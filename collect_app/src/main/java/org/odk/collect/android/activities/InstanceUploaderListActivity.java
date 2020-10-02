@@ -14,14 +14,9 @@
 
 package org.odk.collect.android.activities;
 
-import androidx.appcompat.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +28,7 @@ import android.widget.ListView;
 
 //import com.google.android.gms.analytics.Tracker;      smap
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.LiveData;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
@@ -42,22 +38,18 @@ import androidx.work.WorkManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.backgroundwork.SchedulerFormUpdateAndSubmitManager;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.preferences.Transport;
 import org.odk.collect.android.tasks.InstanceSyncTask;
-import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
-import org.odk.collect.android.tasks.sms.SmsService;
-import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
-import org.odk.collect.android.tasks.sms.models.SmsSubmission;
-import org.odk.collect.android.upload.AutoSendWorker;
 import org.odk.collect.android.utilities.PermissionUtils;
-import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.List;
@@ -69,10 +61,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 
-import static org.odk.collect.android.analytics.AnalyticsEvents.FILTER_FORMS_TO_SEND;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
-import static org.odk.collect.android.tasks.sms.SmsSender.SMS_INSTANCE_ID;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 
 /**
@@ -93,8 +82,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
 
     @BindView(R.id.upload_button)
     Button uploadButton;
-    @BindView(R.id.sms_upload_button)
-    Button smsUploadButton;
+
     @BindView(R.id.toggle_button)
     Button toggleSelsButton;
 
@@ -109,27 +97,8 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     // observer
     private boolean autoSendOngoing = true;
 
-    private final BroadcastReceiver smsForegroundReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            //Stops the notification from being sent to others that are listening for this broadcast.
-            abortBroadcast();
-
-            //deletes submission since the app is in the foreground and the NotificationReceiver won't be triggered.
-            if (intent.hasExtra(SMS_INSTANCE_ID)) {
-                deleteIfSubmissionCompleted(intent.getStringExtra(SMS_INSTANCE_ID));
-            }
-        }
-    };
-
-    @Inject
-    SmsService smsService;
-
-    @Inject
-    SmsSubmissionManagerContract smsSubmissionManager;
-
-    //@Inject       smap
-    //Tracker tracker;
+    //@Inject
+    //Analytics analytics;
 
     @Inject
     PermissionUtils permissionUtils;
@@ -169,61 +138,34 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
         });
     }
 
-    /**
-     * Determines how an upload should be handled by checking the transport being used.
-     * If the transport is set to SMS or Internet then either is used respectively else it's
-     * "Both" so the button IDs drive the decision.
-     *
-     * @param button that triggers an upload
-     */
-    @OnClick({R.id.upload_button, R.id.sms_upload_button})
+    @OnClick({R.id.upload_button})
     public void onUploadButtonsClicked(Button button) {
-        Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
+        if (!connectivityProvider.isDeviceOnline()) {
+            ToastUtils.showShortToast(R.string.no_connection);
+            return;
+        }
 
-        if (!transport.equals(Transport.Sms) && button.getId() == R.id.upload_button) {
-            if (!connectivityProvider.isDeviceOnline()) {
-                ToastUtils.showShortToast(R.string.no_connection);
-                return;
-            }
-
-            if (autoSendOngoing) {
-                ToastUtils.showShortToast(R.string.send_in_progress);
-                return;
-            }
+        if (autoSendOngoing) {
+            ToastUtils.showShortToast(R.string.send_in_progress);
+            return;
         }
 
         int checkedItemCount = getCheckedCount();
 
         if (checkedItemCount > 0) {
             // items selected
-            uploadSelectedFiles(button.getId());
+            uploadSelectedFiles();
             setAllToCheckedState(listView, false);
             toggleButtonLabel(findViewById(R.id.toggle_button), listView);
             uploadButton.setEnabled(false);
-            smsUploadButton.setEnabled(false);
         } else {
             // no items selected
             ToastUtils.showLongToast(R.string.noselect_error);
         }
     }
 
-    /**
-     * Changes the default upload button text if "Both" transport is
-     * enabled and sets SMS upload button visibility
-     */
-    private void setupUploadButtons() {
-        Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
-        if (transport.equals(Transport.Both)) {
-            uploadButton.setText(R.string.send_selected_data_internet);
-            smsUploadButton.setVisibility(View.VISIBLE);
-        } else {
-            smsUploadButton.setVisibility(View.GONE);
-            uploadButton.setText(R.string.send_selected_data);
-        }
-    }
-
     void init() {
-        setupUploadButtons();
+        uploadButton.setText(R.string.send_selected_data);
         instancesDao = new InstancesDao();
 
         toggleSelsButton.setLongClickable(true);
@@ -232,7 +174,6 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
             boolean allChecked = toggleChecked(lv);
             toggleButtonLabel(toggleSelsButton, lv);
             uploadButton.setEnabled(allChecked);
-            smsUploadButton.setEnabled(allChecked);
             if (allChecked) {
                 for (int i = 0; i < lv.getCount(); i++) {
                     selectedInstances.add(lv.getItemIdAtPosition(i));
@@ -249,7 +190,6 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
         listView.setItemsCanFocus(false);
         listView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
             uploadButton.setEnabled(areCheckedItems());
-            smsUploadButton.setEnabled(areCheckedItems());
         });
 
         instanceSyncTask = new InstanceSyncTask();
@@ -271,8 +211,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
      * Updates whether an auto-send job is ongoing.
      */
     private void updateAutoSendStatus() {
-        LiveData<List<WorkInfo>> statuses = WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData(AutoSendWorker.TAG);
-
+        LiveData<List<WorkInfo>> statuses = WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData(SchedulerFormUpdateAndSubmitManager.AUTO_SEND_TAG);
         statuses.observe(this, workStatuses -> {
             if (workStatuses != null) {
                 for (WorkInfo status : workStatuses) {
@@ -296,25 +235,13 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
             }
 
         }
-
-        IntentFilter filter = new IntentFilter(SmsNotificationReceiver.SMS_NOTIFICATION_ACTION);
-        // The default priority is 0. Positive values will be before
-        // the default, lower values will be after it.
-        filter.setPriority(1);
-
-        registerReceiver(smsForegroundReceiver, filter);
-        setupUploadButtons();
+        uploadButton.setText(R.string.send_selected_data);
     }
 
     @Override
     protected void onPause() {
         if (instanceSyncTask != null) {
             instanceSyncTask.setDiskSyncListener(null);
-        }
-        try {
-            unregisterReceiver(smsForegroundReceiver);
-        } catch (IllegalArgumentException e) {
-            Timber.w(e);
         }
         super.onPause();
     }
@@ -326,67 +253,37 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
         showSnackbar(result);
     }
 
-    private void uploadSelectedFiles(int buttonId) {
+    private void uploadSelectedFiles() {
         long[] instanceIds = listView.getCheckedItemIds();
-        Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
 
-        if (transport.equals(Transport.Sms) || buttonId == R.id.sms_upload_button) {
-            // https://issuetracker.google.com/issues/66979952
-            if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.O) {
-                permissionUtils.requestSendSMSAndReadPhoneStatePermissions(this, new PermissionListener() {
-                    @Override
-                    public void granted() {
-                        smsService.submitForms(instanceIds);
-                    }
+        String server = (String) GeneralSharedPreferences.getInstance().get(KEY_PROTOCOL);
 
-                    @Override
-                    public void denied() {
-                    }
-                });
+        if (server.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
+            // if it's Sheets, start the Sheets uploader
+            // first make sure we have a google account selected
+            if (new PlayServicesChecker().isGooglePlayServicesAvailable(this)) {
+                Intent i = new Intent(this, GoogleSheetsUploaderActivity.class);
+                i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
+                startActivityForResult(i, INSTANCE_UPLOADER);
             } else {
-                permissionUtils.requestSendSMSPermission(this, new PermissionListener() {
-                    @Override
-                    public void granted() {
-                        smsService.submitForms(instanceIds);
-                    }
-
-                    @Override
-                    public void denied() {
-                    }
-                });
+                new PlayServicesChecker().showGooglePlayServicesAvailabilityErrorDialog(this);
             }
         } else {
+            // otherwise, do the normal aggregate/other thing.
+            Intent i = new Intent(this, InstanceUploaderActivity.class);
+            i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
+            // Not required but without this permission a Device ID attached to a request will be empty.
+            permissionUtils.requestReadPhoneStatePermission(this, false, new PermissionListener() {
+                @Override
+                public void granted() {
+                    startActivityForResult(i, INSTANCE_UPLOADER);
+                }
 
-            String server = (String) GeneralSharedPreferences.getInstance().get(KEY_PROTOCOL);
-
-            //if (server.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) { // smap
-                // if it's Sheets, start the Sheets uploader
-                // first make sure we have a google account selected
-
-                //if (PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
-                //    Intent i = new Intent(this, GoogleSheetsUploaderActivity.class);
-                //    i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
-                //    startActivityForResult(i, INSTANCE_UPLOADER);
-                //} else {
-                //    PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(this);
-                //}
-            //} else {
-                // otherwise, do the normal aggregate/other thing.
-                Intent i = new Intent(this, InstanceUploaderActivity.class);
-                i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
-                // Not required but without this permission a Device ID attached to a request will be empty.
-                permissionUtils.requestReadPhoneStatePermission(this, false, new PermissionListener() {
-                    @Override
-                    public void granted() {
-                        startActivityForResult(i, INSTANCE_UPLOADER);
-                    }
-
-                    @Override
-                    public void denied() {
-                        startActivityForResult(i, INSTANCE_UPLOADER);
-                    }
-                });
-            //}
+                @Override
+                public void denied() {
+                    startActivityForResult(i, INSTANCE_UPLOADER);
+                }
+            });
         }
     }
 
@@ -423,7 +320,6 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
         }
 
         uploadButton.setEnabled(areCheckedItems());
-        smsUploadButton.setEnabled(areCheckedItems());
         Button toggleSelectionsButton = findViewById(R.id.toggle_button);
         toggleButtonLabel(toggleSelectionsButton, listView);
     }
@@ -527,7 +423,6 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
                         case 1: // show all
                             showAllMode = true;
                             updateAdapter();
-                            // analytics.logEvent(FILTER_FORMS_TO_SEND, "SentAndUnsent");  smap commented
                             break;
 
                         case 2:// smap Show incomplete forms
@@ -550,13 +445,6 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
 
         if (listAdapter != null) {
             ((InstanceUploaderAdapter) listAdapter).onDestroy();
-        }
-    }
-
-    private void deleteIfSubmissionCompleted(String instanceId) {
-        SmsSubmission model = smsSubmissionManager.getSubmissionModel(instanceId);
-        if (model.isSubmissionComplete()) {
-            smsSubmissionManager.forgetSubmission(model.getInstanceId());
         }
     }
 }

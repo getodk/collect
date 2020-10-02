@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
+apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.firebase.firebase-perf'
 apply from: '../config/quality.gradle'
 apply from: '../config/jacoco.gradle'
@@ -27,6 +27,10 @@ def mapboxToken = secrets.getProperty('MAPBOX_ACCESS_TOKEN', '')
 
 android {
     compileSdkVersion(28)
+
+    viewBinding {
+        enabled = true
+    }
 
     defaultConfig {
         applicationId "org.smap.smapTask.android"
@@ -179,29 +183,15 @@ android {
     }
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    dexOptions {
-        javaMaxHeapSize '2048M'
-    }
-
-    lintOptions {
-        disable 'MissingTranslation', 'ExtraTranslation'    // smap
-        checkReleaseBuilds false
-        abortOnError true
     }
 
     testOptions {
         unitTests {
             includeAndroidResources = true
             returnDefaultValues = true
-            all {
-                // https://discuss.circleci.com/t/11207/24
-                // it seems any number works, but 1024 - 2048 seem reasonable
-                maxHeapSize = "2048M"
-            }
         }
     }
 }
@@ -217,39 +207,42 @@ configurations.all {
 }
 
 dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.5'
+
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
     implementation 'androidx.browser:browser:1.2.0'
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation "androidx.work:work-runtime:2.3.4"
-    implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.exifinterface:exifinterface:1.1.0'
+    implementation 'androidx.exifinterface:exifinterface:1.2.0'
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.preference:preference:1.1.0'
+    implementation 'androidx.preference:preference:1.1.1'
     implementation "androidx.fragment:fragment:${rootProject.fragmentVersion}"
 
-    implementation "com.google.android.gms:play-services-auth:17.0.0"
+    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.google.android:flexbox:2.0.1'
+
+    implementation "com.google.android.gms:play-services-auth:18.0.0"
     implementation "com.google.android.gms:play-services-maps:17.0.0"
     implementation "com.google.android.gms:play-services-location:17.0.0"
     //implementation "com.google.android.gms:play-services-gcm:17.0.0"    // smap google cloud messaging
     implementation "com.google.firebase:firebase-messaging:20.2.4"
 
-    implementation 'com.google.firebase:firebase-perf:19.0.5'
-    implementation 'com.google.firebase:firebase-analytics:17.2.3'
-    implementation "com.crashlytics.sdk.android:crashlytics:2.10.1"
+    implementation 'com.google.firebase:firebase-perf:19.0.7'
+    implementation 'com.google.firebase:firebase-analytics:17.4.1'
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.0'
 
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.0.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.2.1'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.8.0'
 
-    implementation("com.google.guava:guava:28.2-android")
+    implementation("com.google.guava:guava:29.0-android")
 
     implementation "com.squareup.okhttp3:okhttp:${rootProject.okhttp3Version}"
-    implementation 'com.burgstaller:okhttp-digest:2.2'
+    implementation 'com.burgstaller:okhttp-digest:2.3'
 
     implementation 'com.github.mohamadian:PersianJodaTime:1.2'
     implementation 'com.github.chanmratekoko:myanmar-calendar:1.0.6.RC3'
     implementation 'bikramsambat:bikram-sambat:1.1.0'
-    implementation "com.evernote:android-job:1.4.2"
     implementation "com.rarepebble:colorpicker:3.0.1"
     implementation "commons-io:commons-io:2.6"
     implementation "net.sf.opencsv:opencsv:2.4"
@@ -262,17 +255,17 @@ dependencies {
     implementation files('libs/opendatakit-javarosa-2.17.1.jar')    // smap javarosa
 
 
-    implementation "com.karumi:dexter:6.0.2"
+    implementation "com.karumi:dexter:6.1.2"
     implementation "org.osmdroid:osmdroid-android:6.1.6"
     implementation("com.google.api-client:google-api-client-android:1.30.9") {
         exclude group: 'org.apache.httpcomponents'
         exclude group: 'com.google.guava'
     }
-    implementation("com.google.apis:google-api-services-drive:v3-rev20200306-1.30.9") {
+    implementation("com.google.apis:google-api-services-drive:v3-rev20200413-1.30.9") {
         exclude group: 'org.apache.httpcomponents'
         exclude group: 'com.google.guava'
     }
-    implementation("com.google.apis:google-api-services-sheets:v4-rev20200312-1.30.9") {
+    implementation("com.google.apis:google-api-services-sheets:v4-rev20200508-1.30.9") {
         exclude group: 'org.apache.httpcomponents'
         exclude group: 'com.google.guava'
     }
@@ -281,12 +274,16 @@ dependencies {
     implementation "org.slf4j:slf4j-api:2.0.0-alpha0"
     implementation "com.arcao:slf4j-timber:3.1@aar"
 
-    implementation "com.google.zxing:core:3.3.0" //updating to 3.4.0 requires minSdkVersion >=24 https://github.com/zxing/zxing/releases/tag/zxing-3.4.0
-    implementation "com.journeyapps:zxing-android-embedded:3.6.0" //updating would require minSdkVersion >=24
-    implementation "net.danlew:android.joda:2.10.3"
+    //updating to 3.4.0 requires minSdkVersion >=24 https://github.com/zxing/zxing/releases/tag/zxing-3.4.0
+    implementation "com.google.zxing:core:3.3.0"
+
+    //updating would require minSdkVersion >=24
+    implementation "com.journeyapps:zxing-android-embedded:3.6.0"
+
+    implementation "net.danlew:android.joda:2.10.6"
 
     // Real LeakCanary for debug builds only: notifications, analysis, etc
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
 
     // Android Architecture Components:
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
@@ -307,7 +304,10 @@ dependencies {
     // Dagger:
     implementation "com.google.dagger:dagger:${rootProject.daggerVersion}"
     annotationProcessor "com.google.dagger:dagger-compiler:${rootProject.daggerVersion}"
-    testAnnotationProcessor "com.google.dagger:dagger-compiler:${rootProject.daggerVersion}" // Needed for injection into Robolectric tests
+
+    // Needed for injection into Robolectric tests
+    testAnnotationProcessor "com.google.dagger:dagger-compiler:${rootProject.daggerVersion}"
+
 
     // Dagger Android:
     implementation "com.google.dagger:dagger-android:${rootProject.daggerVersion}"
@@ -323,6 +323,7 @@ dependencies {
 
     implementation project(':nbi-stubs')
     implementation project(':material')
+    implementation project(':async')
 
     // Makes binding to Views easy:
     implementation "com.jakewharton:butterknife:10.2.1"
@@ -342,13 +343,14 @@ dependencies {
     testImplementation "org.robolectric:robolectric:4.3.1"
     testImplementation 'androidx.test.ext:junit:1.1.1'
     debugImplementation "androidx.fragment:fragment-testing:${rootProject.fragmentVersion}"
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation "org.robolectric:shadows-multidex:4.3.1"
     testImplementation "com.squareup.okhttp3:mockwebserver:${rootProject.okhttp3Version}"
     testImplementation "com.squareup.okhttp3:okhttp-tls:${rootProject.okhttp3Version}"
 
     // power mock (for mocking final methods which is not handled by mockito)
-    testImplementation "org.powermock:powermock-module-junit4:2.0.5"
-    testImplementation "org.powermock:powermock-api-mockito2:2.0.5"
+    testImplementation "org.powermock:powermock-module-junit4:2.0.7"
+    testImplementation "org.powermock:powermock-api-mockito2:2.0.7"
 
     testImplementation "org.json:json:20190722"
 

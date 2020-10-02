@@ -66,11 +66,7 @@
   <string name="jump_to_beginning">शुरु पर जाएं</string>
   <string name="jump_to_end">अंत पर जाएं</string>
   <string name="jump_to_previous">ऊपर जाएं</string>
-  <string name="list_failed_with_error">फॉर्म  सूचीकरण असफल%s </string>
   <string name="loading_form">फॉर्म लोड हो रहा है </string>
-  <string name="load_remote_form_error">सूची से फॉर्म प्राप्ति में गलती </string>
-  <string name="location_provider_accuracy">%1$sको प्रयोग कर रहा है. शुद्धता %2$sमीटर है.</string>
-  <string name="location_accuracy">शुद्धता %1$s मीटर है</string>
   <string name="manage_files">संरक्षित फॉर्म मिटायें</string>
   <string name="mark_finished">फॉर्म पूरा करें</string>
   <string name="noselect_error">क्षमा करें, आपने कोई फॉर्म नही चुना है!</string>
@@ -81,8 +77,6 @@
   <string name="no_items_display_instances">प्रदर्शित करने के लिए कुछ भी उपलब्ध नहीं.\n\nभेजने से पहले संरक्षित फॉर्म को अंतिम रूप देने का प्रयास हो रहा.</string>
   <string name="ok">ओके</string>
   <string name="parse_error">क्षमा करें, फॉर्म पार्स करने में असमर्थ</string>
-  <string name="parse_legacy_formlist_failed">सर्वर ने उपलब्ध-फ़ॉर्म दस्तावेज़ प्रदान नहीं किया जो Aggregate 0.9.x. से संगतता रखता हो: %s</string>
-  <string name="parse_openrosa_formlist_failed">सर्वर ने उपलब्ध-फ़ॉर्म दस्तावेज़ प्रदान नहीं किया जो OpenRosa version 1.0 मानकों से संगतता रखता हो: %s</string>
   <string name="password">पासवर्ड</string>
   <string name="play_video">वीडियो चलाएं</string>
   <string name="please_wait">कृपया कुछ क्षण प्रतीक्षा करें</string>
@@ -122,17 +116,11 @@
   <string name="change_splash_path">इमेज बदले</string>
   <string name="keep_changes">बदलाव संरक्षित करें</string>
   <string name="change_formlist_url">फॉर्म सूची पथ (URL पर जोड़ा गया)</string>
-  <string name="change_protocol">प्लेटफोर्म</string>
   <string name="change_submission_url">सबमिशन पथ (URL पर जोड़ा गया)</string>
   <string name="formlist_url">फॉर्म सूची पथ</string>
   <string name="submission_url">सबमिशन पथ</string>
   <string name="font_size">अक्षर फॉन्ट आकार</string>
   <string name="change_font_size">अक्षर फॉन्ट आकार</string>
-  <string name="access_error">%s:प्राप्ति के समय गलती</string>
-  <string name="manifest_server_error">मैन्फेस्ट उत्तर किसी OpenRosa version को रिपोर्ट नहीं करता - खराब सर्वर?</string>
-  <string name="root_element_error">रूट एलिमेंट &amp; नहीं है यह;\&amp;gt को दिखाता है; — जोकि %sथा</string>
-  <string name="root_namespace_error">रूट एलिमेंट नेमस्पेस गलत है: %s</string>
-  <string name="manifest_tag_error">मेन्फेस्ट एंट्री %sमें एक या अधिक टैग लापता हैं: फ़ाइल नाम, हैश, या डाउनलोडUrl</string>
   <string name="form_download_progress">%1$s. %3$sकी %2$sमीडिया फाइलें मिल रही हैं: </string>
   <string name="fetching_manifest">%s. मेनीफेस्ट मिल रहा है </string>
   <string name="success">सफल</string>
@@ -148,8 +136,6 @@
   <string name="save_as_error">संरक्षित नाम रिक्त नहीं होना चाहिए!</string>
   <string name="edit_prompt">Prompt को संशोधित करें</string>
   <string name="selected_google_account_text">गूगल अकाउंट</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">अन्य</string>
   <string name="font_size_extra_large">ज्यादा बड़ा</string>
   <string name="font_size_large">बड़ा</string>
   <string name="font_size_medium">मझला</string>
@@ -173,7 +159,6 @@
   <string name="parent_form_not_present">इस संरक्षित फॉर्म को संपादित करने में असमर्थ क्योंकि सम्बंधित रिक्त फॉर्म मौजूद नहीं है या हटा दिया गया है। \ N \ n फ़ॉर्म आईडी:%1$s</string>
   <string name="launch_app">जारी करें</string>
   <string name="no_app">अनुरोधित एप्लिकेशन लापता है कृपया रीडिंग स्वयं दर्ज करें।</string>
-  <string name="select_one">एकल उत्तर चयन करें</string>
   <string name="savepoint_used">सहेजे गए परिवर्तन से बचे हुए परिवर्तनों को लिया गया!</string>
   <string name="save_and_close">संरक्षित करें और बंद करें</string>
   <string name="sign_button">हस्ताक्षर  इकट्ठा  करें</string>
@@ -245,9 +230,6 @@
   <string name="go_drive">माई ड्राइव</string>
   <string name="go_shared">मेरे साथ साझा किया हुआ </string>
   <string name="modified_on_date_at_time">EEE, MMM dd, yyyy \'पर संशोधित\' HH:mm \'पर\' </string>
-  <string name="aggregate_preferences">ODK Aggregate सेटिंग्स</string>
-  <string name="other_preferences">अन्य प्लेटफ़ॉर्म सेटिंग्स</string>
-  <string name="google_preferences">गुगल सीट सेटिंग</string>
   <string name="google_sheets_url_hint">फॉर्म को एक सबमिशन URL सेट करना होगा यदि नहीं तो इस URL का उपयोग किया जाएगा।</string>
   <string name="drive_get_file"> %1$sऔर मीडिया फाइलों को प्राप्त कर रहा है.</string>
   <string name="no_google_account">कोई गूगल अकाउंट नही चुना!</string>
@@ -315,10 +297,8 @@
   <string name="download_selected">डाउनलोड चयनित</string>
   <string name="gps_result">अक्षांश: %1$s \n देशांतर: %2$s \n ऊंचाई: %3$sm \n शुद्धता: %4$sm</string>
   <string name="parser_exception">XPathParser अपवाद:\"%s\"</string>
-  <string name="selected_answer">चयनित :%s</string>
   <string name="version_number">संस्करण: %s</string>
   <string name="odk_website">ODK वेबसाइट विजिट करें</string>
-  <string name="odk_website_summary">ओपन डाटा किट (ODK ) विषम परिस्थितियों में सामाजिक डाटा इकठ्ठा करने में कार्य आता है.</string>
   <string name="odk_forum">ODK फोरम ज्वाइन करें</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">प. %1$s%2$s%3$s</string>
@@ -379,9 +359,6 @@
   <string name="email">इमेल एड्रेस </string>
   <string name="user_defined">उपयोगकर्ता-परिभाषित</string>
   <string name="device_defined">डिवाइस-से-परिभाषित</string>
-  <string name="device_id">डिवाइस आईडी</string>
-  <string name="subscriber_id">सब्सक्राइबर आईडी</string>
-  <string name="sim_serial_id">सिम सीरियल नंबर</string>
   <string name="select_date">तारीख़ चुनें</string>
   <string name="select_time">समय चुनें</string>
   <string name="no_date_selected">कोई दिनांक चयनित नहीं</string>
@@ -395,7 +372,6 @@
   <string name="include_password_dialog">पासवर्ड कोड में शामिल </string>
   <string name="generate">उत्पन्न</string>
   <string name="invalid_qrcode">QR कोड में मान्य सेटिंग्स शामिल नहीं हैं I</string>
-  <string name="share_qrcode">QR कोड साझा करें</string>
   <string name="take_picture_instruction">तस्वीर लेने के लिए स्क्रीन को टैप करें</string>
   <string name="camera_error">यह डिवाइस Camera2 API का समर्थन नहीं करता है</string>
   <string name="invalid_range_widget">इस विजेट में अमान्य मापदंड हैं!</string>
@@ -431,5 +407,4 @@
   <string name="yes">हाँ</string>
   <string name="no">नहीं</string>
   <string name="start_video_capture_instruction">रिकॉर्डिंग प्रारंभ करने के लिए स्क्रीन को टैप करें</string>
-  <!--Sms submission-->
 </resources>

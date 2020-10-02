@@ -78,7 +78,7 @@ public class MainActivityTest {
         ShadowActivity shadowActivity = shadowOf(mainMenuActivity);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
         ShadowIntent shadowIntent = shadowOf(startedIntent);
-        assertEquals(FileManagerTabs.class.getName(),
+        assertEquals(DeleteSavedFormActivity.class.getName(),
                 shadowIntent.getIntentClass().getName());
     }
 }

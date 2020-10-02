@@ -1,11 +1,10 @@
 package org.odk.collect.android.utilities;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.Arrays.asList;
 
 public class FileUtil {
 
@@ -25,31 +24,11 @@ public class FileUtil {
         return new File(mediaFolderPath + "/itemsets.csv");
     }
 
-    public static String getFileContents(final File smsFile) throws IOException {
-
-        final InputStream inputStream = new FileInputStream(smsFile);
-        final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-        final StringBuilder stringBuilder = new StringBuilder();
-
-        boolean done = false;
-
-        while (!done) {
-            final String line = reader.readLine();
-            done = line == null;
-
-            if (line != null) {
-                stringBuilder.append(line);
-            }
+    public List<File> listFiles(File file) {
+        if (file != null && file.exists()) {
+            return asList(file.listFiles());
+        } else {
+            return new ArrayList<>();
         }
-
-        reader.close();
-        inputStream.close();
-
-        return stringBuilder.toString();
-    }
-
-    public static String getSmsInstancePath(String instancePath) {
-        return instancePath + ".txt";
     }
 }

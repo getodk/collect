@@ -19,7 +19,7 @@ import timber.log.Timber;
  * <p>
  * Should be used whenever there Google Play Services is not present.
  * <p>
- * Package-private, use {@link LocationClients} to retrieve the correct
+ * Package-private, use {@link LocationClientProvider} to retrieve the correct
  * {@link LocationClient}.
  */
 class AndroidLocationClient
@@ -145,6 +145,9 @@ class AndroidLocationClient
         Timber.i("Location changed: %s", location.toString());
 
         if (locationListener != null) {
+            if (location.getAccuracy() < 0) {
+                location.setAccuracy(0);
+            }
             locationListener.onLocationChanged(location);
         }
     }

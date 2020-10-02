@@ -61,11 +61,7 @@
   <string name="jump_to_beginning">सुरू करण्यासाठी जा</string>
   <string name="jump_to_end">संम्पतही कडे जा </string>
   <string name="jump_to_previous">वर जा</string>
-  <string name="list_failed_with_error">फॉर्म सूची अयशस्वी.%s.</string>
   <string name="loading_form">फॉर्म लोड होत आहे</string>
-  <string name="load_remote_form_error">प्रपत्र यादी प्राप्त करताना त्रुटी</string>
-  <string name="location_provider_accuracy">%1$s वापरून अचूकता  %2$s मी आहे.</string>
-  <string name="location_accuracy">अचूकता %1$s मी आहे</string>
   <string name="manage_files">जतन केलेला फॉर्म हटवा</string>
   <string name="mark_finished">अंतिम रूपाने फॉर्म चिन्हांकित करा</string>
   <string name="noselect_error">क्षमस्व, आपण कोणतेही फॉर्म निवडलेले नाहीत!</string>
@@ -76,8 +72,6 @@
   <string name="no_items_display_instances">प्रदर्शित करण्यासाठी काहीही उपलब्ध नाही.\n\nपाठविण्यापूर्वी जतन केलेले फॉर्म्स ला अंतिम रूप देण्याचा प्रयत्न करा</string>
   <string name="ok">ठीक आहे</string>
   <string name="parse_error">क्षमस्व, फॉर्म विश्लेषित करण्यास अक्षम</string>
-  <string name="parse_legacy_formlist_failed">सर्व्हरने एकूण 0.9.x. सह सुसंगत एक उपलब्ध-फॉर्म दस्तऐवज प्रदान केलेला नाही. : %s</string>
-  <string name="parse_openrosa_formlist_failed">सर्व्हरने ओपेनरोसा आवृत्ती 1.0 मानक सह सुसंगत एक उपलब्ध-फॉर्म दस्तऐवज प्रदान केलेले नाही : %s</string>
   <string name="password">संकेतशब्द</string>
   <string name="play_video">व्हिडिओ प्ले करा</string>
   <string name="please_wait">कृपया काही क्षण प्रतीक्षा करा</string>
@@ -117,17 +111,11 @@
   <string name="change_splash_path">प्रतिमा बदला</string>
   <string name="keep_changes">बदल जतन करा</string>
   <string name="change_formlist_url">फॉर्म यादी पथ ( यु र एल  वर जोडलेले )</string>
-  <string name="change_protocol">प्लॅटफॉर्म</string>
   <string name="change_submission_url">सबमिशन पथ (यु र एल वर जोडला आहे)</string>
   <string name="formlist_url">फॉर्म यादी पथ</string>
   <string name="submission_url">सबमिशन पथ</string>
   <string name="font_size">मजकूर फॉन्ट आकार</string>
   <string name="change_font_size">मजकूर फॉन्ट आकार</string>
-  <string name="access_error">%s: ऍक्सेस करताना त्रुटी:</string>
-  <string name="manifest_server_error">मॅनिफेस्ट रिझल्ट एक ओपेनरोसा आवृत्तीची तक्रार करत नाही - खराब सर्व्हर?</string>
-  <string name="root_element_error">मूळ घटक &amp; lt; मॅनिफेस्ट &amp; gt; नाही. %sआहे  </string>
-  <string name="root_namespace_error">रूट घटक नावस्थान चुकीची आहे: %s</string>
-  <string name="manifest_tag_error">मॅनिफेस्ट प्रविष्टि  1%s मध्ये एक किंवा अधिक टॅग गहाळ आहेत: फाइलनाव, हैश किंवा डाउनलोड युरएल.</string>
   <string name="form_download_progress">%1$s मीडिया फायली मिळवत आहे: %2$s पैकी %3$s</string>
   <string name="fetching_manifest">%s. मॅनिफेस्ट मिळवत आहे</string>
   <string name="success">यश</string>
@@ -143,8 +131,6 @@
   <string name="save_as_error">जतन केलेले नाव रिक्त असू शकत नाही!</string>
   <string name="edit_prompt">सूचना संपादित करा</string>
   <string name="selected_google_account_text">गूगल खाते</string>
-  <string name="server_platform_odk_aggregate">ओडीके एकत्र</string>
-  <string name="server_platform_other">इतर</string>
   <string name="font_size_extra_large">जास्त मोठं</string>
   <string name="font_size_large">मोठा</string>
   <string name="font_size_medium">मध्यम</string>
@@ -168,7 +154,6 @@
   <string name="parent_form_not_present">हा जतन केलेला फॉर्म संपादित करण्यास अक्षम कारण संबंधीत रिक्त फॉर्म उपलब्ध नाही किंवा हटविला गेला नाही. \ n \ n फॉर्म ID %1$s</string>
   <string name="launch_app">लाँच करा</string>
   <string name="no_app">विनंती केलेले अनुप्रयोग गहाळ आहे. कृपया स्वतः वाचन प्रविष्ट करा.</string>
-  <string name="select_one">एक उत्तर निवडा</string>
   <string name="savepoint_used">जतन न केलेले बदल पुनर्प्राप्त!</string>
   <string name="save_and_close">जतन करा आणि बंद करा</string>
   <string name="sign_button">स्वाक्षरी एकत्रीकरण</string>
@@ -240,9 +225,6 @@
   <string name="go_drive">माझे ड्राइव्ह</string>
   <string name="go_shared">माझ्यासह शेअर केलेले</string>
   <string name="modified_on_date_at_time">\'सुधारित\' वर EEE, d MMM, yyyy \'at\' HH: mm</string>
-  <string name="aggregate_preferences">ओडीक एकत्रित सेटिंग्ज</string>
-  <string name="other_preferences">इतर प्लॅटफॉर्म सेटिंग्ज</string>
-  <string name="google_preferences">गूगल पत्रक सेटिंग्ज</string>
   <string name="google_sheets_url_hint">फॉर्म एक सबमिशन युरएल सेट करणे आवश्यक आहे नसल्यास, ही युरएल वापरली जाईल.</string>
   <string name="drive_get_file"> %1$s आणि मीडिया फायली मिळवत आहे</string>
   <string name="no_google_account">कोणतेही गूगल खाते निवडलेले नाही!</string>
@@ -310,10 +292,9 @@
   <string name="download_selected">निवडलेल्या डाउनलोड करा</string>
   <string name="gps_result">अक्षांश: %1$s\nरेखांश: %2$s\nअल्टिट्यूड: %3$sm\nअॅक्चुसीसी: %4$sm</string>
   <string name="parser_exception">एक्स पाथ पार्सर अपवादः  \"%s\"</string>
-  <string name="selected_answer">निवडलेले: %s</string>
   <string name="version_number">आवृत्ती: %s</string>
   <string name="odk_website">ओडीके वेबसाइट ला भेट द्या</string>
-  <string name="odk_website_summary">ओपन डाटा किट (ओडीकेे) चा उपयोग आव्हानात्मक पर्यावरणात सामाजिक चांगल्यासाठी डेटा गोळा करण्यासाठी केला जातो.</string>
+  <string name="odk_website_summary">ओडीकेे चा उपयोग आव्हानात्मक पर्यावरणात सामाजिक चांगल्यासाठी डेटा गोळा करण्यासाठी केला जातो.</string>
   <string name="odk_forum">ओडीके मंचात सहभागी व्हा</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">पश्चिम %1$s%2$s%3$s</string>
@@ -369,9 +350,6 @@
   <string name="email">ईमेल पत्ता</string>
   <string name="user_defined">वापरकर्ता परिभाषित</string>
   <string name="device_defined">डिव्हाइस-परिभाषित</string>
-  <string name="device_id">डिव्हाइस ID</string>
-  <string name="subscriber_id">सदस्य ID</string>
-  <string name="sim_serial_id">सिम सिरियल नंबर</string>
   <string name="select_date">तारीख निवडा</string>
   <string name="select_time">वेळेची निवड करा</string>
   <string name="no_date_selected">तारीख निवडली नाही</string>
@@ -385,7 +363,6 @@
   <string name="include_password_dialog">कोडमध्ये समाविष्ट संकेतशब्द</string>
   <string name="generate">व्युत्पन्न करा</string>
   <string name="invalid_qrcode">क्यूआर कोडमध्ये वैध सेटिंग्ज नाहीत</string>
-  <string name="share_qrcode">क्यूआर कोड सामायिक करा</string>
   <string name="take_picture_instruction">एक चित्र घेण्यासाठी स्क्रीन टॅप करा</string>
   <string name="camera_error">हे साधन कॅमेरॅ2 API ला समर्थन देत नाही.</string>
   <string name="invalid_range_widget">या विजेटमध्ये अवैध मापदंड आहेत!</string>
@@ -415,5 +392,4 @@
   <string name="use_device_language">डिव्हाइस भाषा वापरा</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <!--Sms submission-->
 </resources>

@@ -54,11 +54,7 @@
   <string name="jump_to_beginning">Eiti į pradžią</string>
   <string name="jump_to_end">Eiti į pabaigą</string>
   <string name="jump_to_previous">Eiti į viršų</string>
-  <string name="list_failed_with_error">Nepavyko gauti formų sąrašo. %s.</string>
   <string name="loading_form">Įkeliama forma</string>
-  <string name="load_remote_form_error">Klaida nuskaitant formų sąrašą</string>
-  <string name="location_provider_accuracy">Naudojama %1$s. Tikslumas yra %2$s m.</string>
-  <string name="location_accuracy">Tikslumas yra %1$s m</string>
   <string name="manage_files">Ištrinti užpildytą formą</string>
   <string name="mark_finished">Pažymėti formą kaip užbaigtą</string>
   <string name="noselect_error">Deja, Jūs nepažymėjote jokių formų!</string>
@@ -66,8 +62,6 @@
   <string name="no_items_display">Nėra ką rodyti</string>
   <string name="ok">Gerai</string>
   <string name="parse_error">Deja, nepavyko apdoroti formos.</string>
-  <string name="parse_legacy_formlist_failed">Serveris nepateikė galimų formų dokumentų, suderinamų su Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">Serveris nepateikė galimų formų dokumentų, suderinamų su OpenRosa 1.0 standartu : %s</string>
   <string name="password">Slaptažodis</string>
   <string name="play_video">Groti video</string>
   <string name="please_wait">Prašome šiek tiek palaukti.</string>
@@ -103,17 +97,11 @@
   <string name="change_splash_path">Pakeisti paveikslėlį</string>
   <string name="keep_changes">Išsaugoti pakeitimus</string>
   <string name="change_formlist_url">Formų sąrašo kelias (pridėtas prie serverio URL)</string>
-  <string name="change_protocol">Protokolas</string>
   <string name="change_submission_url">Pateikimo kelias (pridėtas prie serverio URL)</string>
   <string name="formlist_url">Formų sąrašo kelias</string>
   <string name="submission_url">Pateikimo kelias</string>
   <string name="font_size">Teksto šrifto dydis</string>
   <string name="change_font_size">Teksto šrifto dydis</string>
-  <string name="access_error">Klaida bandant pasiekti %s: </string>
-  <string name="manifest_server_error">Manifesto atsakymas nepraneša OpenRosa versijos — blogas serveris?</string>
-  <string name="root_element_error">Šakninis elementas nėra &amp;lt;manifest\&gt; — buvo %s</string>
-  <string name="root_namespace_error">Šakninio elemento vardų erdvė neteisinga: %s</string>
-  <string name="manifest_tag_error">Manifesto įvestyje %s trūksta vienos ar keleto žymų: filename, hash, arba downloadUrl</string>
   <string name="form_download_progress">%1$s. Siunčiami medijos failai: %2$s iš %3$s</string>
   <string name="fetching_manifest">%s. Siunčiamas manifestas</string>
   <string name="success">Sėkmingai</string>
@@ -128,8 +116,6 @@
   <string name="save_as_error">Pavadinimas negali būti tuščias!</string>
   <string name="edit_prompt">Keisti atsakymą</string>
   <string name="selected_google_account_text">Google sąskaita</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Kita</string>
   <string name="font_size_extra_large">Labai didelis</string>
   <string name="font_size_large">Didelis</string>
   <string name="font_size_medium">Vidutinis</string>
@@ -151,7 +137,6 @@
   <string name="version">Versija:</string>
   <string name="launch_app">Paleisti</string>
   <string name="no_app">Nerasta nurodyta programa. Atskaitą įveskite rankiniu būdu.</string>
-  <string name="select_one">Pasirinkite vieną atsakymą</string>
   <string name="savepoint_used">Neišsaugoti pakeitimai atkurti pagal išsaugojimo tašką!</string>
   <string name="save_and_close">Išsaugoti ir uždaryti</string>
   <string name="sign_button">Paimti parašą</string>
@@ -188,5 +173,4 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <!--Sms submission-->
 </resources>

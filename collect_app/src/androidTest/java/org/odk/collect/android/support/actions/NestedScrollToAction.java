@@ -15,6 +15,7 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.espresso.util.HumanReadables;
 
 import org.hamcrest.Matcher;
+import org.odk.collect.android.widgets.items.BaseSelectListWidget;
 
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
@@ -25,7 +26,7 @@ import static org.hamcrest.Matchers.anyOf;
 
 /**
  * Required for scrolling to items within a {@link NestedScrollView} like those in
- * {@link org.odk.collect.android.widgets.SelectWidget}. Code is copied from {@link ScrollToAction}
+ * {@link BaseSelectListWidget}. Code is copied from {@link ScrollToAction}
  * as for some reason that class is final.
  */
 

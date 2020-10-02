@@ -3,12 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/margin_standard"
-    android:paddingStart="@dimen/margin_standard"
-    android:paddingRight="@dimen/margin_standard"
-    android:paddingEnd="@dimen/margin_standard"
-    android:paddingTop="@dimen/margin_small"
-    android:paddingBottom="@dimen/margin_small"
+    android:paddingVertical="@dimen/margin_small"
     android:button="@drawable/inset_radio_button"
     tools:text="Option A">
 

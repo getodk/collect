@@ -7,4 +7,6 @@ public interface Analytics {
     void logEvent(String category, String action, String label);
 
     void setAnalyticsCollectionEnabled(boolean isAnalyticsEnabled);
+
+    void setUserProperty(String name, String value);
 }

@@ -25,7 +25,9 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +42,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * @author Nicholas Hallahan nhallahan@spatialdev.com
  */
 @SuppressLint("ViewConstructor")
-public class OSMWidget extends QuestionWidget implements BinaryWidget {
+public class OSMWidget extends QuestionWidget implements BinaryDataReceiver, ButtonClickListener {
 
     // button colors
     private static final int OSM_GREEN = Color.rgb(126, 188, 111);
@@ -56,10 +58,12 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
     private final String instanceId;
     private final int formId;
     private final String formFileName;
+    private final WaitingForDataRegistry waitingForDataRegistry;
     private String osmFileName;
 
-    public OSMWidget(Context context, QuestionDetails questionDetails) {
+    public OSMWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails);
+        this.waitingForDataRegistry = waitingForDataRegistry;
 
         FormController formController = Collect.getInstance().getFormController();
 
@@ -155,10 +159,10 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
             writeOsmRequiredTagsToExtras(launchIntent);
 
             try {
-                waitForData();
+                waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
                 ((Activity) getContext()).startActivityForResult(launchIntent, RequestCodes.OSM_CAPTURE);
             } catch (ActivityNotFoundException e) {
-                cancelWaitingForData();
+                waitingForDataRegistry.cancelWaitingForData();
                 errorTextView.setVisibility(View.VISIBLE);
             }
 

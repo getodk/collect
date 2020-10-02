@@ -40,6 +40,7 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.FormLoadingUtils;
+import org.odk.collect.android.support.pages.FormEntryPage;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -249,7 +250,7 @@ public class FieldListUpdateTest {
         onView(withText("A1")).perform(nestedScrollTo(), click());
         onView(withText("A1B")).perform(nestedScrollTo(), click());
 
-        onView(withText("A")).perform(nestedScrollTo(), longClick());
+        onView(withText("Level1")).perform(nestedScrollTo(), longClick());
         onView(withText(R.string.clear_answer)).perform(click());
         onView(withText(R.string.discard_answer)).perform(click());
 
@@ -260,40 +261,31 @@ public class FieldListUpdateTest {
 
     @Test
     public void selectionChangeAtOneCascadeLevelWithMinimalAppearance_ShouldUpdateNextLevels() {
-        jumpToGroupWithText("Cascading select minimal");
-        onView(withText(startsWith("Level1"))).perform(click());
-
-        // No choices should be shown for levels 2 and 3 when no selection is made for level 1
-        onView(withText("A1")).check(doesNotExist());
-        onView(withText("B1")).check(doesNotExist());
-        onView(withText("C1")).check(doesNotExist());
-        onView(withText("A1A")).check(doesNotExist());
-
-        // Selecting C for level 1 should only reveal options for C at level 2
-        onView(withIndex(withText(R.string.select_one), 0)).perform(click());
-        onView(withText("C")).perform(click());
-        onView(withText("A1")).check(doesNotExist());
-        onView(withText("B1")).check(doesNotExist());
-        onView(withIndex(withText(R.string.select_one), 0)).perform(click());
-        onView(withText("C1")).perform(click());
-        onView(withText("A1A")).check(doesNotExist());
-
-        // Selecting A for level 1 should reveal options for A at level 2
-        onView(withText("C")).perform(click());
-        onView(withText("A")).perform(click());
-        onView(withIndex(withText(R.string.select_one), 0)).perform(click());
-        onView(withText("A1")).check(matches(isDisplayed()));
-        onView(withText("A1A")).check(doesNotExist());
-        onView(withText("B1")).check(doesNotExist());
-        onView(withText("C1")).check(doesNotExist());
-
-        // Selecting A1 for level 2 should reveal options for A1 at level 3
-        onView(withText("A1")).perform(click());
-        onView(withIndex(withText(R.string.select_one), 0)).perform(click());
-        onView(withText("A1A")).check(matches(isDisplayed()));
-        onView(withText("B1A")).check(doesNotExist());
-        onView(withText("B1")).check(doesNotExist());
-        onView(withText("C1")).check(doesNotExist());
+        new FormEntryPage("fieldlist-updates", activityTestRule)
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .clickOnGroup("Cascading select minimal")
+                .clickOnQuestion("Level1")
+                .assertTextDoesNotExist("A1", "B1", "C1", "A1A") // No choices should be shown for levels 2 and 3 when no selection is made for level 1
+                .openSelectMinimalDialog(0)
+                .clickOnText("C") // Selecting C for level 1 should only reveal options for C at level 2
+                .closeSelectMinimalDialog()
+                .assertTextDoesNotExist("A1", "B1")
+                .openSelectMinimalDialog(1)
+                .clickOnText("C1")
+                .closeSelectMinimalDialog()
+                .assertTextDoesNotExist("A1A")
+                .clickOnText("C")
+                .clickOnText("A") // Selecting A for level 1 should reveal options for A at level 2
+                .closeSelectMinimalDialog()
+                .openSelectMinimalDialog(1)
+                .assertText("A1")
+                .assertTextDoesNotExist("A1A", "B1", "C1")
+                .clickOnText("A1") // Selecting A1 for level 2 should reveal options for A1 at level 3
+                .closeSelectMinimalDialog()
+                .openSelectMinimalDialog(2)
+                .assertText("A1A")
+                .assertTextDoesNotExist("B1A", "B1", "C1");
     }
 
     @Test
@@ -385,15 +377,18 @@ public class FieldListUpdateTest {
     }
 
     @Test
-    public void searchInFieldList() throws InterruptedException {
-        jumpToGroupWithText("Search in field-list");
-        onView(withText(startsWith("Source15"))).perform(click());
-        onView(withText("Select One Answer")).check(matches(isDisplayed())).perform(click());
-        onView(withText("Mango")).check(matches(isDisplayed()));
-        onView(withText("Oranges")).check(matches(isDisplayed()));
-        onView(withText("Strawberries")).check(matches(isDisplayed())).perform(click());
-        onView(withText("Strawberries")).check(matches(isDisplayed()));
-        onView(withText("Target15")).check(matches(isDisplayed()));
+    public void searchMinimalInFieldList() {
+        new FormEntryPage("fieldlist-updates", activityTestRule)
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .clickOnGroup("Search in field-list")
+                .clickOnQuestion("Source15")
+                .openSelectMinimalDialog()
+                .assertText("Mango", "Oranges", "Strawberries")
+                .clickOnText("Strawberries")
+                .closeSelectMinimalDialog()
+                .assertText("Target15")
+                .assertSelectMinimalDialogAnswer("Strawberries");
     }
 
     // Scroll down until the desired group name is visible. This is needed to make the tests work

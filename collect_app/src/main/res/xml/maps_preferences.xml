@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:title="@string/maps">
 
     <PreferenceCategory
         android:key="category_basemap"
-        android:title="@string/basemap" />
+        android:title="@string/basemap"
+        app:iconSpaceReserved="false" />
     <PreferenceCategory
         android:key="category_reference_layer"
-        android:title="@string/reference_layer">
+        android:title="@string/reference_layer"
+        app:allowDividerAbove="false"
+        app:allowDividerBelow="false"
+        app:iconSpaceReserved="false">
         <org.odk.collect.android.preferences.CaptionedListPreference
             android:key="reference_layer"
             android:title="@string/layer_data_file"
             android:dialogTitle="@string/layer_data_file"
             android:negativeButtonText="@string/cancel"
-            android:positiveButtonText="@string/ok" />
+            android:positiveButtonText="@string/ok"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>

@@ -59,11 +59,7 @@
   <string name="jump_to_beginning">Gaan na Begin</string>
   <string name="jump_to_end">Gaan na Einde</string>
   <string name="jump_to_previous">Gaan op</string>
-  <string name="list_failed_with_error">Opstel van vormlys het misluk. %s.</string>
   <string name="loading_form">Besig om vorm te laai</string>
-  <string name="load_remote_form_error">Fout tydens haal van vormlys</string>
-  <string name="location_provider_accuracy">Gebruik tans %1$s. Akkuraatheid is %2$s m.</string>
-  <string name="location_accuracy">Akkuraatheid is %1$s m</string>
   <string name="manage_files">Verwyder Gestoorde Vorm</string>
   <string name="mark_finished">Merk vorm as gefinaliseer</string>
   <string name="noselect_error">Jammer, u het nie enige vorms geselekteer nie!</string>
@@ -73,8 +69,6 @@
   <string name="no_items_display_instances">Niks beskikbaar om te vertoon nie.\n\nProbeer om gestoorde vorms te finaliseer voordat u stuur.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Jammer, kon nie vorm verwerk nie.</string>
-  <string name="parse_legacy_formlist_failed">Die server het nie \'n beskikbare-vorms dokument verskaf wat versoenbaar is met Aggregate 0.9.x nie. : %s</string>
-  <string name="parse_openrosa_formlist_failed">Die server het nie \'n beskikbare-vorms dokument verskaf wat versoenbaar is met die OpenRosa weergawe 1.0 standaard nie: %s</string>
   <string name="password">Wagwoord</string>
   <string name="play_video">Speel Video</string>
   <string name="please_wait">Wag asseblief \'n paar sekondes.</string>
@@ -110,17 +104,11 @@
   <string name="change_splash_path">Verander Prentjie</string>
   <string name="keep_changes">Stoor Veranderinge</string>
   <string name="change_formlist_url">Vorm lys path (word bygevoeg tot URL)</string>
-  <string name="change_protocol">Platvorm</string>
   <string name="change_submission_url">Indiening path (word bygevoeg tot URL)</string>
   <string name="formlist_url">Vorm lys path</string>
   <string name="submission_url">Indiening path</string>
   <string name="font_size">Teks font grootte</string>
   <string name="change_font_size">Teks font grootte</string>
-  <string name="access_error">Fout tydens toegang na %s:</string>
-  <string name="manifest_server_error">Manifest antwoord gee nie \'n OpenRosa weergawe nie - slegte server?</string>
-  <string name="root_element_error">Root element is nie &lt;manifest\&gt; nie — was %s</string>
-  <string name="root_namespace_error">Root element Namespace is verkeerd: %s</string>
-  <string name="manifest_tag_error">Manifest inskrywing %s vermis een of meer tags: filename, hash, of downloadUrl</string>
   <string name="form_download_progress">%1$s. Besig om media leërs te haal: %2$s van %3$s</string>
   <string name="fetching_manifest">%s. Besig om manifest te haal</string>
   <string name="success">Sukses</string>
@@ -136,8 +124,6 @@
   <string name="save_as_error">Gestoorde naam mag nie leeg wees nie!</string>
   <string name="edit_prompt">Wysig Vraag</string>
   <string name="selected_google_account_text">Google rekening</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Ander</string>
   <string name="font_size_extra_large">Extra Large</string>
   <string name="font_size_large">Large</string>
   <string name="font_size_medium">Medium</string>
@@ -160,7 +146,6 @@
   <string name="parent_form_not_present">Kon nie hierdie gestoorde vorm wysig nie omdat die ooreenstemmende vorm of nie teenwoordig is nie of uitgevee is.\n\nVorm ID: %1$s</string>
   <string name="launch_app">Loods</string>
   <string name="no_app">Die program of app wat u aangevra het word vermis. Tik asb self die lesing in.</string>
-  <string name="select_one">Kies Een Antwoord</string>
   <string name="savepoint_used">Ongestoorde veranderinge is herstel vanaf stoor-punt!</string>
   <string name="save_and_close">Stoor en maak toe</string>
   <string name="sign_button">Verkry Handtekening</string>
@@ -228,8 +213,6 @@
   <string name="go_drive">My Skyf</string>
   <string name="go_shared">Met my gedeel</string>
   <string name="modified_on_date_at_time">\'Verander op\' EEE, MMM dd, yyyy \'om\' HH:mm</string>
-  <string name="aggregate_preferences">ODK Aggregate verstellings</string>
-  <string name="other_preferences">Ander platform verstellings</string>
   <string name="drive_get_file">Besig om %1$s en media leêrs te haal.</string>
   <string name="no_google_account">Geen Google rekening geselekteer nie!</string>
   <string name="notification_error">Fout met vertoon van kennisgewing teks</string>
@@ -247,5 +230,4 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <!--Sms submission-->
 </resources>

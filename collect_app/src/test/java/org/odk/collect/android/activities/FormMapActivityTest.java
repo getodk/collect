@@ -1,11 +1,11 @@
 package org.odk.collect.android.activities;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -23,7 +23,7 @@ import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.TestMapFragment;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.instances.TestInstancesRepository;
+import org.odk.collect.android.support.InMemInstancesRepository;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.MapsPreferences;
@@ -77,8 +77,8 @@ public class FormMapActivityTest {
         activityController = RobolectricHelpers.buildThemedActivity(FormMapActivity.class);
         activity = (FormMapActivity) activityController.get();
 
-        TestInstancesRepository testInstancesRepository = new TestInstancesRepository(Arrays.asList(testInstances));
-        FormMapViewModel viewModel = new FormMapViewModel(FormMapViewModelTest.TEST_FORM_1, testInstancesRepository);
+        InMemInstancesRepository inMemInstancesRepository = new InMemInstancesRepository(Arrays.asList(testInstances));
+        FormMapViewModel viewModel = new FormMapViewModel(FormMapViewModelTest.TEST_FORM_1, inMemInstancesRepository);
         activity.viewModelFactory = new TestFactory(viewModel);
 
         activityController.setup();
@@ -99,8 +99,8 @@ public class FormMapActivityTest {
         ActivityController controller = RobolectricHelpers.buildThemedActivity(FormMapActivity.class);
         FormMapActivity activity = (FormMapActivity) controller.get();
 
-        TestInstancesRepository testInstancesRepository = new TestInstancesRepository(new ArrayList<>());
-        FormMapViewModel viewModel = new FormMapViewModel(FormMapViewModelTest.TEST_FORM_1, testInstancesRepository);
+        InMemInstancesRepository inMemInstancesRepository = new InMemInstancesRepository(new ArrayList<>());
+        FormMapViewModel viewModel = new FormMapViewModel(FormMapViewModelTest.TEST_FORM_1, inMemInstancesRepository);
         activity.viewModelFactory = new TestFactory(viewModel);
 
         controller.setup();
@@ -115,8 +115,8 @@ public class FormMapActivityTest {
         ActivityController controller = RobolectricHelpers.buildThemedActivity(FormMapActivity.class);
         FormMapActivity activity = (FormMapActivity) controller.get();
 
-        TestInstancesRepository testInstancesRepository = new TestInstancesRepository(new ArrayList<>());
-        FormMapViewModel viewModel = new FormMapViewModel(FormMapViewModelTest.TEST_FORM_1, testInstancesRepository);
+        InMemInstancesRepository inMemInstancesRepository = new InMemInstancesRepository(new ArrayList<>());
+        FormMapViewModel viewModel = new FormMapViewModel(FormMapViewModelTest.TEST_FORM_1, inMemInstancesRepository);
         activity.viewModelFactory = new TestFactory(viewModel);
 
         controller.setup();
@@ -148,13 +148,15 @@ public class FormMapActivityTest {
         assertThat(map.wasLatestZoomCallAnimated(), is(false));
     }
 
+    @LooperMode(PAUSED)
     @Test public void tappingOnLayerMenu_opensLayerDialog() {
-        List<Fragment> fragments = activity.getFragmentManager().getFragments();
+        List<Fragment> fragments = activity.getSupportFragmentManager().getFragments();
         assertThat(fragments, not(hasItem(isA(MapsPreferences.class))));
 
         activity.findViewById(R.id.layer_menu).performClick();
 
-        fragments = activity.getFragmentManager().getFragments();
+        activity.getSupportFragmentManager().executePendingTransactions();
+        fragments = activity.getSupportFragmentManager().getFragments();
         assertThat(fragments, hasItem(isA(MapsPreferences.class)));
     }
 
@@ -339,7 +341,7 @@ public class FormMapActivityTest {
             case OPEN_READ_ONLY:
                 assertThat(activity.findViewById(R.id.info).getVisibility(), is(View.GONE));
                 assertThat(activity.findViewById(R.id.openFormChip).getVisibility(), is(View.VISIBLE));
-                assertThat(((Chip) activity.findViewById(R.id.openFormChip)).getText(), is(activity.getString(R.string.view_sent_forms)));
+                assertThat(((Chip) activity.findViewById(R.id.openFormChip)).getText(), is(activity.getString(R.string.view_data)));
                 break;
             case OPEN_EDIT:
                 assertThat(activity.findViewById(R.id.info).getVisibility(), is(View.GONE));

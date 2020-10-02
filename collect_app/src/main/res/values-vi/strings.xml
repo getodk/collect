@@ -59,11 +59,7 @@
   <string name="jump_to_beginning">Về đầu tiên</string>
   <string name="jump_to_end">Đến cuối cùng</string>
   <string name="jump_to_previous">Về trước</string>
-  <string name="list_failed_with_error">Lỗi hiển thị biểu mẫu. %s.</string>
   <string name="loading_form">Tải biểu mẫu</string>
-  <string name="load_remote_form_error">Lỗi hiển thị danh sách</string>
-  <string name="location_provider_accuracy">Sử dụng %1$s. Độ chính xác là %2$s m.</string>
-  <string name="location_accuracy">Độ chính xác là %1$s m</string>
   <string name="manage_files">Xoá biểu mẫu cũ</string>
   <string name="mark_finished">Đánh dấu biểu mẫu là hoàn thành</string>
   <string name="noselect_error">Xin lỗi, bạn không chọn biểu mẫu nào!</string>
@@ -71,8 +67,6 @@
   <string name="no_items_display">Không có nội dung gì hiển thị.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Xin lỗi, không thể phân tích biểu mẫu.</string>
-  <string name="parse_legacy_formlist_failed">Máy chủ không có các biểu mẫu tương thích với Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">Máy chủ không có các biểu mẫu tương thích với OpenRosa phiên bản chuẩn 1.0: %s</string>
   <string name="password">Mật khẩu</string>
   <string name="play_video">Chạy Video</string>
   <string name="please_wait">Hãy đợi 1 lúc.</string>
@@ -107,17 +101,11 @@
   <string name="change_splash_path">Đổi ảnh</string>
   <string name="keep_changes">Lưu thay đổi</string>
   <string name="change_formlist_url">Danh sách đường dẫn biểu mẫu</string>
-  <string name="change_protocol">Nền tảng máy chủ</string>
   <string name="change_submission_url">Đường dẫn gửi dữ liệu</string>
   <string name="formlist_url">Danh sách đường dẫn biểu mẫu</string>
   <string name="submission_url">Đường dẫn gửi dữ liệu</string>
   <string name="font_size">Kích thước chữ</string>
   <string name="change_font_size">Kích thước chữ</string>
-  <string name="access_error">Lỗi khi truy cập %s: </string>
-  <string name="manifest_server_error">Manifest không báo cáo về phiên bản của OpenRosa — máy chủ lỗi?</string>
-  <string name="root_element_error">Yếu tố gốc không &amp;lt;manifest\&gt; — was %s</string>
-  <string name="root_namespace_error">Yếu tố gốc Namespace không đúng: %s</string>
-  <string name="manifest_tag_error">Mục Manifest %s bị thiếu 1 hoặc nhiều thẻ sau: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Lấy file đa phương tiện: %2$s of %3$s</string>
   <string name="fetching_manifest">%s. Lấy manifest </string>
   <string name="success">Thành công</string>
@@ -132,8 +120,6 @@
   <string name="save_as_error">Tên được lưu không để trống!</string>
   <string name="edit_prompt">Sửa thông tin</string>
   <string name="selected_google_account_text">Tài khoản Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Khác</string>
   <string name="font_size_extra_large">Cực lớn</string>
   <string name="font_size_large">Lớn</string>
   <string name="font_size_medium">Vừa</string>
@@ -155,7 +141,6 @@
   <string name="version">Phiên bản:</string>
   <string name="launch_app">Chạy</string>
   <string name="no_app">Không tìm thấy chương trình yêu cầu. Hãy chỉ rõ chương trình đọc.</string>
-  <string name="select_one">Chọn 1 câu trả lời</string>
   <string name="savepoint_used">Những thay đổi chưa ghi lại được phục hồi từ điểm đã lưu!</string>
   <string name="save_and_close">Lưu và Đóng lại</string>
   <string name="sign_button">Xin Chữ kí</string>
@@ -192,5 +177,4 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <!--Sms submission-->
 </resources>

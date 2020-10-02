@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.database.helpers.InstancesDatabaseHelper;
+import org.odk.collect.android.database.InstancesDatabaseHelper;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.SQLiteUtils;
@@ -23,10 +23,11 @@ import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
-import static org.odk.collect.android.database.helpers.InstancesDatabaseHelper.INSTANCES_TABLE_NAME;
+import static org.odk.collect.android.database.InstancesDatabaseHelper.INSTANCES_TABLE_NAME;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
 @RunWith(Parameterized.class)
+@Ignore("`Parameterized` causes problems for Firebase sharding. Probably need to replace this at JUnit level")
 public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
     private static final String DATABASE_PATH = InstancesDatabaseHelper.getDatabasePath();
 
@@ -66,7 +67,6 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
     }
 
     @Test
-    @Ignore("Flakey. Should be replaced at a Robolectric level probably")
     public void testMigration() throws IOException {
         copyFileFromAssets("database" + File.separator + dbFilename, DATABASE_PATH);
         InstancesDatabaseHelper databaseHelper = new InstancesDatabaseHelper();

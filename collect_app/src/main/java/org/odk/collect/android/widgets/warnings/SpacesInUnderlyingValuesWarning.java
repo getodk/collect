@@ -36,7 +36,7 @@ import java.util.List;
  * initializer that initializes SpacesInUnderlyingValuesWarning with the new renderer
  * as in {@link ##forQuestionWidget(QuestionWidget)}
  *
- * Created as fix for https://github.com/opendatakit/collect/issues/1964
+ * Created as fix for https://github.com/getodk/collect/issues/1964
  *
  */
 public class SpacesInUnderlyingValuesWarning {

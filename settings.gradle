@@ -1,5 +1,5 @@
 include ':collect_app', ':AWSMobileHelper'
-include ':collect_app'
+include ':async'
 include ':nbi-stubs'
 include ':material'
 

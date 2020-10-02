@@ -22,10 +22,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import timber.log.Timber;
 
+import android.content.Context;
 import android.content.Intent;
-import android.preference.EditTextPreference;
-import android.preference.Preference;
-import android.telephony.PhoneNumberUtils;
+import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.MotionEvent;
@@ -34,23 +33,31 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListPopupWindow;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.preference.EditTextPreference;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.backgroundwork.FormUpdateManager;
+import org.odk.collect.android.configure.ServerRepository;
+import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
-import org.odk.collect.android.preferences.utilities.ChangingServerUrlUtils;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PermissionUtils;
-import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Utilities;
 import org.odk.collect.android.utilities.Validator;
-import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.io.ByteArrayInputStream;
 import java.util.Locale;
@@ -58,38 +65,19 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import static android.app.Activity.RESULT_OK;
-import static org.odk.collect.android.analytics.AnalyticsEvents.SET_CUSTOM_ENDPOINT;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SET_FALLBACK_SHEETS_URL;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SET_SERVER;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_SMS_GATEWAY;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_SMS_PREFERENCE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_URL;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_TRANSPORT_PREFERENCE;
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
-//import android.preference.ListPreference;
-//import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 
-//import static org.odk.collect.android.utilities.DialogUtils.showDialog;
-
-public class ServerPreferencesFragment extends BasePreferenceFragment implements
-        View.OnTouchListener, OnBackPressedListener {
+public class ServerPreferencesFragment extends BasePreferenceFragment implements View.OnTouchListener, OnBackPressedListener {
 
     private static final int REQUEST_ACCOUNT_PICKER = 1000;
-    protected EditTextPreference serverUrlPreference;
-    protected EditTextPreference usernamePreference;
-    protected EditTextPreference passwordPreference;
-    //protected ExtendedEditTextPreference smsGatewayPreference;
-    protected EditTextPreference submissionUrlPreference;
-    protected EditTextPreference formListUrlPreference;
-    private ListPopupWindow listPopupWindow;
-    private Preference selectedGoogleAccountPreference;
-    private boolean allowClickSelectedGoogleAccountPreference = true;
 
-    @Inject
-    OpenRosaAPIClient openRosaAPIClient;
+    private EditTextPreference passwordPreference;
 
     @Inject
     GoogleAccountsManager accountsManager;
@@ -97,37 +85,87 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     @Inject
     Analytics analytics;
 
-    /*
-    private ListPreference transportPreference;
-    private ExtendedPreferenceCategory smsPreferenceCategory;
-    */
+    @Inject
+    PreferencesProvider preferencesProvider;
+
+    @Inject
+    FormUpdateManager formUpdateManager;
+
+    @Inject
+    ServerRepository serverRepository;
+
+    private ListPopupWindow listPopupWindow;
+    private Preference selectedGoogleAccountPreference;
+    private boolean allowClickSelectedGoogleAccountPreference = true;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        DaggerUtils.getComponent(activity).inject(this);
+    public void onAttach(@NotNull Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
 
-        ((PreferencesActivity) activity).setOnBackPressedListener(this);
+        ((PreferencesActivity) context).setOnBackPressedListener(this);
+    }
+
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.server_preferences, rootKey);
+        initProtocolPrefs();
+    }
+
+    @Override
+    public void onDestroyView() {
+        // to avoid leaking listPopupWindow
+        listPopupWindow = null;
+        super.onDestroyView();
+    }
+
+    private void initProtocolPrefs() {
+        ListPreference protocolPref = (ListPreference) findPreference(KEY_PROTOCOL);
+        protocolPref.setSummary(protocolPref.getEntry());
+        protocolPref.setOnPreferenceChangeListener((preference, newValue) -> {
+            if (preference.getKey().equals(KEY_PROTOCOL)) {
+                String stringValue = (String) newValue;
+                ListPreference lpref = (ListPreference) preference;
+                String oldValue = lpref.getValue();
+                lpref.setValue(stringValue);
+
+                if (!newValue.equals(oldValue)) {
+                    getPreferenceScreen().removeAll();
+                    addPreferencesFromResource(R.xml.server_preferences);
+                    initProtocolPrefs();
+                }
+            }
+            return true;
+        });
+
+        String value = protocolPref.getValue();
+        switch (Protocol.parse(getActivity(), value)) {
+            case ODK:
+                addAggregatePreferences();
+                break;
+            case GOOGLE:
+                addGooglePreferences();
+                break;
+        }
     }
 
     public void addAggregatePreferences() {
         if (!new AggregatePreferencesAdder(this).add()) {
             return;
         }
-
-        serverUrlPreference = (EditTextPreference) findPreference(
-                GeneralKeys.KEY_SERVER_URL);
-        usernamePreference = (EditTextPreference) findPreference(GeneralKeys.KEY_USERNAME);
+        EditTextPreference serverUrlPreference = (EditTextPreference) findPreference(GeneralKeys.KEY_SERVER_URL);
+        EditTextPreference usernamePreference = (EditTextPreference) findPreference(GeneralKeys.KEY_USERNAME);
         passwordPreference = (EditTextPreference) findPreference(GeneralKeys.KEY_PASSWORD);
 
-        urlDropdownSetup();
-
-        serverUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);
-        serverUrlPreference.getEditText().setOnTouchListener(this);
         serverUrlPreference.setOnPreferenceChangeListener(createChangeListener());
         serverUrlPreference.setSummary(serverUrlPreference.getText());
-        serverUrlPreference.getEditText().setFilters(
-                new InputFilter[]{new ControlCharacterFilter(), new WhitespaceFilter()});
+
+        serverUrlPreference.setOnBindEditTextListener(editText -> {
+            urlDropdownSetup(editText);
+            editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);
+            editText.setFilters(new InputFilter[]{new ControlCharacterFilter(), new WhitespaceFilter()});
+            editText.setOnTouchListener(this);
+        });
 
         usernamePreference.setOnPreferenceChangeListener(createChangeListener());
         // smap begin hack to try and set user name default
@@ -138,81 +176,48 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         }
         // smap end
         usernamePreference.setSummary(usernamePreference.getText());
-        usernamePreference.getEditText().setFilters(
-                new InputFilter[]{new ControlCharacterFilter()});
+
+        usernamePreference.setOnBindEditTextListener(editText -> {
+            editText.setFilters(new InputFilter[]{new ControlCharacterFilter()});
+        });
 
         passwordPreference.setOnPreferenceChangeListener(createChangeListener());
         maskPasswordSummary(passwordPreference.getText());
-        passwordPreference.getEditText().setFilters(
-                new InputFilter[]{new ControlCharacterFilter()});
-        serverUrlPreference.setOnPreferenceClickListener(preference -> {
-            serverUrlPreference.getEditText().requestFocus();
-            return true;
+
+        passwordPreference.setOnBindEditTextListener(editText -> {
+            editText.setFilters(new InputFilter[]{new ControlCharacterFilter()});
         });
-        usernamePreference.setOnPreferenceClickListener(preference -> {
-            usernamePreference.getEditText().requestFocus();
-            return true;
-        });
-        passwordPreference.setOnPreferenceClickListener(preference -> {
-            passwordPreference.getEditText().requestFocus();
-            return true;
-        });
-        //setupTransportPreferences();
-        //getPreferenceScreen().removePreference(findPreference(KEY_TRANSPORT_PREFERENCE));  smap
-        //getPreferenceScreen().removePreference(findPreference(KEY_SMS_PREFERENCE));          smap
-    }
 
-    /*
-    public void setupTransportPreferences() {
-        transportPreference = (ListPreference) findPreference(KEY_SUBMISSION_TRANSPORT_TYPE);
-        transportPreference.setOnPreferenceChangeListener(createTransportChangeListener());
-        transportPreference.setSummary(transportPreference.getEntry());
-
-        smsPreferenceCategory = (ExtendedPreferenceCategory) findPreference(KEY_SMS_PREFERENCE);
-
-        smsGatewayPreference = (ExtendedEditTextPreference) findPreference(KEY_SMS_GATEWAY);
-
-        smsGatewayPreference.setOnPreferenceChangeListener(createChangeListener());
-        smsGatewayPreference.setSummary(smsGatewayPreference.getText());
-        smsGatewayPreference.getEditText().setFilters(
-                new InputFilter[]{new ControlCharacterFilter()});
-
-        Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
-
-        boolean smsEnabled = !transport.equals(Transport.Internet);
-        smsGatewayPreference.setEnabled(smsEnabled);
-        smsPreferenceCategory.setEnabled(smsEnabled);
-    }
-
-    private Preference.OnPreferenceChangeListener createTransportChangeListener() {
-        return (preference, newValue) -> {
-            if (preference.getKey().equals(KEY_SUBMISSION_TRANSPORT_TYPE)) {
-                String stringValue = (String) newValue;
-                ListPreference pref = (ListPreference) preference;
-                String oldValue = pref.getValue();
-
-                if (!newValue.equals(oldValue)) {
-                    pref.setValue(stringValue);
-
-                    Transport transport = Transport.fromPreference(newValue);
-
-                    boolean smsEnabled = !transport.equals(Transport.Internet);
-                    smsGatewayPreference.setEnabled(smsEnabled);
-                    smsPreferenceCategory.setEnabled(smsEnabled);
-
-                    if (transport.equals(Transport.Internet)) {
-                        transportPreference.setSummary(R.string.transport_type_internet);
-                    } else if (transport.equals(Transport.Sms)) {
-                        transportPreference.setSummary(R.string.transport_type_sms);
-                    } else {
-                        transportPreference.setSummary(R.string.transport_type_both);
-                    }
-                }
+        findPreference("custom_server_paths").setOnPreferenceClickListener(preference -> {
+            if (MultiClickGuard.allowClick(getClass().getName())) {
+                Fragment fragment = new CustomServerPathsFragment();
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.preferences_fragment_container, fragment)
+                        .addToBackStack(null)
+                        .commit();
+                return true;
+            } else {
+                return false;
             }
-            return true;
-        };
+        });
     }
-    */
+
+    private void urlDropdownSetup(EditText editText) {
+        listPopupWindow = new ListPopupWindow(getActivity());
+        setupUrlDropdownAdapter(listPopupWindow);
+        listPopupWindow.setAnchorView(editText);
+        listPopupWindow.setModal(true);
+        listPopupWindow.setOnItemClickListener((parent, view, position, id) -> {
+            editText.setText(serverRepository.getServers().get(position));
+            listPopupWindow.dismiss();
+        });
+    }
+
+    public void setupUrlDropdownAdapter(ListPopupWindow listPopupWindow) {
+        ArrayAdapter adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, serverRepository.getServers());
+        listPopupWindow.setAdapter(adapter);
+    }
 
     public void addGooglePreferences() {
         addPreferencesFromResource(R.xml.google_preferences);
@@ -220,6 +225,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
         EditTextPreference googleSheetsUrlPreference = (EditTextPreference) findPreference(
                 GeneralKeys.KEY_GOOGLE_SHEETS_URL);
+        googleSheetsUrlPreference.setOnBindEditTextListener(editText -> editText.setFilters(new InputFilter[] {new ControlCharacterFilter(), new WhitespaceFilter() }));
         googleSheetsUrlPreference.setOnPreferenceChangeListener(createChangeListener());
 
         String currentGoogleSheetsURL = googleSheetsUrlPreference.getText();
@@ -227,59 +233,18 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
             googleSheetsUrlPreference.setSummary(currentGoogleSheetsURL + "\n\n"
                     + getString(R.string.google_sheets_url_hint));
         }
-
-        googleSheetsUrlPreference.getEditText().setFilters(new InputFilter[]{
-                new ControlCharacterFilter(), new WhitespaceFilter()
-        });
-
-        googleSheetsUrlPreference.setOnPreferenceClickListener(preference -> {
-            googleSheetsUrlPreference.getEditText().requestFocus();
-            return true;
-        });
-
         initAccountPreferences();
-        //setupTransportPreferences();
-        getPreferenceScreen().removePreference(findPreference(KEY_TRANSPORT_PREFERENCE));
-        getPreferenceScreen().removePreference(findPreference(KEY_SMS_PREFERENCE));
-    }
-
-    public void addOtherPreferences() {
-        addAggregatePreferences();
-        addPreferencesFromResource(R.xml.other_preferences);
-
-        formListUrlPreference = (EditTextPreference) findPreference(KEY_FORMLIST_URL);
-        submissionUrlPreference = (EditTextPreference) findPreference(KEY_SUBMISSION_URL);
-
-        InputFilter[] filters = {new ControlCharacterFilter(), new WhitespaceFilter()};
-
-        serverUrlPreference.getEditText().setFilters(filters);
-
-        formListUrlPreference.setOnPreferenceChangeListener(createChangeListener());
-        formListUrlPreference.setSummary(formListUrlPreference.getText());
-        formListUrlPreference.getEditText().setFilters(filters);
-        formListUrlPreference.setOnPreferenceClickListener(preference -> {
-            formListUrlPreference.getEditText().requestFocus();
-            return true;
-        });
-
-        submissionUrlPreference.setOnPreferenceChangeListener(createChangeListener());
-        submissionUrlPreference.setSummary(submissionUrlPreference.getText());
-        submissionUrlPreference.getEditText().setFilters(filters);
-        submissionUrlPreference.setOnPreferenceClickListener(preference -> {
-            submissionUrlPreference.getEditText().requestFocus();
-            return true;
-        });
     }
 
     public void initAccountPreferences() {
         selectedGoogleAccountPreference.setSummary(accountsManager.getLastSelectedAccountIfValid());
         selectedGoogleAccountPreference.setOnPreferenceClickListener(preference -> {
             if (allowClickSelectedGoogleAccountPreference) {
-                if (PlayServicesUtil.isGooglePlayServicesAvailable(getActivity())) {
+                if (new PlayServicesChecker().isGooglePlayServicesAvailable(getActivity())) {
                     allowClickSelectedGoogleAccountPreference = false;
                     requestAccountsPermission();
                 } else {
-                    PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getActivity());
+                    new PlayServicesChecker().showGooglePlayServicesAvailabilityErrorDialog(getActivity());
                 }
             }
             return true;
@@ -299,22 +264,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 allowClickSelectedGoogleAccountPreference = true;
             }
         });
-    }
-
-    private void urlDropdownSetup() {
-        listPopupWindow = new ListPopupWindow(getActivity());
-        setupUrlDropdownAdapter();
-        listPopupWindow.setAnchorView(serverUrlPreference.getEditText());
-        listPopupWindow.setModal(true);
-        listPopupWindow.setOnItemClickListener((parent, view, position, id) -> {
-            serverUrlPreference.getEditText().setText(ChangingServerUrlUtils.getUrlList().get(position));
-            listPopupWindow.dismiss();
-        });
-    }
-
-    private void setupUrlDropdownAdapter() {
-        ArrayAdapter adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, ChangingServerUrlUtils.getUrlList());
-        listPopupWindow.setAdapter(adapter);
     }
 
     @Override
@@ -347,8 +296,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                         sendAnalyticsEvent(url);
 
                         preference.setSummary(newValue.toString());
-                        ChangingServerUrlUtils.addUrlToList(url);
-                        setupUrlDropdownAdapter();
+                        setupUrlDropdownAdapter(listPopupWindow);
                     } else {
                         ToastUtils.showShortToast(R.string.url_error);
                         return false;
@@ -399,24 +347,9 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                         return false;
                     }
                     break;
-
-                case KEY_SMS_GATEWAY:
-                    String phoneNumber = newValue.toString();
-
-                    if (!PhoneNumberUtils.isGlobalPhoneNumber(phoneNumber)) {
-                        ToastUtils.showShortToast(getString(R.string.sms_invalid_phone_number));
-                        return false;
-                    }
-
-                    preference.setSummary(phoneNumber);
-                    break;
                 case KEY_FORMLIST_URL:
                 case KEY_SUBMISSION_URL:
                     preference.setSummary(newValue.toString());
-
-                    String customEndpointId = FileUtils.getMd5Hash(new ByteArrayInputStream(newValue.toString().getBytes()));
-                    String action = preference.getKey() + " " + customEndpointId;
-                    analytics.logEvent(SET_CUSTOM_ENDPOINT, action);
                     break;
             }
             return true;
@@ -456,12 +389,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 : "");
     }
 
-    protected void setDefaultAggregatePaths() {
-        GeneralSharedPreferences sharedPreferences = GeneralSharedPreferences.getInstance();
-        sharedPreferences.reset(KEY_FORMLIST_URL);
-        sharedPreferences.reset(KEY_SUBMISSION_URL);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -476,37 +403,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 break;
         }
     }
-
-    /**
-     * Shows a dialog if SMS submission is enabled but the phone number isn't set.
-     */
-    /*
-    private void runSmsPhoneNumberValidation() {
-        Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
-
-        if (!transport.equals(Transport.Internet)) {
-            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-            String gateway = settings.getString(KEY_SMS_GATEWAY, null);
-
-            if (!PhoneNumberUtils.isGlobalPhoneNumber(gateway)) {
-
-                AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
-                        .setIcon(android.R.drawable.ic_dialog_info)
-                        .setTitle(getString(R.string.sms_invalid_phone_number))
-                        .setMessage(R.string.sms_invalid_phone_number_description)
-                        .setPositiveButton(getString(R.string.ok), (dialog, which) -> dialog.dismiss())
-                        .create();
-
-                showDialog(alertDialog, getActivity());
-            } else {
-                runGoogleAccountValidation();
-            }
-        } else {
-            runGoogleAccountValidation();
-        }
-    }
-    */
 
     private void runGoogleAccountValidation() {
         String account = (String) GeneralSharedPreferences.getInstance().get(KEY_SELECTED_GOOGLE_ACCOUNT);
@@ -545,5 +441,4 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         }
         runGoogleAccountValidation();
     }
-
 }

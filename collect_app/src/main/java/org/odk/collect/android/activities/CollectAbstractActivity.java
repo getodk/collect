@@ -18,6 +18,7 @@ package org.odk.collect.android.activities;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 
 import org.odk.collect.android.R;
@@ -28,6 +29,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import java.util.Locale;
 
 import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
@@ -84,15 +87,32 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
 
     @Override
     protected void attachBaseContext(Context base) {
-        super.attachBaseContext(new LocaleHelper().updateLocale(base));
+        super.attachBaseContext(base);
+        applyOverrideConfiguration(new Configuration());
     }
 
     @Override
-    public void applyOverrideConfiguration(Configuration overrideConfiguration) {
-        if (overrideConfiguration != null) {
-            overrideConfiguration.setTo(getBaseContext().getResources().getConfiguration());
+    public void applyOverrideConfiguration(Configuration newConfig) {
+        super.applyOverrideConfiguration(updateConfigurationIfSupported(newConfig));
+    }
+
+    private Configuration updateConfigurationIfSupported(Configuration config) {
+        if (Build.VERSION.SDK_INT >= 24) {
+            if (!config.getLocales().isEmpty()) {
+                return config;
+            }
+        } else {
+            if (config.locale != null) {
+                return config;
+            }
         }
-        super.applyOverrideConfiguration(overrideConfiguration);
+
+        Locale locale = new LocaleHelper().getLocale(this);
+        if (locale != null) {
+            config.setLocale(locale);
+            config.setLayoutDirection(locale);
+        }
+        return config;
     }
 
     public void initToolbar(CharSequence title) {

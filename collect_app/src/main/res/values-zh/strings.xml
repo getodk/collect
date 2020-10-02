@@ -64,11 +64,7 @@
   <string name="jump_to_beginning">开始</string>
   <string name="jump_to_end">结束</string>
   <string name="jump_to_previous">返回</string>
-  <string name="list_failed_with_error">列出表格失败. %s.</string>
   <string name="loading_form">正在加载表格</string>
-  <string name="load_remote_form_error">获取表格列表错误</string>
-  <string name="location_provider_accuracy">使用 %1$s. 精度为  %2$s m.</string>
-  <string name="location_accuracy">精度为  %1$s m</string>
   <string name="manage_files">删除已保存表格</string>
   <string name="mark_finished">标记表格为完成</string>
   <string name="noselect_error">没有选定表格!</string>
@@ -77,8 +73,6 @@
   <string name="no_items_display_forms">无可显示内容。\n\n 请尝试获取并填写一个空白表格</string>
   <string name="ok">好</string>
   <string name="parse_error">无法读取表格.</string>
-  <string name="parse_legacy_formlist_failed">服务器没有提供与 Aggregate 0.9.x.兼容的表格 : %s</string>
-  <string name="parse_openrosa_formlist_failed">服务器没有提供与OpenRosa version 1.0标准兼容的表格: %s</string>
   <string name="password">密码</string>
   <string name="play_video">播放视频</string>
   <string name="please_wait">请稍候.</string>
@@ -118,17 +112,11 @@
   <string name="change_splash_path">修改图片</string>
   <string name="keep_changes">保存修改</string>
   <string name="change_formlist_url">表格列表路径 (附加到服务器URL之后)</string>
-  <string name="change_protocol">服务器平台</string>
   <string name="change_submission_url">提交路径 (附加到服务器URL之后)</string>
   <string name="formlist_url">表格列表路径</string>
   <string name="submission_url">提交路径</string>
   <string name="font_size">字体大小</string>
   <string name="change_font_size">字体大小</string>
-  <string name="access_error">读取 %s 中发生错误:</string>
-  <string name="manifest_server_error">Manifest回复中不包括OpenRosa版本 — 服务器错误?</string>
-  <string name="root_element_error">根元素不是 &lt;manifest\&gt; — 而是 %s</string>
-  <string name="root_namespace_error">根元素命名空间错误: %s</string>
-  <string name="manifest_tag_error">Manifest条目 %s 缺少一个或多个标签: 文件名, 哈希值, 或者下载Url</string>
   <string name="form_download_progress">%1$s. 加载媒体文件: %3$s 中的 %2$s</string>
   <string name="fetching_manifest">%s. 加载Manifest</string>
   <string name="success">成功</string>
@@ -143,8 +131,6 @@
   <string name="save_as_error">保存的名字不能为空!</string>
   <string name="edit_prompt">修改提示</string>
   <string name="selected_google_account_text">Google账号</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">其他</string>
   <string name="font_size_extra_large">极大</string>
   <string name="font_size_large">大</string>
   <string name="font_size_medium">中</string>
@@ -166,7 +152,6 @@
   <string name="version">版本:</string>
   <string name="launch_app">运行</string>
   <string name="no_app">请求的应用不可用. 请手动填入相应值.</string>
-  <string name="select_one">选择一个回答</string>
   <string name="savepoint_used">已从自动保存点恢复未保存修改!</string>
   <string name="save_and_close">保存并关闭</string>
   <string name="sign_button">收集签名</string>
@@ -227,5 +212,4 @@
   <string name="autosend_selector_title">自动发送</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <!--Sms submission-->
 </resources>

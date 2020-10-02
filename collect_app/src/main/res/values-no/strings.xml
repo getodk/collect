@@ -59,11 +59,7 @@
   <string name="jump_to_beginning">Gå til start</string>
   <string name="jump_to_end">Gå til slutten</string>
   <string name="jump_to_previous">Gå opp</string>
-  <string name="list_failed_with_error">Det er oppstått en feil. %s.</string>
   <string name="loading_form">Henter skjema</string>
-  <string name="load_remote_form_error">Det er oppstått en feil</string>
-  <string name="location_provider_accuracy">Bruker %1$s. Nøyaktighet er %2$s m.</string>
-  <string name="location_accuracy">Nøyaktigheten er %1$s m</string>
   <string name="manage_files">Slett lagret skjema</string>
   <string name="mark_finished">Kryss skjema som ferdig</string>
   <string name="noselect_error">Beklager, du har ikke valgt skjema!</string>
@@ -73,8 +69,6 @@
   <string name="no_items_display_instances">Ingen elementer å vise.\n\nEventuelle lagrede skjemaer må fullføres før du kan sende dem. </string>
   <string name="ok">OK</string>
   <string name="parse_error">Beklager, klarte ikke å analysere skjema.</string>
-  <string name="parse_legacy_formlist_failed">Formatet er ikke kompatibel med Aggregate 09.x: %s</string>
-  <string name="parse_openrosa_formlist_failed">Formatet er ikke kompitabel med OpenRosa 1.0 standard: %s</string>
   <string name="password">Passord</string>
   <string name="play_video">Spill video</string>
   <string name="please_wait">Vennligst vent.</string>
@@ -110,17 +104,11 @@
   <string name="change_splash_path">Endre bilde</string>
   <string name="keep_changes">Lagre endringer</string>
   <string name="change_formlist_url">Sti</string>
-  <string name="change_protocol">Server platform</string>
   <string name="change_submission_url">Sti</string>
   <string name="formlist_url">Skjema oversikt</string>
   <string name="submission_url">Bane for innsending</string>
   <string name="font_size">Fontstørrelse</string>
   <string name="change_font_size">Fontstørrelse</string>
-  <string name="access_error">Det er oppstått en feil ved %s.</string>
-  <string name="manifest_server_error">Feil OpenRosa versjon?</string>
-  <string name="root_element_error">Root element er ikke &amp;lt;manifest\&gt; — var %s</string>
-  <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
-  <string name="manifest_tag_error">Manifest entry %s is missing one or more tags: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Henter mediafiler: %2$s av %3$s</string>
   <string name="fetching_manifest">%s. Henter manifestet</string>
   <string name="success">Suksess</string>
@@ -135,8 +123,6 @@
   <string name="save_as_error">Navnet kan ikke være blank!</string>
   <string name="edit_prompt">Rediger prompt</string>
   <string name="selected_google_account_text">Google-konto</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Andre</string>
   <string name="font_size_extra_large">Ekstra stor</string>
   <string name="font_size_large">Stor</string>
   <string name="font_size_medium">Medium</string>
@@ -159,7 +145,6 @@
   <string name="parent_form_not_present">Kan ikke endre dette lagrede skjemaet fordi den tilhørende skjemamalen ikke lenger er tilgjengelig eller er slettet.\n\nForm-ID: %1$s</string>
   <string name="launch_app">Start</string>
   <string name="no_app">Applikasjon mangler. Vennligst tast inn teksten manuelt</string>
-  <string name="select_one">Velg ett svaralternativ</string>
   <string name="savepoint_used">Ikke lagret endringer hentet fra lagringspunkt</string>
   <string name="save_and_close">Save and Close</string>
   <string name="sign_button">Gather Signature</string>
@@ -228,9 +213,6 @@
   <string name="go_drive">Min Drive</string>
   <string name="go_shared">Delt med meg</string>
   <string name="modified_on_date_at_time">\'Endret den\' EEE, MMM dd, yyyy \'kl\' HH:mm</string>
-  <string name="aggregate_preferences">Innstillinger for ODK Aggregate</string>
-  <string name="other_preferences">Andre plattforminnstillinger</string>
-  <string name="google_preferences">Innstillinger for Google Sheets</string>
   <string name="drive_get_file">Henter %1$s og mediafiler.</string>
   <string name="no_google_account">Ingen Goggle-konto er valgt!</string>
   <string name="google_set_account">Du har valgt Google Sheets som din server. Nå må du angi en Google-konto i Generelle innstillinger før du fortsetter.</string>
@@ -256,5 +238,4 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <!--Sms submission-->
 </resources>

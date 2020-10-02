@@ -16,35 +16,42 @@
 
 package org.odk.collect.android.preferences;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 
+import androidx.annotation.NonNull;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceScreen;
+
 import org.odk.collect.android.R;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.android.version.VersionInformation;
 
 import java.util.Collection;
 
+import javax.inject.Inject;
+
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MAPS;
-import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public class GeneralPreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceClickListener {
 
-    public static GeneralPreferencesFragment newInstance(boolean adminMode) {
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
+    @Inject
+    VersionInformation versionInformation;
 
-        GeneralPreferencesFragment generalPreferencesFragment = new GeneralPreferencesFragment();
-        generalPreferencesFragment.setArguments(bundle);
-        return generalPreferencesFragment;
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
     }
 
     @Override
-    public void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        addPreferencesFromResource(R.xml.general_preferences);
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.general_preferences, rootKey);
 
         findPreference("protocol").setOnPreferenceClickListener(this);
         findPreference("user_interface").setOnPreferenceClickListener(this);
@@ -52,39 +59,24 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
         findPreference("form_management").setOnPreferenceClickListener(this);
         findPreference("user_and_device_identity").setOnPreferenceClickListener(this);
         findPreference("smap_preferences").setOnPreferenceClickListener(this);
+        findPreference("experimental").setOnPreferenceClickListener(this);
 
-        if (!getArguments().getBoolean(INTENT_KEY_ADMIN_MODE)) {
+        if (!isInAdminMode()) {
             setPreferencesVisibility();
+        }
+
+        if (versionInformation.isRelease()) {
+            findPreference("experimental").setVisible(false);
         }
     }
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
         if (MultiClickGuard.allowClick(getClass().getName())) {
-            BasePreferenceFragment basePreferenceFragment = null;
-            boolean adminMode = getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false);
-            switch (preference.getKey()) {
-                case "protocol":
-                    basePreferenceFragment = ServerPreferences.newInstance(adminMode);
-                    break;
-                case "user_interface":
-                    AndroidXPreferencesActivity.start(getActivity(), UserInterfacePreferencesFragment.class);
-                    break;
-                case "maps":
-                    basePreferenceFragment = MapsPreferences.newInstance(adminMode);
-                    break;
-                case "form_management":
-                    basePreferenceFragment = FormManagementPreferences.newInstance(adminMode);
-                    break;
-                case "user_and_device_identity":
-                    basePreferenceFragment = IdentityPreferences.newInstance(adminMode);
-                    break;
-            case "smap_preferences":
-                basePreferenceFragment = new SmapInterfacePreferences();  // smap
-                break;
-            }
+            PreferenceFragmentCompat basePreferenceFragment = getPreferenceFragment(preference.getKey());
             if (basePreferenceFragment != null) {
-                getActivity().getFragmentManager()
+                basePreferenceFragment.setArguments(getArguments());
+                getActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.preferences_fragment_container, basePreferenceFragment)
                         .addToBackStack(null)
@@ -94,6 +86,27 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
         }
 
         return false;
+    }
+
+    private PreferenceFragmentCompat getPreferenceFragment(String preferenceKey) {
+        switch (preferenceKey) {
+            case "protocol":
+                return new ServerPreferencesFragment();
+            case "user_interface":
+                return new UserInterfacePreferencesFragment();
+            case "maps":
+                return new MapsPreferences();
+            case "form_management":
+                return new FormManagementPreferences();
+            case "user_and_device_identity":
+                return new IdentityPreferences();
+            case "experimental":
+                return new ExperimentalPreferencesFragment();
+            case "smap_preferences":
+                return new SmapInterfacePreferences();  // smap
+            default:
+                return null;
+        }
     }
 
     private void setPreferencesVisibility() {

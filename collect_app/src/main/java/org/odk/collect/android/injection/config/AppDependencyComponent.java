@@ -1,17 +1,17 @@
 package org.odk.collect.android.injection.config;
 
 import android.app.Application;
-import android.telephony.SmsManager;
 
 import org.javarosa.core.reference.ReferenceManager;
+import org.odk.collect.android.activities.DeleteSavedFormActivity;
+import org.odk.collect.android.activities.FillBlankFormActivity;
 import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.FormHierarchyActivity;
 import org.odk.collect.android.activities.FormMapActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPolyActivity;
-import org.odk.collect.android.activities.GoogleDriveActivity;
-import org.odk.collect.android.activities.GoogleSheetsUploaderActivity;
+import org.odk.collect.android.activities.InstanceUploaderActivity;
 import org.odk.collect.android.activities.InstanceUploaderListActivity;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.activities.SmapMain;    // smap
@@ -19,22 +19,44 @@ import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.events.RxEventBus;
+import org.odk.collect.android.application.initialization.ApplicationInitializer;
+import org.odk.collect.android.backgroundwork.AutoSendTaskSpec;
+import org.odk.collect.android.backgroundwork.AutoUpdateTaskSpec;
+import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec;
+import org.odk.collect.android.configure.SettingsImporter;
+import org.odk.collect.android.configure.qr.QRCodeScannerFragment;
+import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
+import org.odk.collect.android.configure.qr.ShowQRCodeFragment;
 import org.odk.collect.android.formentry.ODKView;
+import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.fragments.DataManagerList;
 import org.odk.collect.android.fragments.MapBoxInitializationFragment;
+import org.odk.collect.android.fragments.BarCodeScannerFragment;
+import org.odk.collect.android.fragments.BlankFormListFragment;
+import org.odk.collect.android.fragments.MapBoxInitializationFragment;
+import org.odk.collect.android.fragments.SavedFormListFragment;
+import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
+import org.odk.collect.android.gdrive.GoogleDriveActivity;
+import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.geo.GoogleMapFragment;
 import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.android.geo.OsmDroidMapFragment;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
+import org.odk.collect.android.preferences.AdminPreferencesFragment;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.preferences.BasePreferenceFragment;
+import org.odk.collect.android.preferences.ExperimentalPreferencesFragment;
 import org.odk.collect.android.preferences.FormManagementPreferences;
 import org.odk.collect.android.preferences.FormMetadataFragment;
+import org.odk.collect.android.preferences.GeneralPreferencesFragment;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.IdentityPreferences;
+import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.tasks.DownloadTasksTask;                 // smap
 import org.odk.collect.android.tasks.SmapLoginTask;                     // smap
@@ -47,16 +69,11 @@ import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.migration.StorageMigrationDialog;
 import org.odk.collect.android.storage.migration.StorageMigrationService;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
-import org.odk.collect.android.tasks.ServerPollingJob;
-import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
-import org.odk.collect.android.tasks.sms.SmsSender;
-import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
-import org.odk.collect.android.tasks.sms.SmsService;
-import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
-import org.odk.collect.android.upload.AutoSendWorker;
+import org.odk.collect.android.utilities.ApplicationResetter;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.FormDownloader;
 import org.odk.collect.android.utilities.Utilities;     // smap
+import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 
@@ -103,17 +120,9 @@ public interface AppDependencyComponent {
 
     void inject(Collect collect);
 
-    void inject(SmsService smsService);
-
-    void inject(SmsSender smsSender);
-
-    void inject(SmsSentBroadcastReceiver smsSentBroadcastReceiver);
-
-    void inject(SmsNotificationReceiver smsNotificationReceiver);
-
     void inject(InstanceUploaderAdapter instanceUploaderAdapter);
 
-    void inject(DataManagerList dataManagerList);
+    void inject(SavedFormListFragment savedFormListFragment);
 
     void inject(PropertyManager propertyManager);
 
@@ -123,9 +132,7 @@ public interface AppDependencyComponent {
 
     void inject(ServerPreferencesFragment serverPreferencesFragment);
 
-    void inject(FormDownloader formDownloader);
-
-    void inject(ServerPollingJob serverPollingJob);
+    void inject(MultiFormDownloader multiFormDownloader);
 
     void inject(AuthDialogUtility authDialogUtility);
 
@@ -179,7 +186,7 @@ public interface AppDependencyComponent {
 
     void inject(StorageMigrationService storageMigrationService);
 
-    void inject(AutoSendWorker autoSendWorker);
+    void inject(AutoSendTaskSpec autoSendTaskSpec);
 
     void inject(StorageMigrationDialog storageMigrationDialog);
 
@@ -197,13 +204,41 @@ public interface AppDependencyComponent {
 
     void inject(SaveFormProgressDialogFragment saveFormProgressDialogFragment);
 
+    void inject(QuitFormDialogFragment quitFormDialogFragment);
+
+    void inject(BarCodeScannerFragment barCodeScannerFragment);
+
+    void inject(QRCodeScannerFragment qrCodeScannerFragment);
+
+    void inject(PreferencesActivity preferencesActivity);
+
+    void inject(ApplicationResetter applicationResetter);
+
+    void inject(FillBlankFormActivity fillBlankFormActivity);
+
     void inject(MapBoxInitializationFragment mapBoxInitializationFragment);
 
-    SmsManager smsManager();
+    void inject(SyncFormsTaskSpec syncWork);
 
-    SmsSubmissionManagerContract smsSubmissionManagerContract();
+    void inject(ExperimentalPreferencesFragment experimentalPreferencesFragment);
 
-    RxEventBus rxEventBus();
+    void inject(AutoUpdateTaskSpec autoUpdateTaskSpec);
+
+    void inject(ServerAuthDialogFragment serverAuthDialogFragment);
+
+    void inject(BasePreferenceFragment basePreferenceFragment);
+
+    void inject(BlankFormListFragment blankFormListFragment);
+
+    void inject(InstanceUploaderActivity instanceUploaderActivity);
+
+    void inject(GeneralPreferencesFragment generalPreferencesFragment);
+
+    void inject(DeleteSavedFormActivity deleteSavedFormActivity);
+
+    void inject(AdminPreferencesFragment.MainMenuAccessPreferences mainMenuAccessPreferences);
+
+    void inject(SelectMinimalDialog selectMinimalDialog);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 
@@ -214,4 +249,10 @@ public interface AppDependencyComponent {
     GeneralSharedPreferences generalSharedPreferences();
 
     AdminSharedPreferences adminSharedPreferences();
+
+    PreferencesProvider preferencesProvider();
+
+    ApplicationInitializer applicationInitializer();
+
+    SettingsImporter settingsImporter();
 }

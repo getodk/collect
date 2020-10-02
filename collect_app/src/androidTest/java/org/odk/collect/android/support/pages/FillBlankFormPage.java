@@ -30,7 +30,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
 
     @Override
     public FillBlankFormPage assertOnPage() {
-        checkIsStringDisplayed(R.string.enter_data);
+        assertToolbarTitle(R.string.enter_data);
         return this;
     }
 
@@ -92,5 +92,20 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     public FormEndPage clickOnEmptyForm(String formName) {
         clickOnFormButton(formName);
         return new FormEndPage(formName, rule).assertOnPage();
+    }
+
+    public FillBlankFormPage clickRefresh() {
+        onView(withId(R.id.menu_refresh)).perform(click());
+        return this;
+    }
+
+    public FillBlankFormPage clickRefreshWithError() {
+        onView(withId(R.id.menu_refresh)).perform(click());
+        return this;
+    }
+
+    public ServerAuthDialog clickRefreshWithAuthError() {
+        onView(withId(R.id.menu_refresh)).perform(click());
+        return new ServerAuthDialog(rule).assertOnPage();
     }
 }

@@ -69,11 +69,7 @@
   <string name="jump_to_beginning">सुरुमा जानुहोस् </string>
   <string name="jump_to_end">अन्त्यमा जानुहोस् </string>
   <string name="jump_to_previous">माथिल्लोमा जानुहोस् </string>
-  <string name="list_failed_with_error">फारमको सूची निकाल्न सकिएन | %s</string>
   <string name="loading_form">फारम लोड हुदैछ |</string>
-  <string name="load_remote_form_error">फारम सूची प्राप्त गर्न असफल</string>
-  <string name="location_provider_accuracy">%1$s प्रयोग गर्दा, सटिकता %2$s m छ |</string>
-  <string name="location_accuracy">सटिकता %1$s m छ |</string>
   <string name="manage_files">संचित फारम डिलिट गर्न</string>
   <string name="mark_finished">फारामलाई अन्तिम रुप दिइएको अंकित गर्नुहोस् </string>
   <string name="noselect_error">कुनै एक फारम छान्नुहोस् </string>
@@ -84,8 +80,6 @@
   <string name="no_items_display_instances">देखाउनको लागि केहि उपलब्ध छैन | \n\n संचित फारमलाई पठाउनु अघि अन्तिम रुप दिन प्रयास गर्नुहोला |</string>
   <string name="ok">ठीक</string>
   <string name="parse_error">माफ गर्नुहोला, फारमको शब्द-सम्मती गर्न सकिएन |</string>
-  <string name="parse_legacy_formlist_failed">सर्भरले एग्रिगेट संस्करण 0.9.x संग मिल्ने उपलब्ध-फारम पठाएन: %s</string>
-  <string name="parse_openrosa_formlist_failed">सर्भरले ओपनरोजा संस्करण 1.0 संग मिल्ने उपलब्ध-फारम पठाएन: %s</string>
   <string name="password">पासवर्ड </string>
   <string name="play_video">भिडियो हेर्नुहोस्</string>
   <string name="please_wait">कृपया केही समय पर्खनुहोस् </string>
@@ -106,8 +100,6 @@
   <string name="send_data">भरिसकेको फारम पठाउन</string>
   <string name="send_data_button">भरिसकेको फारम पठाउन (%s)</string>
   <string name="send_selected_data">छानिएका पठाउनुहोस् </string>
-  <string name="send_selected_data_internet">पठाउनुहोस् (Internet)</string>
-  <string name="send_selected_data_sms">पठाउनुहोस् (SMS)</string>
   <string name="view_sent_forms">भरिसकेको फारम हेर्न</string>
   <string name="view_sent_forms_button">भरिसकेको फारम हेर्न (%s)</string>
   <string name="server_auth_credentials">सर्भरको प्रयोगकर्ता नाम वा पासवर्ड गलत छ %s</string>
@@ -129,17 +121,11 @@
   <string name="change_splash_path">तस्विर बदल्नुहोस् </string>
   <string name="keep_changes">परिवर्तनहरु संचित गर्नुहोस् </string>
   <string name="change_formlist_url">फारम सूचीको मार्ग (URL मा जोडिसकिएको छ )</string>
-  <string name="change_protocol">मंच </string>
   <string name="change_submission_url">बुझाईएको वस्तुको मार्ग (URL मा जोडिसकिएको छ )</string>
   <string name="formlist_url">फारम सूचीको मार्ग </string>
   <string name="submission_url">बुझाईएको वस्तुको मार्ग</string>
   <string name="font_size">अक्षरको आकार</string>
   <string name="change_font_size">अक्षरको आकार</string>
-  <string name="access_error">%s मा प्रवेश गर्न खोज्दा गल्ति भयो:</string>
-  <string name="manifest_server_error">म्यनिफेष्ट को प्रतिक्रियाले कुनै पनि ओपनरोजा संस्करण को जनाउ दिदैन - सर्भर बिग्रियो कि ?</string>
-  <string name="root_element_error"> जड तत्वमा &lt;म्यनिफेष्ट\&gt; छैन — %s थियो </string>
-  <string name="root_namespace_error">जड तत्व Namespace गल्ति छ: %s </string>
-  <string name="manifest_tag_error">म्यनिफेष्ट दाखिला %s बाट एउटा वा सो भन्दा बढी ट्यागहरु हराइरहेका छन्: filename, hash, वा downloadURL</string>
   <string name="form_download_progress">%1$s. मिडिया फाइलहरु प्राप्त गरिदैछ: %3$s मध्येको %2$s</string>
   <string name="fetching_manifest">%s म्यनिफेष्ट प्राप्त गरिदै छ </string>
   <string name="success">सफल</string>
@@ -156,8 +142,6 @@
   <string name="save_as_error">संचित गर्दा नाम खाली छोड्न मिल्दैन !</string>
   <string name="edit_prompt">सम्पादन गर्न प्रेरित गर्नुहोस् </string>
   <string name="selected_google_account_text">गुगल एकाउण्ट</string>
-  <string name="server_platform_odk_aggregate">ODK एग्रिगेट</string>
-  <string name="server_platform_other">अन्य</string>
   <string name="font_size_extra_large">अझ ठूलो </string>
   <string name="font_size_large">ठूलो </string>
   <string name="font_size_medium">मध्यम </string>
@@ -181,7 +165,6 @@
   <string name="parent_form_not_present">यो संचित फारम सम्पादन गर्न सकिएन किनकि यससंग जोडिएको खाली फारम उपलब्ध छैन वा डिलिट भइसकेको छ | \n\nफारम नं: %1$s</string>
   <string name="launch_app">प्रारम्भ गर्नुहोस् </string>
   <string name="no_app">माग गर्नुभएको एप्लिकेशन छैन | नाप स्वयम् दाखिला गर्नुहोला |</string>
-  <string name="select_one">एक उत्तर छान्नुहोस्</string>
   <string name="savepoint_used">संचित नगरिएका परिवर्तनहरु संचितबिन्दुवाट पुन: निकाल्न सकियो !</string>
   <string name="save_and_close">संचित गरी बन्द गर्नुहोस् </string>
   <string name="sign_button">सहि जम्मा गर्नुहोस् </string>
@@ -256,11 +239,6 @@
   <string name="go_drive">मेरो ड्राइभ</string>
   <string name="go_shared">म संग साझा गरिएको </string>
   <string name="modified_on_date_at_time">EEE, MMM dd, yyyy \'को\' HH:mm \'मा परिवर्तन गरिएको\'</string>
-  <string name="aggregate_preferences">ODK एग्रीगेट सेटिङ्स</string>
-  <string name="sms_submission_preferences">SMS सेटिङहरू</string>
-  <string name="submission_transport_types_title">फारमहरू कसरी पठाउने?</string>
-  <string name="other_preferences">अन्य प्लेटफर्म सेटिङ्स</string>
-  <string name="google_preferences">गुगल सिट्स सेटिङ्स</string>
   <string name="google_sheets_url_hint">फारमहरु पठाउनको लागि URL सेट गर्नुपर्दछ । अन्यथा यही URL प्रयोग हुनेछ ।</string>
   <string name="drive_get_file">%1$s र मिडिया फाइलहरु प्राप्त गरिदैछ |</string>
   <string name="no_google_account">एउटा गुगल खाता छान्नुहोस् ! </string>
@@ -334,8 +312,6 @@
   <string name="form_metadata_summary">यी सूचनाहरु प्रयोगकर्ता नाम , ईमेल र / वा फोन नम्बर भरिएको फारमहरुमा डाटा भरेर बुझाउने व्यक्तीको पहिचान गर्न थप गरिनेछन् ।</string>
   <string name="phone_number">फोन नम्बर</string>
   <string name="email">ईमेल</string>
-  <string name="device_id">यन्त्र पहिचान नम्बर</string>
-  <string name="subscriber_id">सब्सक्राइबर पहिचान नम्बर</string>
   <string name="select_date">मिति छान्नुहोस्</string>
   <string name="select_time">समय छान्नुहोस्</string>
   <string name="no_date_selected">मिति छानिएको छैन</string>
@@ -348,7 +324,6 @@
   <string name="include_password_dialog">पासवर्डहरु कोड मै छन्</string>
   <string name="generate">निकाल्नुस्</string>
   <string name="invalid_qrcode">QR कोडमा सही सेटिङ्स छैन</string>
-  <string name="share_qrcode">QR कोड शेयर</string>
   <string name="take_picture_instruction">फोटो लिन स्क्रीन ट्याप गर्नुहोस्</string>
   <string name="error_front_camera_unavailable">यस यन्त्रमा फ्रन्ट क्यामेरा छैन</string>
   <string name="camera_error">यस यन्त्रले Camera2 API सपोर्ट गर्देन ।</string>
@@ -371,5 +346,4 @@
   <string name="yes">हो</string>
   <string name="no">होइन</string>
   <string name="stop_video_capture_instruction">रेकर्डिङ सुरु भयो। रोक्न फेरि छुनुहोस् ।</string>
-  <!--Sms submission-->
 </resources>

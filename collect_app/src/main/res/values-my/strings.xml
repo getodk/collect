@@ -66,11 +66,7 @@
   <string name="jump_to_beginning">ျပန္လည္စတင္ရန္</string>
   <string name="jump_to_end">အဆံုးသတ္ရန္</string>
   <string name="jump_to_previous">အေပၚသို႔တက္ရန္</string>
-  <string name="list_failed_with_error">ပံုစံစာရင္းသြင္းမွုမေအာင္ျမင္ပါ %s.</string>
   <string name="loading_form">ပံုစံရယူေနပါသည္</string>
-  <string name="load_remote_form_error">ပံုစံစာရင္းရယူမွု မွားယြင္းေနပါသည္</string>
-  <string name="location_provider_accuracy">သံုးစြဲမွု %1$s. တိက်မွန္ကန္မွု %2$s m.</string>
-  <string name="location_accuracy">တိက်မွန္ကန္မွု %1$s m</string>
   <string name="manage_files">သိမ္းထားေသာပံုစံအားဖ်က္ရန္</string>
   <string name="mark_finished">အၿပီးသတ္ထားေသာပံုစံအားမွတ္သားရန္</string>
   <string name="noselect_error">ပံုစံေရြးခ်ယ္ထားျခင္းမရိွပါ</string>
@@ -78,8 +74,6 @@
   <string name="no_items_display">ပံုစံအားေဖာ္ျပျခင္းမျပဳနိုင္ပါ</string>
   <string name="ok">OK</string>
   <string name="parse_error">ပံုစံကို မခြဲျခားႏိုင္ပါ</string>
-  <string name="parse_legacy_formlist_failed">ဆာဗာမွ အသံုးျပဳေသာ ေဆာ့၀ဲ ႏွင့္ ကိုက္ညီေသာ ပံုစံအားလံုးကို မလုပ္ေဆာင္ႏိုင္ပါ ၊ %s</string>
-  <string name="parse_openrosa_formlist_failed">Tဆာဗာမွ အသံုးျပဳေသာ ေဆာ့၀ဲ ႏွင့္ ကိုက္ညီေသာ ပံုစံအားလံုးကို မလုပ္ေဆာင္ႏိုင္ပါ ၊ %s</string>
   <string name="password">လ်ိဳ႔၀ွက္နံပါတ္</string>
   <string name="play_video">ဗြီဒီယိုဖြင့္ရန္</string>
   <string name="please_wait">ေခတၱေစာင့္ပါ</string>
@@ -115,17 +109,11 @@
   <string name="change_splash_path">ပံုေျပာင္းရန္</string>
   <string name="keep_changes">ေျပာင္းလဲမွုမ်ားကို သိမ္းဆည္းရန္</string>
   <string name="change_formlist_url">ပံုစံစာရင္းရိွသည့္ေနရာ (appended to Server URL)</string>
-  <string name="change_protocol">ဆာဗာ ပလက္္ေဖာင္း</string>
   <string name="change_submission_url">ထည့္သြင္းရမည့္ေနရာ(appended to Server URL)</string>
   <string name="formlist_url">ပံုစံစာရင္းရိွသည့္ေနရာ</string>
   <string name="submission_url">ထည့္သြင္းရမည့္ေနရာ</string>
   <string name="font_size">စာလံုးအရြယ္အစား</string>
   <string name="change_font_size">စာလံုးအရြယ္အစား</string>
-  <string name="access_error">လုပ္ဆာင္မွုမွားယြင္းေနသည္ %s:</string>
-  <string name="manifest_server_error">ဆာဗာမေကာင္းပါ</string>
-  <string name="root_element_error">အေျခခံလုပ္ေဆာင္ခ်က္ &lt; မရွင္းလင္းပါ - %s</string>
-  <string name="root_namespace_error">အေျခခံလုပ္ေဆာင္ခ်က္ျဖစ္ေသာ အမည္ထည့္သြင္းျခင္း မမွန္ကန္ပါ: %s</string>
-  <string name="manifest_tag_error">ရွင္းလင္းစြာထည့္သြင္းျခင္း %s တခု၊ တစ္ခုထက္ပို၍ မွားယြင္းေနပါသည္: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. မီဒီယာဖိုင္ရယူေနပါသည္: %2$s of %3$s</string>
   <string name="fetching_manifest">%s. ရွင္းလင္းခ်က္ရယူေနပါသည္</string>
   <string name="success">ေအာင္ျမင္ပါၿပီ</string>
@@ -140,8 +128,6 @@
   <string name="save_as_error">အမည္ေနရာတြင္ ကြပ္လပ္ထား၍ မရပါ</string>
   <string name="edit_prompt">ခ်က္ျခင္းျပင္ဆင္ရန္</string>
   <string name="selected_google_account_text">ဂူးဂယ္ (လ္) အေကာင့္</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">အျခား</string>
   <string name="font_size_extra_large">အလြန္ႀကီး</string>
   <string name="font_size_large">အႀကီး</string>
   <string name="font_size_medium">အလယ္အလတ္</string>
@@ -163,7 +149,6 @@
   <string name="version">လုပ္ေဆာင္မွုအဆင့္:</string>
   <string name="launch_app">စတင္ေဆာင္ရြက္ရန္</string>
   <string name="no_app">လုပ္ေဆာင္မွုလြဲေခ်ာ္ေနပါသည္၊ ေသခ်ာစြာဖတ္ရွု၍ ၿဖည့္သြင္းပါ</string>
-  <string name="select_one">အေျဖတစ္ခုအား ေရြးခ်ယ္ရန္</string>
   <string name="savepoint_used">သိမ္းဆည္းေနရာမွ မသိမ္းဆည္းရေသးသည္မ်ား ျပန္လည္ရယူရန္</string>
   <string name="save_and_close">သိမ္းဆည္း ၿပီးပိတ္ရန္</string>
   <string name="sign_button">အမွန္အသားအား ရွာရန္</string>
@@ -199,5 +184,4 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <!--Sms submission-->
 </resources>

@@ -23,7 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.ByteArrayInputStream;
@@ -38,7 +38,7 @@ import static org.odk.collect.android.analytics.AnalyticsEvents.SUBSEQUENT_FORM_
 public class FormDownloadListViewModel extends ViewModel {
     private final Analytics analytics;
 
-    private HashMap<String, FormDetails> formDetailsByFormId = new HashMap<>();
+    private HashMap<String, ServerFormDetails> formDetailsByFormId = new HashMap<>();
 
     /**
      * List of forms from the formList response. The map acts like a DisplayableForm object with
@@ -53,7 +53,6 @@ public class FormDownloadListViewModel extends ViewModel {
     private String progressDialogMsg;
     private String alertDialogMsg;
 
-    private boolean progressDialogShowing;
     private boolean alertShowing;
     private boolean cancelDialogShowing;
     private boolean shouldExit;
@@ -71,11 +70,11 @@ public class FormDownloadListViewModel extends ViewModel {
         this.analytics = analytics;
     }
 
-    public HashMap<String, FormDetails> getFormDetailsByFormId() {
+    public HashMap<String, ServerFormDetails> getFormDetailsByFormId() {
         return formDetailsByFormId;
     }
 
-    public void setFormDetailsByFormId(HashMap<String, FormDetails> formDetailsByFormId) {
+    public void setFormDetailsByFormId(HashMap<String, ServerFormDetails> formDetailsByFormId) {
         this.formDetailsByFormId = formDetailsByFormId;
     }
 
@@ -201,14 +200,6 @@ public class FormDownloadListViewModel extends ViewModel {
 
     public void setFormIdsToDownload(String[] formIdsToDownload) {
         this.formIdsToDownload = formIdsToDownload;
-    }
-
-    public boolean isProgressDialogShowing() {
-        return progressDialogShowing;
-    }
-
-    public void setProgressDialogShowing(boolean progressDialogShowing) {
-        this.progressDialogShowing = progressDialogShowing;
     }
 
     public boolean isCancelDialogShowing() {

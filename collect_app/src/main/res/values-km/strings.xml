@@ -74,11 +74,7 @@
   <string name="jump_to_beginning">ទៅកន្លែងចាប់ផ្តើម</string>
   <string name="jump_to_end">ទៅកន្លែងបញ្ចប់</string>
   <string name="jump_to_previous">ទៅឡើង</string>
-  <string name="list_failed_with_error">ការធ្វើបញ្ជីសំណុំបែបបទបរាជ័យ %s ។</string>
   <string name="loading_form">កំពុងផ្ទុកសំណុំបែបបទ</string>
-  <string name="load_remote_form_error">បញ្ហានៃការទាញបញ្ជីសំណុំបែបបទ</string>
-  <string name="location_provider_accuracy">កំពុងប្រើប្រាស់ %1$s. ភាពត្រឹមត្រូវគឺ %2$s ម៉ែត្រ.</string>
-  <string name="location_accuracy">ភាព​ត្រឹមត្រូវគឺ %1$s ម៉ែត្រ</string>
   <string name="manage_files">លុបសំណុំបែបបទដែលបានរក្សាទុក</string>
   <string name="mark_finished">សម្គាល់សំណុំបែបបទថាបានបញ្ចប់</string>
   <string name="noselect_error">សុំទោស, អ្នកមិនបានជ្រើសរើសសំណុំបែបបទណាមួយទេ!</string>
@@ -89,8 +85,6 @@
   <string name="no_items_display_instances">គ្មានអ្វីដែលអាចបង្ហាញបាន.\n\nសូម​ព្យាយាម​បំពេញបញ្ចប់សំណុំ​បែប​បទ​ដែល​​បាន​​រក្សា​​ទុក​​មុន​​នឹង​​ផ្ញើ​​ចេញ</string>
   <string name="ok">យល់ព្រម</string>
   <string name="parse_error">សុំទោស, សំណុំ​បែប​បទ​មិន​អាច​បែកចែកបាន</string>
-  <string name="parse_legacy_formlist_failed">ម៉ាស៊ីន​មេ​មិន​អាច​ផ្តល់​នូវឯកសារ​​សំណុំ​បែប​បទ​ដែលឆប​គ្នាជាមួយ Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">ម៉ាស៊ីន​មេ​មិន​អាច​ផ្តល់​នូវឯកសារ​​សំណុំ​បែប​បទ​ដែលឆប​គ្នាជាមួយនឹង​ស្តង់​ដា OpenRosa ជំនាន់ 1.0: %s</string>
   <string name="password">ពាក្យសម្ងាត់</string>
   <string name="play_video">ចាក់វីដេអូ</string>
   <string name="please_wait">សូមរង់ចាំមួយភ្លែត</string>
@@ -110,8 +104,6 @@
   <string name="send_data">បញ្ជូនសំណុំ​បែប​បទ​ដែលបានបញ្ចប់</string>
   <string name="send_data_button">បញ្ជូនសំណុំ​បែប​បទ​ដែលបានបញ្ចប់ (%s)</string>
   <string name="send_selected_data">បញ្ជូនការជ្រើសរើស</string>
-  <string name="send_selected_data_internet">ផ្ញើចេញ (អ៊ិនធើណីត)</string>
-  <string name="send_selected_data_sms">ផ្ញើ (សារ)</string>
   <string name="view_sent_forms">បង្ហាញសំណុំ​បែប​បទដែលបានផ្ញើចេញ</string>
   <string name="view_sent_forms_button">បង្ហាញសំណុំ​បែប​បទដែលបានផ្ញើចេញ (%s)</string>
   <string name="server_auth_credentials">ឈ្មោះអ្នកប្រើប្រាស់ ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវសម្រាប់ម៉ាស៊ីនមេ៖ %s</string>
@@ -133,17 +125,11 @@
   <string name="change_splash_path">ផ្លាស់ប្តូររូបថត</string>
   <string name="keep_changes">រក្សាការផ្លាស់ប្តូរ</string>
   <string name="change_formlist_url">ផ្លូវរបស់បញ្ជីសំណុំ​បែប​បទ​(បានបន្ថែមលើ URL)</string>
-  <string name="change_protocol">Platform</string>
   <string name="change_submission_url">ផ្លូវដាក់ចូល (បន្ថែមលើ URL)</string>
   <string name="formlist_url">ទីតាំងបញ្ជីសំណុំ​បែប​បទ</string>
   <string name="submission_url">ផ្លូវដាក់ចូល</string>
   <string name="font_size">ទំហំពុម្ភអក្សរ</string>
   <string name="change_font_size">ទំហំពុម្ភអក្សរ</string>
-  <string name="access_error">មានបញ្ហាខណៈពេលដំណើរការ %s:</string>
-  <string name="manifest_server_error">ការឆ្លើយ​តប​ Manifest មិនបាន​រាយការណ៍​ពីជំនាន់ OpenRosa - ម៉ាស៊ីន​មេ​មិន​ត្រឹម​ត្រូវ?</string>
-  <string name="root_element_error">ធាតុឬសគឺ​មិន &lt;manifest\&gt; - %s</string>
-  <string name="root_namespace_error">ធាតុ​ឬស Namespace មិនត្រឹមត្រូវ: %s</string>
-  <string name="manifest_tag_error">ការចូល Manifest %s គឺបាត់បង់ស្លាក​មួយ​ ឬ​ច្រើន: ឈ្មោះឯកសារ, គន្លឹះ​សញ្ញា ឬ អាសយដ្ឋានទាញយក</string>
   <string name="form_download_progress">%1$s. កំពុងទាញយកឯកសារមេឌៀ: %2$s of %3$s</string>
   <string name="fetching_manifest">%s. ការទាញបញ្ជី</string>
   <string name="success">ជោគជ័យ</string>
@@ -161,8 +147,6 @@
   <string name="save_as_error">ឈ្មោះរក្សាទុកមិនអាចទទេ!</string>
   <string name="edit_prompt">កែប្រែ Prompt</string>
   <string name="selected_google_account_text">គណនី Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">ផ្សេងៗ</string>
   <string name="font_size_extra_large">ធំបំផុត</string>
   <string name="font_size_large">ធំ</string>
   <string name="font_size_medium">មធ្បម</string>
@@ -186,7 +170,6 @@
   <string name="parent_form_not_present">មិន​អាច​ធ្វើ​ការ​កែ​ប្រែ​សំុណុំ​បែប​បទ​ដែល​បាន​រក្សាទុក​ ពីព្រោះ​សំណុំបែប​បទ​ទទេ​ដែលត្រូវគ្នាមិន​នៅ ឬត្រូវ​បាន​លុប។ \n\nលេខ​សម្គាល់​សំណុំ​បែប​បទ: %1$s</string>
   <string name="launch_app">ដំណើរការ</string>
   <string name="no_app">ការ​ស្នើ​សុំ​របស់កម្មវិធី​បានបាត់បង់ ។​ សូមធ្វើការអាន​ដោយ​ដៃ ។</string>
-  <string name="select_one">ជ្រើសរើសចម្លើយមួយ</string>
   <string name="savepoint_used">ការផ្លាស់ប្តូរមិនបានរក្សាទុកត្រូវបានស្តារឡើងវិញពី savepoint!</string>
   <string name="save_and_close">រក្សាទុក និងបិទ</string>
   <string name="sign_button">ប្រមូលហត្ថលេខា</string>
@@ -261,9 +244,6 @@
   <string name="go_drive">ថាសរបស់ខ្ញុំ</string>
   <string name="go_shared">ចែក​រំលែក​ជាមួយ​ខ្ញុំ</string>
   <string name="modified_on_date_at_time">\'កែប្រែនៅថ្ងៃ\' EEE, MMM dd, yyyy \'នៅម៉ោង\' HH:mm</string>
-  <string name="aggregate_preferences">ការកំណត់របស់ ODK Aggregate</string>
-  <string name="other_preferences">ការកំណត់លើ platform ដទៃ</string>
-  <string name="google_preferences">ការកំណត់សន្លឹក Google</string>
   <string name="google_sheets_url_hint">ទម្រង់​ត្រូវតែ​កំណត់ URLក្នុងការបញ្ជូន​។ ប្រសិន​មិន​បាន​កំណត់, URL នេះ​នឹង​ត្រូវ​បាន​ប្រើប្រាស់។</string>
   <string name="drive_get_file">កំពុង​ទទួល​ %1$s និង ឯកសារមេឌៀ</string>
   <string name="no_google_account">គ្មាន​គណនី​ Google បាន​ជ្រើស​រើស</string>
@@ -345,11 +325,10 @@
   <string name="download_selected">ទាញយកនូវជំរើស</string>
   <string name="gps_result">រយៈទទឹង: %1$s\nរយៈបណ្ដោយ: %2$s\nរយៈកំពស់: %3$sm\nភាពត្រឹមត្រូវ: %4$sm</string>
   <string name="parser_exception">XPathParser Exception: \"%s\"</string>
-  <string name="selected_answer">បានជ្រើសរើស៖ %s</string>
   <string name="version_number">ជំនាន់: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">ចូលទៅកាន់គេហទំព័រ ODK</string>
-  <string name="odk_website_summary">Open Data Kit (ODK) បាន​ប្រើ​ប្រាស់​ដើម្បី​ប្រមូល​ទិន្នន័យសម្រាប់ភាពប្រសើរ​របស់​សង្គមនៅក្នុងបរិយាកាស​ប្រកួត​ប្រជែង​។</string>
+  <string name="odk_website_summary">ODK បាន​ប្រើ​ប្រាស់​ដើម្បី​ប្រមូល​ទិន្នន័យសម្រាប់ភាពប្រសើរ​របស់​សង្គមនៅក្នុងបរិយាកាស​ប្រកួត​ប្រជែង​។</string>
   <string name="odk_forum">ចូល​រួម​ជា​មួយ​វេទិកា ODK</string>
   <string name="odk_forum_summary">ចូលរួមវេទិកាដើម្បីទទួលបានការគាំទ្រ, លក្ខណៈពិសេសស្នើសុំ, រួមចំណែកកូដ / ការបកប្រែ!</string>
   <string name="all_open_source_licenses">ប្រភពបណ្ណាល័យបើកចំហ/អាជ្ញាបណ្ណ</string>
@@ -416,9 +395,6 @@
   <string name="email">អាសយដ្ឋានអ៊ីម៉ែល</string>
   <string name="user_defined">អ្នកប្រើប្រាស់កំណត់</string>
   <string name="device_defined">ឧបករណ៍កំណត់</string>
-  <string name="device_id">ID របស់ឧបករណ៍</string>
-  <string name="subscriber_id">ID របស់អតិថិជន</string>
-  <string name="sim_serial_id">លេខ​សម្គាល់ស៊ីម</string>
   <string name="select_date">ជ្រើសរើសថ្ងៃខែឆ្នាំ</string>
   <string name="select_time">ជ្រើសរើសម៉ោង</string>
   <string name="no_date_selected">មិនបានជ្រើសរើសថ្ងៃខែឆ្នាំ</string>
@@ -433,7 +409,6 @@
   <string name="include_password_dialog">ពាក្យ​សម្ងាត់​មានភ្ជាប់នៅក្នុង​កូដ</string>
   <string name="generate">បង្កើត</string>
   <string name="invalid_qrcode">លេខកូដ QR មិនមានការកំណត់ត្រឹមត្រូវ</string>
-  <string name="share_qrcode">ចែក​រំលែក​ QR Code</string>
   <string name="take_picture_instruction">ប៉ះលើផ្ទៃ​អេក្រង់ដើម្បីថត​រូប</string>
   <string name="error_front_camera_unavailable">កាមេរ៉ាខាងមុខមិនមាននៅលើឧបករណ៍នេះទេ</string>
   <string name="camera_error">ឧបករណ៍នេះមិនមានការគាំទ្រ​ក្នុង​ការ​ប្រើ​ប្រាស់ API របស់ Camera2</string>
@@ -542,7 +517,6 @@
   <string name="storage_runtime_permission_denied_desc">បើគ្មានការអនុញ្ញាតទាំងនេះ Collect មិនអាចចូលប្រើទម្រង់របស់អ្នក ឬរក្សាទុកចម្លើយ​បើក​កម្មវិធី​ឡើង​វិញ​នៅ​ពេល​អ្នក​រួចរាល់​ដើម្បី​ផ្តល់​សិទ្ធិ​ទាំងនេះ។</string>
   <string name="form_update_category">ទម្រង់សម្រាប់ធ្វើបច្ចុប្បន្នភាព</string>
   <string name="periodic_form_updates_check_title">រយះពេល​ក្នុង​ការ​ពិនិត្យ​រក​ទម្រង់​ដែល​ធ្វើ​បច្ចុប្បន្នភាព</string>
-  <string name="never">មិនដែល</string>
   <string name="every_fifteen_minutes">រៀងរាល់ ១៥នាទី</string>
   <string name="every_one_hour">រៀងរាល់ម៉ោង</string>
   <string name="every_six_hours">រៀងរាល់ ៦ ម៉ោង</string>
@@ -558,10 +532,6 @@
   <string name="not_a_directory">%s មានរួច, ប៉ុន្តែ​ពុំមែន​ជាថត​ឯក​សារ</string>
   <string name="location_metadata">ផ្កាយរណបមាន៖ %1$d/24\n\nពេលវេលាកន្លងទៅ៖ %2$s</string>
   <string name="instance_upload_cancelled">បានបោះបង់ការផ្ទុកឡើងភ្លាមៗ</string>
-  <string name="sms_invalid_phone_number">លេខទូរស័ព្ទមិន​ត្រឹម​ត្រូវ!</string>
-  <!--Sms submission-->
-  <string name="transport_type_sms">សារ</string>
-  <string name="transport_type_both">ជ្រើសរើសនៅពេលផ្ញើ</string>
   <string name="rank_items">ចំណាត់ថ្នាក់ធាតុ</string>
   <string name="missing_google_account_dialog_title">មិនទាន់ដាក់គណនី Google</string>
   <string name="notification_channel_name">ការជូនដំណឹង​ជាទូទៅ</string>

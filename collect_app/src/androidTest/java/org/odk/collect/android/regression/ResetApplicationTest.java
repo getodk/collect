@@ -40,14 +40,14 @@ public class ResetApplicationTest {
                 .clickOnMenu()
                 .clickAdminSettings()
                 .clickOnResetApplication()
-                .checkIsStringDisplayed(R.string.reset_settings_dialog_title)
-                .checkIfOptionIsDisabled(R.string.reset_settings_button_reset)
+                .assertText(R.string.reset_settings_dialog_title)
+                .assertDisabled(R.string.reset_settings_button_reset)
                 .rotateToLandscape(new ResetApplicationDialog(rule))
-                .checkIsStringDisplayed(R.string.reset_settings_dialog_title)
-                .checkIfOptionIsDisabled(R.string.reset_settings_button_reset)
+                .assertText(R.string.reset_settings_dialog_title)
+                .assertDisabled(R.string.reset_settings_button_reset)
                 .rotateToPortrait(new ResetApplicationDialog(rule))
-                .checkIsStringDisplayed(R.string.reset_settings_dialog_title)
-                .checkIfOptionIsDisabled(R.string.reset_settings_button_reset);
+                .assertText(R.string.reset_settings_dialog_title)
+                .assertDisabled(R.string.reset_settings_button_reset);
     }
 
     @Test
@@ -64,17 +64,17 @@ public class ResetApplicationTest {
                 .clickOnMenu()
                 .clickAdminSettings()
                 .clickOnResetApplication()
-                .checkIfOptionIsDisabled(R.string.reset_settings_button_reset)
+                .assertDisabled(R.string.reset_settings_button_reset)
                 .clickOnString(R.string.reset_saved_forms)
                 .clickOnString(R.string.reset_blank_forms)
                 .clickOnString(R.string.reset_settings_button_reset)
                 .clickOKOnDialog();
         new MainMenuPage(rule)
                 .clickFillBlankForm()
-                .checkIfTextDoesNotExist("All widgets")
+                .assertTextDoesNotExist("All widgets")
                 .pressBack(new MainMenuPage(rule))
                 .clickEditSavedForm()
-                .checkIfTextDoesNotExist("All widgets");
+                .assertTextDoesNotExist("All widgets");
     }
 
     @Test
@@ -110,14 +110,14 @@ public class ResetApplicationTest {
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .clickOnUserInterface()
-                .checkIsStringDisplayed(R.string.theme_light)
+                .assertText(R.string.theme_light)
                 .clickOnTheme()
                 .clickOnString(R.string.theme_dark);
         new MainMenuPage(rule)
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .clickOnUserInterface()
-                .checkIsStringDisplayed(R.string.theme_dark)
+                .assertText(R.string.theme_dark)
                 .clickOnLanguage()
                 .clickOnSelectedLanguage("español");
         new MainMenuPage(rule)
@@ -137,10 +137,10 @@ public class ResetApplicationTest {
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .clickOnUserInterface()
-                .checkIsStringDisplayed(R.string.theme_light)
-                .checkIfTextDoesNotExist(R.string.theme_dark)
-                .checkIsStringDisplayed(R.string.use_device_language)
-                .checkIfTextDoesNotExist("español");
+                .assertText(R.string.theme_light)
+                .assertTextDoesNotExist(R.string.theme_dark)
+                .assertText(R.string.use_device_language)
+                .assertTextDoesNotExist("español");
     }
 
     @Test
@@ -152,7 +152,7 @@ public class ResetApplicationTest {
                 .openFormManagement()
                 .clickOnAutoSend()
                 .clickOnString(R.string.wifi_autosend)
-                .checkIsStringDisplayed(R.string.wifi_autosend)
+                .assertText(R.string.wifi_autosend)
                 .clickOnDefaultToFinalized()
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule))
@@ -171,7 +171,7 @@ public class ResetApplicationTest {
                 .clickOnMenu()
                 .clickGeneralSettings()
                 .openFormManagement()
-                .checkIsStringDisplayed(R.string.off)
+                .assertText(R.string.off)
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule))
                 .startBlankForm("All widgets")

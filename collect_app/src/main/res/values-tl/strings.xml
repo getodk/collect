@@ -57,11 +57,7 @@
   <string name="jump_to_beginning">Punta sa Simula</string>
   <string name="jump_to_end">Punta sa Dulo</string>
   <string name="jump_to_previous">Punta Pataas</string>
-  <string name="list_failed_with_error">Nabigong i-lista ang form. %s.</string>
   <string name="loading_form">Kina-karga ang Form</string>
-  <string name="load_remote_form_error">May Mali sa pag-karga ng Listahan ng Form</string>
-  <string name="location_provider_accuracy">Gamit ang %1$s. Ang Kawastuhan ay %2$s m.</string>
-  <string name="location_accuracy">Ang kawastuhan ay %1$s m</string>
   <string name="manage_files">Burahin ang Inimpok na Form</string>
   <string name="mark_finished">Markahan Yari ang Form</string>
   <string name="noselect_error">Paumanhin, walang form na pinili!</string>
@@ -69,8 +65,6 @@
   <string name="no_items_display">Walang maipakita.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Paumanhin, hindi ma-suri ang form.</string>
-  <string name="parse_legacy_formlist_failed">Ang server ay walang maibigay na form na kaugma sa Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">Ang server ay walang maibigay na dokumentong form na kaugma sa pamantayan ng OpenRosa version 1.0: %s</string>
   <string name="password">Kontrasenyas</string>
   <string name="play_video">I-play ang Bidyo</string>
   <string name="please_wait">Mag-hintay ng ilang sandali.</string>
@@ -104,17 +98,11 @@
   <string name="change_splash_path">Palitan ang Imahe</string>
   <string name="keep_changes">Impukin ang mga binago</string>
   <string name="change_formlist_url">Form List Path (appended to Server URL)</string>
-  <string name="change_protocol">Server Platform</string>
   <string name="change_submission_url">Submission Path (appended to Server URL)</string>
   <string name="formlist_url">Form List Path</string>
   <string name="submission_url">Submission Path</string>
   <string name="font_size">Laki ng Teklado</string>
   <string name="change_font_size">Laki ng Tipo ng Teksto</string>
-  <string name="access_error">May mali habang sa pag-access ng %s: </string>
-  <string name="manifest_server_error">Manifest reply does not report an OpenRosa version — bad server?</string>
-  <string name="root_element_error">Root element is not &lt;manifest\&gt; — was %s</string>
-  <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
-  <string name="manifest_tag_error">Manifest entry %s ay kulang ng isa o higit pang mga tags: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Kinukuha ang talaksang media : %2$s of %3$s</string>
   <string name="fetching_manifest">%s. Kinukuha ang manifest </string>
   <string name="success">Tagumpay</string>
@@ -129,8 +117,6 @@
   <string name="save_as_error">Hindi maaaring blangko ang pangalan ng form!</string>
   <string name="edit_prompt">Pamatnugutan ang Udyok</string>
   <string name="selected_google_account_text">Google Account</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Other</string>
   <string name="font_size_extra_large">Labis na Malaki</string>
   <string name="font_size_large">Malaki</string>
   <string name="font_size_medium">Katamtaman</string>
@@ -152,7 +138,6 @@
   <string name="version">Version:</string>
   <string name="launch_app">Ilunsad</string>
   <string name="no_app">Ang hiniling na application ay nawawala. Paki-pasok ng mano-mano ang detalye.</string>
-  <string name="select_one">Pumili ng Isang Sagot</string>
   <string name="savepoint_used">Nabawi sa savepoint ang mga pagbabagong hindi na-Impukin!</string>
   <string name="save_and_close">Impukin at Isara</string>
   <string name="sign_button">Kalapin ang Pirma</string>
@@ -190,5 +175,4 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <!--Sms submission-->
 </resources>

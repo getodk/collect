@@ -28,6 +28,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.async.Scheduler;
 import org.robolectric.RobolectricTestRunner;
 
 import static java.util.Arrays.asList;
@@ -91,7 +92,7 @@ public class QuestionWidgetTest {
             }
 
             @Override
-            public AudioHelperFactory providesAudioHelperFactory() {
+            public AudioHelperFactory providesAudioHelperFactory(Scheduler scheduler) {
                 return context -> audioHelper;
             }
 

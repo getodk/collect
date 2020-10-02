@@ -123,7 +123,7 @@ public class TestMapFragment implements MapFragment {
     }
 
     @Override
-    public int addMarker(MapPoint point, boolean draggable) {
+    public int addMarker(MapPoint point, boolean draggable, @IconAnchor String iconAnchor) {
         mappedPoints.put(point, lastFeatureId);
 
         return lastFeatureId++;

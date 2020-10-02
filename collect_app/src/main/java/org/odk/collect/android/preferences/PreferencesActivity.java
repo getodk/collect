@@ -16,14 +16,18 @@
 
 package org.odk.collect.android.preferences;
 
-import android.app.Fragment;
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
+import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.utilities.ThemeUtils;
+
+import javax.inject.Inject;
 
 public class PreferencesActivity extends CollectAbstractActivity {
 
@@ -32,17 +36,22 @@ public class PreferencesActivity extends CollectAbstractActivity {
 
     private OnBackPressedListener onBackPressedListener;
 
+    @Inject
+    PropertyManager propertyManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferences_layout);
+        DaggerUtils.getComponent(this).inject(this);
+
         setTheme(new ThemeUtils(this).getSettingsTheme());
 
         setTitle(R.string.general_preferences);
         if (savedInstanceState == null) {
-            boolean adminMode = getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
-            Fragment fragment = GeneralPreferencesFragment.newInstance(adminMode);
-            getFragmentManager()
+            Fragment fragment = new GeneralPreferencesFragment();
+            fragment.setArguments(getIntent().getExtras());
+            getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.preferences_fragment_container, fragment, TAG)
                     .commit();
@@ -52,7 +61,7 @@ public class PreferencesActivity extends CollectAbstractActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Collect.getInstance().initializeJavaRosa();
+        propertyManager.reload();
     }
 
     // If the onBackPressedListener is set then onBackPressed is delegated to it.

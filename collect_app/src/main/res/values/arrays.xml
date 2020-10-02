@@ -9,35 +9,20 @@ the specific language governing permissions and limitations under the License. -
     <string-array name="theme_entries">
         <item>@string/theme_light</item>
         <item>@string/theme_dark</item>
-        <item>@string/theme_magenta</item>
     </string-array>
     <!-- DO NOT translate theme_entry_values - only used internally -->
     <string-array name="theme_entry_values" translatable="false">
         <item>@string/app_theme_light</item>
         <item>@string/app_theme_dark</item>
-        <item>@string/app_theme_magenta</item>
     </string-array>
     <!-- DO NOT translate protocol_entry_values - only used internally -->
     <string-array name="protocol_entry_values">
         <item>@string/protocol_odk_default</item>
         <item>@string/protocol_google_sheets</item>
-        <item>@string/protocol_other</item>
     </string-array>
     <string-array name="protocol_entries">
-        <item>@string/server_platform_odk_aggregate</item>
+        <item>@string/server_platform_odk</item>
         <item>@string/server_platform_google_sheets</item>
-        <item>@string/server_platform_other</item>
-    </string-array>
-    <!-- DO NOT translate transport_type_entry_values - only used internally -->
-    <string-array name="transport_type_entry_values" translatable="false">
-        <item>@string/transport_type_value_internet</item>
-        <item>@string/transport_type_value_sms</item>
-        <item>@string/transport_type_value_both</item>
-    </string-array>
-    <string-array name="transport_type_entries">
-        <item>@string/transport_type_internet</item>
-        <item>@string/transport_type_sms</item>
-        <item>@string/transport_type_both</item>
     </string-array>
 
     <!-- DO NOT alter font_size_entry_values - used internally in preferences activity -->
@@ -169,18 +154,28 @@ the specific language governing permissions and limitations under the License. -
         <item>@string/persian_month_11</item>
         <item>@string/persian_month_12</item>
     </string-array>
+
     <string-array name="periodic_form_updates_check_entry_values">
-        <item>@string/never_value</item>
         <item>@string/every_fifteen_minutes_value</item>
         <item>@string/every_one_hour_value</item>
         <item>@string/every_six_hours_value</item>
         <item>@string/every_24_hours_value</item>
     </string-array>
     <string-array name="periodic_form_updates_check_entries">
-        <item>@string/never</item>
         <item>@string/every_fifteen_minutes</item>
         <item>@string/every_one_hour</item>
         <item>@string/every_six_hours</item>
         <item>@string/every_24_hours</item>
+    </string-array>
+
+    <string-array name="form_update_mode_entries">
+        <item>@string/manual</item>
+        <item>@string/previously_downloaded_only</item>
+        <item>@string/match_exactly</item>
+    </string-array>
+    <string-array name="form_update_mode_values">
+        <item>@string/form_update_mode_manual</item>
+        <item>@string/form_update_mode_previously_downloaded</item>
+        <item>@string/form_update_mode_match_exactly</item>
     </string-array>
 </resources>

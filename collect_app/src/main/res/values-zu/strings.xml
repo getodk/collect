@@ -58,11 +58,7 @@
   <string name="jump_to_beginning">Yana ekuqaleni</string>
   <string name="jump_to_end">Yana ekugcineni</string>
   <string name="jump_to_previous">Iya phezulu</string>
-  <string name="list_failed_with_error">Ukukleliswa kwamafomu akuphumelelanga. %s.</string>
   <string name="loading_form">Kufakwa ifomu</string>
-  <string name="load_remote_form_error">Iphutha ekutholeni uhlu lwamafomu</string>
-  <string name="location_provider_accuracy">Ukusebenzisa %1$s. ukucophelela %2$s m.</string>
-  <string name="location_accuracy">Ukucophelela %1s% m</string>
   <string name="manage_files">Susa ifomu elongiwe</string>
   <string name="mark_finished">Bonisa ukuthi ifomu liphothuliwe</string>
   <string name="noselect_error">Uxolo, alikho ifomu olikhethile</string>
@@ -72,8 +68,6 @@
   <string name="no_items_display_instances">Akukho okutholakalayo ukuboniswa.\n\nzama ukuphothula ugcine ifomu ngaphambi kokulithumela.</string>
   <string name="ok">Kulungile</string>
   <string name="parse_error">Uxolo, akukwazi ukuncozulula ifomu.</string>
-  <string name="parse_legacy_formlist_failed">Iseva ayinikezanga imiqulu yamafomu akhona angasebenziswa Aggregate 0.9.x.:%s</string>
-  <string name="parse_openrosa_formlist_failed">Iseva ayinikezanga imiqulu yamafomu akhona angasebenziswa OpenRosa version 1.0 standard: %s</string>
   <string name="password">Inombolomfihlo</string>
   <string name="play_video">Dlala Umbukiso</string>
   <string name="please_wait">Sicela ulinde imizuzu emibalwa.</string>
@@ -108,17 +102,11 @@
   <string name="change_splash_path">Shintsha umfanekiso</string>
   <string name="keep_changes">Gcina ushintsho</string>
   <string name="change_formlist_url">Uhla lendlela yefomu (appended to URL)</string>
-  <string name="change_protocol">Inkundla</string>
   <string name="change_submission_url">Indlela yokuhambisa  (appended to URL)</string>
   <string name="formlist_url">Uhla lendlela yefomu</string>
   <string name="submission_url">Indlela yokuthumela</string>
   <string name="font_size">Usayizi wombhalo (Font)</string>
   <string name="change_font_size">Usayizi wombhalo (Font)</string>
-  <string name="access_error">Iphutha ngenkathi kufinyelelwa %s :</string>
-  <string name="manifest_server_error">Impendulo Manifest akusho ubike version OpenRosa - iseva bad ?</string>
-  <string name="root_element_error">Okuwumsuka akuyona &lt;abonakaliswe\&gt; - Kwaba %s</string>
-  <string name="root_namespace_error">Okuwumsuka wegama akuyilona : %s</string>
-  <string name="manifest_tag_error">Manifest entry %s entulekayo eyodwa noma ngaphezulu tag: lefayela, hashi, noma downloadUrl</string>
   <string name="form_download_progress">%1$s. Ukuthola amafayela emidya: %2$s of %3$s</string>
   <string name="fetching_manifest">%s. Ukuthola izinkomba</string>
   <string name="success">Impumelelo</string>
@@ -133,8 +121,6 @@
   <string name="save_as_error">Igama eligciniwe akumele lingabi nalutho</string>
   <string name="edit_prompt">Hlela ngokushesha</string>
   <string name="selected_google_account_text">akhawunti Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Okunye</string>
   <string name="font_size_extra_large">Okukhulu kakhulu</string>
   <string name="font_size_large">Okukhulu </string>
   <string name="font_size_medium">Okuphakathi</string>
@@ -155,7 +141,6 @@
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="launch_app">Yethula</string>
   <string name="no_app">Isicelo asiphumelelanga. Sicela ufake imibhalo ngesandla.</string>
-  <string name="select_one">Khetha impendulo eyodwa</string>
   <string name="savepoint_used">Izinguquko ezingagciniwe zitholakele from savepoint!</string>
   <string name="save_and_close">Londoloza bese uyavala</string>
   <string name="sign_button">Thola isithupha</string>
@@ -209,5 +194,4 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <!--Sms submission-->
 </resources>

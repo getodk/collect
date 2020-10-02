@@ -36,6 +36,7 @@ import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
+import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.HierarchyListAdapter;
@@ -44,6 +45,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.ODKView;
+import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -56,10 +58,9 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.analytics.AnalyticsEvents.NULL_FORM_CONTROLLER_EVENT;
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getPreviousLevel;
 
-public class FormHierarchyActivity extends CollectAbstractActivity {
+public class FormHierarchyActivity extends CollectAbstractActivity implements DeleteRepeatDialogFragment.DeleteRepeatDialogCallback {
 
     public static final int RESULT_ADD_REPEAT = 2;
     /**
@@ -135,11 +136,10 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         setSupportActionBar(toolbar);
 
         FormController formController = Collect.getInstance().getFormController();
-        // https://github.com/opendatakit/collect/issues/998
+        // https://github.com/getodk/collect/issues/998
         if (formController == null) {
             finish();
             Timber.w("FormController is null");
-            analytics.logEvent(NULL_FORM_CONTROLLER_EVENT, "FormHierarchyActivity", null);
             return;
         }
 
@@ -262,19 +262,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_delete_child:
-                DialogUtils.showDeleteRepeatConfirmDialog(this, () -> {
-                    if (didDeleteLastRepeatItem()) {
-                        // goUpLevel would put us in a weird state after deleting the last item;
-                        // just go back one event instead.
-                        //
-                        // TODO: This works well in most cases, but if there are 2 repeats in a row,
-                        //   and you delete an item from the second repeat, it will send you into the
-                        //   first repeat instead of going back a level as expected.
-                        goToPreviousEvent();
-                    } else {
-                        goUpLevel();
-                    }
-                }, null);
+                DialogUtils.showIfNotShowing(DeleteRepeatDialogFragment.class, getSupportFragmentManager());
                 return true;
 
             case R.id.menu_add_repeat:
@@ -328,6 +316,14 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         // it must be the last remaining item.
         return event == FormEntryController.EVENT_PROMPT_NEW_REPEAT
                 && index.getElementMultiplicity() == 0;
+    }
+
+    private boolean didDeleteFirstRepeatItem() {
+        return Collect
+                .getInstance()
+                .getFormController()
+                .getFormIndex()
+                .getElementMultiplicity() == 0;
     }
 
     /**
@@ -736,7 +732,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         FormController formController = Collect.getInstance().getFormController();
         if (formController != null) {
             formController.getAuditEventLogger().flush();
-            formController.jumpToIndex(startIndex);
+            navigateToTheLastRelevantIndex(formController);
         }
 
         onBackPressedWithoutLogger();
@@ -744,6 +740,29 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
     protected void onBackPressedWithoutLogger() {
         super.onBackPressed();
+    }
+
+    private void navigateToTheLastRelevantIndex(FormController formController) {
+        FormEntryController fec = new FormEntryController(new FormEntryModel(formController.getFormDef()));
+        formController.jumpToIndex(startIndex);
+
+        // startIndex might no longer exist if it was a part of repeat group that has been removed
+        while (true) {
+            boolean isBeginningOfFormIndex = formController.getFormIndex().isBeginningOfFormIndex();
+            boolean isEndOfFormIndex = formController.getFormIndex().isEndOfFormIndex();
+            boolean isIndexRelevant = isBeginningOfFormIndex
+                    || isEndOfFormIndex
+                    || fec.getModel().isIndexRelevant(formController.getFormIndex());
+            boolean isPromptNewRepeatEvent = formController.getEvent() == FormEntryController.EVENT_PROMPT_NEW_REPEAT;
+
+            boolean shouldNavigateBack = !isIndexRelevant || isPromptNewRepeatEvent;
+
+            if (shouldNavigateBack) {
+                formController.stepToPreviousEvent();
+            } else {
+                break;
+            }
+        }
     }
 
     /**
@@ -769,5 +788,23 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         alertDialog.setCancelable(false);
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok), errorListener);
         alertDialog.show();
+    }
+
+    @Override
+    public void deleteGroup() {
+        if (didDeleteLastRepeatItem()) {
+            // goUpLevel would put us in a weird state after deleting the last item;
+            // just go back one event instead.
+            //
+            // TODO: This works well in most cases, but if there are 2 repeats in a row,
+            //   and you delete an item from the second repeat, it will send you into the
+            //   first repeat instead of going back a level as expected.
+            goToPreviousEvent();
+        } else if (didDeleteFirstRepeatItem()) {
+            goUpLevel();
+        } else {
+            goToPreviousEvent();
+            goUpLevel();
+        }
     }
 }

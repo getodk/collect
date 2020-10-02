@@ -17,7 +17,7 @@ public class FormEndPage extends Page<FormEndPage> {
 
     private final String formName;
 
-    FormEndPage(String formName, ActivityTestRule rule) {
+    public FormEndPage(String formName, ActivityTestRule rule) {
         super(rule);
         this.formName = formName;
     }
@@ -58,8 +58,8 @@ public class FormEndPage extends Page<FormEndPage> {
         return this;
     }
 
-    public FormEntryPage clickGoToArrow() {
+    public FormHierarchyPage clickGoToArrow() {
         onView(withId(R.id.menu_goto)).perform(click());
-        return new FormEntryPage(formName, rule);
+        return new FormHierarchyPage(formName, rule);
     }
 }

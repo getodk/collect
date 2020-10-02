@@ -19,11 +19,11 @@ package org.odk.collect.android.support;
 import android.view.View;
 import android.widget.SeekBar;
 
+import androidx.test.espresso.matcher.BoundedMatcher;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-
-import androidx.test.espresso.matcher.BoundedMatcher;
 
 /**
  * Grab bag of Hamcrest matchers.

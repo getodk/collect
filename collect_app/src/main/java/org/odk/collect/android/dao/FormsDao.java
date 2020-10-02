@@ -21,7 +21,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import androidx.loader.content.CursorLoader;
+
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.FormsDatabaseHelper;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -29,10 +32,8 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.loader.content.CursorLoader;
-
 /**
- * This class is used to encapsulate all access to the {@link org.odk.collect.android.database.helpers.FormsDatabaseHelper#DATABASE_NAME}
+ * This class is used to encapsulate all access to the {@link FormsDatabaseHelper#DATABASE_NAME}
  * For more information about this pattern go to https://en.wikipedia.org/wiki/Data_access_object
  */
 public class FormsDao {
@@ -53,7 +54,7 @@ public class FormsDao {
         return Collect.getInstance().getContentResolver().query(uri, null, null, null, null);
     }
 
-    public Cursor getFormsCursor(String formId, String formVersion) {
+    public Cursor getFormsCursorSortedByDateDesc(String formId, String formVersion) {
         String[] selectionArgs;
         String selection;
 
@@ -74,10 +75,6 @@ public class FormsDao {
         return getFormsCursor(null, selection, selectionArgs, order);
     }
 
-    private CursorLoader getFormsCursorLoader(String sortOrder, boolean newestByFormId) {
-        return getFormsCursorLoader(null, null, sortOrder, newestByFormId);
-    }
-
     /**
      * Returns a loader filtered by the specified charSequence in the specified sortOrder. If
      * newestByFormId is true, only the most recently-downloaded version of each form is included.
@@ -86,9 +83,9 @@ public class FormsDao {
         CursorLoader cursorLoader;
 
         if (charSequence.length() == 0) {
-            cursorLoader = getFormsCursorLoader(sortOrder, newestByFormId);
+            cursorLoader = getFormsCursorLoader(FormsColumns.DELETED_DATE + " IS NULL", new String[]{}, sortOrder, newestByFormId);
         } else {
-            String selection = FormsColumns.DISPLAY_NAME + " LIKE ?";
+            String selection = FormsColumns.DISPLAY_NAME + " LIKE ? AND " + FormsColumns.DELETED_DATE + " IS NULL";
             String[] selectionArgs = {"%" + charSequence + "%"};
 
             cursorLoader = getFormsCursorLoader(selection, selectionArgs, sortOrder, newestByFormId);
@@ -118,10 +115,14 @@ public class FormsDao {
         return getFormsCursor(null, selection, selectionArgs, null);
     }
 
+    public Cursor getFormsCursorForFormIdAndFormVersion(String formId, String formVersion) {
+        return getFormsCursorSortedByDateDesc(formId, formVersion);
+    }
+
     public String getFormTitleForFormIdAndFormVersion(String formId, String formVersion) {
         String formTitle = "";
 
-        Cursor cursor = getFormsCursor(formId, formVersion);
+        Cursor cursor = getFormsCursorSortedByDateDesc(formId, formVersion);
         if (cursor != null) {
             try {
                 if (cursor.moveToFirst()) {
@@ -138,7 +139,7 @@ public class FormsDao {
     public boolean isFormEncrypted(String formId, String formVersion) {
         boolean encrypted = false;
 
-        Cursor cursor = getFormsCursor(formId, formVersion);
+        Cursor cursor = getFormsCursorSortedByDateDesc(formId, formVersion);
         if (cursor != null) {
             try {
                 if (cursor.moveToFirst()) {
@@ -155,7 +156,7 @@ public class FormsDao {
     public String getFormMediaPath(String formId, String formVersion) {
         String formMediaPath = null;
 
-        Cursor cursor = getFormsCursor(formId, formVersion);
+        Cursor cursor = getFormsCursorSortedByDateDesc(formId, formVersion);
 
         if (cursor != null) {
             try {
@@ -199,27 +200,6 @@ public class FormsDao {
         Collect.getInstance().getContentResolver().delete(FormsColumns.CONTENT_URI, selection.toString(), idsToDelete);
     }
 
-    public void deleteFormsFromMd5Hash(String... hashes) {
-        List<String> idsToDelete = new ArrayList<>();
-        Cursor c = null;
-        try {
-            for (String hash : hashes) {
-                c = getFormsCursorForMd5Hash(hash);
-                if (c != null && c.moveToFirst()) {
-                    String id = c.getString(c.getColumnIndex(FormsColumns._ID));
-                    idsToDelete.add(id);
-                    c.close();
-                    c = null;
-                }
-            }
-        } finally {
-            if (c != null) {
-                c.close();
-            }
-        }
-        deleteFormsFromIDs(idsToDelete.toArray(new String[idsToDelete.size()]));
-    }
-
     public Uri saveForm(ContentValues values) {
         return Collect.getInstance().getContentResolver().insert(FormsColumns.CONTENT_URI, values);
     }
@@ -232,10 +212,16 @@ public class FormsDao {
         return Collect.getInstance().getContentResolver().update(FormsColumns.CONTENT_URI, values, where, whereArgs);
     }
 
+    public int getCount() {
+        try (Cursor c = getFormsCursor()) {
+            return c.getCount();
+        }
+    }
+
     /**
      * Returns all forms available through the cursor and closes the cursor.
      */
-    public List<Form> getFormsFromCursor(Cursor cursor) {
+    public static List<Form> getFormsFromCursor(Cursor cursor) {
         List<Form> forms = new ArrayList<>();
         if (cursor != null) {
             try {
@@ -256,8 +242,8 @@ public class FormsDao {
                     int languageColumnIndex = cursor.getColumnIndex(FormsColumns.LANGUAGE);
                     int autoSendColumnIndex = cursor.getColumnIndex(FormsColumns.AUTO_SEND);
                     int autoDeleteColumnIndex = cursor.getColumnIndex(FormsColumns.AUTO_DELETE);
-                    int lastDetectedFormVersionHashColumnIndex = cursor.getColumnIndex(FormsColumns.LAST_DETECTED_FORM_VERSION_HASH);
                     //int geometryXpathColumnIndex = cursor.getColumnIndex(FormsColumns.GEOMETRY_XPATH);   // smap disable
+                    int deletedDateColumnIndex = cursor.getColumnIndex(FormsColumns.DELETED_DATE);
 
                     Form form = new Form.Builder()
                             .id(cursor.getLong(idColumnIndex))
@@ -265,18 +251,18 @@ public class FormsDao {
                             .description(cursor.getString(descriptionColumnIndex))
                             .jrFormId(cursor.getString(jrFormIdColumnIndex))
                             .jrVersion(cursor.getString(jrVersionColumnIndex))
-                            .formFilePath(cursor.getString(formFilePathColumnIndex))
+                            .formFilePath(new StoragePathProvider().getFormDbPath(cursor.getString(formFilePathColumnIndex)))
                             .submissionUri(cursor.getString(submissionUriColumnIndex))
                             .base64RSAPublicKey(cursor.getString(base64RSAPublicKeyColumnIndex))
                             .md5Hash(cursor.getString(md5HashColumnIndex))
                             .date(cursor.getLong(dateColumnIndex))
-                            .jrCacheFilePath(cursor.getString(jrCacheFilePathColumnIndex))
-                            .formMediaPath(cursor.getString(formMediaPathColumnIndex))
+                            .jrCacheFilePath(new StoragePathProvider().getCacheDbPath(cursor.getString(jrCacheFilePathColumnIndex)))
+                            .formMediaPath(new StoragePathProvider().getFormDbPath(cursor.getString(formMediaPathColumnIndex)))
                             .language(cursor.getString(languageColumnIndex))
                             .autoSend(cursor.getString(autoSendColumnIndex))
                             .autoDelete(cursor.getString(autoDeleteColumnIndex))
-                            .lastDetectedFormVersionHash(cursor.getString(lastDetectedFormVersionHashColumnIndex))
-                            //.geometryXpath(cursor.getString(geometryXpathColumnIndex))    // smap disable
+                            //.geometryXpath(cursor.getString(geometryXpathColumnIndex))   // smap disable
+                            .deleted(!cursor.isNull(deletedDateColumnIndex))
                             .build();
 
                     forms.add(form);

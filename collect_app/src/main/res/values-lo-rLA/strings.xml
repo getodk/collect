@@ -57,11 +57,7 @@
   <string name="jump_to_beginning">ໄປຫາໜ້າທຳອິດຕົ້ນ</string>
   <string name="jump_to_end">ໄປຫາໜ້າສຸດທ້າຍ</string>
   <string name="jump_to_previous">ເລື່ອນຂື້ນ</string>
-  <string name="list_failed_with_error">ບໍ່ສາມາດສະແດງລາຍການແບບຟອມໄດ້ %s.</string>
   <string name="loading_form">ກຳລັງເປີດແບບຟອມ</string>
-  <string name="load_remote_form_error">ມີ​ຄວາມຜິດພາດ ບໍ່ສາມາດສະແດງລາຍການແບບຟອມໄດ້</string>
-  <string name="location_provider_accuracy">ໃຊ້້ຄ່າພິກັດ %1$s. ຄ່າຄວາມຖືກຕ້ອງແມ່ນ %2$s m.</string>
-  <string name="location_accuracy">ຄ່າຄວາມຖືກຕ້ອງ​ແມ່ນ %1$s m</string>
   <string name="manage_files">ລຶບແບບຟອມທີ່ບັນທຶກໄວ້</string>
   <string name="mark_finished">ໝາຍແບບຟອມວ່າໄດ້ສຳເລັດແລ້ວ</string>
   <string name="noselect_error">ທ່ານບໍ່ທັນ​ໄດ້ເລືອກແບບຟອມ!</string>
@@ -71,8 +67,6 @@
   <string name="no_items_display_instances">ບໍ່ມີຫຍັງທີ່ຈະສະແດງ. \n\nລອງເຮັດເຄື່ອງໜາຍແບບຟອມວ່າສຳເລັດແລ້ວກ່ອນສົ່ງ</string>
   <string name="ok">ຕົກລົງ</string>
   <string name="parse_error">ບໍ່ສາມາດເປີດແບບຟອມໄດ້</string>
-  <string name="parse_legacy_formlist_failed">ເຊີເວີທີເຊື່ອມຕໍ່​ຢູ່ ບໍ່​ມີແບບຟອມ​ທີ່​ສາມາດໃຊ້ງານໄດ້ກັບ Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">ເຊີເວີທີເຊື່ອມຕໍ່​ຢູ່ ບໍ່​ມີແບບຟອມ​ທີ່​ສາມາດໃຊ້ງານໄດ້ກັບ OpenRosa version 1.0 standard: %s</string>
   <string name="password">ລະຫັດຜ່ານ</string>
   <string name="play_video">ເປີດວີດີໂອ</string>
   <string name="please_wait">ກະລຸນາລໍຖ້າຈັກໜ້ອຍ</string>
@@ -108,17 +102,11 @@
   <string name="change_splash_path">ປ່ຽນຮູບພາບ</string>
   <string name="keep_changes">ບັນທຶກການປ່ຽນແປງ</string>
   <string name="change_formlist_url">​ບ່ອນ​ເກັບ​ລາຍ​ການແບບຟອມ (ເພີ່ມເຕີມໃສ່ URL)</string>
-  <string name="change_protocol">ແພຼັດຟອມ (Platform)</string>
   <string name="change_submission_url">​ບ່ອນ​ສົ່ງ​ຂໍ້​ມູນ (ເພີ່ມເຕີມໃສ່ URL)</string>
   <string name="formlist_url">ບ່ອນ​ເກັບ​ລາຍ​ການແບບຟອມ</string>
   <string name="submission_url">ບ່ອນ​ສົ່ງ​ຂໍ້​ມູນ </string>
   <string name="font_size">ຂະໜາດຕົວອັກສອນ</string>
   <string name="change_font_size">ຂະໜາດຕົວອັກສອນ</string>
-  <string name="access_error">ມີ​ຄວາມຜິດພາດໃນຂະນະທີ່ເປີດ %s:</string>
-  <string name="manifest_server_error">Manifest reply does not report an OpenRosa version — bad server?</string>
-  <string name="root_element_error">Root element is not &lt;manifest\&gt; — was %s</string>
-  <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
-  <string name="manifest_tag_error">Manifest entry %s is missing one or more tags: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
   <string name="fetching_manifest">%s. Getting manifest</string>
   <string name="success">ສຳເລັດແລ້ວ</string>
@@ -133,8 +121,6 @@
   <string name="save_as_error">ການໃສ່ຊື່ເອກະສານທີ່ຈະບັນທຶກບໍ່​ຕ້ອງຍະຫວ່າງ!</string>
   <string name="edit_prompt">ແກ້ໄຂຈຸດທີ່ເລືອກ</string>
   <string name="selected_google_account_text">ບັນຊີໃຊ້ງານໃນ Google </string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">ອື່ນໆ</string>
   <string name="font_size_extra_large">ຂະໜາດໃຫຍ່ທີ່ສຸດ</string>
   <string name="font_size_large">ຂະໜາດໃຫຍ່</string>
   <string name="font_size_medium">ຂະໜາດປານກາງ</string>
@@ -158,7 +144,6 @@
   <string name="parent_form_not_present">ບໍ່ສາມາດແກ້ໄຂແບບຟອມທີ່ບັນທຶກໄວ້ເນື່ອງຈາກວ່າບໍ່ມີແບບຟອມເປົ່າຫວ່າງດັ່ງກ່າວ ຫຼື ຖືກລົບໄປແລ້ວ.\n\nລະຫັດຟອມ: %1$s</string>
   <string name="launch_app">ເລີ້ມຕົ້ນການນຳໃຊ້</string>
   <string name="no_app">ບໍ່ພົບ​ໂປ​ແກມ​ທີ່​ຕ້ອງ​ການ ກະລຸນາປ້ອນຂໍ້ມູນໃໝ່ດ້ວຍຕົນເອງ</string>
-  <string name="select_one">ເລືອກໜຶ່ງຄຳຕອບ</string>
   <string name="savepoint_used">ກູ້ຂໍ້ມູນຄືນຈາກຈຸດທີ່ບັນທຶກໄວ້!</string>
   <string name="save_and_close">ບັນທຶກ ແລະ ປິດການໃຊ້ງານ</string>
   <string name="sign_button">ບັນທຶກລາຍເຊັນ</string>
@@ -226,8 +211,6 @@
   <string name="go_drive">ຊ້ອງຂອງຂ້ອຍ</string>
   <string name="go_shared">ແບ່ງກັບຂ້ອຍ</string>
   <string name="modified_on_date_at_time">\'ດັດແກ້ວັນທີ\' EEE, MMM dd, yyyy \'ເວລາ\' HH:mm</string>
-  <string name="aggregate_preferences">ການຕັ້ງຄ່າ ODK Aggregate</string>
-  <string name="other_preferences">ການຕັ້ງຄ່າ platform ອື່ນໆ</string>
   <string name="drive_get_file">ໄດ້ %1$s ຂອງເອກະສານ.</string>
   <string name="no_google_account">ບໍ່ໄດ້ເລືອກບັນຊີຂອງ Google</string>
   <string name="notification_error">ຂໍ້ຜິດພາດສະແດງຂໍ້ຄວາມແຈ້ງເຕືອນ</string>
@@ -245,5 +228,4 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <!--Sms submission-->
 </resources>

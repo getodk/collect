@@ -5,14 +5,12 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.inputmethod.EditorInfo;
 
-import androidx.fragment.app.FragmentActivity;
+import androidx.annotation.Nullable;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.logic.PropertyManager;
@@ -27,11 +25,11 @@ import static org.odk.collect.android.logic.PropertyManager.PROPMGR_DEVICE_ID;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_PHONE_NUMBER;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_SIM_SERIAL;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_SUBSCRIBER_ID;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_INSTALL_ID;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_PHONENUMBER;
+import static org.odk.collect.android.preferences.MetaKeys.KEY_INSTALL_ID;
 
-public class FormMetadataFragment extends PreferenceFragmentCompat {
+public class FormMetadataFragment extends BasePreferenceFragment {
 
     @Inject
     InstallIDProvider installIDProvider;
@@ -63,16 +61,12 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
         deviceIDPreference = findPreference(PROPMGR_DEVICE_ID);
         simSerialPrererence = findPreference(PROPMGR_SIM_SERIAL);
         subscriberIDPreference = findPreference(PROPMGR_SUBSCRIBER_ID);
-
-        FragmentActivity activity = getActivity();
-        if (activity instanceof CollectAbstractActivity) {
-            ((CollectAbstractActivity) activity).initToolbar(getPreferenceScreen().getTitle());
-        }
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
         setupPrefs();
 
         if (permissionUtils.isReadPhoneStatePermissionGranted(getActivity())) {
@@ -126,7 +120,7 @@ public class FormMetadataFragment extends PreferenceFragmentCompat {
 
         @Override
         public CharSequence provideSummary(EditTextPreference preference) {
-            String value = propertyManager.reload(getActivity()).getSingularProperty(propertyKey);
+            String value = propertyManager.reload().getSingularProperty(propertyKey);
             if (!TextUtils.isEmpty(value)) {
                 return value;
             } else {

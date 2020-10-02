@@ -15,6 +15,7 @@
 package org.odk.collect.android.preferences;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
@@ -22,7 +23,6 @@ import androidx.annotation.Nullable;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.tasks.ServerPollingJob;
 
 import java.util.Map;
 import java.util.Set;
@@ -30,7 +30,6 @@ import java.util.Set;
 import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.GeneralKeys.DEFAULTS;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 
 public class GeneralSharedPreferences {
 
@@ -87,9 +86,6 @@ public class GeneralSharedPreferences {
         Editor editor = sharedPreferences.edit();
 
         if (value == null || value instanceof String) {
-            if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK) && get(KEY_PERIODIC_FORM_UPDATES_CHECK) != value) {
-                ServerPollingJob.schedulePeriodicJob((String) value);
-            }
             editor.putString(key, (String) value);
         } else if (value instanceof Boolean) {
             editor.putBoolean(key, (Boolean) value);
@@ -114,10 +110,7 @@ public class GeneralSharedPreferences {
 
     public void clear() {
         for (Map.Entry<String, ?> prefs : getAll().entrySet()) {
-            String key = prefs.getKey();
-            if (!GeneralKeys.KEYS_WE_SHOULD_NOT_RESET.contains(key)) {
-                reset(key);
-            }
+            reset(prefs.getKey());
         }
     }
 
@@ -138,6 +131,10 @@ public class GeneralSharedPreferences {
 
     public static boolean isAutoSendEnabled() {
         return !getInstance().get(GeneralKeys.KEY_AUTOSEND).equals("off");
+    }
+
+    public SharedPreferences getSharedPreferences() {
+        return sharedPreferences;
     }
 
     public static class ValidationException extends RuntimeException {

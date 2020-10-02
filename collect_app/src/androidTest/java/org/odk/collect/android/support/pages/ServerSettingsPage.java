@@ -1,43 +1,47 @@
 package org.odk.collect.android.support.pages;
 
-import androidx.test.espresso.matcher.PreferenceMatchers;
 import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
 
-import static androidx.test.espresso.Espresso.onData;
+import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class ServerSettingsPage extends Page<ServerSettingsPage> {
 
-    ServerSettingsPage(ActivityTestRule rule) {
+    public ServerSettingsPage(ActivityTestRule rule) {
         super(rule);
     }
 
     @Override
     public ServerSettingsPage assertOnPage() {
-        checkIsStringDisplayed(R.string.server_preferences);
+        assertText(R.string.server_preferences);
         return this;
     }
 
     public ServerSettingsPage clickOnServerType() {
-        onData(PreferenceMatchers.withKey("protocol")).perform(click());
+        onView(withText(getTranslatedString(R.string.type))).perform(click());
         return this;
     }
 
-    public ServerSettingsPage clickAggregateUsername() {
-        onData(PreferenceMatchers.withKey("username")).perform(click());
+    public ServerSettingsPage clickServerUsername() {
+        onView(withText(getTranslatedString(R.string.username))).perform(click());
         return this;
     }
 
-    public ServerSettingsPage clickFormListPath() {
-        onData(PreferenceMatchers.withKey("formlist_url")).perform(click());
+    public ServerSettingsPage clickOnURL() {
+        onView(withText(getTranslatedString(R.string.server_url))).perform(click());
         return this;
     }
 
-    public ServerSettingsPage clickSubmissionPath() {
-        onData(PreferenceMatchers.withKey("submission_url")).perform(click());
-        return this;
+    public CustomServerPathsPage clickCustomServerPaths() {
+        onView(withText(getTranslatedString(R.string.custom_server_paths))).perform(click());
+        return new CustomServerPathsPage(rule).assertOnPage();
     }
 
+    public ServerSettingsPage clickServerPassword() {
+        onView(withText(getTranslatedString(R.string.password))).perform(click());
+        return this;
+    }
 }

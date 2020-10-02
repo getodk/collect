@@ -47,9 +47,9 @@ public class FormEntrySettingsTest {
                 .clickAdminSettings()
                 .clickFormEntrySettings()
                 .clickMovingBackwards()
-                .checkIsStringDisplayed(R.string.moving_backwards_disabled_title)
-                .checkIsStringDisplayed(R.string.yes)
-                .checkIsStringDisplayed(R.string.no)
+                .assertText(R.string.moving_backwards_disabled_title)
+                .assertText(R.string.yes)
+                .assertText(R.string.no)
                 .clickOnString(R.string.yes)
                 .checkIfSaveFormOptionIsDisabled()
                 .pressBack(new AdminSettingsPage(rule))
@@ -59,8 +59,8 @@ public class FormEntrySettingsTest {
                 .openFormManagement()
                 .scrollToConstraintProcessing()
                 .checkIfConstraintProcessingIsDisabled()
-                .checkIfTextDoesNotExist(R.string.constraint_behavior_on_finalize)
-                .checkIsStringDisplayed(R.string.constraint_behavior_on_swipe)
+                .assertTextDoesNotExist(R.string.constraint_behavior_on_finalize)
+                .assertText(R.string.constraint_behavior_on_swipe)
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule))
                 .checkIfElementIsGone(R.id.review_data)
@@ -70,10 +70,8 @@ public class FormEntrySettingsTest {
                 .assertText("String widget")
                 .closeSoftKeyboard()
                 .pressBack(new ExitFormDialog("All widgets", rule))
-                .checkIsStringDisplayed(R.string.do_not_save)
-                .checkIfTextDoesNotExist(R.string.keep_changes)
+                .assertText(R.string.do_not_save)
+                .assertTextDoesNotExist(R.string.keep_changes)
                 .clickOnString(R.string.do_not_save);
     }
-
 }
-

@@ -14,10 +14,15 @@
 
 package org.odk.collect.android.preferences;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import androidx.annotation.Nullable;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.preference.CheckBoxPreference;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
@@ -27,33 +32,31 @@ import org.odk.collect.android.utilities.MultiClickGuard;
 import javax.inject.Inject;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_ANALYTICS;
-import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public class IdentityPreferences extends BasePreferenceFragment {
 
     @Inject
     Analytics analytics;
 
-    public static IdentityPreferences newInstance(boolean adminMode) {
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
-
-        IdentityPreferences identityPreferences = new IdentityPreferences();
-        identityPreferences.setArguments(bundle);
-
-        return identityPreferences;
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        Collect.getInstance().getComponent().inject(this);
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.identity_preferences);
-        Collect.getInstance().getComponent().inject(this);
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.identity_preferences, rootKey);
 
         // initAnalyticsPref();  // smap
         findPreference("form_metadata").setOnPreferenceClickListener(preference -> {
             if (MultiClickGuard.allowClick(getClass().getName())) {
-                AndroidXPreferencesActivity.start(getActivity(), FormMetadataFragment.class);
+                Fragment fragment = new FormMetadataFragment();
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.preferences_fragment_container, fragment)
+                        .addToBackStack(null)
+                        .commit();
                 return true;
             }
             return false;

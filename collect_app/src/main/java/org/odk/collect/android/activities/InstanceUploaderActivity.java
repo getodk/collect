@@ -23,7 +23,10 @@ import android.os.Bundle;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.storage.StorageInitializer;
@@ -41,6 +44,8 @@ import java.util.HashMap;
 import java.util.Set;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 /**
@@ -76,10 +81,16 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     private String password;
     private Boolean deleteInstanceAfterUpload;
 
+    @Inject
+    InstancesRepository instancesRepository;
+
+    @Inject
+    FormsRepository formsRepository;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Timber.i("onCreate: %s", savedInstanceState == null ? "creating" : "re-initializing");
+        DaggerUtils.getComponent(this).inject(this);
 
         // This activity is accessed directly externally
         new PermissionUtils().requestStoragePermissions(this, new PermissionListener() {
@@ -193,6 +204,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
             // register this activity with the new uploader task
             instanceServerUploaderTask.setUploaderListener(this);
+            instanceServerUploaderTask.setRepositories(instancesRepository, formsRepository);
             instanceServerUploaderTask.execute(instancesToSend);
         }
     }
@@ -255,7 +267,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
         // If the activity is paused or in the process of pausing, don't show the dialog
         if (!isInstanceStateSaved()) {
-            createUploadInstancesResultDialog(InstanceUploaderUtils.getUploadResultMessage(this, result));
+            createUploadInstancesResultDialog(InstanceUploaderUtils.getUploadResultMessage(instancesRepository, this, result));
         } else {
             // Clean up
             finish();
@@ -370,6 +382,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         if (url != null) {
             instanceServerUploaderTask.setCompleteDestinationUrl(url + Collect.getInstance().getString(R.string.default_odk_submission), false);
         }
+        instanceServerUploaderTask.setRepositories(instancesRepository, formsRepository);
         instanceServerUploaderTask.execute(instancesToSend);
     }
 

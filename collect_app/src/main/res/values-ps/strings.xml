@@ -125,7 +125,6 @@
   <string name="moving_backwards_enabled_title">د بيرته راګرځولو توانول فعال دي</string>
   <string name="yes">هو</string>
   <string name="no">نه</string>
-  <string name="never">هیڅکله</string>
   <string name="every_fifteen_minutes">هر پنځلس دقیقه </string>
   <string name="every_one_hour">هر ساعت</string>
   <string name="every_six_hours">هر ښپږ ساعتونو کښی</string>
@@ -139,5 +138,4 @@
   <string name="theme_dark">تیاره مدار</string>
   <string name="hide_old_form_versions_setting_title">زاړه بڼه نسخه پټ کړئ</string>
   <string name="hide_old_form_versions_setting_summary">یواځې نوې نسخه به په خالي فارم کې راښکاره شي</string>
-  <!--Sms submission-->
 </resources>

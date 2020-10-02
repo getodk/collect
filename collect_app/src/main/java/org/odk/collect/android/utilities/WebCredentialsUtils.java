@@ -4,6 +4,7 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.HttpCredentials;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -29,9 +30,11 @@ public class WebCredentialsUtils {
         HOST_CREDENTIALS.put(host, new HttpCredentials(username, password));
     }
 
-    public void saveCredentialsPreferences(String userName, String password) {
-        GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_USERNAME, userName);
-        GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_PASSWORD, password);
+    public void saveCredentialsPreferences(GeneralSharedPreferences generalSharedPreferences, String userName, String password, PropertyManager propertyManager) {
+        generalSharedPreferences.save(GeneralKeys.KEY_USERNAME, userName);
+        generalSharedPreferences.save(GeneralKeys.KEY_PASSWORD, password);
+
+        propertyManager.reload();
     }
 
     /**

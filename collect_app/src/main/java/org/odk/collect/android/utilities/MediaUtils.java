@@ -60,10 +60,6 @@ import timber.log.Timber;
  */
 public class MediaUtils {
 
-    private MediaUtils() {
-        // static methods only
-    }
-
     protected static String escapePathForLikeSQLClause(String path) {
         String ep = path;
         ep = ep.replaceAll("\\!", "!!");
@@ -95,7 +91,7 @@ public class MediaUtils {
         }
     }
 
-    public static final int deleteImageFileFromMediaProvider(String imageFile) {
+    public int deleteImageFileFromMediaProvider(String imageFile) {
         ContentResolver cr = Collect.getInstance().getContentResolver();
         // images
         int count = 0;

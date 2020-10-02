@@ -3,7 +3,7 @@ package org.odk.collect.android.regression;
 import android.Manifest;
 
 import androidx.test.rule.GrantPermissionRule;
-import androidx.test.runner.AndroidJUnit4;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Rule;
 import org.junit.Test;

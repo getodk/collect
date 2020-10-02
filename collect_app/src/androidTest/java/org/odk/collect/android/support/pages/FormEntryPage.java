@@ -1,10 +1,13 @@
 package org.odk.collect.android.support.pages;
 
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.test.espresso.Espresso;
 import androidx.test.rule.ActivityTestRule;
 
+import org.hamcrest.Matchers;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.ActivityHelpers;
+import org.odk.collect.android.utilities.FlingRegister;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -12,17 +15,14 @@ import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
+import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.odk.collect.android.support.CustomMatchers.withIndex;
@@ -38,15 +38,39 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     @Override
     public FormEntryPage assertOnPage() {
-        onView(allOf(withText(formName), isDescendantOfA(withId(R.id.toolbar)))).check(matches(isDisplayed()));
+        assertToolbarTitle(formName);
         return this;
     }
 
+    /**
+     * @deprecated use {@link #swipeToNextQuestion(String)} instead
+     */
+    @Deprecated
     public FormEntryPage swipeToNextQuestion() {
-        onView(withId(R.id.questionholder)).perform(swipeLeft());
+        flingLeft();
         return this;
     }
 
+    public FormEntryPage swipeToNextQuestion(String questionText) {
+        return swipeToNextQuestion(questionText, false);
+    }
+
+    public FormEntryPage swipeToNextQuestion(String questionText, boolean isRequired) {
+        flingLeft();
+
+        if (isRequired) {
+            waitForText("* " + questionText);
+        } else {
+            waitForText(questionText);
+        }
+
+        return this;
+    }
+
+    /**
+     * @deprecated use {@link #swipeToNextQuestion(String)} instead
+     */
+    @Deprecated
     public FormEntryPage swipeToNextQuestion(int repetitions) {
         for (int i = 0; i < repetitions; i++) {
             swipeToNextQuestion();
@@ -55,35 +79,24 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage swipeToNextRepeat(String repeatLabel, int repeatNumber) {
-        tryAgainOnFail(() -> {
-            onView(withId(R.id.questionholder)).perform(swipeLeft());
-            onView(withText(repeatLabel + " > " + repeatNumber));
-        });
-
+        waitForText(repeatLabel + " > " + (repeatNumber - 1));
+        flingLeft();
+        waitForText(repeatLabel + " > " + repeatNumber);
         return this;
     }
 
     public FormEndPage swipeToEndScreen() {
-        tryAgainOnFail(() -> {
-            onView(withId(R.id.questionholder)).perform(swipeLeft());
-            new FormEndPage(formName, rule).assertOnPage();
-        });
-
-        return new FormEndPage(formName, rule);
+        flingLeft();
+        return waitFor(() -> new FormEndPage(formName, rule).assertOnPage());
     }
 
     public ErrorDialog swipeToNextQuestionWithError() {
-        onView(withId(R.id.questionholder)).perform(swipeLeft());
+        flingLeft();
         return new ErrorDialog(rule).assertOnPage();
     }
 
     public FormEntryPage clickOptionsIcon() {
         Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
-        return this;
-    }
-
-    public FormEntryPage clickOnLaunchButton() {
-        onView(withText(getTranslatedString(R.string.launch_app))).perform(click());
         return this;
     }
 
@@ -98,8 +111,17 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    /**
+     * @deprecated use {@link #swipeToPreviousQuestion(String)} instead
+     */
     public FormEntryPage swipeToPreviousQuestion() {
         onView(withId(R.id.questionholder)).perform(swipeRight());
+        return this;
+    }
+
+    public FormEntryPage swipeToPreviousQuestion(String questionText) {
+        onView(withId(R.id.questionholder)).perform(swipeRight());
+        assertText(questionText);
         return this;
     }
 
@@ -130,16 +152,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage showSpinnerMultipleDialog() {
-        onView(withText(getInstrumentation().getTargetContext().getString(R.string.select_answer))).perform(click());
-        return this;
-    }
-
-    public FormEntryPage clickGoToStart() {
-        onView(withId(R.id.jumpBeginningButton)).perform(click());
-        return this;
-    }
-
     public FormEntryPage clickForwardButton() {
         onView(withText(getTranslatedString(R.string.form_forward))).perform(click());
         return this;
@@ -167,16 +179,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage clickOnAddGroup() {
         clickOnString(R.string.add_repeat);
-        return this;
-    }
-
-    public FormEntryPage checkIfImageViewIsDisplayed() {
-        onView(withTagValue(is("ImageView"))).check(matches(isDisplayed()));
-        return this;
-    }
-
-    public FormEntryPage checkIfImageViewIsNotDisplayed() {
-        onView(withTagValue(is("ImageView"))).check(doesNotExist());
         return this;
     }
 
@@ -228,11 +230,54 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public AddNewRepeatDialog swipeToNextQuestionWithRepeatGroup(String repeatName) {
-        tryAgainOnFail(() -> {
-            onView(withId(R.id.questionholder)).perform(swipeLeft());
-            new AddNewRepeatDialog(repeatName, rule).assertOnPage();
-        });
+        flingLeft();
+        return waitFor(() -> new AddNewRepeatDialog(repeatName, rule).assertOnPage());
+    }
 
-        return new AddNewRepeatDialog(repeatName, rule);
+    public FormEntryPage answerQuestion(String question, String answer) {
+        assertText(question);
+        inputText(answer);
+        closeSoftKeyboard();
+        return this;
+    }
+
+    public FormEntryPage assertQuestion(String text) {
+        waitForText(text);
+        return this;
+    }
+
+    private void flingLeft() {
+        tryAgainOnFail(() -> {
+            FlingRegister.attemptingFling();
+            onView(withId(R.id.questionholder)).perform(swipeLeft());
+
+            waitFor(() -> {
+                if (FlingRegister.isFlingDetected()) {
+                    return true;
+                } else {
+                    throw new RuntimeException("Fling never detected!");
+                }
+            });
+        }, 5);
+    }
+
+    public FormEntryPage openSelectMinimalDialog() {
+        openSelectMinimalDialog(0);
+        return this;
+    }
+
+    public FormEntryPage openSelectMinimalDialog(int index) {
+        onView(withIndex(withClassName(Matchers.endsWith("TextInputEditText")), index)).perform(click());
+        return this;
+    }
+
+    public FormEntryPage closeSelectMinimalDialog() {
+        onView(allOf(instanceOf(AppCompatImageButton.class), withParent(withId(R.id.toolbar)))).perform(click());
+        return this;
+    }
+
+    public FormEntryPage assertSelectMinimalDialogAnswer(String answer) {
+        onView(withId(R.id.answer)).check(matches(withText(answer)));
+        return this;
     }
 }

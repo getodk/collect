@@ -21,10 +21,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 
-import androidx.fragment.app.FragmentActivity;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
 import org.odk.collect.android.R;
@@ -37,7 +35,6 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.version.VersionInformation;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.TreeMap;
 
 import javax.inject.Inject;
@@ -51,24 +48,13 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_THEME;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_NAVIGATION;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SPLASH_PATH;
-import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
-public class UserInterfacePreferencesFragment extends PreferenceFragmentCompat {
+public class UserInterfacePreferencesFragment extends BasePreferenceFragment {
 
     protected static final int IMAGE_CHOOSER = 0;
 
     @Inject
     VersionInformation versionInformation;
-
-    public static UserInterfacePreferencesFragment newInstance(boolean adminMode) {
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(INTENT_KEY_ADMIN_MODE, adminMode);
-
-        UserInterfacePreferencesFragment userInterfacePreferencesFragment = new UserInterfacePreferencesFragment();
-        userInterfacePreferencesFragment.setArguments(bundle);
-
-        return userInterfacePreferencesFragment;
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -79,11 +65,6 @@ public class UserInterfacePreferencesFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.user_interface_preferences, rootKey);
-
-        FragmentActivity activity = getActivity();
-        if (activity instanceof CollectAbstractActivity) {
-            ((CollectAbstractActivity) activity).initToolbar(getPreferenceScreen().getTitle());
-        }
 
         initThemePrefs();
         initNavigationPrefs();
@@ -96,10 +77,6 @@ public class UserInterfacePreferencesFragment extends PreferenceFragmentCompat {
         final ListPreference pref = findPreference(KEY_APP_THEME);
 
         if (pref != null) {
-            if (versionInformation.isRelease()) {
-                hideExperimentalThemes(pref);
-            }
-
             pref.setSummary(pref.getEntry());
             pref.setOnPreferenceChangeListener((preference, newValue) -> {
                 int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
@@ -113,14 +90,6 @@ public class UserInterfacePreferencesFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
-    }
-
-    private void hideExperimentalThemes(ListPreference pref) {
-        CharSequence[] entries = pref.getEntries();
-        pref.setEntries(Arrays.copyOfRange(entries, 0, entries.length - 1));
-
-        CharSequence[] entryValues = pref.getEntryValues();
-        pref.setEntryValues(Arrays.copyOfRange(entryValues, 0, entryValues.length - 1));
     }
 
     private void initNavigationPrefs() {

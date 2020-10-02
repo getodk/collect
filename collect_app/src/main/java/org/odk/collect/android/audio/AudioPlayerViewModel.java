@@ -9,7 +9,8 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import org.odk.collect.android.R;
-import org.odk.collect.utilities.Scheduler;
+import org.odk.collect.async.Cancellable;
+import org.odk.collect.async.Scheduler;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,10 +19,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.function.Supplier;
 
 class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletionListener {
 
-    private final MediaPlayerFactory mediaPlayerFactory;
+    private final Supplier<MediaPlayer> mediaPlayerFactory;
     private final Scheduler scheduler;
     private MediaPlayer mediaPlayer;
 
@@ -29,9 +31,9 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
     private final MutableLiveData<Exception> error = new MutableLiveData<>();
     private final Map<String, MutableLiveData<Integer>> positions = new HashMap<>();
 
-    private Boolean scheduledDurationUpdates = false;
+    private Cancellable positionUpdatesCancellable;
 
-    AudioPlayerViewModel(MediaPlayerFactory mediaPlayerFactory, Scheduler scheduler) {
+    AudioPlayerViewModel(Supplier<MediaPlayer> mediaPlayerFactory, Scheduler scheduler) {
         this.mediaPlayerFactory = mediaPlayerFactory;
         this.scheduler = scheduler;
 
@@ -176,22 +178,20 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
     }
 
     private void schedulePositionUpdates() {
-        if (!scheduledDurationUpdates) {
-            scheduler.schedule(() -> {
-                CurrentlyPlaying currentlyPlaying = this.currentlyPlaying.getValue();
+        positionUpdatesCancellable = scheduler.repeat(() -> {
+            CurrentlyPlaying currentlyPlaying = this.currentlyPlaying.getValue();
 
-                if (currentlyPlaying != null) {
-                    MutableLiveData<Integer> position = getPositionForClip(currentlyPlaying.clip.getClipID());
-                    position.postValue(getMediaPlayer().getCurrentPosition());
-                }
-            }, 500);
-            scheduledDurationUpdates = true;
-        }
+            if (currentlyPlaying != null) {
+                MutableLiveData<Integer> position = getPositionForClip(currentlyPlaying.clip.getClipID());
+                position.postValue(getMediaPlayer().getCurrentPosition());
+            }
+        }, 500);
     }
 
     private void cancelPositionUpdates() {
-        scheduler.cancel();
-        scheduledDurationUpdates = false;
+        if (positionUpdatesCancellable != null) {
+            positionUpdatesCancellable.cancel();
+        }
     }
 
     private void releaseMediaPlayer() {
@@ -201,7 +201,7 @@ class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletion
 
     private MediaPlayer getMediaPlayer() {
         if (mediaPlayer == null) {
-            mediaPlayer = mediaPlayerFactory.create();
+            mediaPlayer = mediaPlayerFactory.get();
             mediaPlayer.setOnCompletionListener(this);
         }
 

@@ -20,6 +20,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
+import androidx.fragment.app.Fragment;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.MainMenuActivity;
@@ -36,6 +38,7 @@ import java.io.ObjectOutputStream;
 import timber.log.Timber;
 
 import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
+import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 /**
  * Handles admin preferences, which are password-protectable and govern which app features and
@@ -44,7 +47,8 @@ import static org.odk.collect.android.activities.ActivityUtils.startActivityAndC
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
  *         option)
  */
-public class AdminPreferencesActivity extends CollectAbstractActivity implements MovingBackwardsDialog.MovingBackwardsDialogListener, ResetSettingsResultDialog.ResetSettingsResultDialogListener {
+public class AdminPreferencesActivity extends CollectAbstractActivity implements MovingBackwardsDialog.MovingBackwardsDialogListener,
+        ResetSettingsResultDialog.ResetSettingsResultDialogListener {
     public static final String ADMIN_PREFERENCES = "admin_prefs";
     public static final String TAG = "AdminPreferencesFragment";
 
@@ -85,17 +89,22 @@ public class AdminPreferencesActivity extends CollectAbstractActivity implements
         setTheme(new ThemeUtils(this).getSettingsTheme());
 
         setTitle(R.string.admin_preferences);
+
+        Fragment fragment = new AdminPreferencesFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
+        fragment.setArguments(args);
         if (savedInstanceState == null) {
-            getFragmentManager()
+            getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.preferences_fragment_container, new AdminPreferencesFragment(), TAG)
+                    .add(R.id.preferences_fragment_container, fragment, TAG)
                     .commit();
         }
     }
 
     @Override
     public void preventOtherWaysOfEditingForm() {
-        AdminPreferencesFragment fragment = (AdminPreferencesFragment) getFragmentManager().findFragmentByTag(TAG);
+        AdminPreferencesFragment fragment = (AdminPreferencesFragment) getSupportFragmentManager().findFragmentByTag(TAG);
         fragment.preventOtherWaysOfEditingForm();
     }
 

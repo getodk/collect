@@ -30,7 +30,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.FileProvider;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -43,14 +42,18 @@ import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.CameraUtils;
+import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
+import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.io.File;
 import java.util.Locale;
@@ -70,12 +73,15 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class VideoWidget extends QuestionWidget implements FileWidget {
+public class VideoWidget extends QuestionWidget implements FileWidget, ButtonClickListener, BinaryDataReceiver {
 
     public static final boolean DEFAULT_HIGH_RESOLUTION = true;
 
     @NonNull
     private MediaUtil mediaUtil;
+
+    private final WaitingForDataRegistry waitingForDataRegistry;
+    private QuestionMediaManager questionMediaManager;
 
     @NonNull
     private FileUtil fileUtil;
@@ -87,15 +93,18 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
 
     private boolean selfie;
 
-    public VideoWidget(Context context, QuestionDetails prompt) {
-        this(context, prompt, new FileUtil(), new MediaUtil());
+    public VideoWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
+        this(context, prompt, new FileUtil(), new MediaUtil(), questionMediaManager, waitingForDataRegistry);
     }
 
-    public VideoWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil) {
+    public VideoWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil,
+                       QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails);
 
         this.fileUtil = fileUtil;
         this.mediaUtil = mediaUtil;
+        this.questionMediaManager = questionMediaManager;
+        this.waitingForDataRegistry = waitingForDataRegistry;
 
         String appearance = getFormEntryPrompt().getAppearanceHint();
         selfie = appearance != null && (appearance.equalsIgnoreCase(WidgetAppearanceUtils.SELFIE) || appearance.equalsIgnoreCase(WidgetAppearanceUtils.NEW_FRONT));
@@ -131,9 +140,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
 
     @Override
     public void deleteFile() {
-        MediaManager
-                .INSTANCE
-                .markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
+        questionMediaManager.markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
                         getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
     }
@@ -193,9 +200,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
             values.put(Video.Media.DATE_ADDED, System.currentTimeMillis());
             values.put(Video.Media.DATA, newVideo.getAbsolutePath());
 
-            MediaManager
-                    .INSTANCE
-                    .replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newVideo.getAbsolutePath());
+            questionMediaManager.replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newVideo.getAbsolutePath());
 
             Uri videoURI = getContext().getContentResolver().insert(
                     Video.Media.EXTERNAL_CONTENT_URI, values);
@@ -306,7 +311,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
             //analytics.logEvent(REQUEST_VIDEO_NOT_HIGH_RES, getQuestionDetails().getFormAnalyticsID(), "");  // smap commented
         }
         try {
-            waitForData();
+            waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
             ((Activity) getContext()).startActivityForResult(i,
                     RequestCodes.VIDEO_CAPTURE);
         } catch (ActivityNotFoundException e) {
@@ -315,7 +320,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
                     getContext().getString(R.string.activity_not_found,
                             getContext().getString(R.string.capture_video)), Toast.LENGTH_SHORT)
                     .show();
-            cancelWaitingForData();
+            waitingForDataRegistry.cancelWaitingForData();
         }
     }
 
@@ -326,7 +331,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         // new Intent(Intent.ACTION_PICK,
         // android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
         try {
-            waitForData();
+            waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
             ((Activity) getContext()).startActivityForResult(i,
                     RequestCodes.VIDEO_CHOOSER);
         } catch (ActivityNotFoundException e) {
@@ -336,7 +341,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
                             getContext().getString(R.string.choose_video)), Toast.LENGTH_SHORT)
                     .show();
 
-            cancelWaitingForData();
+            waitingForDataRegistry.cancelWaitingForData();
         }
     }
 
@@ -346,7 +351,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
 
         Uri uri = null;
         try {
-            uri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", file);
+            uri = ContentUriProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", file);
             FileUtils.grantFileReadPermissions(intent, uri, getContext());
         } catch (IllegalArgumentException e) {
             Timber.e(e);

@@ -17,12 +17,13 @@
 package org.odk.collect.android.utilities;
 
 import android.content.Context;
-import android.database.Cursor;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.forms.Form;
+import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.instances.InstancesRepository;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -40,44 +41,18 @@ public class InstanceUploaderUtils {
      * Returns a formatted message including submission results for all the filled forms accessible
      * through instancesProcessed in the following structure:
      *
-     * Form name 1 - result
+     * Instance name 1 - result
      *
-     * Form name 2 - result
+     * Instance name 2 - result
      */
-    public static String getUploadResultMessage(Context context, Map<String, String> result) {
+    public static String getUploadResultMessage(InstancesRepository instancesRepository, Context context, Map<String, String> result) {
         Set<String> keys = result.keySet();
         Iterator<String> it = keys.iterator();
-
         StringBuilder message = new StringBuilder();
-        int count = keys.size();
-        while (count > 0) {
-            String[] selectionArgs;
 
-            if (count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER) {
-                selectionArgs = new String[ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER];
-            } else {
-                selectionArgs = new String[count];
-            }
-
-            StringBuilder selection = new StringBuilder();
-            selection.append(InstanceColumns._ID + " IN (");
-
-            int i = 0;
-            while (it.hasNext() && i < selectionArgs.length) {
-                selectionArgs[i] = it.next();
-                selection.append('?');
-
-                if (i != selectionArgs.length - 1) {
-                    selection.append(',');
-                }
-                i++;
-            }
-
-            selection.append(')');
-            count -= selectionArgs.length;
-
-            message.append(InstanceUploaderUtils
-                    .getUploadResultMessageForInstances(new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs), result));
+        while (it.hasNext()) {
+            Instance instance = instancesRepository.get(Long.valueOf(it.next()));
+            message.append(getUploadResultMessageForInstances(instance, result));
         }
 
         if (message.length() == 0) {
@@ -87,31 +62,18 @@ public class InstanceUploaderUtils {
         return message.toString().trim();
     }
 
-    private static String getUploadResultMessageForInstances(Cursor instancesProcessed,
-                                                             Map<String, String> resultMessagesByInstanceId) {
-        StringBuilder queryMessage = new StringBuilder();
-        try {
-            if (instancesProcessed != null && instancesProcessed.getCount() > 0) {
-                instancesProcessed.moveToPosition(-1);
-                while (instancesProcessed.moveToNext()) {
-                    String name =
-                            instancesProcessed.getString(
-                                    instancesProcessed.getColumnIndex(InstanceColumns.DISPLAY_NAME));
-                    String id = instancesProcessed.getString(instancesProcessed.getColumnIndex(InstanceColumns._ID));
-                    String text = localizeDefaultAggregateSuccessfulText(resultMessagesByInstanceId.get(id));
-                    queryMessage
-                            .append(name)
-                            .append(" - ")
-                            .append(text)
-                            .append("\n\n");
-                }
-            }
-        } finally {
-            if (instancesProcessed != null) {
-                instancesProcessed.close();
-            }
+    private static String getUploadResultMessageForInstances(Instance instance, Map<String, String> resultMessagesByInstanceId) {
+        StringBuilder uploadResultMessage = new StringBuilder();
+        if (instance != null) {
+            String name = instance.getDisplayName();
+            String text = localizeDefaultAggregateSuccessfulText(resultMessagesByInstanceId.get(instance.getId().toString()));
+            uploadResultMessage
+                    .append(name)
+                    .append(" - ")
+                    .append(text)
+                    .append("\n\n");
         }
-        return String.valueOf(queryMessage);
+        return uploadResultMessage.toString();
     }
 
     private static String localizeDefaultAggregateSuccessfulText(String text) {
@@ -127,5 +89,20 @@ public class InstanceUploaderUtils {
     // https://forum.getodk.org/t/error-400-bad-request-failed-precondition-on-collect-to-google-sheets/19801/5?u=grzesiek2010
     public static boolean doesUrlRefersToGoogleSheetsFile(String url) {
         return !url.contains("drive.google.com/file/d/");
+    }
+
+    /**
+     * Returns whether instances of the form specified should be auto-deleted after successful
+     * update.
+     *
+     * If the form explicitly sets the auto-delete property, then it overrides the preference.
+     */
+    public static boolean shouldFormBeDeleted(FormsRepository formsRepository, String jrFormId, String jrFormVersion, boolean isAutoDeleteAppSettingEnabled) {
+        Form form = formsRepository.get(jrFormId, jrFormVersion);
+        if (form == null) {
+            return false;
+        }
+
+        return form.getAutoDelete() == null ? isAutoDeleteAppSettingEnabled : Boolean.valueOf(form.getAutoDelete());
     }
 }

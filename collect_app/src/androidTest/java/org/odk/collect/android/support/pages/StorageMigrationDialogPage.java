@@ -24,7 +24,7 @@ public class StorageMigrationDialogPage extends Page<StorageMigrationDialogPage>
 
     @Override
     public StorageMigrationDialogPage assertOnPage() {
-        checkIsStringDisplayed(R.string.storage_migration_dialog_title);
+        assertText(R.string.storage_migration_dialog_title);
         return this;
     }
 
@@ -40,7 +40,7 @@ public class StorageMigrationDialogPage extends Page<StorageMigrationDialogPage>
 
     public MainMenuPage clickMigrate() {
         onView(withId(R.id.migrateButton)).perform(click());
-        return new MainMenuPage(rule).assertOnPage();
+        return waitFor(() -> new MainMenuPage(rule).assertOnPage());
     }
 
     public StorageMigrationDialogPage assertForumPostOpen() {

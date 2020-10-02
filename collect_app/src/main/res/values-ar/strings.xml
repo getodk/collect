@@ -74,11 +74,7 @@
   <string name="jump_to_beginning">الذهاب إلى البداية</string>
   <string name="jump_to_end">الذهاب إلى النهاية</string>
   <string name="jump_to_previous">الذهاب صعودًا</string>
-  <string name="list_failed_with_error">فشلت لائحة عرض النماذج. %s</string>
   <string name="loading_form">تحميل الاستمارة</string>
-  <string name="load_remote_form_error">خطأ في جلب لائحة النماذج.</string>
-  <string name="location_provider_accuracy">استخدام %1$s. الدقة هي %2$s متر.</string>
-  <string name="location_accuracy">الدقة هي is %1$s متر</string>
   <string name="manage_files">حذف الاستمارة المحفوظة</string>
   <string name="mark_finished">حدد الاستمارة كاستمارة منتهية</string>
   <string name="noselect_error">عذرًا، لم تختَر أيّ استمارة!</string>
@@ -89,8 +85,6 @@
   <string name="no_items_display_instances">لا شيء متاح للعرض./n/n حاول وضع الصيغ النهائية للاستمارات المحفوظة قبل الارسال.</string>
   <string name="ok">حسناً</string>
   <string name="parse_error">عذراً لا يمكن تحليل الاستمارة.</string>
-  <string name="parse_legacy_formlist_failed">الخادم لو يوفر النماذج المتطابقة مع Aggregate الأصدار 0.9: %s</string>
-  <string name="parse_openrosa_formlist_failed">الخادم لو يوفر النماذج المتطابقة مع مقاييس OpenRosa الأصدار الأول: %s</string>
   <string name="password">كلمة المرور</string>
   <string name="play_video">تشغيل تسجيل الفيديو</string>
   <string name="please_wait">الرجاء الانتظار للحظات قليلة.</string>
@@ -111,8 +105,6 @@
   <string name="send_data">إرسال الاستمارة النهائية</string>
   <string name="send_data_button">إرسال الاستمارة المكتملة (%s)</string>
   <string name="send_selected_data">إرسال الاستمارات المُختارة</string>
-  <string name="send_selected_data_internet">إرسال (عبر الإنترنت)</string>
-  <string name="send_selected_data_sms">إرسال (عبر رسائل نصية)</string>
   <string name="view_sent_forms">عرض الاستمارات المرسلة</string>
   <string name="view_sent_forms_button">عرض الاستمارات المرسلة : (%s)</string>
   <string name="server_auth_credentials">اسم المستخدم أو كلمة المرور للمخدم غير صحيحة: %s</string>
@@ -134,17 +126,11 @@
   <string name="change_splash_path">تغيير الصورة</string>
   <string name="keep_changes">حفظ التعديلات</string>
   <string name="change_formlist_url">مسار الارسال (مظاف الى الرابط)</string>
-  <string name="change_protocol">البرنامج</string>
   <string name="change_submission_url">مسار الارسال (مظاف الى الرابط)</string>
   <string name="formlist_url">مسار قائمة الاستمارات</string>
   <string name="submission_url">مسار الارسال</string>
   <string name="font_size">حجم الخط</string>
   <string name="change_font_size">حجم الخط</string>
-  <string name="access_error">خطأ اثناء الوصول %s:</string>
-  <string name="manifest_server_error">المانيفست لايعلم نسخة OpenRosa - الخادم لايستجيب؟</string>
-  <string name="root_element_error">العنصرالأساسي &lt;manifest\&gt; كان %s</string>
-  <string name="root_namespace_error">اسم العنصرالأساسي غير صحيح:%s</string>
-  <string name="manifest_tag_error">ادخال المانيفست %s يفتقد واحد او أكثر من العلامات: اسم الملف، # أو رابط التحميل</string>
   <string name="form_download_progress">%1$s. الحصول على ملفات الوسائط المتعددة:  %2$s  من %3$s</string>
   <string name="fetching_manifest">%s. الحصول على القائمة </string>
   <string name="success">نجاح</string>
@@ -162,8 +148,6 @@
   <string name="save_as_error">اسم الحفظ لا يمكن أن يكون فارغ!</string>
   <string name="edit_prompt">تعديل التوجيه</string>
   <string name="selected_google_account_text">حساب جوجل</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">أخرى</string>
   <string name="font_size_extra_large">كبير جدا</string>
   <string name="font_size_large">كبير</string>
   <string name="font_size_medium">متوسط</string>
@@ -188,7 +172,6 @@
   <string name="parent_form_not_present">غير قادر على تعديل هذه الاستمارة المحفوظة لان الاستمارة المقابلة غير موجودة جاليا او قد تم مسحها./n/n اعدادات الاستمارة: %1$s</string>
   <string name="launch_app">تشغيل</string>
   <string name="no_app">التطبيق المطلوب مفقود. يرجى ادخال القراءة يدويا.</string>
-  <string name="select_one">إختر إجابة واحدة</string>
   <string name="savepoint_used">التغييرات غير محفوظة يرجى استعادتها من نقطة الحفظ!</string>
   <string name="save_and_close">الحفظ و الاغلاق</string>
   <string name="sign_button">جمع التوقيع</string>
@@ -263,12 +246,6 @@
   <string name="go_drive">المحرك الخاص بي</string>
   <string name="go_shared">مشاركة معي</string>
   <string name="modified_on_date_at_time">\'تم التعديل ب \' yyyy, dd MMM, EEE  \'في الساعة\' mm:HH</string>
-  <string name="aggregate_preferences">اعدادات  ODK Aggregate</string>
-  <string name="sms_submission_preferences">إعدادات إرسال SMS</string>
-  <string name="submission_transport">نقل الارسال (متقدم)</string>
-  <string name="submission_transport_types_title">إرسال الاستمارات عبر</string>
-  <string name="other_preferences">اعدادات البرنامج الاخرى</string>
-  <string name="google_preferences">اعدادات صفحات الجوجل</string>
   <string name="google_sheets_url_hint">يجب أن تقوم الاستمارات بتعيين رابط للارسال. إذا لم يفعلوا ذلك، فسيتم استخدام عنوان الرابط هذا.</string>
   <string name="drive_get_file">الحصول على %1$s وملفات الوسائط.</string>
   <string name="no_google_account">لم يتم اختيار حساب جوجل!</string>
@@ -370,10 +347,6 @@
     <item quantity="many">%dمتر </item>
     <item quantity="other">%dمتر </item>
   </plurals>
-  <string name="location_status_searching">جاري البحث عن موقع GPS، يرجى الانتظار …</string>
-  <string name="location_status_accuracy">دقة GPS للموقع: %.2f متر</string>
-  <string name="location_status_acceptable">دقة GPS للموقع: %.2f متر (مقبولة)</string>
-  <string name="location_status_unacceptable">دقة GPS للموقع: %.2f متر (غير مقبولة)</string>
   <string name="collection_status_paused">النقاط التي تم إدخالها: %d</string>
   <string name="collection_status_placement">النقاط التي تم إدخالها: %d (انقر لوضع نقاط)</string>
   <string name="collection_status_manual">النقاط التي تم إدخالها: %d (التسجيل اليدوي)</string>
@@ -406,11 +379,9 @@
   <string name="record_geopoint">سجل نقطة</string>
   <string name="gps_result">خط العرض: %1$s\n خط الطول : %2$s\nالارتفاع : %3$s\nالدقة : %4$s متر</string>
   <string name="parser_exception">استثناء XPathParser: \"%s\"</string>
-  <string name="selected_answer">المحددة: %s</string>
   <string name="version_number">الإصدار: %s</string>
   <string name="id_number">المعرف : %s</string>
   <string name="odk_website">زيارة موقع ODK</string>
-  <string name="odk_website_summary">حزمة البيانات المفتوحة (ODK) تستخدم لجمع البيانات لمصلحة المجتمع في البيئات الصعبة.</string>
   <string name="odk_forum">انضم إلى منتدى ODK</string>
   <string name="odk_forum_summary">انضم إلى المنتدى للحصول على الدعم وطلب الميزات والمساهمة بالكود / الترجمات!</string>
   <string name="all_open_source_licenses">مكتبات و تراخيص مفتوحة المصدر</string>
@@ -477,9 +448,6 @@
   <string name="email">البريد الالكتروني</string>
   <string name="user_defined">معرف المستخدم</string>
   <string name="device_defined">معرف الجهاز</string>
-  <string name="device_id">رقم معرف الجهاز</string>
-  <string name="subscriber_id">رقم معرف المشترك</string>
-  <string name="sim_serial_id">رقم شريحة الاتصال</string>
   <string name="select_date">اختر التاريخ</string>
   <string name="select_time">اختر الوقت</string>
   <string name="no_date_selected">لم يتم اختيار تاريخ</string>
@@ -494,7 +462,6 @@
   <string name="include_password_dialog">تضمين كلمات المرور في الكود</string>
   <string name="generate">توليد</string>
   <string name="invalid_qrcode">كود QR لا يتضمن إعدادات صحيحة</string>
-  <string name="share_qrcode">مشاركة كود QR</string>
   <string name="take_picture_instruction">انقر على الشاشة لإلتقاط صورة</string>
   <string name="error_front_camera_unavailable">الكاميرا الأمامية غير متوفرة على هذا الجهاز</string>
   <string name="camera_error">خطأ في الكاميرا</string>
@@ -620,13 +587,10 @@
   <string name="record_audio_runtime_permission_denied_desc">بدون هذا الإذن لا يمكن لبرنامج ODK Collect الوصول إلى الميكروفون. يرجى المحاولة مرة أخرى عندما تكون مستعدًا لمنحه.</string>
   <string name="get_accounts_runtime_permission_denied_title">الحصول على إذن الحسابات</string>
   <string name="get_accounts_runtime_permission_denied_desc">بدون هذا الإذن لا يمكن لبرنامج ODK Collect الوصول إلى الحسابات. يرجى المحاولة مرة أخرى عندما تكون مستعدًا لمنحه.</string>
-  <string name="send_sms_runtime_permission_denied_title">إذن لإرسال SMS</string>
-  <string name="send_sms_runtime_permission_denied_desc">بدون هذا الإذن لا يمكن لبرنامج ODK Collect إرسال رسائل SMS. يرجى المحاولة مرة أخرى عندما تكون مستعدًا لمنحه.</string>
   <string name="read_phone_state_runtime_permission_denied_title">إذن قراءة حالة الهاتف</string>
   <string name="read_phone_state_runtime_permission_denied_desc">لا يقوم ODK Collect بإجراء مكالمات ولكنه يحتاج إلى الوصول إلى بعض الخصائص المتعلقة بجهازك مثل رقم الهاتف ومعرف الجهاز.</string>
   <string name="form_update_category">تحديث الاستمارة</string>
   <string name="periodic_form_updates_check_title">تحقق من وجود تحديثات الاستمارة بشكل دوري</string>
-  <string name="never">إطلاقا</string>
   <string name="every_fifteen_minutes">كل 15 دقيقة</string>
   <string name="every_one_hour">كل ساعة</string>
   <string name="every_six_hours">كل 6 ساعات</string>
@@ -644,37 +608,10 @@
   <string name="instance_upload_cancelled">تم إلغاء تحميل النموذج</string>
   <string name="hide_old_form_versions_setting_title">إخفاء الإصدارات القديمة من الاستمارة</string>
   <string name="hide_old_form_versions_setting_summary">سيظهر الإصدار الأحدث فقط في ملء استمارة فارغة</string>
-  <string name="sms_pref_dialog_title">رقم هاتف الوجهة</string>
-  <string name="sms_pref_title">رقم هاتف الوجهة</string>
-  <string name="sms_invalid_phone_number">رقم هاتف غير صحيح!</string>
-  <!--Sms submission-->
-  <string name="sms_no_reception">\'فشلت ب\' yyyy, dd MMM, EEE \'في الساعة\' mm:HH \'بسبب عدم التسليم\'</string>
-  <string name="sms_no_number">\'فشلت ب\' yyyy, dd MMM, EEE \'في الساعة\' mm:HH \'بسبب عدم وجود رقم الهاتف.\'</string>
-  <string name="sms_fatal_error">\'فشلت ب\' yyyy, dd MMM, EEE \'في الساعة\' mm:HH</string>
-  <string name="sms_airplane_mode">\'فشلت ب\' yyyy, dd MMM, EEE \'في الساعة\' mm:HH \'بسبب وضع الطائرة يجري.\'</string>
-  <string name="sms_no_message">لا تشتمل هذه الاستمارة على أية أسئلة بها علامات SMS.</string>
-  <string name="sms_encrypted_message">لا يمكن إرسال الاستمارات المشفرة باستخدام SMS.</string>
-  <string name="sms_last_submission_on_date_at_time">\'آخر محاولة إرسال في\' EEE, MMM dd, yyyy HH:mm</string>
-  <plurals name="sms_sending">
-    <item quantity="zero">تقديم الاستمارة ، إرسال رسالة %1$d من %2$d</item>
-    <item quantity="one">تقديم النموذج كرسالة واحدة.</item>
-    <item quantity="two">تقديم الاستمارة ، إرسال رسالة %1$d من %2$d</item>
-    <item quantity="few">تقديم الاستمارة ، إرسال رسالة %1$d من %2$d</item>
-    <item quantity="many">تقديم الاستمارة ، إرسال رسالة %1$d من %2$d</item>
-    <item quantity="other">تقديم الاستمارة ، إرسال رسالة %1$d من %2$d</item>
-  </plurals>
-  <string name="sms_sent_on_date_at_time">\'ارسلت ك SMS ب\' yyyy, dd MMM, EEE  \'في الساعة\' mm:HH</string>
-  <string name="sms_submission_queued">في قائمة الانتظار للإرسال.</string>
-  <string name="sms_submissions_notif_title">إرسال عبر SMS</string>
-  <string name="sms_submissions_notif_description">يتم إرسال عدة استمارات حاليًا.</string>
-  <string name="transport_type_internet">Wifi / شبكة الاتصال (مستحسن)</string>
-  <string name="transport_type_sms">SMS</string>
-  <string name="transport_type_both">حدد عند الإرسال</string>
   <string name="rank_items">رتب العناصر</string>
   <string name="loading_form_failed">حدث خطأ أثناء تحميل الاستمارة. الرجاء المحاولة مرة أخرى.</string>
   <string name="missing_google_account_dialog_title">حساب Google لم يحدد</string>
   <string name="missing_google_account_dialog_desc">لإرسال الاستمارات عبر Google Sheets، يجب عليك إعداد حساب Google الخاص بك في إعدادات الخادم.</string>
-  <string name="sms_invalid_phone_number_description">قم بتعيين رقم هاتف وجهة لإرسال SMS أو قم بتغيير نوع النقل الخاص بك.</string>
   <string name="notification_channel_name">الإشعارات العامة</string>
   <string name="corrupt_imported_preferences_error">الإعدادات الحالية تالفة. من إعدادات المسؤول، أعد ضبط الإعدادات أو قم باستيراد الإعدادات العاملة.</string>
   <string name="google_play_services_not_available">تريد هذه الاستمارة تتبع موقعك ولكن خدمات Google Play غير متوفرة.</string>
@@ -684,14 +621,10 @@
   <string name="background_location_disabled">تريد هذه الاستمارة تتبع موقعك ولكن تم تعطيل التتبع. يرجى التمكين في القائمة %1$s أعلاه.</string>
   <string name="background_location_enabled">هذه الاستمارة تقوم بتتبع موقعك. يمكنك تعطيل التتبع في القائمة %1$s أعلاه.</string>
   <string name="open_file">فتح الملف</string>
-  <string name="sms_feature_disabled_dialog_title">إرسال عبر SMS معطل</string>
-  <string name="sms_feature_disabled_dialog_message">تم تعطيل عمليات الإرسال عبر SMS بسبب قيود متجر Google Play.\n\nيرجى التأكد من أن الشخص الذي قام بضبط هذا الجهاز يقرأ التفاصيل أدناه ويتخذ إجراءً.</string>
-  <string name="read_details">قراءة التفاصيل</string>
   <string name="google_sheets_encrypted_message">لا يمكن إرسال الاستمارات المشفرة إلى أوراق Google Sheets.</string>
   <string name="number_picker_title">منتقي الأرقام</string>
   <string name="too_complex_form">هذه الاستمارة معقدة جدًا لهذا الجهاز. حاول تبسيط التعبيرات أو طلب المساعدة في المنتدى.</string>
   <string name="reading_files">قراءة الملفات</string>
-  <string name="copying_media_files_failed">فشل نسخ ملفات الوسائط</string>
   <string name="qr_code_not_found">كود QR غير موجود في الصورة المحددة</string>
   <string name="not_granted_permission">النشاط الذي تحاول بدء القيام به يحتاج إلى إذن لم تحصل عليه بعد.</string>
   <string name="basemap_source_unavailable">عذرا، %s خرائط الأساس غير متاحة. الرجاء اختر خريطة أساس أخرى في الإعدادات العامة &lt; الخرائط.</string>
@@ -703,6 +636,5 @@
   <string name="reason">السبب</string>
   <string name="save">حفظ</string>
   <string name="reason_for_changes_description">أنت بحاجة إلى توضيح سبب التغييرات في هذه الاستمارة</string>
-  <string name="scoped_storage_banner_text">يجب عليك ترحيل نماذج Collect إلى التخزين الخاص بحلول أغسطس 2020 للامتثال إلى متطلبات أندرويد.</string>
   <string name="scoped_storage_learn_more">تعلم المزيد وقم بالترحيل</string>
 </resources>

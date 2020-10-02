@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -21,9 +22,12 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.utilities.PermissionUtils;
+import org.robolectric.shadows.ShadowEnvironment;
 
+import static android.os.Environment.MEDIA_MOUNTED;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -33,23 +37,30 @@ import static org.odk.collect.android.support.RobolectricHelpers.overrideAppDepe
 
 @RunWith(AndroidJUnit4.class)
 public class FormDownloadListActivityTest {
+
     @Rule public MockitoRule rule = MockitoJUnit.rule();
 
     @Mock Analytics analytics;
 
     @Mock FormsDao formsDao;
 
-    private ActivityScenario<FormDownloadListActivity> downloadActivity;
-
     @Before public void setup() {
         overrideAppDependencyModule(new AppDependencyModule(analytics, formsDao));
-        downloadActivity = ActivityScenario.launch(FormDownloadListActivity.class);
+        ShadowEnvironment.setExternalStorageState(MEDIA_MOUNTED); // Required for ODK directories to be created
     }
 
-    @Test public void tappingDownloadButton_logsAnalytics() {
+    @After
+    public void teardown() {
+        FormsProvider.releaseDatabaseHelper();
+    }
+
+    @Test
+    public void tappingDownloadButton_logsAnalytics() {
         Cursor cursor = mock(Cursor.class);
         when(cursor.getCount()).thenReturn(0);
         when(formsDao.getFormsCursor()).thenReturn(cursor);
+
+        ActivityScenario<FormDownloadListActivity> downloadActivity = ActivityScenario.launch(FormDownloadListActivity.class);
 
         downloadActivity.onActivity(activity -> {
             activity.findViewById(R.id.add_button).setEnabled(true);
@@ -59,6 +70,7 @@ public class FormDownloadListActivityTest {
     }
 
     private static class AppDependencyModule extends org.odk.collect.android.injection.config.AppDependencyModule {
+
         Analytics analytics;
         FormsDao formsDao;
 

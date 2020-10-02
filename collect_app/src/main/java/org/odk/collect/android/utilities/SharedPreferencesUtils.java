@@ -14,17 +14,13 @@
 
 package org.odk.collect.android.utilities;
 
+import android.content.SharedPreferences;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceSaver;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -103,38 +99,6 @@ public final class SharedPreferencesUtils {
         return prefs;
     }
 
-    public static boolean loadSharedPreferencesFromJSONFile(File src) {
-        boolean res = false;
-        BufferedReader br = null;
-
-        try {
-            String line = null;
-            StringBuilder builder = new StringBuilder();
-            br = new BufferedReader(new FileReader(src));
-
-            while ((line = br.readLine()) != null) {
-                builder.append(line);
-            }
-
-            new PreferenceSaver(GeneralSharedPreferences.getInstance(), AdminSharedPreferences.getInstance()).fromJSON(builder.toString(), null);
-
-            Collect.getInstance().initializeJavaRosa();
-            res = true;
-        } catch (IOException e) {
-            Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());
-        } finally {
-            try {
-                if (br != null) {
-                    br.close();
-                }
-            } catch (IOException ex) {
-                Timber.e(ex, "Exception thrown while closing an input stream due to: %s ", ex.getMessage());
-            }
-        }
-
-        return res;
-    }
-
     public static Collection<String> getAllGeneralKeys() {
         Collection<String> keys = new HashSet<>(DEFAULTS.keySet());
         keys.add(KEY_PASSWORD);
@@ -145,6 +109,21 @@ public final class SharedPreferencesUtils {
         Collection<String> keys = new HashSet<>(ALL_KEYS);
         keys.add(KEY_ADMIN_PW);
         return keys;
+    }
+
+    /** Writes a key with a value of varying type to a SharedPreferences.Editor. */
+    public static void put(SharedPreferences.Editor editor, String key, Object value) {
+        if (value instanceof String) {
+            editor.putString(key, (String) value);
+        } else if (value instanceof Boolean) {
+            editor.putBoolean(key, (Boolean) value);
+        } else if (value instanceof Long) {
+            editor.putLong(key, (Long) value);
+        } else if (value instanceof Integer) {
+            editor.putInt(key, (Integer) value);
+        } else if (value instanceof Float) {
+            editor.putFloat(key, (Float) value);
+        }
     }
 }
 

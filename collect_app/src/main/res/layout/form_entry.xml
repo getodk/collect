@@ -49,10 +49,11 @@ the License.
             android:background="?colorPrimary"
             android:orientation="horizontal">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/form_back_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="?colorOnPrimary"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"
@@ -70,10 +71,11 @@ the License.
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/form_forward_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="?colorOnPrimary"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"

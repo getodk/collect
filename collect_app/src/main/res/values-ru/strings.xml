@@ -73,11 +73,7 @@
   <string name="jump_to_beginning">В начало</string>
   <string name="jump_to_end">В конец</string>
   <string name="jump_to_previous">Назад</string>
-  <string name="list_failed_with_error">Не удалось вывести список бланков опросников: %s шт.</string>
   <string name="loading_form">Загрузка бланка опросника…</string>
-  <string name="load_remote_form_error">Не удалось получить список бланков</string>
-  <string name="location_provider_accuracy">Использую %1$s. Точность %2$s м.</string>
-  <string name="location_accuracy">Точность %1$s м.</string>
   <string name="manage_files">Удаление опросов / бланков</string>
   <string name="mark_finished">Пометить опрос как финализированный </string>
   <string name="noselect_error">Не было выбрано ни одного бланка</string>
@@ -88,8 +84,6 @@
   <string name="no_items_display_instances">Пусто\n\nФинализируйте сохранённые опросы для выгрузки</string>
   <string name="ok">OK</string>
   <string name="parse_error">Не удалось прочесть структуру бланка</string>
-  <string name="parse_legacy_formlist_failed">Сервер не предоставил список доступных опросников в формате совместимом с Aggregate v0.9.x.: %s</string>
-  <string name="parse_openrosa_formlist_failed">Сервер не предоставил список доступных опросников в формате совместимом со стандартом OpenRosa v1.0: %s</string>
   <string name="password">Пароль</string>
   <string name="play_video">Проиграть видео</string>
   <string name="please_wait">Подождите несколько секунд.</string>
@@ -108,8 +102,6 @@
   <string name="send_data">Выгрузить финализированные опросы</string>
   <string name="send_data_button">Выгрузить опросы (%s)</string>
   <string name="send_selected_data">Выгрузить выбранные</string>
-  <string name="send_selected_data_internet">Выгрузить (Интернет)</string>
-  <string name="send_selected_data_sms">Выгрузить (SMS)</string>
   <string name="view_sent_forms">Опросы в архиве</string>
   <string name="view_sent_forms_button">Архив (%s)</string>
   <string name="server_auth_credentials">Неправильное имя пользователя или пароль для сервера: %s</string>
@@ -131,17 +123,11 @@
   <string name="change_splash_path">Изменить изображение</string>
   <string name="keep_changes">Сохранить ответы</string>
   <string name="change_formlist_url">Папка с бланками (добавляется к URL)</string>
-  <string name="change_protocol">Платформа</string>
   <string name="change_submission_url">Папка выгрузки опросов (добавляется к URL)</string>
   <string name="formlist_url">Папка с бланками</string>
   <string name="submission_url">Папка выгрузки</string>
   <string name="font_size">Размер шрифта</string>
   <string name="change_font_size">Размер шрифта</string>
-  <string name="access_error">Ошибка доступа %s:</string>
-  <string name="manifest_server_error">Манифест не соответствует версии OpenRosa — не тот сервер?</string>
-  <string name="root_element_error">Корневой элемент не &lt;манифест\&gt; — был %s</string>
-  <string name="root_namespace_error">Неверное пространство имён для корневого элемента: %s</string>
-  <string name="manifest_tag_error">В записи манифеста %s отсутствуют один или более тэгов: filename, hash, или downloadUrl</string>
   <string name="form_download_progress">%1$s. Загрузка медиа-файлов: %2$s из %3$s</string>
   <string name="fetching_manifest">%s. Загрузка манифеста</string>
   <string name="success">Успешно</string>
@@ -159,8 +145,6 @@
   <string name="save_as_error">Название не может быть пустым!</string>
   <string name="edit_prompt">Изменить вопрос</string>
   <string name="selected_google_account_text">Учётная запись Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Нестандартная</string>
   <string name="font_size_extra_large">Очень большой</string>
   <string name="font_size_large">Большой</string>
   <string name="font_size_medium">Средний</string>
@@ -185,7 +169,6 @@
   <string name="parent_form_not_present">Не удалось отредактировть сохранённый опрос, потому что соответствующий бланк опросника отсутствует или был удалён.\n\nID опросника: %1$s</string>
   <string name="launch_app">Запуск</string>
   <string name="no_app">Запрошенное приложение отсутствует. Пожалуйста, выполните ручной ввод.</string>
-  <string name="select_one">Выберите один из ответов</string>
   <string name="savepoint_used">Несохранённые изменения загружены из точки восстановления!</string>
   <string name="save_and_close">Сохранить и закрыть</string>
   <string name="sign_button">Взять подпись</string>
@@ -260,12 +243,6 @@
   <string name="go_drive">Мой диск</string>
   <string name="go_shared">Доступные мне</string>
   <string name="modified_on_date_at_time">\'Изменено\' EEE, dd MMM yyyy \'в\' HH:mm</string>
-  <string name="aggregate_preferences">ODK AGGREGATE НАСТРОЙКИ</string>
-  <string name="sms_submission_preferences">НАСТРОЙКИ SMS</string>
-  <string name="submission_transport">СПОСОБ ВЫГРУЗКИ</string>
-  <string name="submission_transport_types_title">Выгружать результаты через</string>
-  <string name="other_preferences">НАСТРОЙКИ НЕСТАНДАРТНЫХ ПЛАТФОРМ</string>
-  <string name="google_preferences">НАСТРОЙКИ GOOGLE ТАБЛИЦ</string>
   <string name="google_sheets_url_hint">В опроснике должен быть указан URL-выгрузки. Иначе, будет применён этот адрес.</string>
   <string name="drive_get_file">Получение %1$s и медиа-файлов.</string>
   <string name="no_google_account">Учётная запись Google не выбрана!</string>
@@ -347,11 +324,10 @@
   <string name="download_selected">Загрузить выбранные</string>
   <string name="gps_result">Широта: %1$s\nДолгота: %2$s\nВысота: %3$sм\nТочность:%4$sм</string>
   <string name="parser_exception">Исключение XPathParser: \"%s\"</string>
-  <string name="selected_answer">Выбрано: %s</string>
   <string name="version_number">Версия: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Вебсайт ODK</string>
-  <string name="odk_website_summary">Open Data Kit — приложение для сбора данных работающее без интернета</string>
+  <string name="odk_website_summary">ODK — приложение для сбора данных работающее без интернета</string>
   <string name="odk_forum">Форум</string>
   <string name="odk_forum_summary">Вопросы и предложения</string>
   <string name="all_open_source_licenses">Используемые компоненты</string>
@@ -414,9 +390,6 @@
   <string name="email">Адрес эл. почты</string>
   <string name="user_defined">Пользовательские данные</string>
   <string name="device_defined">Автоматически определено</string>
-  <string name="device_id">Идентификатор устройства</string>
-  <string name="subscriber_id">Идентификатор пользователя</string>
-  <string name="sim_serial_id">Серийный номер SIM</string>
   <string name="select_date">Выберете дату</string>
   <string name="select_time">Выберете время</string>
   <string name="no_date_selected">Дата не выбрана</string>
@@ -431,7 +404,6 @@
   <string name="include_password_dialog">Пароли включены в код</string>
   <string name="generate">Сгенерировать</string>
   <string name="invalid_qrcode">В QR-коде не содержатся правильные настройки</string>
-  <string name="share_qrcode">Поделиться QR-кодом</string>
   <string name="take_picture_instruction">Нажмите на экран, чтобы сделать фото</string>
   <string name="error_front_camera_unavailable">Передняя камера недоступна на данном устройстве</string>
   <string name="camera_error">Это устройство не поддерживает API Camera2.</string>
@@ -545,10 +517,8 @@
   <string name="record_audio_runtime_permission_denied_title">Доступ к записи аудио</string>
   <string name="record_audio_runtime_permission_denied_desc">Без данного разрешения Collect не сможет использовать микрофон. Попробуйте снова когда будете готовы предоставить доступ.</string>
   <string name="get_accounts_runtime_permission_denied_desc">Без данного разрешения Collect не сможет получить доступ к учётным записям. Попробуйте снова когда будете готовы предоставить доступ.</string>
-  <string name="send_sms_runtime_permission_denied_desc">Без данного разрешения приложение не сможет отправлять SMS. Попробуйте снова когда будете готовы предоставить доступ.</string>
   <string name="form_update_category">ОБНОВЛЕНИЕ БЛАНКОВ</string>
   <string name="periodic_form_updates_check_title">Периодичность проверки обновлений</string>
-  <string name="never">Никогда</string>
   <string name="every_fifteen_minutes">Каждые ¼ часа</string>
   <string name="every_one_hour">Каждый 1 час</string>
   <string name="every_six_hours">Каждые 6 часов</string>
@@ -566,24 +536,7 @@
   <string name="instance_upload_cancelled">Загрузка отменена</string>
   <string name="hide_old_form_versions_setting_title">Скрывать прошлые версии бланков</string>
   <string name="hide_old_form_versions_setting_summary">Только новые версии будут показаны в списке заполнения бланков</string>
-  <string name="sms_pref_dialog_title">Выгружать на номер телефона</string>
-  <string name="sms_pref_title">Выгружать на номер телефона</string>
-  <string name="sms_invalid_phone_number">Неправильный формат телефонного номера</string>
-  <!--Sms submission-->
-  <string name="sms_no_number">\'Отказ\' EEE, MMM dd, yyyy \'в\' HH:mm \'— не введён телефон\'</string>
-  <string name="sms_fatal_error">\'Отказ\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
-  <string name="sms_airplane_mode">\'Отказ\' EEE, MMM dd, yyyy \'в\' HH:mm \'— самолётный режим\'</string>
-  <string name="sms_encrypted_message">Шифрованные ответы нельзя выгрузить через SMS</string>
-  <string name="sms_last_submission_on_date_at_time">\'Последняя попытка выгрузки\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
-  <string name="sms_sent_on_date_at_time">\'Выгруженно через SMS\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
-  <string name="sms_submission_queued">В очереди на выгрузку</string>
-  <string name="sms_submissions_notif_title">SMS-выгрузка</string>
-  <string name="transport_type_internet">Интернет (рекомендуется)</string>
-  <string name="transport_type_sms">SMS</string>
-  <string name="transport_type_both">Выбрать при выгрузке</string>
   <string name="loading_form_failed">Ошибка загрузки. Попробуйте ещё раз.</string>
   <string name="missing_google_account_dialog_title">Учётная запись Google не установлена</string>
   <string name="missing_google_account_dialog_desc">Для отправки ответов через Google таблицы необходимо указать учётную запись через которую это будет происходить</string>
-  <string name="sms_invalid_phone_number_description">Введите номер телефона для выгрузки или измените способ доставки.</string>
-  <string name="sms_feature_disabled_dialog_message">Выгрузка через SMS была отключена из-за ограничений Google Play Store.\n\nПожалуйста, убедитесь, что человек, настроивший это устройство, прочитает подробности ниже и примет меры.</string>
 </resources>

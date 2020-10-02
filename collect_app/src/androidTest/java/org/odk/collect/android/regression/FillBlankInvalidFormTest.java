@@ -3,7 +3,7 @@ package org.odk.collect.android.regression;
 import android.Manifest;
 
 import androidx.test.rule.GrantPermissionRule;
-import androidx.test.runner.AndroidJUnit4;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -41,10 +41,10 @@ public class FillBlankInvalidFormTest {
         new MainMenuPage(rule)
                 .clickFillBlankForm()
                 .checkIsSnackbarErrorVisible()
-                .checkIfTextDoesNotExist("Invalid events")
-                .checkIfTextDoesNotExist("invalid-form")
-                .checkIfTextDoesNotExist("setlocation-and-audit-location")
-                .checkIfTextDoesNotExist("setlocation-action-instance-load");
+                .assertTextDoesNotExist("Invalid events")
+                .assertTextDoesNotExist("invalid-form")
+                .assertTextDoesNotExist("setlocation-and-audit-location")
+                .assertTextDoesNotExist("setlocation-action-instance-load");
     }
 
 }

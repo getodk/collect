@@ -88,8 +88,6 @@
   <string name="send_data">ارسال فورم نهایی</string>
   <string name="send_data_button">ارسال فورم نهایی (%s)</string>
   <string name="send_selected_data">ارسال مورد انتخاب شده</string>
-  <string name="send_selected_data_internet">ارسال (داخلی)</string>
-  <string name="send_selected_data_sms">ارسال (اس ام اس)</string>
   <string name="view_sent_forms">مشاهده فورم ارسال شده</string>
   <string name="view_sent_forms_button">مشاهده فورم ارسال شده (%s)</string>
   <string name="server_auth_credentials">پسورد و یا نام کاربری اشتباه برای سرور: %s</string>
@@ -108,7 +106,6 @@
   <string name="formlist_url">شیوه لیست فورم</string>
   <string name="font_size">اندازه فونت متن</string>
   <string name="change_font_size">اندازه فونت متن</string>
-  <string name="access_error">هنگام دسترسی خطا رخ داد %s:</string>
   <string name="success">موفقیت </string>
   <string name="failures">ناکامی</string>
   <string name="no_forms_uploaded">ببخشید، هیچ فورمی آپلود نشده است</string>
@@ -123,8 +120,6 @@
   <string name="save_as_error">نام ذخیره شده نباید خالی باشد!</string>
   <string name="edit_prompt">ویرایش عاجل</string>
   <string name="selected_google_account_text">حساب کاربری گوگل</string>
-  <string name="server_platform_odk_aggregate">مجموعه ODK</string>
-  <string name="server_platform_other">دیگر</string>
   <string name="font_size_extra_large">بسیار بزرگ</string>
   <string name="font_size_large">بزرگ</string>
   <string name="font_size_medium">متوسط</string>
@@ -141,7 +136,6 @@
   <string name="submission_deleted">ارسال حذف شد</string>
   <string name="version">نسخه:</string>
   <string name="launch_app">راه اندازی</string>
-  <string name="select_one">یک پاسخ را انتخاب کنید</string>
   <string name="save_and_close">ذخیره کردن و خروج</string>
   <string name="sign_button">جمع آوری امضا</string>
   <string name="markup_image">نشانه گذاری تصویر</string>
@@ -171,9 +165,6 @@
   <string name="google_drive">گوگل درایو</string>
   <string name="go_drive">درایو من</string>
   <string name="go_shared">با من در اشتراک گذاشته شده است</string>
-  <string name="sms_submission_preferences">تنظیمات ارسال اس ام اس</string>
-  <string name="submission_transport_types_title">فرستادن ارسالی ها از طریق </string>
-  <string name="google_preferences">تنظیمات گوگل شیت</string>
   <string name="odk_auto_note">نتایج ارسال خودکار ODK</string>
   <string name="odk_auto_download_notification_title">نتیاج دانلود خودکار ODK</string>
   <string name="delete_after_send">بعد از ارسال حذف کنید</string>
@@ -215,7 +206,6 @@
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="install_openmapkit">لطفاْ OpenMapKit را نصب کنید!</string>
   <string name="go_back">قبلی</string>
-  <string name="selected_answer">انتخاب شده: %s</string>
   <string name="version_number">نسخه: %s</string>
   <string name="id_number">نمبر شناسایی: %s</string>
   <string name="odk_forum">با انجمن ODK یکجا شوید</string>
@@ -250,9 +240,6 @@
   <string name="email">ایمیل آدرس</string>
   <string name="user_defined">تعریف شده توسط کاربر</string>
   <string name="device_defined">تعریف شده توسط دستگاه</string>
-  <string name="device_id">نمبر شناسایی دستگاه</string>
-  <string name="subscriber_id">نمبر شناسایی مشترک</string>
-  <string name="sim_serial_id">نمبر سریال سیم کارت</string>
   <string name="select_date">انتخاب تاریخ</string>
   <string name="select_time">انتخاب زمان</string>
   <string name="no_date_selected">هیچ تاریخی انتخاب نشده است</string>
@@ -295,23 +282,14 @@
   <string name="camera_runtime_permission_denied_title">مجوز کامره</string>
   <string name="record_audio_runtime_permission_denied_title">ثبت مجوز صوتی</string>
   <string name="get_accounts_runtime_permission_denied_title">دریافت مجوز حساب ها</string>
-  <string name="send_sms_runtime_permission_denied_title">دریافت مجوز اس ام اس</string>
   <string name="form_update_category">آپدیت فورم</string>
-  <string name="never">هرگز</string>
   <string name="every_fifteen_minutes">هر پانزده دقیقه بعد</string>
   <string name="every_one_hour">هر ساعت</string>
   <string name="every_six_hours">هر شش ساعت</string>
   <string name="every_24_hours">هر 24 ساعت</string>
   <string name="form_updates_available">آپدیت های فورم موجود است</string>
-  <string name="sms_invalid_phone_number">شماره تماس غیر معتبر!</string>
-  <!--Sms submission-->
-  <string name="sms_submissions_notif_description">چندین فورم در حال حاضر ارسال شده اند.</string>
-  <string name="transport_type_sms">اس ام اس</string>
-  <string name="transport_type_both">انتخاب ارسال روشن است</string>
   <string name="rank_items">رده بندی اقلام</string>
   <string name="go_to_settings">رفتن به تنظیمات </string>
-  <string name="read_details">جزئیات را بخوانید</string>
   <string name="reading_files">خواندن فایل ها</string>
-  <string name="copying_media_files_failed">کاپی فایل های رسانه ای ناکام شد</string>
   <string name="not_granted_permission">فعالیتی که شما میخواهید آنرا انجام دهید به مجوزی ضرورت دارد که به شما اعطا نشده است. </string>
 </resources>

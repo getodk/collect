@@ -34,7 +34,7 @@ public abstract class SqlLiteHelperTest {
      *
      * Without this, it appears that the migrations only get partially applied. It's not clear how
      * this is possible since calls to onDowngrade and onUpgrade are wrapped in transactions. See
-     * discussion at https://github.com/opendatakit/collect/pull/3250#issuecomment-516439704
+     * discussion at https://github.com/getodk/collect/pull/3250#issuecomment-516439704
      */
     void ensureMigrationAppliesFully(SQLiteOpenHelper databaseHelper) {
         databaseHelper.getReadableDatabase().close();

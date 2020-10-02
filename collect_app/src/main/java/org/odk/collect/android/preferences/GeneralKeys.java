@@ -1,23 +1,24 @@
 package org.odk.collect.android.preferences;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.mapbox.mapboxsdk.maps.Style;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 
 public final class GeneralKeys {
     // server_preferences.xml
     public static final String KEY_PROTOCOL                 = "protocol";
 
-    // aggregate_preferences.xml
+    // odk_server_preferences.xmll
     public static final String KEY_SERVER_URL               = "server_url";
     public static final String KEY_USERNAME                 = "username";
     public static final String KEY_PASSWORD                 = "password";
 
-    // other_preferences.xml
+    // custom_server_paths_preferences.xmlreferences.xml
     public static final String KEY_FORMLIST_URL             = "formlist_url";
     public static final String KEY_SUBMISSION_URL           = "submission_url";
 
@@ -56,6 +57,7 @@ public final class GeneralKeys {
     public static final String KEY_IMAGE_SIZE               = "image_size";
     public static final String KEY_GUIDANCE_HINT            = "guidance_hint";
     public static final String KEY_INSTANCE_SYNC            = "instance_sync";
+    public static final String KEY_FORM_UPDATE_MODE         = "form_update_mode";
 
     // identity_preferences.xml
     public static final String KEY_ANALYTICS                = "analytics";
@@ -64,19 +66,9 @@ public final class GeneralKeys {
     public static final String KEY_METADATA_USERNAME        = "metadata_username";
     public static final String KEY_METADATA_PHONENUMBER     = "metadata_phonenumber";
     public static final String KEY_METADATA_EMAIL           = "metadata_email";
+    public static final String KEY_MAGENTA_THEME            = "magenta";
 
     static final String KEY_FORM_METADATA                   = "form_metadata";
-
-    // other keys
-    public static final String KEY_LAST_VERSION             = "lastVersion";
-    public static final String KEY_FIRST_RUN                = "firstRun";
-    public static final String KEY_SCOPED_STORAGE_USED      = "scoped_storage_used";
-    public static final String KEY_MAPBOX_INITIALIZED       = "mapbox_initialized";
-    public static final String KEY_GOOGLE_BUG_154855417_FIXED = "google_bug_154855417_fixed";
-
-    /** Whether any existing username and email values have been migrated to form metadata */
-    static final String KEY_METADATA_MIGRATED               = "metadata_migrated";
-    public static final String KEY_INSTALL_ID               = "metadata_installid";
 
     public static final String KEY_BACKGROUND_LOCATION      = "background_location";
 
@@ -101,12 +93,6 @@ public final class GeneralKeys {
     public static final String BASEMAP_SOURCE_USGS          = "usgs";
     public static final String BASEMAP_SOURCE_STAMEN        = "stamen";
     public static final String BASEMAP_SOURCE_CARTO         = "carto";
-
-    // Not currently used
-    public static final String KEY_SMS_GATEWAY              = "sms_gateway";
-    public static final String KEY_SUBMISSION_TRANSPORT_TYPE = "submission_transport_type";
-    public static final String KEY_TRANSPORT_PREFERENCE      = "submission_transport_preference";
-    public static final String KEY_SMS_PREFERENCE            = "sms_preference";
 
     // start smap
     public static final String KEY_SMAP_REVIEW_FINAL = "review_final";    // Allow review of Form after finalising
@@ -136,7 +122,7 @@ public final class GeneralKeys {
 
     private static HashMap<String, Object> getHashMap() {
         HashMap<String, Object> hashMap = new HashMap<>();
-        // aggregate_preferences.xml
+        // odk_server_preferences.xmll
         hashMap.put(KEY_SERVER_URL,                 Collect.getInstance().getString(R.string.default_server_url));
         hashMap.put(KEY_USERNAME,                   "");
         hashMap.put(KEY_PASSWORD,                   "");
@@ -149,10 +135,11 @@ public final class GeneralKeys {
         hashMap.put(KEY_HIGH_RESOLUTION,            false);
         hashMap.put(KEY_IMAGE_SIZE,                 "original_image_size");
         hashMap.put(KEY_INSTANCE_SYNC,              true);
-        hashMap.put(KEY_PERIODIC_FORM_UPDATES_CHECK, "never");
+        hashMap.put(KEY_PERIODIC_FORM_UPDATES_CHECK, "every_fifteen_minutes");
         hashMap.put(KEY_AUTOMATIC_UPDATE,           false);
         hashMap.put(KEY_HIDE_OLD_FORM_VERSIONS,     true);
         hashMap.put(KEY_BACKGROUND_LOCATION,        true);
+        hashMap.put(KEY_FORM_UPDATE_MODE,           "manual");
         // form_metadata_preferences.xml
         hashMap.put(KEY_METADATA_USERNAME,          "");
         hashMap.put(KEY_METADATA_PHONENUMBER,       "");
@@ -162,13 +149,11 @@ public final class GeneralKeys {
         hashMap.put(KEY_GOOGLE_SHEETS_URL,          "");
         // identity_preferences.xml
         hashMap.put(KEY_ANALYTICS,                  true);
-        // other_preferences.xml
+        // custom_server_paths_preferenceshs_preferences.xml
         hashMap.put(KEY_FORMLIST_URL,               Collect.getInstance().getString(R.string.default_odk_formlist));
         hashMap.put(KEY_SUBMISSION_URL,             Collect.getInstance().getString(R.string.default_odk_submission));
         // server_preferences.xml
         hashMap.put(KEY_PROTOCOL,                   Collect.getInstance().getString(R.string.protocol_odk_default));
-        hashMap.put(KEY_SMS_GATEWAY,                "");
-        hashMap.put(KEY_SUBMISSION_TRANSPORT_TYPE,  Collect.getInstance().getString(R.string.transport_type_value_internet));
         // user_interface_preferences.xml
         hashMap.put(KEY_APP_THEME,                  Collect.getInstance().getString(R.string.app_theme_light));
         hashMap.put(KEY_APP_LANGUAGE,               "");
@@ -176,6 +161,7 @@ public final class GeneralKeys {
         hashMap.put(KEY_NAVIGATION,                 NAVIGATION_SWIPE);
         hashMap.put(KEY_SHOW_SPLASH,                false);
         hashMap.put(KEY_SPLASH_PATH,                Collect.getInstance().getString(R.string.default_splash_path));
+        hashMap.put(KEY_MAGENTA_THEME,              false);
 
         // start smap
         hashMap.put(KEY_SMAP_REVIEW_FINAL, true);
@@ -206,18 +192,12 @@ public final class GeneralKeys {
 
         // map_preferences.xml
         hashMap.put(KEY_BASEMAP_SOURCE,             BASEMAP_SOURCE_GOOGLE);
+        hashMap.put(KEY_CARTO_MAP_STYLE,            "positron");
+        hashMap.put(KEY_USGS_MAP_STYLE,             "topographic");
+        hashMap.put(KEY_GOOGLE_MAP_STYLE,           String.valueOf(GoogleMap.MAP_TYPE_NORMAL));
+        hashMap.put(KEY_MAPBOX_MAP_STYLE,           Style.MAPBOX_STREETS);
         return hashMap;
     }
-
-    static final Collection<String> KEYS_WE_SHOULD_NOT_RESET = Arrays.asList(
-            KEY_LAST_VERSION,
-            KEY_FIRST_RUN,
-            KEY_METADATA_MIGRATED,
-            KEY_AUTOSEND_WIFI,
-            KEY_AUTOSEND_NETWORK,
-            KEY_SCOPED_STORAGE_USED,
-            KEY_MAPBOX_INITIALIZED
-    );
 
     public static final HashMap<String, Object> DEFAULTS = getHashMap();
 

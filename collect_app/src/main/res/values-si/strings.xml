@@ -20,5 +20,4 @@
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="every_six_hours">සෑම පැය 6 කට වරක්</string>
   <string name="every_24_hours">සෑම පැය24 කට වරක්</string>
-  <!--Sms submission-->
 </resources>

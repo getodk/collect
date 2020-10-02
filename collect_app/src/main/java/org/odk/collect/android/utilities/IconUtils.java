@@ -24,7 +24,7 @@ import android.graphics.drawable.Drawable;
 import androidx.core.content.ContextCompat;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.instances.Instance;
 
 public class IconUtils {
 
@@ -58,13 +58,13 @@ public class IconUtils {
 
     public static Drawable getSubmissionSummaryStatusIcon(Context context, String instanceStatus) {
         switch (instanceStatus) {
-            case InstanceProviderAPI.STATUS_INCOMPLETE:
+            case Instance.STATUS_INCOMPLETE:
                 return ContextCompat.getDrawable(context, R.drawable.form_state_saved);
-            case InstanceProviderAPI.STATUS_COMPLETE:
+            case Instance.STATUS_COMPLETE:
                 return ContextCompat.getDrawable(context, R.drawable.form_state_finalized);
-            case InstanceProviderAPI.STATUS_SUBMITTED:
+            case Instance.STATUS_SUBMITTED:
                 return ContextCompat.getDrawable(context, R.drawable.form_state_submited);
-            case InstanceProviderAPI.STATUS_SUBMISSION_FAILED:
+            case Instance.STATUS_SUBMISSION_FAILED:
                 return ContextCompat.getDrawable(context, R.drawable.form_state_submission_failed);
         }
         return null;

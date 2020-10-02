@@ -1,0 +1,36 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--
+        smap change dialog titles for username and password
+        smap remove custom server path
+    -->
+    <EditTextPreference
+        android:dialogTitle="@string/change_server_url"
+        android:inputType="textNoSuggestions"
+        android:key="server_url"
+        android:title="@string/server_url"
+        app:iconSpaceReserved="false" />
+    <EditTextPreference
+        android:dialogTitle="@string/username"
+        android:inputType="textNoSuggestions"
+        android:key="username"
+        android:title="@string/username"
+        app:iconSpaceReserved="false" />
+    <EditTextPreference
+        android:dialogTitle="@string/server_password"
+        android:inputType="textPassword"
+        android:key="password"
+        android:title="@string/password"
+        app:iconSpaceReserved="false" />
+
+    <!-- smap
+    <Preference
+        android:key="custom_server_paths"
+        android:persistent="false"
+        android:summary="@string/legacy_custom_server_paths_summary"
+        android:title="@string/custom_server_paths"
+        app:iconSpaceReserved="false" />
+    -->
+
+</PreferenceScreen>

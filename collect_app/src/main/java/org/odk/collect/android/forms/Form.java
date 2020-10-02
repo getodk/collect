@@ -18,12 +18,15 @@ package org.odk.collect.android.forms;
 
 import org.odk.collect.android.storage.StoragePathProvider;
 
+import javax.annotation.Nullable;
+
 /**
  * A form definition stored on the device.
  *
  * Objects of this class are created using the builder pattern: https://en.wikipedia.org/wiki/Builder_pattern
  */
 public final class Form {
+
     private final Long id;
     private final String displayName;
     private final String description;
@@ -39,8 +42,8 @@ public final class Form {
     private final String language;
     private final String autoSend;
     private final String autoDelete;
-    private final String lastDetectedFormVersionHash;
     //private final String geometryXPath;  // smap
+    private final boolean deleted;
 
     private Form(Form.Builder builder) {
         id = builder.id;
@@ -58,8 +61,8 @@ public final class Form {
         language = builder.language;
         autoSend = builder.autoSend;
         autoDelete = builder.autoDelete;
-        lastDetectedFormVersionHash = builder.lastDetectedFormVersionHash;
         //geometryXPath = builder.geometryXpath;  // smap
+        deleted = builder.deleted;
     }
 
     public static class Builder {
@@ -78,8 +81,31 @@ public final class Form {
         private String language;
         private String autoSend;
         private String autoDelete;
-        private String lastDetectedFormVersionHash;
         //private String geometryXpath;  // smap
+        private boolean deleted;
+
+        public Builder() {
+        }
+
+        public Builder(Form form) {
+            id = form.id;
+            displayName = form.displayName;
+            description = form.description;
+            jrFormId = form.jrFormId;
+            jrVersion = form.jrVersion;
+            formFilePath = form.formFilePath;
+            submissionUri = form.submissionUri;
+            base64RSAPublicKey = form.base64RSAPublicKey;
+            md5Hash = form.md5Hash;
+            date = form.date;
+            jrCacheFilePath = form.jrCacheFilePath;
+            formMediaPath = form.formMediaPath;
+            language = form.language;
+            autoSend = form.autoSend;
+            autoDelete = form.autoDelete;
+            //geometryXpath = form.geometryXPath;  // smap
+            this.deleted = form.deleted;
+        }
 
         public Builder id(Long id) {
             this.id = id;
@@ -107,7 +133,7 @@ public final class Form {
         }
 
         public Builder formFilePath(String formFilePath) {
-            this.formFilePath = new StoragePathProvider().getFormDbPath(formFilePath);
+            this.formFilePath = formFilePath;
             return this;
         }
 
@@ -132,12 +158,12 @@ public final class Form {
         }
 
         public Builder jrCacheFilePath(String jrCacheFilePath) {
-            this.jrCacheFilePath = new StoragePathProvider().getCacheDbPath(jrCacheFilePath);
+            this.jrCacheFilePath = jrCacheFilePath;
             return this;
         }
 
         public Builder formMediaPath(String formMediaPath) {
-            this.formMediaPath = new StoragePathProvider().getFormDbPath(formMediaPath);
+            this.formMediaPath = formMediaPath;
             return this;
         }
 
@@ -156,15 +182,16 @@ public final class Form {
             return this;
         }
 
-        public Builder lastDetectedFormVersionHash(String lastDetectedFormVersionHash) {
-            this.lastDetectedFormVersionHash = lastDetectedFormVersionHash;
+	// smap - comment out
+        //public Builder geometryXpath(String geometryXpath) {
+        //    this.geometryXpath = geometryXpath;
+        //    return this;
+        //}
+
+        public Builder deleted(boolean deleted) {
+            this.deleted = deleted;
             return this;
         }
-
-        //public Builder geometryXpath(String geometryXpath) {// smap
-        //    //this.geometryXpath = geometryXpath;   // smap
-        //    return this;// smap
-        //}// smap
 
         public Form build() {
             return new Form(this);
@@ -187,6 +214,7 @@ public final class Form {
         return jrFormId;
     }
 
+    @Nullable
     public String getJrVersion() {
         return jrVersion;
     }
@@ -235,13 +263,13 @@ public final class Form {
         return autoDelete;
     }
 
-    public String getLastDetectedFormVersionHash() {
-        return lastDetectedFormVersionHash;
-    }
-
     public String getGeometryXpath() {
         //return geometryXPath;  // smap
         return null;    // smap
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 
     @Override

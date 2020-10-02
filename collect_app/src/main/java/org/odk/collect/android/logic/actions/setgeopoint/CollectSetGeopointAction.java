@@ -23,11 +23,11 @@ import com.google.android.gms.location.LocationListener;
 import org.javarosa.core.model.actions.setgeopoint.SetGeopointAction;
 import org.javarosa.core.model.instance.TreeReference;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.location.client.GoogleLocationClient;
+import org.odk.collect.android.location.client.GoogleFusedLocationClient;
 import org.odk.collect.android.location.client.MaxAccuracyWithinTimeoutLocationClient;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.GeoUtils;
-import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.utilities.PlayServicesChecker;
 
 import timber.log.Timber;
 
@@ -67,13 +67,13 @@ public class CollectSetGeopointAction extends SetGeopointAction implements Locat
     public void requestLocationUpdates() {
         // Do initialization on first location request so the client doesn't need to be serialized
         if (maxAccuracyLocationClient == null) {
-            maxAccuracyLocationClient = new MaxAccuracyWithinTimeoutLocationClient(new GoogleLocationClient(Collect.getInstance().getApplicationContext()), this);
+            maxAccuracyLocationClient = new MaxAccuracyWithinTimeoutLocationClient(new GoogleFusedLocationClient(Collect.getInstance()), this);
         }
 
         // Only start acquiring location if the Collect preference allows it and Google Play
         // Services are available. If it's not allowed, leave the target field blank.
         if (GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true)
-            && PlayServicesUtil.isGooglePlayServicesAvailable(Collect.getInstance().getApplicationContext())) {
+            && new PlayServicesChecker().isGooglePlayServicesAvailable(Collect.getInstance().getApplicationContext())) {
             maxAccuracyLocationClient.requestLocationUpdates(SECONDS_TO_CONSIDER_UPDATES);
         }
     }

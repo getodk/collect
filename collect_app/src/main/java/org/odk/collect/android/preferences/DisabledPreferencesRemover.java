@@ -16,21 +16,17 @@
 
 package org.odk.collect.android.preferences;
 
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceGroup;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceGroup;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
-
 class DisabledPreferencesRemover {
 
-    private final PreferencesActivity pa;
-    private final PreferenceFragment pf;
+    private final PreferenceFragmentCompat pf;
 
-    DisabledPreferencesRemover(PreferencesActivity pa, PreferenceFragment pf) {
-        this.pa = pa;
+    DisabledPreferencesRemover(PreferenceFragmentCompat pf) {
         this.pf = pf;
     }
 
@@ -91,9 +87,7 @@ class DisabledPreferencesRemover {
     }
 
     private void removeEmptyCategories(PreferenceGroup pc) {
-
-        final boolean adminMode = pa.getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
-        if (adminMode || pc == null) {
+        if (pc == null) {
             return;
         }
 

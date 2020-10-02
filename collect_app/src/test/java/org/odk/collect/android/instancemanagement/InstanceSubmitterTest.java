@@ -1,0 +1,65 @@
+package org.odk.collect.android.instancemanagement;
+
+import org.junit.Test;
+import org.odk.collect.android.forms.Form;
+import org.odk.collect.android.support.InMemFormsRepository;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+public class InstanceSubmitterTest {
+    @Test
+    public void shouldFormBeSentFunction_shouldReturnFalseIfAutoSendNotSpecifiedOnFormLevelAndDisabledInSettings() {
+        InMemFormsRepository formsRepository = new InMemFormsRepository();
+
+        formsRepository.save(new Form.Builder()
+                .id(1L)
+                .jrFormId("1")
+                .jrVersion("1")
+                .build());
+
+        assertThat(InstanceSubmitter.shouldFormBeSent(formsRepository, "1", "1", false), is(false));
+    }
+
+    @Test
+    public void shouldFormBeSentFunction_shouldReturnTrueIfAutoSendNotSpecifiedOnFormLevelButEnabledInSettings() {
+        InMemFormsRepository formsRepository = new InMemFormsRepository();
+
+        formsRepository.save(new Form.Builder()
+                .id(1L)
+                .jrFormId("1")
+                .jrVersion("1")
+                .build());
+
+        assertThat(InstanceSubmitter.shouldFormBeSent(formsRepository, "1", "1", true), is(true));
+    }
+
+    @Test
+    public void shouldFormBeSentFunction_shouldReturnFalseIfAutoSendSpecifiedAsFalseOnFormLevelButEnabledInSettings() {
+        InMemFormsRepository formsRepository = new InMemFormsRepository();
+
+        formsRepository.save(new Form.Builder()
+                .id(1L)
+                .jrFormId("1")
+                .jrVersion("1")
+                .autoSend("false")
+                .build());
+
+        assertThat(InstanceSubmitter.shouldFormBeSent(formsRepository, "1", "1", true), is(false));
+    }
+
+    @Test
+    public void shouldFormBeSentFunction_shouldReturnTrueIfAutoSendSpecifiedAsTrueOnFormLevelButDisabledInSettings() {
+        InMemFormsRepository formsRepository = new InMemFormsRepository();
+
+        formsRepository.save(new Form.Builder()
+                .id(1L)
+                .jrFormId("1")
+                .jrVersion("1")
+                .autoSend("true")
+                .build());
+
+        assertThat(InstanceSubmitter.shouldFormBeSent(formsRepository, "1", "1", false), is(true));
+    }
+
+}

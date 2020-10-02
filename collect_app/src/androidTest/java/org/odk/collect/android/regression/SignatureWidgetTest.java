@@ -3,7 +3,7 @@ package org.odk.collect.android.regression;
 import android.Manifest;
 
 import androidx.test.rule.GrantPermissionRule;
-import androidx.test.runner.AndroidJUnit4;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -47,7 +47,7 @@ public class SignatureWidgetTest {
                 .waitForRotationToEnd()
                 .pressBack(new SaveOrIgnoreDialog<>("Gather Signature", new FormEntryPage("All widgets", rule), rule))
                 .checkIsTranslationDisplayed("Exit Gather Signature", "Salir Adjuntar firma")
-                .checkIsStringDisplayed(R.string.keep_changes)
+                .assertText(R.string.keep_changes)
                 .clickIgnoreChanges()
                 .waitForRotationToEnd()
                 .clickWidgetButton()

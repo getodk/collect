@@ -82,7 +82,7 @@ public class CustomTabHelper {
         return packagesSupportingCustomTabs;
     }
 
-    // https://github.com/opendatakit/collect/issues/1221
+    // https://github.com/getodk/collect/issues/1221
     private Uri getNonNullUri(Uri url) {
         return url != null ? url : Uri.parse("");
     }

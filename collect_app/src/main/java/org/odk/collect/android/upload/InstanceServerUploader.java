@@ -76,7 +76,7 @@ public class InstanceServerUploader extends InstanceUploader {
         // the proper scheme.
         if (uriRemap.containsKey(submissionUri)) {
             submissionUri = uriRemap.get(submissionUri);
-            Timber.i("Using Uri remap for submission %s. Now: %s", instance.getDatabaseId(),
+            Timber.i("Using Uri remap for submission %s. Now: %s", instance.getId(),
                     submissionUri.toString());
         } else {
             if (submissionUri.getHost() == null) {

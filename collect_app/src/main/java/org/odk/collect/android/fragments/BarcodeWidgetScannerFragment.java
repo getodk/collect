@@ -8,7 +8,7 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 
 import java.util.Collection;
 
-public class BarcodeWidgetScannerFragment extends BaseCodeScannerFragment {
+public class BarcodeWidgetScannerFragment extends BarCodeScannerFragment {
     public static final String BARCODE_RESULT_KEY = "SCAN_RESULT";
 
     @Override

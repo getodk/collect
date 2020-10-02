@@ -2,6 +2,7 @@ package org.odk.collect.android.support;
 
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
+import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -22,6 +23,7 @@ import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
+import org.robolectric.shadows.ShadowEnvironment;
 import org.robolectric.shadows.ShadowMediaMetadataRetriever;
 import org.robolectric.shadows.ShadowMediaPlayer;
 import org.robolectric.shadows.util.DataSource;
@@ -86,6 +88,10 @@ public class RobolectricHelpers {
         return dataSource;
     }
 
+    public static void mountExternalStorage() {
+        ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
+    }
+
     public static <T extends ViewGroup> T populateRecyclerView(T view) {
         for (int i = 0; i < view.getChildCount(); i++) {
             View child = view.getChildAt(i);
@@ -103,6 +109,16 @@ public class RobolectricHelpers {
     }
 
     public static <V> ViewModelProvider mockViewModelProvider(AppCompatActivity activity, final Class<V> viewModelClass) {
+        return ViewModelProviders.of(activity, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) mock(viewModelClass);
+            }
+        });
+    }
+
+    public static <V> ViewModelProvider mockViewModelProvider(FragmentActivity activity, final Class<V> viewModelClass) {
         return ViewModelProviders.of(activity, new ViewModelProvider.Factory() {
             @NonNull
             @Override

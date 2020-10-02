@@ -71,11 +71,7 @@
   <string name="jump_to_beginning">Idi na početak</string>
   <string name="jump_to_end">Idi na kraj</string>
   <string name="jump_to_previous">Idi gore</string>
-  <string name="list_failed_with_error">Prikazivanje dostupnih formulara nije uspjelo. %s.</string>
   <string name="loading_form">Učitavanje formulara</string>
-  <string name="load_remote_form_error">Greška u pristupu formularima na serveru</string>
-  <string name="location_provider_accuracy">Koristim %1$s. Preciznost %2$s m.</string>
-  <string name="location_accuracy">Preciznost %1$s m</string>
   <string name="manage_files">Obriši sačuvani formular</string>
   <string name="mark_finished">Označi formular kao završen</string>
   <string name="noselect_error">Niste odabrali nijedan formular!</string>
@@ -86,8 +82,6 @@
   <string name="no_items_display_instances">Ništa nije dostupno za prikaz. Pokušaj završiti sačuvane formulare prije slanja.</string>
   <string name="ok">Ok.</string>
   <string name="parse_error">Nisam u stanju da analiziram formular!</string>
-  <string name="parse_legacy_formlist_failed">Na serveru se ne nalazi dostupan formular kompatibilan sa Aggregate 0.9x verzijom: %s</string>
-  <string name="parse_openrosa_formlist_failed">Na serveru se ne nalazi dostupan formular kompatibilan sa OpenRosa 1.0 standard verzijom: %s </string>
   <string name="password">Lozinka</string>
   <string name="play_video">Pusti video</string>
   <string name="please_wait">Molim sačekajte par trenutaka</string>
@@ -108,8 +102,6 @@
   <string name="send_data">Pošalji završene formulare</string>
   <string name="send_data_button">Pošalji završene formulare (%s)</string>
   <string name="send_selected_data">Pošalji označeno</string>
-  <string name="send_selected_data_internet">Pošalji (internet)</string>
-  <string name="send_selected_data_sms">Pošalji (sms)</string>
   <string name="view_sent_forms">Vidi poslate formulare</string>
   <string name="view_sent_forms_button">Vidi poslate formulare (%s)</string>
   <string name="server_auth_credentials">Pogrešno korisničko ime ili lozinka za pristup serveru: %s</string>
@@ -131,17 +123,11 @@
   <string name="change_splash_path">Promijeni sliku</string>
   <string name="keep_changes">Sačuvaj izmjene</string>
   <string name="change_formlist_url">Web putanja liste formulara (dodata URL adresi)</string>
-  <string name="change_protocol">Platforma</string>
   <string name="change_submission_url">Web putanja za slanje formulara (dodata URL adresi)</string>
   <string name="formlist_url">Web putanja liste formulara</string>
   <string name="submission_url">Web putanja za slanje formulara</string>
   <string name="font_size">Veličina teksta</string>
   <string name="change_font_size">Veličina teksta</string>
-  <string name="access_error">Greška pri pristupanju %s:</string>
-  <string name="manifest_server_error">Odgovor ne prikazuje OpenRosa verziju - greška na serveru?</string>
-  <string name="root_element_error">Root element nije prikazan - je %s</string>
-  <string name="root_namespace_error">Root element Namespace je netačan: %s</string>
-  <string name="manifest_tag_error">Unosu %s nedostaje jedan ili više elemenata: ime fajla ili putanja za preuzimanje</string>
   <string name="form_download_progress">%1$s. Preuzimam media fajlove: %2$s od %3$s</string>
   <string name="fetching_manifest">%s. Pribavljam manifest.</string>
   <string name="success">Uspjeh</string>
@@ -159,8 +145,6 @@
   <string name="save_as_error">Sačuvano ime ne može biti prazno!</string>
   <string name="edit_prompt">Uredi Prompt</string>
   <string name="selected_google_account_text">Google korisnički nalog</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Ostalo</string>
   <string name="font_size_extra_large">Veoma veliko</string>
   <string name="font_size_large">Veliko</string>
   <string name="font_size_medium">Srednje</string>
@@ -185,7 +169,6 @@
   <string name="parent_form_not_present">Ne mogu da uredim ili sačuvam formular jer prazna forma nije dostupna ili je obrisana.\n\nForm ID: %1$s</string>
   <string name="launch_app">Pokreni</string>
   <string name="no_app">Tražena aplikacija nedostaje. Molim ručno unesite podatke.</string>
-  <string name="select_one">Odaberi jedan odgovor</string>
   <string name="savepoint_used">Nesačuvane izmjene su preuzete sa memorijske tačke!</string>
   <string name="save_and_close">Sačuvaj i izađi</string>
   <string name="sign_button">Prikupi elektronski potpis</string>
@@ -260,12 +243,6 @@
   <string name="go_drive">Moj Drive</string>
   <string name="go_shared">Podijeljeno sa mnom</string>
   <string name="modified_on_date_at_time">\'Modifikovano na\' EEE, MMM dd, yyyy \'u\' HH:mm</string>
-  <string name="aggregate_preferences">Podešavanja ODK Aggregate servera</string>
-  <string name="sms_submission_preferences">Podešavanja SMS otpremanja </string>
-  <string name="submission_transport">Transport otpremanja (napredno)</string>
-  <string name="submission_transport_types_title">Pošalji otpremanja preko</string>
-  <string name="other_preferences">Ostala podešavanja platforme</string>
-  <string name="google_preferences">Podešavanja Google Sheets-a</string>
   <string name="google_sheets_url_hint">Formular mora podesiti URL za otpremanje. Ukoliko to nije slučaj, ovaj URL će biti korišćen.</string>
   <string name="drive_get_file">Preuzimam %1$s i medija sadržaje.</string>
   <string name="no_google_account">Google nalog nije odabran!</string>
@@ -344,7 +321,6 @@
     <item quantity="few">%d metara</item>
     <item quantity="other">%d metara</item>
   </plurals>
-  <string name="location_status_searching">Tražim GPS lokaciju, molim sačekajte…</string>
   <string name="collection_status_paused">Unijeti podaci: %d</string>
   <string name="collection_status_placement">Unijeti podaci: %d (dodirni kako bi unio podatke)</string>
   <string name="collection_status_manual">Unijeti podaci: %d (ručni unos)</string>
@@ -376,11 +352,10 @@
   <string name="record_geopoint">Zabilježi lokaciju</string>
   <string name="gps_result">Geografska širina:%1$s\nGeografska dužina: %2$s\nVisina: %3$sm\nPreciznost: %4$sm</string>
   <string name="parser_exception">XPathParser izuzetak :\"%s\"</string>
-  <string name="selected_answer">Odabrano: %s</string>
   <string name="version_number">Verzija: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Posjeti ODK vebsajt</string>
-  <string name="odk_website_summary">Open Data Kit (ODK) se koristi za prikupljanje podataka o društvenim stvarima u izazovnim situacijama.</string>
+  <string name="odk_website_summary">ODK se koristi za prikupljanje podataka o društvenim stvarima u izazovnim situacijama.</string>
   <string name="odk_forum">Pridruži se ODK forumu</string>
   <string name="odk_forum_summary">Pridruži se forumu za podršku, traži opcije, ili doprinesi kodu/prevodu!</string>
   <string name="all_open_source_licenses">Otvori biblioteke/ licence koda</string>
@@ -447,9 +422,6 @@
   <string name="email">Email adresa</string>
   <string name="user_defined">Definiše korisnik</string>
   <string name="device_defined">Definiše uređaj</string>
-  <string name="device_id">ID uređaja</string>
-  <string name="subscriber_id">ID pretplatnika</string>
-  <string name="sim_serial_id">Serijski broj SIM kartice</string>
   <string name="select_date">Odaberi datum</string>
   <string name="select_time">Odaberi vrijeme</string>
   <string name="no_date_selected">Datum nije odabran</string>
@@ -464,7 +436,6 @@
   <string name="include_password_dialog">Lozinka je dio Koda</string>
   <string name="generate">Generiši</string>
   <string name="invalid_qrcode">QR kod ne sadrži validna podešavanja</string>
-  <string name="share_qrcode">Podijeli QR kod</string>
   <string name="take_picture_instruction">Dodirni ekran kako bi fotografisao</string>
   <string name="error_front_camera_unavailable">Prednja kamera nije dostupna na ovom uređaju</string>
   <string name="camera_error">Ovaj uređaj ne podržava Camera2 API.</string>
@@ -579,13 +550,10 @@
   <string name="record_audio_runtime_permission_denied_desc">Bez ovih dozvola Collect ne može pristupit mikrofonu. Molim pokušajte ponovo kada budete spremni da odoborite dozvole.</string>
   <string name="get_accounts_runtime_permission_denied_title">Dozvole za dobijanje korisničkih imena.</string>
   <string name="get_accounts_runtime_permission_denied_desc">Bez ovih dozvola Collect ne može pristupit korisničkim nalozima. Molim pokušajte ponovo kada budete spremni da odoborite dozvole.</string>
-  <string name="send_sms_runtime_permission_denied_title">Dozvola za slanje SMS poruka.</string>
-  <string name="send_sms_runtime_permission_denied_desc">Bez ovih dozvola Collect ne može slati SMS poruke. Molim pokušajte ponovo kada budete spremni da odobrite dozvole.</string>
   <string name="read_phone_state_runtime_permission_denied_title">Dozvola za čitanje statusa telefona</string>
   <string name="read_phone_state_runtime_permission_denied_desc">Bez ovih dozvola Collect ne može da obavlja pozive ali mu je potreban pristup nekim djelovima uređaja poput broja telefona ili identifikacionog broja uređaja.</string>
   <string name="form_update_category">Ažuriranje formulara</string>
   <string name="periodic_form_updates_check_title">Periodična provjera ažuriranja formulara</string>
-  <string name="never">Nikad</string>
   <string name="every_fifteen_minutes">Svakih 15 minuta</string>
   <string name="every_one_hour">Svakog sata</string>
   <string name="every_six_hours">Svakih 6 sati</string>
@@ -603,34 +571,10 @@
   <string name="instance_upload_cancelled">Otpremanje prekinuto</string>
   <string name="hide_old_form_versions_setting_title">Sakrij stare verzije formulara</string>
   <string name="hide_old_form_versions_setting_summary">Samo nova verzija će se pojaviti u Popuni prazan formular</string>
-  <string name="sms_pref_dialog_title">Broj telefona</string>
-  <string name="sms_pref_title">Broj telefona</string>
-  <string name="sms_invalid_phone_number">Pogrešan broj telefona!</string>
-  <!--Sms submission-->
-  <string name="sms_no_reception">\'Neuspijeh na\' EEE, MMM dd, yyyy \'u\' HH:mm \'jer mreža nije dostupna\'</string>
-  <string name="sms_no_number">\'Neuspijeh na\' EEE, MMM dd, yyyy \'u\' HH:mm \'jer nemam broj telefona\'</string>
-  <string name="sms_fatal_error">\'Neuspijeh na\' EEE, MMM dd, yyyy \'u\' HH:mm </string>
-  <string name="sms_airplane_mode">\'Neuspijeh na\' EEE, MMM dd, yyyy \'u\' HH:mm \'jer je Airoplan Mode uklljučen\'</string>
-  <string name="sms_no_message">Ovaj formular nema pitanja sa SMS tagovima.</string>
-  <string name="sms_encrypted_message">Enkriptovani formulari ne mogu biti poslati kao SMS.</string>
-  <string name="sms_last_submission_on_date_at_time">\'Poslednji pokušaj otpremanja\' EEE, MMM dd, yyyy \'u\' HH:mm </string>
-  <plurals name="sms_sending" tools:ignore="ImpliedQuantity">
-    <item quantity="one">Otpremam formular kao jedinstvenu poruku.</item>
-    <item quantity="few">Otpreman formular, šaljem poruku %1$d od %2$d</item>
-    <item quantity="other">Otpreman formular, šaljem poruku %1$d od %2$d</item>
-  </plurals>
-  <string name="sms_sent_on_date_at_time">\'Poslat SMS\' EEE, MMM dd, yyyy \'u\' HH:mm</string>
-  <string name="sms_submission_queued">Otpremanja na čekanju</string>
-  <string name="sms_submissions_notif_title">Otpremanje SMS-a</string>
-  <string name="sms_submissions_notif_description">Nekoliko formulara je trenutno u fazi otpremanja.</string>
-  <string name="transport_type_internet">Wifi/Mobilna mreža (preporučeno)</string>
-  <string name="transport_type_sms">SMS</string>
-  <string name="transport_type_both">Odaberi pri otpremanju</string>
   <string name="rank_items">Rangiraj stavke</string>
   <string name="loading_form_failed">Došlo je do greške prilikom učitavanja formulara. Molim pokušajte ponovo.</string>
   <string name="missing_google_account_dialog_title">Google korisnički nalog nije napravljen</string>
   <string name="missing_google_account_dialog_desc">Da biste otpremili formulara putem Goodle Sheeta morate da postavite Google korisnički nalog u podešavanjima Servera.</string>
-  <string name="sms_invalid_phone_number_description">Postavi telefonski broj za SMS otpremanja ili promijeni tip otpremanja.</string>
   <string name="notification_channel_name">Opšta obavještenja</string>
   <string name="corrupt_imported_preferences_error">Trenutna podešavanja u pokvarena. Iz administratorkih podešavanja resetuj podešavanja ili unesi ona koja rade.</string>
   <string name="google_play_services_not_available">Ovaj formular želi da prati vašu poziciju ali Google Play Services nisu dostupne.</string>
@@ -640,14 +584,10 @@
   <string name="background_location_disabled">Ovaj formular želi da prati vašu lokaciju ali je ona isključena. Molim uključite lokaciju u %1$s meniju iznad.</string>
   <string name="background_location_enabled">Ovaj formular bilježi tvoju lokaciju. Možeš onemogućiti praćenje u %1$s meniju iznad.</string>
   <string name="open_file">Otvori fajl</string>
-  <string name="sms_feature_disabled_dialog_title">Slanje putem SMS je onemogućeno</string>
-  <string name="sms_feature_disabled_dialog_message">Slanje putem SMS-a je onemogućeno zbog restrikcija iz Google prodavnice.\n\nMolim da se uvjerite da je osoba koja je instalirala ovaj uređan pročita detalje i preduzme odgovarajuće korake.  </string>
-  <string name="read_details">Pročitaj detalje</string>
   <string name="google_sheets_encrypted_message">Enkriptovani formulari ne mogu se otpremiti na Google Sheets.</string>
   <string name="number_picker_title">Birač brojeva</string>
   <string name="too_complex_form">Formular je previše kompleksan za vaoj uređaj. Pokušaj da uprostiš izraze ili zatraži pomoć na forumu.</string>
   <string name="reading_files">Učitavanje fajlova</string>
-  <string name="copying_media_files_failed">Kopiranje medija fajlova nije uspjelo</string>
   <string name="qr_code_not_found">QR kod nije pronađen na odabranoj slici</string>
   <string name="not_granted_permission">Aktivnost koju pokušavate da pokrenete zahtijeva dozvolu koja nije odobrena.</string>
 </resources>

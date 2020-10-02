@@ -3,13 +3,13 @@ package org.odk.collect.android.geo;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
+
+import androidx.annotation.Nullable;
+import androidx.preference.Preference;
 
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
-
-import androidx.annotation.Nullable;
 
 /**
  * For each MapFragment implementation class, there is one instance of this

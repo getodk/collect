@@ -2,49 +2,52 @@
 <lint>
     <!-- suppress newly failing checks -->
     <!-- make sure classes referenced in the manifest or in a layout file are in the project -->
-    <issue id="MissingRegistered" severity="warning"/>
-    <issue id="AppCompatResource" severity="warning"/>
-    <issue id="StaticFieldLeak" severity="warning"/>
-    <issue id="UnusedIds" severity="error"/>
+    <issue id="MissingRegistered" severity="warning" />
+    <issue id="AppCompatResource" severity="warning" />
+    <issue id="StaticFieldLeak" severity="warning" />
+    <issue id="UnusedIds" severity="error" />
     <issue id="AppLinkUrlError" severity="warning" />
 
     <!-- require inputType attribute on all text fields -->
-    <issue id="TextFields" severity="error"/>
+    <issue id="TextFields" severity="error" />
 
-    <issue id="GradleOverrides" severity="error"/>
+    <issue id="GradleOverrides" severity="error" />
 
-    <issue id="SetTextI18n" severity="error"/>
-    <issue id="HardcodedText" severity="error"/>
-    <issue id="TypographyEllipsis" severity="error"/>
-    <issue id="RtlHardcoded" severity="error"/>
-    <issue id="Deprecated" severity="error"/>
-    <issue id="DefaultLocale" severity="error"/>
-    <issue id="SuspiciousImport" severity="error"/>
-    <issue id="WifiManagerPotentialLeak" severity="error"/>
-    <issue id="InefficientWeight" severity="error"/>
-    <issue id="MergeRootFrame" severity="error"/>
-    <issue id="LogNotTimber" severity="error"/>
-    <issue id="StringFormatInTimber" severity="error"/>
-    <issue id="ApplySharedPref" severity="error"/>
-    <issue id="IconLocation" severity="error"/>
-    <issue id="UnknownIdInLayout" severity="error"/>
-    <issue id="IconDuplicates" severity="error"/>
-    <issue id="PxUsage" severity="error"/>
+    <issue id="SetTextI18n" severity="error" />
+    <issue id="HardcodedText" severity="error" />
+    <issue id="TypographyEllipsis" severity="error" />
+    <issue id="RtlHardcoded" severity="error" />
+    <issue id="Deprecated" severity="error" />
+    <issue id="DefaultLocale" severity="error" />
+    <issue id="SuspiciousImport" severity="error" />
+    <issue id="WifiManagerPotentialLeak" severity="error" />
+    <issue id="InefficientWeight" severity="error" />
+    <issue id="MergeRootFrame" severity="error" />
+    <issue id="LogNotTimber" severity="error" />
+    <issue id="StringFormatInTimber" severity="error" />
+    <issue id="ApplySharedPref" severity="error" />
+    <issue id="IconLocation" severity="error" />
+    <issue id="UnknownIdInLayout" severity="error" />
+    <issue id="IconDuplicates" severity="error" />
+    <issue id="PxUsage" severity="error" />
     <issue id="UnusedNamespace" severity="error">
-        <ignore path="res/values*"/>
+        <ignore path="res/values*" />
     </issue>
     <issue id="UnusedResources" severity="error">
-        <ignore path="res/values/dimens.xml"/>
-        <ignore regexp="ga_trackingId|google_crash_reporting_api_key|project_id"/>
-        <ignore regexp="sms_invalid_phone_number_description"/>
+        <ignore path="res/values/dimens.xml" />
+        <ignore regexp="ga_trackingId|google_crash_reporting_api_key|project_id" />
+        <ignore regexp="sms_invalid_phone_number_description" />
     </issue>
 
-    <issue id="TimberExceptionLogging" severity="error"/>
-    <issue id="UselessLeaf" severity="warning"/>
-    <issue id="DuplicateIncludedIds" severity="error"/>
+    <issue id="TimberExceptionLogging" severity="error" />
+    <issue id="UselessLeaf" severity="warning" />
+    <issue id="DuplicateIncludedIds" severity="error" />
 
-    <issue id="ContentDescription" severity="ignore"/>
-    <issue id="HardwareIds" severity="ignore"/>
-    <issue id="MissingPermission" severity="error"/>
-    <issue id="RedundantNamespace" severity="error"/>
+    <issue id="ContentDescription" severity="ignore" />
+    <issue id="HardwareIds" severity="ignore" />
+    <issue id="MissingPermission" severity="error" />
+    <issue id="RedundantNamespace" severity="error" />
+
+    <!-- This check crashes if request interval is passed as a param :S -->
+    <issue id="InvalidPeriodicWorkRequestInterval" severity="ignore" />
 </lint>

@@ -61,12 +61,13 @@ import org.odk.collect.android.audio.PlaybackFailedException;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
-import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.PromptAutoplayer;
 import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
+import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -80,7 +81,7 @@ import org.odk.collect.android.widgets.SmapFormWidget;
 import org.odk.collect.android.widgets.VideoWidget;
 import org.odk.collect.android.widgets.StringWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -109,8 +110,10 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     private final LinearLayout.LayoutParams layout;
     private final ArrayList<QuestionWidget> widgets;
     private final AudioHelper audioHelper;
+    private final QuestionMediaManager questionMediaManager;
 
     public static final String FIELD_LIST = "field-list";
+    private final WaitingForDataRegistry waitingForDataRegistry;
 
     private WidgetValueChangedListener widgetValueChangedListener;
 
@@ -132,16 +135,16 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
     /**
      * Builds the view for a specified question or field-list of questions.
-     *
-     * @param context         the activity creating this view
+     *  @param context         the activity creating this view
      * @param questionPrompts the questions to be included in this view
      * @param groups          the group hierarchy that this question or field list is in
      * @param advancingPage   whether this view is being created after a forward swipe through the
-     *                        form. Used to determine whether to autoplay media.
      */
-    public ODKView(Context context, final FormEntryPrompt[] questionPrompts,
-                   FormEntryCaption[] groups, boolean advancingPage, boolean canUpdate) {      // smap
+    public ODKView(Context context, final FormEntryPrompt[] questionPrompts, FormEntryCaption[] groups,
+                   boolean advancingPage, boolean canUpdate, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {   // smap add canUpdate
         super(context);
+        this.questionMediaManager = questionMediaManager;
+        this.waitingForDataRegistry = waitingForDataRegistry;
 
         getComponent(context).inject(this);
         this.audioHelper = audioHelperFactory.create(context);
@@ -151,8 +154,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         widgets = new ArrayList<>();
         widgetsList = findViewById(R.id.widgets);
 
-        layout =
-                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+        layout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
         // display which group you are in as well as the question
         setGroupText(groups);
@@ -418,7 +420,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      * Note: if the given question is of an unsupported type, a text widget will be created.
      */
     private QuestionWidget configureWidgetForQuestion(FormEntryPrompt question, boolean readOnlyOverride) {
-        QuestionWidget qw = WidgetFactory.createWidgetFromPrompt(question, getContext(), readOnlyOverride);
+        QuestionWidget qw = WidgetFactory.createWidgetFromPrompt(question, getContext(),
+                readOnlyOverride, questionMediaManager, waitingForDataRegistry);
         qw.setOnLongClickListener(this);
         qw.setValueChangedListener(this);
 
@@ -626,34 +629,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     }
 
     /**
-     * Called when another activity returns information to answer this question.
-     */
-    public void setBinaryData(Object answer) {
-        boolean set = false;
-        for (QuestionWidget q : widgets) {
-            if (q instanceof BinaryWidget) {
-                BinaryWidget binaryWidget = (BinaryWidget) q;
-                if (binaryWidget.isWaitingForData()) {
-                    try {
-                        binaryWidget.setBinaryData(answer);
-                        binaryWidget.cancelWaitingForData();
-                    } catch (Exception e) {
-                        Timber.e(e);
-                        ToastUtils.showLongToast(getContext().getString(R.string.error_attaching_binary_file,
-                                e.getMessage()));
-                    }
-                    set = true;
-                    break;
-                }
-            }
-        }
-
-        if (!set) {
-            Timber.w("Attempting to return data to a widget or set of widgets not looking for data");
-        }
-    }
-
-    /**
      * Saves answers for the widgets in this view. Called when the widgets are in an intent group.
      */
     public void setDataForFields(Bundle bundle) throws JavaRosaException {
@@ -692,23 +667,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                     break;
                 }
             }
-        }
-    }
-
-    public void cancelWaitingForBinaryData() {
-        int count = 0;
-        for (QuestionWidget q : widgets) {
-            if (q instanceof BinaryWidget) {
-                if (q.isWaitingForData()) {
-                    q.cancelWaitingForData();
-                    ++count;
-                }
-            }
-        }
-
-        if (count != 1) {
-            Timber.w("Attempting to cancel waiting for binary data to a widget or set of widgets "
-                    + "not looking for data");
         }
     }
 

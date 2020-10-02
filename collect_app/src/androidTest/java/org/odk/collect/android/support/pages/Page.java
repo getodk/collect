@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.core.internal.deps.guava.collect.Iterables;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
@@ -13,8 +14,13 @@ import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import androidx.test.runner.lifecycle.Stage;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.FormLoadingUtils;
 import org.odk.collect.android.support.actions.RotateAction;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
+import org.odk.collect.android.support.matchers.ToastMatcher;
+
+import java.io.IOException;
+import java.util.concurrent.Callable;
 
 import timber.log.Timber;
 
@@ -22,20 +28,22 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.clearText;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
-import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
+import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
+import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.StringContains.containsString;
@@ -86,9 +94,15 @@ abstract class Page<T extends Page<T>> {
     }
 
     public T assertText(String...  text) {
+        closeSoftKeyboard();
         for (String t : text) {
             onView(allOf(withText(t), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(matches(isDisplayed()));
         }
+        return (T) this;
+    }
+
+    public T assertText(int stringID) {
+        assertText(getTranslatedString(stringID));
         return (T) this;
     }
 
@@ -108,25 +122,25 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
-    public T checkIfTextDoesNotExist(String text) {
+    public T assertTextDoesNotExist(String text) {
         onView(withText(text)).check(doesNotExist());
         return (T) this;
     }
 
-    public T checkIfTextDoesNotExist(int string) {
-        return checkIfTextDoesNotExist(getTranslatedString(string));
+    public T assertTextDoesNotExist(int string) {
+        return assertTextDoesNotExist(getTranslatedString(string));
     }
 
-    public T checkIsStringDisplayed(int stringID) {
-        assertText(getTranslatedString(stringID));
+    public T assertTextDoesNotExist(String...  text) {
+        for (String t : text) {
+            onView(allOf(withText(t), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(doesNotExist());
+        }
         return (T) this;
     }
 
     public T checkIsToastWithMessageDisplayed(String message) {
         try {
-            onView(withText(message))
-                    .inRoot(withDecorView(not(is(getCurrentActivity().getWindow().getDecorView()))))
-                    .check(matches(isDisplayed()));
+            onView(withText(message)).inRoot(new ToastMatcher()).check(matches(isDisplayed()));
         } catch (RuntimeException e) {
             // The exception we get out of this is really misleading so cleaning it up here
             throw new RuntimeException("No Toast with text \"" + message + "\" shown on screen!");
@@ -138,6 +152,10 @@ abstract class Page<T extends Page<T>> {
 
     public T checkIsToastWithMessageDisplayed(int stringID) {
         return checkIsToastWithMessageDisplayed(getTranslatedString(stringID));
+    }
+
+    public T checkIsToastWithMessageDisplayed(Integer id, Object... formatArgs) {
+        return checkIsToastWithMessageDisplayed(getTranslatedString(id, formatArgs));
     }
 
     public T clickOnString(int stringID) {
@@ -189,6 +207,11 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
+    public T inputText(int hint, String text) {
+        onView(withHint(getTranslatedString(hint))).perform(replaceText(text));
+        return (T) this;
+    }
+
     public T checkIfElementIsGone(int id) {
         onView(withId(id)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
         return (T) this;
@@ -204,7 +227,12 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
-    public T checkIfOptionIsDisabled(int string) {
+    public T assertEnabled(int string) {
+        onView(withText(string)).check(matches(isEnabled()));
+        return (T) this;
+    }
+
+    public T assertDisabled(int string) {
         onView(withText(string)).check(matches(not(isEnabled())));
         return (T) this;
     }
@@ -263,6 +291,14 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
+    public T scrollToViewAndClickText(String text) {
+        onView(withId(R.id.recycler_view)).perform(RecyclerViewActions
+                .actionOnItem(hasDescendant(withText(text)), scrollTo()));
+        onView(withId(R.id.recycler_view)).perform(RecyclerViewActions
+                .actionOnItem(hasDescendant(withText(text)), click()));
+        return (T) this;
+    }
+
     public T scrollToAndAssertText(String text) {
         onView(withText(text)).perform(nestedScrollTo());
         onView(withText(text)).check(matches(isDisplayed()));
@@ -291,28 +327,48 @@ abstract class Page<T extends Page<T>> {
     }
 
     void tryAgainOnFail(Runnable action) {
-        try {
-            action.run();
-        } catch (NoMatchingViewException e) {
-            assertOnPage();
-            action.run();
-        }
+        tryAgainOnFail(action, 2);
     }
 
-    public void waitForText(String text) {
-        int counter = 0;
-        NoMatchingViewException failure = null;
+    void tryAgainOnFail(Runnable action, int maxTimes) {
+        Exception failure = null;
 
+        for (int i = 0; i < maxTimes; i++) {
+            try {
+                action.run();
+                return;
+            } catch (Exception e) {
+                failure = e;
+
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException ignored) {
+                    // ignored
+                }
+            }
+        }
+
+        throw new RuntimeException("tryAgainOnFail failed", failure);
+    }
+
+    protected void waitForText(String text) {
+        waitFor(() -> assertText(text));
+    }
+
+    protected <T> T waitFor(Callable<T> callable) {
+        int counter = 0;
+        Exception failure = null;
+
+        // Try 20 times/for 5 seconds
         while (counter < 20) {
             try {
-                assertText(text);
-                return;
-            } catch (NoMatchingViewException exception) {
-                failure = exception;
+                return callable.call();
+            } catch (Exception throwable) {
+                failure = throwable;
             }
 
             try {
-                Thread.sleep(500);
+                Thread.sleep(250);
             } catch (InterruptedException ignored) {
                 // ignored
             }
@@ -320,9 +376,30 @@ abstract class Page<T extends Page<T>> {
             counter++;
         }
 
-        if (failure != null) {
-            throw failure;
+        throw new RuntimeException("waitFor failed", failure);
+    }
+
+    public T assertTextNotDisplayed(int string) {
+        onView(withText(getTranslatedString(string))).check(matches(not(isDisplayed())));
+        return (T) this;
+    }
+
+    protected void assertToolbarTitle(String title) {
+        onView(allOf(withText(title), isDescendantOfA(withId(R.id.toolbar)))).check(matches(isDisplayed()));
+    }
+
+    protected void assertToolbarTitle(int title) {
+        assertToolbarTitle(getTranslatedString(title));
+    }
+
+    public T copyForm(String formFilename) {
+        try {
+            FormLoadingUtils.copyFormToStorage(formFilename);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+
+        return (T) this;
     }
 }
 

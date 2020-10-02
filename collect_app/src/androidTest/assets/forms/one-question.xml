@@ -4,7 +4,7 @@
         <h:title>One Question</h:title>
         <model>
             <instance>
-                <data id="one_question">
+                <data id="one_question" orx:version="1">
                     <age/>
                 </data>
             </instance>

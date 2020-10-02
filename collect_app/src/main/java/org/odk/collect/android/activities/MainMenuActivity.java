@@ -39,23 +39,19 @@ import androidx.lifecycle.ViewModelProviders;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.analytics.Analytics;
-import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.configure.LegacySettingsFileReader;
+import org.odk.collect.android.configure.SettingsImporter;
+import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.gdrive.GoogleDriveActivity;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.material.MaterialBanner;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment.Action;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
-import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceSaver;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.preferences.Transport;
-import org.odk.collect.android.preferences.qr.QRCodeTabsActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -66,18 +62,15 @@ import org.odk.collect.android.storage.migration.StorageMigrationResult;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.android.utilities.PlayServicesUtil;
-import org.odk.collect.android.utilities.SharedPreferencesUtils;
+import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.version.VersionInformation;
+import org.odk.collect.material.MaterialBanner;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.lang.ref.WeakReference;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -85,8 +78,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
-
+import static org.odk.collect.android.analytics.AnalyticsEvents.SETTINGS_IMPORT_JSON;
+import static org.odk.collect.android.analytics.AnalyticsEvents.SETTINGS_IMPORT_SERIALIZED;
 import static org.odk.collect.android.utilities.DialogUtils.getDialog;
 import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
 
@@ -138,11 +131,10 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     AdminPasswordProvider adminPasswordProvider;
 
     @Inject
-    VersionInformation versionInformation;
+    SettingsImporter settingsImporter;
 
     @Inject
-    GeneralSharedPreferences generalSharedPreferences;
-
+    MainMenuViewModel.Factory viewModelFactory;
     private MainMenuViewModel viewModel;
 
     @Override
@@ -151,12 +143,10 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         Collect.getInstance().getComponent().inject(this);
         setContentView(R.layout.main_menu);
         ButterKnife.bind(this);
-        viewModel = ViewModelProviders.of(this, new MainMenuViewModel.Factory(versionInformation)).get(MainMenuViewModel.class);
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainMenuViewModel.class);
 
         initToolbar();
         DaggerUtils.getComponent(this).inject(this);
-
-        disableSmsIfNeeded();
 
         storageMigrationRepository.getResult().observe(this, this::onStorageMigrationFinish);
 
@@ -168,7 +158,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             public void onClick(View v) {
                 if (MultiClickGuard.allowClick(getClass().getName())) {
                     Intent i = new Intent(getApplicationContext(),
-                            FormChooserListActivity.class);
+                            FillBlankFormActivity.class);
                     startActivity(i);
                 }
             }
@@ -230,11 +220,11 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                             GeneralKeys.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
                     Intent i = null;
                     if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
-                        if (PlayServicesUtil.isGooglePlayServicesAvailable(MainMenuActivity.this)) {
+                        if (new PlayServicesChecker().isGooglePlayServicesAvailable(MainMenuActivity.this)) {
                             i = new Intent(getApplicationContext(),
                                     GoogleDriveActivity.class);
                         } else {
-                            PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(MainMenuActivity.this);
+                            new PlayServicesChecker().showGooglePlayServicesAvailabilityErrorDialog(MainMenuActivity.this);
                             return;
                         }
                     } else {
@@ -254,7 +244,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             public void onClick(View v) {
                 if (MultiClickGuard.allowClick(getClass().getName())) {
                     Intent i = new Intent(getApplicationContext(),
-                            FileManagerTabs.class);
+                            DeleteSavedFormActivity.class);
                     startActivity(i);
                 }
             }
@@ -277,33 +267,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             return;
         }
 
-        File f = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings");
-        File j = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json");
-        // Give JSON file preference
-        if (j.exists()) {
-            boolean success = SharedPreferencesUtils.loadSharedPreferencesFromJSONFile(j);
-            if (success) {
-                ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
-                j.delete();
-                recreate();
-
-                // Delete settings file to prevent overwrite of settings from JSON file on next startup
-                if (f.exists()) {
-                    f.delete();
-                }
-            } else {
-                ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
-            }
-        } else if (f.exists()) {
-            boolean success = loadSharedPreferencesFromFile(f);
-            if (success) {
-                ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
-                f.delete();
-                recreate();
-            } else {
-                ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
-            }
-        }
+        importSettingsFromLegacyFiles();
     }
 
     @Override
@@ -361,8 +325,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_configure_qr_code:
-                analytics.logEvent(AnalyticsEvents.SCAN_QR_CODE, "MainMenu");
-
                 if (adminPasswordProvider.isAdminPasswordSet()) {
                     Bundle args = new Bundle();
                     args.putSerializable(AdminPasswordDialogFragment.ARG_ACTION, Action.SCAN_QR_CODE);
@@ -506,39 +468,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         }
     }
 
-    private boolean loadSharedPreferencesFromFile(File src) {
-        // this should probably be in a thread if it ever gets big
-        boolean res = false;
-        ObjectInputStream input = null;
-        try {
-            input = new ObjectInputStream(new FileInputStream(src));
-
-            // first object is preferences
-            Map<String, Object> entries = (Map<String, Object>) input.readObject();
-
-            AutoSendPreferenceMigrator.migrate(entries);
-            PreferenceSaver.saveGeneralPrefs(generalSharedPreferences, entries);
-
-            // second object is admin options
-            Map<String, Object> adminEntries = (Map<String, Object>) input.readObject();
-            PreferenceSaver.saveAdminPrefs(AdminSharedPreferences.getInstance(), adminEntries);
-
-            Collect.getInstance().initializeJavaRosa();
-            res = true;
-        } catch (IOException | ClassNotFoundException e) {
-            Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());
-        } finally {
-            try {
-                if (input != null) {
-                    input.close();
-                }
-            } catch (IOException ex) {
-                Timber.e(ex, "Exception thrown while closing an input stream due to: %s ", ex.getMessage());
-            }
-        }
-        return res;
-    }
-
     @Override
     public void onCorrectAdminPassword(Action action) {
         switch (action) {
@@ -598,27 +527,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         }
     }
 
-    private void disableSmsIfNeeded() {
-        if (Transport.Internet != Transport.fromPreference(generalSharedPreferences.get(KEY_SUBMISSION_TRANSPORT_TYPE))) {
-            generalSharedPreferences.save(KEY_SUBMISSION_TRANSPORT_TYPE, getString(R.string.transport_type_value_internet));
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder
-                    .setTitle(R.string.sms_feature_disabled_dialog_title)
-                    .setMessage(R.string.sms_feature_disabled_dialog_message)
-                    .setPositiveButton(R.string.read_details, (dialog, which) -> {
-                        Intent intent = new Intent(this, WebViewActivity.class);
-                        intent.putExtra("url", "https://forum.getodk.org/t/17973");
-                        startActivity(intent);
-                    })
-                    .setNegativeButton(R.string.ok, (dialog, which) -> dialog.dismiss());
-
-            builder
-                    .create()
-                    .show();
-        }
-    }
-
     private void onStorageMigrationFinish(StorageMigrationResult result) {
         if (result == StorageMigrationResult.SUCCESS) {
             DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
@@ -649,7 +557,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     private void displayStorageMigrationBanner() {
         storageMigrationBanner.setVisibility(View.VISIBLE);
-        storageMigrationBanner.setText(getString(R.string.scoped_storage_banner_text));
+        storageMigrationBanner.setText(getText(R.string.scoped_storage_banner_text));
         storageMigrationBanner.setActionText(getString(R.string.scoped_storage_learn_more));
         storageMigrationBanner.setAction(() -> {
             showStorageMigrationDialog();
@@ -665,5 +573,32 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             storageMigrationBanner.setVisibility(View.GONE);
             storageMigrationRepository.clearResult();
         });
+    }
+
+    private void importSettingsFromLegacyFiles() {
+        try {
+            String settings = new LegacySettingsFileReader(storagePathProvider).toJSON();
+
+            if (settings != null) {
+                String type = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json").exists()
+                        ? SETTINGS_IMPORT_JSON : SETTINGS_IMPORT_SERIALIZED;
+                String settingsHash = FileUtils.getMd5Hash(new ByteArrayInputStream(settings.getBytes()));
+
+                if (settingsImporter.fromJSON(settings)) {
+                    ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
+                    analytics.logEvent(type, "Success", settingsHash);
+                    recreate();
+                } else {
+                    ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
+                    analytics.logEvent(type, "Corrupt", settingsHash);
+                }
+            }
+        } catch (LegacySettingsFileReader.CorruptSettingsFileException e) {
+            ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
+
+            String type = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json").exists()
+                    ? SETTINGS_IMPORT_JSON : SETTINGS_IMPORT_SERIALIZED;
+            analytics.logEvent(type, "Corrupt exception", "none");
+        }
     }
 }

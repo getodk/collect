@@ -43,7 +43,7 @@ public class EditSavedFormPage extends Page<EditSavedFormPage> {
 
     @Override
     public EditSavedFormPage assertOnPage() {
-        checkIsStringDisplayed(R.string.review_data);
+        assertText(R.string.review_data);
         return this;
     }
 
@@ -67,9 +67,9 @@ public class EditSavedFormPage extends Page<EditSavedFormPage> {
         return new IdentifyUserPromptPage(formName, rule).assertOnPage();
     }
 
-    public FormEntryPage clickOnForm(String formName) {
+    public FormHierarchyPage clickOnForm(String formName) {
         scrollToAndClickOnForm(formName);
-        return new FormEntryPage(formName, rule);
+        return new FormHierarchyPage(formName, rule);
     }
 
     private void scrollToAndClickOnForm(String formName) {

@@ -74,11 +74,7 @@
   <string name="jump_to_beginning">Idź Do Początku</string>
   <string name="jump_to_end">Idź Na Koniec</string>
   <string name="jump_to_previous">Idź Do Góry</string>
-  <string name="list_failed_with_error">Tworzenie listy formularzy nie powiodło się. %s</string>
   <string name="loading_form">Wczytywanie Formularza</string>
-  <string name="load_remote_form_error">Błąd Pobierania Listy Formularzy</string>
-  <string name="location_provider_accuracy">Korzystam z %1$s. Dokładność rzędu %2$s m.</string>
-  <string name="location_accuracy">Dokładność rzędu %1$s m</string>
   <string name="manage_files">Skasuj Zapisany Formularz</string>
   <string name="mark_finished">Zaznacz formularz jako zakończony</string>
   <string name="noselect_error">Przykro mi, nie zaznaczyłeś żadnego formularza!</string>
@@ -89,8 +85,6 @@
   <string name="no_items_display_instances">Brak informacji do wyświetlenia.\n\nSpróbuj zakończyć zapisane formularze przed wysłaniem.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Przykro mi, nie mogę zanalizować formularza.</string>
-  <string name="parse_legacy_formlist_failed">Serwer nie dostarczył dokumentu z dostępnymi formularzami zgodnego z Aggregate 0.9.x: %s</string>
-  <string name="parse_openrosa_formlist_failed">Serwer nie dostarczył dokumentu z dostępnymi formularzami zgodnego ze standardem OpenRosa wersja 1.0: %s</string>
   <string name="password">Hasło</string>
   <string name="play_video">Odtwórz Wideo</string>
   <string name="please_wait">Poczekaj kilka chwil.</string>
@@ -111,8 +105,6 @@
   <string name="send_data">Wyślij Zakończony Formularz</string>
   <string name="send_data_button">Wyślij Zakończony Formularz (%s)</string>
   <string name="send_selected_data">Wyślij Wybrane</string>
-  <string name="send_selected_data_internet">Wyślij (Internet)</string>
-  <string name="send_selected_data_sms">Wyślij (SMS)</string>
   <string name="view_sent_forms">Pokaż Wysłany Formularz</string>
   <string name="view_sent_forms_button">Pokaż Wysłany Formularz (%s)</string>
   <string name="server_auth_credentials">Nieprawidłowa nazwa użytkownika lub hasło do serwera: %s</string>
@@ -134,17 +126,11 @@
   <string name="change_splash_path">Zmień obraz</string>
   <string name="keep_changes">Zapisz Zmiany</string>
   <string name="change_formlist_url">Ścieżka do listy formularzy (dołączana do URL)</string>
-  <string name="change_protocol">Platforma</string>
   <string name="change_submission_url">Ścieżka zgłoszeń (dołączana do URL)</string>
   <string name="formlist_url">Ścieżka do listy formularzy</string>
   <string name="submission_url">Ścieżka zgłoszeń</string>
   <string name="font_size">Wielkość czcionki</string>
   <string name="change_font_size">Wielkość czcionki</string>
-  <string name="access_error">Błąd przy próbie dostępu %s:</string>
-  <string name="manifest_server_error">Odpowiedź w manifeście nie raportuje wersji OpenRosa — niewłaściwy serwer?</string>
-  <string name="root_element_error">Główny element nie jest &lt;manifest\&gt; — był %s</string>
-  <string name="root_namespace_error">Przestrzeń nazw głównego elementu jest niewłaściwa: %s</string>
-  <string name="manifest_tag_error">Wpis %s w manifeście ma brakujący jeden lub więcej znaczników: nazwa pliku, hash lub URL pobrania</string>
   <string name="form_download_progress">%1$s. Pobieram pliki medialne: %2$s z %3$s</string>
   <string name="fetching_manifest">%s. Pobieram manifest </string>
   <string name="success">Sukces</string>
@@ -162,8 +148,6 @@
   <string name="save_as_error">Zapisana nazwa nie może być pusta!</string>
   <string name="edit_prompt">Edytuj Pytanie</string>
   <string name="selected_google_account_text">Konto Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Inny</string>
   <string name="font_size_extra_large">Extra Duży</string>
   <string name="font_size_large">Duży</string>
   <string name="font_size_medium">Średni</string>
@@ -188,7 +172,6 @@
   <string name="parent_form_not_present">Nie mogę edytować tego zapisanego formularza ponieważ powiązany czysty formularz jest niedostępny lub został skasowany.\n\nID Formularza: %1$s</string>
   <string name="launch_app">Uruchom</string>
   <string name="no_app">Brakuje żądanej aplikacji. Proszę, wprowadź ręcznie odczytane wartości.</string>
-  <string name="select_one">Wybierz Jedną Odpowiedź</string>
   <string name="savepoint_used">Niezapisane zmiany odzyskane z punktu zapisu!</string>
   <string name="save_and_close">Zapisz i Zamknij</string>
   <string name="sign_button">Pobierz Podpis</string>
@@ -263,12 +246,6 @@
   <string name="go_drive">Mój Dysk</string>
   <string name="go_shared">Dzielone ze Mną</string>
   <string name="modified_on_date_at_time">\'Zmieniony\' EEE, MMM dd, yyyy \'o\' HH:mm</string>
-  <string name="aggregate_preferences">Ustawienia ODK Aggregate</string>
-  <string name="sms_submission_preferences">Ustawienia przesyłania SMSów</string>
-  <string name="submission_transport">Przesyłanie zgłoszeń (zaawansowane)</string>
-  <string name="submission_transport_types_title">Przesyłaj zgłoszenia poprzez</string>
-  <string name="other_preferences">Inne ustawienia platformy</string>
-  <string name="google_preferences">Ustawienia Google Sheets</string>
   <string name="google_sheets_url_hint">Formularze muszą ustawić URL przesyłania. Jeśli nie, ten adres URL zostanie użyty.</string>
   <string name="drive_get_file">Pobieram %1$s i pliki medialne.</string>
   <string name="no_google_account">Nie wybrałeś konta Google!</string>
@@ -364,10 +341,6 @@
     <item quantity="many">%d metrów</item>
     <item quantity="other">%d metry</item>
   </plurals>
-  <string name="location_status_searching">Wyszukiwanie lokalizacji GPS, proszę czekać…</string>
-  <string name="location_status_accuracy">Dokładność lokalizacji GPS: %.2f m</string>
-  <string name="location_status_acceptable">Dokładność lokalizacji GPS: %.2f m (dopuszczalna)</string>
-  <string name="location_status_unacceptable">Dokładność lokalizacji GPS: %.2f m (niedopuszczalna)</string>
   <string name="collection_status_paused">Wprowadzone punkty: %d</string>
   <string name="collection_status_placement">Wprowadzone punkty: %d (dotknij, by dodać)</string>
   <string name="collection_status_manual">Wprowadzone punkty: %d (wprowadzanie manualne)</string>
@@ -400,11 +373,10 @@
   <string name="record_geopoint">Zapisz punkt</string>
   <string name="gps_result">Szerokość: %1$s\nDługość: %2$s\nWzniesienie: %3$sm\nDokładność: %4$sm</string>
   <string name="parser_exception">Wyjątek XPathParser: \"%s\"</string>
-  <string name="selected_answer">Wybrany: %s</string>
   <string name="version_number">Wersja: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Odwiedź stronę ODK</string>
-  <string name="odk_website_summary">Open Data Kit (ODK) służy do zbierania danych w trudnych warunkach dla społeczego dobra.</string>
+  <string name="odk_website_summary">ODK służy do zbierania danych w trudnych warunkach dla społeczego dobra.</string>
   <string name="odk_forum">Dołącz do forum ODK</string>
   <string name="odk_forum_summary">Dołącz do forum by uzyskać wsparcie, zgłaszać potrzeby nowych opcji, wnieść swój wkład w tłumaczenie i kodowanie.</string>
   <string name="all_open_source_licenses">Biblioteki/licencje open source</string>
@@ -471,9 +443,6 @@
   <string name="email">Adres email</string>
   <string name="user_defined">Zdefiniowane przez użytkownika</string>
   <string name="device_defined">Zdefiniowane przez urządzenie</string>
-  <string name="device_id">ID urządzenia</string>
-  <string name="subscriber_id">ID subskrybenta</string>
-  <string name="sim_serial_id">Numer seryjny SIM</string>
   <string name="select_date">Wybierz datę</string>
   <string name="select_time">Wybierz godzinę</string>
   <string name="no_date_selected">Nie wybrano daty</string>
@@ -488,7 +457,6 @@
   <string name="include_password_dialog">Hasło Zawarte w Kodzie</string>
   <string name="generate">Wygeneruj</string>
   <string name="invalid_qrcode">Kod QR nie zawiera poprawnych ustawień</string>
-  <string name="share_qrcode">Udostępnij kod QR</string>
   <string name="take_picture_instruction">Dotknij ekran, by zrobić zdjęcie</string>
   <string name="error_front_camera_unavailable">Przednia kamera nie jest dostępna w tym urządzeniu</string>
   <string name="camera_error">To urządzenie nie wspiera Camera2 API.</string>
@@ -614,13 +582,10 @@
   <string name="record_audio_runtime_permission_denied_desc">Bez tych uprawnieć Collect nie ma dostępu do mikrofonu. Spróbuj ponownie, kiedy uprawnienia zostaną nadane.</string>
   <string name="get_accounts_runtime_permission_denied_title">Uzyskaj uprawnienia do kont</string>
   <string name="get_accounts_runtime_permission_denied_desc">Bez tych uprawnieć Collect nie ma dostępu do kont. Spróbuj ponownie, kiedy uprawnienia zostaną nadane.</string>
-  <string name="send_sms_runtime_permission_denied_title">Uprawnienia do wysyłania wiadomości SMS</string>
-  <string name="send_sms_runtime_permission_denied_desc">Bez tych uprawnieć Collect nie może wysyłać wiadomości SMS. Spróbuj ponownie, kiedy uprawnienia zostaną nadane.</string>
   <string name="read_phone_state_runtime_permission_denied_title">Sprawdź uprawnienia dostępu do właściwości telefonu</string>
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect nie wykonuje połączeń, ale wymaga dostępu do niektórych właściwości twojego urządzenia, w tym do numeru telefonu i numeru ID</string>
   <string name="form_update_category">Aktualizacja formularza</string>
   <string name="periodic_form_updates_check_title">Cykliczne sprawdzenie możliwych aktualizacji</string>
-  <string name="never">Nigdy</string>
   <string name="every_fifteen_minutes">Co piętnaście minut</string>
   <string name="every_one_hour">Co godzinę</string>
   <string name="every_six_hours">Co sześć godzin</string>
@@ -638,35 +603,10 @@
   <string name="instance_upload_cancelled">Przesyłanie zostało anulowane</string>
   <string name="hide_old_form_versions_setting_title">Ukryj stare wersje formularzy</string>
   <string name="hide_old_form_versions_setting_summary">Tylko najnowsza wersja pojawi się w Wypełnij Pusty Formularz</string>
-  <string name="sms_pref_dialog_title">Docelowy numer telefonu</string>
-  <string name="sms_pref_title">Docelowy numer telefonu</string>
-  <string name="sms_invalid_phone_number">Nieprawidłowy numer telefonu!</string>
-  <!--Sms submission-->
-  <string name="sms_no_reception">\'Zakończone niepowodzeniem\' EEE, MMM dd, yyyy \'o\' HH:mm \'z powodu braku zasięgu.\'</string>
-  <string name="sms_no_number">\'Zakończone niepowodzeniem\' EEE, MMM dd, yyyy \'o\' HH:mm \'z powodu braku numeru telefonu.\'</string>
-  <string name="sms_fatal_error">\'Zakończone niepowodzeniem\' EEE, MMM dd, yyyy \'o\' HH:mm</string>
-  <string name="sms_airplane_mode">\'Zakończone niepowodzeniem\' EEE, MMM dd, yyyy \'o\' HH:mm \'z powodu aktywnego Trybu Samolotowego.\'</string>
-  <string name="sms_no_message">Ten formularz nie zawiera żadnych pytań z otagowaniem SMS.</string>
-  <string name="sms_encrypted_message">Zaszyfrowane formularze nie mogą być przesłane przez SMS.</string>
-  <string name="sms_last_submission_on_date_at_time">\'Ostatnia próba przesłania miała miejsce\' EEE, MMM dd, yyyy \'o\' HH:mm</string>
-  <plurals name="sms_sending">
-    <item quantity="one">Przesyłanie formularza jako pojedynczej wiadomości.</item>
-    <item quantity="few">Przesyłanie formularza, wysyłanie wiadomości %1$d z %2$d</item>
-    <item quantity="many">Przesyłanie formularza, wysyłanie wiadomości %1$d z %2$d</item>
-    <item quantity="other">Przesyłanie formularza, wysyłanie wiadomości %1$d z %2$d</item>
-  </plurals>
-  <string name="sms_sent_on_date_at_time">\'Wysłano jako SMS\' EEE, MMM dd, yyyy \'o\' HH:mm</string>
-  <string name="sms_submission_queued">W kolejce do przesłania.</string>
-  <string name="sms_submissions_notif_title">Przesyłanie SMSów</string>
-  <string name="sms_submissions_notif_description">Obcenie przesyłanych jest kilka formularzy.</string>
-  <string name="transport_type_internet">Wifi/Dane pakietowe (zalecane)</string>
-  <string name="transport_type_sms">SMS</string>
-  <string name="transport_type_both">Wybierz przy wysyłaniu</string>
   <string name="rank_items">Uszereguj pozycje</string>
   <string name="loading_form_failed">Wystąpił błąd w trakcie ładowania formularza. Spróbuj ponownie,</string>
   <string name="missing_google_account_dialog_title">Nie wybrano konta Google</string>
   <string name="missing_google_account_dialog_desc">By przesłać formularz poprzez Arkusze Google, zapisz swoje konto Google w ustawieniach serwera.</string>
-  <string name="sms_invalid_phone_number_description">Ustaw docelowy numer telefonu by przesyłać SMSy lub zmień rodzaj transmisji.</string>
   <string name="notification_channel_name">Ogólne powiadomienia</string>
   <string name="corrupt_imported_preferences_error">Bieżące ustawienia nie działają prawidłowo. Zresetuj je lub załaduj poprawne w ustawieniach administratora.</string>
   <string name="google_play_services_not_available">Ten formularz chce śledzić twoją lokalizację, ale usługi Google Play nie są dostępne.</string>
@@ -676,14 +616,10 @@
   <string name="background_location_disabled">Ten formularz chce śledzić twoją lokalizację, jednak funkcja śledzenia jest wyłączona. Włącz ją wybierając %1$s w menu powyżej.</string>
   <string name="background_location_enabled">Ten formularz śledzi twoją lokalizację. Możesz wyłączyć funkcję śledzenia poprzez %1$s w menu powyżej.</string>
   <string name="open_file">Otwórz plik</string>
-  <string name="sms_feature_disabled_dialog_title">Wysyłanie przez wiadomość SMS Wyłączone.</string>
-  <string name="sms_feature_disabled_dialog_message">Wysyłanie przez SMS zostało wyłączone ze względu na ograniczenia Google Play Store.\n\nUpewnij się, że osoba konfigurująca to urządzenie przeczyta poniższe szczegóły i podejmie stosowne kroki.</string>
-  <string name="read_details">Przeczytaj szczegóły</string>
   <string name="google_sheets_encrypted_message">Zaszyfrowane formularze nie mogą być przesłane do Google Sheets.</string>
   <string name="number_picker_title">Wybór Wartości</string>
   <string name="too_complex_form">Formularz jest zbyt skomplikowany dla tego urządzenia. Spróbuj uprościć wyrażenia, lub poproś o pomoc na forum.</string>
   <string name="reading_files">Odczyt plików</string>
-  <string name="copying_media_files_failed">Kopiowanie plików mediów nie powiodło się</string>
   <string name="qr_code_not_found">Na wybranym zdjęciu nie odnaleziono kodu QR</string>
   <string name="not_granted_permission">Aktywność, którą próbujesz wykonać, wymaga autoryzacji, której nie posiadasz.</string>
   <string name="basemap_source_unavailable">Przepraszamy, mapy bazowe %s nie są dostępne na tym urządzeniu.  Wybierz inną mapę bazową z Ustawień Ogólnych &gt; Mapy.</string>
@@ -695,6 +631,5 @@
   <string name="reason">Powód</string>
   <string name="save">Zapisz</string>
   <string name="reason_for_changes_description">Musisz uzasadnić powód zmian w tym formularzu</string>
-  <string name="scoped_storage_banner_text">By spełnić wymagania systemu Android, przenieś swoje formularze do pamięci prywatnej przed sierpniem 2020.</string>
   <string name="scoped_storage_learn_more">Dowiedz się więcej i przenieś</string>
 </resources>

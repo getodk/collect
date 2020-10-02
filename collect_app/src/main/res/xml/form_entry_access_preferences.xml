@@ -1,30 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:title="@string/form_entry_setting">
 
     <CheckBoxPreference
         android:key="moving_backwards"
-        android:title="@string/moving_backwards_title" />
+        android:title="@string/moving_backwards_title"
+        app:iconSpaceReserved="false" />
 
-    <PreferenceCategory android:title="@string/form_entry">
+    <PreferenceCategory android:title="@string/form_entry"
+        app:allowDividerAbove="false"
+        app:allowDividerBelow="false"
+        app:iconSpaceReserved="false" >
         <CheckBoxPreference
             android:key="access_settings"
-            android:title="@string/general_preferences" />
+            android:title="@string/general_preferences"
+            app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="change_language"
-            android:title="@string/change_language" />
+            android:title="@string/change_language"
+            app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="jump_to"
-            android:title="@string/view_hierarchy" />
+            android:title="@string/view_hierarchy"
+            app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="save_mid"
-            android:title="@string/save_mid" />
+            android:title="@string/save_mid"
+            app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="save_as"
-            android:title="@string/save_form_as" />
+            android:title="@string/save_form_as"
+            app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="mark_as_finalized"
-            android:title="@string/mark_finished" />
+            android:title="@string/mark_finished"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>

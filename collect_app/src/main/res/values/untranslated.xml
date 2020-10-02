@@ -15,14 +15,9 @@ the specific language governing permissions and limitations under the License. -
     <string name="default_server_url" translatable="false">https://sg.smap.com.au</string>
     <string name="protocol_odk_default" translatable="false">odk_default</string>
     <string name="protocol_google_sheets" translatable="false">google_sheets</string>
-    <string name="protocol_other" translatable="false">other_protocol</string>
     <string name="default_odk_formlist" translatable="false">/formList</string>
     <string name="default_odk_submission" translatable="false">/submission</string>
     <string name="app_url" translatable="false">https://www.smap.org</string>
-    <string name="sms_submission_preference_key" translatable="false">sms_preference</string>
-    <string name="transport_type_value_internet" translatable="false">internet</string>
-    <string name="transport_type_value_sms" translatable="false">sms</string>
-    <string name="transport_type_value_both" translatable="false">both</string>
     <string name="never_value" translatable="false">never</string>
     <string name="every_fifteen_minutes_value" translatable="false">every_fifteen_minutes</string>
     <string name="every_one_hour_value" translatable="false">every_one_hour</string>
@@ -30,7 +25,10 @@ the specific language governing permissions and limitations under the License. -
     <string name="every_24_hours_value" translatable="false">every_24_hours</string>
     <string name="app_theme_light" translatable="false">light_theme</string>
     <string name="app_theme_dark" translatable="false">dark_theme</string>
-    <string name="app_theme_magenta" translatable="false">magenta_theme</string>
+    <string name="server_platform_odk" translatable="false">ODK</string>
+    <string name="form_update_mode_manual" translatable="false">manual</string>
+    <string name="form_update_mode_previously_downloaded" translatable="false">previously_downloaded</string>
+    <string name="form_update_mode_match_exactly" translatable="false">match_exactly</string>
 
     <!-- For consistency, we don't translate these brand/organization names. -->
     <string name="basemap_source_google" translatable="false">Google</string>

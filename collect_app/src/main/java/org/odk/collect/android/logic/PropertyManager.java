@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.logic;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiInfo;
@@ -26,6 +27,7 @@ import org.javarosa.core.services.properties.IPropertyRules;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.PermissionUtils;
 
@@ -41,6 +43,7 @@ import timber.log.Timber;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_PHONENUMBER;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_USERNAME;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_USERNAME;
 
 /**
  * Returns device properties and metadata to JavaRosa
@@ -77,6 +80,8 @@ public class PropertyManager implements IPropertyManager {
     @Inject
     PermissionUtils permissionUtils;
 
+    private final Context context;
+
     public String getName() {
         return "Property Manager";
     }
@@ -92,13 +97,20 @@ public class PropertyManager implements IPropertyManager {
     }
 
     public PropertyManager(Context context) {
-        Timber.i("calling constructor");
-
+        this.context = context;
         Collect.getInstance().getComponent().inject(this);
-        reload(context);
+
+        reload();
     }
 
-    public PropertyManager reload(Context context) {
+    public PropertyManager(Application application, RxEventBus rxEventBus, PermissionUtils permissionUtils, DeviceDetailsProvider deviceDetailsProvider) {
+        this.eventBus = rxEventBus;
+        this.permissionUtils = permissionUtils;
+        this.deviceDetailsProvider = deviceDetailsProvider;
+        this.context = application;
+    }
+
+    public PropertyManager reload() {
         try {
             // Device-defined properties
             IdAndPrefix idp = findDeviceId(context, deviceDetailsProvider);
@@ -115,6 +127,11 @@ public class PropertyManager implements IPropertyManager {
         initUserDefined(prefs, KEY_METADATA_USERNAME,    PROPMGR_USERNAME,      SCHEME_USERNAME);
         initUserDefined(prefs, KEY_METADATA_PHONENUMBER, PROPMGR_PHONE_NUMBER,  SCHEME_TEL);
         initUserDefined(prefs, KEY_METADATA_EMAIL,       PROPMGR_EMAIL,         SCHEME_MAILTO);
+
+        // Use the server username by default if the metadata username is not defined
+        if (getSingularProperty(PROPMGR_USERNAME) == null || getSingularProperty(PROPMGR_USERNAME).isEmpty()) {
+            putProperty(PROPMGR_USERNAME, SCHEME_USERNAME, (String) GeneralSharedPreferences.getInstance().get(KEY_USERNAME));
+        }
 
         return this;
     }

@@ -74,11 +74,7 @@
   <string name="jump_to_beginning">დასაწყისში გადასვლა</string>
   <string name="jump_to_end">ბოლოში გადასვლა</string>
   <string name="jump_to_previous">ზევით ასვლა</string>
-  <string name="list_failed_with_error">ფორმების ჩამონათვალის ჩვენება ვერ მოხერხდა. %s.</string>
   <string name="loading_form">ფორმის ჩატვირთვა</string>
-  <string name="load_remote_form_error">შეცდომა ფორმების ჩამონათვლის ჩვენებისას</string>
-  <string name="location_provider_accuracy">მდებარეობის მიღება %1$s-ით. აკურატულობა შეადგენს %2$s მეტრს.</string>
-  <string name="location_accuracy">აკურატულობა %1$s მეტრია</string>
   <string name="manage_files">შენახული ფორმების წაშლა</string>
   <string name="mark_finished">აღვნიშნოთ ფორმა დასრულებულად</string>
   <string name="noselect_error">უკაცრავად, თქვენ ფორმა არ აგირჩევიათ!</string>
@@ -89,8 +85,6 @@
   <string name="no_items_display_instances">საჩვენებლად ხელმისაწვდომი არაფერია.\n\nცადეთ ფორმების დასრულება მათ გაგზავნამდე</string>
   <string name="ok">OK</string>
   <string name="parse_error">უკაცრავად, ფორმის დამუშავება შეუძლებელია.</string>
-  <string name="parse_legacy_formlist_failed">შეუძლებელია სერვერიდან Aggregate 0.9.x. : %s-ის თანხვედრი ფორმის მოპოვება</string>
-  <string name="parse_openrosa_formlist_failed">სერვერზე არ მოიპოვება ფორმა, რომელიც OpenRosa version 1.0 სტანდარტის თანხვედრია: %s</string>
   <string name="password">პაროლი</string>
   <string name="play_video">ვიდეოჩანაწერის ჩვენება</string>
   <string name="please_wait">გთხოვთ, დაიცადოთ.</string>
@@ -111,8 +105,6 @@
   <string name="send_data">დასრულებული ფორმების გაგზავნა</string>
   <string name="send_data_button">დასრულებული ფორმების გაგზავნა (%s)</string>
   <string name="send_selected_data">არჩეული ფორმების გაგზავნა</string>
-  <string name="send_selected_data_internet">გაგზავნა (ინტერნეტი)</string>
-  <string name="send_selected_data_sms">გაგზავნა (მოკლე ტექსტური შეტყობინება)</string>
   <string name="view_sent_forms">გაგზავნილი ფორმის ნახვა</string>
   <string name="view_sent_forms_button">გაგზავნილი ფორმების ნახვა (%s)</string>
   <string name="server_auth_credentials">სერვერის არასწორი პაროლი ან მომხმარებლის სახელი: %s</string>
@@ -134,17 +126,11 @@
   <string name="change_splash_path">სურათის შეცვლა</string>
   <string name="keep_changes">ცვლილებების შენახვა</string>
   <string name="change_formlist_url">ბმული ფორმების ჩამონათვალზე (დაემატოს სერვერის ბმულს)</string>
-  <string name="change_protocol">სერვერის პლატფორმა</string>
   <string name="change_submission_url">ბმული დადასტურებულ ფორმებზე (დაემატოს სერვერის ბმულს)</string>
   <string name="formlist_url">ბმული ფორმების ჩამონათვალზე</string>
   <string name="submission_url">ბმული დადასტურებულ ფორმებზე</string>
   <string name="font_size">ტექსტის ზომა</string>
   <string name="change_font_size">ტექსტის ზომა</string>
-  <string name="access_error">შეცდომა %s-თან დაკავშირებისას </string>
-  <string name="manifest_server_error">მანიფესტის პასუხში არ იგულისხმება OpenRosa — ვერსია; bad server?</string>
-  <string name="root_element_error">ძირის ელემენტეი არ არის &lt;manifest\&gt; — იყო %s</string>
-  <string name="root_namespace_error">ძირის ელემენტის სახელთა სივრცე არასწორია: %s</string>
-  <string name="manifest_tag_error">მანიფესტის ჩანაწერში %s არ არსებობს ერთი ან მეტი ჭდე: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. მედია-ფაილების მიღება: %2$s of %3$s</string>
   <string name="fetching_manifest">%s. მანიფესტის მიღება </string>
   <string name="success">წარმატება</string>
@@ -161,8 +147,6 @@
   <string name="save_as_error">სახელი არ უნდა იყოს ცარიელი!</string>
   <string name="edit_prompt">გამოპასუხების რედაქტირება</string>
   <string name="selected_google_account_text">Google ექაუნთი</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">სხვა</string>
   <string name="font_size_extra_large">ძალიან დიდი</string>
   <string name="font_size_large">დიდი</string>
   <string name="font_size_medium">საშუალო</string>
@@ -186,7 +170,6 @@
   <string name="parent_form_not_present">შენახული ფორმის რედაქტირება შეუძლებელია, რადგან შესაბამისი ცარიელი ფორმა არ არსებობს, ან - წაშლილია. \n\nფორმის ID: %1$s</string>
   <string name="launch_app">ჩართვა</string>
   <string name="no_app">მოთხოვნილი აპლიკაცია არ მოიძებნა, გთხოვთ მიუთითოთ ხელით.</string>
-  <string name="select_one">აირჩიეთ ერთი პასუხი</string>
   <string name="savepoint_used">მოხდა შეუნახავი ცვლილებების აღდგენა!</string>
   <string name="save_and_close">შენახვა და დახურვა</string>
   <string name="sign_button">ხელმოწერის შენახვა</string>
@@ -236,7 +219,6 @@
   <string name="survey_saving_saving_message">მიმდინარეობს SD-ბარათზე შენახვა</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">ჩემი Drive</string>
-  <string name="aggregate_preferences">ODK Aggregate-ის პარამეტრები</string>
   <string name="notification_error">შეცდომა შეტყობინების ტექსტის ჩვენებისას</string>
   <string name="delete_after_send">გაგზავნის შემდგომ წაშლა</string>
   <string name="change_server_url">სერვერის ვებ-მისამართი</string>
@@ -261,5 +243,4 @@
   <string name="autosend_selector_title">ავტომატურად გაგზავნა</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <!--Sms submission-->
 </resources>

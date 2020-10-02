@@ -37,6 +37,7 @@ the specific language governing permissions and limitations under the License.
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <!- smap - add foreground service ->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <!-- Normal permissions -->
@@ -133,29 +134,28 @@ the specific language governing permissions and limitations under the License.
             android:name=".activities.DrawActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activities.GoogleDriveActivity"
+            android:name=".gdrive.GoogleDriveActivity"
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateHidden" />
         <!-- smap add History -->
         <activity android:name=".activities.HistoryActivity" />
         <activity android:name=".activities.InstanceChooserList" />
-        <activity android:name=".activities.FormChooserListActivity" />
+        <activity android:name=".activities.FillBlankFormActivity" android:launchMode="singleTop"/>
         <activity android:name=".activities.FormDownloadListActivity" />
         <activity
-            android:name=".activities.FileManagerTabs"
+            android:name=".activities.DeleteSavedFormActivity"
             android:configChanges="orientation|screenSize" />
         <activity
-            android:name=".activities.GoogleSheetsUploaderActivity"
+            android:name=".gdrive.GoogleSheetsUploaderActivity"
             android:configChanges="orientation|screenSize" />
         <activity
             android:name=".activities.InstanceUploaderListActivity"
             android:configChanges="orientation|screenSize" />
         <activity android:name=".activities.InstanceUploaderActivity" />
         <activity android:name=".activities.AboutActivity" />
-        <activity android:name=".preferences.qr.QRCodeTabsActivity" />
+        <activity android:name=".configure.qr.QRCodeTabsActivity" />
         <activity android:name=".preferences.PreferencesActivity" />
         <activity android:name=".preferences.AdminPreferencesActivity" />
-        <activity android:name=".preferences.AndroidXPreferencesActivity" />
         <activity android:name=".activities.FormHierarchyActivity" />
         <activity android:name=".activities.ViewOnlyFormHierarchyActivity" />
         <!-- smap add survey notes -->
@@ -290,7 +290,7 @@ the specific language governing permissions and limitations under the License.
 
         <activity-alias
             android:name=".activities.FormChooserList"
-            android:targetActivity=".activities.FormChooserListActivity"
+            android:targetActivity=".activities.FillBlankFormActivity"
             tools:ignore="AppLinkUrlError">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

@@ -59,11 +59,7 @@
   <string name="jump_to_beginning">ফরম শুরুর স্থানে যান</string>
   <string name="jump_to_end">ফরম শেষের স্থানে যান</string>
   <string name="jump_to_previous">আগের প্রশ্নে যান</string>
-  <string name="list_failed_with_error">ফরম সাজানো ব্যর্থ হয়েছে। %s.</string>
   <string name="loading_form">ফরম লোড হচ্ছে </string>
-  <string name="load_remote_form_error">ফরম এর তালিকা পেতে ত্রুটি পাওয়া গেছে।</string>
-  <string name="location_provider_accuracy">এখানে ব্যবহৃত %1$s. যার যথাযথতা হল %2$s m.</string>
-  <string name="location_accuracy">যথাযথতা মান %1$s m.</string>
   <string name="manage_files">সংরক্ষিত ফরম মুছে দিন </string>
   <string name="mark_finished">ফরম চূড়ান্ত হিসেবে চিন্হিত করুন </string>
   <string name="noselect_error">দুঃখিত, আপনি কোন ফরম  নির্বাচন করেন নি!</string>
@@ -73,8 +69,6 @@
   <string name="no_items_display_instances">প্রদর্শন করার মত কিছু পাওয়া যায়নি।\n\nTry ফরম পাঠানের পূর্বে চূড়ান্ত ফরম নিশ্চিত করে নিন।</string>
   <string name="ok">ঠিক আছে</string>
   <string name="parse_error">দুঃখিত, ফরম উদ্ধার করা সম্ভব হয়নি।</string>
-  <string name="parse_legacy_formlist_failed">সার্ভার থেকে Aggregate 0.9.x. : %s এর একযোগে ব্যবহারযোগ্য কোন ফরম পাওয়া যায় নি।</string>
-  <string name="parse_openrosa_formlist_failed">সার্ভার থেকে OpenRosa version 1.0 standard: %s এর একযোগে ব্যবহারযোগ্য কোন ফরম পাওয়া যায় নি।</string>
   <string name="password">পাসওয়ার্ড</string>
   <string name="play_video">ভিডিও চালান</string>
   <string name="please_wait">দয়া করে কিছু সময় অপেক্ষা করুন।</string>
@@ -110,7 +104,6 @@
   <string name="change_splash_path">ছবি পরিবর্তন করুন</string>
   <string name="keep_changes">পরিবর্তন সংরক্ষণকরুন</string>
   <string name="change_formlist_url">ফর্ম তালিকা URL পরিবর্তন</string>
-  <string name="change_protocol">প্লাটফর্ম</string>
   <string name="change_submission_url"> সাবমিশান URL পরিবর্তন</string>
   <string name="formlist_url">ফর্ম তালিকা URL</string>
   <string name="submission_url"> সাবমিশান URL</string>
@@ -126,8 +119,6 @@
   <string name="save_form_as">এই ফর্মের নাম</string>
   <string name="save_as_error">সংরক্ষিত নাম খালি রাখা যাবে না।</string>
   <string name="selected_google_account_text">গুগল একাউন্ট</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">অন্যান</string>
   <string name="font_size_extra_large">বিশাল বৃহৎ।</string>
   <string name="font_size_large">বৃহৎ</string>
   <string name="font_size_medium">মাঝারি</string>
@@ -149,7 +140,6 @@
   <string name="version">ভার্সন</string>
   <string name="launch_app">launch_app</string>
   <string name="no_app">অনুরোধকৃত  application অনুপস্থিত. অনুগ্রহ করে ম্যানোয়েলি তত্ত্ব নিন।</string>
-  <string name="select_one">দয়াকরে একটি উত্তর নির্বাচন করুন</string>
   <string name="save_and_close">সংরক্ষণ করেন এবং বন্ধ করেন</string>
   <string name="sign_button">সাক্ষর নিন।</string>
   <string name="markup_image">মার্কআপ চিত্র</string>
@@ -192,5 +182,4 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <!--Sms submission-->
 </resources>

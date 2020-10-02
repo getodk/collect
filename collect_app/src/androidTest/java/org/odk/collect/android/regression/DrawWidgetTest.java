@@ -3,7 +3,7 @@ package org.odk.collect.android.regression;
 import android.Manifest;
 
 import androidx.test.rule.GrantPermissionRule;
-import androidx.test.runner.AndroidJUnit4;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -92,14 +92,14 @@ public class DrawWidgetTest {
                 .clickOnId(R.id.simple_button)
                 .waitForRotationToEnd()
                 .clickOnId(R.id.fab_actions)
-                .checkIsStringDisplayed(R.string.set_color)
+                .assertText(R.string.set_color)
                 .checkIsIdDisplayed(R.id.fab_clear)
                 .clickOnId(R.id.fab_actions)
-                .checkIsStringDisplayed(R.string.set_color)
+                .assertText(R.string.set_color)
                 .checkIsIdDisplayed(R.id.fab_save_and_close)
                 .clickOnId(R.id.fab_actions)
-                .checkIsStringDisplayed(R.string.set_color)
-                .checkIsStringDisplayed(R.string.set_color)
+                .assertText(R.string.set_color)
+                .assertText(R.string.set_color)
                 .pressBack(new SaveOrIgnoreDialog<>("Sketch Image", new FormEntryPage("All widgets", rule), rule))
                 .clickSaveChanges()
                 .waitForRotationToEnd()

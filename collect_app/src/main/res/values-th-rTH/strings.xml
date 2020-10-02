@@ -2,12 +2,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">แสดงรหัสผ่าน</string>
   <string name="activity_not_found">ไม่มีกิจกรรมให้ดำเนินการ: %s</string>
+  <string name="view_image">ดูรูปภาพ</string>
+  <string name="signature_capture">ลงลายมือชื่อ</string>
+  <string name="view_video">ดูภาพเคลื่อนไหว</string>
   <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
   <string name="cancel">ยกเลิก</string>
   <string name="cancel_loading_form">ยกเลิก</string>
   <string name="cancel_location">ยกเลิก</string>
+  <string name="canceling">กำลังยกเลิก</string>
   <string name="capture_audio">บันทึกเสียง</string>
-  <string name="capture_image">บันทึกภาพ</string>
+  <string name="capture_image">ถ่ายภาพ</string>
   <string name="capture_osm">เปิด OpenMapKit</string>
   <string name="capture_video">บันทึกภาพเคลื่อนไหว</string>
   <string name="change_language">เปลี่ยนภาษา</string>
@@ -59,11 +63,7 @@
   <string name="jump_to_beginning">ไปที่จุดเริ่มต้น</string>
   <string name="jump_to_end">ไปที่จุดสิ้นสุด</string>
   <string name="jump_to_previous">เลื่อนขึ้น</string>
-  <string name="list_failed_with_error">ไม่สามารถแสดงรายการแบบสำรวจได้ %s.</string>
   <string name="loading_form">กำลังเปิดแบบสำรวจ</string>
-  <string name="load_remote_form_error">มีข้อผิดพลาด ไม่สามารถแสดงรายการแบบสำรวจได้</string>
-  <string name="location_provider_accuracy">รับพิกัดผ่าน %1$s ค่าความแม่นยำที่ %2$s เมตร</string>
-  <string name="location_accuracy">ความแม่นยำ %1$s เมตร</string>
   <string name="manage_files">ลบแบบสำรวจที่บันทึกไว้</string>
   <string name="mark_finished">ทำเครื่องหมายแบบสำรวจว่าเสร็จเรียบร้อยแล้ว</string>
   <string name="noselect_error">ขออภัย ท่านยังไม่ได้เลือกแบบสำรวจ</string>
@@ -73,8 +73,6 @@
   <string name="no_items_display_instances">ไม่มีข้อมูลให้แสดง \n\n ลองยืนยันข้อมูลที่บันทึกไว้ก่อนส่ง</string>
   <string name="ok">ตกลง</string>
   <string name="parse_error">ขออภัย ไม่สามารถเปิดแบบสำรวจได้</string>
-  <string name="parse_legacy_formlist_failed">เซิร์ฟเวอร์ที่เชื่อมต่ออยู่ไม่มีแบบสำรวจที่ใช้งานได้กับ Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">เซิร์ฟเวอร์ที่เชื่อมต่ออยู่ไม่มีแบบสำรวจที่ใช้งานได้กับ OpenRosa version 1.0 standard: %s</string>
   <string name="password">รหัสผ่าน</string>
   <string name="play_video">เปิดภาพเคลื่อนไหว</string>
   <string name="please_wait">โปรดรอสักครู่</string>
@@ -113,22 +111,17 @@
   <string name="change_splash_path">เปลี่ยนภาพใหม่</string>
   <string name="keep_changes">บันทึกการเปลี่ยนแปลง</string>
   <string name="change_formlist_url">Form list path (appended to URL)</string>
-  <string name="change_protocol">Platform</string>
   <string name="change_submission_url">Submission path (appended to URL)</string>
   <string name="formlist_url">Form list path</string>
   <string name="submission_url">Submission path</string>
   <string name="font_size">ขนาดตัวอักษร</string>
   <string name="change_font_size">ขนาดอักษร</string>
-  <string name="access_error">มีข้อผิดพลาดขณะเปิด %s:</string>
-  <string name="manifest_server_error">Manifest reply does not report an OpenRosa version — bad server?</string>
-  <string name="root_element_error">Root element is not &lt;manifest\&gt; — was %s</string>
-  <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
-  <string name="manifest_tag_error">Manifest entry %s is missing one or more tags: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
   <string name="fetching_manifest">%s. Getting manifest </string>
   <string name="success">สำเร็จ</string>
   <string name="no_forms_uploaded">ขออภัย ไม่สามารถส่งแบบสำรวจได้</string>
   <string name="upload_results">ส่งผลสำรวจ</string>
+  <string name="choose_file">เลือกไฟล์</string>
   <string name="choose_sound">เลือกไฟล์เสียง</string>
   <string name="choose_video">เลือกภาพเคลื่อนไหว</string>
   <string name="choose_image">เลือกรูปภาพ</string>
@@ -138,8 +131,6 @@
   <string name="save_as_error">Saved name must not be blank!</string>
   <string name="edit_prompt">แก้ไขจุดที่เลือก</string>
   <string name="selected_google_account_text">บัญชีกูเกิล</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">อื่นๆ</string>
   <string name="font_size_extra_large">ขนาดใหญ่พิเศษ</string>
   <string name="font_size_large">ขนาดใหญ่</string>
   <string name="font_size_medium">ขนาดปานกลาง</string>
@@ -163,7 +154,6 @@
   <string name="parent_form_not_present">ไม่สามารถแก้ไขฟอร์มที่บันทึกไว้ได้ เนื่องจากฟอร์มเปล่าไม่มีอยู่หรือถูกลบไปแล้ว \n\nForm ID: %1$s</string>
   <string name="launch_app">เริ่มการทำงาน</string>
   <string name="no_app">ไม่พบโปรแกรมที่เรียกใช้ กรุณากรอกข้อมูลด้วยตนเอง</string>
-  <string name="select_one">เลือกคำตอบใดคำตอบหนึ่ง</string>
   <string name="savepoint_used">กู้คืนข้อมูลจากจุดที่บันทึกไว้</string>
   <string name="save_and_close">บันทึกและปิดการทำงาน</string>
   <string name="sign_button">บันทึกลายมือชื่อ</string>
@@ -181,9 +171,11 @@
   <string name="admin_password_incorrect">ขออภัย รหัสผ่านไม่ถูกต้อง</string>
   <string name="enter_admin_password">ใส่รหัสผ่านสำหรับผู้ควบคุมระบบ</string>
   <string name="change_admin_password">เปลี่ยนรหัสผ่านของผู้ดูแลระบบ</string>
+  <string name="autosend">ส่งอัตโนมัติ</string>
   <string name="found_in_main">ปล่อยว่างเพื่อซ่อนจากเมนูหลัก</string>
   <string name="found_in_settings">ปล่อยว่างเพื่อซ่อนจากเมนูตั้งค่าทั่วไป</string>
   <string name="form_forward">ต่อไป</string>
+  <string name="form_backward">ย้อนกลับ</string>
   <string name="navigation">ค้นหา</string>
   <string name="swipe_navigation">ใช้การเลื่อนหน้าจอไปด้านข้าง</string>
   <string name="buttons_navigation">ใช่ปุ่มเลื่อนไปข้างหน้า/ย้อนกลับ</string>
@@ -194,6 +186,7 @@
   <string name="constraint_behavior_on_swipe">ตรวจสอบเมื่อปัดเลื่อนไปข้างหน้า</string>
   <string name="constraint_behavior_on_finalize">เลื่อนการตรวจสอบไปจนกว่าการสำรวจสิ้นสุด</string>
   <string name="view_change_location">แสดงหรือเปลี่ยนตำแหน่ง</string>
+  <string name="change_location">เปลี่ยนตำแหน่งพิกัด</string>
   <string name="open_url">ไปที่ Url</string>
   <string name="get_bearing">บันทึกทิศทาง</string>
   <string name="replace_bearing">แทนที่ทิศทาง</string>
@@ -227,9 +220,6 @@
   <string name="go_drive">My Drive</string>
   <string name="go_shared">แบ่งปันกับฉัน</string>
   <string name="modified_on_date_at_time">\'แก้ไขเมื่อ\' EEE, MMM dd, yyy \'เวลา\' HH:mm</string>
-  <string name="aggregate_preferences">ตั้งค่า ODK Aggregate</string>
-  <string name="other_preferences">ตั้งค่า Platform อื่น</string>
-  <string name="google_preferences">การตั้งค่า Google Sheets</string>
   <string name="drive_get_file">ได้รับ %1$s และไฟล์ภาพและเสียง</string>
   <string name="no_google_account">ไม่ได้เลือกบัญชีผู้ใช้งาน Google</string>
   <string name="google_set_account">คุณเลือก Google Sheets เป็นเซิร์ฟเวอร์ โปรดเลือกบัญชี Google ที่เกี่ยวข้องในการตั้งค่าทั่วไปก่อนดำเนินการต่อ</string>
@@ -247,6 +237,7 @@
 </string>
   <string name="about_preferences">เกี่ยวกับ</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <string name="maps">แผนที่</string>
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
       These strings are only being used to preserve compatibility with pre-existing
        tile caches, and are not shown in the UI.-->
@@ -327,14 +318,11 @@
   <string name="email">ที่อยู่อีเมล์</string>
   <string name="user_defined">กำหนดโดยผู้ใช้งาน</string>
   <string name="device_defined">กำหนดโดยโทรศัพท์</string>
-  <string name="device_id">รหัสประจำเครื่อง</string>
-  <string name="subscriber_id">รหัสลงทะเบียน</string>
-  <string name="sim_serial_id">หมายเลข SIM serial</string>
   <string name="select_date">เลือกวันที่</string>
   <string name="select_time">เลือกเวลา</string>
   <string name="no_date_selected">ยังไม่ได้เลือกวันที่</string>
   <string name="no_time_selected">ยังไม่ได้เลือกเวลา</string>
+  <string name="autosend_selector_title">ส่งอัตโนมัติ</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <!--Sms submission-->
 </resources>

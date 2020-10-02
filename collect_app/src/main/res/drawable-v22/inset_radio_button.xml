@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="?android:attr/listChoiceIndicatorSingle"
+    android:insetLeft="@dimen/margin_standard"
+    android:insetRight="@dimen/margin_standard"/>

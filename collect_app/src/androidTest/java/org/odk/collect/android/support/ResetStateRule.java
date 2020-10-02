@@ -1,6 +1,7 @@
 package org.odk.collect.android.support;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -10,9 +11,10 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.preferences.MetaSharedPreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
-import org.odk.collect.android.utilities.ResetUtility;
+import org.odk.collect.android.utilities.ApplicationResetter;
+import org.odk.collect.android.utilities.MultiClickGuard;
 
 import java.util.Arrays;
 import java.util.List;
@@ -56,47 +58,61 @@ public class ResetStateRule implements TestRule {
 
         @Override
         public void evaluate() throws Throwable {
-            // Reset any singleton state
-            if (appDependencyModule != null) {
-                CollectHelpers.overrideAppDependencyModule(appDependencyModule);
-            } else {
-                CollectHelpers.overrideAppDependencyModule(new AppDependencyModule());
-            }
-
-            // Make sure we clear all our shared prefs - ignore logic that doesn't reset keys
             Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-            PreferenceManager.getDefaultSharedPreferences(context).edit().clear().commit();
-            context.getSharedPreferences(ADMIN_PREFERENCES, 0).edit().clear().commit();
-            new MetaSharedPreferencesProvider(context).getMetaSharedPreferences().edit().clear().commit();
 
-            // Reset the app in both the old and new storage locations (just nuke dirs)
-            List<Integer> resetActions = Arrays.asList(
-                    ResetUtility.ResetAction.RESET_PREFERENCES,
-                    ResetUtility.ResetAction.RESET_INSTANCES,
-                    ResetUtility.ResetAction.RESET_FORMS,
-                    ResetUtility.ResetAction.RESET_LAYERS,
-                    ResetUtility.ResetAction.RESET_CACHE,
-                    ResetUtility.ResetAction.RESET_OSM_DROID
-            );
+            resetDagger();
+            clearSharedPrefs(context);
+            clearDisk();
+            setTestState();
 
-            new StorageStateProvider().disableUsingScopedStorage();
-            new ResetUtility().reset(context, resetActions);
-            new StorageStateProvider().enableUsingScopedStorage();
-            new ResetUtility().reset(context, resetActions);
-
-            // Setup storage location for tests
-            if (useScopedStorage) {
-                new StorageStateProvider().enableUsingScopedStorage();
-            } else {
-                new StorageStateProvider().disableUsingScopedStorage();
-            }
-
-            // Any dependencies (PropertyManager for instance) will already have been
-            // passed to JavaRosa so make sure everything is reset
-            ((Collect) context.getApplicationContext()).initializeJavaRosa();
+            // Reinitialize any application state with new deps/state
+            ((Collect) context.getApplicationContext()).getComponent().applicationInitializer().initialize();
 
             base.evaluate();
         }
+    }
+
+    private void setTestState() {
+        MultiClickGuard.test = true;
+    }
+
+    private void clearDisk() {
+        // Reset the app in both the old and new storage locations (just nuke dirs)
+        List<Integer> resetActions = Arrays.asList(
+                ApplicationResetter.ResetAction.RESET_PREFERENCES,
+                ApplicationResetter.ResetAction.RESET_INSTANCES,
+                ApplicationResetter.ResetAction.RESET_FORMS,
+                ApplicationResetter.ResetAction.RESET_LAYERS,
+                ApplicationResetter.ResetAction.RESET_CACHE,
+                ApplicationResetter.ResetAction.RESET_OSM_DROID
+        );
+
+        new StorageStateProvider().disableUsingScopedStorage();
+        new ApplicationResetter().reset(resetActions);
+        new StorageStateProvider().enableUsingScopedStorage();
+        new ApplicationResetter().reset(resetActions);
+
+        // Setup storage location for tests
+        if (useScopedStorage) {
+            new StorageStateProvider().enableUsingScopedStorage();
+        } else {
+            new StorageStateProvider().disableUsingScopedStorage();
+        }
+    }
+
+    private void resetDagger() {
+        if (appDependencyModule != null) {
+            CollectHelpers.overrideAppDependencyModule(appDependencyModule);
+        } else {
+            CollectHelpers.overrideAppDependencyModule(new AppDependencyModule());
+        }
+    }
+
+    private void clearSharedPrefs(Context context) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().clear().commit();
+        context.getSharedPreferences(ADMIN_PREFERENCES, 0).edit().clear().commit();
+        SharedPreferences metaSharedPreferences = new PreferencesProvider(context).getMetaSharedPreferences();
+        metaSharedPreferences.edit().clear().commit();
     }
 
 }

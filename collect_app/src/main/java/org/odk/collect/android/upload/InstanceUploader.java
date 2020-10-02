@@ -22,20 +22,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
-
 public abstract class InstanceUploader {
-    static final String FAIL = "Error: ";
+    public static final String FAIL = "Error: ";
 
     /**
      * Uploads the specified instance to the specified destination URL. It may return a custom
@@ -87,40 +83,22 @@ public abstract class InstanceUploader {
         return instancesToUpload;
     }
 
-    void saveSuccessStatusToDatabase(Instance instance) {
+    public void saveSuccessStatusToDatabase(Instance instance) {
         Uri instanceDatabaseUri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI,
-                instance.getDatabaseId().toString());
+                instance.getId().toString());
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
-        contentValues.put(InstanceColumns.T_TASK_STATUS, InstanceProviderAPI.STATUS_SUBMITTED);     // smap
+        contentValues.put(InstanceColumns.STATUS, Instance.STATUS_SUBMITTED);
+        contentValues.put(InstanceColumns.T_TASK_STATUS, Instance.STATUS_SUBMITTED);     // smap
         Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
     }
 
-    void saveFailedStatusToDatabase(Instance instance) {
+    public void saveFailedStatusToDatabase(Instance instance) {
         Uri instanceDatabaseUri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI,
-                instance.getDatabaseId().toString());
+                instance.getId().toString());
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+        contentValues.put(InstanceColumns.STATUS, Instance.STATUS_SUBMISSION_FAILED);
         Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
-    }
-
-    /**
-     * Returns whether instances of the form specified should be auto-deleted after successful
-     * update.
-     *
-     * If the form explicitly sets the auto-delete property, then it overrides the preference.
-     */
-    public static boolean formShouldBeAutoDeleted(String jrFormId, boolean isAutoDeleteAppSettingEnabled) {
-        String autoDelete = null;
-        try (Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId)) {
-            if (cursor != null && cursor.moveToFirst()) {
-                int autoDeleteColumnIndex = cursor.getColumnIndex(AUTO_DELETE);
-                autoDelete = cursor.getString(autoDeleteColumnIndex);
-            }
-        }
-
-        return autoDelete == null ? isAutoDeleteAppSettingEnabled : Boolean.valueOf(autoDelete);
     }
 }

@@ -71,11 +71,7 @@
   <string name="jump_to_beginning">Перейти на початок</string>
   <string name="jump_to_end">Перейти в кінець</string>
   <string name="jump_to_previous">Перейти назад</string>
-  <string name="list_failed_with_error">Складання списку не вдалося. %s.</string>
   <string name="loading_form">Завантаження анкети</string>
-  <string name="load_remote_form_error">Помилка отримання списку анкет</string>
-  <string name="location_provider_accuracy">Використання %1$s. Точність %2$s м.</string>
-  <string name="location_accuracy">Точність %1$s м</string>
   <string name="manage_files">Видалити збережену анкету</string>
   <string name="mark_finished">Позначити анкету як завершену</string>
   <string name="noselect_error">Вибачте, Ви не обрали жодної анкети!</string>
@@ -86,8 +82,6 @@
   <string name="no_items_display_instances">Нічого доступного для відображення.\n\nСпробуйте перед надсиланням позначити збережені анкети як завершені.</string>
   <string name="ok">Добре</string>
   <string name="parse_error">Вибачте, неможливо розібрати анкету.</string>
-  <string name="parse_legacy_formlist_failed">На сервері відсутні анкети сумісні з Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">На сервері відсутні анкети сумісні з стандартом OpenRosa версії 1.0: %s</string>
   <string name="password">Пароль</string>
   <string name="play_video">Відтворити відео</string>
   <string name="please_wait">Будь ласка, зачекайте.</string>
@@ -108,8 +102,6 @@
   <string name="send_data">Надіслати завершену анкету</string>
   <string name="send_data_button">Надіслати завершену анкету (%s)</string>
   <string name="send_selected_data">Надіслати обране</string>
-  <string name="send_selected_data_internet">Надіслати (Інтернет)</string>
-  <string name="send_selected_data_sms">Надіслати (Повідомлення)</string>
   <string name="view_sent_forms">Переглянути надіслану анкету</string>
   <string name="view_sent_forms_button">Переглянути надіслану анкету (%s)</string>
   <string name="server_auth_credentials">Неправильні ім\'я користувача або пароль до сервера: %s</string>
@@ -131,17 +123,11 @@
   <string name="change_splash_path">Змінити зображення</string>
   <string name="keep_changes">Зберегти зміни</string>
   <string name="change_formlist_url">Шлях до списку анкет (додається до URL)</string>
-  <string name="change_protocol">Платформа</string>
   <string name="change_submission_url">Шлях надсилання (додається до URL)</string>
   <string name="formlist_url">Шлях до списку анкет</string>
   <string name="submission_url">Шлях надсилання</string>
   <string name="font_size">Розмір шрифту</string>
   <string name="change_font_size">Розмір шрифту</string>
-  <string name="access_error">Помилка підчас доступу до %s:</string>
-  <string name="manifest_server_error">Маніфест відповідь не повідомляє версію OpenRosa — помилковий серевер?</string>
-  <string name="root_element_error">Кореневий елемент не є &lt;маніфест\&gt; — був %s</string>
-  <string name="root_namespace_error">Кореневий елемент має некоректну назву: %s</string>
-  <string name="manifest_tag_error">В записі маніфесту  %s є один або більше пропущені теги: filename, hash, чи downloadUrl</string>
   <string name="form_download_progress">%1$s. Отримання медіа файлу: %2$s з %3$s</string>
   <string name="fetching_manifest">%s. Отримання маніфесту</string>
   <string name="success">Успішно!</string>
@@ -159,8 +145,6 @@
   <string name="save_as_error">Ім’я не може бути порожнім!</string>
   <string name="edit_prompt">Редагувати запит</string>
   <string name="selected_google_account_text">Обліковий запис Google</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Інше</string>
   <string name="font_size_extra_large">Дуже великий</string>
   <string name="font_size_large">Великий</string>
   <string name="font_size_medium">Середній</string>
@@ -185,7 +169,6 @@
   <string name="parent_form_not_present">Неможливо відредагувати збережену анкету бо відповідна незаповнена анкета відсутня або була видалена.\n\nID анкети: %1$s</string>
   <string name="launch_app">Запустити</string>
   <string name="no_app">Потрібна програма відсутня. Будь ласка, введіть показники вручну.</string>
-  <string name="select_one">Оберіть одну відповідь</string>
   <string name="savepoint_used">Незбережені зміни відновлені з місця збереження!</string>
   <string name="save_and_close">Зберегти та закрити</string>
   <string name="sign_button">Отримати підпис</string>
@@ -260,12 +243,6 @@
   <string name="go_drive">Мій диск</string>
   <string name="go_shared">Розділене зі мною</string>
   <string name="modified_on_date_at_time">\'Зімінено в\' EEE, dd MMM, yyyy \'at\' HH:mm</string>
-  <string name="aggregate_preferences">Налаштування ODK Aggregate</string>
-  <string name="sms_submission_preferences">Налаштування повідомлень</string>
-  <string name="submission_transport">Транспортування відправлень (розширені)</string>
-  <string name="submission_transport_types_title">Надіслати відправлення через</string>
-  <string name="other_preferences">Налаштування інших платформ</string>
-  <string name="google_preferences">Налаштування Google Сторінок</string>
   <string name="google_sheets_url_hint">URL для відправки має бути зазначено в анкетах. Інакше, буде використано цей URL.</string>
   <string name="drive_get_file">Отримання %1$s та медіа файлів.</string>
   <string name="no_google_account">Не вибраний жоден обліковий запис Google!</string>
@@ -347,7 +324,6 @@
     <item quantity="many">%d метрів</item>
     <item quantity="other">%d метрів</item>
   </plurals>
-  <string name="location_status_searching">Пошук розташування GPS, будь ласка, зачекайте…</string>
   <string name="collection_status_paused">Введених точок: %d</string>
   <string name="collection_status_placement">Введених точок: %d (ткніть для розміщення точок)</string>
   <string name="collection_status_manual">Введених точок: %d (ручний запис)</string>
@@ -379,11 +355,10 @@
   <string name="record_geopoint">Записати точку</string>
   <string name="gps_result">Широта: %1$s\nДовгота: %2$s\nВисота: %3$sm\nТочність: %4$sm</string>
   <string name="parser_exception">XPathParser Exception: \"%s\"</string>
-  <string name="selected_answer">Обрано: %s</string>
   <string name="version_number">Версія: %s</string>
   <string name="id_number">ID: %s</string>
   <string name="odk_website">Перейти на сайт ODK</string>
-  <string name="odk_website_summary">Open Data Kit (ODK) використовується для збору даних для суспільних потреб.</string>
+  <string name="odk_website_summary">ODK використовується для збору даних для суспільних потреб.</string>
   <string name="odk_forum">Долучитись до форуму ODK</string>
   <string name="odk_forum_summary">Долучайтесь до форуму аби отримати допомогу, запросити нові функції, допомогти в створенні коду чи перекладу!</string>
   <string name="all_open_source_licenses">Відкриті бібліотеки/ліцензії</string>
@@ -450,9 +425,6 @@
   <string name="email">Електронна адреса</string>
   <string name="user_defined">Визначено користувачем</string>
   <string name="device_defined">Визначено пристроєм</string>
-  <string name="device_id">ID пристрою</string>
-  <string name="subscriber_id">ID підписника</string>
-  <string name="sim_serial_id">Серійний номер SIM</string>
   <string name="select_date">Обрати дату</string>
   <string name="select_time">Обрати час</string>
   <string name="no_date_selected">Дата не обрана</string>
@@ -467,7 +439,6 @@
   <string name="include_password_dialog">Паролі Включені в Код</string>
   <string name="generate">Згенерувати</string>
   <string name="invalid_qrcode">QR код не містить коректних налаштувань</string>
-  <string name="share_qrcode">Поділитись QR кодом</string>
   <string name="take_picture_instruction">Щоб зробити знімок торкніться екрану</string>
   <string name="error_front_camera_unavailable">Фронтальна камера на цьому пристрої не доступна</string>
   <string name="camera_error">Цей пристрій не підтримує Camera2 API.</string>
@@ -582,13 +553,10 @@
   <string name="record_audio_runtime_permission_denied_desc">Без цього дозволу Collect не має доступу до мікрофону. Будь ласка, спробуйте знову коли будете готові надати його.</string>
   <string name="get_accounts_runtime_permission_denied_title">Отримати дозволи облікового запису</string>
   <string name="get_accounts_runtime_permission_denied_desc">Без цього дозволу Collect не має доступу до облікових записів. Будь ласка, спробуйте знову коли будете готові надати його.</string>
-  <string name="send_sms_runtime_permission_denied_title">Дозвіл надсилати повідомлення</string>
-  <string name="send_sms_runtime_permission_denied_desc">Без цього дозволу Collect не може надсилати повідомлення. Будь ласка, спробуйте знову коли будете готові надати його.</string>
   <string name="read_phone_state_runtime_permission_denied_title">Сатус телефону</string>
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect не робить телефонних дзвінків але потребує доступу до певних властивостей вашого пристрою як то номер телефну та ID пристрою</string>
   <string name="form_update_category">Оновлення анкети</string>
   <string name="periodic_form_updates_check_title">Періодична перерівка оновлень анкет</string>
-  <string name="never">Ніколи</string>
   <string name="every_fifteen_minutes">Кожних п\'ятнадцять хвилин</string>
   <string name="every_one_hour">Щогодини</string>
   <string name="every_six_hours">Кожні шість годин</string>
@@ -606,35 +574,10 @@
   <string name="instance_upload_cancelled">Завантаження екземпляру скасовано</string>
   <string name="hide_old_form_versions_setting_title">Приховати старі версії анкет</string>
   <string name="hide_old_form_versions_setting_summary">Тільки найновіша версія буде відображена в Заповнити анкету</string>
-  <string name="sms_pref_dialog_title">Номер телефону отримувача</string>
-  <string name="sms_pref_title">Номер телефону отримувача</string>
-  <string name="sms_invalid_phone_number">Некоректний номер!</string>
-  <!--Sms submission-->
-  <string name="sms_no_reception">\'Не вдалося\' EEE, MMM dd, yyyy \'в\' HH:mm \'через відсутність отримувача\'</string>
-  <string name="sms_no_number">\'Не вдалося\' EEE, MMM dd, yyyy \'в\' HH:mm \'через не вказаний номер телефону\'</string>
-  <string name="sms_fatal_error">\'Не вдалося\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
-  <string name="sms_airplane_mode">\'Не вдалося\' EEE, MMM dd, yyyy \'в\' HH:mm \'через ввімкнений Режим Без Зв/\'язку\'</string>
-  <string name="sms_no_message">Ця анкета не має питань з позначками повідомлень.</string>
-  <string name="sms_encrypted_message">Зашифровані анкети не можуть бути відправлені як повідомлення.</string>
-  <string name="sms_last_submission_on_date_at_time">\'Остання спроба відправки\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
-  <plurals name="sms_sending" tools:ignore="ImpliedQuantity">
-    <item quantity="one">Надсилання анкети як повдомлення.</item>
-    <item quantity="few">Надсилання анкети, повдомлення %1$d з %2$d</item>
-    <item quantity="many">Надсилання анкети, повдомлення %1$d з %2$d</item>
-    <item quantity="other">Надсилання анкети, повдомлення %1$d з %2$d</item>
-  </plurals>
-  <string name="sms_sent_on_date_at_time">\'Надіслана як повідомлення\' EEE, MMM dd, yyyy \'о\' HH:mm</string>
-  <string name="sms_submission_queued">Черга на надсилання.</string>
-  <string name="sms_submissions_notif_title">Надсилання повідомлень</string>
-  <string name="sms_submissions_notif_description">Декілька анкет наразі надсилаються.</string>
-  <string name="transport_type_internet">Wifi/Мобільна мережа (рекомендовано)</string>
-  <string name="transport_type_sms">Повідомлення</string>
-  <string name="transport_type_both">Обрати та надіслати</string>
   <string name="rank_items">Засоби оцінки</string>
   <string name="loading_form_failed">Під час завантаження анкети виникла помилка. Будь ласка спробуйте знову.</string>
   <string name="missing_google_account_dialog_title">Нема облікового запису Google</string>
   <string name="missing_google_account_dialog_desc">Щоб надіслати анкету через Google Таблиці Ви повинні налаштувати обліковий запис Google в налаштуваннях сервера.</string>
-  <string name="sms_invalid_phone_number_description">Вкажіть номер телефону для надсиланнячерез повідомлення або замініть тип відправки.</string>
   <string name="notification_channel_name">Загальні сповіщення</string>
   <string name="corrupt_imported_preferences_error">Ці налаштування пошкоджені. Через адміністративні налаштування стиньте налаштування програми або імпортуйте непошкоджені.</string>
   <string name="google_play_services_not_available">Ця анкета хоче відслідковувати ваше розташування але Сервіси Google Play не доступні.</string>
@@ -644,5 +587,4 @@
   <string name="background_location_disabled">Ця анкета хоче відслідковувати ваше розташування але відслідковування вимкнене. Будь ласка, увімкніть його в %1$s меню.</string>
   <string name="background_location_enabled">Ця анкета відслідковує ваше розташування. Ви можете вимкнути відслідковування в %1$s меню.</string>
   <string name="open_file">Відкрити файл</string>
-  <string name="read_details">Прочитайте докладну інформацію</string>
 </resources>

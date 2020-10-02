@@ -86,15 +86,11 @@
   <string name="change_splash_path">Görüntüyü Değiştir</string>
   <string name="keep_changes">Değişiklikleri Kaydet</string>
   <string name="change_formlist_url">Form liste yolu(URL\'ye eklenmiş)</string>
-  <string name="change_protocol">Platform</string>
   <string name="change_submission_url">Gönderim yolu( URL ye eklenmiş)</string>
   <string name="formlist_url">Form listesi yolu</string>
   <string name="submission_url">Gönderim yolu</string>
   <string name="font_size">Text font büyüklüğü</string>
   <string name="change_font_size">Text font büyüklüğü</string>
-  <string name="access_error">Hata:%s ulaşırken</string>
-  <string name="root_element_error">kök element  &lt;manifest\&gt; — was %s degil</string>
-  <string name="root_namespace_error">Kök elementin alanadi doğru değil: %s</string>
   <string name="form_download_progress">%1$s. Alinan medya dosyasi : %2$s of %3$s</string>
   <string name="success">Başarılı</string>
   <string name="no_forms_uploaded">Herhangi bir form gönderilmedi.</string>
@@ -107,8 +103,6 @@
   <string name="save_form_as">Form ismi </string>
   <string name="save_as_error">İsim alani boş bırakilamaz</string>
   <string name="selected_google_account_text">Google account</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Diğer</string>
   <string name="font_size_extra_large">Çok Büyük</string>
   <string name="font_size_large">Büyük</string>
   <string name="font_size_medium">Orta</string>
@@ -123,7 +117,6 @@
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="version">Version:</string>
   <string name="launch_app">Başla</string>
-  <string name="select_one">Bir cevap seçin</string>
   <string name="save_and_close">Sakla ve Kapat</string>
   <string name="admin_preferences">Yönetici Ayarlari</string>
   <string name="admin_access_settings">Yöbetici Ayarlari için Tap</string>
@@ -149,5 +142,4 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <!--Sms submission-->
 </resources>

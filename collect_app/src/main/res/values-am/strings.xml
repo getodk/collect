@@ -57,9 +57,7 @@
   <string name="jump_to_beginning">ወደ መጀመሪያ ይሂዱ</string>
   <string name="jump_to_end">ወደ መጨረሻ ይሂዱ</string>
   <string name="jump_to_previous">ወደ ላይ ውጣ</string>
-  <string name="list_failed_with_error">የቅፅ ዝርዝሩ አልተሳካም፡፡ 1 %s</string>
   <string name="loading_form">ቅጽ በመጫን ላይ</string>
-  <string name="load_remote_form_error">የቅጽ ዝርዝር ማግኘት ላይ ስህተት ተከስቷል</string>
   <string name="manage_files">የተሞላዉን ቅጽ ያጥፉ</string>
   <string name="mark_finished">ቅጹን እንደተጠናቀቀ ምልክት አድርግ</string>
   <string name="noselect_error">ይቅርታ፣ ምንም ቅጽ አልመረጡም!</string>
@@ -70,7 +68,6 @@
   <string name="no_items_display_instances">ምንም የሚታይ ነገር የለም:: \n\n ከመላኩ በፊት የተቀመጡ ቅጾች ማጠናቀቅ ይሞክሩ</string>
   <string name="ok">እሺ</string>
   <string name="parse_error">ይቅርታ፣ ቅፁን ለመተንተን አልተቻለም</string>
-  <string name="parse_legacy_formlist_failed">ሰርቨሩ ከ Aggregate 0.9.x ጋር የሚጣጣምና የሚገኝ ቅፅ ሰነድ አላቀረበም፡፡ 1 %s</string>
   <string name="password">የይለፍ ቃል</string>
   <string name="play_video">ቪድዮ አጫውት</string>
   <string name="please_wait">እባክዎ ጥቂት ጊዜ ይጠብቁ</string>
@@ -118,8 +115,6 @@
   <string name="save_form_as">ይህን ቅጽ ይሰይሙ</string>
   <string name="save_as_error">የተቀመጠው ስም ባዶ መሆን የለበትም!</string>
   <string name="selected_google_account_text">የ Google መለያ</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">ሌላ</string>
   <string name="font_size_extra_large">በጣም ትልቅ</string>
   <string name="font_size_large">ትልቅ</string>
   <string name="font_size_medium">መካከለኛ</string>
@@ -141,7 +136,6 @@
   <string name="deleted_on_date_at_time">\'የተሰረዘዉ በ\' EEE፣ ወወወ ቀቀ ዓዓዓዓ \'በ\' ሰሰ:ደደ</string>
   <string name="version">ስሪት:</string>
   <string name="launch_app">አስጀምር</string>
-  <string name="select_one">አንድ መልስ ብቻ ይምረጡ</string>
   <string name="savepoint_used">ያልተቀመጡ ለውጦች በጥንቃቄ ተመልሰዋል!</string>
   <string name="save_and_close">አስቀምጥ እና ዝጋ</string>
   <string name="sign_button">ፊርማ ያሰባስቡ</string>
@@ -185,8 +179,6 @@
   <string name="google_drive">ጉግል Drive</string>
   <string name="go_drive">የእኔ Drive</string>
   <string name="go_shared">ከእኔ ጋር የተጋሩ</string>
-  <string name="aggregate_preferences">ODK Aggregate ቅንጅቶች</string>
-  <string name="other_preferences">ሌሎች ስርዓተ ቅንብሮች</string>
   <string name="no_google_account">ምንም የ Google መለያ አልተመረጠም!</string>
   <string name="google_set_account">Google ሉሆችን እንደ አገልጋይዎ መርጠዋል, እባክዎ ከመቀጠልዎ በፊት በአጠቃላይ ቅንብሮች ውስጥ ተዛማጅ የ Google መለያ ይምረጡ</string>
   <string name="notification_error">የማሳወቂያ ጽሁፍ በማሳየት ላይ ስህተት</string>
@@ -215,7 +207,6 @@
   <string name="install_openmapkit">እባክዎ OpenMapKitን ይጫኑ!</string>
   <string name="go_back">ተመለስ</string>
   <string name="download_selected">የተመረጠውን አውርድ</string>
-  <string name="selected_answer">ተመርጧል: 1 %s</string>
   <string name="version_number">ሥሪት: 1 %s</string>
   <string name="odk_website">የODKን ድረ ገፅ ይጎብኙ</string>
   <string name="odk_forum">የODKን መድረክ ይቀላቀሉ</string>
@@ -281,5 +272,4 @@
   <string name="moving_backwards_enabled_title">ወደኋላ መሄድ ተመርጧል</string>
   <string name="yes">አዎ</string>
   <string name="no">አይ</string>
-  <!--Sms submission-->
 </resources>

@@ -31,7 +31,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
@@ -39,12 +39,12 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
-import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
@@ -57,7 +57,9 @@ import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.utilities.ViewUtils;
 import org.odk.collect.android.widgets.interfaces.Widget;
+import org.odk.collect.android.widgets.items.SelectImageMapWidget;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -91,7 +93,7 @@ public abstract class QuestionWidget
     private AtomicBoolean expanded;
     private Bundle state;
     protected final ThemeUtils themeUtils;
-    protected final AudioHelper audioHelper;
+    protected AudioHelper audioHelper;
     private final ViewGroup containerView;
     private final QuestionTextSizeHelper questionTextSizeHelper = new QuestionTextSizeHelper();
 
@@ -177,17 +179,23 @@ public abstract class QuestionWidget
         String imageURI = this instanceof SelectImageMapWidget ? null : prompt.getImageText();
         String videoURI = prompt.getSpecialFormQuestionText("video");
         String bigImageURI = prompt.getSpecialFormQuestionText("big-image");
-        label.setImageVideo(
-                imageURI,
-                videoURI,
-                bigImageURI,
-                getReferenceManager()
-        );
-
         String playableAudioURI = getPlayableAudioURI(prompt, referenceManager);
-        if (playableAudioURI != null) {
-            label.setAudio(playableAudioURI, audioHelper);
-            //analytics.logEvent(AUDIO_QUESTION, "AudioLabel", questionDetails.getFormAnalyticsID());   // smap commented
+        try {
+            if (imageURI != null) {
+                audioVideoImageTextLabel.setImage(new File(referenceManager.deriveReference(imageURI).getLocalURI()));
+            }
+            if (bigImageURI != null) {
+                audioVideoImageTextLabel.setBigImage(new File(referenceManager.deriveReference(bigImageURI).getLocalURI()));
+            }
+            if (videoURI != null) {
+                audioVideoImageTextLabel.setVideo(new File(referenceManager.deriveReference(videoURI).getLocalURI()));
+            }
+            if (playableAudioURI != null) {
+                label.setAudio(playableAudioURI, audioHelper);
+                //analytics.logEvent(AUDIO_QUESTION, "AudioLabel", questionDetails.getFormAnalyticsID()); // smap commented
+            }
+        } catch (InvalidReferenceException e) {
+            Timber.d(e, "Invalid media reference due to %s ", e.getMessage());
         }
 
         label.setPlayTextColor(getPlayColor(formEntryPrompt, themeUtils));
@@ -451,52 +459,6 @@ public abstract class QuestionWidget
             }
         }
         return nochoose;
-    }
-
-    @Override
-    public final void waitForData() {
-        Collect collect = Collect.getInstance();
-        if (collect == null) {
-            throw new IllegalStateException("Collect application instance is null.");
-        }
-
-        FormController formController = collect.getFormController();
-        if (formController == null) {
-            return;
-        }
-
-        formController.setIndexWaitingForData(getFormEntryPrompt().getIndex());
-    }
-
-    @Override
-    public final void cancelWaitingForData() {
-        Collect collect = Collect.getInstance();
-        if (collect == null) {
-            throw new IllegalStateException("Collect application instance is null.");
-        }
-
-        FormController formController = collect.getFormController();
-        if (formController == null) {
-            return;
-        }
-
-        formController.setIndexWaitingForData(null);
-    }
-
-    @Override
-    public final boolean isWaitingForData() {
-        Collect collect = Collect.getInstance();
-        if (collect == null) {
-            throw new IllegalStateException("Collect application instance is null.");
-        }
-
-        FormController formController = collect.getFormController();
-        if (formController == null) {
-            return false;
-        }
-
-        FormIndex index = getFormEntryPrompt().getIndex();
-        return index.equals(formController.getIndexWaitingForData());
     }
 
     //region Accessors

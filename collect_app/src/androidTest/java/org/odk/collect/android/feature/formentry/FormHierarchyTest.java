@@ -12,6 +12,8 @@ import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
+import org.odk.collect.android.support.pages.AddNewRepeatDialog;
+import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.FormHierarchyPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
@@ -35,10 +37,11 @@ public class FormHierarchyTest {
             .around(new CopyFormRule("formHierarchy1.xml", null))
             .around(new CopyFormRule("formHierarchy2.xml", null))
             .around(new CopyFormRule("formHierarchy3.xml", null))
+            .around(new CopyFormRule("repeat_group_new.xml", null))
             .around(rule);
 
     @Test
-    //https://github.com/opendatakit/collect/issues/2871
+    //https://github.com/getodk/collect/issues/2871
     public void allRelevantQuestionsShouldBeVisibleInHierarchyView() {
         new MainMenuPage(rule)
                 .startBlankForm("formHierarchy1")
@@ -54,7 +57,7 @@ public class FormHierarchyTest {
     }
 
     @Test
-    //https://github.com/opendatakit/collect/issues/2944
+    //https://github.com/getodk/collect/issues/2944
     public void notRelevantRepeatGroupsShouldNotBeVisibleInHierarchy() {
         final FormHierarchyPage page = new MainMenuPage(rule)
                 .startBlankForm("formHierarchy2")
@@ -100,22 +103,23 @@ public class FormHierarchyTest {
     }
 
     @Test
-    //https://github.com/opendatakit/collect/issues/2936
+    //https://github.com/getodk/collect/issues/2936
     public void repeatGroupsShouldBeVisibleAsAppropriate() {
         FormHierarchyPage page = new MainMenuPage(rule)
                 .startBlankForm("formHierarchy3")
-                .swipeToNextQuestion()
-                .swipeToNextQuestion()
-                .swipeToNextQuestion()
-                .swipeToNextQuestion()
-                .swipeToNextQuestion()
-                .swipeToNextQuestion()
-                .clickOnString(R.string.add_repeat)
-                .swipeToNextQuestion()
-                .clickOnString(R.string.add_repeat)
-                .swipeToNextQuestion()
-                .clickOnDoNotAddGroup()
-                .clickOnDoNotAddGroup()
+                .assertQuestion("Intro")
+                .swipeToNextQuestion("Text")
+                .swipeToNextQuestion("Integer 1_1")
+                .swipeToNextQuestion("Integer 1_2")
+                .swipeToNextQuestion("Integer 2_1")
+                .swipeToNextQuestion("Integer 2_2")
+                .swipeToNextQuestionWithRepeatGroup("Repeat Group 1")
+                .clickOnAdd(new FormEntryPage("formHierarchy3", rule))
+                .swipeToNextQuestionWithRepeatGroup("Repeat Group 1_1")
+                .clickOnAdd(new FormEntryPage("formHierarchy3", rule))
+                .swipeToNextQuestionWithRepeatGroup("Repeat Group 1_1")
+                .clickOnDoNotAdd(new AddNewRepeatDialog("Repeat Group 1", rule))
+                .clickOnDoNotAdd(new FormEntryPage("formHierarchy3", rule))
                 .clickGoToArrow();
 
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
@@ -124,11 +128,11 @@ public class FormHierarchyTest {
 
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
 
-        page.checkIfTextDoesNotExist("Repeat Group 1");
+        page.assertTextDoesNotExist("Repeat Group 1");
     }
 
     @Test
-    //https://github.com/opendatakit/collect/issues/2942
+    //https://github.com/getodk/collect/issues/2942
     public void deletingLastGroupShouldNotBreakHierarchy() {
         FormHierarchyPage page = new MainMenuPage(rule)
                 .startBlankForm("formHierarchy3")
@@ -156,5 +160,22 @@ public class FormHierarchyTest {
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(1)));
 
         page.assertText("Repeat Group 1_1 > 1");
+    }
+
+    @Test
+    //https://github.com/getodk/collect/issues/3971
+    public void deletingLastGroupAndAddingOneShouldNotBreakHierarchy() {
+        new MainMenuPage(rule)
+                .startBlankFormWithRepeatGroup("RepeatGroupNew", "People")
+                .clickOnAdd(new FormEntryPage("RepeatGroupNew", rule))
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .swipeToNextQuestion()
+                .swipeToNextQuestion()
+                .clickOnAddGroup()
+                .clickGoToArrow()
+                .deleteGroup()
+                .addGroup();
     }
 }

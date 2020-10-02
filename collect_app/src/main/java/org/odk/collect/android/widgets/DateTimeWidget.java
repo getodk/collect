@@ -23,7 +23,8 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not
@@ -34,7 +35,7 @@ import org.odk.collect.android.widgets.interfaces.BinaryWidget;
  */
 
 @SuppressLint("ViewConstructor")
-public class DateTimeWidget extends QuestionWidget implements BinaryWidget, WidgetValueChangedListener {
+public class DateTimeWidget extends QuestionWidget implements BinaryDataReceiver, WidgetValueChangedListener, ButtonClickListener {
 
     DateWidget dateWidget;
     TimeWidget timeWidget;

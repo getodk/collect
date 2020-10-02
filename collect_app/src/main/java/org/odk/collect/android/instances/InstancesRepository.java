@@ -12,12 +12,21 @@ import java.util.List;
  * without introducing new specialized methods (e.g. get(Specification s) instead of getBy(XYZ).
  */
 public interface InstancesRepository {
-    Instance getBy(long databaseId);
 
-    List<Instance> getAllBy(String formId);
+    List<Instance> getAllFinalized();
+
+    Instance get(long databaseId);
+
+    List<Instance> getAllByJrFormId(String formId);
+
+    List<Instance> getAllByJrFormIdAndJrVersion(String jrFormId, String jrVersion);
+
+    List<Instance> getAllByJrFormIdAndJrVersionNotDeleted(String jrFormId, String jrVersion);
 
     /**
      * Get the Instance corresponding to the given path or null if no unique Instance matches.
      */
     Instance getByPath(String instancePath);
+
+    void delete(Long id);
 }

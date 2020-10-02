@@ -91,7 +91,7 @@ public class TrackChangesReasonTest {
                 .clickSaveAndExitWithChangesReasonPrompt()
                 .closeSoftKeyboard()
                 .pressBack(new FormEntryPage("Track Changes Reason", rule))
-                .checkIsStringDisplayed(R.string.save_form_as);
+                .assertText(R.string.save_form_as);
     }
 
     @Test
@@ -109,7 +109,7 @@ public class TrackChangesReasonTest {
                 .clickSaveAndExitWithChangesReasonPrompt()
                 .closeSoftKeyboard()
                 .pressClose(new FormEntryPage("Track Changes Reason", rule))
-                .checkIsStringDisplayed(R.string.save_form_as);
+                .assertText(R.string.save_form_as);
     }
 
     @Test

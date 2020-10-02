@@ -60,11 +60,7 @@
   <string name="jump_to_beginning">Liigu algusesse</string>
   <string name="jump_to_end">Liigu lõppu</string>
   <string name="jump_to_previous">Liigu üles</string>
-  <string name="list_failed_with_error">Vormide kuvamine ebaõnnestus. %s</string>
   <string name="loading_form">Vormide laadimine</string>
-  <string name="load_remote_form_error">Vormide nimekirja laadimisel esines viga</string>
-  <string name="location_provider_accuracy">Kasutades %1$s. Täpsusasteks on %2$s m.</string>
-  <string name="location_accuracy">Täpsusasteks on %1$s m</string>
   <string name="manage_files">Kustuta salvestatud vorm</string>
   <string name="mark_finished">Märgi vorm lõpetatuks</string>
   <string name="noselect_error">Kahjuks ei ole te ühtegi vormi valinud!</string>
@@ -75,8 +71,6 @@
   <string name="no_items_display_instances">Puudub sisu mida näidata.\n\nEnnem ära saatmist märgi salvestatud vormid lõpetatuks.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Kahjuks ei ole vormi töötlemine võimalik.</string>
-  <string name="parse_legacy_formlist_failed">Serveril puudub informatsioon vormide kohta, mis ühilduks versiooniga: Aggregate 0.9.x. : %s</string>
-  <string name="parse_openrosa_formlist_failed">Serveril puudub informatsioon vormide kohta, mis ühilduks versiooniga: OpenRosa version 1.0 standard: %s</string>
   <string name="password">Salasõna</string>
   <string name="play_video">Mängi videot</string>
   <string name="please_wait">Palun oodake.</string>
@@ -114,17 +108,11 @@
   <string name="change_splash_path">Muuda pilti</string>
   <string name="keep_changes">Muudatuste salvestamine</string>
   <string name="change_formlist_url">Vormi nimekirja asukoht (lisatud veebiaadressile)</string>
-  <string name="change_protocol">Platvorm</string>
   <string name="change_submission_url">Vormide sisestuste asukoht (lisatud veebiaadressile)</string>
   <string name="formlist_url">Vormi nimekirja asukoht</string>
   <string name="submission_url">Vormi sisestuse asukoht</string>
   <string name="font_size">Teksti suurus</string>
   <string name="change_font_size">Teksti suurus</string>
-  <string name="access_error">%s avamisel esines viga</string>
-  <string name="manifest_server_error">Serveri vastuses puudub OpenRosa versioon</string>
-  <string name="root_element_error">Ei leia juurelementi &lt;manifest\&gt; — oli %s</string>
-  <string name="root_namespace_error">Juurelemendi nimeruum on vale: %s</string>
-  <string name="manifest_tag_error">Manifest kirjest %s puudub kas: failnimi, räsi või downloadUrl</string>
   <string name="form_download_progress">%1$s. Laeb faile: %2$s of %3$s</string>
   <string name="fetching_manifest">%s. Laen manifest faili</string>
   <string name="success">Õnnestus</string>
@@ -139,8 +127,6 @@
   <string name="save_as_error">Salvestatud nimi ei tohi tühjaks jääda!</string>
   <string name="edit_prompt">Muuda küsimust</string>
   <string name="selected_google_account_text">Google konto</string>
-  <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-  <string name="server_platform_other">Mõni teine</string>
   <string name="font_size_extra_large">Väga suur</string>
   <string name="font_size_large">Suur</string>
   <string name="font_size_medium">Keskmine</string>
@@ -164,7 +150,6 @@
   <string name="parent_form_not_present">Salvestatud vormi ei õnnestu muuta kuna vormi, kas ei ole olemas või on kustutatud. \n\nVormi ID: %1$s</string>
   <string name="launch_app">Alusta</string>
   <string name="no_app">Soovitud rakendust ei ole. Palun sisestage käsitsi.</string>
-  <string name="select_one">Valige üks vastus</string>
   <string name="savepoint_used">Salvestamata muudatused on taastatud!</string>
   <string name="save_and_close">Salvesta ja sulge</string>
   <string name="sign_button">Allkirja kogumine</string>
@@ -235,9 +220,6 @@
   <string name="go_drive">Minu Drive</string>
   <string name="go_shared">Minuga jagatud</string>
   <string name="modified_on_date_at_time">\'Muudetud\' EEE, MMM dd, yyyy \'kell\' HH:mm</string>
-  <string name="aggregate_preferences">ODK Aggregate seaded</string>
-  <string name="other_preferences">Ülejäänud platvormi seaded</string>
-  <string name="google_preferences">Google Sheets seaded</string>
   <string name="drive_get_file">Laen %1$s ja meediafailid.</string>
   <string name="no_google_account">Google kontot ei ole valitud!</string>
   <string name="google_set_account">Olete serveriks valinud Google Sheets-i. Enne jätkamist palun valige vastav Google konto üldsätetest</string>
@@ -301,7 +283,6 @@
   <string name="download_selected">Allalaadimine valitud</string>
   <string name="gps_result">Laiuskraad: %1$s\nPikkuskraad: %2$s\nKõrgus: %3$sm\nTäpsusaste: %4$sm</string>
   <string name="parser_exception">XPathParser Viga: \"%s\"</string>
-  <string name="selected_answer">Valitud: %s</string>
   <string name="version_number">Versoon: %s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">W %1$s%2$s%3$s</string>
@@ -348,5 +329,4 @@
   <string name="no_date_selected">Kuupäev valimata</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <!--Sms submission-->
 </resources>

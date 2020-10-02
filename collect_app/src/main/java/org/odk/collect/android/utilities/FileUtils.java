@@ -280,7 +280,11 @@ public class FileUtils {
 
         fields.put(TITLE, formDef.getTitle());
         fields.put(FORMID, formDef.getMainInstance().getRoot().getAttributeValue(null, "id"));
-        fields.put(VERSION, formDef.getMainInstance().getRoot().getAttributeValue(null, "version"));
+        String version = formDef.getMainInstance().getRoot().getAttributeValue(null, "version");
+        if (version != null && version.trim().isEmpty()) {
+            version = null;
+        }
+        fields.put(VERSION, version);
 
         if (formDef.getSubmissionProfile() != null) {
             fields.put(SUBMISSIONURI, formDef.getSubmissionProfile().getAction());
@@ -534,6 +538,7 @@ public class FileUtils {
         if (newOptions.inSampleSize <= 0) {
             newOptions.inSampleSize = 1;
         }
+
         Bitmap bitmap;
         try {
             bitmap = BitmapFactory.decodeFile(path, originalOptions);
@@ -562,7 +567,6 @@ public class FileUtils {
 
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(data);
-            fos.close();
         } catch (IOException e) {
             Timber.e(e);
         }
