@@ -33,6 +33,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.TaskAssignment;
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.loaders.GeofenceEntry;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
@@ -225,7 +226,7 @@ public class Utilities {
 
             values = new ContentValues();
             values.put(InstanceColumns.T_REPEAT, 0);
-            values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
+            values.put(InstanceColumns.STATUS, Instance.STATUS_INCOMPLETE);
 
             Collect.getInstance().getContentResolver().update(initialUri, values, null, null);
 
@@ -289,7 +290,7 @@ public class Utilities {
 
                     if (instance.paths != null && instance.paths.size() > 0) {
                         for (String media : instance.paths) {
-                            FormDownloader fd = new FormDownloader();
+                            MultiFormDownloader fd = new MultiFormDownloader();
                             String mediaUrl = serverUrl + "/" + media;
                             int idx = media.lastIndexOf('/');
                             String mediaName = null;

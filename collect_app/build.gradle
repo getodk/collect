@@ -242,17 +242,21 @@ dependencies {
 
     implementation 'com.github.mohamadian:PersianJodaTime:1.2'
     implementation 'com.github.chanmratekoko:myanmar-calendar:1.0.6.RC3'
-    implementation 'bikramsambat:bikram-sambat:1.1.0'
+    //implementation 'bikramsambat:bikram-sambat:1.1.0'
     implementation "com.rarepebble:colorpicker:3.0.1"
     implementation "commons-io:commons-io:2.6"
     implementation "net.sf.opencsv:opencsv:2.4"
+    implementation("org.getodk:javarosa:3.0.2") {   // Temp dev move
+        exclude group: 'joda-time'
+        exclude group: 'org.slf4j'
+    }
     // smap comment out reference to maven repository version of javarosa will use a local version instead
     //implementation("org.opendatakit:opendatakit-javarosa:2.17.1") {
     //    exclude group: 'joda-time'
     //    exclude group: 'org.slf4j'
     //}
-    implementation('net.sf.kxml:kxml2:2.3.0')                       // smap javarosa dependency
-    implementation files('libs/opendatakit-javarosa-2.17.1.jar')    // smap javarosa
+    //implementation('net.sf.kxml:kxml2:2.3.0')                       // smap javarosa dependency
+    //implementation files('libs/opendatakit-javarosa-2.17.1.jar')    // smap javarosa
 
 
     implementation "com.karumi:dexter:6.1.2"

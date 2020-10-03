@@ -34,6 +34,7 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.storage.StorageStateProvider;
 
 import java.io.File;
@@ -80,6 +81,8 @@ public class FileUtils {
     public static final String AUTO_DELETE = "autoDelete";
     public static final String AUTO_SEND = "autoSend";
     //public static final String GEOMETRY_XPATH = "geometryXpath";   // smap
+    public static final String TASKS_ONLY = "tasks_only"; // smap Set to "yes" if the form should not be available to the user
+    public static final String SOURCE = "source"; // smap (shouldn't be null but for migration can be)
 
     /** Suffix for the form media directory. */
     public static final String MEDIA_SUFFIX = "-media";

@@ -221,7 +221,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
                             String formPath,
                             String surveyNotes,
                             boolean canUpdate,
-                            boolean saveMessage) {		// smap added task, formPath, surveyNotes, canUpdate, saveMessage
+                            boolean saveMessage) {        // smap added task, formPath, surveyNotes, canUpdate, saveMessage
 
         saveTask = new SaveTask(saveRequest, formSaver, formController, mediaUtils, new SaveTask.Listener() {
             @Override
@@ -234,8 +234,8 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
                 handleTaskResult(saveToDiskResult, saveRequest, saveToDiskResult.isComplete(), taskId, saveMessage);  // smap add isComplete, taskId, saveMessage
                 clearMediaFiles();
             }
-        }, null, new ArrayList<>(originalFiles.values()), taskId, formPath, surveyNotes, canUpdate, saveMessage).execute();		// smap added task, formPath, surveyNotes, canUpdate, saveMessage, nulled out analytics
-
+        }, null, new ArrayList<>(originalFiles.values()), taskId, formPath, surveyNotes, canUpdate, saveMessage).execute();        // smap added task, formPath, surveyNotes, canUpdate, saveMessage, nulled out analytics
+    }
 
     private void handleTaskResult(SaveToDiskResult taskResult, SaveRequest saveRequest,
                                   boolean isComplete, long taskId, boolean saveMessage) {  // smap

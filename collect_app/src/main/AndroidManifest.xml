@@ -37,7 +37,7 @@ the specific language governing permissions and limitations under the License.
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <!- smap - add foreground service ->
+    <!-- smap - add foreground service -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <!-- Normal permissions -->

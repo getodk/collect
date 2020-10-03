@@ -6,7 +6,7 @@
 
     <!-- smap change colour -->
     <path
-            android:fillColor="@color/amber_500"
+            android:fillColor="#FFC107"
             android:pathData="M60,60m-60,0a60,60 0,1 1,120 0a60,60 0,1 1,-120 0"/>
     <path
             android:fillColor="#FFFFFF"

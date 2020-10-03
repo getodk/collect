@@ -231,7 +231,7 @@ public class SaveFormToDisk {
             values.put(InstanceColumns.ACT_LAT, lat);
 
             values.put(InstanceColumns.T_ACT_FINISH, Calendar.getInstance().getTime().getTime());
-            values.put(InstanceColumns.T_IS_SYNC, InstanceProviderAPI.STATUS_SYNC_NO);
+            values.put(InstanceColumns.T_IS_SYNC, Utilities.STATUS_SYNC_NO);
         }
         values.put(InstanceColumns.T_SURVEY_NOTES, mSurveyNotes);
         values.put(InstanceColumns.T_REPEAT, 0);        // When saved it is no longer a repeat task

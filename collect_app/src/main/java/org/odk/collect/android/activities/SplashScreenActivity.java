@@ -105,9 +105,6 @@ public class SplashScreenActivity extends Activity {
         boolean showSplash = generalSharedPreferences.getBoolean(GeneralKeys.KEY_SHOW_SPLASH, false);
         String splashPath = (String) generalSharedPreferences.get(KEY_SPLASH_PATH);
 
-            firstRun = true;
-        }
-
         // smap start - login screen
         String url = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SERVER_URL);
         String user = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_USERNAME);
@@ -125,10 +122,8 @@ public class SplashScreenActivity extends Activity {
             // smap end
 
             // do all the first run things
-            if (firstRun || showSplash) {
-                editor.putBoolean(GeneralKeys.KEY_FIRST_RUN, false);
-                editor.commit();
-
+            if (showSplash) {
+           
                 // smap instead of the splash screen show the logon screen if there are missing credentials
                 if (url.isEmpty() || user.isEmpty() || password.isEmpty()) {
                     startActivity(new Intent(SplashScreenActivity.this, SmapLoginActivity.class));  //smap

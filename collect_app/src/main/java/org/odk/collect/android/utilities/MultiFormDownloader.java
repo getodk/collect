@@ -357,9 +357,9 @@ public class MultiFormDownloader {
                 .displayName(formInfo.get(FileUtils.TITLE))
                 .jrVersion(formInfo.get(FileUtils.VERSION))
                 .jrFormId(formInfo.get(FileUtils.FORMID))
-                .put(FormsColumns.PROJECT,                 project);      // smap
-                .put(FormsColumns.TASKS_ONLY,              tasks_only ? "yes" : "no");            // smap
-                .put(FormsColumns.SOURCE,                  source);                               // smap
+                .jrFormId(formInfo.get(FileUtils.PROJECT))      // smap
+                .jrFormId(formInfo.get(FileUtils.TASKS_ONLY))   // smap
+                .jrFormId(formInfo.get(FileUtils.SOURCE))       // smap
                 .submissionUri(formInfo.get(FileUtils.SUBMISSIONURI))
                 .base64RSAPublicKey(formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY))
                 .autoDelete(formInfo.get(FileUtils.AUTO_DELETE))
@@ -374,7 +374,7 @@ public class MultiFormDownloader {
      * Takes the formName and the URL and attempts to download the specified file. Returns a file
      * object representing the downloaded file.
      */
-    FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener, boolean download, String formPath) throws Exception {      // smap add download flag and formPath
+    FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener, boolean download, String formPath) throws Exception {     // smap add download flag and formPath
         // clean up friendly form name...
         String rootName = FormNameUtils.formatFilenameFromFormName(formName);
 
@@ -388,10 +388,11 @@ public class MultiFormDownloader {
             int i = 2;
             f = new File(path);
 
-        InputStream file = formListApi.fetchForm(url);
-        writeFile(f, stateListener, file);
+            InputStream file = formListApi.fetchForm(url);
+            writeFile(f, stateListener, file);
 
             downloadFile(f, url, true);     // smap credentials flag
+        }
 
         // we've downloaded the file, and we may have renamed it
         // make sure it's not the same as a file we already have

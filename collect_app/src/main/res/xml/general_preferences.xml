@@ -42,7 +42,7 @@ limitations under the License.
     <Preference
         android:icon="@drawable/ic_other"
         android:key="smap_preferences"
-        android:title="@string/server_platform_other" />
+        android:title="@string/smap_other" />
     <Preference
         android:icon="@drawable/ic_baseline_warning_24"
         android:key="experimental"

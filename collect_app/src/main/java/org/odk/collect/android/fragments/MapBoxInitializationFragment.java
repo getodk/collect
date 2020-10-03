@@ -102,11 +102,8 @@ public class MapBoxInitializationFragment extends Fragment {
     }
 
     private void initMapBox(View rootView) {
-<<<<<<< HEAD
-        SharedPreferences metaSharedPreferences = new MetaSharedPreferencesProvider(getContext()).getMetaSharedPreferences();
-=======
+
         SharedPreferences metaSharedPreferences = preferencesProvider.getMetaSharedPreferences();
->>>>>>> merge_master
         if (!metaSharedPreferences.getBoolean(KEY_MAPBOX_INITIALIZED, false) && connectivityProvider.isDeviceOnline()) {
             // This "one weird trick" lets us initialize MapBox at app start when the internet is
             // most likely to be available. This is annoyingly needed for offline tiles to work.
