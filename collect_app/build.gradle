@@ -256,10 +256,7 @@ dependencies {
     implementation "org.slf4j:slf4j-api:2.0.0-alpha0"
     implementation "com.arcao:slf4j-timber:3.1@aar"
 
-    //updating to 3.4.0 requires minSdkVersion >=24 https://github.com/zxing/zxing/releases/tag/zxing-3.4.0
-    implementation "com.google.zxing:core:3.3.0"
-
-    //updating would require minSdkVersion >=24
+    //updating would require minSdkVersion >=24, it uses zxing:core 3.3.2 by default
     implementation "com.journeyapps:zxing-android-embedded:3.6.0"
 
     implementation "net.danlew:android.joda:2.10.6.1"
@@ -277,7 +274,6 @@ dependencies {
 
     // Needed for injection into Robolectric tests
     testAnnotationProcessor "com.google.dagger:dagger-compiler:${rootProject.daggerVersion}"
-
 
     // Dagger Android:
     implementation "com.google.dagger:dagger-android:${rootProject.daggerVersion}"

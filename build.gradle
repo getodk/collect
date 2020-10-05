@@ -10,7 +10,6 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.1'
         classpath 'com.google.gms:google-services:4.3.4'
-        classpath 'org.ow2.asm:asm:9.0' // https://github.com/jacoco/jacoco/issues/639#issuecomment-355424756
         classpath 'org.jacoco:org.jacoco.core:0.8.6'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.3.0'
         classpath 'com.google.firebase:perf-plugin:1.3.1'
