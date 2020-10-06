@@ -34,7 +34,7 @@ limitations under the License.
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <org.odk.collect.android.views.CustomRangeSlider
+        <org.odk.collect.android.views.SuppressFlingGestureSlider
             android:id="@+id/slider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

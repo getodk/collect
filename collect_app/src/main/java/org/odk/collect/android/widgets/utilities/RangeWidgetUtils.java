@@ -13,7 +13,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.RangeWidgetHorizontalBinding;
 import org.odk.collect.android.databinding.RangeWidgetVerticalBinding;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.views.CustomRangeSlider;
+import org.odk.collect.android.views.SuppressFlingGestureSlider;
 
 import java.math.BigDecimal;
 
@@ -25,7 +25,7 @@ public class RangeWidgetUtils {
 
     public static Object[] setUpLayoutElements(Context context, FormEntryPrompt prompt) {
         View answerView;
-        CustomRangeSlider slider;
+        SuppressFlingGestureSlider slider;
         TextView currentValue;
         TextView minValue;
         TextView maxValue;
@@ -66,7 +66,7 @@ public class RangeWidgetUtils {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    public static void setUpSlider(RangeQuestion rangeQuestion, CustomRangeSlider slider, BigDecimal actualValue) {
+    public static void setUpSlider(RangeQuestion rangeQuestion, SuppressFlingGestureSlider slider, BigDecimal actualValue) {
         BigDecimal rangeStart = rangeQuestion.getRangeStart();
         BigDecimal rangeEnd = rangeQuestion.getRangeEnd();
         BigDecimal rangeStep = rangeQuestion.getRangeStep().abs();
@@ -91,13 +91,13 @@ public class RangeWidgetUtils {
         });
     }
 
-    public static BigDecimal setUpNullValue(CustomRangeSlider slider, TextView currentValue) {
+    public static BigDecimal setUpNullValue(SuppressFlingGestureSlider slider, TextView currentValue) {
         slider.setValue(slider.getValueFrom());
         currentValue.setText("");
         return null;
     }
 
-    public static boolean isWidgetValid(RangeQuestion rangeQuestion, CustomRangeSlider slider) {
+    public static boolean isWidgetValid(RangeQuestion rangeQuestion, SuppressFlingGestureSlider slider) {
         BigDecimal rangeStart = rangeQuestion.getRangeStart();
         BigDecimal rangeEnd = rangeQuestion.getRangeEnd();
         BigDecimal rangeStep = rangeQuestion.getRangeStep().abs();
@@ -111,7 +111,7 @@ public class RangeWidgetUtils {
         return result;
     }
 
-    private static void disableWidget(CustomRangeSlider slider) {
+    private static void disableWidget(SuppressFlingGestureSlider slider) {
         ToastUtils.showLongToast(R.string.invalid_range_widget);
         slider.setEnabled(false);
     }
