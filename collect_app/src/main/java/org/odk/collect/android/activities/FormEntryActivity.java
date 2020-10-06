@@ -2678,7 +2678,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    updateFieldListQuestions(changedWidget.getFormEntryPrompt().getIndex());
+                    try {
+                        updateFieldListQuestions(changedWidget.getFormEntryPrompt().getIndex());
+                    } catch (RuntimeException e) {
+                        Timber.w(e);
+                    }
 
                     odkView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
                         @Override
