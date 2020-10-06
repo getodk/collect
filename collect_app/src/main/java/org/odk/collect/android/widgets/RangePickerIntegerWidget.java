@@ -2,6 +2,7 @@ package org.odk.collect.android.widgets;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.TypedValue;
 import android.view.View;
 
 import org.javarosa.core.model.RangeQuestion;
@@ -32,7 +33,6 @@ public class RangePickerIntegerWidget extends QuestionWidget  {
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = WidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         View answerView = binding.getRoot();
-
         setUpWidgetParameters();
 
         actualValue = RangeWidgetUtils.setUpRangePickerWidget(context, binding, prompt);
@@ -41,8 +41,10 @@ public class RangePickerIntegerWidget extends QuestionWidget  {
         } else {
             progress = 0;
         }
-
         displayedValuesForNumberPicker = RangeWidgetUtils.setUpDisplayedValuesForNumberPicker(rangeStart, rangeStep, rangeEnd, true);
+
+        binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.widgetButton.setOnClickListener(v -> onButtonClick());
         return answerView;
     }
