@@ -20,13 +20,12 @@ the License.
 
     <include layout="@layout/app_bar_layout"/>
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/questionholder"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_above="@+id/buttonholder"
-        android:layout_below="@id/appBarLayout"
-        android:orientation="horizontal"/>
+        android:layout_below="@id/appBarLayout" />
 
     <ImageView
         android:id="@+id/shadow_up"

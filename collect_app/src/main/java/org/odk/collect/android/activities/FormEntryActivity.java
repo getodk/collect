@@ -41,7 +41,7 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -260,7 +260,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private Animation outAnimation;
     private View staleView;
 
-    private LinearLayout questionHolder;
+    private FrameLayout questionHolder;
     private View currentView;
 
     private AlertDialog alertDialog;
