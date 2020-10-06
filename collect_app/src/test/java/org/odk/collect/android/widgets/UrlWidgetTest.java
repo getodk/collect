@@ -15,6 +15,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.shadows.ShadowToast;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -57,7 +58,7 @@ public class UrlWidgetTest {
     }
 
     @Test
-    public void usingReadOnlyOption_makeAllClickableElementsDisabled() {
+    public void usingReadOnlyOption_doesNotShowUrlButton() {
         UrlWidget widget = createWidget(promptWithReadOnly());
         assertThat(widget.binding.urlButton.getVisibility(), equalTo(View.GONE));
     }
@@ -70,19 +71,14 @@ public class UrlWidgetTest {
     }
 
     @Test
-    public void whenPromptHasAnswer_displaysAnswer() {
+    public void clearAnswer_showsToastThatTheUrlIsReadOnly() {
         UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        assertThat(widget.binding.urlAnswerText.getText().toString(), equalTo("blah"));
+        widget.clearAnswer();
+        assertThat(ShadowToast.getTextOfLatestToast(), equalTo("URL is readonly"));
     }
 
     @Test
-    public void whenPromptAnswerDoesNotHaveAnswer_displayEmptyString() {
-        UrlWidget widget = createWidget(promptWithAnswer(null));
-        assertThat(widget.binding.urlAnswerText.getText().toString(), equalTo(""));
-    }
-
-    @Test
-    public void clickingButtonWhenUrlIsEmpty_doesNotCallOpenUri() {
+    public void clickingButton_whenUrlIsEmpty_doesNotOpensUri() {
         UrlWidget widget = createWidget(promptWithAnswer(null));
         widget.binding.urlButton.performClick();
 
@@ -91,7 +87,17 @@ public class UrlWidgetTest {
     }
 
     @Test
-    public void clickingButtonWhenUrlIsNotEmpty_callsOpenUri() {
+    public void clickingButton_whenUrlIsEmpty_showsToastMessage() {
+        UrlWidget widget = createWidget(promptWithAnswer(null));
+        widget.binding.urlButton.performClick();
+
+        verify(customTabHelper, never()).bindCustomTabsService(null, null);
+        verify(customTabHelper, never()).openUri(null, null);
+        assertThat(ShadowToast.getTextOfLatestToast(), equalTo("No URL set"));
+    }
+
+    @Test
+    public void clickingButton_whenUrlIsNotEmpty_opensUriAndBindsCustomTabService() {
         UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         widget.binding.urlButton.performClick();
 
