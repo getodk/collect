@@ -37,7 +37,6 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ContentUriProvider;
-import org.odk.collect.android.utilities.ContentUriFetcher;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -57,7 +56,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, W
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
     private final ActivityAvailability activityAvailability;
-    private final ContentUriFetcher contentUriFetcher;
+    private final ContentUriProvider contentUriProvider;
 
     private String binaryName;
 
@@ -69,12 +68,12 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, W
 
     ArbitraryFileWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry,
                         QuestionMediaManager questionMediaManager, ActivityAvailability activityAvailability,
-                        ContentUriFetcher contentUriFetcher) {
+                        ContentUriProvider contentUriProvider) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
         this.activityAvailability = activityAvailability;
-        this.contentUriFetcher = contentUriFetcher;
+        this.contentUriProvider = contentUriProvider;
     }
 
     @Override
@@ -162,7 +161,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, W
     private void openFile() {
         Uri fileUri = Uri.fromFile(new File(FileWidgetUtils.getInstanceFolder() + File.separator + binaryName));
 
-        Uri contentUri = contentUriFetcher.getUri(getContext(),
+        Uri contentUri = contentUriProvider.getUriForFile(getContext(),
                 BuildConfig.APPLICATION_ID + ".provider",
                 new File(FileWidgetUtils.getInstanceFolder() + File.separator + binaryName));
         Intent intent = new Intent();

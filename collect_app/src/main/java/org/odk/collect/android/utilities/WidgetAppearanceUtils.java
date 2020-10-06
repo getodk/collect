@@ -177,11 +177,6 @@ public class WidgetAppearanceUtils {
         return appearance.contains(FRONT) || appearance.contains(NEW_FRONT) || appearance.contains(SELFIE);
     }
 
-    public static boolean isFrontCameraAppearance(FormEntryPrompt prompt) {
-        String appearance = getSanitizedAppearanceHint(prompt);
-        return appearance.contains(FRONT) || appearance.contains(NEW_FRONT) || appearance.contains(SELFIE);
-    }
-
     public static boolean isFlexAppearance(FormEntryPrompt prompt) {
         String appearance = getSanitizedAppearanceHint(prompt);
 

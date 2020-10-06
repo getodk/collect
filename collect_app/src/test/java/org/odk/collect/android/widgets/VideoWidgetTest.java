@@ -22,8 +22,8 @@ import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.CameraUtilsProvider;
-import org.odk.collect.android.utilities.ContentUriFetcher;
+import org.odk.collect.android.utilities.CameraUtils;
+import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.support.FakeFileWidgetUtils;
@@ -58,22 +58,22 @@ public class VideoWidgetTest {
     private TestScreenContextActivity widgetActivity;
     private ShadowActivity shadowActivity;
     private FakeWaitingForDataRegistry waitingForDataRegistry;
-    private CameraUtilsProvider cameraUtilsProvider;
+    private CameraUtils cameraUtils;
     private QuestionMediaManager questionMediaManager;
     private FormIndex formIndex;
     private FakePermissionUtils permissionUtils;
     private ActivityAvailability activityAvailability;
-    private ContentUriFetcher contentUriFetcher;
+    private ContentUriProvider contentUriProvider;
 
     @Before
     public void setUp() {
         widgetActivity = widgetTestActivity();
         shadowActivity = shadowOf(widgetActivity);
 
-        cameraUtilsProvider = mock(CameraUtilsProvider.class);
+        cameraUtils = mock(CameraUtils.class);
         questionMediaManager = mock(QuestionMediaManager.class);
         activityAvailability = mock(ActivityAvailability.class);
-        contentUriFetcher = mock(ContentUriFetcher.class);
+        contentUriProvider = mock(ContentUriProvider.class);
         formIndex = mock(FormIndex.class);
 
         waitingForDataRegistry = new FakeWaitingForDataRegistry();
@@ -141,7 +141,7 @@ public class VideoWidgetTest {
     @Test
     public void usingSelfieWidget_disablesCaptureButton_whenFrontCameraIsNotAvailable() {
         FormEntryPrompt prompt = promptWithReadOnly();
-        when(cameraUtilsProvider.checkFrontCameraAvailability()).thenReturn(false);
+        when(cameraUtils.isFrontCameraAvailable()).thenReturn(false);
         when(prompt.getAppearanceHint()).thenReturn(WidgetAppearanceUtils.SELFIE);
         VideoWidget widget = createWidget(prompt);
 
@@ -152,7 +152,7 @@ public class VideoWidgetTest {
     @Test
     public void usingMediaAppearanceNewFront_disablesCaptureButton_whenFrontCameraIsNotAvailable() {
         FormEntryPrompt prompt = promptWithReadOnly();
-        when(cameraUtilsProvider.checkFrontCameraAvailability()).thenReturn(false);
+        when(cameraUtils.isFrontCameraAvailable()).thenReturn(false);
         when(prompt.getAppearanceHint()).thenReturn(WidgetAppearanceUtils.NEW_FRONT);
         VideoWidget widget = createWidget(prompt);
 
@@ -371,7 +371,7 @@ public class VideoWidgetTest {
     @Test
     public void clickingPlayVideoButton_launchesCorrectIntent() {
         VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
-        when(contentUriFetcher.getUri(widgetActivity,
+        when(contentUriProvider.getUriForFile(widgetActivity,
                 BuildConfig.APPLICATION_ID + ".provider",
                 new File("null" + File.separator + "blah.mp4"))).thenReturn(Uri.parse("content://blah"));
         widget.setPermissionUtils(permissionUtils);
@@ -400,6 +400,6 @@ public class VideoWidgetTest {
 
     public VideoWidget createWidget(FormEntryPrompt prompt) {
         return new VideoWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"),
-                waitingForDataRegistry, cameraUtilsProvider, questionMediaManager, activityAvailability, contentUriFetcher, fakeFileWidgetUtils);
+                waitingForDataRegistry, cameraUtils, questionMediaManager, activityAvailability, contentUriProvider, fakeFileWidgetUtils);
     }
 }

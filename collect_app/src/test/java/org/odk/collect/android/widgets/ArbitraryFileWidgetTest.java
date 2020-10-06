@@ -18,7 +18,7 @@ import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.ContentUriFetcher;
+import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
@@ -52,7 +52,7 @@ public class ArbitraryFileWidgetTest {
     private FormIndex formIndex;
     private File mockedFile;
     private ActivityAvailability activityAvailability;
-    private ContentUriFetcher contentUriFetcher;
+    private ContentUriProvider contentUriProvider;
 
     @Before
     public void setUp() {
@@ -61,7 +61,7 @@ public class ArbitraryFileWidgetTest {
 
         mockedQuestionMediaManager = mock(QuestionMediaManager.class);
         activityAvailability = mock(ActivityAvailability.class);
-        contentUriFetcher = mock(ContentUriFetcher.class);
+        contentUriProvider = mock(ContentUriProvider.class);
         formIndex = mock(FormIndex.class);
         mockedFile = mock(File.class);
 
@@ -249,7 +249,7 @@ public class ArbitraryFileWidgetTest {
         when(activityAvailability.isActivityAvailable(any())).thenReturn(true);
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
 
-        when(contentUriFetcher.getUri(widgetActivity,
+        when(contentUriProvider.getUriForFile(widgetActivity,
                 BuildConfig.APPLICATION_ID + ".provider",
                 new File("null" + File.separator + "blah.txt"))).thenReturn(Uri.parse("content://blah"));
 
@@ -263,6 +263,6 @@ public class ArbitraryFileWidgetTest {
 
     public ArbitraryFileWidget createWidget(FormEntryPrompt prompt) {
         return new ArbitraryFileWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"),
-                waitingForDataRegistry, mockedQuestionMediaManager, activityAvailability, contentUriFetcher);
+                waitingForDataRegistry, mockedQuestionMediaManager, activityAvailability, contentUriProvider);
     }
 }

@@ -32,12 +32,7 @@ import java.io.IOException;
 
 import timber.log.Timber;
 
-public class CameraUtils implements CameraUtilsProvider {
-
-    @Override
-    public boolean checkFrontCameraAvailability() {
-        return isFrontCameraAvailable();
-    }
+public class CameraUtils {
 
     public static Camera getCameraInstance(Activity activity, int cameraId) {
         Camera camera = Camera.open(cameraId);

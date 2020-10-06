@@ -43,6 +43,7 @@ import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -69,21 +70,24 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     protected ImageClickHandler imageClickHandler;
     protected ExternalImageCaptureHandler imageCaptureHandler;
 
+    protected final ContentUriProvider contentUriProvider;
+
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
     private final FileWidgetUtils fileWidgetUtils;
 
     public BaseImageWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager,
                            WaitingForDataRegistry waitingForDataRegistry) {
-        this(context, prompt, questionMediaManager, waitingForDataRegistry, new FileWidgetUtils());
+        this(context, prompt, questionMediaManager, waitingForDataRegistry, new ContentUriProvider(), new FileWidgetUtils());
     }
 
     public BaseImageWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager,
-                           WaitingForDataRegistry waitingForDataRegistry, FileWidgetUtils fileWidgetUtils) {
+                           WaitingForDataRegistry waitingForDataRegistry, ContentUriProvider contentUriProvider, FileWidgetUtils fileWidgetUtils) {
         super(context, prompt);
         this.questionMediaManager = questionMediaManager;
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.fileWidgetUtils = fileWidgetUtils;
+        this.contentUriProvider = contentUriProvider;
     }
 
     @Override

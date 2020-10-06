@@ -170,8 +170,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         }
 
         Intent intent = new Intent("android.intent.action.VIEW");
-        Uri uri =
-                ContentUriProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", videoFile);
+        Uri uri = (new ContentUriProvider()).getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", videoFile);
         FileUtils.grantFileReadPermissions(intent, uri, getContext());
         intent.setDataAndType(uri, "video/*");
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
@@ -235,8 +234,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     private void openImage() {
         try {
             Intent intent = new Intent("android.intent.action.VIEW");
-            Uri uri =
-                    ContentUriProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", bigImageFile);
+            Uri uri = (new ContentUriProvider()).getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", bigImageFile);
             FileUtils.grantFileReadPermissions(intent, uri, getContext());
             intent.setDataAndType(uri, "image/*");
             getContext().startActivity(intent);

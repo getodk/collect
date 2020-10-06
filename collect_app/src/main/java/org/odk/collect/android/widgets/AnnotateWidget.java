@@ -31,7 +31,6 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
@@ -184,7 +183,7 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
         // the size. boo.
 
         try {
-            Uri uri = ContentUriProvider.getUriForFile(getContext(),
+            Uri uri = contentUriProvider.getUriForFile(getContext(),
                     BuildConfig.APPLICATION_ID + ".provider",
                     new File(new StoragePathProvider().getTmpFilePath()));
             // if this gets modified, the onActivityResult in

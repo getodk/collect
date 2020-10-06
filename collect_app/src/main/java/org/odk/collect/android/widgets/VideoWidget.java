@@ -39,8 +39,6 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.CameraUtils;
-import org.odk.collect.android.utilities.CameraUtilsProvider;
-import org.odk.collect.android.utilities.ContentUriFetcher;
 import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
@@ -75,7 +73,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
     private final ActivityAvailability activityAvailability;
-    private final ContentUriFetcher contentUriFetcher;
+    private final ContentUriProvider contentUriProvider;
     private final FileWidgetUtils fileWidgetUtils;
 
     private String binaryName;
@@ -85,17 +83,17 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
                 new ActivityAvailability(context), new ContentUriProvider(), new FileWidgetUtils());
     }
 
-    public VideoWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, CameraUtilsProvider cameraUtilsProvider,
-                       QuestionMediaManager questionMediaManager, ActivityAvailability activityAvailability, ContentUriFetcher contentUriFetcher, FileWidgetUtils fileWidgetUtils) {
+    public VideoWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, CameraUtils cameraUtils,
+                       QuestionMediaManager questionMediaManager, ActivityAvailability activityAvailability, ContentUriProvider contentUriProvider, FileWidgetUtils fileWidgetUtils) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
         this.activityAvailability = activityAvailability;
-        this.contentUriFetcher = contentUriFetcher;
+        this.contentUriProvider = contentUriProvider;
         this.fileWidgetUtils = fileWidgetUtils;
 
         if (WidgetAppearanceUtils.isFrontCameraAppearance(getFormEntryPrompt())) {
-            if (!cameraUtilsProvider.checkFrontCameraAvailability()) {
+            if (!cameraUtils.isFrontCameraAvailable()) {
                 binding.captureVideo.setEnabled(false);
                 ToastUtils.showLongToast(R.string.error_front_camera_unavailable);
             }
@@ -262,7 +260,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
 
         Uri uri = null;
         try {
-            uri = contentUriFetcher.getUri(getContext(), BuildConfig.APPLICATION_ID + ".provider", file);
+            uri = contentUriProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", file);
             FileUtils.grantFileReadPermissions(intent, uri, getContext());
         } catch (IllegalArgumentException e) {
             Timber.e(e);
