@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <org.odk.collect.android.views.MultiClickSafeButton
+        android:id="@+id/widget_button"
+        style="@style/Widget.Collect.Button.WidgetAnswer"
+        android:text="@string/select_value" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/widget_answer_text"
+        style="@style/Widget.Collect.TextView.WidgetAnswer"
+        android:text="@string/no_value_selected"
+        />
+
+</LinearLayout>

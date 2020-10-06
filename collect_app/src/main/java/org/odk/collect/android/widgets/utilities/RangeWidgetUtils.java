@@ -13,9 +13,9 @@ import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.databinding.RangePickerWidgetAnswerBinding;
 import org.odk.collect.android.databinding.RangeWidgetHorizontalBinding;
 import org.odk.collect.android.databinding.RangeWidgetVerticalBinding;
-import org.odk.collect.android.databinding.WidgetButtonAndAnswerLayoutBinding;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.TrackingTouchSlider;
@@ -144,15 +144,12 @@ public class RangeWidgetUtils {
         return actualValue;
     }
 
-    public static void setUpRangePickerWidget(Context context, WidgetButtonAndAnswerLayoutBinding binding, FormEntryPrompt prompt) {
+    public static void setUpRangePickerWidget(Context context, RangePickerWidgetAnswerBinding binding, FormEntryPrompt prompt) {
         if (RangeWidgetUtils.isRangePickerWidgetValid((RangeQuestion) prompt.getQuestion(), binding.widgetButton)) {
             if (prompt.getAnswerValue() != null) {
                 BigDecimal actualValue = new BigDecimal(prompt.getAnswerValue().getValue().toString());
                 binding.widgetAnswerText.setText(String.valueOf(actualValue));
                 binding.widgetButton.setText(context.getString(R.string.edit_value));
-            } else {
-                binding.widgetAnswerText.setText(R.string.no_value_selected);
-                binding.widgetButton.setText(R.string.select_value);
             }
         }
         if (prompt.isReadOnly()) {
@@ -237,7 +234,7 @@ public class RangeWidgetUtils {
         }
     }
 
-    public static int getNumberPickerProgress(WidgetButtonAndAnswerLayoutBinding binding, BigDecimal rangeStart, BigDecimal rangeStep,
+    public static int getNumberPickerProgress(RangePickerWidgetAnswerBinding binding, BigDecimal rangeStart, BigDecimal rangeStep,
                                                BigDecimal rangeEnd, int value) {
         BigDecimal actualValue;
         int elementCount = rangeEnd.subtract(rangeStart).abs().divide(rangeStep).intValue();
