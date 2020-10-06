@@ -3,7 +3,6 @@ package org.odk.collect.android.widgets.utilities;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -84,12 +83,11 @@ public class RangeWidgetUtils {
             minValue = rangeWidgetHorizontalBinding.minValue;
             maxValue = rangeWidgetHorizontalBinding.maxValue;
         }
-        setUpWidgetParameters((RangeQuestion) prompt.getQuestion(), minValue, maxValue);
 
+        setUpWidgetParameters((RangeQuestion) prompt.getQuestion(), minValue, maxValue);
         if (prompt.isReadOnly()) {
             slider.setEnabled(false);
         }
-
         return new RangeWidgetLayoutElements(answerView, slider, currentValue);
     }
 
@@ -97,13 +95,8 @@ public class RangeWidgetUtils {
         BigDecimal rangeStart = rangeQuestion.getRangeStart();
         BigDecimal rangeEnd = rangeQuestion.getRangeEnd();
 
-        if (rangeEnd.compareTo(rangeStart) > -1) {
-            minValue.setText(String.valueOf(rangeStart));
-            maxValue.setText(String.valueOf(rangeEnd));
-        } else {
-            minValue.setText(String.valueOf(rangeEnd));
-            maxValue.setText(String.valueOf(rangeStart));
-        }
+        minValue.setText(String.valueOf(rangeStart));
+        maxValue.setText(String.valueOf(rangeEnd));
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -131,20 +124,6 @@ public class RangeWidgetUtils {
                 slider.setStepSize(rangeStep.floatValue());
             }
         }
-
-        slider.setOnTouchListener((v, event) -> {
-            int action = event.getAction();
-            switch (action) {
-                case MotionEvent.ACTION_DOWN:
-                    v.getParent().requestDisallowInterceptTouchEvent(true);
-                    break;
-                case MotionEvent.ACTION_UP:
-                    v.getParent().requestDisallowInterceptTouchEvent(false);
-                    break;
-            }
-            v.onTouchEvent(event);
-            return true;
-        });
 
         BigDecimal actualValue = null;
         if (prompt.getAnswerValue() != null) {
@@ -188,18 +167,22 @@ public class RangeWidgetUtils {
     }
 
     public static BigDecimal setUpSliderValue(FormEntryPrompt prompt, Slider slider, RangeQuestion rangeQuestion, float value) {
+        BigDecimal rangeStart = rangeQuestion.getRangeStart();
+        BigDecimal rangeStep = rangeQuestion.getRangeStep().abs();
+        BigDecimal rangeEnd = rangeQuestion.getRangeEnd();
+
+        BigDecimal actualValue = BigDecimal.valueOf(value);
         if (prompt.getQuestion().getAppearanceAttr() != null && prompt.getQuestion().getAppearanceAttr().contains(NO_TICKS_APPEARANCE)) {
-            BigDecimal rangeStart = rangeQuestion.getRangeStart();
-            BigDecimal rangeStep = rangeQuestion.getRangeStep().abs();
+            int progress = (actualValue.subtract(rangeStart).abs().divide(rangeStep)).intValue();
+            actualValue = rangeStart.add(rangeStep.multiply(new BigDecimal(String.valueOf(progress))));
 
-            int progress = (int) ((value - rangeStart.floatValue()) / rangeStep.floatValue());
-            float  actualValue = rangeStart.floatValue() + progress * rangeStep.floatValue();
-
-            slider.setValue(actualValue);
-            return BigDecimal.valueOf(actualValue);
+            slider.setValue(actualValue.floatValue());
+        }
+        if (rangeEnd.compareTo(rangeStart) < 0) {
+            actualValue = rangeEnd.add(rangeStart).subtract(actualValue);
         }
 
-        return BigDecimal.valueOf(value);
+        return actualValue;
     }
 
     public static String[] getDisplayedValuesForNumberPicker(BigDecimal rangeStart, BigDecimal rangeStep, BigDecimal rangeEnd, Boolean isIntegerDataType) {
@@ -232,7 +215,6 @@ public class RangeWidgetUtils {
 
     public static void showNumberPickerDialog(FormEntryActivity activity, String[] displayedValuesForNumberPicker, int id, int progress) {
         NumberPickerDialog dialog = NumberPickerDialog.newInstance(id, displayedValuesForNumberPicker, progress);
-
         try {
             dialog.show(activity.getSupportFragmentManager(), NumberPickerDialog.NUMBER_PICKER_DIALOG_TAG);
         } catch (ClassCastException e) {

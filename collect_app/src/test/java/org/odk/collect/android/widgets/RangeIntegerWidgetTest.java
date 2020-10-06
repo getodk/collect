@@ -108,12 +108,23 @@ public class RangeIntegerWidgetTest {
     }
 
     @Test
-    public void changingSliderValue_updatesAnswer() {
+    public void changingSliderValue_whenRangeStartIsSmallerThanRangeEnd_updatesAnswer() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         widget.slider.setValue(4.0F);
 
         assertThat(widget.getAnswer().getValue(), equalTo(4));
         assertThat(widget.currentValue.getText(), equalTo("4"));
+    }
+
+    @Test
+    public void changingSliderValue_whenRangeStartIsGreaterThanRangeEnd_updatesAnswer() {
+        when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.TEN);
+        when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.ONE);
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        widget.slider.setValue(4.0F);
+
+        assertThat(widget.getAnswer().getValue(), equalTo(7));
+        assertThat(widget.currentValue.getText(), equalTo("7"));
     }
 
     @Test

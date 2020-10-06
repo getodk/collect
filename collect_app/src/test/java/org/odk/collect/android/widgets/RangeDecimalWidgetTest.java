@@ -36,9 +36,9 @@ public class RangeDecimalWidgetTest {
     public void setup() {
         rangeQuestion = mock(RangeQuestion.class);
 
-        when(rangeQuestion.getRangeStart()).thenReturn(new BigDecimal("1.5"));
-        when(rangeQuestion.getRangeEnd()).thenReturn(new BigDecimal("5.5"));
-        when(rangeQuestion.getRangeStep()).thenReturn(new BigDecimal("0.5"));
+        when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.valueOf(1.5));
+        when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.valueOf(5.5));
+        when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.valueOf(0.5));
     }
 
     @Test
@@ -84,7 +84,6 @@ public class RangeDecimalWidgetTest {
     public void clearAnswer_clearsWidgetAnswer() {
         RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
         widget.clearAnswer();
-
         assertThat(widget.getAnswer(), nullValue());
     }
 
@@ -92,8 +91,8 @@ public class RangeDecimalWidgetTest {
     public void clearAnswer_callsValueChangeListener() {
         RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-
         widget.clearAnswer();
+
         verify(valueChangedListener).widgetValueChanged(widget);
     }
 
@@ -104,6 +103,17 @@ public class RangeDecimalWidgetTest {
 
         assertThat(widget.getAnswer().getValue(), equalTo(2.5));
         assertThat(widget.currentValue.getText(), equalTo("2.5"));
+    }
+
+    @Test
+    public void changingSliderValue_whenRangeStartIsGreaterThanRangeEnd_updatesAnswer() {
+        when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.valueOf(5.5));
+        when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.valueOf(1.5));
+        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        widget.slider.setValue(4.0F);
+
+        assertThat(widget.getAnswer().getValue(), equalTo(3.0));
+        assertThat(widget.currentValue.getText(), equalTo("3.0"));
     }
 
     @Test
