@@ -32,14 +32,11 @@ public class TrackingTouchSliderTest {
     }
 
     @Test
-    public void onStartTrackingTouch_suppressesFlingGesture() {
-        slider.onTouchEvent(MotionEventBuilder.newBuilder().setAction(ACTION_DOWN).build());
-        assertThat(slider.isTrackingTouch(), equalTo(true));
-    }
-
-    @Test
-    public void onStopTrackingTouch_doesNotSuppressFlingGesture() {
+    public void touchEventOnSlider_suppressFlingGesture() {
         slider.onTouchEvent(MotionEventBuilder.newBuilder().setAction(ACTION_UP).build());
         assertThat(slider.isTrackingTouch(), equalTo(false));
+
+        slider.onTouchEvent(MotionEventBuilder.newBuilder().setAction(ACTION_DOWN).build());
+        assertThat(slider.isTrackingTouch(), equalTo(true));
     }
 }

@@ -16,7 +16,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.databinding.RangeWidgetHorizontalBinding;
 import org.odk.collect.android.databinding.RangeWidgetVerticalBinding;
-import org.odk.collect.android.databinding.WidgetAnswerBinding;
+import org.odk.collect.android.databinding.WidgetButtonAndAnswerLayoutBinding;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.TrackingTouchSlider;
@@ -155,7 +155,7 @@ public class RangeWidgetUtils {
         return actualValue;
     }
 
-    public static void setUpRangePickerWidget(Context context, WidgetAnswerBinding binding, FormEntryPrompt prompt) {
+    public static void setUpRangePickerWidget(Context context, WidgetButtonAndAnswerLayoutBinding binding, FormEntryPrompt prompt) {
         if (RangeWidgetUtils.isRangePickerWidgetValid((RangeQuestion) prompt.getQuestion(), binding.widgetButton)) {
             if (prompt.getAnswerValue() != null) {
                 BigDecimal actualValue = new BigDecimal(prompt.getAnswerValue().getValue().toString());
@@ -240,7 +240,7 @@ public class RangeWidgetUtils {
         }
     }
 
-    public static int getNumberPickerProgress(WidgetAnswerBinding binding, BigDecimal rangeStart, BigDecimal rangeStep,
+    public static int getNumberPickerProgress(WidgetButtonAndAnswerLayoutBinding binding, BigDecimal rangeStart, BigDecimal rangeStep,
                                                BigDecimal rangeEnd, int value) {
         BigDecimal actualValue;
         int elementCount = rangeEnd.subtract(rangeStart).abs().divide(rangeStep).intValue();

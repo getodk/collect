@@ -11,14 +11,14 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.databinding.WidgetAnswerBinding;
+import org.odk.collect.android.databinding.WidgetButtonAndAnswerLayoutBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
 
 import java.math.BigDecimal;
 
 public class RangePickerDecimalWidget extends QuestionWidget {
-    WidgetAnswerBinding binding;
+    WidgetButtonAndAnswerLayoutBinding binding;
     String[] displayedValuesForNumberPicker;
 
     private BigDecimal rangeStart;
@@ -33,7 +33,7 @@ public class RangePickerDecimalWidget extends QuestionWidget {
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        binding = WidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
+        binding = WidgetButtonAndAnswerLayoutBinding.inflate(((Activity) context).getLayoutInflater());
 
         binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
