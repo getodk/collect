@@ -19,6 +19,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
@@ -86,28 +87,44 @@ public class FormManagementPreferences extends BasePreferenceFragment {
     private void updateDisabledPrefs() {
         SharedPreferences sharedPrefs = preferencesProvider.getGeneralSharedPreferences();
 
-        Preference updateFrequency = findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK);
-        CheckBoxPreference automaticDownload = findPreference(KEY_AUTOMATIC_UPDATE);
+        // Might be null if disabled in Admin settings
+        @Nullable Preference updateFrequency = findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK);
+        @Nullable CheckBoxPreference automaticDownload = findPreference(KEY_AUTOMATIC_UPDATE);
 
         if (Protocol.parse(getActivity(), sharedPrefs.getString(KEY_PROTOCOL, null)) == Protocol.GOOGLE) {
             displayDisabled(findPreference(KEY_FORM_UPDATE_MODE), getString(R.string.manual));
-            displayDisabled(automaticDownload, false);
-            updateFrequency.setEnabled(false);
+            if (automaticDownload != null) {
+                displayDisabled(automaticDownload, false);
+            }
+            if (updateFrequency != null) {
+                updateFrequency.setEnabled(false);
+            }
         } else {
             switch (getFormUpdateMode(requireContext(), sharedPrefs)) {
                 case MANUAL:
-                    displayDisabled(automaticDownload, false);
-                    updateFrequency.setEnabled(false);
+                    if (automaticDownload != null) {
+                        displayDisabled(automaticDownload, false);
+                    }
+                    if (updateFrequency != null) {
+                        updateFrequency.setEnabled(false);
+                    }
                     break;
                 case PREVIOUSLY_DOWNLOADED_ONLY:
-                    automaticDownload.setEnabled(true);
-                    automaticDownload.setChecked(sharedPrefs.getBoolean(KEY_AUTOMATIC_UPDATE, false));
-
-                    updateFrequency.setEnabled(true);
+                    if (automaticDownload != null) {
+                        automaticDownload.setEnabled(true);
+                        automaticDownload.setChecked(sharedPrefs.getBoolean(KEY_AUTOMATIC_UPDATE, false));
+                    }
+                    if (updateFrequency != null) {
+                        updateFrequency.setEnabled(true);
+                    }
                     break;
                 case MATCH_EXACTLY:
-                    displayDisabled(automaticDownload, true);
-                    updateFrequency.setEnabled(true);
+                    if (automaticDownload != null) {
+                        displayDisabled(automaticDownload, true);
+                    }
+                    if (updateFrequency != null) {
+                        updateFrequency.setEnabled(true);
+                    }
                     break;
             }
         }
