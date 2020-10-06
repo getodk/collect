@@ -20,7 +20,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.TextView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -44,15 +43,8 @@ public class UrlWidget extends QuestionWidget {
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = UrlWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
-
-        if (prompt.isReadOnly()) {
-            binding.urlButton.setVisibility(GONE);
-        } else {
-            binding.urlButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-            binding.urlButton.setOnClickListener(v -> onButtonClick());
-        }
-        binding.urlAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-        binding.urlAnswerText.setText(prompt.getAnswerText());
+        binding.urlButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.urlButton.setOnClickListener(v -> onButtonClick());
 
         return binding.getRoot();
     }
@@ -64,10 +56,9 @@ public class UrlWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        String answerText = binding.urlAnswerText.getText().toString();
-        return !answerText.isEmpty()
-                ? new StringData(answerText)
-                : null;
+        return getFormEntryPrompt().getAnswerValue() == null
+                ? null
+                : new StringData(getFormEntryPrompt().getAnswerText());
     }
 
     @Override
@@ -79,7 +70,6 @@ public class UrlWidget extends QuestionWidget {
     public void cancelLongPress() {
         super.cancelLongPress();
         binding.urlButton.cancelLongPress();
-        binding.urlAnswerText.cancelLongPress();
     }
 
     @Override
@@ -91,20 +81,11 @@ public class UrlWidget extends QuestionWidget {
     }
 
     public void onButtonClick() {
-        if (!isUrlEmpty(binding.urlAnswerText)) {
+        if (getFormEntryPrompt().getAnswerValue() != null) {
             customTabHelper.bindCustomTabsService(getContext(), null);
-            customTabHelper.openUri(getContext(), getUri());
+            customTabHelper.openUri(getContext(), Uri.parse(getFormEntryPrompt().getAnswerText()));
         } else {
             ToastUtils.showShortToast("No URL set");
         }
-    }
-
-    private boolean isUrlEmpty(TextView stringAnswer) {
-        return stringAnswer == null || stringAnswer.getText() == null
-                || stringAnswer.getText().toString().isEmpty();
-    }
-
-    private Uri getUri() {
-        return Uri.parse(binding.urlAnswerText.getText().toString());
     }
 }

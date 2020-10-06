@@ -67,10 +67,10 @@ public class AnalyticsEvents {
     public static final String SAVE_INCOMPLETE = "WidgetAttribute";
 
     /**
-     * Track displays of audio question types. The action should be the type of audio question and
+     * Track displays of widget/question types. The action should be the type of widget and
      * the label should be a hash of the form definition.
      */
-    public static final String AUDIO_QUESTION = "Prompt";
+    public static final String PROMPT = "Prompt";
 
     /**
      * Track scoped storage migration attempts. The action should be the result of the attempt.

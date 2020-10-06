@@ -18,7 +18,7 @@ import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
-import static org.odk.collect.android.analytics.AnalyticsEvents.AUDIO_QUESTION;
+import static org.odk.collect.android.analytics.AnalyticsEvents.PROMPT;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
 
 public abstract class BaseSelectListWidget extends ItemsWidget implements MultiChoiceWidget, SelectItemClickListener {
@@ -108,7 +108,7 @@ public abstract class BaseSelectListWidget extends ItemsWidget implements MultiC
                 String audioURI = getPlayableAudioURI(questionDetails.getPrompt(), choice, getReferenceManager());
 
                 if (audioURI != null) {
-                    analytics.logEvent(AUDIO_QUESTION, "AudioChoice", questionDetails.getFormAnalyticsID());
+                    analytics.logEvent(PROMPT, "AudioChoice", questionDetails.getFormAnalyticsID());
                     break;
                 }
             }
