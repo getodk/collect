@@ -24,7 +24,6 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
@@ -123,8 +122,6 @@ public class GoogleFusedLocationClientTest {
 
     @Test
     public void requestingLocationUpdatesShouldUpdateCorrectListener() {
-        when(googleApiClient.isConnected()).thenReturn(true);
-
         client.start();
 
         TestLocationListener firstListener = new TestLocationListener();
@@ -173,13 +170,13 @@ public class GoogleFusedLocationClientTest {
     @Test
     public void getLastLocationShouldCallBlockingConnectIfNotConnected() {
         client.getLastLocation();
-        verify(googleApiClient, timeout(100)).blockingConnect();
+        verify(googleApiClient).blockingConnect();
 
         when(googleApiClient.isConnected()).thenReturn(true);
         client.start();
 
         client.getLastLocation();
-        verify(googleApiClient, timeout(100)).blockingConnect(); // 'verify' checks if called *once*.
+        verify(googleApiClient).blockingConnect(); // 'verify' checks if called *once*.
     }
 
     @Test
