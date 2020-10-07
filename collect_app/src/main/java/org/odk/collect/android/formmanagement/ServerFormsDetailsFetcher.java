@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.formmanagement;
 
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.MediaFileRepository;
 import org.odk.collect.server.FormApiException;
@@ -23,8 +25,6 @@ import org.odk.collect.server.FormListApi;
 import org.odk.collect.server.FormListItem;
 import org.odk.collect.server.ManifestFile;
 import org.odk.collect.server.MediaFile;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -61,7 +61,6 @@ public class ServerFormsDetailsFetcher {
         List<ServerFormDetails> serverFormDetailsList = new ArrayList<>();
 
         for (FormListItem listItem : formListItems) {
-            boolean isNewerFormVersionAvailable = false;
             ManifestFile manifestFile = null;
 
             if (listItem.getManifestURL() != null) {
@@ -69,10 +68,12 @@ public class ServerFormsDetailsFetcher {
             }
 
             boolean thisFormAlreadyDownloaded = !formsRepository.getByJrFormIdNotDeleted(listItem.getFormID()).isEmpty();
-            if (thisFormAlreadyDownloaded) {
-                isNewerFormVersionAvailable = isNewerFormVersionAvailable(listItem);
 
-                if (manifestFile != null) {
+            boolean isNewerFormVersionAvailable = false;
+            if (thisFormAlreadyDownloaded) {
+                if (isNewerFormVersionAvailable(listItem)) {
+                    isNewerFormVersionAvailable = true;
+                } else if (manifestFile != null) {
                     List<MediaFile> newMediaFiles = manifestFile.getMediaFiles();
 
                     if (newMediaFiles != null && !newMediaFiles.isEmpty()) {

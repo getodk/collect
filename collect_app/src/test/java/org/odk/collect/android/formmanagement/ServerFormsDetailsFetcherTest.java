@@ -2,6 +2,7 @@ package org.odk.collect.android.formmanagement;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.MediaFileRepository;
@@ -9,7 +10,6 @@ import org.odk.collect.server.FormListApi;
 import org.odk.collect.server.FormListItem;
 import org.odk.collect.server.ManifestFile;
 import org.odk.collect.server.MediaFile;
-import org.odk.collect.android.support.InMemFormsRepository;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -161,6 +161,22 @@ public class ServerFormsDetailsFetcherTest {
         List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
         assertThat(serverFormDetails.get(1).isUpdated(), is(false));
         assertThat(serverFormDetails.get(1).isNotOnDevice(), is(false));
+    }
+
+    @Test
+    public void whenAFormExists_andIsUpdatedOnServer_andDoesNotHaveNewMedia_isUpdated() throws Exception {
+        formsRepository.save(new Form.Builder()
+                .id(2L)
+                .jrFormId("form-2")
+                .md5Hash("form-2-hash-old")
+                .build());
+
+        File localMediaFile = File.createTempFile("blah", ".csv");
+        writeToFile(localMediaFile, "blah");
+        when(mediaFileRepository.getAll("form-2", "server")).thenReturn(asList(localMediaFile));
+
+        List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
+        assertThat(serverFormDetails.get(1).isUpdated(), is(true));
     }
 
     private void writeToFile(File mediaFile, String blah) throws IOException {
