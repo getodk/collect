@@ -141,7 +141,7 @@ public class ServerFormDownloaderTest {
 
         try {
             downloader.downloadForm(serverFormDetails, null, formListApi);
-            fail("Excepted exception");
+            fail("Expected exception");
         } catch (InterruptedException e) {
             assertThat(formsRepository.getAll(), is(empty()));
             assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));

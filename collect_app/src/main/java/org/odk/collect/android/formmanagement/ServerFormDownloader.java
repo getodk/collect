@@ -90,7 +90,7 @@ public class ServerFormDownloader implements FormDownloader {
         }
 
         @Override
-        public boolean isTaskCanceled() {
+        public boolean isTaskCancelled() {
             if (isCancelled != null) {
                 return isCancelled.get();
             } else {
@@ -147,7 +147,7 @@ public class ServerFormDownloader implements FormDownloader {
                 return false;
             }
 
-            if (stateListener != null && stateListener.isTaskCanceled()) {
+            if (stateListener != null && stateListener.isTaskCancelled()) {
                 cleanUp(fileResult, tempMediaPath);
                 fileResult = null;
             }
@@ -174,7 +174,7 @@ public class ServerFormDownloader implements FormDownloader {
 
             boolean installed = false;
 
-            if ((stateListener == null || !stateListener.isTaskCanceled()) && success) {
+            if ((stateListener == null || !stateListener.isTaskCancelled()) && success) {
                 if (!fileResult.isNew || isSubmissionOk(parsedFields)) {
                     installed = installEverything(tempMediaPath, fileResult, parsedFields, formsDirPath);
                 } else {
@@ -357,7 +357,7 @@ public class ServerFormDownloader implements FormDownloader {
 
                     byte[] buf = new byte[4096];
                     int len;
-                    while ((len = is.read(buf)) > 0 && (stateListener == null || !stateListener.isTaskCanceled())) {
+                    while ((len = is.read(buf)) > 0 && (stateListener == null || !stateListener.isTaskCancelled())) {
                         os.write(buf, 0, len);
                     }
                     os.flush();
@@ -399,7 +399,7 @@ public class ServerFormDownloader implements FormDownloader {
                     }
                 }
 
-                if (stateListener != null && stateListener.isTaskCanceled()) {
+                if (stateListener != null && stateListener.isTaskCancelled()) {
                     FileUtils.deleteAndReport(tempFile);
                     throw new InterruptedException();
                 }

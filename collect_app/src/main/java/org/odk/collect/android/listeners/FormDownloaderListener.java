@@ -20,5 +20,5 @@ public interface FormDownloaderListener {
 
     void progressUpdate(String currentFile, String progress, String total);
 
-    boolean isTaskCanceled();
+    boolean isTaskCancelled();
 }
