@@ -182,7 +182,7 @@ public class ServerFormDownloaderTest {
     }
 
     @Test
-    public void beforeDownloadingMediaFile_reportsProgress() throws Exception {
+    public void beforeDownloadingEachMediaFile_reportsProgress() throws Exception {
         String xform = createXForm("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
