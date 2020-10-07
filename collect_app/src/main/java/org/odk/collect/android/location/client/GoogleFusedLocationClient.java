@@ -128,11 +128,13 @@ public class GoogleFusedLocationClient
     }
 
     public void stopLocationUpdates() {
-        if (!isMonitoringLocation() || !googleApiClient.isConnected()) {
+        if (!isMonitoringLocation()) {
             return;
         }
 
-        fusedLocationProviderApi.removeLocationUpdates(googleApiClient, locationListener);
+        if (googleApiClient.isConnected()) {
+            fusedLocationProviderApi.removeLocationUpdates(googleApiClient, locationListener);
+        }
         locationListener = null;
     }
 
@@ -141,7 +143,7 @@ public class GoogleFusedLocationClient
     public Location getLastLocation() {
         // We need to block if the Client isn't already connected:
         if (!googleApiClient.isConnected()) {
-            new Thread(googleApiClient::blockingConnect).start();
+            googleApiClient.blockingConnect();
         }
 
         return fusedLocationProviderApi.getLastLocation(googleApiClient);
