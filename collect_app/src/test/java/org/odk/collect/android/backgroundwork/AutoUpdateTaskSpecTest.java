@@ -9,6 +9,10 @@ import androidx.test.core.app.ApplicationProvider;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
@@ -26,16 +30,20 @@ import org.odk.collect.android.support.BooleanChangeLock;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
 
+import java.util.HashMap;
 import java.util.function.Supplier;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
+@SuppressWarnings("PMD.DoubleBraceInitialization")
 public class AutoUpdateTaskSpecTest {
 
     private final BooleanChangeLock changeLock = new BooleanChangeLock();
@@ -108,5 +116,41 @@ public class AutoUpdateTaskSpecTest {
         task.get();
 
         verifyNoInteractions(formDownloader);
+    }
+
+    @Test
+    public void whenAutoDownloadEnabled_andDownloadIsCancelled_sendsCompletedDownloadsToNotifier() throws Exception {
+        generalPrefs.edit().putBoolean(GeneralKeys.KEY_AUTOMATIC_UPDATE, true).apply();
+
+        ServerFormDetails form1 = new ServerFormDetails("", "", "", "form1", "", "", false, true, new ManifestFile("", emptyList()));
+        ServerFormDetails form2 = new ServerFormDetails("", "", "", "form2", "", "", false, true, new ManifestFile("", emptyList()));
+        when(serverFormsDetailsFetcher.fetchFormDetails()).thenReturn(asList(form1, form2));
+
+        // Cancel form download after downloading one form
+        doAnswer(new Answer<Void>() {
+
+            private boolean calledBefore;
+
+            @Override
+            public Void answer(InvocationOnMock invocation) throws Throwable {
+                if (!calledBefore) {
+                    calledBefore = true;
+                } else {
+                    throw new InterruptedException();
+                }
+
+                return null;
+            }
+        }).when(formDownloader).downloadForm(any(), any(), any());
+
+        AutoUpdateTaskSpec taskSpec = new AutoUpdateTaskSpec();
+        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
+        task.get();
+
+        verify(notifier).onUpdatesDownloaded(new HashMap<ServerFormDetails, String>() {
+            {
+                put(form1, Collect.getInstance().getString(R.string.success));
+            }
+        });
     }
 }
