@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.formmanagement;
 
-import org.odk.collect.server.ManifestFile;
+import org.odk.collect.android.server.ManifestFile;
 
 import java.io.Serializable;
 

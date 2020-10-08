@@ -1,4 +1,4 @@
-package org.odk.collect.forms;
+package org.odk.collect.android.forms;
 
 import java.io.File;
 import java.util.List;

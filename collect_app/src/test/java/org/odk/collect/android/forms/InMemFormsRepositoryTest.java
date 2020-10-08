@@ -1,4 +1,4 @@
-package org.odk.collect.forms;
+package org.odk.collect.android.forms;
 
 import org.junit.Before;
 import org.odk.collect.android.support.InMemFormsRepository;

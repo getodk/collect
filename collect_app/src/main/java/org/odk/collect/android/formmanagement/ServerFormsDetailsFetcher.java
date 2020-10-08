@@ -18,13 +18,13 @@ package org.odk.collect.android.formmanagement;
 
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
-import org.odk.collect.forms.FormsRepository;
-import org.odk.collect.forms.MediaFileRepository;
-import org.odk.collect.server.FormSourceException;
-import org.odk.collect.server.FormSource;
-import org.odk.collect.server.FormListItem;
-import org.odk.collect.server.ManifestFile;
-import org.odk.collect.server.MediaFile;
+import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.forms.MediaFileRepository;
+import org.odk.collect.android.server.FormSourceException;
+import org.odk.collect.android.server.FormSource;
+import org.odk.collect.android.server.FormListItem;
+import org.odk.collect.android.server.ManifestFile;
+import org.odk.collect.android.server.MediaFile;
 
 import java.io.File;
 import java.util.ArrayList;

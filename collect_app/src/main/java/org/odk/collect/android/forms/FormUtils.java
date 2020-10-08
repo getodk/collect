@@ -1,4 +1,4 @@
-package org.odk.collect.forms;
+package org.odk.collect.android.forms;
 
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.core.reference.RootTranslator;

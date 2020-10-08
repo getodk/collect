@@ -32,7 +32,7 @@ import androidx.loader.content.CursorLoader;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.DeleteInstancesListener;

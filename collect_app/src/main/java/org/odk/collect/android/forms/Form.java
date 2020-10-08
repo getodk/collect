@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.forms;
+package org.odk.collect.android.forms;
 
 import javax.annotation.Nullable;
 

@@ -59,7 +59,7 @@ import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
-import org.odk.collect.server.FormSourceException;
+import org.odk.collect.android.server.FormSourceException;
 
 import java.net.URI;
 import java.util.ArrayList;

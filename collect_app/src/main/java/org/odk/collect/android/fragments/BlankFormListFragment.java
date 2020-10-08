@@ -28,7 +28,7 @@ import androidx.loader.content.CursorLoader;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FormListAdapter;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.InstancesRepository;

@@ -3,7 +3,7 @@ package org.odk.collect.android.formmanagement;
 import android.content.Context;
 
 import org.odk.collect.android.R;
-import org.odk.collect.server.FormSourceException;
+import org.odk.collect.android.server.FormSourceException;
 import org.odk.collect.android.utilities.TranslationHandler;
 
 public class FormSourceExceptionMapper {

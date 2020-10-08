@@ -35,7 +35,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import static org.odk.collect.forms.FormUtils.setupReferenceManagerForForm;
+import static org.odk.collect.android.forms.FormUtils.setupReferenceManagerForForm;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
 public class FormLoadingUtils {

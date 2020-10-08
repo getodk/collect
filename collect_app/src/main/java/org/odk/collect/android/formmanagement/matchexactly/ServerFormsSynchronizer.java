@@ -6,9 +6,9 @@ import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.instances.InstancesRepository;
-import org.odk.collect.forms.Form;
-import org.odk.collect.forms.FormsRepository;
-import org.odk.collect.server.FormSourceException;
+import org.odk.collect.android.forms.Form;
+import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.server.FormSourceException;
 
 import java.util.List;
 

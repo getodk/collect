@@ -50,7 +50,7 @@ import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.android.forms.FormsRepository;
 
 import java.io.IOException;
 import java.util.HashMap;

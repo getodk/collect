@@ -4,7 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import org.odk.collect.server.FormSourceException;
+import org.odk.collect.android.server.FormSourceException;
 
 public class SyncStatusRepository {
 

@@ -153,7 +153,7 @@ import org.odk.collect.android.widgets.RangePickerIntegerWidget;
 import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
 import org.odk.collect.android.widgets.utilities.FormControllerWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
-import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.android.forms.FormsRepository;
 
 import java.io.File;
 import java.io.FileOutputStream;

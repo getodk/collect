@@ -9,13 +9,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.server.FormSourceException;
+import org.odk.collect.android.server.FormSourceException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.odk.collect.server.FormSourceException.Type.FETCH_ERROR;
-import static org.odk.collect.server.FormSourceException.Type.SECURITY_ERROR;
-import static org.odk.collect.server.FormSourceException.Type.UNREACHABLE;
+import static org.odk.collect.android.server.FormSourceException.Type.FETCH_ERROR;
+import static org.odk.collect.android.server.FormSourceException.Type.SECURITY_ERROR;
+import static org.odk.collect.android.server.FormSourceException.Type.UNREACHABLE;
 
 @RunWith(AndroidJUnit4.class)
 public class FormSourceExceptionMapperTest {

@@ -37,7 +37,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFormInstance;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.forms.Form;
+import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;

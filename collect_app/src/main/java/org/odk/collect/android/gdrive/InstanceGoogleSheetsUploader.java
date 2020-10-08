@@ -53,7 +53,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.UrlUtils;
-import org.odk.collect.forms.Form;
+import org.odk.collect.android.forms.Form;
 
 import java.io.File;
 import java.io.IOException;

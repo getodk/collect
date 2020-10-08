@@ -22,7 +22,7 @@ import androidx.core.util.Pair;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
-import org.odk.collect.server.FormSourceException;
+import org.odk.collect.android.server.FormSourceException;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.util.HashMap;
