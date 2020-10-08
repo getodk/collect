@@ -14,9 +14,9 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FillBlankFormActivity;
 import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.NotificationActivity;
-import org.odk.collect.android.formmanagement.FormApiExceptionMapper;
+import org.odk.collect.android.formmanagement.FormSourceExceptionMapper;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.server.FormApiException;
+import org.odk.collect.server.FormSourceException;
 import org.odk.collect.android.preferences.MetaKeys;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.IconUtils;
@@ -112,7 +112,7 @@ public class NotificationManagerNotifier implements Notifier {
     }
 
     @Override
-    public void onSync(@Nullable FormApiException exception) {
+    public void onSync(@Nullable FormSourceException exception) {
         if (exception != null) {
             Intent intent = new Intent(application, FillBlankFormActivity.class);
             PendingIntent contentIntent = PendingIntent.getActivity(application, FORM_SYNC_NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -120,7 +120,7 @@ public class NotificationManagerNotifier implements Notifier {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(application, COLLECT_NOTIFICATION_CHANNEL)
                     .setContentIntent(contentIntent)
                     .setContentTitle(TranslationHandler.getString(application, R.string.form_update_error))
-                    .setStyle(new NotificationCompat.BigTextStyle().bigText(new FormApiExceptionMapper(application).getMessage(exception)))
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(new FormSourceExceptionMapper(application).getMessage(exception)))
                     .setSmallIcon(IconUtils.getNotificationAppIcon())
                     .setAutoCancel(true);
 

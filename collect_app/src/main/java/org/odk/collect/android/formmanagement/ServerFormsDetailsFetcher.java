@@ -20,8 +20,8 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.MediaFileRepository;
-import org.odk.collect.server.FormApiException;
-import org.odk.collect.server.FormListApi;
+import org.odk.collect.server.FormSourceException;
+import org.odk.collect.server.FormSource;
 import org.odk.collect.server.FormListItem;
 import org.odk.collect.server.ManifestFile;
 import org.odk.collect.server.MediaFile;
@@ -36,35 +36,35 @@ public class ServerFormsDetailsFetcher {
 
     private final FormsRepository formsRepository;
     private final MediaFileRepository mediaFileRepository;
-    private final FormListApi formListAPI;
+    private final FormSource formSource;
     private final DiskFormsSynchronizer diskFormsSynchronizer;
 
     public ServerFormsDetailsFetcher(FormsRepository formsRepository,
                                      MediaFileRepository mediaFileRepository,
-                                     FormListApi formListAPI,
+                                     FormSource formSource,
                                      DiskFormsSynchronizer diskFormsSynchronizer) {
         this.formsRepository = formsRepository;
         this.mediaFileRepository = mediaFileRepository;
-        this.formListAPI = formListAPI;
+        this.formSource = formSource;
         this.diskFormsSynchronizer = diskFormsSynchronizer;
     }
 
     public void updateFormListApi(String url, WebCredentialsUtils webCredentialsUtils) {
-        formListAPI.updateUrl(url);
-        formListAPI.updateWebCredentialsUtils(webCredentialsUtils);
+        formSource.updateUrl(url);
+        formSource.updateWebCredentialsUtils(webCredentialsUtils);
     }
 
-    public List<ServerFormDetails> fetchFormDetails() throws FormApiException {
+    public List<ServerFormDetails> fetchFormDetails() throws FormSourceException {
         diskFormsSynchronizer.synchronize();
 
-        List<FormListItem> formListItems = formListAPI.fetchFormList();
+        List<FormListItem> formListItems = formSource.fetchFormList();
         List<ServerFormDetails> serverFormDetailsList = new ArrayList<>();
 
         for (FormListItem listItem : formListItems) {
             ManifestFile manifestFile = null;
 
             if (listItem.getManifestURL() != null) {
-                manifestFile = getManifestFile(formListAPI, listItem.getManifestURL());
+                manifestFile = getManifestFile(formSource, listItem.getManifestURL());
             }
 
             boolean thisFormAlreadyDownloaded = !formsRepository.getByJrFormIdNotDeleted(listItem.getFormID()).isEmpty();
@@ -99,15 +99,15 @@ public class ServerFormsDetailsFetcher {
         return serverFormDetailsList;
     }
 
-    private ManifestFile getManifestFile(FormListApi formListAPI, String manifestUrl) {
+    private ManifestFile getManifestFile(FormSource formSource, String manifestUrl) {
         if (manifestUrl == null) {
             return null;
         }
 
         try {
-            return formListAPI.fetchManifest(manifestUrl);
-        } catch (FormApiException formApiException) {
-            Timber.w(formApiException);
+            return formSource.fetchManifest(manifestUrl);
+        } catch (FormSourceException formSourceException) {
+            Timber.w(formSourceException);
             return null;
         }
     }

@@ -6,7 +6,7 @@ import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.MediaFileRepository;
-import org.odk.collect.server.FormListApi;
+import org.odk.collect.server.FormSource;
 import org.odk.collect.server.FormListItem;
 import org.odk.collect.server.ManifestFile;
 import org.odk.collect.server.MediaFile;
@@ -47,15 +47,15 @@ public class ServerFormsDetailsFetcherTest {
         formsRepository = new InMemFormsRepository();
         mediaFileRepository = mock(MediaFileRepository.class);
 
-        FormListApi formListAPI = mock(FormListApi.class);
-        when(formListAPI.fetchFormList()).thenReturn(formList);
+        FormSource formSource = mock(FormSource.class);
+        when(formSource.fetchFormList()).thenReturn(formList);
 
-        when(formListAPI.fetchManifest(formList.get(1).getManifestURL())).thenReturn(new ManifestFile("manifest-2-hash", asList(
+        when(formSource.fetchManifest(formList.get(1).getManifestURL())).thenReturn(new ManifestFile("manifest-2-hash", asList(
                 mediaFile))
         );
 
         DiskFormsSynchronizer diskFormsSynchronizer = mock(DiskFormsSynchronizer.class);
-        fetcher = new ServerFormsDetailsFetcher(formsRepository, mediaFileRepository, formListAPI, diskFormsSynchronizer);
+        fetcher = new ServerFormsDetailsFetcher(formsRepository, mediaFileRepository, formSource, diskFormsSynchronizer);
     }
 
     @Test

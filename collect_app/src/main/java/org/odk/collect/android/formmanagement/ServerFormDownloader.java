@@ -11,8 +11,8 @@ import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.Validator;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
-import org.odk.collect.server.FormApiException;
-import org.odk.collect.server.FormListApi;
+import org.odk.collect.server.FormSourceException;
+import org.odk.collect.server.FormSource;
 import org.odk.collect.server.MediaFile;
 
 import java.io.File;
@@ -40,10 +40,10 @@ public class ServerFormDownloader implements FormDownloader {
     private final String formsDirPath;
     private final FormMetadataParser formMetadataParser;
 
-    public ServerFormDownloader(FormListApi formListApi, FormsRepository formsRepository, File cacheDir, String formsDirPath, FormMetadataParser formMetadataParser) {
+    public ServerFormDownloader(FormSource formSource, FormsRepository formsRepository, File cacheDir, String formsDirPath, FormMetadataParser formMetadataParser) {
         this.cacheDir = cacheDir;
         this.formsDirPath = formsDirPath;
-        this.multiFormDownloader = new MultiFormDownloader(formsRepository, formListApi);
+        this.multiFormDownloader = new MultiFormDownloader(formsRepository, formSource);
         this.formsRepository = formsRepository;
         this.formMetadataParser = formMetadataParser;
     }
@@ -105,13 +105,13 @@ public class ServerFormDownloader implements FormDownloader {
 
         private static final String TEMP_DOWNLOAD_EXTENSION = ".tempDownload";
 
-        private final FormListApi formListApi;
+        private final FormSource formSource;
         private final FormsRepository formsRepository;
 
         @Deprecated
-        MultiFormDownloader(FormsRepository formsRepository, FormListApi formListApi) {
+        MultiFormDownloader(FormsRepository formsRepository, FormSource formSource) {
             this.formsRepository = formsRepository;
-            this.formListApi = formListApi;
+            this.formSource = formSource;
         }
 
         @Deprecated
@@ -144,7 +144,7 @@ public class ServerFormDownloader implements FormDownloader {
 
                 // do not download additional forms.
                 throw e;
-            } catch (FormApiException | IOException e) {
+            } catch (FormSourceException | IOException e) {
                 return false;
             }
 
@@ -287,7 +287,7 @@ public class ServerFormDownloader implements FormDownloader {
          * Takes the formName and the URL and attempts to download the specified file. Returns a file
          * object representing the downloaded file.
          */
-        FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener, File tempDir, String formsDirPath) throws FormApiException, IOException, InterruptedException {
+        FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener, File tempDir, String formsDirPath) throws FormSourceException, IOException, InterruptedException {
             // clean up friendly form name...
             String rootName = FormNameUtils.formatFilenameFromFormName(formName);
 
@@ -301,7 +301,7 @@ public class ServerFormDownloader implements FormDownloader {
                 i++;
             }
 
-            InputStream file = formListApi.fetchForm(url);
+            InputStream file = formSource.fetchForm(url);
             writeFile(tempFormFile, stateListener, file, tempDir);
 
             boolean isNew = true;
@@ -470,7 +470,7 @@ public class ServerFormDownloader implements FormDownloader {
 
         String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
                                              ServerFormDetails fd,
-                                             FormDownloaderListener stateListener, List<MediaFile> files, File tempDir) throws FormApiException, IOException, InterruptedException {
+                                             FormDownloaderListener stateListener, List<MediaFile> files, File tempDir) throws FormSourceException, IOException, InterruptedException {
             if (fd.getManifestUrl() == null) {
                 return null;
             }
@@ -499,7 +499,7 @@ public class ServerFormDownloader implements FormDownloader {
                     File tempMediaFile = new File(tempMediaDir, toDownload.getFilename());
 
                     if (!finalMediaFile.exists()) {
-                        InputStream mediaFile = formListApi.fetchMediaFile(toDownload.getDownloadUrl());
+                        InputStream mediaFile = formSource.fetchMediaFile(toDownload.getDownloadUrl());
                         writeFile(tempMediaFile, stateListener, mediaFile, tempDir);
                     } else {
                         String currentFileHash = FileUtils.getMd5Hash(finalMediaFile);
@@ -509,7 +509,7 @@ public class ServerFormDownloader implements FormDownloader {
                             // if the hashes match, it's the same file
                             // otherwise delete our current one and replace it with the new one
                             FileUtils.deleteAndReport(finalMediaFile);
-                            InputStream mediaFile = formListApi.fetchMediaFile(toDownload.getDownloadUrl());
+                            InputStream mediaFile = formSource.fetchMediaFile(toDownload.getDownloadUrl());
                             writeFile(tempMediaFile, stateListener, mediaFile, tempDir);
                         } else {
                             // exists, and the hash is the same

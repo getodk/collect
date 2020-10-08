@@ -39,7 +39,7 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.formentry.RefreshFormListDialogFragment;
-import org.odk.collect.android.formmanagement.FormApiExceptionMapper;
+import org.odk.collect.android.formmanagement.FormSourceExceptionMapper;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
@@ -59,7 +59,7 @@ import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
-import org.odk.collect.server.FormApiException;
+import org.odk.collect.server.FormSourceException;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -520,7 +520,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     }
 
     @Override
-    public void formListDownloadingComplete(HashMap<String, ServerFormDetails> formList, FormApiException exception) {
+    public void formListDownloadingComplete(HashMap<String, ServerFormDetails> formList, FormSourceException exception) {
         DialogUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
         downloadFormListTask.setDownloaderListener(null);
         downloadFormListTask = null;
@@ -576,7 +576,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             switch (exception.getType()) {
                 case FETCH_ERROR:
                 case UNREACHABLE:
-                    String dialogMessage = new FormApiExceptionMapper(this).getMessage(exception);
+                    String dialogMessage = new FormSourceExceptionMapper(this).getMessage(exception);
                     String dialogTitle = getString(R.string.load_remote_form_error);
 
                     if (viewModel.isDownloadOnlyMode()) {

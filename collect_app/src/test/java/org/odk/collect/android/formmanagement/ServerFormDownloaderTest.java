@@ -10,8 +10,8 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
-import org.odk.collect.server.FormApiException;
-import org.odk.collect.server.FormListApi;
+import org.odk.collect.server.FormSourceException;
+import org.odk.collect.server.FormSource;
 import org.odk.collect.server.FormListItem;
 import org.odk.collect.server.ManifestFile;
 import org.odk.collect.server.MediaFile;
@@ -68,10 +68,10 @@ public class ServerFormDownloaderTest {
                 false,
                 null);
 
-        FormListApi formListApi = mock(FormListApi.class);
-        when(formListApi.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
+        FormSource formSource = mock(FormSource.class);
+        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
 
-        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()));
+        ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()));
         downloader.downloadForm(serverFormDetails, null, null);
 
         List<Form> allForms = formsRepository.getAll();
@@ -101,12 +101,12 @@ public class ServerFormDownloaderTest {
                         new MediaFile("file2", "hash-2", "http://file2")
                 )));
 
-        FormListApi formListApi = mock(FormListApi.class);
-        when(formListApi.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
-        when(formListApi.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents1".getBytes()));
-        when(formListApi.fetchMediaFile("http://file2")).thenReturn(new ByteArrayInputStream("contents2".getBytes()));
+        FormSource formSource = mock(FormSource.class);
+        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
+        when(formSource.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents1".getBytes()));
+        when(formSource.fetchMediaFile("http://file2")).thenReturn(new ByteArrayInputStream("contents2".getBytes()));
 
-        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()));
+        ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()));
         downloader.downloadForm(serverFormDetails, null, null);
 
         List<Form> allForms = formsRepository.getAll();
@@ -148,10 +148,10 @@ public class ServerFormDownloaderTest {
                         new MediaFile("file2", "hash-2", "http://file2")
                 )));
 
-        FormListApi formListApi = mock(FormListApi.class);
-        when(formListApi.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
-        when(formListApi.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents1".getBytes()));
-        when(formListApi.fetchMediaFile("http://file2")).thenReturn(new ByteArrayInputStream("contents2".getBytes()));
+        FormSource formSource = mock(FormSource.class);
+        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
+        when(formSource.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents1".getBytes()));
+        when(formSource.fetchMediaFile("http://file2")).thenReturn(new ByteArrayInputStream("contents2".getBytes()));
 
         FormMetadataParser formMetadataParser = new FormMetadataParser(ReferenceManager.instance()) {
             @Override
@@ -164,7 +164,7 @@ public class ServerFormDownloaderTest {
             }
         };
 
-        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, cacheDir, formsDir.getAbsolutePath(), formMetadataParser);
+        ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), formMetadataParser);
         downloader.downloadForm(serverFormDetails, null, null);
     }
 
@@ -182,7 +182,7 @@ public class ServerFormDownloaderTest {
                 false,
                 null);
 
-        CancelAfterFormDownloadFormListApi formListApi = new CancelAfterFormDownloadFormListApi(xform);
+        CancelAfterFormDownloadFormSource formListApi = new CancelAfterFormDownloadFormSource(xform);
         ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()));
 
         try {
@@ -212,7 +212,7 @@ public class ServerFormDownloaderTest {
                         new MediaFile("file2", "hash-2", "http://file2")
                 )));
 
-        CancelAfterMediaFileDownloadFormListApi formListApi = new CancelAfterMediaFileDownloadFormListApi(xform);
+        CancelAfterMediaFileDownloadFormSource formListApi = new CancelAfterMediaFileDownloadFormSource(xform);
         ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()));
 
         try {
@@ -244,12 +244,12 @@ public class ServerFormDownloaderTest {
                     new MediaFile("file2", "hash-2", "http://file2")
                 )));
 
-        FormListApi formListApi = mock(FormListApi.class);
-        when(formListApi.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
-        when(formListApi.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents".getBytes()));
-        when(formListApi.fetchMediaFile("http://file2")).thenReturn(new ByteArrayInputStream("contents".getBytes()));
+        FormSource formSource = mock(FormSource.class);
+        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
+        when(formSource.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents".getBytes()));
+        when(formSource.fetchMediaFile("http://file2")).thenReturn(new ByteArrayInputStream("contents".getBytes()));
 
-        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()));
+        ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()));
         RecordingProgressReporter progressReporter = new RecordingProgressReporter();
         downloader.downloadForm(serverFormDetails, progressReporter, null);
 
@@ -275,10 +275,10 @@ public class ServerFormDownloaderTest {
                 false,
                 null);
 
-        FormListApi formListApi = mock(FormListApi.class);
-        when(formListApi.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
+        FormSource formSource = mock(FormSource.class);
+        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
 
-        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()));
+        ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()));
         downloader.downloadForm(serverFormDetails, null, null);
         assertThat(formsRepository.get(1L).isDeleted(), is(false));
     }
@@ -301,33 +301,33 @@ public class ServerFormDownloaderTest {
         }
     }
 
-    public static class CancelAfterFormDownloadFormListApi implements FormListApi, Supplier<Boolean> {
+    public static class CancelAfterFormDownloadFormSource implements FormSource, Supplier<Boolean> {
 
         private final String xform;
         private boolean isCancelled;
 
-        public CancelAfterFormDownloadFormListApi(String xform) {
+        public CancelAfterFormDownloadFormSource(String xform) {
             this.xform = xform;
         }
 
         @Override
-        public InputStream fetchForm(String formURL) throws FormApiException {
+        public InputStream fetchForm(String formURL) throws FormSourceException {
             isCancelled = true;
             return new ByteArrayInputStream(xform.getBytes());
         }
 
         @Override
-        public List<FormListItem> fetchFormList() throws FormApiException {
+        public List<FormListItem> fetchFormList() throws FormSourceException {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public ManifestFile fetchManifest(String manifestURL) throws FormApiException {
+        public ManifestFile fetchManifest(String manifestURL) throws FormSourceException {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public InputStream fetchMediaFile(String mediaFileURL) throws FormApiException {
+        public InputStream fetchMediaFile(String mediaFileURL) throws FormSourceException {
             throw new UnsupportedOperationException();
         }
 
@@ -347,22 +347,22 @@ public class ServerFormDownloaderTest {
         }
     }
 
-    public static class CancelAfterMediaFileDownloadFormListApi implements FormListApi, Supplier<Boolean> {
+    public static class CancelAfterMediaFileDownloadFormSource implements FormSource, Supplier<Boolean> {
 
         private final String xform;
         private boolean isCancelled;
 
-        public CancelAfterMediaFileDownloadFormListApi(String xform) {
+        public CancelAfterMediaFileDownloadFormSource(String xform) {
             this.xform = xform;
         }
 
         @Override
-        public InputStream fetchForm(String formURL) throws FormApiException {
+        public InputStream fetchForm(String formURL) throws FormSourceException {
             return new ByteArrayInputStream(xform.getBytes());
         }
 
         @Override
-        public InputStream fetchMediaFile(String mediaFileURL) throws FormApiException {
+        public InputStream fetchMediaFile(String mediaFileURL) throws FormSourceException {
             isCancelled = true;
             return new ByteArrayInputStream("contents".getBytes());
         }
@@ -378,12 +378,12 @@ public class ServerFormDownloaderTest {
         }
 
         @Override
-        public List<FormListItem> fetchFormList() throws FormApiException {
+        public List<FormListItem> fetchFormList() throws FormSourceException {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public ManifestFile fetchManifest(String manifestURL) throws FormApiException {
+        public ManifestFile fetchManifest(String manifestURL) throws FormSourceException {
             throw new UnsupportedOperationException();
         }
 

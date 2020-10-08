@@ -5,7 +5,7 @@ import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchroniz
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.instances.InstancesRepository;
-import org.odk.collect.server.FormApiException;
+import org.odk.collect.server.FormSourceException;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.android.support.InMemInstancesRepository;
 
@@ -80,12 +80,12 @@ public class ServerFormsSynchronizerTest {
 
     @Test
     public void whenFetchingFormDetailsThrowsAnError_throwsError() throws Exception {
-        FormApiException exception = new FormApiException(FormApiException.Type.AUTH_REQUIRED);
+        FormSourceException exception = new FormSourceException(FormSourceException.Type.AUTH_REQUIRED);
         when(serverFormDetailsFetcher.fetchFormDetails()).thenThrow(exception);
 
         try {
             synchronizer.synchronize();
-        } catch (FormApiException e) {
+        } catch (FormSourceException e) {
             assertThat(e, is(exception));
         }
     }
@@ -106,8 +106,8 @@ public class ServerFormsSynchronizerTest {
 
         try {
             synchronizer.synchronize();
-        } catch (FormApiException e) {
-            assertThat(e.getType(), is(FormApiException.Type.FETCH_ERROR));
+        } catch (FormSourceException e) {
+            assertThat(e.getType(), is(FormSourceException.Type.FETCH_ERROR));
             verify(formDownloader).downloadForm(serverForms.get(1), null, null);
         }
     }

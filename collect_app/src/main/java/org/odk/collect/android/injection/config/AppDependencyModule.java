@@ -52,6 +52,7 @@ import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
+import org.odk.collect.android.openrosa.OpenRosaFormSource;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.MediaFileRepository;
@@ -69,8 +70,7 @@ import org.odk.collect.android.notifications.NotificationManagerNotifier;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.server.FormListApi;
-import org.odk.collect.android.openrosa.OpenRosaFormListApi;
+import org.odk.collect.server.FormSource;
 import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
 import org.odk.collect.android.preferences.AdminKeys;
@@ -170,8 +170,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormDownloader providesFormDownloader(FormListApi formListApi, FormsRepository formsRepository, StoragePathProvider storagePathProvider) {
-        return new ServerFormDownloader(formListApi, formsRepository, new File(storagePathProvider.getDirPath(StorageSubdirectory.CACHE)), storagePathProvider.getDirPath(StorageSubdirectory.FORMS), new FormMetadataParser(ReferenceManager.instance()));
+    public FormDownloader providesFormDownloader(FormSource formSource, FormsRepository formsRepository, StoragePathProvider storagePathProvider) {
+        return new ServerFormDownloader(formSource, formsRepository, new File(storagePathProvider.getDirPath(StorageSubdirectory.CACHE)), storagePathProvider.getDirPath(StorageSubdirectory.FORMS), new FormMetadataParser(ReferenceManager.instance()));
     }
 
     @Provides
@@ -398,12 +398,12 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormListApi providesFormAPI(GeneralSharedPreferences generalSharedPreferences, Context context, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils) {
+    public FormSource providesFormAPI(GeneralSharedPreferences generalSharedPreferences, Context context, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils) {
         SharedPreferences generalPrefs = generalSharedPreferences.getSharedPreferences();
         String serverURL = generalPrefs.getString(GeneralKeys.KEY_SERVER_URL, context.getString(R.string.default_server_url));
         String formListPath = generalPrefs.getString(GeneralKeys.KEY_FORMLIST_URL, context.getString(R.string.default_odk_formlist));
 
-        return new OpenRosaFormListApi(serverURL, formListPath, openRosaHttpInterface, webCredentialsUtils);
+        return new OpenRosaFormSource(serverURL, formListPath, openRosaHttpInterface, webCredentialsUtils);
     }
 
     @Provides
@@ -418,8 +418,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormsRepository formsRepository, MediaFileRepository mediaFileRepository, FormListApi formListAPI, DiskFormsSynchronizer diskFormsSynchronizer) {
-        return new ServerFormsDetailsFetcher(formsRepository, mediaFileRepository, formListAPI, diskFormsSynchronizer);
+    public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormsRepository formsRepository, MediaFileRepository mediaFileRepository, FormSource formSource, DiskFormsSynchronizer diskFormsSynchronizer) {
+        return new ServerFormsDetailsFetcher(formsRepository, mediaFileRepository, formSource, diskFormsSynchronizer);
     }
 
     @Provides

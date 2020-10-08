@@ -33,7 +33,7 @@ import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
-import org.odk.collect.server.FormApiException;
+import org.odk.collect.server.FormSourceException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -103,7 +103,7 @@ public class AutoUpdateTaskSpec implements TaskSpec {
                 }
 
                 return true;
-            } catch (FormApiException e) {
+            } catch (FormSourceException e) {
                 return true;
             }
         };

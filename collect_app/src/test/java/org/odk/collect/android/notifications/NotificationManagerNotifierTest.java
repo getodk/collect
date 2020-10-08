@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.server.FormApiException;
+import org.odk.collect.server.FormSourceException;
 import org.odk.collect.server.ManifestFile;
 import org.odk.collect.android.preferences.PreferencesProvider;
 
@@ -38,7 +38,7 @@ public class NotificationManagerNotifierTest {
 
     @Test
     public void onSync_whenExceptionNull_clearsNotification() {
-        notifier.onSync(new FormApiException(FormApiException.Type.FETCH_ERROR));
+        notifier.onSync(new FormSourceException(FormSourceException.Type.FETCH_ERROR));
         assertThat(shadowOf(notificationManager).getAllNotifications().size(), is(1));
 
         notifier.onSync(null);

@@ -8,7 +8,7 @@ import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
-import org.odk.collect.server.FormApiException;
+import org.odk.collect.server.FormSourceException;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class ServerFormsSynchronizer {
         this.formDownloader = formDownloader;
     }
 
-    public void synchronize() throws FormApiException {
+    public void synchronize() throws FormSourceException {
         List<ServerFormDetails> formList = serverFormsDetailsFetcher.fetchFormDetails();
         List<Form> formsOnDevice = formsRepository.getAll();
         FormDeleter formDeleter = new FormDeleter(formsRepository, instancesRepository);
@@ -52,7 +52,7 @@ public class ServerFormsSynchronizer {
         }
 
         if (downloadException) {
-            throw new FormApiException(FormApiException.Type.FETCH_ERROR);
+            throw new FormSourceException(FormSourceException.Type.FETCH_ERROR);
         }
     }
 }
