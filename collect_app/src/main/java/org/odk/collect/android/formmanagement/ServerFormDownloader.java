@@ -2,7 +2,6 @@ package org.odk.collect.android.formmanagement;
 
 import android.net.Uri;
 
-import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormDownloaderListener;
@@ -39,12 +38,14 @@ public class ServerFormDownloader implements FormDownloader {
     private final FormsRepository formsRepository;
     private final File cacheDir;
     private final String formsDirPath;
+    private final FormMetadataParser formMetadataParser;
 
-    public ServerFormDownloader(FormListApi formListApi, FormsRepository formsRepository, File cacheDir, String formsDirPath) {
+    public ServerFormDownloader(FormListApi formListApi, FormsRepository formsRepository, File cacheDir, String formsDirPath, FormMetadataParser formMetadataParser) {
         this.cacheDir = cacheDir;
         this.formsDirPath = formsDirPath;
         this.multiFormDownloader = new MultiFormDownloader(formsRepository, formListApi);
         this.formsRepository = formsRepository;
+        this.formMetadataParser = formMetadataParser;
     }
 
     @Override
@@ -59,7 +60,7 @@ public class ServerFormDownloader implements FormDownloader {
 
         try {
             FormDownloaderListener stateListener = new ProgressReporterAndSupplierStateListener(progressReporter, isCancelled);
-            boolean result = multiFormDownloader.processOneForm(form, stateListener, tempDir, formsDirPath);
+            boolean result = multiFormDownloader.processOneForm(form, stateListener, tempDir, formsDirPath, formMetadataParser);
 
             if (!result) {
                 throw new FormDownloadException();
@@ -114,7 +115,7 @@ public class ServerFormDownloader implements FormDownloader {
         }
 
         @Deprecated
-        public boolean processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener, File tempDir, String formsDirPath) throws InterruptedException {
+        public boolean processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener, File tempDir, String formsDirPath, FormMetadataParser formMetadataParser) throws InterruptedException {
             boolean success = true;
 
             // use a temporary media path until everything is ok.
@@ -162,8 +163,8 @@ public class ServerFormDownloader implements FormDownloader {
                     final long start = System.currentTimeMillis();
                     Timber.w("Parsing document %s", fileResult.file.getAbsolutePath());
 
-                    parsedFields = new FormMetadataParser(ReferenceManager.instance())
-                            .parse(fileResult.file, tempDir);
+                    parsedFields = formMetadataParser
+                            .parse(fileResult.file, new File(tempMediaPath));
 
                     Timber.i("Parse finished in %.3f seconds.",
                             (System.currentTimeMillis() - start) / 1000F);
