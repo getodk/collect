@@ -7,13 +7,13 @@ import androidx.annotation.Nullable;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.openrosa.CaseInsensitiveEmptyHeaders;
-import org.odk.collect.openrosa.CaseInsensitiveHeaders;
-import org.odk.collect.openrosa.HttpCredentialsInterface;
-import org.odk.collect.openrosa.HttpGetResult;
-import org.odk.collect.openrosa.HttpHeadResult;
-import org.odk.collect.openrosa.HttpPostResult;
-import org.odk.collect.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.openrosa.CaseInsensitiveEmptyHeaders;
+import org.odk.collect.android.openrosa.CaseInsensitiveHeaders;
+import org.odk.collect.android.openrosa.HttpCredentialsInterface;
+import org.odk.collect.android.openrosa.HttpGetResult;
+import org.odk.collect.android.openrosa.HttpHeadResult;
+import org.odk.collect.android.openrosa.HttpPostResult;
+import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

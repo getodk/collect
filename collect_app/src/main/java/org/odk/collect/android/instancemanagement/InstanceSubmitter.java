@@ -28,7 +28,7 @@ import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
-import org.odk.collect.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;

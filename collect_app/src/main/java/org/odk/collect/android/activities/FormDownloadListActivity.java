@@ -58,7 +58,7 @@ import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
-import org.odk.collect.openrosa.HttpCredentialsInterface;
+import org.odk.collect.android.openrosa.HttpCredentialsInterface;
 import org.odk.collect.server.FormApiException;
 
 import java.net.URI;

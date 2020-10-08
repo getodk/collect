@@ -40,7 +40,7 @@ import org.odk.collect.android.geo.GoogleMapFragment;
 import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.android.geo.OsmDroidMapFragment;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.AdminPreferencesFragment;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
