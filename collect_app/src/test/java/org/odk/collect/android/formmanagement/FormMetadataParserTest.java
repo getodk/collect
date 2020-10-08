@@ -4,6 +4,7 @@ import com.google.common.io.Files;
 
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
+import org.javarosa.xform.parse.XFormParseException;
 import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.utilities.FileUtils;
@@ -62,6 +63,32 @@ public class FormMetadataParserTest {
         FormMetadataParser formMetadataParser = new FormMetadataParser(referenceManager);
         Map<String, String> metaData = formMetadataParser.parse(formXml, mediaDir);
         assertThat(metaData.get(FileUtils.FORMID), is("basic-last-saved"));
+    }
+
+    /**
+     * Edge case: a form could have an attachment with filename last-saved.xml. This will get
+     * replaced immediately on download and this test documents that behavior. We could let it go
+     * through but let's replace it immediately to help a user who tries this troubleshoot.
+     * Otherwise it would only be replaced when an instance is saved so a user could think everything
+     * is ok if they only try launching the form once.
+     *
+     * This is an unfortunate side effect of using the form media folder to store the contents that
+     * jr://instance/last-saved resolves to.
+     *
+     * Additionally, immediately replacing a secondary instance with name last-saved.xml avoid users
+     * exploiting this current implementation quirk as a feature to preload defaults for the first
+     * instance.
+     * */
+    @Test(expected = XFormParseException.class)
+    public void cannotParseFormWithExternalSecondaryInstanceNamedLastSaved() throws Exception {
+        File formXml = File.createTempFile("form", ".xml");
+        FileUtils.write(formXml, LAST_SAVED_EXTERNAL_SECONDARY_INSTANCE.getBytes());
+
+        File externalInstance = new File(mediaDir, "last-saved.xml");
+        FileUtils.write(externalInstance, EXTERNAL_INSTANCE.getBytes());
+
+        FormMetadataParser formMetadataParser = new FormMetadataParser(referenceManager);
+        formMetadataParser.parse(formXml, mediaDir);
     }
 
     @Test
@@ -181,6 +208,30 @@ public class FormMetadataParserTest {
             "        <input ref=\"/data/q1\">\n" +
             "            <label>Question</label>\n" +
             "        </input>\n" +
+            "    </h:body>\n" +
+            "</h:html>";
+
+    private static final String LAST_SAVED_EXTERNAL_SECONDARY_INSTANCE = "<h:html xmlns=\"http://www.w3.org/2002/xforms\" xmlns:h=\"http://www.w3.org/1999/xhtml\" >\n" +
+            "    <h:head>\n" +
+            "        <h:title>last-saved-attached</h:title>\n" +
+            "        <model>\n" +
+            "            <instance>\n" +
+            "                <data id=\"last-saved-attached\">\n" +
+            "                    <first/>\n" +
+            "                </data>\n" +
+            "            </instance>\n" +
+            "            <instance id=\"external-xml\" src=\"jr://file/last-saved.xml\" />\n" +
+            "            <bind nodeset=\"/data/first\" type=\"select1\"/>\n" +
+            "        </model>\n" +
+            "    </h:head>\n" +
+            "    <h:body>\n" +
+            "        <select1 ref=\"/data/first\">\n" +
+            "            <label>First</label>\n" +
+            "            <itemset nodeset=\"instance('external-xml')/root/item[first='']\">\n" +
+            "                <value ref=\"name\"/>\n" +
+            "                <label ref=\"label\"/>\n" +
+            "            </itemset>\n" +
+            "        </select1>\n" +
             "    </h:body>\n" +
             "</h:html>";
 }
