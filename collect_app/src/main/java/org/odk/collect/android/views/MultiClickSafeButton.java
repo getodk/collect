@@ -21,10 +21,6 @@ public class MultiClickSafeButton extends MaterialButton {
 
     @Override
     public boolean performClick() {
-        if (MultiClickGuard.allowClick(getClass().getName())) {
-            return super.performClick();
-        } else {
-            return false;
-        }
+        return MultiClickGuard.allowClick(getClass().getName()) && super.performClick();
     }
 }
