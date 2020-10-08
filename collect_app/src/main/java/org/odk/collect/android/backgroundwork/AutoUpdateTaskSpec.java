@@ -22,18 +22,18 @@ import androidx.work.WorkerParameters;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.FormDownloadException;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.server.FormApiException;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
+import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
+import org.odk.collect.server.FormApiException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -84,9 +84,9 @@ public class AutoUpdateTaskSpec implements TaskSpec {
                                 for (ServerFormDetails serverFormDetails : updatedForms) {
                                     try {
                                         formDownloader.downloadForm(serverFormDetails, null, null);
-                                        results.put(serverFormDetails, Collect.getInstance().getString(R.string.success));
+                                        results.put(serverFormDetails, TranslationHandler.getString(context, R.string.success));
                                     } catch (FormDownloadException e) {
-                                        results.put(serverFormDetails, e.getMessage());
+                                        results.put(serverFormDetails, TranslationHandler.getString(context, R.string.failure));
                                     } catch (InterruptedException e) {
                                         break;
                                     }
