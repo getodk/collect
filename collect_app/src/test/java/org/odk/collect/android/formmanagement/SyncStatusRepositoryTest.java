@@ -5,8 +5,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
-import org.odk.collect.android.server.FormSourceException;
-import org.odk.collect.android.server.FormSourceException.Type;
+import org.odk.collect.android.forms.FormSourceException;
+import org.odk.collect.android.forms.FormSourceException.Type;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

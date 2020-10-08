@@ -11,7 +11,7 @@ import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchroniz
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.android.server.FormSourceException;
+import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
 

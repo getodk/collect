@@ -70,7 +70,7 @@ import org.odk.collect.android.notifications.NotificationManagerNotifier;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.server.FormSource;
+import org.odk.collect.android.forms.FormSource;
 import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
 import org.odk.collect.android.preferences.AdminKeys;

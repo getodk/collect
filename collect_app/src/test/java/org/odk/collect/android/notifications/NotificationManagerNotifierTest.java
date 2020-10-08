@@ -11,8 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.server.FormSourceException;
-import org.odk.collect.android.server.ManifestFile;
+import org.odk.collect.android.forms.FormSourceException;
+import org.odk.collect.android.forms.ManifestFile;
 import org.odk.collect.android.preferences.PreferencesProvider;
 
 import java.util.List;

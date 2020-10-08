@@ -5,11 +5,11 @@ import org.jetbrains.annotations.NotNull;
 import org.kxml2.kdom.Element;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
-import org.odk.collect.android.server.FormSourceException;
-import org.odk.collect.android.server.FormSource;
-import org.odk.collect.android.server.FormListItem;
-import org.odk.collect.android.server.ManifestFile;
-import org.odk.collect.android.server.MediaFile;
+import org.odk.collect.android.forms.FormSourceException;
+import org.odk.collect.android.forms.FormSource;
+import org.odk.collect.android.forms.FormListItem;
+import org.odk.collect.android.forms.ManifestFile;
+import org.odk.collect.android.forms.MediaFile;
 
 import java.io.InputStream;
 import java.net.UnknownHostException;
@@ -21,10 +21,10 @@ import javax.net.ssl.SSLException;
 
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
-import static org.odk.collect.android.server.FormSourceException.Type.AUTH_REQUIRED;
-import static org.odk.collect.android.server.FormSourceException.Type.FETCH_ERROR;
-import static org.odk.collect.android.server.FormSourceException.Type.SECURITY_ERROR;
-import static org.odk.collect.android.server.FormSourceException.Type.UNREACHABLE;
+import static org.odk.collect.android.forms.FormSourceException.Type.AUTH_REQUIRED;
+import static org.odk.collect.android.forms.FormSourceException.Type.FETCH_ERROR;
+import static org.odk.collect.android.forms.FormSourceException.Type.SECURITY_ERROR;
+import static org.odk.collect.android.forms.FormSourceException.Type.UNREACHABLE;
 
 public class OpenRosaFormSource implements FormSource {
 

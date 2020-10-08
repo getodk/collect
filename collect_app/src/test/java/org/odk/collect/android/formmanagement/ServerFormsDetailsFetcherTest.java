@@ -6,10 +6,10 @@ import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.forms.MediaFileRepository;
-import org.odk.collect.android.server.FormSource;
-import org.odk.collect.android.server.FormListItem;
-import org.odk.collect.android.server.ManifestFile;
-import org.odk.collect.android.server.MediaFile;
+import org.odk.collect.android.forms.FormSource;
+import org.odk.collect.android.forms.FormListItem;
+import org.odk.collect.android.forms.ManifestFile;
+import org.odk.collect.android.forms.MediaFile;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;

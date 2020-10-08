@@ -10,11 +10,11 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
-import org.odk.collect.android.server.FormSourceException;
-import org.odk.collect.android.server.FormSource;
-import org.odk.collect.android.server.FormListItem;
-import org.odk.collect.android.server.ManifestFile;
-import org.odk.collect.android.server.MediaFile;
+import org.odk.collect.android.forms.FormSourceException;
+import org.odk.collect.android.forms.FormSource;
+import org.odk.collect.android.forms.FormListItem;
+import org.odk.collect.android.forms.ManifestFile;
+import org.odk.collect.android.forms.MediaFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

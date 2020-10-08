@@ -1,4 +1,4 @@
-package org.odk.collect.android.server;
+package org.odk.collect.android.forms;
 
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 

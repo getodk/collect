@@ -11,9 +11,9 @@ import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.Validator;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
-import org.odk.collect.android.server.FormSourceException;
-import org.odk.collect.android.server.FormSource;
-import org.odk.collect.android.server.MediaFile;
+import org.odk.collect.android.forms.FormSourceException;
+import org.odk.collect.android.forms.FormSource;
+import org.odk.collect.android.forms.MediaFile;
 
 import java.io.File;
 import java.io.FileOutputStream;

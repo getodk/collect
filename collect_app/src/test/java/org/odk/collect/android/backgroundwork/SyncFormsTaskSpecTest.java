@@ -18,7 +18,7 @@ import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.android.server.FormSourceException;
+import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.support.BooleanChangeLock;

@@ -5,7 +5,7 @@ import org.odk.collect.android.openrosa.OpenRosaFormSource;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.openrosa.HttpGetResult;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.server.FormSourceException;
+import org.odk.collect.android.forms.FormSourceException;
 
 import java.io.ByteArrayInputStream;
 import java.net.URI;
@@ -23,9 +23,9 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.server.FormSourceException.Type.FETCH_ERROR;
-import static org.odk.collect.android.server.FormSourceException.Type.SECURITY_ERROR;
-import static org.odk.collect.android.server.FormSourceException.Type.UNREACHABLE;
+import static org.odk.collect.android.forms.FormSourceException.Type.FETCH_ERROR;
+import static org.odk.collect.android.forms.FormSourceException.Type.SECURITY_ERROR;
+import static org.odk.collect.android.forms.FormSourceException.Type.UNREACHABLE;
 
 public class OpenRosaFormSourceTest {
 
