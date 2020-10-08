@@ -4,18 +4,16 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 import androidx.annotation.NonNull;
-
-import com.google.android.material.button.MaterialButton;
+import androidx.appcompat.widget.AppCompatImageButton;
 
 import org.odk.collect.android.utilities.MultiClickGuard;
 
-public class MultiClickSafeButton extends MaterialButton {
-
-    public MultiClickSafeButton(@NonNull Context context) {
+public class MultiClickSafeImageButton extends AppCompatImageButton {
+    public MultiClickSafeImageButton(@NonNull Context context) {
         super(context);
     }
 
-    public MultiClickSafeButton(Context context, AttributeSet attrs) {
+    public MultiClickSafeImageButton(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
