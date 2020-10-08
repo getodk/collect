@@ -16,6 +16,7 @@ import java.io.IOException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.atMostOnce;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.only;
@@ -47,6 +48,14 @@ public class FormEntryViewModelTest {
     public void addRepeat_stepsToNextScreenEvent() throws Exception {
         viewModel.addRepeat(true);
         verify(formController).stepToNextScreenEvent();
+    }
+
+    @Test
+    public void addRepeat_whenThereIsAnErrorCreatingRepeat_setsErrorWithMessage() throws Exception {
+        doThrow(new RuntimeException(new IOException("OH NO"))).when(formController).newRepeat();
+
+        viewModel.addRepeat(true);
+        assertThat(viewModel.getError().getValue(), equalTo("OH NO"));
     }
 
     @Test
