@@ -45,6 +45,8 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
     private final GeoButtonClickListener geoButtonClickListener;
     private final double accuracyThreshold;
 
+    private String stringAnswer;
+
     public GeoPointWidget(Context context, QuestionDetails questionDetails, QuestionDef questionDef,
                           WaitingForDataRegistry waitingForDataRegistry, GeoButtonClickListener geoButtonClickListener) {
         super(context, questionDetails);
@@ -52,7 +54,7 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
         this.geoButtonClickListener = geoButtonClickListener;
         accuracyThreshold = GeoDataRequester.getAccuracyThreshold(questionDef);
 
-        String stringAnswer = getFormEntryPrompt().getAnswerText();
+        stringAnswer = getFormEntryPrompt().getAnswerText();
 
         if (stringAnswer != null && !stringAnswer.isEmpty()) {
             binding.geoAnswerText.setText(GeoDataRequester.getAnswerToDisplay(getContext(), stringAnswer));
@@ -71,7 +73,6 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
             binding.simpleButton.setVisibility(GONE);
         } else {
             binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-
             binding.simpleButton.setOnClickListener(v -> {
                 Bundle bundle = new Bundle();
                 String stringAnswer = prompt.getAnswerText();
@@ -90,13 +91,14 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
 
     @Override
     public IAnswerData getAnswer() {
-        return binding.geoAnswerText.getText().equals("")
+        return stringAnswer == null || stringAnswer.isEmpty()
                 ? null
-                : new GeoPointData(GeoDataRequester.getLocationParamsFromStringAnswer(getFormEntryPrompt().getAnswerText()));
+                : new GeoPointData(GeoDataRequester.getLocationParamsFromStringAnswer(stringAnswer));
     }
 
     @Override
     public void clearAnswer() {
+        stringAnswer = "";
         binding.geoAnswerText.setText(null);
         binding.simpleButton.setText(R.string.get_point);
         widgetValueChanged();
@@ -117,7 +119,8 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
 
     @Override
     public void setData(Object answer) {
-        binding.geoAnswerText.setText(GeoDataRequester.getAnswerToDisplay(getContext(), (String) answer));
+        stringAnswer = (String) answer;
+        binding.geoAnswerText.setText(GeoDataRequester.getAnswerToDisplay(getContext(), stringAnswer));
         binding.simpleButton.setText(answer != null ? R.string.change_location : R.string.get_point);
         widgetValueChanged();
     }

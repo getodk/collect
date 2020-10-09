@@ -48,6 +48,7 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
     private final GeoButtonClickListener geoButtonClickListener;
     private final double accuracyThreshold;
 
+    private String stringAnswer;
     private boolean draggable = true;
 
     public GeoPointMapWidget(Context context, QuestionDetails questionDetails,
@@ -59,11 +60,10 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
         accuracyThreshold = GeoDataRequester.getAccuracyThreshold(questionDef);
         determineMapProperties();
 
-        String stringAnswer = getFormEntryPrompt().getAnswerText();
+        stringAnswer = getFormEntryPrompt().getAnswerText();
         binding.geoAnswerText.setText(GeoDataRequester.getAnswerToDisplay(getContext(), stringAnswer));
 
         boolean dataAvailable = stringAnswer != null && !stringAnswer.isEmpty();
-
         if (getFormEntryPrompt().isReadOnly()) {
             if (dataAvailable) {
                 binding.simpleButton.setText(R.string.geopoint_view_read_only);
@@ -105,9 +105,9 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
 
     @Override
     public IAnswerData getAnswer() {
-        return binding.geoAnswerText.getText().equals("")
+        return stringAnswer == null || stringAnswer.isEmpty()
                 ? null
-                : new GeoPointData(GeoDataRequester.getLocationParamsFromStringAnswer(getFormEntryPrompt().getAnswerText()));
+                : new GeoPointData(GeoDataRequester.getLocationParamsFromStringAnswer(stringAnswer));
     }
 
     @Override
@@ -132,7 +132,8 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
 
     @Override
     public void setData(Object answer) {
-        binding.geoAnswerText.setText(GeoDataRequester.getAnswerToDisplay(getContext(), (String) answer));
+        stringAnswer = (String) answer;
+        binding.geoAnswerText.setText(GeoDataRequester.getAnswerToDisplay(getContext(), stringAnswer));
         binding.simpleButton.setText(answer != null ? R.string.view_change_location : R.string.get_point);
         widgetValueChanged();
     }
