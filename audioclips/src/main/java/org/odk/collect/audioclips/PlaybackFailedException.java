@@ -1,4 +1,4 @@
-package org.odk.collect.android.audio;
+package org.odk.collect.audioclips;
 
 import androidx.core.util.ObjectsCompat;
 

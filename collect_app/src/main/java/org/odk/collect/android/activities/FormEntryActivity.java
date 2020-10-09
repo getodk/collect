@@ -76,7 +76,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioControllerView;
-import org.odk.collect.android.audio.AudioClipViewModel;
 import org.odk.collect.android.audio.ViewModelAudioPlayer;
 import org.odk.collect.android.backgroundwork.FormSubmitManager;
 import org.odk.collect.android.dao.FormsDao;
@@ -157,6 +156,7 @@ import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.FormControllerWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.audioclips.AudioClipViewModel;
 
 import java.io.File;
 import java.io.FileOutputStream;

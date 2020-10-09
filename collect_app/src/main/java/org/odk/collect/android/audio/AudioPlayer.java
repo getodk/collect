@@ -1,5 +1,7 @@
 package org.odk.collect.android.audio;
 
+import org.odk.collect.audioclips.Clip;
+
 import java.util.function.Consumer;
 
 public interface AudioPlayer {

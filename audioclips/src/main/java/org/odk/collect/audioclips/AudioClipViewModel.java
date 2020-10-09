@@ -1,4 +1,4 @@
-package org.odk.collect.android.audio;
+package org.odk.collect.audioclips;
 
 import android.media.MediaPlayer;
 
@@ -9,7 +9,6 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import org.odk.collect.android.R;
 import org.odk.collect.async.Cancellable;
 import org.odk.collect.async.Scheduler;
 
@@ -129,7 +128,7 @@ public class AudioClipViewModel extends ViewModel implements MediaPlayer.OnCompl
     }
 
     private int getExceptionMsg(String uri) {
-        return new File(uri).exists() ? R.string.file_invalid : R.string.file_missing;
+        return new File(uri).exists() ? 1 : 0;
     }
 
     @Override

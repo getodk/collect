@@ -3,6 +3,9 @@ package org.odk.collect.android.audio;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 
+import org.odk.collect.audioclips.AudioClipViewModel;
+import org.odk.collect.audioclips.Clip;
+
 import java.util.function.Consumer;
 
 public class ViewModelAudioPlayer implements AudioPlayer {

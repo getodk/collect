@@ -320,6 +320,7 @@ dependencies {
     implementation project(':strings')
     implementation project(':material')
     implementation project(':async')
+    implementation project(':audioclips')
 
     // Makes binding to Views easy:
     implementation "com.jakewharton:butterknife:10.2.3"

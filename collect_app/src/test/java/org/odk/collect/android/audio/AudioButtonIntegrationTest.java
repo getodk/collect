@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.support.FakeLifecycleOwner;
 import org.odk.collect.android.support.FakeScheduler;
 import org.odk.collect.android.support.LiveDataTester;
+import org.odk.collect.audioclips.Clip;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.android.controller.ActivityController;

@@ -53,7 +53,6 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.AudioPlayer;
-import org.odk.collect.android.audio.PlaybackFailedException;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
@@ -71,6 +70,7 @@ import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.StringWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.audioclips.PlaybackFailedException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -169,7 +169,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 final PlaybackFailedException playbackFailedException = (PlaybackFailedException) e;
                 Toast.makeText(
                         getContext(),
-                        getContext().getString(playbackFailedException.getExceptionMsg(), playbackFailedException.getURI()),
+                        getContext().getString(playbackFailedException.getExceptionMsg() == 0 ? R.string.file_missing : R.string.file_invalid, playbackFailedException.getURI()),
                         Toast.LENGTH_SHORT
                 ).show();
 

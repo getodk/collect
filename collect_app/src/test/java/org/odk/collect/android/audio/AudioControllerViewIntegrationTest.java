@@ -18,6 +18,8 @@ import org.odk.collect.android.support.FakeLifecycleOwner;
 import org.odk.collect.android.support.FakeScheduler;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.SwipableParentActivity;
+import org.odk.collect.audioclips.AudioClipViewModel;
+import org.odk.collect.audioclips.Clip;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowMediaPlayer;
 import org.robolectric.shadows.util.DataSource;

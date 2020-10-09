@@ -1,4 +1,4 @@
-package org.odk.collect.android.audio;
+package org.odk.collect.audioclips;
 
 import android.media.MediaPlayer;
 
@@ -10,10 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
-import org.mockito.Mockito;
-import org.odk.collect.android.R;
-import org.odk.collect.android.support.FakeScheduler;
-import org.odk.collect.android.support.LiveDataTester;
 import org.robolectric.RobolectricTestRunner;
 
 import java.io.IOException;
@@ -26,6 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -55,7 +52,7 @@ public class AudioClipViewModelTest {
     public void play_resetsAndPreparesAndStartsMediaPlayer() throws Exception {
         viewModel.play(new Clip("clip1", "file://audio.mp3"));
 
-        InOrder inOrder = Mockito.inOrder(mediaPlayer);
+        InOrder inOrder = inOrder(mediaPlayer);
 
         inOrder.verify(mediaPlayer).reset();
         inOrder.verify(mediaPlayer).setDataSource("file://audio.mp3");
@@ -77,7 +74,7 @@ public class AudioClipViewModelTest {
         viewModel.setPosition("clip1", 4321);
         viewModel.play(new Clip("clip1", "file://audio.mp3"));
 
-        InOrder inOrder = Mockito.inOrder(mediaPlayer);
+        InOrder inOrder = inOrder(mediaPlayer);
 
         inOrder.verify(mediaPlayer).seekTo(4321);
         inOrder.verify(mediaPlayer).start();
@@ -397,9 +394,9 @@ public class AudioClipViewModelTest {
         doThrow(IOException.class).when(mediaPlayer).setDataSource("file://missing.mp3");
         viewModel.play(new Clip("clip1", "file://missing.mp3"));
 
-        PlaybackFailedException playbackFailedException = new PlaybackFailedException("file://missing.mp3", R.string.file_missing);
+        PlaybackFailedException playbackFailedException = new PlaybackFailedException("file://missing.mp3", 0);
         assertThat(error.getValue(), equalTo(playbackFailedException));
-        assertThat(R.string.file_missing, equalTo(playbackFailedException.getExceptionMsg()));
+        assertThat(0, equalTo(playbackFailedException.getExceptionMsg()));
     }
 
     @Test
@@ -409,9 +406,9 @@ public class AudioClipViewModelTest {
         doThrow(IOException.class).when(mediaPlayer).setDataSource("file://invalid.mp3");
         viewModel.play(new Clip("clip1", "file://invalid.mp3"));
 
-        PlaybackFailedException playbackFailedException = new PlaybackFailedException("file://invalid.mp3", R.string.file_invalid);
+        PlaybackFailedException playbackFailedException = new PlaybackFailedException("file://invalid.mp3", 1);
         assertThat(error.getValue(), equalTo(playbackFailedException));
-        assertThat(R.string.file_invalid, equalTo(playbackFailedException.getExceptionMsg()));
+        assertThat(1, equalTo(playbackFailedException.getExceptionMsg()));
     }
 
     @Test

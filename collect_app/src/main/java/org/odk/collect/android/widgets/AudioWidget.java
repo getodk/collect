@@ -35,7 +35,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.AudioPlayer;
-import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.databinding.AudioWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -48,6 +47,7 @@ import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.audioclips.Clip;
 
 import java.io.File;
 import java.util.Locale;
