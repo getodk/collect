@@ -27,7 +27,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
+import org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 @SuppressLint("ViewConstructor")
@@ -35,13 +35,13 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
     GeoWidgetAnswerBinding binding;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
-    private final GeoDataRequester geoDataRequester;
+    private final ActivityGeoDataRequester activityGeoDataRequester;
 
     public GeoShapeWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry,
-                          GeoDataRequester geoDataRequester) {
+                          ActivityGeoDataRequester activityGeoDataRequester) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
-        this.geoDataRequester = geoDataRequester;
+        this.activityGeoDataRequester = activityGeoDataRequester;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
         binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        binding.simpleButton.setOnClickListener(v -> geoDataRequester.requestGeoShape(context, prompt, waitingForDataRegistry));
+        binding.simpleButton.setOnClickListener(v -> activityGeoDataRequester.requestGeoShape(context, prompt, waitingForDataRegistry));
 
         String stringAnswer = prompt.getAnswerText();
         binding.geoAnswerText.setText(stringAnswer);

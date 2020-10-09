@@ -28,8 +28,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 import org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester;
+import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 @SuppressLint("ViewConstructor")
@@ -37,13 +37,13 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
     GeoWidgetAnswerBinding binding;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
-    private final GeoDataRequester geoDataRequester;
+    private final ActivityGeoDataRequester activityGeoDataRequester;
 
     public GeoPointMapWidget(Context context, QuestionDetails questionDetails,
-                             WaitingForDataRegistry waitingForDataRegistry, GeoDataRequester geoDataRequester) {
+                             WaitingForDataRegistry waitingForDataRegistry, ActivityGeoDataRequester activityGeoDataRequester) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
-        this.geoDataRequester = geoDataRequester;
+        this.activityGeoDataRequester = activityGeoDataRequester;
     }
 
     @Override
@@ -53,10 +53,10 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        binding.simpleButton.setOnClickListener(v -> geoDataRequester.requestGeoPoint(context, prompt, waitingForDataRegistry));
+        binding.simpleButton.setOnClickListener(v -> activityGeoDataRequester.requestGeoPoint(context, prompt, waitingForDataRegistry));
 
         String answerText = prompt.getAnswerText();
-        binding.geoAnswerText.setText(ActivityGeoDataRequester.getAnswerToDisplay(getContext(), answerText));
+        binding.geoAnswerText.setText(GeoWidgetUtils.getAnswerToDisplay(getContext(), answerText));
 
         boolean dataAvailable = answerText != null && !answerText.isEmpty();
         if (getFormEntryPrompt().isReadOnly()) {
@@ -81,7 +81,7 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
         String answerText = getFormEntryPrompt().getAnswerText();
         return answerText == null || answerText.isEmpty()
                 ? null
-                : new GeoPointData(ActivityGeoDataRequester.getLocationParamsFromStringAnswer(answerText));
+                : new GeoPointData(GeoWidgetUtils.getLocationParamsFromStringAnswer(answerText));
     }
 
     @Override
@@ -106,7 +106,7 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
 
     @Override
     public void setData(Object answer) {
-        binding.geoAnswerText.setText(ActivityGeoDataRequester.getAnswerToDisplay(getContext(), answer.toString()));
+        binding.geoAnswerText.setText(GeoWidgetUtils.getAnswerToDisplay(getContext(), answer.toString()));
         binding.simpleButton.setText(answer.toString().isEmpty() ? R.string.get_point : R.string.view_change_location);
         widgetValueChanged();
     }

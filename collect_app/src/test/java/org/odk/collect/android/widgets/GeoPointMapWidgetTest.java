@@ -10,8 +10,8 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 import org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester;
+import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
 
@@ -30,12 +30,12 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 public class GeoPointMapWidgetTest {
     private final GeoPointData answer = new GeoPointData(getRandomDoubleArray());
 
-    private GeoDataRequester geoDataRequester;
+    private ActivityGeoDataRequester activityGeoDataRequester;
     private WaitingForDataRegistry waitingForDataRegistry;
 
     @Before
     public void setup() {
-        geoDataRequester = mock(GeoDataRequester.class);
+        activityGeoDataRequester = mock(ActivityGeoDataRequester.class);
         waitingForDataRegistry = mock(WaitingForDataRegistry.class);
     }
 
@@ -49,13 +49,13 @@ public class GeoPointMapWidgetTest {
     public void getAnswer_whenPromptHasAnswer_returnsPromptAnswer() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(answer));
         assertEquals(widget.getAnswer().getDisplayText(),
-                new GeoPointData(ActivityGeoDataRequester.getLocationParamsFromStringAnswer(answer.getDisplayText())).getDisplayText());
+                new GeoPointData(GeoWidgetUtils.getLocationParamsFromStringAnswer(answer.getDisplayText())).getDisplayText());
     }
 
     @Test
     public void whenPromptHasAnswer_answerTextViewShowsCorrectAnswer() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(answer));
-        assertEquals(widget.binding.geoAnswerText.getText(), ActivityGeoDataRequester.getAnswerToDisplay(widget.getContext(), answer.getDisplayText()));
+        assertEquals(widget.binding.geoAnswerText.getText(), GeoWidgetUtils.getAnswerToDisplay(widget.getContext(), answer.getDisplayText()));
     }
 
     @Test
@@ -104,7 +104,7 @@ public class GeoPointMapWidgetTest {
     public void setData_updatesWidgetDisplayedAnswer() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
         widget.setBinaryData(answer.getDisplayText());
-        assertEquals(widget.binding.geoAnswerText.getText(), ActivityGeoDataRequester.getAnswerToDisplay(widget.getContext(), answer.getDisplayText()));
+        assertEquals(widget.binding.geoAnswerText.getText(), GeoWidgetUtils.getAnswerToDisplay(widget.getContext(), answer.getDisplayText()));
     }
 
     @Test
@@ -149,11 +149,11 @@ public class GeoPointMapWidgetTest {
         GeoPointMapWidget widget = createWidget(prompt);
         widget.binding.simpleButton.performClick();
 
-        verify(geoDataRequester).requestGeoPoint(widget.getContext(), prompt, waitingForDataRegistry);
+        verify(activityGeoDataRequester).requestGeoPoint(widget.getContext(), prompt, waitingForDataRegistry);
     }
 
     private GeoPointMapWidget createWidget(FormEntryPrompt prompt) {
         return new GeoPointMapWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"),
-                waitingForDataRegistry, geoDataRequester);
+                waitingForDataRegistry, activityGeoDataRequester);
     }
 }

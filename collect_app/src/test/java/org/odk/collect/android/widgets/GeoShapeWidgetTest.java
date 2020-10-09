@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
+import org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
 
@@ -29,12 +29,12 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 public class GeoShapeWidgetTest {
     private final String answer = stringFromDoubleList();
 
-    private GeoDataRequester geoDataRequester;
+    private ActivityGeoDataRequester activityGeoDataRequester;
     private WaitingForDataRegistry waitingForDataRegistry;
 
     @Before
     public void setup() {
-        geoDataRequester = mock(GeoDataRequester.class);
+        activityGeoDataRequester = mock(ActivityGeoDataRequester.class);
         waitingForDataRegistry = mock(WaitingForDataRegistry.class);
     }
 
@@ -153,11 +153,11 @@ public class GeoShapeWidgetTest {
         GeoShapeWidget widget = createWidget(prompt);
         widget.binding.simpleButton.performClick();
 
-        verify(geoDataRequester).requestGeoShape(widget.getContext(), prompt, waitingForDataRegistry);
+        verify(activityGeoDataRequester).requestGeoShape(widget.getContext(), prompt, waitingForDataRegistry);
     }
 
     private GeoShapeWidget createWidget(FormEntryPrompt prompt) {
         return new GeoShapeWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"),
-                waitingForDataRegistry, geoDataRequester);
+                waitingForDataRegistry, activityGeoDataRequester);
     }
 }
