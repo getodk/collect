@@ -36,16 +36,16 @@ import java.util.function.Supplier;
 public class AudioHelper {
 
     private final LifecycleOwner lifecycleOwner;
-    private final AudioPlayerViewModel viewModel;
+    private final AudioClipViewModel viewModel;
 
     public AudioHelper(FragmentActivity activity, LifecycleOwner lifecycleOwner, Scheduler scheduler, Supplier<MediaPlayer> mediaPlayerFactory) {
         this.lifecycleOwner = lifecycleOwner;
 
-        AudioPlayerViewModelFactory factory = new AudioPlayerViewModelFactory(mediaPlayerFactory, scheduler);
+        AudioClipViewModel.Factory factory = new AudioClipViewModel.Factory(mediaPlayerFactory, scheduler);
 
         viewModel = ViewModelProviders
                 .of(activity, factory)
-                .get(AudioPlayerViewModel.class);
+                .get(AudioClipViewModel.class);
 
         registerLifecycleCallbacks(activity, lifecycleOwner);
     }
@@ -56,7 +56,7 @@ public class AudioHelper {
      * @return A {@link LiveData} value representing whether this clip is playing or not
      */
     public LiveData<Boolean> setAudio(AudioButton button, Clip clip) {
-        AudioPlayerViewModel viewModel = this.viewModel;
+        AudioClipViewModel viewModel = this.viewModel;
 
         LiveData<Boolean> isPlaying = viewModel.isPlaying(clip.getClipID());
 
@@ -122,11 +122,11 @@ public class AudioHelper {
 
     private static class AudioButtonListener implements AudioButton.Listener {
 
-        private final AudioPlayerViewModel viewModel;
+        private final AudioClipViewModel viewModel;
         private final String uri;
         private final String buttonID;
 
-        AudioButtonListener(AudioPlayerViewModel viewModel, String uri, String buttonID) {
+        AudioButtonListener(AudioClipViewModel viewModel, String uri, String buttonID) {
             this.viewModel = viewModel;
             this.uri = uri;
             this.buttonID = buttonID;
@@ -145,9 +145,9 @@ public class AudioHelper {
 
     private static class BackgroundObserver implements LifecycleObserver {
 
-        private final AudioPlayerViewModel viewModel;
+        private final AudioClipViewModel viewModel;
 
-        BackgroundObserver(AudioPlayerViewModel viewModel) {
+        BackgroundObserver(AudioClipViewModel viewModel) {
             this.viewModel = viewModel;
         }
 

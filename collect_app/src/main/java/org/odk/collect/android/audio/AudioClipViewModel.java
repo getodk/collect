@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
 import org.odk.collect.async.Cancellable;
@@ -21,7 +22,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.function.Supplier;
 
-public class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletionListener {
+public class AudioClipViewModel extends ViewModel implements MediaPlayer.OnCompletionListener {
 
     private final Supplier<MediaPlayer> mediaPlayerFactory;
     private final Scheduler scheduler;
@@ -33,7 +34,7 @@ public class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCom
 
     private Cancellable positionUpdatesCancellable;
 
-    AudioPlayerViewModel(Supplier<MediaPlayer> mediaPlayerFactory, Scheduler scheduler) {
+    AudioClipViewModel(Supplier<MediaPlayer> mediaPlayerFactory, Scheduler scheduler) {
         this.mediaPlayerFactory = mediaPlayerFactory;
         this.scheduler = scheduler;
 
@@ -245,9 +246,22 @@ public class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCom
         Queue<Clip> getPlaylist() {
             return playlist;
         }
+    }
 
-        Clip getClip() {
-            return clip;
+    public static class Factory implements ViewModelProvider.Factory {
+
+        private final Supplier<MediaPlayer> mediaPlayerFactory;
+        private final Scheduler scheduler;
+
+        public Factory(Supplier<MediaPlayer> mediaPlayerFactory, Scheduler scheduler) {
+            this.mediaPlayerFactory = mediaPlayerFactory;
+            this.scheduler = scheduler;
+        }
+
+        @NonNull
+        @Override
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            return (T) new AudioClipViewModel(mediaPlayerFactory, scheduler);
         }
     }
 }

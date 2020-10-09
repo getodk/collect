@@ -33,17 +33,17 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-public class AudioPlayerViewModelTest {
+public class AudioClipViewModelTest {
 
     private final MediaPlayer mediaPlayer = mock(MediaPlayer.class);
     private final FakeScheduler fakeScheduler = new FakeScheduler();
     private final LiveDataTester liveDataTester = new LiveDataTester();
 
-    private AudioPlayerViewModel viewModel;
+    private AudioClipViewModel viewModel;
 
     @Before
     public void setup() {
-        viewModel = new AudioPlayerViewModel(() -> mediaPlayer, fakeScheduler);
+        viewModel = new AudioClipViewModel(() -> mediaPlayer, fakeScheduler);
     }
 
     @After
@@ -253,7 +253,7 @@ public class AudioPlayerViewModelTest {
     @Test
     public void play_afterBackground_createsANewMediaPlayer() {
         RecordingMockMediaPlayerFactory factory = new RecordingMockMediaPlayerFactory();
-        AudioPlayerViewModel viewModel = new AudioPlayerViewModel(factory, new FakeScheduler());
+        AudioClipViewModel viewModel = new AudioClipViewModel(factory, new FakeScheduler());
 
         viewModel.play(new Clip("clip1", "file://audio.mp3"));
         assertThat(factory.createdInstances.size(), equalTo(1));

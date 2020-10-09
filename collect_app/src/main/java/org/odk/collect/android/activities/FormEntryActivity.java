@@ -76,8 +76,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioControllerView;
-import org.odk.collect.android.audio.AudioPlayerViewModel;
-import org.odk.collect.android.audio.AudioPlayerViewModelFactory;
+import org.odk.collect.android.audio.AudioClipViewModel;
 import org.odk.collect.android.audio.ViewModelAudioPlayer;
 import org.odk.collect.android.backgroundwork.FormSubmitManager;
 import org.odk.collect.android.dao.FormsDao;
@@ -1300,10 +1299,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private ODKView createODKView(boolean advancingPage, FormEntryPrompt[] prompts, FormEntryCaption[] groups) {
         odkViewLifecycle.start();
 
-        AudioPlayerViewModelFactory factory = new AudioPlayerViewModelFactory(MediaPlayer::new, scheduler);
+        AudioClipViewModel.Factory factory = new AudioClipViewModel.Factory(MediaPlayer::new, scheduler);
         ViewModelAudioPlayer viewModelAudioPlayer = new ViewModelAudioPlayer(ViewModelProviders
                 .of(this, factory)
-                .get(AudioPlayerViewModel.class), odkViewLifecycle);
+                .get(AudioClipViewModel.class), odkViewLifecycle);
 
         return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer);
     }

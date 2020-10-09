@@ -7,10 +7,10 @@ import java.util.function.Consumer;
 
 public class ViewModelAudioPlayer implements AudioPlayer {
 
-    private final AudioPlayerViewModel viewModel;
+    private final AudioClipViewModel viewModel;
     private final LifecycleOwner lifecycleOwner;
 
-    public ViewModelAudioPlayer(AudioPlayerViewModel viewModel, LifecycleOwner lifecycleOwner) {
+    public ViewModelAudioPlayer(AudioClipViewModel viewModel, LifecycleOwner lifecycleOwner) {
         this.viewModel = viewModel;
         this.lifecycleOwner = lifecycleOwner;
     }

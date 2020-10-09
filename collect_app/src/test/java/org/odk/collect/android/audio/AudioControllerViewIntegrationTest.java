@@ -47,10 +47,10 @@ public class AudioControllerViewIntegrationTest {
         activity = RobolectricHelpers.createThemedActivity(SwipableParentActivity.class);
         audioHelper = new AudioHelper(activity, new FakeLifecycleOwner(), fakeScheduler, () -> mediaPlayer);
 
-        AudioPlayerViewModelFactory factory = new AudioPlayerViewModelFactory(() -> mediaPlayer, fakeScheduler);
+        AudioClipViewModel.Factory factory = new AudioClipViewModel.Factory(() -> mediaPlayer, fakeScheduler);
         audioPlayer = new ViewModelAudioPlayer(ViewModelProviders
                 .of(activity, factory)
-                .get(AudioPlayerViewModel.class), new FakeLifecycleOwner());
+                .get(AudioClipViewModel.class), new FakeLifecycleOwner());
     }
 
     @Test
