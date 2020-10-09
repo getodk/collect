@@ -102,7 +102,6 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     private void setUpPickers() {
         dayPicker = getDialog().findViewById(R.id.day_picker);
         dayPicker.setOnValueChangedListener((picker, oldVal, newVal) -> updateGregorianDateLabel());
-        dayPicker.setValue(1);
         monthPicker = getDialog().findViewById(R.id.month_picker);
         monthPicker.setOnValueChangedListener((picker, oldVal, newVal) -> monthUpdated());
         yearPicker = getDialog().findViewById(R.id.year_picker);
@@ -114,12 +113,9 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     private void hidePickersIfNeeded() {
         if (viewModel.getDatePickerDetails().isMonthYearMode()) {
             dayPicker.setVisibility(View.GONE);
-            dayPicker.setValue(1);
         } else if (viewModel.getDatePickerDetails().isYearMode()) {
             dayPicker.setVisibility(View.GONE);
             monthPicker.setVisibility(View.GONE);
-            dayPicker.setValue(1);
-            yearPicker.setValue(1);
         }
     }
 
@@ -185,7 +181,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     }
 
     public LocalDateTime getDate() {
-        return viewModel.getLocalDateTime();
+        return getDay() == 0 ? viewModel.getLocalDateTime() : getOriginalDate();
     }
 
     protected abstract void updateDays();
