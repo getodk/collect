@@ -4,6 +4,7 @@ import androidx.core.util.Pair;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.IFormElement;
+import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -98,6 +99,11 @@ public class MockFormEntryPromptBuilder {
         when(prompt.getAnswerValue()).thenReturn(answer);
         when(prompt.getAnswerText()).thenCallRealMethod();
 
+        return this;
+    }
+
+    public MockFormEntryPromptBuilder withQuestion(QuestionDef questionDef) {
+        when(prompt.getQuestion()).thenReturn(questionDef);
         return this;
     }
 }

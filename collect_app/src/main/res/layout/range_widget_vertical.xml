@@ -19,7 +19,9 @@ limitations under the License.
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:paddingTop="15dp"
-    android:paddingBottom="15dp">
+    android:paddingBottom="15dp"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
     <TextView
         android:id="@+id/current_value"
@@ -31,24 +33,18 @@ limitations under the License.
 
     <FrameLayout
         android:layout_width="50dp"
-        android:layout_height="330dp">
+        android:layout_height="330dp"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
-        <SeekBar
-            android:id="@+id/seek_bar_no_ticks"
+        <org.odk.collect.android.views.TrackingTouchSlider
+            android:id="@+id/slider"
+            style="@style/SliderTheme"
             android:layout_width="330dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layerType="software"
-            android:rotation="270"/>
-
-        <SeekBar
-            android:id="@+id/seek_bar"
-            android:layout_width="330dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:theme="@style/Base.Widget.AppCompat.SeekBar.Discrete"
-            android:layerType="software"
-            android:rotation="270"/>
+            android:rotation="270" />
 
     </FrameLayout>
 

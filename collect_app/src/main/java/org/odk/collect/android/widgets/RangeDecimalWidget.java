@@ -18,67 +18,87 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.material.slider.Slider;
 
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.views.TrackingTouchSlider;
+import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
 
 import java.math.BigDecimal;
 
 @SuppressLint("ViewConstructor")
-public class RangeDecimalWidget extends RangeWidget {
+public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChangeListener {
+    TrackingTouchSlider slider;
+    TextView currentValue;
+
+    private int visibleThumbRadius;
 
     public RangeDecimalWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
     }
 
     @Override
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+        RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.setUpLayoutElements(context, prompt);
+        slider = layoutElements.getSlider();
+        currentValue = layoutElements.getCurrentValue();
+
+        visibleThumbRadius = slider.getThumbRadius();
+        setUpActualValueLabel(RangeWidgetUtils.setUpSlider(prompt, slider, false));
+
+        if (slider.isEnabled()) {
+            slider.addOnChangeListener(this);
+        }
+        return layoutElements.getAnswerView();
+    }
+
+    @Override
     public IAnswerData getAnswer() {
-        return actualValue != null
-                ? new DecimalData(actualValue.doubleValue())
-                : null;
+        String stringAnswer = currentValue.getText().toString();
+        return stringAnswer.isEmpty() ? null : new DecimalData(Double.parseDouble(stringAnswer));
     }
 
     @Override
-    protected void setUpActualValueLabel() {
-        String value = actualValue != null
-                ? String.valueOf(actualValue.doubleValue())
-                : "";
+    public void setOnLongClickListener(OnLongClickListener l) {
+    }
 
-        if (currentValue != null) {
-            currentValue.setText(value);
+    @Override
+    public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        return slider.isTrackingTouch();
+    }
+
+    @Override
+    public void clearAnswer() {
+        setUpActualValueLabel(null);
+        widgetValueChanged();
+    }
+
+    @Override
+    public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
+        if (fromUser) {
+            BigDecimal actualValue = RangeWidgetUtils.getActualValue(getFormEntryPrompt(), slider, value);
+            setUpActualValueLabel(actualValue);
+            widgetValueChanged();
         }
     }
 
-    @Override
-    protected void setUpDisplayedValuesForNumberPicker() {
-        displayedValuesForNumberPicker = new String[elementCount + 1];
-
-        if (isRangeIncreasing()) {
-            fillDisplayedValuesWithIncreasingValues();
-
+    private void setUpActualValueLabel(BigDecimal actualValue) {
+        if (actualValue != null) {
+            currentValue.setText(String.valueOf(actualValue.doubleValue()));
+            slider.setThumbRadius(visibleThumbRadius);
         } else {
-            fillDisplayedValuesWithDecreasingValues();
-        }
-    }
-
-    private boolean isRangeIncreasing() {
-        return rangeEnd.compareTo(rangeStart) > -1;
-    }
-
-    private void fillDisplayedValuesWithIncreasingValues() {
-        int index = 0;
-        for (BigDecimal i = rangeEnd; i.compareTo(rangeStart) > -1; i = i.subtract(rangeStep.abs())) {
-            displayedValuesForNumberPicker[index] = String.valueOf(i);
-            index++;
-        }
-    }
-
-    private void fillDisplayedValuesWithDecreasingValues() {
-        int index = 0;
-        for (BigDecimal i = rangeEnd; i.compareTo(rangeStart) < 1; i = i.add(rangeStep.abs())) {
-            displayedValuesForNumberPicker[index] = String.valueOf(i);
-            index++;
+            slider.setValue(slider.getValueFrom());
+            slider.setThumbRadius(0);
+            currentValue.setText("");
         }
     }
 }

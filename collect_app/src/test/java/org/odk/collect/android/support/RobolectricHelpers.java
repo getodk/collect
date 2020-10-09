@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.core.app.ApplicationProvider;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -45,6 +46,10 @@ public class RobolectricHelpers {
 
     public static AppDependencyComponent getApplicationComponent() {
         return ((Collect) RuntimeEnvironment.application).getComponent();
+    }
+
+    public static void createThemedContext() {
+        ApplicationProvider.getApplicationContext().setTheme(R.style.Theme_Collect_Light);
     }
 
     public static <T extends FragmentActivity> T createThemedActivity(Class<T> clazz) {
