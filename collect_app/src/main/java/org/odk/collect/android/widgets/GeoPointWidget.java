@@ -80,7 +80,7 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
                 }
                 bundle.putDouble(GeoDataRequester.ACCURACY_THRESHOLD, accuracyThreshold);
 
-                geoButtonClickListener.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(), waitingForDataRegistry,
+                geoButtonClickListener.requestGeoIntent(context, prompt.getIndex(), getPermissionUtils(), waitingForDataRegistry,
                         GeoPointActivity.class, bundle, LOCATION_CAPTURE);
             });
         }

@@ -12,7 +12,7 @@ import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.widgets.interfaces.GeoButtonClickListener;
+import org.odk.collect.android.widgets.support.FakeGeoButtonClickListener;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
 
@@ -32,16 +32,15 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 @RunWith(RobolectricTestRunner.class)
 public class GeoShapeWidgetTest {
     private final FakePermissionUtils permissionUtils = new FakePermissionUtils();
+    private final FakeGeoButtonClickListener fakeGeoButtonClickListener = new FakeGeoButtonClickListener();
     private final String answer = stringFromDoubleList();
 
     private WaitingForDataRegistry waitingForDataRegistry;
-    private GeoButtonClickListener mockGeoButtonClickListener;
     private View.OnLongClickListener listener;
 
     @Before
     public void setup() {
         waitingForDataRegistry = mock(WaitingForDataRegistry.class);
-        mockGeoButtonClickListener = mock(GeoButtonClickListener.class);
         listener = mock(View.OnLongClickListener.class);
     }
 
@@ -70,17 +69,27 @@ public class GeoShapeWidgetTest {
     }
 
     @Test
-    public void widgetCallsSetButtonLabelAndVisibility_whenPromptIsReadOnlyAndDoesNotHaveAnswer() {
+    public void whenPromptIsReadOnlyAndDoesNotHaveAnswer_geoButtonIsNotDisplayed() {
         GeoShapeWidget widget = createWidget(promptWithReadOnly());
-        verify(mockGeoButtonClickListener).setButtonLabelAndVisibility(widget.binding, true, false,
-                R.string.geoshape_view_read_only, R.string.geoshape_view_change_location, R.string.get_shape);
+        assertEquals(widget.binding.simpleButton.getVisibility(), View.GONE);
     }
 
     @Test
-    public void widgetCallsSetButtonLabelAndVisibility_whenPromptIsNotReadOnlyAndHasAnswer() {
+    public void whenPromptIsReadOnlyAndHasAnswer_viewGeoShapeButtonIsShown() {
+        GeoShapeWidget widget = createWidget(promptWithReadOnlyAndAnswer(new StringData(answer)));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.geoshape_view_read_only));
+    }
+
+    @Test
+    public void whenPromptIsNotReadOnlyAndDoesNotHaveAnswer_startGeoShapeButtonIsShown() {
+        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.get_shape));
+    }
+
+    @Test
+    public void whenPromptIsNotReadOnlyAndHasAnswer_viewOrChangeGeoShapeButtonIsShown() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        verify(mockGeoButtonClickListener).setButtonLabelAndVisibility(widget.binding, false, true,
-                R.string.geoshape_view_read_only, R.string.geoshape_view_change_location, R.string.get_shape);
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.geoshape_view_change_location));
     }
 
     @Test
@@ -89,8 +98,7 @@ public class GeoShapeWidgetTest {
         widget.clearAnswer();
 
         assertEquals(widget.binding.geoAnswerText.getText(), "");
-        verify(mockGeoButtonClickListener).setButtonLabelAndVisibility(widget.binding, false, false,
-                R.string.geoshape_view_read_only, R.string.geoshape_view_change_location, R.string.get_shape);
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.get_shape));
     }
 
     @Test
@@ -114,26 +122,24 @@ public class GeoShapeWidgetTest {
     }
 
     @Test
-    public void setData_setsCorrectAnswerInAnswerTextView() {
+    public void setData_updatesWidgetDisplayedAnswer() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(null));
         widget.setBinaryData(answer);
         assertEquals(widget.binding.geoAnswerText.getText().toString(), answer);
     }
 
     @Test
-    public void setData_whenDataIsNotNull_updatesButtonLabel() {
-        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
-        widget.setBinaryData(answer);
-        verify(mockGeoButtonClickListener).setButtonLabelAndVisibility(widget.binding, false, true,
-                R.string.geoshape_view_read_only, R.string.geoshape_view_change_location, R.string.get_shape);
-    }
-
-    @Test
     public void setData_whenDataIsNull_updatesButtonLabel() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
         widget.setBinaryData("");
-        verify(mockGeoButtonClickListener).setButtonLabelAndVisibility(widget.binding, false, false,
-                R.string.geoshape_view_read_only, R.string.geoshape_view_change_location, R.string.get_shape);
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.get_shape));
+    }
+
+    @Test
+    public void setData_whenDataIsNotNull_updatesButtonLabel() {
+        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
+        widget.setBinaryData(answer);
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.geoshape_view_change_location));
     }
 
     @Test
@@ -146,33 +152,29 @@ public class GeoShapeWidgetTest {
     }
 
     @Test
-    public void whenPromptIsReadOnlyAndDoesNotHaveAnswer_bundleStoresCorrectValues() {
-        GeoShapeWidget widget = createWidget(promptWithReadOnlyAndAnswer(null));
-        widget.binding.simpleButton.performClick();
-        assertGeoPolyBundleArgumentEquals(widget.bundle, "", GeoPolyActivity.OutputMode.GEOSHAPE, true);
-    }
-
-    @Test
-    public void whenPromptIsNotReadOnlyAndHasAnswer_bundleStoresCorrectValues() {
-        GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        widget.binding.simpleButton.performClick();
-        assertGeoPolyBundleArgumentEquals(widget.bundle, answer, GeoPolyActivity.OutputMode.GEOSHAPE, false);
-    }
-
-    @Test
-    public void buttonClick_callsOnButtonClicked() {
-        FormEntryPrompt prompt = promptWithAnswer(null);
-        GeoShapeWidget widget = createWidget(prompt);
-
+    public void buttonClick_whenPromptIsReadOnlyAndDoesNotHaveAnswer_requestsGeoIntentWithCorrectValues() {
+        GeoShapeWidget widget = createWidget(promptWithReadOnly());
         widget.setPermissionUtils(permissionUtils);
         widget.binding.simpleButton.performClick();
 
-        verify(mockGeoButtonClickListener).onButtonClicked(widget.getContext(), prompt.getIndex(), permissionUtils, null,
-                waitingForDataRegistry, GeoPolyActivity.class, widget.bundle, GEOSHAPE_CAPTURE);
+        assertEquals(fakeGeoButtonClickListener.activityClass, GeoPolyActivity.class);
+        assertEquals(fakeGeoButtonClickListener.requestCode, GEOSHAPE_CAPTURE);
+        assertGeoPolyBundleArgumentEquals(fakeGeoButtonClickListener.geoBundle, "", GeoPolyActivity.OutputMode.GEOSHAPE, true);
+    }
+
+    @Test
+    public void buttonClick_whenPromptIsNotReadOnlyAndHasAnswer_requestsGeoIntentWithCorrectValues() {
+        GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
+        widget.setPermissionUtils(permissionUtils);
+        widget.binding.simpleButton.performClick();
+
+        assertEquals(fakeGeoButtonClickListener.activityClass, GeoPolyActivity.class);
+        assertEquals(fakeGeoButtonClickListener.requestCode, GEOSHAPE_CAPTURE);
+        assertGeoPolyBundleArgumentEquals(fakeGeoButtonClickListener.geoBundle, answer, GeoPolyActivity.OutputMode.GEOSHAPE, false);
     }
 
     private GeoShapeWidget createWidget(FormEntryPrompt prompt) {
         return new GeoShapeWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"),
-                waitingForDataRegistry, mockGeoButtonClickListener);
+                waitingForDataRegistry, fakeGeoButtonClickListener);
     }
 }

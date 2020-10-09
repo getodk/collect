@@ -237,12 +237,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
             startInput();
         }
 
-        if (intentReadOnly) {
-            playButton.setEnabled(false);
-            clearButton.setEnabled(false);
-            backspaceButton.setEnabled(false);
-        }
-
         map.setClickListener(this::onClick);
         // Also allow long press to place point to match prior versions
         map.setLongPressListener(this::onClick);

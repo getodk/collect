@@ -4,7 +4,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.test.core.app.ApplicationProvider;
 
@@ -18,17 +17,16 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPolyActivity;
-import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.fakes.FakePermissionUtils;
-import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.GEOSHAPE_CAPTURE;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.GEOTRACE_CAPTURE;
@@ -45,29 +43,23 @@ public class GeoDataRequesterTest {
 
     private final GeoDataRequester geoDataRequester = new GeoDataRequester();
     private final FakePermissionUtils permissionUtils = new FakePermissionUtils();
+    private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
     private final GeoPointData answer = new GeoPointData(getRandomDoubleArray());
     private final Bundle bundle = new Bundle();
 
-    private GeoWidgetAnswerBinding binding;
-    private WaitingForDataRegistry waitingForDataRegistry;
     private TestScreenContextActivity testActivity;
     private Context context;
     private FormIndex formIndex;
-    private MapConfigurator mapConfigurator;
     private QuestionDef questionDef;
 
     @Before
     public void setUp() {
         context = ApplicationProvider.getApplicationContext();
         testActivity = widgetTestActivity();
-        binding = GeoWidgetAnswerBinding.inflate(testActivity.getLayoutInflater());
 
-        waitingForDataRegistry = mock(WaitingForDataRegistry.class);
         formIndex = mock(FormIndex.class);
-        mapConfigurator = mock(MapConfigurator.class);
         questionDef = mock(QuestionDef.class);
 
-        when(mapConfigurator.isAvailable(any())).thenReturn(true);
         permissionUtils.setPermissionGranted(true);
         bundle.putString(STRING_ARG, "blah");
     }
@@ -107,35 +99,26 @@ public class GeoDataRequesterTest {
     }
 
     @Test
-    public void whenPermissionIsNotGranted_onButtonClickedShouldNotLaunchAnyIntent() {
+    public void whenPermissionIsNotGranted_requestGeoIntentShouldNotLaunchAnyIntent() {
         permissionUtils.setPermissionGranted(false);
-        geoDataRequester.onButtonClicked(testActivity, formIndex, permissionUtils, null,
+        geoDataRequester.requestGeoIntent(testActivity, formIndex, permissionUtils,
                 waitingForDataRegistry, GeoPointActivity.class, null, LOCATION_CAPTURE);
         Intent startedIntent = shadowOf(testActivity).getNextStartedActivity();
 
         assertNull(startedIntent);
+        assertFalse(waitingForDataRegistry.waiting.contains(formIndex));
     }
 
     @Test
-    public void whenMapConfiguratorIsNotAvailable_widgetShowsUnavailableMessage() {
-        when(mapConfigurator.isAvailable(any())).thenReturn(false);
-        geoDataRequester.onButtonClicked(testActivity, formIndex, permissionUtils, mapConfigurator,
-                waitingForDataRegistry, GeoPointActivity.class, null, LOCATION_CAPTURE);
-
-        verify(mapConfigurator).showUnavailableMessage(testActivity);
-    }
-
-    @Test
-    public void whenPermissionIsGranted_onButtonClickedWaitsForLocationData() {
-        geoDataRequester.onButtonClicked(testActivity, formIndex, permissionUtils, mapConfigurator,
+    public void whenPermissionIsGranted_requestGeoIntentSetsWidgetWaitingForData() {
+        geoDataRequester.requestGeoIntent(testActivity, formIndex, permissionUtils,
                 waitingForDataRegistry, GeoPointActivity.class, bundle, LOCATION_CAPTURE);
-
-        verify(waitingForDataRegistry).waitForData(formIndex);
+        assertTrue(waitingForDataRegistry.waiting.contains(formIndex));
     }
 
     @Test
-    public void onButtonClickedShouldLaunchCorrectIntent_forGeoPointWidget() {
-        geoDataRequester.onButtonClicked(testActivity, formIndex, permissionUtils, null,
+    public void requestGeoIntentShouldLaunchCorrectIntent_forGeoPointWidget() {
+        geoDataRequester.requestGeoIntent(testActivity, formIndex, permissionUtils,
                 waitingForDataRegistry, GeoPointActivity.class, bundle, LOCATION_CAPTURE);
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
 
@@ -144,8 +127,8 @@ public class GeoDataRequesterTest {
     }
 
     @Test
-    public void onButtonClickedShouldLaunchCorrectIntent_forGeoPointMapWidget() {
-        geoDataRequester.onButtonClicked(testActivity, formIndex, permissionUtils, null,
+    public void requestGeoIntentShouldLaunchCorrectIntent_forGeoPointMapWidget() {
+        geoDataRequester.requestGeoIntent(testActivity, formIndex, permissionUtils,
                 waitingForDataRegistry, GeoPointMapActivity.class, bundle, LOCATION_CAPTURE);
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
 
@@ -154,8 +137,8 @@ public class GeoDataRequesterTest {
     }
 
     @Test
-    public void onButtonClickedShouldLaunchCorrectIntent_forGeoShapeWidget() {
-        geoDataRequester.onButtonClicked(testActivity, formIndex, permissionUtils, null,
+    public void requestGeoIntenrShouldLaunchCorrectIntent_forGeoShapeWidget() {
+        geoDataRequester.requestGeoIntent(testActivity, formIndex, permissionUtils,
                 waitingForDataRegistry, GeoPolyActivity.class, bundle, GEOSHAPE_CAPTURE);
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
 
@@ -164,41 +147,13 @@ public class GeoDataRequesterTest {
     }
 
     @Test
-    public void onButtonClickedShouldLaunchCorrectIntent_forGeoTraceWidget() {
-        geoDataRequester.onButtonClicked(testActivity, formIndex, permissionUtils, null,
+    public void requestGeoIntentShouldLaunchCorrectIntent_forGeoTraceWidget() {
+        geoDataRequester.requestGeoIntent(testActivity, formIndex, permissionUtils,
                 waitingForDataRegistry, GeoPolyActivity.class, bundle, GEOTRACE_CAPTURE);
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
 
         assertEquals(startedIntent.getComponent(), new ComponentName(widgetTestActivity(), GeoPolyActivity.class));
         assertEquals(startedIntent.getExtras().getString(STRING_ARG), "blah");
-    }
-
-    @Test
-    public void setButtonLabelAndVisibility_doesNotShowButton_whenWidgetIsReadOnlyAndDoesNotHaveAnswer() {
-        geoDataRequester.setButtonLabelAndVisibility(binding, true, false,
-                R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
-        assertEquals(binding.simpleButton.getVisibility(), View.GONE);
-    }
-
-    @Test
-    public void setButtonLabelAndVisibility_showsButtonWithCorrectLabel_whenWidgetIsReadOnlyAndHasAnswerData() {
-        geoDataRequester.setButtonLabelAndVisibility(binding, true, true,
-                R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
-        assertEquals(binding.simpleButton.getText(), context.getString(R.string.geopoint_view_read_only));
-    }
-
-    @Test
-    public void setButtonLabelAndVisibility_showsButtonWithCorrectLabel_whenWidgetIsNotReadOnlyAndDoesNotHaveAnswer() {
-        geoDataRequester.setButtonLabelAndVisibility(binding, false, false,
-                R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
-        assertEquals(binding.simpleButton.getText(), context.getString(R.string.get_point));
-    }
-
-    @Test
-    public void setButtonLabelAndVisibility_showsButtonWithCorrectLabel_whenWidgetIsNotReadOnlyAndHasAnswer() {
-        geoDataRequester.setButtonLabelAndVisibility(binding, false, true,
-                R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
-        assertEquals(binding.simpleButton.getText(), context.getString(R.string.view_change_location));
     }
 
     @Test

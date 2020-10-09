@@ -80,7 +80,7 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
             bundle.putSerializable(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOSHAPE);
             bundle.putBoolean(GeoDataRequester.READ_ONLY, prompt.isReadOnly());
 
-            geoButtonClickListener.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(),
+            geoButtonClickListener.requestGeoIntent(context, prompt.getIndex(), getPermissionUtils(),
                     waitingForDataRegistry, GeoPolyActivity.class, bundle, GEOSHAPE_CAPTURE);
         });
 
@@ -116,8 +116,7 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
     @Override
     public void setData(Object answer) {
         binding.geoAnswerText.setText(answer.toString());
-        binding.simpleButton.setText(answer != null || answer.toString().isEmpty() ?
-                R.string.geoshape_view_change_location : R.string.get_shape);
+        binding.simpleButton.setText(answer.toString().isEmpty() ? R.string.get_shape : R.string.geoshape_view_change_location);
         widgetValueChanged();
     }
 }

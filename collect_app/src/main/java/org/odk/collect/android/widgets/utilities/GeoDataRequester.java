@@ -25,8 +25,8 @@ public class GeoDataRequester implements GeoButtonClickListener {
     public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
 
     @Override
-    public void onButtonClicked(Context context, FormIndex index, PermissionUtils permissionUtils,
-                                WaitingForDataRegistry waitingForDataRegistry, Class activityClass, Bundle bundle, int requestCode) {
+    public void requestGeoIntent(Context context, FormIndex index, PermissionUtils permissionUtils,
+                                 WaitingForDataRegistry waitingForDataRegistry, Class activityClass, Bundle bundle, int requestCode) {
         permissionUtils.requestLocationPermissions((Activity) context, new PermissionListener() {
             @Override
             public void granted() {

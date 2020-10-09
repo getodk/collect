@@ -96,7 +96,7 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
             bundle.putBoolean(GeoDataRequester.READ_ONLY, prompt.isReadOnly());
             bundle.putBoolean(GeoDataRequester.DRAGGABLE_ONLY, draggable);
 
-            geoButtonClickListener.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(),
+            geoButtonClickListener.requestGeoIntent(context, prompt.getIndex(), getPermissionUtils(),
                     waitingForDataRegistry, GeoPointMapActivity.class, bundle, LOCATION_CAPTURE);
         });
 

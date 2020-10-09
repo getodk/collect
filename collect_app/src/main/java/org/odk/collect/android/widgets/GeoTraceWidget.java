@@ -44,7 +44,6 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 @SuppressLint("ViewConstructor")
 public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver {
     GeoWidgetAnswerBinding binding;
-    Bundle bundle;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final MapConfigurator mapConfigurator;
@@ -91,7 +90,7 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
             bundle.putBoolean(GeoDataRequester.READ_ONLY, prompt.isReadOnly());
 
             if (mapConfigurator.isAvailable(context)) {
-                geoButtonClickListener.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(),
+                geoButtonClickListener.requestGeoIntent(context, prompt.getIndex(), getPermissionUtils(),
                         waitingForDataRegistry, GeoPolyActivity.class, bundle, GEOTRACE_CAPTURE);
             } else {
                 mapConfigurator.showUnavailableMessage(context);
@@ -132,8 +131,7 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
     @Override
     public void setData(Object answer) {
         binding.geoAnswerText.setText(answer.toString());
-        binding.simpleButton.setText(answer != null || answer.toString().isEmpty() ?
-                R.string.geotrace_view_change_location : R.string.get_trace);
+        binding.simpleButton.setText(answer.toString().isEmpty() ? R.string.get_trace : R.string.geotrace_view_change_location);
         widgetValueChanged();
     }
 }

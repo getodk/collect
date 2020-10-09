@@ -13,14 +13,17 @@ import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.widgets.interfaces.GeoButtonClickListener;
+import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.widgets.support.FakeGeoButtonClickListener;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.GEOTRACE_CAPTURE;
 import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.assertGeoPolyBundleArgumentEquals;
 import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.stringFromDoubleList;
@@ -29,23 +32,27 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.prom
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
+import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 public class GeoTraceWidgetTest {
     private final FakePermissionUtils permissionUtils = new FakePermissionUtils();
+    private final FakeGeoButtonClickListener fakeGeoButtonClickListener = new FakeGeoButtonClickListener();
     private final String answer = stringFromDoubleList();
 
+    private TestScreenContextActivity widgetActivity;
     private WaitingForDataRegistry waitingForDataRegistry;
     private MapConfigurator mapConfigurator;
-    private GeoButtonClickListener mockGeoButtonClickListener;
     private View.OnLongClickListener listener;
 
     @Before
     public void setup() {
+        widgetActivity = widgetTestActivity();
         waitingForDataRegistry = mock(WaitingForDataRegistry.class);
         mapConfigurator = mock(MapConfigurator.class);
-        mockGeoButtonClickListener = mock(GeoButtonClickListener.class);
         listener = mock(View.OnLongClickListener.class);
+
+        when(mapConfigurator.isAvailable(any())).thenReturn(true);
     }
 
     @Test
@@ -73,17 +80,27 @@ public class GeoTraceWidgetTest {
     }
 
     @Test
-    public void widgetCallsSetButtonLabelAndVisibility_whenPromptIsReadOnlyAndDoesNotHaveAnswer() {
+    public void whenPromptIsReadOnlyAndDoesNotHaveAnswer_geoButtonIsNotDisplayed() {
         GeoTraceWidget widget = createWidget(promptWithReadOnly());
-        verify(mockGeoButtonClickListener).setButtonLabelAndVisibility(widget.binding, true, false,
-                R.string.geotrace_view_read_only, R.string.geotrace_view_change_location, R.string.get_trace);
+        assertEquals(widget.binding.simpleButton.getVisibility(), View.GONE);
     }
 
     @Test
-    public void widgetCallsSetButtonLabelAndVisibility_whenPromptIsNotReadOnlyAndHasAnswer() {
+    public void whenPromptIsReadOnlyAndHasAnswer_viewGeoShapeButtonIsShown() {
+        GeoTraceWidget widget = createWidget(promptWithReadOnlyAndAnswer(new StringData(answer)));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.geotrace_view_read_only));
+    }
+
+    @Test
+    public void whenPromptIsNotReadOnlyAndDoesNotHaveAnswer_startGeoShapeButtonIsShown() {
+        GeoTraceWidget widget = createWidget(promptWithAnswer(null));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.get_trace));
+    }
+
+    @Test
+    public void whenPromptIsNotReadOnlyAndHasAnswer_viewOrChangeGeoShapeButtonIsShown() {
         GeoTraceWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        verify(mockGeoButtonClickListener).setButtonLabelAndVisibility(widget.binding, false, true,
-                R.string.geotrace_view_read_only, R.string.geotrace_view_change_location, R.string.get_trace);
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.geotrace_view_change_location));
     }
 
     @Test
@@ -92,8 +109,7 @@ public class GeoTraceWidgetTest {
         widget.clearAnswer();
 
         assertEquals(widget.binding.geoAnswerText.getText(), "");
-        verify(mockGeoButtonClickListener).setButtonLabelAndVisibility(widget.binding, false, false,
-                R.string.geotrace_view_read_only, R.string.geotrace_view_change_location, R.string.get_trace);
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.get_trace));
     }
 
     @Test
@@ -124,19 +140,24 @@ public class GeoTraceWidgetTest {
     }
 
     @Test
-    public void setData_whenDataIsNotNull_updatesButtonLabel() {
+    public void setData_updatesWidgetDisplayedAnswer() {
         GeoTraceWidget widget = createWidget(promptWithAnswer(null));
         widget.setBinaryData(answer);
-        verify(mockGeoButtonClickListener).setButtonLabelAndVisibility(widget.binding, false, true,
-                R.string.geotrace_view_read_only, R.string.geotrace_view_change_location, R.string.get_trace);
+        assertEquals(widget.binding.geoAnswerText.getText().toString(), answer);
     }
 
     @Test
     public void setData_whenDataIsNull_updatesButtonLabel() {
         GeoTraceWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
         widget.setBinaryData("");
-        verify(mockGeoButtonClickListener).setButtonLabelAndVisibility(widget.binding, false, false,
-                R.string.geotrace_view_read_only, R.string.geotrace_view_change_location, R.string.get_trace);
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.get_trace));
+    }
+
+    @Test
+    public void setData_whenDataIsNotNull_updatesButtonLabel() {
+        GeoTraceWidget widget = createWidget(promptWithAnswer(null));
+        widget.setBinaryData(answer);
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.geotrace_view_change_location));
     }
 
     @Test
@@ -149,33 +170,41 @@ public class GeoTraceWidgetTest {
     }
 
     @Test
-    public void whenPromptIsReadOnlyAndDoesNotHaveAnswer_bundleStoresCorrectValues() {
-        GeoTraceWidget widget = createWidget(promptWithReadOnlyAndAnswer(null));
-        widget.binding.simpleButton.performClick();
-        assertGeoPolyBundleArgumentEquals(widget.bundle, "", GeoPolyActivity.OutputMode.GEOTRACE, true);
-    }
-
-    @Test
-    public void whenPromptIsNotReadOnlyAndHasAnswer_bundleStoresCorrectValues() {
-        GeoTraceWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        widget.binding.simpleButton.performClick();
-        assertGeoPolyBundleArgumentEquals(widget.bundle, answer, GeoPolyActivity.OutputMode.GEOTRACE, false);
-    }
-
-    @Test
-    public void buttonClick_callsOnButtonClicked() {
-        FormEntryPrompt prompt = promptWithAnswer(null);
-        GeoTraceWidget widget = createWidget(prompt);
+    public void buttonClick_whenMapConfiguratorIsUnavailable_doesNotLaunchAnyIntent() {
+        GeoTraceWidget widget = createWidget(promptWithReadOnly());
+        when(mapConfigurator.isAvailable(widget.getContext())).thenReturn(false);
 
         widget.setPermissionUtils(permissionUtils);
         widget.binding.simpleButton.performClick();
 
-        verify(mockGeoButtonClickListener).onButtonClicked(widget.getContext(), prompt.getIndex(), permissionUtils, mapConfigurator,
-                waitingForDataRegistry, GeoPolyActivity.class, widget.bundle, GEOTRACE_CAPTURE);
+        assertNull(shadowOf(widgetActivity).getNextStartedActivity());
+        verify(mapConfigurator).showUnavailableMessage(widget.getContext());
+    }
+
+    @Test
+    public void buttonClick_whenPromptIsReadOnlyAndDoesNotHaveAnswer_requestsGeoIntentWithCorrectValues() {
+        GeoTraceWidget widget = createWidget(promptWithReadOnly());
+        widget.setPermissionUtils(permissionUtils);
+        widget.binding.simpleButton.performClick();
+
+        assertEquals(fakeGeoButtonClickListener.activityClass, GeoPolyActivity.class);
+        assertEquals(fakeGeoButtonClickListener.requestCode, GEOTRACE_CAPTURE);
+        assertGeoPolyBundleArgumentEquals(fakeGeoButtonClickListener.geoBundle, "", GeoPolyActivity.OutputMode.GEOTRACE, true);
+    }
+
+    @Test
+    public void buttonClick_whenPromptIsNotReadOnlyAndHasAnswer_requestsGeoIntentWithCorrectValues() {
+        GeoTraceWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
+        widget.setPermissionUtils(permissionUtils);
+        widget.binding.simpleButton.performClick();
+
+        assertEquals(fakeGeoButtonClickListener.activityClass, GeoPolyActivity.class);
+        assertEquals(fakeGeoButtonClickListener.requestCode, GEOTRACE_CAPTURE);
+        assertGeoPolyBundleArgumentEquals(fakeGeoButtonClickListener.geoBundle, answer, GeoPolyActivity.OutputMode.GEOTRACE, false);
     }
 
     private GeoTraceWidget createWidget(FormEntryPrompt prompt) {
-        return new GeoTraceWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"),
-                waitingForDataRegistry, mapConfigurator, mockGeoButtonClickListener);
+        return new GeoTraceWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"),
+                waitingForDataRegistry, mapConfigurator, fakeGeoButtonClickListener);
     }
 }
