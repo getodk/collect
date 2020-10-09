@@ -14,4 +14,10 @@
         style="@style/Widget.Collect.Button.WidgetAnswer"
         android:text="@string/choose_sound" />
 
+    <org.odk.collect.android.audio.AudioControllerView
+        android:id="@+id/audio_controller"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
 </LinearLayout>

@@ -15,4 +15,6 @@ public interface AudioPlayer {
     void onPlayingChanged(String clipID, Consumer<Boolean> playingConsumer);
 
     void onPositionChanged(String clipID, Consumer<Integer> positionConsumer);
+
+    void stop();
 }

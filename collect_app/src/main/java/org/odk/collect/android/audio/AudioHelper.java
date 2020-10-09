@@ -1,6 +1,5 @@
 package org.odk.collect.android.audio;
 
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 
 import androidx.fragment.app.FragmentActivity;
@@ -20,7 +19,7 @@ import java.util.function.Supplier;
 
 /**
  * Object for setting up playback of audio clips with {@link AudioButton} and
- * {@link AudioControllerView} controls. Only one clip can be played at once so when a clip is
+ * controls. Only one clip can be played at once so when a clip is
  * played from a view or from the `play` method any currently playing audio will stop.
  * <p>
  * Clips are identified using a `clipID` which enables the playback state of clips to survive
@@ -68,28 +67,6 @@ public class AudioHelper {
         return isPlaying;
     }
 
-    public void setAudio(AudioPlayer audioPlayer, AudioControllerView view, Clip clip) {
-        audioPlayer.onPlayingChanged(clip.getClipID(), view::setPlaying);
-        audioPlayer.onPositionChanged(clip.getClipID(), view::setPosition);
-        view.setDuration(getDurationOfFile(clip.getURI()));
-        view.setListener(new AudioControllerView.Listener() {
-            @Override
-            public void onPlayClicked() {
-                audioPlayer.play(clip);
-            }
-
-            @Override
-            public void onPauseClicked() {
-                audioPlayer.pause();
-            }
-
-            @Override
-            public void onPositionChanged(Integer newPosition) {
-                audioPlayer.setPosition(clip.getClipID(), newPosition);
-            }
-        });
-    }
-
     public void play(Clip clip) {
         viewModel.play(clip);
     }
@@ -100,13 +77,6 @@ public class AudioHelper {
 
     public void stop() {
         viewModel.stop();
-    }
-
-    private Integer getDurationOfFile(String uri) {
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(uri);
-        String durationString = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-        return durationString != null ? Integer.parseInt(durationString) : 0;
     }
 
     public LiveData<Exception> getError() {

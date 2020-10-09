@@ -15,8 +15,8 @@
 package org.odk.collect.android.audio;
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -32,7 +32,7 @@ import static java.lang.Math.min;
 
 public class AudioControllerView extends FrameLayout {
 
-    final AudioControllerLayoutBinding binding;
+    public final AudioControllerLayoutBinding binding;
 
     private final TextView currentDurationLabel;
     private final TextView totalDurationLabel;
@@ -47,10 +47,14 @@ public class AudioControllerView extends FrameLayout {
     private Listener listener;
 
     public AudioControllerView(Context context) {
-        super(context);
+        this(context, null);
+    }
+
+    public AudioControllerView(Context context, AttributeSet attrs) {
+        super(context, attrs);
 
         binding = AudioControllerLayoutBinding.inflate(LayoutInflater.from(context), this, true);
-        playButton = binding.playBtn;
+        playButton = binding.play;
         currentDurationLabel = binding.currentDuration;
         totalDurationLabel = binding.totalDuration;
         seekBar = binding.seekBar;
@@ -61,7 +65,7 @@ public class AudioControllerView extends FrameLayout {
 
         binding.fastForwardBtn.setOnClickListener(view -> fastForwardMedia());
         binding.fastRewindBtn.setOnClickListener(view -> rewindMedia());
-        binding.playBtn.setOnClickListener(view -> playClicked());
+        binding.play.setOnClickListener(view -> playClicked());
     }
 
     private void fastForwardMedia() {
@@ -93,14 +97,6 @@ public class AudioControllerView extends FrameLayout {
         if (listener != null) {
             listener.onPositionChanged(correctedPosition);
         }
-    }
-
-    public void hidePlayer() {
-        setVisibility(GONE);
-    }
-
-    public void showPlayer() {
-        setVisibility(View.VISIBLE);
     }
 
     private static String getTime(long seconds) {

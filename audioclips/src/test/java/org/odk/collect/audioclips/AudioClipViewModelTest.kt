@@ -239,30 +239,36 @@ class AudioClipViewModelTest {
     @Test
     fun position_returnsMediaPlayerPositionInMilliseconds() {
         `when`(mediaPlayer.currentPosition).thenReturn(0)
-        val duration = liveDataTester.activate(viewModel.getPosition("clip1"))
-        assertThat(duration.value, equalTo(0))
+        val position = liveDataTester.activate(viewModel.getPosition("clip1"))
+        assertThat(position.value, equalTo(0))
+
         viewModel.play(Clip("clip1", "file://audio.mp3"))
         `when`(mediaPlayer.currentPosition).thenReturn(1000)
         fakeScheduler.runForeground()
-        assertThat(duration.value, equalTo(1000))
+        assertThat(position.value, equalTo(1000))
+
         `when`(mediaPlayer.currentPosition).thenReturn(24135)
         fakeScheduler.runForeground()
-        assertThat(duration.value, equalTo(24135))
+        assertThat(position.value, equalTo(24135))
     }
 
     @Test
     fun position_worksWhenMultipleClipsArePlayed() {
         `when`(mediaPlayer.currentPosition).thenReturn(0)
-        val duration1 = liveDataTester.activate(viewModel.getPosition("clip1"))
-        val duration2 = liveDataTester.activate(viewModel.getPosition("clip2"))
+        val position1 = liveDataTester.activate(viewModel.getPosition("clip1"))
+        val position2 = liveDataTester.activate(viewModel.getPosition("clip2"))
+
         viewModel.play(Clip("clip1", "file://audio.mp3"))
         `when`(mediaPlayer.currentPosition).thenReturn(1000)
         fakeScheduler.runForeground()
-        assertThat(duration1.value, equalTo(1000))
+        assertThat(position1.value, equalTo(1000))
+        assertThat(position2.value, equalTo(0))
+
         viewModel.play(Clip("clip2", "file://audio.mp3"))
         `when`(mediaPlayer.currentPosition).thenReturn(2500)
         fakeScheduler.runForeground()
-        assertThat(duration2.value, equalTo(2500))
+        assertThat(position1.value, equalTo(1000))
+        assertThat(position2.value, equalTo(2500))
     }
 
     @Test

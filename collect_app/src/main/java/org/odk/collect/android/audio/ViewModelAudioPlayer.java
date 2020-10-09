@@ -42,4 +42,9 @@ public class ViewModelAudioPlayer implements AudioPlayer {
     public void onPositionChanged(String clipID, Consumer<Integer> positionConsumer) {
         viewModel.getPosition(clipID).observe(lifecycleOwner, (Observer<Integer>) positionConsumer::accept);
     }
+
+    @Override
+    public void stop() {
+        viewModel.stop();
+    }
 }
