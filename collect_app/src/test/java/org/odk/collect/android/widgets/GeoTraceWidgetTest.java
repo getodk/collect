@@ -13,7 +13,7 @@ import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.widgets.interfaces.GeoWidget;
+import org.odk.collect.android.widgets.interfaces.GeoButtonClickListener;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
 
@@ -36,14 +36,14 @@ public class GeoTraceWidgetTest {
 
     private WaitingForDataRegistry waitingForDataRegistry;
     private MapConfigurator mapConfigurator;
-    private GeoWidget mockGeoWidget;
+    private GeoButtonClickListener mockGeoButtonClickListener;
     private View.OnLongClickListener listener;
 
     @Before
     public void setup() {
         waitingForDataRegistry = mock(WaitingForDataRegistry.class);
         mapConfigurator = mock(MapConfigurator.class);
-        mockGeoWidget = mock(GeoWidget.class);
+        mockGeoButtonClickListener = mock(GeoButtonClickListener.class);
         listener = mock(View.OnLongClickListener.class);
     }
 
@@ -150,12 +150,12 @@ public class GeoTraceWidgetTest {
         widget.setPermissionUtils(permissionUtils);
         widget.binding.simpleButton.performClick();
 
-        verify(mockGeoWidget).onButtonClicked(widget.getContext(), prompt.getIndex(), permissionUtils, mapConfigurator,
+        verify(mockGeoButtonClickListener).onButtonClicked(widget.getContext(), prompt.getIndex(), permissionUtils, mapConfigurator,
                 waitingForDataRegistry, GeoPolyActivity.class, widget.bundle, GEOTRACE_CAPTURE);
     }
 
     private GeoTraceWidget createWidget(FormEntryPrompt prompt) {
         return new GeoTraceWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"),
-                waitingForDataRegistry, mapConfigurator, mockGeoWidget);
+                waitingForDataRegistry, mapConfigurator, mockGeoButtonClickListener);
     }
 }

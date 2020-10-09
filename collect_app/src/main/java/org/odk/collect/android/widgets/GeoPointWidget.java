@@ -25,12 +25,13 @@ import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.interfaces.GeoWidget;
+import org.odk.collect.android.widgets.interfaces.GeoButtonClickListener;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -42,14 +43,14 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
     Bundle bundle;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
-    private final GeoWidget geoWidget;
+    private final GeoButtonClickListener geoButtonClickListener;
     private final double accuracyThreshold;
 
     public GeoPointWidget(Context context, QuestionDetails questionDetails, QuestionDef questionDef,
-                          WaitingForDataRegistry waitingForDataRegistry, GeoWidget geoWidget) {
+                          WaitingForDataRegistry waitingForDataRegistry, GeoButtonClickListener geoButtonClickListener) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
-        this.geoWidget = geoWidget;
+        this.geoButtonClickListener = geoButtonClickListener;
         accuracyThreshold = GeoWidgetUtils.getAccuracyThreshold(questionDef);
 
         String stringAnswer = getFormEntryPrompt().getAnswerText();
@@ -72,7 +73,7 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
 
             binding.simpleButton.setOnClickListener(v -> {
                 bundle = GeoWidgetUtils.getGeoPointBundle(prompt.getAnswerText(), accuracyThreshold, null, null);
-                geoWidget.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(), null, waitingForDataRegistry,
+                geoButtonClickListener.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(), null, waitingForDataRegistry,
                         GeoPointActivity.class, bundle, LOCATION_CAPTURE);
             });
         }

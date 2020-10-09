@@ -24,13 +24,14 @@ import android.view.View;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapConfigurator;
-import org.odk.collect.android.widgets.interfaces.GeoWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+import org.odk.collect.android.widgets.interfaces.GeoButtonClickListener;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -47,14 +48,14 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
 
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final MapConfigurator mapConfigurator;
-    private final GeoWidget geoWidget;
+    private final GeoButtonClickListener geoButtonClickListener;
 
     public GeoTraceWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry,
-                          MapConfigurator mapConfigurator, GeoWidget geoWidget) {
+                          MapConfigurator mapConfigurator, GeoButtonClickListener geoButtonClickListener) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.mapConfigurator = mapConfigurator;
-        this.geoWidget = geoWidget;
+        this.geoButtonClickListener = geoButtonClickListener;
 
         String answerText = getFormEntryPrompt().getAnswerText();
         if (answerText != null && !answerText.isEmpty()) {
@@ -78,7 +79,7 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
                 bundle = GeoWidgetUtils.getGeoPolyBundle(binding.geoAnswerText.getText().toString(),
                         GeoPolyActivity.OutputMode.GEOTRACE);
 
-                geoWidget.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(), mapConfigurator,
+                geoButtonClickListener.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(), mapConfigurator,
                         waitingForDataRegistry, GeoPolyActivity.class, bundle, GEOTRACE_CAPTURE);
             });
         }

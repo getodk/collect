@@ -13,7 +13,7 @@ import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.PermissionUtils;
-import org.odk.collect.android.widgets.interfaces.GeoWidget;
+import org.odk.collect.android.widgets.interfaces.GeoButtonClickListener;
 
 import java.text.DecimalFormat;
 
@@ -21,7 +21,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.activities.GeoPolyActivity.ANSWER_KEY;
 
-public class GeoWidgetUtils implements GeoWidget {
+public class GeoWidgetUtils implements GeoButtonClickListener {
     public static final String LOCATION = "gp";
     public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
     public static final String READ_ONLY = "readOnly";

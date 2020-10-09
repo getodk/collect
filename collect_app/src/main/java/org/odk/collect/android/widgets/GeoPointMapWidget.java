@@ -25,16 +25,13 @@ import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-<<<<<<< HEAD
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-=======
-import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
-import org.odk.collect.android.widgets.interfaces.GeoWidget;
->>>>>>> eeaf3c948... code refactor
+import org.odk.collect.android.widgets.interfaces.GeoButtonClickListener;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -49,23 +46,23 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
     Bundle bundle;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
-    private final GeoWidget geoWidget;
+    private final GeoButtonClickListener geoButtonClickListener;
     private final double accuracyThreshold;
 
     private boolean draggable = true;
 
     public GeoPointMapWidget(Context context, QuestionDetails questionDetails,
-                             QuestionDef questionDef, WaitingForDataRegistry waitingForDataRegistry, GeoWidget geoWidget) {
+                             QuestionDef questionDef, WaitingForDataRegistry waitingForDataRegistry, GeoButtonClickListener geoButtonClickListener) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
-        this.geoWidget = geoWidget;
+        this.geoButtonClickListener = geoButtonClickListener;
 
         accuracyThreshold = GeoWidgetUtils.getAccuracyThreshold(questionDef);
         determineMapProperties();
 
         String stringAnswer = getFormEntryPrompt().getAnswerText();
         if (stringAnswer != null && !stringAnswer.isEmpty()) {
-            setBinaryData(stringAnswer);
+            setData(stringAnswer);
         } else {
             updateButtonLabelsAndVisibility(false);
         }
@@ -80,21 +77,10 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
 
         binding.simpleButton.setOnClickListener(v -> {
             bundle = GeoWidgetUtils.getGeoPointBundle(prompt.getAnswerText(), accuracyThreshold, prompt.isReadOnly(), draggable);
-            geoWidget.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(), null,
+            geoButtonClickListener.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(), null,
                     waitingForDataRegistry, GeoPointMapActivity.class, bundle, LOCATION_CAPTURE);
         });
 
-<<<<<<< HEAD
-        stringAnswer = prompt.getAnswerText();
-        boolean dataAvailable = false;
-        if (stringAnswer != null && !stringAnswer.isEmpty()) {
-            dataAvailable = true;
-            setData(stringAnswer);
-        }
-        updateButtonLabelsAndVisibility(dataAvailable);
-
-=======
->>>>>>> eeaf3c948... code refactor
         return binding.getRoot();
     }
 
@@ -126,21 +112,9 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
     }
 
     @Override
-<<<<<<< HEAD
     public void setData(Object answer) {
-        stringAnswer = (String) answer;
-        binding.geoAnswerText.setText(GeoWidgetUtils.getAnswerToDisplay(getContext(), stringAnswer));
-
-        if (binding.geoAnswerText.getText().toString().equals("")) {
-            stringAnswer = "";
-        }
-
-        updateButtonLabelsAndVisibility(stringAnswer != null);
-=======
-    public void setBinaryData(Object answer) {
         binding.geoAnswerText.setText(GeoWidgetUtils.getAnswerToDisplay(getContext(), (String) answer));
         updateButtonLabelsAndVisibility(answer != null);
->>>>>>> eeaf3c948... code refactor
         widgetValueChanged();
     }
 

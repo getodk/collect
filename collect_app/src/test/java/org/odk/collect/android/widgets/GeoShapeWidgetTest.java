@@ -12,7 +12,7 @@ import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.widgets.interfaces.GeoWidget;
+import org.odk.collect.android.widgets.interfaces.GeoButtonClickListener;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
 
@@ -34,13 +34,13 @@ public class GeoShapeWidgetTest {
     private final String answer = stringFromDoubleList();
 
     private WaitingForDataRegistry waitingForDataRegistry;
-    private GeoWidget mockGeoWidget;
+    private GeoButtonClickListener mockGeoButtonClickListener;
     private View.OnLongClickListener listener;
 
     @Before
     public void setup() {
         waitingForDataRegistry = mock(WaitingForDataRegistry.class);
-        mockGeoWidget = mock(GeoWidget.class);
+        mockGeoButtonClickListener = mock(GeoButtonClickListener.class);
         listener = mock(View.OnLongClickListener.class);
     }
 
@@ -147,12 +147,12 @@ public class GeoShapeWidgetTest {
         widget.setPermissionUtils(permissionUtils);
         widget.binding.simpleButton.performClick();
 
-        verify(mockGeoWidget).onButtonClicked(widget.getContext(), prompt.getIndex(), permissionUtils, null,
+        verify(mockGeoButtonClickListener).onButtonClicked(widget.getContext(), prompt.getIndex(), permissionUtils, null,
                 waitingForDataRegistry, GeoPolyActivity.class, widget.bundle, GEOSHAPE_CAPTURE);
     }
 
     private GeoShapeWidget createWidget(FormEntryPrompt prompt) {
         return new GeoShapeWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"),
-                waitingForDataRegistry, mockGeoWidget);
+                waitingForDataRegistry, mockGeoButtonClickListener);
     }
 }

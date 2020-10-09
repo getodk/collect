@@ -13,7 +13,7 @@ import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.widgets.interfaces.GeoWidget;
+import org.odk.collect.android.widgets.interfaces.GeoButtonClickListener;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
@@ -38,14 +38,14 @@ public class GeoPointWidgetTest {
     private final FakePermissionUtils permissionUtils = new FakePermissionUtils();
     private final GeoPointData answer = new GeoPointData(getRandomDoubleArray());
 
-    private GeoWidget mockGeoWidget;
+    private GeoButtonClickListener mockGeoButtonClickListener;
     private QuestionDef questionDef;
     private WaitingForDataRegistry waitingForDataRegistry;
     private View.OnLongClickListener listener;
 
     @Before
     public void setup() {
-        mockGeoWidget = mock(GeoWidget.class);
+        mockGeoButtonClickListener = mock(GeoButtonClickListener.class);
         questionDef = mock(QuestionDef.class);
         waitingForDataRegistry = mock(WaitingForDataRegistry.class);
         listener = mock(View.OnLongClickListener.class);
@@ -153,12 +153,12 @@ public class GeoPointWidgetTest {
         widget.setPermissionUtils(permissionUtils);
         widget.binding.simpleButton.performClick();
 
-        verify(mockGeoWidget).onButtonClicked(widget.getContext(), prompt.getIndex(), permissionUtils, null,
+        verify(mockGeoButtonClickListener).onButtonClicked(widget.getContext(), prompt.getIndex(), permissionUtils, null,
                 waitingForDataRegistry, GeoPointActivity.class, widget.bundle, LOCATION_CAPTURE);
     }
 
     private GeoPointWidget createWidget(FormEntryPrompt prompt) {
         return new GeoPointWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"),
-                questionDef,  waitingForDataRegistry, mockGeoWidget);
+                questionDef,  waitingForDataRegistry, mockGeoButtonClickListener);
     }
 }
