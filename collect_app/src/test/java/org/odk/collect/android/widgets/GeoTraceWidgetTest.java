@@ -123,6 +123,13 @@ public class GeoTraceWidgetTest {
     }
 
     @Test
+    public void setData_updatesWidgetAnswer() {
+        GeoTraceWidget widget = createWidget(promptWithAnswer(null));
+        widget.setBinaryData(answer);
+        assertEquals(widget.getAnswer().getDisplayText(), answer);
+    }
+
+    @Test
     public void setData_setsCorrectAnswerInAnswerTextView() {
         GeoTraceWidget widget = createWidget(promptWithAnswer(null));
         widget.setBinaryData(answer);

@@ -118,6 +118,13 @@ public class GeoShapeWidgetTest {
     }
 
     @Test
+    public void setData_updatesWidgetAnswer() {
+        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
+        widget.setBinaryData(answer);
+        assertEquals(widget.getAnswer().getDisplayText(), answer);
+    }
+
+    @Test
     public void setData_updatesWidgetDisplayedAnswer() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(null));
         widget.setBinaryData(answer);

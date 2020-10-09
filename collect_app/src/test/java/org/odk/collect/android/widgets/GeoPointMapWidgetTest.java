@@ -101,6 +101,14 @@ public class GeoPointMapWidgetTest {
     }
 
     @Test
+    public void setData_updatesWidgetAnswer() {
+        GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
+        widget.setBinaryData(answer.getDisplayText());
+        assertEquals(widget.getAnswer().getDisplayText(), answer.getDisplayText());
+    }
+
+
+    @Test
     public void setData_updatesWidgetDisplayedAnswer() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
         widget.setBinaryData(answer.getDisplayText());

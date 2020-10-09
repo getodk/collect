@@ -39,6 +39,8 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final GeoDataRequester geoDataRequester;
 
+    private String answerText;
+
     public GeoPointMapWidget(Context context, QuestionDetails questionDetails,
                              WaitingForDataRegistry waitingForDataRegistry, GeoDataRequester geoDataRequester) {
         super(context, questionDetails);
@@ -55,7 +57,7 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
 
         binding.simpleButton.setOnClickListener(v -> geoDataRequester.requestGeoPoint(context, prompt, waitingForDataRegistry));
 
-        String answerText = prompt.getAnswerText();
+        answerText = prompt.getAnswerText();
         binding.geoAnswerText.setText(GeoWidgetUtils.getAnswerToDisplay(getContext(), answerText));
 
         boolean dataAvailable = answerText != null && !answerText.isEmpty();
@@ -78,7 +80,6 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
 
     @Override
     public IAnswerData getAnswer() {
-        String answerText = getFormEntryPrompt().getAnswerText();
         return answerText == null || answerText.isEmpty()
                 ? null
                 : new GeoPointData(GeoWidgetUtils.getLocationParamsFromStringAnswer(answerText));
@@ -106,8 +107,9 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
 
     @Override
     public void setData(Object answer) {
-        binding.geoAnswerText.setText(GeoWidgetUtils.getAnswerToDisplay(getContext(), answer.toString()));
-        binding.simpleButton.setText(answer.toString().isEmpty() ? R.string.get_point : R.string.view_change_location);
+        answerText = answer.toString();
+        binding.geoAnswerText.setText(GeoWidgetUtils.getAnswerToDisplay(getContext(), answerText));
+        binding.simpleButton.setText(answerText == null || answerText.isEmpty() ? R.string.get_point : R.string.view_change_location);
         widgetValueChanged();
     }
 }
