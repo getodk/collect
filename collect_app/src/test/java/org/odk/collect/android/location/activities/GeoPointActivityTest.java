@@ -13,7 +13,6 @@ import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClientProvider;
-import org.odk.collect.android.widgets.GeoPointMapWidget;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.android.controller.ActivityController;
@@ -29,6 +28,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.activities.FormEntryActivity.LOCATION_RESULT;
+import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.DEFAULT_LOCATION_ACCURACY;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
@@ -83,7 +83,7 @@ public class GeoPointActivityTest extends BaseGeoActivityTest {
         assertThat(activity.getDialogMessage(), containsString(activity.getAccuracyMessage(firstLocation)));
 
         // Second update with poor accuracy should change dialog message:
-        float poorAccuracy = (float) GeoPointMapWidget.DEFAULT_LOCATION_ACCURACY + 1.0f;
+        float poorAccuracy = (float) DEFAULT_LOCATION_ACCURACY + 1.0f;
 
         Location secondLocation = newMockLocation();
         when(secondLocation.getAccuracy()).thenReturn(poorAccuracy);
@@ -94,7 +94,7 @@ public class GeoPointActivityTest extends BaseGeoActivityTest {
         assertThat(activity.getDialogMessage(), containsString(activity.getAccuracyMessage(secondLocation)));
 
         // Third location with good accuracy should change dialog and finish activity.
-        float goodAccuracy = (float) GeoPointMapWidget.DEFAULT_LOCATION_ACCURACY - 1.0f;
+        float goodAccuracy = (float) DEFAULT_LOCATION_ACCURACY - 1.0f;
 
         Location thirdLocation = newMockLocation();
         when(thirdLocation.getAccuracy()).thenReturn(goodAccuracy);

@@ -16,7 +16,7 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -27,11 +27,11 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.GEOSHAPE_CAPTURE;
 
 @SuppressLint("ViewConstructor")
 public class GeoShapeWidget extends QuestionWidget implements BinaryDataReceiver {
@@ -57,7 +57,12 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryDataReceiver
             binding.simpleButton.setText(getDefaultButtonLabel());
             binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-            binding.simpleButton.setOnClickListener(v -> onButtonClick());
+            binding.simpleButton.setOnClickListener(v -> {
+                Bundle bundle = GeoWidgetUtils.getGeoPolyActivityBundle(binding.geoAnswerText.getText().toString(),
+                        GeoPolyActivity.OutputMode.GEOSHAPE);
+                GeoWidgetUtils.onButtonClick(context, prompt, getPermissionUtils(), null,
+                        waitingForDataRegistry, GeoPolyActivity.class, bundle, GEOSHAPE_CAPTURE);
+            });
         }
 
         String answerText = prompt.getAnswerText();
@@ -105,27 +110,6 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryDataReceiver
         return !s.isEmpty()
                 ? new StringData(s)
                 : null;
-    }
-
-    private void onButtonClick() {
-        getPermissionUtils().requestLocationPermissions((Activity) getContext(), new PermissionListener() {
-            @Override
-            public void granted() {
-                waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-                startGeoActivity();
-            }
-
-            @Override
-            public void denied() {
-            }
-        });
-    }
-
-    private void startGeoActivity() {
-        Intent intent = new Intent(getContext(), GeoPolyActivity.class)
-                .putExtra(GeoPolyActivity.ANSWER_KEY, binding.geoAnswerText.getText().toString())
-                .putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOSHAPE);
-        ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOSHAPE_CAPTURE);
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {

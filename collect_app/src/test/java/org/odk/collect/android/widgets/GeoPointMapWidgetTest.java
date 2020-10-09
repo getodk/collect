@@ -33,14 +33,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MAPS;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.PLACEMENT_MAP;
-import static org.odk.collect.android.widgets.GeoPointMapWidget.ACCURACY_THRESHOLD;
-import static org.odk.collect.android.widgets.GeoPointMapWidget.DEFAULT_LOCATION_ACCURACY;
 import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.getRandomDoubleArray;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAppearanceAndReadOnly;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
+import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.ACCURACY_THRESHOLD;
+import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.DEFAULT_LOCATION_ACCURACY;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)

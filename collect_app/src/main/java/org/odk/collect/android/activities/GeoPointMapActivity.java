@@ -34,13 +34,16 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.widgets.GeoPointMapWidget;
 
 import java.text.DecimalFormat;
 
 import javax.inject.Inject;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.DRAGGABLE_ONLY;
+import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.LOCATION;
+import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.READ_ONLY;
 
 /**
  * Allow the user to indicate a location by placing a marker on a map, either
@@ -222,20 +225,20 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
 
         Intent intent = getIntent();
         if (intent != null && intent.getExtras() != null) {
-            intentDraggable = intent.getBooleanExtra(GeoPointMapWidget.DRAGGABLE_ONLY, false);
+            intentDraggable = intent.getBooleanExtra(DRAGGABLE_ONLY, false);
             if (!intentDraggable) {
                 // Not Draggable, set text for Map else leave as placement-map text
                 locationInfo.setText(getString(R.string.geopoint_no_draggable_instruction));
             }
 
-            intentReadOnly = intent.getBooleanExtra(GeoPointMapWidget.READ_ONLY, false);
+            intentReadOnly = intent.getBooleanExtra(READ_ONLY, false);
             if (intentReadOnly) {
                 captureLocation = true;
                 clearButton.setEnabled(false);
             }
 
-            if (intent.hasExtra(GeoPointMapWidget.LOCATION)) {
-                double[] point = intent.getDoubleArrayExtra(GeoPointMapWidget.LOCATION);
+            if (intent.hasExtra(LOCATION)) {
+                double[] point = intent.getDoubleArrayExtra(LOCATION);
 
                 // If the point is initially set from the intent, the "place marker"
                 // button, dragging, and long-pressing are all initially disabled.
