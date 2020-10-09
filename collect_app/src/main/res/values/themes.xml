@@ -11,4 +11,10 @@
         <item name="android:buttonStyle">@style/Widget.Collect.Button.Custom</item>
         <item name="imageButtonStyle">@style/Widget.Collect.ImageButton.Custom.Light</item>
     </style>
+
+    <style name="Theme.Collect.Magenta" parent="Theme.Collect.BaseMagenta">
+        <item name="android:buttonStyle">@style/Widget.Collect.Button.Custom</item>
+        <item name="imageButtonStyle">@style/Widget.Collect.ImageButton.Custom.Magenta</item>
+    </style>
+
 </resources>
