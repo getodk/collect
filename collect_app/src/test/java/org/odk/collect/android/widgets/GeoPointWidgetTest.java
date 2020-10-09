@@ -154,7 +154,7 @@ public class GeoPointWidgetTest {
     }
 
     @Test
-    public void whenPermissionIsGranted_buttonClickLaunchesIntentAndWaitsForLocationData() {
+    public void whenPermissionIsGranted_buttonClickWaitsForLocationData() {
         FormEntryPrompt prompt = promptWithAnswer(null);
         GeoPointWidget widget = createWidget(prompt);
         stubLocationPermissions(widget, true);

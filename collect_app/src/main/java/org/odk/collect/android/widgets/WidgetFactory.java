@@ -23,6 +23,7 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.CameraUtils;
+import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
@@ -112,7 +113,7 @@ public class WidgetFactory {
                         questionWidget = new GeoShapeWidget(context, questionDetails, waitingForDataRegistry);
                         break;
                     case Constants.DATATYPE_GEOTRACE:
-                        questionWidget = new GeoTraceWidget(context, questionDetails, waitingForDataRegistry);
+                        questionWidget = new GeoTraceWidget(context, questionDetails, waitingForDataRegistry, MapProvider.getConfigurator());
                         break;
                     case Constants.DATATYPE_BARCODE:
                         questionWidget = new BarcodeWidget(context, questionDetails, waitingForDataRegistry, new CameraUtils());

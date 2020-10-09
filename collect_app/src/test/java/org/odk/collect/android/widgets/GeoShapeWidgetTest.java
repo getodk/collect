@@ -127,7 +127,7 @@ public class GeoShapeWidgetTest {
     }
 
     @Test
-    public void whenPermissionIsGranted_buttonClickShouldSetTheLocationSavedOnTheMap() {
+    public void whenPermissionIsGranted_buttonClickWaitsForLocationData() {
         FormEntryPrompt prompt = promptWithAnswer(null);
         GeoShapeWidget widget = createWidget(prompt);
         stubLocationPermissions(widget, true);
