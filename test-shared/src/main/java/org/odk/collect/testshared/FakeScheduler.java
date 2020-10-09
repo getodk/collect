@@ -1,4 +1,4 @@
-package org.odk.collect.audioclips;
+package org.odk.collect.testshared;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.async.Cancellable;

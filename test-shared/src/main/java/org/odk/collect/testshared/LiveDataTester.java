@@ -1,4 +1,4 @@
-package org.odk.collect.audioclips;
+package org.odk.collect.testshared;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;

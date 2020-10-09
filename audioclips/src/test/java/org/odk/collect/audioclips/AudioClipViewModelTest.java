@@ -10,6 +10,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
+import org.odk.collect.testshared.FakeScheduler;
+import org.odk.collect.testshared.LiveDataTester;
 import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;

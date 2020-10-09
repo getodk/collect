@@ -1,4 +1,4 @@
-package org.odk.collect.audioclips;
+package org.odk.collect.testshared;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;

@@ -1,3 +1,4 @@
+include ':test-shared'
 include ':audioclips'
 include ':strings'
 include ':async'
