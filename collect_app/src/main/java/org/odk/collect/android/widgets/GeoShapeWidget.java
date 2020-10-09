@@ -27,21 +27,32 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.GeoWidget;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.GEOSHAPE_CAPTURE;
 
 @SuppressLint("ViewConstructor")
-public class GeoShapeWidget extends QuestionWidget implements BinaryDataReceiver {
+public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver {
     GeoWidgetAnswerBinding binding;
+    Bundle bundle;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
+    private final GeoWidget geoWidget;
 
-    public GeoShapeWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
+    public GeoShapeWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, GeoWidget geoWidget) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
+        this.geoWidget = geoWidget;
+
+        String answerText = getFormEntryPrompt().getAnswerText();
+        if (answerText != null && !answerText.isEmpty()) {
+            setData(answerText);
+        } else {
+            updateButtonLabelsAndVisibility(false);
+        }
     }
 
     @Override
@@ -55,24 +66,23 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryDataReceiver
             binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
             binding.simpleButton.setOnClickListener(v -> {
-                Bundle bundle = GeoWidgetUtils.getGeoPolyActivityBundle(binding.geoAnswerText.getText().toString(),
+                bundle = GeoWidgetUtils.getGeoPolyBundle(binding.geoAnswerText.getText().toString(),
                         GeoPolyActivity.OutputMode.GEOSHAPE);
-                GeoWidgetUtils.onButtonClick(context, prompt, getPermissionUtils(), null,
+                geoWidget.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(), null,
                         waitingForDataRegistry, GeoPolyActivity.class, bundle, GEOSHAPE_CAPTURE);
             });
         }
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        String answerText = prompt.getAnswerText();
-        boolean dataAvailable = false;
-
-        if (answerText != null && !answerText.isEmpty()) {
-            dataAvailable = true;
-            setBinaryData(answerText);
-        }
-
-        updateButtonLabelsAndVisibility(dataAvailable);
         return binding.getRoot();
+    }
+
+    @Override
+    public IAnswerData getAnswer() {
+        String stringAnswer = binding.geoAnswerText.getText().toString();
+        return !stringAnswer.isEmpty()
+                ? new StringData(stringAnswer)
+                : null;
     }
 
     @Override
@@ -96,18 +106,10 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryDataReceiver
     }
 
     @Override
-    public void setBinaryData(Object answer) {
+    public void setData(Object answer) {
         binding.geoAnswerText.setText(answer.toString());
         updateButtonLabelsAndVisibility(!answer.toString().isEmpty());
         widgetValueChanged();
-    }
-
-    @Override
-    public IAnswerData getAnswer() {
-        String s = binding.geoAnswerText.getText().toString();
-        return !s.isEmpty()
-                ? new StringData(s)
-                : null;
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {

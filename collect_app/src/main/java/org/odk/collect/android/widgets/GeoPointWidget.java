@@ -22,6 +22,7 @@ import android.util.TypedValue;
 import android.view.View;
 
 import org.javarosa.core.model.QuestionDef;
+import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
@@ -29,6 +30,7 @@ import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+import org.odk.collect.android.widgets.interfaces.GeoWidget;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -37,16 +39,25 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 @SuppressLint("ViewConstructor")
 public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver {
     GeoWidgetAnswerBinding binding;
+    Bundle bundle;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
+    private final GeoWidget geoWidget;
     private final double accuracyThreshold;
 
-    private String stringAnswer;
-
-    public GeoPointWidget(Context context, QuestionDetails questionDetails, QuestionDef questionDef, WaitingForDataRegistry waitingForDataRegistry) {
+    public GeoPointWidget(Context context, QuestionDetails questionDetails, QuestionDef questionDef,
+                          WaitingForDataRegistry waitingForDataRegistry, GeoWidget geoWidget) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
+        this.geoWidget = geoWidget;
         accuracyThreshold = GeoWidgetUtils.getAccuracyThreshold(questionDef);
+
+        String stringAnswer = getFormEntryPrompt().getAnswerText();
+        if (stringAnswer != null && !stringAnswer.isEmpty()) {
+            setData(stringAnswer);
+        } else {
+            updateButtonLabelsAndVisibility(false);
+        }
     }
 
     @Override
@@ -60,32 +71,25 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
             binding.simpleButton.setText(getDefaultButtonLabel());
 
             binding.simpleButton.setOnClickListener(v -> {
-                Bundle bundle = GeoWidgetUtils.getGeoPointBundle(stringAnswer, accuracyThreshold, null, null);
-                GeoWidgetUtils.onButtonClick(context, prompt, getPermissionUtils(), null,
-                        waitingForDataRegistry, GeoPointActivity.class, bundle, LOCATION_CAPTURE);
+                bundle = GeoWidgetUtils.getGeoPointBundle(prompt.getAnswerText(), accuracyThreshold, null, null);
+                geoWidget.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(), null, waitingForDataRegistry,
+                        GeoPointActivity.class, bundle, LOCATION_CAPTURE);
             });
         }
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-
-        String stringAnswer = prompt.getAnswerText();
-        boolean dataAvailable = false;
-        if (stringAnswer != null && !stringAnswer.isEmpty()) {
-            dataAvailable = true;
-            setData(stringAnswer);
-        }
-        updateButtonLabelsAndVisibility(dataAvailable);
 
         return binding.getRoot();
     }
 
     @Override
     public IAnswerData getAnswer() {
-        return GeoWidgetUtils.getAnswer(stringAnswer);
+        return binding.geoAnswerText.getText().equals("")
+                ? null
+                : new GeoPointData(GeoWidgetUtils.getLocationParamsFromStringAnswer(getFormEntryPrompt().getAnswerText()));
     }
 
     @Override
     public void clearAnswer() {
-        stringAnswer = null;
         binding.geoAnswerText.setText(null);
         updateButtonLabelsAndVisibility(false);
         widgetValueChanged();
@@ -106,14 +110,8 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
 
     @Override
     public void setData(Object answer) {
-        stringAnswer = (String) answer;
-        binding.geoAnswerText.setText(GeoWidgetUtils.getAnswerToDisplay(getContext(), stringAnswer));
-
-        if (binding.geoAnswerText.getText().toString().equals("")) {
-            stringAnswer = "";
-        }
-
-        updateButtonLabelsAndVisibility(stringAnswer != null);
+        binding.geoAnswerText.setText(GeoWidgetUtils.getAnswerToDisplay(getContext(), (String) answer));
+        updateButtonLabelsAndVisibility(answer != null);
         widgetValueChanged();
     }
 

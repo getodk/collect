@@ -29,7 +29,8 @@ import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapConfigurator;
-import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.GeoWidget;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -40,17 +41,27 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * device moves along a path.
  */
 @SuppressLint("ViewConstructor")
-public class GeoTraceWidget extends QuestionWidget implements BinaryDataReceiver {
+public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver {
     GeoWidgetAnswerBinding binding;
+    Bundle bundle;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final MapConfigurator mapConfigurator;
+    private final GeoWidget geoWidget;
 
     public GeoTraceWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry,
-                          MapConfigurator mapConfigurator) {
+                          MapConfigurator mapConfigurator, GeoWidget geoWidget) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.mapConfigurator = mapConfigurator;
+        this.geoWidget = geoWidget;
+
+        String answerText = getFormEntryPrompt().getAnswerText();
+        if (answerText != null && !answerText.isEmpty()) {
+            setData(answerText);
+        } else {
+            updateButtonLabelsAndVisibility(false);
+        }
     }
 
     @Override
@@ -64,31 +75,23 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryDataReceiver
             binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
             binding.simpleButton.setOnClickListener(v -> {
-                Bundle bundle = GeoWidgetUtils.getGeoPolyActivityBundle(binding.geoAnswerText.getText().toString(),
+                bundle = GeoWidgetUtils.getGeoPolyBundle(binding.geoAnswerText.getText().toString(),
                         GeoPolyActivity.OutputMode.GEOTRACE);
-                GeoWidgetUtils.onButtonClick(context, prompt, getPermissionUtils(), mapConfigurator,
+
+                geoWidget.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(), mapConfigurator,
                         waitingForDataRegistry, GeoPolyActivity.class, bundle, GEOTRACE_CAPTURE);
             });
         }
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-
-        String answerText = prompt.getAnswerText();
-        boolean dataAvailable = false;
-
-        if (answerText != null && !answerText.isEmpty()) {
-            dataAvailable = true;
-            setBinaryData(answerText);
-        }
-        updateButtonLabelsAndVisibility(dataAvailable);
 
         return binding.getRoot();
     }
 
     @Override
     public IAnswerData getAnswer() {
-        String s = binding.geoAnswerText.getText().toString();
-        return !s.equals("")
-                ? new StringData(s)
+        String stringAnswer = binding.geoAnswerText.getText().toString();
+        return !stringAnswer.equals("")
+                ? new StringData(stringAnswer)
                 : null;
     }
 
@@ -106,7 +109,14 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryDataReceiver
     }
 
     @Override
-    public void setBinaryData(Object answer) {
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        binding.simpleButton.cancelLongPress();
+        binding.geoAnswerText.cancelLongPress();
+    }
+
+    @Override
+    public void setData(Object answer) {
         binding.geoAnswerText.setText(answer.toString());
         updateButtonLabelsAndVisibility(!answer.toString().isEmpty());
         widgetValueChanged();

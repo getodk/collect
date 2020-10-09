@@ -6,52 +6,38 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 
+import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.QuestionDef;
-import org.javarosa.core.model.data.GeoPointData;
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPolyActivity;
-import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.widgets.interfaces.GeoWidget;
 
 import java.text.DecimalFormat;
 
 import timber.log.Timber;
 
-public class GeoWidgetUtils {
+import static org.odk.collect.android.activities.GeoPolyActivity.ANSWER_KEY;
+
+public class GeoWidgetUtils implements GeoWidget {
     public static final String LOCATION = "gp";
     public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
     public static final String READ_ONLY = "readOnly";
     public static final String DRAGGABLE_ONLY = "draggable";
     public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
 
-    private GeoWidgetUtils() {
+    @Override
+    public void onButtonClicked(Context context, FormIndex index, PermissionUtils permissionUtils, MapConfigurator mapConfigurator,
+                                WaitingForDataRegistry waitingForDataRegistry, Class activityClass, Bundle bundle, int requestCode) {
+        onButtonClick(context, index, permissionUtils, mapConfigurator, waitingForDataRegistry, activityClass, bundle, requestCode);
     }
 
     public static double getAccuracyThreshold(QuestionDef questionDef) {
         // Determine the accuracy threshold to use.
         String acc = questionDef.getAdditionalAttribute(null, ACCURACY_THRESHOLD);
         return acc != null && !acc.isEmpty() ? Double.parseDouble(acc) : DEFAULT_LOCATION_ACCURACY;
-    }
-
-    public static IAnswerData getAnswer(String stringAnswer) {
-        if (stringAnswer == null || stringAnswer.isEmpty()) {
-            return null;
-        } else {
-            return new GeoPointData(GeoWidgetUtils.getLocationParamsFromStringAnswer(stringAnswer));
-        }
-    }
-
-    public static String updateAnswer(Context context, GeoWidgetAnswerBinding binding, Object answer) {
-        String stringAnswer = (String) answer;
-        binding.geoAnswerText.setText(getAnswerToDisplay(context, stringAnswer));
-        if (binding.geoAnswerText.getText().toString().equals("")) {
-            stringAnswer = "";
-        }
-        return stringAnswer;
     }
 
     public static String getAnswerToDisplay(Context context, String answer) {
@@ -73,7 +59,7 @@ public class GeoWidgetUtils {
     }
 
     public static Bundle getGeoPointBundle(String stringAnswer, double accuracyThreshold, Boolean readOnly, Boolean draggable) {
-        Bundle bundle = new Bundle();
+        final Bundle bundle = new Bundle();
         if (stringAnswer != null && !stringAnswer.isEmpty()) {
             bundle.putDoubleArray(LOCATION, GeoWidgetUtils.getLocationParamsFromStringAnswer(stringAnswer));
         }
@@ -85,20 +71,24 @@ public class GeoWidgetUtils {
         return bundle;
     }
 
-    public static Bundle getGeoPolyActivityBundle(String stringAnswer, GeoPolyActivity.OutputMode outputMode) {
-        Bundle bundle = new Bundle();
-        bundle.putString(GeoPolyActivity.ANSWER_KEY, stringAnswer);
+    public static Bundle getGeoPolyBundle(String stringAnswer, GeoPolyActivity.OutputMode outputMode) {
+        final Bundle bundle = new Bundle();
+        bundle.putString(ANSWER_KEY, stringAnswer);
         bundle.putSerializable(GeoPolyActivity.OUTPUT_MODE_KEY, outputMode);
         return bundle;
     }
 
-    public static void onButtonClick(Context context, FormEntryPrompt prompt, PermissionUtils permissionUtils, MapConfigurator mapConfigurator,
-                                     WaitingForDataRegistry waitingForDataRegistry, Class activityClass, Bundle bundle, int requestCode) {
+    private static void onButtonClick(Context context, FormIndex index, PermissionUtils permissionUtils, MapConfigurator mapConfigurator,
+                                      WaitingForDataRegistry waitingForDataRegistry, Class activityClass, Bundle bundle, int requestCode) {
         permissionUtils.requestLocationPermissions((Activity) context, new PermissionListener() {
             @Override
             public void granted() {
-                waitingForDataRegistry.waitForData(prompt.getIndex());
-                GeoWidgetUtils.startGeoActivity(context, mapConfigurator, activityClass, bundle, requestCode);
+                waitingForDataRegistry.waitForData(index);
+                if (mapConfigurator == null || mapConfigurator.isAvailable(context)) {
+                    GeoWidgetUtils.startGeoActivity(context, activityClass, bundle, requestCode);
+                } else {
+                    mapConfigurator.showUnavailableMessage(context);
+                }
             }
 
             @Override
@@ -107,14 +97,10 @@ public class GeoWidgetUtils {
         });
     }
 
-    private static void startGeoActivity(Context context, MapConfigurator mapConfigurator, Class activityClass, Bundle bundle, int requestCode) {
-        if (mapConfigurator == null || mapConfigurator.isAvailable(context)) {
-            Intent intent = new Intent(context, activityClass);
-            intent.putExtras(bundle);
-            ((Activity) context).startActivityForResult(intent, requestCode);
-        } else {
-            mapConfigurator.showUnavailableMessage(context);
-        }
+    private static void startGeoActivity(Context context, Class activityClass, Bundle bundle, int requestCode) {
+        Intent intent = new Intent(context, activityClass);
+        intent.putExtras(bundle);
+        ((Activity) context).startActivityForResult(intent, requestCode);
     }
 
     public static String convertCoordinatesIntoDegreeFormat(Context context, double coordinate, String type) {

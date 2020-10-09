@@ -19,7 +19,7 @@ public class GeoWidgetHelpers {
     private GeoWidgetHelpers() {
     }
 
-    public static void assertGroPointBundleArgumentEquals(Bundle bundle, double[] location, double accuracyThreshold, Boolean readOnly, Object draggableOnly) {
+    public static void assertGeoPointBundleArgumentEquals(Bundle bundle, double[] location, double accuracyThreshold, Boolean readOnly, Object draggableOnly) {
         assertThat(bundle.getDoubleArray(LOCATION), equalTo(location));
         assertThat(bundle.getDouble(ACCURACY_THRESHOLD), equalTo(accuracyThreshold));
         assertThat(bundle.getBoolean(READ_ONLY), equalTo(readOnly));
@@ -77,4 +77,22 @@ public class GeoWidgetHelpers {
 
         return b.toString();
     }
+/*
+    public static class FakeGeoWidgetUtils implements GeoWidget {
+
+        public boolean setUpAnswerCalled = false;
+        public boolean onButtonClicked = false;
+
+        @Override
+        public String setUpAnswer(Context context, GeoWidgetAnswerBinding binding, Object answer) {
+            this.setUpAnswerCalled = true;
+            return null;
+        }
+
+        @Override
+        public void OnButtonClicked(Context context, FormIndex index, PermissionUtils permissionUtils, MapConfigurator mapConfigurator,
+                                    WaitingForDataRegistry waitingForDataRegistry, Class activityClass, Bundle bundle, int requestCode) {
+            onButtonClicked = true;
+        }
+    }*/
 }

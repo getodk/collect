@@ -1,13 +1,10 @@
 package org.odk.collect.android.widgets;
 
-import android.content.ComponentName;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.GeoPointData;
-import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +13,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.widgets.support.GeoWidgetHelpers;
+import org.odk.collect.android.widgets.interfaces.GeoWidget;
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
@@ -31,16 +28,16 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.LOCATION_CAPTURE;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MAPS;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.PLACEMENT_MAP;
+import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.assertGeoPointBundleArgumentEquals;
 import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.getRandomDoubleArray;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAppearanceAndReadOnly;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAppearanceAndAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
-import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.ACCURACY_THRESHOLD;
-import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.DEFAULT_LOCATION_ACCURACY;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
@@ -49,33 +46,45 @@ public class GeoPointMapWidgetTest {
     private final FakePermissionUtils permissionUtils = new FakePermissionUtils();
     private final GeoPointData answer = new GeoPointData(getRandomDoubleArray());
 
+    private GeoWidget mockGeoWidget;
     private QuestionDef questionDef;
     private WaitingForDataRegistry waitingForDataRegistry;
+    private View.OnLongClickListener listener;
 
     @Before
     public void setup() {
+        mockGeoWidget = mock(GeoWidget.class);
         questionDef = mock(QuestionDef.class);
         waitingForDataRegistry = mock(WaitingForDataRegistry.class);
+        listener = mock(View.OnLongClickListener.class);
         when(questionDef.getAdditionalAttribute(anyString(), anyString())).thenReturn(null);
     }
 
     @Test
-    public void getAnswer_returnsPromptAnswer() {
+    public void getAnswer_whenPromptDoesNotHaveAnswer_returnsPromptAnswer() {
+        GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
+        assertNull(widget.getAnswer());
+    }
+
+    @Test
+    public void getAnswer_whenPromptHasAnswer_returnsPromptAnswer() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(answer));
         assertEquals(widget.getAnswer().getDisplayText(),
-                GeoWidgetUtils.getAnswer(promptWithAnswer(answer).getAnswerText()).getDisplayText());
+                new GeoPointData(GeoWidgetUtils.getLocationParamsFromStringAnswer(answer.getDisplayText())).getDisplayText());
     }
 
     @Test
     public void clearAnswer_clearsWidgetAnswer() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(answer));
         widget.clearAnswer();
+
         assertNull(widget.getAnswer());
+        assertEquals(widget.binding.geoAnswerText.getText(), "");
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.get_point));
     }
 
     @Test
     public void clickingButtonForLong_callsLongClickListener() {
-        View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
         GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
         widget.setOnLongClickListener(listener);
         widget.binding.simpleButton.performLongClick();
@@ -84,28 +93,18 @@ public class GeoPointMapWidgetTest {
     }
 
     @Test
-    public void whenPromptDoesNotHaveAnswer_textViewDisplaysEmptyString() {
+    public void clickingAnswerTextViewForLong_callsLongClickListener() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
-        assertEquals(widget.binding.geoAnswerText.getText().toString(), "");
+        widget.setOnLongClickListener(listener);
+        widget.binding.geoAnswerText.performLongClick();
+
+        verify(listener).onLongClick(widget.binding.geoAnswerText);
     }
 
     @Test
-    public void whenPromptAnswerDoesNotHaveConvertibleString_textViewDisplaysEmptyString() {
-        GeoPointMapWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        assertEquals(widget.binding.geoAnswerText.getText().toString(), "");
-    }
-
-    @Test
-    public void whenPromptHasAnswer_textViewDisplaysAnswer() {
+    public void whenPromptHasAnswer_answerTextViewShowsCorrectAnswer() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(answer));
-        String[] parts = answer.getDisplayText().split(" ");
-        assertEquals(widget.binding.geoAnswerText.getText().toString(), widget.getContext().getString(
-                R.string.gps_result,
-                GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(widget.getContext(), Double.parseDouble(parts[0]), "lat"),
-                GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(widget.getContext(), Double.parseDouble(parts[1]), "lon"),
-                GeoWidgetUtils.truncateDouble(parts[2]),
-                GeoWidgetUtils.truncateDouble(parts[3])
-        ));
+        assertEquals(widget.binding.geoAnswerText.getText(), GeoWidgetUtils.getAnswerToDisplay(widgetTestActivity(), answer.getDisplayText()));
     }
 
     @Test
@@ -145,71 +144,46 @@ public class GeoPointMapWidgetTest {
     }
 
     @Test
-    public void whenPermissionIsGranted_buttonClickLaunchesIntentAndWaitsForLocationData() {
+    public void whenPromptDoesNotHaveAnswerAndIsReadOnly_bundleStoresCorrectValues() {
+        GeoPointMapWidget widget = createWidget(promptWithReadOnlyAndAnswer(null));
+        widget.binding.simpleButton.performClick();
+
+        assertGeoPointBundleArgumentEquals(widget.bundle, null, GeoWidgetUtils.getAccuracyThreshold(questionDef),
+                true, true);
+    }
+
+    @Test
+    public void whenPromptHasAnswerAndMapsAppearance_bundleStoresCorrectValues() {
+        GeoPointMapWidget widget = createWidget(promptWithAppearanceAndAnswer(MAPS, answer));
+        widget.binding.simpleButton.performClick();
+
+        assertGeoPointBundleArgumentEquals(widget.bundle, GeoWidgetUtils.getLocationParamsFromStringAnswer(answer.getDisplayText()),
+                GeoWidgetUtils.getAccuracyThreshold(questionDef), false, false);
+    }
+
+    @Test
+    public void whenPromptHasAnswerAndPlacementsMapAppearance_bundleStoresCorrectValues() {
+        GeoPointMapWidget widget = createWidget(promptWithAppearanceAndAnswer(PLACEMENT_MAP, answer));
+        widget.binding.simpleButton.performClick();
+
+        assertGeoPointBundleArgumentEquals(widget.bundle, GeoWidgetUtils.getLocationParamsFromStringAnswer(answer.getDisplayText()),
+                GeoWidgetUtils.getAccuracyThreshold(questionDef), false, true);
+    }
+
+    @Test
+    public void buttonClick_callsOnButtonClicked() {
         FormEntryPrompt prompt = promptWithAnswer(null);
         GeoPointMapWidget widget = createWidget(prompt);
-        QuestionWidgetHelpers.stubLocationPermissions(permissionUtils, widget, true);
+
+        widget.setPermissionUtils(permissionUtils);
         widget.binding.simpleButton.performClick();
 
-        verify(waitingForDataRegistry).waitForData(prompt.getIndex());
-    }
-
-    @Test
-    public void whenPromptIsReadOnly_buttonShouldLaunchCorrectIntent() {
-        GeoPointMapWidget widget = createWidget(promptWithReadOnly());
-        QuestionWidgetHelpers.stubLocationPermissions(permissionUtils, widget, true);
-        widget.binding.simpleButton.performClick();
-
-        Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
-        Bundle bundle = startedIntent.getExtras();
-
-        assertEquals(startedIntent.getComponent(), new ComponentName(widgetTestActivity(), GeoPointMapActivity.class));
-        GeoWidgetHelpers.assertGroPointBundleArgumentEquals(bundle, null, DEFAULT_LOCATION_ACCURACY, true, true);
-    }
-
-    @Test
-    public void whenPromptHasAnswerAndAccuracyThresholdValue_buttonShouldLaunchCorrectIntent() {
-        when(questionDef.getAdditionalAttribute(null, ACCURACY_THRESHOLD)).thenReturn("2.0");
-
-        GeoPointMapWidget widget = createWidget(promptWithAnswer(answer));
-        QuestionWidgetHelpers.stubLocationPermissions(permissionUtils, widget, true);
-        widget.binding.simpleButton.performClick();
-
-        Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
-        Bundle bundle = startedIntent.getExtras();
-
-        assertEquals(startedIntent.getComponent(), new ComponentName(widgetTestActivity(), GeoPointMapActivity.class));
-        GeoWidgetHelpers.assertGroPointBundleArgumentEquals(bundle, GeoWidgetUtils.getLocationParamsFromStringAnswer(
-                answer.getDisplayText()), 2.0, false, true);
-    }
-
-    @Test
-    public void ifWidgetHasPlacementMapsAppearance_buttonShouldLaunchCorrectIntent() {
-        GeoPointMapWidget widget = createWidget(promptWithAppearanceAndReadOnly(PLACEMENT_MAP, false));
-        QuestionWidgetHelpers.stubLocationPermissions(permissionUtils, widget, true);
-        widget.binding.simpleButton.performClick();
-
-        Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
-        Bundle bundle = startedIntent.getExtras();
-
-        assertEquals(startedIntent.getComponent(), new ComponentName(widgetTestActivity(), GeoPointMapActivity.class));
-        GeoWidgetHelpers.assertGroPointBundleArgumentEquals(bundle, null, DEFAULT_LOCATION_ACCURACY, false, true);
-    }
-
-    @Test
-    public void ifWidgetHasMapsAppearance_buttonShouldLaunchCorrectIntent() {
-        GeoPointMapWidget widget = createWidget(promptWithAppearanceAndReadOnly(MAPS, true));
-        QuestionWidgetHelpers.stubLocationPermissions(permissionUtils, widget, true);
-        widget.binding.simpleButton.performClick();
-
-        Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
-        Bundle bundle = startedIntent.getExtras();
-
-        assertEquals(startedIntent.getComponent(), new ComponentName(widgetTestActivity(), GeoPointMapActivity.class));
-        GeoWidgetHelpers.assertGroPointBundleArgumentEquals(bundle, null, DEFAULT_LOCATION_ACCURACY, true, false);
+        verify(mockGeoWidget).onButtonClicked(widget.getContext(), prompt.getIndex(), permissionUtils, null,
+                waitingForDataRegistry, GeoPointMapActivity.class, widget.bundle, LOCATION_CAPTURE);
     }
 
     private GeoPointMapWidget createWidget(FormEntryPrompt prompt) {
-        return new GeoPointMapWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"), questionDef, waitingForDataRegistry);
+        return new GeoPointMapWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"),
+                questionDef, waitingForDataRegistry, mockGeoWidget);
     }
 }

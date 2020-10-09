@@ -1,12 +1,15 @@
 package org.odk.collect.android.widgets.interfaces;
 
-public interface GeoWidget extends WidgetDataReceiver {
+import android.content.Context;
+import android.os.Bundle;
 
-    void startGeoActivity();
+import org.javarosa.core.model.FormIndex;
+import org.odk.collect.android.geo.MapConfigurator;
+import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
-    void updateButtonLabelsAndVisibility(boolean dataAvailable);
+public interface GeoWidget {
 
-    String getAnswerToDisplay(String answer);
-
-    String getDefaultButtonLabel();
+    void onButtonClicked(Context context, FormIndex index, PermissionUtils permissionUtils, MapConfigurator mapConfigurator,
+                         WaitingForDataRegistry waitingForDataRegistry, Class activityClass, Bundle bundle, int requestCode);
 }

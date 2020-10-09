@@ -22,13 +22,19 @@ import android.util.TypedValue;
 import android.view.View;
 
 import org.javarosa.core.model.QuestionDef;
+import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+<<<<<<< HEAD
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+=======
+import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.GeoWidget;
+>>>>>>> eeaf3c948... code refactor
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -40,19 +46,29 @@ import static org.odk.collect.android.utilities.WidgetAppearanceUtils.hasAppeara
 @SuppressLint("ViewConstructor")
 public class GeoPointMapWidget extends QuestionWidget implements WidgetDataReceiver {
     GeoWidgetAnswerBinding binding;
+    Bundle bundle;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
+    private final GeoWidget geoWidget;
     private final double accuracyThreshold;
 
     private boolean draggable = true;
-    private String stringAnswer;
 
     public GeoPointMapWidget(Context context, QuestionDetails questionDetails,
-                             QuestionDef questionDef, WaitingForDataRegistry waitingForDataRegistry) {
+                             QuestionDef questionDef, WaitingForDataRegistry waitingForDataRegistry, GeoWidget geoWidget) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
+        this.geoWidget = geoWidget;
+
         accuracyThreshold = GeoWidgetUtils.getAccuracyThreshold(questionDef);
         determineMapProperties();
+
+        String stringAnswer = getFormEntryPrompt().getAnswerText();
+        if (stringAnswer != null && !stringAnswer.isEmpty()) {
+            setBinaryData(stringAnswer);
+        } else {
+            updateButtonLabelsAndVisibility(false);
+        }
     }
 
     @Override
@@ -63,11 +79,12 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
         binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         binding.simpleButton.setOnClickListener(v -> {
-            Bundle bundle = GeoWidgetUtils.getGeoPointBundle(stringAnswer, accuracyThreshold, prompt.isReadOnly(), draggable);
-            GeoWidgetUtils.onButtonClick(context, prompt, getPermissionUtils(), null,
+            bundle = GeoWidgetUtils.getGeoPointBundle(prompt.getAnswerText(), accuracyThreshold, prompt.isReadOnly(), draggable);
+            geoWidget.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(), null,
                     waitingForDataRegistry, GeoPointMapActivity.class, bundle, LOCATION_CAPTURE);
         });
 
+<<<<<<< HEAD
         stringAnswer = prompt.getAnswerText();
         boolean dataAvailable = false;
         if (stringAnswer != null && !stringAnswer.isEmpty()) {
@@ -76,17 +93,20 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
         }
         updateButtonLabelsAndVisibility(dataAvailable);
 
+=======
+>>>>>>> eeaf3c948... code refactor
         return binding.getRoot();
     }
 
     @Override
     public IAnswerData getAnswer() {
-        return GeoWidgetUtils.getAnswer(stringAnswer);
+        return binding.geoAnswerText.getText().equals("")
+                ? null
+                : new GeoPointData(GeoWidgetUtils.getLocationParamsFromStringAnswer(getFormEntryPrompt().getAnswerText()));
     }
 
     @Override
     public void clearAnswer() {
-        stringAnswer = null;
         binding.geoAnswerText.setText(null);
         updateButtonLabelsAndVisibility(false);
         widgetValueChanged();
@@ -106,6 +126,7 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
     }
 
     @Override
+<<<<<<< HEAD
     public void setData(Object answer) {
         stringAnswer = (String) answer;
         binding.geoAnswerText.setText(GeoWidgetUtils.getAnswerToDisplay(getContext(), stringAnswer));
@@ -115,6 +136,11 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
         }
 
         updateButtonLabelsAndVisibility(stringAnswer != null);
+=======
+    public void setBinaryData(Object answer) {
+        binding.geoAnswerText.setText(GeoWidgetUtils.getAnswerToDisplay(getContext(), (String) answer));
+        updateButtonLabelsAndVisibility(answer != null);
+>>>>>>> eeaf3c948... code refactor
         widgetValueChanged();
     }
 
