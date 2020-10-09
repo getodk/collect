@@ -29,7 +29,7 @@ import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.interfaces.GeoButtonClickListener;
+import org.odk.collect.android.widgets.interfaces.GeoWidgetListener;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -41,20 +41,21 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
     Bundle bundle;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
-    private final GeoButtonClickListener geoButtonClickListener;
+    private final GeoWidgetListener geoWidgetListener;
 
-    public GeoShapeWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, GeoButtonClickListener geoButtonClickListener) {
+    public GeoShapeWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, GeoWidgetListener geoWidgetListener) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
-        this.geoButtonClickListener = geoButtonClickListener;
+        this.geoWidgetListener = geoWidgetListener;
 
         String answerText = getFormEntryPrompt().getAnswerText();
+        boolean dataAvailable = false;
         if (answerText != null && !answerText.isEmpty()) {
-            setData(answerText);
-        } else {
-            GeoWidgetUtils.updateButtonLabelsAndVisibility(binding, getFormEntryPrompt().isReadOnly(), false,
-                    R.string.geoshape_view_read_only, R.string.geoshape_view_change_location, R.string.get_shape);
+            binding.geoAnswerText.setText(answerText);
+            dataAvailable = true;
         }
+        geoWidgetListener.setButtonLabelAndVisibility(binding, getFormEntryPrompt().isReadOnly(), dataAvailable,
+                R.string.geoshape_view_read_only, R.string.geoshape_view_change_location, R.string.get_shape);
     }
 
     @Override
@@ -67,7 +68,7 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
         binding.simpleButton.setOnClickListener(v -> {
             bundle = GeoWidgetUtils.getGeoPolyBundle(binding.geoAnswerText.getText().toString(),
                     GeoPolyActivity.OutputMode.GEOSHAPE, prompt.isReadOnly());
-            geoButtonClickListener.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(), null,
+            geoWidgetListener.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(), null,
                     waitingForDataRegistry, GeoPolyActivity.class, bundle, GEOSHAPE_CAPTURE);
         });
 
@@ -77,15 +78,13 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
     @Override
     public IAnswerData getAnswer() {
         String stringAnswer = binding.geoAnswerText.getText().toString();
-        return !stringAnswer.isEmpty()
-                ? new StringData(stringAnswer)
-                : null;
+        return stringAnswer.isEmpty() ? null : new StringData(stringAnswer);
     }
 
     @Override
     public void clearAnswer() {
         binding.geoAnswerText.setText(null);
-        GeoWidgetUtils.updateButtonLabelsAndVisibility(binding, getFormEntryPrompt().isReadOnly(), false,
+        geoWidgetListener.setButtonLabelAndVisibility(binding, getFormEntryPrompt().isReadOnly(), false,
                 R.string.geoshape_view_read_only, R.string.geoshape_view_change_location, R.string.get_shape);
         widgetValueChanged();
     }
@@ -106,7 +105,7 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
     @Override
     public void setData(Object answer) {
         binding.geoAnswerText.setText(answer.toString());
-        GeoWidgetUtils.updateButtonLabelsAndVisibility(binding, getFormEntryPrompt().isReadOnly(), !answer.toString().isEmpty(),
+        geoWidgetListener.setButtonLabelAndVisibility(binding, getFormEntryPrompt().isReadOnly(), !answer.toString().isEmpty(),
                 R.string.geoshape_view_read_only, R.string.geoshape_view_change_location, R.string.get_shape);
         widgetValueChanged();
     }

@@ -31,7 +31,7 @@ import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.interfaces.GeoButtonClickListener;
+import org.odk.collect.android.widgets.interfaces.GeoWidgetListener;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -48,22 +48,23 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
 
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final MapConfigurator mapConfigurator;
-    private final GeoButtonClickListener geoButtonClickListener;
+    private final GeoWidgetListener geoWidgetListener;
 
     public GeoTraceWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry,
-                          MapConfigurator mapConfigurator, GeoButtonClickListener geoButtonClickListener) {
+                          MapConfigurator mapConfigurator, GeoWidgetListener geoWidgetListener) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.mapConfigurator = mapConfigurator;
-        this.geoButtonClickListener = geoButtonClickListener;
+        this.geoWidgetListener = geoWidgetListener;
 
         String answerText = getFormEntryPrompt().getAnswerText();
+        boolean dataAvailable = false;
         if (answerText != null && !answerText.isEmpty()) {
-            setData(answerText);
-        } else {
-            GeoWidgetUtils.updateButtonLabelsAndVisibility(binding, getFormEntryPrompt().isReadOnly(), false,
-                    R.string.geotrace_view_read_only, R.string.geotrace_view_change_location, R.string.get_trace);
+            binding.geoAnswerText.setText(answerText);
+            dataAvailable = true;
         }
+        geoWidgetListener.setButtonLabelAndVisibility(binding, getFormEntryPrompt().isReadOnly(), dataAvailable,
+                R.string.geotrace_view_read_only, R.string.geotrace_view_change_location, R.string.get_trace);
     }
 
     @Override
@@ -76,7 +77,7 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
         binding.simpleButton.setOnClickListener(v -> {
             bundle = GeoWidgetUtils.getGeoPolyBundle(binding.geoAnswerText.getText().toString(),
                     GeoPolyActivity.OutputMode.GEOTRACE, prompt.isReadOnly());
-            geoButtonClickListener.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(), mapConfigurator,
+            geoWidgetListener.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(), mapConfigurator,
                     waitingForDataRegistry, GeoPolyActivity.class, bundle, GEOTRACE_CAPTURE);
         });
 
@@ -100,7 +101,7 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
     @Override
     public void clearAnswer() {
         binding.geoAnswerText.setText(null);
-        GeoWidgetUtils.updateButtonLabelsAndVisibility(binding, getFormEntryPrompt().isReadOnly(), false,
+        geoWidgetListener.setButtonLabelAndVisibility(binding, getFormEntryPrompt().isReadOnly(), false,
                 R.string.geotrace_view_read_only, R.string.geotrace_view_change_location, R.string.get_trace);
         widgetValueChanged();
     }
@@ -115,7 +116,7 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
     @Override
     public void setData(Object answer) {
         binding.geoAnswerText.setText(answer.toString());
-        GeoWidgetUtils.updateButtonLabelsAndVisibility(binding, getFormEntryPrompt().isReadOnly(), !answer.toString().isEmpty(),
+        geoWidgetListener.setButtonLabelAndVisibility(binding, getFormEntryPrompt().isReadOnly(), !answer.toString().isEmpty(),
                 R.string.geotrace_view_read_only, R.string.geotrace_view_change_location, R.string.get_trace);
         widgetValueChanged();
     }

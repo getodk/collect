@@ -31,7 +31,7 @@ import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.interfaces.GeoButtonClickListener;
+import org.odk.collect.android.widgets.interfaces.GeoWidgetListener;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -46,27 +46,25 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
     Bundle bundle;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
-    private final GeoButtonClickListener geoButtonClickListener;
+    private final GeoWidgetListener geoWidgetListener;
     private final double accuracyThreshold;
 
     private boolean draggable = true;
 
     public GeoPointMapWidget(Context context, QuestionDetails questionDetails,
-                             QuestionDef questionDef, WaitingForDataRegistry waitingForDataRegistry, GeoButtonClickListener geoButtonClickListener) {
+                             QuestionDef questionDef, WaitingForDataRegistry waitingForDataRegistry, GeoWidgetListener geoWidgetListener) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
-        this.geoButtonClickListener = geoButtonClickListener;
+        this.geoWidgetListener = geoWidgetListener;
 
         accuracyThreshold = GeoWidgetUtils.getAccuracyThreshold(questionDef);
         determineMapProperties();
 
         String stringAnswer = getFormEntryPrompt().getAnswerText();
-        if (stringAnswer != null && !stringAnswer.isEmpty()) {
-            setData(stringAnswer);
-        } else {
-            GeoWidgetUtils.updateButtonLabelsAndVisibility(binding, getFormEntryPrompt().isReadOnly(), false,
-                    R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
-        }
+
+        binding.geoAnswerText.setText(GeoWidgetUtils.getAnswerToDisplay(getContext(), stringAnswer));
+        geoWidgetListener.setButtonLabelAndVisibility(binding, getFormEntryPrompt().isReadOnly(), stringAnswer != null && !stringAnswer.isEmpty(),
+                R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
     }
 
     @Override
@@ -78,7 +76,7 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
 
         binding.simpleButton.setOnClickListener(v -> {
             bundle = GeoWidgetUtils.getGeoPointBundle(prompt.getAnswerText(), accuracyThreshold, prompt.isReadOnly(), draggable);
-            geoButtonClickListener.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(), null,
+            geoWidgetListener.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(), null,
                     waitingForDataRegistry, GeoPointMapActivity.class, bundle, LOCATION_CAPTURE);
         });
 
@@ -95,7 +93,7 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
     @Override
     public void clearAnswer() {
         binding.geoAnswerText.setText(null);
-        GeoWidgetUtils.updateButtonLabelsAndVisibility(binding, getFormEntryPrompt().isReadOnly(), false,
+        geoWidgetListener.setButtonLabelAndVisibility(binding, getFormEntryPrompt().isReadOnly(), false,
                 R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
         widgetValueChanged();
     }
@@ -116,7 +114,7 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
     @Override
     public void setData(Object answer) {
         binding.geoAnswerText.setText(GeoWidgetUtils.getAnswerToDisplay(getContext(), (String) answer));
-        GeoWidgetUtils.updateButtonLabelsAndVisibility(binding, getFormEntryPrompt().isReadOnly(), !answer.toString().isEmpty(),
+        geoWidgetListener.setButtonLabelAndVisibility(binding, getFormEntryPrompt().isReadOnly(), answer != null,
                 R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
         widgetValueChanged();
     }

@@ -14,7 +14,7 @@ import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.PermissionUtils;
-import org.odk.collect.android.widgets.interfaces.GeoButtonClickListener;
+import org.odk.collect.android.widgets.interfaces.GeoWidgetListener;
 
 import java.text.DecimalFormat;
 
@@ -22,7 +22,7 @@ import timber.log.Timber;
 
 import static android.view.View.GONE;
 
-public class GeoWidgetUtils implements GeoButtonClickListener {
+public class GeoWidgetUtils implements GeoWidgetListener {
     public static final String LOCATION = "gp";
     public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
     public static final String READ_ONLY = "readOnly";
@@ -33,6 +33,12 @@ public class GeoWidgetUtils implements GeoButtonClickListener {
     public void onButtonClicked(Context context, FormIndex index, PermissionUtils permissionUtils, MapConfigurator mapConfigurator,
                                 WaitingForDataRegistry waitingForDataRegistry, Class activityClass, Bundle bundle, int requestCode) {
         onButtonClick(context, index, permissionUtils, mapConfigurator, waitingForDataRegistry, activityClass, bundle, requestCode);
+    }
+
+    @Override
+    public void setButtonLabelAndVisibility(GeoWidgetAnswerBinding binding, boolean readOnly, boolean dataAvailable,
+                                            int buttonTextReadOnly, int buttonTextDataAvailable, int defaultButtonText) {
+        updateButtonLabelAndVisibility(binding, readOnly, dataAvailable, buttonTextReadOnly, buttonTextDataAvailable, defaultButtonText);
     }
 
     public static double getAccuracyThreshold(QuestionDef questionDef) {
@@ -57,19 +63,6 @@ public class GeoWidgetUtils implements GeoButtonClickListener {
             return "";
         }
         return "";
-    }
-
-    public static void updateButtonLabelsAndVisibility(GeoWidgetAnswerBinding binding, boolean readOnly, boolean dataAvailable,
-                                                       int buttonTextReadOnly, int buttonTextDataAvailable, int defaultButtonText) {
-        if (readOnly) {
-            if (dataAvailable) {
-                binding.simpleButton.setText(buttonTextReadOnly);
-            } else {
-                binding.simpleButton.setVisibility(GONE);
-            }
-        } else {
-            binding.simpleButton.setText(dataAvailable ? buttonTextDataAvailable : defaultButtonText);
-        }
     }
 
     public static Bundle getGeoPointBundle(String stringAnswer, double accuracyThreshold, Boolean readOnly, Boolean draggable) {
@@ -116,6 +109,19 @@ public class GeoWidgetUtils implements GeoButtonClickListener {
         Intent intent = new Intent(context, activityClass);
         intent.putExtras(bundle);
         ((Activity) context).startActivityForResult(intent, requestCode);
+    }
+
+    private static void updateButtonLabelAndVisibility(GeoWidgetAnswerBinding binding, boolean readOnly, boolean dataAvailable,
+                                                       int buttonTextReadOnly, int buttonTextDataAvailable, int defaultButtonText) {
+        if (readOnly) {
+            if (dataAvailable) {
+                binding.simpleButton.setText(buttonTextReadOnly);
+            } else {
+                binding.simpleButton.setVisibility(GONE);
+            }
+        } else {
+            binding.simpleButton.setText(dataAvailable ? buttonTextDataAvailable : defaultButtonText);
+        }
     }
 
     public static String convertCoordinatesIntoDegreeFormat(Context context, double coordinate, String type) {

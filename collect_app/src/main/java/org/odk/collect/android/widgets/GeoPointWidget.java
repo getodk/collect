@@ -31,7 +31,7 @@ import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.interfaces.GeoButtonClickListener;
+import org.odk.collect.android.widgets.interfaces.GeoWidgetListener;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -43,22 +43,19 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
     Bundle bundle;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
-    private final GeoButtonClickListener geoButtonClickListener;
+    private final GeoWidgetListener geoWidgetListener;
     private final double accuracyThreshold;
 
     public GeoPointWidget(Context context, QuestionDetails questionDetails, QuestionDef questionDef,
-                          WaitingForDataRegistry waitingForDataRegistry, GeoButtonClickListener geoButtonClickListener) {
+                          WaitingForDataRegistry waitingForDataRegistry, GeoWidgetListener geoWidgetListener) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
-        this.geoButtonClickListener = geoButtonClickListener;
+        this.geoWidgetListener = geoWidgetListener;
         accuracyThreshold = GeoWidgetUtils.getAccuracyThreshold(questionDef);
 
         String stringAnswer = getFormEntryPrompt().getAnswerText();
-        if (stringAnswer != null && !stringAnswer.isEmpty()) {
-            setData(stringAnswer);
-        } else {
-            updateButtonLabelsAndVisibility(false);
-        }
+        binding.geoAnswerText.setText(GeoWidgetUtils.getAnswerToDisplay(getContext(), stringAnswer));
+        updateButtonLabelsAndVisibility(stringAnswer != null && !stringAnswer.isEmpty());
     }
 
     @Override
@@ -70,11 +67,10 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
             binding.simpleButton.setVisibility(GONE);
         } else {
             binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-            binding.simpleButton.setText(getDefaultButtonLabel());
 
             binding.simpleButton.setOnClickListener(v -> {
                 bundle = GeoWidgetUtils.getGeoPointBundle(prompt.getAnswerText(), accuracyThreshold, null, null);
-                geoButtonClickListener.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(), null, waitingForDataRegistry,
+                geoWidgetListener.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(), null, waitingForDataRegistry,
                         GeoPointActivity.class, bundle, LOCATION_CAPTURE);
             });
         }
@@ -118,12 +114,7 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
         if (!getFormEntryPrompt().isReadOnly()) {
-            binding.simpleButton.setText(
-                    dataAvailable ? R.string.change_location : R.string.get_point);
+            binding.simpleButton.setText(dataAvailable ? R.string.change_location : R.string.get_point);
         }
-    }
-
-    private String getDefaultButtonLabel() {
-        return getContext().getString(R.string.get_location);
     }
 }

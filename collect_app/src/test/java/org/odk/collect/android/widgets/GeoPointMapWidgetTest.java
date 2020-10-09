@@ -13,14 +13,12 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.widgets.interfaces.GeoButtonClickListener;
+import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.odk.collect.android.widgets.interfaces.GeoWidgetListener;
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
-
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -33,6 +31,7 @@ import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MAPS;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.PLACEMENT_MAP;
 import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.assertGeoPointBundleArgumentEquals;
 import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.getRandomDoubleArray;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAppearanceAndAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
@@ -42,26 +41,26 @@ import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 public class GeoPointMapWidgetTest {
-
     private final FakePermissionUtils permissionUtils = new FakePermissionUtils();
     private final GeoPointData answer = new GeoPointData(getRandomDoubleArray());
 
-    private GeoButtonClickListener mockGeoButtonClickListener;
+    private GeoWidgetListener mockGeoWidgetListener;
     private QuestionDef questionDef;
     private WaitingForDataRegistry waitingForDataRegistry;
     private View.OnLongClickListener listener;
 
     @Before
     public void setup() {
-        mockGeoButtonClickListener = mock(GeoButtonClickListener.class);
+        mockGeoWidgetListener = mock(GeoWidgetListener.class);
         questionDef = mock(QuestionDef.class);
         waitingForDataRegistry = mock(WaitingForDataRegistry.class);
         listener = mock(View.OnLongClickListener.class);
+
         when(questionDef.getAdditionalAttribute(anyString(), anyString())).thenReturn(null);
     }
 
     @Test
-    public void getAnswer_whenPromptDoesNotHaveAnswer_returnsPromptAnswer() {
+    public void getAnswer_whenPromptDoesNotHaveAnswer_returnsNull() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
         assertNull(widget.getAnswer());
     }
@@ -74,63 +73,85 @@ public class GeoPointMapWidgetTest {
     }
 
     @Test
+    public void whenPromptHasAnswer_answerTextViewShowsCorrectAnswer() {
+        GeoPointMapWidget widget = createWidget(promptWithAnswer(answer));
+        assertEquals(widget.binding.geoAnswerText.getText(), GeoWidgetUtils.getAnswerToDisplay(widget.getContext(), answer.getDisplayText()));
+    }
+
+    @Test
+    public void widgetCallsSetButtonLabelAndVisibility_whenPromptIsReadOnlyAndDoesNotHaveAnswer() {
+        GeoPointMapWidget widget = createWidget(promptWithReadOnly());
+        verify(mockGeoWidgetListener).setButtonLabelAndVisibility(widget.binding, true, false,
+                R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
+    }
+
+    @Test
+    public void widgetCallsSetButtonLabelAndVisibility_whenPromptIsNotReadOnlyAndHasAnswer() {
+        GeoPointMapWidget widget = createWidget(promptWithAnswer(answer));
+        verify(mockGeoWidgetListener).setButtonLabelAndVisibility(widget.binding, false, true,
+                R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
+    }
+
+    @Test
     public void clearAnswer_clearsWidgetAnswer() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(answer));
         widget.clearAnswer();
 
-        assertNull(widget.getAnswer());
         assertEquals(widget.binding.geoAnswerText.getText(), "");
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.get_point));
+        verify(mockGeoWidgetListener).setButtonLabelAndVisibility(widget.binding, false, false,
+                R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
     }
 
     @Test
-    public void clickingButtonForLong_callsLongClickListener() {
+    public void clearAnswer_callsValueChangeListeners() {
+        GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+        widget.clearAnswer();
+
+        verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void setData_setsCorrectAnswerInAnswerTextView() {
+        GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
+        widget.setBinaryData(answer.getDisplayText());
+        assertEquals(widget.binding.geoAnswerText.getText(), GeoWidgetUtils.getAnswerToDisplay(widget.getContext(), answer.getDisplayText()));
+    }
+
+    @Test
+    public void setData_whenDataIsNotNull_updatesButtonLabel() {
+        GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
+        widget.setBinaryData(answer.getDisplayText());
+        verify(mockGeoWidgetListener).setButtonLabelAndVisibility(widget.binding, false, true,
+                R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
+    }
+
+    @Test
+    public void setData_whenDataIsNull_updatesButtonLabel() {
+        GeoPointMapWidget widget = createWidget(promptWithAnswer(answer));
+        widget.setBinaryData(null);
+        verify(mockGeoWidgetListener).setButtonLabelAndVisibility(widget.binding, false, false,
+                R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
+    }
+
+    @Test
+    public void setData_callsValueChangeListener() {
+        GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+        widget.setBinaryData(answer.getDisplayText());
+
+        verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void clickingButtonAndAnswerTextViewForLong_callsLongClickListener() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
         widget.setOnLongClickListener(listener);
         widget.binding.simpleButton.performLongClick();
-
-        verify(listener).onLongClick(widget.binding.simpleButton);
-    }
-
-    @Test
-    public void clickingAnswerTextViewForLong_callsLongClickListener() {
-        GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
-        widget.setOnLongClickListener(listener);
         widget.binding.geoAnswerText.performLongClick();
 
+        verify(listener).onLongClick(widget.binding.simpleButton);
         verify(listener).onLongClick(widget.binding.geoAnswerText);
-    }
-
-    @Test
-    public void whenPromptHasAnswer_answerTextViewShowsCorrectAnswer() {
-        GeoPointMapWidget widget = createWidget(promptWithAnswer(answer));
-        assertEquals(widget.binding.geoAnswerText.getText(), GeoWidgetUtils.getAnswerToDisplay(widgetTestActivity(), answer.getDisplayText()));
-    }
-
-    @Test
-    public void whenPromptIsReadOnlyAndDoesNotHaveAnswer_buttonIsNotDisplayed() {
-        GeoPointMapWidget widget = createWidget(promptWithReadOnly());
-        assertEquals(widget.binding.simpleButton.getVisibility(), GONE);
-    }
-
-    @Test
-    public void whenPromptIsReadOnlyAndHasAnswer_buttonShowsCorrectText() {
-        GeoPointMapWidget widget = createWidget(promptWithReadOnlyAndAnswer(answer));
-
-        assertEquals(widget.binding.simpleButton.getVisibility(), VISIBLE);
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.geopoint_view_read_only));
-    }
-
-    @Test
-    public void whenPromptDoesNotHaveHasAnswer_buttonShowsCorrectText() {
-        GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.get_point));
-    }
-
-    @Test
-    public void whenPromptHasAnswer_buttonShowsCorrectText() {
-        GeoPointMapWidget widget = createWidget(promptWithAnswer(answer));
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.view_change_location));
     }
 
     @Test
@@ -178,12 +199,12 @@ public class GeoPointMapWidgetTest {
         widget.setPermissionUtils(permissionUtils);
         widget.binding.simpleButton.performClick();
 
-        verify(mockGeoButtonClickListener).onButtonClicked(widget.getContext(), prompt.getIndex(), permissionUtils, null,
+        verify(mockGeoWidgetListener).onButtonClicked(widget.getContext(), prompt.getIndex(), permissionUtils, null,
                 waitingForDataRegistry, GeoPointMapActivity.class, widget.bundle, LOCATION_CAPTURE);
     }
 
     private GeoPointMapWidget createWidget(FormEntryPrompt prompt) {
         return new GeoPointMapWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"),
-                questionDef, waitingForDataRegistry, mockGeoButtonClickListener);
+                questionDef, waitingForDataRegistry, mockGeoWidgetListener);
     }
 }

@@ -26,9 +26,10 @@ public class GeoWidgetHelpers {
         assertThat(bundle.getBoolean(DRAGGABLE_ONLY), equalTo(draggableOnly));
     }
 
-    public static void assertGeoPolyBundleArgumentEquals(Bundle bundle, String answer, GeoPolyActivity.OutputMode outputMode) {
+    public static void assertGeoPolyBundleArgumentEquals(Bundle bundle, String answer, GeoPolyActivity.OutputMode outputMode, boolean readOnly) {
         assertThat(bundle.getString(GeoPolyActivity.ANSWER_KEY), equalTo(answer));
         assertThat(bundle.get(GeoPolyActivity.OUTPUT_MODE_KEY), equalTo(outputMode));
+        assertThat(bundle.getBoolean(READ_ONLY), equalTo(readOnly));
     }
 
     public static double[] getRandomDoubleArray() {
@@ -77,22 +78,4 @@ public class GeoWidgetHelpers {
 
         return b.toString();
     }
-/*
-    public static class FakeGeoWidgetUtils implements GeoWidget {
-
-        public boolean setUpAnswerCalled = false;
-        public boolean onButtonClicked = false;
-
-        @Override
-        public String setUpAnswer(Context context, GeoWidgetAnswerBinding binding, Object answer) {
-            this.setUpAnswerCalled = true;
-            return null;
-        }
-
-        @Override
-        public void OnButtonClicked(Context context, FormIndex index, PermissionUtils permissionUtils, MapConfigurator mapConfigurator,
-                                    WaitingForDataRegistry waitingForDataRegistry, Class activityClass, Bundle bundle, int requestCode) {
-            onButtonClicked = true;
-        }
-    }*/
 }
