@@ -61,13 +61,12 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
         determineMapProperties();
 
         String stringAnswer = getFormEntryPrompt().getAnswerText();
-        boolean dataAvailable = false;
         if (stringAnswer != null && !stringAnswer.isEmpty()) {
             setData(stringAnswer);
-            dataAvailable = true;
-
+        } else {
+            GeoWidgetUtils.updateButtonLabelsAndVisibility(binding, getFormEntryPrompt().isReadOnly(), false,
+                    R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
         }
-        updateButtonLabelsAndVisibility(dataAvailable);
     }
 
     @Override
@@ -96,7 +95,8 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
     @Override
     public void clearAnswer() {
         binding.geoAnswerText.setText(null);
-        updateButtonLabelsAndVisibility(false);
+        GeoWidgetUtils.updateButtonLabelsAndVisibility(binding, getFormEntryPrompt().isReadOnly(), false,
+                R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
         widgetValueChanged();
     }
 
@@ -116,7 +116,8 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
     @Override
     public void setData(Object answer) {
         binding.geoAnswerText.setText(GeoWidgetUtils.getAnswerToDisplay(getContext(), (String) answer));
-        updateButtonLabelsAndVisibility(answer != null);
+        GeoWidgetUtils.updateButtonLabelsAndVisibility(binding, getFormEntryPrompt().isReadOnly(), !answer.toString().isEmpty(),
+                R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
         widgetValueChanged();
     }
 
@@ -126,18 +127,6 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
             draggable = true;
         } else if (hasAppearance(getFormEntryPrompt(), MAPS)) {
             draggable = false;
-        }
-    }
-
-    private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
-        if (getFormEntryPrompt().isReadOnly()) {
-            if (dataAvailable) {
-                binding.simpleButton.setText(R.string.geopoint_view_read_only);
-            } else {
-                binding.simpleButton.setVisibility(GONE);
-            }
-        } else {
-            binding.simpleButton.setText(dataAvailable ? R.string.view_change_location : R.string.get_point);
         }
     }
 }

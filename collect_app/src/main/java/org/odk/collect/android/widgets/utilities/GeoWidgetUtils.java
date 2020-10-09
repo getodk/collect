@@ -10,6 +10,7 @@ import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.QuestionDef;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPolyActivity;
+import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.PermissionUtils;
@@ -18,6 +19,8 @@ import org.odk.collect.android.widgets.interfaces.GeoButtonClickListener;
 import java.text.DecimalFormat;
 
 import timber.log.Timber;
+
+import static android.view.View.GONE;
 
 public class GeoWidgetUtils implements GeoButtonClickListener {
     public static final String LOCATION = "gp";
@@ -54,6 +57,19 @@ public class GeoWidgetUtils implements GeoButtonClickListener {
             return "";
         }
         return "";
+    }
+
+    public static void updateButtonLabelsAndVisibility(GeoWidgetAnswerBinding binding, boolean readOnly, boolean dataAvailable,
+                                                       int buttonTextReadOnly, int buttonTextDataAvailable, int defaultButtonText) {
+        if (readOnly) {
+            if (dataAvailable) {
+                binding.simpleButton.setText(buttonTextReadOnly);
+            } else {
+                binding.simpleButton.setVisibility(GONE);
+            }
+        } else {
+            binding.simpleButton.setText(dataAvailable ? buttonTextDataAvailable : defaultButtonText);
+        }
     }
 
     public static Bundle getGeoPointBundle(String stringAnswer, double accuracyThreshold, Boolean readOnly, Boolean draggable) {

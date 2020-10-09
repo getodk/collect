@@ -49,12 +49,12 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
         this.geoButtonClickListener = geoButtonClickListener;
 
         String answerText = getFormEntryPrompt().getAnswerText();
-        boolean dataAvailable = false;
         if (answerText != null && !answerText.isEmpty()) {
             setData(answerText);
-            dataAvailable = true;
+        } else {
+            GeoWidgetUtils.updateButtonLabelsAndVisibility(binding, getFormEntryPrompt().isReadOnly(), false,
+                    R.string.geoshape_view_read_only, R.string.geoshape_view_change_location, R.string.get_shape);
         }
-        updateButtonLabelsAndVisibility(dataAvailable);
     }
 
     @Override
@@ -85,7 +85,8 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
     @Override
     public void clearAnswer() {
         binding.geoAnswerText.setText(null);
-        updateButtonLabelsAndVisibility(false);
+        GeoWidgetUtils.updateButtonLabelsAndVisibility(binding, getFormEntryPrompt().isReadOnly(), false,
+                R.string.geoshape_view_read_only, R.string.geoshape_view_change_location, R.string.get_shape);
         widgetValueChanged();
     }
 
@@ -105,19 +106,8 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
     @Override
     public void setData(Object answer) {
         binding.geoAnswerText.setText(answer.toString());
-        updateButtonLabelsAndVisibility(!answer.toString().isEmpty());
+        GeoWidgetUtils.updateButtonLabelsAndVisibility(binding, getFormEntryPrompt().isReadOnly(), !answer.toString().isEmpty(),
+                R.string.geoshape_view_read_only, R.string.geoshape_view_change_location, R.string.get_shape);
         widgetValueChanged();
-    }
-
-    private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
-        if (getFormEntryPrompt().isReadOnly()) {
-            if (dataAvailable) {
-                binding.simpleButton.setText(R.string.geoshape_view_read_only);
-            } else {
-                binding.simpleButton.setVisibility(GONE);
-            }
-        } else {
-            binding.simpleButton.setText(dataAvailable ? R.string.geoshape_view_change_location : R.string.get_shape);
-        }
     }
 }
