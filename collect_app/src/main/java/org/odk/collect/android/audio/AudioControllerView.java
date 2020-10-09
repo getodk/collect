@@ -15,6 +15,7 @@
 package org.odk.collect.android.audio;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -24,31 +25,19 @@ import android.widget.TextView;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.odk.collect.android.R;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.odk.collect.android.databinding.AudioControllerLayoutBinding;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class AudioControllerView extends FrameLayout {
 
-    @BindView(R.id.currentDuration)
-    TextView currentDurationLabel;
+    final AudioControllerLayoutBinding binding;
 
-    @BindView(R.id.totalDuration)
-    TextView totalDurationLabel;
-
-    @BindView(R.id.playBtn)
-    @SuppressFBWarnings("UR")
-    ImageButton playButton;
-
-    @BindView(R.id.seekBar)
-    @SuppressFBWarnings("UR")
-    SeekBar seekBar;
-
+    private final TextView currentDurationLabel;
+    private final TextView totalDurationLabel;
+    private final ImageButton playButton;
+    private final SeekBar seekBar;
     private final SwipeListener swipeListener;
 
     private Boolean playing = false;
@@ -60,28 +49,32 @@ public class AudioControllerView extends FrameLayout {
     public AudioControllerView(Context context) {
         super(context);
 
-        View.inflate(context, R.layout.audio_controller_layout, this);
-        ButterKnife.bind(this);
+        binding = AudioControllerLayoutBinding.inflate(LayoutInflater.from(context), this, true);
+        playButton = binding.playBtn;
+        currentDurationLabel = binding.currentDuration;
+        totalDurationLabel = binding.totalDuration;
+        seekBar = binding.seekBar;
 
         swipeListener = new SwipeListener();
         seekBar.setOnSeekBarChangeListener(swipeListener);
         playButton.setImageResource(R.drawable.ic_play_arrow_24dp);
+
+        binding.fastForwardBtn.setOnClickListener(view -> fastForwardMedia());
+        binding.fastRewindBtn.setOnClickListener(view -> rewindMedia());
+        binding.playBtn.setOnClickListener(view -> playClicked());
     }
 
-    @OnClick(R.id.fastForwardBtn)
-    void fastForwardMedia() {
+    private void fastForwardMedia() {
         int newPosition = position + 5000;
         onPositionChanged(newPosition);
     }
 
-    @OnClick(R.id.fastRewindBtn)
-    void rewindMedia() {
+    private void rewindMedia() {
         int newPosition = position - 5000;
         onPositionChanged(newPosition);
     }
 
-    @OnClick(R.id.playBtn)
-    void playClicked() {
+    private void playClicked() {
         if (listener == null) {
             return;
         }
