@@ -53,14 +53,6 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
         this.waitingForDataRegistry = waitingForDataRegistry;
         accuracyThreshold = GeoWidgetUtils.getAccuracyThreshold(questionDef);
         determineMapProperties();
-
-        stringAnswer = getFormEntryPrompt().getAnswerText();
-        boolean dataAvailable = false;
-        if (stringAnswer != null && !stringAnswer.isEmpty()) {
-            dataAvailable = true;
-            setData(stringAnswer);
-        }
-        updateButtonLabelsAndVisibility(dataAvailable);
     }
 
     @Override
@@ -69,11 +61,20 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
 
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+
         binding.simpleButton.setOnClickListener(v -> {
             Bundle bundle = GeoWidgetUtils.getGeoPointBundle(stringAnswer, accuracyThreshold, prompt.isReadOnly(), draggable);
             GeoWidgetUtils.onButtonClick(context, prompt, getPermissionUtils(), null,
                     waitingForDataRegistry, GeoPointMapActivity.class, bundle, LOCATION_CAPTURE);
         });
+
+        stringAnswer = prompt.getAnswerText();
+        boolean dataAvailable = false;
+        if (stringAnswer != null && !stringAnswer.isEmpty()) {
+            dataAvailable = true;
+            setData(stringAnswer);
+        }
+        updateButtonLabelsAndVisibility(dataAvailable);
 
         return binding.getRoot();
     }

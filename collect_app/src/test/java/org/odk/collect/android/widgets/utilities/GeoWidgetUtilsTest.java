@@ -2,15 +2,35 @@ package org.odk.collect.android.widgets.utilities;
 
 import android.content.Context;
 
+import org.javarosa.core.model.data.GeoPointData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
 import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.getRandomDoubleArray;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 
 @RunWith(RobolectricTestRunner.class)
 public class GeoWidgetUtilsTest {
+    private final GeoPointData answer = new GeoPointData(getRandomDoubleArray());
+
+    @Test
+    public void getAnswer_whenStringAnswerIsEmpty_returnsNull() {
+        assertNull(GeoWidgetUtils.getAnswer(""));
+    }
+
+    @Test
+    public void getAnswer_whenStringAnswerIsNotConvertible_returnsNull() {
+        assertNull(GeoWidgetUtils.getAnswer("blah"));
+    }
+
+    @Test
+    public void getAnswer_withAnswer_returnsAnswer() {
+        assertEquals(GeoWidgetUtils.getAnswer(promptWithAnswer(answer).getAnswerText()).getDisplayText(), answer.getDisplayText());
+    }
 
     @Test
     // Results confirmed with https://www.sunearthtools.com/dp/tools/conversion.php

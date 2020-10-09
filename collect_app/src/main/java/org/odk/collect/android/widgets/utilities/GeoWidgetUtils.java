@@ -48,7 +48,6 @@ public class GeoWidgetUtils {
     public static String updateAnswer(Context context, GeoWidgetAnswerBinding binding, Object answer) {
         String stringAnswer = (String) answer;
         binding.geoAnswerText.setText(getAnswerToDisplay(context, stringAnswer));
-
         if (binding.geoAnswerText.getText().toString().equals("")) {
             stringAnswer = "";
         }

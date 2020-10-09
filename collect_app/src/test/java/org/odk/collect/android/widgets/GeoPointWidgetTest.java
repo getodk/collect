@@ -61,21 +61,10 @@ public class GeoPointWidgetTest {
     }
 
     @Test
-    public void getAnswer_whenPromptDoesNotHaveAnswer_returnsNull() {
-        GeoPointWidget widget = createWidget(promptWithAnswer(null));
-        assertNull(widget.getAnswer());
-    }
-
-    @Test
-    public void getAnswer_whenPromptDoesNotHaveConvertibleStringAsAnswer_returnsNull() {
-        GeoPointWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        assertNull(widget.getAnswer());
-    }
-
-    @Test
-    public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
+    public void getAnswer_returnsPromptAnswer() {
         GeoPointWidget widget = createWidget(promptWithAnswer(answer));
-        assertEquals(widget.getAnswer().getDisplayText(), answer.getDisplayText());
+        assertEquals(widget.getAnswer().getDisplayText(),
+                GeoWidgetUtils.getAnswer(promptWithAnswer(answer).getAnswerText()).getDisplayText());
     }
 
     @Test

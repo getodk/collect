@@ -79,7 +79,6 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryDataReceiver
             dataAvailable = true;
             setBinaryData(answerText);
         }
-
         updateButtonLabelsAndVisibility(dataAvailable);
 
         return binding.getRoot();

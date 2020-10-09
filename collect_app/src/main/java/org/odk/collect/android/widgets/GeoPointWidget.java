@@ -47,11 +47,6 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
         accuracyThreshold = GeoWidgetUtils.getAccuracyThreshold(questionDef);
-
-        stringAnswer = getFormEntryPrompt().getAnswerText();
-        if (stringAnswer != null && !stringAnswer.isEmpty()) {
-            setData(stringAnswer);
-        }
     }
 
     @Override
@@ -61,8 +56,8 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
         if (prompt.isReadOnly()) {
             binding.simpleButton.setVisibility(GONE);
         } else {
-            binding.simpleButton.setText(getDefaultButtonLabel());
             binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+            binding.simpleButton.setText(getDefaultButtonLabel());
 
             binding.simpleButton.setOnClickListener(v -> {
                 Bundle bundle = GeoWidgetUtils.getGeoPointBundle(stringAnswer, accuracyThreshold, null, null);
@@ -71,6 +66,14 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
             });
         }
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+
+        String stringAnswer = prompt.getAnswerText();
+        boolean dataAvailable = false;
+        if (stringAnswer != null && !stringAnswer.isEmpty()) {
+            dataAvailable = true;
+            setData(stringAnswer);
+        }
+        updateButtonLabelsAndVisibility(dataAvailable);
 
         return binding.getRoot();
     }
