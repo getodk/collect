@@ -1,7 +1,9 @@
 package org.odk.collect.android.widgets;
 
+import android.os.Bundle;
 import android.view.View;
 
+import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -13,8 +15,8 @@ import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.widgets.support.FakeGeoButtonClickListener;
-import org.odk.collect.android.widgets.utilities.GeoDataRequester;
+import org.odk.collect.android.widgets.interfaces.ActivityGeoDataRequester;
+import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
 
@@ -25,7 +27,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.LOCATION_CAPTURE;
-import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.assertGeoPointBundleArgumentEquals;
 import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.getRandomDoubleArray;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
@@ -35,15 +36,16 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 @RunWith(RobolectricTestRunner.class)
 public class GeoPointWidgetTest {
     private final FakePermissionUtils permissionUtils = new FakePermissionUtils();
-    private final FakeGeoButtonClickListener fakeGeoButtonClickListener = new FakeGeoButtonClickListener();
     private final GeoPointData answer = new GeoPointData(getRandomDoubleArray());
 
+    private ActivityGeoDataRequester activityGeoDataRequester;
     private QuestionDef questionDef;
     private WaitingForDataRegistry waitingForDataRegistry;
     private View.OnLongClickListener listener;
 
     @Before
     public void setup() {
+        activityGeoDataRequester = mock(ActivityGeoDataRequester.class);
         questionDef = mock(QuestionDef.class);
         waitingForDataRegistry = mock(WaitingForDataRegistry.class);
         listener = mock(View.OnLongClickListener.class);
@@ -72,7 +74,7 @@ public class GeoPointWidgetTest {
     @Test
     public void answerTextViewShouldShowCorrectAnswer() {
         GeoPointWidget widget = createWidget(promptWithAnswer(answer));
-        assertEquals(widget.binding.geoAnswerText.getText(), GeoDataRequester.getAnswerToDisplay(widget.getContext(), answer.getDisplayText()));
+        assertEquals(widget.binding.geoAnswerText.getText(), GeoWidgetUtils.getAnswerToDisplay(widget.getContext(), answer.getDisplayText()));
     }
 
     @Test
@@ -120,7 +122,7 @@ public class GeoPointWidgetTest {
     public void setData_updatesWidgetDisplayedAnswer() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
         widget.setBinaryData(answer.getDisplayText());
-        assertEquals(widget.binding.geoAnswerText.getText(), GeoDataRequester.getAnswerToDisplay(widget.getContext(), answer.getDisplayText()));
+        assertEquals(widget.binding.geoAnswerText.getText(), GeoWidgetUtils.getAnswerToDisplay(widget.getContext(), answer.getDisplayText()));
     }
 
     @Test
@@ -147,33 +149,26 @@ public class GeoPointWidgetTest {
     }
 
     @Test
-    public void buttonClick_whenPromptDoesNotHaveAnswer_requestsGeoIntentWithCorrectValues() {
-        GeoPointWidget widget = createWidget(promptWithAnswer(null));
+    public void buttonClick_requestsGeoIntent_withCorrectValues() {
+        FormEntryPrompt prompt = promptWithAnswer(answer);
+        FormIndex formIndex = mock(FormIndex.class);
+        Bundle bundle = new Bundle();
+
+        when(prompt.getIndex()).thenReturn(formIndex);
+        when(activityGeoDataRequester.requestGeoPoint(prompt)).thenReturn(bundle);
+
+        GeoPointWidget widget = createWidget(prompt);
         widget.setPermissionUtils(permissionUtils);
         widget.binding.simpleButton.performClick();
 
-        assertEquals(fakeGeoButtonClickListener.activityClass, GeoPointActivity.class);
-        assertEquals(fakeGeoButtonClickListener.requestCode, LOCATION_CAPTURE);
-        assertGeoPointBundleArgumentEquals(fakeGeoButtonClickListener.geoBundle, null, GeoDataRequester.DEFAULT_LOCATION_ACCURACY,
-                false, false);
-    }
-
-    @Test
-    public void buttonClick_whenPromptHasAnswer_requestsGeoIntentWithCorrectValues() {
-        when(questionDef.getAdditionalAttribute(null, GeoDataRequester.ACCURACY_THRESHOLD)).thenReturn("10");
-
-        GeoPointWidget widget = createWidget(promptWithAnswer(answer));
-        widget.setPermissionUtils(permissionUtils);
-        widget.binding.simpleButton.performClick();
-
-        assertEquals(fakeGeoButtonClickListener.activityClass, GeoPointActivity.class);
-        assertEquals(fakeGeoButtonClickListener.requestCode, LOCATION_CAPTURE);
-        assertGeoPointBundleArgumentEquals(fakeGeoButtonClickListener.geoBundle, GeoDataRequester.getLocationParamsFromStringAnswer(answer.getDisplayText()),
-                10.0, false, false);
+        verify(activityGeoDataRequester).requestGeoIntent(widget.getContext(), formIndex, waitingForDataRegistry,
+                GeoPointActivity.class, bundle, LOCATION_CAPTURE);
     }
 
     private GeoPointWidget createWidget(FormEntryPrompt prompt) {
-        return new GeoPointWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"),
-                questionDef, waitingForDataRegistry, fakeGeoButtonClickListener);
+        when(prompt.getQuestion()).thenReturn(questionDef);
+
+        return new GeoPointWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"), waitingForDataRegistry,
+                activityGeoDataRequester);
     }
 }

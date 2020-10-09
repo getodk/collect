@@ -17,11 +17,9 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
 
-import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -31,39 +29,42 @@ import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.interfaces.GeoButtonClickListener;
-import org.odk.collect.android.widgets.utilities.GeoDataRequester;
+import org.odk.collect.android.widgets.interfaces.ActivityGeoDataRequester;
+import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.LOCATION_CAPTURE;
-import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MAPS;
-import static org.odk.collect.android.utilities.WidgetAppearanceUtils.PLACEMENT_MAP;
-import static org.odk.collect.android.utilities.WidgetAppearanceUtils.hasAppearance;
 
 @SuppressLint("ViewConstructor")
 public class GeoPointMapWidget extends QuestionWidget implements WidgetDataReceiver {
     GeoWidgetAnswerBinding binding;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
-    private final GeoButtonClickListener geoButtonClickListener;
-    private final double accuracyThreshold;
-
-    private String stringAnswer;
-    private boolean draggable = true;
+    private final ActivityGeoDataRequester activityGeoDataRequester;
 
     public GeoPointMapWidget(Context context, QuestionDetails questionDetails,
-                             QuestionDef questionDef, WaitingForDataRegistry waitingForDataRegistry, GeoButtonClickListener geoButtonClickListener) {
+                             WaitingForDataRegistry waitingForDataRegistry, ActivityGeoDataRequester activityGeoDataRequester) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
-        this.geoButtonClickListener = geoButtonClickListener;
+        this.activityGeoDataRequester = activityGeoDataRequester;
+    }
 
-        accuracyThreshold = GeoDataRequester.getAccuracyThreshold(questionDef);
-        determineMapProperties();
+    @Override
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+        binding = GeoWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
-        stringAnswer = getFormEntryPrompt().getAnswerText();
-        binding.geoAnswerText.setText(GeoDataRequester.getAnswerToDisplay(getContext(), stringAnswer));
+        binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        boolean dataAvailable = stringAnswer != null && !stringAnswer.isEmpty();
+        binding.simpleButton.setOnClickListener(v -> {
+            activityGeoDataRequester.requestGeoIntent(context, prompt.getIndex(), waitingForDataRegistry,
+                    GeoPointMapActivity.class, activityGeoDataRequester.requestGeoPoint(prompt), LOCATION_CAPTURE);
+        });
+
+        String answerText = prompt.getAnswerText();
+        binding.geoAnswerText.setText(GeoWidgetUtils.getAnswerToDisplay(getContext(), answerText));
+
+        boolean dataAvailable = answerText != null && !answerText.isEmpty();
         if (getFormEntryPrompt().isReadOnly()) {
             if (dataAvailable) {
                 binding.simpleButton.setText(R.string.geopoint_view_read_only);
@@ -77,37 +78,16 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
                 binding.simpleButton.setText(R.string.get_point);
             }
         }
-    }
-
-    @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        binding = GeoWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
-
-        binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-        binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-
-        binding.simpleButton.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            String stringAnswer = prompt.getAnswerText();
-            if (stringAnswer != null && !stringAnswer.isEmpty()) {
-                bundle.putDoubleArray(GeoDataRequester.LOCATION, GeoDataRequester.getLocationParamsFromStringAnswer(stringAnswer));
-            }
-            bundle.putDouble(GeoDataRequester.ACCURACY_THRESHOLD, accuracyThreshold);
-            bundle.putBoolean(GeoDataRequester.READ_ONLY, prompt.isReadOnly());
-            bundle.putBoolean(GeoDataRequester.DRAGGABLE_ONLY, draggable);
-
-            geoButtonClickListener.requestGeoIntent(context, prompt.getIndex(), getPermissionUtils(),
-                    waitingForDataRegistry, GeoPointMapActivity.class, bundle, LOCATION_CAPTURE);
-        });
 
         return binding.getRoot();
     }
 
     @Override
     public IAnswerData getAnswer() {
-        return stringAnswer == null || stringAnswer.isEmpty()
+        String answerText = getFormEntryPrompt().getAnswerText();
+        return answerText == null || answerText.isEmpty()
                 ? null
-                : new GeoPointData(GeoDataRequester.getLocationParamsFromStringAnswer(stringAnswer));
+                : new GeoPointData(GeoWidgetUtils.getLocationParamsFromStringAnswer(answerText));
     }
 
     @Override
@@ -132,18 +112,8 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
 
     @Override
     public void setData(Object answer) {
-        stringAnswer = (String) answer;
-        binding.geoAnswerText.setText(GeoDataRequester.getAnswerToDisplay(getContext(), stringAnswer));
-        binding.simpleButton.setText(stringAnswer.isEmpty() ? R.string.get_point : R.string.view_change_location);
+        binding.geoAnswerText.setText(GeoWidgetUtils.getAnswerToDisplay(getContext(), answer.toString()));
+        binding.simpleButton.setText(answer.toString().isEmpty() ? R.string.get_point : R.string.view_change_location);
         widgetValueChanged();
-    }
-
-    private void determineMapProperties() {
-        // Determine whether the point should be draggable.
-        if (hasAppearance(getFormEntryPrompt(), PLACEMENT_MAP)) {
-            draggable = true;
-        } else if (hasAppearance(getFormEntryPrompt(), MAPS)) {
-            draggable = false;
-        }
     }
 }

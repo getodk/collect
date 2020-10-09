@@ -17,11 +17,9 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
 
-import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -31,8 +29,8 @@ import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.interfaces.GeoButtonClickListener;
-import org.odk.collect.android.widgets.utilities.GeoDataRequester;
+import org.odk.collect.android.widgets.interfaces.ActivityGeoDataRequester;
+import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.LOCATION_CAPTURE;
@@ -42,26 +40,13 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
     GeoWidgetAnswerBinding binding;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
-    private final GeoButtonClickListener geoButtonClickListener;
-    private final double accuracyThreshold;
+    private final ActivityGeoDataRequester activityGeoDataRequester;
 
-    private String stringAnswer;
-
-    public GeoPointWidget(Context context, QuestionDetails questionDetails, QuestionDef questionDef,
-                          WaitingForDataRegistry waitingForDataRegistry, GeoButtonClickListener geoButtonClickListener) {
+    public GeoPointWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry,
+                          ActivityGeoDataRequester activityGeoDataRequester) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
-        this.geoButtonClickListener = geoButtonClickListener;
-        accuracyThreshold = GeoDataRequester.getAccuracyThreshold(questionDef);
-
-        stringAnswer = getFormEntryPrompt().getAnswerText();
-
-        if (stringAnswer != null && !stringAnswer.isEmpty()) {
-            binding.geoAnswerText.setText(GeoDataRequester.getAnswerToDisplay(getContext(), stringAnswer));
-            binding.simpleButton.setText(R.string.change_location);
-        } else {
-            binding.simpleButton.setText(R.string.get_point);
-        }
+        this.activityGeoDataRequester = activityGeoDataRequester;
     }
 
     @Override
@@ -74,16 +59,18 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
         } else {
             binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
             binding.simpleButton.setOnClickListener(v -> {
-                Bundle bundle = new Bundle();
-                String stringAnswer = prompt.getAnswerText();
-                if (stringAnswer != null && !stringAnswer.isEmpty()) {
-                    bundle.putDoubleArray(GeoDataRequester.LOCATION, GeoDataRequester.getLocationParamsFromStringAnswer(stringAnswer));
-                }
-                bundle.putDouble(GeoDataRequester.ACCURACY_THRESHOLD, accuracyThreshold);
-
-                geoButtonClickListener.requestGeoIntent(context, prompt.getIndex(), getPermissionUtils(), waitingForDataRegistry,
-                        GeoPointActivity.class, bundle, LOCATION_CAPTURE);
+                activityGeoDataRequester.requestGeoIntent(context, prompt.getIndex(), waitingForDataRegistry,
+                        GeoPointActivity.class, activityGeoDataRequester.requestGeoPoint(prompt), LOCATION_CAPTURE);
             });
+        }
+
+        String answerText = prompt.getAnswerText();
+
+        if (answerText != null && !answerText.isEmpty()) {
+            binding.geoAnswerText.setText(GeoWidgetUtils.getAnswerToDisplay(getContext(), answerText));
+            binding.simpleButton.setText(R.string.change_location);
+        } else {
+            binding.simpleButton.setText(R.string.get_point);
         }
 
         return binding.getRoot();
@@ -91,14 +78,14 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
 
     @Override
     public IAnswerData getAnswer() {
-        return stringAnswer == null || stringAnswer.isEmpty()
+        String answerText = getFormEntryPrompt().getAnswerText();
+        return answerText == null || answerText.isEmpty()
                 ? null
-                : new GeoPointData(GeoDataRequester.getLocationParamsFromStringAnswer(stringAnswer));
+                : new GeoPointData(GeoWidgetUtils.getLocationParamsFromStringAnswer(answerText));
     }
 
     @Override
     public void clearAnswer() {
-        stringAnswer = "";
         binding.geoAnswerText.setText(null);
         binding.simpleButton.setText(R.string.get_point);
         widgetValueChanged();
@@ -119,9 +106,8 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
 
     @Override
     public void setData(Object answer) {
-        stringAnswer = (String) answer;
-        binding.geoAnswerText.setText(GeoDataRequester.getAnswerToDisplay(getContext(), stringAnswer));
-        binding.simpleButton.setText(stringAnswer.isEmpty() ? R.string.get_point : R.string.change_location);
+        binding.geoAnswerText.setText(GeoWidgetUtils.getAnswerToDisplay(getContext(), answer.toString()));
+        binding.simpleButton.setText(answer.toString().isEmpty() ? R.string.get_point : R.string.change_location);
         widgetValueChanged();
     }
 }

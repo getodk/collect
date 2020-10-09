@@ -9,10 +9,10 @@ import java.util.Random;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.odk.collect.android.widgets.utilities.GeoDataRequester.ACCURACY_THRESHOLD;
-import static org.odk.collect.android.widgets.utilities.GeoDataRequester.DRAGGABLE_ONLY;
-import static org.odk.collect.android.widgets.utilities.GeoDataRequester.LOCATION;
-import static org.odk.collect.android.widgets.utilities.GeoDataRequester.READ_ONLY;
+import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.ACCURACY_THRESHOLD;
+import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.DRAGGABLE_ONLY;
+import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.LOCATION;
+import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.READ_ONLY;
 
 public class GeoWidgetHelpers {
 

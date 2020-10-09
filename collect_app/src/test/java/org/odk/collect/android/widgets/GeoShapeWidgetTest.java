@@ -1,7 +1,9 @@
 package org.odk.collect.android.widgets;
 
+import android.os.Bundle;
 import android.view.View;
 
+import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
@@ -12,7 +14,7 @@ import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.widgets.support.FakeGeoButtonClickListener;
+import org.odk.collect.android.widgets.interfaces.ActivityGeoDataRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
 
@@ -20,8 +22,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.GEOSHAPE_CAPTURE;
-import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.assertGeoPolyBundleArgumentEquals;
 import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.stringFromDoubleList;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
@@ -32,14 +34,15 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 @RunWith(RobolectricTestRunner.class)
 public class GeoShapeWidgetTest {
     private final FakePermissionUtils permissionUtils = new FakePermissionUtils();
-    private final FakeGeoButtonClickListener fakeGeoButtonClickListener = new FakeGeoButtonClickListener();
     private final String answer = stringFromDoubleList();
 
+    private ActivityGeoDataRequester activityGeoDataRequester;
     private WaitingForDataRegistry waitingForDataRegistry;
     private View.OnLongClickListener listener;
 
     @Before
     public void setup() {
+        activityGeoDataRequester = mock(ActivityGeoDataRequester.class);
         waitingForDataRegistry = mock(WaitingForDataRegistry.class);
         listener = mock(View.OnLongClickListener.class);
     }
@@ -152,29 +155,24 @@ public class GeoShapeWidgetTest {
     }
 
     @Test
-    public void buttonClick_whenPromptIsReadOnlyAndDoesNotHaveAnswer_requestsGeoIntentWithCorrectValues() {
-        GeoShapeWidget widget = createWidget(promptWithReadOnly());
+    public void buttonClick_requestsGeoIntent_withCorrectValues() {
+        FormEntryPrompt prompt = promptWithAnswer(new StringData(answer));
+        FormIndex formIndex = mock(FormIndex.class);
+        Bundle bundle = new Bundle();
+
+        when(prompt.getIndex()).thenReturn(formIndex);
+        when(activityGeoDataRequester.requestGeoShape(prompt)).thenReturn(bundle);
+
+        GeoShapeWidget widget = createWidget(prompt);
         widget.setPermissionUtils(permissionUtils);
         widget.binding.simpleButton.performClick();
 
-        assertEquals(fakeGeoButtonClickListener.activityClass, GeoPolyActivity.class);
-        assertEquals(fakeGeoButtonClickListener.requestCode, GEOSHAPE_CAPTURE);
-        assertGeoPolyBundleArgumentEquals(fakeGeoButtonClickListener.geoBundle, "", GeoPolyActivity.OutputMode.GEOSHAPE, true);
-    }
-
-    @Test
-    public void buttonClick_whenPromptIsNotReadOnlyAndHasAnswer_requestsGeoIntentWithCorrectValues() {
-        GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        widget.setPermissionUtils(permissionUtils);
-        widget.binding.simpleButton.performClick();
-
-        assertEquals(fakeGeoButtonClickListener.activityClass, GeoPolyActivity.class);
-        assertEquals(fakeGeoButtonClickListener.requestCode, GEOSHAPE_CAPTURE);
-        assertGeoPolyBundleArgumentEquals(fakeGeoButtonClickListener.geoBundle, answer, GeoPolyActivity.OutputMode.GEOSHAPE, false);
+        verify(activityGeoDataRequester).requestGeoIntent(widget.getContext(), formIndex, waitingForDataRegistry,
+                GeoPolyActivity.class, bundle, GEOSHAPE_CAPTURE);
     }
 
     private GeoShapeWidget createWidget(FormEntryPrompt prompt) {
         return new GeoShapeWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"),
-                waitingForDataRegistry, fakeGeoButtonClickListener);
+                waitingForDataRegistry, activityGeoDataRequester);
     }
 }
