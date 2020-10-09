@@ -82,6 +82,10 @@ public class AudioControllerView extends FrameLayout {
 
     @OnClick(R.id.playBtn)
     void playClicked() {
+        if (listener == null) {
+            return;
+        }
+
         if (playing) {
             listener.onPauseClicked();
         } else {

@@ -10,12 +10,12 @@ import org.odk.collect.async.Scheduler;
 
 import java.util.function.Supplier;
 
-class AudioPlayerViewModelFactory implements ViewModelProvider.Factory {
+public class AudioPlayerViewModelFactory implements ViewModelProvider.Factory {
 
     private final Supplier<MediaPlayer> mediaPlayerFactory;
     private final Scheduler scheduler;
 
-    AudioPlayerViewModelFactory(Supplier<MediaPlayer> mediaPlayerFactory, Scheduler scheduler) {
+    public AudioPlayerViewModelFactory(Supplier<MediaPlayer> mediaPlayerFactory, Scheduler scheduler) {
         this.mediaPlayerFactory = mediaPlayerFactory;
         this.scheduler = scheduler;
     }

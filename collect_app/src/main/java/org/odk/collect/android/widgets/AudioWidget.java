@@ -34,6 +34,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.audio.AudioPlayer;
 import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.databinding.AudioWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -43,8 +44,8 @@ import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -65,6 +66,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 
 @SuppressLint("ViewConstructor")
 public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDataReceiver {
+    private final AudioPlayer audioPlayer;
     AudioWidgetAnswerBinding binding;
     AudioControllerView audioController;
 
@@ -80,14 +82,16 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
     private QuestionMediaManager questionMediaManager;
     private String binaryName;
 
-    public AudioWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
+    public AudioWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, AudioPlayer audioPlayer) {
         this(context, prompt, new FileUtil(), new MediaUtil(), null, questionMediaManager,
-                waitingForDataRegistry, null, new ActivityAvailability(context));
+                waitingForDataRegistry, null, new ActivityAvailability(context), audioPlayer);
     }
 
+    @SuppressWarnings("PMD.ExcessiveParameterList")
     AudioWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, @NonNull AudioControllerView audioController,
-                QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, AudioHelper audioHelper, ActivityAvailability activityAvailability) {
+                QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, AudioHelper audioHelper, ActivityAvailability activityAvailability, AudioPlayer audioPlayer) {
         super(context, questionDetails);
+        this.audioPlayer = audioPlayer;
 
         if (audioHelper != null) {
             this.audioHelper = audioHelper;
@@ -225,7 +229,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
 
     private void updatePlayerMedia() {
         if (binaryName != null) {
-            audioHelper.setAudio(audioController, new Clip(String.valueOf(ViewCompat.generateViewId()), getAudioFile().getAbsolutePath()));
+            audioHelper.setAudio(audioPlayer, audioController, new Clip(String.valueOf(ViewCompat.generateViewId()), getAudioFile().getAbsolutePath()));
             audioController.showPlayer();
         } else {
             audioController.hidePlayer();
@@ -272,7 +276,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
             ((Activity) getContext()).startActivityForResult(intent, RequestCodes.AUDIO_CAPTURE);
         } else {
             Toast.makeText(getContext(), getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.capture_audio)), Toast.LENGTH_SHORT).show();
+                    getContext().getString(R.string.capture_audio)), Toast.LENGTH_SHORT).show();
             waitingForDataRegistry.cancelWaitingForData();
         }
     }
@@ -286,7 +290,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
             ((Activity) getContext()).startActivityForResult(intent, RequestCodes.AUDIO_CHOOSER);
         } else {
             Toast.makeText(getContext(), getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.choose_audio)), Toast.LENGTH_SHORT).show();
+                    getContext().getString(R.string.choose_audio)), Toast.LENGTH_SHORT).show();
             waitingForDataRegistry.cancelWaitingForData();
         }
     }

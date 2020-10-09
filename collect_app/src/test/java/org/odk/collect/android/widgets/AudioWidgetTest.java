@@ -20,6 +20,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.audio.AudioPlayer;
 import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -77,6 +78,7 @@ public class AudioWidgetTest {
     private ActivityAvailability activityAvailability;
     private FormIndex formIndex;
     private File mockedFile;
+    private AudioPlayer audioPlayer;
 
     @Before
     public void setUp() {
@@ -90,6 +92,7 @@ public class AudioWidgetTest {
         formIndex = mock(FormIndex.class);
         mockedFile = mock(File.class);
         audioHelper = new FakeAudioHelper(widgetActivity, new FakeLifecycleOwner(), fakeScheduler, () -> mediaPlayer);
+        audioPlayer = mock(AudioPlayer.class);
 
         when(mockedFile.exists()).thenReturn(true);
         when(mockedFile.getName()).thenReturn("newFile.mp3");
@@ -134,6 +137,7 @@ public class AudioWidgetTest {
 
         assertThat(audioHelper.audioController, equalTo(audioController));
         assertThat(audioHelper.clip.getURI(), equalTo(clip.getURI()));
+        assertThat(audioHelper.audioPlayer, equalTo(audioPlayer));
         verify(audioController).showPlayer();
     }
 
@@ -262,6 +266,7 @@ public class AudioWidgetTest {
 
         assertThat(audioHelper.audioController, equalTo(audioController));
         assertThat(audioHelper.clip.getURI(), equalTo(clip.getURI()));
+        assertThat(audioHelper.audioPlayer, equalTo(audioPlayer));
         verify(audioController, times(2)).showPlayer();
     }
 
@@ -374,8 +379,18 @@ public class AudioWidgetTest {
     }
 
     public AudioWidget createWidget(FormEntryPrompt prompt) {
-        return new AudioWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"), fileUtil,
-                mediaUtil, audioController, questionMediaManager, waitingForDataRegistry, audioHelper, activityAvailability);
+        return new AudioWidget(
+                widgetActivity,
+                new QuestionDetails(prompt, "formAnalyticsID"),
+                fileUtil,
+                mediaUtil,
+                audioController,
+                questionMediaManager,
+                waitingForDataRegistry,
+                audioHelper,
+                activityAvailability,
+                audioPlayer
+        );
     }
 
     private Clip getAnswerAudioClip(String instanceFolderPath, IAnswerData answer) {
@@ -389,6 +404,7 @@ public class AudioWidgetTest {
     private static class FakeAudioHelper extends AudioHelper {
         public AudioControllerView audioController;
         public Clip clip;
+        public AudioPlayer audioPlayer;
 
         public boolean isMediaStopped;
 
@@ -399,6 +415,12 @@ public class AudioWidgetTest {
 
         @Override
         public void setAudio(AudioControllerView view, Clip clip) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void setAudio(AudioPlayer audioPlayer, AudioControllerView view, Clip clip) {
+            this.audioPlayer = audioPlayer;
             this.audioController = view;
             this.clip = clip;
         }

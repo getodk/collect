@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.function.Supplier;
 
-class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletionListener {
+public class AudioPlayerViewModel extends ViewModel implements MediaPlayer.OnCompletionListener {
 
     private final Supplier<MediaPlayer> mediaPlayerFactory;
     private final Scheduler scheduler;

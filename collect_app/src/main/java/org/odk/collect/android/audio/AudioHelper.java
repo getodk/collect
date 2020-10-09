@@ -79,6 +79,28 @@ public class AudioHelper {
         view.setListener(new AudioControllerViewListener(viewModel, clip.getURI(), clip.getClipID()));
     }
 
+    public void setAudio(AudioPlayer audioPlayer, AudioControllerView view, Clip clip) {
+        audioPlayer.isPlaying(clip.getClipID()).observe(lifecycleOwner, view::setPlaying);
+        audioPlayer.getPosition(clip.getClipID()).observe(lifecycleOwner, view::setPosition);
+        view.setDuration(getDurationOfFile(clip.getURI()));
+        view.setListener(new AudioControllerView.Listener() {
+            @Override
+            public void onPlayClicked() {
+                audioPlayer.play(clip);
+            }
+
+            @Override
+            public void onPauseClicked() {
+                audioPlayer.pause();
+            }
+
+            @Override
+            public void onPositionChanged(Integer newPosition) {
+                audioPlayer.setPosition(clip.getClipID(), newPosition);
+            }
+        });
+    }
+
     public void play(Clip clip) {
         viewModel.play(clip);
     }

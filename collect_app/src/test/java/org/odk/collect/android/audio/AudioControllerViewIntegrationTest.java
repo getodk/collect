@@ -7,6 +7,7 @@ import android.widget.ProgressBar;
 import android.widget.SeekBar;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
@@ -39,12 +40,17 @@ public class AudioControllerViewIntegrationTest {
 
     private FragmentActivity activity;
     private AudioHelper audioHelper;
+    private AudioPlayer audioPlayer;
 
     @Before
     public void setup() {
         activity = RobolectricHelpers.createThemedActivity(SwipableParentActivity.class);
-
         audioHelper = new AudioHelper(activity, new FakeLifecycleOwner(), fakeScheduler, () -> mediaPlayer);
+
+        AudioPlayerViewModelFactory factory = new AudioPlayerViewModelFactory(() -> mediaPlayer, fakeScheduler);
+        audioPlayer = new ViewModelAudioPlayer(ViewModelProviders
+                .of(activity, factory)
+                .get(AudioPlayerViewModel.class));
     }
 
     @Test
@@ -53,7 +59,7 @@ public class AudioControllerViewIntegrationTest {
         final DataSource dataSource = setupMediaPlayerDataSource(testFile);
 
         AudioControllerView view = new AudioControllerView(activity);
-        audioHelper.setAudio(view, new Clip("clip1", testFile));
+        audioHelper.setAudio(audioPlayer, view, new Clip("clip1", testFile));
 
         ImageButton playButton = view.findViewById(R.id.playBtn);
         assertThat(getCreatedFromResId(playButton), equalTo(R.drawable.ic_play_arrow_24dp));
@@ -265,7 +271,7 @@ public class AudioControllerViewIntegrationTest {
         setupMediaPlayerDataSource(testFile, fileLength);
 
         AudioControllerView view = new AudioControllerView(activity);
-        audioHelper.setAudio(view, new Clip(clipID, testFile));
+        audioHelper.setAudio(audioPlayer, view, new Clip(clipID, testFile));
         return view;
     }
 }

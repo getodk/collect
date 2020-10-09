@@ -52,6 +52,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.audio.AudioPlayer;
 import org.odk.collect.android.audio.PlaybackFailedException;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
@@ -102,6 +103,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
     public static final String FIELD_LIST = "field-list";
     private final WaitingForDataRegistry waitingForDataRegistry;
+    private final AudioPlayer audioPlayer;
 
     private WidgetValueChangedListener widgetValueChangedListener;
 
@@ -113,16 +115,17 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
     /**
      * Builds the view for a specified question or field-list of questions.
-     *  @param context         the activity creating this view
+     * @param context         the activity creating this view
      * @param questionPrompts the questions to be included in this view
      * @param groups          the group hierarchy that this question or field list is in
      * @param advancingPage   whether this view is being created after a forward swipe through the
      */
     public ODKView(Context context, final FormEntryPrompt[] questionPrompts, FormEntryCaption[] groups,
-                   boolean advancingPage, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
+                   boolean advancingPage, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, AudioPlayer audioPlayer) {
         super(context);
         this.questionMediaManager = questionMediaManager;
         this.waitingForDataRegistry = waitingForDataRegistry;
+        this.audioPlayer = audioPlayer;
 
         getComponent(context).inject(this);
         this.audioHelper = audioHelperFactory.create(context);
@@ -264,7 +267,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      */
     private QuestionWidget configureWidgetForQuestion(FormEntryPrompt question, boolean readOnlyOverride) {
         QuestionWidget qw = WidgetFactory.createWidgetFromPrompt(question, getContext(), readOnlyOverride,
-                waitingForDataRegistry, questionMediaManager, analytics);
+                waitingForDataRegistry, questionMediaManager, analytics, audioPlayer);
         qw.setOnLongClickListener(this);
         qw.setValueChangedListener(this);
 

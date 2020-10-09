@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -75,6 +76,9 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioControllerView;
+import org.odk.collect.android.audio.AudioPlayerViewModel;
+import org.odk.collect.android.audio.AudioPlayerViewModelFactory;
+import org.odk.collect.android.audio.ViewModelAudioPlayer;
 import org.odk.collect.android.backgroundwork.FormSubmitManager;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
@@ -101,7 +105,6 @@ import org.odk.collect.android.formentry.repeats.AddRepeatDialog;
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
-import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog;
@@ -154,6 +157,7 @@ import org.odk.collect.android.widgets.RangePickerIntegerWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.FormControllerWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.async.Scheduler;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -322,7 +326,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     FormSubmitManager formSubmitManager;
 
     @Inject
-    FormsRepository formsRepository;
+    Scheduler scheduler;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -1295,7 +1299,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @NotNull
     private ODKView createODKView(boolean advancingPage, FormEntryPrompt[] prompts, FormEntryCaption[] groups) {
         odkViewLifecycle.start();
-        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry);
+
+        AudioPlayerViewModelFactory factory = new AudioPlayerViewModelFactory(MediaPlayer::new, scheduler);
+        ViewModelAudioPlayer viewModelAudioPlayer = new ViewModelAudioPlayer(ViewModelProviders
+                .of(this, factory)
+                .get(AudioPlayerViewModel.class));
+
+        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer);
     }
 
     @Override
