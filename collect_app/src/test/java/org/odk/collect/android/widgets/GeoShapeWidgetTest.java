@@ -1,20 +1,16 @@
 package org.odk.collect.android.widgets;
 
-import android.os.Bundle;
 import android.view.View;
 
-import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.GeoPolyActivity;
-import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.widgets.interfaces.ActivityGeoDataRequester;
+import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
 
@@ -22,8 +18,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.GEOSHAPE_CAPTURE;
 import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.stringFromDoubleList;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
@@ -33,18 +27,15 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 
 @RunWith(RobolectricTestRunner.class)
 public class GeoShapeWidgetTest {
-    private final FakePermissionUtils permissionUtils = new FakePermissionUtils();
     private final String answer = stringFromDoubleList();
 
-    private ActivityGeoDataRequester activityGeoDataRequester;
+    private GeoDataRequester geoDataRequester;
     private WaitingForDataRegistry waitingForDataRegistry;
-    private View.OnLongClickListener listener;
 
     @Before
     public void setup() {
-        activityGeoDataRequester = mock(ActivityGeoDataRequester.class);
+        geoDataRequester = mock(GeoDataRequester.class);
         waitingForDataRegistry = mock(WaitingForDataRegistry.class);
-        listener = mock(View.OnLongClickListener.class);
     }
 
     @Test
@@ -115,7 +106,9 @@ public class GeoShapeWidgetTest {
 
     @Test
     public void clickingButtonAndAnswerTextViewForLong_callsLongClickListeners() {
+        View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
         GeoShapeWidget widget = createWidget(promptWithAnswer(null));
+
         widget.setOnLongClickListener(listener);
         widget.binding.simpleButton.performLongClick();
         widget.binding.geoAnswerText.performLongClick();
@@ -155,24 +148,16 @@ public class GeoShapeWidgetTest {
     }
 
     @Test
-    public void buttonClick_requestsGeoIntent_withCorrectValues() {
+    public void buttonClick_requestsGeoShape() {
         FormEntryPrompt prompt = promptWithAnswer(new StringData(answer));
-        FormIndex formIndex = mock(FormIndex.class);
-        Bundle bundle = new Bundle();
-
-        when(prompt.getIndex()).thenReturn(formIndex);
-        when(activityGeoDataRequester.requestGeoShape(prompt)).thenReturn(bundle);
-
         GeoShapeWidget widget = createWidget(prompt);
-        widget.setPermissionUtils(permissionUtils);
         widget.binding.simpleButton.performClick();
 
-        verify(activityGeoDataRequester).requestGeoIntent(widget.getContext(), formIndex, waitingForDataRegistry,
-                GeoPolyActivity.class, bundle, GEOSHAPE_CAPTURE);
+        verify(geoDataRequester).requestGeoShape(widget.getContext(), prompt, waitingForDataRegistry);
     }
 
     private GeoShapeWidget createWidget(FormEntryPrompt prompt) {
         return new GeoShapeWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"),
-                waitingForDataRegistry, activityGeoDataRequester);
+                waitingForDataRegistry, geoDataRequester);
     }
 }

@@ -41,9 +41,9 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.DRAGGABLE_ONLY;
-import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.LOCATION;
-import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.READ_ONLY;
+import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.DRAGGABLE_ONLY;
+import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.LOCATION;
+import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.READ_ONLY;
 
 /**
  * Allow the user to indicate a location by placing a marker on a map, either

@@ -1,60 +1,46 @@
 package org.odk.collect.android.widgets;
 
-import android.os.Bundle;
 import android.view.View;
 
-import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.GeoPolyActivity;
-import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.support.TestScreenContextActivity;
-import org.odk.collect.android.widgets.interfaces.ActivityGeoDataRequester;
+import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.GEOTRACE_CAPTURE;
 import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.stringFromDoubleList;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
-import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 public class GeoTraceWidgetTest {
-    private final FakePermissionUtils permissionUtils = new FakePermissionUtils();
     private final String answer = stringFromDoubleList();
 
-    private TestScreenContextActivity widgetActivity;
     private WaitingForDataRegistry waitingForDataRegistry;
-    private ActivityGeoDataRequester activityGeoDataRequester;
+    private GeoDataRequester geoDataRequester;
     private MapConfigurator mapConfigurator;
-    private View.OnLongClickListener listener;
 
     @Before
     public void setup() {
-        widgetActivity = widgetTestActivity();
         waitingForDataRegistry = mock(WaitingForDataRegistry.class);
-        activityGeoDataRequester = mock(ActivityGeoDataRequester.class);
+        geoDataRequester = mock(GeoDataRequester.class);
         mapConfigurator = mock(MapConfigurator.class);
-        listener = mock(View.OnLongClickListener.class);
-
-        when(mapConfigurator.isAvailable(any())).thenReturn(true);
     }
 
     @Test
@@ -125,7 +111,9 @@ public class GeoTraceWidgetTest {
 
     @Test
     public void clickingButtonAndAnswerTextViewForLong_callsLongClickListener() {
+        View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
         GeoTraceWidget widget = createWidget(promptWithAnswer(null));
+
         widget.setOnLongClickListener(listener);
         widget.binding.simpleButton.performLongClick();
         widget.binding.geoAnswerText.performLongClick();
@@ -172,36 +160,30 @@ public class GeoTraceWidgetTest {
     }
 
     @Test
-    public void buttonClick_whenMapConfiguratorIsUnavailable_doesNotLaunchAnyIntent() {
-        GeoTraceWidget widget = createWidget(promptWithReadOnly());
-        when(mapConfigurator.isAvailable(widget.getContext())).thenReturn(false);
+    public void buttonClick_whenMapConfiguratorIsUnavailable_doesNotRequestGeoTrace() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        GeoTraceWidget widget = createWidget(prompt);
 
-        widget.setPermissionUtils(permissionUtils);
+        when(mapConfigurator.isAvailable(widget.getContext())).thenReturn(false);
         widget.binding.simpleButton.performClick();
 
-        assertNull(shadowOf(widgetActivity).getNextStartedActivity());
+        verify(geoDataRequester, never()).requestGeoTrace(widget.getContext(), prompt, waitingForDataRegistry);
         verify(mapConfigurator).showUnavailableMessage(widget.getContext());
     }
 
     @Test
-    public void buttonClick_requestsGeoIntent_withCorrectValues() {
-        FormEntryPrompt prompt = promptWithAnswer(new StringData(answer));
-        FormIndex formIndex = mock(FormIndex.class);
-        Bundle bundle = new Bundle();
-
-        when(prompt.getIndex()).thenReturn(formIndex);
-        when(activityGeoDataRequester.requestGeoTrace(prompt)).thenReturn(bundle);
-
+    public void buttonClick_whenMapConfiguratorIsAvailable_requestsGeoTrace() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
         GeoTraceWidget widget = createWidget(prompt);
-        widget.setPermissionUtils(permissionUtils);
+
+        when(mapConfigurator.isAvailable(widget.getContext())).thenReturn(true);
         widget.binding.simpleButton.performClick();
 
-        verify(activityGeoDataRequester).requestGeoIntent(widget.getContext(), formIndex, waitingForDataRegistry,
-                GeoPolyActivity.class, bundle, GEOTRACE_CAPTURE);
+        verify(geoDataRequester).requestGeoTrace(widget.getContext(), prompt, waitingForDataRegistry);
     }
 
     private GeoTraceWidget createWidget(FormEntryPrompt prompt) {
-        return new GeoTraceWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"),
-                waitingForDataRegistry, mapConfigurator, activityGeoDataRequester);
+        return new GeoTraceWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"),
+                waitingForDataRegistry, mapConfigurator, geoDataRequester);
     }
 }

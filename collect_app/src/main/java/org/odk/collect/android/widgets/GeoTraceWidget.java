@@ -25,15 +25,12 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.interfaces.ActivityGeoDataRequester;
+import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
-
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.GEOTRACE_CAPTURE;
 
 /**
  * GeoTraceWidget allows the user to collect a trace of GPS points as the
@@ -45,14 +42,14 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
 
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final MapConfigurator mapConfigurator;
-    private final ActivityGeoDataRequester activityGeoDataRequester;
+    private final GeoDataRequester geoDataRequester;
 
     public GeoTraceWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry,
-                          MapConfigurator mapConfigurator, ActivityGeoDataRequester activityGeoDataRequester) {
+                          MapConfigurator mapConfigurator, GeoDataRequester geoDataRequester) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.mapConfigurator = mapConfigurator;
-        this.activityGeoDataRequester = activityGeoDataRequester;
+        this.geoDataRequester = geoDataRequester;
     }
 
     @Override
@@ -64,8 +61,7 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
 
         binding.simpleButton.setOnClickListener(v -> {
             if (mapConfigurator.isAvailable(context)) {
-                activityGeoDataRequester.requestGeoIntent(context, prompt.getIndex(), waitingForDataRegistry,
-                        GeoPolyActivity.class, activityGeoDataRequester.requestGeoTrace(prompt), GEOTRACE_CAPTURE);
+                geoDataRequester.requestGeoTrace(context, prompt, waitingForDataRegistry);
             } else {
                 mapConfigurator.showUnavailableMessage(context);
             }
