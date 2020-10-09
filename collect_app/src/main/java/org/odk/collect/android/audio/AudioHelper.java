@@ -66,22 +66,9 @@ public class AudioHelper {
         return isPlaying;
     }
 
-    /**
-     * @param view   The control being used for playback
-     * @param clip   The clip to be played
-     */
-    public void setAudio(AudioControllerView view, Clip clip) {
-        AudioPlayerViewModel viewModel = this.viewModel;
-
-        viewModel.isPlaying(clip.getClipID()).observe(lifecycleOwner, view::setPlaying);
-        viewModel.getPosition(clip.getClipID()).observe(lifecycleOwner, view::setPosition);
-        view.setDuration(getDurationOfFile(clip.getURI()));
-        view.setListener(new AudioControllerViewListener(viewModel, clip.getURI(), clip.getClipID()));
-    }
-
     public void setAudio(AudioPlayer audioPlayer, AudioControllerView view, Clip clip) {
-        audioPlayer.isPlaying(clip.getClipID()).observe(lifecycleOwner, view::setPlaying);
-        audioPlayer.getPosition(clip.getClipID()).observe(lifecycleOwner, view::setPosition);
+        audioPlayer.onPlayingChanged(clip.getClipID(), view::setPlaying);
+        audioPlayer.onPositionChanged(clip.getClipID(), view::setPosition);
         view.setDuration(getDurationOfFile(clip.getURI()));
         view.setListener(new AudioControllerView.Listener() {
             @Override
@@ -131,34 +118,6 @@ public class AudioHelper {
     private void registerLifecycleCallbacks(FragmentActivity activity, LifecycleOwner lifecycleOwner) {
         activity.getLifecycle().addObserver(new BackgroundObserver(viewModel));
         lifecycleOwner.getLifecycle().addObserver(new BackgroundObserver(viewModel));
-    }
-
-    private static class AudioControllerViewListener implements AudioControllerView.Listener {
-
-        private final AudioPlayerViewModel viewModel;
-        private final String uri;
-        private final String clipID;
-
-        AudioControllerViewListener(AudioPlayerViewModel viewModel, String uri, String clipID) {
-            this.viewModel = viewModel;
-            this.uri = uri;
-            this.clipID = clipID;
-        }
-
-        @Override
-        public void onPlayClicked() {
-            viewModel.play(new Clip(clipID, uri));
-        }
-
-        @Override
-        public void onPauseClicked() {
-            viewModel.pause();
-        }
-
-        @Override
-        public void onPositionChanged(Integer newPosition) {
-            viewModel.setPosition(clipID, newPosition);
-        }
     }
 
     private static class AudioButtonListener implements AudioButton.Listener {

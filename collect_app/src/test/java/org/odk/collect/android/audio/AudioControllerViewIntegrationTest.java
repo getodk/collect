@@ -50,7 +50,7 @@ public class AudioControllerViewIntegrationTest {
         AudioPlayerViewModelFactory factory = new AudioPlayerViewModelFactory(() -> mediaPlayer, fakeScheduler);
         audioPlayer = new ViewModelAudioPlayer(ViewModelProviders
                 .of(activity, factory)
-                .get(AudioPlayerViewModel.class));
+                .get(AudioPlayerViewModel.class), new FakeLifecycleOwner());
     }
 
     @Test

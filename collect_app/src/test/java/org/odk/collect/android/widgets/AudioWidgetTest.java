@@ -414,11 +414,6 @@ public class AudioWidgetTest {
         }
 
         @Override
-        public void setAudio(AudioControllerView view, Clip clip) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
         public void setAudio(AudioPlayer audioPlayer, AudioControllerView view, Clip clip) {
             this.audioPlayer = audioPlayer;
             this.audioController = view;

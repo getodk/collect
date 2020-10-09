@@ -1303,7 +1303,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         AudioPlayerViewModelFactory factory = new AudioPlayerViewModelFactory(MediaPlayer::new, scheduler);
         ViewModelAudioPlayer viewModelAudioPlayer = new ViewModelAudioPlayer(ViewModelProviders
                 .of(this, factory)
-                .get(AudioPlayerViewModel.class));
+                .get(AudioPlayerViewModel.class), odkViewLifecycle);
 
         return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer);
     }

@@ -1,13 +1,18 @@
 package org.odk.collect.android.audio;
 
-import androidx.lifecycle.LiveData;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
+
+import java.util.function.Consumer;
 
 public class ViewModelAudioPlayer implements AudioPlayer {
 
     private final AudioPlayerViewModel viewModel;
+    private final LifecycleOwner lifecycleOwner;
 
-    public ViewModelAudioPlayer(AudioPlayerViewModel viewModel) {
+    public ViewModelAudioPlayer(AudioPlayerViewModel viewModel, LifecycleOwner lifecycleOwner) {
         this.viewModel = viewModel;
+        this.lifecycleOwner = lifecycleOwner;
     }
 
     @Override
@@ -16,22 +21,22 @@ public class ViewModelAudioPlayer implements AudioPlayer {
     }
 
     @Override
-    public LiveData<Boolean> isPlaying(String clipId) {
-        return viewModel.isPlaying(clipId);
-    }
-
-    @Override
     public void pause() {
         viewModel.pause();
     }
 
     @Override
-    public LiveData<Integer> getPosition(String clipId) {
-        return viewModel.getPosition(clipId);
+    public void setPosition(String clipId, Integer position) {
+        viewModel.setPosition(clipId, position);
     }
 
     @Override
-    public void setPosition(String clipId, Integer position) {
-        viewModel.setPosition(clipId, position);
+    public void onPlayingChanged(String clipID, Consumer<Boolean> playingConsumer) {
+        viewModel.isPlaying(clipID).observe(lifecycleOwner, (Observer<Boolean>) playingConsumer::accept);
+    }
+
+    @Override
+    public void onPositionChanged(String clipID, Consumer<Integer> positionConsumer) {
+        viewModel.getPosition(clipID).observe(lifecycleOwner, (Observer<Integer>) positionConsumer::accept);
     }
 }
