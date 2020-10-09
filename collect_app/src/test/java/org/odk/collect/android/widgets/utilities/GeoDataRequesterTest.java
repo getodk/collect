@@ -35,15 +35,15 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.LOCATION_CAPTURE;
 import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.getRandomDoubleArray;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
-import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.ACCURACY_THRESHOLD;
-import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.DEFAULT_LOCATION_ACCURACY;
+import static org.odk.collect.android.widgets.utilities.GeoDataRequester.ACCURACY_THRESHOLD;
+import static org.odk.collect.android.widgets.utilities.GeoDataRequester.DEFAULT_LOCATION_ACCURACY;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-public class GeoWidgetUtilsTest {
+public class GeoDataRequesterTest {
     private static final String STRING_ARG = "STRING_ARG";
 
-    private final GeoWidgetUtils geoWidgetUtils = new GeoWidgetUtils();
+    private final GeoDataRequester geoDataRequester = new GeoDataRequester();
     private final FakePermissionUtils permissionUtils = new FakePermissionUtils();
     private final GeoPointData answer = new GeoPointData(getRandomDoubleArray());
     private final Bundle bundle = new Bundle();
@@ -74,42 +74,42 @@ public class GeoWidgetUtilsTest {
 
     @Test
     public void getAccuracyThreshold_whenAccuracyThresholdIsNull_returnsDefaultValue() {
-        assertEquals(GeoWidgetUtils.getAccuracyThreshold(questionDef), DEFAULT_LOCATION_ACCURACY);
+        assertEquals(GeoDataRequester.getAccuracyThreshold(questionDef), DEFAULT_LOCATION_ACCURACY);
     }
 
     @Test
     public void getAccuracyThreshold_whenAccuracyThresholdIsNotNull_returnsAccuracyThreshold() {
         when(questionDef.getAdditionalAttribute(null, ACCURACY_THRESHOLD)).thenReturn("3");
-        assertEquals(GeoWidgetUtils.getAccuracyThreshold(questionDef), Double.parseDouble("3"));
+        assertEquals(GeoDataRequester.getAccuracyThreshold(questionDef), Double.parseDouble("3"));
     }
 
     @Test
     public void getAnswerToDisplay_whenAnswerIsNull_returnsEmptyString() {
-        assertEquals(GeoWidgetUtils.getAnswerToDisplay(context, null), "");
+        assertEquals(GeoDataRequester.getAnswerToDisplay(context, null), "");
     }
 
     @Test
     public void getAnswerToDisplay_whenAnswerIsNotConvertible_returnsEmptyString() {
-        assertEquals(GeoWidgetUtils.getAnswerToDisplay(context, "blah"), "");
+        assertEquals(GeoDataRequester.getAnswerToDisplay(context, "blah"), "");
     }
 
     @Test
     public void getAnswerToDisplay_whenAnswerIsNotNullAndConvertible_returnsAnswer() {
         String stringAnswer = answer.getDisplayText();
         String[] parts = stringAnswer.split(" ");
-        assertEquals(GeoWidgetUtils.getAnswerToDisplay(context, stringAnswer), context.getString(
+        assertEquals(GeoDataRequester.getAnswerToDisplay(context, stringAnswer), context.getString(
                 R.string.gps_result,
-                GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(context, Double.parseDouble(parts[0]), "lat"),
-                GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(context, Double.parseDouble(parts[1]), "lon"),
-                GeoWidgetUtils.truncateDouble(parts[2]),
-                GeoWidgetUtils.truncateDouble(parts[3])
+                GeoDataRequester.convertCoordinatesIntoDegreeFormat(context, Double.parseDouble(parts[0]), "lat"),
+                GeoDataRequester.convertCoordinatesIntoDegreeFormat(context, Double.parseDouble(parts[1]), "lon"),
+                GeoDataRequester.truncateDouble(parts[2]),
+                GeoDataRequester.truncateDouble(parts[3])
         ));
     }
 
     @Test
     public void whenPermissionIsNotGranted_onButtonClickedShouldNotLaunchAnyIntent() {
         permissionUtils.setPermissionGranted(false);
-        geoWidgetUtils.onButtonClicked(testActivity, formIndex, permissionUtils, null,
+        geoDataRequester.onButtonClicked(testActivity, formIndex, permissionUtils, null,
                 waitingForDataRegistry, GeoPointActivity.class, null, LOCATION_CAPTURE);
         Intent startedIntent = shadowOf(testActivity).getNextStartedActivity();
 
@@ -119,7 +119,7 @@ public class GeoWidgetUtilsTest {
     @Test
     public void whenMapConfiguratorIsNotAvailable_widgetShowsUnavailableMessage() {
         when(mapConfigurator.isAvailable(any())).thenReturn(false);
-        geoWidgetUtils.onButtonClicked(testActivity, formIndex, permissionUtils, mapConfigurator,
+        geoDataRequester.onButtonClicked(testActivity, formIndex, permissionUtils, mapConfigurator,
                 waitingForDataRegistry, GeoPointActivity.class, null, LOCATION_CAPTURE);
 
         verify(mapConfigurator).showUnavailableMessage(testActivity);
@@ -127,7 +127,7 @@ public class GeoWidgetUtilsTest {
 
     @Test
     public void whenPermissionIsGranted_onButtonClickedWaitsForLocationData() {
-        geoWidgetUtils.onButtonClicked(testActivity, formIndex, permissionUtils, mapConfigurator,
+        geoDataRequester.onButtonClicked(testActivity, formIndex, permissionUtils, mapConfigurator,
                 waitingForDataRegistry, GeoPointActivity.class, bundle, LOCATION_CAPTURE);
 
         verify(waitingForDataRegistry).waitForData(formIndex);
@@ -135,7 +135,7 @@ public class GeoWidgetUtilsTest {
 
     @Test
     public void onButtonClickedShouldLaunchCorrectIntent_forGeoPointWidget() {
-        geoWidgetUtils.onButtonClicked(testActivity, formIndex, permissionUtils, null,
+        geoDataRequester.onButtonClicked(testActivity, formIndex, permissionUtils, null,
                 waitingForDataRegistry, GeoPointActivity.class, bundle, LOCATION_CAPTURE);
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
 
@@ -145,7 +145,7 @@ public class GeoWidgetUtilsTest {
 
     @Test
     public void onButtonClickedShouldLaunchCorrectIntent_forGeoPointMapWidget() {
-        geoWidgetUtils.onButtonClicked(testActivity, formIndex, permissionUtils, null,
+        geoDataRequester.onButtonClicked(testActivity, formIndex, permissionUtils, null,
                 waitingForDataRegistry, GeoPointMapActivity.class, bundle, LOCATION_CAPTURE);
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
 
@@ -155,7 +155,7 @@ public class GeoWidgetUtilsTest {
 
     @Test
     public void onButtonClickedShouldLaunchCorrectIntent_forGeoShapeWidget() {
-        geoWidgetUtils.onButtonClicked(testActivity, formIndex, permissionUtils, null,
+        geoDataRequester.onButtonClicked(testActivity, formIndex, permissionUtils, null,
                 waitingForDataRegistry, GeoPolyActivity.class, bundle, GEOSHAPE_CAPTURE);
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
 
@@ -165,7 +165,7 @@ public class GeoWidgetUtilsTest {
 
     @Test
     public void onButtonClickedShouldLaunchCorrectIntent_forGeoTraceWidget() {
-        geoWidgetUtils.onButtonClicked(testActivity, formIndex, permissionUtils, null,
+        geoDataRequester.onButtonClicked(testActivity, formIndex, permissionUtils, null,
                 waitingForDataRegistry, GeoPolyActivity.class, bundle, GEOTRACE_CAPTURE);
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
 
@@ -175,28 +175,28 @@ public class GeoWidgetUtilsTest {
 
     @Test
     public void setButtonLabelAndVisibility_doesNotShowButton_whenWidgetIsReadOnlyAndDoesNotHaveAnswer() {
-        geoWidgetUtils.setButtonLabelAndVisibility(binding, true, false,
+        geoDataRequester.setButtonLabelAndVisibility(binding, true, false,
                 R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
         assertEquals(binding.simpleButton.getVisibility(), View.GONE);
     }
 
     @Test
     public void setButtonLabelAndVisibility_showsButtonWithCorrectLabel_whenWidgetIsReadOnlyAndHasAnswerData() {
-        geoWidgetUtils.setButtonLabelAndVisibility(binding, true, true,
+        geoDataRequester.setButtonLabelAndVisibility(binding, true, true,
                 R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
         assertEquals(binding.simpleButton.getText(), context.getString(R.string.geopoint_view_read_only));
     }
 
     @Test
     public void setButtonLabelAndVisibility_showsButtonWithCorrectLabel_whenWidgetIsNotReadOnlyAndDoesNotHaveAnswer() {
-        geoWidgetUtils.setButtonLabelAndVisibility(binding, false, false,
+        geoDataRequester.setButtonLabelAndVisibility(binding, false, false,
                 R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
         assertEquals(binding.simpleButton.getText(), context.getString(R.string.get_point));
     }
 
     @Test
     public void setButtonLabelAndVisibility_showsButtonWithCorrectLabel_whenWidgetIsNotReadOnlyAndHasAnswer() {
-        geoWidgetUtils.setButtonLabelAndVisibility(binding, false, true,
+        geoDataRequester.setButtonLabelAndVisibility(binding, false, true,
                 R.string.geopoint_view_read_only, R.string.view_change_location, R.string.get_point);
         assertEquals(binding.simpleButton.getText(), context.getString(R.string.view_change_location));
     }
@@ -204,60 +204,60 @@ public class GeoWidgetUtilsTest {
     @Test
     // Results confirmed with https://www.sunearthtools.com/dp/tools/conversion.php
     public void convertCoordinatesIntoDegreeFormatTest() {
-        assertEquals("N 37°27'5\"", GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(context, 37.45153333333334, "lat"));
-        assertEquals("W 122°9'19\"", GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(context, -122.15539166666667, "lon"));
+        assertEquals("N 37°27'5\"", GeoDataRequester.convertCoordinatesIntoDegreeFormat(context, 37.45153333333334, "lat"));
+        assertEquals("W 122°9'19\"", GeoDataRequester.convertCoordinatesIntoDegreeFormat(context, -122.15539166666667, "lon"));
 
-        assertEquals("N 3°51'4\"", GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(context, 3.8513583333333337, "lat"));
-        assertEquals("W 70°2'11\"", GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(context, -70.03650333333333, "lon"));
+        assertEquals("N 3°51'4\"", GeoDataRequester.convertCoordinatesIntoDegreeFormat(context, 3.8513583333333337, "lat"));
+        assertEquals("W 70°2'11\"", GeoDataRequester.convertCoordinatesIntoDegreeFormat(context, -70.03650333333333, "lon"));
 
-        assertEquals("S 31°8'40\"", GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(context, -31.144546666666663, "lat"));
-        assertEquals("E 138°16'15\"", GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(context, 138.27083666666667, "lon"));
+        assertEquals("S 31°8'40\"", GeoDataRequester.convertCoordinatesIntoDegreeFormat(context, -31.144546666666663, "lat"));
+        assertEquals("E 138°16'15\"", GeoDataRequester.convertCoordinatesIntoDegreeFormat(context, 138.27083666666667, "lon"));
 
-        assertEquals("N 61°23'15\"", GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(context, 61.38757333333333, "lat"));
-        assertEquals("W 150°55'37\"", GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(context, -150.92708666666667, "lon"));
+        assertEquals("N 61°23'15\"", GeoDataRequester.convertCoordinatesIntoDegreeFormat(context, 61.38757333333333, "lat"));
+        assertEquals("W 150°55'37\"", GeoDataRequester.convertCoordinatesIntoDegreeFormat(context, -150.92708666666667, "lon"));
 
-        assertEquals("N 0°0'0\"", GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(context, 0, "lat"));
-        assertEquals("E 0°0'0\"", GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(context, 0, "lon"));
+        assertEquals("N 0°0'0\"", GeoDataRequester.convertCoordinatesIntoDegreeFormat(context, 0, "lat"));
+        assertEquals("E 0°0'0\"", GeoDataRequester.convertCoordinatesIntoDegreeFormat(context, 0, "lon"));
     }
 
     @Test
     public void floorTest() {
-        assertEquals("5", GeoWidgetUtils.floor("5"));
-        assertEquals("-5", GeoWidgetUtils.floor("-5"));
-        assertEquals("5", GeoWidgetUtils.floor("5.55"));
-        assertEquals("-5", GeoWidgetUtils.floor("-5.55"));
-        assertEquals("", GeoWidgetUtils.floor(""));
-        assertEquals("", GeoWidgetUtils.floor(null));
-        assertEquals("qwerty", GeoWidgetUtils.floor("qwerty"));
+        assertEquals("5", GeoDataRequester.floor("5"));
+        assertEquals("-5", GeoDataRequester.floor("-5"));
+        assertEquals("5", GeoDataRequester.floor("5.55"));
+        assertEquals("-5", GeoDataRequester.floor("-5.55"));
+        assertEquals("", GeoDataRequester.floor(""));
+        assertEquals("", GeoDataRequester.floor(null));
+        assertEquals("qwerty", GeoDataRequester.floor("qwerty"));
     }
 
     @Test
     public void getLocationParamsFromStringAnswerTest() {
-        double[] gp = GeoWidgetUtils.getLocationParamsFromStringAnswer("37.45153333333334 -122.15539166666667 0.0 20.0");
+        double[] gp = GeoDataRequester.getLocationParamsFromStringAnswer("37.45153333333334 -122.15539166666667 0.0 20.0");
         assertEquals(37.45153333333334, gp[0]);
         assertEquals(-122.15539166666667, gp[1]);
         assertEquals(0.0, gp[2]);
         assertEquals(20.0, gp[3]);
 
-        gp = GeoWidgetUtils.getLocationParamsFromStringAnswer("37.45153333333334");
+        gp = GeoDataRequester.getLocationParamsFromStringAnswer("37.45153333333334");
         assertEquals(37.45153333333334, gp[0]);
         assertEquals(0.0, gp[1]);
         assertEquals(0.0, gp[2]);
         assertEquals(0.0, gp[3]);
 
-        gp = GeoWidgetUtils.getLocationParamsFromStringAnswer("");
+        gp = GeoDataRequester.getLocationParamsFromStringAnswer("");
         assertEquals(0.0, gp[0]);
         assertEquals(0.0, gp[1]);
         assertEquals(0.0, gp[2]);
         assertEquals(0.0, gp[3]);
 
-        gp = GeoWidgetUtils.getLocationParamsFromStringAnswer(null);
+        gp = GeoDataRequester.getLocationParamsFromStringAnswer(null);
         assertEquals(0.0, gp[0]);
         assertEquals(0.0, gp[1]);
         assertEquals(0.0, gp[2]);
         assertEquals(0.0, gp[3]);
 
-        gp = GeoWidgetUtils.getLocationParamsFromStringAnswer("37.45153333333334 -122.15539166666667 0.0 qwerty");
+        gp = GeoDataRequester.getLocationParamsFromStringAnswer("37.45153333333334 -122.15539166666667 0.0 qwerty");
         assertEquals(37.45153333333334, gp[0]);
         assertEquals(-122.15539166666667, gp[1]);
         assertEquals(0.0, gp[2]);
@@ -266,14 +266,14 @@ public class GeoWidgetUtilsTest {
 
     @Test
     public void truncateDoubleTest() {
-        assertEquals("5", GeoWidgetUtils.truncateDouble("5"));
-        assertEquals("-5", GeoWidgetUtils.truncateDouble("-5"));
-        assertEquals("5.12", GeoWidgetUtils.truncateDouble("5.12"));
-        assertEquals("-5.12", GeoWidgetUtils.truncateDouble("-5.12"));
-        assertEquals("5.12", GeoWidgetUtils.truncateDouble("5.1234"));
-        assertEquals("-5.12", GeoWidgetUtils.truncateDouble("-5.1234"));
-        assertEquals("", GeoWidgetUtils.truncateDouble(""));
-        assertEquals("", GeoWidgetUtils.truncateDouble(null));
-        assertEquals("", GeoWidgetUtils.truncateDouble("qwerty"));
+        assertEquals("5", GeoDataRequester.truncateDouble("5"));
+        assertEquals("-5", GeoDataRequester.truncateDouble("-5"));
+        assertEquals("5.12", GeoDataRequester.truncateDouble("5.12"));
+        assertEquals("-5.12", GeoDataRequester.truncateDouble("-5.12"));
+        assertEquals("5.12", GeoDataRequester.truncateDouble("5.1234"));
+        assertEquals("-5.12", GeoDataRequester.truncateDouble("-5.1234"));
+        assertEquals("", GeoDataRequester.truncateDouble(""));
+        assertEquals("", GeoDataRequester.truncateDouble(null));
+        assertEquals("", GeoDataRequester.truncateDouble("qwerty"));
     }
 }

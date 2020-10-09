@@ -12,7 +12,7 @@ import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.widgets.interfaces.GeoWidgetListener;
+import org.odk.collect.android.widgets.interfaces.GeoButtonClickListener;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
 
@@ -35,13 +35,13 @@ public class GeoShapeWidgetTest {
     private final String answer = stringFromDoubleList();
 
     private WaitingForDataRegistry waitingForDataRegistry;
-    private GeoWidgetListener mockGeoWidgetListener;
+    private GeoButtonClickListener mockGeoButtonClickListener;
     private View.OnLongClickListener listener;
 
     @Before
     public void setup() {
         waitingForDataRegistry = mock(WaitingForDataRegistry.class);
-        mockGeoWidgetListener = mock(GeoWidgetListener.class);
+        mockGeoButtonClickListener = mock(GeoButtonClickListener.class);
         listener = mock(View.OnLongClickListener.class);
     }
 
@@ -72,14 +72,14 @@ public class GeoShapeWidgetTest {
     @Test
     public void widgetCallsSetButtonLabelAndVisibility_whenPromptIsReadOnlyAndDoesNotHaveAnswer() {
         GeoShapeWidget widget = createWidget(promptWithReadOnly());
-        verify(mockGeoWidgetListener).setButtonLabelAndVisibility(widget.binding, true, false,
+        verify(mockGeoButtonClickListener).setButtonLabelAndVisibility(widget.binding, true, false,
                 R.string.geoshape_view_read_only, R.string.geoshape_view_change_location, R.string.get_shape);
     }
 
     @Test
     public void widgetCallsSetButtonLabelAndVisibility_whenPromptIsNotReadOnlyAndHasAnswer() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        verify(mockGeoWidgetListener).setButtonLabelAndVisibility(widget.binding, false, true,
+        verify(mockGeoButtonClickListener).setButtonLabelAndVisibility(widget.binding, false, true,
                 R.string.geoshape_view_read_only, R.string.geoshape_view_change_location, R.string.get_shape);
     }
 
@@ -89,7 +89,7 @@ public class GeoShapeWidgetTest {
         widget.clearAnswer();
 
         assertEquals(widget.binding.geoAnswerText.getText(), "");
-        verify(mockGeoWidgetListener).setButtonLabelAndVisibility(widget.binding, false, false,
+        verify(mockGeoButtonClickListener).setButtonLabelAndVisibility(widget.binding, false, false,
                 R.string.geoshape_view_read_only, R.string.geoshape_view_change_location, R.string.get_shape);
     }
 
@@ -124,7 +124,7 @@ public class GeoShapeWidgetTest {
     public void setData_whenDataIsNotNull_updatesButtonLabel() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(null));
         widget.setBinaryData(answer);
-        verify(mockGeoWidgetListener).setButtonLabelAndVisibility(widget.binding, false, true,
+        verify(mockGeoButtonClickListener).setButtonLabelAndVisibility(widget.binding, false, true,
                 R.string.geoshape_view_read_only, R.string.geoshape_view_change_location, R.string.get_shape);
     }
 
@@ -132,7 +132,7 @@ public class GeoShapeWidgetTest {
     public void setData_whenDataIsNull_updatesButtonLabel() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
         widget.setBinaryData("");
-        verify(mockGeoWidgetListener).setButtonLabelAndVisibility(widget.binding, false, false,
+        verify(mockGeoButtonClickListener).setButtonLabelAndVisibility(widget.binding, false, false,
                 R.string.geoshape_view_read_only, R.string.geoshape_view_change_location, R.string.get_shape);
     }
 
@@ -167,12 +167,12 @@ public class GeoShapeWidgetTest {
         widget.setPermissionUtils(permissionUtils);
         widget.binding.simpleButton.performClick();
 
-        verify(mockGeoWidgetListener).onButtonClicked(widget.getContext(), prompt.getIndex(), permissionUtils, null,
+        verify(mockGeoButtonClickListener).onButtonClicked(widget.getContext(), prompt.getIndex(), permissionUtils, null,
                 waitingForDataRegistry, GeoPolyActivity.class, widget.bundle, GEOSHAPE_CAPTURE);
     }
 
     private GeoShapeWidget createWidget(FormEntryPrompt prompt) {
         return new GeoShapeWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"),
-                waitingForDataRegistry, mockGeoWidgetListener);
+                waitingForDataRegistry, mockGeoButtonClickListener);
     }
 }

@@ -46,8 +46,8 @@ import java.util.TimerTask;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermissionsGranted;
-import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.ACCURACY_THRESHOLD;
-import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.DEFAULT_LOCATION_ACCURACY;
+import static org.odk.collect.android.widgets.utilities.GeoDataRequester.ACCURACY_THRESHOLD;
+import static org.odk.collect.android.widgets.utilities.GeoDataRequester.DEFAULT_LOCATION_ACCURACY;
 
 public class GeoPointActivity extends CollectAbstractActivity implements LocationListener,
         LocationClient.LocationClientListener, GpsStatus.Listener {

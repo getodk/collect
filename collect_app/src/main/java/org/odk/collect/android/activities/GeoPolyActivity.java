@@ -46,7 +46,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.READ_ONLY;
+import static org.odk.collect.android.widgets.utilities.GeoDataRequester.READ_ONLY;
 
 public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialogFragment.SettingsDialogCallback {
     public static final String ANSWER_KEY = "answer";
