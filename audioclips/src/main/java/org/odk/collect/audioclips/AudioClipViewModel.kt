@@ -10,9 +10,16 @@ import java.util.*
 import java.util.function.Supplier
 import kotlin.jvm.Throws
 
-class AudioClipViewModel internal constructor(private val mediaPlayerFactory: Supplier<MediaPlayer>, private val scheduler: Scheduler) : ViewModel(), MediaPlayer.OnCompletionListener {
+class AudioClipViewModel(private val mediaPlayerFactory: Supplier<MediaPlayer>, private val scheduler: Scheduler) : ViewModel(), MediaPlayer.OnCompletionListener {
 
-    private var mediaPlayer: MediaPlayer? = null
+    private var _mediaPlayer: MediaPlayer? = null
+    private val mediaPlayer: MediaPlayer
+        get() {
+            val mediaPlayer = _mediaPlayer ?: setupNewMediaPlayer()
+            _mediaPlayer = mediaPlayer
+            return mediaPlayer
+        }
+
     private val currentlyPlaying = MutableLiveData<CurrentlyPlaying?>(null)
     private val error = MutableLiveData<Exception?>()
     private val positions: MutableMap<String, MutableLiveData<Int>?> = HashMap()
@@ -24,20 +31,21 @@ class AudioClipViewModel internal constructor(private val mediaPlayerFactory: Su
         playNext(playlist)
     }
 
-    fun playInOrder(clips: List<Clip>?) {
+    fun playInOrder(clips: List<Clip>) {
         val playlist: Queue<Clip> = LinkedList(clips)
         playNext(playlist)
     }
 
     fun stop() {
         if (currentlyPlaying.value != null) {
-            getMediaPlayer()!!.stop()
+            mediaPlayer.stop()
         }
+
         cleanUpAfterClip()
     }
 
     fun pause() {
-        getMediaPlayer()!!.pause()
+        mediaPlayer.pause()
         val currentlyPlayingValue = currentlyPlaying.value
         if (currentlyPlayingValue != null) {
             currentlyPlaying.value = currentlyPlayingValue.paused()
@@ -45,11 +53,11 @@ class AudioClipViewModel internal constructor(private val mediaPlayerFactory: Su
     }
 
     fun isPlaying(clipID: String): LiveData<Boolean> {
-        return Transformations.map(currentlyPlaying) { value: CurrentlyPlaying? ->
+        return Transformations.map(currentlyPlaying) { value ->
             if (isCurrentPlayingClip(clipID, value)) {
-                return@map !value!!.isPaused
+                !value!!.isPaused
             } else {
-                return@map false
+                false
             }
         }
     }
@@ -60,7 +68,7 @@ class AudioClipViewModel internal constructor(private val mediaPlayerFactory: Su
 
     fun setPosition(clipID: String, newPosition: Int) {
         if (isCurrentPlayingClip(clipID, currentlyPlaying.value)) {
-            getMediaPlayer()!!.seekTo(newPosition)
+            mediaPlayer.seekTo(newPosition)
         }
         getPositionForClip(clipID).value = newPosition
     }
@@ -86,8 +94,8 @@ class AudioClipViewModel internal constructor(private val mediaPlayerFactory: Su
                     return
                 }
             }
-            getMediaPlayer()!!.seekTo(getPositionForClip(nextClip.clipID).value!!)
-            getMediaPlayer()!!.start()
+            mediaPlayer.seekTo(getPositionForClip(nextClip.clipID).value!!)
+            mediaPlayer.start()
             currentlyPlaying.value = CurrentlyPlaying(
                     Clip(nextClip.clipID, nextClip.uRI),
                     false,
@@ -144,28 +152,24 @@ class AudioClipViewModel internal constructor(private val mediaPlayerFactory: Su
             val currentlyPlaying = currentlyPlaying.value
             if (currentlyPlaying != null) {
                 val position = getPositionForClip(currentlyPlaying.clip.clipID)
-                position.postValue(getMediaPlayer()!!.currentPosition)
+                position.postValue(mediaPlayer.currentPosition)
             }
         }, 500)
     }
 
     private fun cancelPositionUpdates() {
-        if (positionUpdatesCancellable != null) {
-            positionUpdatesCancellable!!.cancel()
-        }
+        positionUpdatesCancellable?.cancel()
     }
 
     private fun releaseMediaPlayer() {
-        getMediaPlayer()!!.release()
-        mediaPlayer = null
+        mediaPlayer.release()
+        _mediaPlayer = null
     }
 
-    private fun getMediaPlayer(): MediaPlayer? {
-        if (mediaPlayer == null) {
-            mediaPlayer = mediaPlayerFactory.get()
-            mediaPlayer!!.setOnCompletionListener(this)
-        }
-        return mediaPlayer
+    private fun setupNewMediaPlayer(): MediaPlayer {
+        val newMediaPlayer: MediaPlayer = mediaPlayerFactory.get()
+        newMediaPlayer.setOnCompletionListener(this)
+        return newMediaPlayer
     }
 
     private fun isCurrentPlayingClip(clipID: String, currentlyPlayingValue: CurrentlyPlaying?): Boolean {
@@ -174,9 +178,9 @@ class AudioClipViewModel internal constructor(private val mediaPlayerFactory: Su
 
     @Throws(IOException::class)
     private fun loadNewClip(uri: String) {
-        getMediaPlayer()!!.reset()
-        getMediaPlayer()!!.setDataSource(uri)
-        getMediaPlayer()!!.prepare()
+        mediaPlayer.reset()
+        mediaPlayer.setDataSource(uri)
+        mediaPlayer.prepare()
     }
 
     private class CurrentlyPlaying internal constructor(val clip: Clip, val isPaused: Boolean, val playlist: Queue<Clip>) {
@@ -187,7 +191,6 @@ class AudioClipViewModel internal constructor(private val mediaPlayerFactory: Su
         fun paused(): CurrentlyPlaying {
             return CurrentlyPlaying(clip, true, playlist)
         }
-
     }
 
     class Factory(private val mediaPlayerFactory: Supplier<MediaPlayer>, private val scheduler: Scheduler) : ViewModelProvider.Factory {
