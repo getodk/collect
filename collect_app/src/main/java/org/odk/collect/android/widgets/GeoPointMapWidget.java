@@ -61,11 +61,13 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
         determineMapProperties();
 
         String stringAnswer = getFormEntryPrompt().getAnswerText();
+        boolean dataAvailable = false;
         if (stringAnswer != null && !stringAnswer.isEmpty()) {
             setData(stringAnswer);
-        } else {
-            updateButtonLabelsAndVisibility(false);
+            dataAvailable = true;
+
         }
+        updateButtonLabelsAndVisibility(dataAvailable);
     }
 
     @Override
@@ -135,8 +137,7 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
                 binding.simpleButton.setVisibility(GONE);
             }
         } else {
-            binding.simpleButton.setText(
-                    dataAvailable ? R.string.view_change_location : R.string.get_point);
+            binding.simpleButton.setText(dataAvailable ? R.string.view_change_location : R.string.get_point);
         }
     }
 }

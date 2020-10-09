@@ -49,31 +49,27 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
         this.geoButtonClickListener = geoButtonClickListener;
 
         String answerText = getFormEntryPrompt().getAnswerText();
+        boolean dataAvailable = false;
         if (answerText != null && !answerText.isEmpty()) {
             setData(answerText);
-        } else {
-            updateButtonLabelsAndVisibility(false);
+            dataAvailable = true;
         }
+        updateButtonLabelsAndVisibility(dataAvailable);
     }
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = GeoWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
-        if (prompt.isReadOnly()) {
-            binding.simpleButton.setVisibility(GONE);
-        } else {
-            binding.simpleButton.setText(getDefaultButtonLabel());
-            binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-
-            binding.simpleButton.setOnClickListener(v -> {
-                bundle = GeoWidgetUtils.getGeoPolyBundle(binding.geoAnswerText.getText().toString(),
-                        GeoPolyActivity.OutputMode.GEOSHAPE);
-                geoButtonClickListener.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(), null,
-                        waitingForDataRegistry, GeoPolyActivity.class, bundle, GEOSHAPE_CAPTURE);
-            });
-        }
+        binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+
+        binding.simpleButton.setOnClickListener(v -> {
+            bundle = GeoWidgetUtils.getGeoPolyBundle(binding.geoAnswerText.getText().toString(),
+                    GeoPolyActivity.OutputMode.GEOSHAPE, prompt.isReadOnly());
+            geoButtonClickListener.onButtonClicked(context, prompt.getIndex(), getPermissionUtils(), null,
+                    waitingForDataRegistry, GeoPolyActivity.class, bundle, GEOSHAPE_CAPTURE);
+        });
 
         return binding.getRoot();
     }
@@ -114,10 +110,14 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
-        binding.simpleButton.setText(dataAvailable ? R.string.geoshape_view_change_location : R.string.get_shape);
-    }
-
-    private String getDefaultButtonLabel() {
-        return getContext().getString(R.string.get_shape);
+        if (getFormEntryPrompt().isReadOnly()) {
+            if (dataAvailable) {
+                binding.simpleButton.setText(R.string.geoshape_view_read_only);
+            } else {
+                binding.simpleButton.setVisibility(GONE);
+            }
+        } else {
+            binding.simpleButton.setText(dataAvailable ? R.string.geoshape_view_change_location : R.string.get_shape);
+        }
     }
 }

@@ -19,8 +19,6 @@ import java.text.DecimalFormat;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.activities.GeoPolyActivity.ANSWER_KEY;
-
 public class GeoWidgetUtils implements GeoButtonClickListener {
     public static final String LOCATION = "gp";
     public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
@@ -71,10 +69,11 @@ public class GeoWidgetUtils implements GeoButtonClickListener {
         return bundle;
     }
 
-    public static Bundle getGeoPolyBundle(String stringAnswer, GeoPolyActivity.OutputMode outputMode) {
+    public static Bundle getGeoPolyBundle(String stringAnswer, GeoPolyActivity.OutputMode outputMode, boolean readOnly) {
         final Bundle bundle = new Bundle();
-        bundle.putString(ANSWER_KEY, stringAnswer);
+        bundle.putString(GeoPolyActivity.ANSWER_KEY, stringAnswer);
         bundle.putSerializable(GeoPolyActivity.OUTPUT_MODE_KEY, outputMode);
+        bundle.putBoolean(READ_ONLY, readOnly);
         return bundle;
     }
 

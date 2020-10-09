@@ -65,6 +65,7 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = GeoWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
+        binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         if (prompt.isReadOnly()) {
             binding.simpleButton.setVisibility(GONE);
         } else {
@@ -77,7 +78,6 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
                         GeoPointActivity.class, bundle, LOCATION_CAPTURE);
             });
         }
-        binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         return binding.getRoot();
     }
