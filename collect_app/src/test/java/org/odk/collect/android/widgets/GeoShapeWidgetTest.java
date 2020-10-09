@@ -4,8 +4,6 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -36,10 +34,6 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.prom
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 import static org.robolectric.Shadows.shadowOf;
 
-/**
- * @author James Knight
- */
-
 @RunWith(RobolectricTestRunner.class)
 public class GeoShapeWidgetTest {
 
@@ -55,13 +49,13 @@ public class GeoShapeWidgetTest {
     }
 
     @Test
-    public void usingReadOnlyOption_makesAllClickableElementsDisabled() {
+    public void usingReadOnlyOption_doesNotShowTheGeoButton() {
         GeoShapeWidget widget = createWidget(promptWithReadOnly());
-        assertThat(widget.startGeoButton.getVisibility(), equalTo(View.GONE));
+        assertThat(widget.binding.simpleButton.getVisibility(), equalTo(View.GONE));
     }
 
     @Test
-    public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsNull() {
+    public void getAnswer_whenPromptDoesNotHaveAnswer_returnsNull() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(null));
         assertThat(widget.getAnswer(), equalTo(null));
     }
@@ -84,6 +78,7 @@ public class GeoShapeWidgetTest {
         GeoShapeWidget widget = createWidget(promptWithAnswer(null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.clearAnswer();
+
         verify(valueChangedListener).widgetValueChanged(widget);
     }
 
@@ -92,51 +87,40 @@ public class GeoShapeWidgetTest {
         View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
         GeoShapeWidget widget = createWidget(promptWithAnswer(null));
         widget.setOnLongClickListener(listener);
-        widget.startGeoButton.performLongClick();
+        widget.binding.simpleButton.performLongClick();
 
-        verify(listener).onLongClick(widget.startGeoButton);
-    }
-
-    @Test
-    public void cancelLongPress_callsCancelLongPressForButtonAndTextView() {
-        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
-        widget.startGeoButton = mock(Button.class);
-        widget.answerDisplay = mock(TextView.class);
-        widget.cancelLongPress();
-
-        verify(widget.startGeoButton).cancelLongPress();
-        verify(widget.answerDisplay).cancelLongPress();
+        verify(listener).onLongClick(widget.binding.simpleButton);
     }
 
     @Test
     public void whenPromptDoesNotHaveAnswer_textViewDisplaysEmptyString() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(null));
-        assertThat(widget.answerDisplay.getText().toString(), equalTo(""));
+        assertThat(widget.binding.geoAnswerText.getText().toString(), equalTo(""));
     }
 
     @Test
     public void whenPromptHasAnswer_textViewDisplaysAnswer() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        assertThat(widget.answerDisplay.getText().toString(), equalTo(answer));
+        assertThat(widget.binding.geoAnswerText.getText().toString(), equalTo(answer));
     }
 
     @Test
     public void whenPromptDoesNotHaveAnswer_StartGeoShapeButtonIsShown() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(null));
-        assertThat(widget.startGeoButton.getText(), equalTo(widget.getContext().getString(R.string.get_shape)));
+        assertThat(widget.binding.simpleButton.getText(), equalTo(widget.getContext().getString(R.string.get_shape)));
     }
 
     @Test
     public void whenPromptHasAnswer_ViewOrChangeGeoShapeButtonIsShown() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        assertThat(widget.startGeoButton.getText(), equalTo(widget.getContext().getString(R.string.geoshape_view_change_location)));
+        assertThat(widget.binding.simpleButton.getText(), equalTo(widget.getContext().getString(R.string.geoshape_view_change_location)));
     }
 
     @Test
     public void whenPermissionIsNotGranted_buttonShouldNotLaunchAnyIntent() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(null));
         stubLocationPermissions(widget, false);
-        widget.startGeoButton.performClick();
+        widget.binding.simpleButton.performClick();
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
 
         assertNull(startedIntent);
@@ -147,16 +131,29 @@ public class GeoShapeWidgetTest {
         FormEntryPrompt prompt = promptWithAnswer(null);
         GeoShapeWidget widget = createWidget(prompt);
         stubLocationPermissions(widget, true);
-        widget.startGeoButton.performClick();
+        widget.binding.simpleButton.performClick();
 
         verify(waitingForDataRegistry).waitForData(prompt.getIndex());
     }
 
     @Test
-    public void whenPermissionIsGranted_buttonShouldLaunchCorrectIntent() {
+    public void whenPromptDoesNotHaveAnswer_buttonShouldLaunchCorrectIntent() {
+        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
+        stubLocationPermissions(widget, true);
+        widget.binding.simpleButton.performClick();
+
+        Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
+        Bundle bundle = startedIntent.getExtras();
+
+        assertThat(startedIntent.getComponent(), equalTo(new ComponentName(widgetTestActivity(), GeoPolyActivity.class)));
+        assertBundleArgumentEquals(bundle, "", GeoPolyActivity.OutputMode.GEOSHAPE);
+    }
+
+    @Test
+    public void whenPromptHasAnswer_buttonShouldLaunchCorrectIntent() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
         stubLocationPermissions(widget, true);
-        widget.startGeoButton.performClick();
+        widget.binding.simpleButton.performClick();
 
         Intent startedIntent = shadowOf(widgetTestActivity()).getNextStartedActivity();
         Bundle bundle = startedIntent.getExtras();

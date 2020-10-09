@@ -16,6 +16,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
@@ -33,14 +34,11 @@ import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.GeoPointMapWidget.ACCURACY_THRESHOLD;
 import static org.odk.collect.android.widgets.GeoPointMapWidget.DEFAULT_LOCATION_ACCURACY;
 import static org.odk.collect.android.widgets.GeoPointMapWidget.LOCATION;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 import static org.robolectric.Shadows.shadowOf;
-
-/**
- * @author James Knight
- */
 
 @RunWith(RobolectricTestRunner.class)
 public class GeoPointWidgetTest {
@@ -65,17 +63,15 @@ public class GeoPointWidgetTest {
     }
 
     @Test
-    public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsNull() {
+    public void getAnswer_whenPromptDoesNotHaveAnswer_returnsNull() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
         assertThat(widget.getAnswer(), equalTo(null));
-        assertThat(widget.binding.geoAnswerText.getText(), equalTo(""));
     }
 
     @Test
-    public void getAnswer_whenPromptAnswerDoesNotHaveConvertibleString_returnsNull() {
+    public void getAnswer_whenPromptDoesNotHaveConvertibleStringAsAnswer_returnsNull() {
         GeoPointWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         assertThat(widget.getAnswer(), equalTo(null));
-        assertThat(widget.binding.geoAnswerText.getText(), equalTo(""));
     }
 
     @Test
@@ -89,6 +85,15 @@ public class GeoPointWidgetTest {
         GeoPointWidget widget = createWidget(promptWithAnswer(answer));
         widget.clearAnswer();
         assertThat(widget.getAnswer(), nullValue());
+    }
+
+    @Test
+    public void clearAnswer_callsValueChangeListeners() {
+        GeoPointWidget widget = createWidget(promptWithAnswer(null));
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+        widget.clearAnswer();
+
+        verify(valueChangedListener).widgetValueChanged(widget);
     }
 
     @Test

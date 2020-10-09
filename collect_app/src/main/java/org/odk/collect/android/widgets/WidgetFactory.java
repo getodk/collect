@@ -24,7 +24,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.CustomTabHelper;
-import org.odk.collect.android.utilities.QuestionMediaManager;\
+import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.items.ItemsetWidget;
 import org.odk.collect.android.widgets.items.LabelWidget;

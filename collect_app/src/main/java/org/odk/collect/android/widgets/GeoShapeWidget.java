@@ -18,37 +18,26 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPolyActivity;
+import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
-/**
- * GeoShapeWidget is the widget that allows the user to get Collect multiple GPS points.
- *
- * @author Jon Nordling (jonnordling@gmail.com)
- */
 @SuppressLint("ViewConstructor")
 public class GeoShapeWidget extends QuestionWidget implements BinaryDataReceiver {
-    private final WaitingForDataRegistry waitingForDataRegistry;
+    GeoWidgetAnswerBinding binding;
 
-    protected Button startGeoButton;
-    protected TextView answerDisplay;
+    private final WaitingForDataRegistry waitingForDataRegistry;
 
     public GeoShapeWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails);
@@ -57,33 +46,27 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryDataReceiver
 
     public void startGeoActivity() {
         Intent intent = new Intent(getContext(), GeoPolyActivity.class)
-            .putExtra(GeoPolyActivity.ANSWER_KEY, answerDisplay.getText().toString())
+            .putExtra(GeoPolyActivity.ANSWER_KEY, binding.geoAnswerText.getText().toString())
             .putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOSHAPE);
         ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOSHAPE_CAPTURE);
     }
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        ViewGroup answerView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.base_geo_widget_layout, null);
+        binding = GeoWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
+        View answerView = binding.getRoot();
 
-        answerDisplay = answerView.findViewById(R.id.geo_answer_text);
-        answerDisplay.setTextColor(new ThemeUtils(context).getColorOnSurface());
-        answerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-
-        startGeoButton = answerView.findViewById(R.id.simple_button);
+        binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         if (prompt.isReadOnly()) {
-            startGeoButton.setVisibility(GONE);
+            binding.simpleButton.setVisibility(GONE);
         } else {
-            startGeoButton.setText(getDefaultButtonLabel());
-            startGeoButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+            binding.simpleButton.setText(getDefaultButtonLabel());
+            binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-            startGeoButton.setOnClickListener(v -> {
-                if (MultiClickGuard.allowClick(QuestionWidget.class.getName())) {
-                    this.onButtonClick();
-                }
-            });
+            binding.simpleButton.setOnClickListener(v -> onButtonClick());
         }
+
         String answerText = prompt.getAnswerText();
         boolean dataAvailable = false;
 
@@ -98,34 +81,34 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryDataReceiver
 
     @Override
     public void clearAnswer() {
-        answerDisplay.setText(null);
+        binding.geoAnswerText.setText(null);
         updateButtonLabelsAndVisibility(false);
         widgetValueChanged();
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        startGeoButton.setOnLongClickListener(l);
-        answerDisplay.setOnLongClickListener(l);
+        binding.simpleButton.setOnLongClickListener(l);
+        binding.geoAnswerText.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        startGeoButton.cancelLongPress();
-        answerDisplay.cancelLongPress();
+        binding.simpleButton.cancelLongPress();
+        binding.geoAnswerText.cancelLongPress();
     }
 
     @Override
     public void setBinaryData(Object answer) {
-        answerDisplay.setText(answer.toString());
+        binding.geoAnswerText.setText(answer.toString());
         updateButtonLabelsAndVisibility(!answer.toString().isEmpty());
         widgetValueChanged();
     }
 
     @Override
     public IAnswerData getAnswer() {
-        String s = answerDisplay.getText().toString();
+        String s = binding.geoAnswerText.getText().toString();
         return !s.isEmpty()
                 ? new StringData(s)
                 : null;
@@ -146,7 +129,7 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryDataReceiver
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
-        startGeoButton.setText(dataAvailable ? R.string.geoshape_view_change_location : R.string.get_shape);
+        binding.simpleButton.setText(dataAvailable ? R.string.geoshape_view_change_location : R.string.get_shape);
     }
 
     private String getDefaultButtonLabel() {

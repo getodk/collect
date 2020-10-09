@@ -42,11 +42,10 @@ import static org.odk.collect.android.widgets.GeoPointMapWidget.LOCATION;
 
 @SuppressLint("ViewConstructor")
 public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver {
+    GeoWidgetAnswerBinding binding;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final double accuracyThreshold;
-
-    GeoWidgetAnswerBinding binding;
 
     private boolean readOnly;
     private String stringAnswer;
