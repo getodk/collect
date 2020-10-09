@@ -12,6 +12,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.robolectric.RobolectricTestRunner;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -394,21 +395,18 @@ public class AudioClipViewModelTest {
         doThrow(IOException.class).when(mediaPlayer).setDataSource("file://missing.mp3");
         viewModel.play(new Clip("clip1", "file://missing.mp3"));
 
-        PlaybackFailedException playbackFailedException = new PlaybackFailedException("file://missing.mp3", 0);
-        assertThat(error.getValue(), equalTo(playbackFailedException));
-        assertThat(0, equalTo(playbackFailedException.getExceptionMsg()));
+        assertThat(error.getValue(), equalTo(new PlaybackFailedException("file://missing.mp3", 0)));
     }
 
     @Test
     public void getError_whenPlaybackFailsBecauseOfInvalidFile_is_PlaybackFailed() throws Exception {
         final LiveData<Exception> error = liveDataTester.activate(viewModel.getError());
 
-        doThrow(IOException.class).when(mediaPlayer).setDataSource("file://invalid.mp3");
-        viewModel.play(new Clip("clip1", "file://invalid.mp3"));
+        File invalid = File.createTempFile("invalid", ".mp3");
+        doThrow(IOException.class).when(mediaPlayer).setDataSource(invalid.getAbsolutePath());
+        viewModel.play(new Clip("clip1", invalid.getAbsolutePath()));
 
-        PlaybackFailedException playbackFailedException = new PlaybackFailedException("file://invalid.mp3", 1);
-        assertThat(error.getValue(), equalTo(playbackFailedException));
-        assertThat(1, equalTo(playbackFailedException.getExceptionMsg()));
+        assertThat(error.getValue(), equalTo(new PlaybackFailedException(invalid.getAbsolutePath(), 1)));
     }
 
     @Test
