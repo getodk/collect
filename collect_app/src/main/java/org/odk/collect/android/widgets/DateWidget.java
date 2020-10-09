@@ -32,8 +32,6 @@ import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
-import java.util.Date;
-
 @SuppressLint("ViewConstructor")
 public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
     DateWidgetAnswerBinding binding;
@@ -70,8 +68,8 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
         } else {
             selectedDate = DateTimeUtils.getSelectedDate(new LocalDateTime(getFormEntryPrompt().getAnswerValue().getValue()),
                     LocalDateTime.now());
-            binding.dateAnswerText.setText(DateTimeWidgetUtils.getDateTimeLabel(
-                    (Date) getAnswer().getValue(), datePickerDetails, false, context));
+            binding.dateAnswerText.setText(DateTimeWidgetUtils.getDateTimeLabel(selectedDate.toDate(),
+                    datePickerDetails, false, context));
         }
 
         return binding.getRoot();
