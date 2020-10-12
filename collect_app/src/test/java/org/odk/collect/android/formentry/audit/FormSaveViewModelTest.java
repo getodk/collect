@@ -333,8 +333,8 @@ public class FormSaveViewModelTest {
 
     @Test
     public void saveForm_savesCorrectFiles() {
-        viewModel.markOriginalFileOrDelete("index", "blah");
-        viewModel.replaceRecentFileForQuestion("index", "blah");
+        viewModel.deleteAnswerFile("index", "blah");
+        viewModel.replaceAnswerFile("index", "blah");
 
         viewModel.saveForm(Uri.parse("file://form"), true, "", true);
         whenFormSaverFinishes(SaveFormToDisk.SAVED);
@@ -390,25 +390,41 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void markOriginalFileOrDelete_whenQuestionIndexHasAnswer_onRecreatingViewModel_deletesFile() {
-        viewModel.markOriginalFileOrDelete("index", "blah");
+    public void deleteAnswerFile_whenFileHasAlreadyBeenDeleted_actuallyDeletesNewFile() {
+        viewModel.deleteAnswerFile("index", "blah1");
+        viewModel.deleteAnswerFile("index", "blah2");
 
-        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null);
-        restoredViewModel.formLoaded(formController);
-        restoredViewModel.markOriginalFileOrDelete("index", "blah");
-
-        verify(mediaUtils).deleteImageFileFromMediaProvider("blah");
+        verify(mediaUtils).deleteImageFileFromMediaProvider("blah2");
     }
 
     @Test
-    public void replaceRecentFileForQuestion_whenQuestionIndexHasAnswer_onRecreatingViewModel_deletesFile() {
-        viewModel.replaceRecentFileForQuestion("index", "blah");
+    public void deleteAnswerFile_whenFileHasAlreadyBeenDeleted_onRecreatingViewModel_actuallyDeletesNewFile() {
+        viewModel.deleteAnswerFile("index", "blah1");
 
         FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null);
         restoredViewModel.formLoaded(formController);
-        restoredViewModel.replaceRecentFileForQuestion("index", "blah");
+        restoredViewModel.deleteAnswerFile("index", "blah2");
 
-        verify(mediaUtils).deleteImageFileFromMediaProvider("blah");
+        verify(mediaUtils).deleteImageFileFromMediaProvider("blah2");
+    }
+
+    @Test
+    public void replaceAnswerFile_whenFileHasAlreadyBeenReplaced_deletesPreviousReplacement() {
+        viewModel.replaceAnswerFile("index", "blah1");
+        viewModel.replaceAnswerFile("index", "blah2");
+
+        verify(mediaUtils).deleteImageFileFromMediaProvider("blah1");
+    }
+
+    @Test
+    public void replaceAnswerFile_whenFileHasAlreadyBeenReplaced_afterRecreatingViewModel_deletesPreviousReplacement() {
+        viewModel.replaceAnswerFile("index", "blah1");
+
+        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null);
+        restoredViewModel.formLoaded(formController);
+        restoredViewModel.replaceAnswerFile("index", "blah2");
+
+        verify(mediaUtils).deleteImageFileFromMediaProvider("blah1");
     }
 
     @Test

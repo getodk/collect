@@ -94,7 +94,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
 
     @Override
     public void deleteFile() {
-        questionMediaManager.markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
+        questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
                 getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
     }
