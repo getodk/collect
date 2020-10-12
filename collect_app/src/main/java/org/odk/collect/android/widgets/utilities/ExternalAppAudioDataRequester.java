@@ -12,7 +12,7 @@ import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.PermissionUtils;
 
-public class ExternalAppAudioDataRequester {
+public class ExternalAppAudioDataRequester implements AudioDataRequester {
 
     private final Activity activity;
     private final PermissionUtils permissionUtils;
@@ -26,7 +26,8 @@ public class ExternalAppAudioDataRequester {
         this.waitingForDataRegistry = waitingForDataRegistry;
     }
 
-    public void requestAudioRecording(FormEntryPrompt prompt) {
+    @Override
+    public void requestRecording(FormEntryPrompt prompt) {
         permissionUtils.requestRecordAudioPermission(activity, new PermissionListener() {
             @Override
             public void granted() {

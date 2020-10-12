@@ -37,9 +37,9 @@ import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
+import org.odk.collect.android.widgets.utilities.AudioDataRequester;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
-import org.odk.collect.android.widgets.utilities.ExternalAppAudioDataRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.audioclips.Clip;
 
@@ -60,30 +60,24 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 
 @SuppressLint("ViewConstructor")
 public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDataReceiver {
-    private final AudioPlayer audioPlayer;
     AudioWidgetAnswerBinding binding;
 
-    private AudioControllerView audioController;
-
+    private final AudioPlayer audioPlayer;
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final ActivityAvailability activityAvailability;
+    private final AudioDataRequester audioDataRequester;
+    private final QuestionMediaManager questionMediaManager;
 
-    private QuestionMediaManager questionMediaManager;
     private String binaryName;
 
-    public AudioWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, AudioPlayer audioPlayer) {
-        this(context, prompt, questionMediaManager,
-                waitingForDataRegistry, new ActivityAvailability(context), audioPlayer);
-    }
-
-    AudioWidget(Context context, QuestionDetails questionDetails,
-                QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, ActivityAvailability activityAvailability, AudioPlayer audioPlayer) {
+    public AudioWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, ActivityAvailability activityAvailability, AudioPlayer audioPlayer, AudioDataRequester audioDataRequester) {
         super(context, questionDetails);
         this.audioPlayer = audioPlayer;
 
         this.questionMediaManager = questionMediaManager;
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.activityAvailability = activityAvailability;
+        this.audioDataRequester = audioDataRequester;
 
         hideButtonsIfNeeded();
 
@@ -102,11 +96,9 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
             binding.captureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
             binding.chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-            binding.captureButton.setOnClickListener(v -> new ExternalAppAudioDataRequester((Activity) getContext(), activityAvailability, waitingForDataRegistry, getPermissionUtils()).requestAudioRecording(getFormEntryPrompt()));
+            binding.captureButton.setOnClickListener(v -> audioDataRequester.requestRecording(getFormEntryPrompt()));
             binding.chooseButton.setOnClickListener(v -> chooseSound());
         }
-
-        audioController = binding.audioController;
 
         return binding.getRoot();
     }
@@ -125,7 +117,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
         deleteFile();
 
         // hide audio player
-        audioController.setVisibility(GONE);
+        binding.audioController.setVisibility(GONE);
 
         widgetValueChanged();
     }
@@ -203,10 +195,10 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
         if (binaryName != null) {
             Clip clip = new Clip("audio:" + getFormEntryPrompt().getIndex().toString(), getAudioFile().getAbsolutePath());
 
-            audioPlayer.onPlayingChanged(clip.getClipID(), audioController::setPlaying);
-            audioPlayer.onPositionChanged(clip.getClipID(), audioController::setPosition);
-            audioController.setDuration(getDurationOfFile(clip.getURI()));
-            audioController.setListener(new AudioControllerView.Listener() {
+            audioPlayer.onPlayingChanged(clip.getClipID(), binding.audioController::setPlaying);
+            audioPlayer.onPositionChanged(clip.getClipID(), binding.audioController::setPosition);
+            binding.audioController.setDuration(getDurationOfFile(clip.getURI()));
+            binding.audioController.setListener(new AudioControllerView.Listener() {
                 @Override
                 public void onPlayClicked() {
                     audioPlayer.play(clip);
@@ -223,9 +215,9 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
                 }
             });
 
-            audioController.setVisibility(View.VISIBLE);
+            binding.audioController.setVisibility(View.VISIBLE);
         } else {
-            audioController.setVisibility(GONE);
+            binding.audioController.setVisibility(GONE);
         }
     }
 

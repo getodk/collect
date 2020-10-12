@@ -1,7 +1,6 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Intent;
-import android.provider.MediaStore;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -15,7 +14,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioControllerView;
-import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.RobolectricHelpers;
@@ -25,6 +23,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
+import org.odk.collect.android.widgets.utilities.AudioDataRequester;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.audioclips.Clip;
 import org.robolectric.RobolectricTestRunner;
@@ -56,9 +55,9 @@ import static org.robolectric.Shadows.shadowOf;
 @RunWith(RobolectricTestRunner.class)
 public class AudioWidgetTest {
 
-    private final FakePermissionUtils fakePermissionUtils = new FakePermissionUtils();
     private final FakeQuestionMediaManager questionMediaManager = new FakeQuestionMediaManager();
     private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
+    private final AudioDataRequester audioDataRequester = mock(AudioDataRequester.class);
 
     private TestScreenContextActivity widgetActivity;
     private ShadowActivity shadowActivity;
@@ -284,56 +283,12 @@ public class AudioWidgetTest {
     }
 
     @Test
-    public void clickingCaptureButton_whenIntentIsNotAvailable_doesNotStartAnyIntentAndCancelsWaitingForData() {
-        when(activityAvailability.isActivityAvailable(any())).thenReturn(false);
-
-        AudioWidget widget = createWidget(promptWithAnswer(null));
-        widget.setPermissionUtils(fakePermissionUtils);
-        fakePermissionUtils.setPermissionGranted(true);
-
-        widget.binding.captureButton.performClick();
-        Intent startedActivity = shadowActivity.getNextStartedActivity();
-        String toastMessage = ShadowToast.getTextOfLatestToast();
-
-        assertThat(startedActivity, nullValue());
-        assertThat(waitingForDataRegistry.waiting.isEmpty(), equalTo(true));
-        assertThat(toastMessage, equalTo(widget.getContext().getString(R.string.activity_not_found,
-                widget.getContext().getString(R.string.capture_audio))));
-    }
-
-    @Test
-    public void clickingCaptureButton_whenPermissionIsNotGranted_doesNotStartAnyIntentAndCancelsWaitingForData() {
-        AudioWidget widget = createWidget(promptWithAnswer(null));
-        widget.setPermissionUtils(fakePermissionUtils);
-        fakePermissionUtils.setPermissionGranted(false);
-
-        widget.binding.captureButton.performClick();
-        Intent startedActivity = shadowActivity.getNextStartedActivity();
-
-        assertThat(startedActivity, nullValue());
-        assertThat(waitingForDataRegistry.waiting.isEmpty(), equalTo(true));
-    }
-
-    @Test
-    public void clickingCaptureButton_whenPermissionIsGranted_startsRecordSoundIntentAndSetsWidgetWaitingForData() {
+    public void clickingCaptureButton_requestsRecording() {
         FormEntryPrompt prompt = promptWithAnswer(null);
-        when(prompt.getIndex()).thenReturn(formIndex);
-
         AudioWidget widget = createWidget(prompt);
-        widget.setPermissionUtils(fakePermissionUtils);
-        fakePermissionUtils.setPermissionGranted(true);
 
         widget.binding.captureButton.performClick();
-        Intent startedActivity = shadowActivity.getNextStartedActivity();
-
-        assertThat(startedActivity.getAction(), equalTo(MediaStore.Audio.Media.RECORD_SOUND_ACTION));
-        assertThat(startedActivity.getStringExtra(MediaStore.EXTRA_OUTPUT), equalTo(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-                .toString()));
-
-        ShadowActivity.IntentForResult intentForResult = shadowActivity.getNextStartedActivityForResult();
-        assertThat(intentForResult.requestCode, equalTo(ApplicationConstants.RequestCodes.AUDIO_CAPTURE));
-
-        assertThat(waitingForDataRegistry.waiting.contains(formIndex), equalTo(true));
+        verify(audioDataRequester).requestRecording(prompt);
     }
 
     @Test
@@ -415,7 +370,8 @@ public class AudioWidgetTest {
                 questionMediaManager,
                 waitingForDataRegistry,
                 activityAvailability,
-                audioPlayer
+                audioPlayer,
+                audioDataRequester
         );
     }
 
