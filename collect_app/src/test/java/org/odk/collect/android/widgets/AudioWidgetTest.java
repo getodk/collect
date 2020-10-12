@@ -50,21 +50,16 @@ public class AudioWidgetTest {
 
     private TestScreenContextActivity widgetActivity;
     private FormIndex formIndex;
-    private File mockedFile;
     private FakeAudioPlayer audioPlayer;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         widgetActivity = RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
 
         formIndex = mock(FormIndex.class);
-        mockedFile = mock(File.class);
-        audioPlayer = new FakeAudioPlayer();
-
-        when(mockedFile.exists()).thenReturn(true);
-        when(mockedFile.getName()).thenReturn("newFile.mp3");
-        when(mockedFile.getAbsolutePath()).thenReturn("newFilePath");
         when(formIndex.toString()).thenReturn("questionIndex");
+
+        audioPlayer = new FakeAudioPlayer();
     }
 
     @Test
@@ -149,38 +144,45 @@ public class AudioWidgetTest {
     }
 
     @Test
-    public void setData_whenFileExists_replacesOriginalFileWithNewFile() {
+    public void setData_whenFileExists_replacesOriginalFileWithNewFile() throws Exception {
         FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.mp3"));
         when(prompt.getIndex()).thenReturn(formIndex);
         AudioWidget widget = createWidget(prompt);
-        widget.setData(mockedFile);
 
-        assertThat(questionMediaManager.recentFiles.get("questionIndex"), equalTo("newFilePath"));
+        File newFile = File.createTempFile("newFile", ".mp3");
+        widget.setData(newFile);
+
+        assertThat(questionMediaManager.recentFiles.get("questionIndex"), equalTo(newFile.getAbsolutePath()));
     }
 
     @Test
-    public void setData_whenPromptHasDifferentAudioFile_deletesOriginalAnswer() {
+    public void setData_whenPromptHasDifferentAudioFile_deletesOriginalAnswer() throws Exception {
         FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.mp3"));
         when(prompt.getIndex()).thenReturn(formIndex);
 
         AudioWidget widget = createWidget(prompt);
-        widget.setData(mockedFile);
+
+        File newFile = File.createTempFile("newFile", ".mp3");
+        widget.setData(newFile);
 
         assertThat(questionMediaManager.originalFiles.get("questionIndex"),
                 equalTo(widget.getInstanceFolder() + File.separator + "blah.mp3"));
     }
 
     @Test
-    public void setData_whenPromptDoesNotHaveAnswer_doesNotDeleteOriginalAnswer() {
+    public void setData_whenPromptDoesNotHaveAnswer_doesNotDeleteOriginalAnswer() throws Exception {
         AudioWidget widget = createWidget(promptWithAnswer(null));
-        widget.setData(mockedFile);
+
+        File newFile = File.createTempFile("newFile", ".mp3");
+        widget.setData(newFile);
         assertThat(questionMediaManager.originalFiles.isEmpty(), equalTo(true));
     }
 
     @Test
-    public void setData_whenPromptHasSameAnswer_doesNotDeleteOriginalAnswer() {
-        AudioWidget widget = createWidget(promptWithAnswer(new StringData("newFile.mp3")));
-        widget.setData(mockedFile);
+    public void setData_whenPromptHasSameAnswer_doesNotDeleteOriginalAnswer() throws Exception {
+        File newFile = File.createTempFile("newFile", ".mp3");
+        AudioWidget widget = createWidget(promptWithAnswer(new StringData(newFile.getName())));
+        widget.setData(newFile);
         assertThat(questionMediaManager.originalFiles.isEmpty(), equalTo(true));
     }
 
@@ -192,30 +194,36 @@ public class AudioWidgetTest {
     }
 
     @Test
-    public void setData_whenFileExists_updatesWidgetAnswer() {
+    public void setData_whenFileExists_updatesWidgetAnswer() throws Exception {
         AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
-        widget.setData(mockedFile);
-        assertThat(widget.getAnswer().getDisplayText(), equalTo("newFile.mp3"));
+
+        File newFile = File.createTempFile("newFile", ".mp3");
+        widget.setData(newFile);
+        assertThat(widget.getAnswer().getDisplayText(), equalTo(newFile.getName()));
     }
 
     @Test
-    public void setData_whenFileExists_updatesPlayerMedia() {
+    public void setData_whenFileExists_updatesPlayerMedia() throws Exception {
         FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.mp3"));
         AudioWidget widget = createWidget(prompt);
-        widget.setData(mockedFile);
+
+        File newFile = File.createTempFile("newFile", ".mp3");
+        widget.setData(newFile);
 
         assertThat(widget.binding.audioController.getVisibility(), is(VISIBLE));
         widget.binding.audioController.binding.play.performClick();
 
-        Clip expectedClip = getExpectedClip(prompt, "newFile.mp3");
+        Clip expectedClip = getExpectedClip(prompt, newFile.getName());
         assertThat(audioPlayer.getCurrentClip(), is(expectedClip));
     }
 
     @Test
-    public void setData_whenFileExists_callsValueChangeListener() {
+    public void setData_whenFileExists_callsValueChangeListener() throws Exception {
         AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.setData(mockedFile);
+
+        File newFile = File.createTempFile("newFile", ".mp3");
+        widget.setData(newFile);
 
         verify(valueChangedListener).widgetValueChanged(widget);
     }
