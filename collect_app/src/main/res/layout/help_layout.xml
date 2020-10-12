@@ -12,8 +12,7 @@
     <RelativeLayout
         android:id="@+id/text_layout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/help_icon"
@@ -40,7 +39,6 @@
         android:id="@+id/guidance_text_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small"
         android:orientation="vertical"
         android:visibility="gone"
         tools:visibility="visible">
@@ -58,7 +56,6 @@
         style="@style/TextAppearance.Collect.Subtitle1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small"
         android:textColor="?attr/colorError"
         android:visibility="gone"
         tools:text="A warning"
