@@ -18,37 +18,30 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.provider.MediaStore.Audio;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.databinding.AudioWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.utilities.AudioDataRequester;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
-import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.audioclips.Clip;
 
 import java.io.File;
 import java.util.Locale;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -63,20 +56,16 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
     AudioWidgetAnswerBinding binding;
 
     private final AudioPlayer audioPlayer;
-    private final WaitingForDataRegistry waitingForDataRegistry;
-    private final ActivityAvailability activityAvailability;
     private final AudioDataRequester audioDataRequester;
     private final QuestionMediaManager questionMediaManager;
 
     private String binaryName;
 
-    public AudioWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, ActivityAvailability activityAvailability, AudioPlayer audioPlayer, AudioDataRequester audioDataRequester) {
+    public AudioWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager, AudioPlayer audioPlayer, AudioDataRequester audioDataRequester) {
         super(context, questionDetails);
         this.audioPlayer = audioPlayer;
 
         this.questionMediaManager = questionMediaManager;
-        this.waitingForDataRegistry = waitingForDataRegistry;
-        this.activityAvailability = activityAvailability;
         this.audioDataRequester = audioDataRequester;
 
         hideButtonsIfNeeded();
@@ -97,7 +86,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
             binding.chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
             binding.captureButton.setOnClickListener(v -> audioDataRequester.requestRecording(getFormEntryPrompt()));
-            binding.chooseButton.setOnClickListener(v -> chooseSound());
+            binding.chooseButton.setOnClickListener(v -> audioDataRequester.requestFile(getFormEntryPrompt()));
         }
 
         return binding.getRoot();
@@ -239,20 +228,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
         super.cancelLongPress();
         binding.captureButton.cancelLongPress();
         binding.chooseButton.cancelLongPress();
-    }
-
-    private void chooseSound() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("audio/*");
-
-        if (activityAvailability.isActivityAvailable(intent)) {
-            waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-            ((Activity) getContext()).startActivityForResult(intent, RequestCodes.AUDIO_CHOOSER);
-        } else {
-            Toast.makeText(getContext(), getContext().getString(R.string.activity_not_found,
-                    getContext().getString(R.string.choose_audio)), Toast.LENGTH_SHORT).show();
-            waitingForDataRegistry.cancelWaitingForData();
-        }
     }
 
     /**

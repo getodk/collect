@@ -51,4 +51,18 @@ public class ExternalAppAudioDataRequester implements AudioDataRequester {
         });
     }
 
+    @Override
+    public void requestFile(FormEntryPrompt prompt) {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("audio/*");
+
+        if (activityAvailability.isActivityAvailable(intent)) {
+            waitingForDataRegistry.waitForData(prompt.getIndex());
+            activity.startActivityForResult(intent, ApplicationConstants.RequestCodes.AUDIO_CHOOSER);
+        } else {
+            Toast.makeText(activity, activity.getString(R.string.activity_not_found, activity.getString(R.string.choose_audio)), Toast.LENGTH_SHORT).show();
+            waitingForDataRegistry.cancelWaitingForData();
+        }
+    }
+
 }

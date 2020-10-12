@@ -176,7 +176,7 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
                 ExternalAppAudioDataRequester audioDataRequester = new ExternalAppAudioDataRequester((Activity) context, activityAvailability, waitingForDataRegistry, permissionUtils);
-                questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, activityAvailability, audioPlayer, audioDataRequester);
+                questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, audioDataRequester);
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
                 questionWidget = new VideoWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);

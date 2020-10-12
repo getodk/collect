@@ -1,6 +1,5 @@
 package org.odk.collect.android.widgets;
 
-import android.content.Intent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -12,37 +11,29 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
-import org.odk.collect.android.utilities.ActivityAvailability;
-import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
-import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.AudioDataRequester;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.audioclips.Clip;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.shadows.ShadowActivity;
-import org.robolectric.shadows.ShadowToast;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static android.content.Intent.ACTION_GET_CONTENT;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -50,18 +41,14 @@ import static org.odk.collect.android.support.RobolectricHelpers.setupMediaPlaye
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
-import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 public class AudioWidgetTest {
 
     private final FakeQuestionMediaManager questionMediaManager = new FakeQuestionMediaManager();
-    private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
     private final AudioDataRequester audioDataRequester = mock(AudioDataRequester.class);
 
     private TestScreenContextActivity widgetActivity;
-    private ShadowActivity shadowActivity;
-    private ActivityAvailability activityAvailability;
     private FormIndex formIndex;
     private File mockedFile;
     private FakeAudioPlayer audioPlayer;
@@ -69,9 +56,7 @@ public class AudioWidgetTest {
     @Before
     public void setUp() {
         widgetActivity = RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
-        shadowActivity = shadowOf(widgetActivity);
 
-        activityAvailability = mock(ActivityAvailability.class);
         formIndex = mock(FormIndex.class);
         mockedFile = mock(File.class);
         audioPlayer = new FakeAudioPlayer();
@@ -80,7 +65,6 @@ public class AudioWidgetTest {
         when(mockedFile.getName()).thenReturn("newFile.mp3");
         when(mockedFile.getAbsolutePath()).thenReturn("newFilePath");
         when(formIndex.toString()).thenReturn("questionIndex");
-        when(activityAvailability.isActivityAvailable(any())).thenReturn(true);
     }
 
     @Test
@@ -250,36 +234,12 @@ public class AudioWidgetTest {
     }
 
     @Test
-    public void clickingChooseButton_whenIntentIsNotAvailable_doesNotStartAnyIntentAndCancelsWaitingForData() {
-        when(activityAvailability.isActivityAvailable(any())).thenReturn(false);
-        AudioWidget widget = createWidget(promptWithAnswer(null));
-
-        widget.binding.chooseButton.performClick();
-        Intent startedActivity = shadowActivity.getNextStartedActivity();
-        String toastMessage = ShadowToast.getTextOfLatestToast();
-
-        assertThat(startedActivity, nullValue());
-        assertThat(waitingForDataRegistry.waiting.isEmpty(), equalTo(true));
-        assertThat(toastMessage, equalTo(widget.getContext().getString(R.string.activity_not_found,
-                widget.getContext().getString(R.string.choose_audio))));
-    }
-
-    @Test
-    public void clickingChooseButton_startsChooseAudioFileActivityAndSetsWidgetWaitingForData() {
+    public void clickingChooseButton_requestsAudioFile() {
         FormEntryPrompt prompt = promptWithAnswer(null);
-        when(prompt.getIndex()).thenReturn(formIndex);
-
         AudioWidget widget = createWidget(prompt);
+
         widget.binding.chooseButton.performClick();
-
-        Intent startedActivity = shadowActivity.getNextStartedActivity();
-        assertThat(startedActivity.getAction(), equalTo(ACTION_GET_CONTENT));
-        assertThat(startedActivity.getType(), equalTo("audio/*"));
-
-        ShadowActivity.IntentForResult intentForResult = shadowActivity.getNextStartedActivityForResult();
-        assertThat(intentForResult.requestCode, equalTo(ApplicationConstants.RequestCodes.AUDIO_CHOOSER));
-
-        assertThat(waitingForDataRegistry.waiting.contains(formIndex), equalTo(true));
+        verify(audioDataRequester).requestFile(prompt);
     }
 
     @Test
@@ -368,8 +328,6 @@ public class AudioWidgetTest {
                 widgetActivity,
                 new QuestionDetails(prompt, "formAnalyticsID"),
                 questionMediaManager,
-                waitingForDataRegistry,
-                activityAvailability,
                 audioPlayer,
                 audioDataRequester
         );
