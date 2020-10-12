@@ -52,7 +52,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
-import org.odk.collect.android.audio.AudioPlayer;
+import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;

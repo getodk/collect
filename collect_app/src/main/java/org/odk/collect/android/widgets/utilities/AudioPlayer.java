@@ -1,4 +1,4 @@
-package org.odk.collect.android.audio;
+package org.odk.collect.android.widgets.utilities;
 
 import org.odk.collect.audioclips.Clip;
 

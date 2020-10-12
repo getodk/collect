@@ -31,15 +31,15 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioControllerView;
-import org.odk.collect.android.audio.AudioPlayer;
 import org.odk.collect.android.databinding.AudioWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+import org.odk.collect.android.widgets.utilities.AudioPlayer;
+import org.odk.collect.android.widgets.utilities.ExternalAppAudioDataRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.audioclips.Clip;
 
@@ -102,7 +102,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
             binding.captureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
             binding.chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-            binding.captureButton.setOnClickListener(v -> onCaptureAudioButtonClicked());
+            binding.captureButton.setOnClickListener(v -> new ExternalAppAudioDataRequester((Activity) getContext(), activityAvailability, waitingForDataRegistry, getPermissionUtils()).requestAudioRecording(getFormEntryPrompt()));
             binding.chooseButton.setOnClickListener(v -> chooseSound());
         }
 
@@ -148,7 +148,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
      * so a File object would be presented.
      *
      * @param object Uri or File of the chosen file.
-     * @see org.odk.collect.android.activities.FormEntryActivity#onActivityResult(int, int, Intent)
+     * @see org.odk.collect.android.activities.FormEntryActivity
      */
     @Override
     public void setData(Object object) {
@@ -247,34 +247,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
         super.cancelLongPress();
         binding.captureButton.cancelLongPress();
         binding.chooseButton.cancelLongPress();
-    }
-
-    private void onCaptureAudioButtonClicked() {
-        getPermissionUtils().requestRecordAudioPermission((Activity) getContext(), new PermissionListener() {
-            @Override
-            public void granted() {
-                captureAudio();
-            }
-
-            @Override
-            public void denied() {
-            }
-        });
-    }
-
-    private void captureAudio() {
-        Intent intent = new Intent(android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION);
-        intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.toString());
-
-        if (activityAvailability.isActivityAvailable(intent)) {
-            waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-            ((Activity) getContext()).startActivityForResult(intent, RequestCodes.AUDIO_CAPTURE);
-        } else {
-            Toast.makeText(getContext(), getContext().getString(R.string.activity_not_found,
-                    getContext().getString(R.string.capture_audio)), Toast.LENGTH_SHORT).show();
-            waitingForDataRegistry.cancelWaitingForData();
-        }
     }
 
     private void chooseSound() {
