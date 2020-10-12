@@ -32,8 +32,13 @@ import java.util.function.Supplier;
  * construct multiple instances (within a {@link android.view.View} or
  * {@link androidx.fragment.app.Fragment} for instance) if needed within one
  * {@link android.app.Activity}.
+ *
+ * @deprecated wrapping the ViewModel like this doesn't really fit with other ways we've integrated
+ * widgets with "external" services. Instead of this widgets should talk to {@link AudioPlayer}
+ * and the Activity/Fragment components should talk to the ViewModel itself.
  */
 
+@Deprecated
 public class AudioHelper {
 
     private final LifecycleOwner lifecycleOwner;
