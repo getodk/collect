@@ -6,6 +6,7 @@ import org.odk.collect.async.Cancellable
 import org.odk.collect.async.Scheduler
 import java.io.File
 import java.io.IOException
+import java.lang.Integer.max
 import java.util.*
 import java.util.function.Supplier
 import kotlin.jvm.Throws
@@ -148,13 +149,16 @@ class AudioClipViewModel(private val mediaPlayerFactory: Supplier<MediaPlayer>, 
     }
 
     private fun schedulePositionUpdates() {
+        val clipDuration = mediaPlayer.duration
+        val timeBetweenUpdates = max(clipDuration / 100, 1000 / 12) // Never faster than 12fps
+
         positionUpdatesCancellable = scheduler.repeat(Runnable {
             val currentlyPlaying = currentlyPlaying.value
             if (currentlyPlaying != null) {
                 val position = getPositionForClip(currentlyPlaying.clip.clipID)
                 position.postValue(mediaPlayer.currentPosition)
             }
-        }, 500)
+        }, timeBetweenUpdates.toLong())
     }
 
     private fun cancelPositionUpdates() {

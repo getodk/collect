@@ -15,6 +15,7 @@
 package org.odk.collect.android.audio;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
@@ -40,9 +41,9 @@ public class AudioControllerView extends FrameLayout {
     private final SeekBar seekBar;
     private final SwipeListener swipeListener;
 
-    private Boolean playing = false;
-    private Integer position = 0;
-    private Integer duration = 0;
+    private boolean playing;
+    private int position;
+    private int duration;
 
     private Listener listener;
 
@@ -137,7 +138,12 @@ public class AudioControllerView extends FrameLayout {
         this.position = position;
 
         currentDurationLabel.setText(getTime(position));
-        seekBar.setProgress(position);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            seekBar.setProgress(position, true);
+        } else {
+            seekBar.setProgress(position);
+        }
     }
 
     public interface SwipableParent {
