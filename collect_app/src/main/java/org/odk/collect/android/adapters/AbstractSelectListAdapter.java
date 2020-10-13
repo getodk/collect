@@ -316,6 +316,9 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
                 audioVideoImageTextLabel.findViewById(R.id.audio_video_image_text_label_container).setLayoutParams(params);
                 audioVideoImageTextLabel.findViewById(R.id.image_text_label_container).setLayoutParams(params);
+                audioVideoImageTextLabel.getImageView().setVisibility(View.GONE);
+                audioVideoImageTextLabel.getVideoButton().setVisibility(View.GONE);
+                audioVideoImageTextLabel.getAudioButton().setVisibility(View.GONE);
             }
         }
     }

@@ -89,7 +89,6 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
                 audioVideoImageTextLabel = (AudioVideoImageTextLabel) v;
                 audioVideoImageTextLabel.setPlayTextColor(playColor);
                 audioVideoImageTextLabel.setItemClickListener(listener);
-                adjustAudioVideoImageTextLabelParams();
             }
         }
 
@@ -102,6 +101,8 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
                 } else {
                     view.setBackground(null);
                 }
+            } else {
+                adjustAudioVideoImageTextLabelParams();
             }
         }
     }

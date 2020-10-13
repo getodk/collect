@@ -72,7 +72,6 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
                 audioVideoImageTextLabel = (AudioVideoImageTextLabel) v;
                 audioVideoImageTextLabel.setPlayTextColor(playColor);
                 audioVideoImageTextLabel.setItemClickListener(listener);
-                adjustAudioVideoImageTextLabelParams();
             }
         }
 
@@ -86,6 +85,8 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
                         break;
                     }
                 }
+            } else {
+                adjustAudioVideoImageTextLabelParams();
             }
         }
     }
