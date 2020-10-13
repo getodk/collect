@@ -77,7 +77,7 @@ public class DatabaseFormsRepository implements FormsRepository {
     @Nullable
     @Override
     public Form getByPath(String path) {
-        try (Cursor cursor = new FormsDao().getFormsCursorForFormFilePath(path)){
+        try (Cursor cursor = new FormsDao().getFormsCursorForFormFilePath(path)) {
             return getFormOrNull(cursor);
         }
     }
