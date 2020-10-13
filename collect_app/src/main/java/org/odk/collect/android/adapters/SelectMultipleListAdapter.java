@@ -86,7 +86,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
                     }
                 }
             } else {
-                adjustAudioVideoImageTextLabelParams();
+                adjustAudioVideoImageTextLabelForFlexAppearance();
             }
         }
     }

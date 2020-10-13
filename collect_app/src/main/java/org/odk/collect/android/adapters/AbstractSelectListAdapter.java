@@ -310,7 +310,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
             return imageURI;
         }
 
-        void adjustAudioVideoImageTextLabelParams() {
+        void adjustAudioVideoImageTextLabelForFlexAppearance() {
             if (WidgetAppearanceUtils.isFlexAppearance(prompt)) {
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 

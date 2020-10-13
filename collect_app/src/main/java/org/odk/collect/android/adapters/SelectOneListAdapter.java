@@ -102,7 +102,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
                     view.setBackground(null);
                 }
             } else {
-                adjustAudioVideoImageTextLabelParams();
+                adjustAudioVideoImageTextLabelForFlexAppearance();
             }
         }
     }
