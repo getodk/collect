@@ -11,7 +11,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester;
+import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
 
@@ -33,13 +33,13 @@ public class GeoTraceWidgetTest {
     private final String answer = stringFromDoubleList();
 
     private WaitingForDataRegistry waitingForDataRegistry;
-    private ActivityGeoDataRequester activityGeoDataRequester;
+    private GeoDataRequester geoDataRequester;
     private MapConfigurator mapConfigurator;
 
     @Before
     public void setup() {
         waitingForDataRegistry = mock(WaitingForDataRegistry.class);
-        activityGeoDataRequester = mock(ActivityGeoDataRequester.class);
+        geoDataRequester = mock(GeoDataRequester.class);
         mapConfigurator = mock(MapConfigurator.class);
     }
 
@@ -167,7 +167,7 @@ public class GeoTraceWidgetTest {
         when(mapConfigurator.isAvailable(widget.getContext())).thenReturn(false);
         widget.binding.simpleButton.performClick();
 
-        verify(activityGeoDataRequester, never()).requestGeoTrace(widget.getContext(), prompt, waitingForDataRegistry);
+        verify(geoDataRequester, never()).requestGeoTrace(widget.getContext(), prompt, waitingForDataRegistry);
         verify(mapConfigurator).showUnavailableMessage(widget.getContext());
     }
 
@@ -179,11 +179,11 @@ public class GeoTraceWidgetTest {
         when(mapConfigurator.isAvailable(widget.getContext())).thenReturn(true);
         widget.binding.simpleButton.performClick();
 
-        verify(activityGeoDataRequester).requestGeoTrace(widget.getContext(), prompt, waitingForDataRegistry);
+        verify(geoDataRequester).requestGeoTrace(widget.getContext(), prompt, waitingForDataRegistry);
     }
 
     private GeoTraceWidget createWidget(FormEntryPrompt prompt) {
         return new GeoTraceWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"),
-                waitingForDataRegistry, mapConfigurator, activityGeoDataRequester);
+                waitingForDataRegistry, mapConfigurator, geoDataRequester);
     }
 }

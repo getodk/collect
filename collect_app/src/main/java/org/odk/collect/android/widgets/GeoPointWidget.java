@@ -28,7 +28,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester;
+import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -37,13 +37,13 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
     GeoWidgetAnswerBinding binding;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
-    private final ActivityGeoDataRequester activityGeoDataRequester;
+    private final GeoDataRequester geoDataRequester;
 
     public GeoPointWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry,
-                          ActivityGeoDataRequester activityGeoDataRequester) {
+                          GeoDataRequester geoDataRequester) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
-        this.activityGeoDataRequester = activityGeoDataRequester;
+        this.geoDataRequester = geoDataRequester;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
             binding.simpleButton.setVisibility(GONE);
         } else {
             binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-            binding.simpleButton.setOnClickListener(v -> activityGeoDataRequester.requestGeoPoint(context, prompt, waitingForDataRegistry));
+            binding.simpleButton.setOnClickListener(v -> geoDataRequester.requestGeoPoint(context, prompt, waitingForDataRegistry));
         }
 
         String answerText = prompt.getAnswerText();

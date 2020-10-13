@@ -13,8 +13,9 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 
-public class ActivityGeoDataRequester {
+public class ActivityGeoDataRequester implements GeoDataRequester {
     public static final String LOCATION = "gp";
     public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
     public static final String READ_ONLY = "readOnly";
@@ -22,14 +23,11 @@ public class ActivityGeoDataRequester {
 
     private final PermissionUtils permissionUtils;
 
-    public ActivityGeoDataRequester() {
-        permissionUtils = new PermissionUtils();
-    }
-
     public ActivityGeoDataRequester(PermissionUtils permissionUtils) {
         this.permissionUtils = permissionUtils;
     }
 
+    @Override
     public void requestGeoPoint(Context context, FormEntryPrompt prompt, WaitingForDataRegistry waitingForDataRegistry) {
 
         permissionUtils.requestLocationPermissions((Activity) context, new PermissionListener() {
@@ -66,6 +64,7 @@ public class ActivityGeoDataRequester {
         });
     }
 
+    @Override
     public void requestGeoShape(Context context, FormEntryPrompt prompt, WaitingForDataRegistry waitingForDataRegistry) {
         permissionUtils.requestLocationPermissions((Activity) context, new PermissionListener() {
             @Override
@@ -86,6 +85,7 @@ public class ActivityGeoDataRequester {
         });
     }
 
+    @Override
     public void requestGeoTrace(Context context, FormEntryPrompt prompt, WaitingForDataRegistry waitingForDataRegistry) {
         permissionUtils.requestLocationPermissions((Activity) context, new PermissionListener() {
             @Override

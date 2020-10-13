@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester;
+import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
@@ -29,12 +29,12 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 public class GeoPointWidgetTest {
     private final GeoPointData answer = new GeoPointData(getRandomDoubleArray());
 
-    private ActivityGeoDataRequester activityGeoDataRequester;
+    private GeoDataRequester geoDataRequester;
     private WaitingForDataRegistry waitingForDataRegistry;
 
     @Before
     public void setup() {
-        activityGeoDataRequester = mock(ActivityGeoDataRequester.class);
+        geoDataRequester = mock(GeoDataRequester.class);
         waitingForDataRegistry = mock(WaitingForDataRegistry.class);
     }
 
@@ -141,11 +141,11 @@ public class GeoPointWidgetTest {
         GeoPointWidget widget = createWidget(prompt);
         widget.binding.simpleButton.performClick();
 
-        verify(activityGeoDataRequester).requestGeoPoint(widget.getContext(), prompt, waitingForDataRegistry);
+        verify(geoDataRequester).requestGeoPoint(widget.getContext(), prompt, waitingForDataRegistry);
     }
 
     private GeoPointWidget createWidget(FormEntryPrompt prompt) {
         return new GeoPointWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"),
-                waitingForDataRegistry, activityGeoDataRequester);
+                waitingForDataRegistry, geoDataRequester);
     }
 }
