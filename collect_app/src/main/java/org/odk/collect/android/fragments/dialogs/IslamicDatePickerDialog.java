@@ -73,6 +73,9 @@ public class IslamicDatePickerDialog extends CustomDatePickerDialog {
         if (islamicDay > islamicDate.dayOfMonth().getMaximumValue()) {
             islamicDay = islamicDate.dayOfMonth().getMaximumValue();
         }
+        if (islamicDay < islamicDate.dayOfMonth().getMinimumValue()) {
+            islamicDay = islamicDate.dayOfMonth().getMinimumValue();
+        }
 
         return new LocalDateTime(islamicYear, islamicMonth + 1, islamicDay, 0, 0, 0, 0, IslamicChronology.getInstance());
     }

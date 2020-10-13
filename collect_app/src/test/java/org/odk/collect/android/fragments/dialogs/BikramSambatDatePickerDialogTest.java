@@ -49,7 +49,7 @@ public class BikramSambatDatePickerDialogTest {
         when(datePickerDetails.isSpinnerMode()).thenReturn(false);
         dialogFragment.show(fragmentManager, "TAG");
 
-        DialogFragmentHelpers.assertDialogShowsCorrectDateForYearMode(2077, "2077 (2020)");
+        DialogFragmentHelpers.assertDialogShowsCorrectDateForYearMode(2077, "2076 (2020)");
     }
 
     @Test
@@ -58,7 +58,7 @@ public class BikramSambatDatePickerDialogTest {
         when(datePickerDetails.isSpinnerMode()).thenReturn(false);
         dialogFragment.show(fragmentManager, "TAG");
 
-        DialogFragmentHelpers.assertDialogShowsCorrectDateForMonthMode(2077, 0, "बैशाख 2077 (2020Apr)");
+        DialogFragmentHelpers.assertDialogShowsCorrectDateForMonthMode(2077, 0, "चैत 2076 (2020Apr)");
     }
 
     @Test

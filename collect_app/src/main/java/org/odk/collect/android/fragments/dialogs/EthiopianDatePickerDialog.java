@@ -76,6 +76,9 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
         if (ethiopianDay > ethiopianDate.dayOfMonth().getMaximumValue()) {
             ethiopianDay = ethiopianDate.dayOfMonth().getMaximumValue();
         }
+        if (ethiopianDay < ethiopianDate.dayOfMonth().getMinimumValue()) {
+            ethiopianDay = ethiopianDate.dayOfMonth().getMinimumValue();
+        }
 
         return new LocalDateTime(ethiopianYear, ethiopianMonth + 1, ethiopianDay, 0, 0, 0, 0, EthiopicChronology.getInstance());
     }

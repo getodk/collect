@@ -73,6 +73,10 @@ public class CopticDatePickerDialog extends CustomDatePickerDialog {
             copticDay = copticDate.dayOfMonth().getMaximumValue();
         }
 
+        if (copticDay < copticDate.dayOfMonth().getMinimumValue()) {
+            copticDay = copticDate.dayOfMonth().getMinimumValue();
+        }
+
         return new LocalDateTime(copticYear, copticMonth + 1, copticDay, 0, 0, 0, 0, CopticChronology.getInstance());
     }
 }

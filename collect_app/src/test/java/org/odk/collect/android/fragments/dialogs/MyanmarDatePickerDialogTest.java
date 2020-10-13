@@ -58,7 +58,7 @@ public class MyanmarDatePickerDialogTest {
         when(datePickerDetails.isSpinnerMode()).thenReturn(false);
         dialogFragment.show(fragmentManager, "TAG");
 
-        DialogFragmentHelpers.assertDialogShowsCorrectDateForMonthMode(1382, 1, "ကဆုန် 1382 (2020Apr)");
+        DialogFragmentHelpers.assertDialogShowsCorrectDateForMonthMode(1382, 1, "တန်ခူး 1382 (2020Apr)");
     }
 
     @Test

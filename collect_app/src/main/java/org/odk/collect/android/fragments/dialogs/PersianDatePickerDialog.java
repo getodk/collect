@@ -72,6 +72,9 @@ public class PersianDatePickerDialog extends CustomDatePickerDialog {
         if (persianDay > persianDate.dayOfMonth().getMaximumValue()) {
             persianDay = persianDate.dayOfMonth().getMaximumValue();
         }
+        if (persianDay < persianDate.dayOfMonth().getMinimumValue()) {
+            persianDay = persianDate.dayOfMonth().getMinimumValue();
+        }
 
         return new LocalDateTime(persianYear, persianMonth + 1, persianDay, 0, 0, 0, 0, PersianChronologyKhayyamBorkowski.getInstance());
     }

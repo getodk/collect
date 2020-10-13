@@ -62,14 +62,14 @@ public class DialogFragmentHelpers {
     public static void assertDialogShowsCorrectDateForYearMode(int year, String date) {
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
 
-        assertDatePickerValue(dialog, year, 0, 1);
+        assertDatePickerValue(dialog, year, 0, 0);
         assertThat(((TextView) dialog.findViewById(R.id.date_gregorian)).getText().toString(), equalTo(date));
     }
 
     public static void assertDialogShowsCorrectDateForMonthMode(int year, int month, String date) {
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
 
-        assertDatePickerValue(dialog, year, month, 1);
+        assertDatePickerValue(dialog, year, month, 0);
         assertThat(((TextView) dialog.findViewById(R.id.date_gregorian)).getText().toString(), equalTo(date));
     }
 
