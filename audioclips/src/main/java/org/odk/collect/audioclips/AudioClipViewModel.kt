@@ -6,7 +6,6 @@ import org.odk.collect.async.Cancellable
 import org.odk.collect.async.Scheduler
 import java.io.File
 import java.io.IOException
-import java.lang.Integer.max
 import java.util.*
 import java.util.function.Supplier
 import kotlin.jvm.Throws
