@@ -149,16 +149,13 @@ class AudioClipViewModel(private val mediaPlayerFactory: Supplier<MediaPlayer>, 
     }
 
     private fun schedulePositionUpdates() {
-        val clipDuration = mediaPlayer.duration
-        val timeBetweenUpdates = max(clipDuration / 100, 1000 / 12) // Never faster than 12fps
-
         positionUpdatesCancellable = scheduler.repeat(Runnable {
             val currentlyPlaying = currentlyPlaying.value
             if (currentlyPlaying != null) {
                 val position = getPositionForClip(currentlyPlaying.clip.clipID)
                 position.postValue(mediaPlayer.currentPosition)
             }
-        }, timeBetweenUpdates.toLong())
+        }, 1000 / 12) // 12fps
     }
 
     private fun cancelPositionUpdates() {
