@@ -127,6 +127,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
             if (view != null) {
                 view.setBackground(null);
             }
+            audioHelper.stop();
         } else {
             addItem(selection);
             if (view != null) {
