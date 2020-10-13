@@ -323,7 +323,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         }
     }
 
-    protected void playAudio(SelectChoice selectChoice) {
+    public void playAudio(SelectChoice selectChoice) {
         audioHelper.stop();
         Clip clip = getClip(prompt, selectChoice, referenceManager);
         if (clip != null) {

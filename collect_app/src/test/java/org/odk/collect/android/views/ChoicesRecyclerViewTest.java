@@ -44,6 +44,9 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.RobolectricHelpers.populateRecyclerView;
 
@@ -413,6 +416,52 @@ public class ChoicesRecyclerViewTest {
 
         clickChoice(0); // Select AAA
         assertThat(adapter.hasAnswerChanged(), is(false));
+    }
+
+    @Test
+    public void whenChoiceSelectedInSelectOneNoButtonsMode_shouldTryToPlayAudio() {
+        List<SelectChoice> items = getTestChoices();
+        setUpFormEntryPrompt(items, "no-buttons");
+
+        SelectItemClickListener listener = mock(SelectItemClickListener.class);
+        AudioHelper audioHelper = mock(AudioHelper.class);
+        SelectOneListAdapter adapter = spy(new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true));
+
+        recyclerView.initRecyclerView(adapter, false);
+
+        clickChoice(0); // Select AAA
+        verify(adapter).playAudio(any());
+    }
+
+    @Test
+    public void whenChoiceSelectedInSelectMultiNoButtonsMode_shouldTryToPlayAudio() {
+        List<SelectChoice> items = getTestChoices();
+        setUpFormEntryPrompt(items, "no-buttons");
+
+        SelectItemClickListener listener = mock(SelectItemClickListener.class);
+        AudioHelper audioHelper = mock(AudioHelper.class);
+        SelectMultipleListAdapter adapter = spy(new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true));
+        recyclerView.initRecyclerView(adapter, false);
+
+        clickChoice(0); // Select AAA
+        verify(adapter).playAudio(any());
+    }
+
+    @Test
+    public void whenChoiceUnselectedInSelectMultiNoButtonsMode_shouldStopPlayingAudio() {
+        List<SelectChoice> items = getTestChoices();
+        setUpFormEntryPrompt(items, "no-buttons");
+
+        SelectItemClickListener listener = mock(SelectItemClickListener.class);
+        AudioHelper audioHelper = mock(AudioHelper.class);
+        List<Selection> selectedItems = new ArrayList<>();
+        selectedItems.add(items.get(0).selection());
+        SelectMultipleListAdapter adapter = spy(new SelectMultipleListAdapter(selectedItems, listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true));
+        recyclerView.initRecyclerView(adapter, false);
+
+        clickChoice(0); // Unselect AAA
+        verify(adapter.getAudioHelper()).stop();
+        verify(adapter, never()).playAudio(any());
     }
 
     private List<SelectChoice> getTestChoices() {
