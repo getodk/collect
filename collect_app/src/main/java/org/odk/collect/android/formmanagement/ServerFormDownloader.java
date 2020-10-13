@@ -4,16 +4,16 @@ import android.net.Uri;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.forms.Form;
+import org.odk.collect.android.forms.FormSource;
+import org.odk.collect.android.forms.FormSourceException;
+import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.forms.MediaFile;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.Validator;
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormsRepository;
-import org.odk.collect.android.forms.FormSourceException;
-import org.odk.collect.android.forms.FormSource;
-import org.odk.collect.android.forms.MediaFile;
 
 import java.io.File;
 import java.io.FileOutputStream;

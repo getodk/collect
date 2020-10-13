@@ -37,6 +37,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
+import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.gdrive.sheets.DriveApi;
 import org.odk.collect.android.gdrive.sheets.DriveHelper;
 import org.odk.collect.android.gdrive.sheets.SheetsApi;
@@ -53,7 +54,6 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.UrlUtils;
-import org.odk.collect.android.forms.Form;
 
 import java.io.File;
 import java.io.IOException;

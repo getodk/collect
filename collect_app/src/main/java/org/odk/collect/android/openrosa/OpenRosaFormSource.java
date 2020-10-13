@@ -3,13 +3,13 @@ package org.odk.collect.android.openrosa;
 import org.javarosa.xform.parse.XFormParser;
 import org.jetbrains.annotations.NotNull;
 import org.kxml2.kdom.Element;
-import org.odk.collect.android.utilities.DocumentFetchResult;
-import org.odk.collect.android.utilities.WebCredentialsUtils;
-import org.odk.collect.android.forms.FormSourceException;
-import org.odk.collect.android.forms.FormSource;
 import org.odk.collect.android.forms.FormListItem;
+import org.odk.collect.android.forms.FormSource;
+import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.android.forms.ManifestFile;
 import org.odk.collect.android.forms.MediaFile;
+import org.odk.collect.android.utilities.DocumentFetchResult;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.InputStream;
 import java.net.UnknownHostException;
