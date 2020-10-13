@@ -159,8 +159,27 @@ public class GeoShapeWidgetTest {
         FormEntryPrompt prompt = promptWithAnswer(new StringData(answer));
         GeoShapeWidget widget = createWidget(prompt);
         widget.binding.simpleButton.performClick();
+        verify(geoDataRequester).requestGeoShape(widget.getContext(), prompt, answer, waitingForDataRegistry);
+    }
 
-        verify(geoDataRequester).requestGeoShape(widget.getContext(), prompt, waitingForDataRegistry);
+    @Test
+    public void buttonClick_requestsGeoShape_whenAnswerIsCleared() {
+        FormEntryPrompt prompt = promptWithAnswer(new StringData(answer));
+        GeoShapeWidget widget = createWidget(prompt);
+        widget.clearAnswer();
+        widget.binding.simpleButton.performClick();
+
+        verify(geoDataRequester).requestGeoShape(widget.getContext(), prompt, "", waitingForDataRegistry);
+    }
+
+    @Test
+    public void buttonClick_requestsGeoShape_whenAnswerIsUpdated() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        GeoShapeWidget widget = createWidget(prompt);
+        widget.setData(answer);
+        widget.binding.simpleButton.performClick();
+
+        verify(geoDataRequester).requestGeoShape(widget.getContext(), prompt, answer, waitingForDataRegistry);
     }
 
     private GeoShapeWidget createWidget(FormEntryPrompt prompt) {

@@ -17,6 +17,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -41,6 +42,7 @@ public class GeoTraceWidgetTest {
         waitingForDataRegistry = mock(WaitingForDataRegistry.class);
         geoDataRequester = mock(GeoDataRequester.class);
         mapConfigurator = mock(MapConfigurator.class);
+        when(mapConfigurator.isAvailable(any())).thenReturn(true);
     }
 
     @Test
@@ -174,7 +176,7 @@ public class GeoTraceWidgetTest {
         when(mapConfigurator.isAvailable(widget.getContext())).thenReturn(false);
         widget.binding.simpleButton.performClick();
 
-        verify(geoDataRequester, never()).requestGeoTrace(widget.getContext(), prompt, waitingForDataRegistry);
+        verify(geoDataRequester, never()).requestGeoTrace(widget.getContext(), prompt, "",  waitingForDataRegistry);
         verify(mapConfigurator).showUnavailableMessage(widget.getContext());
     }
 
@@ -182,11 +184,29 @@ public class GeoTraceWidgetTest {
     public void buttonClick_whenMapConfiguratorIsAvailable_requestsGeoTrace() {
         FormEntryPrompt prompt = promptWithAnswer(null);
         GeoTraceWidget widget = createWidget(prompt);
-
-        when(mapConfigurator.isAvailable(widget.getContext())).thenReturn(true);
         widget.binding.simpleButton.performClick();
 
-        verify(geoDataRequester).requestGeoTrace(widget.getContext(), prompt, waitingForDataRegistry);
+        verify(geoDataRequester).requestGeoTrace(widget.getContext(), prompt, "", waitingForDataRegistry);
+    }
+
+    @Test
+    public void buttonClick_requestsGeoTrace_whenAnswerIsCleared() {
+        FormEntryPrompt prompt = promptWithAnswer(new StringData(answer));
+        GeoTraceWidget widget = createWidget(prompt);
+        widget.clearAnswer();
+        widget.binding.simpleButton.performClick();
+
+        verify(geoDataRequester).requestGeoTrace(widget.getContext(), prompt, "", waitingForDataRegistry);
+    }
+
+    @Test
+    public void buttonClick_requestsGeoTrace_whenAnswerIsUpdated() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        GeoTraceWidget widget = createWidget(prompt);
+        widget.setData(answer);
+        widget.binding.simpleButton.performClick();
+
+        verify(geoDataRequester).requestGeoTrace(widget.getContext(), prompt, answer, waitingForDataRegistry);
     }
 
     private GeoTraceWidget createWidget(FormEntryPrompt prompt) {

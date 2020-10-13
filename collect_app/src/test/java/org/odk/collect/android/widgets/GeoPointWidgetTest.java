@@ -138,7 +138,6 @@ public class GeoPointWidgetTest {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.setData(answer.getDisplayText());
-
         verify(valueChangedListener).widgetValueChanged(widget);
     }
 
@@ -147,8 +146,27 @@ public class GeoPointWidgetTest {
         FormEntryPrompt prompt = promptWithAnswer(answer);
         GeoPointWidget widget = createWidget(prompt);
         widget.binding.simpleButton.performClick();
+        verify(geoDataRequester).requestGeoPoint(widget.getContext(), prompt, answer.getDisplayText(), waitingForDataRegistry);
+    }
 
-        verify(geoDataRequester).requestGeoPoint(widget.getContext(), prompt, waitingForDataRegistry);
+    @Test
+    public void buttonClick_requestsGeoPoint_whenAnswerIsCleared() {
+        FormEntryPrompt prompt = promptWithAnswer(answer);
+        GeoPointWidget widget = createWidget(prompt);
+        widget.clearAnswer();
+        widget.binding.simpleButton.performClick();
+
+        verify(geoDataRequester).requestGeoPoint(widget.getContext(), prompt, null, waitingForDataRegistry);
+    }
+
+    @Test
+    public void buttonClick_requestsGeoPoint_whenAnswerIsUpdated() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        GeoPointWidget widget = createWidget(prompt);
+        widget.setData(answer);
+        widget.binding.simpleButton.performClick();
+
+        verify(geoDataRequester).requestGeoPoint(widget.getContext(), prompt, answer.getDisplayText(), waitingForDataRegistry);
     }
 
     private GeoPointWidget createWidget(FormEntryPrompt prompt) {

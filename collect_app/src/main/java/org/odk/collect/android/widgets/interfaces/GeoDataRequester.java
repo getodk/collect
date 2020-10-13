@@ -2,7 +2,6 @@ package org.odk.collect.android.widgets.interfaces;
 
 import android.content.Context;
 
-import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 

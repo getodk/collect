@@ -6,7 +6,6 @@ import android.content.Intent;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.GeoPointData;
-import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +32,6 @@ import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.assertGeo
 import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.assertGeoPolyBundleArgumentEquals;
 import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.getRandomDoubleArray;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.ACCURACY_THRESHOLD;
 import static org.robolectric.Shadows.shadowOf;
@@ -56,7 +54,7 @@ public class ActivityGeoDataRequesterTest {
         testActivity = widgetTestActivity();
         shadowActivity = shadowOf(testActivity);
 
-        prompt = promptWithReadOnly();
+        prompt = promptWithAnswer(null);
         formIndex = mock(FormIndex.class);
         questionDef = mock(QuestionDef.class);
 
@@ -68,7 +66,7 @@ public class ActivityGeoDataRequesterTest {
     @Test
     public void whenPermissionIsNotGranted_requestGeoPoint_doesNotLaunchAnyIntent() {
         permissionUtils.setPermissionGranted(false);
-        activityGeoDataRequester.requestGeoPoint(testActivity, prompt, waitingForDataRegistry);
+        activityGeoDataRequester.requestGeoPoint(testActivity, prompt, "", waitingForDataRegistry);
 
         assertNull(shadowActivity.getNextStartedActivity());
         assertTrue(waitingForDataRegistry.waiting.isEmpty());
@@ -77,7 +75,7 @@ public class ActivityGeoDataRequesterTest {
     @Test
     public void whenPermissionIsNotGranted_requestGeoShape_doesNotLaunchAnyIntent() {
         permissionUtils.setPermissionGranted(false);
-        activityGeoDataRequester.requestGeoShape(testActivity, prompt, waitingForDataRegistry);
+        activityGeoDataRequester.requestGeoShape(testActivity, prompt, "", waitingForDataRegistry);
 
         assertNull(shadowActivity.getNextStartedActivity());
         assertTrue(waitingForDataRegistry.waiting.isEmpty());
@@ -86,7 +84,7 @@ public class ActivityGeoDataRequesterTest {
     @Test
     public void whenPermissionIsNotGranted_requestGeoTrace_doesNotLaunchAnyIntent() {
         permissionUtils.setPermissionGranted(false);
-        activityGeoDataRequester.requestGeoTrace(testActivity, prompt, waitingForDataRegistry);
+        activityGeoDataRequester.requestGeoTrace(testActivity, prompt, "", waitingForDataRegistry);
 
         assertNull(shadowActivity.getNextStartedActivity());
         assertTrue(waitingForDataRegistry.waiting.isEmpty());
@@ -94,25 +92,26 @@ public class ActivityGeoDataRequesterTest {
 
     @Test
     public void whenPermissionIGranted_requestGeoPoint_setsFormIndexWaitingForData() {
-        activityGeoDataRequester.requestGeoPoint(testActivity, prompt, waitingForDataRegistry);
+        activityGeoDataRequester.requestGeoPoint(testActivity, prompt, "", waitingForDataRegistry);
         assertTrue(waitingForDataRegistry.waiting.contains(formIndex));
     }
 
     @Test
     public void whenPermissionIGranted_requestGeoShape_setsFormIndexWaitingForData() {
-        activityGeoDataRequester.requestGeoShape(testActivity, prompt, waitingForDataRegistry);
+        activityGeoDataRequester.requestGeoShape(testActivity, prompt, "", waitingForDataRegistry);
         assertTrue(waitingForDataRegistry.waiting.contains(formIndex));
     }
 
     @Test
     public void whenPermissionIGranted_requestGeoTrace_setsFormIndexWaitingForData() {
-        activityGeoDataRequester.requestGeoTrace(testActivity, prompt, waitingForDataRegistry);
+        activityGeoDataRequester.requestGeoTrace(testActivity, prompt, "", waitingForDataRegistry);
         assertTrue(waitingForDataRegistry.waiting.contains(formIndex));
     }
 
     @Test
-    public void whenPromptIsReadOnly_requestGeoPoint_launchesCorrectIntent() {
-        activityGeoDataRequester.requestGeoPoint(testActivity, prompt, waitingForDataRegistry);
+    public void whenWidgetIsReadOnly_requestGeoPoint_launchesCorrectIntent() {
+        when(prompt.isReadOnly()).thenReturn(true);
+        activityGeoDataRequester.requestGeoPoint(testActivity, prompt, "", waitingForDataRegistry);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
 
         assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivity.class));
@@ -123,12 +122,10 @@ public class ActivityGeoDataRequesterTest {
     }
 
     @Test
-    public void whenPromptHasAnswerAndAccuracyValue_requestGeoPoint_launchesCorrectIntent() {
-        FormEntryPrompt prompt = promptWithAnswer(answer);
-        when(prompt.getQuestion()).thenReturn(questionDef);
+    public void whenWidgetHasAnswerAndAccuracyValue_requestGeoPoint_launchesCorrectIntent() {
         when(questionDef.getAdditionalAttribute(null, ACCURACY_THRESHOLD)).thenReturn("10");
 
-        activityGeoDataRequester.requestGeoPoint(testActivity, prompt, waitingForDataRegistry);
+        activityGeoDataRequester.requestGeoPoint(testActivity, prompt, answer.getDisplayText(), waitingForDataRegistry);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
 
         assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivity.class));
@@ -139,52 +136,50 @@ public class ActivityGeoDataRequesterTest {
     }
 
     @Test
-    public void whenPromptHasMapsAppearance_requestGeoPoint_launchesCorrectIntent() {
-        FormEntryPrompt prompt = promptWithAnswer(null);
-        when(prompt.getQuestion()).thenReturn(questionDef);
+    public void whenWidgetHasMapsAppearance_requestGeoPoint_launchesCorrectIntent() {
         when(prompt.getAppearanceHint()).thenReturn(WidgetAppearanceUtils.MAPS);
 
-        activityGeoDataRequester.requestGeoPoint(testActivity, prompt, waitingForDataRegistry);
+        activityGeoDataRequester.requestGeoPoint(testActivity, prompt, "", waitingForDataRegistry);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
 
         assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointMapActivity.class));
-        assertGeoPointBundleArgumentEquals(startedIntent.getExtras(), null, GeoWidgetUtils.DEFAULT_LOCATION_ACCURACY, false, false);
+        assertGeoPointBundleArgumentEquals(startedIntent.getExtras(), null, GeoWidgetUtils.DEFAULT_LOCATION_ACCURACY,
+                false, false);
 
         assertEquals(shadowActivity.getNextStartedActivityForResult().requestCode, LOCATION_CAPTURE);
     }
 
     @Test
-    public void whenPromptHasPlacementMapAppearance_requestGeoPoint_launchesCorrectIntent() {
-        FormEntryPrompt prompt = promptWithAnswer(null);
-        when(prompt.getQuestion()).thenReturn(questionDef);
+    public void whenWidgetHasPlacementMapAppearance_requestGeoPoint_launchesCorrectIntent() {
         when(prompt.getAppearanceHint()).thenReturn(WidgetAppearanceUtils.PLACEMENT_MAP);
 
-        activityGeoDataRequester.requestGeoPoint(testActivity, prompt, waitingForDataRegistry);
+        activityGeoDataRequester.requestGeoPoint(testActivity, prompt, "", waitingForDataRegistry);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
 
         assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointMapActivity.class));
-        assertGeoPointBundleArgumentEquals(startedIntent.getExtras(), null, GeoWidgetUtils.DEFAULT_LOCATION_ACCURACY, false, true);
+        assertGeoPointBundleArgumentEquals(startedIntent.getExtras(), null, GeoWidgetUtils.DEFAULT_LOCATION_ACCURACY,
+                false, true);
 
         assertEquals(shadowActivity.getNextStartedActivityForResult().requestCode, LOCATION_CAPTURE);
     }
 
     @Test
-    public void whenPromptIsReadOnly_requestGeoShape_launchesCorrectIntent() {
-        activityGeoDataRequester.requestGeoShape(testActivity, prompt, waitingForDataRegistry);
+    public void whenWidgetIsReadOnly_requestGeoShape_launchesCorrectIntent() {
+        when(prompt.isReadOnly()).thenReturn(true);
+        activityGeoDataRequester.requestGeoShape(testActivity, prompt, "", waitingForDataRegistry);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
 
         assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPolyActivity.class));
-        assertGeoPolyBundleArgumentEquals(startedIntent.getExtras(), null, GeoPolyActivity.OutputMode.GEOSHAPE, true);
+        assertGeoPolyBundleArgumentEquals(startedIntent.getExtras(), "", GeoPolyActivity.OutputMode.GEOSHAPE, true);
 
         assertEquals(shadowActivity.getNextStartedActivityForResult().requestCode, GEOSHAPE_CAPTURE);
     }
 
     @Test
-    public void whenPromptHasAnswerAndAccuracyValue_requestGeoShape_launchesCorrectIntent() {
-        FormEntryPrompt prompt = promptWithAnswer(new StringData("blah"));
+    public void whenWidgetHasAnswerAndAccuracyValue_requestGeoShape_launchesCorrectIntent() {
         when(questionDef.getAdditionalAttribute(null, ACCURACY_THRESHOLD)).thenReturn("10");
 
-        activityGeoDataRequester.requestGeoShape(testActivity, prompt, waitingForDataRegistry);
+        activityGeoDataRequester.requestGeoShape(testActivity, prompt, "blah", waitingForDataRegistry);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
 
         assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPolyActivity.class));
@@ -194,22 +189,22 @@ public class ActivityGeoDataRequesterTest {
     }
 
     @Test
-    public void whenPromptIsReadOnly_requestGeoTrace_launchesCorrectIntent() {
-        activityGeoDataRequester.requestGeoTrace(testActivity, prompt, waitingForDataRegistry);
+    public void whenWidgetIsReadOnly_requestGeoTrace_launchesCorrectIntent() {
+        when(prompt.isReadOnly()).thenReturn(true);
+        activityGeoDataRequester.requestGeoTrace(testActivity, prompt, "", waitingForDataRegistry);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
 
         assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPolyActivity.class));
-        assertGeoPolyBundleArgumentEquals(startedIntent.getExtras(), null, GeoPolyActivity.OutputMode.GEOTRACE, true);
+        assertGeoPolyBundleArgumentEquals(startedIntent.getExtras(), "", GeoPolyActivity.OutputMode.GEOTRACE, true);
 
         assertEquals(shadowActivity.getNextStartedActivityForResult().requestCode, GEOTRACE_CAPTURE);
     }
 
     @Test
-    public void whenPromptHasAnswerAndAccuracyValue_requestGeoTrace_launchesCorrectIntent() {
-        FormEntryPrompt prompt = promptWithAnswer(new StringData("blah"));
+    public void whenWidgetHasAnswerAndAccuracyValue_requestGeoTrace_launchesCorrectIntent() {
         when(questionDef.getAdditionalAttribute(null, ACCURACY_THRESHOLD)).thenReturn("10");
 
-        activityGeoDataRequester.requestGeoTrace(testActivity, prompt, waitingForDataRegistry);
+        activityGeoDataRequester.requestGeoTrace(testActivity, prompt, "blah", waitingForDataRegistry);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
 
         assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPolyActivity.class));
