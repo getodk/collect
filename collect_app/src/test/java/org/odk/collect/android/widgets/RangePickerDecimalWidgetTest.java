@@ -94,7 +94,6 @@ public class RangePickerDecimalWidgetTest {
     public void setNumberPickerValue_updatesAnswer() {
         RangePickerDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         widget.setNumberPickerValue(4);
-
         assertThat(widget.getAnswer().getDisplayText(), equalTo("3.5"));
     }
 
@@ -105,7 +104,6 @@ public class RangePickerDecimalWidgetTest {
 
         RangePickerDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         widget.setNumberPickerValue(4);
-
         assertThat(widget.getAnswer().getDisplayText(), equalTo("3.5"));
     }
 

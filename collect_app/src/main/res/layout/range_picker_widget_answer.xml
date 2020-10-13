@@ -6,6 +6,8 @@
 
     <org.odk.collect.android.views.MultiClickSafeButton
         android:id="@+id/widget_button"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
         style="@style/Widget.Collect.Button.WidgetAnswer"
         android:text="@string/select_value" />
 
