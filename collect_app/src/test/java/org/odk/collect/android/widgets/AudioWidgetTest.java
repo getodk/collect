@@ -215,6 +215,21 @@ public class AudioWidgetTest {
         assertThat(widget.getAnswer().getDisplayText(), equalTo(newFile.getName()));
     }
 
+    /**
+     * Currently choosing audio is locked into the {@link org.odk.collect.android.tasks.MediaLoadingTask}
+     * flow and so we'd need to rip this apart to let us drop support for accepting File as data. In
+     * this case it will just grab the name off the file and use {@link org.odk.collect.android.utilities.QuestionMediaManager}
+     * to handle grabbing the actual file
+     */
+    @Test
+    public void setData_supportsFilesAsWellAsStrings() throws Exception {
+        AudioWidget widget = createWidget(promptWithAnswer(null));
+
+        File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
+        widget.setData(newFile);
+        assertThat(widget.getAnswer().getDisplayText(), equalTo(newFile.getName()));
+    }
+
     @Test
     public void setData_whenFileExists_updatesPlayerMedia() throws Exception {
         FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.mp3"));

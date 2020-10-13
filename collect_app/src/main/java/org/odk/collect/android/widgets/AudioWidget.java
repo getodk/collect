@@ -111,18 +111,15 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
     }
 
     /**
-     * Set this widget with the actual file returned by OnActivityResult.
-     * Both of Uri and File are supported.
-     * If the file is local, a Uri is enough for the copy task below.
-     * If the chose file is from cloud(such as Google Drive),
-     * The retrieve and copy task is already executed in the previous step,
-     * so a File object would be presented.
-     *
-     * @param object Uri or File of the chosen file.
+     * @param object file name of media file that will be available in the {@link QuestionMediaManager}
      * @see org.odk.collect.android.activities.FormEntryActivity
      */
     @Override
     public void setData(Object object) {
+        // Support being handed a File as well
+        if (object instanceof File) {
+            object = (String) ((File) object).getName();
+        }
         if (object instanceof String) {
             String fileName = (String) object;
             File newAudio = questionMediaManager.getAnswerFile(fileName);
