@@ -129,6 +129,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
             view.setBackground(ContextCompat.getDrawable(view.getContext(), R.drawable.select_item_border));
             selectedItem = view;
             selectedValue = selection.getValue();
+            playAudio(selection.choice);
         }
         listener.onItemClicked();
     }

@@ -42,6 +42,7 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.utilities.FileUtils;
@@ -57,6 +58,7 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.formentry.media.FormMediaUtils.getClip;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getClipID;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
 import static org.odk.collect.android.widgets.QuestionWidget.isRTL;
@@ -315,6 +317,14 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                 audioVideoImageTextLabel.findViewById(R.id.audio_video_image_text_label_container).setLayoutParams(params);
                 audioVideoImageTextLabel.findViewById(R.id.image_text_label_container).setLayoutParams(params);
             }
+        }
+    }
+
+    protected void playAudio(SelectChoice selectChoice) {
+        audioHelper.stop();
+        Clip clip = getClip(prompt, selectChoice, referenceManager);
+        if (clip != null) {
+            audioHelper.play(clip);
         }
     }
 

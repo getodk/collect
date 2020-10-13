@@ -132,6 +132,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
             if (view != null) {
                 view.setBackground(ContextCompat.getDrawable(view.getContext(), R.drawable.select_item_border));
             }
+            playAudio(selection.choice);
         }
     }
 
