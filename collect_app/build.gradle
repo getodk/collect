@@ -96,6 +96,7 @@ android {
             }
         }
 
+        // This uses the default debug keystore that the Android tooling creates https://stackoverflow.com/questions/16622528/android-studio-debug-keystore
         selfSignedRelease {
             storeFile new File(System.getProperty("user.home") + '/.android/debug.keystore')
             storePassword 'android'
