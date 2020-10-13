@@ -103,7 +103,7 @@ public class GeoPointMapWidgetTest {
     @Test
     public void setData_updatesWidgetAnswer() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
-        widget.setBinaryData(answer.getDisplayText());
+        widget.setData(answer.getDisplayText());
         assertEquals(widget.getAnswer().getDisplayText(), answer.getDisplayText());
     }
 
@@ -111,21 +111,21 @@ public class GeoPointMapWidgetTest {
     @Test
     public void setData_updatesWidgetDisplayedAnswer() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
-        widget.setBinaryData(answer.getDisplayText());
+        widget.setData(answer.getDisplayText());
         assertEquals(widget.binding.geoAnswerText.getText(), GeoWidgetUtils.getAnswerToDisplay(widget.getContext(), answer.getDisplayText()));
     }
 
     @Test
     public void setData_whenDataIsNull_updatesButtonLabel() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(answer));
-        widget.setBinaryData("");
+        widget.setData("");
         assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.get_point));
     }
 
     @Test
     public void setData_whenDataIsNotNull_updatesButtonLabel() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
-        widget.setBinaryData(answer.getDisplayText());
+        widget.setData(answer.getDisplayText());
         assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.view_change_location));
     }
 
@@ -133,7 +133,7 @@ public class GeoPointMapWidgetTest {
     public void setData_callsValueChangeListener() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.setBinaryData(answer.getDisplayText());
+        widget.setData(answer.getDisplayText());
 
         verify(valueChangedListener).widgetValueChanged(widget);
     }

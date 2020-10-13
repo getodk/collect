@@ -125,35 +125,35 @@ public class GeoTraceWidgetTest {
     @Test
     public void setData_updatesWidgetAnswer() {
         GeoTraceWidget widget = createWidget(promptWithAnswer(null));
-        widget.setBinaryData(answer);
+        widget.setData(answer);
         assertEquals(widget.getAnswer().getDisplayText(), answer);
     }
 
     @Test
     public void setData_setsCorrectAnswerInAnswerTextView() {
         GeoTraceWidget widget = createWidget(promptWithAnswer(null));
-        widget.setBinaryData(answer);
+        widget.setData(answer);
         assertEquals(widget.binding.geoAnswerText.getText().toString(), answer);
     }
 
     @Test
     public void setData_updatesWidgetDisplayedAnswer() {
         GeoTraceWidget widget = createWidget(promptWithAnswer(null));
-        widget.setBinaryData(answer);
+        widget.setData(answer);
         assertEquals(widget.binding.geoAnswerText.getText().toString(), answer);
     }
 
     @Test
     public void setData_whenDataIsNull_updatesButtonLabel() {
         GeoTraceWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        widget.setBinaryData("");
+        widget.setData("");
         assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.get_trace));
     }
 
     @Test
     public void setData_whenDataIsNotNull_updatesButtonLabel() {
         GeoTraceWidget widget = createWidget(promptWithAnswer(null));
-        widget.setBinaryData(answer);
+        widget.setData(answer);
         assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.geotrace_view_change_location));
     }
 
@@ -161,7 +161,7 @@ public class GeoTraceWidgetTest {
     public void setData_callsValueChangeListener() {
         GeoTraceWidget widget = createWidget(promptWithAnswer(null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.setBinaryData(answer);
+        widget.setData(answer);
 
         verify(valueChangedListener).widgetValueChanged(widget);
     }

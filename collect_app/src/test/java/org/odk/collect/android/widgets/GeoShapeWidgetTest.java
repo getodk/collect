@@ -120,28 +120,28 @@ public class GeoShapeWidgetTest {
     @Test
     public void setData_updatesWidgetAnswer() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(null));
-        widget.setBinaryData(answer);
+        widget.setData(answer);
         assertEquals(widget.getAnswer().getDisplayText(), answer);
     }
 
     @Test
     public void setData_updatesWidgetDisplayedAnswer() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(null));
-        widget.setBinaryData(answer);
+        widget.setData(answer);
         assertEquals(widget.binding.geoAnswerText.getText().toString(), answer);
     }
 
     @Test
     public void setData_whenDataIsNull_updatesButtonLabel() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        widget.setBinaryData("");
+        widget.setData("");
         assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.get_shape));
     }
 
     @Test
     public void setData_whenDataIsNotNull_updatesButtonLabel() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(null));
-        widget.setBinaryData(answer);
+        widget.setData(answer);
         assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.geoshape_view_change_location));
     }
 
@@ -149,7 +149,7 @@ public class GeoShapeWidgetTest {
     public void setData_callsValueChangeListener() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.setBinaryData(answer);
+        widget.setData(answer);
 
         verify(valueChangedListener).widgetValueChanged(widget);
     }
