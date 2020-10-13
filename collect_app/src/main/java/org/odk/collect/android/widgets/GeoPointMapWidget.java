@@ -87,6 +87,7 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
 
     @Override
     public void clearAnswer() {
+        answerText = null;
         binding.geoAnswerText.setText(null);
         binding.simpleButton.setText(R.string.get_point);
         widgetValueChanged();
