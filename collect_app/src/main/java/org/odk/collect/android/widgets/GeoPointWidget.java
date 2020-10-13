@@ -29,9 +29,13 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+<<<<<<< HEAD
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+=======
+import org.odk.collect.android.geo.MapConfigurator;
+>>>>>>> 911881237... add unit tests
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -41,6 +45,7 @@ import static org.odk.collect.android.widgets.GeoPointMapWidget.DEFAULT_LOCATION
 import static org.odk.collect.android.widgets.GeoPointMapWidget.LOCATION;
 
 @SuppressLint("ViewConstructor")
+<<<<<<< HEAD
 public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver {
 
     private final WaitingForDataRegistry waitingForDataRegistry;
@@ -55,19 +60,54 @@ public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
 
+=======
+public class GeoPointWidget extends BaseGeoWidget {
+    public static final String LOCATION = "gp";
+    public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
+    public static final String READ_ONLY = "readOnly";
+    public static final String DRAGGABLE_ONLY = "draggable";
+
+    public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
+    private MapConfigurator mapConfigurator;
+    private boolean useMap;
+    private double accuracyThreshold;
+    private boolean draggable = true;
+    private String stringAnswer;
+
+    public GeoPointWidget(Context context, QuestionDetails questionDetails, QuestionDef questionDef, MapConfigurator mapConfigurator) {
+        super(context, questionDetails);
+        this.mapConfigurator = mapConfigurator;
+        determineMapProperties(questionDef);
+    }
+
+    private void determineMapProperties(QuestionDef questionDef) {
+>>>>>>> 911881237... add unit tests
         // Determine the accuracy threshold to use.
         String acc = questionDef.getAdditionalAttribute(null, ACCURACY_THRESHOLD);
         accuracyThreshold = acc != null && !acc.isEmpty() ? Double.parseDouble(acc) : DEFAULT_LOCATION_ACCURACY;
 
+<<<<<<< HEAD
         stringAnswer = getFormEntryPrompt().getAnswerText();
         boolean dataAvailable = false;
         if (stringAnswer != null && !stringAnswer.isEmpty()) {
             dataAvailable = true;
             setBinaryData(stringAnswer);
+=======
+        // Determine whether to use the map and whether the point should be draggable.
+        if (mapConfigurator.isAvailable(getContext())) {
+            if (hasAppearance(getFormEntryPrompt(), PLACEMENT_MAP)) {
+                draggable = true;
+                useMap = true;
+            } else if (hasAppearance(getFormEntryPrompt(), MAPS)) {
+                draggable = false;
+                useMap = true;
+            }
+>>>>>>> 911881237... add unit tests
         }
         updateButtonLabelsAndVisibility(dataAvailable);
     }
 
+<<<<<<< HEAD
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = GeoWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
@@ -78,6 +118,12 @@ public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver
         readOnly = prompt.isReadOnly();
         if (readOnly) {
             binding.simpleButton.setVisibility(GONE);
+=======
+    public void updateButtonLabelsAndVisibility(boolean dataAvailable) {
+        if (useMap) {
+            startGeoButton.setText(
+                dataAvailable ? R.string.view_change_location : R.string.get_point);
+>>>>>>> 911881237... add unit tests
         } else {
             binding.simpleButton.setText(getDefaultButtonLabel());
             binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
@@ -126,8 +172,12 @@ public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver
             stringAnswer = "";
         }
 
+<<<<<<< HEAD
         updateButtonLabelsAndVisibility(stringAnswer != null);
+=======
+>>>>>>> 911881237... add unit tests
         widgetValueChanged();
+        updateButtonLabelsAndVisibility(true);
     }
 
     private String getAnswerToDisplay(String answer) {

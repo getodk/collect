@@ -40,7 +40,7 @@ import static org.odk.collect.android.widgets.GeoPointMapWidget.DRAGGABLE_ONLY;
 import static org.odk.collect.android.widgets.GeoPointMapWidget.LOCATION;
 import static org.odk.collect.android.widgets.GeoPointMapWidget.READ_ONLY;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAppearance;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAppearanceAndReadOnly;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
@@ -215,7 +215,7 @@ public class GeoPointMapWidgetTest {
 
     @Test
     public void ifWidgetHasPlacementMapsAppearance_buttonShouldLaunchCorrectIntent() {
-        GeoPointMapWidget widget = createWidget(promptWithAppearance(PLACEMENT_MAP));
+        GeoPointMapWidget widget = createWidget(promptWithAppearanceAndReadOnly(PLACEMENT_MAP, true));
         stubLocationPermissions(widget, true);
         widget.binding.simpleButton.performClick();
 
@@ -228,7 +228,7 @@ public class GeoPointMapWidgetTest {
 
     @Test
     public void ifWidgetHasMapsAppearance_buttonShouldLaunchCorrectIntent() {
-        GeoPointMapWidget widget = createWidget(promptWithAppearance(MAPS));
+        GeoPointMapWidget widget = createWidget(promptWithAppearanceAndReadOnly(MAPS, true));
         stubLocationPermissions(widget, true);
         widget.binding.simpleButton.performClick();
 
