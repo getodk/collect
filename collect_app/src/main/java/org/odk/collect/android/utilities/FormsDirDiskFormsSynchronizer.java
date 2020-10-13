@@ -92,17 +92,6 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
                                         cursor.getColumnIndex(FormsProviderAPI.FormsColumns._ID));
                                 Uri updateUri = Uri.withAppendedPath(FormsProviderAPI.FormsColumns.CONTENT_URI, id);
                                 uriToUpdate.add(new UriFile(updateUri, sqlFile));
-                            } else {
-                                if (!cursor.isNull(cursor.getColumnIndex(FormsProviderAPI.FormsColumns.DELETED_DATE))) {
-                                    long deletedDate = cursor.getLong(cursor.getColumnIndex(FormsProviderAPI.FormsColumns.DELETED_DATE));
-
-                                    if (sqlFile.lastModified() > deletedDate) {
-                                        String id = cursor.getString(
-                                                cursor.getColumnIndex(FormsProviderAPI.FormsColumns._ID));
-                                        Uri updateUri = Uri.withAppendedPath(FormsProviderAPI.FormsColumns.CONTENT_URI, id);
-                                        uriToUpdate.add(new UriFile(updateUri, sqlFile));
-                                    }
-                                }
                             }
                         } else {
                             //File not found in sdcard but file path found in database
