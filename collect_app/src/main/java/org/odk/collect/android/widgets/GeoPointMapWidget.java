@@ -31,7 +31,7 @@ import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -41,7 +41,7 @@ import static org.odk.collect.android.utilities.WidgetAppearanceUtils.PLACEMENT_
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.hasAppearance;
 
 @SuppressLint("ViewConstructor")
-public class GeoPointMapWidget extends QuestionWidget implements BinaryDataReceiver {
+public class GeoPointMapWidget extends QuestionWidget implements WidgetDataReceiver {
     public static final String LOCATION = "gp";
     public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
     public static final String READ_ONLY = "readOnly";
@@ -67,7 +67,7 @@ public class GeoPointMapWidget extends QuestionWidget implements BinaryDataRecei
         boolean dataAvailable = false;
         if (stringAnswer != null && !stringAnswer.isEmpty()) {
             dataAvailable = true;
-            setBinaryData(stringAnswer);
+            setData(stringAnswer);
         }
         updateButtonLabelsAndVisibility(dataAvailable);
     }
@@ -117,7 +117,7 @@ public class GeoPointMapWidget extends QuestionWidget implements BinaryDataRecei
     }
 
     @Override
-    public void setBinaryData(Object answer) {
+    public void setData(Object answer) {
         stringAnswer = (String) answer;
         binding.geoAnswerText.setText(getAnswerToDisplay(stringAnswer));
 

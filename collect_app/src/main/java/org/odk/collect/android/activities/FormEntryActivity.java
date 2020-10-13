@@ -151,7 +151,7 @@ import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangePickerDecimalWidget;
 import org.odk.collect.android.widgets.RangePickerIntegerWidget;
-import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.FormControllerWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -995,10 +995,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (currentViewIfODKView != null) {
             boolean set = false;
             for (QuestionWidget widget : currentViewIfODKView.getWidgets()) {
-                if (widget instanceof BinaryDataReceiver) {
+                if (widget instanceof WidgetDataReceiver) {
                     if (waitingForDataRegistry.isWaitingForData(widget.getFormEntryPrompt().getIndex())) {
                         try {
-                            ((BinaryDataReceiver) widget).setBinaryData(data);
+                            ((WidgetDataReceiver) widget).setData(data);
                             waitingForDataRegistry.cancelWaitingForData();
                         } catch (Exception e) {
                             Timber.e(e);

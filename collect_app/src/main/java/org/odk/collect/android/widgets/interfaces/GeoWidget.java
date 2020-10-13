@@ -1,6 +1,6 @@
 package org.odk.collect.android.widgets.interfaces;
 
-public interface GeoWidget extends BinaryDataReceiver {
+public interface GeoWidget extends WidgetDataReceiver {
 
     void startGeoActivity();
 

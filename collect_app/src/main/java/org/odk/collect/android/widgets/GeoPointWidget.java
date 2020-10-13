@@ -24,7 +24,6 @@ import android.view.View;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
@@ -32,7 +31,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 <<<<<<< HEAD
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 =======
 import org.odk.collect.android.geo.MapConfigurator;
 >>>>>>> 911881237... add unit tests
@@ -40,13 +39,10 @@ import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.android.widgets.GeoPointMapWidget.ACCURACY_THRESHOLD;
-import static org.odk.collect.android.widgets.GeoPointMapWidget.DEFAULT_LOCATION_ACCURACY;
-import static org.odk.collect.android.widgets.GeoPointMapWidget.LOCATION;
 
 @SuppressLint("ViewConstructor")
 <<<<<<< HEAD
-public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver {
+public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver {
 
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final double accuracyThreshold;
@@ -91,7 +87,7 @@ public class GeoPointWidget extends BaseGeoWidget {
         boolean dataAvailable = false;
         if (stringAnswer != null && !stringAnswer.isEmpty()) {
             dataAvailable = true;
-            setBinaryData(stringAnswer);
+            setData(stringAnswer);
 =======
         // Determine whether to use the map and whether the point should be draggable.
         if (mapConfigurator.isAvailable(getContext())) {

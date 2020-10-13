@@ -109,14 +109,14 @@ public class BarcodeWidgetTest {
     @Test
     public void setData_updatesWidgetAnswer_afterStrippingInvalidCharacters() {
         BarcodeWidget widget = createWidget(promptWithAnswer(null));
-        widget.setBinaryData("\ud800blah\b");
+        widget.setData("\ud800blah\b");
         assertThat(widget.binding.barcodeAnswerText.getText().toString(), is("blah"));
     }
 
     @Test
     public void setData_updatesButtonLabel() {
         BarcodeWidget widget = createWidget(promptWithAnswer(null));
-        widget.setBinaryData("\ud800blah\b");
+        widget.setData("\ud800blah\b");
         assertThat(widget.binding.barcodeButton.getText(), is(widgetTestActivity.getString(R.string.replace_barcode)));
     }
 
@@ -124,7 +124,7 @@ public class BarcodeWidgetTest {
     public void setData_callsValueChangeListener() {
         BarcodeWidget widget = createWidget(promptWithAnswer(null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.setBinaryData("blah");
+        widget.setData("blah");
 
         verify(valueChangedListener).widgetValueChanged(widget);
     }

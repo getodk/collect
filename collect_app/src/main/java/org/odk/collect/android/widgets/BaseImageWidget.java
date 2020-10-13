@@ -47,7 +47,7 @@ import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
-import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -57,7 +57,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerImageView;
 
-public abstract class BaseImageWidget extends QuestionWidget implements FileWidget, BinaryDataReceiver {
+public abstract class BaseImageWidget extends QuestionWidget implements FileWidget, WidgetDataReceiver {
 
     @Nullable
     protected ImageView imageView;
@@ -101,7 +101,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     }
 
     @Override
-    public void setBinaryData(Object newImageObj) {
+    public void setData(Object newImageObj) {
         // you are replacing an answer. delete the previous image using the
         // content provider.
         if (binaryName != null) {

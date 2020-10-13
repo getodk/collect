@@ -43,7 +43,7 @@ import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
@@ -64,7 +64,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  */
 
 @SuppressLint("ViewConstructor")
-public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDataReceiver {
+public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDataReceiver {
     AudioWidgetAnswerBinding binding;
     AudioControllerView audioController;
 
@@ -168,7 +168,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
      * @see org.odk.collect.android.activities.FormEntryActivity#onActivityResult(int, int, Intent)
      */
     @Override
-    public void setBinaryData(Object object) {
+    public void setData(Object object) {
         File newAudio;
         // get the file path and create a copy in the instance folder
         if (object instanceof Uri) {

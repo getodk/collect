@@ -10,7 +10,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.junit.Test;
 import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
-import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.Widget;
 
 import static org.junit.Assert.assertEquals;
@@ -79,7 +79,7 @@ public abstract class BinaryWidgetTest<W extends Widget, A extends IAnswerData>
         A answer = getNextAnswer();
         Object binaryData = createBinaryData(answer);
 
-        ((BinaryDataReceiver) widget).setBinaryData(binaryData);
+        ((WidgetDataReceiver) widget).setData(binaryData);
 
         IAnswerData answerData = widget.getAnswer();
 
@@ -97,7 +97,7 @@ public abstract class BinaryWidgetTest<W extends Widget, A extends IAnswerData>
         A newAnswer = getNextAnswer();
         Object binaryData = createBinaryData(newAnswer);
 
-        ((BinaryDataReceiver) widget).setBinaryData(binaryData);
+        ((WidgetDataReceiver) widget).setData(binaryData);
 
         IAnswerData answerData = widget.getAnswer();
 

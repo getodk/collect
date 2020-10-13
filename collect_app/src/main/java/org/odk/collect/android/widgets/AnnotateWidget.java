@@ -199,8 +199,8 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
     }
 
     @Override
-    public void setBinaryData(Object newImageObj) {
-        super.setBinaryData(newImageObj);
+    public void setData(Object newImageObj) {
+        super.setData(newImageObj);
 
         annotateButton.setEnabled(binaryName != null);
     }

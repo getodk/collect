@@ -56,7 +56,7 @@ public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget 
 
         if (answerText != null && !answerText.isEmpty()) {
             dataAvailable = true;
-            setBinaryData(answerText);
+            setData(answerText);
         }
 
         updateButtonLabelsAndVisibility(dataAvailable);
@@ -84,7 +84,7 @@ public abstract class BaseGeoWidget extends QuestionWidget implements GeoWidget 
     }
 
     @Override
-    public void setBinaryData(Object answer) {
+    public void setData(Object answer) {
         String answerText = answer.toString();
         answerDisplay.setText(getAnswerToDisplay(answerText));
         widgetValueChanged();

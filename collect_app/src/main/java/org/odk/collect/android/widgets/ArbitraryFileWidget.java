@@ -44,7 +44,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
@@ -58,7 +58,7 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.create
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 
 @SuppressLint("ViewConstructor")
-public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, ButtonClickListener, BinaryDataReceiver {
+public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, ButtonClickListener, WidgetDataReceiver {
 
     @NonNull
     private FileUtil fileUtil;
@@ -119,7 +119,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
     }
 
     @Override
-    public void setBinaryData(Object object) {
+    public void setData(Object object) {
         File newFile;
         // get the file path and create a copy in the instance folder
         if (object instanceof Uri) {

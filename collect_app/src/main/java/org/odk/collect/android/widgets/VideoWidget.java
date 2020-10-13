@@ -49,7 +49,7 @@ import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
@@ -73,7 +73,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class VideoWidget extends QuestionWidget implements FileWidget, ButtonClickListener, BinaryDataReceiver {
+public class VideoWidget extends QuestionWidget implements FileWidget, ButtonClickListener, WidgetDataReceiver {
 
     public static final boolean DEFAULT_HIGH_RESOLUTION = true;
 
@@ -176,7 +176,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
      * @see org.odk.collect.android.activities.FormEntryActivity#onActivityResult(int, int, Intent)
      */
     @Override
-    public void setBinaryData(Object object) {
+    public void setData(Object object) {
         File newVideo = null;
         // get the file path and create a copy in the instance folder
         if (object instanceof Uri) {

@@ -32,7 +32,7 @@ import org.odk.collect.android.activities.BearingActivity;
 import org.odk.collect.android.databinding.BearingWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
@@ -41,7 +41,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * BearingWidget is the widget that allows the user to get a compass heading.
  */
 @SuppressLint("ViewConstructor")
-public class BearingWidget extends QuestionWidget implements BinaryDataReceiver {
+public class BearingWidget extends QuestionWidget implements WidgetDataReceiver {
     BearingWidgetAnswerBinding binding;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
@@ -89,7 +89,7 @@ public class BearingWidget extends QuestionWidget implements BinaryDataReceiver 
     }
 
     @Override
-    public void setBinaryData(Object answer) {
+    public void setData(Object answer) {
         binding.answerText.setText((String) answer);
         binding.bearingButton.setText(getContext().getString(R.string.replace_bearing));
         widgetValueChanged();

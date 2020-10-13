@@ -9,11 +9,11 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.SelectMinimalWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
-import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
-public abstract class SelectMinimalWidget extends ItemsWidget implements BinaryDataReceiver, MultiChoiceWidget {
+public abstract class SelectMinimalWidget extends ItemsWidget implements WidgetDataReceiver, MultiChoiceWidget {
     SelectMinimalWidgetAnswerBinding binding;
     private final WaitingForDataRegistry waitingForDataRegistry;
 

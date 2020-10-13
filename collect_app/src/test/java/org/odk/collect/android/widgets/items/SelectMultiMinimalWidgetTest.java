@@ -63,7 +63,7 @@ public class SelectMultiMinimalWidgetTest extends GeneralSelectMultiWidgetTest<S
         SelectMultiData answer = getInitialAnswer();
         Selection selectedChoice = ((List<Selection>) answer.getValue()).get(0);
         when(formEntryPrompt.getSelectItemText(selectedChoice)).thenReturn(selectedChoice.getValue());
-        getSpyWidget().setBinaryData(Collections.singletonList(selectedChoice));
+        getSpyWidget().setData(Collections.singletonList(selectedChoice));
 
         assertThat(getSpyWidget().binding.answer.getText().toString(), is(selectedChoice.getValue()));
         getSpyWidget().clearAnswer();
@@ -76,7 +76,7 @@ public class SelectMultiMinimalWidgetTest extends GeneralSelectMultiWidgetTest<S
 
         SelectMultiData answer = getInitialAnswer();
         Selection selectedChoice = ((List<Selection>) answer.getValue()).get(0);
-        getSpyWidget().setBinaryData(Collections.singletonList(selectedChoice));
+        getSpyWidget().setData(Collections.singletonList(selectedChoice));
 
         verify(valueChangedListener).widgetValueChanged(getSpyWidget());
     }

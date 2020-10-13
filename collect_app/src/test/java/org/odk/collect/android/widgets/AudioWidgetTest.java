@@ -194,7 +194,7 @@ public class AudioWidgetTest {
         FormEntryPrompt prompt = promptWithAnswer(new StringData(FILE_PATH));
         when(prompt.getIndex()).thenReturn(formIndex);
         AudioWidget widget = createWidget(prompt);
-        widget.setBinaryData(mockedFile);
+        widget.setData(mockedFile);
 
         assertThat(questionMediaManager.recentFiles.get("questionIndex"), equalTo("newFilePath"));
     }
@@ -205,7 +205,7 @@ public class AudioWidgetTest {
         when(prompt.getIndex()).thenReturn(formIndex);
 
         AudioWidget widget = createWidget(prompt);
-        widget.setBinaryData(mockedFile);
+        widget.setData(mockedFile);
 
         assertThat(questionMediaManager.originalFiles.get("questionIndex"),
                 equalTo(widget.getInstanceFolder() + File.separator + "blah.mp3"));
@@ -214,21 +214,21 @@ public class AudioWidgetTest {
     @Test
     public void setData_whenPromptDoesNotHaveAnswer_doesNotDeleteOriginalAnswer() {
         AudioWidget widget = createWidget(promptWithAnswer(null));
-        widget.setBinaryData(mockedFile);
+        widget.setData(mockedFile);
         assertThat(questionMediaManager.originalFiles.isEmpty(), equalTo(true));
     }
 
     @Test
     public void setData_whenPromptHasSameAnswer_doesNotDeleteOriginalAnswer() {
         AudioWidget widget = createWidget(promptWithAnswer(new StringData("newFile.mp3")));
-        widget.setBinaryData(mockedFile);
+        widget.setData(mockedFile);
         assertThat(questionMediaManager.originalFiles.isEmpty(), equalTo(true));
     }
 
     @Test
     public void setData_whenFileDoesNotExist_doesNotUpdateWidgetAnswer() {
         AudioWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
-        widget.setBinaryData(new File("newFile.mp3"));
+        widget.setData(new File("newFile.mp3"));
         assertThat(widget.getAnswer().getDisplayText(), equalTo(FILE_PATH));
     }
 
@@ -243,21 +243,21 @@ public class AudioWidgetTest {
         when(fileUtil.getFileAtPath(SOURCE_FILE_PATH)).thenReturn(sourceFile);
         when(fileUtil.getFileAtPath("null/null.mp3")).thenReturn(mockedFile);
 
-        widget.setBinaryData(newFileUri);
+        widget.setData(newFileUri);
         verify(fileUtil).copyFile(sourceFile, mockedFile);
     }
 
     @Test
     public void setData_whenFileExists_updatesWidgetAnswer() {
         AudioWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
-        widget.setBinaryData(mockedFile);
+        widget.setData(mockedFile);
         assertThat(widget.getAnswer().getDisplayText(), equalTo("newFile.mp3"));
     }
 
     @Test
     public void setData_whenFileExists_updatesPlayerMedia() {
         AudioWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
-        widget.setBinaryData(mockedFile);
+        widget.setData(mockedFile);
         Clip clip = getAnswerAudioClip(widget.getInstanceFolder(), widget.getAnswer());
 
         assertThat(audioHelper.audioController, equalTo(audioController));
@@ -269,7 +269,7 @@ public class AudioWidgetTest {
     public void setData_whenFileExists_callsValueChangeListener() {
         AudioWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.setBinaryData(mockedFile);
+        widget.setData(mockedFile);
 
         verify(valueChangedListener).widgetValueChanged(widget);
     }

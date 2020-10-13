@@ -22,17 +22,9 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-<<<<<<< HEAD
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.QuestionMediaManager;
-=======
-<<<<<<< HEAD
-import org.odk.collect.android.utilities.CustomTabHelper;
-=======
-import org.odk.collect.android.geo.MapProvider;
->>>>>>> 911881237... add unit tests
->>>>>>> d15742d4a... fix conflicts
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.items.ItemsetWidget;
 import org.odk.collect.android.widgets.items.LabelWidget;
