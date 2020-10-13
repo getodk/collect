@@ -5,6 +5,8 @@ import android.net.Uri;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.SavedStateHandle;
 
+import com.google.common.io.Files;
+
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
@@ -22,12 +24,14 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.javarosa.form.api.FormEntryController.EVENT_GROUP;
 import static org.javarosa.form.api.FormEntryController.EVENT_QUESTION;
 import static org.javarosa.form.api.FormEntryController.EVENT_REPEAT;
@@ -425,6 +429,15 @@ public class FormSaveViewModelTest {
         restoredViewModel.replaceAnswerFile("index", "blah2");
 
         verify(mediaUtils).deleteImageFileFromMediaProvider("blah1");
+    }
+
+    @Test
+    public void getAnswerFile_returnsFileFromInstance() {
+        File tempDir = Files.createTempDir();
+        when(formController.getInstanceFile()).thenReturn(new File(tempDir + File.separator + "instance.xml"));
+
+        File answerFile = viewModel.getAnswerFile("answer.file");
+        assertThat(answerFile, is(new File(tempDir, "answer.file")));
     }
 
     @Test

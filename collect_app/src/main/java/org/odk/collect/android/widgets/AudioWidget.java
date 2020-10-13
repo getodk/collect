@@ -33,8 +33,8 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
-import org.odk.collect.android.widgets.utilities.AudioDataRequester;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+import org.odk.collect.android.widgets.utilities.AudioDataRequester;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.audioclips.Clip;
 
@@ -95,7 +95,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
     @Override
     public void deleteFile() {
         audioPlayer.stop();
-        questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(), getInstanceFolder() + File.separator + binaryName);
+        questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(), getAudioFile().getAbsolutePath());
         binaryName = null;
     }
 
@@ -132,43 +132,43 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
      */
     @Override
     public void setData(Object object) {
-        File newAudio;
-        // get the file path and create a copy in the instance folder
         if (object instanceof File) {
             // Getting a file indicates we've done the copy in the before step
-            newAudio = (File) object;
+
+            String fileName = ((File) object).getName();
+            File newAudio = questionMediaManager.getAnswerFile(fileName);
+
+            if (newAudio.exists()) {
+                // Add the copy to the content provider
+                ContentValues values = new ContentValues(6);
+                values.put(Audio.Media.TITLE, newAudio.getName());
+                values.put(Audio.Media.DISPLAY_NAME, newAudio.getName());
+                values.put(Audio.Media.DATE_ADDED, System.currentTimeMillis());
+                values.put(Audio.Media.DATA, newAudio.getAbsolutePath());
+
+                questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
+                Uri audioURI = getContext().getContentResolver().insert(Audio.Media.EXTERNAL_CONTENT_URI, values);
+
+                if (audioURI != null) {
+                    Timber.i("Inserting AUDIO returned uri = %s", audioURI.toString());
+                }
+
+                // when replacing an answer. remove the current media.
+                if (binaryName != null && !binaryName.equals(newAudio.getName())) {
+                    deleteFile();
+                }
+
+                binaryName = newAudio.getName();
+                Timber.i("Setting current answer to %s", newAudio.getName());
+
+                widgetValueChanged();
+                updatePlayerMedia();
+            } else {
+                Timber.e("Inserting Audio file FAILED");
+            }
         } else {
             Timber.w("AudioWidget's setBinaryData must receive a File object.");
             return;
-        }
-
-        if (newAudio.exists()) {
-            // Add the copy to the content provider
-            ContentValues values = new ContentValues(6);
-            values.put(Audio.Media.TITLE, newAudio.getName());
-            values.put(Audio.Media.DISPLAY_NAME, newAudio.getName());
-            values.put(Audio.Media.DATE_ADDED, System.currentTimeMillis());
-            values.put(Audio.Media.DATA, newAudio.getAbsolutePath());
-
-            questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
-            Uri audioURI = getContext().getContentResolver().insert(Audio.Media.EXTERNAL_CONTENT_URI, values);
-
-            if (audioURI != null) {
-                Timber.i("Inserting AUDIO returned uri = %s", audioURI.toString());
-            }
-
-            // when replacing an answer. remove the current media.
-            if (binaryName != null && !binaryName.equals(newAudio.getName())) {
-                deleteFile();
-            }
-
-            binaryName = newAudio.getName();
-            Timber.i("Setting current answer to %s", newAudio.getName());
-
-            widgetValueChanged();
-            updatePlayerMedia();
-        } else {
-            Timber.e("Inserting Audio file FAILED");
         }
     }
 
@@ -233,6 +233,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
      * Returns the audio file added to the widget for the current instance
      */
     private File getAudioFile() {
-        return new File(getInstanceFolder() + File.separator + binaryName);
+        return questionMediaManager.getAnswerFile(binaryName);
     }
 }

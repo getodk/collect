@@ -313,6 +313,16 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         }
     }
 
+    @Override
+    @Nullable
+    public File getAnswerFile(String fileName) {
+        if (formController != null && formController.getInstanceFile() != null) {
+            return new File(formController.getInstanceFile().getParent(), fileName);
+        } else {
+            return null;
+        }
+    }
+
     private void clearMediaFiles() {
         originalFiles.clear();
         recentFiles.clear();

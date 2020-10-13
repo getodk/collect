@@ -108,8 +108,7 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(prompt);
         widget.deleteFile();
 
-        assertThat(questionMediaManager.originalFiles.get("questionIndex"),
-                equalTo(widget.getInstanceFolder() + File.separator + "blah.mp3"));
+        assertThat(questionMediaManager.originalFiles.get("questionIndex"), equalTo(questionMediaManager.getAnswerFile("blah.mp3").toString()));
     }
 
     @Test
@@ -130,8 +129,7 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(prompt);
         widget.clearAnswer();
 
-        assertThat(questionMediaManager.originalFiles.get("questionIndex"),
-                equalTo(widget.getInstanceFolder() + File.separator + "blah.mp3"));
+        assertThat(questionMediaManager.originalFiles.get("questionIndex"), equalTo(questionMediaManager.getAnswerFile("blah.mp3").toString()));
     }
 
     @Test
@@ -149,7 +147,7 @@ public class AudioWidgetTest {
         when(prompt.getIndex()).thenReturn(formIndex);
         AudioWidget widget = createWidget(prompt);
 
-        File newFile = File.createTempFile("newFile", ".mp3");
+        File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
         widget.setData(newFile);
 
         assertThat(questionMediaManager.recentFiles.get("questionIndex"), equalTo(newFile.getAbsolutePath()));
@@ -162,25 +160,24 @@ public class AudioWidgetTest {
 
         AudioWidget widget = createWidget(prompt);
 
-        File newFile = File.createTempFile("newFile", ".mp3");
+        File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
         widget.setData(newFile);
 
-        assertThat(questionMediaManager.originalFiles.get("questionIndex"),
-                equalTo(widget.getInstanceFolder() + File.separator + "blah.mp3"));
+        assertThat(questionMediaManager.originalFiles.get("questionIndex"), equalTo(questionMediaManager.getAnswerFile("blah.mp3").toString()));
     }
 
     @Test
     public void setData_whenPromptDoesNotHaveAnswer_doesNotDeleteOriginalAnswer() throws Exception {
         AudioWidget widget = createWidget(promptWithAnswer(null));
 
-        File newFile = File.createTempFile("newFile", ".mp3");
+        File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
         widget.setData(newFile);
         assertThat(questionMediaManager.originalFiles.isEmpty(), equalTo(true));
     }
 
     @Test
     public void setData_whenPromptHasSameAnswer_doesNotDeleteOriginalAnswer() throws Exception {
-        File newFile = File.createTempFile("newFile", ".mp3");
+        File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
         AudioWidget widget = createWidget(promptWithAnswer(new StringData(newFile.getName())));
         widget.setData(newFile);
         assertThat(questionMediaManager.originalFiles.isEmpty(), equalTo(true));
@@ -197,7 +194,7 @@ public class AudioWidgetTest {
     public void setData_whenFileExists_updatesWidgetAnswer() throws Exception {
         AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
 
-        File newFile = File.createTempFile("newFile", ".mp3");
+        File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
         widget.setData(newFile);
         assertThat(widget.getAnswer().getDisplayText(), equalTo(newFile.getName()));
     }
@@ -207,7 +204,7 @@ public class AudioWidgetTest {
         FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.mp3"));
         AudioWidget widget = createWidget(prompt);
 
-        File newFile = File.createTempFile("newFile", ".mp3");
+        File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
         widget.setData(newFile);
 
         assertThat(widget.binding.audioController.getVisibility(), is(VISIBLE));
@@ -222,7 +219,7 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
 
-        File newFile = File.createTempFile("newFile", ".mp3");
+        File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
         widget.setData(newFile);
 
         verify(valueChangedListener).widgetValueChanged(widget);
@@ -264,7 +261,7 @@ public class AudioWidgetTest {
         FormEntryPrompt prompt = promptWithAnswer(null);
         AudioWidget widget = createWidget(prompt);
 
-        File audioFile = File.createTempFile("blah", ".mp3");
+        File audioFile = File.createTempFile("blah", ".mp3", questionMediaManager.getDir());
         Clip expectedClip = getExpectedClip(prompt, audioFile.getName());
         widget.setData(audioFile);
 
@@ -286,7 +283,7 @@ public class AudioWidgetTest {
     public void afterSetBinaryData_canSkipClipForward() throws Exception {
         FormEntryPrompt prompt = promptWithAnswer(null);
 
-        File audioFile = File.createTempFile("blah", ".mp3");
+        File audioFile = File.createTempFile("blah", ".mp3", questionMediaManager.getDir());
         Clip expectedClip = getExpectedClip(prompt, audioFile.getName());
         setupMediaPlayerDataSource(expectedClip.getURI(), 322450);
 
@@ -302,7 +299,7 @@ public class AudioWidgetTest {
     public void afterSetBinaryData_whenPositionOfClipChanges_updatesPosition() throws Exception {
         FormEntryPrompt prompt = promptWithAnswer(null);
 
-        File audioFile = File.createTempFile("blah", ".mp3");
+        File audioFile = File.createTempFile("blah", ".mp3", questionMediaManager.getDir());
         Clip expectedClip = getExpectedClip(prompt, audioFile.getName());
         setupMediaPlayerDataSource(expectedClip.getURI(), 322450);
 
@@ -320,7 +317,7 @@ public class AudioWidgetTest {
     public void afterSetBinaryData_showsDurationOfAudio() throws Exception {
         FormEntryPrompt prompt = promptWithAnswer(null);
 
-        File audioFile = File.createTempFile("blah", ".mp3");
+        File audioFile = File.createTempFile("blah", ".mp3", questionMediaManager.getDir());
         Clip expectedClip = getExpectedClip(prompt, audioFile.getName());
         setupMediaPlayerDataSource(expectedClip.getURI(), 322450);
 
@@ -345,7 +342,7 @@ public class AudioWidgetTest {
     private Clip getExpectedClip(FormEntryPrompt prompt, String fileName) {
         return new Clip(
                 "audio:" + prompt.getIndex().toString(),
-                new File("null", fileName).getAbsolutePath() // This is instanceFolder/fileName
+                questionMediaManager.getAnswerFile(fileName).getAbsolutePath()
         );
     }
 
