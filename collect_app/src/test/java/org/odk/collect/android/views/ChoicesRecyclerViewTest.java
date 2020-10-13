@@ -1,6 +1,7 @@
 package org.odk.collect.android.views;
 
 import android.app.Activity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
@@ -15,6 +16,9 @@ import com.google.android.flexbox.FlexboxLayoutManager;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.helper.Selection;
+import org.javarosa.core.reference.InvalidReferenceException;
+import org.javarosa.core.reference.Reference;
+import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,9 +61,10 @@ public class ChoicesRecyclerViewTest {
     private ActivityController<TestScreenContextActivity> activityController;
 
     private FormEntryPrompt formEntryPrompt;
+    private ReferenceManager referenceManager;
 
     @Before
-    public void setUp() {
+    public void setUp() throws InvalidReferenceException {
         activityController = RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class);
         Activity activity = activityController.get();
         FrameLayout frameLayout = new FrameLayout(activity);
@@ -68,6 +73,7 @@ public class ChoicesRecyclerViewTest {
         recyclerView = new ChoicesRecyclerView(activity);
         frameLayout.addView(recyclerView);
         populateRecyclerView(recyclerView);
+        setUpReferenceManager();
     }
 
     @Test
@@ -462,6 +468,27 @@ public class ChoicesRecyclerViewTest {
         clickChoice(0); // Unselect AAA
         verify(adapter.getAudioHelper()).stop();
         verify(adapter, never()).playAudio(any());
+    }
+
+    @Test
+    public void whenColumnsPackAppearanceIsUsed_shouldMediaElementsBeHidden() {
+        List<SelectChoice> items = getTestChoices();
+        setUpFormEntryPrompt(items, "columns-pack");
+
+        SelectItemClickListener listener = mock(SelectItemClickListener.class);
+        SelectMultipleListAdapter adapter = spy(new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, referenceManager, null, 0, 1, false));
+        recyclerView.initRecyclerView(adapter, true);
+
+        assertThat(getAudioVideoImageTextLabelView(0).getImageView().getVisibility(), is(View.GONE));
+        assertThat(getAudioVideoImageTextLabelView(0).getVideoButton().getVisibility(), is(View.GONE));
+        assertThat(getAudioVideoImageTextLabelView(0).getAudioButton().getVisibility(), is(View.GONE));
+    }
+
+    private void setUpReferenceManager() throws InvalidReferenceException {
+        referenceManager = mock(ReferenceManager.class);
+        Reference reference = mock(Reference.class);
+        when(reference.getLocalURI()).thenReturn("");
+        when(referenceManager.deriveReference(any())).thenReturn(reference);
     }
 
     private List<SelectChoice> getTestChoices() {
