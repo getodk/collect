@@ -68,7 +68,7 @@ def googleMapsApiKey = secrets.getProperty('GOOGLE_MAPS_API_KEY', '')
 def mapboxToken = secrets.getProperty('MAPBOX_ACCESS_TOKEN', '')
 
 android {
-    compileSdkVersion(28)
+    compileSdkVersion 30
 
     viewBinding {
         enabled = true
@@ -76,8 +76,8 @@ android {
 
     defaultConfig {
         applicationId('org.odk.collect.android')
-        minSdkVersion(21)
-        targetSdkVersion(28)
+        minSdkVersion 21
+        targetSdkVersion 28
         versionCode LEGACY_BUILD_NUMBER_OFFSET + getMasterCommitCount()
         versionName getVersionName()
         testInstrumentationRunner('androidx.test.runner.AndroidJUnitRunner')

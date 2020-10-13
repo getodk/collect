@@ -10,7 +10,7 @@ references:
   android_config: &android_config
     working_directory: *workspace
     docker:
-      - image: circleci/android:api-27
+      - image: circleci/android:api-30
 
 jobs:
   check_quality:
