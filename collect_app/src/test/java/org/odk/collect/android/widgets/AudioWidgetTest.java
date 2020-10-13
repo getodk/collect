@@ -231,29 +231,26 @@ public class AudioWidgetTest {
     }
 
     @Test
-    public void setData_whenFileExists_updatesPlayerMedia() throws Exception {
-        FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.mp3"));
-        AudioWidget widget = createWidget(prompt);
-
-        File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
-        widget.setData(newFile.getName());
-
-        assertThat(widget.binding.audioController.getVisibility(), is(VISIBLE));
-        widget.binding.audioController.binding.play.performClick();
-
-        Clip expectedClip = getExpectedClip(prompt, newFile.getName());
-        assertThat(audioPlayer.getCurrentClip(), is(expectedClip));
-    }
-
-    @Test
     public void setData_whenFileExists_callsValueChangeListener() throws Exception {
-        AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
+        AudioWidget widget = createWidget(promptWithAnswer(null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
 
         File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
         widget.setData(newFile.getName());
 
         verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void setData_whenFileExists_hidesButtonsAndShowsAudioController() throws Exception {
+        AudioWidget widget = createWidget(promptWithAnswer(null));
+
+        File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
+        widget.setData(newFile.getName());
+
+        assertThat(widget.binding.captureButton.getVisibility(), is(GONE));
+        assertThat(widget.binding.captureButton.getVisibility(), is(GONE));
+        assertThat(widget.binding.audioController.getVisibility(), is(VISIBLE));
     }
 
     @Test

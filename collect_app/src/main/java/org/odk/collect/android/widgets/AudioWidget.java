@@ -147,8 +147,9 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
                 binaryName = newAudio.getName();
                 Timber.i("Setting current answer to %s", newAudio.getName());
 
-                widgetValueChanged();
+                hideButtonsIfNeeded();
                 updatePlayerMedia();
+                widgetValueChanged();
             } else {
                 Timber.e("Inserting Audio file FAILED");
             }
