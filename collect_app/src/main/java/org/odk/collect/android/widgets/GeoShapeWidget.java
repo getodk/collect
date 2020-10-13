@@ -51,7 +51,8 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
         binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        binding.simpleButton.setOnClickListener(v -> geoDataRequester.requestGeoShape(context, prompt, waitingForDataRegistry));
+        binding.simpleButton.setOnClickListener(v ->
+                geoDataRequester.requestGeoShape(context, prompt, getAnswerText(), waitingForDataRegistry));
 
         String stringAnswer = prompt.getAnswerText();
         binding.geoAnswerText.setText(stringAnswer);
@@ -77,8 +78,7 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
 
     @Override
     public IAnswerData getAnswer() {
-        String stringAnswer = binding.geoAnswerText.getText().toString();
-        return stringAnswer.isEmpty() ? null : new StringData(stringAnswer);
+        return getAnswerText().isEmpty() ? null : new StringData(getAnswerText());
     }
 
     @Override
@@ -106,5 +106,9 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
         binding.geoAnswerText.setText(answer.toString());
         binding.simpleButton.setText(answer.toString().isEmpty() ? R.string.get_shape : R.string.geoshape_view_change_location);
         widgetValueChanged();
+    }
+
+    private String getAnswerText() {
+        return binding.geoAnswerText.getText().toString();
     }
 }

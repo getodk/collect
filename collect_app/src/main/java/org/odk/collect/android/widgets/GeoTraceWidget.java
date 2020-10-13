@@ -61,7 +61,7 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
 
         binding.simpleButton.setOnClickListener(v -> {
             if (mapConfigurator.isAvailable(context)) {
-                geoDataRequester.requestGeoTrace(context, prompt, waitingForDataRegistry);
+                geoDataRequester.requestGeoTrace(context, prompt, getAnswerText(), waitingForDataRegistry);
             } else {
                 mapConfigurator.showUnavailableMessage(context);
             }
@@ -91,8 +91,7 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
 
     @Override
     public IAnswerData getAnswer() {
-        String stringAnswer = binding.geoAnswerText.getText().toString();
-        return stringAnswer.isEmpty() ? null : new StringData(stringAnswer);
+        return getAnswerText().isEmpty() ? null : new StringData(getAnswerText());
     }
 
     @Override
@@ -120,5 +119,9 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
         binding.geoAnswerText.setText(answer.toString());
         binding.simpleButton.setText(answer.toString().isEmpty() ? R.string.get_trace : R.string.geotrace_view_change_location);
         widgetValueChanged();
+    }
+
+    private String getAnswerText() {
+        return binding.geoAnswerText.getText().toString();
     }
 }

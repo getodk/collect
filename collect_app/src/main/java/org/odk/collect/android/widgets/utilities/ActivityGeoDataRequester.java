@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
@@ -28,7 +29,7 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
     }
 
     @Override
-    public void requestGeoPoint(Context context, FormEntryPrompt prompt, WaitingForDataRegistry waitingForDataRegistry) {
+    public void requestGeoPoint(Context context, FormEntryPrompt prompt, String answerText, WaitingForDataRegistry waitingForDataRegistry) {
 
         permissionUtils.requestLocationPermissions((Activity) context, new PermissionListener() {
             @Override
@@ -37,23 +38,15 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
 
                 Bundle bundle = new Bundle();
 
-                String answer = prompt.getAnswerText();
-                if (answer != null && !answer.isEmpty()) {
-                    bundle.putDoubleArray(LOCATION, GeoWidgetUtils.getLocationParamsFromStringAnswer(answer));
+                if (answerText != null && !answerText.isEmpty()) {
+                    bundle.putDoubleArray(LOCATION, GeoWidgetUtils.getLocationParamsFromStringAnswer(answerText));
                 }
+
                 bundle.putDouble(ACCURACY_THRESHOLD, GeoWidgetUtils.getAccuracyThreshold(prompt.getQuestion()));
                 bundle.putBoolean(READ_ONLY, prompt.isReadOnly());
+                bundle.putBoolean(DRAGGABLE_ONLY, hasPlacementMapAppearance(prompt));
 
-                boolean isMapAppearance = true;
-                if (WidgetAppearanceUtils.hasAppearance(prompt, WidgetAppearanceUtils.PLACEMENT_MAP)) {
-                    bundle.putBoolean(DRAGGABLE_ONLY, true);
-                } else if (WidgetAppearanceUtils.hasAppearance(prompt, WidgetAppearanceUtils.MAPS)) {
-                    bundle.putBoolean(DRAGGABLE_ONLY, false);
-                } else {
-                    isMapAppearance = false;
-                }
-
-                Intent intent = new Intent(context, isMapAppearance ? GeoPointMapActivity.class : GeoPointActivity.class);
+                Intent intent = new Intent(context, isMapsAppearance(prompt) ? GeoPointMapActivity.class : GeoPointActivity.class);
                 intent.putExtras(bundle);
                 ((Activity) context).startActivityForResult(intent, ApplicationConstants.RequestCodes.LOCATION_CAPTURE);
             }
@@ -65,14 +58,14 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
     }
 
     @Override
-    public void requestGeoShape(Context context, FormEntryPrompt prompt, WaitingForDataRegistry waitingForDataRegistry) {
+    public void requestGeoShape(Context context, FormEntryPrompt prompt, String answerText, WaitingForDataRegistry waitingForDataRegistry) {
         permissionUtils.requestLocationPermissions((Activity) context, new PermissionListener() {
             @Override
             public void granted() {
                 waitingForDataRegistry.waitForData(prompt.getIndex());
 
                 Intent intent = new Intent(context, GeoPolyActivity.class);
-                intent.putExtra(GeoPolyActivity.ANSWER_KEY, prompt.getAnswerText());
+                intent.putExtra(GeoPolyActivity.ANSWER_KEY, answerText);
                 intent.putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOSHAPE);
                 intent.putExtra(READ_ONLY, prompt.isReadOnly());
 
@@ -86,14 +79,14 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
     }
 
     @Override
-    public void requestGeoTrace(Context context, FormEntryPrompt prompt, WaitingForDataRegistry waitingForDataRegistry) {
+    public void requestGeoTrace(Context context, FormEntryPrompt prompt, String answerText, WaitingForDataRegistry waitingForDataRegistry) {
         permissionUtils.requestLocationPermissions((Activity) context, new PermissionListener() {
             @Override
             public void granted() {
                 waitingForDataRegistry.waitForData(prompt.getIndex());
 
                 Intent intent = new Intent(context, GeoPolyActivity.class);
-                intent.putExtra(GeoPolyActivity.ANSWER_KEY, prompt.getAnswerText());
+                intent.putExtra(GeoPolyActivity.ANSWER_KEY, answerText);
                 intent.putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOTRACE);
                 intent.putExtra(READ_ONLY, prompt.isReadOnly());
 
@@ -104,5 +97,17 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
             public void denied() {
             }
         });
+    }
+
+    private boolean isMapsAppearance(FormEntryPrompt prompt) {
+        return hasMapsAppearance(prompt) || hasPlacementMapAppearance(prompt);
+    }
+
+    private boolean hasMapsAppearance(FormEntryPrompt prompt) {
+        return WidgetAppearanceUtils.hasAppearance(prompt, WidgetAppearanceUtils.MAPS);
+    }
+
+    private boolean hasPlacementMapAppearance(FormEntryPrompt prompt) {
+        return WidgetAppearanceUtils.hasAppearance(prompt, WidgetAppearanceUtils.PLACEMENT_MAP);
     }
 }
