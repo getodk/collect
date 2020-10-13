@@ -95,6 +95,14 @@ android {
                 keyPassword secrets.getProperty('RELEASE_KEY_PASSWORD')
             }
         }
+
+        // This uses the default debug keystore that the Android tooling creates https://stackoverflow.com/questions/16622528/android-studio-debug-keystore
+        selfSignedRelease {
+            storeFile new File(System.getProperty("user.home") + '/.android/debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
     }
 
     buildTypes {
@@ -116,6 +124,18 @@ android {
             if (secrets.getProperty('RELEASE_STORE_FILE')) {
                 signingConfig signingConfigs.release
             }
+            minifyEnabled(true)
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            resValue("bool", "CRASHLYTICS_ENABLED", "true")
+            resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
+            buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
+
+            matchingFallbacks = ['release'] // So other modules use release build type for this
+        }
+
+        selfSignedRelease {
+            signingConfig signingConfigs.selfSignedRelease
+
             minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             resValue("bool", "CRASHLYTICS_ENABLED", "true")
