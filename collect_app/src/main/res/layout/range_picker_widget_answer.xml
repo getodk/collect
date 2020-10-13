@@ -11,7 +11,10 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/widget_answer_text"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
         style="@style/Widget.Collect.TextView.WidgetAnswer"
+        android:gravity="center"
         android:text="@string/no_value_selected"
         />
 

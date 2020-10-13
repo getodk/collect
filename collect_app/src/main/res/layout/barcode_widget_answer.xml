@@ -11,6 +11,9 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/barcode_answer_text"
-        style="@style/Widget.Collect.TextView.WidgetAnswer" />
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        style="@style/Widget.Collect.TextView.WidgetAnswer"
+        android:gravity="center" />
 
 </LinearLayout>
