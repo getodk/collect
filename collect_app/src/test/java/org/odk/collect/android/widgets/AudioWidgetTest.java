@@ -63,6 +63,24 @@ public class AudioWidgetTest {
     }
 
     @Test
+    public void whenPromptDoesNotHaveAnswer_showsButtonsAndHidesAudioController() {
+        AudioWidget widget = createWidget(promptWithAnswer(null));
+
+        assertThat(widget.binding.captureButton.getVisibility(), is(VISIBLE));
+        assertThat(widget.binding.chooseButton.getVisibility(), is(VISIBLE));
+        assertThat(widget.binding.audioController.getVisibility(), is(GONE));
+    }
+
+    @Test
+    public void whenPromptHasAnswer_hidesButtonsAndShowsAudioController() {
+        AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
+
+        assertThat(widget.binding.captureButton.getVisibility(), is(GONE));
+        assertThat(widget.binding.chooseButton.getVisibility(), is(GONE));
+        assertThat(widget.binding.audioController.getVisibility(), is(VISIBLE));
+    }
+
+    @Test
     public void usingReadOnlyOption_doesNotShowCaptureAndChooseButtons() {
         AudioWidget widget = createWidget(promptWithReadOnly());
         assertThat(widget.binding.captureButton.getVisibility(), equalTo(GONE));
@@ -70,10 +88,9 @@ public class AudioWidgetTest {
     }
 
     @Test
-    public void getAnswer_whenPromptDoesNotHaveAnswer_returnsNullAndHidesAudioPlayer() {
+    public void getAnswer_whenPromptDoesNotHaveAnswer_returnsNull() {
         AudioWidget widget = createWidget(promptWithAnswer(null));
         assertThat(widget.getAnswer(), nullValue());
-        assertThat(widget.binding.audioController.getVisibility(), is(GONE));
     }
 
     @Test
@@ -118,7 +135,6 @@ public class AudioWidgetTest {
 
         assertThat(widget.getAnswer(), nullValue());
         assertThat(widget.binding.audioController.getVisibility(), is(GONE));
-        assertThat(audioPlayer.getCurrentClip(), nullValue());
     }
 
     @Test
@@ -326,6 +342,24 @@ public class AudioWidgetTest {
 
         AudioControllerView audioController = widget.binding.audioController;
         assertThat(audioController.binding.totalDuration.getText().toString(), is("05:22"));
+    }
+
+    @Test
+    public void clickingRemove_clearsAnswer() {
+        AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
+        widget.binding.audioController.binding.remove.performClick();
+
+        assertThat(widget.getAnswer(), nullValue());
+    }
+
+    @Test
+    public void clickingRemove_hidesAudioControllerAndShowsButtons() {
+        AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
+        widget.binding.audioController.binding.remove.performClick();
+
+        assertThat(widget.binding.audioController.getVisibility(), is(GONE));
+        assertThat(widget.binding.captureButton.getVisibility(), is(VISIBLE));
+        assertThat(widget.binding.chooseButton.getVisibility(), is(VISIBLE));
     }
 
     public AudioWidget createWidget(FormEntryPrompt prompt) {

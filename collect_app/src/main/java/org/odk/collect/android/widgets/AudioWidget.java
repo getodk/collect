@@ -68,9 +68,9 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
         this.questionMediaManager = questionMediaManager;
         this.audioDataRequester = audioDataRequester;
 
-        hideButtonsIfNeeded();
-
         binaryName = questionDetails.getPrompt().getAnswerText();
+
+        hideButtonsIfNeeded();
         updatePlayerMedia();
     }
 
@@ -78,16 +78,11 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = AudioWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
-        if (prompt.isReadOnly()) {
-            binding.captureButton.setVisibility(View.GONE);
-            binding.chooseButton.setVisibility(View.GONE);
-        } else {
-            binding.captureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-            binding.chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.captureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-            binding.captureButton.setOnClickListener(v -> audioDataRequester.requestRecording(getFormEntryPrompt()));
-            binding.chooseButton.setOnClickListener(v -> audioDataRequester.requestFile(getFormEntryPrompt()));
-        }
+        binding.captureButton.setOnClickListener(v -> audioDataRequester.requestRecording(getFormEntryPrompt()));
+        binding.chooseButton.setOnClickListener(v -> audioDataRequester.requestFile(getFormEntryPrompt()));
 
         return binding.getRoot();
     }
@@ -101,13 +96,9 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
 
     @Override
     public void clearAnswer() {
-        // remove the file
         deleteFile();
-
-        // hide audio player
-        binding.audioController.setVisibility(GONE);
-
         widgetValueChanged();
+        hideButtonsIfNeeded();
     }
 
     @Override
@@ -171,8 +162,22 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
     }
 
     private void hideButtonsIfNeeded() {
-        if (getFormEntryPrompt().getAppearanceHint() != null
-                && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains(WidgetAppearanceUtils.NEW)) {
+        if (getAnswer() == null) {
+            binding.captureButton.setVisibility(View.VISIBLE);
+            binding.chooseButton.setVisibility(View.VISIBLE);
+            binding.audioController.setVisibility(View.GONE);
+        } else {
+            binding.captureButton.setVisibility(View.GONE);
+            binding.chooseButton.setVisibility(View.GONE);
+            binding.audioController.setVisibility(View.VISIBLE);
+        }
+
+        if (getFormEntryPrompt().isReadOnly()) {
+            binding.captureButton.setVisibility(View.GONE);
+            binding.chooseButton.setVisibility(View.GONE);
+        }
+
+        if (getFormEntryPrompt().getAppearanceHint() != null && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains(WidgetAppearanceUtils.NEW)) {
             binding.chooseButton.setVisibility(View.GONE);
         }
     }
@@ -198,6 +203,11 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
                 @Override
                 public void onPositionChanged(Integer newPosition) {
                     audioPlayer.setPosition(clip.getClipID(), newPosition);
+                }
+
+                @Override
+                public void onRemoveClicked() {
+                    clearAnswer();
                 }
             });
 

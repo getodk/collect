@@ -66,6 +66,7 @@ public class AudioControllerView extends FrameLayout {
         binding.fastForwardBtn.setOnClickListener(view -> fastForwardMedia());
         binding.fastRewindBtn.setOnClickListener(view -> rewindMedia());
         binding.play.setOnClickListener(view -> playClicked());
+        binding.remove.setOnClickListener(view -> listener.onRemoveClicked());
     }
 
     private void fastForwardMedia() {
@@ -150,6 +151,8 @@ public class AudioControllerView extends FrameLayout {
         void onPauseClicked();
 
         void onPositionChanged(Integer newPosition);
+
+        void onRemoveClicked();
     }
 
     private class SwipeListener implements SeekBar.OnSeekBarChangeListener {
