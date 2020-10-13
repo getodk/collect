@@ -132,13 +132,11 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
      */
     @Override
     public void setData(Object object) {
-        if (object instanceof File) {
-            // Getting a file indicates we've done the copy in the before step
-
-            String fileName = ((File) object).getName();
+        if (object instanceof String) {
+            String fileName = (String) object;
             File newAudio = questionMediaManager.getAnswerFile(fileName);
 
-            if (newAudio.exists()) {
+            if (newAudio != null && newAudio.exists()) {
                 // Add the copy to the content provider
                 ContentValues values = new ContentValues(6);
                 values.put(Audio.Media.TITLE, newAudio.getName());

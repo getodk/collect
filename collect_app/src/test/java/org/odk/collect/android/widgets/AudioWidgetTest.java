@@ -148,7 +148,7 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(prompt);
 
         File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
-        widget.setData(newFile);
+        widget.setData(newFile.getName());
 
         assertThat(questionMediaManager.recentFiles.get("questionIndex"), equalTo(newFile.getAbsolutePath()));
     }
@@ -161,7 +161,7 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(prompt);
 
         File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
-        widget.setData(newFile);
+        widget.setData(newFile.getName());
 
         assertThat(questionMediaManager.originalFiles.get("questionIndex"), equalTo(questionMediaManager.getAnswerFile("blah.mp3").toString()));
     }
@@ -171,7 +171,7 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(promptWithAnswer(null));
 
         File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
-        widget.setData(newFile);
+        widget.setData(newFile.getName());
         assertThat(questionMediaManager.originalFiles.isEmpty(), equalTo(true));
     }
 
@@ -179,14 +179,14 @@ public class AudioWidgetTest {
     public void setData_whenPromptHasSameAnswer_doesNotDeleteOriginalAnswer() throws Exception {
         File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
         AudioWidget widget = createWidget(promptWithAnswer(new StringData(newFile.getName())));
-        widget.setData(newFile);
+        widget.setData(newFile.getName());
         assertThat(questionMediaManager.originalFiles.isEmpty(), equalTo(true));
     }
 
     @Test
     public void setData_whenFileDoesNotExist_doesNotUpdateWidgetAnswer() {
         AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
-        widget.setData(new File("newFile.mp3"));
+        widget.setData("newFile.mp3");
         assertThat(widget.getAnswer().getDisplayText(), equalTo("blah.mp3"));
     }
 
@@ -195,7 +195,7 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
 
         File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
-        widget.setData(newFile);
+        widget.setData(newFile.getName());
         assertThat(widget.getAnswer().getDisplayText(), equalTo(newFile.getName()));
     }
 
@@ -205,7 +205,7 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(prompt);
 
         File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
-        widget.setData(newFile);
+        widget.setData(newFile.getName());
 
         assertThat(widget.binding.audioController.getVisibility(), is(VISIBLE));
         widget.binding.audioController.binding.play.performClick();
@@ -220,7 +220,7 @@ public class AudioWidgetTest {
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
 
         File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
-        widget.setData(newFile);
+        widget.setData(newFile.getName());
 
         verify(valueChangedListener).widgetValueChanged(widget);
     }
@@ -263,7 +263,7 @@ public class AudioWidgetTest {
 
         File audioFile = File.createTempFile("blah", ".mp3", questionMediaManager.getDir());
         Clip expectedClip = getExpectedClip(prompt, audioFile.getName());
-        widget.setData(audioFile);
+        widget.setData(audioFile.getName());
 
         AudioControllerView audioController = widget.binding.audioController;
         assertThat(audioController.getVisibility(), is(VISIBLE));
@@ -288,7 +288,7 @@ public class AudioWidgetTest {
         setupMediaPlayerDataSource(expectedClip.getURI(), 322450);
 
         AudioWidget widget = createWidget(prompt);
-        widget.setData(audioFile);
+        widget.setData(audioFile.getName());
 
         AudioControllerView audioController = widget.binding.audioController;
         audioController.binding.fastForwardBtn.performClick();
@@ -304,7 +304,7 @@ public class AudioWidgetTest {
         setupMediaPlayerDataSource(expectedClip.getURI(), 322450);
 
         AudioWidget widget = createWidget(prompt);
-        widget.setData(audioFile);
+        widget.setData(audioFile.getName());
 
         AudioControllerView audioController = widget.binding.audioController;
         assertThat(audioController.binding.currentDuration.getText().toString(), is("00:00"));
@@ -322,7 +322,7 @@ public class AudioWidgetTest {
         setupMediaPlayerDataSource(expectedClip.getURI(), 322450);
 
         AudioWidget widget = createWidget(prompt);
-        widget.setData(audioFile);
+        widget.setData(audioFile.getName());
 
         AudioControllerView audioController = widget.binding.audioController;
         assertThat(audioController.binding.totalDuration.getText().toString(), is("05:22"));

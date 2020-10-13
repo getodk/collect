@@ -920,11 +920,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     try {
                         InputStream inputStream = getContentResolver().openInputStream(mediaUri);
                         if (inputStream != null) {
-                            OutputStream outputStream = new FileOutputStream(new File(filePath));
+                            File newFile = new File(filePath);
+                            OutputStream outputStream = new FileOutputStream(newFile);
                             IOUtils.copy(inputStream, outputStream);
                             inputStream.close();
                             outputStream.close();
-                            saveFileAnswer(new File(filePath));
+
+                            if (getCurrentViewIfODKView() != null) {
+                                setBinaryWidgetData(newFile.getName());
+                            }
+                            saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                         }
                     } catch (IOException e) {
                         Timber.e(e);
@@ -933,7 +938,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 break;
             case RequestCodes.VIDEO_CAPTURE:
                 mediaUri = intent.getData();
-                saveFileAnswer(mediaUri);
+                if (getCurrentViewIfODKView() != null) {
+                    setBinaryWidgetData(mediaUri);
+                }
+                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 String filePath = MediaUtils.getDataColumn(this, mediaUri, null, null);
                 if (filePath != null) {
                     new File(filePath).delete();
@@ -979,17 +987,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             Timber.e("currentView returned null.");
         }
         return null;
-    }
-
-    private void saveFileAnswer(Object media) {
-        // For audio/video capture/chooser, we get the URI from the content
-        // provider
-        // then the widget copies the file and makes a new entry in the
-        // content provider.
-        if (getCurrentViewIfODKView() != null) {
-            setBinaryWidgetData(media);
-        }
-        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
     }
 
     public void setBinaryWidgetData(Object data) {
