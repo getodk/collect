@@ -1,8 +1,10 @@
 package org.odk.collect.audiorecorder
 
+import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.app.Application
 import android.net.Uri
+import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.core.app.launchActivity
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -40,7 +42,7 @@ class AudioRecorderActivityTest {
     }
 
     @Test
-    fun pressingDone_stopsRecording_setsResultToRecordedFile_andFinishes() {
+    fun pressingDone_cancelsRecording_setsResultToRecordedFile_andFinishes() {
         val scenario = launchActivity<AudioRecorderActivity>().onActivity {
             it.done.performClick()
         }
@@ -49,6 +51,16 @@ class AudioRecorderActivityTest {
         assertThat(scenario.result.resultCode, equalTo(RESULT_OK))
         assertThat(scenario.result.resultData.data, equalTo(Uri.parse(fakeRecorder.file.absolutePath)))
     }
+
+    @Test
+    fun pressingBack_stopsRecording_doesNotReturnFile() {
+        val scenario = launchActivity<AudioRecorderActivity>()
+        scenario.moveToState(Lifecycle.State.DESTROYED)
+
+        assertThat(fakeRecorder.isRecording(), equalTo(false))
+        assertThat(fakeRecorder.wasCancelled(), equalTo(true))
+        assertThat(scenario.result.resultCode, equalTo(RESULT_CANCELED))
+    }
 }
 
 private class FakeRecorder : Recorder {
@@ -56,17 +68,28 @@ private class FakeRecorder : Recorder {
     val file: File = File.createTempFile("recording", ".mp3")
 
     private var recording = false
+    private var cancelled = false
 
     fun isRecording(): Boolean {
         return recording
     }
 
+    fun wasCancelled(): Boolean {
+        return cancelled
+    }
+
     override fun start() {
         recording = true
+        cancelled = false
     }
 
     override fun stop(): File {
         recording = false
         return file
+    }
+
+    override fun cancel() {
+        recording = false
+        cancelled = true
     }
 }

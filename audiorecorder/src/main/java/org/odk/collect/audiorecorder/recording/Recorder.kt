@@ -2,7 +2,8 @@ package org.odk.collect.audiorecorder.recording
 
 import java.io.File
 
-interface Recorder {
+internal interface Recorder {
     fun start()
     fun stop(): File
+    fun cancel()
 }

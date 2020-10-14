@@ -4,7 +4,7 @@ import android.media.MediaRecorder
 import java.io.File
 
 
-class MediaRecorderRecorder(private val cacheDir: File) : Recorder {
+internal class MediaRecorderRecorder(private val cacheDir: File) : Recorder {
 
     private var mediaRecorder: MediaRecorder? = null
     private var file: File? = null
@@ -21,7 +21,6 @@ class MediaRecorderRecorder(private val cacheDir: File) : Recorder {
             prepare()
             start()
         }
-
     }
 
     override fun stop(): File {
@@ -31,5 +30,9 @@ class MediaRecorderRecorder(private val cacheDir: File) : Recorder {
         }
 
         return file!!
+    }
+
+    override fun cancel() {
+        stop()
     }
 }

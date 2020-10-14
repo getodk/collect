@@ -13,7 +13,7 @@ import javax.inject.Inject
 class AudioRecorderActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var recorder: Recorder
+    internal lateinit var recorder: Recorder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +32,11 @@ class AudioRecorderActivity : AppCompatActivity() {
 
             finish()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        recorder.cancel()
     }
 
     object ARGS {
