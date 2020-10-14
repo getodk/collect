@@ -6,6 +6,7 @@
         <activity
             android:name=".recording.AudioRecorderActivity"
             android:label="Audio Recorder"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
     </application>
 
