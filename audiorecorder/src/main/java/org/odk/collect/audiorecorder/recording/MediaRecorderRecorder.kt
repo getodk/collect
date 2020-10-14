@@ -4,35 +4,42 @@ import android.media.MediaRecorder
 import java.io.File
 
 
-internal class MediaRecorderRecorder(private val cacheDir: File) : Recorder {
+internal class MediaRecorderRecorder(private val cacheDir: File, private val mediaRecorderFactory: () -> MediaRecorderWrapper) : Recorder {
 
-    private var mediaRecorder: MediaRecorder? = null
+    private var mediaRecorder: MediaRecorderWrapper? = null
     private var file: File? = null
 
     override fun start() {
-        val tempFile: File = File.createTempFile("recording", ".m4a", cacheDir)
+        val tempFile = File.createTempFile("recording", ".m4a", cacheDir)
         file = tempFile
 
-        mediaRecorder = MediaRecorder().apply {
-            setAudioSource(MediaRecorder.AudioSource.MIC)
-            setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-            setOutputFile(tempFile.absolutePath)
-            setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-            prepare()
-            start()
+        mediaRecorder = mediaRecorderFactory().also {
+            it.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+            it.setAudioSource(MediaRecorder.AudioSource.MIC)
+            it.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+            it.setOutputFile(tempFile.absolutePath)
+            it.prepare()
+            it.start()
         }
     }
 
     override fun stop(): File {
-        mediaRecorder?.apply {
-            stop()
-            release()
-        }
+        stopAndReleaseMediaRecorder()
 
         return file!!
     }
 
     override fun cancel() {
-        stop()
+        stopAndReleaseMediaRecorder()
+        file?.delete()
+    }
+
+    private fun stopAndReleaseMediaRecorder() {
+        mediaRecorder?.apply {
+            stop()
+            release()
+        }
+
+        mediaRecorder = null
     }
 }

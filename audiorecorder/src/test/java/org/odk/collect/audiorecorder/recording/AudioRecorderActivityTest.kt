@@ -1,4 +1,4 @@
-package org.odk.collect.audiorecorder
+package org.odk.collect.audiorecorder.recording
 
 import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
@@ -14,8 +14,9 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.audiorecorder.recording.AudioRecorderActivity
-import org.odk.collect.audiorecorder.recording.Recorder
+import org.odk.collect.audiorecorder.AudioRecorderDependencyModule
+import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent
+import org.odk.collect.audiorecorder.setAudioRecorderDependencyComponent
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
