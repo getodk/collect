@@ -72,7 +72,6 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
                 audioVideoImageTextLabel = (AudioVideoImageTextLabel) v;
                 audioVideoImageTextLabel.setPlayTextColor(playColor);
                 audioVideoImageTextLabel.setItemClickListener(listener);
-                adjustAudioVideoImageTextLabelParams();
             }
         }
 
@@ -86,6 +85,8 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
                         break;
                     }
                 }
+            } else {
+                adjustAudioVideoImageTextLabelForFlexAppearance();
             }
         }
     }
@@ -127,11 +128,13 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
             if (view != null) {
                 view.setBackground(null);
             }
+            audioHelper.stop();
         } else {
             addItem(selection);
             if (view != null) {
                 view.setBackground(ContextCompat.getDrawable(view.getContext(), R.drawable.select_item_border));
             }
+            playAudio(selection.choice);
         }
     }
 
