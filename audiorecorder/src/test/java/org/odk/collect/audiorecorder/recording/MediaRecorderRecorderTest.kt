@@ -23,8 +23,12 @@ class MediaRecorderRecorderTest {
     @Test
     fun start_setsUpAACRecordingFromMic() {
         recorder.start()
+
         assertThat(mediaRecorder.getAudioEncoder(), equalTo(MediaRecorder.AudioEncoder.AAC))
+        assertThat(mediaRecorder.getAudioEncodingSampleRate(), equalTo(32000))
+        assertThat(mediaRecorder.getAudioEncodingBitRate(), equalTo(128000))
         assertThat(mediaRecorder.getOutputFormat(), equalTo(MediaRecorder.OutputFormat.MPEG_4))
+
         assertThat(mediaRecorder.getAudioSource(), equalTo(MediaRecorder.AudioSource.MIC))
     }
 
@@ -85,6 +89,8 @@ class MediaRecorderRecorderTest {
 
 private class FakeMediaRecorderWrapper : MediaRecorderWrapper {
 
+    private var bitRate: Int? = null
+    private var sampleRate: Int? = null
     private var file: File? = null
     private var audioSource: Int? = null
     private var outputFormat: Int? = null
@@ -99,12 +105,20 @@ private class FakeMediaRecorderWrapper : MediaRecorderWrapper {
             throw IllegalStateException("MediaRecorder already prepared!")
         }
 
+        if (outputFormat != null) {
+            throw IllegalStateException("Can't setup audio source after setting output form on MediaRecorder")
+        }
+
         this.audioSource = audioSource
     }
 
     override fun setOutputFormat(outputFormat: Int) {
         if (prepared) {
             throw IllegalStateException("MediaRecorder already prepared!")
+        }
+
+        if (audioSource == null) {
+            throw IllegalStateException("Need to set audio source before setting output format")
         }
 
         this.outputFormat = outputFormat
@@ -127,7 +141,27 @@ private class FakeMediaRecorderWrapper : MediaRecorderWrapper {
             throw IllegalStateException("MediaRecorder already prepared!")
         }
 
+        if (outputFormat == null) {
+            throw IllegalStateException("MediaRecorder needs an output format before an encoding can be set")
+        }
+
         this.audioEncoder = audioEncoder
+    }
+
+    override fun setAudioEncodingSampleRate(sampleRate: Int) {
+        if (prepared) {
+            throw IllegalStateException("MediaRecorder already prepared!")
+        }
+
+        this.sampleRate = sampleRate
+    }
+
+    override fun setAudioEncodingBitRate(bitRate: Int) {
+        if (prepared) {
+            throw IllegalStateException("MediaRecorder already prepared!")
+        }
+
+        this.bitRate = bitRate
     }
 
     override fun prepare() {
@@ -176,5 +210,13 @@ private class FakeMediaRecorderWrapper : MediaRecorderWrapper {
 
     fun isReleased(): Boolean {
         return released;
+    }
+
+    fun getAudioEncodingSampleRate(): Int? {
+        return sampleRate
+    }
+
+    fun getAudioEncodingBitRate(): Int? {
+        return bitRate
     }
 }

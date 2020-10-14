@@ -14,10 +14,15 @@ internal class MediaRecorderRecorder(private val cacheDir: File, private val med
         file = tempFile
 
         mediaRecorder = mediaRecorderFactory().also {
-            it.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
             it.setAudioSource(MediaRecorder.AudioSource.MIC)
             it.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+
+            it.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+            it.setAudioEncodingSampleRate(32000)
+            it.setAudioEncodingBitRate(128000)
+
             it.setOutputFile(tempFile.absolutePath)
+
             it.prepare()
             it.start()
         }

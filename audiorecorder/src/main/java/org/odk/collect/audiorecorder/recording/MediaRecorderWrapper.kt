@@ -11,6 +11,8 @@ interface MediaRecorderWrapper {
     fun setOutputFormat(outputFormat: Int)
     fun setOutputFile(path: String)
     fun setAudioEncoder(audioEncoder: Int)
+    fun setAudioEncodingSampleRate(sampleRate: Int)
+    fun setAudioEncodingBitRate(bitRate: Int)
     fun prepare()
     fun start()
     fun stop()
@@ -33,6 +35,14 @@ class RealMediaRecorderWrapper(private val mediaRecorder: MediaRecorder) : Media
 
     override fun setAudioEncoder(audioEncoder: Int) {
         mediaRecorder.setAudioEncoder(audioEncoder)
+    }
+
+    override fun setAudioEncodingSampleRate(sampleRate: Int) {
+        mediaRecorder.setAudioSamplingRate(sampleRate)
+    }
+
+    override fun setAudioEncodingBitRate(bitRate: Int) {
+        mediaRecorder.setAudioEncodingBitRate(bitRate)
     }
 
     override fun prepare() {
