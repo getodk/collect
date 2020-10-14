@@ -321,6 +321,7 @@ dependencies {
     implementation project(':material')
     implementation project(':async')
     implementation project(':audioclips')
+    implementation project(path: ':audiorecorder')
 
     // Makes binding to Views easy:
     implementation "com.jakewharton:butterknife:10.2.3"

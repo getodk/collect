@@ -16,6 +16,7 @@ package org.odk.collect.android.widgets;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.hardware.SensorManager;
 
 import org.javarosa.core.model.Constants;
@@ -23,8 +24,9 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.PermissionUtils;
@@ -43,8 +45,10 @@ import org.odk.collect.android.widgets.items.SelectOneImageMapWidget;
 import org.odk.collect.android.widgets.items.SelectOneMinimalWidget;
 import org.odk.collect.android.widgets.items.SelectOneWidget;
 import org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester;
+import org.odk.collect.android.widgets.utilities.AudioDataRequester;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.ExternalAppAudioDataRequester;
+import org.odk.collect.android.widgets.utilities.InternalAudioDataRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.PROMPT;
@@ -67,9 +71,11 @@ public class WidgetFactory {
 
     /**
      * Returns the appropriate QuestionWidget for the given FormEntryPrompt.
-     *  @param prompt              prompt element to be rendered
-     * @param context          Android context
-     * @param readOnlyOverride a flag to be ORed with JR readonly attribute.
+     *
+     * @param prompt                   prompt element to be rendered
+     * @param context                  Android context
+     * @param readOnlyOverride         a flag to be ORed with JR readonly attribute.
+     * @param generalSharedPreferences shared preferences where general settings live
      */
     public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt,
                                                         Context context,
@@ -77,7 +83,8 @@ public class WidgetFactory {
                                                         WaitingForDataRegistry waitingForDataRegistry,
                                                         QuestionMediaManager questionMediaManager,
                                                         Analytics analytics,
-                                                        AudioPlayer audioPlayer) {
+                                                        AudioPlayer audioPlayer,
+                                                        SharedPreferences generalSharedPreferences) {
 
         String appearance = WidgetAppearanceUtils.getSanitizedAppearanceHint(prompt);
         QuestionDetails questionDetails = new QuestionDetails(prompt, Collect.getCurrentFormIdentifierHash());
@@ -104,7 +111,7 @@ public class WidgetFactory {
                             questionWidget = new BearingWidget(context, questionDetails, waitingForDataRegistry,
                                     (SensorManager) context.getSystemService(Context.SENSOR_SERVICE));
                         } else {
-                             questionWidget = new DecimalWidget(context, questionDetails, readOnlyOverride);
+                            questionWidget = new DecimalWidget(context, questionDetails, readOnlyOverride);
                         }
                         break;
                     case Constants.DATATYPE_INTEGER:
@@ -175,8 +182,16 @@ public class WidgetFactory {
                 questionWidget = new OSMWidget(context, questionDetails, waitingForDataRegistry);
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
-                ExternalAppAudioDataRequester audioDataRequester = new ExternalAppAudioDataRequester((Activity) context, activityAvailability, waitingForDataRegistry, permissionUtils);
+                AudioDataRequester audioDataRequester;
+
+                if (generalSharedPreferences.getBoolean(GeneralKeys.KEY_IN_APP_RECORDING, false)) {
+                    audioDataRequester = new InternalAudioDataRequester((Activity) context, waitingForDataRegistry);
+                } else {
+                    audioDataRequester = new ExternalAppAudioDataRequester((Activity) context, activityAvailability, waitingForDataRegistry, permissionUtils);
+                }
+
                 questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, audioDataRequester);
+
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
                 questionWidget = new VideoWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
