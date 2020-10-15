@@ -5,7 +5,7 @@ import android.app.Activity.RESULT_OK
 import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.Lifecycle
-import androidx.test.core.app.ApplicationProvider
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.core.app.launchActivity
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.android.synthetic.main.activity_audio_recorder.*
@@ -15,8 +15,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.audiorecorder.AudioRecorderDependencyModule
-import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent
-import org.odk.collect.audiorecorder.setAudioRecorderDependencyComponent
+import org.odk.collect.audiorecorder.overrideDependencies
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
@@ -26,14 +25,11 @@ class AudioRecorderActivityTest {
 
     @Before
     fun setup() {
-        setAudioRecorderDependencyComponent(DaggerAudioRecorderDependencyComponent.builder()
-                .application(ApplicationProvider.getApplicationContext())
-                .dependencyModule(object : AudioRecorderDependencyModule() {
-                    override fun providesRecorder(application: Application): Recorder {
-                        return fakeRecorder
-                    }
-                })
-                .build())
+        getApplicationContext<Application>().overrideDependencies(object : AudioRecorderDependencyModule() {
+            override fun providesRecorder(application: Application): Recorder {
+                return fakeRecorder
+            }
+        })
     }
 
     @Test

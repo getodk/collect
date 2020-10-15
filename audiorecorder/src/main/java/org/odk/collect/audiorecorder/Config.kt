@@ -2,6 +2,7 @@ package org.odk.collect.audiorecorder
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
 import android.media.MediaRecorder
 import dagger.BindsInstance
 import dagger.Component
@@ -14,8 +15,11 @@ import org.odk.collect.audiorecorder.recording.Recorder
 
 private var _component: AudioRecorderDependencyComponent? = null
 
-internal fun setAudioRecorderDependencyComponent(component: AudioRecorderDependencyComponent) {
-    _component = component
+internal fun Application.overrideDependencies(module: AudioRecorderDependencyModule) {
+    _component = DaggerAudioRecorderDependencyComponent.builder()
+            .application(this)
+            .dependencyModule(module)
+            .build()
 }
 
 internal fun Activity.getComponent(): AudioRecorderDependencyComponent {
@@ -25,7 +29,7 @@ internal fun Activity.getComponent(): AudioRecorderDependencyComponent {
                     .application(application)
                     .build()
 
-            setAudioRecorderDependencyComponent(newComponent)
+            _component = newComponent
             newComponent
         } else {
             it
