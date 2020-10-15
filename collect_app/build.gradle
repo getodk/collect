@@ -317,6 +317,7 @@ dependencies {
     implementation "com.jakewharton.rxrelay2:rxrelay:2.1.1"
 
     implementation project(':nbi-stubs')
+    implementation project(':strings')
     implementation project(':material')
     implementation project(':async')
 
