@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_audio_recorder.*
 import org.odk.collect.audiorecorder.R
 import org.odk.collect.audiorecorder.getComponent
+import org.odk.collect.audiorecorder.recorder.Recorder
 import javax.inject.Inject
 
 class AudioRecorderActivity : AppCompatActivity() {

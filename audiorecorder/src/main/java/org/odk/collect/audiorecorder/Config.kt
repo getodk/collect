@@ -2,16 +2,15 @@ package org.odk.collect.audiorecorder
 
 import android.app.Activity
 import android.app.Application
-import android.content.Context
 import android.media.MediaRecorder
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
 import org.odk.collect.audiorecorder.recording.AudioRecorderActivity
-import org.odk.collect.audiorecorder.recording.MediaRecorderRecorder
-import org.odk.collect.audiorecorder.recording.RealMediaRecorderWrapper
-import org.odk.collect.audiorecorder.recording.Recorder
+import org.odk.collect.audiorecorder.recorder.MediaRecorderRecorder
+import org.odk.collect.audiorecorder.recorder.RealMediaRecorderWrapper
+import org.odk.collect.audiorecorder.recorder.Recorder
 
 private var _component: AudioRecorderDependencyComponent? = null
 

@@ -16,6 +16,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.audiorecorder.AudioRecorderDependencyModule
 import org.odk.collect.audiorecorder.overrideDependencies
+import org.odk.collect.audiorecorder.recorder.Recorder
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
