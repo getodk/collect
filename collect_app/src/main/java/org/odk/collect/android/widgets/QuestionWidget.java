@@ -121,7 +121,7 @@ public abstract class QuestionWidget
 
         if (context instanceof FormEntryActivity) {
             state = ((FormEntryActivity) context).getState();
-            permissionUtils = new PermissionUtils();
+            permissionUtils = new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert);
         }
 
         this.questionDetails = questionDetails;

@@ -21,6 +21,7 @@ import android.hardware.SensorManager;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -88,7 +89,7 @@ public class WidgetFactory {
 
         String appearance = WidgetAppearanceUtils.getSanitizedAppearanceHint(prompt);
         QuestionDetails questionDetails = new QuestionDetails(prompt, Collect.getCurrentFormIdentifierHash());
-        PermissionUtils permissionUtils = new PermissionUtils();
+        PermissionUtils permissionUtils = new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert);
         ActivityAvailability activityAvailability = new ActivityAvailability(context);
 
         final QuestionWidget questionWidget;

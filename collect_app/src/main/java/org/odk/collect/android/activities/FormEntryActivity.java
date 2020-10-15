@@ -399,7 +399,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             mediaLoadingFragment = (MediaLoadingFragment) getFragmentManager().findFragmentByTag(TAG_MEDIA_LOADING_FRAGMENT);
         }
 
-        new PermissionUtils().requestStoragePermissions(this, new PermissionListener() {
+        new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
@@ -2335,7 +2335,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         if (formController != null) {
             if (readPhoneStatePermissionRequestNeeded) {
-                new PermissionUtils().requestReadPhoneStatePermission(this, true, new PermissionListener() {
+                new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestReadPhoneStatePermission(this, true, new PermissionListener() {
                     @Override
                     public void granted() {
                         readPhoneStatePermissionRequestNeeded = false;
@@ -2668,7 +2668,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         displayUIFor(backgroundLocationViewModel.activityDisplayed());
 
         if (backgroundLocationViewModel.isBackgroundLocationPermissionsCheckNeeded()) {
-            new PermissionUtils().requestLocationPermissions(this, new PermissionListener() {
+            new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestLocationPermissions(this, new PermissionListener() {
                 @Override
                 public void granted() {
                     displayUIFor(backgroundLocationViewModel.locationPermissionsGranted());

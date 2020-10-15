@@ -68,7 +68,7 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         initToolbar(getString(R.string.configure_via_qr_code));
         menuDelegate = new QRCodeMenuDelegate(this, activityAvailability, qrCodeGenerator, fileProvider, preferencesProvider, scheduler);
 
-        new PermissionUtils().requestCameraPermission(this, new PermissionListener() {
+        new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestCameraPermission(this, new PermissionListener() {
             @Override
             public void granted() {
                 setupViewPager();

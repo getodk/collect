@@ -101,6 +101,10 @@ public class FormDownloadListActivityTest {
     }
 
     private static class AlwaysGrantStoragePermissionsPermissionUtils extends PermissionUtils {
+        private AlwaysGrantStoragePermissionsPermissionUtils() {
+            super(R.style.Theme_Collect_Dialog_PermissionAlert);
+        }
+
         @Override
         public void requestStoragePermissions(Activity activity, @NonNull PermissionListener action) {
             action.granted();
