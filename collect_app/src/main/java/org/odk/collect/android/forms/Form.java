@@ -16,8 +16,6 @@
 
 package org.odk.collect.android.forms;
 
-import org.odk.collect.android.storage.StoragePathProvider;
-
 import javax.annotation.Nullable;
 
 /**
@@ -220,10 +218,6 @@ public final class Form {
 
     public String getFormFilePath() {
         return formFilePath;
-    }
-
-    public String getAbsoluteFormFilePath() {
-        return new StoragePathProvider().getAbsoluteFormFilePath(formFilePath);
     }
 
     public String getSubmissionUri() {

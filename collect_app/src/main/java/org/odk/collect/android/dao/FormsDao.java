@@ -25,12 +25,15 @@ import androidx.loader.content.CursorLoader;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.FormsDatabaseHelper;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
 /**
  * This class is used to encapsulate all access to the {@link FormsDatabaseHelper#DATABASE_NAME}
@@ -162,7 +165,7 @@ public class FormsDao {
             try {
                 if (cursor.moveToFirst()) {
                     int formMediaPathColumnIndex = cursor.getColumnIndex(FormsColumns.FORM_MEDIA_PATH);
-                    formMediaPath = new StoragePathProvider().getAbsoluteFormFilePath(cursor.getString(formMediaPathColumnIndex));
+                    formMediaPath = getAbsoluteFilePath(new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS), cursor.getString(formMediaPathColumnIndex));
                 }
             } finally {
                 cursor.close();

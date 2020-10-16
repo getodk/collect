@@ -1,4 +1,4 @@
-package org.odk.collect.android.formmanagement;
+package org.odk.collect.android.preferences;
 
 import android.content.Context;
 

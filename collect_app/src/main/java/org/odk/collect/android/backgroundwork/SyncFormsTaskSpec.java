@@ -11,7 +11,7 @@ import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchroniz
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.android.openrosa.api.FormApiException;
+import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
 
@@ -55,7 +55,7 @@ public class SyncFormsTaskSpec implements TaskSpec {
                         notifier.onSync(null);
 
                         analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, "Success");
-                    } catch (FormApiException e) {
+                    } catch (FormSourceException e) {
                         syncStatusRepository.finishSync(e);
                         notifier.onSync(e);
 

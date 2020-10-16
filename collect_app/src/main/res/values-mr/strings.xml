@@ -117,8 +117,7 @@
   <string name="font_size">मजकूर फॉन्ट आकार</string>
   <string name="change_font_size">मजकूर फॉन्ट आकार</string>
   <string name="form_download_progress">%1$s मीडिया फायली मिळवत आहे: %2$s पैकी %3$s</string>
-  <string name="fetching_manifest">%s. मॅनिफेस्ट मिळवत आहे</string>
-  <string name="success">यश</string>
+    <string name="success">यश</string>
   <string name="no_forms_uploaded">क्षमस्व, कोणताही फॉर्म अपलोड करण्यात आला नाही</string>
   <string name="upload_results">परिणाम अपलोड करा</string>
   <string name="xform_parse_error">%1$s साठी XForm parse त्रुटी: %2$s गहाळ आहे किंवा अवैध आहे</string>

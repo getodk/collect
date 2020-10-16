@@ -131,8 +131,7 @@
   <string name="font_size">Textstorlek</string>
   <string name="change_font_size">Textstorlek</string>
   <string name="form_download_progress">%1$s. Hämtar mediafil: %2$s av %3$s</string>
-  <string name="fetching_manifest">%s. Hämtar manifest </string>
-  <string name="success">Lyckades</string>
+    <string name="success">Lyckades</string>
   <string name="failures">Fel</string>
   <string name="no_forms_uploaded">Tyvärr, inga formulär laddades upp</string>
   <string name="upload_results">Uppladdningsresultat</string>

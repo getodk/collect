@@ -39,7 +39,8 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.formentry.RefreshFormListDialogFragment;
-import org.odk.collect.android.formmanagement.FormApiExceptionMapper;
+import org.odk.collect.android.formmanagement.FormSourceExceptionMapper;
+import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -47,19 +48,18 @@ import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
-import org.odk.collect.android.openrosa.HttpCredentialsInterface;
-import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.android.openrosa.HttpCredentialsInterface;
+import org.odk.collect.android.forms.FormSourceException;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -67,6 +67,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -142,7 +143,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     StorageInitializer storageInitializer;
 
     @Inject
-    MultiFormDownloader multiFormDownloader;
+    FormDownloader formDownloader;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -430,7 +431,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             // show dialog box
             DialogUtils.showIfNotShowing(RefreshFormListDialogFragment.class, getSupportFragmentManager());
 
-            downloadFormsTask = new DownloadFormsTask(multiFormDownloader);
+            downloadFormsTask = new DownloadFormsTask(formDownloader);
             downloadFormsTask.setDownloaderListener(this);
 
             if (viewModel.getUrl() != null) {
@@ -519,7 +520,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     }
 
     @Override
-    public void formListDownloadingComplete(HashMap<String, ServerFormDetails> formList, FormApiException exception) {
+    public void formListDownloadingComplete(HashMap<String, ServerFormDetails> formList, FormSourceException exception) {
         DialogUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
         downloadFormListTask.setDownloaderListener(null);
         downloadFormListTask = null;
@@ -575,7 +576,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             switch (exception.getType()) {
                 case FETCH_ERROR:
                 case UNREACHABLE:
-                    String dialogMessage = new FormApiExceptionMapper(this).getMessage(exception);
+                    String dialogMessage = new FormSourceExceptionMapper(this).getMessage(exception);
                     String dialogTitle = getString(R.string.load_remote_form_error);
 
                     if (viewModel.isDownloadOnlyMode()) {
@@ -687,7 +688,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     }
 
     @Override
-    public void formsDownloadingComplete(HashMap<ServerFormDetails, String> result) {
+    public void formsDownloadingComplete(Map<ServerFormDetails, String> result) {
         if (downloadFormsTask != null) {
             downloadFormsTask.setDownloaderListener(null);
         }
@@ -712,7 +713,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         }
     }
 
-    public static String getDownloadResultMessage(HashMap<ServerFormDetails, String> result) {
+    public static String getDownloadResultMessage(Map<ServerFormDetails, String> result) {
         Set<ServerFormDetails> keys = result.keySet();
         StringBuilder b = new StringBuilder();
         for (ServerFormDetails k : keys) {

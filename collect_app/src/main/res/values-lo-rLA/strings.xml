@@ -108,8 +108,7 @@
   <string name="font_size">ຂະໜາດຕົວອັກສອນ</string>
   <string name="change_font_size">ຂະໜາດຕົວອັກສອນ</string>
   <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
-  <string name="fetching_manifest">%s. Getting manifest</string>
-  <string name="success">ສຳເລັດແລ້ວ</string>
+    <string name="success">ສຳເລັດແລ້ວ</string>
   <string name="no_forms_uploaded">ບໍ່ສາມາດ ອັບໂລດ ແບບຟອມໄດ້</string>
   <string name="upload_results">ຜົນໄດ້ຮັບ​ຂອງ​ການ​ ອັບໂລດ</string>
   <string name="choose_sound">ເລືອກຮູບແບບສຽງ</string>

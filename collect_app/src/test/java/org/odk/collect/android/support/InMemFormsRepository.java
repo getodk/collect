@@ -56,7 +56,7 @@ public class InMemFormsRepository implements FormsRepository {
     @Nullable
     @Override
     public Form getByPath(String path) {
-        throw new UnsupportedOperationException();
+        return forms.stream().filter(f -> f.getFormFilePath().equals(path)).findFirst().orElse(null);
     }
 
     @Override
@@ -90,6 +90,6 @@ public class InMemFormsRepository implements FormsRepository {
 
     @Override
     public void deleteFormsByMd5Hash(String md5Hash) {
-        throw new UnsupportedOperationException();
+        forms.removeIf(f -> f.getMD5Hash().equals(md5Hash));
     }
 }

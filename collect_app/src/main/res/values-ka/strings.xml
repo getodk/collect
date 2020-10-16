@@ -132,8 +132,7 @@
   <string name="font_size">ტექსტის ზომა</string>
   <string name="change_font_size">ტექსტის ზომა</string>
   <string name="form_download_progress">%1$s. მედია-ფაილების მიღება: %2$s of %3$s</string>
-  <string name="fetching_manifest">%s. მანიფესტის მიღება </string>
-  <string name="success">წარმატება</string>
+    <string name="success">წარმატება</string>
   <string name="failures">წარუმატებლობები</string>
   <string name="no_forms_uploaded">უკაცრავად, ფორმები ვერ აიტვირთა.</string>
   <string name="upload_results">ატვირთვის შედეგი</string>

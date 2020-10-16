@@ -62,7 +62,6 @@ import org.odk.collect.android.storage.migration.StorageMigrationService;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.utilities.ApplicationResetter;
 import org.odk.collect.android.utilities.AuthDialogUtility;
-import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 
@@ -120,8 +119,6 @@ public interface AppDependencyComponent {
     void inject(InstanceServerUploaderTask uploader);
 
     void inject(ServerPreferencesFragment serverPreferencesFragment);
-
-    void inject(MultiFormDownloader multiFormDownloader);
 
     void inject(AuthDialogUtility authDialogUtility);
 

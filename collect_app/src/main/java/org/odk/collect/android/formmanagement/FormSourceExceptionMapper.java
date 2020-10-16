@@ -3,18 +3,18 @@ package org.odk.collect.android.formmanagement;
 import android.content.Context;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.openrosa.api.FormApiException;
+import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.android.utilities.TranslationHandler;
 
-public class FormApiExceptionMapper {
+public class FormSourceExceptionMapper {
 
     private final Context context;
 
-    public FormApiExceptionMapper(Context context) {
+    public FormSourceExceptionMapper(Context context) {
         this.context = context;
     }
 
-    public String getMessage(FormApiException exception) {
+    public String getMessage(FormSourceException exception) {
         switch (exception.getType()) {
             case UNREACHABLE:
                 return TranslationHandler.getString(context, R.string.unreachable_error, exception.getServerUrl()) + " " + TranslationHandler.getString(context, R.string.report_to_project_lead);

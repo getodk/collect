@@ -89,17 +89,17 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void withCredentials_whenBasicChallengeReceived_whenHttps_retriesWithCredentials() throws Exception {
-        MockWebServer httpsMockWebServer = mockWebServerRule.start();
+        MockWebServer mockWebServer = mockWebServerRule.start();
 
-        enqueueBasicChallenge(httpsMockWebServer);
-        enqueueSuccess(httpsMockWebServer);
+        enqueueBasicChallenge(mockWebServer);
+        enqueueSuccess(mockWebServer);
 
         OpenRosaServerClient client = subject.get("https", "Android", new HttpCredentials("user", "pass"));
-        client.makeRequest(buildRequest(httpsMockWebServer, ""), new Date());
+        client.makeRequest(buildRequest(mockWebServer, ""), new Date());
 
-        assertThat(httpsMockWebServer.getRequestCount(), equalTo(2));
-        httpsMockWebServer.takeRequest();
-        RecordedRequest request = httpsMockWebServer.takeRequest();
+        assertThat(mockWebServer.getRequestCount(), equalTo(2));
+        mockWebServer.takeRequest();
+        RecordedRequest request = mockWebServer.takeRequest();
         assertThat(request.getHeader("Authorization"), equalTo("Basic dXNlcjpwYXNz"));
     }
 
@@ -120,36 +120,36 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void withCredentials_whenDigestChallengeReceived_whenHttps_retriesWithCredentials() throws Exception {
-        MockWebServer httpsMockWebServer = mockWebServerRule.startHTTPS();
+        MockWebServer mockWebServer = mockWebServerRule.start();
 
-        enqueueDigestChallenge(httpsMockWebServer);
-        enqueueSuccess(httpsMockWebServer);
+        enqueueDigestChallenge(mockWebServer);
+        enqueueSuccess(mockWebServer);
 
         OpenRosaServerClient client = subject.get("https", "Android", new HttpCredentials("user", "pass"));
-        client.makeRequest(buildRequest(httpsMockWebServer, ""), new Date());
+        client.makeRequest(buildRequest(mockWebServer, ""), new Date());
 
-        assertThat(httpsMockWebServer.getRequestCount(), equalTo(2));
-        httpsMockWebServer.takeRequest();
-        RecordedRequest request = httpsMockWebServer.takeRequest();
+        assertThat(mockWebServer.getRequestCount(), equalTo(2));
+        mockWebServer.takeRequest();
+        RecordedRequest request = mockWebServer.takeRequest();
         assertThat(request.getHeader("Authorization"), startsWith("Digest"));
     }
 
     @Test
     public void withCredentials_onceBasicChallenged_whenHttps_proactivelySendsCredentials() throws Exception {
-        MockWebServer httpsMockWebServer = mockWebServerRule.startHTTPS();
+        MockWebServer mockWebServer = mockWebServerRule.start();
 
-        enqueueBasicChallenge(httpsMockWebServer);
-        enqueueSuccess(httpsMockWebServer);
-        enqueueSuccess(httpsMockWebServer);
+        enqueueBasicChallenge(mockWebServer);
+        enqueueSuccess(mockWebServer);
+        enqueueSuccess(mockWebServer);
 
         OpenRosaServerClient client = subject.get("https", "Android", new HttpCredentials("user", "pass"));
-        client.makeRequest(buildRequest(httpsMockWebServer, ""), new Date());
-        client.makeRequest(buildRequest(httpsMockWebServer, "/different"), new Date());
+        client.makeRequest(buildRequest(mockWebServer, ""), new Date());
+        client.makeRequest(buildRequest(mockWebServer, "/different"), new Date());
 
-        assertThat(httpsMockWebServer.getRequestCount(), equalTo(3));
-        httpsMockWebServer.takeRequest();
-        httpsMockWebServer.takeRequest();
-        RecordedRequest request = httpsMockWebServer.takeRequest();
+        assertThat(mockWebServer.getRequestCount(), equalTo(3));
+        mockWebServer.takeRequest();
+        mockWebServer.takeRequest();
+        RecordedRequest request = mockWebServer.takeRequest();
         assertThat(request.getHeader("Authorization"), equalTo("Basic dXNlcjpwYXNz"));
     }
 
@@ -174,20 +174,20 @@ public abstract class OpenRosaServerClientProviderTest {
 
     @Test
     public void withCredentials_onceDigestChallenged_whenHttps_proactivelySendsCredentials() throws Exception {
-        MockWebServer httpsMockWebServer = mockWebServerRule.startHTTPS();
+        MockWebServer mockWebServer = mockWebServerRule.start();
 
-        enqueueDigestChallenge(httpsMockWebServer);
-        enqueueSuccess(httpsMockWebServer);
-        enqueueSuccess(httpsMockWebServer);
+        enqueueDigestChallenge(mockWebServer);
+        enqueueSuccess(mockWebServer);
+        enqueueSuccess(mockWebServer);
 
         OpenRosaServerClient client = subject.get("https", "Android", new HttpCredentials("user", "pass"));
-        client.makeRequest(buildRequest(httpsMockWebServer, ""), new Date());
-        client.makeRequest(buildRequest(httpsMockWebServer, "/different"), new Date());
+        client.makeRequest(buildRequest(mockWebServer, ""), new Date());
+        client.makeRequest(buildRequest(mockWebServer, "/different"), new Date());
 
-        assertThat(httpsMockWebServer.getRequestCount(), equalTo(3));
-        httpsMockWebServer.takeRequest();
-        httpsMockWebServer.takeRequest();
-        RecordedRequest request = httpsMockWebServer.takeRequest();
+        assertThat(mockWebServer.getRequestCount(), equalTo(3));
+        mockWebServer.takeRequest();
+        mockWebServer.takeRequest();
+        RecordedRequest request = mockWebServer.takeRequest();
         assertThat(request.getHeader("Authorization"), startsWith("Digest"));
     }
 

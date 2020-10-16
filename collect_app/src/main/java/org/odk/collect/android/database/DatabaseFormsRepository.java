@@ -5,9 +5,9 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
-import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +29,12 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SUBMISSION_URI;
 
 public class DatabaseFormsRepository implements FormsRepository {
+
+    private final StoragePathProvider storagePathProvider;
+
+    public DatabaseFormsRepository() {
+        storagePathProvider = new StoragePathProvider();
+    }
 
     @Override
     public List<Form> getByJrFormIdNotDeleted(String jrFormId) {
@@ -71,14 +77,16 @@ public class DatabaseFormsRepository implements FormsRepository {
     @Nullable
     @Override
     public Form getByPath(String path) {
-        return getFormOrNull(new FormsDao().getFormsCursorForFormFilePath(path));
+        try (Cursor cursor = new FormsDao().getFormsCursorForFormFilePath(path)) {
+            return getFormOrNull(cursor);
+        }
     }
 
     @Override
     public Uri save(Form form) {
         final ContentValues v = new ContentValues();
-        v.put(FORM_FILE_PATH, new StoragePathProvider().getFormDbPath(form.getFormFilePath()));
-        v.put(FORM_MEDIA_PATH, new StoragePathProvider().getFormDbPath(form.getFormMediaPath()));
+        v.put(FORM_FILE_PATH, storagePathProvider.getFormDbPath(form.getFormFilePath()));
+        v.put(FORM_MEDIA_PATH, storagePathProvider.getFormDbPath(form.getFormMediaPath()));
         v.put(DISPLAY_NAME, form.getDisplayName());
         v.put(JR_VERSION, form.getJrVersion());
         v.put(JR_FORM_ID, form.getJrFormId());

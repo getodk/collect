@@ -1,15 +1,14 @@
 package org.odk.collect.android.forms;
 
 import org.junit.Test;
-import org.odk.collect.android.utilities.FileUtils;
 
-import java.io.File;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.odk.collect.android.support.FormUtils.buildForm;
 
 public abstract class FormsRepositoryTest {
 
@@ -20,7 +19,7 @@ public abstract class FormsRepositoryTest {
     @Test
     public void get_whenFormHasNullVersion_returnsForm() {
         FormsRepository formsRepository = buildSubject();
-        formsRepository.save(buildForm(1L, "1", null)
+        formsRepository.save(buildForm(1L, "1", null, getFormFilesPath())
                 .build());
 
         Form form = formsRepository.get("1", null);
@@ -31,7 +30,7 @@ public abstract class FormsRepositoryTest {
     @Test
     public void softDelete_marksDeletedAsTrue() {
         FormsRepository formsRepository = buildSubject();
-        formsRepository.save(buildForm(1L, "1", null)
+        formsRepository.save(buildForm(1L, "1", null, getFormFilesPath())
                 .build());
 
         formsRepository.softDelete(1L);
@@ -41,7 +40,7 @@ public abstract class FormsRepositoryTest {
     @Test
     public void restore_marksDeletedAsFalse() {
         FormsRepository formsRepository = buildSubject();
-        formsRepository.save(buildForm(1L, "1", null)
+        formsRepository.save(buildForm(1L, "1", null, getFormFilesPath())
                 .deleted(true)
                 .build());
 
@@ -52,12 +51,12 @@ public abstract class FormsRepositoryTest {
     @Test
     public void getByJrFormIdNotDeleted_doesNotReturnDeletedForms() {
         FormsRepository formsRepository = buildSubject();
-        formsRepository.save(buildForm(1L, "1", "deleted")
+        formsRepository.save(buildForm(1L, "1", "deleted", getFormFilesPath())
                 .deleted(true)
                 .build()
         );
 
-        formsRepository.save(buildForm(2L, "1", "not-deleted")
+        formsRepository.save(buildForm(2L, "1", "not-deleted", getFormFilesPath())
                 .deleted(false)
                 .build()
         );
@@ -65,20 +64,5 @@ public abstract class FormsRepositoryTest {
         List<Form> forms = formsRepository.getByJrFormIdNotDeleted("1");
         assertThat(forms.size(), is(1));
         assertThat(forms.get(0).getJrVersion(), equalTo("not-deleted"));
-    }
-
-    private Form.Builder buildForm(long id, String jrFormId, String jrVersion) {
-        String fileName = jrFormId + "-" + jrVersion;
-        File formFile = new File(getFormFilesPath() + "/" + fileName + ".xml");
-        FileUtils.write(formFile, "blah".getBytes());
-        String mediaPath = new File(getFormFilesPath() + "/" + fileName + "-media").getAbsolutePath();
-
-        return new Form.Builder()
-                .id(id)
-                .displayName("Test Form")
-                .formFilePath(formFile.getAbsolutePath())
-                .formMediaPath(mediaPath)
-                .jrFormId(jrFormId)
-                .jrVersion(jrVersion);
     }
 }

@@ -148,7 +148,6 @@
     <string name="font_size">Text font size</string>
     <string name="change_font_size">Text font size</string>
     <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
-    <string name="fetching_manifest">%s. Getting manifest </string>
     <string name="success">Success</string>
     <string name="failures">Failures</string>
     <string name="no_forms_uploaded">Sorry, no form was uploaded.</string>

@@ -15,7 +15,7 @@
 package org.odk.collect.android.listeners;
 
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.openrosa.api.FormApiException;
+import org.odk.collect.android.forms.FormSourceException;
 
 import java.util.HashMap;
 
@@ -23,5 +23,5 @@ import java.util.HashMap;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface FormListDownloaderListener {
-    void formListDownloadingComplete(HashMap<String, ServerFormDetails> formList, FormApiException exception);
+    void formListDownloadingComplete(HashMap<String, ServerFormDetails> formList, FormSourceException exception);
 }

@@ -22,7 +22,7 @@ import androidx.core.util.Pair;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
-import org.odk.collect.android.openrosa.api.FormApiException;
+import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.util.HashMap;
@@ -36,7 +36,7 @@ import java.util.List;
  *
  * @author carlhartung
  */
-public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<ServerFormDetails>, FormApiException>> {
+public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<ServerFormDetails>, FormSourceException>> {
 
     private final ServerFormsDetailsFetcher serverFormsDetailsFetcher;
 
@@ -51,17 +51,17 @@ public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<Serv
     }
 
     @Override
-    protected Pair<List<ServerFormDetails>, FormApiException> doInBackground(Void... values) {
+    protected Pair<List<ServerFormDetails>, FormSourceException> doInBackground(Void... values) {
         if (webCredentialsUtils != null) {
             setTemporaryCredentials();
         }
 
         List<ServerFormDetails> formList = null;
-        FormApiException exception = null;
+        FormSourceException exception = null;
 
         try {
             formList = serverFormsDetailsFetcher.fetchFormDetails();
-        } catch (FormApiException e) {
+        } catch (FormSourceException e) {
             exception = e;
         } finally {
             if (webCredentialsUtils != null) {
@@ -73,7 +73,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<Serv
     }
 
     @Override
-    protected void onPostExecute(Pair<List<ServerFormDetails>, FormApiException> result) {
+    protected void onPostExecute(Pair<List<ServerFormDetails>, FormSourceException> result) {
         synchronized (this) {
             if (stateListener != null) {
                 if (result.first != null) {

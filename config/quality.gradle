@@ -47,17 +47,3 @@ tasks.register("pmd", Pmd) {
         }
     }
 }
-
-//------------------------Lint------------------------//
-
-android {
-    lintOptions {
-        abortOnError true
-        xmlReport true
-        htmlReport true
-        checkGeneratedSources true
-        lintConfig file("$configDir/lint.xml")
-        htmlOutput file("$reportsDir/lint/lint-result.html")
-        xmlOutput file("$reportsDir/lint/lint-result.xml")
-    }
-}

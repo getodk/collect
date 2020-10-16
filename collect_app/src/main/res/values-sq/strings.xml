@@ -123,8 +123,7 @@
   <string name="font_size">Madhësia tekstit</string>
   <string name="change_font_size">Madhësia e tekstit</string>
   <string name="form_download_progress">%1$s. Duke ngarkuar media: %2$s of %3$s</string>
-  <string name="fetching_manifest">%s Duke ngarkuar manifestin</string>
-  <string name="success">Sukses</string>
+    <string name="success">Sukses</string>
   <string name="no_forms_uploaded">Nuk është ngarkuar asnjë formular.</string>
   <string name="upload_results">Ngarko rezultatet</string>
   <string name="xform_parse_error">Gabim në dekodimin e XForm për %1$s: %2$s mungon ose i pavlefshëm.</string>

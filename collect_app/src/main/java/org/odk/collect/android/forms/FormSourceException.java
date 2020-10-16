@@ -1,6 +1,6 @@
-package org.odk.collect.android.openrosa.api;
+package org.odk.collect.android.forms;
 
-public class FormApiException extends Exception {
+public class FormSourceException extends Exception {
 
     public enum Type {
         UNREACHABLE,
@@ -12,12 +12,12 @@ public class FormApiException extends Exception {
     private final Type type;
     private final String serverUrl;
 
-    public FormApiException(Type type) {
+    public FormSourceException(Type type) {
         this.type = type;
         this.serverUrl = null;
     }
 
-    public FormApiException(Type type, String serverUrl) {
+    public FormSourceException(Type type, String serverUrl) {
         this.type = type;
         this.serverUrl = serverUrl;
     }

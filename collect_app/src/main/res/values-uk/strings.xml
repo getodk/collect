@@ -129,8 +129,7 @@
   <string name="font_size">Розмір шрифту</string>
   <string name="change_font_size">Розмір шрифту</string>
   <string name="form_download_progress">%1$s. Отримання медіа файлу: %2$s з %3$s</string>
-  <string name="fetching_manifest">%s. Отримання маніфесту</string>
-  <string name="success">Успішно!</string>
+    <string name="success">Успішно!</string>
   <string name="failures">Невдалі</string>
   <string name="no_forms_uploaded">Вибачте, жодна анкета не була вивантажена.</string>
   <string name="upload_results">Вивантаження результатів</string>

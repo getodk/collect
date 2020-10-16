@@ -475,13 +475,14 @@ public class FileUtils {
     public static void purgeMediaPath(String mediaPath) {
         File tempMediaFolder = new File(mediaPath);
         File[] tempMediaFiles = tempMediaFolder.listFiles();
-        if (tempMediaFiles == null || tempMediaFiles.length == 0) {
-            deleteAndReport(tempMediaFolder);
-        } else {
+
+        if (tempMediaFiles != null) {
             for (File tempMediaFile : tempMediaFiles) {
                 deleteAndReport(tempMediaFile);
             }
         }
+
+        deleteAndReport(tempMediaFolder);
     }
 
     public static void moveMediaFiles(String tempMediaPath, File formMediaPath) throws IOException {

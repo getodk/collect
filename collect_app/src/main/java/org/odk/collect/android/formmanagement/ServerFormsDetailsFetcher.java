@@ -16,15 +16,14 @@
 
 package org.odk.collect.android.formmanagement;
 
+import org.odk.collect.android.forms.FormListItem;
+import org.odk.collect.android.forms.FormSource;
+import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.forms.ManifestFile;
+import org.odk.collect.android.forms.MediaFile;
 import org.odk.collect.android.forms.MediaFileRepository;
-import org.odk.collect.android.openrosa.api.FormListApi;
-import org.odk.collect.android.openrosa.api.FormApiException;
-import org.odk.collect.android.openrosa.api.FormListItem;
-import org.odk.collect.android.openrosa.api.ManifestFile;
-import org.odk.collect.android.openrosa.api.MediaFile;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.File;
@@ -37,46 +36,52 @@ public class ServerFormsDetailsFetcher {
 
     private final FormsRepository formsRepository;
     private final MediaFileRepository mediaFileRepository;
-    private final FormListApi formListAPI;
+    private final FormSource formSource;
     private final DiskFormsSynchronizer diskFormsSynchronizer;
 
     public ServerFormsDetailsFetcher(FormsRepository formsRepository,
                                      MediaFileRepository mediaFileRepository,
-                                     FormListApi formListAPI,
+                                     FormSource formSource,
                                      DiskFormsSynchronizer diskFormsSynchronizer) {
         this.formsRepository = formsRepository;
         this.mediaFileRepository = mediaFileRepository;
-        this.formListAPI = formListAPI;
+        this.formSource = formSource;
         this.diskFormsSynchronizer = diskFormsSynchronizer;
     }
 
-    public List<ServerFormDetails> fetchFormDetails() throws FormApiException {
+    public void updateFormListApi(String url, WebCredentialsUtils webCredentialsUtils) {
+        formSource.updateUrl(url);
+        formSource.updateWebCredentialsUtils(webCredentialsUtils);
+    }
+
+    public List<ServerFormDetails> fetchFormDetails() throws FormSourceException {
         diskFormsSynchronizer.synchronize();
 
-        List<FormListItem> formListItems = formListAPI.fetchFormList();
+        List<FormListItem> formListItems = formSource.fetchFormList();
         List<ServerFormDetails> serverFormDetailsList = new ArrayList<>();
 
         for (FormListItem listItem : formListItems) {
-            boolean isNewerFormVersionAvailable = false;
-            boolean areNewerMediaFilesAvailable = false;
             ManifestFile manifestFile = null;
 
-            boolean thisFormAlreadyDownloaded = isThisFormAlreadyDownloaded(listItem.getFormID());
+            if (listItem.getManifestURL() != null) {
+                manifestFile = getManifestFile(formSource, listItem.getManifestURL());
+            }
 
+            boolean thisFormAlreadyDownloaded = !formsRepository.getByJrFormIdNotDeleted(listItem.getFormID()).isEmpty();
+
+            boolean isNewerFormVersionAvailable = false;
             if (thisFormAlreadyDownloaded) {
-                isNewerFormVersionAvailable = isNewerFormVersionAvailable(MultiFormDownloader.getMd5Hash(listItem.getHashWithPrefix()));
-                if (!isNewerFormVersionAvailable && listItem.getManifestURL() != null) {
-                    manifestFile = getManifestFile(formListAPI, listItem.getManifestURL());
-                    if (manifestFile != null) {
-                        List<MediaFile> newMediaFiles = manifestFile.getMediaFiles();
-                        if (newMediaFiles != null && !newMediaFiles.isEmpty()) {
-                            areNewerMediaFilesAvailable = areNewerMediaFilesAvailable(listItem.getFormID(), listItem.getVersion(), newMediaFiles);
-                        }
+                if (isNewerFormVersionAvailable(listItem)) {
+                    isNewerFormVersionAvailable = true;
+                } else if (manifestFile != null) {
+                    List<MediaFile> newMediaFiles = manifestFile.getMediaFiles();
+
+                    if (newMediaFiles != null && !newMediaFiles.isEmpty()) {
+                        isNewerFormVersionAvailable = areNewerMediaFilesAvailable(listItem.getFormID(), listItem.getVersion(), newMediaFiles);
                     }
                 }
             }
 
-            String manifestFileHash = manifestFile != null ? manifestFile.getHash() : null;
             ServerFormDetails serverFormDetails = new ServerFormDetails(
                     listItem.getName(),
                     listItem.getDownloadURL(),
@@ -84,9 +89,9 @@ public class ServerFormsDetailsFetcher {
                     listItem.getFormID(),
                     listItem.getVersion(),
                     listItem.getHashWithPrefix(),
-                    manifestFileHash,
                     !thisFormAlreadyDownloaded,
-                    isNewerFormVersionAvailable || areNewerMediaFilesAvailable);
+                    isNewerFormVersionAvailable,
+                    manifestFile);
 
             serverFormDetailsList.add(serverFormDetails);
         }
@@ -94,29 +99,26 @@ public class ServerFormsDetailsFetcher {
         return serverFormDetailsList;
     }
 
-    private boolean isThisFormAlreadyDownloaded(String formId) {
-        return !formsRepository.getByJrFormIdNotDeleted(formId).isEmpty();
-    }
-
-    private ManifestFile getManifestFile(FormListApi formListAPI, String manifestUrl) {
+    private ManifestFile getManifestFile(FormSource formSource, String manifestUrl) {
         if (manifestUrl == null) {
             return null;
         }
 
         try {
-            return formListAPI.fetchManifest(manifestUrl);
-        } catch (FormApiException formApiException) {
-            Timber.w(formApiException);
+            return formSource.fetchManifest(manifestUrl);
+        } catch (FormSourceException formSourceException) {
+            Timber.w(formSourceException);
             return null;
         }
     }
 
-    private boolean isNewerFormVersionAvailable(String md5Hash) {
-        if (md5Hash == null) {
+    private boolean isNewerFormVersionAvailable(FormListItem formListItem) {
+        if (formListItem.getHashWithPrefix() == null) {
             return false;
         }
 
-        return formsRepository.getByMd5Hash(md5Hash) == null;
+        String hash = getMd5HashWithoutPrefix(formListItem.getHashWithPrefix());
+        return formsRepository.getByMd5Hash(hash) == null;
     }
 
     private boolean areNewerMediaFilesAvailable(String formId, String formVersion, List<MediaFile> newMediaFiles) {
@@ -151,8 +153,7 @@ public class ServerFormsDetailsFetcher {
         return false;
     }
 
-    public void updateFormListApi(String url, WebCredentialsUtils webCredentialsUtils) {
-        formListAPI.updateUrl(url);
-        formListAPI.updateWebCredentialsUtils(webCredentialsUtils);
+    private String getMd5HashWithoutPrefix(String hash) {
+        return hash == null || hash.isEmpty() ? null : hash.substring("md5:".length());
     }
 }

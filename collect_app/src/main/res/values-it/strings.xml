@@ -133,8 +133,7 @@
   <string name="font_size">Dimensione dei caratteri del testo</string>
   <string name="change_font_size">Dimensione dei caratteri del testo</string>
   <string name="form_download_progress">%1$s. Caricamento file multimediali: %2$s di %3$s</string>
-  <string name="fetching_manifest">%s. Ottenendo \'Manifest\' da XML</string>
-  <string name="success">Successo</string>
+    <string name="success">Successo</string>
   <string name="failures">Errori</string>
   <string name="no_forms_uploaded">Spiacenti, nessun modulo è stato caricato.</string>
   <string name="upload_results">Risultati del caricamento</string>

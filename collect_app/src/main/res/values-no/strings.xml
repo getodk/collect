@@ -110,8 +110,7 @@
   <string name="font_size">Fontstørrelse</string>
   <string name="change_font_size">Fontstørrelse</string>
   <string name="form_download_progress">%1$s. Henter mediafiler: %2$s av %3$s</string>
-  <string name="fetching_manifest">%s. Henter manifestet</string>
-  <string name="success">Suksess</string>
+    <string name="success">Suksess</string>
   <string name="no_forms_uploaded">Beklager, opplasting feilet.</string>
   <string name="upload_results">Vis oversikt</string>
   <string name="choose_sound">Velg lyd</string>

@@ -132,8 +132,7 @@
   <string name="font_size">Ukubwa wa maandishi</string>
   <string name="change_font_size">Ukubwa wa maandishi</string>
   <string name="form_download_progress">%1$s. inapata kabrasha za media: %2$s kati ya %3$s</string>
-  <string name="fetching_manifest">%s. Inapata orodha </string>
-  <string name="success">Mafanikio</string>
+    <string name="success">Mafanikio</string>
   <string name="failures">Zimeshindikana</string>
   <string name="no_forms_uploaded">Pole, hakuna fomu Iliyopakiwa.</string>
   <string name="upload_results">Matokeo ya kupakiwa</string>

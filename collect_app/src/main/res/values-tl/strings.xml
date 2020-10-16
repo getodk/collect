@@ -104,8 +104,7 @@
   <string name="font_size">Laki ng Teklado</string>
   <string name="change_font_size">Laki ng Tipo ng Teksto</string>
   <string name="form_download_progress">%1$s. Kinukuha ang talaksang media : %2$s of %3$s</string>
-  <string name="fetching_manifest">%s. Kinukuha ang manifest </string>
-  <string name="success">Tagumpay</string>
+    <string name="success">Tagumpay</string>
   <string name="no_forms_uploaded">Sorry, no form was uploaded.</string>
   <string name="upload_results">Upload Results</string>
   <string name="choose_sound">Pumili ng Tunog</string>

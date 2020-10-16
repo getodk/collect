@@ -129,8 +129,7 @@
   <string name="font_size">Veličina teksta</string>
   <string name="change_font_size">Veličina teksta</string>
   <string name="form_download_progress">%1$s. Preuzimam media fajlove: %2$s od %3$s</string>
-  <string name="fetching_manifest">%s. Pribavljam manifest.</string>
-  <string name="success">Uspjeh</string>
+    <string name="success">Uspjeh</string>
   <string name="failures">Neuspijeh</string>
   <string name="no_forms_uploaded">Nijedan formular nije otpremljen.</string>
   <string name="upload_results">Rezultati otpremljivanja</string>

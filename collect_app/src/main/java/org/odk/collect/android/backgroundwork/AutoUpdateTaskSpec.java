@@ -21,16 +21,19 @@ import android.content.Context;
 import androidx.work.WorkerParameters;
 
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.R;
+import org.odk.collect.android.formmanagement.FormDownloadException;
+import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.android.openrosa.api.FormApiException;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
-import org.odk.collect.android.utilities.MultiFormDownloader;
+import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
+import org.odk.collect.android.forms.FormSourceException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +54,7 @@ public class AutoUpdateTaskSpec implements TaskSpec {
     StorageMigrationRepository storageMigrationRepository;
 
     @Inject
-    MultiFormDownloader multiFormDownloader;
+    FormDownloader formDownloader;
 
     @Inject
     Notifier notifier;
@@ -77,8 +80,19 @@ public class AutoUpdateTaskSpec implements TaskSpec {
                     if (preferencesProvider.getGeneralSharedPreferences().getBoolean(KEY_AUTOMATIC_UPDATE, false)) {
                         changeLock.withLock(acquiredLock -> {
                             if (acquiredLock) {
-                                final HashMap<ServerFormDetails, String> result = multiFormDownloader.downloadForms(updatedForms, null);
-                                notifier.onUpdatesDownloaded(result);
+                                HashMap<ServerFormDetails, String> results = new HashMap<>();
+                                for (ServerFormDetails serverFormDetails : updatedForms) {
+                                    try {
+                                        formDownloader.downloadForm(serverFormDetails, null, null);
+                                        results.put(serverFormDetails, TranslationHandler.getString(context, R.string.success));
+                                    } catch (FormDownloadException e) {
+                                        results.put(serverFormDetails, TranslationHandler.getString(context, R.string.failure));
+                                    } catch (InterruptedException e) {
+                                        break;
+                                    }
+                                }
+
+                                notifier.onUpdatesDownloaded(results);
                             }
 
                             return null;
@@ -89,7 +103,7 @@ public class AutoUpdateTaskSpec implements TaskSpec {
                 }
 
                 return true;
-            } catch (FormApiException e) {
+            } catch (FormSourceException e) {
                 return true;
             }
         };

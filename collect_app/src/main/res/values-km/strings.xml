@@ -131,8 +131,7 @@
   <string name="font_size">ទំហំពុម្ភអក្សរ</string>
   <string name="change_font_size">ទំហំពុម្ភអក្សរ</string>
   <string name="form_download_progress">%1$s. កំពុងទាញយកឯកសារមេឌៀ: %2$s of %3$s</string>
-  <string name="fetching_manifest">%s. ការទាញបញ្ជី</string>
-  <string name="success">ជោគជ័យ</string>
+    <string name="success">ជោគជ័យ</string>
   <string name="failures">បរាជ័យ</string>
   <string name="no_forms_uploaded">សុំទោស, គ្មានសំណុំ​បែប​បទសម្រាប់ផ្ទុកឡើង.</string>
   <string name="upload_results">លទ្ធផលនៃការផ្ទុកឡើង</string>

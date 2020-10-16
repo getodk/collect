@@ -1,4 +1,4 @@
-package org.odk.collect.android.openrosa.api;
+package org.odk.collect.android.forms;
 
 public class FormListItem {
 

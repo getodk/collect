@@ -1,10 +1,13 @@
-package org.odk.collect.android.openrosa.api;
+package org.odk.collect.android.openrosa;
 
 import org.javarosa.xform.parse.XFormParser;
 import org.jetbrains.annotations.NotNull;
 import org.kxml2.kdom.Element;
-import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
+import org.odk.collect.android.forms.FormListItem;
+import org.odk.collect.android.forms.FormSource;
+import org.odk.collect.android.forms.FormSourceException;
+import org.odk.collect.android.forms.ManifestFile;
+import org.odk.collect.android.forms.MediaFile;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
@@ -18,12 +21,12 @@ import javax.net.ssl.SSLException;
 
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
-import static org.odk.collect.android.openrosa.api.FormApiException.Type.AUTH_REQUIRED;
-import static org.odk.collect.android.openrosa.api.FormApiException.Type.FETCH_ERROR;
-import static org.odk.collect.android.openrosa.api.FormApiException.Type.SECURITY_ERROR;
-import static org.odk.collect.android.openrosa.api.FormApiException.Type.UNREACHABLE;
+import static org.odk.collect.android.forms.FormSourceException.Type.AUTH_REQUIRED;
+import static org.odk.collect.android.forms.FormSourceException.Type.FETCH_ERROR;
+import static org.odk.collect.android.forms.FormSourceException.Type.SECURITY_ERROR;
+import static org.odk.collect.android.forms.FormSourceException.Type.UNREACHABLE;
 
-public class OpenRosaFormListApi implements FormListApi {
+public class OpenRosaFormSource implements FormSource {
 
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST =
             "http://openrosa.org/xforms/xformsList";
@@ -35,25 +38,14 @@ public class OpenRosaFormListApi implements FormListApi {
     private String serverURL;
     private final String formListPath;
 
-    public OpenRosaFormListApi(String serverURL, String formListPath, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils) {
+    public OpenRosaFormSource(String serverURL, String formListPath, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils) {
         this.openRosaXMLFetcher = new OpenRosaXmlFetcher(openRosaHttpInterface, webCredentialsUtils);
         this.serverURL = serverURL;
         this.formListPath = formListPath;
     }
 
-    /**
-     * @deprecated this is only to provide a way to use this implementation for fetching manifests
-     * and forms when downloading a form in older code.
-     */
-    @Deprecated
-    public OpenRosaFormListApi(OpenRosaXmlFetcher openRosaXmlFetcher) {
-        this.openRosaXMLFetcher = openRosaXmlFetcher;
-        serverURL = null;
-        formListPath = null;
-    }
-
     @Override
-    public List<FormListItem> fetchFormList() throws FormApiException {
+    public List<FormListItem> fetchFormList() throws FormSourceException {
         if (serverURL == null) {
             throw new UnsupportedOperationException("Using deprecated constructor!");
         }
@@ -63,11 +55,11 @@ public class OpenRosaFormListApi implements FormListApi {
         // If we can't get the document, return the error, cancel the task
         if (result.errorMessage != null) {
             if (result.responseCode == HTTP_UNAUTHORIZED) {
-                throw new FormApiException(AUTH_REQUIRED);
+                throw new FormSourceException(AUTH_REQUIRED);
             } else if (result.responseCode == HTTP_NOT_FOUND) {
-                throw new FormApiException(UNREACHABLE, serverURL);
+                throw new FormSourceException(UNREACHABLE, serverURL);
             } else {
-                throw new FormApiException(FETCH_ERROR);
+                throw new FormSourceException(FETCH_ERROR);
             }
         }
 
@@ -79,7 +71,7 @@ public class OpenRosaFormListApi implements FormListApi {
     }
 
     @Override
-    public ManifestFile fetchManifest(String manifestURL) throws FormApiException {
+    public ManifestFile fetchManifest(String manifestURL) throws FormSourceException {
         if (manifestURL == null) {
             return null;
         }
@@ -87,23 +79,23 @@ public class OpenRosaFormListApi implements FormListApi {
         DocumentFetchResult result = mapException(() -> openRosaXMLFetcher.getXML(manifestURL));
 
         if (result.errorMessage != null) {
-            throw new FormApiException(FETCH_ERROR);
+            throw new FormSourceException(FETCH_ERROR);
         }
 
         if (!result.isOpenRosaResponse) {
-            throw new FormApiException(FETCH_ERROR);
+            throw new FormSourceException(FETCH_ERROR);
         }
 
         return parseManifest(result);
     }
 
     @Override
-    public InputStream fetchForm(String formURL) throws FormApiException {
+    public InputStream fetchForm(String formURL) throws FormSourceException {
         return fetchFile(formURL);
     }
 
     @Override
-    public InputStream fetchMediaFile(String mediaFileURL) throws FormApiException {
+    public InputStream fetchMediaFile(String mediaFileURL) throws FormSourceException {
         return mapException(() -> openRosaXMLFetcher.getFile(mediaFileURL, null));
     }
 
@@ -118,24 +110,24 @@ public class OpenRosaFormListApi implements FormListApi {
     }
 
     @NotNull
-    private InputStream fetchFile(String formURL) throws FormApiException {
+    private InputStream fetchFile(String formURL) throws FormSourceException {
         InputStream formFile = mapException(() -> openRosaXMLFetcher.getFile(formURL, null));
 
         if (formFile != null) {
             return formFile;
         } else {
-            throw new FormApiException(FETCH_ERROR);
+            throw new FormSourceException(FETCH_ERROR);
         }
     }
 
-    private List<FormListItem> parseFormList(DocumentFetchResult result) throws FormApiException {
+    private List<FormListItem> parseFormList(DocumentFetchResult result) throws FormSourceException {
         // Attempt OpenRosa 1.0 parsing
         Element xformsElement = result.doc.getRootElement();
         if (!xformsElement.getName().equals("xforms")) {
-            throw new FormApiException(FETCH_ERROR);
+            throw new FormSourceException(FETCH_ERROR);
         }
         if (!isXformsListNamespacedElement(xformsElement)) {
-            throw new FormApiException(FETCH_ERROR);
+            throw new FormSourceException(FETCH_ERROR);
         }
 
         List<FormListItem> formList = new ArrayList<>();
@@ -233,7 +225,7 @@ public class OpenRosaFormListApi implements FormListApi {
 
             if (formId == null || downloadUrl == null || formName == null) {
                 formList.clear();
-                throw new FormApiException(FETCH_ERROR);
+                throw new FormSourceException(FETCH_ERROR);
             }
 
             FormListItem formListItem = new FormListItem(downloadUrl, formId, version, hash, formName, manifestUrl);
@@ -243,7 +235,7 @@ public class OpenRosaFormListApi implements FormListApi {
         return formList;
     }
 
-    private List<FormListItem> parseLegacyFormList(DocumentFetchResult result) throws FormApiException {
+    private List<FormListItem> parseLegacyFormList(DocumentFetchResult result) throws FormSourceException {
         // Aggregate 0.9.x mode...
         // populate HashMap with form names and urls
         Element formsElement = result.doc.getRootElement();
@@ -277,7 +269,7 @@ public class OpenRosaFormListApi implements FormListApi {
                 }
                 if (formName == null) {
                     formList.clear();
-                    throw new FormApiException(FETCH_ERROR);
+                    throw new FormSourceException(FETCH_ERROR);
                 }
 
                 formList.add(new FormListItem(downloadUrl, formId, null, null, formName, null));
@@ -288,16 +280,16 @@ public class OpenRosaFormListApi implements FormListApi {
         return formList;
     }
 
-    private ManifestFile parseManifest(DocumentFetchResult result) throws FormApiException {
+    private ManifestFile parseManifest(DocumentFetchResult result) throws FormSourceException {
         // Attempt OpenRosa 1.0 parsing
         Element manifestElement = result.doc.getRootElement();
 
         if (!manifestElement.getName().equals("manifest")) {
-            throw new FormApiException(FETCH_ERROR);
+            throw new FormSourceException(FETCH_ERROR);
         }
 
         if (!isXformsManifestNamespacedElement(manifestElement)) {
-            throw new FormApiException(FETCH_ERROR);
+            throw new FormSourceException(FETCH_ERROR);
         }
 
         int elements = manifestElement.getChildCount();
@@ -353,7 +345,7 @@ public class OpenRosaFormListApi implements FormListApi {
                 }
 
                 if (filename == null || downloadUrl == null || hash == null) {
-                    throw new FormApiException(FETCH_ERROR);
+                    throw new FormSourceException(FETCH_ERROR);
                 }
 
                 files.add(new MediaFile(filename, hash, downloadUrl));
@@ -363,15 +355,15 @@ public class OpenRosaFormListApi implements FormListApi {
         return new ManifestFile(result.getHash(), files);
     }
 
-    private <T> T mapException(Callable<T> callable) throws FormApiException {
+    private <T> T mapException(Callable<T> callable) throws FormSourceException {
         try {
             return callable.call();
         } catch (UnknownHostException e) {
-            throw new FormApiException(UNREACHABLE, serverURL);
+            throw new FormSourceException(UNREACHABLE, serverURL);
         } catch (SSLException e) {
-            throw new FormApiException(SECURITY_ERROR, serverURL);
+            throw new FormSourceException(SECURITY_ERROR, serverURL);
         } catch (Exception e) {
-            throw new FormApiException(FETCH_ERROR, serverURL);
+            throw new FormSourceException(FETCH_ERROR, serverURL);
         }
     }
 
