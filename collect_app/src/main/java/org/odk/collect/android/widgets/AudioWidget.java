@@ -34,8 +34,9 @@ import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.utilities.AudioDataRequester;
+import org.odk.collect.android.widgets.utilities.AudioFileRequester;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
+import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.audioclips.Clip;
 
 import java.io.File;
@@ -56,17 +57,19 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
     AudioWidgetAnswerBinding binding;
 
     private final AudioPlayer audioPlayer;
-    private final AudioDataRequester audioDataRequester;
+    private final RecordingRequester recordingRequester;
     private final QuestionMediaManager questionMediaManager;
 
     private String binaryName;
+    private final AudioFileRequester audioFileRequester;
 
-    public AudioWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager, AudioPlayer audioPlayer, AudioDataRequester audioDataRequester) {
+    public AudioWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager, AudioPlayer audioPlayer, RecordingRequester recordingRequester, AudioFileRequester audioFileRequester) {
         super(context, questionDetails);
         this.audioPlayer = audioPlayer;
 
         this.questionMediaManager = questionMediaManager;
-        this.audioDataRequester = audioDataRequester;
+        this.recordingRequester = recordingRequester;
+        this.audioFileRequester = audioFileRequester;
 
         binaryName = questionDetails.getPrompt().getAnswerText();
 
@@ -81,8 +84,8 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
         binding.captureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        binding.captureButton.setOnClickListener(v -> audioDataRequester.requestRecording(getFormEntryPrompt()));
-        binding.chooseButton.setOnClickListener(v -> audioDataRequester.requestFile(getFormEntryPrompt()));
+        binding.captureButton.setOnClickListener(v -> recordingRequester.requestRecording(getFormEntryPrompt()));
+        binding.chooseButton.setOnClickListener(v -> audioFileRequester.requestFile(getFormEntryPrompt()));
 
         return binding.getRoot();
     }

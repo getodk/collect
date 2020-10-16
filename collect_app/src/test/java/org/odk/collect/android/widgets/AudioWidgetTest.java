@@ -18,7 +18,8 @@ import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
-import org.odk.collect.android.widgets.utilities.AudioDataRequester;
+import org.odk.collect.android.widgets.utilities.AudioFileRequester;
+import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.audioclips.Clip;
 import org.robolectric.RobolectricTestRunner;
@@ -46,7 +47,8 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.prom
 public class AudioWidgetTest {
 
     private final FakeQuestionMediaManager questionMediaManager = new FakeQuestionMediaManager();
-    private final AudioDataRequester audioDataRequester = mock(AudioDataRequester.class);
+    private final RecordingRequester recordingRequester = mock(RecordingRequester.class);
+    private final AudioFileRequester audioFileRequester = mock(AudioFileRequester.class);
 
     private TestScreenContextActivity widgetActivity;
     private FormIndex formIndex;
@@ -272,7 +274,7 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(prompt);
 
         widget.binding.chooseButton.performClick();
-        verify(audioDataRequester).requestFile(prompt);
+        verify(audioFileRequester).requestFile(prompt);
     }
 
     @Test
@@ -281,7 +283,7 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(prompt);
 
         widget.binding.captureButton.performClick();
-        verify(audioDataRequester).requestRecording(prompt);
+        verify(recordingRequester).requestRecording(prompt);
     }
 
     @Test
@@ -380,7 +382,8 @@ public class AudioWidgetTest {
                 new QuestionDetails(prompt, "formAnalyticsID"),
                 questionMediaManager,
                 audioPlayer,
-                audioDataRequester
+                recordingRequester,
+                audioFileRequester
         );
     }
 

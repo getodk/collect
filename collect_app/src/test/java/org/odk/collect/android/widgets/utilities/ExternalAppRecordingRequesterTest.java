@@ -19,7 +19,6 @@ import org.robolectric.Robolectric;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowToast;
 
-import static android.content.Intent.ACTION_GET_CONTENT;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -31,19 +30,19 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.prom
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(AndroidJUnit4.class)
-public class ExternalAppAudioDataRequesterTest {
+public class ExternalAppRecordingRequesterTest {
 
     private final ActivityAvailability activityAvailability = mock(ActivityAvailability.class);
     private final FakePermissionUtils permissionUtils = new FakePermissionUtils();
     private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
 
     private Activity activity;
-    private ExternalAppAudioDataRequester requester;
+    private ExternalAppRecordingRequester requester;
 
     @Before
     public void setup() {
         activity = Robolectric.buildActivity(Activity.class).get();
-        requester = new ExternalAppAudioDataRequester(activity, activityAvailability, waitingForDataRegistry, permissionUtils);
+        requester = new ExternalAppRecordingRequester(activity, activityAvailability, waitingForDataRegistry, permissionUtils);
     }
 
     @Test
@@ -87,35 +86,6 @@ public class ExternalAppAudioDataRequesterTest {
 
         ShadowActivity.IntentForResult intentForResult = shadowOf(activity).getNextStartedActivityForResult();
         assertThat(intentForResult.requestCode, equalTo(ApplicationConstants.RequestCodes.AUDIO_CAPTURE));
-
-        assertThat(waitingForDataRegistry.waiting.contains(prompt.getIndex()), equalTo(true));
-    }
-
-    @Test
-    public void requestFile_whenIntentIsNotAvailable_doesNotStartAnyIntentAndCancelsWaitingForData() {
-        when(activityAvailability.isActivityAvailable(any())).thenReturn(false);
-
-        requester.requestFile(promptWithAnswer(null));
-        Intent startedActivity = shadowOf(activity).getNextStartedActivity();
-        String toastMessage = ShadowToast.getTextOfLatestToast();
-
-        assertThat(startedActivity, nullValue());
-        assertThat(waitingForDataRegistry.waiting.isEmpty(), equalTo(true));
-        assertThat(toastMessage, equalTo(activity.getString(R.string.activity_not_found, activity.getString(R.string.choose_audio))));
-    }
-
-    @Test
-    public void requestFile_startsChooseAudioFileActivityAndSetsWidgetWaitingForData() {
-        when(activityAvailability.isActivityAvailable(any())).thenReturn(true);
-
-        FormEntryPrompt prompt = promptWithAnswer(null);
-        requester.requestFile(prompt);
-        Intent startedActivity = shadowOf(activity).getNextStartedActivity();
-        assertThat(startedActivity.getAction(), equalTo(ACTION_GET_CONTENT));
-        assertThat(startedActivity.getType(), equalTo("audio/*"));
-
-        ShadowActivity.IntentForResult intentForResult = shadowOf(activity).getNextStartedActivityForResult();
-        assertThat(intentForResult.requestCode, equalTo(ApplicationConstants.RequestCodes.AUDIO_CHOOSER));
 
         assertThat(waitingForDataRegistry.waiting.contains(prompt.getIndex()), equalTo(true));
     }

@@ -9,12 +9,12 @@ import org.odk.collect.audiorecorder.recording.AudioRecorderActivity;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.INTERNAL_AUDIO_CAPTURE;
 
-public class InternalAudioDataRequester implements AudioDataRequester {
+public class InternalRecordingRequester implements RecordingRequester {
 
     private final Activity activity;
     private final WaitingForDataRegistry waitingForDataRegistry;
 
-    public InternalAudioDataRequester(Activity activity, WaitingForDataRegistry waitingForDataRegistry) {
+    public InternalRecordingRequester(Activity activity, WaitingForDataRegistry waitingForDataRegistry) {
         this.activity = activity;
         this.waitingForDataRegistry = waitingForDataRegistry;
     }
@@ -27,10 +27,5 @@ public class InternalAudioDataRequester implements AudioDataRequester {
 
         waitingForDataRegistry.waitForData(prompt.getIndex());
         activity.startActivityForResult(intent, INTERNAL_AUDIO_CAPTURE);
-    }
-
-    @Override
-    public void requestFile(FormEntryPrompt prompt) {
-        throw new UnsupportedOperationException();
     }
 }

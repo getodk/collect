@@ -22,17 +22,17 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.prom
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(AndroidJUnit4.class)
-public class InternalAudioDataRequesterTest {
+public class InternalRecordingRequesterTest {
 
     private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
 
     private Activity activity;
-    private InternalAudioDataRequester requester;
+    private InternalRecordingRequester requester;
 
     @Before
     public void setup() {
         activity = Robolectric.buildActivity(Activity.class).get();
-        requester = new InternalAudioDataRequester(activity, waitingForDataRegistry);
+        requester = new InternalRecordingRequester(activity, waitingForDataRegistry);
     }
 
     @Test

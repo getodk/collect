@@ -12,14 +12,14 @@ import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.PermissionUtils;
 
-public class ExternalAppAudioDataRequester implements AudioDataRequester {
+public class ExternalAppRecordingRequester implements RecordingRequester {
 
     private final Activity activity;
     private final PermissionUtils permissionUtils;
     private final ActivityAvailability activityAvailability;
     private final WaitingForDataRegistry waitingForDataRegistry;
 
-    public ExternalAppAudioDataRequester(Activity activity, ActivityAvailability activityAvailability, WaitingForDataRegistry waitingForDataRegistry, PermissionUtils permissionUtils) {
+    public ExternalAppRecordingRequester(Activity activity, ActivityAvailability activityAvailability, WaitingForDataRegistry waitingForDataRegistry, PermissionUtils permissionUtils) {
         this.activity = activity;
         this.permissionUtils = permissionUtils;
         this.activityAvailability = activityAvailability;
@@ -50,19 +50,4 @@ public class ExternalAppAudioDataRequester implements AudioDataRequester {
             }
         });
     }
-
-    @Override
-    public void requestFile(FormEntryPrompt prompt) {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("audio/*");
-
-        if (activityAvailability.isActivityAvailable(intent)) {
-            waitingForDataRegistry.waitForData(prompt.getIndex());
-            activity.startActivityForResult(intent, ApplicationConstants.RequestCodes.AUDIO_CHOOSER);
-        } else {
-            Toast.makeText(activity, activity.getString(R.string.activity_not_found, activity.getString(R.string.choose_audio)), Toast.LENGTH_SHORT).show();
-            waitingForDataRegistry.cancelWaitingForData();
-        }
-    }
-
 }

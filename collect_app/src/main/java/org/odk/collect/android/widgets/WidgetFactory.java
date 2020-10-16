@@ -46,10 +46,11 @@ import org.odk.collect.android.widgets.items.SelectOneImageMapWidget;
 import org.odk.collect.android.widgets.items.SelectOneMinimalWidget;
 import org.odk.collect.android.widgets.items.SelectOneWidget;
 import org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester;
-import org.odk.collect.android.widgets.utilities.AudioDataRequester;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
-import org.odk.collect.android.widgets.utilities.ExternalAppAudioDataRequester;
-import org.odk.collect.android.widgets.utilities.InternalAudioDataRequester;
+import org.odk.collect.android.widgets.utilities.ExternalAppRecordingRequester;
+import org.odk.collect.android.widgets.utilities.GetContentAudioFileRequester;
+import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
+import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.PROMPT;
@@ -183,15 +184,15 @@ public class WidgetFactory {
                 questionWidget = new OSMWidget(context, questionDetails, waitingForDataRegistry);
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
-                AudioDataRequester audioDataRequester;
+                RecordingRequester recordingRequester;
 
                 if (generalSharedPreferences.getBoolean(GeneralKeys.KEY_IN_APP_RECORDING, false)) {
-                    audioDataRequester = new InternalAudioDataRequester((Activity) context, waitingForDataRegistry);
+                    recordingRequester = new InternalRecordingRequester((Activity) context, waitingForDataRegistry);
                 } else {
-                    audioDataRequester = new ExternalAppAudioDataRequester((Activity) context, activityAvailability, waitingForDataRegistry, permissionUtils);
+                    recordingRequester = new ExternalAppRecordingRequester((Activity) context, activityAvailability, waitingForDataRegistry, permissionUtils);
                 }
 
-                questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, audioDataRequester);
+                questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, recordingRequester, new GetContentAudioFileRequester((Activity) context, activityAvailability, waitingForDataRegistry));
 
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
