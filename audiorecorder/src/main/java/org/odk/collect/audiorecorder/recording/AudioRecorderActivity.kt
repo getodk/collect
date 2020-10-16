@@ -4,7 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_audio_recorder.*
 import org.odk.collect.audiorecorder.R
 import org.odk.collect.audiorecorder.getComponent
@@ -16,6 +19,8 @@ class AudioRecorderActivity : AppCompatActivity() {
     @Inject
     internal lateinit var recorder: Recorder
 
+    private val viewModel: AudioRecorderViewModel by viewModels { AudioRecorderViewModel.Factory(recorder) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getComponent().inject(this)
@@ -23,21 +28,16 @@ class AudioRecorderActivity : AppCompatActivity() {
         setTheme(intent.getIntExtra(ARGS.THEME, R.style.Theme_MaterialComponents_Light_NoActionBar))
         setContentView(R.layout.activity_audio_recorder)
 
-        recorder.start()
+        viewModel.start()
 
         done.setOnClickListener {
-            val recording = recorder.stop()
+            val recording = viewModel.stop()
             setResult(Activity.RESULT_OK, Intent().also {
                 it.data = Uri.parse(recording.absolutePath)
             })
 
             finish()
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        recorder.cancel()
     }
 
     object ARGS {
