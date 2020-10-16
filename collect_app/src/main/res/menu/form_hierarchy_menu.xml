@@ -5,14 +5,14 @@
 
     <item
         android:id="@+id/menu_delete_child"
-        android:icon="@drawable/ic_delete_menu"
+        android:icon="@drawable/ic_delete_menu_24"
         android:title="@string/delete_repeat"
         android:visible="false"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/menu_add_repeat"
-        android:icon="@drawable/ic_add_circle"
+        android:icon="@drawable/ic_add_circle_24"
         android:title="@string/add_another_menu"
         android:visible="false"
         app:showAsAction="always" />
