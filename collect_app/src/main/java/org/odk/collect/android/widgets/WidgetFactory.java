@@ -187,7 +187,7 @@ public class WidgetFactory {
                 RecordingRequester recordingRequester;
 
                 if (generalSharedPreferences.getBoolean(GeneralKeys.KEY_IN_APP_RECORDING, false)) {
-                    recordingRequester = new InternalRecordingRequester((Activity) context, waitingForDataRegistry);
+                    recordingRequester = new InternalRecordingRequester((Activity) context, waitingForDataRegistry, permissionUtils);
                 } else {
                     recordingRequester = new ExternalAppRecordingRequester((Activity) context, activityAvailability, waitingForDataRegistry, permissionUtils);
                 }
