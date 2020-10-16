@@ -38,7 +38,6 @@ import org.odk.collect.android.location.client.LocationClientProvider;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.widgets.GeoPointMapWidget;
 
 import java.text.DecimalFormat;
 import java.util.Timer;
@@ -47,6 +46,8 @@ import java.util.TimerTask;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermissionsGranted;
+import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.ACCURACY_THRESHOLD;
+import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.DEFAULT_LOCATION_ACCURACY;
 
 public class GeoPointActivity extends CollectAbstractActivity implements LocationListener,
         LocationClient.LocationClientListener, GpsStatus.Listener {
@@ -95,11 +96,10 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
         Intent intent = getIntent();
 
-        targetAccuracy = GeoPointMapWidget.DEFAULT_LOCATION_ACCURACY;
+        targetAccuracy = DEFAULT_LOCATION_ACCURACY;
         if (intent != null && intent.getExtras() != null) {
-            if (intent.hasExtra(GeoPointMapWidget.ACCURACY_THRESHOLD)) {
-                targetAccuracy = intent.getDoubleExtra(GeoPointMapWidget.ACCURACY_THRESHOLD,
-                        GeoPointMapWidget.DEFAULT_LOCATION_ACCURACY);
+            if (intent.hasExtra(ACCURACY_THRESHOLD)) {
+                targetAccuracy = intent.getDoubleExtra(ACCURACY_THRESHOLD, DEFAULT_LOCATION_ACCURACY);
             }
         }
 

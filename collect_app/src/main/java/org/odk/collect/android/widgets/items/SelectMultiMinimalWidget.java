@@ -63,7 +63,7 @@ public class SelectMultiMinimalWidget extends SelectMinimalWidget {
     }
 
     @Override
-    public void setBinaryData(Object answer) {
+    public void setData(Object answer) {
         selectedItems = (List<Selection>) answer;
         updateAnswerLabel();
         widgetValueChanged();

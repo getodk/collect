@@ -65,7 +65,7 @@ public class SelectOneMinimalWidget extends SelectMinimalWidget {
     }
 
     @Override
-    public void setBinaryData(Object answer) {
+    public void setData(Object answer) {
         List<Selection> answers = (List<Selection>) answer;
         selectedItem = answers.isEmpty() ? null : answers.get(0);
         updateAnswer();

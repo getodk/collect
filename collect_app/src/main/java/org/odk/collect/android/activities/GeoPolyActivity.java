@@ -46,6 +46,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.READ_ONLY;
+
 public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialogFragment.SettingsDialogCallback {
     public static final String ANSWER_KEY = "answer";
     public static final String OUTPUT_MODE_KEY = "output_mode";
@@ -96,6 +98,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
     private boolean inputActive; // whether we are ready for the user to add points
     private boolean recordingEnabled; // whether points are taken from GPS readings (if not, placed by tapping)
     private boolean recordingAutomatic; // whether GPS readings are taken at regular intervals (if not, only when user-directed)
+    private boolean intentReadOnly; // whether the intent requested for the path to be read-only.
 
     private int intervalIndex = DEFAULT_INTERVAL_INDEX;
 
@@ -122,6 +125,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
                 ACCURACY_THRESHOLD_INDEX_KEY, DEFAULT_ACCURACY_THRESHOLD_INDEX);
         }
 
+        intentReadOnly = getIntent().getBooleanExtra(READ_ONLY, false);
         outputMode = (OutputMode) getIntent().getSerializableExtra(OUTPUT_MODE_KEY);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -229,7 +233,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         }
         featureId = map.addDraggablePoly(points, outputMode == OutputMode.GEOSHAPE);
 
-        if (inputActive) {
+        if (inputActive && !intentReadOnly) {
             startInput();
         }
 
@@ -466,6 +470,11 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         settingsView.findViewById(R.id.manual_mode).setEnabled(location != null);
         settingsView.findViewById(R.id.automatic_mode).setEnabled(location != null);
 
+        if (intentReadOnly) {
+            playButton.setEnabled(false);
+            backspaceButton.setEnabled(false);
+            clearButton.setEnabled(false);
+        }
         // Settings dialog
 
         // GPS status

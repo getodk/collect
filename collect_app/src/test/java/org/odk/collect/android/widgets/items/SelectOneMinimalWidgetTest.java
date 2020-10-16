@@ -67,7 +67,7 @@ public class SelectOneMinimalWidgetTest extends GeneralSelectOneWidgetTest<Selec
         SelectOneData answer = getInitialAnswer();
         Selection selectedChoice = (Selection) answer.getValue();
         when(formEntryPrompt.getSelectItemText(selectedChoice)).thenReturn(selectedChoice.getValue());
-        getSpyWidget().setBinaryData(Collections.singletonList(selectedChoice));
+        getSpyWidget().setData(Collections.singletonList(selectedChoice));
 
         assertThat(getSpyWidget().binding.answer.getText().toString(), is(selectedChoice.getValue()));
         getSpyWidget().clearAnswer();
@@ -80,7 +80,7 @@ public class SelectOneMinimalWidgetTest extends GeneralSelectOneWidgetTest<Selec
 
         SelectOneData answer = getInitialAnswer();
         Selection selectedChoice = (Selection) answer.getValue();
-        getSpyWidget().setBinaryData(Collections.singletonList(selectedChoice));
+        getSpyWidget().setData(Collections.singletonList(selectedChoice));
 
         verify(valueChangedListener).widgetValueChanged(getSpyWidget());
     }

@@ -117,14 +117,14 @@ public class BearingWidgetTest {
     @Test
     public void setData_updatesWidgetAnswer() {
         BearingWidget widget = createWidget(promptWithAnswer(null));
-        widget.setBinaryData("blah");
+        widget.setData("blah");
         assertThat(widget.binding.answerText.getText().toString(), is("blah"));
     }
 
     @Test
     public void setData_updatesButtonLabel() {
         BearingWidget widget = createWidget(promptWithAnswer(null));
-        widget.setBinaryData("blah");
+        widget.setData("blah");
         assertThat(widget.binding.bearingButton.getText(), is(widgetActivity.getString(R.string.replace_bearing)));
     }
 
@@ -133,7 +133,7 @@ public class BearingWidgetTest {
         BearingWidget widget = createWidget(promptWithAnswer(null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
 
-        widget.setBinaryData("blah");
+        widget.setData("blah");
         verify(valueChangedListener).widgetValueChanged(widget);
     }
 

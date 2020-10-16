@@ -1,125 +1,189 @@
 package org.odk.collect.android.widgets;
 
-import android.content.Intent;
+import android.view.View;
 
-import androidx.annotation.NonNull;
-
-import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.StringData;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.ShadowPlayServicesUtil;
-import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.widgets.base.BaseGeoWidgetTest;
-import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
-import org.robolectric.annotation.Config;
+import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.robolectric.RobolectricTestRunner;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.stringFromDoubleList;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndAnswer;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 
-import static org.mockito.Mockito.when;
+@RunWith(RobolectricTestRunner.class)
+public class GeoShapeWidgetTest {
+    private final String answer = stringFromDoubleList();
 
-/**
- * @author James Knight
- */
-
-@Config(shadows = {ShadowPlayServicesUtil.class})
-public class GeoShapeWidgetTest extends BaseGeoWidgetTest<GeoShapeWidget, StringData> {
-
-    private ArrayList<double[]> initialDoubles;
-    private ArrayList<double[]> answerDoubles;
-
-    @Override
-    public StringData getInitialAnswer() {
-        return new StringData(stringFromDoubleList(initialDoubles));
-    }
-
-    @NonNull
-    @Override
-    public GeoShapeWidget createWidget() {
-        return new GeoShapeWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), new FakeWaitingForDataRegistry());
-    }
-
-    @Override
-    public Object createBinaryData(StringData answerData) {
-        return stringFromDoubleList(answerDoubles);
-    }
-
-    @NonNull
-    @Override
-    public StringData getNextAnswer() {
-        return new StringData(stringFromDoubleList(answerDoubles));
-    }
+    private GeoDataRequester geoDataRequester;
+    private WaitingForDataRegistry waitingForDataRegistry;
 
     @Before
-    public void setUp() throws Exception {
-        super.setUp();
-
-        initialDoubles = getRandomDoubleArrayList();
-        answerDoubles = getRandomDoubleArrayList();
-    }
-
-    @Override
-    public void getAnswerShouldReturnExistingAnswerIfPromptHasExistingAnswer() {
-        when(formEntryPrompt.getAnswerText()).thenReturn(stringFromDoubleList(initialDoubles));
-        super.getAnswerShouldReturnExistingAnswerIfPromptHasExistingAnswer();
-    }
-
-    private ArrayList<double[]> getRandomDoubleArrayList() {
-        ArrayList<double[]> doubleList = new ArrayList<>();
-
-        int pointCount = Math.max(1, random.nextInt() % 5);
-        for (int i = 0; i < pointCount; ++i) {
-            doubleList.add(getRandomDoubleArray());
-        }
-
-        return doubleList;
-    }
-
-    private double[] getRandomDoubleArray() {
-        return new double[]{
-                random.nextDouble(),
-                random.nextDouble(),
-                random.nextDouble(),
-                random.nextDouble()
-        };
-    }
-
-    /**
-     * Matches {@link GeoPointData#getDisplayText()}
-     */
-    private String stringFromDoubleList(List<double[]> doubleList) {
-        StringBuilder b = new StringBuilder();
-        boolean first = true;
-        for (double[] doubles : doubleList) {
-            if (!first) {
-                b.append("; ");
-            }
-            first = false;
-            b.append(stringFromDoubles(doubles));
-        }
-        return b.toString();
-    }
-
-    private String stringFromDoubles(double[] doubles) {
-        StringBuilder b = new StringBuilder();
-        for (int i = 0; i < doubles.length; i++) {
-            b.append(doubles[i]);
-            if (i != doubles.length - 1) {
-                b.append(' ');
-            }
-        }
-
-        return b.toString();
+    public void setup() {
+        geoDataRequester = mock(GeoDataRequester.class);
+        waitingForDataRegistry = mock(WaitingForDataRegistry.class);
     }
 
     @Test
-    public void buttonsShouldLaunchCorrectIntents() {
-        stubAllRuntimePermissionsGranted(true);
+    public void getAnswer_whenPromptDoesNotHaveAnswer_returnsNull() {
+        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
+        assertNull(widget.getAnswer());
+    }
 
-        Intent intent = getIntentLaunchedByClick(R.id.simple_button);
-        assertComponentEquals(activity, GeoPolyActivity.class, intent);
+    @Test
+    public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
+        GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
+        assertEquals(widget.getAnswer().getDisplayText(), answer);
+    }
+
+    @Test
+    public void whenPromptDoesNotHaveAnswer_textViewDisplaysEmptyString() {
+        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
+        assertEquals(widget.binding.geoAnswerText.getText().toString(), "");
+    }
+
+    @Test
+    public void whenPromptHasAnswer_textViewDisplaysAnswer() {
+        GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
+        assertEquals(widget.binding.geoAnswerText.getText().toString(), answer);
+    }
+
+    @Test
+    public void whenPromptIsReadOnlyAndDoesNotHaveAnswer_geoButtonIsNotDisplayed() {
+        GeoShapeWidget widget = createWidget(promptWithReadOnly());
+        assertEquals(widget.binding.simpleButton.getVisibility(), View.GONE);
+    }
+
+    @Test
+    public void whenPromptIsReadOnlyAndHasAnswer_viewGeoShapeButtonIsShown() {
+        GeoShapeWidget widget = createWidget(promptWithReadOnlyAndAnswer(new StringData(answer)));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.geoshape_view_read_only));
+    }
+
+    @Test
+    public void whenPromptIsNotReadOnlyAndDoesNotHaveAnswer_startGeoShapeButtonIsShown() {
+        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.get_shape));
+    }
+
+    @Test
+    public void whenPromptIsNotReadOnlyAndHasAnswer_viewOrChangeGeoShapeButtonIsShown() {
+        GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.geoshape_view_change_location));
+    }
+
+    @Test
+    public void clearAnswer_clearsWidgetAnswer() {
+        GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
+        widget.clearAnswer();
+
+        assertEquals(widget.binding.geoAnswerText.getText(), "");
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.get_shape));
+    }
+
+    @Test
+    public void clearAnswer_callsValueChangeListeners() {
+        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+        widget.clearAnswer();
+
+        verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void clickingButtonAndAnswerTextViewForLong_callsLongClickListeners() {
+        View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
+        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
+
+        widget.setOnLongClickListener(listener);
+        widget.binding.simpleButton.performLongClick();
+        widget.binding.geoAnswerText.performLongClick();
+
+        verify(listener).onLongClick(widget.binding.simpleButton);
+        verify(listener).onLongClick(widget.binding.geoAnswerText);
+    }
+
+    @Test
+    public void setData_updatesWidgetAnswer() {
+        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
+        widget.setData(answer);
+        assertEquals(widget.getAnswer().getDisplayText(), answer);
+    }
+
+    @Test
+    public void setData_updatesWidgetDisplayedAnswer() {
+        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
+        widget.setData(answer);
+        assertEquals(widget.binding.geoAnswerText.getText().toString(), answer);
+    }
+
+    @Test
+    public void setData_whenDataIsNull_updatesButtonLabel() {
+        GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
+        widget.setData("");
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.get_shape));
+    }
+
+    @Test
+    public void setData_whenDataIsNotNull_updatesButtonLabel() {
+        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
+        widget.setData(answer);
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.geoshape_view_change_location));
+    }
+
+    @Test
+    public void setData_callsValueChangeListener() {
+        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+        widget.setData(answer);
+
+        verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void buttonClick_requestsGeoShape() {
+        FormEntryPrompt prompt = promptWithAnswer(new StringData(answer));
+        GeoShapeWidget widget = createWidget(prompt);
+        widget.binding.simpleButton.performClick();
+        verify(geoDataRequester).requestGeoShape(widget.getContext(), prompt, answer, waitingForDataRegistry);
+    }
+
+    @Test
+    public void buttonClick_requestsGeoShape_whenAnswerIsCleared() {
+        FormEntryPrompt prompt = promptWithAnswer(new StringData(answer));
+        GeoShapeWidget widget = createWidget(prompt);
+        widget.clearAnswer();
+        widget.binding.simpleButton.performClick();
+
+        verify(geoDataRequester).requestGeoShape(widget.getContext(), prompt, "", waitingForDataRegistry);
+    }
+
+    @Test
+    public void buttonClick_requestsGeoShape_whenAnswerIsUpdated() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        GeoShapeWidget widget = createWidget(prompt);
+        widget.setData(answer);
+        widget.binding.simpleButton.performClick();
+
+        verify(geoDataRequester).requestGeoShape(widget.getContext(), prompt, answer, waitingForDataRegistry);
+    }
+
+    private GeoShapeWidget createWidget(FormEntryPrompt prompt) {
+        return new GeoShapeWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"),
+                waitingForDataRegistry, geoDataRequester);
     }
 }

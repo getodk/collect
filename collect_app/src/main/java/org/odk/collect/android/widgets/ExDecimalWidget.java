@@ -64,7 +64,7 @@ public class ExDecimalWidget extends ExStringWidget {
     }
 
     @Override
-    public void setBinaryData(Object answer) {
+    public void setData(Object answer) {
         DecimalData decimalData = ExternalAppsUtils.asDecimalData(answer);
         answerText.setText(decimalData == null ? null : decimalData.getValue().toString());
         widgetValueChanged();

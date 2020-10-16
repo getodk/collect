@@ -23,7 +23,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 
 /**
@@ -35,7 +35,7 @@ import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
  */
 
 @SuppressLint("ViewConstructor")
-public class DateTimeWidget extends QuestionWidget implements BinaryDataReceiver, WidgetValueChangedListener, ButtonClickListener {
+public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver, WidgetValueChangedListener, ButtonClickListener {
 
     DateWidget dateWidget;
     TimeWidget timeWidget;
@@ -118,8 +118,8 @@ public class DateTimeWidget extends QuestionWidget implements BinaryDataReceiver
     }
 
     @Override
-    public void setBinaryData(Object answer) {
-        dateWidget.setBinaryData(answer);
+    public void setData(Object answer) {
+        dateWidget.setData(answer);
     }
 
     public DateWidget getDateWidget() {

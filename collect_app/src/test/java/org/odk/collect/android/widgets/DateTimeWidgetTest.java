@@ -53,7 +53,7 @@ public class DateTimeWidgetTest extends GeneralDateTimeWidgetTest<DateTimeWidget
     public void setData() {
         DateTimeWidget widget = getSpyWidget();
         LocalDateTime date = new LocalDateTime().withYear(2010).withMonthOfYear(5).withDayOfMonth(12);
-        widget.setBinaryData(date);
+        widget.setData(date);
         assertFalse(widget.getDateWidget().isNullAnswer);
         assertEquals(widget.getDateWidget().getAnswer().getDisplayText(), new DateData(date.toDate()).getDisplayText());
     }

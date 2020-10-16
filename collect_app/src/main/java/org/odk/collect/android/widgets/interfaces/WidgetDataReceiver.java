@@ -16,10 +16,9 @@ package org.odk.collect.android.widgets.interfaces;
 
 import org.odk.collect.android.activities.FormEntryActivity;
 
-public interface BinaryDataReceiver {
-
+public interface WidgetDataReceiver {
     /**
      * Allows answer to be set externally in {@link FormEntryActivity}.
      */
-    void setBinaryData(Object answer);
+    void setData(Object answer);
 }
