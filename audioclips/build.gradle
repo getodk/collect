@@ -43,7 +43,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-livedata:2.2.0'
 
-    testImplementation project(path: ':test-shared')
+    testImplementation project(path: ':testshared')
     testImplementation 'junit:junit:4.13'
     testImplementation 'org.mockito:mockito-core:3.5.11'
     testImplementation 'androidx.test.ext:junit:1.1.2'
