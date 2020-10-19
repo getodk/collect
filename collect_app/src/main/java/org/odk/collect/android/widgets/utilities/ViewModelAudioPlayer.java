@@ -3,7 +3,6 @@ package org.odk.collect.android.widgets.utilities;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 
-import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.audioclips.AudioClipViewModel;
 import org.odk.collect.audioclips.Clip;
 
