@@ -9,12 +9,18 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers
-import org.mockito.Mockito.*
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.doThrow
+import org.mockito.Mockito.inOrder
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.never
+import org.mockito.Mockito.times
+import org.mockito.Mockito.verify
 import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.LiveDataTester
 import java.io.File
 import java.io.IOException
-import java.util.*
+import java.util.ArrayList
 import java.util.function.Supplier
 
 class AudioClipViewModelTest {
@@ -70,10 +76,13 @@ class AudioClipViewModelTest {
 
     @Test
     fun playInOrder_playsClipsOneAfterTheOther_andUpdatesProgress() {
-        viewModel.playInOrder(listOf(
+        viewModel.playInOrder(
+            listOf(
                 Clip("clip1", "file://audio1.mp3"),
                 Clip("clip2", "file://audio2.mp3")
-        ))
+            )
+        )
+
         val captor = ArgumentCaptor.forClass(MediaPlayer.OnCompletionListener::class.java)
         verify(mediaPlayer).setOnCompletionListener(captor.capture())
         val onCompletionListener = captor.value
@@ -92,20 +101,26 @@ class AudioClipViewModelTest {
     @Test
     fun playInOrder_whenThereIsAnErrorContinuesWithNextClip() {
         doThrow(IOException::class.java).`when`(mediaPlayer).setDataSource("file://missing.mp3")
-        viewModel.playInOrder(listOf(
+        viewModel.playInOrder(
+            listOf(
                 Clip("clip1", "file://missing.mp3"),
                 Clip("clip2", "file://not-missing.mp3")
-        ))
+            )
+        )
+
         verify(mediaPlayer).setDataSource("file://not-missing.mp3")
         verify(mediaPlayer, times(1)).start()
     }
 
     @Test
     fun play_afterAPlayInOrder_doesNotContinuePlayingClips() {
-        viewModel.playInOrder(listOf(
+        viewModel.playInOrder(
+            listOf(
                 Clip("clip1", "file://audio1.mp3"),
                 Clip("clip2", "file://audio2.mp3")
-        ))
+            )
+        )
+
         viewModel.play(Clip("clip3", "file://audio3.mp3"))
         verify(mediaPlayer, times(2)).start()
         verify(mediaPlayer).setDataSource("file://audio1.mp3")

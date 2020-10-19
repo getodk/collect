@@ -1,12 +1,17 @@
 package org.odk.collect.audioclips
 
 import android.media.MediaPlayer
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.async.Cancellable
 import org.odk.collect.async.Scheduler
 import java.io.File
 import java.io.IOException
-import java.util.*
+import java.util.LinkedList
+import java.util.Queue
 import java.util.function.Supplier
 import kotlin.jvm.Throws
 
@@ -97,9 +102,11 @@ class AudioClipViewModel(private val mediaPlayerFactory: Supplier<MediaPlayer>, 
             mediaPlayer.seekTo(getPositionForClip(nextClip.clipID).value!!)
             mediaPlayer.start()
             currentlyPlaying.value = CurrentlyPlaying(
-                    Clip(nextClip.clipID, nextClip.uRI),
-                    false,
-                    playlist)
+                Clip(nextClip.clipID, nextClip.uRI),
+                false,
+                playlist
+            )
+
             schedulePositionUpdates()
         }
     }
@@ -148,13 +155,16 @@ class AudioClipViewModel(private val mediaPlayerFactory: Supplier<MediaPlayer>, 
     }
 
     private fun schedulePositionUpdates() {
-        positionUpdatesCancellable = scheduler.repeat(Runnable {
-            val currentlyPlaying = currentlyPlaying.value
-            if (currentlyPlaying != null) {
-                val position = getPositionForClip(currentlyPlaying.clip.clipID)
-                position.postValue(mediaPlayer.currentPosition)
-            }
-        }, 1000 / 12) // 12fps
+        positionUpdatesCancellable = scheduler.repeat(
+            Runnable {
+                val currentlyPlaying = currentlyPlaying.value
+                if (currentlyPlaying != null) {
+                    val position = getPositionForClip(currentlyPlaying.clip.clipID)
+                    position.postValue(mediaPlayer.currentPosition)
+                }
+            },
+            1000 / 12
+        ) // 12fps
     }
 
     private fun cancelPositionUpdates() {
