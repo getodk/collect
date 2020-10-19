@@ -12,86 +12,112 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="7dp">
+    android:layout_margin="@dimen/margin_standard">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/margin_standard">
+        android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/fastRewindBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_extra_small"
-            android:layout_marginRight="@dimen/margin_extra_small"
-            android:layout_toStartOf="@id/playBtn"
-            android:background="?android:attr/selectableItemBackground"
-            android:minHeight="@dimen/touch_target_size"
-            android:minWidth="@dimen/touch_target_size"
-            android:padding="@dimen/margin_small"
-            app:srcCompat="@drawable/ic_replay_5_black_24dp" />
-
-        <ImageButton
-            android:id="@+id/playBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="@dimen/margin_extra_small"
-            android:layout_marginRight="@dimen/margin_extra_small"
-            android:background="?android:attr/selectableItemBackground"
-            android:minHeight="@dimen/touch_target_size"
-            android:minWidth="@dimen/touch_target_size"
-            android:padding="@dimen/margin_small"
-            app:srcCompat="@drawable/ic_play_arrow_24dp" />
-
-        <ImageButton
-            android:id="@+id/fastForwardBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_extra_small"
-            android:layout_marginRight="@dimen/margin_extra_small"
-            android:layout_toEndOf="@id/playBtn"
-            android:background="?android:attr/selectableItemBackground"
-            android:minHeight="@dimen/touch_target_size"
-            android:minWidth="@dimen/touch_target_size"
-            android:padding="@dimen/margin_small"
-            app:srcCompat="@drawable/ic_forward_5_black_24dp" />
-
-        <TextView
-            android:id="@+id/currentDuration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/playBtn"
-            android:textColor="?colorOnSurface"
-            android:textSize="@dimen/text_size_small"
-            android:textStyle="bold"
-            tools:text="00:00" />
-
-        <TextView
-            android:id="@+id/totalDuration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@+id/playBtn"
-            android:textColor="?colorOnSurface"
-            android:textSize="@dimen/text_size_small"
-            android:textStyle="bold"
-            tools:text="00:00" />
-
-        <SeekBar
-            android:id="@+id/seekBar"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/currentDuration"
-            android:paddingEnd="0dp"
-            android:paddingStart="0dp"
-            android:thumbOffset="3dp" />
-    </RelativeLayout>
-</androidx.cardview.widget.CardView>
+            android:padding="@dimen/margin_standard">
+
+            <ImageButton
+                android:id="@+id/fastRewindBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_extra_small"
+                android:layout_marginRight="@dimen/margin_extra_small"
+                android:layout_toStartOf="@id/play"
+                android:background="?android:attr/selectableItemBackground"
+                android:minHeight="@dimen/touch_target_size"
+                android:minWidth="@dimen/touch_target_size"
+                android:padding="@dimen/margin_small"
+                app:srcCompat="@drawable/ic_replay_5_black_24dp" />
+
+            <ImageButton
+                android:id="@+id/play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="@dimen/margin_extra_small"
+                android:layout_marginRight="@dimen/margin_extra_small"
+                android:background="?android:attr/selectableItemBackground"
+                android:minHeight="@dimen/touch_target_size"
+                android:minWidth="@dimen/touch_target_size"
+                android:padding="@dimen/margin_small"
+                app:srcCompat="@drawable/ic_play_arrow_24dp" />
+
+            <ImageButton
+                android:id="@+id/fastForwardBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_extra_small"
+                android:layout_marginRight="@dimen/margin_extra_small"
+                android:layout_toEndOf="@id/play"
+                android:background="?android:attr/selectableItemBackground"
+                android:minHeight="@dimen/touch_target_size"
+                android:minWidth="@dimen/touch_target_size"
+                android:padding="@dimen/margin_small"
+                app:srcCompat="@drawable/ic_forward_5_black_24dp" />
+
+            <TextView
+                android:id="@+id/currentDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/play"
+                android:textColor="?colorOnSurface"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold"
+                tools:text="00:00" />
+
+            <TextView
+                android:id="@+id/totalDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/play"
+                android:textColor="?colorOnSurface"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold"
+                tools:text="00:00" />
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/currentDuration"
+                android:paddingEnd="0dp"
+                android:paddingStart="0dp"
+                android:thumbOffset="3dp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/remove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/clear_answer"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:textColor="?colorSecondary"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

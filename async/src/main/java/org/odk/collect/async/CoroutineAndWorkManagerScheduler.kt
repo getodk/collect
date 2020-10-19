@@ -1,7 +1,21 @@
 package org.odk.collect.async
 
-import androidx.work.*
-import kotlinx.coroutines.*
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Runnable
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 import java.util.function.Consumer
 import java.util.function.Supplier
@@ -26,27 +40,27 @@ class CoroutineAndWorkManagerScheduler(private val foregroundContext: CoroutineC
 
     override fun networkDeferred(tag: String, spec: TaskSpec) {
         val constraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
 
         val workRequest = OneTimeWorkRequest.Builder(spec.getWorkManagerAdapter())
-                .addTag(tag)
-                .setConstraints(constraints)
-                .build()
+            .addTag(tag)
+            .setConstraints(constraints)
+            .build()
 
         workManager.beginUniqueWork(tag, ExistingWorkPolicy.KEEP, workRequest).enqueue()
     }
 
     override fun networkDeferred(tag: String, spec: TaskSpec, repeatPeriod: Long) {
         val constraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
 
         val worker = spec.getWorkManagerAdapter()
         val workRequest = PeriodicWorkRequest.Builder(worker, repeatPeriod, TimeUnit.MILLISECONDS)
-                .addTag(tag)
-                .setConstraints(constraints)
-                .build()
+            .addTag(tag)
+            .setConstraints(constraints)
+            .build()
 
         workManager.enqueueUniquePeriodicWork(tag, ExistingPeriodicWorkPolicy.REPLACE, workRequest)
     }
@@ -91,4 +105,3 @@ private class ScopeCancellable(private val scope: CoroutineScope) : Cancellable 
         return true
     }
 }
-

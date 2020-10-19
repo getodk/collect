@@ -5,6 +5,8 @@ import android.net.Uri;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.SavedStateHandle;
 
+import com.google.common.io.Files;
+
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
@@ -22,12 +24,14 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.javarosa.form.api.FormEntryController.EVENT_GROUP;
 import static org.javarosa.form.api.FormEntryController.EVENT_QUESTION;
 import static org.javarosa.form.api.FormEntryController.EVENT_REPEAT;
@@ -333,8 +337,8 @@ public class FormSaveViewModelTest {
 
     @Test
     public void saveForm_savesCorrectFiles() {
-        viewModel.markOriginalFileOrDelete("index", "blah");
-        viewModel.replaceRecentFileForQuestion("index", "blah");
+        viewModel.deleteAnswerFile("index", "blah");
+        viewModel.replaceAnswerFile("index", "blah");
 
         viewModel.saveForm(Uri.parse("file://form"), true, "", true);
         whenFormSaverFinishes(SaveFormToDisk.SAVED);
@@ -389,27 +393,64 @@ public class FormSaveViewModelTest {
         assertThat(saveResult.getValue(), equalTo(null));
     }
 
+    //region QuestionMediaManager implementation
+
+    /**
+     * Covers clearing an answer, adding a new answer and then clearing again - we'd never need
+     * to restore the new answer file in this case.
+     */
     @Test
-    public void markOriginalFileOrDelete_whenQuestionIndexHasAnswer_onRecreatingViewModel_deletesFile() {
-        viewModel.markOriginalFileOrDelete("index", "blah");
+    public void deleteAnswerFile_whenAnswerFileHasAlreadyBeenDeleted_actuallyDeletesNewFile() {
+        viewModel.deleteAnswerFile("index", "blah1");
+        viewModel.deleteAnswerFile("index", "blah2");
 
-        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null);
-        restoredViewModel.formLoaded(formController);
-        restoredViewModel.markOriginalFileOrDelete("index", "blah");
-
-        verify(mediaUtils).deleteImageFileFromMediaProvider("blah");
+        verify(mediaUtils).deleteImageFileFromMediaProvider("blah2");
     }
 
     @Test
-    public void replaceRecentFileForQuestion_whenQuestionIndexHasAnswer_onRecreatingViewModel_deletesFile() {
-        viewModel.replaceRecentFileForQuestion("index", "blah");
+    public void deleteAnswerFile_whenAnswerFileHasAlreadyBeenDeleted_onRecreatingViewModel_actuallyDeletesNewFile() {
+        viewModel.deleteAnswerFile("index", "blah1");
 
         FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null);
         restoredViewModel.formLoaded(formController);
-        restoredViewModel.replaceRecentFileForQuestion("index", "blah");
+        restoredViewModel.deleteAnswerFile("index", "blah2");
 
-        verify(mediaUtils).deleteImageFileFromMediaProvider("blah");
+        verify(mediaUtils).deleteImageFileFromMediaProvider("blah2");
     }
+
+    /**
+     * Covers replacing an answer, and then replacing an answer again - we'd never need
+     * to restore the first replacement in this case
+     */
+    @Test
+    public void replaceAnswerFile_whenAnswerFileHasAlreadyBeenReplaced_deletesPreviousReplacement() {
+        viewModel.replaceAnswerFile("index", "blah1");
+        viewModel.replaceAnswerFile("index", "blah2");
+
+        verify(mediaUtils).deleteImageFileFromMediaProvider("blah1");
+    }
+
+    @Test
+    public void replaceAnswerFile_whenAnswerFileHasAlreadyBeenReplaced_afterRecreatingViewModel_deletesPreviousReplacement() {
+        viewModel.replaceAnswerFile("index", "blah1");
+
+        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null);
+        restoredViewModel.formLoaded(formController);
+        restoredViewModel.replaceAnswerFile("index", "blah2");
+
+        verify(mediaUtils).deleteImageFileFromMediaProvider("blah1");
+    }
+
+    @Test
+    public void getAnswerFile_returnsFileFromInstance() {
+        File tempDir = Files.createTempDir();
+        when(formController.getInstanceFile()).thenReturn(new File(tempDir + File.separator + "instance.xml"));
+
+        File answerFile = viewModel.getAnswerFile("answer.file");
+        assertThat(answerFile, is(new File(tempDir, "answer.file")));
+    }
+
+    //endregion
 
     @Test
     public void ignoreChanges_whenFormControllerNotSet_doesNothing() {

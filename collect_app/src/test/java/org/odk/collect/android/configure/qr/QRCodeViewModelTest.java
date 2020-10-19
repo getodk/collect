@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.FakeScheduler;
+import org.odk.collect.testshared.FakeScheduler;
 
 import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;

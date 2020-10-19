@@ -1,5 +1,7 @@
+include ':testshared'
+include ':audioclips'
 include ':strings'
 include ':async'
 include ':collect_app'
-include ':nbi-stubs'
+include ':nbistubs'
 include ':material'

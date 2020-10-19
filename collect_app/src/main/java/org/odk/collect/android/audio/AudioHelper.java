@@ -1,6 +1,5 @@
 package org.odk.collect.android.audio;
 
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 
 import androidx.fragment.app.FragmentActivity;
@@ -11,14 +10,17 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModelProviders;
 
+import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.audioclips.AudioClipViewModel;
+import org.odk.collect.audioclips.Clip;
 
 import java.util.List;
 import java.util.function.Supplier;
 
 /**
  * Object for setting up playback of audio clips with {@link AudioButton} and
- * {@link AudioControllerView} controls. Only one clip can be played at once so when a clip is
+ * controls. Only one clip can be played at once so when a clip is
  * played from a view or from the `play` method any currently playing audio will stop.
  * <p>
  * Clips are identified using a `clipID` which enables the playback state of clips to survive
@@ -31,21 +33,26 @@ import java.util.function.Supplier;
  * construct multiple instances (within a {@link android.view.View} or
  * {@link androidx.fragment.app.Fragment} for instance) if needed within one
  * {@link android.app.Activity}.
+ *
+ * @deprecated wrapping the ViewModel like this doesn't really fit with other ways we've integrated
+ * widgets with "external" services. Instead of this widgets should talk to {@link AudioPlayer}
+ * and the Activity/Fragment components should talk to the ViewModel itself.
  */
 
+@Deprecated
 public class AudioHelper {
 
     private final LifecycleOwner lifecycleOwner;
-    private final AudioPlayerViewModel viewModel;
+    private final AudioClipViewModel viewModel;
 
     public AudioHelper(FragmentActivity activity, LifecycleOwner lifecycleOwner, Scheduler scheduler, Supplier<MediaPlayer> mediaPlayerFactory) {
         this.lifecycleOwner = lifecycleOwner;
 
-        AudioPlayerViewModelFactory factory = new AudioPlayerViewModelFactory(mediaPlayerFactory, scheduler);
+        AudioClipViewModel.Factory factory = new AudioClipViewModel.Factory(mediaPlayerFactory, scheduler);
 
         viewModel = ViewModelProviders
                 .of(activity, factory)
-                .get(AudioPlayerViewModel.class);
+                .get(AudioClipViewModel.class);
 
         registerLifecycleCallbacks(activity, lifecycleOwner);
     }
@@ -56,7 +63,7 @@ public class AudioHelper {
      * @return A {@link LiveData} value representing whether this clip is playing or not
      */
     public LiveData<Boolean> setAudio(AudioButton button, Clip clip) {
-        AudioPlayerViewModel viewModel = this.viewModel;
+        AudioClipViewModel viewModel = this.viewModel;
 
         LiveData<Boolean> isPlaying = viewModel.isPlaying(clip.getClipID());
 
@@ -64,19 +71,6 @@ public class AudioHelper {
         button.setListener(new AudioButtonListener(viewModel, clip.getURI(), clip.getClipID()));
 
         return isPlaying;
-    }
-
-    /**
-     * @param view   The control being used for playback
-     * @param clip   The clip to be played
-     */
-    public void setAudio(AudioControllerView view, Clip clip) {
-        AudioPlayerViewModel viewModel = this.viewModel;
-
-        viewModel.isPlaying(clip.getClipID()).observe(lifecycleOwner, view::setPlaying);
-        viewModel.getPosition(clip.getClipID()).observe(lifecycleOwner, view::setPosition);
-        view.setDuration(getDurationOfFile(clip.getURI()));
-        view.setListener(new AudioControllerViewListener(viewModel, clip.getURI(), clip.getClipID()));
     }
 
     public void play(Clip clip) {
@@ -89,13 +83,6 @@ public class AudioHelper {
 
     public void stop() {
         viewModel.stop();
-    }
-
-    private Integer getDurationOfFile(String uri) {
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(uri);
-        String durationString = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-        return durationString != null ? Integer.parseInt(durationString) : 0;
     }
 
     public LiveData<Exception> getError() {
@@ -111,41 +98,13 @@ public class AudioHelper {
         lifecycleOwner.getLifecycle().addObserver(new BackgroundObserver(viewModel));
     }
 
-    private static class AudioControllerViewListener implements AudioControllerView.Listener {
-
-        private final AudioPlayerViewModel viewModel;
-        private final String uri;
-        private final String clipID;
-
-        AudioControllerViewListener(AudioPlayerViewModel viewModel, String uri, String clipID) {
-            this.viewModel = viewModel;
-            this.uri = uri;
-            this.clipID = clipID;
-        }
-
-        @Override
-        public void onPlayClicked() {
-            viewModel.play(new Clip(clipID, uri));
-        }
-
-        @Override
-        public void onPauseClicked() {
-            viewModel.pause();
-        }
-
-        @Override
-        public void onPositionChanged(Integer newPosition) {
-            viewModel.setPosition(clipID, newPosition);
-        }
-    }
-
     private static class AudioButtonListener implements AudioButton.Listener {
 
-        private final AudioPlayerViewModel viewModel;
+        private final AudioClipViewModel viewModel;
         private final String uri;
         private final String buttonID;
 
-        AudioButtonListener(AudioPlayerViewModel viewModel, String uri, String buttonID) {
+        AudioButtonListener(AudioClipViewModel viewModel, String uri, String buttonID) {
             this.viewModel = viewModel;
             this.uri = uri;
             this.buttonID = buttonID;
@@ -164,9 +123,9 @@ public class AudioHelper {
 
     private static class BackgroundObserver implements LifecycleObserver {
 
-        private final AudioPlayerViewModel viewModel;
+        private final AudioClipViewModel viewModel;
 
-        BackgroundObserver(AudioPlayerViewModel viewModel) {
+        BackgroundObserver(AudioClipViewModel viewModel) {
             this.viewModel = viewModel;
         }
 

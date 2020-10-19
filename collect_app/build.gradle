@@ -316,10 +316,11 @@ dependencies {
     // Better "Subjects" for Rx:
     implementation "com.jakewharton.rxrelay2:rxrelay:2.1.1"
 
-    implementation project(':nbi-stubs')
+    implementation project(':nbistubs')
     implementation project(':strings')
     implementation project(':material')
     implementation project(':async')
+    implementation project(':audioclips')
 
     // Makes binding to Views easy:
     implementation "com.jakewharton:butterknife:10.2.3"
@@ -336,6 +337,7 @@ dependencies {
     testImplementation "junit:junit:4.13"
     testImplementation "org.mockito:mockito-core:3.5.11"
 
+    testImplementation project(path: ':testshared')
     testImplementation "org.robolectric:robolectric:4.3.1"
     testImplementation 'androidx.test.ext:junit:1.1.2'
     debugImplementation("androidx.fragment:fragment-testing:${rootProject.fragmentVersion}") {

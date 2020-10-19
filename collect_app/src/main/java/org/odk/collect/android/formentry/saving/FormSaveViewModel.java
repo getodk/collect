@@ -287,8 +287,10 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     @Override
-    public void markOriginalFileOrDelete(String questionIndex, String fileName) {
+    public void deleteAnswerFile(String questionIndex, String fileName) {
         if (questionIndex != null && fileName != null) {
+            // We don't want to delete the "original" answer file as we might need to restore it
+            // but we can delete any follow up deletions
             if (originalFiles.containsKey(questionIndex)) {
                 mediaUtils.deleteImageFileFromMediaProvider(fileName);
             } else {
@@ -299,13 +301,25 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     @Override
-    public void replaceRecentFileForQuestion(String questionIndex, String fileName) {
+    public void replaceAnswerFile(String questionIndex, String fileName) {
         if (questionIndex != null && fileName != null) {
+            // If we're replacing an answer's file for a second time we can just get rid of the
+            // first (replacement) file we were going to use
             if (recentFiles.containsKey(questionIndex)) {
                 mediaUtils.deleteImageFileFromMediaProvider(recentFiles.get(questionIndex));
             }
             recentFiles.put(questionIndex, fileName);
             stateHandle.set(RECENT_FILES, recentFiles);
+        }
+    }
+
+    @Override
+    @Nullable
+    public File getAnswerFile(String fileName) {
+        if (formController != null && formController.getInstanceFile() != null) {
+            return new File(formController.getInstanceFile().getParent(), fileName);
+        } else {
+            return null;
         }
     }
 

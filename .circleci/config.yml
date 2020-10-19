@@ -55,14 +55,15 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
 
       - run:
-          name: Run nbi unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 nbi-stubs:testDebug
-      - run:
           name: Run async unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 async:testDebug
       - run:
           name: Run material unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 material:testDebug
+      - run:
+          name: Run audioclips unit tests
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 audioclips:testDebug
+
       - store_artifacts:
           path: collect_app/build/reports
           destination: reports

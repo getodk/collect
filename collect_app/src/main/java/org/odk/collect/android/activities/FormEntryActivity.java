@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -75,6 +76,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioControllerView;
+import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.backgroundwork.FormSubmitManager;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
@@ -101,7 +103,6 @@ import org.odk.collect.android.formentry.repeats.AddRepeatDialog;
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
-import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog;
@@ -154,6 +155,8 @@ import org.odk.collect.android.widgets.RangePickerIntegerWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.FormControllerWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.async.Scheduler;
+import org.odk.collect.audioclips.AudioClipViewModel;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -322,7 +325,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     FormSubmitManager formSubmitManager;
 
     @Inject
-    FormsRepository formsRepository;
+    Scheduler scheduler;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -917,11 +920,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     try {
                         InputStream inputStream = getContentResolver().openInputStream(mediaUri);
                         if (inputStream != null) {
-                            OutputStream outputStream = new FileOutputStream(new File(filePath));
+                            File newFile = new File(filePath);
+                            OutputStream outputStream = new FileOutputStream(newFile);
                             IOUtils.copy(inputStream, outputStream);
                             inputStream.close();
                             outputStream.close();
-                            saveFileAnswer(new File(filePath));
+
+                            if (getCurrentViewIfODKView() != null) {
+                                setBinaryWidgetData(newFile.getName());
+                            }
+                            saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                         }
                     } catch (IOException e) {
                         Timber.e(e);
@@ -930,7 +938,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 break;
             case RequestCodes.VIDEO_CAPTURE:
                 mediaUri = intent.getData();
-                saveFileAnswer(mediaUri);
+                if (getCurrentViewIfODKView() != null) {
+                    setBinaryWidgetData(mediaUri);
+                }
+                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 String filePath = MediaUtils.getDataColumn(this, mediaUri, null, null);
                 if (filePath != null) {
                     new File(filePath).delete();
@@ -976,17 +987,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             Timber.e("currentView returned null.");
         }
         return null;
-    }
-
-    private void saveFileAnswer(Object media) {
-        // For audio/video capture/chooser, we get the URI from the content
-        // provider
-        // then the widget copies the file and makes a new entry in the
-        // content provider.
-        if (getCurrentViewIfODKView() != null) {
-            setBinaryWidgetData(media);
-        }
-        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
     }
 
     public void setBinaryWidgetData(Object data) {
@@ -1295,7 +1295,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @NotNull
     private ODKView createODKView(boolean advancingPage, FormEntryPrompt[] prompts, FormEntryCaption[] groups) {
         odkViewLifecycle.start();
-        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry);
+
+        AudioClipViewModel.Factory factory = new AudioClipViewModel.Factory(MediaPlayer::new, scheduler);
+        ViewModelAudioPlayer viewModelAudioPlayer = new ViewModelAudioPlayer(ViewModelProviders
+                .of(this, factory)
+                .get(AudioClipViewModel.class), odkViewLifecycle);
+
+        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer);
     }
 
     @Override

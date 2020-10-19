@@ -447,7 +447,13 @@ public abstract class QuestionWidget
 
     //region Accessors
 
+    /**
+     * @deprecated widgets shouldn't need to know about the instance folder. They can use
+     * {@link org.odk.collect.android.utilities.QuestionMediaManager} to access media attached
+     * to the instance.
+     */
     @Nullable
+    @Deprecated
     public final String getInstanceFolder() {
         Collect collect = Collect.getInstance();
         if (collect == null) {

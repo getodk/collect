@@ -47,3 +47,7 @@ tasks.register("pmd", Pmd) {
         }
     }
 }
+
+//------------------------ktlint------------------------//
+
+apply plugin: "org.jlleitschuh.gradle.ktlint"

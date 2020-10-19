@@ -1,121 +1,102 @@
 package org.odk.collect.android.widgets;
 
-import android.content.Intent;
-import android.media.MediaPlayer;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.view.View;
 
-import androidx.core.view.ViewCompat;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.LifecycleOwner;
+import androidx.annotation.Nullable;
 
 import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioControllerView;
-import org.odk.collect.android.audio.AudioHelper;
-import org.odk.collect.android.audio.Clip;
-import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.support.FakeLifecycleOwner;
-import org.odk.collect.android.support.FakeScheduler;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
-import org.odk.collect.android.utilities.ActivityAvailability;
-import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.FileUtil;
-import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
-import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
-import org.odk.collect.async.Scheduler;
+import org.odk.collect.android.widgets.utilities.AudioDataRequester;
+import org.odk.collect.android.widgets.utilities.AudioPlayer;
+import org.odk.collect.audioclips.Clip;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.shadows.ShadowActivity;
-import org.robolectric.shadows.ShadowToast;
 
 import java.io.File;
-import java.util.function.Supplier;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 
-import static android.content.Intent.ACTION_GET_CONTENT;
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.support.RobolectricHelpers.setupMediaPlayerDataSource;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
-import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 public class AudioWidgetTest {
-    private static final String FILE_PATH = "blah.mp3";
-    private static final String SOURCE_FILE_PATH = "sourceFile.mp3";
 
-    private final MediaPlayer mediaPlayer = new MediaPlayer();
-    private final FakeScheduler fakeScheduler = new FakeScheduler();
-    private final FakePermissionUtils fakePermissionUtils = new FakePermissionUtils();
     private final FakeQuestionMediaManager questionMediaManager = new FakeQuestionMediaManager();
-    private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
+    private final AudioDataRequester audioDataRequester = mock(AudioDataRequester.class);
 
     private TestScreenContextActivity widgetActivity;
-    private ShadowActivity shadowActivity;
-    private AudioControllerView audioController;
-    private FileUtil fileUtil;
-    private MediaUtil mediaUtil;
-    private FakeAudioHelper audioHelper;
-    private ActivityAvailability activityAvailability;
     private FormIndex formIndex;
-    private File mockedFile;
+    private FakeAudioPlayer audioPlayer;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         widgetActivity = RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
-        shadowActivity = shadowOf(widgetActivity);
 
-        audioController = mock(AudioControllerView.class);
-        fileUtil = mock(FileUtil.class);
-        mediaUtil = mock(MediaUtil.class);
-        activityAvailability = mock(ActivityAvailability.class);
         formIndex = mock(FormIndex.class);
-        mockedFile = mock(File.class);
-        audioHelper = new FakeAudioHelper(widgetActivity, new FakeLifecycleOwner(), fakeScheduler, () -> mediaPlayer);
-
-        when(mockedFile.exists()).thenReturn(true);
-        when(mockedFile.getName()).thenReturn("newFile.mp3");
-        when(mockedFile.getAbsolutePath()).thenReturn("newFilePath");
         when(formIndex.toString()).thenReturn("questionIndex");
-        when(activityAvailability.isActivityAvailable(any())).thenReturn(true);
+
+        audioPlayer = new FakeAudioPlayer();
+    }
+
+    @Test
+    public void whenPromptDoesNotHaveAnswer_showsButtonsAndHidesAudioController() {
+        AudioWidget widget = createWidget(promptWithAnswer(null));
+
+        assertThat(widget.binding.captureButton.getVisibility(), is(VISIBLE));
+        assertThat(widget.binding.chooseButton.getVisibility(), is(VISIBLE));
+        assertThat(widget.binding.audioController.getVisibility(), is(GONE));
+    }
+
+    @Test
+    public void whenPromptHasAnswer_hidesButtonsAndShowsAudioController() {
+        AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
+
+        assertThat(widget.binding.captureButton.getVisibility(), is(GONE));
+        assertThat(widget.binding.chooseButton.getVisibility(), is(GONE));
+        assertThat(widget.binding.audioController.getVisibility(), is(VISIBLE));
     }
 
     @Test
     public void usingReadOnlyOption_doesNotShowCaptureAndChooseButtons() {
         AudioWidget widget = createWidget(promptWithReadOnly());
-        assertThat(widget.binding.captureButton.getVisibility(), equalTo(View.GONE));
-        assertThat(widget.binding.chooseButton.getVisibility(), equalTo(View.GONE));
+        assertThat(widget.binding.captureButton.getVisibility(), equalTo(GONE));
+        assertThat(widget.binding.chooseButton.getVisibility(), equalTo(GONE));
     }
 
     @Test
-    public void getAnswer_whenPromptDoesNotHaveAnswer_returnsNullAndHidesAudioPlayer() {
+    public void getAnswer_whenPromptDoesNotHaveAnswer_returnsNull() {
         AudioWidget widget = createWidget(promptWithAnswer(null));
         assertThat(widget.getAnswer(), nullValue());
-        verify(audioController).hidePlayer();
     }
 
     @Test
     public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
-        AudioWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
-        assertThat(widget.getAnswer().getDisplayText(), equalTo(FILE_PATH));
+        AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
+        assertThat(widget.getAnswer().getDisplayText(), equalTo("blah.mp3"));
     }
 
     @Test
@@ -124,65 +105,52 @@ public class AudioWidgetTest {
         when(prompt.getAppearanceHint()).thenReturn(WidgetAppearanceUtils.NEW);
         AudioWidget widget = createWidget(prompt);
 
-        assertThat(widget.binding.chooseButton.getVisibility(), equalTo(View.GONE));
-    }
-
-    @Test
-    public void whenPromptHasAnswer_updatesPlayerMedia() {
-        AudioWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
-        Clip clip = getAnswerAudioClip(widget.getInstanceFolder(), widget.getAnswer());
-
-        assertThat(audioHelper.audioController, equalTo(audioController));
-        assertThat(audioHelper.clip.getURI(), equalTo(clip.getURI()));
-        verify(audioController).showPlayer();
+        assertThat(widget.binding.chooseButton.getVisibility(), equalTo(GONE));
     }
 
     @Test
     public void deleteFile_removesWidgetAnswerAndStopsPlayingMedia() {
-        AudioWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+        AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
         widget.deleteFile();
 
         assertThat(widget.getAnswer(), nullValue());
-        assertThat(audioHelper.isMediaStopped, equalTo(true));
+        assertThat(audioPlayer.getCurrentClip(), nullValue());
     }
 
     @Test
     public void deleteFile_setsFileAsideForDeleting() {
-        FormEntryPrompt prompt = promptWithAnswer(new StringData(FILE_PATH));
+        FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.mp3"));
         when(prompt.getIndex()).thenReturn(formIndex);
 
         AudioWidget widget = createWidget(prompt);
         widget.deleteFile();
 
-        assertThat(questionMediaManager.originalFiles.get("questionIndex"),
-                equalTo(widget.getInstanceFolder() + File.separator + "blah.mp3"));
+        assertThat(questionMediaManager.originalFiles.get("questionIndex"), equalTo(questionMediaManager.getAnswerFile("blah.mp3").toString()));
     }
 
     @Test
     public void clearAnswer_removesAnswerAndHidesPlayer() {
-        AudioWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+        AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
         widget.clearAnswer();
 
         assertThat(widget.getAnswer(), nullValue());
-        assertThat(audioHelper.isMediaStopped, equalTo(true));
-        verify(audioController).hidePlayer();
+        assertThat(widget.binding.audioController.getVisibility(), is(GONE));
     }
 
     @Test
     public void clearAnswer_setsFileAsideForDeleting() {
-        FormEntryPrompt prompt = promptWithAnswer(new StringData(FILE_PATH));
+        FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.mp3"));
         when(prompt.getIndex()).thenReturn(formIndex);
 
         AudioWidget widget = createWidget(prompt);
         widget.clearAnswer();
 
-        assertThat(questionMediaManager.originalFiles.get("questionIndex"),
-                equalTo(widget.getInstanceFolder() + File.separator + "blah.mp3"));
+        assertThat(questionMediaManager.originalFiles.get("questionIndex"), equalTo(questionMediaManager.getAnswerFile("blah.mp3").toString()));
     }
 
     @Test
     public void clearAnswer_callsValueChangeListeners() {
-        AudioWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+        AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.clearAnswer();
 
@@ -190,88 +158,99 @@ public class AudioWidgetTest {
     }
 
     @Test
-    public void setData_whenFileExists_replacesOriginalFileWithNewFile() {
-        FormEntryPrompt prompt = promptWithAnswer(new StringData(FILE_PATH));
+    public void setData_whenFileExists_replacesOriginalFileWithNewFile() throws Exception {
+        FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.mp3"));
         when(prompt.getIndex()).thenReturn(formIndex);
         AudioWidget widget = createWidget(prompt);
-        widget.setData(mockedFile);
 
-        assertThat(questionMediaManager.recentFiles.get("questionIndex"), equalTo("newFilePath"));
+        File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
+        widget.setData(newFile.getName());
+
+        assertThat(questionMediaManager.recentFiles.get("questionIndex"), equalTo(newFile.getAbsolutePath()));
     }
 
     @Test
-    public void setData_whenPromptHasDifferentAudioFile_deletesOriginalAnswer() {
-        FormEntryPrompt prompt = promptWithAnswer(new StringData(FILE_PATH));
+    public void setData_whenPromptHasDifferentAudioFile_deletesOriginalAnswer() throws Exception {
+        FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.mp3"));
         when(prompt.getIndex()).thenReturn(formIndex);
 
         AudioWidget widget = createWidget(prompt);
-        widget.setData(mockedFile);
 
-        assertThat(questionMediaManager.originalFiles.get("questionIndex"),
-                equalTo(widget.getInstanceFolder() + File.separator + "blah.mp3"));
+        File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
+        widget.setData(newFile.getName());
+
+        assertThat(questionMediaManager.originalFiles.get("questionIndex"), equalTo(questionMediaManager.getAnswerFile("blah.mp3").toString()));
     }
 
     @Test
-    public void setData_whenPromptDoesNotHaveAnswer_doesNotDeleteOriginalAnswer() {
+    public void setData_whenPromptDoesNotHaveAnswer_doesNotDeleteOriginalAnswer() throws Exception {
         AudioWidget widget = createWidget(promptWithAnswer(null));
-        widget.setData(mockedFile);
+
+        File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
+        widget.setData(newFile.getName());
         assertThat(questionMediaManager.originalFiles.isEmpty(), equalTo(true));
     }
 
     @Test
-    public void setData_whenPromptHasSameAnswer_doesNotDeleteOriginalAnswer() {
-        AudioWidget widget = createWidget(promptWithAnswer(new StringData("newFile.mp3")));
-        widget.setData(mockedFile);
+    public void setData_whenPromptHasSameAnswer_doesNotDeleteOriginalAnswer() throws Exception {
+        File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
+        AudioWidget widget = createWidget(promptWithAnswer(new StringData(newFile.getName())));
+        widget.setData(newFile.getName());
         assertThat(questionMediaManager.originalFiles.isEmpty(), equalTo(true));
     }
 
     @Test
     public void setData_whenFileDoesNotExist_doesNotUpdateWidgetAnswer() {
-        AudioWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
-        widget.setData(new File("newFile.mp3"));
-        assertThat(widget.getAnswer().getDisplayText(), equalTo(FILE_PATH));
+        AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
+        widget.setData("newFile.mp3");
+        assertThat(widget.getAnswer().getDisplayText(), equalTo("blah.mp3"));
     }
 
     @Test
-    public void setData_whenDataIsUri_copiesNewFileToSource() {
-        Uri newFileUri = Uri.fromFile(mockedFile);
-        File sourceFile = new File(SOURCE_FILE_PATH);
+    public void setData_whenFileExists_updatesWidgetAnswer() throws Exception {
+        AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
 
-        AudioWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+        File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
+        widget.setData(newFile.getName());
+        assertThat(widget.getAnswer().getDisplayText(), equalTo(newFile.getName()));
+    }
 
-        when(mediaUtil.getPathFromUri(widget.getContext(), newFileUri, MediaStore.Audio.Media.DATA)).thenReturn(SOURCE_FILE_PATH);
-        when(fileUtil.getFileAtPath(SOURCE_FILE_PATH)).thenReturn(sourceFile);
-        when(fileUtil.getFileAtPath("null/null.mp3")).thenReturn(mockedFile);
+    /**
+     * Currently choosing audio is locked into the {@link org.odk.collect.android.tasks.MediaLoadingTask}
+     * flow and so we'd need to rip this apart to let us drop support for accepting File as data. In
+     * this case it will just grab the name off the file and use {@link org.odk.collect.android.utilities.QuestionMediaManager}
+     * to handle grabbing the actual file
+     */
+    @Test
+    public void setData_supportsFilesAsWellAsStrings() throws Exception {
+        AudioWidget widget = createWidget(promptWithAnswer(null));
 
-        widget.setData(newFileUri);
-        verify(fileUtil).copyFile(sourceFile, mockedFile);
+        File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
+        widget.setData(newFile);
+        assertThat(widget.getAnswer().getDisplayText(), equalTo(newFile.getName()));
     }
 
     @Test
-    public void setData_whenFileExists_updatesWidgetAnswer() {
-        AudioWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
-        widget.setData(mockedFile);
-        assertThat(widget.getAnswer().getDisplayText(), equalTo("newFile.mp3"));
-    }
-
-    @Test
-    public void setData_whenFileExists_updatesPlayerMedia() {
-        AudioWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
-        widget.setData(mockedFile);
-        Clip clip = getAnswerAudioClip(widget.getInstanceFolder(), widget.getAnswer());
-
-        assertThat(audioHelper.audioController, equalTo(audioController));
-        assertThat(audioHelper.clip.getURI(), equalTo(clip.getURI()));
-        verify(audioController, times(2)).showPlayer();
-    }
-
-    @Test
-    public void setData_whenFileExists_callsValueChangeListener() {
-        AudioWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+    public void setData_whenFileExists_callsValueChangeListener() throws Exception {
+        AudioWidget widget = createWidget(promptWithAnswer(null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.setData(mockedFile);
+
+        File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
+        widget.setData(newFile.getName());
 
         verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void setData_whenFileExists_hidesButtonsAndShowsAudioController() throws Exception {
+        AudioWidget widget = createWidget(promptWithAnswer(null));
+
+        File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
+        widget.setData(newFile.getName());
+
+        assertThat(widget.binding.captureButton.getVisibility(), is(GONE));
+        assertThat(widget.binding.captureButton.getVisibility(), is(GONE));
+        assertThat(widget.binding.audioController.getVisibility(), is(VISIBLE));
     }
 
     @Test
@@ -288,124 +267,185 @@ public class AudioWidgetTest {
     }
 
     @Test
-    public void clickingChooseButton_whenIntentIsNotAvailable_doesNotStartAnyIntentAndCancelsWaitingForData() {
-        when(activityAvailability.isActivityAvailable(any())).thenReturn(false);
-        AudioWidget widget = createWidget(promptWithAnswer(null));
+    public void clickingChooseButton_requestsAudioFile() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        AudioWidget widget = createWidget(prompt);
 
         widget.binding.chooseButton.performClick();
-        Intent startedActivity = shadowActivity.getNextStartedActivity();
-        String toastMessage = ShadowToast.getTextOfLatestToast();
-
-        assertThat(startedActivity, nullValue());
-        assertThat(waitingForDataRegistry.waiting.isEmpty(), equalTo(true));
-        assertThat(toastMessage, equalTo(widget.getContext().getString(R.string.activity_not_found,
-                widget.getContext().getString(R.string.choose_audio))));
+        verify(audioDataRequester).requestFile(prompt);
     }
 
     @Test
-    public void clickingChooseButton_startsChooseAudioFileActivityAndSetsWidgetWaitingForData() {
+    public void clickingCaptureButton_requestsRecording() {
         FormEntryPrompt prompt = promptWithAnswer(null);
-        when(prompt.getIndex()).thenReturn(formIndex);
+        AudioWidget widget = createWidget(prompt);
+
+        widget.binding.captureButton.performClick();
+        verify(audioDataRequester).requestRecording(prompt);
+    }
+
+    @Test
+    public void afterSetBinaryData_clickingPlayAndPause_playsAndPausesAudio() throws Exception {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        AudioWidget widget = createWidget(prompt);
+
+        File audioFile = File.createTempFile("blah", ".mp3", questionMediaManager.getDir());
+        Clip expectedClip = getExpectedClip(prompt, audioFile.getName());
+        widget.setData(audioFile.getName());
+
+        AudioControllerView audioController = widget.binding.audioController;
+        assertThat(audioController.getVisibility(), is(VISIBLE));
+        audioController.binding.play.performClick();
+        assertThat(audioPlayer.getCurrentClip(), is(expectedClip));
+
+        audioController.binding.play.performClick();
+        assertThat(audioPlayer.getCurrentClip(), is(expectedClip));
+        assertThat(audioPlayer.isPaused(), is(true));
+
+        audioController.binding.play.performClick();
+        assertThat(audioPlayer.getCurrentClip(), is(expectedClip));
+        assertThat(audioPlayer.isPaused(), is(false));
+    }
+
+    @Test
+    public void afterSetBinaryData_canSkipClipForward() throws Exception {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+
+        File audioFile = File.createTempFile("blah", ".mp3", questionMediaManager.getDir());
+        Clip expectedClip = getExpectedClip(prompt, audioFile.getName());
+        setupMediaPlayerDataSource(expectedClip.getURI(), 322450);
 
         AudioWidget widget = createWidget(prompt);
-        widget.binding.chooseButton.performClick();
+        widget.setData(audioFile.getName());
 
-        Intent startedActivity = shadowActivity.getNextStartedActivity();
-        assertThat(startedActivity.getAction(), equalTo(ACTION_GET_CONTENT));
-        assertThat(startedActivity.getType(), equalTo("audio/*"));
-
-        ShadowActivity.IntentForResult intentForResult = shadowActivity.getNextStartedActivityForResult();
-        assertThat(intentForResult.requestCode, equalTo(ApplicationConstants.RequestCodes.AUDIO_CHOOSER));
-
-        assertThat(waitingForDataRegistry.waiting.contains(formIndex), equalTo(true));
+        AudioControllerView audioController = widget.binding.audioController;
+        audioController.binding.fastForwardBtn.performClick();
+        assertThat(audioPlayer.getPosition(expectedClip.getClipID()), is(5000));
     }
 
     @Test
-    public void clickingCaptureButton_whenIntentIsNotAvailable_doesNotStartAnyIntentAndCancelsWaitingForData() {
-        when(activityAvailability.isActivityAvailable(any())).thenReturn(false);
-
-        AudioWidget widget = createWidget(promptWithAnswer(null));
-        widget.setPermissionUtils(fakePermissionUtils);
-        fakePermissionUtils.setPermissionGranted(true);
-
-        widget.binding.captureButton.performClick();
-        Intent startedActivity = shadowActivity.getNextStartedActivity();
-        String toastMessage = ShadowToast.getTextOfLatestToast();
-
-        assertThat(startedActivity, nullValue());
-        assertThat(waitingForDataRegistry.waiting.isEmpty(), equalTo(true));
-        assertThat(toastMessage, equalTo(widget.getContext().getString(R.string.activity_not_found,
-                widget.getContext().getString(R.string.capture_audio))));
-    }
-
-    @Test
-    public void clickingCaptureButton_whenPermissionIsNotGranted_doesNotStartAnyIntentAndCancelsWaitingForData() {
-        AudioWidget widget = createWidget(promptWithAnswer(null));
-        widget.setPermissionUtils(fakePermissionUtils);
-        fakePermissionUtils.setPermissionGranted(false);
-
-        widget.binding.captureButton.performClick();
-        Intent startedActivity = shadowActivity.getNextStartedActivity();
-
-        assertThat(startedActivity, nullValue());
-        assertThat(waitingForDataRegistry.waiting.isEmpty(), equalTo(true));
-    }
-
-    @Test
-    public void clickingCaptureButton_whenPermissionIsGranted_startsRecordSoundIntentAndSetsWidgetWaitingForData() {
+    public void afterSetBinaryData_whenPositionOfClipChanges_updatesPosition() throws Exception {
         FormEntryPrompt prompt = promptWithAnswer(null);
-        when(prompt.getIndex()).thenReturn(formIndex);
+
+        File audioFile = File.createTempFile("blah", ".mp3", questionMediaManager.getDir());
+        Clip expectedClip = getExpectedClip(prompt, audioFile.getName());
+        setupMediaPlayerDataSource(expectedClip.getURI(), 322450);
 
         AudioWidget widget = createWidget(prompt);
-        widget.setPermissionUtils(fakePermissionUtils);
-        fakePermissionUtils.setPermissionGranted(true);
+        widget.setData(audioFile.getName());
 
-        widget.binding.captureButton.performClick();
-        Intent startedActivity = shadowActivity.getNextStartedActivity();
+        AudioControllerView audioController = widget.binding.audioController;
+        assertThat(audioController.binding.currentDuration.getText().toString(), is("00:00"));
 
-        assertThat(startedActivity.getAction(), equalTo(MediaStore.Audio.Media.RECORD_SOUND_ACTION));
-        assertThat(startedActivity.getStringExtra(MediaStore.EXTRA_OUTPUT), equalTo(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-                .toString()));
+        audioPlayer.setPosition(expectedClip.getClipID(), 42000);
+        assertThat(audioController.binding.currentDuration.getText().toString(), is("00:42"));
+    }
 
-        ShadowActivity.IntentForResult intentForResult = shadowActivity.getNextStartedActivityForResult();
-        assertThat(intentForResult.requestCode, equalTo(ApplicationConstants.RequestCodes.AUDIO_CAPTURE));
+    @Test
+    public void afterSetBinaryData_showsDurationOfAudio() throws Exception {
+        FormEntryPrompt prompt = promptWithAnswer(null);
 
-        assertThat(waitingForDataRegistry.waiting.contains(formIndex), equalTo(true));
+        File audioFile = File.createTempFile("blah", ".mp3", questionMediaManager.getDir());
+        Clip expectedClip = getExpectedClip(prompt, audioFile.getName());
+        setupMediaPlayerDataSource(expectedClip.getURI(), 322450);
+
+        AudioWidget widget = createWidget(prompt);
+        widget.setData(audioFile.getName());
+
+        AudioControllerView audioController = widget.binding.audioController;
+        assertThat(audioController.binding.totalDuration.getText().toString(), is("05:22"));
+    }
+
+    @Test
+    public void clickingRemove_clearsAnswer() {
+        AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
+        widget.binding.audioController.binding.remove.performClick();
+
+        assertThat(widget.getAnswer(), nullValue());
+    }
+
+    @Test
+    public void clickingRemove_hidesAudioControllerAndShowsButtons() {
+        AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
+        widget.binding.audioController.binding.remove.performClick();
+
+        assertThat(widget.binding.audioController.getVisibility(), is(GONE));
+        assertThat(widget.binding.captureButton.getVisibility(), is(VISIBLE));
+        assertThat(widget.binding.chooseButton.getVisibility(), is(VISIBLE));
     }
 
     public AudioWidget createWidget(FormEntryPrompt prompt) {
-        return new AudioWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"), fileUtil,
-                mediaUtil, audioController, questionMediaManager, waitingForDataRegistry, audioHelper, activityAvailability);
+        return new AudioWidget(
+                widgetActivity,
+                new QuestionDetails(prompt, "formAnalyticsID"),
+                questionMediaManager,
+                audioPlayer,
+                audioDataRequester
+        );
     }
 
-    private Clip getAnswerAudioClip(String instanceFolderPath, IAnswerData answer) {
-        return new Clip(String.valueOf(ViewCompat.generateViewId()), getAudioFilePath(instanceFolderPath, answer));
+    @NotNull
+    private Clip getExpectedClip(FormEntryPrompt prompt, String fileName) {
+        return new Clip(
+                "audio:" + prompt.getIndex().toString(),
+                questionMediaManager.getAnswerFile(fileName).getAbsolutePath()
+        );
     }
 
-    private String getAudioFilePath(String instanceFolderPath, IAnswerData answer) {
-        return (new File(instanceFolderPath + File.separator + answer.getDisplayText())).getAbsolutePath();
-    }
+    private static class FakeAudioPlayer implements AudioPlayer {
 
-    private static class FakeAudioHelper extends AudioHelper {
-        public AudioControllerView audioController;
-        public Clip clip;
+        private final Map<String, Consumer<Boolean>> playingChangedListeners = new HashMap<>();
+        private final Map<String, Consumer<Integer>> positionChangedListeners = new HashMap<>();
+        private final Map<String, Integer> positions = new HashMap<>();
 
-        public boolean isMediaStopped;
+        private boolean paused;
+        private Clip clip;
 
-        FakeAudioHelper(FragmentActivity activity, LifecycleOwner lifecycleOwner, Scheduler scheduler, Supplier<MediaPlayer> mediaPlayerFactory) {
-            super(activity, lifecycleOwner, scheduler, mediaPlayerFactory);
-            isMediaStopped = false;
+        @Override
+        public void play(Clip clip) {
+            this.clip = clip;
+            paused = false;
+            playingChangedListeners.get(clip.getClipID()).accept(true);
         }
 
         @Override
-        public void setAudio(AudioControllerView view, Clip clip) {
-            this.audioController = view;
-            this.clip = clip;
+        public void pause() {
+            paused = true;
+            playingChangedListeners.get(clip.getClipID()).accept(false);
+        }
+
+        @Override
+        public void setPosition(String clipId, Integer position) {
+            positions.put(clipId, position);
+            positionChangedListeners.get(clipId).accept(position);
+        }
+
+        @Override
+        public void onPlayingChanged(String clipID, Consumer<Boolean> playingConsumer) {
+            playingChangedListeners.put(clipID, playingConsumer);
+        }
+
+        @Override
+        public void onPositionChanged(String clipID, Consumer<Integer> positionConsumer) {
+            positionChangedListeners.put(clipID, positionConsumer);
         }
 
         @Override
         public void stop() {
-            isMediaStopped = true;
+            clip = null;
+        }
+
+        @Nullable
+        public Clip getCurrentClip() {
+            return clip;
+        }
+
+        public boolean isPaused() {
+            return paused;
+        }
+
+        public Integer getPosition(String clipId) {
+            return positions.get(clipId);
         }
     }
 }

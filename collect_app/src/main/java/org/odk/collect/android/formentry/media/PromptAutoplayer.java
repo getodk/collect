@@ -6,8 +6,8 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.audio.AudioHelper;
-import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.audioclips.Clip;
 
 import java.util.ArrayList;
 import java.util.List;

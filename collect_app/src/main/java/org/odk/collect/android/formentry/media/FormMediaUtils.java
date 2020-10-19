@@ -9,8 +9,8 @@ import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.utilities.ThemeUtils;
+import org.odk.collect.audioclips.Clip;
 
 import timber.log.Timber;
 
