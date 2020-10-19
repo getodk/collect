@@ -31,12 +31,13 @@
         <item name="android:tint">@color/light_theme_tint_list</item>
     </style>
 
-    <style name="Widget.Collect.ImageButton.Custom.Magenta" parent="Widget.AppCompat.ImageButton">
-        <item name="android:tint">@color/magenta_theme_tint_list</item>
-    </style>
-
     <style name="Widget.Collect.ImageButton.Custom.Dark" parent="Widget.AppCompat.ImageButton">
         <item name="android:tint">@color/dark_theme_tint_list</item>
+    </style>
+
+    <style name="Widget.Collect.ImageButton.MapButton" parent="Widget.AppCompat.ImageButton">
+        <item name="android:tintMode">src_in</item>
+        <item name="android:tint">@color/map_button_tint_list</item>
     </style>
 
 </resources>
