@@ -61,7 +61,7 @@ jobs:
           name: Run material unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 material:testDebug
       - run:
-          name: Run material unit tests
+          name: Run audioclips unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 audioclips:testDebug
 
       - store_artifacts:
