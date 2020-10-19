@@ -393,8 +393,14 @@ public class FormSaveViewModelTest {
         assertThat(saveResult.getValue(), equalTo(null));
     }
 
+    //region QuestionMediaManager implementation
+
+    /**
+     * Covers clearing an answer, adding a new answer and then clearing again - we'd never need
+     * to restore the new answer file in this case.
+     */
     @Test
-    public void deleteAnswerFile_whenFileHasAlreadyBeenDeleted_actuallyDeletesNewFile() {
+    public void deleteAnswerFile_whenAnswerFileHasAlreadyBeenDeleted_actuallyDeletesNewFile() {
         viewModel.deleteAnswerFile("index", "blah1");
         viewModel.deleteAnswerFile("index", "blah2");
 
@@ -402,7 +408,7 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void deleteAnswerFile_whenFileHasAlreadyBeenDeleted_onRecreatingViewModel_actuallyDeletesNewFile() {
+    public void deleteAnswerFile_whenAnswerFileHasAlreadyBeenDeleted_onRecreatingViewModel_actuallyDeletesNewFile() {
         viewModel.deleteAnswerFile("index", "blah1");
 
         FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null);
@@ -412,8 +418,12 @@ public class FormSaveViewModelTest {
         verify(mediaUtils).deleteImageFileFromMediaProvider("blah2");
     }
 
+    /**
+     * Covers replacing an answer, and then replacing an answer again - we'd never need
+     * to restore the first replacement in this case
+     */
     @Test
-    public void replaceAnswerFile_whenFileHasAlreadyBeenReplaced_deletesPreviousReplacement() {
+    public void replaceAnswerFile_whenAnswerFileHasAlreadyBeenReplaced_deletesPreviousReplacement() {
         viewModel.replaceAnswerFile("index", "blah1");
         viewModel.replaceAnswerFile("index", "blah2");
 
@@ -421,7 +431,7 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void replaceAnswerFile_whenFileHasAlreadyBeenReplaced_afterRecreatingViewModel_deletesPreviousReplacement() {
+    public void replaceAnswerFile_whenAnswerFileHasAlreadyBeenReplaced_afterRecreatingViewModel_deletesPreviousReplacement() {
         viewModel.replaceAnswerFile("index", "blah1");
 
         FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null);
@@ -439,6 +449,8 @@ public class FormSaveViewModelTest {
         File answerFile = viewModel.getAnswerFile("answer.file");
         assertThat(answerFile, is(new File(tempDir, "answer.file")));
     }
+
+    //endregion
 
     @Test
     public void ignoreChanges_whenFormControllerNotSet_doesNothing() {
