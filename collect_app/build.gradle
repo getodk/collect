@@ -68,7 +68,7 @@ def googleMapsApiKey = secrets.getProperty('GOOGLE_MAPS_API_KEY', '')
 def mapboxToken = secrets.getProperty('MAPBOX_ACCESS_TOKEN', '')
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion rootProject.androidCompileSdk
 
     viewBinding {
         enabled = true
@@ -76,8 +76,8 @@ android {
 
     defaultConfig {
         applicationId('org.odk.collect.android')
-        minSdkVersion 21
-        targetSdkVersion 28
+        minSdkVersion rootProject.androidMinSdk
+        targetSdkVersion rootProject.androidTargetSdk
         versionCode LEGACY_BUILD_NUMBER_OFFSET + getMasterCommitCount()
         versionName getVersionName()
         testInstrumentationRunner('androidx.test.runner.AndroidJUnitRunner')
@@ -317,6 +317,7 @@ dependencies {
     implementation "com.jakewharton.rxrelay2:rxrelay:2.1.1"
 
     implementation project(':nbi-stubs')
+    implementation project(':strings')
     implementation project(':material')
     implementation project(':async')
 
