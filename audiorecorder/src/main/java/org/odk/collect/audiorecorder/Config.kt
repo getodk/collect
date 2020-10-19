@@ -7,26 +7,26 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
-import org.odk.collect.audiorecorder.recording.AudioRecorderActivity
 import org.odk.collect.audiorecorder.recorder.MediaRecorderRecorder
 import org.odk.collect.audiorecorder.recorder.RealMediaRecorderWrapper
 import org.odk.collect.audiorecorder.recorder.Recorder
+import org.odk.collect.audiorecorder.recording.AudioRecorderActivity
 
 private var _component: AudioRecorderDependencyComponent? = null
 
 internal fun Application.overrideDependencies(module: AudioRecorderDependencyModule) {
     _component = DaggerAudioRecorderDependencyComponent.builder()
-            .application(this)
-            .dependencyModule(module)
-            .build()
+        .application(this)
+        .dependencyModule(module)
+        .build()
 }
 
 internal fun Activity.getComponent(): AudioRecorderDependencyComponent {
     return _component.let {
         if (it == null) {
             val newComponent = DaggerAudioRecorderDependencyComponent.builder()
-                    .application(application)
-                    .build()
+                .application(application)
+                .build()
 
             _component = newComponent
             newComponent

@@ -3,7 +3,6 @@ package org.odk.collect.audiorecorder.recorder
 import android.media.MediaRecorder
 import java.io.File
 
-
 internal class MediaRecorderRecorder(private val cacheDir: File, private val mediaRecorderFactory: () -> MediaRecorderWrapper) : Recorder {
 
     private var mediaRecorder: MediaRecorderWrapper? = null

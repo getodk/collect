@@ -8,7 +8,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.core.app.launchActivity
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlinx.android.synthetic.main.activity_audio_recorder.*
+import kotlinx.android.synthetic.main.activity_audio_recorder.done
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Before
@@ -26,11 +26,13 @@ class AudioRecorderActivityTest {
 
     @Before
     fun setup() {
-        getApplicationContext<Application>().overrideDependencies(object : AudioRecorderDependencyModule() {
-            override fun providesRecorder(application: Application): Recorder {
-                return fakeRecorder
+        getApplicationContext<Application>().overrideDependencies(
+            object : AudioRecorderDependencyModule() {
+                override fun providesRecorder(application: Application): Recorder {
+                    return fakeRecorder
+                }
             }
-        })
+        )
     }
 
     @Test

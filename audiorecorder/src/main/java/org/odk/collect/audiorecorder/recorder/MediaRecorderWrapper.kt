@@ -60,5 +60,4 @@ class RealMediaRecorderWrapper(private val mediaRecorder: MediaRecorder) : Media
     override fun release() {
         mediaRecorder.release()
     }
-
 }

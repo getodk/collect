@@ -6,9 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.activity_audio_recorder.*
+import kotlinx.android.synthetic.main.activity_audio_recorder.done
 import org.odk.collect.audiorecorder.R
 import org.odk.collect.audiorecorder.getComponent
 import org.odk.collect.audiorecorder.recorder.Recorder
@@ -32,9 +30,12 @@ class AudioRecorderActivity : AppCompatActivity() {
 
         done.setOnClickListener {
             val recording = viewModel.stop()
-            setResult(Activity.RESULT_OK, Intent().also {
-                it.data = Uri.parse(recording.absolutePath)
-            })
+            setResult(
+                Activity.RESULT_OK,
+                Intent().also {
+                    it.data = Uri.parse(recording.absolutePath)
+                }
+            )
 
             finish()
         }

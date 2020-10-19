@@ -211,7 +211,7 @@ private class FakeMediaRecorderWrapper : MediaRecorderWrapper {
     }
 
     fun isReleased(): Boolean {
-        return released;
+        return released
     }
 
     fun getAudioEncodingSampleRate(): Int? {
