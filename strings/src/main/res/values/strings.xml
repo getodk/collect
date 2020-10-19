@@ -706,4 +706,6 @@
     <string name="failure">Failure</string>
     <string name="form_update_succeeded">Form update succeeded</string>
     <string name="in_app_recording">Use in-app audio recording</string>
+    <string name="stop_recording">Stop recording</string>
+    <string name="recording">Recording…</string>
 </resources>
