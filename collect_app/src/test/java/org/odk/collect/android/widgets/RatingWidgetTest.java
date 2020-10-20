@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithQuestionAndAnswer;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndQuestion;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndQuestionDef;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 
 @RunWith(RobolectricTestRunner.class)
@@ -43,7 +43,7 @@ public class RatingWidgetTest {
 
     @Test
     public void usingReadOnly_makesAllClickableElementsDisabled() {
-        RatingWidget widget = createWidget(promptWithReadOnlyAndQuestion(rangeQuestion));
+        RatingWidget widget = createWidget(promptWithReadOnlyAndQuestionDef(rangeQuestion));
         assertThat(widget.binding.ratingBar1.isEnabled(), equalTo(false));
         assertThat(widget.binding.ratingBar2.isEnabled(), equalTo(false));
     }
@@ -51,7 +51,7 @@ public class RatingWidgetTest {
     @Test
     public void ratingWidgetShowsCorrectViewForLessNumberOfStars() {
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.valueOf(4));
-        RatingWidget widget = createWidget(promptWithReadOnlyAndQuestion(rangeQuestion));
+        RatingWidget widget = createWidget(promptWithReadOnlyAndQuestionDef(rangeQuestion));
 
         assertThat(widget.binding.ratingBar1.getNumStars(), equalTo(4));
         assertThat(widget.binding.ratingBar1.getMax(), equalTo(4));
@@ -61,7 +61,7 @@ public class RatingWidgetTest {
     @Test
     public void ratingWidgetShowsCorrectViewForMoreNumberOfStars() {
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.valueOf(8));
-        RatingWidget widget = createWidget(promptWithReadOnlyAndQuestion(rangeQuestion));
+        RatingWidget widget = createWidget(promptWithReadOnlyAndQuestionDef(rangeQuestion));
 
         assertThat(widget.binding.ratingBar1.getNumStars(), equalTo(5));
         assertThat(widget.binding.ratingBar1.getMax(), equalTo(5));
@@ -72,7 +72,7 @@ public class RatingWidgetTest {
 
     @Test
     public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsNull() {
-        assertThat(createWidget(promptWithReadOnlyAndQuestion(rangeQuestion)).getAnswer(), nullValue());
+        assertThat(createWidget(promptWithReadOnlyAndQuestionDef(rangeQuestion)).getAnswer(), nullValue());
     }
 
     @Test

@@ -22,8 +22,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsSeekBar;
 
-import androidx.core.content.ContextCompat;
-
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
