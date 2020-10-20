@@ -30,9 +30,9 @@ import java.lang.reflect.Field;
 import timber.log.Timber;
 
 public class FixedDatePickerDialog extends DialogFragment {
-    public static final String CURRENT_DATE = "DATE";
+    public static final String CURRENT_DATE = "CURRENT_DATE";
     public static final String DATE_PICKER_DETAILS = "DATE_PICKER_DETAILS";
-    public static final String THEME = "THEME";
+    public static final String DATE_PICKER_THEME = "DATE_PICKER_THEME";
 
     private DatePickerDialog.OnDateSetListener listener;
     private ThemeUtils themeUtils;
@@ -52,7 +52,7 @@ public class FixedDatePickerDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         LocalDateTime date = (LocalDateTime) getArguments().getSerializable(CURRENT_DATE);
-        int theme = getArguments().getInt(THEME);
+        int theme = getArguments().getInt(DATE_PICKER_THEME);
 
         DatePickerDialog dialog = new DatePickerDialog(requireActivity(), theme, listener,
                 date.toDate().getYear(), date.toDate().getMonth(), date.toDate().getDay());

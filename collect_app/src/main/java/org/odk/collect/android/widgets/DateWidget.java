@@ -48,7 +48,7 @@ import java.util.Date;
 import static org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog.DATE_PICKER_DIALOG;
 import static org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog.CURRENT_DATE;
 import static org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog.DATE_PICKER_DETAILS;
-import static org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog.THEME;
+import static org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog.DATE_PICKER_THEME;
 
 @SuppressLint("ViewConstructor")
 public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
@@ -187,7 +187,7 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
                 break;
             default:
                 Bundle bundle = new Bundle();
-                bundle.putInt(THEME, getTheme());
+                bundle.putInt(DATE_PICKER_THEME, getTheme());
                 bundle.putSerializable(CURRENT_DATE, date);
                 bundle.putSerializable(DATE_PICKER_DETAILS, datePickerDetails);
 
