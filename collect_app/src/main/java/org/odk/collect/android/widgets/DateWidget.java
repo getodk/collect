@@ -60,8 +60,11 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
         } else {
             binding.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
             binding.widgetButton.setText(getContext().getString(R.string.select_date));
-            binding.widgetButton.setOnClickListener(v -> DateTimeWidgetUtils.showDatePickerDialog(
-                    (FormEntryActivity) getContext(), prompt.getIndex(), datePickerDetails, selectedDate));
+            binding.widgetButton.setOnClickListener(v -> {
+                DateTimeWidgetUtils.setWidgetWaitingForData(prompt.getIndex());
+                DateTimeWidgetUtils.showDatePickerDialog((FormEntryActivity) getContext(),
+                        prompt.getIndex(), datePickerDetails, selectedDate);
+            });
         }
         binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 

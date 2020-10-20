@@ -65,10 +65,14 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
             binding.dateWidget.widgetButton.setText(getContext().getString(R.string.select_date));
             binding.timeWidget.widgetButton.setText(getContext().getString(R.string.select_time));
 
-            binding.dateWidget.widgetButton.setOnClickListener(v -> DateTimeWidgetUtils.showDatePickerDialog(
-                    (FormEntryActivity) context, prompt.getIndex(), datePickerDetails, selectedDate));
-            binding.timeWidget.widgetButton.setOnClickListener(v ->
-                    DateTimeWidgetUtils.showTimePickerDialog((FormEntryActivity) getContext(), selectedTime));
+            binding.dateWidget.widgetButton.setOnClickListener(v -> {
+                DateTimeWidgetUtils.setWidgetWaitingForData(prompt.getIndex());
+                DateTimeWidgetUtils.showDatePickerDialog((FormEntryActivity) context, prompt.getIndex(), datePickerDetails, selectedDate);
+            });
+            binding.timeWidget.widgetButton.setOnClickListener(v -> {
+                DateTimeWidgetUtils.setWidgetWaitingForData(prompt.getIndex());
+                DateTimeWidgetUtils.showTimePickerDialog((FormEntryActivity) getContext(), selectedTime);
+            });
         }
         binding.dateWidget.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.timeWidget.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);

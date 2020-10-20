@@ -75,7 +75,6 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.jetbrains.annotations.NotNull;
-import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
@@ -108,7 +107,6 @@ import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
-import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
@@ -154,7 +152,6 @@ import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.DateTimeWidget;
-import org.odk.collect.android.widgets.DateWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangePickerDecimalWidget;
 import org.odk.collect.android.widgets.RangePickerIntegerWidget;
@@ -163,7 +160,6 @@ import org.odk.collect.android.widgets.utilities.FormControllerWaitingForDataReg
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.AudioClipViewModel;
-import org.odk.collect.android.widgets.TimeWidget;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -213,9 +209,8 @@ import static org.odk.collect.android.utilities.ToastUtils.showShortToast;
 public class FormEntryActivity extends CollectAbstractActivity implements AnimationListener,
         FormLoaderListener, AdvanceToNextListener, SwipeHandler.OnSwipeListener,
         SavePointListener, NumberPickerDialog.NumberPickerListener,
-        CustomDatePickerDialog.CustomDatePickerDialogListener, RankingWidgetDialog.RankingListener,
-        SaveFormIndexTask.SaveFormIndexListener, WidgetValueChangedListener,
-        ScreenContext, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
+        RankingWidgetDialog.RankingListener, SaveFormIndexTask.SaveFormIndexListener,
+        WidgetValueChangedListener, ScreenContext, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
         AudioControllerView.SwipableParent, FormIndexAnimationHandler.Listener,
         QuitFormDialogFragment.Listener, DeleteRepeatDialogFragment.DeleteRepeatDialogCallback,
         SelectMinimalDialog.SelectMinimalDialogListener, DatePickerDialog.OnDateSetListener,
@@ -711,44 +706,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         } catch (Exception e) {
             Timber.e("Could not schedule SavePointTask. Perhaps a lot of swiping is taking place?");
-        }
-    }
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        if (currentView != null) {
-            for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
-                if (qw instanceof DateWidget) {
-                    ((DateWidget) qw).setData(DateTimeUtils.getLocalDateTime(
-                            year, month + 1, dayOfMonth, 0, 0));
-                    widgetValueChanged(qw);
-                    return;
-                } else if (qw instanceof DateTimeWidget) {
-                    ((DateTimeWidget) qw).setData(DateTimeUtils.getLocalDateTime(
-                            year, month + 1, dayOfMonth, 0, 0));
-                    widgetValueChanged(qw);
-                    return;
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        if (currentView != null) {
-            for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
-                if (qw instanceof TimeWidget) {
-                    view.clearFocus();
-                    ((TimeWidget) qw).setData(DateTimeUtils.getDateTime(hourOfDay, minute));
-                    widgetValueChanged(qw);
-                    return;
-                } else if (qw instanceof DateTimeWidget) {
-                    view.clearFocus();
-                    ((DateTimeWidget) qw).setData(DateTimeUtils.getDateTime(hourOfDay, minute));
-                    widgetValueChanged(qw);
-                    return;
-                }
-            }
         }
     }
 
@@ -2634,11 +2591,20 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     @Override
-    public void onDateChanged(LocalDateTime date) {
-        ODKView odkView = getCurrentViewIfODKView();
-        if (odkView != null) {
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        if (getCurrentViewIfODKView() != null) {
             QuestionWidget widgetGettingNewValue = getWidgetWaitingForBinaryData();
-            setBinaryWidgetData(date);
+            setBinaryWidgetData(DateTimeUtils.getLocalDateTime(
+                    year, month + 1, dayOfMonth, 0, 0));
+            widgetValueChanged(widgetGettingNewValue);
+        }
+    }
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        if (getCurrentViewIfODKView() != null) {
+            QuestionWidget widgetGettingNewValue = getWidgetWaitingForBinaryData();
+            setBinaryWidgetData(DateTimeUtils.getDateTime(hourOfDay, minute));
             widgetValueChanged(widgetGettingNewValue);
         }
     }

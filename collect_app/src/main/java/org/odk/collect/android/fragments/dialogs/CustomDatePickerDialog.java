@@ -16,22 +16,21 @@
 
 package org.odk.collect.android.fragments.dialogs;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AlertDialog;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
-import org.javarosa.core.model.FormIndex;
 import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.GregorianChronology;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.DatePickerDetails;
-import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
@@ -45,17 +44,13 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
 
     private TextView gregorianDateText;
 
-    private CustomDatePickerDialogListener listener;
-
-    public interface CustomDatePickerDialogListener {
-        void onDateChanged(LocalDateTime date);
-    }
+    private DatePickerDialog.OnDateSetListener listener;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof CustomDatePickerDialogListener) {
-            listener = (CustomDatePickerDialogListener) context;
+        if (context instanceof DatePickerDialog.OnDateSetListener) {
+            listener = (DatePickerDialog.OnDateSetListener) context;
         }
     }
 
@@ -65,11 +60,8 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
                 .setTitle(R.string.select_date)
                 .setView(R.layout.custom_date_picker_dialog)
                 .setPositiveButton(R.string.ok, (dialog, id) -> {
-                    FormController formController = Collect.getInstance().getFormController();
-                    if (formController != null) {
-                        formController.setIndexWaitingForData((FormIndex) getArguments().getSerializable(DateTimeWidgetUtils.FORM_INDEX));
-                    }
-                    listener.onDateChanged(getDateAsGregorian(getOriginalDate()));
+                    LocalDateTime date = getDateAsGregorian(getOriginalDate());
+                    listener.onDateSet((DatePicker) getView(), date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
                     dismiss();
                 })
                 .setNegativeButton(R.string.cancel, (dialog, id) -> dismiss())

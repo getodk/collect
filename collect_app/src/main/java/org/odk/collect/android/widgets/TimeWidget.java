@@ -53,8 +53,10 @@ public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
         } else {
             binding.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
             binding.widgetButton.setText(getContext().getString(R.string.select_time));
-            binding.widgetButton.setOnClickListener(v -> DateTimeWidgetUtils.showTimePickerDialog(
-                    (FormEntryActivity) getContext(), selectedTime));
+            binding.widgetButton.setOnClickListener(v -> {
+                DateTimeWidgetUtils.setWidgetWaitingForData(prompt.getIndex());
+                DateTimeWidgetUtils.showTimePickerDialog((FormEntryActivity) getContext(), selectedTime);
+            });
         }
         binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
