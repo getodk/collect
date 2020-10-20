@@ -58,16 +58,16 @@ public class DateTimeWidgetTest {
     public void usingReadOnlyOption_doesNotShowButtons() {
         DateTimeWidget widget = createWidget(promptWithReadOnlyAndQuestionDef(questionDef));
 
-        assertEquals(widget.binding.dateWidget.widgetButton.getVisibility(), View.GONE);
-        assertEquals(widget.binding.timeWidget.widgetButton.getVisibility(), View.GONE);
+        assertEquals(widget.binding.dateWidget.dateButton.getVisibility(), View.GONE);
+        assertEquals(widget.binding.timeWidget.timeButton.getVisibility(), View.GONE);
     }
 
     @Test
     public void whenPromptIsNotReadOnly_buttonShowsCorrectText() {
         DateTimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
 
-        assertEquals(widget.binding.dateWidget.widgetButton.getText(), widget.getContext().getString(R.string.select_date));
-        assertEquals(widget.binding.timeWidget.widgetButton.getText(), widget.getContext().getString(R.string.select_time));
+        assertEquals(widget.binding.dateWidget.dateButton.getText(), widget.getContext().getString(R.string.select_date));
+        assertEquals(widget.binding.timeWidget.timeButton.getText(), widget.getContext().getString(R.string.select_time));
     }
 
     @Test
@@ -78,7 +78,7 @@ public class DateTimeWidgetTest {
     @Test
     public void getAnswer_whenPromptHasDateAnswer_returnsDateAnswerAndCurrentTime() {
         DateTimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new DateTimeData(localDateTime.toDate())));
-        widget.binding.timeWidget.widgetAnswerText.setText(widget.getContext().getString(R.string.no_time_selected));
+        widget.binding.timeWidget.timeAnswerText.setText(widget.getContext().getString(R.string.no_time_selected));
 
         assertEquals(widget.getAnswer().getDisplayText(),
                 new DateTimeData(DateTimeUtils.getSelectedDate(localDateTime, LocalDateTime.now()).toDate()).getDisplayText());
@@ -87,7 +87,7 @@ public class DateTimeWidgetTest {
     @Test
     public void getAnswer_whenPromptHasTimeAnswer_returnsTimeAnswerAndCurrentDate() {
         DateTimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new DateTimeData(localDateTime.toDate())));
-        widget.binding.dateWidget.widgetAnswerText.setText(widget.getContext().getString(R.string.no_date_selected));
+        widget.binding.dateWidget.dateAnswerText.setText(widget.getContext().getString(R.string.no_date_selected));
 
         assertEquals(widget.getAnswer().getDisplayText(),
                 new DateTimeData(DateTimeUtils.getSelectedTime(localDateTime, LocalDateTime.now()).toDate()).getDisplayText());
@@ -103,8 +103,8 @@ public class DateTimeWidgetTest {
     public void whenPromptDoesNotHaveAnswer_answerTextViewShowsNoValueSelected() {
         DateTimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
 
-        assertEquals(widget.binding.dateWidget.widgetAnswerText.getText(), widget.getContext().getString(R.string.no_date_selected));
-        assertEquals(widget.binding.timeWidget.widgetAnswerText.getText(), widget.getContext().getString(R.string.no_time_selected));
+        assertEquals(widget.binding.dateWidget.dateAnswerText.getText(), widget.getContext().getString(R.string.no_date_selected));
+        assertEquals(widget.binding.timeWidget.timeAnswerText.getText(), widget.getContext().getString(R.string.no_time_selected));
     }
 
     @Test
@@ -113,16 +113,16 @@ public class DateTimeWidgetTest {
         DatePickerDetails datePickerDetails = DateTimeWidgetUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
         DateTimeWidget widget = createWidget(prompt);
 
-        assertEquals(widget.binding.dateWidget.widgetAnswerText.getText(),
+        assertEquals(widget.binding.dateWidget.dateAnswerText.getText(),
                 DateTimeWidgetUtils.getDateTimeLabel(localDateTime.toDate(), datePickerDetails, false, widget.getContext()));
-        assertEquals(widget.binding.timeWidget.widgetAnswerText.getText(), DateTimeUtils.getTimeData(localDateTime.toDateTime()).getDisplayText());
+        assertEquals(widget.binding.timeWidget.timeAnswerText.getText(), DateTimeUtils.getTimeData(localDateTime.toDateTime()).getDisplayText());
     }
 
     @Test
     public void clickingSetDateButton_callsDisplayDatePickerDialogWithCurrentDate_whenPromptDoesNotHaveAnswer() {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, null);
         DateTimeWidget widget = createWidget(prompt);
-        widget.binding.dateWidget.widgetButton.performClick();
+        widget.binding.dateWidget.dateButton.performClick();
 
         verify(widgetUtils).showDatePickerDialog(widgetActivity, DateTimeWidgetUtils.getDatePickerDetails(
                 prompt.getQuestion().getAppearanceAttr()), DateTimeUtils.getCurrentDateTime());
@@ -132,7 +132,7 @@ public class DateTimeWidgetTest {
     public void clickingSetTimeButton_callsDisplayTimePickerDialogWithCurrentTime_whenPromptDoesNotHaveAnswer() {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, null);
         DateTimeWidget widget = createWidget(prompt);
-        widget.binding.timeWidget.widgetButton.performClick();
+        widget.binding.timeWidget.timeButton.performClick();
 
         verify(widgetUtils).showTimePickerDialog(widgetActivity, DateTimeUtils.getCurrentDateTime());
     }
@@ -141,7 +141,7 @@ public class DateTimeWidgetTest {
     public void clickingSetDateButton_callsDisplayDatePickerDialogWithSelectedDate_whenPromptHasAnswer() {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, new DateData(localDateTime.toDate()));
         DateTimeWidget widget = createWidget(prompt);
-        widget.binding.dateWidget.widgetButton.performClick();
+        widget.binding.dateWidget.dateButton.performClick();
 
         verify(widgetUtils).showDatePickerDialog(widgetActivity, DateTimeWidgetUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr()),
                 DateTimeUtils.getSelectedDate(localDateTime, new LocalDateTime().withTime(0, 0, 0, 0)));
@@ -151,7 +151,7 @@ public class DateTimeWidgetTest {
     public void clickingSetTimeButton_callsDisplayTimePickerDialogWithSelectedTime_whenPromptHasAnswer() {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, new TimeData(localDateTime.toDateTime().toDate()));
         DateTimeWidget widget = createWidget(prompt);
-        widget.binding.timeWidget.widgetButton.performClick();
+        widget.binding.timeWidget.timeButton.performClick();
 
         verify(widgetUtils).showTimePickerDialog(widgetActivity, localDateTime);
     }
@@ -162,8 +162,8 @@ public class DateTimeWidgetTest {
         widget.clearAnswer();
 
         assertThat(widget.getAnswer(), nullValue());
-        assertEquals(widget.binding.dateWidget.widgetAnswerText.getText(), widget.getContext().getString(R.string.no_date_selected));
-        assertEquals(widget.binding.timeWidget.widgetAnswerText.getText(), widget.getContext().getString(R.string.no_time_selected));
+        assertEquals(widget.binding.dateWidget.dateAnswerText.getText(), widget.getContext().getString(R.string.no_date_selected));
+        assertEquals(widget.binding.timeWidget.timeAnswerText.getText(), widget.getContext().getString(R.string.no_time_selected));
     }
 
     @Test
@@ -180,11 +180,11 @@ public class DateTimeWidgetTest {
         DateTimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
         widget.setOnLongClickListener(onLongClickListener);
 
-        widget.binding.dateWidget.widgetButton.performLongClick();
-        widget.binding.timeWidget.widgetButton.performLongClick();
+        widget.binding.dateWidget.dateButton.performLongClick();
+        widget.binding.timeWidget.timeButton.performLongClick();
 
-        verify(onLongClickListener).onLongClick(widget.binding.dateWidget.widgetButton);
-        verify(onLongClickListener).onLongClick(widget.binding.timeWidget.widgetButton);
+        verify(onLongClickListener).onLongClick(widget.binding.dateWidget.dateButton);
+        verify(onLongClickListener).onLongClick(widget.binding.timeWidget.timeButton);
     }
 
     @Test
@@ -192,11 +192,11 @@ public class DateTimeWidgetTest {
         DateTimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
         widget.setOnLongClickListener(onLongClickListener);
 
-        widget.binding.dateWidget.widgetAnswerText.performLongClick();
-        widget.binding.timeWidget.widgetAnswerText.performLongClick();
+        widget.binding.dateWidget.dateAnswerText.performLongClick();
+        widget.binding.timeWidget.timeAnswerText.performLongClick();
 
-        verify(onLongClickListener).onLongClick(widget.binding.dateWidget.widgetAnswerText);
-        verify(onLongClickListener).onLongClick(widget.binding.timeWidget.widgetAnswerText);
+        verify(onLongClickListener).onLongClick(widget.binding.dateWidget.dateAnswerText);
+        verify(onLongClickListener).onLongClick(widget.binding.timeWidget.timeAnswerText);
     }
 
     @Test
@@ -206,7 +206,7 @@ public class DateTimeWidgetTest {
         DateTimeWidget widget = createWidget(prompt);
         widget.setData(new LocalDateTime().withDate(2010, 5, 12));
 
-        assertEquals(widget.binding.dateWidget.widgetAnswerText.getText(),
+        assertEquals(widget.binding.dateWidget.dateAnswerText.getText(),
                 DateTimeWidgetUtils.getDateTimeLabel(localDateTime.toDate(), datePickerDetails, false, widget.getContext()));
     }
 
@@ -224,7 +224,7 @@ public class DateTimeWidgetTest {
     public void setTimeData_updatesValueShownInTimeAnswerTextView() {
         DateTimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
         widget.setData(new DateTime().withTime(12, 10, 0, 0));
-        assertEquals(widget.binding.timeWidget.widgetAnswerText.getText(), DateTimeUtils.getTimeData(localDateTime.toDateTime()).getDisplayText());
+        assertEquals(widget.binding.timeWidget.timeAnswerText.getText(), DateTimeUtils.getTimeData(localDateTime.toDateTime()).getDisplayText());
     }
 
     @Test

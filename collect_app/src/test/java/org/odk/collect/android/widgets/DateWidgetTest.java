@@ -52,13 +52,13 @@ public class DateWidgetTest {
     @Test
     public void usingReadOnlyOption_doesNotShowButton() {
         DateWidget widget = createWidget(promptWithReadOnlyAndQuestionDef(questionDef));
-        assertEquals(widget.binding.widgetButton.getVisibility(), View.GONE);
+        assertEquals(widget.binding.dateButton.getVisibility(), View.GONE);
     }
 
     @Test
     public void whenPromptIsNotReadOnly_buttonShowsCorrectText() {
         DateWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
-        assertEquals(widget.binding.widgetButton.getText(), widget.getContext().getString(R.string.select_date));
+        assertEquals(widget.binding.dateButton.getText(), widget.getContext().getString(R.string.select_date));
     }
 
     @Test
@@ -75,7 +75,7 @@ public class DateWidgetTest {
     @Test
     public void whenPromptDoesNotHaveAnswer_answerTextViewShowsNoDateSelected() {
         DateWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
-        assertEquals(widget.binding.widgetAnswerText.getText(), widget.getContext().getString(R.string.no_date_selected));
+        assertEquals(widget.binding.dateAnswerText.getText(), widget.getContext().getString(R.string.no_date_selected));
     }
 
     @Test
@@ -84,7 +84,7 @@ public class DateWidgetTest {
         DatePickerDetails datePickerDetails = DateTimeWidgetUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
         DateWidget widget = createWidget(prompt);
 
-        assertEquals(widget.binding.widgetAnswerText.getText(),
+        assertEquals(widget.binding.dateAnswerText.getText(),
                 DateTimeWidgetUtils.getDateTimeLabel(dateAnswer.toDate(), datePickerDetails, false, widget.getContext()));
     }
 
@@ -92,7 +92,7 @@ public class DateWidgetTest {
     public void clickingButton_callsDisplayDatePickerDialogWithCurrentDate_whenPromptDoesNotHaveAnswer() {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, null);
         DateWidget widget = createWidget(prompt);
-        widget.binding.widgetButton.performClick();
+        widget.binding.dateButton.performClick();
 
         verify(widgetUtils).showDatePickerDialog(widgetActivity, DateTimeWidgetUtils.getDatePickerDetails(
                 prompt.getQuestion().getAppearanceAttr()), DateTimeUtils.getCurrentDateTime());
@@ -102,7 +102,7 @@ public class DateWidgetTest {
     public void clickingButton_callsDisplayDatePickerDialogWithSelectedDate_whenPromptHasAnswer() {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, new DateData(dateAnswer.toDate()));
         DateWidget widget = createWidget(prompt);
-        widget.binding.widgetButton.performClick();
+        widget.binding.dateButton.performClick();
 
         verify(widgetUtils).showDatePickerDialog(widgetActivity, DateTimeWidgetUtils.getDatePickerDetails(
                 prompt.getQuestion().getAppearanceAttr()), dateAnswer);
@@ -112,7 +112,7 @@ public class DateWidgetTest {
     public void clearAnswer_clearsWidgetAnswer() {
         DateWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
         widget.clearAnswer();
-        assertEquals(widget.binding.widgetAnswerText.getText(), widget.getContext().getString(R.string.no_date_selected));
+        assertEquals(widget.binding.dateAnswerText.getText(), widget.getContext().getString(R.string.no_date_selected));
     }
 
     @Test
@@ -128,11 +128,11 @@ public class DateWidgetTest {
     public void clickingButtonAndAnswerTextViewForLong_callsLongClickListener() {
         DateWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new DateData(dateAnswer.toDate())));
         widget.setOnLongClickListener(onLongClickListener);
-        widget.binding.widgetButton.performLongClick();
-        widget.binding.widgetAnswerText.performLongClick();
+        widget.binding.dateButton.performLongClick();
+        widget.binding.dateAnswerText.performLongClick();
 
-        verify(onLongClickListener).onLongClick(widget.binding.widgetButton);
-        verify(onLongClickListener).onLongClick(widget.binding.widgetAnswerText);
+        verify(onLongClickListener).onLongClick(widget.binding.dateButton);
+        verify(onLongClickListener).onLongClick(widget.binding.dateAnswerText);
     }
 
     @Test
@@ -149,7 +149,7 @@ public class DateWidgetTest {
         DateWidget widget = createWidget(prompt);
         widget.setData(dateAnswer);
 
-        assertEquals(widget.binding.widgetAnswerText.getText(),
+        assertEquals(widget.binding.dateAnswerText.getText(),
                 DateTimeWidgetUtils.getDateTimeLabel(dateAnswer.toDate(), datePickerDetails, false, widget.getContext()));
     }
 

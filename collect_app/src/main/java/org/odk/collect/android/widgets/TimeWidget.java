@@ -27,7 +27,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
-import org.odk.collect.android.databinding.WidgetAnswerBinding;
+import org.odk.collect.android.databinding.TimeWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
@@ -35,7 +35,7 @@ import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
 @SuppressLint("ViewConstructor")
 public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
-    WidgetAnswerBinding binding;
+    TimeWidgetAnswerBinding binding;
 
     private final DateTimeWidgetUtils widgetUtils;
 
@@ -48,28 +48,26 @@ public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        binding = WidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
+        binding = TimeWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
         if (prompt.isReadOnly()) {
-            binding.widgetButton.setVisibility(GONE);
+            binding.timeButton.setVisibility(GONE);
         } else {
-            binding.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-            binding.widgetButton.setText(getContext().getString(R.string.select_time));
+            binding.timeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-            binding.widgetButton.setOnClickListener(v -> {
+            binding.timeButton.setOnClickListener(v -> {
                 DateTimeWidgetUtils.setWidgetWaitingForData(prompt.getIndex());
                 widgetUtils.showTimePickerDialog(context, selectedTime);
             });
         }
-        binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.timeAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         if (prompt.getAnswerValue() == null) {
             selectedTime = DateTimeUtils.getCurrentDateTime();
-            binding.widgetAnswerText.setText(R.string.no_time_selected);
         } else {
             DateTime dateTime = new DateTime(getFormEntryPrompt().getAnswerValue().getValue());
             selectedTime = DateTimeUtils.getSelectedTime(dateTime.toLocalDateTime(), LocalDateTime.now());
-            binding.widgetAnswerText.setText(DateTimeUtils.getTimeData(dateTime).getDisplayText());
+            binding.timeAnswerText.setText(DateTimeUtils.getTimeData(dateTime).getDisplayText());
         }
 
         return binding.getRoot();
@@ -78,35 +76,35 @@ public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
     @Override
     public void clearAnswer() {
         selectedTime = DateTimeUtils.getCurrentDateTime();
-        binding.widgetAnswerText.setText(R.string.no_time_selected);
+        binding.timeAnswerText.setText(R.string.no_time_selected);
         widgetValueChanged();
     }
 
     @Override
     public IAnswerData getAnswer() {
-        return binding.widgetAnswerText.getText().equals(getContext().getString(R.string.no_time_selected))
+        return binding.timeAnswerText.getText().equals(getContext().getString(R.string.no_time_selected))
                 ? null
                 : new TimeData(selectedTime.toDateTime().toDate());
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        binding.widgetButton.setOnLongClickListener(l);
-        binding.widgetAnswerText.setOnLongClickListener(l);
+        binding.timeButton.setOnLongClickListener(l);
+        binding.timeAnswerText.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        binding.widgetButton.cancelLongPress();
-        binding.widgetAnswerText.cancelLongPress();
+        binding.timeButton.cancelLongPress();
+        binding.timeAnswerText.cancelLongPress();
     }
 
     @Override
     public void setData(Object answer) {
         if (answer instanceof DateTime) {
             selectedTime = DateTimeUtils.getSelectedTime(((DateTime) answer).toLocalDateTime(), LocalDateTime.now());
-            binding.widgetAnswerText.setText(new TimeData(selectedTime.toDate()).getDisplayText());
+            binding.timeAnswerText.setText(new TimeData(selectedTime.toDate()).getDisplayText());
         }
     }
 }

@@ -4,11 +4,11 @@
     android:layout_height="wrap_content">
 
     <include
-        layout="@layout/widget_answer"
+        layout="@layout/date_widget_answer"
         android:id="@+id/date_widget"/>
 
     <include
-        layout="@layout/widget_answer"
+        layout="@layout/time_widget_answer"
         android:id="@+id/time_widget"/>
 
 </LinearLayout>

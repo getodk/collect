@@ -50,13 +50,13 @@ public class TimeWidgetTest {
     @Test
     public void usingReadOnlyOption_doesNotShowButton() {
         TimeWidget widget = createWidget(promptWithReadOnlyAndQuestionDef(questionDef));
-        assertEquals(widget.binding.widgetButton.getVisibility(), View.GONE);
+        assertEquals(widget.binding.timeButton.getVisibility(), View.GONE);
     }
 
     @Test
     public void whenPromptIsNotReadOnly_buttonShowsCorrectText() {
         TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
-        assertEquals(widget.binding.widgetButton.getText(), widget.getContext().getString(R.string.select_time));
+        assertEquals(widget.binding.timeButton.getText(), widget.getContext().getString(R.string.select_time));
     }
 
     @Test
@@ -73,20 +73,20 @@ public class TimeWidgetTest {
     @Test
     public void whenPromptDoesNotHaveAnswer_answerTextViewShowsNoTimeSelected() {
         TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
-        assertEquals(widget.binding.widgetAnswerText.getText(), widget.getContext().getString(R.string.no_time_selected));
+        assertEquals(widget.binding.timeAnswerText.getText(), widget.getContext().getString(R.string.no_time_selected));
     }
 
     @Test
     public void whenPromptHasAnswer_answerTextViewShowsCorrectTime() {
         TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new TimeData(timeAnswer.toDateTime().toDate())));
-        assertEquals(widget.binding.widgetAnswerText.getText(), DateTimeUtils.getTimeData(timeAnswer.toDateTime()).getDisplayText());
+        assertEquals(widget.binding.timeAnswerText.getText(), DateTimeUtils.getTimeData(timeAnswer.toDateTime()).getDisplayText());
     }
 
     @Test
     public void clickingButton_callsDisplayTimePickerDialogWithCurrentTime_whenPromptDoesNotHaveAnswer() {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, null);
         TimeWidget widget = createWidget(prompt);
-        widget.binding.widgetButton.performClick();
+        widget.binding.timeButton.performClick();
 
         verify(widgetUtils).showTimePickerDialog(widgetActivity, DateTimeUtils.getCurrentDateTime());
     }
@@ -95,7 +95,7 @@ public class TimeWidgetTest {
     public void clickingButton_callsDisplayTimePickerDialogWithSelectedTime_whenPromptHasAnswer() {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, new TimeData(timeAnswer.toDateTime().toDate()));
         TimeWidget widget = createWidget(prompt);
-        widget.binding.widgetButton.performClick();
+        widget.binding.timeButton.performClick();
 
         verify(widgetUtils).showTimePickerDialog(widgetActivity, timeAnswer);
     }
@@ -104,7 +104,7 @@ public class TimeWidgetTest {
     public void clearAnswer_clearsWidgetAnswer() {
         TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new TimeData(timeAnswer.toDateTime().toDate())));
         widget.clearAnswer();
-        assertEquals(widget.binding.widgetAnswerText.getText(), widget.getContext().getString(R.string.no_time_selected));
+        assertEquals(widget.binding.timeAnswerText.getText(), widget.getContext().getString(R.string.no_time_selected));
     }
 
     @Test
@@ -120,11 +120,11 @@ public class TimeWidgetTest {
     public void clickingButtonAndAnswerTextViewForLong_callsLongClickListener() {
         TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
         widget.setOnLongClickListener(onLongClickListener);
-        widget.binding.widgetButton.performLongClick();
-        widget.binding.widgetAnswerText.performLongClick();
+        widget.binding.timeButton.performLongClick();
+        widget.binding.timeAnswerText.performLongClick();
 
-        verify(onLongClickListener).onLongClick(widget.binding.widgetButton);
-        verify(onLongClickListener).onLongClick(widget.binding.widgetAnswerText);
+        verify(onLongClickListener).onLongClick(widget.binding.timeButton);
+        verify(onLongClickListener).onLongClick(widget.binding.timeAnswerText);
     }
 
     @Test
@@ -138,7 +138,7 @@ public class TimeWidgetTest {
     public void setData_updatesValueDisplayedInAnswerTextView() {
         TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
         widget.setData(timeAnswer.toDateTime());
-        assertEquals(widget.binding.widgetAnswerText.getText(), DateTimeUtils.getTimeData(timeAnswer.toDateTime()).getDisplayText());
+        assertEquals(widget.binding.timeAnswerText.getText(), DateTimeUtils.getTimeData(timeAnswer.toDateTime()).getDisplayText());
     }
 
     private TimeWidget createWidget(FormEntryPrompt prompt) {

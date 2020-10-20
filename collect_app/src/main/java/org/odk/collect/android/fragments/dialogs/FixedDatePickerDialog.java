@@ -41,6 +41,7 @@ public class FixedDatePickerDialog extends DialogFragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         themeUtils = new ThemeUtils(context);
+
         if (context instanceof CustomDatePickerDialog.DateChangeListener) {
             dateChangeListener = (CustomDatePickerDialog.DateChangeListener) context;
         }

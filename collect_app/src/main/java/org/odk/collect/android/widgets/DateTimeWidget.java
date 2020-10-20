@@ -58,41 +58,36 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
         datePickerDetails = DateTimeWidgetUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
 
         if (prompt.isReadOnly()) {
-            binding.dateWidget.widgetButton.setVisibility(GONE);
-            binding.timeWidget.widgetButton.setVisibility(GONE);
+            binding.dateWidget.dateButton.setVisibility(GONE);
+            binding.timeWidget.timeButton.setVisibility(GONE);
         } else {
-            binding.dateWidget.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-            binding.timeWidget.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+            binding.dateWidget.dateButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+            binding.timeWidget.timeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-            binding.dateWidget.widgetButton.setText(getContext().getString(R.string.select_date));
-            binding.timeWidget.widgetButton.setText(getContext().getString(R.string.select_time));
-
-            binding.dateWidget.widgetButton.setOnClickListener(v -> {
+            binding.dateWidget.dateButton.setOnClickListener(v -> {
                 DateTimeWidgetUtils.setWidgetWaitingForData(prompt.getIndex());
                 widgetUtils.showDatePickerDialog(context, datePickerDetails, selectedDateTime);
             });
 
-            binding.timeWidget.widgetButton.setOnClickListener(v -> {
+            binding.timeWidget.timeButton.setOnClickListener(v -> {
                 DateTimeWidgetUtils.setWidgetWaitingForData(prompt.getIndex());
                 widgetUtils.showTimePickerDialog(context, selectedDateTime);
             });
         }
-        binding.dateWidget.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-        binding.timeWidget.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.dateWidget.dateAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.timeWidget.timeAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        if (getFormEntryPrompt().getAnswerValue() == null) {
-            resetAnswerFields();
-        } else {
-            selectedDateTime = DateTimeUtils.getCurrentDateTime();
+        selectedDateTime = DateTimeUtils.getCurrentDateTime();
 
+        if (getFormEntryPrompt().getAnswerValue() != null) {
             LocalDateTime selectedDate = new LocalDateTime(getFormEntryPrompt().getAnswerValue().getValue());
             selectedDateTime = DateTimeUtils.getSelectedDate(selectedDate, selectedDateTime);
-            binding.dateWidget.widgetAnswerText.setText(DateTimeWidgetUtils.getDateTimeLabel(
+            binding.dateWidget.dateAnswerText.setText(DateTimeWidgetUtils.getDateTimeLabel(
                     selectedDate.toDate(), datePickerDetails, false, context));
 
             DateTime selectedTime = new DateTime(getFormEntryPrompt().getAnswerValue().getValue());
             selectedDateTime = DateTimeUtils.getSelectedTime(selectedTime.toLocalDateTime(), selectedDateTime);
-            binding.timeWidget.widgetAnswerText.setText(DateTimeUtils.getTimeData(selectedTime).getDisplayText());
+            binding.timeWidget.timeAnswerText.setText(DateTimeUtils.getTimeData(selectedTime).getDisplayText());
         }
 
         return binding.getRoot();
@@ -120,40 +115,40 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        binding.dateWidget.widgetButton.setOnLongClickListener(l);
-        binding.dateWidget.widgetAnswerText.setOnLongClickListener(l);
+        binding.dateWidget.dateButton.setOnLongClickListener(l);
+        binding.dateWidget.dateAnswerText.setOnLongClickListener(l);
 
-        binding.timeWidget.widgetButton.setOnLongClickListener(l);
-        binding.timeWidget.widgetAnswerText.setOnLongClickListener(l);
+        binding.timeWidget.timeButton.setOnLongClickListener(l);
+        binding.timeWidget.timeAnswerText.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        binding.dateWidget.widgetButton.cancelLongPress();
-        binding.dateWidget.widgetAnswerText.cancelLongPress();
+        binding.dateWidget.dateButton.cancelLongPress();
+        binding.dateWidget.dateAnswerText.cancelLongPress();
 
-        binding.timeWidget.widgetButton.cancelLongPress();
-        binding.timeWidget.widgetAnswerText.cancelLongPress();
+        binding.timeWidget.timeButton.cancelLongPress();
+        binding.timeWidget.timeAnswerText.cancelLongPress();
     }
 
     @Override
     public void setData(Object answer) {
         if (answer instanceof LocalDateTime) {
             selectedDateTime = DateTimeUtils.getSelectedDate((LocalDateTime) answer, selectedDateTime);
-            binding.dateWidget.widgetAnswerText.setText(DateTimeWidgetUtils.getDateTimeLabel(
+            binding.dateWidget.dateAnswerText.setText(DateTimeWidgetUtils.getDateTimeLabel(
                     selectedDateTime.toDate(), datePickerDetails, false, getContext()));
         }
         if (answer instanceof DateTime) {
             selectedDateTime = DateTimeUtils.getSelectedTime(((DateTime) answer).toLocalDateTime(), selectedDateTime);
-            binding.timeWidget.widgetAnswerText.setText(new TimeData(selectedDateTime.toDate()).getDisplayText());
+            binding.timeWidget.timeAnswerText.setText(new TimeData(selectedDateTime.toDate()).getDisplayText());
         }
     }
 
     private void resetAnswerFields() {
         selectedDateTime = DateTimeUtils.getCurrentDateTime();
-        binding.dateWidget.widgetAnswerText.setText(R.string.no_date_selected);
-        binding.timeWidget.widgetAnswerText.setText(R.string.no_time_selected);
+        binding.dateWidget.dateAnswerText.setText(R.string.no_date_selected);
+        binding.timeWidget.timeAnswerText.setText(R.string.no_time_selected);
     }
 
     private boolean isNullValue() {
@@ -163,10 +158,10 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
     }
 
     private boolean isDateNull() {
-        return binding.dateWidget.widgetAnswerText.getText().equals(getContext().getString(R.string.no_date_selected));
+        return binding.dateWidget.dateAnswerText.getText().equals(getContext().getString(R.string.no_date_selected));
     }
 
     private boolean isTimeNull() {
-        return binding.timeWidget.widgetAnswerText.getText().equals(getContext().getString(R.string.no_time_selected));
+        return binding.timeWidget.timeAnswerText.getText().equals(getContext().getString(R.string.no_time_selected));
     }
 }

@@ -25,7 +25,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
-import org.odk.collect.android.databinding.WidgetAnswerBinding;
+import org.odk.collect.android.databinding.DateWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
@@ -36,7 +36,7 @@ import java.util.Date;
 
 @SuppressLint("ViewConstructor")
 public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
-    WidgetAnswerBinding binding;
+    DateWidgetAnswerBinding binding;
 
     private final DateTimeWidgetUtils widgetUtils;
 
@@ -50,29 +50,27 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        binding = WidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
+        binding = DateWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         datePickerDetails = DateTimeWidgetUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
 
         if (prompt.isReadOnly()) {
-            binding.widgetButton.setVisibility(GONE);
+            binding.dateButton.setVisibility(GONE);
         } else {
-            binding.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-            binding.widgetButton.setText(getContext().getString(R.string.select_date));
+            binding.dateButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-            binding.widgetButton.setOnClickListener(v -> {
+            binding.dateButton.setOnClickListener(v -> {
                 DateTimeWidgetUtils.setWidgetWaitingForData(prompt.getIndex());
                 widgetUtils.showDatePickerDialog(context, datePickerDetails, selectedDate);
             });
         }
-        binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.dateAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         if (prompt.getAnswerValue() == null) {
             selectedDate = DateTimeUtils.getCurrentDateTime();
-            binding.widgetAnswerText.setText(R.string.no_date_selected);
         } else {
             selectedDate = DateTimeUtils.getSelectedDate(new LocalDateTime(getFormEntryPrompt().getAnswerValue().getValue()),
                     LocalDateTime.now());
-            binding.widgetAnswerText.setText(DateTimeWidgetUtils.getDateTimeLabel(
+            binding.dateAnswerText.setText(DateTimeWidgetUtils.getDateTimeLabel(
                     (Date) getAnswer().getValue(), datePickerDetails, false, context));
         }
 
@@ -81,28 +79,28 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
 
     @Override
     public IAnswerData getAnswer() {
-        return binding.widgetAnswerText.getText().equals(getContext().getString(R.string.no_date_selected))
+        return binding.dateAnswerText.getText().equals(getContext().getString(R.string.no_date_selected))
                 ? null
                 : new DateData(selectedDate.toDate());
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        binding.widgetButton.setOnLongClickListener(l);
-        binding.widgetAnswerText.setOnLongClickListener(l);
+        binding.dateButton.setOnLongClickListener(l);
+        binding.dateAnswerText.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        binding.widgetButton.cancelLongPress();
-        binding.widgetAnswerText.cancelLongPress();
+        binding.dateButton.cancelLongPress();
+        binding.dateAnswerText.cancelLongPress();
     }
 
     @Override
     public void clearAnswer() {
         selectedDate = DateTimeUtils.getCurrentDateTime();
-        binding.widgetAnswerText.setText(R.string.no_date_selected);
+        binding.dateAnswerText.setText(R.string.no_date_selected);
         widgetValueChanged();
     }
 
@@ -110,7 +108,7 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
     public void setData(Object answer) {
         if (answer instanceof LocalDateTime) {
             selectedDate = DateTimeUtils.getSelectedDate((LocalDateTime) answer, LocalDateTime.now());
-            binding.widgetAnswerText.setText(DateTimeWidgetUtils.getDateTimeLabel(
+            binding.dateAnswerText.setText(DateTimeWidgetUtils.getDateTimeLabel(
                     selectedDate.toDate(), datePickerDetails, false, getContext()));
         }
     }
