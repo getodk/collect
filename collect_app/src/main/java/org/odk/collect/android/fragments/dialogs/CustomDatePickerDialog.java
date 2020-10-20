@@ -38,8 +38,6 @@ import org.odk.collect.android.utilities.DateTimeUtils;
  * @author Grzegorz Orczykowski (gorczykowski@soldevelo.com)
  */
 public abstract class CustomDatePickerDialog extends DialogFragment {
-    public static final String DATE_PICKER_DIALOG = "datePickerDialog";
-
     private static final String FORM_INDEX = "formIndex";
     private static final String DATE = "date";
     private static final String DATE_PICKER_DETAILS = "datePickerDetails";

@@ -56,8 +56,8 @@ public class DateTimeWidgetTest {
     public void usingReadOnlyOption_doesNotShowButtons() {
         DateTimeWidget widget = createWidget(promptWithReadOnlyAndQuestionDef(questionDef));
 
-        assertEquals(widget.binding.dateButton.getVisibility(), View.GONE);
-        assertEquals(widget.binding.timeButton.getVisibility(), View.GONE);
+        assertEquals(widget.binding.dateWidget.widgetButton.getVisibility(), View.GONE);
+        assertEquals(widget.binding.timeWidget.widgetButton.getVisibility(), View.GONE);
     }
 
     @Test
@@ -75,8 +75,8 @@ public class DateTimeWidgetTest {
     public void whenPromptDoesNotHaveAnswer_answerTextViewShowsCorrectText() {
         DateTimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
 
-        assertEquals(widget.binding.dateAnswerText.getText(), widget.getContext().getString(R.string.no_date_selected));
-        assertEquals(widget.binding.timeAnswerText.getText(), widget.getContext().getString(R.string.no_time_selected));
+        assertEquals(widget.binding.dateWidget.widgetAnswerText.getText(), widget.getContext().getString(R.string.no_date_selected));
+        assertEquals(widget.binding.timeWidget.widgetAnswerText.getText(), widget.getContext().getString(R.string.no_time_selected));
     }
 
     @Test
@@ -85,9 +85,9 @@ public class DateTimeWidgetTest {
         DatePickerDetails datePickerDetails = DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
         DateTimeWidget widget = createWidget(prompt);
 
-        assertEquals(widget.binding.dateAnswerText.getText(),
+        assertEquals(widget.binding.dateWidget.widgetAnswerText.getText(),
                 DateTimeUtils.getDateTimeLabel(date.toDate(), datePickerDetails, false, widget.getContext()));
-        assertEquals(widget.binding.timeAnswerText.getText(), "12:00");
+        assertEquals(widget.binding.timeWidget.widgetAnswerText.getText(), "12:00");
     }
 
     @Test
@@ -98,7 +98,7 @@ public class DateTimeWidgetTest {
         DateTimeWidget widget = createWidget(prompt);
         widget.setBinaryData(date);
 
-        assertEquals(widget.binding.dateAnswerText.getText(),
+        assertEquals(widget.binding.dateWidget.widgetAnswerText.getText(),
                 DateTimeUtils.getDateTimeLabel(date.toDate(), datePickerDetails, false, widget.getContext()));
     }
 
@@ -107,7 +107,7 @@ public class DateTimeWidgetTest {
         DateTimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
         widget.onTimeSet(12, 10);
 
-        assertEquals(widget.binding.timeAnswerText.getText(), "12:10");
+        assertEquals(widget.binding.timeWidget.widgetAnswerText.getText(), "12:10");
     }
 
     @Test
@@ -116,8 +116,8 @@ public class DateTimeWidgetTest {
         widget.clearAnswer();
 
         assertThat(widget.getAnswer(), nullValue());
-        assertEquals(widget.binding.dateAnswerText.getText(), widget.getContext().getString(R.string.no_date_selected));
-        assertEquals(widget.binding.timeAnswerText.getText(), widget.getContext().getString(R.string.no_time_selected));
+        assertEquals(widget.binding.dateWidget.widgetAnswerText.getText(), widget.getContext().getString(R.string.no_date_selected));
+        assertEquals(widget.binding.timeWidget.widgetAnswerText.getText(), widget.getContext().getString(R.string.no_time_selected));
     }
 
     @Test
@@ -134,11 +134,11 @@ public class DateTimeWidgetTest {
         DateTimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
         widget.setOnLongClickListener(listener);
 
-        widget.binding.dateButton.performLongClick();
-        widget.binding.timeButton.performLongClick();
+        widget.binding.dateWidget.widgetButton.performLongClick();
+        widget.binding.timeWidget.widgetButton.performLongClick();
 
-        verify(listener).onLongClick(widget.binding.dateButton);
-        verify(listener).onLongClick(widget.binding.timeButton);
+        verify(listener).onLongClick(widget.binding.dateWidget.widgetButton);
+        verify(listener).onLongClick(widget.binding.timeWidget.widgetButton);
     }
 
     @Test
@@ -146,11 +146,11 @@ public class DateTimeWidgetTest {
         DateTimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
         widget.setOnLongClickListener(listener);
 
-        widget.binding.dateAnswerText.performLongClick();
-        widget.binding.timeAnswerText.performLongClick();
+        widget.binding.dateWidget.widgetAnswerText.performLongClick();
+        widget.binding.timeWidget.widgetAnswerText.performLongClick();
 
-        verify(listener).onLongClick(widget.binding.dateAnswerText);
-        verify(listener).onLongClick(widget.binding.timeAnswerText);
+        verify(listener).onLongClick(widget.binding.dateWidget.widgetAnswerText);
+        verify(listener).onLongClick(widget.binding.timeWidget.widgetAnswerText);
     }
 
     private DateTimeWidget createWidget(FormEntryPrompt prompt) {

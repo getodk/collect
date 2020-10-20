@@ -1,12 +1,10 @@
 package org.odk.collect.android.widgets.utilities;
 
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.widget.TextView;
 
+import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.TimeData;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.activities.FormEntryActivity;
@@ -20,13 +18,9 @@ import org.odk.collect.android.fragments.dialogs.IslamicDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.MyanmarDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.PersianDatePickerDialog;
 import org.odk.collect.android.logic.DatePickerDetails;
-import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 
-import java.util.Date;
-
-import static org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog.DATE_PICKER_DIALOG;
 import static org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog.CURRENT_TIME;
 import static org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog.TIME_PICKER_THEME;
 import static org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog.CURRENT_DATE;
@@ -38,50 +32,40 @@ public class DateTimeWidgetUtils {
     private DateTimeWidgetUtils() {
     }
 
-    public static TimeData getTimeData(int hourOfDay, int minuteOfHour, boolean nullAnswer) {
+    public static TimeData getTimeData(int hourOfDay, int minuteOfHour) {
         // use picker time, convert to today's date, store as utc
         DateTime localDateTime = new DateTime()
                 .withTime(hourOfDay, minuteOfHour, 0, 0);
 
-        return !nullAnswer
-                ? new TimeData(localDateTime.toDate())
-                : null;
+        return new TimeData(localDateTime.toDate());
     }
 
-    public static void setDateLabel(Context context, TextView dateAnswerText, Date date, DatePickerDetails datePickerDetails) {
-        dateAnswerText.setText(DateTimeUtils.getDateTimeLabel(date, datePickerDetails, false, context));
-    }
-
-    public static void setTimeLabel(TextView timeAnswerText, int hourOfDay, int minuteOfHour, boolean nullAnswer) {
-        timeAnswerText.setText(getTimeData(hourOfDay, minuteOfHour, nullAnswer).getDisplayText());
-    }
-
-    public static void showDatePickerDialog(FormEntryActivity activity, FormEntryPrompt prompt, DatePickerDetails datePickerDetails,
+    public static void showDatePickerDialog(FormEntryActivity activity, FormIndex formIndex, DatePickerDetails datePickerDetails,
                                             LocalDateTime date) {
         switch (datePickerDetails.getDatePickerType()) {
             case ETHIOPIAN:
-                CustomDatePickerDialog dialog = EthiopianDatePickerDialog.newInstance(prompt.getIndex(), date, datePickerDetails);
-                dialog.show(activity.getSupportFragmentManager(), DATE_PICKER_DIALOG);
+                CustomDatePickerDialog dialog = EthiopianDatePickerDialog.newInstance(formIndex, date, datePickerDetails);
+                dialog.show(activity.getSupportFragmentManager(), CustomDatePickerDialog.class.getName());
                 break;
             case COPTIC:
-                dialog = CopticDatePickerDialog.newInstance(prompt.getIndex(), date, datePickerDetails);
-                dialog.show(activity.getSupportFragmentManager(), DATE_PICKER_DIALOG);
+                dialog = CopticDatePickerDialog.newInstance(formIndex, date, datePickerDetails);
+                dialog.show(activity.getSupportFragmentManager(), CustomDatePickerDialog.class.getName());
                 break;
             case ISLAMIC:
-                dialog = IslamicDatePickerDialog.newInstance(prompt.getIndex(), date, datePickerDetails);
-                dialog.show(activity.getSupportFragmentManager(), DATE_PICKER_DIALOG);
+                dialog = IslamicDatePickerDialog.newInstance(formIndex, date, datePickerDetails);
+                dialog.show(activity.getSupportFragmentManager(), CustomDatePickerDialog.class.getName());
                 break;
             case BIKRAM_SAMBAT:
-                dialog = BikramSambatDatePickerDialog.newInstance(prompt.getIndex(), date, datePickerDetails);
-                dialog.show(activity.getSupportFragmentManager(), DATE_PICKER_DIALOG);
+                dialog = BikramSambatDatePickerDialog.newInstance(formIndex, date, datePickerDetails);
+                dialog.show(activity.getSupportFragmentManager(), CustomDatePickerDialog.class.getName());
                 break;
             case MYANMAR:
-                dialog = MyanmarDatePickerDialog.newInstance(prompt.getIndex(), date, datePickerDetails);
-                dialog.show(activity.getSupportFragmentManager(), DATE_PICKER_DIALOG);
+                dialog = MyanmarDatePickerDialog.newInstance(formIndex, date, datePickerDetails);
+                dialog.show(activity.getSupportFragmentManager(), CustomDatePickerDialog.class.getName());
                 break;
             case PERSIAN:
-                dialog = PersianDatePickerDialog.newInstance(prompt.getIndex(), date, datePickerDetails);
-                dialog.show(activity.getSupportFragmentManager(), DATE_PICKER_DIALOG);
+                dialog = PersianDatePickerDialog.newInstance(formIndex, date, datePickerDetails);
+                dialog.show(activity.getSupportFragmentManager(), CustomDatePickerDialog.class.getName());
                 break;
             default:
                 ThemeUtils themeUtils = new ThemeUtils(activity);

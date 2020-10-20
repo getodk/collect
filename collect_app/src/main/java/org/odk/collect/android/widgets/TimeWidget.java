@@ -50,7 +50,6 @@ public class TimeWidget extends QuestionWidget {
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = WidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
-        View answerView = binding.getRoot();
 
         if (prompt.isReadOnly()) {
             binding.widgetButton.setVisibility(GONE);
@@ -60,17 +59,18 @@ public class TimeWidget extends QuestionWidget {
             binding.widgetButton.setOnClickListener(v -> onButtonClick());
         }
         binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.widgetAnswerText.setText(R.string.no_time_selected);
 
         if (getFormEntryPrompt().getAnswerValue() == null) {
-            clearAnswer();
+            nullAnswer = true;
         } else {
             Date date = (Date) getFormEntryPrompt().getAnswerValue().getValue();
 
             DateTime dateTime = new DateTime(date);
-            updateTime(dateTime);
+            onTimeSet(dateTime.getHourOfDay(), dateTime.getMinuteOfHour());
         }
 
-        return answerView;
+        return binding.getRoot();
     }
 
     @Override
@@ -82,7 +82,9 @@ public class TimeWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        return DateTimeWidgetUtils.getTimeData(hourOfDay, minuteOfHour, nullAnswer);
+        return !nullAnswer
+                ? DateTimeWidgetUtils.getTimeData(hourOfDay, minuteOfHour)
+                : null;
     }
 
     @Override
@@ -102,13 +104,7 @@ public class TimeWidget extends QuestionWidget {
         this.hourOfDay = hourOfDay;
         this.minuteOfHour = minute;
         nullAnswer = false;
-        DateTimeWidgetUtils.setTimeLabel(binding.widgetAnswerText, hourOfDay, minuteOfHour, false);
-    }
-
-    private void updateTime(DateTime dateTime) {
-        hourOfDay = dateTime.getHourOfDay();
-        minuteOfHour = dateTime.getMinuteOfHour();
-        DateTimeWidgetUtils.setTimeLabel(binding.widgetAnswerText, hourOfDay, minuteOfHour, nullAnswer);
+        binding.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(hourOfDay, minuteOfHour).getDisplayText());
     }
 
     private void onButtonClick() {
