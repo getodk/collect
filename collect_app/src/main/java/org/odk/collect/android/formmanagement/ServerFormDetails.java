@@ -82,6 +82,10 @@ public class ServerFormDetails implements Serializable {
         return tasks_only;
     }           // smap
 
+    public boolean isFormNotDownloaded() {
+        return isFormNotDownloaded;
+    }           // smap
+
     public String getFormPath() {
         return formPath;
     }           // smap

@@ -62,8 +62,10 @@ public class ServerFormsDetailsFetcher {
             ManifestFile manifestFile = null;
 
             boolean thisFormAlreadyDownloaded = isThisFormAlreadyDownloaded(listItem.getFormID());
+            boolean formNotDownloaded = true;   // smap
 
             if (thisFormAlreadyDownloaded) {
+                formNotDownloaded = false;      // smap
                 isNewerFormVersionAvailable = isNewerFormVersionAvailable(MultiFormDownloader.getMd5Hash(listItem.getHashWithPrefix()));
                 if (!isNewerFormVersionAvailable && listItem.getManifestURL() != null) {
                     manifestFile = getManifestFile(formListAPI, listItem.getManifestURL());
@@ -86,7 +88,11 @@ public class ServerFormsDetailsFetcher {
                     listItem.getHashWithPrefix(),
                     manifestFileHash,
                     !thisFormAlreadyDownloaded,
-                    isNewerFormVersionAvailable || areNewerMediaFilesAvailable);
+                    isNewerFormVersionAvailable || areNewerMediaFilesAvailable,
+                    formNotDownloaded,        // smap
+                    false,          // smap tasks only
+                    null,             // smap formPath
+                    null);                   // smap project
 
             serverFormDetailsList.add(serverFormDetails);
         }

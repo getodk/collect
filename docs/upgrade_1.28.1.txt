@@ -92,7 +92,8 @@ r	1) Aggregate preferences replaced by odk_server_preferences
 	4) ResetDialogPreference => ApplicationResetter && ResetDialogFragementCompat; Check smapLocations still supported
 	5) MultiFormDownloader => check on success flag and its use  - Big focus on this class that it still work
 		a) The input stream is now passed to writeFile. Make sure it uses the crednetials flag when creating it
-		b) FormListDownloader was deleted. What smap changes from that need to be added
+r		b) FormListDownloader was deleted. What smap changes from that need to be added
+		c) FormDetails replaced by ServerFormDetails
 	6) Check tab colors
 	7) NotificationUtils - they deleted we retained - review
 

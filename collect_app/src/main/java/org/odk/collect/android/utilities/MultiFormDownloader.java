@@ -29,10 +29,7 @@ import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
-import org.odk.collect.android.logic.FormDetails;
-import org.odk.collect.android.logic.MediaFile;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.android.openrosa.api.FormListApi;
 import org.odk.collect.android.openrosa.api.MediaFile;
@@ -149,21 +146,15 @@ public class MultiFormDownloader {
             // get the xml file
             // if we've downloaded a duplicate, this gives us the file
             fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl() + "&deviceID=" + deviceId, stateListener,
-                    fd.isNewerFormVersionAvailable() || fd.isFormNotDownloaded(),       // smap add flag on newer form version available or never downloaded
                     fd.getFormPath());                      // smap
-
-            if(fileResult.isNew()) {    // smap
-                message += Collect.getInstance().getString(R.string.success);
-                message += "\n";
-            }
 
             if (fd.getManifestUrl() != null) {
                 finalMediaPath = FileUtils.constructMediaPath(
                         fileResult.getFile().getAbsolutePath());
                 String error = downloadManifestAndMediaFiles(tempMediaPath, finalMediaPath, fd,
-                        count, total, stateListener, rgTempMediaPath, orgMediaPath);                              // smap added org paths
-                if (error != null) {
-                    message += error;
+                        count, total, stateListener, orgTempMediaPath, orgMediaPath);                              // smap added org paths
+                if (error != null && !error.isEmpty()) {
+                    success = false;
                 }
             } else {
                 Timber.i("No Manifest for: %s", fd.getFormName());
@@ -209,7 +200,7 @@ public class MultiFormDownloader {
                         (System.currentTimeMillis() - start) / 1000F);
             } catch (RuntimeException e) {
                 ReferenceManager.instance().reset();    // smap ensure reference manager reset after error
-                return message + e.getMessage();
+                return false;
             }
         }
 
@@ -223,9 +214,8 @@ public class MultiFormDownloader {
             }
         }
         if (!installed) {
-            message += Collect.getInstance().getString(R.string.copying_media_files_failed);
-            cleanUp(fileResult, null, tempMediaPath, orgTempMediaPath);    // smap
             success = false;
+            cleanUp(fileResult, null, tempMediaPath, orgTempMediaPath);    // smap
         }
 
         return success;
@@ -237,7 +227,7 @@ public class MultiFormDownloader {
     }
 
     boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields, 
-            FormDetails fd, String orgTempMediaPath, String orgMediaPath)   {   // smap add fd,  organisational paths
+            ServerFormDetails fd, String orgTempMediaPath, String orgMediaPath)   {   // smap add fd,  organisational paths
         UriResult uriResult = null;
         try {
             uriResult = findExistingOrCreateNewUri(fileResult.file, parsedFields,
@@ -374,25 +364,21 @@ public class MultiFormDownloader {
      * Takes the formName and the URL and attempts to download the specified file. Returns a file
      * object representing the downloaded file.
      */
-    FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener, boolean download, String formPath) throws Exception {     // smap add download flag and formPath
+    FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener, String formPath) throws Exception {
         // clean up friendly form name...
         String rootName = FormNameUtils.formatFilenameFromFormName(formName);
 
         File f;
         boolean isNew = false;      // smap
         StoragePathProvider storagePathProvider = new StoragePathProvider(); // smap
-        if(download) {             // smap
-            // proposed name of xml file...
-            //StoragePathProvider storagePathProvider = new StoragePathProvider();  // smap commented out
-            String path = storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + rootName + ".xml";
-            int i = 2;
-            f = new File(path);
+        // proposed name of xml file...
+        //StoragePathProvider storagePathProvider = new StoragePathProvider();  // smap commented out
+        String path = storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + rootName + ".xml";
+        int i = 2;
+        f = new File(path);
 
-            InputStream file = formListApi.fetchForm(url);
-            writeFile(f, stateListener, file);
-
-            downloadFile(f, url, true);     // smap credentials flag
-        }
+        InputStream file = formListApi.fetchForm(url);
+        writeFile(f, stateListener, file, true);    // smap credentials flag
 
         // we've downloaded the file, and we may have renamed it
         // make sure it's not the same as a file we already have
