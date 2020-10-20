@@ -34,7 +34,6 @@ import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
-import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
 import java.util.Date;
@@ -44,7 +43,7 @@ import java.util.Date;
  * exist.
  */
 @SuppressLint("ViewConstructor")
-public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver, ButtonClickListener {
+public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver {
     DateTimeWidgetAnswerBinding binding;
 
     private LocalDateTime date;
@@ -76,7 +75,8 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
 
             binding.dateWidget.widgetButton.setOnClickListener(v -> DateTimeWidgetUtils.showDatePickerDialog(
                     (FormEntryActivity) context, prompt.getIndex(), datePickerDetails, date));
-            binding.timeWidget.widgetButton.setOnClickListener(v -> onButtonClick(binding.timeWidget.widgetButton.getId()));
+            binding.timeWidget.widgetButton.setOnClickListener(v ->
+                    DateTimeWidgetUtils.createTimePickerDialog((FormEntryActivity) getContext(), hourOfDay, minuteOfHour));
         }
         binding.dateWidget.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.timeWidget.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
@@ -91,7 +91,10 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
 
             Date date = (Date) getFormEntryPrompt().getAnswerValue().getValue();
             DateTime dateTime = new DateTime(date);
-            onTimeSet(dateTime.getHourOfDay(), dateTime.getMinuteOfHour());
+
+            hourOfDay = dateTime.getHourOfDay();
+            minuteOfHour = dateTime.getMinuteOfHour();
+            binding.timeWidget.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(hourOfDay, minuteOfHour).getDisplayText());
         }
 
         return binding.getRoot();
@@ -102,20 +105,21 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
         if (isNullValue()) {
             return null;
         } else {
+            LocalDateTime ldt;
             if (isTimeNull) {
+                ldt = DateTimeUtils.getLocalDateTime(date.getYear(),
+                        date.getMonthOfYear(), date.getDayOfMonth(), 0, 0);
                 setTimeToCurrent();
             } else if (isDateNull) {
-                date = DateTimeWidgetUtils.getCurrentDate();
-            }
-            LocalDateTime ldt = new LocalDateTime()
-                    .withYear(date.getYear())
-                    .withMonthOfYear(date.getMonthOfYear())
-                    .withDayOfMonth(date.getDayOfMonth())
-                    .withHourOfDay(hourOfDay)
-                    .withMinuteOfHour(minuteOfHour)
-                    .withSecondOfMinute(0)
-                    .withMillisOfSecond(0);
+                ldt = new LocalDateTime()
+                        .withHourOfDay(hourOfDay)
+                        .withMinuteOfHour(minuteOfHour);
 
+                date = DateTimeWidgetUtils.getCurrentDate();
+            } else {
+                ldt = DateTimeUtils.getLocalDateTime(date.getYear(),
+                        date.getMonthOfYear(), date.getDayOfMonth(), hourOfDay, minuteOfHour);
+            }
             return new DateTimeData(ldt.toDate());
         }
     }
@@ -153,19 +157,14 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
 
             binding.dateWidget.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
                     (Date) getAnswer().getValue(), datePickerDetails, false, getContext()));
+
+        } else if (answer instanceof DateTime) {
+            hourOfDay = ((DateTime) answer).getHourOfDay();
+            minuteOfHour = ((DateTime) answer).getMinuteOfHour();
+            isTimeNull = false;
+
+            binding.timeWidget.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(hourOfDay, minuteOfHour).getDisplayText());
         }
-    }
-
-    @Override
-    public void onButtonClick(int buttonId) {
-        DateTimeWidgetUtils.createTimePickerDialog((FormEntryActivity) getContext(), hourOfDay, minuteOfHour);
-    }
-
-    public void onTimeSet(int hourOfDay, int minute) {
-        this.hourOfDay = hourOfDay;
-        this.minuteOfHour = minute;
-        isTimeNull = false;
-        binding.timeWidget.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(hourOfDay, minuteOfHour).getDisplayText());
     }
 
     private void clearAnswerWithoutValueChangeListener() {

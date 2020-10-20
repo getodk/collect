@@ -52,7 +52,7 @@ public class FixedDatePickerDialog extends DialogFragment {
         int theme = getArguments().getInt(CustomDatePickerDialog.DATE_PICKER_THEME);
 
         DatePickerDialog dialog = new DatePickerDialog(requireActivity(), theme, listener,
-                date.getYear(), date.getMonthOfYear()-1, date.getDayOfMonth());
+                date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
 
         if (themeUtils.isHoloDialogTheme(theme)) {
             dialog.setTitle(requireContext().getString(R.string.select_date));
@@ -79,7 +79,7 @@ public class FixedDatePickerDialog extends DialogFragment {
 
             dialog.getDatePicker().findViewById(Resources.getSystem().getIdentifier("month", "id", "android"))
                     .setVisibility(View.GONE);
-            dialog.getDatePicker().updateDate(date.getYear(), 0, 1);
+            dialog.getDatePicker().updateDate(date.getYear(), 1, 1);
         } else if (((DatePickerDetails) getArguments().getSerializable(CustomDatePickerDialog.DATE_PICKER_DETAILS)).isMonthYearMode()) {
             dialog.getDatePicker().findViewById(Resources.getSystem().getIdentifier("day", "id", "android"))
                     .setVisibility(View.GONE);

@@ -40,6 +40,23 @@ public class DateTimeUtils {
         return dateFormatter.format(date);
     }
 
+    public static LocalDateTime getLocalDateTime(int year, int month, int dayOfMonth, int hourOfDay, int minute) {
+        return new LocalDateTime()
+                .withYear(year)
+                .withMonthOfYear(month)
+                .withDayOfMonth(dayOfMonth)
+                .withHourOfDay(hourOfDay)
+                .withMinuteOfHour(minute)
+                .withSecondOfMinute(0)
+                .withMillisOfSecond(0);
+    }
+
+    public static DateTime getDateTime(int hourOfDay, int minute) {
+        return new DateTime()
+                .withHourOfDay(hourOfDay)
+                .withMinuteOfHour(minute);
+    }
+
     public static String getDateTimeLabel(Date date, DatePickerDetails datePickerDetails, boolean containsTime, Context context) {
         String gregorianDateText = getGregorianDateTimeLabel(date, datePickerDetails, containsTime, Locale.getDefault());
 

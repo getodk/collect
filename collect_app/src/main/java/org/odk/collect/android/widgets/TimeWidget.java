@@ -27,12 +27,13 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.databinding.WidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
 import java.util.Date;
 
 @SuppressLint("ViewConstructor")
-public class TimeWidget extends QuestionWidget {
+public class TimeWidget extends QuestionWidget implements BinaryDataReceiver {
     WidgetAnswerBinding binding;
 
     private int hourOfDay;
@@ -55,7 +56,8 @@ public class TimeWidget extends QuestionWidget {
         } else {
             binding.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
             binding.widgetButton.setText(getContext().getString(R.string.select_time));
-            binding.widgetButton.setOnClickListener(v -> onButtonClick());
+            binding.widgetButton.setOnClickListener(v -> DateTimeWidgetUtils.createTimePickerDialog(
+                    (FormEntryActivity) getContext(), hourOfDay, minuteOfHour));
         }
         binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
@@ -64,9 +66,11 @@ public class TimeWidget extends QuestionWidget {
             binding.widgetAnswerText.setText(R.string.no_time_selected);
         } else {
             Date date = (Date) getFormEntryPrompt().getAnswerValue().getValue();
-
             DateTime dateTime = new DateTime(date);
-            onTimeSet(dateTime.getHourOfDay(), dateTime.getMinuteOfHour());
+
+            hourOfDay = dateTime.getHourOfDay();
+            minuteOfHour = dateTime.getMinuteOfHour();
+            binding.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(hourOfDay, minuteOfHour).getDisplayText());
         }
 
         return binding.getRoot();
@@ -99,14 +103,13 @@ public class TimeWidget extends QuestionWidget {
         binding.widgetAnswerText.cancelLongPress();
     }
 
-    public void onTimeSet(int hourOfDay, int minute) {
-        this.hourOfDay = hourOfDay;
-        this.minuteOfHour = minute;
-        binding.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(hourOfDay, minuteOfHour).getDisplayText());
-    }
-
-    private void onButtonClick() {
-        DateTimeWidgetUtils.createTimePickerDialog((FormEntryActivity) getContext(), hourOfDay, minuteOfHour);
+    @Override
+    public void setBinaryData(Object answer) {
+        if (answer instanceof DateTime) {
+            hourOfDay = ((DateTime) answer).getHourOfDay();
+            minuteOfHour = ((DateTime) answer).getMinuteOfHour();
+            binding.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(hourOfDay, minuteOfHour).getDisplayText());
+        }
     }
 
     private void setTimeToCurrent() {
