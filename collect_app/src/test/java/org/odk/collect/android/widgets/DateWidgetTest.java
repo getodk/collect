@@ -59,7 +59,7 @@ public class DateWidgetTest {
     }
 
     @Test
-    public void whenPromptDoesNotHaveAnswer_answerTextViewShowsEmptyString() {
+    public void whenPromptDoesNotHaveAnswer_answerTextViewShowsNoDateSelected() {
         DateWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
         assertEquals(widget.dateTextView.getText(), widget.getContext().getString(R.string.no_date_selected));
     }
@@ -68,8 +68,19 @@ public class DateWidgetTest {
     public void whenPromptHasAnswer_answerTextViewShowsCorrectDate() {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, new DateData(date.toDate()));
         DatePickerDetails datePickerDetails = DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
+        DateWidget widget = createWidget(prompt);
 
-        DateWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new DateData(date.toDate())));
+        assertEquals(widget.dateTextView.getText(), DateTimeUtils.getDateTimeLabel(date.toDate(), datePickerDetails, false, widget.getContext()));
+    }
+
+    @Test
+    public void onDateSet_setsCorrectDateInAnswerTextView() {
+        FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, null);
+        DatePickerDetails datePickerDetails = DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
+
+        DateWidget widget = createWidget(prompt);
+        widget.onDateSet(date.getYear(), date.getMonthOfYear()-1, date.getDayOfMonth());
+
         assertEquals(widget.dateTextView.getText(), DateTimeUtils.getDateTimeLabel(date.toDate(), datePickerDetails, false, widget.getContext()));
     }
 

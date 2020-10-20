@@ -15,20 +15,21 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.util.TypedValue;
+import android.view.View;
 
 import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.databinding.WidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.fragments.dialogs.BikramSambatDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.CopticDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
@@ -40,13 +41,10 @@ import org.odk.collect.android.fragments.dialogs.PersianDatePickerDialog;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.utilities.DialogUtils;
 
 import java.util.Date;
 
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerTextView;
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog.DATE_PICKER_DIALOG;
 import static org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog.CURRENT_DATE;
 import static org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog.DATE_PICKER_DETAILS;
@@ -60,14 +58,12 @@ import static org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog.TH
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class DateWidget extends QuestionWidget implements WidgetDataReceiver, ButtonClickListener {
-    Button dateButton;
-    TextView dateTextView;
+public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
+    WidgetAnswerBinding binding;
 
     boolean isNullAnswer;
 
     private LocalDateTime date;
-
     private DatePickerDetails datePickerDetails;
 
     public DateWidget(Context context, QuestionDetails prompt) {
@@ -76,14 +72,25 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver, Bu
 
     public DateWidget(Context context, QuestionDetails prompt, boolean isPartOfDateTimeWidget) {
         super(context, prompt, !isPartOfDateTimeWidget);
-        createWidget(context);
     }
 
-    protected void createWidget(Context context) {
+    @Override
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+        binding = WidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
+        View answerView = binding.getRoot();
+
         datePickerDetails = DateTimeUtils.getDatePickerDetails(getFormEntryPrompt().getQuestion().getAppearanceAttr());
-        dateButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.select_date), getAnswerFontSize(), this);
-        dateTextView = createAnswerTextView(getContext(), getAnswerFontSize());
-        addViews(context);
+
+        if (prompt.isReadOnly()) {
+            binding.widgetButton.setVisibility(GONE);
+        } else {
+            binding.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+            binding.widgetButton.setText(getContext().getString(R.string.select_date));
+            binding.widgetButton.setOnClickListener(v -> showDatePickerDialog());
+        }
+
+        binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+
         if (getFormEntryPrompt().getAnswerValue() == null) {
             clearAnswer();
             setDateToCurrent();
@@ -91,19 +98,21 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver, Bu
             date = new LocalDateTime(getFormEntryPrompt().getAnswerValue().getValue());
             setDateLabel();
         }
+
+        return answerView;
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        dateButton.setOnLongClickListener(l);
-        dateTextView.setOnLongClickListener(l);
+        binding.widgetButton.setOnLongClickListener(l);
+        binding.widgetAnswerText.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        dateButton.cancelLongPress();
-        dateTextView.cancelLongPress();
+        binding.widgetButton.cancelLongPress();
+        binding.widgetAnswerText.cancelLongPress();
     }
 
     @Override
@@ -114,7 +123,7 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver, Bu
 
     void clearAnswerWithoutValueChangeEvent() {
         isNullAnswer = true;
-        dateTextView.setText(R.string.no_date_selected);
+        binding.widgetAnswerText.setText(R.string.no_date_selected);
         setDateToCurrent();
     }
 
@@ -131,11 +140,6 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver, Bu
         }
     }
 
-    @Override
-    public void onButtonClick(int buttonId) {
-        showDatePickerDialog();
-    }
-
     public boolean isDayHidden() {
         return datePickerDetails.isMonthYearMode() || datePickerDetails.isYearMode();
     }
@@ -146,14 +150,6 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver, Bu
 
     public boolean isNullAnswer() {
         return isNullAnswer;
-    }
-
-    private void addViews(Context context) {
-        LinearLayout linearLayout = new LinearLayout(getContext());
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.addView(dateButton);
-        linearLayout.addView(dateTextView);
-        addAnswerView(linearLayout, WidgetViewUtils.getStandardMargin(context));
     }
 
     protected void setDateToCurrent() {
@@ -167,7 +163,7 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver, Bu
 
     protected void setDateLabel() {
         isNullAnswer = false;
-        dateTextView.setText(DateTimeUtils.getDateTimeLabel((Date) getAnswer().getValue(), datePickerDetails, false, getContext()));
+        binding.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel((Date) getAnswer().getValue(), datePickerDetails, false, getContext()));
     }
 
     protected void showDatePickerDialog() {
