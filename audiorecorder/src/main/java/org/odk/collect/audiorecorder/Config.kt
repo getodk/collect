@@ -14,6 +14,10 @@ import org.odk.collect.audiorecorder.recording.AudioRecorderActivity
 
 private var _component: AudioRecorderDependencyComponent? = null
 
+/**
+ * Calling this will statically change the component at a static level so other
+ * tests that don't override dependencies could be affected.
+ */
 internal fun Application.overrideDependencies(module: AudioRecorderDependencyModule) {
     _component = DaggerAudioRecorderDependencyComponent.builder()
         .application(this)
