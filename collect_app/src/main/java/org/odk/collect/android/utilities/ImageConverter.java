@@ -39,6 +39,10 @@ public class ImageConverter {
     private ImageConverter() {
     }
 
+    /**
+     * Before proceed with scaling or rotating, make sure existing exif information is store/restored.
+     * @author Khuong Ninh (khuong.ninh@it-development.com)
+     */
     public static void execute(String imagePath, QuestionWidget questionWidget, Context context) {
         ExifInterface exif = null;
         try {
@@ -172,6 +176,12 @@ public class ImageConverter {
         FileUtils.saveBitmapToFile(image, imagePath);
     }
 
+    /**
+     * Copy an existing source exif to a new path.
+     * @param sourceExif : Source exif
+     * @param newPath    : path to which the exif is written to.
+     * @author Khuong Ninh (khuong.ninh@it-development.com)
+     */
     public static void copyExif(ExifInterface sourceExif, String newPath) throws IOException {
         if (sourceExif == null) {
             return;
@@ -209,9 +219,7 @@ public class ImageConverter {
         ExifInterface newExif = new ExifInterface(newPath);
         for (int i = 0; i < attributes.length; i++) {
             String value = sourceExif.getAttribute(attributes[i]);
-            if (newExif.hasAttribute(attributes[i])) {
-                Timber.w(" KHUONG DETECTED Detected %s : %s", attributes[i], value);
-            } else {
+            if (!newExif.hasAttribute(attributes[i]) == false) {
                 if (value != null) {
                     newExif.setAttribute(attributes[i], value);
                 }
@@ -220,6 +228,12 @@ public class ImageConverter {
         newExif.saveAttributes();
     }
 
+    /**
+     * Copy an existing source exif from one path to a new one.
+     * @param oldPath : Path where existing source exif data is stored.
+     * @param newPath : path to which the exif is written to.
+     * @author Khuong Ninh (khuong.ninh@it-development.com)
+     */
     public static void copyExif(String oldPath, String newPath) throws IOException {
         ExifInterface oldExif = new ExifInterface(oldPath);
         copyExif(oldExif, newPath);
