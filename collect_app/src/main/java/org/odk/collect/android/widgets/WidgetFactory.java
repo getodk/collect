@@ -19,7 +19,6 @@ import android.content.Context;
 import android.hardware.SensorManager;
 
 import org.javarosa.core.model.Constants;
-import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
@@ -229,7 +228,7 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_RANGE:
                 if (appearance.startsWith(WidgetAppearanceUtils.RATING)) {
-                    questionWidget = new RatingWidget(context, questionDetails, (RangeQuestion) questionDetails.getPrompt().getQuestion());
+                    questionWidget = new RatingWidget(context, questionDetails);
                 } else {
                     switch (prompt.getDataType()) {
                         case Constants.DATATYPE_INTEGER:

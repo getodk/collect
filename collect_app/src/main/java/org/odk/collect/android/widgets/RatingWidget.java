@@ -17,9 +17,9 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.widget.RatingBar;
 
 import androidx.core.content.ContextCompat;
 
@@ -27,61 +27,81 @@ import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.RatingWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.utilities.UiUtils;
 
 @SuppressLint("ViewConstructor")
 public class RatingWidget extends QuestionWidget {
 
     public static final int ASSUMED_TOTAL_MARGIN_AROUND_WIDGET = 40;
 
-    private RatingWidgetAnswerBinding binding;
+    private RatingBar ratingBar;
 
-    public RatingWidget(Context context, QuestionDetails questionDetails, RangeQuestion rangeQuestion) {
+    public RatingWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
-        binding.ratingBar.setNumStars(rangeQuestion.getRangeEnd().intValue());
-        binding.ratingBar.setStepSize(1.0F);
     }
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        binding = RatingWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
+        RatingWidgetAnswerBinding binding = RatingWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         View answerView = binding.getRoot();
 
-        binding.ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> widgetValueChanged());
-        binding.ratingBar.setEnabled(!prompt.isReadOnly());
+
+        RangeQuestion rangeQuestion = (RangeQuestion) prompt.getQuestion();
+        int numberOfStars = rangeQuestion.getRangeEnd().intValue();
+        int columns = calculateColumns(48);
+
+        int rows = (int) Math.ceil((double) numberOfStars / columns);
+
+        if (rows == 1) {
+            binding.ratingBar.setVisibility(VISIBLE);
+            this.ratingBar = binding.ratingBar;
+        } else {
+            binding.ratingBar.setVisibility(GONE);
+            columns = calculateColumns(36);
+            rows = (int) Math.ceil((double) numberOfStars / columns);
+            if (rows == 1) {
+                binding.ratingBar2.setVisibility(VISIBLE);
+                this.ratingBar = binding.ratingBar2;
+            } else {
+                binding.ratingBar3.setVisibility(VISIBLE);
+                this.ratingBar = binding.ratingBar3;
+            }
+        }
+
+        ratingBar.setNumStars(rangeQuestion.getRangeEnd().intValue());
+        ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> widgetValueChanged());
+        ratingBar.setEnabled(!prompt.isReadOnly());
 
         if (prompt.getAnswerText() != null) {
-            binding.ratingBar.setRating(Integer.parseInt(prompt.getAnswerText()));
+            ratingBar.setRating(Integer.parseInt(prompt.getAnswerText()));
         }
         return answerView;
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        binding.ratingBar.setOnLongClickListener(l);
+        ratingBar.setOnLongClickListener(l);
     }
 
     @Override
     public IAnswerData getAnswer() {
-        return binding.ratingBar.getRating() == 0.0F ? null : new IntegerData((int) binding.ratingBar.getRating());
+        return ratingBar.getRating() == 0.0F ? null : new IntegerData((int) ratingBar.getRating());
     }
 
     @Override
     public void clearAnswer() {
-        binding.ratingBar.setRating(0.0F);
+        ratingBar.setRating(0.0F);
     }
 
-    protected RatingWidgetAnswerBinding getBinding() {
-        return binding;
+    protected RatingBar getRatingBar() {
+        return ratingBar;
     }
 
-    private int calculateColumns() {
-        Drawable starDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_star);
+    private int calculateColumns(int widthOfStar) {
         DisplayMetrics dm = getScreenDimensions((Activity) getContext());
-        int widthOfStar = starDrawable.getIntrinsicWidth();
-        return (dm.widthPixels - ASSUMED_TOTAL_MARGIN_AROUND_WIDGET) / widthOfStar;
+        return (dm.widthPixels - ASSUMED_TOTAL_MARGIN_AROUND_WIDGET) / ((int) UiUtils.convertDpToPixel(widthOfStar, getContext()));
     }
 
     private DisplayMetrics getScreenDimensions(Activity activity) {

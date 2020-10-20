@@ -21,8 +21,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
+
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithRangeQuestionAndAnswer;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndRangeQuestion;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 
 @RunWith(RobolectricTestRunner.class)
@@ -38,51 +39,51 @@ public class RatingWidgetTest {
 
     @Test
     public void ratingBarShowsCorrectNumberOfStars() {
-        RatingWidget widget = createWidget(promptWithReadOnly());
-        assertThat(widget.getBinding().ratingBar.getNumStars(), equalTo(5));
+        RatingWidget widget = createWidget(promptWithReadOnlyAndRangeQuestion(rangeQuestion));
+        assertThat(widget.getRatingBar().getNumStars(), equalTo(5));
     }
 
     @Test
     public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsZero() {
-        assertThat(createWidget(promptWithAnswer(null)).getAnswer(), nullValue());
+        assertThat(createWidget(promptWithReadOnlyAndRangeQuestion(rangeQuestion)).getAnswer(), nullValue());
     }
 
     @Test
     public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
-        RatingWidget widget = createWidget(promptWithAnswer(new StringData("3")));
+        RatingWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("3")));
         assertThat(widget.getAnswer().getValue(), equalTo(3));
     }
 
     @Test
     public void whenPromptDoesNotHaveAnswer_noStarsAreHighlightedOnRatingBar() {
-        RatingWidget widget = createWidget(promptWithAnswer(null));
-        assertThat(widget.getBinding().ratingBar.getRating(), equalTo(0.0F));
+        RatingWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
+        assertThat(widget.getRatingBar().getRating(), equalTo(0.0F));
     }
 
     @Test
     public void whenPromptHasAnswer_correctNumberOfStarsAreHighlightedOnRatingBar() {
-        RatingWidget widget = createWidget(promptWithAnswer(new StringData(("3"))));
-        assertThat(widget.getBinding().ratingBar.getRating(), equalTo(3.0F));
+        RatingWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("3")));
+        assertThat(widget.getRatingBar().getRating(), equalTo(3.0F));
     }
 
     @Test
     public void usingReadOnly_makesAllClickableElementsDisabled() {
-        RatingWidget widget = createWidget(promptWithReadOnly());
-        assertThat(widget.getBinding().ratingBar.isEnabled(), equalTo(false));
+        RatingWidget widget = createWidget(promptWithReadOnlyAndRangeQuestion(rangeQuestion));
+        assertThat(widget.getRatingBar().isEnabled(), equalTo(false));
     }
 
     @Test
     public void clearAnswer_clearsWidgetAnswer() {
-        RatingWidget widget = createWidget(promptWithAnswer(new StringData("3")));
+        RatingWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("3")));
         widget.clearAnswer();
 
         assertThat(widget.getAnswer(), nullValue());
-        assertThat(widget.getBinding().ratingBar.getRating(), equalTo(0.0F));
+        assertThat(widget.getRatingBar().getRating(), equalTo(0.0F));
     }
 
     @Test
     public void clearAnswer_callsValueChangeListeners() {
-        RatingWidget widget = createWidget(promptWithAnswer(new StringData("3")));
+        RatingWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("3")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.setValueChangedListener(valueChangedListener);
         widget.clearAnswer();
@@ -92,39 +93,39 @@ public class RatingWidgetTest {
 
     @Test
     public void changingRating_callsValueChangeListeners() {
-        RatingWidget widget = createWidget(promptWithAnswer(new StringData("3")));
+        RatingWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("3")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.setValueChangedListener(valueChangedListener);
-        widget.getBinding().ratingBar.setRating(4.0F);
+        widget.getRatingBar().setRating(4.0F);
 
         verify(valueChangedListener).widgetValueChanged(widget);
     }
 
     @Test
     public void changingRating_updatesAnswer() {
-        RatingWidget widget = createWidget(promptWithAnswer(new StringData("3")));
-        widget.getBinding().ratingBar.setRating(4.0F);
+        RatingWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("3")));
+        widget.getRatingBar().setRating(4.0F);
         assertThat(widget.getAnswer().getValue(), equalTo(4));
     }
 
     @Test
     public void ratingBar_doesNotAllowUserToSetDecimalRating() {
-        RatingWidget widget = createWidget(promptWithAnswer(new StringData("3")));
-        widget.getBinding().ratingBar.setRating(4.8F);
-        assertThat(widget.getAnswer().getValue(), equalTo(4));
+        RatingWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("3")));
+        widget.getRatingBar().setRating(4.8F);
+        assertThat(widget.getAnswer().getValue(), equalTo(5));
     }
 
     @Test
     public void clickingRatingBarForLong_callsLongClickListener() {
-        View.OnLongClickListener listener = mock( View.OnLongClickListener.class);
-        RatingWidget widget = createWidget(promptWithAnswer(null));
+        View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
+        RatingWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
         widget.setOnLongClickListener(listener);
-        widget.getBinding().ratingBar.performLongClick();
+        widget.getRatingBar().performLongClick();
 
-        verify(listener).onLongClick(widget.getBinding().ratingBar);
+        verify(listener).onLongClick(widget.getRatingBar());
     }
 
     private RatingWidget createWidget(FormEntryPrompt prompt) {
-        return new RatingWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"), rangeQuestion);
+        return new RatingWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"));
     }
 }
