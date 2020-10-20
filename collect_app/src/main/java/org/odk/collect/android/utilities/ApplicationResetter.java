@@ -16,19 +16,12 @@
 
 package org.odk.collect.android.utilities;
 
-import android.content.Context;
-import android.content.Intent;
-
+import org.odk.collect.android.database.InstancesDatabaseHelper;
+import org.odk.collect.android.database.FormsDatabaseHelper;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.database.TraceUtilities;
-import org.odk.collect.android.database.helpers.FormsDatabaseHelper;
-import org.odk.collect.android.database.helpers.InstancesDatabaseHelper;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.configure.ServerRepository;
-import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.AdminSharedPreferences;

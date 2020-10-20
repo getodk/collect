@@ -96,6 +96,9 @@ r		b) FormListDownloader was deleted. What smap changes from that need to be add
 		c) FormDetails replaced by ServerFormDetails
 	6) Check tab colors
 	7) NotificationUtils - they deleted we retained - review
+	8) strings.xml - had to change a string and I don't know why
+	9) FormsDatabaseMigrator is new
+	10) FormsDatabaseHelper is new
 
 	Complete List of Changes
 	-------------------------

@@ -57,10 +57,10 @@ public class ItemsetWidget extends SelectOneWidget {
     private static final String QUOTATION_MARK = "\"";
 
     public ItemsetWidget(Context context, QuestionDetails formEntryPrompt, boolean autoAdvanceToNext, boolean readOnlyOverride) {  // smap
-        this(context, new ItemsetQuestionDetails(formEntryPrompt.getPrompt(), formEntryPrompt.getFormAnalyticsID(), new XPathParseTool(), new ItemsetDbAdapter(), new FileUtil()), autoAdvanceToNext);
+        this(context, new ItemsetQuestionDetails(formEntryPrompt.getPrompt(), formEntryPrompt.getFormAnalyticsID(), new XPathParseTool(), new ItemsetDbAdapter(), new FileUtil()), autoAdvanceToNext, readOnlyOverride);
     }
 
-    public ItemsetWidget(Context context, ItemsetQuestionDetails formEntryPrompt, boolean autoAdvance, readOnlyOverride) {  // smap
+    public ItemsetWidget(Context context, ItemsetQuestionDetails formEntryPrompt, boolean autoAdvance, boolean readOnlyOverride) {  // smap
         super(context, formEntryPrompt, autoAdvance, readOnlyOverride);  // smap
     }
 

@@ -18,9 +18,6 @@ package org.odk.collect.android.preferences;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
 
 import androidx.annotation.NonNull;
 import androidx.preference.Preference;

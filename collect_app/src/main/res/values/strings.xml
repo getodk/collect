@@ -391,7 +391,7 @@
     <string name="download_selected">Download Selected</string>
     <string name="record_geopoint">Record a point</string>
     <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nAccuracy: %4$sm</string>
-    <string name="parser_exception">XPathParser Exception: \"%s\"</string>
+    <string name="parser_exception">XPathParser Exception: \"%1$s\"</string>
     <string name="version_number">Version: %s</string>
     <string name="id_number">ID: %s</string>
     <string name="odk_website">Visit the ODK website</string>
