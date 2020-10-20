@@ -22,8 +22,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithRangeQuestionAndAnswer;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndRangeQuestion;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithQuestionAndAnswer;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndQuestion;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 
 @RunWith(RobolectricTestRunner.class)
@@ -39,14 +39,14 @@ public class RatingWidgetTest {
 
     @Test
     public void usingReadOnly_makesAllClickableElementsDisabled() {
-        RatingWidget widget = createWidget(promptWithReadOnlyAndRangeQuestion(rangeQuestion));
+        RatingWidget widget = createWidget(promptWithReadOnlyAndQuestion(rangeQuestion));
         assertThat(widget.binding.ratingBar1.isEnabled(), equalTo(false));
         assertThat(widget.binding.ratingBar2.isEnabled(), equalTo(false));
     }
 
     @Test
     public void ratingWidgetShowsCorrectViewForLessNumberOfStars() {
-        RatingWidget widget = createWidget(promptWithReadOnlyAndRangeQuestion(rangeQuestion));
+        RatingWidget widget = createWidget(promptWithReadOnlyAndQuestion(rangeQuestion));
 
         assertThat(widget.binding.ratingBar1.getNumStars(), equalTo(5));
         assertThat(widget.binding.ratingBar2.getVisibility(), equalTo(View.GONE));
@@ -55,7 +55,7 @@ public class RatingWidgetTest {
     @Test
     public void ratingWidgetShowsCorrectViewForMoreNumberOfStars() {
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.valueOf(10));
-        RatingWidget widget = createWidget(promptWithReadOnlyAndRangeQuestion(rangeQuestion));
+        RatingWidget widget = createWidget(promptWithReadOnlyAndQuestion(rangeQuestion));
 
         assertThat(widget.binding.ratingBar1.getNumStars(), equalTo(5));
         assertThat(widget.binding.ratingBar2.getVisibility(), equalTo(View.VISIBLE));
@@ -63,20 +63,20 @@ public class RatingWidgetTest {
     }
 
     @Test
-    public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsZero() {
-        assertThat(createWidget(promptWithReadOnlyAndRangeQuestion(rangeQuestion)).getAnswer(), nullValue());
+    public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsNull() {
+        assertThat(createWidget(promptWithReadOnlyAndQuestion(rangeQuestion)).getAnswer(), nullValue());
     }
 
     @Test
     public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.valueOf(10));
-        RatingWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("7")));
+        RatingWidget widget = createWidget(promptWithQuestionAndAnswer(rangeQuestion, new StringData("7")));
         assertThat(widget.getAnswer().getValue(), equalTo(7));
     }
 
     @Test
     public void whenPromptDoesNotHaveAnswer_noStarsAreHighlightedOnRatingBar() {
-        RatingWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
+        RatingWidget widget = createWidget(promptWithQuestionAndAnswer(rangeQuestion, null));
 
         assertThat(widget.binding.ratingBar1.getRating(), equalTo(0.0F));
         assertThat(widget.binding.ratingBar2.getRating(), equalTo(0.0F));
@@ -84,7 +84,7 @@ public class RatingWidgetTest {
 
     @Test
     public void whenPromptHasAnswer_correctNumberOfStarsAreHighlighted_forSmallerRatingBar() {
-        RatingWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("3")));
+        RatingWidget widget = createWidget(promptWithQuestionAndAnswer(rangeQuestion, new StringData("3")));
 
         assertThat(widget.binding.ratingBar1.getRating(), equalTo(3.0F));
         assertThat(widget.binding.ratingBar2.getRating(), equalTo(0.0F));
@@ -93,7 +93,7 @@ public class RatingWidgetTest {
     @Test
     public void whenPromptHasAnswer_correctNumberOfStarsAreHighlighted_forRatingBarInMultipleLines() {
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.valueOf(10));
-        RatingWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("7")));
+        RatingWidget widget = createWidget(promptWithQuestionAndAnswer(rangeQuestion, new StringData("7")));
 
         assertThat(widget.binding.ratingBar1.getRating(), equalTo(5.0F));
         assertThat(widget.binding.ratingBar2.getRating(), equalTo(2.0F));
@@ -101,7 +101,7 @@ public class RatingWidgetTest {
 
     @Test
     public void clearAnswer_clearsWidgetAnswer() {
-        RatingWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("3")));
+        RatingWidget widget = createWidget(promptWithQuestionAndAnswer(rangeQuestion, new StringData("3")));
         widget.clearAnswer();
 
         assertThat(widget.getAnswer(), nullValue());
@@ -111,7 +111,7 @@ public class RatingWidgetTest {
 
     @Test
     public void clearAnswer_callsValueChangeListeners() {
-        RatingWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("3")));
+        RatingWidget widget = createWidget(promptWithQuestionAndAnswer(rangeQuestion, new StringData("3")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.setValueChangedListener(valueChangedListener);
         widget.clearAnswer();
@@ -121,7 +121,7 @@ public class RatingWidgetTest {
 
     @Test
     public void changingRating_callsValueChangeListeners() {
-        RatingWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("3")));
+        RatingWidget widget = createWidget(promptWithQuestionAndAnswer(rangeQuestion, new StringData("3")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.setValueChangedListener(valueChangedListener);
         widget.binding.ratingBar1.setRating(4.0F);
@@ -131,7 +131,7 @@ public class RatingWidgetTest {
 
     @Test
     public void changingRating_updatesAnswer() {
-        RatingWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("3")));
+        RatingWidget widget = createWidget(promptWithQuestionAndAnswer(rangeQuestion, new StringData("3")));
         widget.binding.ratingBar1.setRating(4.0F);
 
         assertThat(widget.getAnswer().getValue(), equalTo(4));
@@ -139,7 +139,7 @@ public class RatingWidgetTest {
 
     @Test
     public void ratingBar_doesNotAllowUserToSetDecimalRating() {
-        RatingWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, new StringData("3")));
+        RatingWidget widget = createWidget(promptWithQuestionAndAnswer(rangeQuestion, new StringData("3")));
         widget.binding.ratingBar1.setRating(4.8F);
         assertThat(widget.getAnswer().getValue(), equalTo(5));
     }
@@ -147,7 +147,7 @@ public class RatingWidgetTest {
     @Test
     public void clickingRatingBarForLong_callsLongClickListener() {
         View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
-        RatingWidget widget = createWidget(promptWithRangeQuestionAndAnswer(rangeQuestion, null));
+        RatingWidget widget = createWidget(promptWithQuestionAndAnswer(rangeQuestion, null));
         widget.setOnLongClickListener(listener);
         widget.binding.ratingBar1.performLongClick();
         widget.binding.ratingBar2.performLongClick();

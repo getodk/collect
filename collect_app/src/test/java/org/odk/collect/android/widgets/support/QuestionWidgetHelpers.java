@@ -48,10 +48,11 @@ public class QuestionWidgetHelpers {
     public static FormEntryPrompt promptWithReadOnlyAndAnswer(IAnswerData answer) {
         return new MockFormEntryPromptBuilder()
                 .withReadOnly(true)
+                .withAnswer(answer)
                 .build();
     }
 
-    public static FormEntryPrompt promptWithRangeQuestionAndAnswer(QuestionDef questionDef, IAnswerData answer) {
+    public static FormEntryPrompt promptWithQuestionAndAnswer(QuestionDef questionDef, IAnswerData answer) {
         return new MockFormEntryPromptBuilder()
                 .withQuestion(questionDef)
                 .withAnswer(answer)
