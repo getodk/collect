@@ -751,11 +751,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (currentView != null) {
             for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
                 if (qw instanceof TimeWidget) {
-                    ((TimeWidget) qw).onTimeSet(view, hourOfDay, minute);
+                    view.clearFocus();
+                    ((TimeWidget) qw).onTimeSet(hourOfDay, minute);
                     widgetValueChanged(qw);
                     return;
                 } else if (qw instanceof DateTimeWidget) {
-                    ((DateTimeWidget) qw).onTimeSet(view, hourOfDay, minute);
+                    view.clearFocus();
+                    ((DateTimeWidget) qw).onTimeSet(hourOfDay, minute);
                     widgetValueChanged(qw);
                     return;
                 }

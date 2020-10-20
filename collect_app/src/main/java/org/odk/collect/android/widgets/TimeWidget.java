@@ -17,26 +17,19 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.TimePicker;
 
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.TimeData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.databinding.WidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog;
-import org.odk.collect.android.utilities.DialogUtils;
+import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
 import java.util.Date;
 
-import static org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog.CURRENT_TIME;
-import static org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog.TIME_PICKER_THEME;
 
 @SuppressLint("ViewConstructor")
 public class TimeWidget extends QuestionWidget {
@@ -89,13 +82,7 @@ public class TimeWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        // use picker time, convert to today's date, store as utc
-        DateTime localDateTime = new DateTime()
-                .withTime(hourOfDay, minuteOfHour, 0, 0);
-
-        return !nullAnswer
-                ? new TimeData(localDateTime.toDate())
-                : null;
+        return DateTimeWidgetUtils.getTimeData(hourOfDay, minuteOfHour, nullAnswer);
     }
 
     @Override
@@ -111,24 +98,10 @@ public class TimeWidget extends QuestionWidget {
         binding.widgetAnswerText.cancelLongPress();
     }
 
-    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-        timePicker.clearFocus();
+    public void onTimeSet(int hourOfDay, int minute) {
         this.hourOfDay = hourOfDay;
         this.minuteOfHour = minute;
-        setTimeLabel();
-    }
-
-    private void setTimeLabel() {
-        nullAnswer = false;
-        binding.widgetAnswerText.setText(getAnswer().getDisplayText());
-    }
-
-    private void createTimePickerDialog() {
-        Bundle bundle = new Bundle();
-        bundle.putInt(TIME_PICKER_THEME, themeUtils.getHoloDialogTheme());
-        bundle.putSerializable(CURRENT_TIME, new DateTime().withTime(hourOfDay, minuteOfHour, 0, 0));
-
-        DialogUtils.showIfNotShowing(CustomTimePickerDialog.class, bundle, ((FormEntryActivity) getContext()).getSupportFragmentManager());
+        DateTimeWidgetUtils.setTimeLabel(binding.widgetAnswerText, hourOfDay, minuteOfHour, nullAnswer);
     }
 
     private void setTimeToCurrent() {
@@ -144,7 +117,7 @@ public class TimeWidget extends QuestionWidget {
         this.minuteOfHour = minuteOfHour;
 
         if (shouldUpdateLabel) {
-            setTimeLabel();
+            DateTimeWidgetUtils.setTimeLabel(binding.widgetAnswerText, hourOfDay, minuteOfHour, nullAnswer);
         }
     }
 
@@ -154,6 +127,6 @@ public class TimeWidget extends QuestionWidget {
         } else {
             updateTime(hourOfDay, minuteOfHour, true);
         }
-        createTimePickerDialog();
+        DateTimeWidgetUtils.createTimePickerDialog(getContext(), hourOfDay, minuteOfHour);
     }
 }

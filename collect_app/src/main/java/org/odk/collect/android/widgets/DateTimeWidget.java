@@ -17,46 +17,25 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.os.Build;
-import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.TimePicker;
 
 import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.TimeData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.databinding.DateTimeWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.fragments.dialogs.BikramSambatDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.CopticDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog;
-import org.odk.collect.android.fragments.dialogs.EthiopianDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.IslamicDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.MyanmarDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.PersianDatePickerDialog;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
-import org.odk.collect.android.utilities.DialogUtils;
+import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
 import java.util.Date;
-
-import static org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog.DATE_PICKER_DIALOG;
-import static org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog.CURRENT_TIME;
-import static org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog.TIME_PICKER_THEME;
-import static org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog.CURRENT_DATE;
-import static org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog.DATE_PICKER_DETAILS;
-import static org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog.DATE_PICKER_THEME;
 
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not
@@ -96,7 +75,8 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
             binding.dateButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
             binding.timeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-            binding.dateButton.setOnClickListener(v -> showDatePickerDialog());
+            binding.dateButton.setOnClickListener(v -> DateTimeWidgetUtils.showDatePickerDialog(
+                    context, prompt, datePickerDetails, date));
             binding.timeButton.setOnClickListener(v -> onButtonClick(binding.timeButton.getId()));
         }
         binding.dateAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
@@ -104,10 +84,11 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
 
         if (getFormEntryPrompt().getAnswerValue() == null) {
             clearAnswer();
-            setDateToCurrent();
+            date = DateTimeWidgetUtils.getCurrentDate();
         } else {
             date = new LocalDateTime(getFormEntryPrompt().getAnswerValue().getValue());
-            setDateLabel();
+            DateTimeWidgetUtils.setDateLabel(getContext(), binding.dateAnswerText, getAnswer(), datePickerDetails);
+            isDateNull = false;
 
             Date date = (Date) getFormEntryPrompt().getAnswerValue().getValue();
             DateTime dateTime = new DateTime(date);
@@ -124,24 +105,18 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
         } else {
             if (isTimeNull) {
                 setTimeToCurrent();
-                setTimeLabel();
+                DateTimeWidgetUtils.setTimeLabel(binding.timeAnswerText, hourOfDay, minuteOfHour, isTimeNull);
             } else if (isDateNull) {
-                setDateToCurrent();
-                setDateLabel();
+                date = DateTimeWidgetUtils.getCurrentDate();
+                DateTimeWidgetUtils.setDateLabel(getContext(), binding.dateAnswerText, getAnswer(), datePickerDetails);
+                isDateNull = false;
             }
-
-            int year = date.getYear();
-            int month = date.getMonthOfYear();
-            int day = date.getDayOfMonth();
-            int hour = hourOfDay;
-            int minute = minuteOfHour;
-
             LocalDateTime ldt = new LocalDateTime()
-                    .withYear(year)
-                    .withMonthOfYear(month)
-                    .withDayOfMonth(day)
-                    .withHourOfDay(hour)
-                    .withMinuteOfHour(minute)
+                    .withYear(date.getYear())
+                    .withMonthOfYear(date.getMonthOfYear())
+                    .withDayOfMonth(date.getDayOfMonth())
+                    .withHourOfDay(hourOfDay)
+                    .withMinuteOfHour(minuteOfHour)
                     .withSecondOfMinute(0)
                     .withMillisOfSecond(0);
 
@@ -153,7 +128,7 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
     public void clearAnswer() {
         isDateNull = true;
         binding.dateAnswerText.setText(R.string.no_date_selected);
-        setDateToCurrent();
+        date = DateTimeWidgetUtils.getCurrentDate();
 
         isTimeNull = true;
         binding.timeAnswerText.setText(R.string.no_time_selected);
@@ -183,7 +158,8 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
     public void setData(Object answer) {
         if (answer instanceof LocalDateTime) {
             date = (LocalDateTime) answer;
-            setDateLabel();
+            DateTimeWidgetUtils.setDateLabel(getContext(), binding.dateAnswerText, getAnswer(), datePickerDetails);
+            isDateNull = false;
         }
     }
 
@@ -194,7 +170,7 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
         } else {
             updateTime(hourOfDay, minuteOfHour, true);
         }
-        createTimePickerDialog();
+        DateTimeWidgetUtils.createTimePickerDialog(getContext(), hourOfDay, minuteOfHour);
     }
 
     @Override
@@ -202,20 +178,10 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
         widgetValueChanged();
     }
 
-    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-        timePicker.clearFocus();
+    public void onTimeSet(int hourOfDay, int minute) {
         this.hourOfDay = hourOfDay;
         this.minuteOfHour = minute;
-        setTimeLabel();
-    }
-
-    private void setDateToCurrent() {
-        date = LocalDateTime
-                .now()
-                .withHourOfDay(0)
-                .withMinuteOfHour(0)
-                .withSecondOfMinute(0)
-                .withMillisOfSecond(0);
+        DateTimeWidgetUtils.setTimeLabel(binding.timeAnswerText, hourOfDay, minuteOfHour, isTimeNull);
     }
 
     private void setTimeToCurrent() {
@@ -231,94 +197,13 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
         this.minuteOfHour = minuteOfHour;
 
         if (shouldUpdateLabel) {
-            setTimeLabel();
+            DateTimeWidgetUtils.setTimeLabel(binding.timeAnswerText, hourOfDay, minuteOfHour, isTimeNull);
         }
-    }
-
-    private void setDateLabel() {
-        isDateNull = false;
-        binding.dateAnswerText.setText(DateTimeUtils.getDateTimeLabel((Date) getAnswer().getValue(), datePickerDetails, false, getContext()));
-    }
-
-    private void setTimeLabel() {
-        isTimeNull = false;
-        binding.timeAnswerText.setText(getTimeData().getDisplayText());
-    }
-
-    private TimeData getTimeData() {
-        // use picker time, convert to today's date, store as utc
-        DateTime localDateTime = new DateTime()
-                .withTime(hourOfDay, minuteOfHour, 0, 0);
-        return !isTimeNull
-                ? new TimeData(localDateTime.toDate())
-                : null;
     }
 
     private boolean isNullValue() {
         return getFormEntryPrompt().isRequired()
                 ? isDateNull || isTimeNull
                 : isDateNull && isTimeNull;
-    }
-
-    private void showDatePickerDialog() {
-        switch (datePickerDetails.getDatePickerType()) {
-            case ETHIOPIAN:
-                CustomDatePickerDialog dialog = EthiopianDatePickerDialog.newInstance(getFormEntryPrompt().getIndex(), date, datePickerDetails);
-                dialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), DATE_PICKER_DIALOG);
-                break;
-            case COPTIC:
-                dialog = CopticDatePickerDialog.newInstance(getFormEntryPrompt().getIndex(), date, datePickerDetails);
-                dialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), DATE_PICKER_DIALOG);
-                break;
-            case ISLAMIC:
-                dialog = IslamicDatePickerDialog.newInstance(getFormEntryPrompt().getIndex(), date, datePickerDetails);
-                dialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), DATE_PICKER_DIALOG);
-                break;
-            case BIKRAM_SAMBAT:
-                dialog = BikramSambatDatePickerDialog.newInstance(getFormEntryPrompt().getIndex(), date, datePickerDetails);
-                dialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), DATE_PICKER_DIALOG);
-                break;
-            case MYANMAR:
-                dialog = MyanmarDatePickerDialog.newInstance(getFormEntryPrompt().getIndex(), date, datePickerDetails);
-                dialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), DATE_PICKER_DIALOG);
-                break;
-            case PERSIAN:
-                dialog = PersianDatePickerDialog.newInstance(getFormEntryPrompt().getIndex(), date, datePickerDetails);
-                dialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), DATE_PICKER_DIALOG);
-                break;
-            default:
-                Bundle bundle = new Bundle();
-                bundle.putInt(DATE_PICKER_THEME, getTheme());
-                bundle.putSerializable(CURRENT_DATE, date);
-                bundle.putSerializable(DATE_PICKER_DETAILS, datePickerDetails);
-
-                DialogUtils.showIfNotShowing(FixedDatePickerDialog.class, bundle, ((FormEntryActivity) getContext()).getSupportFragmentManager());
-        }
-    }
-
-    private void createTimePickerDialog() {
-        Bundle bundle = new Bundle();
-        bundle.putInt(TIME_PICKER_THEME, themeUtils.getHoloDialogTheme());
-        bundle.putSerializable(CURRENT_TIME, new DateTime().withTime(hourOfDay, minuteOfHour, 0, 0));
-
-        DialogUtils.showIfNotShowing(CustomTimePickerDialog.class, bundle, ((FormEntryActivity) getContext()).getSupportFragmentManager());
-    }
-
-    private int getTheme() {
-        int theme = 0;
-        if (!isBrokenSamsungDevice()) {
-            theme = themeUtils.getMaterialDialogTheme();
-        }
-        if (!datePickerDetails.isCalendarMode() || isBrokenSamsungDevice()) {
-            theme = themeUtils.getHoloDialogTheme();
-        }
-
-        return theme;
-    }
-
-    // https://stackoverflow.com/questions/28618405/datepicker-crashes-on-my-device-when-clicked-with-personal-app
-    private boolean isBrokenSamsungDevice() {
-        return Build.MANUFACTURER.equalsIgnoreCase("samsung")
-                && Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1;
     }
 }
