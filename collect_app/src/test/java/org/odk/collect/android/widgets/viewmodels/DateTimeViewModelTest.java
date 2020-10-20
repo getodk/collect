@@ -13,8 +13,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.support.LiveDataTester;
 import org.odk.collect.android.utilities.DateTimeUtils;
+import org.odk.collect.testshared.LiveDataTester;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,10 +25,10 @@ import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class DateTimeViewModelTest {
-    private final LiveDataTester liveDataTester = new LiveDataTester();
-
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
+
+    private final LiveDataTester liveDataTester = new LiveDataTester();
 
     private DateTimeViewModel viewModel;
     LiveData<LocalDateTime> selectedDate;
