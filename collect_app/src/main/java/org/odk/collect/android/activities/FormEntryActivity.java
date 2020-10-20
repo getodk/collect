@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.activities;
 
+import android.app.DatePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -41,6 +42,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
@@ -149,6 +151,7 @@ import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.DateTimeWidget;
+import org.odk.collect.android.widgets.DateWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangePickerDecimalWidget;
 import org.odk.collect.android.widgets.RangePickerIntegerWidget;
@@ -211,7 +214,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         ScreenContext, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
         AudioControllerView.SwipableParent, FormIndexAnimationHandler.Listener,
         QuitFormDialogFragment.Listener, DeleteRepeatDialogFragment.DeleteRepeatDialogCallback,
-        SelectMinimalDialog.SelectMinimalDialogListener {
+        SelectMinimalDialog.SelectMinimalDialogListener, DatePickerDialog.OnDateSetListener {
 
     // Defines for FormEntryActivity
     private static final boolean EXIT = true;
@@ -702,6 +705,19 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         } catch (Exception e) {
             Timber.e("Could not schedule SavePointTask. Perhaps a lot of swiping is taking place?");
+        }
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        if (currentView != null) {
+            for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
+                if (qw instanceof DateWidget) {
+                    ((DateWidget) qw).onDateSet(year, month, dayOfMonth);
+                    widgetValueChanged(qw);
+                    return;
+                }
+            }
         }
     }
 
