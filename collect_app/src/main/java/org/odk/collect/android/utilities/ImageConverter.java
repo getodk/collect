@@ -40,8 +40,21 @@ public class ImageConverter {
     }
 
     public static void execute(String imagePath, QuestionWidget questionWidget, Context context) {
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(imagePath);
+        } catch (IOException e) {
+            Timber.w(e);
+        }
+
         rotateImageIfNeeded(imagePath);
         scaleDownImageIfNeeded(imagePath, questionWidget, context);
+        
+        try {
+            copyExif(exif, imagePath);
+        } catch (IOException e) {
+            Timber.w(e);
+        }
     }
 
     private static void scaleDownImageIfNeeded(String imagePath, QuestionWidget questionWidget, Context context) {
@@ -157,6 +170,59 @@ public class ImageConverter {
             Timber.w(e);
         }
         FileUtils.saveBitmapToFile(image, imagePath);
+    }
+
+    public static void copyExif(ExifInterface sourceExif, String newPath) throws IOException {
+        if (sourceExif == null) {
+            return;
+        }
+
+        String[] attributes = new String[] {
+                ExifInterface.TAG_APERTURE_VALUE,
+                ExifInterface.TAG_ARTIST,
+                ExifInterface.TAG_BITS_PER_SAMPLE,
+                ExifInterface.TAG_DATETIME,
+                ExifInterface.TAG_DATETIME_ORIGINAL,
+                ExifInterface.TAG_DATETIME_DIGITIZED,
+                ExifInterface.TAG_EXPOSURE_TIME,
+                ExifInterface.TAG_FLASH,
+                ExifInterface.TAG_FOCAL_LENGTH,
+                ExifInterface.TAG_GPS_ALTITUDE,
+                ExifInterface.TAG_GPS_ALTITUDE_REF,
+                ExifInterface.TAG_GPS_DATESTAMP,
+                ExifInterface.TAG_GPS_LATITUDE,
+                ExifInterface.TAG_GPS_LATITUDE_REF,
+                ExifInterface.TAG_GPS_LONGITUDE,
+                ExifInterface.TAG_GPS_LONGITUDE_REF,
+                ExifInterface.TAG_GPS_PROCESSING_METHOD,
+                ExifInterface.TAG_GPS_TIMESTAMP,
+                ExifInterface.TAG_ISO_SPEED,
+                ExifInterface.TAG_MAKE,
+                ExifInterface.TAG_MODEL,
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.TAG_SUBSEC_TIME,
+                ExifInterface.TAG_PIXEL_X_DIMENSION,
+                ExifInterface.TAG_PIXEL_Y_DIMENSION,
+                ExifInterface.TAG_WHITE_BALANCE
+        };
+
+        ExifInterface newExif = new ExifInterface(newPath);
+        for (int i = 0; i < attributes.length; i++) {
+            String value = sourceExif.getAttribute(attributes[i]);
+            if (newExif.hasAttribute(attributes[i])) {
+                Timber.w(" KHUONG DETECTED Detected %s : %s", attributes[i], value);
+            } else {
+                if (value != null) {
+                    newExif.setAttribute(attributes[i], value);
+                }
+            }
+        }
+        newExif.saveAttributes();
+    }
+
+    public static void copyExif(String oldPath, String newPath) throws IOException {
+        ExifInterface oldExif = new ExifInterface(oldPath);
+        copyExif(oldExif, newPath);
     }
 
     public static Bitmap scaleImageToNewWidth(Bitmap bitmap, int newWidth) {
