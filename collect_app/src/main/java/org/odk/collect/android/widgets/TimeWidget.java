@@ -44,7 +44,6 @@ public class TimeWidget extends QuestionWidget {
 
     private int hourOfDay;
     private int minuteOfHour;
-
     private boolean nullAnswer;
 
     public TimeWidget(Context context, final QuestionDetails prompt) {
@@ -83,13 +82,9 @@ public class TimeWidget extends QuestionWidget {
 
     @Override
     public void clearAnswer() {
-        clearAnswerWithoutValueChangeEvent();
-        widgetValueChanged();
-    }
-
-    void clearAnswerWithoutValueChangeEvent() {
         nullAnswer = true;
         binding.widgetAnswerText.setText(R.string.no_time_selected);
+        widgetValueChanged();
     }
 
     @Override
@@ -116,7 +111,14 @@ public class TimeWidget extends QuestionWidget {
         binding.widgetAnswerText.cancelLongPress();
     }
 
-    public void setTimeLabel() {
+    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+        timePicker.clearFocus();
+        this.hourOfDay = hourOfDay;
+        this.minuteOfHour = minute;
+        setTimeLabel();
+    }
+
+    private void setTimeLabel() {
         nullAnswer = false;
         binding.widgetAnswerText.setText(getAnswer().getDisplayText());
     }
@@ -129,40 +131,21 @@ public class TimeWidget extends QuestionWidget {
         DialogUtils.showIfNotShowing(CustomTimePickerDialog.class, bundle, ((FormEntryActivity) getContext()).getSupportFragmentManager());
     }
 
-    public int getHour() {
-        return hourOfDay;
-    }
-
-    public int getMinute() {
-        return minuteOfHour;
-    }
-
-    public boolean isNullAnswer() {
-        return nullAnswer;
-    }
-
-    public void setTimeToCurrent() {
+    private void setTimeToCurrent() {
         updateTime(DateTime.now(), false);
     }
 
-    public void updateTime(DateTime dateTime, boolean shouldUpdateLabel) {
+    private void updateTime(DateTime dateTime, boolean shouldUpdateLabel) {
         updateTime(dateTime.getHourOfDay(), dateTime.getMinuteOfHour(), shouldUpdateLabel);
     }
 
-    public void updateTime(int hourOfDay, int minuteOfHour, boolean shouldUpdateLabel) {
+    private void updateTime(int hourOfDay, int minuteOfHour, boolean shouldUpdateLabel) {
         this.hourOfDay = hourOfDay;
         this.minuteOfHour = minuteOfHour;
 
         if (shouldUpdateLabel) {
             setTimeLabel();
         }
-    }
-
-    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-        timePicker.clearFocus();
-        this.hourOfDay = hourOfDay;
-        this.minuteOfHour = minute;
-        setTimeLabel();
     }
 
     private void onButtonClick() {

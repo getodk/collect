@@ -54,10 +54,9 @@ import static org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog.DA
 public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
     WidgetAnswerBinding binding;
 
-    boolean isNullAnswer;
-
     private LocalDateTime date;
     private DatePickerDetails datePickerDetails;
+    private boolean isNullAnswer;
 
     public DateWidget(Context context, QuestionDetails prompt) {
         this(context, prompt, false);
@@ -72,7 +71,7 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
         binding = WidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         View answerView = binding.getRoot();
 
-        datePickerDetails = DateTimeUtils.getDatePickerDetails(getFormEntryPrompt().getQuestion().getAppearanceAttr());
+        datePickerDetails = DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
 
         if (prompt.isReadOnly()) {
             binding.widgetButton.setVisibility(GONE);
@@ -110,14 +109,10 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
 
     @Override
     public void clearAnswer() {
-        clearAnswerWithoutValueChangeEvent();
-        widgetValueChanged();
-    }
-
-    void clearAnswerWithoutValueChangeEvent() {
         isNullAnswer = true;
         binding.widgetAnswerText.setText(R.string.no_date_selected);
         setDateToCurrent();
+        widgetValueChanged();
     }
 
     @Override
@@ -133,19 +128,7 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
         }
     }
 
-    public boolean isDayHidden() {
-        return datePickerDetails.isMonthYearMode() || datePickerDetails.isYearMode();
-    }
-
-    public LocalDateTime getDate() {
-        return date;
-    }
-
-    public boolean isNullAnswer() {
-        return isNullAnswer;
-    }
-
-    protected void setDateToCurrent() {
+    private void setDateToCurrent() {
         date = LocalDateTime
                 .now()
                 .withHourOfDay(0)
@@ -154,12 +137,12 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
                 .withMillisOfSecond(0);
     }
 
-    protected void setDateLabel() {
+    private void setDateLabel() {
         isNullAnswer = false;
         binding.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel((Date) getAnswer().getValue(), datePickerDetails, false, getContext()));
     }
 
-    protected void showDatePickerDialog() {
+    private void showDatePickerDialog() {
         switch (datePickerDetails.getDatePickerType()) {
             case ETHIOPIAN:
                 CustomDatePickerDialog dialog = EthiopianDatePickerDialog.newInstance(getFormEntryPrompt().getIndex(), date, datePickerDetails);
