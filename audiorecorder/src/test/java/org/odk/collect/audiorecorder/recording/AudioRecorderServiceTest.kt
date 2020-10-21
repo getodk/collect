@@ -13,6 +13,7 @@ import org.odk.collect.audiorecorder.overrideDependencies
 import org.odk.collect.audiorecorder.recorder.Recorder
 import org.robolectric.Robolectric.buildService
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.Shadows.shadowOf
 
 @RunWith(RobolectricTestRunner::class)
 class AudioRecorderServiceTest {
@@ -49,28 +50,30 @@ class AudioRecorderServiceTest {
     }
 
     @Test
-    fun stopAction_stopsRecorder_andSetsRecordingOnRepository() {
+    fun stopAction_stopsRecorder_stopsSelf_andSetsRecordingOnRepository() {
         val intent = Intent(application, AudioRecorderService::class.java)
         intent.action = AudioRecorderService.ACTION_STOP
 
-        buildService(AudioRecorderService::class.java, intent)
+        val service = buildService(AudioRecorderService::class.java, intent)
             .create()
             .startCommand(0, 0)
 
         assertThat(recorder.isRecording(), equalTo(false))
         assertThat(recordingRepository.getRecording().value, equalTo(recorder.file))
+        assertThat(shadowOf(service.get()).isStoppedBySelf, equalTo(true))
     }
 
     @Test
-    fun cancelAction_cancelsRecorder() {
+    fun cancelAction_cancelsRecorder_stopsSelf() {
         val intent = Intent(application, AudioRecorderService::class.java)
         intent.action = AudioRecorderService.ACTION_CANCEL
 
-        buildService(AudioRecorderService::class.java, intent)
+        val service = buildService(AudioRecorderService::class.java, intent)
             .create()
             .startCommand(0, 0)
 
         assertThat(recorder.isRecording(), equalTo(false))
         assertThat(recorder.wasCancelled(), equalTo(true))
+        assertThat(shadowOf(service.get()).isStoppedBySelf, equalTo(true))
     }
 }

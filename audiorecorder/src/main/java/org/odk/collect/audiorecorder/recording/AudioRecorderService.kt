@@ -23,11 +23,16 @@ class AudioRecorderService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
             ACTION_START -> recorder.start()
-            ACTION_CANCEL -> recorder.cancel()
+
+            ACTION_CANCEL -> {
+                recorder.cancel()
+                stopSelf()
+            }
 
             ACTION_STOP -> {
                 val file = recorder.stop()
                 recordingRepository.create(file)
+                stopSelf()
             }
         }
 
