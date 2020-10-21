@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_audio_recorder.done
 import org.odk.collect.audiorecorder.R
 import org.odk.collect.audiorecorder.getComponent
@@ -26,18 +27,23 @@ class AudioRecorderActivity : AppCompatActivity() {
         setTheme(intent.getIntExtra(ARGS.THEME, R.style.Theme_MaterialComponents_Light_NoActionBar))
         setContentView(R.layout.activity_audio_recorder)
 
+        viewModel.recording.observe(this) { file ->
+            if (file != null) {
+                setResult(
+                    Activity.RESULT_OK,
+                    Intent().also {
+                        it.data = Uri.parse(file.absolutePath)
+                    }
+                )
+
+                finish()
+            }
+        }
+
         viewModel.start()
 
         done.setOnClickListener {
-            val recording = viewModel.stop()
-            setResult(
-                Activity.RESULT_OK,
-                Intent().also {
-                    it.data = Uri.parse(recording.absolutePath)
-                }
-            )
-
-            finish()
+            viewModel.stop()
         }
     }
 
