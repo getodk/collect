@@ -290,7 +290,7 @@ public class Utilities {
 
                     if (instance.paths != null && instance.paths.size() > 0) {
                         for (String media : instance.paths) {
-                            MultiFormDownloader fd = new MultiFormDownloader();
+                            FormDownloader fd = new FormDownloader();
                             String mediaUrl = serverUrl + "/" + media;
                             int idx = media.lastIndexOf('/');
                             String mediaName = null;
