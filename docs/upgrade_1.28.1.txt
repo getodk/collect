@@ -98,7 +98,7 @@ r		b) FormListDownloader was deleted. What smap changes from that need to be add
 	7) NotificationUtils - they deleted we retained - review
 	8) strings.xml - had to change a string and I don't know why
 	9) FormsDatabaseMigrator is new
-	10) FormsDatabaseHelper is new
+	10) FormsDatabaseHelper is new (moved from helpers folder to parent)
 
 	Complete List of Changes
 	-------------------------

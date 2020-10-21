@@ -73,7 +73,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         try {
-            formDatabaseMigrator.onDowngrade(db);
+            //formDatabaseMigrator.onDowngrade(db); // smap
 
             Timber.i("Downgrading database from %d to %d completed with success.", oldVersion, newVersion);
             isDatabaseBeingMigrated = false;
