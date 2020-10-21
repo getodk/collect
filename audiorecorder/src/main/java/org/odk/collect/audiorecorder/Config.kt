@@ -1,7 +1,7 @@
 package org.odk.collect.audiorecorder
 
-import android.app.Activity
 import android.app.Application
+import android.content.Context
 import android.media.MediaRecorder
 import dagger.BindsInstance
 import dagger.Component
@@ -11,7 +11,9 @@ import org.odk.collect.audiorecorder.recorder.MediaRecorderRecorder
 import org.odk.collect.audiorecorder.recorder.RealMediaRecorderWrapper
 import org.odk.collect.audiorecorder.recorder.Recorder
 import org.odk.collect.audiorecorder.recording.AudioRecorderActivity
+import org.odk.collect.audiorecorder.recording.AudioRecorderService
 import org.odk.collect.audiorecorder.recording.RecordingRepository
+import javax.inject.Singleton
 
 private var _component: AudioRecorderDependencyComponent? = null
 
@@ -26,22 +28,8 @@ internal fun Application.overrideDependencies(module: AudioRecorderDependencyMod
         .build()
 }
 
-internal fun Activity.getComponent(): AudioRecorderDependencyComponent {
-    return _component.let {
-        if (it == null) {
-            val newComponent = DaggerAudioRecorderDependencyComponent.builder()
-                .application(application)
-                .build()
-
-            _component = newComponent
-            newComponent
-        } else {
-            it
-        }
-    }
-}
-
 @Component(modules = [AudioRecorderDependencyModule::class])
+@Singleton
 internal interface AudioRecorderDependencyComponent {
 
     @Component.Builder
@@ -56,6 +44,22 @@ internal interface AudioRecorderDependencyComponent {
     }
 
     fun inject(activity: AudioRecorderActivity)
+    fun inject(activity: AudioRecorderService)
+}
+
+internal fun Context.getComponent(): AudioRecorderDependencyComponent {
+    return _component.let {
+        if (it == null) {
+            val newComponent = DaggerAudioRecorderDependencyComponent.builder()
+                .application(applicationContext as Application)
+                .build()
+
+            _component = newComponent
+            newComponent
+        } else {
+            it
+        }
+    }
 }
 
 @Module
@@ -67,7 +71,8 @@ internal open class AudioRecorderDependencyModule {
     }
 
     @Provides
-    fun providesRecordingRepository(): RecordingRepository {
+    @Singleton
+    open fun providesRecordingRepository(): RecordingRepository {
         return RecordingRepository()
     }
 }

@@ -8,6 +8,9 @@
             android:label="Audio Recorder"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
+
+        <service android:name=".recording.AudioRecorderService" />
+
     </application>
 
 </manifest>

@@ -9,18 +9,14 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_audio_recorder.done
 import org.odk.collect.audiorecorder.R
 import org.odk.collect.audiorecorder.getComponent
-import org.odk.collect.audiorecorder.recorder.Recorder
 import javax.inject.Inject
 
 class AudioRecorderActivity : AppCompatActivity() {
 
     @Inject
-    internal lateinit var recorder: Recorder
-
-    @Inject
     internal lateinit var recordingRepository: RecordingRepository
 
-    private val viewModel: AudioRecorderViewModel by viewModels { AudioRecorderViewModel.Factory(recorder, recordingRepository) }
+    private val viewModel: AudioRecorderViewModel by viewModels { AudioRecorderViewModel.Factory(application, recordingRepository) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +34,7 @@ class AudioRecorderActivity : AppCompatActivity() {
                     }
                 )
 
+                recordingRepository.clear()
                 finish()
             }
         }

@@ -15,4 +15,8 @@ class RecordingRepository {
     fun getRecording(): LiveData<File?> {
         return _recording
     }
+
+    fun clear() {
+        _recording.value = null
+    }
 }

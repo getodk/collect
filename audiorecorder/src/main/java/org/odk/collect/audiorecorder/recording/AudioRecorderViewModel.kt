@@ -1,34 +1,42 @@
 package org.odk.collect.audiorecorder.recording
 
+import android.app.Application
+import android.content.Intent
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import org.odk.collect.audiorecorder.recorder.Recorder
+import org.odk.collect.audiorecorder.recording.AudioRecorderService.Companion.ACTION_CANCEL
+import org.odk.collect.audiorecorder.recording.AudioRecorderService.Companion.ACTION_START
+import org.odk.collect.audiorecorder.recording.AudioRecorderService.Companion.ACTION_STOP
 import java.io.File
 import javax.inject.Inject
 
-internal class AudioRecorderViewModel(private val recorder: Recorder, private val recordingRepository: RecordingRepository) : ViewModel() {
+internal class AudioRecorderViewModel(private val application: Application, recordingRepository: RecordingRepository) : ViewModel() {
 
     val recording: LiveData<File?> = recordingRepository.getRecording()
 
     fun start() {
-        recorder.start()
+        application.startService(
+            Intent(application, AudioRecorderService::class.java).apply { action = ACTION_START }
+        )
     }
 
     fun stop() {
-        val file = recorder.stop()
-        recordingRepository.create(file)
+        application.startService(
+            Intent(application, AudioRecorderService::class.java).apply { action = ACTION_STOP }
+        )
     }
 
-    override fun onCleared() {
-        recorder.cancel()
+    public override fun onCleared() {
+        application.startService(
+            Intent(application, AudioRecorderService::class.java).apply { action = ACTION_CANCEL }
+        )
     }
 
-    class Factory @Inject constructor(private val recorder: Recorder, private val recordingRepository: RecordingRepository) : ViewModelProvider.Factory {
+    class Factory @Inject constructor(private val application: Application, private val recordingRepository: RecordingRepository) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return AudioRecorderViewModel(recorder, recordingRepository) as T
+            return AudioRecorderViewModel(application, recordingRepository) as T
         }
     }
 }
