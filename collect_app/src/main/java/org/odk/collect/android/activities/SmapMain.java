@@ -49,6 +49,9 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.SurveyDataViewModel;
 import org.odk.collect.android.adapters.ViewPagerAdapter;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.configure.LegacySettingsFileReader;
+import org.odk.collect.android.configure.SettingsImporter;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.fragments.SmapFormListFragment;
 import org.odk.collect.android.fragments.SmapTaskListFragment;
 import org.odk.collect.android.fragments.SmapTaskMapFragment;
@@ -59,10 +62,8 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
 import org.odk.collect.android.loaders.SurveyData;
 import org.odk.collect.android.loaders.TaskEntry;
-import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
-import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.FormsProviderAPI;
@@ -76,6 +77,7 @@ import org.odk.collect.android.taskModel.NfcTrigger;
 import org.odk.collect.android.tasks.DownloadTasksTask;
 import org.odk.collect.android.tasks.NdefReaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PermissionUtils;
@@ -84,6 +86,7 @@ import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Utilities;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -95,12 +98,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 import timber.log.Timber;
+
+import static org.odk.collect.android.analytics.AnalyticsEvents.SETTINGS_IMPORT_JSON;
+import static org.odk.collect.android.analytics.AnalyticsEvents.SETTINGS_IMPORT_SERIALIZED;
 
 public class SmapMain extends CollectAbstractActivity implements TaskDownloaderListener,
         NFCListener,
@@ -171,12 +179,16 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
     @Inject
     StorageStateProvider storageStateProvider;
+ */
+
+    @Inject
+    SettingsImporter settingsImporter;
 
     @Inject
     StoragePathProvider storagePathProvider;
 
     // End scoped storage
-    */
+
 
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -211,35 +223,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         tabLayout.setupWithViewPager(viewPager);
 
         stateChanged();
-
-        // Get settings if available in a file
-        StoragePathProvider storagePathProvider = new StoragePathProvider();
-        File f = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings");
-        File j = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json");
-        // Give JSON file preference
-        if (j.exists()) {
-            SharedPreferencesUtils sharedPrefs = new SharedPreferencesUtils();
-            boolean success = sharedPrefs.loadSharedPreferencesFromJSONFile(j);
-            if (success) {
-                ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
-                j.delete();
-
-                // Delete settings file to prevent overwrite of settings from JSON file on next startup
-                if (f.exists()) {
-                    f.delete();
-                }
-            } else {
-                ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
-            }
-        } else if (f.exists()) {
-            boolean success = loadSharedPreferencesFromFile(f);
-            if (success) {
-                ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
-                f.delete();
-            } else {
-                ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
-            }
-        }
 
         // Show login status if it was set
         String login_status = getIntent().getStringExtra(LOGIN_STATUS);
@@ -277,6 +260,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             @Override public void denied() { }
         });
 
+        importSettingsFromLegacyFiles();
     }
 
     @Override
@@ -493,7 +477,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
      * Forms Downloading Overrides
      */
     @Override
-    public void formsDownloadingComplete(HashMap<FormDetails, String> result) {
+    public void formsDownloadingComplete(HashMap<ServerFormDetails, String> result) {
         // TODO Auto-generated method stub
         // Ignore formsDownloading is called synchronously from taskDownloader
     }
@@ -685,78 +669,33 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     }
 
     /*
-     * Copied from Collect Main Menu Activity
+     * Copy from main menu activity
      */
-    private boolean loadSharedPreferencesFromFile(File src) {
-        // this should probably be in a thread if it ever gets big
-        boolean res = false;
-        ObjectInputStream input = null;
+    private void importSettingsFromLegacyFiles() {
         try {
-            input = new ObjectInputStream(new FileInputStream(src));
-            SharedPreferences.Editor prefEdit = PreferenceManager.getDefaultSharedPreferences(
-                    this).edit();
-            prefEdit.clear();
-            // first object is preferences
-            Map<String, ?> entries = (Map<String, ?>) input.readObject();
+            String settings = new LegacySettingsFileReader(storagePathProvider).toJSON();
 
-            AutoSendPreferenceMigrator.migrate(entries);
+            if (settings != null) {
+                String type = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json").exists()
+                        ? SETTINGS_IMPORT_JSON : SETTINGS_IMPORT_SERIALIZED;
+                String settingsHash = FileUtils.getMd5Hash(new ByteArrayInputStream(settings.getBytes()));
 
-            for (Map.Entry<String, ?> entry : entries.entrySet()) {
-                Object v = entry.getValue();
-                String key = entry.getKey();
-
-                if (v instanceof Boolean) {
-                    prefEdit.putBoolean(key, (Boolean) v);
-                } else if (v instanceof Float) {
-                    prefEdit.putFloat(key, (Float) v);
-                } else if (v instanceof Integer) {
-                    prefEdit.putInt(key, (Integer) v);
-                } else if (v instanceof Long) {
-                    prefEdit.putLong(key, (Long) v);
-                } else if (v instanceof String) {
-                    prefEdit.putString(key, ((String) v));
+                if (settingsImporter.fromJSON(settings)) {
+                    ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
+                    //analytics.logEvent(type, "Success", settingsHash);
+                    recreate();
+                } else {
+                    ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
+                    //analytics.logEvent(type, "Corrupt", settingsHash);
                 }
             }
-            prefEdit.apply();
-            //AuthDialogUtility.setWebCredentialsFromPreferences();  // Looks like this is no longer needed
+        } catch (LegacySettingsFileReader.CorruptSettingsFileException e) {
+            ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
 
-            // second object is admin options
-            SharedPreferences.Editor adminEdit = getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES,
-                    0).edit();
-            adminEdit.clear();
-            // first object is preferences
-            Map<String, ?> adminEntries = (Map<String, ?>) input.readObject();
-            for (Map.Entry<String, ?> entry : adminEntries.entrySet()) {
-                Object v = entry.getValue();
-                String key = entry.getKey();
-
-                if (v instanceof Boolean) {
-                    adminEdit.putBoolean(key, (Boolean) v);
-                } else if (v instanceof Float) {
-                    adminEdit.putFloat(key, (Float) v);
-                } else if (v instanceof Integer) {
-                    adminEdit.putInt(key, (Integer) v);
-                } else if (v instanceof Long) {
-                    adminEdit.putLong(key, (Long) v);
-                } else if (v instanceof String) {
-                    adminEdit.putString(key, ((String) v));
-                }
-            }
-            adminEdit.apply();
-
-            res = true;
-        } catch (IOException | ClassNotFoundException e) {
-            Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());
-        } finally {
-            try {
-                if (input != null) {
-                    input.close();
-                }
-            } catch (IOException ex) {
-                Timber.e(ex, "Exception thrown while closing an input stream due to: %s ", ex.getMessage());
-            }
+            String type = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json").exists()
+                    ? SETTINGS_IMPORT_JSON : SETTINGS_IMPORT_SERIALIZED;
+            //analytics.logEvent(type, "Corrupt exception", "none");
         }
-        return res;
     }
 
     /*

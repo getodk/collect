@@ -16,13 +16,9 @@ package org.odk.collect.android.preferences;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import androidx.annotation.Nullable;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.preference.CheckBoxPreference;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
@@ -62,6 +58,7 @@ public class IdentityPreferences extends BasePreferenceFragment {
             return false;
         });
 
+        //initAnalyticsPref();  // smap
     }
 
     /* smap

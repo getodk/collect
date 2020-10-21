@@ -30,7 +30,6 @@ import org.odk.collect.android.configure.qr.ShowQRCodeFragment;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
-import org.odk.collect.android.fragments.DataManagerList;
 import org.odk.collect.android.fragments.MapBoxInitializationFragment;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
 import org.odk.collect.android.fragments.BlankFormListFragment;
@@ -63,15 +62,12 @@ import org.odk.collect.android.tasks.SmapLoginTask;                     // smap
 import org.odk.collect.android.tasks.SmapRemoteWebServicePostTask;      // smap
 import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;          // smap
 import org.odk.collect.android.preferences.UserInterfacePreferencesFragment;
-import org.odk.collect.android.preferences.qr.QRCodeTabsActivity;
-import org.odk.collect.android.preferences.qr.ShowQRCodeFragment;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.migration.StorageMigrationDialog;
 import org.odk.collect.android.storage.migration.StorageMigrationService;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.utilities.ApplicationResetter;
 import org.odk.collect.android.utilities.AuthDialogUtility;
-import org.odk.collect.android.utilities.FormDownloader;
 import org.odk.collect.android.utilities.Utilities;     // smap
 import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.widgets.ExStringWidget;

@@ -42,7 +42,6 @@ import org.odk.collect.android.database.TaskAssignment;
 import org.odk.collect.android.database.TraceUtilities;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.AdminKeys;
