@@ -81,10 +81,12 @@ class AudioRecorderActivityTest {
 
         assertThat(scenario1.result.resultCode, equalTo(RESULT_OK))
         assertThat(scenario1.result.resultData.data, equalTo(Uri.parse(recording1.absolutePath)))
-
         scenario1.moveToState(Lifecycle.State.DESTROYED)
 
-        val scenario2 = launchActivity<AudioRecorderActivity>()
+        val scenario2 = launchActivity<AudioRecorderActivity>().onActivity {
+            assertThat(it.isFinishing, equalTo(false))
+        }
+
         val recording2 = File.createTempFile("blah2", ".mp3")
         recordingRepository.create(recording2)
 
