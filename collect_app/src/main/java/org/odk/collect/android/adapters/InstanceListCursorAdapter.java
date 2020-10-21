@@ -24,8 +24,6 @@ import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-import com.crashlytics.android.Crashlytics;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.instances.Instance;

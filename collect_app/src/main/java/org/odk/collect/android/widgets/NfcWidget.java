@@ -41,7 +41,8 @@ import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.getCenteredAnswerTextView;
@@ -53,7 +54,7 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.getCen
  * @author Neil Penman (neilpenman@gmail.com)
  * Based on BarcodeWidget by Yaw Anokwa (yanokwa@gmail.com)
  */
-public class NfcWidget extends QuestionWidget implements BinaryWidget {
+public class NfcWidget extends QuestionWidget implements BinaryDataReceiver, ButtonClickListener {
 	private Button mGetNfcButton;
 	private TextView mStringAnswer;
     private NfcAdapter mNfcAdapter;

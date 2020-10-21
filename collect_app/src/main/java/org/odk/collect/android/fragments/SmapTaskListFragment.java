@@ -34,6 +34,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.AboutActivity;
+import org.odk.collect.android.activities.FillBlankFormActivity;
 import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.activities.SmapTaskStatusActivity;
@@ -539,7 +540,7 @@ public class SmapTaskListFragment extends ListFragment {
     private void processEnterData() {
         if (MultiClickGuard.allowClick(getClass().getName())) {
             Intent i = new Intent(getContext(),
-                    FormChooserListActivity.class);
+                    FillBlankFormActivity.class);
             startActivity(i);
         }
     }

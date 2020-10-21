@@ -21,17 +21,17 @@ import android.view.ViewGroup;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
-import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
 
 import java.util.ArrayList;
 
 public class FormDetailsAdapter implements SpinnerAdapter {
 
-	private ArrayList<FormDetails> data;
+	private ArrayList<ServerFormDetails> data;
 	private Context context; 
 	private int layoutResourceId;
 	
-	public FormDetailsAdapter(ArrayList<FormDetails> data) {
+	public FormDetailsAdapter(ArrayList<ServerFormDetails> data) {
 		this.data = data;
 	}
 	

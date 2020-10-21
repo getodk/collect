@@ -43,7 +43,8 @@ import org.odk.collect.android.taskModel.FormLaunchDetail;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 
 import java.util.HashMap;
 import java.util.regex.Pattern;
@@ -56,7 +57,7 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.create
  * @author neilpenman@smap.com.au
  */
 @SuppressLint("ViewConstructor")
-public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
+public class SmapFormWidget extends QuestionWidget implements BinaryDataReceiver, ButtonClickListener {
     // If an extra with this key is specified, it will be parsed as a URI and used as intent data
     private static final String URI_KEY = "uri_data";
 
