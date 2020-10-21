@@ -98,13 +98,13 @@ public class OpenRosaFormListApi implements FormListApi {
     }
 
     @Override
-    public InputStream fetchForm(String formURL) throws FormApiException {
-        return fetchFile(formURL);
+    public InputStream fetchForm(String formURL, boolean credentials) throws FormApiException {     // smap add credentials
+        return fetchFile(formURL, credentials);
     }
 
     @Override
-    public InputStream fetchMediaFile(String mediaFileURL) throws FormApiException {
-        return mapException(() -> openRosaXMLFetcher.getFile(mediaFileURL, null));
+    public InputStream fetchMediaFile(String mediaFileURL, boolean credentials) throws FormApiException {   // smap add credentials flag
+        return mapException(() -> openRosaXMLFetcher.getFile(mediaFileURL, null, credentials));
     }
 
     @Override
@@ -118,8 +118,8 @@ public class OpenRosaFormListApi implements FormListApi {
     }
 
     @NotNull
-    private InputStream fetchFile(String formURL) throws FormApiException {
-        InputStream formFile = mapException(() -> openRosaXMLFetcher.getFile(formURL, null));
+    private InputStream fetchFile(String formURL, boolean credentials) throws FormApiException {    // smap add credentials
+        InputStream formFile = mapException(() -> openRosaXMLFetcher.getFile(formURL, null, credentials));
 
         if (formFile != null) {
             return formFile;

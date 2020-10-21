@@ -377,8 +377,8 @@ public class MultiFormDownloader {
         int i = 2;
         f = new File(path);
 
-        InputStream file = formListApi.fetchForm(url);
-        writeFile(f, stateListener, file, true);    // smap credentials flag
+        InputStream file = formListApi.fetchForm(url, true);    // smap add credentials flag
+        writeFile(f, stateListener, file);    // smap credentials flag
 
         // we've downloaded the file, and we may have renamed it
         // make sure it's not the same as a file we already have
@@ -414,7 +414,7 @@ public class MultiFormDownloader {
      * is okay, so that garbage is not left over on cancel.
      *
      */
-    public void writeFile(File file, FormDownloaderListener stateListener, InputStream inputStream, boolean credentials)   // smap made public, flag to include credentials
+    public void writeFile(File file, FormDownloaderListener stateListener, InputStream inputStream)   // smap made public
             throws IOException, TaskCancelledException, URISyntaxException, Exception {
 
         File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION,
@@ -610,8 +610,8 @@ public class MultiFormDownloader {
 
                 // end smap
                 if (!finalMediaFile.exists()) {
-                    InputStream mediaFile = formListApi.fetchMediaFile(toDownload.getDownloadUrl());
-                    writeFile(tempMediaFile, stateListener, mediaFile, true);	// smap add credentials file
+                    InputStream mediaFile = formListApi.fetchMediaFile(toDownload.getDownloadUrl(), true);  // smap add credentials file
+                    writeFile(tempMediaFile, stateListener, mediaFile);
                 } else {
                     String currentFileHash = FileUtils.getMd5Hash(finalMediaFile);
                     if(currentFileHash == null && finalImportedMediaFile != null && finalImportedMediaFile.exists()) { // smap get hash from imported if necessary
@@ -624,8 +624,8 @@ public class MultiFormDownloader {
                         // otherwise delete our current one and replace it with the new one
                         FileUtils.deleteAndReport(finalMediaFile);
                         downloadMsg.append(Collect.getInstance().getString(R.string.smap_get_media, tempMediaFile.getName())).append("\n");     // smap
-                        InputStream mediaFile = formListApi.fetchMediaFile(toDownload.getDownloadUrl());
-                        writeFile(tempMediaFile, stateListener, mediaFile, true);	// smap credentials flag
+                        InputStream mediaFile = formListApi.fetchMediaFile(toDownload.getDownloadUrl(), true);  // smap credentials flag
+                        writeFile(tempMediaFile, stateListener, mediaFile);
                     } else {
                         // exists, and the hash is the same
                         // no need to download it again

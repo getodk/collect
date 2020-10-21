@@ -11,9 +11,9 @@ public interface FormListApi {
 
     ManifestFile fetchManifest(String manifestURL) throws FormApiException;
 
-    InputStream fetchForm(String formURL) throws FormApiException;
+    InputStream fetchForm(String formURL, boolean credentials) throws FormApiException;             // smap add credentials
 
-    InputStream fetchMediaFile(String mediaFileURL) throws FormApiException;
+    InputStream fetchMediaFile(String mediaFileURL, boolean credentials) throws FormApiException;   // smap add credentials
 
     void updateUrl(String url);
 

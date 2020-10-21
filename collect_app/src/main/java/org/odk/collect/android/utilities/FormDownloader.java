@@ -28,12 +28,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.FormDownloaderListener;
-import org.odk.collect.android.logic.FileReferenceFactory;
-import org.odk.collect.android.logic.FormDetails;
-import org.odk.collect.android.logic.MediaFile;
-import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.openrosa.OpenRosaAPIClient;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 
@@ -42,15 +36,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME;
@@ -59,15 +52,26 @@ import static org.odk.collect.android.utilities.FileUtils.write;
 
 public class FormDownloader {
 
+    private static class TaskCancelledException extends Exception {
+        private final File file;
+
+        TaskCancelledException(File file) {
+            super("Task was cancelled during processing of " + file);
+            this.file = file;
+        }
+
+        TaskCancelledException() {
+            super("Task was cancelled");
+            this.file = null;
+        }
+    }
+
     private static final String MD5_COLON_PREFIX = "md5:";
     private static final String TEMP_DOWNLOAD_EXTENSION = ".tempDownload";
 
     private FormDownloaderListener stateListener;
 
     private FormsDao formsDao;
-
-    @Inject
-    OpenRosaAPIClient openRosaAPIClient;
 
     /**
      * Common routine to download a document from the downloadUrl and save the contents in the file
@@ -79,7 +83,7 @@ public class FormDownloader {
      * @param file        the final file
      * @param downloadUrl the url to get the contents from.
      */
-    public void downloadFile(File file, String downloadUrl, boolean credentials)     // smap made public, flag to include credentials
+    public void downloadFile(File file, InputStream is, String downloadUrl, boolean credentials)     // smap made public, flag to include credentials
             throws IOException, TaskCancelledException, URISyntaxException, Exception {
         File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION,
                 new File(new StoragePathProvider().getDirPath(StorageSubdirectory.CACHE)));
@@ -97,11 +101,10 @@ public class FormDownloader {
             Timber.i("Started downloading to %s from %s", tempFile.getAbsolutePath(), downloadUrl);
 
             // write connection to file
-            InputStream is = null;
             OutputStream os = null;
 
             try {
-                is = openRosaAPIClient.getFile(downloadUrl, null, credentials);    // smap add credentials
+
                 os = new FileOutputStream(tempFile);
 
                 byte[] buf = new byte[4096];
@@ -171,6 +174,7 @@ public class FormDownloader {
             throw new RuntimeException(msg);
         }
     }
+
 
 }
 
