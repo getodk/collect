@@ -11,6 +11,7 @@ import org.odk.collect.audiorecorder.recorder.MediaRecorderRecorder
 import org.odk.collect.audiorecorder.recorder.RealMediaRecorderWrapper
 import org.odk.collect.audiorecorder.recorder.Recorder
 import org.odk.collect.audiorecorder.recording.AudioRecorderActivity
+import org.odk.collect.audiorecorder.recording.RecordingRepository
 
 private var _component: AudioRecorderDependencyComponent? = null
 
@@ -63,5 +64,10 @@ internal open class AudioRecorderDependencyModule {
     @Provides
     open fun providesRecorder(application: Application): Recorder {
         return MediaRecorderRecorder(application.cacheDir) { RealMediaRecorderWrapper(MediaRecorder()) }
+    }
+
+    @Provides
+    fun providesRecordingRepository(): RecordingRepository {
+        return RecordingRepository()
     }
 }

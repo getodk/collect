@@ -8,10 +8,9 @@ import org.odk.collect.audiorecorder.recorder.Recorder
 import java.io.File
 import javax.inject.Inject
 
-internal class AudioRecorderViewModel(private val recorder: Recorder) : ViewModel() {
+internal class AudioRecorderViewModel(private val recorder: Recorder, private val recordingRepository: RecordingRepository) : ViewModel() {
 
-    private val _recording = MutableLiveData<File?>(null)
-    val recording: LiveData<File?> = _recording
+    val recording: LiveData<File?> = recordingRepository.getRecording()
 
     fun start() {
         recorder.start()
@@ -19,17 +18,17 @@ internal class AudioRecorderViewModel(private val recorder: Recorder) : ViewMode
 
     fun stop() {
         val file = recorder.stop()
-        _recording.value = file
+        recordingRepository.create(file)
     }
 
     override fun onCleared() {
         recorder.cancel()
     }
 
-    class Factory @Inject constructor(private val recorder: Recorder) : ViewModelProvider.Factory {
+    class Factory @Inject constructor(private val recorder: Recorder, private val recordingRepository: RecordingRepository) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return AudioRecorderViewModel(recorder) as T
+            return AudioRecorderViewModel(recorder, recordingRepository) as T
         }
     }
 }
