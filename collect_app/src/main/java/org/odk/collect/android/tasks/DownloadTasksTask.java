@@ -40,6 +40,8 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.database.Assignment;
 import org.odk.collect.android.database.TaskAssignment;
 import org.odk.collect.android.database.TraceUtilities;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.PropertyManager;
@@ -60,6 +62,7 @@ import org.odk.collect.android.taskModel.TaskResponse;
 import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.ManageForm.ManageFormDetails;
 import org.odk.collect.android.utilities.ManageFormResponse;
+import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.Utilities;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -106,6 +109,9 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
     @Inject
     WebCredentialsUtils webCredentialsUtils;
 
+    @Inject
+    MultiFormDownloader multiFormDownloader;
+    
     private FormsDao formsDao;
 	
 	/*
@@ -523,9 +529,9 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                  *  Get any forms the user does not currently have
                  *  Delete any forms that are no longer accessible to the user
                  */
-                HashMap<FormDetails, String> outcome = synchroniseForms(tr.forms);
+                HashMap<ServerFormDetails, String> outcome = synchroniseForms(tr.forms);
                 if(outcome != null) {
-                    for (FormDetails key : outcome.keySet()) {
+                    for (ServerFormDetails key : outcome.keySet()) {
                         results.put(key.getFormName(), outcome.get(key));
                     }
                 }
@@ -591,8 +597,8 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 " and " + InstanceColumns.DELETED_DATE + " is null ";
         String selectionArgs[] = {
         		Utilities.getSource(),
-        		InstanceProviderAPI.STATUS_COMPLETE,
-                InstanceProviderAPI.STATUS_SUBMISSION_FAILED                 
+        		Instance.STATUS_COMPLETE,
+                Instance.STATUS_SUBMISSION_FAILED
             };
 
         ArrayList<Long> toUpload = new ArrayList<Long>();
@@ -821,10 +827,10 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
      *   (2) Delete forms not on the server or older versions of forms
      *       unless there is an uncompleted data instance using that form
      */
-	private HashMap<FormDetails, String> synchroniseForms(List<FormLocator> forms) throws Exception {
+	private HashMap<ServerFormDetails, String> synchroniseForms(List<FormLocator> forms) throws Exception {
     	
 
-		HashMap<FormDetails, String> dfResults = null;
+		HashMap<ServerFormDetails, String> dfResults = null;
     	
     	if(forms == null) {
         	publishProgress(Collect.getInstance().getString(R.string.smap_no_forms));
@@ -832,7 +838,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
     		
     		HashMap <String, String> formMap = new HashMap <String, String> ();
           	ManageForm mf = new ManageForm();
-    		ArrayList<FormDetails> toDownload = new ArrayList<FormDetails> ();
+    		ArrayList<ServerFormDetails> toDownload = new ArrayList<> ();
     		
     		// Create an array of ODK form details
         	for(FormLocator form : forms) {
@@ -847,7 +853,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         				form.manifestUrl = serverUrl + "/xformsManifest?key=" + form.ident;
         			}
 
-                    FormDetails fd = new FormDetails(form.name, form.url, form.manifestUrl, form.ident, formVersionString,
+                    ServerFormDetails fd = new ServerFormDetails(form.name, form.url, form.manifestUrl, form.ident, formVersionString,
                             null,               // form hash
                             null,      // manifest hash
                             !mfd.exists,        // New form version available
@@ -868,7 +874,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         	}
 
             if(toDownload.size() > 0) {
-                DownloadFormsTask downloadFormsTask = new DownloadFormsTask();
+                DownloadFormsTask downloadFormsTask = new DownloadFormsTask(multiFormDownloader);
                 publishProgress(Collect.getInstance().getString(R.string.smap_downloading, toDownload.size()));
 
                 Timber.i("Downloading " + toDownload.size() + " forms");

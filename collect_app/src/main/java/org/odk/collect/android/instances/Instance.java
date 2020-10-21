@@ -29,6 +29,9 @@ public final class Instance {
     public static final String STATUS_COMPLETE = "complete";
     public static final String STATUS_SUBMITTED = "submitted";
     public static final String STATUS_SUBMISSION_FAILED = "submissionFailed";
+    public static final String STATUS_SYNC_YES = "synchronized";        // Smap
+    public static final String STATUS_SYNC_NO = "not synchronized";     // Smap
+
 
     private final String displayName;
     private final String submissionUri;

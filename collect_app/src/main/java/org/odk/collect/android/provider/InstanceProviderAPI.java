@@ -26,10 +26,6 @@ public final class InstanceProviderAPI {
     private InstanceProviderAPI() {
     }
 
-    // status for instances
-    public static final String STATUS_SYNC_YES = "synchronized";        // Smap
-    public static final String STATUS_SYNC_NO = "not synchronized";     // Smap
-
     /**
      * Notes table
      */
