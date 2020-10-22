@@ -255,7 +255,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
     }
 
     private void onCaptureAudioButtonClicked() {
-        analytics.logEvent(AnalyticsEvents.AUDIO, "Record", getQuestionDetails().getFormAnalyticsID());
+        analytics.logFormEvent(AnalyticsEvents.AUDIO_RECORD, getQuestionDetails().getFormAnalyticsID());
 
         getPermissionUtils().requestRecordAudioPermission((Activity) getContext(), new PermissionListener() {
             @Override
@@ -285,7 +285,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
     }
 
     private void chooseSound() {
-        analytics.logEvent(AnalyticsEvents.AUDIO, "Choose", getQuestionDetails().getFormAnalyticsID());
+        analytics.logFormEvent(AnalyticsEvents.AUDIO_CHOOSE, getQuestionDetails().getFormAnalyticsID());
 
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("audio/*");

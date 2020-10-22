@@ -144,5 +144,11 @@ public class AnalyticsEvents {
      */
     public static final String CUSTOM_ENDPOINT_SUB = "CustomEndpointSub";
 
-    public static final String AUDIO = "audio";
+    /**
+     * These events track how often recording vs choosing a file is used in audio questions. Should be
+     * sent with form ID so it's clear if a particular form/project is using a one workflow more than
+     * the other.
+     */
+    public static final String AUDIO_RECORD = "AudioRecord";
+    public static final String AUDIO_CHOOSE = "AudioChoose";
 }

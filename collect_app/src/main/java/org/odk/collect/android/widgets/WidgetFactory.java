@@ -19,7 +19,6 @@ import android.content.Context;
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.analytics.Analytics;
-import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.CustomTabHelper;
@@ -151,7 +150,6 @@ public class WidgetFactory {
                 questionWidget = new OSMWidget(context, questionDetails, waitingForDataRegistry);
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
-                analytics.logEvent(AnalyticsEvents.AUDIO_QUESTION, "Audio", questionDetails.getFormAnalyticsID());
                 questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, analytics);
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:

@@ -31,6 +31,13 @@ public class FirebaseAnalytics implements Analytics {
         firebaseAnalytics.logEvent(category, bundle);
     }
 
+    @Override
+    public void logFormEvent(String event, String formId) {
+        Bundle bundle = new Bundle();
+        bundle.putString("form", formId);
+        firebaseAnalytics.logEvent(event, bundle);
+    }
+
     private void setupRemoteAnalytics() {
         boolean isAnalyticsEnabled = generalSharedPreferences.getBoolean(GeneralKeys.KEY_ANALYTICS, true);
         setAnalyticsCollectionEnabled(isAnalyticsEnabled);
