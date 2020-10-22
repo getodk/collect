@@ -5,6 +5,8 @@ import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.not
+import org.hamcrest.Matchers.nullValue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -35,6 +37,18 @@ class AudioRecorderServiceTest {
                 }
             }
         )
+    }
+
+    @Test
+    fun startAction_startsInForeground() {
+        val intent = Intent(application, AudioRecorderService::class.java)
+        intent.action = AudioRecorderService.ACTION_START
+
+        val service = buildService(AudioRecorderService::class.java, intent)
+            .create()
+            .startCommand(0, 0)
+
+        assertThat(shadowOf(service.get()).lastForegroundNotification, not(nullValue()))
     }
 
     @Test
