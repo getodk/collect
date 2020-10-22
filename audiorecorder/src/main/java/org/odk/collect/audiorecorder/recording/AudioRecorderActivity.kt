@@ -24,7 +24,9 @@ class AudioRecorderActivity : AppCompatActivity() {
 
         setTheme(intent.getIntExtra(ARGS.THEME, R.style.Theme_MaterialComponents_Light_NoActionBar))
         setContentView(R.layout.activity_audio_recorder)
+        done.setOnClickListener { viewModel.stop() }
 
+        viewModel.start()
         viewModel.recording.observe(this) { file ->
             if (file != null) {
                 setResult(
@@ -34,15 +36,9 @@ class AudioRecorderActivity : AppCompatActivity() {
                     }
                 )
 
-                recordingRepository.clear()
+                viewModel.endSession()
                 finish()
             }
-        }
-
-        viewModel.start()
-
-        done.setOnClickListener {
-            viewModel.stop()
         }
     }
 

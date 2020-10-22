@@ -11,7 +11,7 @@ import org.odk.collect.audiorecorder.recording.AudioRecorderService.Companion.AC
 import java.io.File
 import javax.inject.Inject
 
-internal class AudioRecorderViewModel(private val application: Application, recordingRepository: RecordingRepository) : ViewModel() {
+internal class AudioRecorderViewModel(private val application: Application, private val recordingRepository: RecordingRepository) : ViewModel() {
 
     val recording: LiveData<File?> = recordingRepository.getRecording()
 
@@ -25,6 +25,10 @@ internal class AudioRecorderViewModel(private val application: Application, reco
         application.startService(
             Intent(application, AudioRecorderService::class.java).apply { action = ACTION_STOP }
         )
+    }
+
+    fun endSession() {
+        recordingRepository.clear()
     }
 
     public override fun onCleared() {
