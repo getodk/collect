@@ -8,8 +8,8 @@
         app:title="@string/theme_magenta" />
 
     <SwitchPreference
-        android:key="in_app_recording"
+        android:key="external_app_recording"
         app:iconSpaceReserved="false"
-        app:title="@string/in_app_recording" />
+        app:title="@string/external_app_recording" />
 
 </PreferenceScreen>

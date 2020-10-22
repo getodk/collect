@@ -186,10 +186,10 @@ public class WidgetFactory {
             case Constants.CONTROL_AUDIO_CAPTURE:
                 RecordingRequester recordingRequester;
 
-                if (generalSharedPreferences.getBoolean(GeneralKeys.KEY_IN_APP_RECORDING, false)) {
-                    recordingRequester = new InternalRecordingRequester((Activity) context, waitingForDataRegistry, permissionUtils);
-                } else {
+                if (generalSharedPreferences.getBoolean(GeneralKeys.KEY_EXTERNAL_APP_RECORDING, true)) {
                     recordingRequester = new ExternalAppRecordingRequester((Activity) context, activityAvailability, waitingForDataRegistry, permissionUtils);
+                } else {
+                    recordingRequester = new InternalRecordingRequester((Activity) context, waitingForDataRegistry, permissionUtils);
                 }
 
                 questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, recordingRequester, new GetContentAudioFileRequester((Activity) context, activityAvailability, waitingForDataRegistry));

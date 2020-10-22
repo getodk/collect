@@ -93,7 +93,7 @@ public final class GeneralKeys {
 
     // experimental
     public static final String KEY_MAGENTA_THEME            = "magenta";
-    public static final String KEY_IN_APP_RECORDING         = "in_app_recording";
+    public static final String KEY_EXTERNAL_APP_RECORDING   = "external_app_recording";
 
     private static HashMap<String, Object> getHashMap() {
         HashMap<String, Object> hashMap = new HashMap<>();
@@ -137,7 +137,7 @@ public final class GeneralKeys {
         hashMap.put(KEY_SHOW_SPLASH,                false);
         hashMap.put(KEY_SPLASH_PATH,                Collect.getInstance().getString(R.string.default_splash_path));
         hashMap.put(KEY_MAGENTA_THEME,              false);
-        hashMap.put(KEY_IN_APP_RECORDING,           false);
+        hashMap.put(KEY_EXTERNAL_APP_RECORDING,     true);
         // map_preferences.xml
         hashMap.put(KEY_BASEMAP_SOURCE,             BASEMAP_SOURCE_GOOGLE);
         hashMap.put(KEY_CARTO_MAP_STYLE,            "positron");
