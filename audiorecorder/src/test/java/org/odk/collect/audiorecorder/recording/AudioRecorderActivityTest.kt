@@ -63,8 +63,10 @@ class AudioRecorderActivityTest {
     }
 
     @Test
-    fun whenRecordingAvailable_finishesWithRecordingAsResult() {
-        val scenario = launchActivity<AudioRecorderActivity>()
+    fun afterPressingDone_whenRecordingAvailable_finishesWithRecordingAsResult() {
+        val scenario = launchActivity<AudioRecorderActivity>().onActivity {
+            it.done.performClick()
+        }
 
         val recording = File.createTempFile("blah", ".mp3")
         recordingRepository.create(recording)
@@ -88,7 +90,11 @@ class AudioRecorderActivityTest {
 
     @Test
     fun recordingCanHappenMoreThanOnce() {
-        val scenario1 = launchActivity<AudioRecorderActivity>()
+        val scenario1 = launchActivity<AudioRecorderActivity>().onActivity {
+            assertThat(it.isFinishing, equalTo(false))
+            it.done.performClick()
+        }
+
         val recording1 = File.createTempFile("blah1", ".mp3")
         recordingRepository.create(recording1)
 
@@ -98,6 +104,7 @@ class AudioRecorderActivityTest {
 
         val scenario2 = launchActivity<AudioRecorderActivity>().onActivity {
             assertThat(it.isFinishing, equalTo(false))
+            it.done.performClick()
         }
 
         val recording2 = File.createTempFile("blah2", ".mp3")
