@@ -10,6 +10,7 @@ import androidx.core.app.NotificationCompat
 import org.odk.collect.audiorecorder.R
 import org.odk.collect.audiorecorder.getComponent
 import org.odk.collect.audiorecorder.recorder.Recorder
+import org.odk.collect.strings.getLocalizedString
 import javax.inject.Inject
 
 class AudioRecorderService : Service() {
@@ -31,7 +32,7 @@ class AudioRecorderService : Service() {
                 setupNotificationChannel()
 
                 val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
-                    .setContentTitle(getString(R.string.recording))
+                    .setContentTitle(getLocalizedString(R.string.recording))
                     .setSmallIcon(R.drawable.ic_baseline_mic_24)
                     .build()
 
@@ -58,7 +59,7 @@ class AudioRecorderService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
                 NOTIFICATION_CHANNEL,
-                getString(R.string.recording_channel),
+                getLocalizedString(R.string.recording_channel),
                 NotificationManager.IMPORTANCE_DEFAULT
             )
 
