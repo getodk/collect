@@ -42,6 +42,11 @@ class AudioRecorderActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        viewModel.cancel()
+    }
+
     object ARGS {
         const val THEME = "theme"
     }

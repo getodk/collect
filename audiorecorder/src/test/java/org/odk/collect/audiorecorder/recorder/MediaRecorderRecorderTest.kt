@@ -39,6 +39,12 @@ class MediaRecorderRecorderTest {
     }
 
     @Test
+    fun start_setsIsRecording_toTrue() {
+        recorder.start()
+        assertThat(recorder.isRecording(), equalTo(true))
+    }
+
+    @Test
     fun recordingTwice_doesntUseSameOutputFile() {
         var mediaRecorder = FakeMediaRecorderWrapper()
         var recorder = MediaRecorderRecorder(cacheDir) { mediaRecorder }
@@ -68,6 +74,13 @@ class MediaRecorderRecorderTest {
     }
 
     @Test
+    fun stop_setsIsRecording_toFalse() {
+        recorder.start()
+        recorder.stop()
+        assertThat(recorder.isRecording(), equalTo(false))
+    }
+
+    @Test
     fun cancel_releasesMediaRecorder() {
         recorder.start()
         recorder.cancel()
@@ -79,6 +92,13 @@ class MediaRecorderRecorderTest {
         recorder.start()
         recorder.cancel()
         assertThat(mediaRecorder.getOutputFile()!!.exists(), equalTo(false))
+    }
+
+    @Test
+    fun cancel_setsIsRecording_toFalse() {
+        recorder.start()
+        recorder.cancel()
+        assertThat(recorder.isRecording(), equalTo(false))
     }
 
     @Test

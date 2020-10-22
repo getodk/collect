@@ -22,7 +22,11 @@ class AudioRecorderService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
-            ACTION_START -> recorder.start()
+            ACTION_START -> {
+                if (!recorder.isRecording()) {
+                    recorder.start()
+                }
+            }
 
             ACTION_CANCEL -> {
                 recorder.cancel()

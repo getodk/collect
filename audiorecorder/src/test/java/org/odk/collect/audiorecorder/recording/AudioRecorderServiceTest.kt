@@ -50,6 +50,25 @@ class AudioRecorderServiceTest {
     }
 
     @Test
+    fun startAction_whenRecordingInProgress_doesNothing() {
+        val intent = Intent(application, AudioRecorderService::class.java)
+        intent.action = AudioRecorderService.ACTION_START
+
+        buildService(AudioRecorderService::class.java, intent)
+            .create()
+            .startCommand(0, 0)
+
+        assertThat(recorder.isRecording(), equalTo(true))
+
+        buildService(AudioRecorderService::class.java, intent)
+            .create()
+            .startCommand(0, 0)
+
+        assertThat(recorder.isRecording(), equalTo(true))
+        assertThat(recorder.recordings.size, equalTo(1))
+    }
+
+    @Test
     fun stopAction_stopsRecorder_stopsSelf_andSetsRecordingOnRepository() {
         val intent = Intent(application, AudioRecorderService::class.java)
         intent.action = AudioRecorderService.ACTION_STOP

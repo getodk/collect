@@ -74,6 +74,19 @@ class AudioRecorderActivityTest {
     }
 
     @Test
+    fun pressingBack_cancelsRecording() {
+        launchActivity<AudioRecorderActivity>().onActivity {
+            shadowOf(it).clearStartedServices() // Get rid of start command
+
+            it.onBackPressed()
+
+            val nextStartedService = shadowOf(it).nextStartedService
+            assertThat(nextStartedService.component?.className, equalTo(AudioRecorderService::class.qualifiedName))
+            assertThat(nextStartedService.action, equalTo(AudioRecorderService.ACTION_CANCEL))
+        }
+    }
+
+    @Test
     fun recordingCanHappenMoreThanOnce() {
         val scenario1 = launchActivity<AudioRecorderActivity>()
         val recording1 = File.createTempFile("blah1", ".mp3")

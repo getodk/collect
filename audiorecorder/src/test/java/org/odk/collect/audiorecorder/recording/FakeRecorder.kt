@@ -7,10 +7,13 @@ class FakeRecorder : Recorder {
 
     val file: File = File.createTempFile("recording", ".mp3")
 
+    private val _recordings = mutableListOf<Unit>()
+    val recordings: List<Unit> = _recordings
+
     private var recording = false
     private var cancelled = false
 
-    fun isRecording(): Boolean {
+    override fun isRecording(): Boolean {
         return recording
     }
 
@@ -21,6 +24,7 @@ class FakeRecorder : Recorder {
     override fun start() {
         recording = true
         cancelled = false
+        _recordings.add(Unit)
     }
 
     override fun stop(): File {

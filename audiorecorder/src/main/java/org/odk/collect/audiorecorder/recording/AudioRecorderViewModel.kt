@@ -27,14 +27,14 @@ internal class AudioRecorderViewModel(private val application: Application, priv
         )
     }
 
-    fun endSession() {
-        recordingRepository.clear()
-    }
-
-    public override fun onCleared() {
+    fun cancel() {
         application.startService(
             Intent(application, AudioRecorderService::class.java).apply { action = ACTION_CANCEL }
         )
+    }
+
+    fun endSession() {
+        recordingRepository.clear()
     }
 
     class Factory @Inject constructor(private val application: Application, private val recordingRepository: RecordingRepository) : ViewModelProvider.Factory {
