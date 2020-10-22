@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import org.odk.collect.audiorecorder.R
 import org.odk.collect.audiorecorder.getComponent
 import org.odk.collect.audiorecorder.recorder.Recorder
 import javax.inject.Inject
@@ -27,23 +28,14 @@ class AudioRecorderService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
             ACTION_START -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    val notificationChannel = NotificationChannel(
-                        "recording_channel",
-                        "Recording notifications",
-                        NotificationManager.IMPORTANCE_DEFAULT
-                    )
+                setupNotificationChannel()
 
-                    (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(notificationChannel)
-                }
-
-                val notification = NotificationCompat.Builder(this, "recording_channel")
-                    .setContentTitle("Blah")
-                    .setContentText("Blah")
-                    .setSmallIcon(applicationInfo.icon)
+                val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
+                    .setContentTitle(getString(R.string.recording))
+                    .setSmallIcon(R.drawable.ic_baseline_mic_24)
                     .build()
 
-                startForeground(1, notification)
+                startForeground(NOTIFICATION_ID, notification)
 
                 if (!recorder.isRecording()) {
                     recorder.start()
@@ -60,6 +52,18 @@ class AudioRecorderService : Service() {
         }
 
         return START_STICKY
+    }
+
+    private fun setupNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(
+                NOTIFICATION_CHANNEL,
+                getString(R.string.recording_channel),
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+
+            (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(notificationChannel)
+        }
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
@@ -83,6 +87,9 @@ class AudioRecorderService : Service() {
     }
 
     companion object {
+        const val NOTIFICATION_ID = 1
+        const val NOTIFICATION_CHANNEL = "recording_channel"
+
         const val ACTION_START = "START"
         const val ACTION_STOP = "STOP"
         const val ACTION_CANCEL = "CANCEL"

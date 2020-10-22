@@ -11,6 +11,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.audiorecorder.AudioRecorderDependencyModule
+import org.odk.collect.audiorecorder.R
 import org.odk.collect.audiorecorder.overrideDependencies
 import org.odk.collect.audiorecorder.recorder.Recorder
 import org.robolectric.Robolectric.buildService
@@ -40,7 +41,7 @@ class AudioRecorderServiceTest {
     }
 
     @Test
-    fun startAction_startsInForeground() {
+    fun startAction_startsInForegroundWithNotification() {
         val intent = Intent(application, AudioRecorderService::class.java)
         intent.action = AudioRecorderService.ACTION_START
 
@@ -48,7 +49,9 @@ class AudioRecorderServiceTest {
             .create()
             .startCommand(0, 0)
 
-        assertThat(shadowOf(service.get()).lastForegroundNotification, not(nullValue()))
+        val notification = shadowOf(service.get()).lastForegroundNotification
+        assertThat(notification, not(nullValue()))
+        assertThat(shadowOf(notification).contentTitle, equalTo(application.getString(R.string.recording)))
     }
 
     @Test
