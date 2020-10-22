@@ -13,19 +13,28 @@ import org.odk.collect.audiorecorder.recorder.Recorder
 import org.odk.collect.audiorecorder.recording.AudioRecorderActivity
 import org.odk.collect.audiorecorder.recording.AudioRecorderService
 import org.odk.collect.audiorecorder.recording.RecordingRepository
+import java.lang.IllegalStateException
 import javax.inject.Singleton
 
 private var _component: AudioRecorderDependencyComponent? = null
 
-/**
- * For testing. Because this changes the component statically, it must be called by
- * every test that uses dependencies or there will be pollution between them.
- */
-internal fun Application.overrideDependencies(module: AudioRecorderDependencyModule) {
-    _component = DaggerAudioRecorderDependencyComponent.builder()
-        .application(this)
-        .dependencyModule(module)
-        .build()
+internal fun Context.getComponent(): AudioRecorderDependencyComponent {
+    return _component.let {
+        if (it == null && applicationContext is TestApplication) {
+            throw IllegalStateException("Dependencies not specified!")
+        }
+
+        if (it == null) {
+            val newComponent = DaggerAudioRecorderDependencyComponent.builder()
+                .application(applicationContext as Application)
+                .build()
+
+            _component = newComponent
+            newComponent
+        } else {
+            it
+        }
+    }
 }
 
 @Component(modules = [AudioRecorderDependencyModule::class])
@@ -47,21 +56,6 @@ internal interface AudioRecorderDependencyComponent {
     fun inject(activity: AudioRecorderService)
 }
 
-internal fun Context.getComponent(): AudioRecorderDependencyComponent {
-    return _component.let {
-        if (it == null) {
-            val newComponent = DaggerAudioRecorderDependencyComponent.builder()
-                .application(applicationContext as Application)
-                .build()
-
-            _component = newComponent
-            newComponent
-        } else {
-            it
-        }
-    }
-}
-
 @Module
 internal open class AudioRecorderDependencyModule {
 
@@ -75,4 +69,15 @@ internal open class AudioRecorderDependencyModule {
     open fun providesRecordingRepository(): RecordingRepository {
         return RecordingRepository()
     }
+}
+
+internal fun TestApplication.clearDependencies() {
+    _component = null
+}
+
+internal fun TestApplication.setupDependencies(module: AudioRecorderDependencyModule) {
+    _component = DaggerAudioRecorderDependencyComponent.builder()
+        .application(this)
+        .dependencyModule(module)
+        .build()
 }

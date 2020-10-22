@@ -12,8 +12,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.audiorecorder.AudioRecorderDependencyModule
 import org.odk.collect.audiorecorder.R
-import org.odk.collect.audiorecorder.overrideDependencies
+import org.odk.collect.audiorecorder.TestApplication
 import org.odk.collect.audiorecorder.recorder.Recorder
+import org.odk.collect.audiorecorder.setupDependencies
 import org.robolectric.Robolectric.buildService
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
@@ -21,13 +22,13 @@ import org.robolectric.Shadows.shadowOf
 @RunWith(RobolectricTestRunner::class)
 class AudioRecorderServiceTest {
 
-    private val application: Application by lazy { ApplicationProvider.getApplicationContext() }
+    private val application: TestApplication by lazy { ApplicationProvider.getApplicationContext() }
     private val recordingRepository = RecordingRepository()
     private val recorder = FakeRecorder()
 
     @Before
     fun setup() {
-        application.overrideDependencies(
+        application.setupDependencies(
             object : AudioRecorderDependencyModule() {
                 override fun providesRecorder(application: Application): Recorder {
                     return recorder

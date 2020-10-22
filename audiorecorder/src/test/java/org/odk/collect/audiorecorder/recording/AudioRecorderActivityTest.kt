@@ -14,8 +14,9 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.audiorecorder.AudioRecorderDependencyModule
-import org.odk.collect.audiorecorder.overrideDependencies
+import org.odk.collect.audiorecorder.TestApplication
 import org.odk.collect.audiorecorder.recorder.Recorder
+import org.odk.collect.audiorecorder.setupDependencies
 import org.robolectric.Shadows.shadowOf
 import java.io.File
 
@@ -27,7 +28,7 @@ class AudioRecorderActivityTest {
 
     @Before
     fun setup() {
-        getApplicationContext<Application>().overrideDependencies(
+        getApplicationContext<TestApplication>().setupDependencies(
             object : AudioRecorderDependencyModule() {
                 override fun providesRecorder(application: Application): Recorder {
                     return fakeRecorder
