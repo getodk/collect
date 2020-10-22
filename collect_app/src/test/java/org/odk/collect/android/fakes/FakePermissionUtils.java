@@ -3,6 +3,7 @@ package org.odk.collect.android.fakes;
 import android.app.Activity;
 import androidx.annotation.NonNull;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.PermissionUtils;
 
@@ -15,6 +16,10 @@ import org.odk.collect.android.utilities.PermissionUtils;
 public class FakePermissionUtils extends PermissionUtils {
 
     private boolean isPermissionGranted;
+
+    public FakePermissionUtils() {
+        super(R.style.Theme_Collect_Dialog_PermissionAlert);
+    }
 
     @Override
     protected void requestPermissions(Activity activity, @NonNull PermissionListener listener, String... permissions) {

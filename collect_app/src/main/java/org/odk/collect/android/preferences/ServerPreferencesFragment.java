@@ -239,7 +239,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     }
 
     private void requestAccountsPermission() {
-        new PermissionUtils().requestGetAccountsPermission(getActivity(), new PermissionListener() {
+        new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestGetAccountsPermission(getActivity(), new PermissionListener() {
             @Override
             public void granted() {
                 Intent intent = accountsManager.getAccountChooserIntent();

@@ -90,7 +90,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         DaggerUtils.getComponent(this).inject(this);
 
         // This activity is accessed directly externally
-        new PermissionUtils().requestStoragePermissions(this, new PermissionListener() {
+        new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent

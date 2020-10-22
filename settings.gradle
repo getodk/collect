@@ -1,3 +1,4 @@
+include ':audiorecorder'
 include ':testshared'
 include ':audioclips'
 include ':strings'

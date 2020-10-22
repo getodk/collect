@@ -52,6 +52,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
@@ -112,6 +113,9 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
     @Inject
     public Analytics analytics;
+
+    @Inject
+    PreferencesProvider preferencesProvider;
 
     /**
      * Builds the view for a specified question or field-list of questions.
@@ -267,7 +271,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      */
     private QuestionWidget configureWidgetForQuestion(FormEntryPrompt question, boolean readOnlyOverride) {
         QuestionWidget qw = WidgetFactory.createWidgetFromPrompt(question, getContext(), readOnlyOverride,
-                waitingForDataRegistry, questionMediaManager, analytics, audioPlayer);
+                waitingForDataRegistry, questionMediaManager, analytics, audioPlayer, preferencesProvider.getGeneralSharedPreferences());
         qw.setOnLongClickListener(this);
         qw.setValueChangedListener(this);
 

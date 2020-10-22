@@ -264,7 +264,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     }
 
     private void selectAccount() {
-        new PermissionUtils().requestGetAccountsPermission(this, new PermissionListener() {
+        new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestGetAccountsPermission(this, new PermissionListener() {
             @Override
             public void granted() {
                 String account = accountsManager.getLastSelectedAccountIfValid();

@@ -159,6 +159,7 @@ import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.AudioClipViewModel;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -355,12 +356,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         swipeHandler = new SwipeHandler(this);
 
         compositeDisposable.add(eventBus
-                        .register(ReadPhoneStatePermissionRxEvent.class)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(event -> {
-                            readPhoneStatePermissionRequestNeeded = true;
-                        }));
+                .register(ReadPhoneStatePermissionRxEvent.class)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(event -> {
+                    readPhoneStatePermissionRequestNeeded = true;
+                }));
 
         errorMessage = null;
 
@@ -398,7 +399,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             mediaLoadingFragment = (MediaLoadingFragment) getFragmentManager().findFragmentByTag(TAG_MEDIA_LOADING_FRAGMENT);
         }
 
-        new PermissionUtils().requestStoragePermissions(this, new PermissionListener() {
+        new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
@@ -969,6 +970,31 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 String bearing = intent.getStringExtra(BEARING_RESULT);
                 if (getCurrentViewIfODKView() != null) {
                     setBinaryWidgetData(bearing);
+                }
+                break;
+
+            case RequestCodes.INTERNAL_AUDIO_CAPTURE:
+                try {
+                    Uri data = intent.getData();
+
+                    InputStream inputStream = new FileInputStream(new File(data.toString()));
+                    File newFile = new File(formController.getInstanceFile().getParent()
+                            + File.separator
+                            + System.currentTimeMillis()
+                            + "."
+                            + ContentResolverHelper.getFileExtensionFromUri(this, data));
+
+                    OutputStream outputStream = new FileOutputStream(newFile);
+                    IOUtils.copy(inputStream, outputStream);
+                    inputStream.close();
+                    outputStream.close();
+
+                    if (getCurrentViewIfODKView() != null) {
+                        setBinaryWidgetData(newFile.getName());
+                    }
+                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                } catch (IOException e) {
+                    Timber.e(e);
                 }
                 break;
         }
@@ -2309,7 +2335,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         if (formController != null) {
             if (readPhoneStatePermissionRequestNeeded) {
-                new PermissionUtils().requestReadPhoneStatePermission(this, true, new PermissionListener() {
+                new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestReadPhoneStatePermission(this, true, new PermissionListener() {
                     @Override
                     public void granted() {
                         readPhoneStatePermissionRequestNeeded = false;
@@ -2642,7 +2668,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         displayUIFor(backgroundLocationViewModel.activityDisplayed());
 
         if (backgroundLocationViewModel.isBackgroundLocationPermissionsCheckNeeded()) {
-            new PermissionUtils().requestLocationPermissions(this, new PermissionListener() {
+            new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestLocationPermissions(this, new PermissionListener() {
                 @Override
                 public void granted() {
                     displayUIFor(backgroundLocationViewModel.locationPermissionsGranted());

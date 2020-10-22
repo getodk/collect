@@ -110,6 +110,10 @@ public class FormMetadataFragmentTest {
         private PermissionListener lastAction;
         private boolean granted;
 
+        private FakePhoneStatePermissionUtils() {
+            super(R.style.Theme_Collect_Dialog_PermissionAlert);
+        }
+
         @Override
         public void requestReadPhoneStatePermission(Activity activity, boolean displayPermissionDeniedDialog, @NonNull PermissionListener action) {
             timesRequested++;

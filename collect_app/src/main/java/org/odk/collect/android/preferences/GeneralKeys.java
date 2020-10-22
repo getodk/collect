@@ -66,7 +66,6 @@ public final class GeneralKeys {
     public static final String KEY_METADATA_USERNAME        = "metadata_username";
     public static final String KEY_METADATA_PHONENUMBER     = "metadata_phonenumber";
     public static final String KEY_METADATA_EMAIL           = "metadata_email";
-    public static final String KEY_MAGENTA_THEME            = "magenta";
 
     static final String KEY_FORM_METADATA                   = "form_metadata";
 
@@ -91,6 +90,10 @@ public final class GeneralKeys {
     public static final String BASEMAP_SOURCE_USGS          = "usgs";
     public static final String BASEMAP_SOURCE_STAMEN        = "stamen";
     public static final String BASEMAP_SOURCE_CARTO         = "carto";
+
+    // experimental
+    public static final String KEY_MAGENTA_THEME            = "magenta";
+    public static final String KEY_EXTERNAL_APP_RECORDING   = "external_app_recording";
 
     private static HashMap<String, Object> getHashMap() {
         HashMap<String, Object> hashMap = new HashMap<>();
@@ -134,6 +137,7 @@ public final class GeneralKeys {
         hashMap.put(KEY_SHOW_SPLASH,                false);
         hashMap.put(KEY_SPLASH_PATH,                Collect.getInstance().getString(R.string.default_splash_path));
         hashMap.put(KEY_MAGENTA_THEME,              false);
+        hashMap.put(KEY_EXTERNAL_APP_RECORDING,     true);
         // map_preferences.xml
         hashMap.put(KEY_BASEMAP_SOURCE,             BASEMAP_SOURCE_GOOGLE);
         hashMap.put(KEY_CARTO_MAP_STYLE,            "positron");
