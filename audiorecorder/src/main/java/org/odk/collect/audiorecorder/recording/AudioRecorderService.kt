@@ -51,22 +51,35 @@ class AudioRecorderService : Service() {
             }
 
             ACTION_CANCEL -> {
-                recorder.cancel()
-                stopSelf()
+                cancelRecording()
             }
 
             ACTION_STOP -> {
-                val file = recorder.stop()
-                recordingRepository.create(file)
-                stopSelf()
+                stopRecording()
             }
         }
 
         return START_STICKY
     }
 
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+        cancelRecording()
+    }
+
     override fun onBind(p0: Intent?): IBinder? {
         return null
+    }
+
+    private fun stopRecording() {
+        val file = recorder.stop()
+        recordingRepository.create(file)
+        stopSelf()
+    }
+
+    private fun cancelRecording() {
+        recorder.cancel()
+        stopSelf()
     }
 
     companion object {

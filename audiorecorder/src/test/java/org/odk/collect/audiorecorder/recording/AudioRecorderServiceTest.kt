@@ -109,4 +109,20 @@ class AudioRecorderServiceTest {
         assertThat(recorder.wasCancelled(), equalTo(true))
         assertThat(shadowOf(service.get()).isStoppedBySelf, equalTo(true))
     }
+
+    @Test
+    fun whenUserKillsAppFromTaskManager_cancelsRecorder_stopsSelf() {
+        val intent = Intent(application, AudioRecorderService::class.java)
+        intent.action = AudioRecorderService.ACTION_START
+
+        val service = buildService(AudioRecorderService::class.java, intent)
+            .create()
+            .startCommand(0, 0)
+
+        service.get().onTaskRemoved(Intent())
+
+        assertThat(recorder.isRecording(), equalTo(false))
+        assertThat(recorder.wasCancelled(), equalTo(true))
+        assertThat(shadowOf(service.get()).isStoppedBySelf, equalTo(true))
+    }
 }
