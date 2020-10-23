@@ -19,7 +19,7 @@ fun Context.getLocalizedString(stringId: Int, vararg formatArgs: Any): String {
             }
 
             val localizedContext = createConfigurationContext(newConfig)
-            localizedContext.resources.getString(stringId, formatArgs)
+            localizedContext.resources.getString(stringId, *formatArgs)
         }
 
         else -> {
