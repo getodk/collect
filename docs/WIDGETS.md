@@ -64,7 +64,7 @@ As you'll see from the example you need to call `widgetValueChanged` whenever th
 
 ### Handling rotation/configuration changes
 
-When the device is rotated during form entry, the on screen answers will be saved. This means that when a `Widget` view is recreated it will be passed the correct answers in with `FormEntryPrompt` meaning no extra work is required to handle configuration changes. If a widget's answer layout contains any editable views (like an `EditText` for example) they should have include `android:saveEnabled="false"` to prevent Android from trying to load previous values in.
+When the device is rotated during form entry, the on screen answers will be saved. Then, when it is is recreated, the `Widget` will be passed the correct answers in with `FormEntryPrompt` meaning no extra work is required to handle configuration changes. If a widget's answer layout contains any editable views (like an `EditText` for example) they should include `android:saveEnabled="false"` to prevent Android from trying to load previous values in.
 
 ## Testing widgets
 
