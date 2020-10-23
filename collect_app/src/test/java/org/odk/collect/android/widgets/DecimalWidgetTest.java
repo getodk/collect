@@ -35,7 +35,7 @@ public class DecimalWidgetTest extends GeneralStringWidgetTest<DecimalWidget, De
     @NonNull
     @Override
     public DecimalWidget createWidget() {
-        return new DecimalWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
+        return new DecimalWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride));
     }
 
     @NonNull
