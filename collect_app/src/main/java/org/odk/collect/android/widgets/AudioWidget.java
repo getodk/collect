@@ -173,7 +173,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
             binding.audioController.setVisibility(View.VISIBLE);
         }
 
-        if (getFormEntryPrompt().isReadOnly()) {
+        if (questionDetails.isReadOnly()) {
             binding.captureButton.setVisibility(View.GONE);
             binding.chooseButton.setVisibility(View.GONE);
         }
