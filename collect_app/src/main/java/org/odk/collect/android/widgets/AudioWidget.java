@@ -117,6 +117,22 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
         binding = AudioWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
         audioController = new AudioControllerView(context);
+        audioController.setAnalytics(new AudioControllerView.AnalyticsListener() {
+            @Override
+            public void onPlay() {
+                analytics.logFormEvent(AnalyticsEvents.AUDIO_PLAY, getQuestionDetails().getFormAnalyticsID());
+            }
+
+            @Override
+            public void onFastFwdOrFastRwd() {
+                analytics.logFormEvent(AnalyticsEvents.AUDIO_FAST_FWD_RWD, getQuestionDetails().getFormAnalyticsID());
+            }
+
+            @Override
+            public void onSeek() {
+                analytics.logFormEvent(AnalyticsEvents.AUDIO_SEEK, getQuestionDetails().getFormAnalyticsID());
+            }
+        });
 
         binding.getRoot().addView(audioController);
         if (prompt.isReadOnly()) {
