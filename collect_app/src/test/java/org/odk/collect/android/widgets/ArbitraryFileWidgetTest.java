@@ -55,7 +55,7 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
     @NonNull
     @Override
     public ArbitraryFileWidget createWidget() {
-        return new ArbitraryFileWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"),
+        return new ArbitraryFileWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride),
                 fileUtil, mediaUtil, new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry());
     }
 
@@ -93,6 +93,13 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
 
     @Test
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+
+        assertThat(getSpyWidget().chooseFileButton.getVisibility(), is(View.GONE));
+    }
+
+    @Test
+    public void whenReadOnlyOverrideOptionIsUsed_shouldAllClickableElementsBeDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
         assertThat(getSpyWidget().chooseFileButton.getVisibility(), is(View.GONE));
