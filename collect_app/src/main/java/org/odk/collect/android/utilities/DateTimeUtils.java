@@ -18,10 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import bikramsambat.BikramSambatDate;
-import bikramsambat.BsCalendar;
-import bikramsambat.BsException;
-import bikramsambat.BsGregorianDate;
+
 import mmcalendar.MyanmarDate;
 import mmcalendar.MyanmarDateConverter;
 import timber.log.Timber;
@@ -63,7 +60,7 @@ public class DateTimeUtils {
                 break;
             case BIKRAM_SAMBAT:
                 customDate = new DateTime(date);
-                monthArray = BsCalendar.MONTH_NAMES.toArray(new String[BsCalendar.MONTH_NAMES.size()]);
+ //               monthArray = BsCalendar.MONTH_NAMES.toArray(new String[BsCalendar.MONTH_NAMES.size()]);
                 break;
             case MYANMAR:
                 customDate = new DateTime(date);
@@ -86,25 +83,25 @@ public class DateTimeUtils {
         SimpleDateFormat df = new SimpleDateFormat("HH:mm", Locale.getDefault());
         switch (datePickerDetails.getDatePickerType()) {
             case BIKRAM_SAMBAT:
-                BikramSambatDate bikramSambatDate;
-                try {
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(date);
-                    bikramSambatDate = BsCalendar.getInstance().toBik(new BsGregorianDate(
-                            calendar.get(Calendar.YEAR),
-                            calendar.get(Calendar.MONTH) + 1,
-                            calendar.get(Calendar.DAY_OF_MONTH)));
-                    String day = datePickerDetails.isSpinnerMode() ? bikramSambatDate.day + " " : "";
-                    String month = datePickerDetails.isSpinnerMode() || datePickerDetails.isMonthYearMode() ? monthArray[bikramSambatDate.month - 1] + " " : "";
+//                BikramSambatDate bikramSambatDate;
+//                try {
+///                    Calendar calendar = Calendar.getInstance();
+//                    calendar.setTime(date);
+//                    bikramSambatDate = BsCalendar.getInstance().toBik(new BsGregorianDate(
+//                            calendar.get(Calendar.YEAR),
+//                            calendar.get(Calendar.MONTH) + 1,
+//                            calendar.get(Calendar.DAY_OF_MONTH)));
+//                    String day = datePickerDetails.isSpinnerMode() ? bikramSambatDate.day + " " : "";
+//                    String month = datePickerDetails.isSpinnerMode() || datePickerDetails.isMonthYearMode() ? monthArray[bikramSambatDate.month - 1] + " " : "";
 
                     if (containsTime) {
-                        customDateText = day + month + bikramSambatDate.year + ", " + df.format(customDate.toDate());
+ //                       customDateText = day + month + bikramSambatDate.year + ", " + df.format(customDate.toDate());
                     } else {
-                        customDateText = day + month + bikramSambatDate.year;
+  ///                      customDateText = day + month + bikramSambatDate.year;
                     }
-                } catch (BsException e) {
-                    Timber.e(e);
-                }
+  //              } catch (BsException e) {
+ //                   Timber.e(e);
+  //              }
                 break;
             case MYANMAR: {
                 MyanmarDate myanmarDate = MyanmarDateConverter.convert(customDate.getYear(),
@@ -112,7 +109,7 @@ public class DateTimeUtils {
                         customDate.getMinuteOfHour(), customDate.getSecondOfMinute());
 
                 String day = datePickerDetails.isSpinnerMode() ? myanmarDate.getMonthDay() + " " : "";
-                String month = datePickerDetails.isSpinnerMode() || datePickerDetails.isMonthYearMode() ? monthArray[MyanmarDateUtils.getMonthId(myanmarDate)] + " " : "";
+                String month = datePickerDetails.isSpinnerMode() || datePickerDetails.isMonthYearMode() ? " " : "";
 
                 if (containsTime) {
                     customDateText = day + month + myanmarDate.getYearInt() + ", " + df.format(customDate.toDate());
@@ -123,7 +120,7 @@ public class DateTimeUtils {
             }
             default:
                 String day = datePickerDetails.isSpinnerMode() ? customDate.getDayOfMonth() + " " : "";
-                String month = datePickerDetails.isSpinnerMode() || datePickerDetails.isMonthYearMode() ? monthArray[customDate.getMonthOfYear() - 1] + " " : "";
+                String month = datePickerDetails.isSpinnerMode() || datePickerDetails.isMonthYearMode() ?  " " : "";
 
                 if (containsTime) {
                     customDateText = day + month + customDate.getYear() + ", " + df.format(customDate.toDate());

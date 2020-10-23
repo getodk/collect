@@ -186,9 +186,9 @@ public class InstancesDao {
             cursorLoader = getIncompleteInstancesCursorLoader(sortOrder);
         } else {
             String selection =
-                    "(" + InstanceProviderAPI.InstanceColumns.T_TASK_STATUS + "=? and "
-                            + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ? and "
-                            + InstanceProviderAPI.InstanceColumns.DELETED_DATE + " is null";    // smap
+                    "(" + InstanceColumns.T_TASK_STATUS + "=? and "
+                            + InstanceColumns.DISPLAY_NAME + " LIKE ? and "
+                            + InstanceColumns.DELETED_DATE + " is null";    // smap
             String[] selectionArgs = {
                     Utilities.STATUS_T_ACCEPTED,
                     "%" + charSequence + "%"};
@@ -203,8 +203,8 @@ public class InstancesDao {
      * smap get incomplete instances without a filter
      */
     public CursorLoader getIncompleteInstancesCursorLoader(String sortOrder) {
-        String selection = InstanceProviderAPI.InstanceColumns.DELETED_DATE + " IS NULL and "  // smap
-                + InstanceProviderAPI.InstanceColumns.T_TASK_STATUS + "=? ";
+        String selection = InstanceColumns.DELETED_DATE + " IS NULL and "  // smap
+                + InstanceColumns.T_TASK_STATUS + "=? ";
         String[] selectionArgs = {Utilities.STATUS_T_ACCEPTED};
 
         return getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
@@ -384,7 +384,6 @@ public class InstancesDao {
                             .deletedDate(cursor.isNull(deletedDateColumnIndex) ? null : cursor.getLong(deletedDateColumnIndex))
                             .geometryType(cursor.getString(geometryTypeColumnIndex))
                             .geometry(cursor.getString(geometryColumnIndex))
-                            .databaseId(cursor.getLong(databaseIdIndex))
                             .repeat(cursor.getInt(repeatColumnIndex) > 0)                       // smap
                             .updateid(cursor.getString(updateidColumnIndex))                    // smap
                             .location_trigger(cursor.getString(locationTriggerColumnIndex))     // smap

@@ -34,15 +34,6 @@
                    android:layout_marginBottom="24dp"
                    android:layout_gravity="center_horizontal" />
 
-        <!--URI for Kontrolid -->
-        <org.odk.collect.android.views.ScrolledToTopSpinner
-            android:id="@+id/urlSpinner"
-            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries="@array/smap_kontrolid_servers"
-            android:layout_marginTop="20dp"/>
-
         <!--  URL Label -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"

@@ -225,8 +225,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-auth:18.0.0"
     implementation "com.google.android.gms:play-services-maps:17.0.0"
     implementation "com.google.android.gms:play-services-location:17.0.0"
-    //implementation "com.google.android.gms:play-services-gcm:17.0.0"    // smap google cloud messaging
-    implementation "com.google.firebase:firebase-messaging:20.2.4"
+    implementation "com.google.firebase:firebase-messaging:20.2.4"      // smap synchronisation
 
     implementation 'com.google.firebase:firebase-perf:19.0.7'
     implementation 'com.google.firebase:firebase-analytics:17.4.1'
@@ -242,21 +241,18 @@ dependencies {
 
     implementation 'com.github.mohamadian:PersianJodaTime:1.2'
     implementation 'com.github.chanmratekoko:myanmar-calendar:1.0.6.RC3'
-    implementation 'bikramsambat:bikram-sambat:1.1.0'
+    //implementation 'bikramsambat:bikram-sambat:1.1.0'
     implementation "com.rarepebble:colorpicker:3.0.1"
     implementation "commons-io:commons-io:2.6"
     implementation "net.sf.opencsv:opencsv:2.4"
-    implementation("org.getodk:javarosa:3.0.2") {   // Temp dev move
-        exclude group: 'joda-time'
-        exclude group: 'org.slf4j'
-    }
     // smap comment out reference to maven repository version of javarosa will use a local version instead
-    //implementation("org.opendatakit:opendatakit-javarosa:2.17.1") {
+    //implementation("org.getodk:javarosa:3.0.2") {
     //    exclude group: 'joda-time'
     //    exclude group: 'org.slf4j'
     //}
-    //implementation('net.sf.kxml:kxml2:2.3.0')                       // smap javarosa dependency
-    //implementation files('libs/opendatakit-javarosa-2.17.1.jar')    // smap javarosa
+
+    implementation('net.sf.kxml:kxml2:2.3.0')                       // smap javarosa dependency
+    implementation files('libs/javarosa-3.0.2.jar')    // smap javarosa
 
 
     implementation "com.karumi:dexter:6.1.2"
@@ -291,7 +287,6 @@ dependencies {
 
     // Android Architecture Components:
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-    //implementation "androidx.lifecycle:lifecycle-viewmodel:2.2.0"     // smap
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
     // smap aws
@@ -370,10 +365,6 @@ dependencies {
 
     androidTestImplementation "com.squareup.okhttp3:mockwebserver:${rootProject.okhttp3Version}"
 
-    //androidTestImplementation "android.arch.work:work-testing:1.0.1"
-
-    // smap
-    //implementation "com.android.support:design:28.2.0"
     androidTestImplementation "androidx.work:work-testing:2.3.4"
 }
 
