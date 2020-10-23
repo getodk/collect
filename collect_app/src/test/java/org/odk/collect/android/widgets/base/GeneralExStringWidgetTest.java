@@ -21,6 +21,15 @@ public abstract class GeneralExStringWidgetTest<W extends ExStringWidget, A exte
         return answerData.getDisplayText();
     }
 
+    // TODO we should have such tests for every widget like we have to confirm readOnly option
+    @Test
+    public void testElementsVisibilityAndAvailability() {
+        assertThat(getSpyWidget().launchIntentButton.getVisibility(), is(View.VISIBLE));
+        assertThat(getSpyWidget().launchIntentButton.isEnabled(), is(Boolean.TRUE));
+        assertThat(getSpyWidget().answerText.getVisibility(), is(View.VISIBLE));
+        assertThat(getSpyWidget().answerText.isEnabled(), is(Boolean.FALSE));
+    }
+
     @Test
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);

@@ -50,7 +50,7 @@ public class StringWidget extends QuestionWidget {
     protected StringWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
 
-        answerText = getAnswerEditText(questionDetails.isReadOnly(), getFormEntryPrompt());
+        answerText = getAnswerEditText(questionDetails.isReadOnly() || this instanceof ExStringWidget, getFormEntryPrompt());
         setUpLayout(context);
     }
 
