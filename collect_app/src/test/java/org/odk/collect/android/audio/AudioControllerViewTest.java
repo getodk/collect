@@ -1,4 +1,4 @@
-package org.odk.collect.android.audio;
+ package org.odk.collect.android.audio;
 
 import android.widget.SeekBar;
 
@@ -42,6 +42,18 @@ public class AudioControllerViewTest {
 
         view.setDuration(64000);
         assertThat(view.binding.totalDuration.getText().toString(), equalTo("01:04"));
+    }
+
+    @Test
+    public void setDuration_whenHours_showsDurationInHoursMinutesAndSeconds() {
+        view.setDuration((60 * 60 * 1000) + 64000);
+        assertThat(view.binding.totalDuration.getText().toString(), equalTo("01:01:04"));
+    }
+
+    @Test
+    public void setDuration_when100Hours_showsDurationInHoursMinutesAndSeconds() {
+        view.setDuration(100 * 60 * 60 * 1000);
+        assertThat(view.binding.totalDuration.getText().toString(), equalTo("100:00:00"));
     }
 
     @Test
