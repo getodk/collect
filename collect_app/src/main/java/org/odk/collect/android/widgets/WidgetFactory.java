@@ -113,7 +113,7 @@ public class WidgetFactory {
                             questionWidget = new BearingWidget(context, questionDetails, waitingForDataRegistry,
                                     (SensorManager) context.getSystemService(Context.SENSOR_SERVICE));
                         } else {
-                            questionWidget = new DecimalWidget(context, questionDetails, readOnlyOverride);
+                            questionWidget = new DecimalWidget(context, questionDetails);
                         }
                         break;
                     case Constants.DATATYPE_INTEGER:
