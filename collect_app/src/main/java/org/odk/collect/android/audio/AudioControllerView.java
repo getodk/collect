@@ -26,11 +26,8 @@ import android.widget.TextView;
 import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.AudioControllerLayoutBinding;
 
-import java.util.Locale;
-
 import static java.lang.Math.max;
 import static java.lang.Math.min;
-import static java.lang.String.format;
 
 public class AudioControllerView extends FrameLayout {
 
@@ -106,18 +103,6 @@ public class AudioControllerView extends FrameLayout {
         }
     }
 
-    private static String getTime(long milliseconds) {
-        long hours = milliseconds / ONE_HOUR;
-        long minutes = (milliseconds % ONE_HOUR) / ONE_MINUTE;
-        long seconds = (milliseconds % ONE_MINUTE) / ONE_SECOND;
-
-        if (milliseconds < ONE_HOUR) {
-            return format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
-        } else {
-            return format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
-        }
-    }
-
     public void setPlaying(Boolean playing) {
         this.playing = playing;
 
@@ -141,16 +126,15 @@ public class AudioControllerView extends FrameLayout {
     public void setDuration(Integer duration) {
         this.duration = duration;
 
-        totalDurationLabel.setText(getTime(duration));
+        totalDurationLabel.setText(LengthFormatter.formatLength((long) duration));
         seekBar.setMax(duration);
-
         setPosition(0);
     }
 
     private void renderPosition(Integer position) {
         this.position = position;
 
-        currentDurationLabel.setText(getTime(position));
+        currentDurationLabel.setText(LengthFormatter.formatLength((long) position));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             seekBar.setProgress(position, true);

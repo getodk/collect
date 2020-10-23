@@ -34,37 +34,13 @@ public class AudioControllerViewTest {
 
     @Test
     public void setDuration_showsDurationInMinutesAndSeconds() {
-        view.setDuration(1000);
-        assertThat(view.binding.totalDuration.getText().toString(), equalTo("00:01"));
-
         view.setDuration(52000);
         assertThat(view.binding.totalDuration.getText().toString(), equalTo("00:52"));
-
-        view.setDuration(64000);
-        assertThat(view.binding.totalDuration.getText().toString(), equalTo("01:04"));
-    }
-
-    @Test
-    public void setDuration_whenHours_showsDurationInHoursMinutesAndSeconds() {
-        view.setDuration((60 * 60 * 1000) + 64000);
-        assertThat(view.binding.totalDuration.getText().toString(), equalTo("01:01:04"));
-    }
-
-    @Test
-    public void setDuration_when100Hours_showsDurationInHoursMinutesAndSeconds() {
-        view.setDuration(100 * 60 * 60 * 1000);
-        assertThat(view.binding.totalDuration.getText().toString(), equalTo("100:00:00"));
     }
 
     @Test
     public void setPosition_showsPositionInMinutesAndSeconds() {
         view.setDuration(65000);
-
-        view.setPosition(1000);
-        assertThat(view.binding.currentDuration.getText().toString(), equalTo("00:01"));
-
-        view.setPosition(52000);
-        assertThat(view.binding.currentDuration.getText().toString(), equalTo("00:52"));
 
         view.setPosition(64000);
         assertThat(view.binding.currentDuration.getText().toString(), equalTo("01:04"));
