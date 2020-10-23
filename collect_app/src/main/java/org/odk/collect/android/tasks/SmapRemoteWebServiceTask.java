@@ -11,6 +11,7 @@ import org.odk.collect.android.utilities.FormDownloader;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
@@ -68,13 +69,15 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
             URL url = new URL(lookupUrl);
             URI uri = url.toURI();
 
+            InputStream is = httpInterface.executeGetRequest(uri, null, webCredentialsUtils.getCredentials(uri)).getInputStream();
+
             HashMap<String, String> headers = new HashMap<String, String> ();
 
             if(imagePath != null) {
                 FormDownloader fd = new FormDownloader();
                 File f = new File(imagePath);
                 if(!f.exists()) {
-                    fd.downloadFile(f, lookupUrl, false);
+                    fd.downloadFile(f, is, lookupUrl, true);
                 }
                 item.data = imageName;
             } else {

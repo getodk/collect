@@ -150,7 +150,6 @@ public class UserInterfacePreferencesFragment extends BasePreferenceFragment {
                 edit.putString(KEY_APP_LANGUAGE, newValue.toString());
                 edit.apply();
 
-                localeHelper.updateLocale(getActivity());
                 Intent intent = new Intent(getActivity().getBaseContext(), SmapMain.class);             // smap
                 getActivity().startActivity(intent);                            // smap
                 //startActivityAndCloseAllOthers(getActivity(), MainMenuActivity.class);    // smap commented

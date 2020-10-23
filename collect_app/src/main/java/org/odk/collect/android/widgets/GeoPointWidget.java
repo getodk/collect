@@ -47,7 +47,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryDataReceiver
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final double accuracyThreshold;
 
-    GeoWidgetAnswerBinding binding;
+    public GeoWidgetAnswerBinding binding;      // smap make public
 
     private boolean readOnly;
     private String stringAnswer;

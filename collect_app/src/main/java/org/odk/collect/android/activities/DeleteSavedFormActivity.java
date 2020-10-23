@@ -52,7 +52,7 @@ public class DeleteSavedFormActivity extends CollectAbstractActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.notes);
+        toolbar.setNavigationIcon(R.mipmap.ic_nav);         // smap
     }
 
     private void setUpViewPager() {

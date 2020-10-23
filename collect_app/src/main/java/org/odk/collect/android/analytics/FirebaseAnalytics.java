@@ -42,6 +42,6 @@ public class FirebaseAnalytics implements Analytics {
 
     @Override
     public void setUserProperty(String name, String value) {
-        firebaseAnalytics.setUserProperty(name, value);
+        //firebaseAnalytics.setUserProperty(name, value);
     }
 }

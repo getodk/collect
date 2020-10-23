@@ -252,7 +252,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                     } else if (geopointPrompt != null) {    // Smap - launch gps collection
                         GeoPointWidget geopointWidget = (GeoPointWidget) widgets.get(0);
                         if (geopointWidget != null) {
-                            geopointWidget.startGeoButton.performClick();
+                            geopointWidget.binding.simpleButton.performClick();
                         }
                     } else if (imagePrompt != null) {    // Smap - launch image collection
                         ImageWidget imageWidget = (ImageWidget) widgets.get(0);
@@ -267,7 +267,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                     } else if (audioPrompt != null) {    // Smap - launch audio collection
                         AudioWidget audioWidget = (AudioWidget) widgets.get(0);
                         if (audioWidget != null) {
-                            audioWidget.captureButton.performClick();
+                            audioWidget.binding.captureButton.performClick();   // Note this onlu auto starts capture of new audio
                         }
                     }
                 }

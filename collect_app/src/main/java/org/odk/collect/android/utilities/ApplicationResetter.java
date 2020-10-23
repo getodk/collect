@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.utilities;
 
+import org.odk.collect.android.database.FormDatabaseMigrator;
 import org.odk.collect.android.database.InstancesDatabaseHelper;
 import org.odk.collect.android.database.FormsDatabaseHelper;
 import org.odk.collect.android.application.Collect;
@@ -124,7 +125,7 @@ public class ApplicationResetter {
 
     private void resetForms() {
        // new FormsDao().deleteFormsDatabase();  // smap
-        FormsDatabaseHelper.recreateDatabase();      // smap - really delete the database
+        FormDatabaseMigrator.recreateDatabase();      // smap - really delete the database
 
         File itemsetDbFile = new File(storagePathProvider.getDirPath(StorageSubdirectory.METADATA) + File.separator + ItemsetDbAdapter.DATABASE_NAME);
 

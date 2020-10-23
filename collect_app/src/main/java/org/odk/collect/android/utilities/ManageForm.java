@@ -22,6 +22,7 @@ import android.util.Log;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.TaskAssignment;
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -157,11 +158,11 @@ public class ManageForm {
         	
 			// get all complete or failed submission instances
 			String selection = null;
-			String selectionArgs1 [] = { InstanceProviderAPI.STATUS_INCOMPLETE, 
+			String selectionArgs1 [] = { Instance.STATUS_INCOMPLETE,
 					formId
 					};
 			
-			String selectionArgs2 [] = 	{ InstanceProviderAPI.STATUS_INCOMPLETE, 
+			String selectionArgs2 [] = 	{ Instance.STATUS_INCOMPLETE,
 					formId,
                     version
 					};
@@ -344,7 +345,7 @@ public class ManageForm {
     	values.put(InstanceColumns.SUBMISSION_URI, submissionUri);
     	values.put(InstanceColumns.INSTANCE_FILE_PATH, instancePath);
     	values.put(InstanceColumns.DISPLAY_NAME, formName);
-    	values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
+    	values.put(InstanceColumns.STATUS, Instance.STATUS_INCOMPLETE);
 
     	// Add task geofence values
         values.put(InstanceColumns.T_SHOW_DIST, ta.task.show_dist);
@@ -366,7 +367,7 @@ public class ManageForm {
         }
         values.put(InstanceColumns.FORM_PATH, formPath);
         values.put(InstanceColumns.T_ADDRESS, ta.task.address);
-        values.put(InstanceColumns.T_IS_SYNC, InstanceProviderAPI.STATUS_SYNC_YES);
+        values.put(InstanceColumns.T_IS_SYNC, Instance.STATUS_SYNC_YES);
 
         // Add target location
         if (ta.location != null && ta.location.geometry != null && ta.location.geometry.coordinates != null && ta.location.geometry.coordinates.length >= 1) {

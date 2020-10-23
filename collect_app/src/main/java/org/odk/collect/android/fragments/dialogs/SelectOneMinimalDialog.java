@@ -23,7 +23,7 @@ public class SelectOneMinimalDialog extends SelectMinimalDialog implements Selec
                                   int playColor, int numColumns, boolean noButtonsMode) {
         super(isFlex, isAutoComplete);
         adapter = new SelectOneListAdapter(selectedItem, this, context, items, prompt,
-                referenceManager, null, playColor, numColumns, noButtonsMode);
+                referenceManager, null, playColor, numColumns, noButtonsMode, false);   // smap readonlyoverride
     }
 
     @Override

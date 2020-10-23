@@ -101,7 +101,9 @@ r		b) FormListDownloader was deleted. What smap changes from that need to be add
 	10) FormsDatabaseHelper is new (moved from helpers folder to parent)
 	11) FileManagerTabs replaced by DeleteSavedFormActivity
 	12) FormChooserListActivity replaced by FillBlankFormActivity
-	13( BikramSambatDatePickerDialog.java, DateTimeUtils.java Hacked in temporary solution
+	13) BikramSambatDatePickerDialog.java, DateTimeUtils.java Hacked in temporary solution
+	14) AboutPreferencesFragment has been deleted
+	15) FormEntryActivity - save form - show message has been removed
 
 	Complete List of Changes
 	-------------------------

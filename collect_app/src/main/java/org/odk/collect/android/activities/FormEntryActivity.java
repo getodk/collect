@@ -1024,7 +1024,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 break;
             case RequestCodes.NFC_CAPTURE:       // smap
                 String nfcId = intent.getStringExtra(NFC_RESULT);
-                ((ODKView) currentView).setBinaryData(nfcId);
+                setBinaryWidgetData(nfcId);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case RequestCodes.BEARING_CAPTURE:
@@ -1803,7 +1803,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
                         // analytics.logEvent(SAVE_INCOMPLETE, "saveIncomplete", Collect.getCurrentFormIdentifierHash());
 
-                        saveForm(false, false, null, false, true);        // smap add "save message" as true
+                        saveForm(false, false, null, false);        // smap add "save message" as true ???? Removed in upgrade
                         autoSaved = true;
                     }
                 }
@@ -1947,9 +1947,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * isntancs as complete. If updatedSaveName is non-null, the instances
      * content provider is updated with the new name
      */
-    private boolean saveForm(boolean exit, boolean complete, String updatedSaveName,
-                             boolean current,
-                             boolean saveMessage) {   // smap make public add saveMessage
+    public boolean saveForm(boolean exit, boolean complete, String updatedSaveName,
+                             boolean current) {   // smap make public
         // save current answer
         if (current) {
             if (!saveAnswersForCurrentScreen(complete)) {

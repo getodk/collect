@@ -38,8 +38,13 @@ import timber.log.Timber;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_LANGUAGE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOSEND;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_CONSTRAINT_BEHAVIOR;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_IMAGE_SIZE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_NAVIGATION;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SPLASH_PATH;
 
 public class SmapInterfacePreferences extends BasePreferenceFragment {
@@ -49,13 +54,7 @@ public class SmapInterfacePreferences extends BasePreferenceFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.smap_interface_preferences);
 
-        initNavigationPrefs();
-        initFontSizePref();
-        initLanguagePrefs();
-        initSplashPrefs();
-        initMapPrefs();
     }
 
     @Override
@@ -68,154 +67,11 @@ public class SmapInterfacePreferences extends BasePreferenceFragment {
         super.onDetach();
     }
 
-    private void initNavigationPrefs() {
-        final ListPreference pref = (ListPreference) findPreference(KEY_NAVIGATION);
-
-        if (pref != null) {
-            pref.setSummary(pref.getEntry());
-            pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                    String entry = (String) ((ListPreference) preference).getEntries()[index];
-                    preference.setSummary(entry);
-                    return true;
-                }
-            });
-        }
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        addPreferencesFromResource(R.xml.smap_interface_preferences);
     }
 
-    private void initFontSizePref() {
-        final ListPreference pref = (ListPreference) findPreference(KEY_FONT_SIZE);
-
-        if (pref != null) {
-            pref.setSummary(pref.getEntry());
-            pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                    CharSequence entry = ((ListPreference) preference).getEntries()[index];
-                    preference.setSummary(entry);
-                    return true;
-                }
-            });
-        }
-    }
-
-    private void initLanguagePrefs() {
-        final ListPreference pref = (ListPreference) findPreference(KEY_APP_LANGUAGE);
-
-        if (pref != null) {
-            final LocaleHelper localeHelper = new LocaleHelper();
-            TreeMap<String, String> languageList = localeHelper.getEntryListValues();
-            int length = languageList.size() + 1;
-            ArrayList<String> entryValues = new ArrayList<>();
-            entryValues.add(0, "");
-            entryValues.addAll(languageList.values());
-            pref.setEntryValues(entryValues.toArray(new String[length]));
-            ArrayList<String> entries = new ArrayList<>();
-            entries.add(0, getActivity().getResources()
-                    .getString(R.string.use_device_language));
-            entries.addAll(languageList.keySet());
-            pref.setEntries(entries.toArray(new String[length]));
-            if (pref.getValue() == null) {
-                //set Default value to "Use phone locale"
-                pref.setValueIndex(0);
-            }
-            pref.setSummary(pref.getEntry());
-            pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                    String entry = (String) ((ListPreference) preference).getEntries()[index];
-                    preference.setSummary(entry);
-
-                    SharedPreferences.Editor edit = PreferenceManager
-                            .getDefaultSharedPreferences(getActivity()).edit();
-                    edit.putString(KEY_APP_LANGUAGE, newValue.toString());
-                    edit.apply();
-
-                    localeHelper.updateLocale(getActivity());
-
-                    //Intent intent = new Intent(getActivity().getBaseContext(), MainMenuActivity.class);     // smap
-                    Intent intent = new Intent(getActivity().getBaseContext(), SmapMain.class);             // smap
-                    getActivity().startActivity(intent);
-                    getActivity().overridePendingTransition(0, 0);
-                    getActivity().finishAffinity();
-                    return true;
-                }
-            });
-        }
-    }
-
-    private void initSplashPrefs() {
-        final PreferenceScreen pref = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
-
-        //if (pref != null) {
-        //    pref.setOnPreferenceClickListener(new SplashClickListener(this, pref));
-        //    pref.setSummary(pref.getSharedPreferences().getString(
-        //            KEY_SPLASH_PATH, getString(R.string.default_splash_path)));
-        //}
-    }
-
-    private void initMapPrefs() {
-        /*
-        final ListPreference mapSdk = (ListPreference) findPreference(KEY_MAP_SDK);
-        final ListPreference mapBasemap = (ListPreference) findPreference(KEY_MAP_BASEMAP);
-
-        if (mapSdk == null || mapBasemap == null) {
-            return;
-        }
-
-        mapSdk.setSummary(mapSdk.getEntry());
-        mapSdk.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-
-                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                // TODO reenable OSM
-                //if (index == GOOGLE_MAPS) {
-                    mapBasemap.setEntryValues(R.array.map_google_basemap_selector_entry_values);
-                    mapBasemap.setEntries(R.array.map_google_basemap_selector_entries);
-                    mapBasemap.setValue(GOOGLE_MAPS_BASEMAP_DEFAULT);
-                    mapBasemap.setSummary(mapBasemap.getEntry());
-                //} else {
-                    // Else its OSM Maps
-                //    mapBasemap.setEntryValues(R.array.map_osm_basemap_selector_entry_values);
-                //    mapBasemap.setEntries(R.array.map_osm_basemap_selector_entries);
-                //    mapBasemap.setValue(OSM_MAPS_BASEMAP_DEFAULT);
-                //    mapBasemap.setSummary(mapBasemap.getEntry());
-                //}
-
-                String entry = (String) ((ListPreference) preference).getEntries()[index];
-                preference.setSummary(entry);
-                return true;
-            }
-        });
-
-        if (mapSdk.getValue().equals(OSM_BASEMAP_KEY)) {
-            mapBasemap.setEntryValues(R.array.map_osm_basemap_selector_entry_values);
-            mapBasemap.setEntries(R.array.map_osm_basemap_selector_entries);
-        } else {
-            mapBasemap.setEntryValues(R.array.map_google_basemap_selector_entry_values);
-            mapBasemap.setEntries(R.array.map_google_basemap_selector_entries);
-        }
-        mapBasemap.setSummary(mapBasemap.getEntry());
-        mapBasemap.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                String entry = (String) ((ListPreference) preference).getEntries()[index];
-                preference.setSummary(entry);
-                return true;
-            }
-        });
-        */
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -226,29 +82,8 @@ public class SmapInterfacePreferences extends BasePreferenceFragment {
             return;
         }
 
-        switch (requestCode) {
-            case IMAGE_CHOOSER:
 
-                // get gp of chosen file
-                Uri selectedMedia = intent.getData();
-                String sourceMediaPath = MediaUtils.getPathFromUri(getActivity(), selectedMedia,
-                        MediaStore.Images.Media.DATA);
-
-                // setting image path
-                setSplashPath(sourceMediaPath);
-                break;
-        }
     }
 
-    void setSplashPath(String path) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(KEY_SPLASH_PATH, path);
-        editor.apply();
 
-        PreferenceScreen splashPathPreference = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
-        String summary = splashPathPreference.getSharedPreferences().getString(
-                KEY_SPLASH_PATH, getString(R.string.default_splash_path));
-        splashPathPreference.setSummary(summary);
-    }
 }

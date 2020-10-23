@@ -138,7 +138,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getQuestionFontSize());
         button.setText(StringUtils.textToHtml(prompt.getSelectChoiceText(filteredItems.get(index))));
         button.setTag(items.indexOf(filteredItems.get(index)));
-        button.setEnabled(!widget.getFormEntryPrompt().isReadOnly() && !readOnlyOverride);    // smap add readOnlyOverride
+        button.setEnabled(!prompt.isReadOnly() && !readOnlyOverride);    // smap add readOnlyOverride
         button.setGravity(isRTL() ? Gravity.END : Gravity.START);
         button.setTextAlignment(isRTL() ? View.TEXT_ALIGNMENT_TEXT_END : View.TEXT_ALIGNMENT_TEXT_START);
     }

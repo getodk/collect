@@ -23,7 +23,7 @@ public class SelectOneMinimalWidget extends SelectMinimalWidget {
     private final boolean autoAdvance;
     private AdvanceToNextListener autoAdvanceListener;
 
-    public SelectOneMinimalWidget(Context context, QuestionDetails prompt, boolean autoAdvance) {
+    public SelectOneMinimalWidget(Context context, QuestionDetails prompt, boolean autoAdvance, boolean readOnlyOverride) {
         super(context, prompt);
         selectedItem = getQuestionDetails().getPrompt().getAnswerValue() == null
                 ? null

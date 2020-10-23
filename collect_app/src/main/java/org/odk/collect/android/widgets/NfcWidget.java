@@ -43,6 +43,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.getCenteredAnswerTextView;
@@ -61,7 +62,7 @@ public class NfcWidget extends QuestionWidget implements BinaryDataReceiver, But
     public PendingIntent mNfcPendingIntent;
     public IntentFilter[] mNfcFilters;
 
-	public NfcWidget(Context context, QuestionDetails questionDetails) {
+	public NfcWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
 		super(context, questionDetails);
 
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();

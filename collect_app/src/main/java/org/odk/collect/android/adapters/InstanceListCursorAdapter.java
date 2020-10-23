@@ -93,7 +93,7 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
                     Timber.e(e);
                     disabledMessage = context.getString(R.string.submission_deleted);
                 }
-                if(reason != null) {
+                if(reason != null) {        // smap
                     disabledMessage += "\n" + reason;
                 }
             } else if (!formExists) {
@@ -172,8 +172,6 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
             case Instance.STATUS_SUBMISSION_FAILED:
                 return R.drawable.form_state_submission_failed_circle;
         }
-
-        Crashlytics.log("Unknown InstanceProviderAPI status: " + formStatus);
 
         return -1;
     }

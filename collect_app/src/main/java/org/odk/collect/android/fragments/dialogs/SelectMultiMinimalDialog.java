@@ -20,6 +20,6 @@ public class SelectMultiMinimalDialog extends SelectMinimalDialog {
                                     int playColor, int numColumns, boolean noButtonsMode) {
         super(isFlex, isAutoComplete);
         adapter = new SelectMultipleListAdapter(selectedItems, null, context, items, prompt,
-                referenceManager, null, playColor, numColumns, noButtonsMode);
+                referenceManager, null, playColor, numColumns, noButtonsMode, false);       // smap read only override
     }
 }

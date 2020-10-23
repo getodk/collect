@@ -272,7 +272,7 @@ public class SmapFormWidget extends QuestionWidget implements BinaryDataReceiver
 
         // 3. Save and exit current form
         mFormEntryActivity.saveForm(true, false,
-                null, false, false);
+                null, false);
     }
 
     private void focusAnswer() {

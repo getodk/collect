@@ -48,11 +48,13 @@ public class SelectOneWidget extends BaseSelectListWidget {
 
     @Nullable
     private AdvanceToNextListener listener;
+    private boolean readOnlyOverride;      // smap
 
     private final boolean autoAdvance;
 
     public SelectOneWidget(Context context, QuestionDetails questionDetails, boolean autoAdvance, boolean readOnlyOverride) {  // smap read only override
         super(context, questionDetails);
+        this.readOnlyOverride = readOnlyOverride;       // smap
         this.autoAdvance = autoAdvance;
         if (context instanceof AdvanceToNextListener) {
             listener = (AdvanceToNextListener) context;
@@ -66,7 +68,7 @@ public class SelectOneWidget extends BaseSelectListWidget {
 
         recyclerViewAdapter = new SelectOneListAdapter(getSelectedValue(), this, getContext(), items,
                 getFormEntryPrompt(), getReferenceManager(), getAudioHelper(),
-                getPlayColor(getFormEntryPrompt(), themeUtils), numColumns, noButtonsMode);
+                getPlayColor(getFormEntryPrompt(), themeUtils), numColumns, noButtonsMode, readOnlyOverride);   // smap add readonlyoverride
         return recyclerViewAdapter;
     }
 

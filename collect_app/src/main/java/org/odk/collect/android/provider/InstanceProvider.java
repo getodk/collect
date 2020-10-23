@@ -305,7 +305,7 @@ public class InstanceProvider extends ContentProvider {
                 }
 
                 // Keep sent instance database rows but delete corresponding files
-                if (status != null && status.equals(InstanceProviderAPI.STATUS_SUBMITTED)) {
+                if (status != null && status.equals(Instance.STATUS_SUBMITTED)) {
                     ContentValues cv = new ContentValues();
                     cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
 

@@ -65,11 +65,11 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
         //setTheme(R.style.DarkAppTheme);     // override theme for login
         setContentView(R.layout.smap_activity_login);
         ButterKnife.bind(this);
-        urlSpinner = findViewById(R.id.urlSpinner);
+        //urlSpinner = findViewById(R.id.urlSpinner);   URL spinner no longer included - need to add back in if it is required
 
         url = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SERVER_URL);
 
-        if(BuildConfig.FLAVOR.equals("kontrolid")) {
+        if(BuildConfig.FLAVOR.equals("kontrolid") && false) {   // Disable this option
             useSpinner = true;
             urlText.setVisibility(View.GONE);
 

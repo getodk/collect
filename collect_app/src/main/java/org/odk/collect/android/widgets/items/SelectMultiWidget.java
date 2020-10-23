@@ -39,8 +39,10 @@ import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColo
  */
 @SuppressLint("ViewConstructor")
 public class SelectMultiWidget extends BaseSelectListWidget {
+    private boolean readOnlyOverride;      // smap
     public SelectMultiWidget(Context context, QuestionDetails prompt, boolean readOnlyOverride) {  // smap - add read only override
         super(context, prompt);
+        this.readOnlyOverride = readOnlyOverride;   // smap
         SpacesInUnderlyingValuesWarning
                 .forQuestionWidget(this)
                 .renderWarningIfNecessary(items);
@@ -53,7 +55,7 @@ public class SelectMultiWidget extends BaseSelectListWidget {
 
         recyclerViewAdapter = new SelectMultipleListAdapter(getSelectedItems(), this, getContext(),
                 items, getFormEntryPrompt(), getReferenceManager(), getAudioHelper(),
-                getPlayColor(getFormEntryPrompt(), themeUtils), numColumns, noButtonsMode);
+                getPlayColor(getFormEntryPrompt(), themeUtils), numColumns, noButtonsMode, readOnlyOverride);       // smap
         return recyclerViewAdapter;
     }
 
