@@ -108,11 +108,11 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
 
         selfie = WidgetAppearanceUtils.isFrontCameraAppearance(getFormEntryPrompt());
 
-        captureButton = createSimpleButton(getContext(), R.id.capture_video, getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.capture_video), getAnswerFontSize(), this);
+        captureButton = createSimpleButton(getContext(), R.id.capture_video, questionDetails.isReadOnly(), getContext().getString(R.string.capture_video), getAnswerFontSize(), this);
 
-        chooseButton = createSimpleButton(getContext(), R.id.choose_video, getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.choose_video), getAnswerFontSize(), this);
+        chooseButton = createSimpleButton(getContext(), R.id.choose_video, questionDetails.isReadOnly(), getContext().getString(R.string.choose_video), getAnswerFontSize(), this);
 
-        playButton = createSimpleButton(getContext(), R.id.play_video, getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.play_video), getAnswerFontSize(), this);
+        playButton = createSimpleButton(getContext(), R.id.play_video, questionDetails.isReadOnly(), getContext().getString(R.string.play_video), getAnswerFontSize(), this);
         playButton.setVisibility(VISIBLE);
 
         // retrieve answer from data model and update ui
