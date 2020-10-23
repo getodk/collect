@@ -12,6 +12,7 @@
         android:progressBackgroundTint="#61000000"
         android:progressTint="@color/highContrastHighlight"
         android:secondaryProgressTint="@android:color/transparent"
+        android:saveEnabled="false"
         android:stepSize="1.0" />
 
     <RatingBar
@@ -22,6 +23,7 @@
         android:progressBackgroundTint="#61000000"
         android:progressTint="@color/highContrastHighlight"
         android:secondaryProgressTint="@android:color/transparent"
+        android:saveEnabled="false"
         android:stepSize="1.0" />
 
 </LinearLayout>
