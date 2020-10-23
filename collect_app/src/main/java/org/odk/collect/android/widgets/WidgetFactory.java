@@ -152,7 +152,7 @@ public class WidgetFactory {
                         } else if (appearance.startsWith(WidgetAppearanceUtils.EX)) {
                             questionWidget = new ExStringWidget(context, questionDetails, waitingForDataRegistry);
                         } else if (appearance.contains(WidgetAppearanceUtils.NUMBERS)) {
-                            questionWidget = new StringNumberWidget(context, questionDetails, readOnlyOverride);
+                            questionWidget = new StringNumberWidget(context, questionDetails);
                         } else if (appearance.equals(WidgetAppearanceUtils.URL)) {
                             questionWidget = new UrlWidget(context, questionDetails, new CustomTabHelper());
 
