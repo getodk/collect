@@ -89,7 +89,7 @@ public class WidgetFactory {
                                                         SharedPreferences generalSharedPreferences) {
 
         String appearance = WidgetAppearanceUtils.getSanitizedAppearanceHint(prompt);
-        QuestionDetails questionDetails = new QuestionDetails(prompt, Collect.getCurrentFormIdentifierHash());
+        QuestionDetails questionDetails = new QuestionDetails(prompt, Collect.getCurrentFormIdentifierHash(), readOnlyOverride);
         PermissionUtils permissionUtils = new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert);
         ActivityAvailability activityAvailability = new ActivityAvailability(context);
 
