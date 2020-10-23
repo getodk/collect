@@ -136,6 +136,8 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
         assertThat(getSpyWidget().captureButton.getVisibility(), is(View.GONE));
         assertThat(getSpyWidget().chooseButton.getVisibility(), is(View.GONE));
         assertThat(getSpyWidget().playButton.getVisibility(), is(View.VISIBLE));
+        assertThat(getSpyWidget().playButton.isEnabled(), is(Boolean.FALSE));
+        assertThat(getSpyWidget().playButton.getText(), is("Play Video"));
     }
 
     @Test
@@ -146,5 +148,7 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
         assertThat(getSpyWidget().captureButton.getVisibility(), is(View.GONE));
         assertThat(getSpyWidget().chooseButton.getVisibility(), is(View.GONE));
         assertThat(getSpyWidget().playButton.getVisibility(), is(View.VISIBLE));
+        assertThat(getSpyWidget().playButton.isEnabled(), is(Boolean.FALSE));
+        assertThat(getSpyWidget().playButton.getText(), is("Play Video"));
     }
 }

@@ -112,7 +112,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
 
         chooseButton = createSimpleButton(getContext(), R.id.choose_video, questionDetails.isReadOnly(), getContext().getString(R.string.choose_video), getAnswerFontSize(), this);
 
-        playButton = createSimpleButton(getContext(), R.id.play_video, questionDetails.isReadOnly(), getContext().getString(R.string.play_video), getAnswerFontSize(), this);
+        playButton = createSimpleButton(getContext(), R.id.play_video, false, getContext().getString(R.string.play_video), getAnswerFontSize(), this);
         playButton.setVisibility(VISIBLE);
 
         // retrieve answer from data model and update ui
