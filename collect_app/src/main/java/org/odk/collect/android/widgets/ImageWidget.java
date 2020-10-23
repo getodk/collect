@@ -76,9 +76,9 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
         String appearance = getFormEntryPrompt().getAppearanceHint();
         selfie = WidgetAppearanceUtils.isFrontCameraAppearance(getFormEntryPrompt());
 
-        captureButton = createSimpleButton(getContext(), R.id.capture_image, getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.capture_image), getAnswerFontSize(), this);
+        captureButton = createSimpleButton(getContext(), R.id.capture_image, questionDetails.isReadOnly(), getContext().getString(R.string.capture_image), getAnswerFontSize(), this);
 
-        chooseButton = createSimpleButton(getContext(), R.id.choose_image, getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.choose_image), getAnswerFontSize(), this);
+        chooseButton = createSimpleButton(getContext(), R.id.choose_image, questionDetails.isReadOnly(), getContext().getString(R.string.choose_image), getAnswerFontSize(), this);
 
         answerLayout.addView(captureButton);
         answerLayout.addView(chooseButton);
