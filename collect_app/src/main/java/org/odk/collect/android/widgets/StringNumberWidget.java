@@ -28,7 +28,7 @@ import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
 public class StringNumberWidget extends StringWidget {
 
     public StringNumberWidget(Context context, QuestionDetails questionDetails) {
-        super(context, questionDetails, false);
+        super(context, questionDetails);
         StringWidgetUtils.adjustEditTextAnswerToStringNumberWidget(answerText, questionDetails.getPrompt());
     }
 

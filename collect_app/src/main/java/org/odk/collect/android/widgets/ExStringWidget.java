@@ -106,7 +106,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     public ActivityAvailability activityAvailability;
 
     public ExStringWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
-        super(context, questionDetails, true);
+        super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
         getComponent(context).inject(this);
     }

@@ -49,10 +49,10 @@ public class StringWidget extends QuestionWidget {
     boolean readOnly;
     public final EditText answerText;
 
-    protected StringWidget(Context context, QuestionDetails questionDetails, boolean readOnlyOverride) {
+    protected StringWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
 
-        readOnly = questionDetails.getPrompt().isReadOnly() || readOnlyOverride;
+        readOnly = questionDetails.isReadOnly();
         answerText = getAnswerEditText(readOnly, getFormEntryPrompt());
         setUpLayout(context);
     }

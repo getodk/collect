@@ -28,7 +28,7 @@ import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
 public class DecimalWidget extends StringWidget {
 
     public DecimalWidget(Context context, QuestionDetails questionDetails) {
-        super(context, questionDetails, false);
+        super(context, questionDetails);
         StringWidgetUtils.adjustEditTextAnswerToDecimalWidget(answerText, questionDetails.getPrompt());
     }
 
