@@ -120,7 +120,7 @@ public class WidgetFactory {
                         if (appearance.startsWith(WidgetAppearanceUtils.EX)) {
                             questionWidget = new ExIntegerWidget(context, questionDetails, waitingForDataRegistry);
                         } else {
-                            questionWidget = new IntegerWidget(context, questionDetails, readOnlyOverride);
+                            questionWidget = new IntegerWidget(context, questionDetails);
                         }
                         break;
                     case Constants.DATATYPE_GEOPOINT:
