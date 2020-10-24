@@ -35,6 +35,7 @@ import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.external.handler.SmapRemoteDataItem; 
 import org.odk.collect.android.geo.MapboxUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
+import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.loaders.GeofenceEntry;
 import org.odk.collect.android.logic.FormInfo;
@@ -89,6 +90,7 @@ public class Collect extends Application {
     private Stack<FormLaunchDetail> formStack = new Stack<>();              // smap
     private FormRestartDetails mRestartDetails;                             // smap
     private String formId;                                                  // smap
+
     @Inject
     ApplicationInitializer applicationInitializer;
 
