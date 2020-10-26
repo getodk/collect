@@ -19,7 +19,7 @@ class AudioRecorderService : Service() {
     internal lateinit var recorder: Recorder
 
     @Inject
-    internal lateinit var recordingRepository: RecordingRepository
+    internal lateinit var recordingSession: RecordingSession
 
     override fun onCreate() {
         super.onCreate()
@@ -78,7 +78,7 @@ class AudioRecorderService : Service() {
 
     private fun stopRecording() {
         val file = recorder.stop()
-        recordingRepository.create(file)
+        recordingSession.recordingReady(file)
         stopSelf()
     }
 

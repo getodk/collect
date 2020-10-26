@@ -12,27 +12,27 @@ import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Com
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_START
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_STOP
 import org.odk.collect.audiorecorder.recording.internal.RealAudioRecorderViewModel
-import org.odk.collect.audiorecorder.recording.internal.RecordingRepository
+import org.odk.collect.audiorecorder.recording.internal.RecordingSession
 import org.robolectric.Shadows.shadowOf
 import java.io.File.createTempFile
 
 @RunWith(AndroidJUnit4::class)
 class RealAudioRecorderViewModelTest {
 
-    private val recordingRepository = RecordingRepository()
+    private val recordingSession = RecordingSession()
 
     private val application by lazy { getApplicationContext<Application>() }
     private val viewModel: RealAudioRecorderViewModel by lazy {
-        RealAudioRecorderViewModel(application, recordingRepository)
+        RealAudioRecorderViewModel(application, recordingSession)
     }
 
     @Test
-    fun recording_returnsRepositoryRecording() {
+    fun recording_returnsSessionRecording() {
         val recording = viewModel.recording
         assertThat(recording.value, equalTo(null))
 
         val file = createTempFile("blah", "mp3")
-        recordingRepository.create(file)
+        recordingSession.recordingReady(file)
         assertThat(recording.value!!.absolutePath, equalTo(file.absolutePath))
     }
 
@@ -61,10 +61,10 @@ class RealAudioRecorderViewModelTest {
     }
 
     @Test
-    fun endSession_clearsRepository() {
-        recordingRepository.create(createTempFile("blah", "mp3"))
+    fun endSession_clearsSessionRecording() {
+        recordingSession.recordingReady(createTempFile("blah", "mp3"))
 
         viewModel.endSession()
-        assertThat(recordingRepository.getRecording().value, equalTo(null))
+        assertThat(recordingSession.getRecording().value, equalTo(null))
     }
 }

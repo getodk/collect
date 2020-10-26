@@ -24,7 +24,7 @@ import org.robolectric.Shadows.shadowOf
 class AudioRecorderServiceTest {
 
     private val application: TestApplication by lazy { ApplicationProvider.getApplicationContext() }
-    private val recordingRepository = RecordingRepository()
+    private val recordingSession = RecordingSession()
     private val recorder = FakeRecorder()
 
     @Before
@@ -35,8 +35,8 @@ class AudioRecorderServiceTest {
                     return recorder
                 }
 
-                override fun providesRecordingRepository(): RecordingRepository {
-                    return recordingRepository
+                override fun providesRecordingSession(): RecordingSession {
+                    return recordingSession
                 }
             }
         )
@@ -88,7 +88,7 @@ class AudioRecorderServiceTest {
     }
 
     @Test
-    fun stopAction_stopsRecorder_stopsSelf_andSetsRecordingOnRepository() {
+    fun stopAction_stopsRecorder_stopsSelf_andSetsRecordingOnSession() {
         val intent = Intent(application, AudioRecorderService::class.java)
         intent.action = AudioRecorderService.ACTION_STOP
 
@@ -97,7 +97,7 @@ class AudioRecorderServiceTest {
             .startCommand(0, 0)
 
         assertThat(recorder.isRecording(), equalTo(false))
-        assertThat(recordingRepository.getRecording().value, equalTo(recorder.file))
+        assertThat(recordingSession.getRecording().value, equalTo(recorder.file))
         assertThat(shadowOf(service.get()).isStoppedBySelf, equalTo(true))
     }
 

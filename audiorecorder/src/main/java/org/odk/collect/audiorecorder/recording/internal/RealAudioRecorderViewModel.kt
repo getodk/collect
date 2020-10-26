@@ -9,9 +9,9 @@ import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Com
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_STOP
 import java.io.File
 
-internal class RealAudioRecorderViewModel internal constructor(private val application: Application, private val recordingRepository: RecordingRepository) : AudioRecorderViewModel() {
+internal class RealAudioRecorderViewModel internal constructor(private val application: Application, private val recordingSession: RecordingSession) : AudioRecorderViewModel() {
 
-    override val recording: LiveData<File?> = recordingRepository.getRecording()
+    override val recording: LiveData<File?> = recordingSession.getRecording()
 
     override fun start() {
         application.startService(
@@ -32,6 +32,6 @@ internal class RealAudioRecorderViewModel internal constructor(private val appli
     }
 
     override fun endSession() {
-        recordingRepository.clear()
+        recordingSession.finish()
     }
 }
