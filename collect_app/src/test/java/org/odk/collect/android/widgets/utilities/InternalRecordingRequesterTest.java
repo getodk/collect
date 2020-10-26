@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.fakes.FakePermissionUtils;
+import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 import org.robolectric.Robolectric;
 
@@ -28,7 +29,7 @@ public class InternalRecordingRequesterTest {
     @Before
     public void setup() {
         Activity activity = Robolectric.buildActivity(Activity.class).get();
-        requester = new InternalRecordingRequester(activity, viewModel, permissionUtils);
+        requester = new InternalRecordingRequester(activity, viewModel, permissionUtils, new FakeWaitingForDataRegistry());
         permissionUtils.setPermissionGranted(true);
     }
 

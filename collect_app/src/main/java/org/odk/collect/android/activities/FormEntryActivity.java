@@ -76,7 +76,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioControllerView;
-import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.backgroundwork.FormSubmitManager;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
@@ -154,9 +153,12 @@ import org.odk.collect.android.widgets.RangePickerDecimalWidget;
 import org.odk.collect.android.widgets.RangePickerIntegerWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.FormControllerWaitingForDataRegistry;
+import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.AudioClipViewModel;
+import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
+import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -351,8 +353,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Collect.getInstance().getComponent().inject(this);
-        setupViewModels();
         setContentView(R.layout.form_entry);
+        setupViewModels();
         swipeHandler = new SwipeHandler(this);
 
         compositeDisposable.add(eventBus
@@ -464,6 +466,36 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formSaveViewModel = new ViewModelProvider(this, factory).get(FormSaveViewModel.class);
 
         formSaveViewModel.getSaveResult().observe(this, this::handleSaveResult);
+
+        AudioRecorderViewModel audioRecorderViewModel = new ViewModelProvider(
+                this,
+                new AudioRecorderViewModelFactory(getApplication())
+        ).get(AudioRecorderViewModel.class);
+        findViewById(R.id.stop_recording).setOnClickListener(v -> audioRecorderViewModel.stop());
+        audioRecorderViewModel.getRecording().observe(this, file -> {
+            if (file == null) {
+                return;
+            }
+
+            try {
+                InputStream inputStream = new FileInputStream(file);
+                File newFile = new File(getFormController().getInstanceFile().getParent()
+                        + File.separator
+                        + System.currentTimeMillis()
+                        + "."
+                        + ContentResolverHelper.getFileExtensionFromUri(this, Uri.parse(file.getAbsolutePath())));
+
+                OutputStream outputStream = new FileOutputStream(newFile);
+                IOUtils.copy(inputStream, outputStream);
+                inputStream.close();
+                outputStream.close();
+
+                setBinaryWidgetData(newFile.getName());
+//                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+            } catch (IOException ignored) {
+                // Ignored
+            }
+        });
     }
 
     private void formControllerAvailable(@NonNull FormController formController) {
@@ -970,31 +1002,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 String bearing = intent.getStringExtra(BEARING_RESULT);
                 if (getCurrentViewIfODKView() != null) {
                     setBinaryWidgetData(bearing);
-                }
-                break;
-
-            case RequestCodes.INTERNAL_AUDIO_CAPTURE:
-                try {
-                    Uri data = intent.getData();
-
-                    InputStream inputStream = new FileInputStream(new File(data.toString()));
-                    File newFile = new File(formController.getInstanceFile().getParent()
-                            + File.separator
-                            + System.currentTimeMillis()
-                            + "."
-                            + ContentResolverHelper.getFileExtensionFromUri(this, data));
-
-                    OutputStream outputStream = new FileOutputStream(newFile);
-                    IOUtils.copy(inputStream, outputStream);
-                    inputStream.close();
-                    outputStream.close();
-
-                    if (getCurrentViewIfODKView() != null) {
-                        setBinaryWidgetData(newFile.getName());
-                    }
-                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                } catch (IOException e) {
-                    Timber.e(e);
                 }
                 break;
         }

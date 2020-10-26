@@ -12,11 +12,13 @@ public class InternalRecordingRequester implements RecordingRequester {
     private final Activity activity;
     private final AudioRecorderViewModel viewModel;
     private final PermissionUtils permissionUtils;
+    private final WaitingForDataRegistry waitingForDataRegistry;
 
-    public InternalRecordingRequester(Activity activity, AudioRecorderViewModel viewModel, PermissionUtils permissionUtils) {
+    public InternalRecordingRequester(Activity activity, AudioRecorderViewModel viewModel, PermissionUtils permissionUtils, WaitingForDataRegistry waitingForDataRegistry) {
         this.activity = activity;
         this.viewModel = viewModel;
         this.permissionUtils = permissionUtils;
+        this.waitingForDataRegistry = waitingForDataRegistry;
     }
 
     @Override
@@ -24,6 +26,7 @@ public class InternalRecordingRequester implements RecordingRequester {
         permissionUtils.requestRecordAudioPermission(activity, new PermissionListener() {
             @Override
             public void granted() {
+                waitingForDataRegistry.waitForData(prompt.getIndex());
                 viewModel.start();
             }
 

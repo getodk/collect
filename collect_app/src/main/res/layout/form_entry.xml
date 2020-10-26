@@ -12,13 +12,12 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 -->
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/llParent"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/app_bar_layout"/>
+    <include layout="@layout/app_bar_layout" />
 
     <FrameLayout
         android:id="@+id/questionholder"
@@ -38,27 +37,27 @@ the License.
         android:id="@+id/buttonholder"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:gravity="center_vertical"
+        android:layout_alignParentBottom="true"
         android:background="?colorPrimary"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/form_back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="?colorOnPrimary"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:focusable="true"
             android:contentDescription="@string/form_backward"
+            android:drawableStart="@drawable/ic_navigate_back_wrapped"
+            android:focusable="true"
+            android:padding="10dp"
             android:text="@string/form_backward"
             android:textAllCaps="true"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+            android:textColor="?colorOnPrimary"
             android:textStyle="bold"
-            android:padding="10dp"
-            android:visibility="gone"
-            android:drawableStart="@drawable/ic_navigate_back_wrapped" />
+            android:visibility="gone" />
 
         <View
             android:layout_width="0dp"
@@ -69,17 +68,27 @@ the License.
             android:id="@+id/form_forward_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="?colorOnPrimary"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:focusable="true"
             android:contentDescription="@string/form_forward"
+            android:drawableEnd="@drawable/ic_navigate_forward_wrapped"
+            android:focusable="true"
+            android:padding="10dp"
             android:text="@string/form_forward"
             android:textAllCaps="true"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+            android:textColor="?colorOnPrimary"
             android:textStyle="bold"
-            android:padding="10dp"
-            android:visibility="gone"
-            android:drawableEnd="@drawable/ic_navigate_forward_wrapped" />
+            android:visibility="gone" />
     </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/stop_recording"
+        style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="64dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/stop_recording" />
 </RelativeLayout>

@@ -41,6 +41,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -403,6 +404,10 @@ abstract class Page<T extends Page<T>> {
         }
 
         return (T) this;
+    }
+
+    public void assertContentDescriptionDisplayed(int stringId) {
+        onView(withContentDescription(stringId)).check(matches(isDisplayed()));
     }
 }
 
