@@ -10,8 +10,8 @@ import dagger.Provides
 import org.odk.collect.audiorecorder.recorder.MediaRecorderRecorder
 import org.odk.collect.audiorecorder.recorder.RealMediaRecorderWrapper
 import org.odk.collect.audiorecorder.recorder.Recorder
-import org.odk.collect.audiorecorder.recording.AudioRecorderActivity
 import org.odk.collect.audiorecorder.recording.AudioRecorderService
+import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel
 import org.odk.collect.audiorecorder.recording.RecordingRepository
 import java.lang.IllegalStateException
 import javax.inject.Singleton
@@ -52,8 +52,9 @@ internal interface AudioRecorderDependencyComponent {
         fun build(): AudioRecorderDependencyComponent
     }
 
-    fun inject(activity: AudioRecorderActivity)
     fun inject(activity: AudioRecorderService)
+
+    fun inject(activity: AudioRecorderViewModel.Factory)
 }
 
 @Module

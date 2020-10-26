@@ -5,14 +5,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application>
-        <activity
-            android:name=".recording.AudioRecorderActivity"
-            android:label="Audio Recorder"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
-
         <service android:name=".recording.AudioRecorderService" />
-
     </application>
 
 </manifest>
