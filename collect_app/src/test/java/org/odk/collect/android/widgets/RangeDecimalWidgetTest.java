@@ -156,6 +156,17 @@ public class RangeDecimalWidgetTest {
     }
 
     @Test
+    public void changingSliderValue_whenRangeStartIsGreaterThanRangeEnd_updatesAnswer() {
+        when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.valueOf(5.5));
+        when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.valueOf(1.5));
+        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        widget.slider.setValue(4.0F);
+
+        assertThat(widget.getAnswer().getValue(), equalTo(3.0));
+        assertThat(widget.currentValue.getText(), equalTo("3.0"));
+    }
+
+    @Test
     public void changingSliderValue_callsValueChangeListener() {
         RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);

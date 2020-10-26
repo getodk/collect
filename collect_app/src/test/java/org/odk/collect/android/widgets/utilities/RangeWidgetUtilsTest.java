@@ -51,7 +51,7 @@ public class RangeWidgetUtilsTest {
         sampleTextView2 = new TextView(ApplicationProvider.getApplicationContext());
 
         binding = RangePickerWidgetAnswerBinding.inflate((widgetTestActivity()).getLayoutInflater());
-        
+
         rangeQuestion = mock(RangeQuestion.class);
         when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.ONE);
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.TEN);

@@ -89,7 +89,6 @@ public class RangeWidgetUtils {
         if (prompt.isReadOnly()) {
             slider.setEnabled(false);
         }
-
         return new RangeWidgetLayoutElements(answerView, slider, currentValue);
     }
 
