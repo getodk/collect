@@ -55,7 +55,7 @@ public class ImageConverter {
         scaleDownImageIfNeeded(imagePath, questionWidget, context);
         
         try {
-            copyExif(exif, imagePath);
+            exif.saveAttributes();
         } catch (IOException e) {
             Timber.w(e);
         }
@@ -174,69 +174,6 @@ public class ImageConverter {
             Timber.w(e);
         }
         FileUtils.saveBitmapToFile(image, imagePath);
-    }
-
-    /**
-     * Copy an existing source exif to a new path.
-     * @param sourceExif : Source exif
-     * @param newPath    : path to which the exif is written to.
-     * @author Khuong Ninh (khuong.ninh@it-development.com)
-     */
-    public static void copyExif(ExifInterface sourceExif, String newPath) throws IOException {
-        if (sourceExif == null) {
-            return;
-        }
-
-        String[] attributes = new String[] {
-                ExifInterface.TAG_APERTURE_VALUE,
-                ExifInterface.TAG_ARTIST,
-                ExifInterface.TAG_BITS_PER_SAMPLE,
-                ExifInterface.TAG_DATETIME,
-                ExifInterface.TAG_DATETIME_ORIGINAL,
-                ExifInterface.TAG_DATETIME_DIGITIZED,
-                ExifInterface.TAG_EXPOSURE_TIME,
-                ExifInterface.TAG_FLASH,
-                ExifInterface.TAG_FOCAL_LENGTH,
-                ExifInterface.TAG_GPS_ALTITUDE,
-                ExifInterface.TAG_GPS_ALTITUDE_REF,
-                ExifInterface.TAG_GPS_DATESTAMP,
-                ExifInterface.TAG_GPS_LATITUDE,
-                ExifInterface.TAG_GPS_LATITUDE_REF,
-                ExifInterface.TAG_GPS_LONGITUDE,
-                ExifInterface.TAG_GPS_LONGITUDE_REF,
-                ExifInterface.TAG_GPS_PROCESSING_METHOD,
-                ExifInterface.TAG_GPS_TIMESTAMP,
-                ExifInterface.TAG_ISO_SPEED,
-                ExifInterface.TAG_MAKE,
-                ExifInterface.TAG_MODEL,
-                ExifInterface.TAG_ORIENTATION,
-                ExifInterface.TAG_SUBSEC_TIME,
-                ExifInterface.TAG_PIXEL_X_DIMENSION,
-                ExifInterface.TAG_PIXEL_Y_DIMENSION,
-                ExifInterface.TAG_WHITE_BALANCE
-        };
-
-        ExifInterface newExif = new ExifInterface(newPath);
-        for (int i = 0; i < attributes.length; i++) {
-            String value = sourceExif.getAttribute(attributes[i]);
-            if (!newExif.hasAttribute(attributes[i]) == false) {
-                if (value != null) {
-                    newExif.setAttribute(attributes[i], value);
-                }
-            }
-        }
-        newExif.saveAttributes();
-    }
-
-    /**
-     * Copy an existing source exif from one path to a new one.
-     * @param oldPath : Path where existing source exif data is stored.
-     * @param newPath : path to which the exif is written to.
-     * @author Khuong Ninh (khuong.ninh@it-development.com)
-     */
-    public static void copyExif(String oldPath, String newPath) throws IOException {
-        ExifInterface oldExif = new ExifInterface(oldPath);
-        copyExif(oldExif, newPath);
     }
 
     public static Bitmap scaleImageToNewWidth(Bitmap bitmap, int newWidth) {
