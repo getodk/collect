@@ -51,9 +51,9 @@ public class RangePickerIntegerWidget extends QuestionWidget  {
     }
 
     @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-        binding.widgetButton.setOnLongClickListener(l);
-        binding.widgetAnswerText.setOnLongClickListener(l);
+    public void setOnLongClickListener(OnLongClickListener longClickListener) {
+        binding.widgetButton.setOnLongClickListener(longClickListener);
+        binding.widgetAnswerText.setOnLongClickListener(longClickListener);
     }
 
     @Override

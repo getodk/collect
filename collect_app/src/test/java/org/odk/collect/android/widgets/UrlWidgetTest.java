@@ -73,7 +73,6 @@ public class UrlWidgetTest {
     public void clickingButton_whenUrlIsEmpty_doesNotOpensUri() {
         UrlWidget widget = createWidget(promptWithAnswer(null));
         widget.binding.urlButton.performClick();
-
         verify(customTabHelper, never()).bindCustomTabsService(null, null);
         verify(customTabHelper, never()).openUri(null, null);
     }
@@ -92,7 +91,6 @@ public class UrlWidgetTest {
     public void clickingButton_whenUrlIsNotEmpty_opensUriAndBindsCustomTabService() {
         UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         widget.binding.urlButton.performClick();
-
         verify(customTabHelper).bindCustomTabsService(widget.getContext(), null);
         verify(customTabHelper).openUri(widget.getContext(), Uri.parse("blah"));
     }
@@ -102,14 +100,12 @@ public class UrlWidgetTest {
         UrlWidget widget = createWidget(promptWithAnswer(null));
         widget.setOnLongClickListener(listener);
         widget.binding.urlButton.performLongClick();
-
         verify(listener).onLongClick(widget.binding.urlButton);
     }
 
     @Test
     public void detachingFromWindow_doesNotCallOnServiceDisconnected_whenServiceConnectionIsNull() {
         when(customTabHelper.getServiceConnection()).thenReturn(null);
-
         UrlWidget widget = createWidget(promptWithAnswer(null));
         widget.onDetachedFromWindow();
         verify(spyActivity, never()).unbindService(null);
