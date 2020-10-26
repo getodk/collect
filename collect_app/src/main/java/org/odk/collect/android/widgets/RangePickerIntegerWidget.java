@@ -36,12 +36,14 @@ public class RangePickerIntegerWidget extends QuestionWidget  {
 
     public RangePickerIntegerWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
-
         RangePickerViewModel rangePickerViewModel = new ViewModelProvider(((ScreenContext) getContext()).getActivity(),
                 new ViewModelProvider.NewInstanceFactory()).get(RangePickerViewModel.class);
+
         rangePickerViewModel.getNumberPickerValue().observe(((ScreenContext) getContext()).getViewLifecycle(), answer -> {
             if (answer != null) {
-                progress = RangeWidgetUtils.getNumberPickerProgress(binding, rangeStart, rangeStep, rangeEnd, answer);
+                progress = rangePickerViewModel.getNumberPickerProgress(rangeStart, rangeStep, rangeEnd, answer);
+                binding.widgetAnswerText.setText(rangePickerViewModel.getStringAnswer());
+                binding.widgetButton.setText(R.string.edit_value);
             }
         });
     }
