@@ -169,6 +169,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
         answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.HORIZONTAL);
         answerLayout.setGravity(Gravity.CENTER);
+        answerLayout.setTag("ArbitraryFileWidgetAnswer");
 
         ImageView attachmentImg = new ImageView(getContext());
         attachmentImg.setImageResource(R.drawable.ic_attachment);

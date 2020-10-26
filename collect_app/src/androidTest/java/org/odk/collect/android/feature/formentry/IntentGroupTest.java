@@ -19,20 +19,30 @@ package org.odk.collect.android.feature.formentry;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Instrumentation;
+import android.content.ClipData;
 import android.content.Intent;
+import android.net.Uri;
 
+import androidx.core.content.FileProvider;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
+
+import net.bytebuddy.utility.RandomString;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.FormLoadingUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -43,8 +53,13 @@ import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.isInternal;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
 /**
  * Tests that intent groups work as documented at https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields
@@ -80,17 +95,109 @@ public class IntentGroupTest {
     }
 
     @Test
-    public void externalApp_ShouldPopulateFields() {
+    public void externalApp_ShouldPopulateStringFields() {
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("sometext", "Here is a text value");
 
-        int randomInteger = (new Random()).nextInt(255);
-        resultIntent.putExtra("someinteger", randomInteger);
+        int randomInteger = new Random().nextInt(255);
+        double scale = Math.pow(10, 2);
+        double randomDecimal = Math.round(new Random().nextDouble() * scale) / scale;
+        String randomText = RandomString.make();
+
+        resultIntent.putExtra("questionInteger", randomInteger);
+        resultIntent.putExtra("questionDecimal", randomDecimal);
+        resultIntent.putExtra("questionText", randomText);
 
         intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent));
         onView(withText("This is buttonText")).perform(click());
 
-        onView(withText("Here is a text value")).check(matches(isDisplayed()));
         onView(withText(Integer.toString(randomInteger))).check(matches(isDisplayed()));
+        onView(withText(String.valueOf(randomDecimal))).check(matches(isDisplayed()));
+        onView(withText(randomText)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void externalApp_ShouldPopulateImageField() throws IOException {
+        onView(withTagValue(is("ImageView"))).check(doesNotExist());
+        onView(withId(R.id.capture_image)).check(doesNotExist());
+        onView(withId(R.id.choose_image)).check(doesNotExist());
+
+        Intent resultIntent = new Intent();
+
+        File tmpJpg = new File(new StoragePathProvider().getTmpFilePath());
+        copyFileFromAssets("media" + File.separator + "famous.jpg", tmpJpg.getPath());
+
+        ClipData clipData = ClipData.newRawUri(null, null);
+        clipData.addItem(new ClipData.Item("questionImage", null, getUriForFile(tmpJpg)));
+
+        resultIntent.setClipData(clipData);
+        intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent));
+        onView(withText("This is buttonText")).perform(click());
+
+        onView(withTagValue(is("ImageView"))).check(matches(isDisplayed()));
+        onView(withId(R.id.capture_image)).check(doesNotExist());
+        onView(withId(R.id.choose_image)).check(doesNotExist());
+    }
+
+    @Test
+    public void externalApp_ShouldPopulateAudioField() throws IOException {
+        onView(withId(R.id.audio_controller)).check(matches(not(isDisplayed())));
+
+        Intent resultIntent = new Intent();
+
+        File tmpJpg = new File(new StoragePathProvider().getTmpFilePath());
+        copyFileFromAssets("media" + File.separator + "sampleAudio.wav", tmpJpg.getPath());
+
+        ClipData clipData = ClipData.newRawUri(null, null);
+        clipData.addItem(new ClipData.Item("questionAudio", null, getUriForFile(tmpJpg)));
+
+        resultIntent.setClipData(clipData);
+        intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent));
+        onView(withText("This is buttonText")).perform(click());
+
+        onView(withId(R.id.audio_controller)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void externalApp_ShouldPopulateVideoField() throws IOException {
+        onView(withId(R.id.play_video)).check(matches(isDisplayed()));
+        onView(withId(R.id.play_video)).check(matches(not(isEnabled())));
+
+        Intent resultIntent = new Intent();
+
+        File tmpJpg = new File(new StoragePathProvider().getTmpFilePath());
+        copyFileFromAssets("media" + File.separator + "sampleVideo.mp4", tmpJpg.getPath());
+
+        ClipData clipData = ClipData.newRawUri(null, null);
+        clipData.addItem(new ClipData.Item("questionVideo", null, getUriForFile(tmpJpg)));
+
+        resultIntent.setClipData(clipData);
+        intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent));
+        onView(withText("This is buttonText")).perform(click());
+
+        onView(withId(R.id.play_video)).check(matches(isDisplayed()));
+        onView(withId(R.id.play_video)).check(matches(isEnabled()));
+    }
+
+    @Test
+    public void externalApp_ShouldPopulateArbitraryFileField() throws IOException {
+        onView(withTagValue(is("ArbitraryFileWidgetAnswer"))).check(matches(not(isDisplayed())));
+
+        Intent resultIntent = new Intent();
+
+        File tmpJpg = new File(new StoragePathProvider().getTmpFilePath());
+        copyFileFromAssets("media" + File.separator + "fruits.csv", tmpJpg.getPath());
+
+        ClipData clipData = ClipData.newRawUri(null, null);
+        clipData.addItem(new ClipData.Item("questionFile", null, getUriForFile(tmpJpg)));
+
+        resultIntent.setClipData(clipData);
+        intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent));
+        onView(withText("This is buttonText")).perform(click());
+
+        onView(withTagValue(is("ArbitraryFileWidgetAnswer"))).check(matches(isDisplayed()));
+    }
+
+    private Uri getUriForFile(File file) {
+        return FileProvider.getUriForFile(Collect.getInstance(), BuildConfig.APPLICATION_ID + ".provider", file);
     }
 }
