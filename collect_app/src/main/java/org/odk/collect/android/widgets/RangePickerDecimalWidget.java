@@ -9,6 +9,7 @@ import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.databinding.RangePickerWidgetAnswerBinding;
