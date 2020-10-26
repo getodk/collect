@@ -150,8 +150,6 @@ import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
-import org.odk.collect.android.widgets.RangePickerDecimalWidget;
-import org.odk.collect.android.widgets.RangePickerIntegerWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.FormControllerWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
@@ -164,6 +162,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -2570,38 +2569,25 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     @Override
-    public void onNumberPickerValueSelected(int widgetId, int value) {
-        if (currentView != null) {
-            for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
-                if (qw instanceof RangePickerIntegerWidget && widgetId == qw.getId()) {
-                    ((RangePickerIntegerWidget) qw).setNumberPickerValue(value);
-                    widgetValueChanged(qw);
-                    return;
-                } else if (qw instanceof RangePickerDecimalWidget && widgetId == qw.getId()) {
-                    ((RangePickerDecimalWidget) qw).setNumberPickerValue(value);
-                    widgetValueChanged(qw);
-                    return;
-                }
-            }
-        }
+    public void onNumberPickerValueSelected(Integer value) {
+        onDataChanged(value);
     }
 
     @Override
     public void onDateChanged(LocalDateTime date) {
-        ODKView odkView = getCurrentViewIfODKView();
-        if (odkView != null) {
-            QuestionWidget widgetGettingNewValue = getWidgetWaitingForBinaryData();
-            setBinaryWidgetData(date);
-            widgetValueChanged(widgetGettingNewValue);
-        }
+        onDataChanged(date);
     }
 
     @Override
     public void onRankingChanged(List<SelectChoice> items) {
+        onDataChanged(items);
+    }
+
+    private void onDataChanged(Object data) {
         ODKView odkView = getCurrentViewIfODKView();
         if (odkView != null) {
             QuestionWidget widgetGettingNewValue = getWidgetWaitingForBinaryData();
-            setBinaryWidgetData(items);
+            setBinaryWidgetData(data);
             widgetValueChanged(widgetGettingNewValue);
         }
     }

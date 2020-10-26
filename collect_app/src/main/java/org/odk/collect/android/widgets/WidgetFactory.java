@@ -32,7 +32,6 @@ import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
-import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.items.ItemsetWidget;
 import org.odk.collect.android.widgets.items.LabelWidget;
@@ -251,14 +250,14 @@ public class WidgetFactory {
                     switch (prompt.getDataType()) {
                         case Constants.DATATYPE_INTEGER:
                             if (prompt.getQuestion().getAppearanceAttr() != null && prompt.getQuestion().getAppearanceAttr().contains(PICKER_APPEARANCE)) {
-                                questionWidget = new RangePickerIntegerWidget(context, questionDetails, ((ScreenContext) context).getViewLifecycle());
+                                questionWidget = new RangePickerIntegerWidget(context, questionDetails, waitingForDataRegistry);
                             } else {
                                 questionWidget = new RangeIntegerWidget(context, questionDetails);
                             }
                             break;
                         case Constants.DATATYPE_DECIMAL:
                             if (prompt.getQuestion().getAppearanceAttr() != null && prompt.getQuestion().getAppearanceAttr().contains(PICKER_APPEARANCE)) {
-                                questionWidget = new RangePickerDecimalWidget(context, questionDetails, ((ScreenContext) context).getViewLifecycle());
+                                questionWidget = new RangePickerDecimalWidget(context, questionDetails, waitingForDataRegistry);
                             } else {
                                 questionWidget = new RangeDecimalWidget(context, questionDetails);
                             }

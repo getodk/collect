@@ -19,31 +19,33 @@ package org.odk.collect.android.fragments.dialogs;
 import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
+import org.odk.collect.android.widgets.viewmodels.RangePickerViewModel;
 
 public class NumberPickerDialog extends DialogFragment {
-
     public static final String NUMBER_PICKER_DIALOG_TAG = "numberPickerDialogTag";
-    public static final String WIDGET_ID = "widgetId";
     public static final String DISPLAYED_VALUES = "displayedValues";
     public static final String PROGRESS = "progress";
 
+    private RangePickerViewModel rangePickerViewModel;
+
     public interface NumberPickerListener {
-        void onNumberPickerValueSelected(int widgetId, int value);
+        void onNumberPickerValueSelected(Integer value);
     }
 
     private NumberPickerListener listener;
 
-    public static NumberPickerDialog newInstance(int widgetId, String[] displayedValues, int progress) {
+    public static NumberPickerDialog newInstance(String[] displayedValues, int progress) {
         Bundle bundle = new Bundle();
-        bundle.putInt(WIDGET_ID, widgetId);
         bundle.putSerializable(DISPLAYED_VALUES, displayedValues);
         bundle.putInt(PROGRESS, progress);
 
@@ -53,7 +55,7 @@ public class NumberPickerDialog extends DialogFragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NotNull Context context) {
         super.onAttach(context);
 
         try {
@@ -61,11 +63,18 @@ public class NumberPickerDialog extends DialogFragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement OnHeadlineSelectedListener");
         }
+
+        rangePickerViewModel = new ViewModelProvider(this).get(RangePickerViewModel.class);
+        rangePickerViewModel.getNumberPickerValue().observe(this, answer -> {
+            if (answer != null) {
+                listener.onNumberPickerValueSelected(answer);
+            }
+        });
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.number_picker_dialog, null);
 
         final NumberPicker numberPicker = view.findViewById(R.id.number_picker);
@@ -75,19 +84,13 @@ public class NumberPickerDialog extends DialogFragment {
         numberPicker.setDisplayedValues((String[]) getArguments().getSerializable(DISPLAYED_VALUES));
         numberPicker.setValue(((String[]) getArguments().getSerializable(DISPLAYED_VALUES)).length - 1 - getArguments().getInt(PROGRESS));
 
-        return new AlertDialog.Builder(getActivity())
+        return new AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.number_picker_title)
                 .setView(view)
                 .setPositiveButton(R.string.ok,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                listener.onNumberPickerValueSelected(getArguments().getInt(WIDGET_ID), numberPicker.getValue());
-                            }
-                        })
+                        (dialog, whichButton) -> rangePickerViewModel.setNumberPickerValue(numberPicker.getValue()))
                 .setNegativeButton(R.string.cancel,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                            }
+                        (dialog, whichButton) -> {
                         })
                 .create();
     }

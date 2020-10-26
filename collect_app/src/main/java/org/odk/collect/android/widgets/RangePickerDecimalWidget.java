@@ -6,9 +6,6 @@ import android.content.Context;
 import android.util.TypedValue;
 import android.view.View;
 
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.ViewModelProvider;
-
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
@@ -18,31 +15,28 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.databinding.RangePickerWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.ScreenContext;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
-import org.odk.collect.android.widgets.viewmodels.RangePickerViewModel;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.math.BigDecimal;
 
 @SuppressLint("ViewConstructor")
-public class RangePickerDecimalWidget extends QuestionWidget {
+public class RangePickerDecimalWidget extends QuestionWidget implements WidgetDataReceiver {
     RangePickerWidgetAnswerBinding binding;
-    String[] displayedValuesForNumberPicker;
 
+    private String[] displayedValuesForNumberPicker;
     private BigDecimal rangeStart;
     private BigDecimal rangeEnd;
     private BigDecimal rangeStep;
     private int progress;
 
-    public RangePickerDecimalWidget(Context context, QuestionDetails questionDetails, LifecycleOwner lifecycleOwner) {
-        super(context, questionDetails);
+    private final WaitingForDataRegistry waitingForDataRegistry;
 
-        RangePickerViewModel rangePickerViewModel = new ViewModelProvider(((ScreenContext) getContext())
-                .getActivity()).get(RangePickerViewModel.class);
-        rangePickerViewModel.getNumberPickerValue().observe(lifecycleOwner, answer -> {
-            progress = RangeWidgetUtils.getNumberPickerProgress(binding, rangeStart, rangeStep, rangeEnd, answer);
-            widgetValueChanged();
-        });
+    public RangePickerDecimalWidget(Context context, QuestionDetails questionDetails,
+                                    WaitingForDataRegistry waitingForDataRegistry) {
+        super(context, questionDetails);
+        this.waitingForDataRegistry = waitingForDataRegistry;
     }
 
     @Override
@@ -58,8 +52,12 @@ public class RangePickerDecimalWidget extends QuestionWidget {
         RangeWidgetUtils.setUpRangePickerWidget(context, binding, prompt);
 
         progress = RangeWidgetUtils.getRangePickerProgressFromPrompt(prompt);
-        binding.widgetButton.setOnClickListener(v -> RangeWidgetUtils.showNumberPickerDialog(
-                (FormEntryActivity) getContext(), displayedValuesForNumberPicker, getId(), progress));
+
+        binding.widgetButton.setOnClickListener(v -> {
+            waitingForDataRegistry.waitForData(prompt.getIndex());
+            RangeWidgetUtils.showNumberPickerDialog(
+                    (FormEntryActivity) getContext(), displayedValuesForNumberPicker, progress);
+        });
 
         return binding.getRoot();
     }
@@ -80,8 +78,17 @@ public class RangePickerDecimalWidget extends QuestionWidget {
     @Override
     public void clearAnswer() {
         progress = 0;
-        RangeWidgetUtils.setRangePickerAnswer(binding);
+        binding.widgetAnswerText.setText(getContext().getString(R.string.no_value_selected));
+        binding.widgetButton.setText(getContext().getString(R.string.select_value));
         widgetValueChanged();
+    }
+
+    @Override
+    public void setData(Object answer) {
+        if (answer instanceof Integer) {
+            progress = RangeWidgetUtils.getNumberPickerProgress(binding,
+                    rangeStart, rangeStep, rangeEnd, (Integer) answer);
+        }
     }
 
     private void setUpWidgetParameters() {

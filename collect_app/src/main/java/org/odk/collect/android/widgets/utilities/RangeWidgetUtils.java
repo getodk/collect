@@ -222,8 +222,8 @@ public class RangeWidgetUtils {
         }
     }
 
-    public static void showNumberPickerDialog(FormEntryActivity activity, String[] displayedValuesForNumberPicker, int id, int progress) {
-        NumberPickerDialog dialog = NumberPickerDialog.newInstance(id, displayedValuesForNumberPicker, progress);
+    public static void showNumberPickerDialog(FormEntryActivity activity, String[] displayedValuesForNumberPicker, int progress) {
+        NumberPickerDialog dialog = NumberPickerDialog.newInstance(displayedValuesForNumberPicker, progress);
         try {
             dialog.show(activity.getSupportFragmentManager(), NumberPickerDialog.NUMBER_PICKER_DIALOG_TAG);
         } catch (ClassCastException e) {
@@ -232,7 +232,7 @@ public class RangeWidgetUtils {
     }
 
     public static int getNumberPickerProgress(RangePickerWidgetAnswerBinding binding, BigDecimal rangeStart, BigDecimal rangeStep,
-                                              BigDecimal rangeEnd, int value) {
+                                              BigDecimal rangeEnd, Integer value) {
         BigDecimal actualValue;
         int elementCount = rangeEnd.subtract(rangeStart).abs().divide(rangeStep).intValue();
         BigDecimal multiply = new BigDecimal(elementCount - value).multiply(rangeStep);

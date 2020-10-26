@@ -11,7 +11,7 @@ public class RangePickerViewModel extends ViewModel {
         return numberPickerValue;
     }
 
-    public void setNumberPickerValue(int numberPickerValue) {
+    public void setNumberPickerValue(Integer numberPickerValue) {
         this.numberPickerValue.postValue(numberPickerValue);
     }
 }

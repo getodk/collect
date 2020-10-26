@@ -2,8 +2,6 @@ package org.odk.collect.android.widgets;
 
 import android.view.View;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -13,9 +11,8 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.support.FakeLifecycleOwner;
 import org.odk.collect.android.support.TestScreenContextActivity;
-import org.odk.collect.android.widgets.viewmodels.RangePickerViewModel;
+import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
 
 import java.math.BigDecimal;
@@ -31,68 +28,47 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 
 @RunWith(RobolectricTestRunner.class)
 public class RangePickerIntegerWidgetTest {
-
-    private TestScreenContextActivity widgetActivity;
-    private RangeQuestion rangeQuestion;
-    private RangePickerViewModel rangePickerViewModel;
-    private FakeLifecycleOwner fakeLifecycleOwner;
+    private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
+    private final TestScreenContextActivity widgetActivity = widgetTestActivity();
+    private final RangeQuestion rangeQuestion = mock(RangeQuestion.class);
 
     @Before
     public void setup() {
-        widgetActivity = widgetTestActivity();
-        rangeQuestion = mock(RangeQuestion.class);
-        fakeLifecycleOwner = new FakeLifecycleOwner();
-
-        rangePickerViewModel = new ViewModelProvider(widgetActivity).get(RangePickerViewModel.class);
-
         when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.ONE);
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.TEN);
         when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ONE);
     }
 
     @Test
-    public void whenRangeEndIsGreaterThanRangeStart_widgetsSetsCorrectValuesForNumberPicker() {
-        RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        int index = 0;
-
-        for (int i = 10; i >= 1; i--, index++) {
-            assertEquals(widget.displayedValuesForNumberPicker[index], String.valueOf(i));
-        }
-    }
-
-    @Test
-    public void whenRangeStartIsGreaterThanRangeEnd_widgetsSetsCorrectValuesForNumberPicker() {
-        when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.TEN);
-        when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.ONE);
-        RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        int index = 0;
-
-        for (int i = 1; i <= 10; i++, index++) {
-            assertEquals(widget.displayedValuesForNumberPicker[index], String.valueOf(i));
-        }
-    }
-
-    @Test
     public void getAnswer_whenPromptDoesNotHaveAnswer_returnsNull() {
-        RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        assertNull(createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null)).getAnswer());
+    }
 
-        assertNull(widget.getAnswer());
+    @Test
+    public void whenPromptDoesNotHaveAnswer_correctValuesAreDisplayed() {
+        RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         assertEquals(widget.binding.widgetButton.getText(), widget.getContext().getString(R.string.select_value));
+        assertEquals(widget.binding.widgetAnswerText.getText(), widget.getContext().getString(R.string.no_value_selected));
     }
 
     @Test
     public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
         RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
-
         assertEquals(widget.getAnswer().getValue(), 4);
         assertEquals(widget.binding.widgetButton.getText(), widget.getContext().getString(R.string.edit_value));
+    }
+
+    @Test
+    public void whenPromptHasAnswer_correctValuesAreDisplayed() {
+        RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
+        assertEquals(widget.binding.widgetButton.getText(), widget.getContext().getString(R.string.edit_value));
+        assertEquals(widget.binding.widgetAnswerText.getText(), "4");
     }
 
     @Test
     public void clearAnswer_clearsWidgetAnswer() {
         RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
         widget.clearAnswer();
-
         assertEquals(widget.binding.widgetAnswerText.getText(), widget.getContext().getString(R.string.no_value_selected));
         assertEquals(widget.binding.widgetButton.getText(), widget.getContext().getString(R.string.select_value));
     }
@@ -102,14 +78,12 @@ public class RangePickerIntegerWidgetTest {
         RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.clearAnswer();
-
         verify(valueChangedListener).widgetValueChanged(widget);
     }
 
     @Test
     public void clickingWidgetForLong_callsLongClickListener() {
         View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
-
         RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         widget.setOnLongClickListener(listener);
         widget.binding.widgetButton.performLongClick();
@@ -120,28 +94,30 @@ public class RangePickerIntegerWidgetTest {
     }
 
     @Test
-    public void updatingValueInRangePickerViewModel_updatesAnswer() {
+    public void setData_updatesAnswer() {
         RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        rangePickerViewModel.setNumberPickerValue(5);
-
-        rangePickerViewModel.getNumberPickerValue().observe(fakeLifecycleOwner, integer -> {
-            assertEquals(widget.binding.widgetAnswerText.getText(), "5");
-            assertEquals(widget.binding.widgetButton.getText(), widget.getContext().getString(R.string.edit_value));
-        });
+        widget.setData(5);
+        assertEquals(widget.getAnswer().getDisplayText(), "5");
     }
 
     @Test
-    public void updatingValueInRangePickerViewModel_callsValueChangeListener() {
+    public void setData_updatesDisplayedAnswer() {
+        RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        widget.setData(5);
+        assertEquals(widget.binding.widgetButton.getText(), widget.getContext().getString(R.string.edit_value));
+        assertEquals(widget.getAnswer().getDisplayText(), "5");
+    }
+
+    @Test
+    public void setData_callsValueChangeListener() {
         RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        rangePickerViewModel.setNumberPickerValue(5);
-
-        rangePickerViewModel.getNumberPickerValue().observe(fakeLifecycleOwner, integer -> {
-            verify(valueChangedListener).widgetValueChanged(widget);
-        });
+        widget.setData(5);
+        verify(valueChangedListener).widgetValueChanged(widget);
     }
 
     private RangePickerIntegerWidget createWidget(FormEntryPrompt prompt) {
-        return new RangePickerIntegerWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"), fakeLifecycleOwner);
+        return new RangePickerIntegerWidget(widgetActivity, new QuestionDetails(prompt,
+                "formAnalyticsID"), waitingForDataRegistry);
     }
 }
