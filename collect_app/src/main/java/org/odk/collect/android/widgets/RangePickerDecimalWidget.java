@@ -24,7 +24,6 @@ public class RangePickerDecimalWidget extends QuestionWidget {
     private BigDecimal rangeStart;
     private BigDecimal rangeEnd;
     private BigDecimal rangeStep;
-
     private int progress;
 
     public RangePickerDecimalWidget(Context context, QuestionDetails questionDetails) {
