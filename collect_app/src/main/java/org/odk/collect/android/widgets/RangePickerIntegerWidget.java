@@ -6,6 +6,7 @@ import android.content.Context;
 import android.util.TypedValue;
 import android.view.View;
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.javarosa.core.model.RangeQuestion;
@@ -34,17 +35,14 @@ public class RangePickerIntegerWidget extends QuestionWidget  {
 
     private int progress;
 
-    public RangePickerIntegerWidget(Context context, QuestionDetails questionDetails) {
+    public RangePickerIntegerWidget(Context context, QuestionDetails questionDetails, LifecycleOwner lifecycleOwner) {
         super(context, questionDetails);
-        RangePickerViewModel rangePickerViewModel = new ViewModelProvider(((ScreenContext) getContext()).getActivity(),
-                new ViewModelProvider.NewInstanceFactory()).get(RangePickerViewModel.class);
 
-        rangePickerViewModel.getNumberPickerValue().observe(((ScreenContext) getContext()).getViewLifecycle(), answer -> {
-            if (answer != null) {
-                progress = rangePickerViewModel.getNumberPickerProgress(rangeStart, rangeStep, rangeEnd, answer);
-                binding.widgetAnswerText.setText(rangePickerViewModel.getStringAnswer());
-                binding.widgetButton.setText(R.string.edit_value);
-            }
+        RangePickerViewModel rangePickerViewModel = new ViewModelProvider(((ScreenContext) getContext())
+                .getActivity()).get(RangePickerViewModel.class);
+        rangePickerViewModel.getNumberPickerValue().observe(lifecycleOwner, answer -> {
+            progress = RangeWidgetUtils.getNumberPickerProgress(binding, rangeStart, rangeStep, rangeEnd, answer);
+            widgetValueChanged();
         });
     }
 
@@ -58,11 +56,12 @@ public class RangePickerIntegerWidget extends QuestionWidget  {
         setUpWidgetParameters();
         displayedValuesForNumberPicker = RangeWidgetUtils.getDisplayedValuesForNumberPicker(
                 rangeStart, rangeStep, rangeEnd, true);
-        RangeWidgetUtils.setUpRangePickerWidget(context, binding, prompt);
+        RangeWidgetUtils.setUpRangePickerWidget(binding, prompt);
 
         progress = RangeWidgetUtils.getRangePickerProgressFromPrompt(prompt);
         binding.widgetButton.setOnClickListener(v -> RangeWidgetUtils.showNumberPickerDialog(
                 (FormEntryActivity) getContext(), displayedValuesForNumberPicker, getId(), progress));
+
         return binding.getRoot();
     }
 
@@ -81,7 +80,8 @@ public class RangePickerIntegerWidget extends QuestionWidget  {
 
     @Override
     public void clearAnswer() {
-        setUpNullValue();
+        progress = 0;
+        RangeWidgetUtils.setRangePickerAnswer(binding);
         widgetValueChanged();
     }
 
@@ -90,11 +90,5 @@ public class RangePickerIntegerWidget extends QuestionWidget  {
         rangeStart = rangeQuestion.getRangeStart();
         rangeEnd = rangeQuestion.getRangeEnd();
         rangeStep = rangeQuestion.getRangeStep().abs();
-    }
-
-    private void setUpNullValue() {
-        progress = 0;
-        binding.widgetAnswerText.setText(getContext().getString(R.string.no_value_selected));
-        binding.widgetButton.setText(getContext().getString(R.string.select_value));
     }
 }
