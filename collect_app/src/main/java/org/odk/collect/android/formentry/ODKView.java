@@ -532,9 +532,13 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                             && prompt.getDataType() == Constants.DATATYPE_BINARY) {
                         Uri uri = clipData.getItemAt(i).getUri();
                         if (uri != null) {
-                            File destFile = FileUtils.createDestinationMediaFile(formController.getInstanceFile().getParent(), ContentResolverHelper.getFileExtensionFromUri(getContext(), uri));
-                            FileUtils.saveMediaFileFromUri(uri, destFile, getContext());
-                            ((WidgetDataReceiver) questionWidget).setData(destFile);
+                            try {
+                                File destFile = FileUtils.createDestinationMediaFile(formController.getInstanceFile().getParent(), ContentResolverHelper.getFileExtensionFromUri(getContext(), uri));
+                                FileUtils.saveMediaFileFromUri(uri, destFile, getContext());
+                                ((WidgetDataReceiver) questionWidget).setData(destFile);
+                            } catch (SecurityException e) {
+                                Timber.w(e);
+                            }
                         }
                     }
                 }
