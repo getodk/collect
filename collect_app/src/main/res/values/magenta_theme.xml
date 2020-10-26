@@ -46,9 +46,6 @@
         <!-- defines the hint color for search -->
         <item name="android:textColorHint">#E3E3E3</item>
 
-        <!-- Used as slider track color. Should use theme value instead -->
-        <item name="sliderTrackColor">#E0E0E0</item>
-
         <!-- Used for list item dividers. Should use theme value instead -->
         <item name="dividerColor">#1e000000</item>
 
