@@ -50,6 +50,7 @@
         <item name="android:panelBackground">@android:color/white</item>
         <item name="searchViewStyle">@style/Widget.Collect.SearchView.Dark</item>
         <item name="iconColor">#ffffff</item>
+        <item name="sliderTrackColor">#1effffff</item>
         <item name="dividerColor">#1effffff</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
         <!--

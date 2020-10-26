@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="Collect">
         <attr name="iconColor" format="color" />
+        <attr name="sliderTrackColor" format="color" />
         <attr name="dividerColor" format="color" />
         <attr name="dividerCompat" format="reference" />
     </declare-styleable>

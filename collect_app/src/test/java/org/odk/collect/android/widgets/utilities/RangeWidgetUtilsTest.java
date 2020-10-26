@@ -10,6 +10,7 @@ import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.databinding.RangePickerWidgetAnswerBinding;
@@ -50,7 +51,7 @@ public class RangeWidgetUtilsTest {
         sampleTextView2 = new TextView(ApplicationProvider.getApplicationContext());
 
         binding = RangePickerWidgetAnswerBinding.inflate((widgetTestActivity()).getLayoutInflater());
-
+        
         rangeQuestion = mock(RangeQuestion.class);
         when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.ONE);
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.TEN);
