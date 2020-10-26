@@ -13,9 +13,9 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.support.FakeLifecycleOwner;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.widgets.viewmodels.RangePickerViewModel;
+import org.odk.collect.testshared.FakeLifecycleOwner;
 import org.robolectric.RobolectricTestRunner;
 import java.math.BigDecimal;
 

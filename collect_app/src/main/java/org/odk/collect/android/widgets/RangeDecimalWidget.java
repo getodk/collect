@@ -31,7 +31,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.views.TrackingTouchSlider;
-import org.odk.collect.android.widgets.utilities.;
+import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
 
 import java.math.BigDecimal;
 
@@ -48,7 +48,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        .RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.setUpLayoutElements(context, prompt);
+        RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.setUpLayoutElements(context, prompt);
         slider = layoutElements.getSlider();
         currentValue = layoutElements.getCurrentValue();
 

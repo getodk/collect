@@ -40,6 +40,7 @@ public class RangePickerIntegerWidget extends QuestionWidget  {
 
         RangePickerViewModel rangePickerViewModel = new ViewModelProvider(((ScreenContext) getContext())
                 .getActivity()).get(RangePickerViewModel.class);
+
         rangePickerViewModel.getNumberPickerValue().observe(lifecycleOwner, answer -> {
             progress = RangeWidgetUtils.getNumberPickerProgress(binding, rangeStart, rangeStep, rangeEnd, answer);
             widgetValueChanged();
@@ -56,7 +57,7 @@ public class RangePickerIntegerWidget extends QuestionWidget  {
         setUpWidgetParameters();
         displayedValuesForNumberPicker = RangeWidgetUtils.getDisplayedValuesForNumberPicker(
                 rangeStart, rangeStep, rangeEnd, true);
-        RangeWidgetUtils.setUpRangePickerWidget(binding, prompt);
+        RangeWidgetUtils.setUpRangePickerWidget(context, binding, prompt);
 
         progress = RangeWidgetUtils.getRangePickerProgressFromPrompt(prompt);
         binding.widgetButton.setOnClickListener(v -> RangeWidgetUtils.showNumberPickerDialog(

@@ -32,6 +32,7 @@ import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
+import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.items.ItemsetWidget;
 import org.odk.collect.android.widgets.items.LabelWidget;

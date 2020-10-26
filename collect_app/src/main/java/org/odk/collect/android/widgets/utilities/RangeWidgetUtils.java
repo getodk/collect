@@ -11,7 +11,6 @@ import com.google.android.material.slider.Slider;
 
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.form.api.FormEntryPrompt;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.databinding.RangePickerWidgetAnswerBinding;
@@ -89,6 +88,7 @@ public class RangeWidgetUtils {
         if (prompt.isReadOnly()) {
             slider.setEnabled(false);
         }
+
         return new RangeWidgetLayoutElements(answerView, slider, currentValue);
     }
 
@@ -168,32 +168,6 @@ public class RangeWidgetUtils {
         return progress;
     }
 
-    public static int getNumberPickerProgress(WidgetButtonAndAnswerLayoutBinding binding, BigDecimal rangeStart,
-                                              BigDecimal rangeStep, BigDecimal rangeEnd, int value) {
-        BigDecimal actualValue;
-        int elementCount = rangeEnd.subtract(rangeStart).abs().divide(rangeStep).intValue();
-        BigDecimal multiply = new BigDecimal(elementCount - value).abs().multiply(rangeStep);
-
-        if (rangeStart.compareTo(rangeEnd) < 0) {
-            actualValue = rangeStart.add(multiply);
-        } else {
-            actualValue = rangeStart.subtract(multiply);
-        }
-        setRangePickerAnswer(binding, actualValue);
-
-        return actualValue.subtract(rangeStart).abs().divide(rangeStep).intValue();
-    }
-
-    public static void setRangePickerAnswer(WidgetButtonAndAnswerLayoutBinding binding) {
-        binding.widgetAnswerText.setText(R.string.no_value_selected);
-        binding.widgetButton.setText(R.string.select_value);
-    }
-
-    private static void setRangePickerAnswer(WidgetButtonAndAnswerLayoutBinding binding, BigDecimal actualValue) {
-        binding.widgetAnswerText.setText(String.valueOf(actualValue));
-        binding.widgetButton.setText(R.string.edit_value);
-    }
-
     public static BigDecimal getActualValue(FormEntryPrompt prompt, Slider slider, float value) {
         RangeQuestion rangeQuestion = (RangeQuestion) prompt.getQuestion();
         BigDecimal rangeStart = rangeQuestion.getRangeStart();
@@ -258,7 +232,7 @@ public class RangeWidgetUtils {
     }
 
     public static int getNumberPickerProgress(RangePickerWidgetAnswerBinding binding, BigDecimal rangeStart, BigDecimal rangeStep,
-                                               BigDecimal rangeEnd, int value) {
+                                              BigDecimal rangeEnd, int value) {
         BigDecimal actualValue;
         int elementCount = rangeEnd.subtract(rangeStart).abs().divide(rangeStep).intValue();
         BigDecimal multiply = new BigDecimal(elementCount - value).multiply(rangeStep);

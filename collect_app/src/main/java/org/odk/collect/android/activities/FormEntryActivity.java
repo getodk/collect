@@ -106,6 +106,7 @@ import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog;
+import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
@@ -2569,6 +2570,23 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     @Override
+    public void onNumberPickerValueSelected(int widgetId, int value) {
+        if (currentView != null) {
+            for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
+                if (qw instanceof RangePickerIntegerWidget && widgetId == qw.getId()) {
+                    ((RangePickerIntegerWidget) qw).setNumberPickerValue(value);
+                    widgetValueChanged(qw);
+                    return;
+                } else if (qw instanceof RangePickerDecimalWidget && widgetId == qw.getId()) {
+                    ((RangePickerDecimalWidget) qw).setNumberPickerValue(value);
+                    widgetValueChanged(qw);
+                    return;
+                }
+            }
+        }
+    }
+
+    @Override
     public void onDateChanged(LocalDateTime date) {
         ODKView odkView = getCurrentViewIfODKView();
         if (odkView != null) {
@@ -2787,4 +2805,3 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         return !Objects.equals(mutableQuestionBeforeSave.getAnswerText(), immutableQuestionBeforeSave.getAnswerText());
     }
 }
-

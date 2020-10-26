@@ -157,7 +157,7 @@ public class RangeIntegerWidgetTest {
     }
 
     @Test
-    public void changingSliderValue_whenRangeStartIsGreaterThanRangeEnd_updatesAnswer() {
+    public void changingSliderValueProgrammatically_whenRangeStartIsGreaterThanRangeEnd_updatesAnswer() {
         when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.TEN);
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.ONE);
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
@@ -177,14 +177,14 @@ public class RangeIntegerWidgetTest {
     }
 
     @Test
-    public void changingSliderValueProgramatically_doesNotUpdateAnswer() {
+    public void changingSliderValueProgrammatically_doesNotUpdateAnswer() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         widget.slider.setValue(4);
         assertThat(widget.currentValue.getText(), equalTo(""));
     }
 
     @Test
-    public void changingSliderValueProgramatically_doesNotCallValueChangeListener() {
+    public void changingSliderValueProgrammatically_doesNotCallValueChangeListener() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.slider.setValue(4);

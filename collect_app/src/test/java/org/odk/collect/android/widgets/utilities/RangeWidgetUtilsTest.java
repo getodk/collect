@@ -10,7 +10,6 @@ import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.databinding.RangePickerWidgetAnswerBinding;
@@ -73,26 +72,26 @@ public class RangeWidgetUtilsTest {
 
     @Test
     public void whenPromptDoesNotHaveAnswer_answerTextViewShowsNoValueSelected() {
-        RangeWidgetUtils.setUpRangePickerWidget(binding, promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        RangeWidgetUtils.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithQuestionDefAndAnswer(rangeQuestion, null));
         assertThat(binding.widgetAnswerText.getText(), equalTo(widgetTestActivity().getString(R.string.no_value_selected)));
     }
 
     @Test
     public void whenPromptHasAnswer_answerTextViewShowsCorrectAnswer() {
-        RangeWidgetUtils.setUpRangePickerWidget(binding, promptWithQuestionDefAndAnswer(
+        RangeWidgetUtils.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithQuestionDefAndAnswer(
                 rangeQuestion, new StringData("4")));
         assertThat(binding.widgetAnswerText.getText(), equalTo("4"));
     }
 
     @Test
     public void whenPromptDoesNotHaveAnswer_pickerButtonShowsNoValueSelected() {
-        RangeWidgetUtils.setUpRangePickerWidget(binding, promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        RangeWidgetUtils.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithQuestionDefAndAnswer(rangeQuestion, null));
         assertThat(binding.widgetButton.getText(), equalTo(widgetTestActivity().getString(R.string.select_value)));
     }
 
     @Test
     public void whenPromptHasAnswer_pickerButtonShowsCorrectAnswer() {
-        RangeWidgetUtils.setUpRangePickerWidget(binding, promptWithQuestionDefAndAnswer(
+        RangeWidgetUtils.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithQuestionDefAndAnswer(
                 rangeQuestion, new StringData("4")));
         assertThat(binding.widgetButton.getText(), equalTo(widgetTestActivity().getString(R.string.edit_value)));
     }
@@ -170,14 +169,14 @@ public class RangeWidgetUtilsTest {
     @Test
     public void whenRangeQuestionHasZeroRangeStep_pickerButtonIsDisabled() {
         when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ZERO);
-        RangeWidgetUtils.setUpRangePickerWidget(binding, promptWithReadOnlyAndQuestionDef(rangeQuestion));
+        RangeWidgetUtils.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithReadOnlyAndQuestionDef(rangeQuestion));
         assertFalse(binding.widgetButton.isEnabled());
     }
 
     @Test
     public void whenPromptHasInvalidWidgetParameters_pickerButtonIsDisabled() {
         when(rangeQuestion.getRangeStep()).thenReturn(new BigDecimal(2));
-        RangeWidgetUtils.setUpRangePickerWidget(binding, promptWithReadOnlyAndQuestionDef(rangeQuestion));
+        RangeWidgetUtils.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithReadOnlyAndQuestionDef(rangeQuestion));
         assertFalse(binding.widgetButton.isEnabled());
     }
 
