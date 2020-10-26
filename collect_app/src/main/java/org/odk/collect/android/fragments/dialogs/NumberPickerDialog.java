@@ -19,27 +19,25 @@ package org.odk.collect.android.fragments.dialogs;
 import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.widgets.viewmodels.RangePickerViewModel;
 
 public class NumberPickerDialog extends DialogFragment {
-
     public static final String NUMBER_PICKER_DIALOG_TAG = "numberPickerDialogTag";
     public static final String WIDGET_ID = "widgetId";
     public static final String DISPLAYED_VALUES = "displayedValues";
     public static final String PROGRESS = "progress";
 
-    public interface NumberPickerListener {
-        void onNumberPickerValueSelected(int widgetId, int value);
-    }
+    private RangePickerViewModel rangePickerViewModel;
 
-    private NumberPickerListener listener;
 
     public static NumberPickerDialog newInstance(int widgetId, String[] displayedValues, int progress) {
         Bundle bundle = new Bundle();
@@ -55,12 +53,7 @@ public class NumberPickerDialog extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
-        try {
-            listener = (NumberPickerListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement OnHeadlineSelectedListener");
-        }
+        rangePickerViewModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.NewInstanceFactory()).get(RangePickerViewModel.class);
     }
 
     @Override
@@ -78,17 +71,8 @@ public class NumberPickerDialog extends DialogFragment {
         return new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.number_picker_title)
                 .setView(view)
-                .setPositiveButton(R.string.ok,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                listener.onNumberPickerValueSelected(getArguments().getInt(WIDGET_ID), numberPicker.getValue());
-                            }
-                        })
-                .setNegativeButton(R.string.cancel,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                            }
-                        })
+                .setPositiveButton(R.string.ok, (dialog, whichButton) -> rangePickerViewModel.setNumberPickerValue(numberPicker.getValue()))
+                .setNegativeButton(R.string.cancel, (dialog, whichButton) -> { })
                 .create();
     }
 }
