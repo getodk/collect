@@ -26,6 +26,7 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 
 import org.odk.collect.android.databinding.UrlWidgetAnswerBinding;
+import org.odk.collect.android.databinding.WidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.ToastUtils;
