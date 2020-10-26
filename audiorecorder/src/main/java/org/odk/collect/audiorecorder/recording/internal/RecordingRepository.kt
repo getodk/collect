@@ -1,4 +1,4 @@
-package org.odk.collect.audiorecorder.recording
+package org.odk.collect.audiorecorder.recording.internal
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

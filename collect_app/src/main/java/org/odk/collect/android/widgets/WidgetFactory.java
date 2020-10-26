@@ -56,6 +56,8 @@ import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
+import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
+import org.odk.collect.audiorecorder.recording.internal.RealAudioRecorderViewModel;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.PROMPT;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MAPS;
@@ -194,7 +196,7 @@ public class WidgetFactory {
                     recordingRequester = new ExternalAppRecordingRequester((Activity) context, activityAvailability, waitingForDataRegistry, permissionUtils);
                 } else {
                     ComponentActivity activity = (ComponentActivity) context;
-                    AudioRecorderViewModel.Factory factory = new AudioRecorderViewModel.Factory(activity.getApplication());
+                    AudioRecorderViewModelFactory factory = new AudioRecorderViewModelFactory(activity.getApplication());
                     AudioRecorderViewModel viewModel = new ViewModelProvider(activity, factory).get(AudioRecorderViewModel.class);
                     recordingRequester = new InternalRecordingRequester(activity, viewModel, permissionUtils);
                 }

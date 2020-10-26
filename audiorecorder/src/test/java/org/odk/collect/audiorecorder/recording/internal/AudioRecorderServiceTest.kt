@@ -1,4 +1,4 @@
-package org.odk.collect.audiorecorder.recording
+package org.odk.collect.audiorecorder.recording.internal
 
 import android.app.Application
 import android.content.Intent
@@ -14,7 +14,9 @@ import org.odk.collect.audiorecorder.AudioRecorderDependencyModule
 import org.odk.collect.audiorecorder.R
 import org.odk.collect.audiorecorder.TestApplication
 import org.odk.collect.audiorecorder.recorder.Recorder
+import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService
 import org.odk.collect.audiorecorder.setupDependencies
+import org.odk.collect.audiorecorder.support.FakeRecorder
 import org.robolectric.Robolectric.buildService
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf

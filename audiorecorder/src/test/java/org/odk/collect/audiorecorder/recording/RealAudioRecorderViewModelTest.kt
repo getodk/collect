@@ -7,20 +7,23 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.audiorecorder.recording.AudioRecorderService.Companion.ACTION_CANCEL
-import org.odk.collect.audiorecorder.recording.AudioRecorderService.Companion.ACTION_START
-import org.odk.collect.audiorecorder.recording.AudioRecorderService.Companion.ACTION_STOP
+import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService
+import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_CANCEL
+import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_START
+import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_STOP
+import org.odk.collect.audiorecorder.recording.internal.RealAudioRecorderViewModel
+import org.odk.collect.audiorecorder.recording.internal.RecordingRepository
 import org.robolectric.Shadows.shadowOf
 import java.io.File.createTempFile
 
 @RunWith(AndroidJUnit4::class)
-class AudioRecorderViewModelTest {
+class RealAudioRecorderViewModelTest {
 
     private val recordingRepository = RecordingRepository()
 
     private val application by lazy { getApplicationContext<Application>() }
-    private val viewModel: AudioRecorderViewModel by lazy {
-        AudioRecorderViewModel(application, recordingRepository)
+    private val viewModel: RealAudioRecorderViewModel by lazy {
+        RealAudioRecorderViewModel(application, recordingRepository)
     }
 
     @Test

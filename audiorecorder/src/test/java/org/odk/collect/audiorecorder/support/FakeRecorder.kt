@@ -1,4 +1,4 @@
-package org.odk.collect.audiorecorder.recording
+package org.odk.collect.audiorecorder.support
 
 import org.odk.collect.audiorecorder.recorder.Recorder
 import java.io.File
