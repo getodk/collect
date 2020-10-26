@@ -19,9 +19,11 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -53,6 +55,10 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.dao.helpers.ContentResolverHelper;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FormEntryPromptUtils;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
@@ -73,6 +79,7 @@ import org.odk.collect.android.widgets.WidgetFactory;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.audioclips.PlaybackFailedException;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -424,6 +431,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                                 case Constants.DATATYPE_TEXT:
                                 case Constants.DATATYPE_INTEGER:
                                 case Constants.DATATYPE_DECIMAL:
+                                case Constants.DATATYPE_BINARY:
                                     i.putExtra(reference.getNameLast(),
                                             (Serializable) value);
                                     break;
@@ -469,40 +477,66 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     /**
      * Saves answers for the widgets in this view. Called when the widgets are in an intent group.
      */
-    public void setDataForFields(Bundle bundle) throws JavaRosaException {
-        if (bundle == null) {
+    public void setDataForFields(Bundle bundle, ClipData clipData) throws JavaRosaException {
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController == null) {
             return;
         }
-        FormController formController = Collect.getInstance().getFormController();
-        Set<String> keys = bundle.keySet();
-        for (String key : keys) {
-            for (QuestionWidget questionWidget : widgets) {
-                FormEntryPrompt prompt = questionWidget.getFormEntryPrompt();
-                TreeReference treeReference =
-                        (TreeReference) prompt.getFormElement().getBind().getReference();
 
-                if (treeReference.getNameLast().equals(key)) {
-                    switch (prompt.getDataType()) {
-                        case Constants.DATATYPE_TEXT:
-                            formController.saveAnswer(prompt.getIndex(),
-                                    ExternalAppsUtils.asStringData(bundle.get(key)));
-                            break;
-                        case Constants.DATATYPE_INTEGER:
-                            formController.saveAnswer(prompt.getIndex(),
-                                    ExternalAppsUtils.asIntegerData(bundle.get(key)));
-                            break;
-                        case Constants.DATATYPE_DECIMAL:
-                            formController.saveAnswer(prompt.getIndex(),
-                                    ExternalAppsUtils.asDecimalData(bundle.get(key)));
-                            break;
-                        default:
-                            throw new RuntimeException(
-                                    getContext().getString(R.string.ext_assign_value_error,
-                                            treeReference.toString(false)));
+        if (bundle != null) {
+            Set<String> keys = bundle.keySet();
+            for (String key : keys) {
+                for (QuestionWidget questionWidget : widgets) {
+                    FormEntryPrompt prompt = questionWidget.getFormEntryPrompt();
+                    TreeReference treeReference =
+                            (TreeReference) prompt.getFormElement().getBind().getReference();
+
+                    if (treeReference.getNameLast().equals(key)) {
+                        switch (prompt.getDataType()) {
+                            case Constants.DATATYPE_TEXT:
+                                formController.saveAnswer(prompt.getIndex(),
+                                        ExternalAppsUtils.asStringData(bundle.get(key)));
+                                break;
+                            case Constants.DATATYPE_INTEGER:
+                                formController.saveAnswer(prompt.getIndex(),
+                                        ExternalAppsUtils.asIntegerData(bundle.get(key)));
+                                break;
+                            case Constants.DATATYPE_DECIMAL:
+                                formController.saveAnswer(prompt.getIndex(),
+                                        ExternalAppsUtils.asDecimalData(bundle.get(key)));
+                                break;
+                            default:
+                                throw new RuntimeException(
+                                        getContext().getString(R.string.ext_assign_value_error,
+                                                treeReference.toString(false)));
+                        }
+
+                        ((StringWidget) questionWidget).setDisplayValueFromModel();
+                        break;
                     }
+                }
+            }
+        }
 
-                    ((StringWidget) questionWidget).setDisplayValueFromModel();
-                    break;
+        if (clipData != null) {
+            for (int i = 0; i < clipData.getItemCount(); i++) {
+                CharSequence key = clipData.getItemAt(i).getText();
+                if (key == null) {
+                    continue;
+                }
+
+                for (QuestionWidget questionWidget : widgets) {
+                    FormEntryPrompt prompt = questionWidget.getFormEntryPrompt();
+
+                    if (FormEntryPromptUtils.getQuestionName(prompt).equals(key.toString())
+                            && prompt.getDataType() == Constants.DATATYPE_BINARY) {
+                        Uri uri = clipData.getItemAt(i).getUri();
+                        if (uri != null) {
+                            File destFile = FileUtils.createDestinationMediaFile(formController.getInstanceFile().getParent(), ContentResolverHelper.getFileExtensionFromUri(getContext(), uri));
+                            FileUtils.saveMediaFileFromUri(uri, destFile, getContext());
+                            ((WidgetDataReceiver) questionWidget).setData(destFile);
+                        }
+                    }
                 }
             }
         }

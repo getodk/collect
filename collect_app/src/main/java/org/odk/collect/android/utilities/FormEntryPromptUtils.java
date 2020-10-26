@@ -24,6 +24,7 @@ import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.MultipleItemsData;
 import org.javarosa.core.model.data.helper.Selection;
+import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.dao.ItemsetDao;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -122,5 +123,9 @@ public class FormEntryPromptUtils {
         }
 
         return questionText;
+    }
+
+    public static String getQuestionName(FormEntryPrompt prompt) {
+        return ((TreeReference) prompt.getFormElement().getBind().getReference()).getNameLast();
     }
 }
