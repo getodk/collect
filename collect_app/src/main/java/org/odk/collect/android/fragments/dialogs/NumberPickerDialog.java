@@ -37,27 +37,11 @@ public class NumberPickerDialog extends DialogFragment {
     public static final String PROGRESS = "progress";
 
     private RangePickerViewModel rangePickerViewModel;
-
-    public interface NumberPickerListener {
-        void onNumberPickerValueSelected(Integer value);
-    }
-
     private NumberPickerListener listener;
-
-    public static NumberPickerDialog newInstance(String[] displayedValues, int progress) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(DISPLAYED_VALUES, displayedValues);
-        bundle.putInt(PROGRESS, progress);
-
-        NumberPickerDialog dialogFragment = new NumberPickerDialog();
-        dialogFragment.setArguments(bundle);
-        return dialogFragment;
-    }
 
     @Override
     public void onAttach(@NotNull Context context) {
         super.onAttach(context);
-
         try {
             listener = (NumberPickerListener) context;
         } catch (ClassCastException e) {
@@ -65,6 +49,9 @@ public class NumberPickerDialog extends DialogFragment {
         }
 
         rangePickerViewModel = new ViewModelProvider(this).get(RangePickerViewModel.class);
+        rangePickerViewModel.setDisplayedValuesForNumberPicker((String[]) getArguments().getSerializable(DISPLAYED_VALUES));
+        rangePickerViewModel.setProgress(getArguments().getInt(PROGRESS));
+
         rangePickerViewModel.getNumberPickerValue().observe(this, answer -> {
             if (answer != null) {
                 listener.onNumberPickerValueSelected(answer);
@@ -72,26 +59,29 @@ public class NumberPickerDialog extends DialogFragment {
         });
     }
 
+    @NotNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.number_picker_dialog, null);
 
         final NumberPicker numberPicker = view.findViewById(R.id.number_picker);
-        numberPicker.setMaxValue(((String[]) getArguments().getSerializable(DISPLAYED_VALUES)).length - 1);
+        numberPicker.setMaxValue(rangePickerViewModel.getDisplayedValuesForNumberPicker().length - 1);
         numberPicker.setMinValue(0);
         numberPicker.setWrapSelectorWheel(false);
-        numberPicker.setDisplayedValues((String[]) getArguments().getSerializable(DISPLAYED_VALUES));
-        numberPicker.setValue(((String[]) getArguments().getSerializable(DISPLAYED_VALUES)).length - 1 - getArguments().getInt(PROGRESS));
+        numberPicker.setDisplayedValues(rangePickerViewModel.getDisplayedValuesForNumberPicker());
+        numberPicker.setValue(rangePickerViewModel.getDisplayedValuesForNumberPicker().length - rangePickerViewModel.getProgress() - 1);
 
         return new AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.number_picker_title)
                 .setView(view)
                 .setPositiveButton(R.string.ok,
                         (dialog, whichButton) -> rangePickerViewModel.setNumberPickerValue(numberPicker.getValue()))
-                .setNegativeButton(R.string.cancel,
-                        (dialog, whichButton) -> {
-                        })
+                .setNegativeButton(R.string.cancel, (dialog, whichButton) -> { })
                 .create();
+    }
+
+    public interface NumberPickerListener {
+        void onNumberPickerValueSelected(Integer value);
     }
 }

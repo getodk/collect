@@ -59,7 +59,7 @@ public class RangeWidgetUtilsTest {
 
     @Test
     public void usingReadOnlyOption_disablesTheSlider() {
-        RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.setUpLayoutElements(
+        RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.getLayoutElements(
                 widgetTestActivity(), promptWithReadOnlyAndQuestionDef(rangeQuestion));
         assertFalse(layoutElements.getSlider().isEnabled());
     }
@@ -98,7 +98,7 @@ public class RangeWidgetUtilsTest {
 
     @Test
     public void setNumberPickerValue_updatesAnswer() {
-        RangeWidgetUtils.getNumberPickerProgress(binding, rangeQuestion.getRangeStart(), rangeQuestion.getRangeStep(), rangeQuestion.getRangeEnd(), 4);
+        RangeWidgetUtils.getRangePickerValue(binding, rangeQuestion.getRangeStart(), rangeQuestion.getRangeStep(), rangeQuestion.getRangeEnd(), 4);
         assertThat(binding.widgetAnswerText.getText(), equalTo("6"));
     }
 
@@ -107,13 +107,13 @@ public class RangeWidgetUtilsTest {
         when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.TEN);
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.ONE);
 
-        RangeWidgetUtils.getNumberPickerProgress(binding, rangeQuestion.getRangeStart(), rangeQuestion.getRangeStep(), rangeQuestion.getRangeEnd(), 4);
+        RangeWidgetUtils.getRangePickerValue(binding, rangeQuestion.getRangeStart(), rangeQuestion.getRangeStep(), rangeQuestion.getRangeEnd(), 4);
         assertThat(binding.widgetAnswerText.getText(), equalTo("5"));
     }
 
     @Test
     public void setUpLayoutElements_forHorizontalSliderWidget_shouldShowCorrectSlider() {
-        RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.setUpLayoutElements(
+        RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.getLayoutElements(
                 widgetTestActivity(), promptWithReadOnlyAndQuestionDef(rangeQuestion));
         assertThat(layoutElements.getSlider().getRotation(), equalTo(0.0F));
     }
@@ -121,7 +121,7 @@ public class RangeWidgetUtilsTest {
     @Test
     public void setUpLayoutElements_forVerticalSliderWidget_shouldShowCorrectSlider() {
         when(rangeQuestion.getAppearanceAttr()).thenReturn(VERTICAL_APPEARANCE);
-        RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.setUpLayoutElements(
+        RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.getLayoutElements(
                 widgetTestActivity(), promptWithReadOnlyAndQuestionDef(rangeQuestion));
         assertThat(layoutElements.getSlider().getRotation(), equalTo(270.0F));
     }
@@ -183,10 +183,9 @@ public class RangeWidgetUtilsTest {
     @Test
     public void clickingPickerButton_showsNumberPickerDialog() {
         FormEntryActivity activity = RobolectricHelpers.createThemedActivity(FormEntryActivity.class);
-        RangeWidgetUtils.showNumberPickerDialog(activity, new String[]{}, 0);
+        RangeWidgetUtils.requestRangePickerValue(activity, new String[]{}, 0);
         NumberPickerDialog numberPickerDialog = (NumberPickerDialog) activity.getSupportFragmentManager()
                 .findFragmentByTag(NumberPickerDialog.NUMBER_PICKER_DIALOG_TAG);
-
         assertNotNull(numberPickerDialog);
     }
 }

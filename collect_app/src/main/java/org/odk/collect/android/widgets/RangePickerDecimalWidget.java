@@ -12,7 +12,6 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.databinding.RangePickerWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
@@ -42,22 +41,22 @@ public class RangePickerDecimalWidget extends QuestionWidget implements WidgetDa
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = RangePickerWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
-
         binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        setUpWidgetParameters();
-        displayedValuesForNumberPicker = RangeWidgetUtils.getDisplayedValuesForNumberPicker(
-                rangeStart, rangeStep, rangeEnd, false);
-        RangeWidgetUtils.setUpRangePickerWidget(context, binding, prompt);
+        setUpWidgetParameters((RangeQuestion) prompt.getQuestion());
 
-        progress = RangeWidgetUtils.getRangePickerProgressFromPrompt(prompt);
-
-        binding.widgetButton.setOnClickListener(v -> {
-            waitingForDataRegistry.waitForData(prompt.getIndex());
-            RangeWidgetUtils.showNumberPickerDialog(
-                    (FormEntryActivity) getContext(), displayedValuesForNumberPicker, progress);
-        });
+        if (prompt.isReadOnly()) {
+            binding.widgetButton.setVisibility(View.GONE);
+        } else if (!RangeWidgetUtils.isWidgetValid((RangeQuestion) prompt.getQuestion())) {
+            binding.widgetButton.setEnabled(false);
+        } else {
+            binding.widgetButton.setOnClickListener(v -> {
+                RangeWidgetUtils.requestRangePickerValue(context, waitingForDataRegistry, prompt.getIndex(),
+                        displayedValuesForNumberPicker, progress);
+            });
+        }
+        setUpWidgetAnswer(context, prompt);
 
         return binding.getRoot();
     }
@@ -86,15 +85,30 @@ public class RangePickerDecimalWidget extends QuestionWidget implements WidgetDa
     @Override
     public void setData(Object answer) {
         if (answer instanceof Integer) {
-            progress = RangeWidgetUtils.getNumberPickerProgress(binding,
-                    rangeStart, rangeStep, rangeEnd, (Integer) answer);
+            BigDecimal actualValue = RangeWidgetUtils.getRangePickerValue(rangeStart, rangeStep, rangeEnd, (Integer) answer);
+            progress = actualValue.subtract(rangeStart).abs().divide(rangeStep).intValue();
+
+            binding.widgetAnswerText.setText(String.valueOf(actualValue));
+            binding.widgetButton.setText(R.string.edit_value);
         }
     }
 
-    private void setUpWidgetParameters() {
-        RangeQuestion rangeQuestion = (RangeQuestion) getFormEntryPrompt().getQuestion();
+    private void setUpWidgetParameters(RangeQuestion rangeQuestion) {
         rangeStart = rangeQuestion.getRangeStart();
         rangeEnd = rangeQuestion.getRangeEnd();
         rangeStep = rangeQuestion.getRangeStep().abs() != null ? rangeQuestion.getRangeStep().abs() : new BigDecimal("0.5");
+        displayedValuesForNumberPicker = RangeWidgetUtils.getDisplayedValuesForNumberPicker(
+                rangeStart, rangeStep, rangeEnd, false);
+    }
+
+    private void setUpWidgetAnswer(Context context, FormEntryPrompt prompt) {
+        if (prompt.getAnswerText() != null || !prompt.getAnswerText().isEmpty()) {
+            BigDecimal actualValue = new BigDecimal(prompt.getAnswerText());
+            progress = actualValue.subtract(rangeStart.abs().divide(
+                    rangeStep == null ? BigDecimal.ONE : rangeStep)).intValue();
+
+            binding.widgetAnswerText.setText(String.valueOf(actualValue));
+            binding.widgetButton.setText(context.getString(R.string.edit_value));
+        }
     }
 }

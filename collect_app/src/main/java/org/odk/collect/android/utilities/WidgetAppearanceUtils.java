@@ -60,6 +60,10 @@ public class WidgetAppearanceUtils {
     public static final String NO_BUTTONS               = "no-buttons";
     public static final String QUICK                    = "quick";
 
+    // Range widget appearances
+    public static final String VERTICAL_APPEARANCE      = "vertical";
+    public static final String NO_TICKS_APPEARANCE      = "no-ticks";
+
     // Media appearances
     public static final String SIGNATURE                = "signature";
     public static final String ANNOTATE                 = "annotate";
