@@ -15,7 +15,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.RangePickerWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
+import org.odk.collect.android.widgets.utilities.RangeWidgetDataRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.math.BigDecimal;
@@ -47,11 +47,11 @@ public class RangePickerIntegerWidget extends QuestionWidget implements WidgetDa
 
         if (prompt.isReadOnly()) {
             binding.widgetButton.setVisibility(View.GONE);
-        } else if (!RangeWidgetUtils.isWidgetValid((RangeQuestion) prompt.getQuestion())) {
+        } else if (!RangeWidgetDataRequester.isWidgetValid((RangeQuestion) prompt.getQuestion())) {
             binding.widgetButton.setEnabled(false);
         } else {
             binding.widgetButton.setOnClickListener(v -> {
-                RangeWidgetUtils.requestRangePickerValue(context, waitingForDataRegistry, prompt.getIndex(),
+                RangeWidgetDataRequester.requestRangePickerValue(context, waitingForDataRegistry, prompt.getIndex(),
                         displayedValuesForNumberPicker, progress);
             });
         }
@@ -84,7 +84,7 @@ public class RangePickerIntegerWidget extends QuestionWidget implements WidgetDa
     @Override
     public void setData(Object answer) {
         if (answer instanceof Integer) {
-            BigDecimal actualValue = RangeWidgetUtils.getRangePickerValue(rangeStart, rangeStep, rangeEnd, (Integer) answer);
+            BigDecimal actualValue = RangeWidgetDataRequester.getRangePickerValue(rangeStart, rangeStep, rangeEnd, (Integer) answer);
             progress = actualValue.subtract(rangeStart).abs().divide(rangeStep).intValue();
 
             binding.widgetAnswerText.setText(String.valueOf(actualValue));
@@ -97,7 +97,7 @@ public class RangePickerIntegerWidget extends QuestionWidget implements WidgetDa
         rangeEnd = rangeQuestion.getRangeEnd();
         rangeStep = rangeQuestion.getRangeStep().abs();
 
-        displayedValuesForNumberPicker = RangeWidgetUtils.getDisplayedValuesForNumberPicker(
+        displayedValuesForNumberPicker = RangeWidgetDataRequester.getDisplayedValuesForNumberPicker(
                 rangeStart, rangeStep, rangeEnd, true);
     }
 

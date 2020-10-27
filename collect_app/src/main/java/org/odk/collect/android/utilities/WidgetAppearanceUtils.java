@@ -63,6 +63,7 @@ public class WidgetAppearanceUtils {
     // Range widget appearances
     public static final String VERTICAL_APPEARANCE      = "vertical";
     public static final String NO_TICKS_APPEARANCE      = "no-ticks";
+    public static final String PICKER_APPEARANCE       = "picker";
 
     // Media appearances
     public static final String SIGNATURE                = "signature";

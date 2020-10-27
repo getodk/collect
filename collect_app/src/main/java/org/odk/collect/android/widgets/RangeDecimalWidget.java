@@ -33,7 +33,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.views.TrackingTouchSlider;
-import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
+import org.odk.collect.android.widgets.utilities.RangeWidgetDataRequester;
 
 import java.math.BigDecimal;
 
@@ -58,7 +58,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.getLayoutElements(context, prompt);
+        RangeWidgetDataRequester.RangeWidgetLayoutElements layoutElements = RangeWidgetDataRequester.getLayoutElements(context, prompt);
         slider = layoutElements.getSlider();
         currentValue = layoutElements.getCurrentValue();
         minValue = layoutElements.getMinValue();
@@ -75,7 +75,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
             actualValue = new BigDecimal(prompt.getAnswerText());
         }
 
-        if (prompt.isReadOnly() || !RangeWidgetUtils.isWidgetValid((RangeQuestion) prompt.getQuestion())) {
+        if (prompt.isReadOnly() || !RangeWidgetDataRequester.isWidgetValid((RangeQuestion) prompt.getQuestion())) {
             slider.setEnabled(false);
         } else  {
             setUpSlider(prompt, actualValue);
@@ -111,7 +111,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
     @Override
     public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
         if (fromUser) {
-            BigDecimal actualValue = RangeWidgetUtils.getActualValue(getFormEntryPrompt(), slider,
+            BigDecimal actualValue = RangeWidgetDataRequester.getActualValue(getFormEntryPrompt(), slider,
                     rangeStart, rangeEnd, rangeStep, BigDecimal.valueOf(value));
             setUpActualValueLabel(actualValue);
             widgetValueChanged();

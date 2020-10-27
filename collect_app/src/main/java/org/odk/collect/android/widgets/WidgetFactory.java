@@ -55,6 +55,7 @@ import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.PROMPT;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MAPS;
+import static org.odk.collect.android.utilities.WidgetAppearanceUtils.PICKER_APPEARANCE;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.PLACEMENT_MAP;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.hasAppearance;
 
@@ -64,8 +65,6 @@ import static org.odk.collect.android.utilities.WidgetAppearanceUtils.hasAppeara
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class WidgetFactory {
-
-    private static final String PICKER_APPEARANCE = "picker";
 
     private WidgetFactory() {
 
@@ -249,14 +248,14 @@ public class WidgetFactory {
                 } else {
                     switch (prompt.getDataType()) {
                         case Constants.DATATYPE_INTEGER:
-                            if (prompt.getQuestion().getAppearanceAttr() != null && prompt.getQuestion().getAppearanceAttr().contains(PICKER_APPEARANCE)) {
+                            if (WidgetAppearanceUtils.hasAppearance(prompt, PICKER_APPEARANCE)) {
                                 questionWidget = new RangePickerIntegerWidget(context, questionDetails, waitingForDataRegistry);
                             } else {
                                 questionWidget = new RangeIntegerWidget(context, questionDetails);
                             }
                             break;
                         case Constants.DATATYPE_DECIMAL:
-                            if (prompt.getQuestion().getAppearanceAttr() != null && prompt.getQuestion().getAppearanceAttr().contains(PICKER_APPEARANCE)) {
+                            if (WidgetAppearanceUtils.hasAppearance(prompt, PICKER_APPEARANCE)) {
                                 questionWidget = new RangePickerDecimalWidget(context, questionDetails, waitingForDataRegistry);
                             } else {
                                 questionWidget = new RangeDecimalWidget(context, questionDetails);

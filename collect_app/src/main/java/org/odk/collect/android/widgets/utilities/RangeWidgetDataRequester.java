@@ -1,6 +1,5 @@
 package org.odk.collect.android.widgets.utilities;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -28,9 +27,9 @@ import java.math.BigDecimal;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.NO_TICKS_APPEARANCE;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.VERTICAL_APPEARANCE;
 
-public class RangeWidgetUtils {
+public class RangeWidgetDataRequester {
 
-    private RangeWidgetUtils() {
+    private RangeWidgetDataRequester() {
     }
 
     public static class RangeWidgetLayoutElements {

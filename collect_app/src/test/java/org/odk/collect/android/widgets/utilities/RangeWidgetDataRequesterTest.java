@@ -33,7 +33,7 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.prom
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 
 @RunWith(RobolectricTestRunner.class)
-public class RangeWidgetUtilsTest {
+public class RangeWidgetDataRequesterTest {
     private static final String VERTICAL_APPEARANCE = "vertical";
 
     private RangePickerWidgetAnswerBinding binding;
@@ -59,46 +59,46 @@ public class RangeWidgetUtilsTest {
 
     @Test
     public void usingReadOnlyOption_disablesTheSlider() {
-        RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.getLayoutElements(
+        RangeWidgetDataRequester.RangeWidgetLayoutElements layoutElements = RangeWidgetDataRequester.getLayoutElements(
                 widgetTestActivity(), promptWithReadOnlyAndQuestionDef(rangeQuestion));
         assertFalse(layoutElements.getSlider().isEnabled());
     }
 
     @Test
     public void usingReadOnlyOption_hidesPickerButton() {
-        RangeWidgetUtils.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithReadOnlyAndQuestionDef(rangeQuestion));
+        RangeWidgetDataRequester.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithReadOnlyAndQuestionDef(rangeQuestion));
         assertThat(binding.widgetButton.getVisibility(), equalTo(View.GONE));
     }
 
     @Test
     public void whenPromptDoesNotHaveAnswer_answerTextViewShowsNoValueSelected() {
-        RangeWidgetUtils.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        RangeWidgetDataRequester.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithQuestionDefAndAnswer(rangeQuestion, null));
         assertThat(binding.widgetAnswerText.getText(), equalTo(widgetTestActivity().getString(R.string.no_value_selected)));
     }
 
     @Test
     public void whenPromptHasAnswer_answerTextViewShowsCorrectAnswer() {
-        RangeWidgetUtils.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithQuestionDefAndAnswer(
+        RangeWidgetDataRequester.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithQuestionDefAndAnswer(
                 rangeQuestion, new StringData("4")));
         assertThat(binding.widgetAnswerText.getText(), equalTo("4"));
     }
 
     @Test
     public void whenPromptDoesNotHaveAnswer_pickerButtonShowsNoValueSelected() {
-        RangeWidgetUtils.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        RangeWidgetDataRequester.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithQuestionDefAndAnswer(rangeQuestion, null));
         assertThat(binding.widgetButton.getText(), equalTo(widgetTestActivity().getString(R.string.select_value)));
     }
 
     @Test
     public void whenPromptHasAnswer_pickerButtonShowsCorrectAnswer() {
-        RangeWidgetUtils.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithQuestionDefAndAnswer(
+        RangeWidgetDataRequester.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithQuestionDefAndAnswer(
                 rangeQuestion, new StringData("4")));
         assertThat(binding.widgetButton.getText(), equalTo(widgetTestActivity().getString(R.string.edit_value)));
     }
 
     @Test
     public void setNumberPickerValue_updatesAnswer() {
-        RangeWidgetUtils.getRangePickerValue(binding, rangeQuestion.getRangeStart(), rangeQuestion.getRangeStep(), rangeQuestion.getRangeEnd(), 4);
+        RangeWidgetDataRequester.getRangePickerValue(binding, rangeQuestion.getRangeStart(), rangeQuestion.getRangeStep(), rangeQuestion.getRangeEnd(), 4);
         assertThat(binding.widgetAnswerText.getText(), equalTo("6"));
     }
 
@@ -107,13 +107,13 @@ public class RangeWidgetUtilsTest {
         when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.TEN);
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.ONE);
 
-        RangeWidgetUtils.getRangePickerValue(binding, rangeQuestion.getRangeStart(), rangeQuestion.getRangeStep(), rangeQuestion.getRangeEnd(), 4);
+        RangeWidgetDataRequester.getRangePickerValue(binding, rangeQuestion.getRangeStart(), rangeQuestion.getRangeStep(), rangeQuestion.getRangeEnd(), 4);
         assertThat(binding.widgetAnswerText.getText(), equalTo("5"));
     }
 
     @Test
     public void setUpLayoutElements_forHorizontalSliderWidget_shouldShowCorrectSlider() {
-        RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.getLayoutElements(
+        RangeWidgetDataRequester.RangeWidgetLayoutElements layoutElements = RangeWidgetDataRequester.getLayoutElements(
                 widgetTestActivity(), promptWithReadOnlyAndQuestionDef(rangeQuestion));
         assertThat(layoutElements.getSlider().getRotation(), equalTo(0.0F));
     }
@@ -121,14 +121,14 @@ public class RangeWidgetUtilsTest {
     @Test
     public void setUpLayoutElements_forVerticalSliderWidget_shouldShowCorrectSlider() {
         when(rangeQuestion.getAppearanceAttr()).thenReturn(VERTICAL_APPEARANCE);
-        RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.getLayoutElements(
+        RangeWidgetDataRequester.RangeWidgetLayoutElements layoutElements = RangeWidgetDataRequester.getLayoutElements(
                 widgetTestActivity(), promptWithReadOnlyAndQuestionDef(rangeQuestion));
         assertThat(layoutElements.getSlider().getRotation(), equalTo(270.0F));
     }
 
     @Test
     public void setUpWidgetParameters_showsCorrectMinAndMaxValues() {
-        RangeWidgetUtils.setUpWidgetParameters(rangeQuestion, sampleTextView1, sampleTextView2);
+        RangeWidgetDataRequester.setUpWidgetParameters(rangeQuestion, sampleTextView1, sampleTextView2);
 
         assertThat(sampleTextView1.getText(), equalTo("1"));
         assertThat(sampleTextView2.getText(), equalTo("10"));
@@ -137,7 +137,7 @@ public class RangeWidgetUtilsTest {
     @Test
     public void whenRangeQuestionHasZeroRangeStep_invalidWidgetToastIsShown() {
         when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ZERO);
-        assertThat(RangeWidgetUtils.isWidgetValid(rangeQuestion), equalTo(false));
+        assertThat(RangeWidgetDataRequester.isWidgetValid(rangeQuestion), equalTo(false));
 
         String toastText = ShadowToast.getTextOfLatestToast();
         assertThat(toastText, equalTo(ApplicationProvider.getApplicationContext().getString(R.string.invalid_range_widget)));
@@ -146,7 +146,7 @@ public class RangeWidgetUtilsTest {
     @Test
     public void whenPromptHasInvalidWidgetParameters_invalidWidgetToastIsShown() {
         when(rangeQuestion.getRangeStep()).thenReturn(new BigDecimal(2));
-        assertThat(RangeWidgetUtils.isWidgetValid(rangeQuestion), equalTo(false));
+        assertThat(RangeWidgetDataRequester.isWidgetValid(rangeQuestion), equalTo(false));
 
         String toastText = ShadowToast.getTextOfLatestToast();
         assertThat(toastText, equalTo(ApplicationProvider.getApplicationContext().getString(R.string.invalid_range_widget)));
@@ -155,35 +155,35 @@ public class RangeWidgetUtilsTest {
     @Test
     public void whenRangeQuestionHasZeroRangeStep_sliderIsDisabled() {
         when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ZERO);
-        RangeWidgetUtils.isRangeSliderWidgetValid(rangeQuestion, slider);
+        RangeWidgetDataRequester.isRangeSliderWidgetValid(rangeQuestion, slider);
         assertFalse(slider.isEnabled());
     }
 
     @Test
     public void whenPromptHasInvalidWidgetParameters_sliderIsDisabled() {
         when(rangeQuestion.getRangeStep()).thenReturn(new BigDecimal(2));
-        RangeWidgetUtils.isRangeSliderWidgetValid(rangeQuestion, slider);
+        RangeWidgetDataRequester.isRangeSliderWidgetValid(rangeQuestion, slider);
         assertFalse(slider.isEnabled());
     }
 
     @Test
     public void whenRangeQuestionHasZeroRangeStep_pickerButtonIsDisabled() {
         when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ZERO);
-        RangeWidgetUtils.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithReadOnlyAndQuestionDef(rangeQuestion));
+        RangeWidgetDataRequester.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithReadOnlyAndQuestionDef(rangeQuestion));
         assertFalse(binding.widgetButton.isEnabled());
     }
 
     @Test
     public void whenPromptHasInvalidWidgetParameters_pickerButtonIsDisabled() {
         when(rangeQuestion.getRangeStep()).thenReturn(new BigDecimal(2));
-        RangeWidgetUtils.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithReadOnlyAndQuestionDef(rangeQuestion));
+        RangeWidgetDataRequester.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithReadOnlyAndQuestionDef(rangeQuestion));
         assertFalse(binding.widgetButton.isEnabled());
     }
 
     @Test
     public void clickingPickerButton_showsNumberPickerDialog() {
         FormEntryActivity activity = RobolectricHelpers.createThemedActivity(FormEntryActivity.class);
-        RangeWidgetUtils.requestRangePickerValue(activity, new String[]{}, 0);
+        RangeWidgetDataRequester.requestRangePickerValue(activity, new String[]{}, 0);
         NumberPickerDialog numberPickerDialog = (NumberPickerDialog) activity.getSupportFragmentManager()
                 .findFragmentByTag(NumberPickerDialog.NUMBER_PICKER_DIALOG_TAG);
         assertNotNull(numberPickerDialog);
