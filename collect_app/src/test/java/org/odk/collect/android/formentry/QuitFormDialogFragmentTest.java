@@ -29,7 +29,6 @@ import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 public class QuitFormDialogFragmentTest {
-
     private FragmentActivity activity;
     private FragmentManager fragmentManager;
     private QuitFormDialogFragment dialogFragment;

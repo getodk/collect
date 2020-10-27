@@ -2,10 +2,6 @@ package org.odk.collect.android.widgets;
 
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.LifecycleOwner;
-
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.StringData;
@@ -16,10 +12,10 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
+import org.odk.collect.android.fragments.dialogs.NumberPickerDialogTest;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
-import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
 
@@ -144,7 +140,8 @@ public class RangePickerIntegerWidgetTest {
 
     @Test
     public void clickingWidgetButton_showsNumberPickerDialog_whenPromptDoesNotHaveAnswer() {
-        TestRangePickerWidgetActivity activity = RobolectricHelpers.createThemedActivity(TestRangePickerWidgetActivity.class);
+        NumberPickerDialogTest.TestRangePickerWidgetActivity activity =
+                RobolectricHelpers.createThemedActivity(NumberPickerDialogTest.TestRangePickerWidgetActivity.class);
         RangePickerIntegerWidget widget = createWidget(activity, promptWithQuestionDefAndAnswer(rangeQuestion, null));
         widget.binding.widgetButton.performClick();
 
@@ -159,7 +156,8 @@ public class RangePickerIntegerWidgetTest {
 
     @Test
     public void clickingWidgetButton_showsNumberPickerDialog_whenPromptHasAnswer() {
-        TestRangePickerWidgetActivity activity = RobolectricHelpers.createThemedActivity(TestRangePickerWidgetActivity.class);
+        NumberPickerDialogTest.TestRangePickerWidgetActivity activity =
+                RobolectricHelpers.createThemedActivity(NumberPickerDialogTest.TestRangePickerWidgetActivity.class);
         RangePickerIntegerWidget widget = createWidget(activity, promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
         widget.binding.widgetButton.performClick();
 
@@ -176,7 +174,8 @@ public class RangePickerIntegerWidgetTest {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(rangeQuestion, null);
         when(prompt.getIndex()).thenReturn(formIndex);
 
-        TestRangePickerWidgetActivity activity = RobolectricHelpers.createThemedActivity(TestRangePickerWidgetActivity.class);
+        NumberPickerDialogTest.TestRangePickerWidgetActivity activity =
+                RobolectricHelpers.createThemedActivity(NumberPickerDialogTest.TestRangePickerWidgetActivity.class);
         RangePickerIntegerWidget widget = createWidget(activity, prompt);
         widget.binding.widgetButton.performClick();
         assertTrue(waitingForDataRegistry.waiting.contains(formIndex));
@@ -199,26 +198,8 @@ public class RangePickerIntegerWidgetTest {
                 "formAnalyticsID"), waitingForDataRegistry);
     }
 
-    private RangePickerIntegerWidget createWidget(TestRangePickerWidgetActivity activity, FormEntryPrompt prompt) {
+    private RangePickerIntegerWidget createWidget(NumberPickerDialogTest.TestRangePickerWidgetActivity activity, FormEntryPrompt prompt) {
         return new RangePickerIntegerWidget(activity, new QuestionDetails(prompt,
                 "formAnalyticsID"), waitingForDataRegistry);
-    }
-
-    static class TestRangePickerWidgetActivity extends AppCompatActivity implements
-            ScreenContext, NumberPickerDialog.NumberPickerListener {
-
-        @Override
-        public FragmentActivity getActivity() {
-            return this;
-        }
-
-        @Override
-        public LifecycleOwner getViewLifecycle() {
-            return this;
-        }
-
-        @Override
-        public void onNumberPickerValueSelected(Integer value) {
-        }
     }
 }

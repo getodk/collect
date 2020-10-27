@@ -69,14 +69,14 @@ public class RangeWidgetDataRequester {
         }
     }
 
-    public static RangeWidgetLayoutElements getLayoutElements(Context context, FormEntryPrompt prompt) {
+    public static RangeWidgetLayoutElements getLayoutElements(Context context, String appearance) {
         View answerView;
         TrackingTouchSlider slider;
         TextView currentValue;
         TextView minValue;
         TextView maxValue;
 
-        if (WidgetAppearanceUtils.hasAppearance(prompt, VERTICAL_APPEARANCE)) {
+        if (hasVerticalAppearance(appearance)) {
             RangeWidgetVerticalBinding rangeWidgetVerticalBinding = RangeWidgetVerticalBinding
                     .inflate(((Activity) context).getLayoutInflater());
             answerView = rangeWidgetVerticalBinding.getRoot();
@@ -178,5 +178,9 @@ public class RangeWidgetDataRequester {
 
     public static Boolean hasNoTicksAppearance(String appearance) {
         return appearance != null && appearance.contains(NO_TICKS_APPEARANCE);
+    }
+
+    private static Boolean hasVerticalAppearance(String appearance) {
+        return appearance != null && appearance.contains(VERTICAL_APPEARANCE);
     }
 }

@@ -55,13 +55,14 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        RangeWidgetDataRequester.RangeWidgetLayoutElements layoutElements = RangeWidgetDataRequester.getLayoutElements(context, prompt);
+        RangeQuestion rangeQuestion = (RangeQuestion) prompt.getQuestion();
+
+        RangeWidgetDataRequester.RangeWidgetLayoutElements layoutElements = RangeWidgetDataRequester
+                .getLayoutElements(context, rangeQuestion.getAppearanceAttr());
         slider = layoutElements.getSlider();
         currentValue = layoutElements.getCurrentValue();
         minValue = layoutElements.getMinValue();
         maxValue = layoutElements.getMaxValue();
-
-        RangeQuestion rangeQuestion = (RangeQuestion) prompt.getQuestion();
 
         setUpWidgetParameters(rangeQuestion);
         minValue.setText(String.valueOf(rangeStart));
