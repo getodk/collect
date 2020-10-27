@@ -538,7 +538,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 if (formController != null) {
                     formControllerAvailable(formController);
-                    refreshCurrentView();
+                    onScreenRefresh();
                 } else {
                     Timber.w("Reloading form and restoring state.");
                     formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath);
@@ -772,7 +772,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // If we're coming back from the hierarchy view, the user has either tapped the back
         // button or another question to jump to so we need to rebuild the view.
         if (requestCode == RequestCodes.HIERARCHY_ACTIVITY) {
-            refreshCurrentView();
+            onScreenRefresh();
             return;
         }
 
@@ -1026,21 +1026,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-    /**
-     * Rebuilds the current view. the controller and the displayed view can get
-     * out of sync due to dialogs and restarts caused by screen orientation
-     * changes, so they're resynchronized here.
-     */
-    @Override
-    public void refreshCurrentView() {
-        int event = getFormController().getEvent();
-
-        View current = createView(event, false);
-        showView(current, AnimationType.FADE);
-
-        formIndexAnimationHandler.setLastIndex(getFormController().getFormIndex());
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menuDelegate.onCreateOptionsMenu(getMenuInflater(), menu);
@@ -1199,7 +1184,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (formController != null && !formController.indexIsInFieldList()) {
             showNextView();
         } else {
-            refreshCurrentView();
+            onScreenRefresh();
         }
     }
 
@@ -1566,14 +1551,37 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     @Override
-    public void onScreenChange() {
+    public void onScreenChange(FormIndexAnimationHandler.Direction direction) {
         audioRecorderViewModel.cancel();
+
+        final int event = getFormController().getEvent();
+
+        switch (direction) {
+            case FORWARDS:
+                animateToNextView(event);
+                break;
+            case BACKWARDS:
+                animateToPreviousView(event);
+                break;
+        }
     }
 
+    /**
+     * Rebuilds the current view. the controller and the displayed view can get
+     * out of sync due to dialogs and restarts caused by screen orientation
+     * changes, so they're resynchronized here.
+     */
     @Override
-    public void animateToNextView() {
+    public void onScreenRefresh() {
         int event = getFormController().getEvent();
 
+        View current = createView(event, false);
+        showView(current, AnimationType.FADE);
+
+        formIndexAnimationHandler.setLastIndex(getFormController().getFormIndex());
+    }
+
+    public void animateToNextView(int event) {
         switch (event) {
             case FormEntryController.EVENT_QUESTION:
             case FormEntryController.EVENT_GROUP:
@@ -1598,9 +1606,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formIndexAnimationHandler.setLastIndex(getFormController().getFormIndex());
     }
 
-    @Override
-    public void animateToPreviousView() {
-        int event = getFormController().getEvent();
+    public void animateToPreviousView(int event) {
         View next = createView(event, false);
         showView(next, AnimationType.LEFT);
 
@@ -1933,7 +1939,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             case CONSTRAINT_ERROR: {
                 DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
-                refreshCurrentView();
+                onScreenRefresh();
 
                 // get constraint behavior preference value with appropriate default
                 String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
@@ -2053,7 +2059,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                 if (formController.currentPromptIsQuestion()) {
                                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                                 }
-                                refreshCurrentView();
+                                onScreenRefresh();
                             }
                         })
                 .setTitle(getString(R.string.change_language))
@@ -2082,7 +2088,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private void adjustFontSize() {
         if (questionFontSize != QuestionFontSizeUtils.getQuestionFontSize()) {
             questionFontSize = QuestionFontSizeUtils.getQuestionFontSize();
-            refreshCurrentView();
+            onScreenRefresh();
         }
     }
 
@@ -2369,7 +2375,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 if (pendingActivityResult) {
                     // set the current view to whatever group we were at...
-                    refreshCurrentView();
+                    onScreenRefresh();
                     // process the pending activity request...
                     onActivityResult(task.getRequestCode(), task.getResultCode(), task.getIntent());
                     return;
@@ -2428,7 +2434,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                         FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile();
                                         if (formIndex != null) {
                                             formController.jumpToIndex(formIndex);
-                                            refreshCurrentView();
+                                            onScreenRefresh();
                                             return;
                                         }
                                     }
@@ -2480,7 +2486,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // and we want that to show up after initialization events.
         activityDisplayed();
 
-        refreshCurrentView();
+        onScreenRefresh();
 
         if (warningMsg != null) {
             showLongToast(warningMsg);
