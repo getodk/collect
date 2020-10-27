@@ -23,6 +23,7 @@ import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
 
@@ -96,6 +97,28 @@ public class AudioRecordingTest {
         assertThat(fakeAudioRecorderViewModel.wasCancelled, is(true));
 
         page.swipeToPreviousQuestion("What does it sound like?")
+                .assertEnabled(R.string.capture_audio);
+    }
+
+    @Test
+    public void whileRecording_quittingForm_cancelsRecording() {
+        final MainMenuPage page = new MainMenuPage(rule).assertOnPage()
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .clickExperimental()
+                .clickExternalAppRecording()
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
+
+                .copyForm("audio-question.xml")
+                .startBlankForm("Audio Question")
+                .clickOnString(R.string.capture_audio)
+                .pressBack(new SaveOrIgnoreDialog<>("Audio Question", new MainMenuPage(rule), rule))
+                .clickSaveChanges();
+
+        assertThat(fakeAudioRecorderViewModel.wasCancelled, is(true));
+
+        page.startBlankForm("Audio Question")
                 .assertEnabled(R.string.capture_audio);
     }
 
