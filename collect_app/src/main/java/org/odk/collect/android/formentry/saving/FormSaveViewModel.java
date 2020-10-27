@@ -13,6 +13,7 @@ import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 import androidx.savedstate.SavedStateRegistryOwner;
 
+import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryController;
@@ -35,6 +36,11 @@ import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.utilities.Clock;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -310,6 +316,28 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             }
             recentFiles.put(questionIndex, fileName);
             stateHandle.set(RECENT_FILES, recentFiles);
+        }
+    }
+
+    @Override
+    public String createAnswerFile(File file) {
+        try {
+            String fileName = file.getName();
+            InputStream inputStream = new FileInputStream(file);
+            File newFile = new File(formController.getInstanceFile().getParent()
+                    + File.separator
+                    + System.currentTimeMillis()
+                    + "."
+                    + fileName.substring(fileName.lastIndexOf('.') + 1));
+
+            OutputStream outputStream = new FileOutputStream(newFile);
+            IOUtils.copy(inputStream, outputStream);
+            inputStream.close();
+            outputStream.close();
+
+            return newFile.getName();
+        } catch (IOException ignored) {
+            return null;
         }
     }
 

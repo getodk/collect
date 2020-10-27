@@ -19,8 +19,8 @@ import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.utilities.AudioFileRequester;
-import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
+import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.audioclips.Clip;
 import org.robolectric.RobolectricTestRunner;
 
@@ -289,8 +289,7 @@ public class AudioWidgetTest {
 
     @Test
     public void whenRecordingRequesterStopsRecording_enablesButtons() {
-        FormEntryPrompt prompt = promptWithAnswer(null);
-        AudioWidget widget = createWidget(prompt);
+        AudioWidget widget = createWidget(promptWithAnswer(null));
 
         recordingRequester.startRecording();
         assertThat(widget.binding.captureButton.isEnabled(), is(false));
@@ -299,6 +298,16 @@ public class AudioWidgetTest {
         recordingRequester.stopRecording();
         assertThat(widget.binding.captureButton.isEnabled(), is(true));
         assertThat(widget.binding.chooseButton.isEnabled(), is(true));
+    }
+
+    @Test
+    public void whenRecordingAvailable__updatesWidgetAnswer() throws Exception {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        AudioWidget widget = createWidget(prompt);
+
+        File newFile = File.createTempFile("newFile", ".mp3", questionMediaManager.getDir());
+        recordingRequester.setRecording(prompt.getIndex().toString(), newFile);
+        assertThat(widget.getAnswer().getDisplayText(), equalTo(newFile.getName()));
     }
 
     @Test
@@ -500,6 +509,7 @@ public class AudioWidgetTest {
 
         FormEntryPrompt requestedRecordingFor;
         private Consumer<Boolean> isRecordingListener;
+        private final Map<String, Consumer<String>> recordingAvailableListeners = new HashMap<>();
 
         @Override
         public void requestRecording(FormEntryPrompt prompt) {
@@ -511,12 +521,21 @@ public class AudioWidgetTest {
             this.isRecordingListener = isRecordingListener;
         }
 
+        @Override
+        public void onRecordingAvailable(FormEntryPrompt prompt, Consumer<String> recordingAvailableListener) {
+            recordingAvailableListeners.put(prompt.getIndex().toString(), recordingAvailableListener);
+        }
+
         public void startRecording() {
             isRecordingListener.accept(true);
         }
 
         public void stopRecording() {
             isRecordingListener.accept(false);
+        }
+
+        public void setRecording(String sessionId, File file) {
+            recordingAvailableListeners.get(sessionId).accept(file.getName());
         }
     }
 }

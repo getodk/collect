@@ -7,6 +7,7 @@ import androidx.lifecycle.LifecycleOwner;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 
 import java.util.function.Consumer;
@@ -18,13 +19,15 @@ public class InternalRecordingRequester implements RecordingRequester {
     private final PermissionUtils permissionUtils;
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final LifecycleOwner lifecycleOwner;
+    private final QuestionMediaManager questionMediaManager;
 
-    public InternalRecordingRequester(Activity activity, AudioRecorderViewModel viewModel, PermissionUtils permissionUtils, WaitingForDataRegistry waitingForDataRegistry, LifecycleOwner lifecycleOwner) {
+    public InternalRecordingRequester(Activity activity, AudioRecorderViewModel viewModel, PermissionUtils permissionUtils, WaitingForDataRegistry waitingForDataRegistry, LifecycleOwner lifecycleOwner, QuestionMediaManager questionMediaManager) {
         this.activity = activity;
         this.viewModel = viewModel;
         this.permissionUtils = permissionUtils;
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.lifecycleOwner = lifecycleOwner;
+        this.questionMediaManager = questionMediaManager;
     }
 
     @Override
@@ -46,5 +49,17 @@ public class InternalRecordingRequester implements RecordingRequester {
     @Override
     public void onIsRecordingChanged(Consumer<Boolean> isRecordingListener) {
         viewModel.isRecording().observe(lifecycleOwner, isRecordingListener::accept);
+    }
+
+    @Override
+    public void onRecordingAvailable(FormEntryPrompt prompt, Consumer<String> recordingAvailableListener) {
+        viewModel.getRecording(prompt.getIndex().toString()).observe(lifecycleOwner, file -> {
+            if (file != null) {
+                String fileName = questionMediaManager.createAnswerFile(file);
+                viewModel.endSession();
+
+                recordingAvailableListener.accept(fileName);
+            }
+        });
     }
 }

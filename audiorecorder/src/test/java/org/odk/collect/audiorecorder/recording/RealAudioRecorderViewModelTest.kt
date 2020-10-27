@@ -41,15 +41,27 @@ class RealAudioRecorderViewModelTest {
     }
 
     @Test
-    fun recording_returnsSessionRecording() {
+    fun getRecording_returnsSessionRecording() {
         recordingSession.start("123")
 
-        val recording = liveDataTester.activate(viewModel.recording)
+        val recording = liveDataTester.activate(viewModel.getRecording("123"))
         assertThat(recording.value, equalTo(null))
 
         val file = createTempFile("blah", "mp3")
         recordingSession.recordingReady(file)
         assertThat(recording.value!!.absolutePath, equalTo(file.absolutePath))
+    }
+
+    @Test
+    fun getRecording_doesNotReturnOtherSessionRecordings() {
+        recordingSession.start("123")
+
+        val recording = liveDataTester.activate(viewModel.getRecording("456"))
+        assertThat(recording.value, equalTo(null))
+
+        val file = createTempFile("blah", "mp3")
+        recordingSession.recordingReady(file)
+        assertThat(recording.value, equalTo(null))
     }
 
     @Test

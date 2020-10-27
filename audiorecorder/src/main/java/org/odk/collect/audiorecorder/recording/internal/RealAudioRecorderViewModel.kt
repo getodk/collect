@@ -13,12 +13,20 @@ import java.io.File
 
 internal class RealAudioRecorderViewModel internal constructor(private val application: Application, private val recordingSession: RecordingSession) : AudioRecorderViewModel() {
 
-    override val recording: LiveData<File?> = map(recordingSession.get()) { it?.second }
-
     private val _isRecording: LiveData<Boolean> = map(recordingSession.get()) { it != null }
 
     override fun isRecording(): LiveData<Boolean> {
         return _isRecording
+    }
+
+    override fun getRecording(sessionId: String): LiveData<File?> {
+        return map(recordingSession.get()) {
+            if (it != null && it.first == sessionId) {
+                it.second
+            } else {
+                null
+            }
+        }
     }
 
     override fun start(sessionId: String) {

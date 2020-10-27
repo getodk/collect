@@ -198,7 +198,7 @@ public class WidgetFactory {
                     ComponentActivity activity = (ComponentActivity) context;
                     AudioRecorderViewModelFactory factory = new AudioRecorderViewModelFactory(activity.getApplication());
                     AudioRecorderViewModel viewModel = new ViewModelProvider(activity, factory).get(AudioRecorderViewModel.class);
-                    recordingRequester = new InternalRecordingRequester(activity, viewModel, permissionUtils, waitingForDataRegistry, ((ScreenContext) context).getViewLifecycle());
+                    recordingRequester = new InternalRecordingRequester(activity, viewModel, permissionUtils, waitingForDataRegistry, ((ScreenContext) context).getViewLifecycle(), questionMediaManager);
                 }
 
                 questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, recordingRequester, new GetContentAudioFileRequester((Activity) context, activityAvailability, waitingForDataRegistry));

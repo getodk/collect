@@ -161,7 +161,6 @@ import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -472,32 +471,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 new AudioRecorderViewModelFactory(getApplication())
         ).get(AudioRecorderViewModel.class);
         findViewById(R.id.stop_recording).setOnClickListener(v -> audioRecorderViewModel.stop());
-        audioRecorderViewModel.getRecording().observe(this, file -> {
-            if (file == null) {
-                return;
-            }
-
-            try {
-                InputStream inputStream = new FileInputStream(file);
-                File newFile = new File(getFormController().getInstanceFile().getParent()
-                        + File.separator
-                        + System.currentTimeMillis()
-                        + "."
-                        + ContentResolverHelper.getFileExtensionFromUri(this, Uri.parse(file.getAbsolutePath())));
-
-                OutputStream outputStream = new FileOutputStream(newFile);
-                IOUtils.copy(inputStream, outputStream);
-                inputStream.close();
-                outputStream.close();
-
-                audioRecorderViewModel.endSession();
-
-                setBinaryWidgetData(newFile.getName());
-//                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-            } catch (IOException ignored) {
-                // Ignored
-            }
-        });
     }
 
     private void formControllerAvailable(@NonNull FormController formController) {

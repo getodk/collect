@@ -8,4 +8,6 @@ public interface RecordingRequester {
     void requestRecording(FormEntryPrompt prompt);
 
     void onIsRecordingChanged(Consumer<Boolean> isRecordingListener);
+
+    void onRecordingAvailable(FormEntryPrompt prompt, Consumer<String> recordingAvailableListener);
 }

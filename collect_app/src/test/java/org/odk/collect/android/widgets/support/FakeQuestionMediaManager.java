@@ -15,6 +15,11 @@ public class FakeQuestionMediaManager implements QuestionMediaManager {
     private final File tempDir = Files.createTempDir();
 
     @Override
+    public String createAnswerFile(File file) {
+        return null;
+    }
+
+    @Override
     public File getAnswerFile(String fileName) {
         return new File(tempDir, fileName);
     }

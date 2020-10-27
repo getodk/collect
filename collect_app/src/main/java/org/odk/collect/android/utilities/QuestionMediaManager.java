@@ -11,6 +11,8 @@ import java.io.File;
  */
 public interface QuestionMediaManager {
 
+    String createAnswerFile(File file);
+
     @Nullable
     File getAnswerFile(String fileName);
 

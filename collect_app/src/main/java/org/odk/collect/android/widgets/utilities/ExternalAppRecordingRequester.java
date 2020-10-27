@@ -57,4 +57,9 @@ public class ExternalAppRecordingRequester implements RecordingRequester {
     public void onIsRecordingChanged(Consumer<Boolean> isRecordingListener) {
 
     }
+
+    @Override
+    public void onRecordingAvailable(FormEntryPrompt prompt, Consumer<String> recordingAvailableListener) {
+
+    }
 }
