@@ -1505,7 +1505,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return;
             }
 
-            animateToNextView();
+            formIndexAnimationHandler.handle(getFormController().getFormIndex());
         } catch (JavaRosaException e) {
             Timber.d(e);
             createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
@@ -1602,7 +1602,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         }
 
                         formController.getAuditEventLogger().flush();    // Close events
-                        animateToPreviousView();
+                        formIndexAnimationHandler.handle(formController.getFormIndex());
                     }
                 } catch (JavaRosaException e) {
                     Timber.d(e);
