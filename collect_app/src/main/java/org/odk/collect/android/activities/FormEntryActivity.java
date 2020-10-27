@@ -294,6 +294,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private FormEntryMenuDelegate menuDelegate;
     private FormIndexAnimationHandler formIndexAnimationHandler;
     private WaitingForDataRegistry waitingForDataRegistry;
+    private AudioRecorderViewModel audioRecorderViewModel;
 
     @Override
     public void allowSwiping(boolean doSwipe) {
@@ -469,10 +470,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         formSaveViewModel.getSaveResult().observe(this, this::handleSaveResult);
 
-        AudioRecorderViewModel audioRecorderViewModel = new ViewModelProvider(
-                this,
-                audioRecorderViewModelFactory
-        ).get(AudioRecorderViewModel.class);
+        audioRecorderViewModel = new ViewModelProvider(this, audioRecorderViewModelFactory).get(AudioRecorderViewModel.class);
         findViewById(R.id.stop_recording).setOnClickListener(v -> audioRecorderViewModel.stop());
     }
 
@@ -1515,59 +1513,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-    @Override
-    public void animateToNextView() {
-        int event = getFormController().getEvent();
-
-        switch (event) {
-            case FormEntryController.EVENT_QUESTION:
-            case FormEntryController.EVENT_GROUP:
-                // create a savepoint
-                nonblockingCreateSavePointData();
-                showView(createView(event, true), AnimationType.RIGHT);
-                break;
-            case FormEntryController.EVENT_END_OF_FORM:
-            case FormEntryController.EVENT_REPEAT:
-            case EVENT_PROMPT_NEW_REPEAT:
-                showView(createView(event, true), AnimationType.RIGHT);
-                break;
-            case FormEntryController.EVENT_REPEAT_JUNCTURE:
-                Timber.i("Repeat juncture: %s", getFormController().getFormIndex().getReference());
-                // skip repeat junctures until we implement them
-                break;
-            default:
-                Timber.w("JavaRosa added a new EVENT type and didn't tell us... shame on them.");
-                break;
-        }
-
-        formIndexAnimationHandler.setLastIndex(getFormController().getFormIndex());
-    }
-
-    private boolean saveBeforeNextView(FormController formController) {
-        if (formController.currentPromptIsQuestion()) {
-            // get constraint behavior preference value with appropriate default
-            String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
-                    .get(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR);
-
-            // if constraint behavior says we should validate on swipe, do so
-            if (constraintBehavior.equals(GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
-                if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
-                    // A constraint was violated so a dialog should be showing.
-                    swipeHandler.setBeenSwiped(false);
-                    return true;
-                }
-
-                // otherwise, just save without validating (constraints will be validated on
-                // finalize)
-            } else {
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-            }
-        }
-
-        formController.getAuditEventLogger().flush();    // Close events waiting for an end time
-        return false;
-    }
-
     /**
      * If moving backwards is allowed, displays the view for the previous question or field list.
      * Steps the global {@link FormController} to the previous question and saves answers to the
@@ -1621,12 +1566,70 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     @Override
+    public void onScreenChange() {
+        audioRecorderViewModel.cancel();
+    }
+
+    @Override
+    public void animateToNextView() {
+        int event = getFormController().getEvent();
+
+        switch (event) {
+            case FormEntryController.EVENT_QUESTION:
+            case FormEntryController.EVENT_GROUP:
+                // create a savepoint
+                nonblockingCreateSavePointData();
+                showView(createView(event, true), AnimationType.RIGHT);
+                break;
+            case FormEntryController.EVENT_END_OF_FORM:
+            case FormEntryController.EVENT_REPEAT:
+            case EVENT_PROMPT_NEW_REPEAT:
+                showView(createView(event, true), AnimationType.RIGHT);
+                break;
+            case FormEntryController.EVENT_REPEAT_JUNCTURE:
+                Timber.i("Repeat juncture: %s", getFormController().getFormIndex().getReference());
+                // skip repeat junctures until we implement them
+                break;
+            default:
+                Timber.w("JavaRosa added a new EVENT type and didn't tell us... shame on them.");
+                break;
+        }
+
+        formIndexAnimationHandler.setLastIndex(getFormController().getFormIndex());
+    }
+
+    @Override
     public void animateToPreviousView() {
         int event = getFormController().getEvent();
         View next = createView(event, false);
         showView(next, AnimationType.LEFT);
 
         formIndexAnimationHandler.setLastIndex(getFormController().getFormIndex());
+    }
+
+    private boolean saveBeforeNextView(FormController formController) {
+        if (formController.currentPromptIsQuestion()) {
+            // get constraint behavior preference value with appropriate default
+            String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
+                    .get(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR);
+
+            // if constraint behavior says we should validate on swipe, do so
+            if (constraintBehavior.equals(GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
+                if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
+                    // A constraint was violated so a dialog should be showing.
+                    swipeHandler.setBeenSwiped(false);
+                    return true;
+                }
+
+                // otherwise, just save without validating (constraints will be validated on
+                // finalize)
+            } else {
+                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+            }
+        }
+
+        formController.getAuditEventLogger().flush();    // Close events waiting for an end time
+        return false;
     }
 
     /**

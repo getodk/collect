@@ -26,8 +26,10 @@ public class FormIndexAnimationHandler {
             listener.refreshCurrentView();
         } else {
             if (index.compareTo(lastIndex) > 0) {
+                listener.onScreenChange();
                 listener.animateToNextView();
             } else if (index.compareTo(lastIndex) < 0) {
+                listener.onScreenChange();
                 listener.animateToPreviousView();
             } else {
                 listener.refreshCurrentView();
@@ -46,6 +48,8 @@ public class FormIndexAnimationHandler {
     }
 
     public interface Listener {
+        void onScreenChange();
+
         void animateToPreviousView();
 
         void animateToNextView();

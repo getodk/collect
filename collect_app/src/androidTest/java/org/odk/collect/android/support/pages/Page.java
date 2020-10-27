@@ -231,7 +231,7 @@ abstract class Page<T extends Page<T>> {
     }
 
     public T assertEnabled(int string) {
-        onView(withText(string)).check(matches(isEnabled()));
+        onView(withText(string)).check(matches(allOf(isDisplayed(), isEnabled())));
         return (T) this;
     }
 

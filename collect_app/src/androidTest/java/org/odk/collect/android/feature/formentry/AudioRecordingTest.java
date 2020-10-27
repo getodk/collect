@@ -20,6 +20,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
+import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
@@ -28,6 +29,8 @@ import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
 import java.io.File;
 import java.io.IOException;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
 @RunWith(AndroidJUnit4.class)
@@ -72,10 +75,32 @@ public class AudioRecordingTest {
                 .assertContentDescriptionDisplayed(R.string.play_audio);
     }
 
+    @Test
+    public void whileRecording_swipingToADifferentScreen_cancelsRecording() {
+        final FormEndPage page = new MainMenuPage(rule).assertOnPage()
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .clickExperimental()
+                .clickExternalAppRecording()
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
+
+                .copyForm("audio-question.xml")
+                .startBlankForm("Audio Question")
+                .clickOnString(R.string.capture_audio)
+                .swipeToEndScreen();
+
+        assertThat(fakeAudioRecorderViewModel.wasCancelled, is(true));
+
+        page.swipeToPreviousQuestion("What does it sound like?")
+                .assertEnabled(R.string.capture_audio);
+    }
+
     private static class FakeAudioRecorderViewModel extends AudioRecorderViewModel {
 
         private final MutableLiveData<Boolean> isRecording = new MutableLiveData<>(false);
         private final MutableLiveData<File> file = new MutableLiveData<>(null);
+        private boolean wasCancelled;
 
         @NotNull
         @Override
@@ -91,6 +116,7 @@ public class AudioRecordingTest {
 
         @Override
         public void start(@NotNull String sessionId) {
+            wasCancelled = false;
             isRecording.setValue(true);
         }
 
@@ -111,6 +137,7 @@ public class AudioRecordingTest {
 
         @Override
         public void cancel() {
+            wasCancelled = true;
             isRecording.setValue(false);
         }
 
