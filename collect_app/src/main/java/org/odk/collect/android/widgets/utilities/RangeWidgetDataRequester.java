@@ -6,13 +6,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.slider.Slider;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.databinding.RangeWidgetHorizontalBinding;
 import org.odk.collect.android.databinding.RangeWidgetVerticalBinding;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
@@ -97,7 +98,7 @@ public class RangeWidgetDataRequester {
         return new RangeWidgetLayoutElements(answerView, slider, currentValue, minValue, maxValue);
     }
 
-    public static BigDecimal getActualValue(FormEntryPrompt prompt, Slider slider,BigDecimal rangeStart,
+    public static BigDecimal getActualValue(FormEntryPrompt prompt, Slider slider, BigDecimal rangeStart,
                                             BigDecimal rangeEnd, BigDecimal rangeStep, BigDecimal actualValue) {
 
         BigDecimal startValue =  rangeEnd.compareTo(rangeStart) < 0 ? rangeEnd : rangeStart;
@@ -143,7 +144,7 @@ public class RangeWidgetDataRequester {
         bundle.putSerializable(NumberPickerDialog.DISPLAYED_VALUES, displayedValuesForNumberPicker);
         bundle.putInt(NumberPickerDialog.PROGRESS, progress);
 
-        DialogUtils.showIfNotShowing(NumberPickerDialog.class, bundle, ((FormEntryActivity) context).getSupportFragmentManager());
+        DialogUtils.showIfNotShowing(NumberPickerDialog.class, bundle, ((AppCompatActivity) context).getSupportFragmentManager());
         waitingForDataRegistry.waitForData(formIndex);
     }
 

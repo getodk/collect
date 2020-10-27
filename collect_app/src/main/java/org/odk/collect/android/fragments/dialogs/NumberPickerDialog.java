@@ -32,7 +32,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.widgets.viewmodels.RangePickerViewModel;
 
 public class NumberPickerDialog extends DialogFragment {
-    public static final String NUMBER_PICKER_DIALOG_TAG = "numberPickerDialogTag";
     public static final String DISPLAYED_VALUES = "displayedValues";
     public static final String PROGRESS = "progress";
 
