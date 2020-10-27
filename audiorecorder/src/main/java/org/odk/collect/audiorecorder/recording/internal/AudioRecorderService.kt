@@ -29,16 +29,20 @@ class AudioRecorderService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
             ACTION_START -> {
-                setupNotificationChannel()
+                val sessionId = intent.getStringExtra(EXTRA_SESSION_ID)
 
-                val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
-                    .setContentTitle(getLocalizedString(R.string.recording))
-                    .setSmallIcon(R.drawable.ic_baseline_mic_24)
-                    .build()
+                if (!recorder.isRecording() && sessionId != null) {
+                    recordingSession.start(sessionId)
 
-                startForeground(NOTIFICATION_ID, notification)
+                    setupNotificationChannel()
 
-                if (!recorder.isRecording()) {
+                    val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
+                        .setContentTitle(getLocalizedString(R.string.recording))
+                        .setSmallIcon(R.drawable.ic_baseline_mic_24)
+                        .build()
+
+                    startForeground(NOTIFICATION_ID, notification)
+
                     recorder.start()
                 }
             }
@@ -84,15 +88,18 @@ class AudioRecorderService : Service() {
 
     private fun cancelRecording() {
         recorder.cancel()
+        recordingSession.end()
         stopSelf()
     }
 
     companion object {
-        const val NOTIFICATION_ID = 1
-        const val NOTIFICATION_CHANNEL = "recording_channel"
+        private const val NOTIFICATION_ID = 1
+        private const val NOTIFICATION_CHANNEL = "recording_channel"
 
         const val ACTION_START = "START"
         const val ACTION_STOP = "STOP"
         const val ACTION_CANCEL = "CANCEL"
+
+        const val EXTRA_SESSION_ID = "EXTRA_SESSION_ID"
     }
 }

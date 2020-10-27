@@ -35,6 +35,7 @@ import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
+import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.items.ItemsetWidget;
 import org.odk.collect.android.widgets.items.LabelWidget;
@@ -197,7 +198,7 @@ public class WidgetFactory {
                     ComponentActivity activity = (ComponentActivity) context;
                     AudioRecorderViewModelFactory factory = new AudioRecorderViewModelFactory(activity.getApplication());
                     AudioRecorderViewModel viewModel = new ViewModelProvider(activity, factory).get(AudioRecorderViewModel.class);
-                    recordingRequester = new InternalRecordingRequester(activity, viewModel, permissionUtils, waitingForDataRegistry);
+                    recordingRequester = new InternalRecordingRequester(activity, viewModel, permissionUtils, waitingForDataRegistry, ((ScreenContext) context).getViewLifecycle());
                 }
 
                 questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, recordingRequester, new GetContentAudioFileRequester((Activity) context, activityAvailability, waitingForDataRegistry));

@@ -12,6 +12,8 @@ import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.PermissionUtils;
 
+import java.util.function.Consumer;
+
 public class ExternalAppRecordingRequester implements RecordingRequester {
 
     private final Activity activity;
@@ -49,5 +51,10 @@ public class ExternalAppRecordingRequester implements RecordingRequester {
             public void denied() {
             }
         });
+    }
+
+    @Override
+    public void onIsRecordingChanged(Consumer<Boolean> isRecordingListener) {
+
     }
 }

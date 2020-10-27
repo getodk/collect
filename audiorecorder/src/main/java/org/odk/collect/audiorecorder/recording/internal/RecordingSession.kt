@@ -6,17 +6,23 @@ import java.io.File
 
 class RecordingSession {
 
-    private val _recording = MutableLiveData<File?>(null)
+    private val _state = MutableLiveData<Pair<String, File?>?>(null)
 
-    fun getRecording(): LiveData<File?> {
-        return _recording
+    fun get(): LiveData<Pair<String, File?>?> {
+        return _state
+    }
+
+    fun start(sessionId: String) {
+        _state.value = Pair(sessionId, null)
     }
 
     fun recordingReady(recording: File) {
-        _recording.value = recording
+        _state.value?.let {
+            _state.value = it.copy(second = recording)
+        }
     }
 
-    fun finish() {
-        _recording.value = null
+    fun end() {
+        _state.value = null
     }
 }

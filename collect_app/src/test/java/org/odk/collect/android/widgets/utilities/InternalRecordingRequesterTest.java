@@ -2,6 +2,7 @@ package org.odk.collect.android.widgets.utilities;
 
 import android.app.Activity;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.form.api.FormEntryPrompt;
@@ -11,11 +12,16 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
+import org.odk.collect.testshared.FakeLifecycleOwner;
 import org.robolectric.Robolectric;
 
+import java.util.function.Consumer;
+
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 
 @RunWith(AndroidJUnit4.class)
@@ -29,7 +35,7 @@ public class InternalRecordingRequesterTest {
     @Before
     public void setup() {
         Activity activity = Robolectric.buildActivity(Activity.class).get();
-        requester = new InternalRecordingRequester(activity, viewModel, permissionUtils, new FakeWaitingForDataRegistry());
+        requester = new InternalRecordingRequester(activity, viewModel, permissionUtils, new FakeWaitingForDataRegistry(), new FakeLifecycleOwner());
         permissionUtils.setPermissionGranted(true);
     }
 
@@ -38,7 +44,7 @@ public class InternalRecordingRequesterTest {
         FormEntryPrompt prompt = promptWithAnswer(null);
         requester.requestRecording(prompt);
 
-        verify(viewModel).start();
+        verify(viewModel).start(prompt.getIndex().toString());
     }
 
     @Test
@@ -48,6 +54,19 @@ public class InternalRecordingRequesterTest {
         FormEntryPrompt prompt = promptWithAnswer(null);
         requester.requestRecording(prompt);
 
-        verify(viewModel, never()).start();
+        verify(viewModel, never()).start(any());
+    }
+
+    @Test
+    public void onIsRecordingChanged_listensToIsRecording() {
+        MutableLiveData<Boolean> liveData = new MutableLiveData<>(false);
+        when(viewModel.isRecording()).thenReturn(liveData);
+
+        Consumer<Boolean> listener = mock(Consumer.class);
+        requester.onIsRecordingChanged(listener);
+        verify(listener).accept(false);
+
+        liveData.setValue(true);
+        verify(listener).accept(false);
     }
 }

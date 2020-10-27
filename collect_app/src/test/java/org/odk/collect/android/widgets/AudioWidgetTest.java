@@ -48,7 +48,7 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.prom
 public class AudioWidgetTest {
 
     private final FakeQuestionMediaManager questionMediaManager = new FakeQuestionMediaManager();
-    private final RecordingRequester recordingRequester = mock(RecordingRequester.class);
+    private final FakeRecordingRequester recordingRequester = new FakeRecordingRequester();
     private final AudioFileRequester audioFileRequester = mock(AudioFileRequester.class);
 
     private TestScreenContextActivity widgetActivity;
@@ -284,7 +284,21 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(prompt);
 
         widget.binding.captureButton.performClick();
-        verify(recordingRequester).requestRecording(prompt);
+        assertThat(recordingRequester.requestedRecordingFor, is(prompt));
+    }
+
+    @Test
+    public void whenRecordingRequesterStopsRecording_enablesButtons() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        AudioWidget widget = createWidget(prompt);
+
+        recordingRequester.startRecording();
+        assertThat(widget.binding.captureButton.isEnabled(), is(false));
+        assertThat(widget.binding.chooseButton.isEnabled(), is(false));
+
+        recordingRequester.stopRecording();
+        assertThat(widget.binding.captureButton.isEnabled(), is(true));
+        assertThat(widget.binding.chooseButton.isEnabled(), is(true));
     }
 
     @Test
@@ -479,6 +493,30 @@ public class AudioWidgetTest {
 
         public Integer getPosition(String clipId) {
             return positions.get(clipId);
+        }
+    }
+
+    private class FakeRecordingRequester implements RecordingRequester {
+
+        FormEntryPrompt requestedRecordingFor;
+        private Consumer<Boolean> isRecordingListener;
+
+        @Override
+        public void requestRecording(FormEntryPrompt prompt) {
+            requestedRecordingFor = prompt;
+        }
+
+        @Override
+        public void onIsRecordingChanged(Consumer<Boolean> isRecordingListener) {
+            this.isRecordingListener = isRecordingListener;
+        }
+
+        public void startRecording() {
+            isRecordingListener.accept(true);
+        }
+
+        public void stopRecording() {
+            isRecordingListener.accept(false);
         }
     }
 }

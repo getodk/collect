@@ -3,19 +3,30 @@ package org.odk.collect.audiorecorder.recording.internal
 import android.app.Application
 import android.content.Intent
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations.map
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_CANCEL
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_START
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_STOP
+import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.EXTRA_SESSION_ID
 import java.io.File
 
 internal class RealAudioRecorderViewModel internal constructor(private val application: Application, private val recordingSession: RecordingSession) : AudioRecorderViewModel() {
 
-    override val recording: LiveData<File?> = recordingSession.getRecording()
+    override val recording: LiveData<File?> = map(recordingSession.get()) { it?.second }
 
-    override fun start() {
+    private val _isRecording: LiveData<Boolean> = map(recordingSession.get()) { it != null }
+
+    override fun isRecording(): LiveData<Boolean> {
+        return _isRecording
+    }
+
+    override fun start(sessionId: String) {
         application.startService(
-            Intent(application, AudioRecorderService::class.java).apply { action = ACTION_START }
+            Intent(application, AudioRecorderService::class.java).apply {
+                action = ACTION_START
+                putExtra(EXTRA_SESSION_ID, sessionId)
+            }
         )
     }
 
@@ -32,6 +43,6 @@ internal class RealAudioRecorderViewModel internal constructor(private val appli
     }
 
     override fun endSession() {
-        recordingSession.finish()
+        recordingSession.end()
     }
 }

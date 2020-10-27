@@ -2,10 +2,14 @@ package org.odk.collect.android.widgets.utilities;
 
 import android.app.Activity;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
+
+import java.util.function.Consumer;
 
 public class InternalRecordingRequester implements RecordingRequester {
 
@@ -13,12 +17,14 @@ public class InternalRecordingRequester implements RecordingRequester {
     private final AudioRecorderViewModel viewModel;
     private final PermissionUtils permissionUtils;
     private final WaitingForDataRegistry waitingForDataRegistry;
+    private final LifecycleOwner lifecycleOwner;
 
-    public InternalRecordingRequester(Activity activity, AudioRecorderViewModel viewModel, PermissionUtils permissionUtils, WaitingForDataRegistry waitingForDataRegistry) {
+    public InternalRecordingRequester(Activity activity, AudioRecorderViewModel viewModel, PermissionUtils permissionUtils, WaitingForDataRegistry waitingForDataRegistry, LifecycleOwner lifecycleOwner) {
         this.activity = activity;
         this.viewModel = viewModel;
         this.permissionUtils = permissionUtils;
         this.waitingForDataRegistry = waitingForDataRegistry;
+        this.lifecycleOwner = lifecycleOwner;
     }
 
     @Override
@@ -27,7 +33,7 @@ public class InternalRecordingRequester implements RecordingRequester {
             @Override
             public void granted() {
                 waitingForDataRegistry.waitForData(prompt.getIndex());
-                viewModel.start();
+                viewModel.start(prompt.getIndex().toString());
             }
 
             @Override
@@ -35,5 +41,10 @@ public class InternalRecordingRequester implements RecordingRequester {
 
             }
         });
+    }
+
+    @Override
+    public void onIsRecordingChanged(Consumer<Boolean> isRecordingListener) {
+        viewModel.isRecording().observe(lifecycleOwner, isRecordingListener::accept);
     }
 }
