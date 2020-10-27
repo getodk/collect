@@ -17,7 +17,36 @@ the License.
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/app_bar_layout" />
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/toolbar"
+            style="@style/Widget.Collect.Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="0dp"
+            app:navigationIcon="@drawable/notes" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/audio_recording_controller"
+            android:name="org.odk.collect.android.audio.AudioRecordingControllerFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <org.odk.collect.android.views.ObviousProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/appBarLayout"
+        android:layout_marginTop="-7dp"
+        android:indeterminate="true"
+        android:visibility="gone" />
 
     <FrameLayout
         android:id="@+id/questionholder"
@@ -81,14 +110,4 @@ the License.
             android:textStyle="bold"
             android:visibility="gone" />
     </LinearLayout>
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/stop_recording"
-        style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/stop_recording" />
 </RelativeLayout>

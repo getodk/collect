@@ -90,7 +90,8 @@ public class AudioRecordingTest {
                 .copyForm("audio-question.xml")
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
-                .swipeToEndScreen();
+                .swipeToEndScreen()
+                .assertTextNotDisplayed(R.string.stop_recording);
 
         assertThat(fakeAudioRecorderViewModel.wasCancelled, is(true));
 

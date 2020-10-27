@@ -703,7 +703,7 @@
     <string name="failure">Failure</string>
     <string name="form_update_succeeded">Form update succeeded</string>
     <string name="external_app_recording">Use external app for audio recording</string>
-    <string name="stop_recording">Stop recording</string>
+    <string name="stop_recording">Stop</string>
     <string name="recording">Recording…</string>
     <string name="recording_channel">Audio recording</string>
 </resources>
