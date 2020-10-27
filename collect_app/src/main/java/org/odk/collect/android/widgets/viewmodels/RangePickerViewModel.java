@@ -19,7 +19,7 @@ public class RangePickerViewModel extends ViewModel {
     }
 
     public String[] getDisplayedValuesForNumberPicker() {
-        return displayedValuesForNumberPicker;
+        return displayedValuesForNumberPicker.clone();
     }
 
     public void setDisplayedValuesForNumberPicker(String[] displayedValuesForNumberPicker) {

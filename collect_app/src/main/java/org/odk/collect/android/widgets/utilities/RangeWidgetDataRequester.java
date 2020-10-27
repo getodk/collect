@@ -6,14 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.slider.Slider;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.databinding.RangeWidgetHorizontalBinding;
 import org.odk.collect.android.databinding.RangeWidgetVerticalBinding;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
@@ -144,7 +143,7 @@ public class RangeWidgetDataRequester {
         bundle.putSerializable(NumberPickerDialog.DISPLAYED_VALUES, displayedValuesForNumberPicker);
         bundle.putInt(NumberPickerDialog.PROGRESS, progress);
 
-        DialogUtils.showIfNotShowing(NumberPickerDialog.class, bundle, ((AppCompatActivity) context).getSupportFragmentManager());
+        DialogUtils.showIfNotShowing(NumberPickerDialog.class, bundle, ((FormEntryActivity) context).getSupportFragmentManager());
         waitingForDataRegistry.waitForData(formIndex);
     }
 
@@ -169,10 +168,14 @@ public class RangeWidgetDataRequester {
 
         boolean result = true;
         if (rangeStep.compareTo(BigDecimal.ZERO) == 0
-                || rangeEnd.subtract(rangeStart).remainder(rangeStep).compareTo(BigDecimal.ZERO) != 0) {
+                || rangeEnd.subtract(rangeStart).abs().remainder(rangeStep).compareTo(BigDecimal.ZERO) != 0) {
             ToastUtils.showLongToast(R.string.invalid_range_widget);
             result = false;
         }
         return result;
+    }
+
+    public static Boolean hasNoTicksAppearance(String appearance) {
+        return appearance != null && appearance.contains(NO_TICKS_APPEARANCE);
     }
 }

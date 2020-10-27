@@ -26,6 +26,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.utilities.WidgetAppearanceUtils.NO_TICKS_APPEARANCE;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithQuestionDefAndAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndQuestionDef;
@@ -33,19 +34,15 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 
 @RunWith(RobolectricTestRunner.class)
 public class RangeIntegerWidgetTest {
-    private static final String NO_TICKS_APPEARANCE = "no-ticks";
-
-    private RangeQuestion rangeQuestion;
-    private MotionEvent motionEvent;
+    private final RangeQuestion rangeQuestion = mock(RangeQuestion.class);
+    private final MotionEvent motionEvent = MotionEventBuilder.newBuilder().build();
 
     @Before
     public void setup() {
-        rangeQuestion = mock(RangeQuestion.class);
         when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.ONE);
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.TEN);
         when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ONE);
 
-        motionEvent = MotionEventBuilder.newBuilder().build();
         motionEvent.setAction(MotionEvent.ACTION_DOWN);
         motionEvent.setLocation(50, 0);
     }
@@ -59,6 +56,23 @@ public class RangeIntegerWidgetTest {
     public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
         assertEquals(widget.getAnswer().getValue(), 4);
+    }
+
+    @Test
+    public void whenWidgetIsReadOnly_sliderIsDisabled() {
+        assertThat(createWidget(promptWithReadOnlyAndQuestionDef(rangeQuestion)).slider.isEnabled(), equalTo(false));
+    }
+
+    @Test
+    public void whenWidgetIsInvalid_sliderIsDisabled() {
+        when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.valueOf(3));
+        assertThat(createWidget(promptWithReadOnlyAndQuestionDef(rangeQuestion)).slider.isEnabled(), equalTo(false));
+    }
+
+    @Test
+    public void whenRangeStepIsZero_sliderIsDisabled() {
+        when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ZERO);
+        assertThat(createWidget(promptWithReadOnlyAndQuestionDef(rangeQuestion)).slider.isEnabled(), equalTo(false));
     }
 
     @Test
@@ -76,6 +90,16 @@ public class RangeIntegerWidgetTest {
     }
 
     @Test
+    public void whenPromptHasAnswer_sliderShowsCorrectAnswer_whenStartIsGreaterThanEnd() {
+        when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.TEN);
+        when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.ONE);
+
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
+        assertThat(widget.slider.getValue(), equalTo(7.0F));
+        assertThat(widget.slider.getThumbRadius(), not(0));
+    }
+
+    @Test
     public void whenPromptDoesNotHaveAnswer_widgetShowsNullAnswer() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         assertThat(widget.currentValue.getText(), equalTo(""));
@@ -88,7 +112,14 @@ public class RangeIntegerWidgetTest {
     }
 
     @Test
-    public void whenSliderIsDiscrete_widgetShowsCorrectSliderValues() {
+    public void widgetDisplaysCorrectStartAndEndValues() {
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        assertThat(widget.minValue.getText(), equalTo("1"));
+        assertThat(widget.maxValue.getText(), equalTo("10"));
+    }
+
+    @Test
+    public void whenSliderIsDiscrete_widgetSetsUpSliderCorrectly() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
 
         assertThat(widget.slider.getValueFrom(), equalTo(1.0F));
@@ -98,7 +129,7 @@ public class RangeIntegerWidgetTest {
     }
 
     @Test
-    public void whenSliderIsContinuous_widgetShowsCorrectSliderValues() {
+    public void whenSliderIsContinuous_widgetSetsUpSliderCorrectly() {
         when(rangeQuestion.getAppearanceAttr()).thenReturn(NO_TICKS_APPEARANCE);
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
 
@@ -127,8 +158,24 @@ public class RangeIntegerWidgetTest {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.clearAnswer();
-
         verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void changingSliderValue_whenStartIsSmallerThanEnd_updatesWidgetAnswer() {
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        widget.slider.onTouchEvent(motionEvent);
+        assertThat(widget.getAnswer().getDisplayText(), equalTo("10"));
+    }
+
+    @Test
+    public void changingSliderValue_whenStartIsGreaterThanEnd_updatesWidgetAnswer() {
+        when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.TEN);
+        when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.ONE);
+
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        widget.slider.onTouchEvent(motionEvent);
+        assertThat(widget.getAnswer().getDisplayText(), equalTo("1"));
     }
 
     @Test
@@ -139,32 +186,22 @@ public class RangeIntegerWidgetTest {
     }
 
     @Test
-    public void changingSliderValue_whenRangeStartIsSmallerThanRangeEnd_updatesAnswer() {
+    public void changingSliderValue_whenStartIsSmallerThanEnd_updatesDisplayedAnswer() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         widget.slider.onTouchEvent(motionEvent);
+        assertThat(widget.slider.getValue(), equalTo(10.0F));
         assertThat(widget.currentValue.getText(), equalTo("10"));
     }
 
     @Test
-    public void changingSliderValue_whenRangeStartIsGreaterThanRangeEnd_updatesAnswer() {
+    public void changingSliderValue_whenStartIsGreaterThanEnd_updatesDisplayedAnswer() {
         when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.TEN);
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.ONE);
 
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         widget.slider.onTouchEvent(motionEvent);
-
+        assertThat(widget.slider.getValue(), equalTo(10.0F));
         assertThat(widget.currentValue.getText(), equalTo("1"));
-    }
-
-    @Test
-    public void changingSliderValueProgrammatically_whenRangeStartIsGreaterThanRangeEnd_updatesAnswer() {
-        when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.TEN);
-        when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.ONE);
-        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.slider.setValue(4.0F);
-
-        assertThat(widget.getAnswer().getValue(), equalTo(7));
-        assertThat(widget.currentValue.getText(), equalTo("7"));
     }
 
     @Test
@@ -172,34 +209,15 @@ public class RangeIntegerWidgetTest {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.slider.onTouchEvent(motionEvent);
-
         verify(valueChangedListener).widgetValueChanged(widget);
-    }
-
-    @Test
-    public void changingSliderValueProgrammatically_doesNotUpdateAnswer() {
-        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.slider.setValue(4);
-        assertThat(widget.currentValue.getText(), equalTo(""));
-    }
-
-    @Test
-    public void changingSliderValueProgrammatically_doesNotCallValueChangeListener() {
-        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.slider.setValue(4);
-
-        verify(valueChangedListener, never()).widgetValueChanged(widget);
     }
 
     @Test
     public void clickingSliderForLong_doesNotCallLongClickListener() {
         View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
-
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         widget.setOnLongClickListener(listener);
         widget.slider.performLongClick();
-
         verify(listener, never()).onLongClick(widget.slider);
     }
 

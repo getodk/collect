@@ -17,12 +17,14 @@ import org.robolectric.RobolectricTestRunner;
 import java.math.BigDecimal;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithQuestionDefAndAnswer;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndQuestionDef;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 
 @RunWith(RobolectricTestRunner.class)
@@ -36,6 +38,24 @@ public class RangePickerDecimalWidgetTest {
         when(rangeQuestion.getRangeStart()).thenReturn(new BigDecimal("1.5"));
         when(rangeQuestion.getRangeEnd()).thenReturn(new BigDecimal("5.5"));
         when(rangeQuestion.getRangeStep()).thenReturn(new BigDecimal("0.5"));
+    }
+
+    @Test
+    public void whenWidgetIsReadOnly_widgetButtonIsNotDisplayed() {
+        assertEquals(createWidget(promptWithReadOnlyAndQuestionDef(rangeQuestion)).binding
+                .widgetButton.getVisibility(), View.GONE);
+    }
+
+    @Test
+    public void whenWidgetIsInvalid_widgetButtonIsDisabled() {
+        when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.valueOf(3));
+        assertFalse(createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null)).binding.widgetButton.isEnabled());
+    }
+
+    @Test
+    public void whenRangeStepIsZero_widgetButtonIsDisabled() {
+        when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ZERO);
+        assertFalse(createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null)).binding.widgetButton.isEnabled());
     }
 
     @Test
@@ -67,6 +87,13 @@ public class RangePickerDecimalWidgetTest {
     public void clearAnswer_clearsWidgetAnswer() {
         RangePickerDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
         widget.clearAnswer();
+        assertNull(widget.getAnswer());
+    }
+
+    @Test
+    public void clearAnswer_clearsWidgetDisplayedAnswer() {
+        RangePickerDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
+        widget.clearAnswer();
         assertEquals(widget.binding.widgetAnswerText.getText(), widget.getContext().getString(R.string.no_value_selected));
         assertEquals(widget.binding.widgetButton.getText(), widget.getContext().getString(R.string.select_value));
     }
@@ -77,18 +104,6 @@ public class RangePickerDecimalWidgetTest {
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.clearAnswer();
         verify(valueChangedListener).widgetValueChanged(widget);
-    }
-
-    @Test
-    public void clickingWidgetForLong_callsLongClickListener() {
-        View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
-        RangePickerDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.setOnLongClickListener(listener);
-        widget.binding.widgetButton.performLongClick();
-        widget.binding.widgetAnswerText.performLongClick();
-
-        verify(listener).onLongClick(widget.binding.widgetButton);
-        verify(listener).onLongClick(widget.binding.widgetAnswerText);
     }
 
     @Test
@@ -112,6 +127,18 @@ public class RangePickerDecimalWidgetTest {
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.setData(4);
         verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void clickingWidgetForLong_callsLongClickListener() {
+        View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
+        RangePickerDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        widget.setOnLongClickListener(listener);
+        widget.binding.widgetButton.performLongClick();
+        widget.binding.widgetAnswerText.performLongClick();
+
+        verify(listener).onLongClick(widget.binding.widgetButton);
+        verify(listener).onLongClick(widget.binding.widgetAnswerText);
     }
 
     private RangePickerDecimalWidget createWidget(FormEntryPrompt prompt) {

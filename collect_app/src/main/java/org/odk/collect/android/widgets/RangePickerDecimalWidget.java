@@ -44,13 +44,12 @@ public class RangePickerDecimalWidget extends QuestionWidget implements WidgetDa
         binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        setUpWidgetParameters((RangeQuestion) prompt.getQuestion());
-
         if (prompt.isReadOnly()) {
             binding.widgetButton.setVisibility(View.GONE);
         } else if (!RangeWidgetDataRequester.isWidgetValid((RangeQuestion) prompt.getQuestion())) {
             binding.widgetButton.setEnabled(false);
         } else {
+            setUpWidgetParameters((RangeQuestion) prompt.getQuestion());
             binding.widgetButton.setOnClickListener(v -> {
                 RangeWidgetDataRequester.requestRangePickerValue(context, waitingForDataRegistry, prompt.getIndex(),
                         displayedValuesForNumberPicker, progress);
@@ -90,6 +89,7 @@ public class RangePickerDecimalWidget extends QuestionWidget implements WidgetDa
 
             binding.widgetAnswerText.setText(String.valueOf(actualValue));
             binding.widgetButton.setText(R.string.edit_value);
+            widgetValueChanged();
         }
     }
 
@@ -102,7 +102,7 @@ public class RangePickerDecimalWidget extends QuestionWidget implements WidgetDa
     }
 
     private void setUpWidgetAnswer(Context context, FormEntryPrompt prompt) {
-        if (prompt.getAnswerText() != null || !prompt.getAnswerText().isEmpty()) {
+        if (prompt.getAnswerText() != null) {
             BigDecimal actualValue = new BigDecimal(prompt.getAnswerText());
             progress = actualValue.subtract(rangeStart.abs().divide(
                     rangeStep == null ? BigDecimal.ONE : rangeStep)).intValue();

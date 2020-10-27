@@ -18,12 +18,14 @@ import org.robolectric.RobolectricTestRunner;
 import java.math.BigDecimal;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithQuestionDefAndAnswer;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndQuestionDef;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 
 @RunWith(RobolectricTestRunner.class)
@@ -37,6 +39,24 @@ public class RangePickerIntegerWidgetTest {
         when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.ONE);
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.TEN);
         when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ONE);
+    }
+
+    @Test
+    public void whenWidgetIsReadOnly_widgetButtonIsNotDisplayed() {
+        assertEquals(createWidget(promptWithReadOnlyAndQuestionDef(rangeQuestion)).binding
+                .widgetButton.getVisibility(), View.GONE);
+    }
+
+    @Test
+    public void whenWidgetIsInvalid_widgetButtonIsDisabled() {
+        when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.valueOf(4));
+        assertFalse(createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null)).binding.widgetButton.isEnabled());
+    }
+
+    @Test
+    public void whenRangeStepIsZero_widgetButtonIsDisabled() {
+        when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ZERO);
+        assertFalse(createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null)).binding.widgetButton.isEnabled());
     }
 
     @Test
@@ -55,7 +75,6 @@ public class RangePickerIntegerWidgetTest {
     public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
         RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
         assertEquals(widget.getAnswer().getValue(), 4);
-        assertEquals(widget.binding.widgetButton.getText(), widget.getContext().getString(R.string.edit_value));
     }
 
     @Test
@@ -69,6 +88,13 @@ public class RangePickerIntegerWidgetTest {
     public void clearAnswer_clearsWidgetAnswer() {
         RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
         widget.clearAnswer();
+        assertNull(widget.getAnswer());
+    }
+
+    @Test
+    public void clearAnswer_clearsWidgetDisplayedAnswer() {
+        RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
+        widget.clearAnswer();
         assertEquals(widget.binding.widgetAnswerText.getText(), widget.getContext().getString(R.string.no_value_selected));
         assertEquals(widget.binding.widgetButton.getText(), widget.getContext().getString(R.string.select_value));
     }
@@ -79,18 +105,6 @@ public class RangePickerIntegerWidgetTest {
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.clearAnswer();
         verify(valueChangedListener).widgetValueChanged(widget);
-    }
-
-    @Test
-    public void clickingWidgetForLong_callsLongClickListener() {
-        View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
-        RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.setOnLongClickListener(listener);
-        widget.binding.widgetButton.performLongClick();
-        widget.binding.widgetAnswerText.performLongClick();
-
-        verify(listener).onLongClick(widget.binding.widgetButton);
-        verify(listener).onLongClick(widget.binding.widgetAnswerText);
     }
 
     @Test
@@ -114,6 +128,18 @@ public class RangePickerIntegerWidgetTest {
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.setData(5);
         verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void clickingWidgetForLong_callsLongClickListener() {
+        View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
+        RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        widget.setOnLongClickListener(listener);
+        widget.binding.widgetButton.performLongClick();
+        widget.binding.widgetAnswerText.performLongClick();
+
+        verify(listener).onLongClick(widget.binding.widgetButton);
+        verify(listener).onLongClick(widget.binding.widgetAnswerText);
     }
 
     private RangePickerIntegerWidget createWidget(FormEntryPrompt prompt) {

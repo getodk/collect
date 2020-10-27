@@ -31,13 +31,10 @@ import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.views.TrackingTouchSlider;
 import org.odk.collect.android.widgets.utilities.RangeWidgetDataRequester;
 
 import java.math.BigDecimal;
-
-import static org.odk.collect.android.utilities.WidgetAppearanceUtils.NO_TICKS_APPEARANCE;
 
 @SuppressLint("ViewConstructor")
 public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChangeListener {
@@ -64,7 +61,9 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
         minValue = layoutElements.getMinValue();
         maxValue = layoutElements.getMaxValue();
 
-        setUpWidgetParameters((RangeQuestion) prompt.getQuestion());
+        RangeQuestion rangeQuestion = (RangeQuestion) prompt.getQuestion();
+
+        setUpWidgetParameters(rangeQuestion);
         minValue.setText(String.valueOf(rangeStart));
         maxValue.setText(String.valueOf(rangeEnd));
 
@@ -75,10 +74,10 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
             actualValue = new BigDecimal(prompt.getAnswerText());
         }
 
-        if (prompt.isReadOnly() || !RangeWidgetDataRequester.isWidgetValid((RangeQuestion) prompt.getQuestion())) {
+        if (prompt.isReadOnly() || !RangeWidgetDataRequester.isWidgetValid(rangeQuestion)) {
             slider.setEnabled(false);
         } else  {
-            setUpSlider(prompt, actualValue);
+            setUpSlider(rangeQuestion.getAppearanceAttr(), actualValue);
             slider.addOnChangeListener(this);
         }
         setUpActualValueLabel(actualValue);
@@ -135,7 +134,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
         }
     }
 
-    private void setUpSlider(FormEntryPrompt prompt, BigDecimal actualValue) {
+    private void setUpSlider(String appearance, BigDecimal actualValue) {
         if (rangeEnd.compareTo(rangeStart) > -1) {
             slider.setValueFrom(rangeStart.floatValue());
             slider.setValueTo(rangeEnd.floatValue());
@@ -143,7 +142,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
             slider.setValueFrom(rangeEnd.floatValue());
             slider.setValueTo(rangeStart.floatValue());
         }
-        if (WidgetAppearanceUtils.hasAppearance(prompt, NO_TICKS_APPEARANCE)) {
+        if (!RangeWidgetDataRequester.hasNoTicksAppearance(appearance)) {
             slider.setStepSize(rangeStep.floatValue());
         }
 
