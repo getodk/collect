@@ -69,8 +69,10 @@ public class AudioRecordingTest {
 
                 .copyForm("audio-question.xml")
                 .startBlankForm("Audio Question")
+                .assertTextNotDisplayed(R.string.stop_recording)
                 .clickOnString(R.string.capture_audio)
                 .clickOnString(R.string.stop_recording)
+                .assertTextNotDisplayed(R.string.stop_recording)
                 .assertTextNotDisplayed(R.string.capture_audio)
                 .assertContentDescriptionDisplayed(R.string.play_audio);
     }

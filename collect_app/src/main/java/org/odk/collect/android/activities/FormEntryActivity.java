@@ -472,6 +472,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         audioRecorderViewModel = new ViewModelProvider(this, audioRecorderViewModelFactory).get(AudioRecorderViewModel.class);
         findViewById(R.id.stop_recording).setOnClickListener(v -> audioRecorderViewModel.stop());
+        audioRecorderViewModel.isRecording().observe(this, recording -> {
+            findViewById(R.id.stop_recording).setVisibility(recording ? View.VISIBLE : View.GONE);
+        });
     }
 
     private void formControllerAvailable(@NonNull FormController formController) {
