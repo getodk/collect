@@ -490,6 +490,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 inputStream.close();
                 outputStream.close();
 
+                audioRecorderViewModel.endSession();
+
                 setBinaryWidgetData(newFile.getName());
 //                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
             } catch (IOException ignored) {
