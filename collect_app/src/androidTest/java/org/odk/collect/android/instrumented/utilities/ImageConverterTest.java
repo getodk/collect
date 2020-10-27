@@ -385,7 +385,7 @@ public class ImageConverterTest {
 
     @Test
     public void keepExifTest1AfterScaleAndRotation() {
-        String[] attributes = new String[] {
+        String[] attributes = {
                 ExifInterface.TAG_APERTURE_VALUE,
                 ExifInterface.TAG_ARTIST,
                 ExifInterface.TAG_BITS_PER_SAMPLE,
@@ -412,7 +412,7 @@ public class ImageConverterTest {
                 ExifInterface.TAG_WHITE_BALANCE
         };
 
-        String[] imageSizes = new String[] {"original_image_size", "large", "medium", "small", "very_small"};
+        String[] imageSizes = {"original_image_size", "large", "medium", "small", "very_small"};
 
         for (int i = 0; i < attributes.length; i++) {
             String testExifTag = attributes[i];
