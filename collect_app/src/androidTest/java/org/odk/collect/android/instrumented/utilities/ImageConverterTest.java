@@ -48,6 +48,7 @@ import java.util.List;
 import timber.log.Timber;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.XML_OPENROSA_NAMESPACE;
@@ -382,6 +383,51 @@ public class ImageConverterTest {
         assertEquals(1250, image.getHeight());
     }
 
+    @Test
+    public void keepExifTest1AfterScaleAndRotation() {
+        String[] attributes = new String[] {
+                ExifInterface.TAG_APERTURE_VALUE,
+                ExifInterface.TAG_ARTIST,
+                ExifInterface.TAG_BITS_PER_SAMPLE,
+                ExifInterface.TAG_DATETIME,
+                ExifInterface.TAG_DATETIME_ORIGINAL,
+                ExifInterface.TAG_DATETIME_DIGITIZED,
+                ExifInterface.TAG_EXPOSURE_TIME,
+                ExifInterface.TAG_FLASH,
+                ExifInterface.TAG_FOCAL_LENGTH,
+                ExifInterface.TAG_GPS_ALTITUDE,
+                ExifInterface.TAG_GPS_ALTITUDE_REF,
+                ExifInterface.TAG_GPS_DATESTAMP,
+                ExifInterface.TAG_GPS_LATITUDE,
+                ExifInterface.TAG_GPS_LATITUDE_REF,
+                ExifInterface.TAG_GPS_LONGITUDE,
+                ExifInterface.TAG_GPS_LONGITUDE_REF,
+                ExifInterface.TAG_GPS_PROCESSING_METHOD,
+                ExifInterface.TAG_GPS_TIMESTAMP,
+                ExifInterface.TAG_MAKE,
+                ExifInterface.TAG_MODEL,
+                ExifInterface.TAG_SUBSEC_TIME,
+                ExifInterface.TAG_PIXEL_X_DIMENSION,
+                ExifInterface.TAG_PIXEL_Y_DIMENSION,
+                ExifInterface.TAG_WHITE_BALANCE
+        };
+
+        String[] imageSizes = new String[] {"original_image_size", "large", "medium", "small", "very_small"};
+
+        for (int i = 0; i < attributes.length; i++) {
+            String testExifTag = attributes[i];
+            String expectdExifValue = testExifTag + "_value";
+            for (int j = 0; j < imageSizes.length; j++) {
+                GeneralSharedPreferences.getInstance().save("image_size", imageSizes[j]);
+                saveTestBitmapExif(3000, 4000, ExifInterface.ORIENTATION_ROTATE_90, testExifTag, expectdExifValue);
+                ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(), Collect.getInstance());
+                ExifInterface result = getTestImageExif();
+                assertNotNull(result);
+                assertEquals(expectdExifValue, result.getAttribute(testExifTag));
+            }
+        }
+    }
+
     private void saveTestBitmap(int width, int height, Integer orientation) {
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
         FileUtils.saveBitmapToFile(bitmap, TEST_IMAGE_PATH);
@@ -395,6 +441,34 @@ public class ImageConverterTest {
                 Timber.w(e);
             }
         }
+    }
+
+    private void saveTestBitmapExif(int width, int height, Integer orientation, String exifTag, String tagValue) {
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        FileUtils.saveBitmapToFile(bitmap, TEST_IMAGE_PATH);
+
+        if (exifTag != null && tagValue != null) {
+            try {
+                ExifInterface exifInterface = new ExifInterface(TEST_IMAGE_PATH);
+                exifInterface.setAttribute(exifTag, tagValue);
+                if (orientation != null) {
+                    exifInterface.setAttribute(ExifInterface.TAG_ORIENTATION, String.valueOf(orientation));
+                }
+                exifInterface.saveAttributes();
+            } catch (IOException e) {
+                Timber.w(e);
+            }
+        }
+    }
+
+    private ExifInterface getTestImageExif() {
+        try {
+            return new ExifInterface(TEST_IMAGE_PATH);
+        } catch (Exception e) {
+            Timber.w(e);
+        }
+
+        return null;
     }
 
     private ImageWidget getTestImageWidget() {
