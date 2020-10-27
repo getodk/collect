@@ -329,6 +329,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Inject
     Scheduler scheduler;
 
+    @Inject
+    AudioRecorderViewModelFactory audioRecorderViewModelFactory;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -468,7 +471,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         AudioRecorderViewModel audioRecorderViewModel = new ViewModelProvider(
                 this,
-                new AudioRecorderViewModelFactory(getApplication())
+                audioRecorderViewModelFactory
         ).get(AudioRecorderViewModel.class);
         findViewById(R.id.stop_recording).setOnClickListener(v -> audioRecorderViewModel.stop());
     }

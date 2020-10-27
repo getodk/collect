@@ -1,13 +1,17 @@
 package org.odk.collect.android.feature.formentry;
 
 import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
+import android.app.Application;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -18,18 +22,26 @@ import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.android.utilities.ActivityAvailability;
+import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
+import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
+
+import java.io.File;
+import java.io.IOException;
+
+import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
 @RunWith(AndroidJUnit4.class)
 public class AudioRecordingTest {
 
+    private final FakeAudioRecorderViewModel fakeAudioRecorderViewModel = new FakeAudioRecorderViewModel();
+
     public final TestDependencies testDependencies = new TestDependencies() {
         @Override
-        public ActivityAvailability providesActivityAvailability(Context context) {
-            return new ActivityAvailability(context) {
+        public AudioRecorderViewModelFactory providesAudioRecorderViewModelFactory(Application application) {
+            return new AudioRecorderViewModelFactory(application) {
                 @Override
-                public boolean isActivityAvailable(Intent intent) {
-                    return true;
+                public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                    return (T) fakeAudioRecorderViewModel;
                 }
             };
         }
@@ -58,5 +70,53 @@ public class AudioRecordingTest {
                 .clickOnString(R.string.stop_recording)
                 .assertTextNotDisplayed(R.string.capture_audio)
                 .assertContentDescriptionDisplayed(R.string.play_audio);
+    }
+
+    private static class FakeAudioRecorderViewModel extends AudioRecorderViewModel {
+
+        private final MutableLiveData<Boolean> isRecording = new MutableLiveData<>(false);
+        private final MutableLiveData<File> file = new MutableLiveData<>(null);
+
+        @NotNull
+        @Override
+        public LiveData<Boolean> isRecording() {
+            return isRecording;
+        }
+
+        @NotNull
+        @Override
+        public LiveData<File> getRecording(@NotNull String sessionId) {
+            return file;
+        }
+
+        @Override
+        public void start(@NotNull String sessionId) {
+            isRecording.setValue(true);
+        }
+
+        @Override
+        public void stop() {
+            this.isRecording.setValue(false);
+
+            try {
+                File tempFile = File.createTempFile("temp", ".m4a");
+                tempFile.deleteOnExit();
+                copyFileFromAssets("media/test.m4a", tempFile.getAbsolutePath());
+
+                this.file.setValue(tempFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public void cancel() {
+            isRecording.setValue(false);
+        }
+
+        @Override
+        public void endSession() {
+            this.file.setValue(null);
+        }
     }
 }

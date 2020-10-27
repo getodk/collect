@@ -92,7 +92,8 @@ public class WidgetFactory {
                                                         QuestionMediaManager questionMediaManager,
                                                         Analytics analytics,
                                                         AudioPlayer audioPlayer,
-                                                        SharedPreferences generalSharedPreferences) {
+                                                        SharedPreferences generalSharedPreferences,
+                                                        AudioRecorderViewModelFactory audioRecorderViewModelFactory) {
 
         String appearance = WidgetAppearanceUtils.getSanitizedAppearanceHint(prompt);
         QuestionDetails questionDetails = new QuestionDetails(prompt, Collect.getCurrentFormIdentifierHash(), readOnlyOverride);
@@ -196,8 +197,7 @@ public class WidgetFactory {
                     recordingRequester = new ExternalAppRecordingRequester((Activity) context, activityAvailability, waitingForDataRegistry, permissionUtils);
                 } else {
                     ComponentActivity activity = (ComponentActivity) context;
-                    AudioRecorderViewModelFactory factory = new AudioRecorderViewModelFactory(activity.getApplication());
-                    AudioRecorderViewModel viewModel = new ViewModelProvider(activity, factory).get(AudioRecorderViewModel.class);
+                    AudioRecorderViewModel viewModel = new ViewModelProvider(activity, audioRecorderViewModelFactory).get(AudioRecorderViewModel.class);
                     recordingRequester = new InternalRecordingRequester(activity, viewModel, permissionUtils, waitingForDataRegistry, ((ScreenContext) context).getViewLifecycle(), questionMediaManager);
                 }
 
