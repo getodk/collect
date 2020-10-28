@@ -24,7 +24,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_DEVICE_ID;
-import static org.odk.collect.android.logic.PropertyManager.PROPMGR_SIM_SERIAL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_PHONENUMBER;
 import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 
@@ -62,17 +61,17 @@ public class FormMetadataFragmentTest {
 
     @Test
     public void recreating_whenPermissionsAcceptedPreviously_showsPermissionDependantPreferences() {
-        when(deviceDetailsProvider.getSimSerialNumber()).thenReturn("simSerial");
+        when(deviceDetailsProvider.getDeviceId()).thenReturn("123456789");
 
         FragmentScenario<FormMetadataFragment> scenario = FragmentScenario.launch(FormMetadataFragment.class);
         permissionUtils.grant();
         scenario.onFragment(fragment -> {
-            assertThat(fragment.findPreference(PROPMGR_SIM_SERIAL).getSummary(), equalTo("simSerial"));
+            assertThat(fragment.findPreference(PROPMGR_DEVICE_ID).getSummary(), equalTo("123456789"));
         });
 
         scenario.recreate();
         scenario.onFragment(fragment -> {
-            assertThat(fragment.findPreference(PROPMGR_SIM_SERIAL).getSummary(), equalTo("simSerial"));
+            assertThat(fragment.findPreference(PROPMGR_DEVICE_ID).getSummary(), equalTo("123456789"));
         });
     }
 
@@ -86,7 +85,6 @@ public class FormMetadataFragmentTest {
 
     @Test
     public void whenDeviceDetailsAreMissing_preferenceSummariesAreNotSet() {
-        when(deviceDetailsProvider.getSimSerialNumber()).thenReturn(null);
         when(deviceDetailsProvider.getLine1Number()).thenReturn(null);
         when(deviceDetailsProvider.getDeviceId()).thenReturn(null);
 
@@ -95,7 +93,6 @@ public class FormMetadataFragmentTest {
         scenario.onFragment(fragment -> {
             String notSetMessage = fragment.getContext().getString(R.string.preference_not_available);
 
-            assertThat(fragment.findPreference(PROPMGR_SIM_SERIAL).getSummary(), equalTo(notSetMessage));
             assertThat(fragment.findPreference(KEY_METADATA_PHONENUMBER).getSummary(), equalTo(notSetMessage));
             assertThat(fragment.findPreference(PROPMGR_DEVICE_ID).getSummary(), equalTo(notSetMessage));
         });

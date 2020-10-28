@@ -10,7 +10,4 @@ public interface DeviceDetailsProvider {
 
     @Nullable
     String getLine1Number() throws SecurityException;
-
-    @Nullable
-    String getSimSerialNumber() throws SecurityException;
 }

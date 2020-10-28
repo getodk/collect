@@ -111,7 +111,6 @@ public class FormMetadataTest {
                 .clickUserAndDeviceIdentity()
                 .clickFormMetadata()
                 .assertPreference(R.string.device_id, deviceDetailsProvider.getDeviceId())
-                .assertPreference(R.string.sim_serial_id, deviceDetailsProvider.getSimSerialNumber())
                 .assertPreference(R.string.install_id, getInstallID());
     }
 
@@ -119,8 +118,7 @@ public class FormMetadataTest {
     public void deviceIdentifiersCanBeIncludedInAForm() {
         new MainMenuPage(rule)
                 .startBlankForm("Metadata")
-                .scrollToAndAssertText(deviceDetailsProvider.getDeviceId())
-                .scrollToAndAssertText(deviceDetailsProvider.getSimSerialNumber());
+                .scrollToAndAssertText(deviceDetailsProvider.getDeviceId());
     }
 
     private String getInstallID() {
@@ -138,11 +136,6 @@ public class FormMetadataTest {
         @Override
         public String getLine1Number() {
             return "line1Number";
-        }
-
-        @Override
-        public String getSimSerialNumber() {
-            return "simSerialNumber";
         }
     }
 }

@@ -247,12 +247,6 @@ public class AppDependencyModule {
             public String getLine1Number() {
                 return telMgr.getLine1Number();
             }
-
-            @Override
-            @SuppressLint({"MissingPermission", "HardwareIds"})
-            public String getSimSerialNumber() {
-                return telMgr.getSimSerialNumber();
-            }
         };
     }
 

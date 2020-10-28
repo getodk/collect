@@ -466,7 +466,6 @@
     <string name="user_defined">User-defined</string>
     <string name="device_defined">Device-defined</string>
     <string name="device_id">Device ID - will be replaced by Install ID in Collect v1.29</string>
-    <string name="sim_serial_id">SIM serial number - will be removed in Collect v1.29</string>
     <string name="select_date">Select date</string>
     <string name="select_time">Select time</string>
     <string name="no_date_selected">No date selected</string>
