@@ -321,24 +321,22 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
     @Override
     public String createAnswerFile(File file) {
-        try {
-            String fileName = file.getName();
-            InputStream inputStream = new FileInputStream(file);
-            File newFile = new File(formController.getInstanceFile().getParent()
-                    + File.separator
-                    + System.currentTimeMillis()
-                    + "."
-                    + fileName.substring(fileName.lastIndexOf('.') + 1));
+        String fileName = file.getName();
+        String extension = fileName.substring(fileName.lastIndexOf('.') + 1);
+        String newFileName = System.currentTimeMillis() + "." + extension;
 
-            OutputStream outputStream = new FileOutputStream(newFile);
-            IOUtils.copy(inputStream, outputStream);
-            inputStream.close();
-            outputStream.close();
+        String instanceDir = formController.getInstanceFile().getParent();
+        String newFilePath = instanceDir + File.separator + newFileName;
 
-            return newFile.getName();
+        try (InputStream inputStream = new FileInputStream(file)) {
+            try (OutputStream outputStream = new FileOutputStream(newFilePath)) {
+                IOUtils.copy(inputStream, outputStream);
+            }
         } catch (IOException ignored) {
-            return null;
+            // Ignored
         }
+
+        return newFileName;
     }
 
     @Override

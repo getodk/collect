@@ -450,6 +450,18 @@ public class FormSaveViewModelTest {
         assertThat(answerFile, is(new File(tempDir, "answer.file")));
     }
 
+    @Test
+    public void createAnswerFile_copiesFileToInstanceFolder_andReturnsNewName() throws Exception {
+        File tempDir = Files.createTempDir();
+        when(formController.getInstanceFile()).thenReturn(new File(tempDir + File.separator + "instance.xml"));
+
+        File externalFile = File.createTempFile("external", ".file");
+        final String fileName = viewModel.createAnswerFile(externalFile);
+
+        assertThat(tempDir.listFiles().length, is(1));
+        assertThat(fileName, is(tempDir.listFiles()[0].getName()));
+    }
+
     //endregion
 
     @Test
