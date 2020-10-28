@@ -445,7 +445,7 @@
   <string name="email">Dirección de correo electrónico</string>
   <string name="user_defined">Definido por el usuario</string>
   <string name="device_defined">Definido por el dispositivo</string>
-  <string name="device_id">ID de dispositivo - será reemplazado por ID de instalación  en versión v1.29 </string>
+  <string name="device_id">ID de dispositivo</string>
   <string name="select_date">Seleccione la fecha</string>
   <string name="select_time">Seleccione la hora</string>
   <string name="no_date_selected">No se ha seleccionado una fecha</string>

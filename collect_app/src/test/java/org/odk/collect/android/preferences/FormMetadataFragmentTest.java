@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.PermissionUtils;
@@ -44,7 +45,7 @@ public class FormMetadataFragmentTest {
             }
 
             @Override
-            public DeviceDetailsProvider providesDeviceDetailsProvider(Context context) {
+            public DeviceDetailsProvider providesDeviceDetailsProvider(Context context, InstallIDProvider installIDProvider) {
                 return deviceDetailsProvider;
             }
         });

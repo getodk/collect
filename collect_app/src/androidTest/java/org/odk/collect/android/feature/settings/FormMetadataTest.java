@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
@@ -37,7 +38,7 @@ public class FormMetadataTest {
             ))
             .around(new ResetStateRule(new AppDependencyModule() {
                 @Override
-                public DeviceDetailsProvider providesDeviceDetailsProvider(Context context) {
+                public DeviceDetailsProvider providesDeviceDetailsProvider(Context context, InstallIDProvider installIDProvider) {
                     return deviceDetailsProvider;
                 }
             }))

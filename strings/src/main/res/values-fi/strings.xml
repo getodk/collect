@@ -444,7 +444,7 @@
   <string name="email">Sähköpostiosoite</string>
   <string name="user_defined">Käyttäjän määrittelemä</string>
   <string name="device_defined">Laitteen määrittelemä</string>
-  <string name="device_id">Laitetunnus Device ID - korvautuu asennustunnuksella Install ID versiosa Collect v1.29</string>
+  <string name="device_id">Laitetunnus Device ID</string>
   <string name="select_date">Valitse päivämäärä</string>
   <string name="select_time">Valitse aika</string>
   <string name="no_date_selected">Päivämäärä valitsematta</string>

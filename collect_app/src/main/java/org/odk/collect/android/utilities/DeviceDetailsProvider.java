@@ -4,7 +4,6 @@ import androidx.annotation.Nullable;
 
 public interface DeviceDetailsProvider {
 
-    @Deprecated
     @Nullable
     String getDeviceId() throws SecurityException;
 
