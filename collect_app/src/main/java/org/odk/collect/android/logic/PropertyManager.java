@@ -153,9 +153,7 @@ public class PropertyManager implements IPropertyManager {
      * @return True if the given property is dangerous, false otherwise.
      */
     private boolean isPropertyDangerous(String propertyName) {
-        return propertyName != null
-                && (propertyName.equalsIgnoreCase(PROPMGR_DEVICE_ID)
-                || propertyName.equalsIgnoreCase(PROPMGR_PHONE_NUMBER));
+        return propertyName != null && propertyName.equalsIgnoreCase(PROPMGR_PHONE_NUMBER);
     }
 
     @Override
