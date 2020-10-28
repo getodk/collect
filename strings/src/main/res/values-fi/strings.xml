@@ -662,7 +662,6 @@
   <string name="storage_migration_failed">Tietojen siirto epäonnistui. Ole hyvä ja yritä uudelleen.</string>
   <string name="storage_migration_dialog_title">Tallennuksen siirto</string>
   <string name="storage_migration_progress_msg">Siirto käynnissä.\Tässä voi kulua muutama sekunti…</string>
-  <string name="install_id">Install ID (asennuksen tunnus) - korvaa Device ID:n (laitetunnuksen) versiossa Collect v1.29</string>
   <string name="preference_not_available">Ei käytettävissä</string>
   <string name="custom_server_paths">Mukautetut palvelinpolut</string>
   <string name="legacy_custom_server_paths_summary">Poistetaan tulevassa versiossa. Ole hyvä ja käytä palvelimellasi alapolkuja /formList ja /submission.</string>

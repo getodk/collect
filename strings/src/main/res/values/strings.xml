@@ -687,7 +687,6 @@
     <string name="storage_migration_dialog_title">Storage migration</string>
     <string name="storage_migration_progress_msg">Migration in progress.\nThis may take a few seconds…</string>
 
-    <string name="install_id">Install ID - will replace Device ID in Collect v1.29</string>
     <string name="preference_not_available">Not available</string>
     <string name="custom_server_paths">Custom server paths</string>
     <string name="legacy_custom_server_paths_summary">Will be removed in a future version. Please use /formList and /submission on your server.</string>

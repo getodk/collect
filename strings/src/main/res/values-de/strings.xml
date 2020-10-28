@@ -662,7 +662,6 @@
   <string name="storage_migration_failed">Datenmigration fehlgeschlagen. Bitte erneut versuchen. </string>
   <string name="storage_migration_dialog_title">Speichermigration</string>
   <string name="storage_migration_progress_msg">Migration läuft. \nDas kann einige Sekunden dauern… </string>
-  <string name="install_id">Installations-ID - wird in Collect v1. 29 die Geräte-ID ersetzen</string>
   <string name="preference_not_available">Nicht verfügbar</string>
   <string name="custom_server_paths">Benutzerdefinierte Serverpfade</string>
   <string name="legacy_custom_server_paths_summary">Wird in einer zukünftigen Version entfernt. Bitte benutzen Sie /formList und /submission auf Ihrem Server. </string>

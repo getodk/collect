@@ -669,7 +669,6 @@
   <string name="storage_migration_dialog_title">Migrace úložiště</string>
   <string name="storage_migration_progress_msg">Probíhá migrace. 
 Může to trvat několik sekund …</string>
-  <string name="install_id">Install ID  - nahradí Device ID v Collect v1.29</string>
   <string name="preference_not_available">Není dostupný</string>
   <string name="custom_server_paths">Vlastní cesty serveru</string>
   <string name="legacy_custom_server_paths_summary">Bude odebráno v budoucí verzi. Použijte prosím / formList a / odeslání  na váš server.</string>

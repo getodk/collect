@@ -663,7 +663,6 @@
   <string name="storage_migration_failed">La migración de datos falló. Inténtalo de nuevo.</string>
   <string name="storage_migration_dialog_title">Migración de almacenamiento</string>
   <string name="storage_migration_progress_msg">Migración en progreso.\nEsto puede tomar algunos segundos.</string>
-  <string name="install_id">ID Instalación - reemplazará al IMEI en Collect v1.29</string>
   <string name="preference_not_available">No disponible</string>
   <string name="custom_server_paths">Rutas de servidor personalizadas</string>
   <string name="legacy_custom_server_paths_summary">Será removido en una próxima versión. Favor usar /formList y /submission en su servidor.</string>
