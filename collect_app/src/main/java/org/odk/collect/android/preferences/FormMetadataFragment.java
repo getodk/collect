@@ -24,7 +24,6 @@ import javax.inject.Inject;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_DEVICE_ID;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_PHONE_NUMBER;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_SIM_SERIAL;
-import static org.odk.collect.android.logic.PropertyManager.PROPMGR_SUBSCRIBER_ID;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_PHONENUMBER;
 import static org.odk.collect.android.preferences.MetaKeys.KEY_INSTALL_ID;
@@ -42,8 +41,6 @@ public class FormMetadataFragment extends BasePreferenceFragment {
     private Preference installIDPreference;
     private Preference deviceIDPreference;
     private Preference simSerialPrererence;
-    private Preference subscriberIDPreference;
-
 
     @Override
     public void onAttach(@NotNull Context context) {
@@ -60,7 +57,6 @@ public class FormMetadataFragment extends BasePreferenceFragment {
         installIDPreference = findPreference(KEY_INSTALL_ID);
         deviceIDPreference = findPreference(PROPMGR_DEVICE_ID);
         simSerialPrererence = findPreference(PROPMGR_SIM_SERIAL);
-        subscriberIDPreference = findPreference(PROPMGR_SUBSCRIBER_ID);
     }
 
     @Override
@@ -104,7 +100,6 @@ public class FormMetadataFragment extends BasePreferenceFragment {
         PropertyManager propertyManager = new PropertyManager(getActivity());
         deviceIDPreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_DEVICE_ID));
         simSerialPrererence.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_SIM_SERIAL));
-        subscriberIDPreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_SUBSCRIBER_ID));
         phonePreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_PHONE_NUMBER));
     }
 

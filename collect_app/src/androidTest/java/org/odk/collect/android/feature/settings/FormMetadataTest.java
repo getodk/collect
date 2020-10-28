@@ -111,7 +111,6 @@ public class FormMetadataTest {
                 .clickUserAndDeviceIdentity()
                 .clickFormMetadata()
                 .assertPreference(R.string.device_id, deviceDetailsProvider.getDeviceId())
-                .assertPreference(R.string.subscriber_id, deviceDetailsProvider.getSubscriberId())
                 .assertPreference(R.string.sim_serial_id, deviceDetailsProvider.getSimSerialNumber())
                 .assertPreference(R.string.install_id, getInstallID());
     }
@@ -121,7 +120,6 @@ public class FormMetadataTest {
         new MainMenuPage(rule)
                 .startBlankForm("Metadata")
                 .scrollToAndAssertText(deviceDetailsProvider.getDeviceId())
-                .scrollToAndAssertText(deviceDetailsProvider.getSubscriberId())
                 .scrollToAndAssertText(deviceDetailsProvider.getSimSerialNumber());
     }
 
@@ -140,11 +138,6 @@ public class FormMetadataTest {
         @Override
         public String getLine1Number() {
             return "line1Number";
-        }
-
-        @Override
-        public String getSubscriberId() {
-            return "subscriberID";
         }
 
         @Override

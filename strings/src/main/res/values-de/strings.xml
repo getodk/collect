@@ -445,7 +445,6 @@
   <string name="user_defined">Benutzerdefiniert</string>
   <string name="device_defined">Gerätedefiniert</string>
   <string name="device_id">Geräte-ID - wird in Collect v1.29 durch Installations-ID ersetzt</string>
-  <string name="subscriber_id">Subscriber-ID - wird in Collect v1.29 entfernt</string>
   <string name="sim_serial_id">SIM Seriennummer - wird in Collect v1.29 entfernt</string>
   <string name="select_date">Datum auswählen</string>
   <string name="select_time">Uhrzeit auswählen</string>

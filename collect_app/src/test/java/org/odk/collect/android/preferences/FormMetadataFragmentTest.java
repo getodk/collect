@@ -25,7 +25,6 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_DEVICE_ID;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_SIM_SERIAL;
-import static org.odk.collect.android.logic.PropertyManager.PROPMGR_SUBSCRIBER_ID;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_PHONENUMBER;
 import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 
@@ -89,7 +88,6 @@ public class FormMetadataFragmentTest {
     public void whenDeviceDetailsAreMissing_preferenceSummariesAreNotSet() {
         when(deviceDetailsProvider.getSimSerialNumber()).thenReturn(null);
         when(deviceDetailsProvider.getLine1Number()).thenReturn(null);
-        when(deviceDetailsProvider.getSubscriberId()).thenReturn(null);
         when(deviceDetailsProvider.getDeviceId()).thenReturn(null);
 
         FragmentScenario<FormMetadataFragment> scenario = FragmentScenario.launch(FormMetadataFragment.class);
@@ -99,7 +97,6 @@ public class FormMetadataFragmentTest {
 
             assertThat(fragment.findPreference(PROPMGR_SIM_SERIAL).getSummary(), equalTo(notSetMessage));
             assertThat(fragment.findPreference(KEY_METADATA_PHONENUMBER).getSummary(), equalTo(notSetMessage));
-            assertThat(fragment.findPreference(PROPMGR_SUBSCRIBER_ID).getSummary(), equalTo(notSetMessage));
             assertThat(fragment.findPreference(PROPMGR_DEVICE_ID).getSummary(), equalTo(notSetMessage));
         });
     }

@@ -250,12 +250,6 @@ public class AppDependencyModule {
 
             @Override
             @SuppressLint({"MissingPermission", "HardwareIds"})
-            public String getSubscriberId() {
-                return telMgr.getSubscriberId();
-            }
-
-            @Override
-            @SuppressLint({"MissingPermission", "HardwareIds"})
             public String getSimSerialNumber() {
                 return telMgr.getSimSerialNumber();
             }

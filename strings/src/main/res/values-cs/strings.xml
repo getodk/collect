@@ -451,7 +451,6 @@
   <string name="user_defined">Uživatelsky definované</string>
   <string name="device_defined">Definované podle zařízení</string>
   <string name="device_id">Device ID - bude nahrazeno Install ID v Collect v1.29</string>
-  <string name="subscriber_id">Subscriber ID - bude odebráno v Collect v1.29</string>
   <string name="sim_serial_id">Sériové číslo SIM - bude odebráno v Collect v1.29</string>
   <string name="select_date">Vybrat datum</string>
   <string name="select_time">Vybrat čas</string>

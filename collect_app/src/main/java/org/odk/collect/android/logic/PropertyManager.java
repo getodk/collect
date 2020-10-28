@@ -53,7 +53,6 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_USERNAME;
 public class PropertyManager implements IPropertyManager {
 
     public static final String PROPMGR_DEVICE_ID        = "deviceid";
-    public static final String PROPMGR_SUBSCRIBER_ID    = "subscriberid";
     public static final String PROPMGR_SIM_SERIAL       = "simserial";
     public static final String PROPMGR_PHONE_NUMBER     = "phonenumber";
     public static final String PROPMGR_USERNAME         = "username";
@@ -64,7 +63,6 @@ public class PropertyManager implements IPropertyManager {
     public static final String SCHEME_USERNAME     = "username";
     private static final String SCHEME_TEL          = "tel";
     private static final String SCHEME_MAILTO       = "mailto";
-    private static final String SCHEME_IMSI         = "imsi";
     private static final String SCHEME_SIMSERIAL    = "simserial";
     private static final String SCHEME_IMEI         = "imei";
     private static final String SCHEME_MAC          = "mac";
@@ -116,7 +114,6 @@ public class PropertyManager implements IPropertyManager {
             IdAndPrefix idp = findDeviceId(context, deviceDetailsProvider);
             putProperty(PROPMGR_DEVICE_ID,     idp.prefix,          idp.id);
             putProperty(PROPMGR_PHONE_NUMBER,  SCHEME_TEL,          deviceDetailsProvider.getLine1Number());
-            putProperty(PROPMGR_SUBSCRIBER_ID, SCHEME_IMSI,         deviceDetailsProvider.getSubscriberId());
             putProperty(PROPMGR_SIM_SERIAL,    SCHEME_SIMSERIAL,    deviceDetailsProvider.getSimSerialNumber());
         } catch (SecurityException e) {
             Timber.e(e);
@@ -216,7 +213,6 @@ public class PropertyManager implements IPropertyManager {
     private boolean isPropertyDangerous(String propertyName) {
         return propertyName != null
                 && (propertyName.equalsIgnoreCase(PROPMGR_DEVICE_ID)
-                || propertyName.equalsIgnoreCase(PROPMGR_SUBSCRIBER_ID)
                 || propertyName.equalsIgnoreCase(PROPMGR_SIM_SERIAL)
                 || propertyName.equalsIgnoreCase(PROPMGR_PHONE_NUMBER));
     }
