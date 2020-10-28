@@ -30,6 +30,9 @@ public class FormMetadataFragment extends BasePreferenceFragment {
     @Inject
     PermissionUtils permissionUtils;
 
+    @Inject
+    PropertyManager propertyManager;
+
     private Preference emailPreference;
     private EditTextPreference phonePreference;
     private Preference deviceIDPreference;
@@ -56,12 +59,12 @@ public class FormMetadataFragment extends BasePreferenceFragment {
         setupPrefs();
 
         if (permissionUtils.isReadPhoneStatePermissionGranted(getActivity())) {
-            phonePreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(new PropertyManager(getActivity()), PROPMGR_PHONE_NUMBER));
+            phonePreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_PHONE_NUMBER));
         } else if (savedInstanceState == null) {
             permissionUtils.requestReadPhoneStatePermission(getActivity(), true, new PermissionListener() {
                 @Override
                 public void granted() {
-                    phonePreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(new PropertyManager(getActivity()), PROPMGR_PHONE_NUMBER));
+                    phonePreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_PHONE_NUMBER));
                 }
 
                 @Override
@@ -83,7 +86,7 @@ public class FormMetadataFragment extends BasePreferenceFragment {
         });
 
         phonePreference.setOnBindEditTextListener(editText -> editText.setInputType(EditorInfo.TYPE_CLASS_PHONE));
-        deviceIDPreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(new PropertyManager(getActivity()), PROPMGR_DEVICE_ID));
+        deviceIDPreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_DEVICE_ID));
     }
 
     private class PropertyManagerPropertySummaryProvider implements Preference.SummaryProvider<EditTextPreference> {
