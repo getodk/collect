@@ -47,6 +47,7 @@ import org.odk.collect.android.widgets.items.SelectOneMinimalWidget;
 import org.odk.collect.android.widgets.items.SelectOneWidget;
 import org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
+import org.odk.collect.android.widgets.utilities.DialogFragmentRangeDataRequester;
 import org.odk.collect.android.widgets.utilities.ExternalAppRecordingRequester;
 import org.odk.collect.android.widgets.utilities.GetContentAudioFileRequester;
 import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
@@ -249,14 +250,16 @@ public class WidgetFactory {
                     switch (prompt.getDataType()) {
                         case Constants.DATATYPE_INTEGER:
                             if (WidgetAppearanceUtils.hasAppearance(prompt, PICKER_APPEARANCE)) {
-                                questionWidget = new RangePickerIntegerWidget(context, questionDetails, waitingForDataRegistry);
+                                questionWidget = new RangePickerIntegerWidget(context, questionDetails,
+                                        new DialogFragmentRangeDataRequester(context, waitingForDataRegistry));
                             } else {
                                 questionWidget = new RangeIntegerWidget(context, questionDetails);
                             }
                             break;
                         case Constants.DATATYPE_DECIMAL:
                             if (WidgetAppearanceUtils.hasAppearance(prompt, PICKER_APPEARANCE)) {
-                                questionWidget = new RangePickerDecimalWidget(context, questionDetails, waitingForDataRegistry);
+                                questionWidget = new RangePickerDecimalWidget(context, questionDetails,
+                                        new DialogFragmentRangeDataRequester(context, waitingForDataRegistry));
                             } else {
                                 questionWidget = new RangeDecimalWidget(context, questionDetails);
                             }

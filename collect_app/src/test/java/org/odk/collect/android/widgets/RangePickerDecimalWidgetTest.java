@@ -11,22 +11,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
-import org.odk.collect.android.fragments.dialogs.NumberPickerDialogTest;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
-import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
+import org.odk.collect.android.widgets.interfaces.RangeWidgetDataRequester;
 import org.robolectric.RobolectricTestRunner;
 import java.math.BigDecimal;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.arrayContainingInAnyOrder;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -37,8 +30,8 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 
 @RunWith(RobolectricTestRunner.class)
 public class RangePickerDecimalWidgetTest {
-    private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
     private final TestScreenContextActivity widgetActivity = widgetTestActivity();
+    private final RangeWidgetDataRequester rangeWidgetDataRequester = mock(RangeWidgetDataRequester.class);
     private final RangeQuestion rangeQuestion = mock(RangeQuestion.class);
 
     @Before
@@ -137,47 +130,29 @@ public class RangePickerDecimalWidgetTest {
         verify(valueChangedListener).widgetValueChanged(widget);
     }
 
-    @Test
-    public void clickingWidgetButton_showsNumberPickerDialog_whenPromptDoesNotHaveAnswer() {
-        NumberPickerDialogTest.TestRangePickerWidgetActivity activity =
-                RobolectricHelpers.createThemedActivity(NumberPickerDialogTest.TestRangePickerWidgetActivity.class);
-        RangePickerDecimalWidget widget = createWidget(activity, promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.binding.widgetButton.performClick();
+    public void clickingWidgetButton_requestsRangePickerValue_whenPromptDoesNotHaveAnswer() {
+    FormIndex formIndex = mock(FormIndex.class);
+    FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(rangeQuestion,  null);
+    when(prompt.getIndex()).thenReturn(formIndex);
 
-        NumberPickerDialog dialog = (NumberPickerDialog) activity.getSupportFragmentManager()
-                .findFragmentByTag(NumberPickerDialog.class.getName());
+    RangePickerDecimalWidget widget = createWidget(prompt);
+    widget.binding.widgetButton.performClick();
 
-        assertNotNull(dialog);
-        assertThat((String[]) dialog.getArguments().getSerializable(NumberPickerDialog.DISPLAYED_VALUES),
-                arrayContainingInAnyOrder("1.5", "2.5", "3.5", "4.5", "5.5"));
-        assertEquals(dialog.getArguments().getInt(NumberPickerDialog.PROGRESS), 0);
-    }
+    verify(rangeWidgetDataRequester).requestRangePickerValue(formIndex,
+            new String[]{"5.5", "4.5", "3.5", "2.5", "1.5"}, 0);
+}
 
     @Test
-    public void clickingWidgetButton_showsNumberPickerDialog_whenPromptHasAnswer() {
-        NumberPickerDialogTest.TestRangePickerWidgetActivity activity =
-                RobolectricHelpers.createThemedActivity(NumberPickerDialogTest.TestRangePickerWidgetActivity.class);
-        RangePickerDecimalWidget widget = createWidget(activity, promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
-        widget.binding.widgetButton.performClick();
-
-        NumberPickerDialog dialog = (NumberPickerDialog) activity.getSupportFragmentManager()
-                .findFragmentByTag(NumberPickerDialog.class.getName());
-
-        assertNotNull(dialog);
-        assertEquals(dialog.getArguments().getInt(NumberPickerDialog.PROGRESS), 1);
-    }
-
-    @Test
-    public void clickingWidgetButton_setsWidgetWaitingForData() {
+    public void clickingWidgetButton_requestsRangePickerValue_whenPromptHasAnswer() {
         FormIndex formIndex = mock(FormIndex.class);
-        FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(rangeQuestion, null);
+        FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(rangeQuestion,  new StringData("2.5"));
         when(prompt.getIndex()).thenReturn(formIndex);
 
-        NumberPickerDialogTest.TestRangePickerWidgetActivity activity =
-                RobolectricHelpers.createThemedActivity(NumberPickerDialogTest.TestRangePickerWidgetActivity.class);
-        RangePickerDecimalWidget widget = createWidget(activity, prompt);
+        RangePickerDecimalWidget widget = createWidget(prompt);
         widget.binding.widgetButton.performClick();
-        assertTrue(waitingForDataRegistry.waiting.contains(formIndex));
+
+        verify(rangeWidgetDataRequester).requestRangePickerValue(formIndex,
+                new String[]{"5.5", "4.5", "3.5", "2.5", "1.5"}, 1);
     }
 
     @Test
@@ -193,12 +168,7 @@ public class RangePickerDecimalWidgetTest {
     }
 
     private RangePickerDecimalWidget createWidget(FormEntryPrompt prompt) {
-        return new RangePickerDecimalWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"), waitingForDataRegistry);
-    }
-
-
-    private RangePickerDecimalWidget createWidget(NumberPickerDialogTest.TestRangePickerWidgetActivity activity, FormEntryPrompt prompt) {
-        return new RangePickerDecimalWidget(activity, new QuestionDetails(prompt,
-                "formAnalyticsID"), waitingForDataRegistry);
+        return new RangePickerDecimalWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"),
+                rangeWidgetDataRequester);
     }
 }

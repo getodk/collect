@@ -14,9 +14,9 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.RangePickerWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.widgets.interfaces.RangeWidgetDataRequester;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.utilities.RangeWidgetDataRequester;
-import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
 
 import java.math.BigDecimal;
 
@@ -30,11 +30,12 @@ public class RangePickerIntegerWidget extends QuestionWidget implements WidgetDa
     private BigDecimal rangeStep;
     private int progress;
 
-    private final WaitingForDataRegistry waitingForDataRegistry;
+    private final RangeWidgetDataRequester rangeWidgetDataRequester;
 
-    public RangePickerIntegerWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
+    public RangePickerIntegerWidget(Context context, QuestionDetails questionDetails,
+                                    RangeWidgetDataRequester rangeWidgetDataRequester) {
         super(context, questionDetails);
-        this.waitingForDataRegistry = waitingForDataRegistry;
+        this.rangeWidgetDataRequester = rangeWidgetDataRequester;
     }
 
     @Override
@@ -45,14 +46,13 @@ public class RangePickerIntegerWidget extends QuestionWidget implements WidgetDa
 
         if (prompt.isReadOnly()) {
             binding.widgetButton.setVisibility(View.GONE);
-        } else if (!RangeWidgetDataRequester.isWidgetValid((RangeQuestion) prompt.getQuestion())) {
+        } else if (!RangeWidgetUtils.isWidgetValid((RangeQuestion) prompt.getQuestion())) {
             binding.widgetButton.setEnabled(false);
         } else {
             setUpWidgetParameters((RangeQuestion) prompt.getQuestion());
-            binding.widgetButton.setOnClickListener(v -> {
-                RangeWidgetDataRequester.requestRangePickerValue(context, waitingForDataRegistry, prompt.getIndex(),
-                        displayedValuesForNumberPicker, progress);
-            });
+            binding.widgetButton.setOnClickListener(v ->
+                rangeWidgetDataRequester.requestRangePickerValue(prompt.getIndex(), displayedValuesForNumberPicker, progress)
+            );
         }
         setUpWidgetAnswer(context, prompt);
 
@@ -83,7 +83,7 @@ public class RangePickerIntegerWidget extends QuestionWidget implements WidgetDa
     @Override
     public void setData(Object answer) {
         if (answer instanceof Integer) {
-            BigDecimal actualValue = RangeWidgetDataRequester.getRangePickerValue(rangeStart, rangeStep, rangeEnd, (Integer) answer);
+            BigDecimal actualValue = RangeWidgetUtils.getRangePickerValue(rangeStart, rangeStep, rangeEnd, (Integer) answer);
             progress = actualValue.subtract(rangeStart).abs().divide(rangeStep).intValue();
 
             binding.widgetAnswerText.setText(String.valueOf(actualValue));
@@ -97,7 +97,7 @@ public class RangePickerIntegerWidget extends QuestionWidget implements WidgetDa
         rangeEnd = rangeQuestion.getRangeEnd();
         rangeStep = rangeQuestion.getRangeStep().abs();
 
-        displayedValuesForNumberPicker = RangeWidgetDataRequester.getDisplayedValuesForNumberPicker(
+        displayedValuesForNumberPicker = RangeWidgetUtils.getDisplayedValuesForNumberPicker(
                 rangeStart, rangeStep, rangeEnd, true);
     }
 

@@ -20,7 +20,7 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-public class RangeWidgetDataRequesterTest {
+public class RangeWidgetUtilsTest {
     private final RangeQuestion rangeQuestion = mock(RangeQuestion.class);
 
     @Before
@@ -32,14 +32,14 @@ public class RangeWidgetDataRequesterTest {
 
     @Test
     public void getLayoutElements_forHorizontalSliderWidget_returnsCorrectSlider() {
-        RangeWidgetDataRequester.RangeWidgetLayoutElements layoutElements = RangeWidgetDataRequester.getLayoutElements(
+        RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.getLayoutElements(
                 widgetTestActivity(), null);
         assertThat(layoutElements.getSlider().getRotation(), equalTo(0.0F));
     }
 
     @Test
     public void getLayoutElements_forVerticalSliderWidget_returnsCorrectSlider() {
-        RangeWidgetDataRequester.RangeWidgetLayoutElements layoutElements = RangeWidgetDataRequester.getLayoutElements(
+        RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.getLayoutElements(
                 widgetTestActivity(), VERTICAL_APPEARANCE);
         assertThat(layoutElements.getSlider().getRotation(), equalTo(270.0F));
     }
@@ -47,7 +47,7 @@ public class RangeWidgetDataRequesterTest {
     @Test
     public void whenRangeQuestionHasZeroRangeStep_invalidWidgetToastIsShown() {
         when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ZERO);
-        assertThat(RangeWidgetDataRequester.isWidgetValid(rangeQuestion), equalTo(false));
+        assertThat(RangeWidgetUtils.isWidgetValid(rangeQuestion), equalTo(false));
         assertThat(ShadowToast.getTextOfLatestToast(),
                 equalTo(ApplicationProvider.getApplicationContext().getString(R.string.invalid_range_widget)));
     }
@@ -55,7 +55,7 @@ public class RangeWidgetDataRequesterTest {
     @Test
     public void whenPromptHasInvalidWidgetParameters_invalidWidgetToastIsShown() {
         when(rangeQuestion.getRangeStep()).thenReturn(new BigDecimal(2));
-        assertThat(RangeWidgetDataRequester.isWidgetValid(rangeQuestion), equalTo(false));
+        assertThat(RangeWidgetUtils.isWidgetValid(rangeQuestion), equalTo(false));
         assertThat(ShadowToast.getTextOfLatestToast(),
                 equalTo(ApplicationProvider.getApplicationContext().getString(R.string.invalid_range_widget)));
     }

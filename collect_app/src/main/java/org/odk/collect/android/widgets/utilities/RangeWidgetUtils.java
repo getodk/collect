@@ -2,22 +2,16 @@ package org.odk.collect.android.widgets.utilities;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.slider.Slider;
 
-import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.RangeWidgetHorizontalBinding;
 import org.odk.collect.android.databinding.RangeWidgetVerticalBinding;
-import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
-import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.views.TrackingTouchSlider;
@@ -27,9 +21,9 @@ import java.math.BigDecimal;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.NO_TICKS_APPEARANCE;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.VERTICAL_APPEARANCE;
 
-public class RangeWidgetDataRequester {
+public class RangeWidgetUtils {
 
-    private RangeWidgetDataRequester() {
+    private RangeWidgetUtils() {
     }
 
     public static class RangeWidgetLayoutElements {
@@ -136,16 +130,6 @@ public class RangeWidgetDataRequester {
             }
         }
         return displayedValuesForNumberPicker;
-    }
-
-    public static void requestRangePickerValue(Context context, WaitingForDataRegistry waitingForDataRegistry, FormIndex formIndex,
-                                               String[] displayedValuesForNumberPicker, int progress) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(NumberPickerDialog.DISPLAYED_VALUES, displayedValuesForNumberPicker);
-        bundle.putInt(NumberPickerDialog.PROGRESS, progress);
-
-        DialogUtils.showIfNotShowing(NumberPickerDialog.class, bundle, ((AppCompatActivity) context).getSupportFragmentManager());
-        waitingForDataRegistry.waitForData(formIndex);
     }
 
     public static BigDecimal getRangePickerValue(BigDecimal rangeStart, BigDecimal rangeStep,
