@@ -103,7 +103,7 @@ public class FileUtils {
     private FileUtils() {
     }
 
-    public static void saveMediaFileFromUri(Uri uri, File destFile, Context context) {
+    public static void saveAnswerFileFromUri(Uri uri, File destFile, Context context) {
         try {
             ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(uri, "r");
             if (pfd != null) {
