@@ -412,7 +412,8 @@ public class AudioWidgetTest {
                 new QuestionDetails(prompt, "formAnalyticsID", readOnlyOverride),
                 questionMediaManager,
                 audioPlayer,
-                audioDataRequester
+                recordingRequester,
+                audioFileRequester
         );
     }
 
