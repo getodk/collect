@@ -19,7 +19,6 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -57,7 +56,6 @@ import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.exception.ExternalParamsException;
@@ -477,7 +475,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     /**
      * Saves answers for the widgets in this view. Called when the widgets are in an intent group.
      */
-    public void setDataForFields(Bundle bundle, ClipData clipData) throws JavaRosaException {
+    public void setDataForFields(Bundle bundle) throws JavaRosaException {
         FormController formController = Collect.getInstance().getFormController();
         if (formController == null) {
             return;
@@ -496,51 +494,39 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                             case Constants.DATATYPE_TEXT:
                                 formController.saveAnswer(prompt.getIndex(),
                                         ExternalAppsUtils.asStringData(bundle.get(key)));
+                                ((StringWidget) questionWidget).setDisplayValueFromModel();
                                 break;
                             case Constants.DATATYPE_INTEGER:
                                 formController.saveAnswer(prompt.getIndex(),
                                         ExternalAppsUtils.asIntegerData(bundle.get(key)));
+                                ((StringWidget) questionWidget).setDisplayValueFromModel();
                                 break;
                             case Constants.DATATYPE_DECIMAL:
                                 formController.saveAnswer(prompt.getIndex(),
                                         ExternalAppsUtils.asDecimalData(bundle.get(key)));
+                                ((StringWidget) questionWidget).setDisplayValueFromModel();
+                                break;
+                            case Constants.DATATYPE_BINARY:
+                                try {
+                                    Uri uri = (Uri) bundle.get(key);
+                                    try {
+                                        File destFile = FileUtils.createDestinationMediaFile(formController.getInstanceFile().getParent(), ContentResolverHelper.getFileExtensionFromUri(getContext(), uri));
+                                        //TODO might be better to use QuestionMediaManager in the future
+                                        FileUtils.saveAnswerFileFromUri(uri, destFile, getContext());
+                                        ((WidgetDataReceiver) questionWidget).setData(destFile);
+                                    } catch (SecurityException e) {
+                                        Timber.w(e);
+                                    }
+                                } catch (ClassCastException e) {
+                                    Timber.w(e);
+                                }
                                 break;
                             default:
                                 throw new RuntimeException(
                                         getContext().getString(R.string.ext_assign_value_error,
                                                 treeReference.toString(false)));
                         }
-
-                        ((StringWidget) questionWidget).setDisplayValueFromModel();
                         break;
-                    }
-                }
-            }
-        }
-
-        if (clipData != null) {
-            for (int i = 0; i < clipData.getItemCount(); i++) {
-                CharSequence key = clipData.getItemAt(i).getText();
-                if (key == null) {
-                    continue;
-                }
-
-                for (QuestionWidget questionWidget : widgets) {
-                    FormEntryPrompt prompt = questionWidget.getFormEntryPrompt();
-
-                    if (FormEntryPromptUtils.getQuestionName(prompt).equals(key.toString())
-                            && prompt.getDataType() == Constants.DATATYPE_BINARY) {
-                        Uri uri = clipData.getItemAt(i).getUri();
-                        if (uri != null) {
-                            try {
-                                File destFile = FileUtils.createDestinationMediaFile(formController.getInstanceFile().getParent(), ContentResolverHelper.getFileExtensionFromUri(getContext(), uri));
-                                //TODO might be better to use QuestionMediaManager in the future
-                                FileUtils.saveAnswerFileFromUri(uri, destFile, getContext());
-                                ((WidgetDataReceiver) questionWidget).setData(destFile);
-                            } catch (SecurityException e) {
-                                Timber.w(e);
-                            }
-                        }
                     }
                 }
             }

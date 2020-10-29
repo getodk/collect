@@ -823,7 +823,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 try {
                     Bundle extras = intent.getExtras();
                     if (getCurrentViewIfODKView() != null) {
-                        getCurrentViewIfODKView().setDataForFields(extras, intent.getClipData());
+                        getCurrentViewIfODKView().setDataForFields(extras);
                     }
                 } catch (JavaRosaException e) {
                     Timber.e(e);
