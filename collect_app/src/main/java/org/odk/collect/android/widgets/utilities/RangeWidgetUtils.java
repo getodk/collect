@@ -116,18 +116,10 @@ public class RangeWidgetUtils {
         int elementCount = rangeEnd.subtract(rangeStart).abs().divide(rangeStep).intValue();
         String[] displayedValuesForNumberPicker = new String[elementCount + 1];
 
-        if (rangeEnd.compareTo(rangeStart) > -1) {
-            for (BigDecimal i = rangeEnd; i.compareTo(rangeStart) > -1; i = i.subtract(rangeStep.abs())) {
-                displayedValuesForNumberPicker[index] = isIntegerDataType ? String.valueOf(i.intValue())
-                        : String.valueOf(i.doubleValue());
-                index++;
-            }
-        } else {
-            for (BigDecimal i = rangeEnd; i.compareTo(rangeStart) < 1; i = i.add(rangeStep.abs())) {
-                displayedValuesForNumberPicker[index] = isIntegerDataType ? String.valueOf(i.intValue())
-                        : String.valueOf(i.doubleValue());
-                index++;
-            }
+        for (BigDecimal i = rangeEnd; i.compareTo(rangeStart) > -1; i = i.subtract(rangeStep.abs())) {
+            displayedValuesForNumberPicker[index] = isIntegerDataType ? String.valueOf(i.intValue())
+                    : String.valueOf(i.doubleValue());
+            index++;
         }
         return displayedValuesForNumberPicker;
     }
@@ -135,14 +127,10 @@ public class RangeWidgetUtils {
     public static BigDecimal getRangePickerValue(BigDecimal rangeStart, BigDecimal rangeStep,
                                           BigDecimal rangeEnd, Integer value) {
         BigDecimal actualValue;
-        int elementCount = rangeEnd.subtract(rangeStart).abs().divide(rangeStep).intValue();
+        int elementCount = (rangeEnd.subtract(rangeStart)).divide(rangeStep).intValue();
         BigDecimal multiply = new BigDecimal(elementCount - value).multiply(rangeStep);
+        actualValue = rangeStart.add(multiply);
 
-        if (rangeStart.compareTo(rangeEnd) < 0) {
-            actualValue = rangeStart.add(multiply);
-        } else {
-            actualValue = rangeStart.subtract(multiply);
-        }
         return actualValue;
     }
 

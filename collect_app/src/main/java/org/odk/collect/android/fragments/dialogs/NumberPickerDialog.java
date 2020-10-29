@@ -69,7 +69,7 @@ public class NumberPickerDialog extends DialogFragment {
         numberPicker.setMinValue(0);
         numberPicker.setWrapSelectorWheel(false);
         numberPicker.setDisplayedValues(rangePickerViewModel.getDisplayedValuesForNumberPicker());
-        numberPicker.setValue(rangePickerViewModel.getDisplayedValuesForNumberPicker().length - rangePickerViewModel.getProgress() - 1);
+        numberPicker.setValue(rangePickerViewModel.getDisplayedValuesForNumberPicker().length - rangePickerViewModel.getProgress() -1);
 
         return new AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.number_picker_title)

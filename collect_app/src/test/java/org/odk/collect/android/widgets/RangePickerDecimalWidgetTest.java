@@ -130,6 +130,7 @@ public class RangePickerDecimalWidgetTest {
         verify(valueChangedListener).widgetValueChanged(widget);
     }
 
+    @Test
     public void clickingWidgetButton_requestsRangePickerValue_whenPromptDoesNotHaveAnswer() {
     FormIndex formIndex = mock(FormIndex.class);
     FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(rangeQuestion,  null);

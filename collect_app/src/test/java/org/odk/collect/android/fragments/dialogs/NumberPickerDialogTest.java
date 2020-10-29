@@ -39,7 +39,7 @@ public class NumberPickerDialogTest {
         dialogFragment = new NumberPickerDialog();
 
         Bundle bundle = new Bundle();
-        bundle.putSerializable(NumberPickerDialog.DISPLAYED_VALUES, new String[] {"1", "2", "3", "4", "5"});
+        bundle.putSerializable(NumberPickerDialog.DISPLAYED_VALUES, new String[] {"5", "4", "3", "2", "1"});
         bundle.putInt(NumberPickerDialog.PROGRESS, 2);
         dialogFragment.setArguments(bundle);
     }

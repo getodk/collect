@@ -51,10 +51,10 @@ public class RangePickerIntegerWidget extends QuestionWidget implements WidgetDa
         } else {
             setUpWidgetParameters((RangeQuestion) prompt.getQuestion());
             binding.widgetButton.setOnClickListener(v ->
-                rangeWidgetDataRequester.requestRangePickerValue(prompt.getIndex(), displayedValuesForNumberPicker, progress)
+                    rangeWidgetDataRequester.requestRangePickerValue(prompt.getIndex(), displayedValuesForNumberPicker, progress)
             );
+            setUpWidgetAnswer(context, prompt);
         }
-        setUpWidgetAnswer(context, prompt);
 
         return binding.getRoot();
     }
@@ -84,7 +84,7 @@ public class RangePickerIntegerWidget extends QuestionWidget implements WidgetDa
     public void setData(Object answer) {
         if (answer instanceof Integer) {
             BigDecimal actualValue = RangeWidgetUtils.getRangePickerValue(rangeStart, rangeStep, rangeEnd, (Integer) answer);
-            progress = actualValue.subtract(rangeStart).abs().divide(rangeStep).intValue();
+            progress = (actualValue.subtract(rangeStart)).divide(rangeStep).intValue();
 
             binding.widgetAnswerText.setText(String.valueOf(actualValue));
             binding.widgetButton.setText(R.string.edit_value);
@@ -93,9 +93,14 @@ public class RangePickerIntegerWidget extends QuestionWidget implements WidgetDa
     }
 
     private void setUpWidgetParameters(RangeQuestion rangeQuestion) {
-        rangeStart = rangeQuestion.getRangeStart();
-        rangeEnd = rangeQuestion.getRangeEnd();
-        rangeStep = rangeQuestion.getRangeStep().abs();
+        if (rangeQuestion.getRangeEnd().compareTo(rangeQuestion.getRangeStart()) > -1) {
+            rangeStart = rangeQuestion.getRangeStart();
+            rangeEnd = rangeQuestion.getRangeEnd();
+        } else {
+            rangeEnd = rangeQuestion.getRangeStart();
+            rangeStart = rangeQuestion.getRangeEnd();
+        }
+        rangeStep = rangeQuestion.getRangeStep() == null ? BigDecimal.ONE : rangeQuestion.getRangeStep().abs();
 
         displayedValuesForNumberPicker = RangeWidgetUtils.getDisplayedValuesForNumberPicker(
                 rangeStart, rangeStep, rangeEnd, true);
@@ -104,8 +109,7 @@ public class RangePickerIntegerWidget extends QuestionWidget implements WidgetDa
     private void setUpWidgetAnswer(Context context, FormEntryPrompt prompt) {
         if (prompt.getAnswerText() != null) {
             BigDecimal actualValue = new BigDecimal(prompt.getAnswerText());
-            progress = actualValue.subtract(rangeStart.abs().divide(
-                    rangeStep == null ? BigDecimal.ONE : rangeStep)).intValue();
+            progress = (actualValue.subtract(rangeStart)).divide(rangeStep).intValue();
 
             binding.widgetAnswerText.setText(String.valueOf(actualValue));
             binding.widgetButton.setText(context.getString(R.string.edit_value));

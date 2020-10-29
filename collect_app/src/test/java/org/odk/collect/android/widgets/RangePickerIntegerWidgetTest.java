@@ -39,7 +39,7 @@ public class RangePickerIntegerWidgetTest {
     public void setup() {
         when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.ONE);
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.TEN);
-        when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ONE);
+        when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.valueOf(3));
     }
 
     @Test
@@ -111,16 +111,16 @@ public class RangePickerIntegerWidgetTest {
     @Test
     public void setData_updatesAnswer() {
         RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.setData(5);
-        assertEquals(widget.getAnswer().getDisplayText(), "5");
+        widget.setData(2);
+        assertEquals(widget.getAnswer().getDisplayText(), "4");
     }
 
     @Test
     public void setData_updatesDisplayedAnswer() {
         RangePickerIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.setData(5);
+        widget.setData(2);
         assertEquals(widget.binding.widgetButton.getText(), widget.getContext().getString(R.string.edit_value));
-        assertEquals(widget.getAnswer().getDisplayText(), "5");
+        assertEquals(widget.getAnswer().getDisplayText(), "4");
     }
 
     @Test
@@ -141,7 +141,7 @@ public class RangePickerIntegerWidgetTest {
         widget.binding.widgetButton.performClick();
 
         verify(rangeWidgetDataRequester).requestRangePickerValue(formIndex,
-                new String[]{"10", "9", "8", "7", "6", "5", "4", "3", "2", "1"}, 0);
+                new String[]{"10", "7", "4", "1"}, 0);
     }
 
     @Test
@@ -154,7 +154,7 @@ public class RangePickerIntegerWidgetTest {
         widget.binding.widgetButton.performClick();
 
         verify(rangeWidgetDataRequester).requestRangePickerValue(formIndex,
-                new String[]{"10", "9", "8", "7", "6", "5", "4", "3", "2", "1"}, 3);
+                new String[]{"10", "7", "4", "1"}, 1);
     }
 
     @Test
