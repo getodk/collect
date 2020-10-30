@@ -110,17 +110,27 @@ public class IntentGroupTest {
 
         Intent resultIntent = new Intent();
 
+        Uri imageUri = createTempFile("famous", "jpg");
+        Uri audioUri = createTempFile("sampleAudio", "wav");
+        Uri videoUri = createTempFile("sampleVideo", "mp4");
+        Uri fileUri = createTempFile("fruits", "csv");
+
         resultIntent.putExtra("questionInteger", "25");
         resultIntent.putExtra("questionDecimal", "46.74");
         resultIntent.putExtra("questionText", "sampleAnswer");
+        resultIntent.putExtra("questionImage", imageUri);
+        resultIntent.putExtra("questionAudio", audioUri);
+        resultIntent.putExtra("questionVideo", videoUri);
+        resultIntent.putExtra("questionFile", fileUri);
 
         ClipData clipData = ClipData.newRawUri(null, null);
-        clipData.addItem(new ClipData.Item("questionImage", null, createTempFile("famous", "jpg")));
-        clipData.addItem(new ClipData.Item("questionAudio", null, createTempFile("sampleAudio", "wav")));
-        clipData.addItem(new ClipData.Item("questionVideo", null, createTempFile("sampleVideo", "mp4")));
-        clipData.addItem(new ClipData.Item("questionFile", null, createTempFile("fruits", "csv")));
+        clipData.addItem(new ClipData.Item("questionImage", null, imageUri));
+        clipData.addItem(new ClipData.Item("questionAudio", null, audioUri));
+        clipData.addItem(new ClipData.Item("questionVideo", null, videoUri));
+        clipData.addItem(new ClipData.Item("questionFile", null, fileUri));
 
         resultIntent.setClipData(clipData);
+        resultIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent));
         onView(withText("This is buttonText")).perform(click());
 
