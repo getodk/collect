@@ -519,7 +519,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                                             Timber.w(e);
                                         }
                                     }
-                                } catch (ClassCastException e) {
+                                } catch (Exception | Error e) {
                                     Timber.w(e);
                                 }
                                 break;
