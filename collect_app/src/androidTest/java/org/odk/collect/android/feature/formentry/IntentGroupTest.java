@@ -97,20 +97,10 @@ public class IntentGroupTest {
 
     @Test
     public void externalApp_ShouldPopulateFields() throws IOException {
-        // Check ImageWidget without answer
-        onView(withTagValue(is("ImageView"))).check(doesNotExist());
-        onView(withId(R.id.capture_image)).check(doesNotExist());
-        onView(withId(R.id.choose_image)).check(doesNotExist());
-
-        // Check AudioWidget without answer
-        onView(withId(R.id.audio_controller)).check(matches(not(isDisplayed())));
-
-        // Check VideoWidget without answer
-        onView(withId(R.id.play_video)).check(matches(isDisplayed()));
-        onView(withId(R.id.play_video)).check(matches(not(isEnabled())));
-
-        // Check ArbitraryFileWidget without answer
-        onView(withTagValue(is("ArbitraryFileWidgetAnswer"))).check(matches(not(isDisplayed())));
+        assertImageWidgetWithoutAnswer();
+        assertAudioWidgetWithoutAnswer();
+        assertVideoWidgetWithoutAnswer();
+        assertFileWidgetWithoutAnswer();
 
         Intent resultIntent = new Intent();
 
@@ -138,43 +128,18 @@ public class IntentGroupTest {
         intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent));
         onView(withText("This is buttonText")).perform(click());
 
-        // Check StringWidgets with answers
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).check(matches(withText("25")));
-        onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText("46.74")));
-        onView(withIndex(withClassName(endsWith("EditText")), 2)).check(matches(withText("sampleAnswer")));
-
-        // Check ImageWidget with answer
-        onView(withTagValue(is("ImageView"))).perform(nestedScrollTo()).check(matches(isDisplayed()));
-        onView(withId(R.id.capture_image)).check(doesNotExist());
-        onView(withId(R.id.choose_image)).check(doesNotExist());
-
-        // Check AudioWidget with answer
-        onView(withId(R.id.audio_controller)).perform(nestedScrollTo()).check(matches(isDisplayed()));
-
-        // Check VideoWidget with answer
-        onView(withId(R.id.play_video)).perform(nestedScrollTo()).check(matches(isDisplayed()));
-        onView(withId(R.id.play_video)).check(matches(isEnabled()));
-
-        // Check ArbitraryFileWidget with answer
-        onView(withTagValue(is("ArbitraryFileWidgetAnswer"))).perform(nestedScrollTo()).check(matches(isDisplayed()));
+        assertImageWidgetWithAnswer();
+        assertAudioWidgetWithAnswer();
+        assertVideoWidgetWithAnswer();
+        assertFileWidgetWithAnswer();
     }
 
     @Test
     public void externalApp_ShouldNotPopulateFieldsIfAnswersAreNull() {
-        // Check ImageWidget without answer
-        onView(withTagValue(is("ImageView"))).check(doesNotExist());
-        onView(withId(R.id.capture_image)).check(doesNotExist());
-        onView(withId(R.id.choose_image)).check(doesNotExist());
-
-        // Check AudioWidget without answer
-        onView(withId(R.id.audio_controller)).check(matches(not(isDisplayed())));
-
-        // Check VideoWidget without answer
-        onView(withId(R.id.play_video)).check(matches(isDisplayed()));
-        onView(withId(R.id.play_video)).check(matches(not(isEnabled())));
-
-        // Check ArbitraryFileWidget without answer
-        onView(withTagValue(is("ArbitraryFileWidgetAnswer"))).check(matches(not(isDisplayed())));
+        assertImageWidgetWithoutAnswer();
+        assertAudioWidgetWithoutAnswer();
+        assertVideoWidgetWithoutAnswer();
+        assertFileWidgetWithoutAnswer();
 
         Intent resultIntent = new Intent();
 
@@ -201,20 +166,48 @@ public class IntentGroupTest {
         onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText("")));
         onView(withIndex(withClassName(endsWith("EditText")), 2)).check(matches(withText("")));
 
-        // Check ImageWidget without answer
+        assertImageWidgetWithoutAnswer();
+        assertAudioWidgetWithoutAnswer();
+        assertVideoWidgetWithoutAnswer();
+        assertFileWidgetWithoutAnswer();
+    }
+
+    private void assertImageWidgetWithoutAnswer() {
         onView(withTagValue(is("ImageView"))).check(doesNotExist());
         onView(withId(R.id.capture_image)).check(doesNotExist());
         onView(withId(R.id.choose_image)).check(doesNotExist());
+    }
 
-        // Check AudioWidget without answer
+    private void assertAudioWidgetWithoutAnswer() {
         onView(withId(R.id.audio_controller)).check(matches(not(isDisplayed())));
+    }
 
-        // Check VideoWidget without answer
+    private void assertVideoWidgetWithoutAnswer() {
         onView(withId(R.id.play_video)).check(matches(isDisplayed()));
         onView(withId(R.id.play_video)).check(matches(not(isEnabled())));
+    }
 
-        // Check ArbitraryFileWidget without answer
+    private void assertFileWidgetWithoutAnswer() {
         onView(withTagValue(is("ArbitraryFileWidgetAnswer"))).check(matches(not(isDisplayed())));
+    }
+
+    private void assertImageWidgetWithAnswer() {
+        onView(withTagValue(is("ImageView"))).perform(nestedScrollTo()).check(matches(isDisplayed()));
+        onView(withId(R.id.capture_image)).check(doesNotExist());
+        onView(withId(R.id.choose_image)).check(doesNotExist());
+    }
+
+    private void assertAudioWidgetWithAnswer() {
+        onView(withId(R.id.audio_controller)).perform(nestedScrollTo()).check(matches(isDisplayed()));
+    }
+
+    private void assertVideoWidgetWithAnswer() {
+        onView(withId(R.id.play_video)).perform(nestedScrollTo()).check(matches(isDisplayed()));
+        onView(withId(R.id.play_video)).check(matches(isEnabled()));
+    }
+
+    private void assertFileWidgetWithAnswer() {
+        onView(withTagValue(is("ArbitraryFileWidgetAnswer"))).perform(nestedScrollTo()).check(matches(isDisplayed()));
     }
 
     @SuppressWarnings("PMD.DoNotHardCodeSDCard")
