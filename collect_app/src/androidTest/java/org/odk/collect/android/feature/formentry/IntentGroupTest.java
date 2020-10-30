@@ -22,6 +22,7 @@ import android.app.Instrumentation;
 import android.content.ClipData;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 
 import androidx.core.content.FileProvider;
 import androidx.test.rule.ActivityTestRule;
@@ -50,11 +51,14 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.isInternal;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.core.StringEndsWith.endsWith;
+import static org.odk.collect.android.support.CustomMatchers.withIndex;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 import static org.odk.collect.android.support.actions.NestedScrollToAction.nestedScrollTo;
 
@@ -135,9 +139,9 @@ public class IntentGroupTest {
         onView(withText("This is buttonText")).perform(click());
 
         // Check StringWidgets with answers
-        onView(withText("25")).perform(nestedScrollTo()).check(matches(isDisplayed()));
-        onView(withText("46.74")).perform(nestedScrollTo()).check(matches(isDisplayed()));
-        onView(withText("sampleAnswer")).perform(nestedScrollTo()).check(matches(isDisplayed()));
+        onView(withIndex(withClassName(endsWith("EditText")), 0)).check(matches(withText("25")));
+        onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText("46.74")));
+        onView(withIndex(withClassName(endsWith("EditText")), 2)).check(matches(withText("sampleAnswer")));
 
         // Check ImageWidget with answer
         onView(withTagValue(is("ImageView"))).perform(nestedScrollTo()).check(matches(isDisplayed()));
@@ -153,6 +157,64 @@ public class IntentGroupTest {
 
         // Check ArbitraryFileWidget with answer
         onView(withTagValue(is("ArbitraryFileWidgetAnswer"))).perform(nestedScrollTo()).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void externalApp_ShouldNotPopulateFieldsIfAnswersAreNull() {
+        // Check ImageWidget without answer
+        onView(withTagValue(is("ImageView"))).check(doesNotExist());
+        onView(withId(R.id.capture_image)).check(doesNotExist());
+        onView(withId(R.id.choose_image)).check(doesNotExist());
+
+        // Check AudioWidget without answer
+        onView(withId(R.id.audio_controller)).check(matches(not(isDisplayed())));
+
+        // Check VideoWidget without answer
+        onView(withId(R.id.play_video)).check(matches(isDisplayed()));
+        onView(withId(R.id.play_video)).check(matches(not(isEnabled())));
+
+        // Check ArbitraryFileWidget without answer
+        onView(withTagValue(is("ArbitraryFileWidgetAnswer"))).check(matches(not(isDisplayed())));
+
+        Intent resultIntent = new Intent();
+
+        resultIntent.putExtra("questionInteger", (Bundle) null);
+        resultIntent.putExtra("questionDecimal", (Bundle) null);
+        resultIntent.putExtra("questionText", (Bundle) null);
+        resultIntent.putExtra("questionImage", (Bundle) null);
+        resultIntent.putExtra("questionAudio", (Bundle) null);
+        resultIntent.putExtra("questionVideo", (Bundle) null);
+        resultIntent.putExtra("questionFile", (Bundle) null);
+
+        ClipData clipData = ClipData.newRawUri(null, null);
+        clipData.addItem(new ClipData.Item("questionImage", null, null));
+        clipData.addItem(new ClipData.Item("questionAudio", null, null));
+        clipData.addItem(new ClipData.Item("questionVideo", null, null));
+        clipData.addItem(new ClipData.Item("questionFile", null, null));
+
+        resultIntent.setClipData(clipData);
+        resultIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent));
+        onView(withText("This is buttonText")).perform(click());
+
+        onView(withIndex(withClassName(endsWith("EditText")), 0)).check(matches(withText("")));
+        onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText("")));
+        onView(withIndex(withClassName(endsWith("EditText")), 2)).check(matches(withText("")));
+
+        // Check ImageWidget without answer
+        onView(withTagValue(is("ImageView"))).check(doesNotExist());
+        onView(withId(R.id.capture_image)).check(doesNotExist());
+        onView(withId(R.id.choose_image)).check(doesNotExist());
+
+        // Check AudioWidget without answer
+        onView(withId(R.id.audio_controller)).check(matches(not(isDisplayed())));
+
+        // Check VideoWidget without answer
+        onView(withId(R.id.play_video)).check(matches(isDisplayed()));
+        onView(withId(R.id.play_video)).check(matches(not(isEnabled())));
+
+        // Check ArbitraryFileWidget without answer
+        onView(withTagValue(is("ArbitraryFileWidgetAnswer"))).check(matches(not(isDisplayed())));
     }
 
     @SuppressWarnings("PMD.DoNotHardCodeSDCard")
