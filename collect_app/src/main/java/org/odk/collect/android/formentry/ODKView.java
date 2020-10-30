@@ -510,14 +510,10 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                                 try {
                                     Uri uri = (Uri) bundle.get(key);
                                     if (uri != null) {
-                                        try {
-                                            File destFile = FileUtils.createDestinationMediaFile(formController.getInstanceFile().getParent(), ContentResolverHelper.getFileExtensionFromUri(getContext(), uri));
-                                            //TODO might be better to use QuestionMediaManager in the future
-                                            FileUtils.saveAnswerFileFromUri(uri, destFile, getContext());
-                                            ((WidgetDataReceiver) questionWidget).setData(destFile);
-                                        } catch (SecurityException e) {
-                                            Timber.w(e);
-                                        }
+                                        File destFile = FileUtils.createDestinationMediaFile(formController.getInstanceFile().getParent(), ContentResolverHelper.getFileExtensionFromUri(getContext(), uri));
+                                        //TODO might be better to use QuestionMediaManager in the future
+                                        FileUtils.saveAnswerFileFromUri(uri, destFile, getContext());
+                                        ((WidgetDataReceiver) questionWidget).setData(destFile);
                                     }
                                 } catch (Exception | Error e) {
                                     Timber.w(e);

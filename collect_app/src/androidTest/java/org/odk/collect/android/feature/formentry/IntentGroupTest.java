@@ -58,6 +58,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.StringEndsWith.endsWith;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.odk.collect.android.support.CustomMatchers.withIndex;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 import static org.odk.collect.android.support.actions.NestedScrollToAction.nestedScrollTo;
@@ -170,6 +172,42 @@ public class IntentGroupTest {
         assertAudioWidgetWithoutAnswer();
         assertVideoWidgetWithoutAnswer();
         assertFileWidgetWithoutAnswer();
+    }
+
+    @Test
+    public void collect_shouldNotCrashWhenAnyExceptionIsThrownWhileReceivingAnswer() {
+        assertImageWidgetWithoutAnswer();
+
+        Intent resultIntent = new Intent();
+
+        Uri uri = mock(Uri.class);
+        doThrow(new SecurityException()).when(uri);
+
+        resultIntent.putExtra("questionImage", uri);
+
+        intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent));
+
+        onView(withText("This is buttonText")).perform(click());
+
+        assertImageWidgetWithoutAnswer();
+    }
+
+    @Test
+    public void collect_shouldNotCrashWhenAnyErrorIsThrownWhileReceivingAnswer() {
+        assertImageWidgetWithoutAnswer();
+
+        Intent resultIntent = new Intent();
+
+        Uri uri = mock(Uri.class);
+        doThrow(new Error()).when(uri);
+
+        resultIntent.putExtra("questionImage", uri);
+
+        intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent));
+
+        onView(withText("This is buttonText")).perform(click());
+
+        assertImageWidgetWithoutAnswer();
     }
 
     private void assertImageWidgetWithoutAnswer() {
