@@ -80,33 +80,32 @@ public class OSMWidgetTest {
 
     @Test
     public void usingReadOnlyOption_doesNotShowButton() {
-        assertThat(createWidget(promptWithReadOnly()).launchOpenMapKitButton.getVisibility(), is(View.GONE));
+        assertThat(createWidget(promptWithReadOnly()).binding.launchOpenMapKitButton.getVisibility(), is(View.GONE));
     }
 
     @Test
     public void whenPromptDoesNotHaveAnswer_widgetShowsNullAnswer() {
         OSMWidget widget = createWidget(promptWithAnswer(null));
 
-        assertThat(widget.errorTextView.getVisibility(), is(View.GONE));
-        assertThat(widget.osmFileNameHeaderTextView.getVisibility(), is(View.GONE));
-        assertThat(widget.osmFileNameTextView.getText(), is(""));
+        assertThat(widget.binding.errorText.getVisibility(), is(View.GONE));
+        assertThat(widget.binding.osmFileHeaderText.getVisibility(), is(View.GONE));
+        assertThat(widget.binding.osmFileText.getText(), is(""));
     }
 
     @Test
     public void whenPromptHasAnswer_widgetShowsCorrectAnswer() {
         OSMWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
 
-        assertThat(widget.errorTextView.getVisibility(), is(View.GONE));
-        assertThat(widget.osmFileNameHeaderTextView.getText(), is(widgetActivity.getString(R.string.edited_osm_file)));
-        assertThat(widget.osmFileNameTextView.getText(), is("blah"));
+        assertThat(widget.binding.errorText.getVisibility(), is(View.GONE));
+        assertThat(widget.binding.osmFileHeaderText.getText(), is(widgetActivity.getString(R.string.edited_osm_file)));
+        assertThat(widget.binding.osmFileText.getText(), is("blah"));
     }
 
     @Test
     public void whenPromptHasAnswer_recaptureOsmButtonIsDisplayed() {
         OSMWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        assertThat(widget.launchOpenMapKitButton.getText(), is(widgetActivity.getString(R.string.recapture_osm)));
+        assertThat(widget.binding.launchOpenMapKitButton.getText(), is(widgetActivity.getString(R.string.recapture_osm)));
     }
-
 
     @Test
     public void getAnswer_whenPromptAnswerDoesNotHaveAnswer_returnsNull() {
@@ -123,7 +122,15 @@ public class OSMWidgetTest {
     public void clearAnswer_clearsWidgetAnswer() {
         OSMWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         widget.clearAnswer();
-        assertThat(widget.getAnswer(), nullValue());
+        assertThat(widget.binding.osmFileHeaderText.getVisibility(), is(View.GONE));
+        assertThat(widget.binding.osmFileText.getText(), is(""));
+    }
+
+    @Test
+    public void clearAnswer_showsCaptureOsmButton() {
+        OSMWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
+        widget.clearAnswer();
+        assertThat(widget.binding.launchOpenMapKitButton.getText(), is(widgetActivity.getString(R.string.capture_osm)));
     }
 
     @Test
@@ -141,16 +148,16 @@ public class OSMWidgetTest {
         OSMWidget widget = createWidget(promptWithAnswer(null));
         widget.setOnLongClickListener(listener);
 
-        widget.launchOpenMapKitButton.performLongClick();
-        widget.osmFileNameTextView.performLongClick();
-        widget.osmFileNameHeaderTextView.performLongClick();
-        widget.errorTextView.performLongClick();
+        widget.binding.launchOpenMapKitButton.performLongClick();
+        widget.binding.osmFileText.performLongClick();
+        widget.binding.osmFileHeaderText.performLongClick();
+        widget.binding.errorText.performLongClick();
 
-        verify(listener).onLongClick(widget.launchOpenMapKitButton);
-        verify(listener).onLongClick(widget.osmFileNameTextView);
+        verify(listener).onLongClick(widget.binding.launchOpenMapKitButton);
+        verify(listener).onLongClick(widget.binding.osmFileText);
 
-        verify(listener, never()).onLongClick(widget.osmFileNameHeaderTextView);
-        verify(listener, never()).onLongClick(widget.errorTextView);
+        verify(listener, never()).onLongClick(widget.binding.osmFileHeaderText);
+        verify(listener, never()).onLongClick(widget.binding.errorText);
     }
 
     @Test
@@ -158,9 +165,16 @@ public class OSMWidgetTest {
         OSMWidget widget = createWidget(promptWithAnswer(null));
         widget.setBinaryData("blah");
 
-        assertThat(widget.osmFileNameHeaderTextView.getVisibility(), is(View.VISIBLE));
-        assertThat(widget.osmFileNameTextView.getVisibility(), is(View.VISIBLE));
-        assertThat(widget.osmFileNameTextView.getText(), is("blah"));
+        assertThat(widget.binding.osmFileHeaderText.getVisibility(), is(View.VISIBLE));
+        assertThat(widget.binding.osmFileText.getVisibility(), is(View.VISIBLE));
+        assertThat(widget.binding.osmFileText.getText(), is("blah"));
+    }
+
+    @Test
+    public void setData_showsRecaptureOsmButton() {
+        OSMWidget widget = createWidget(promptWithAnswer(null));
+        widget.setBinaryData("blah");
+        assertThat(widget.binding.launchOpenMapKitButton.getText(), is(widgetActivity.getString(R.string.recapture_osm)));
     }
 
     @Test
@@ -176,17 +190,16 @@ public class OSMWidgetTest {
     public void clickingButton_whenActivityIsNotAvailable_showsErrorTextView() {
         when(activityAvailability.isActivityAvailable(ArgumentMatchers.any())).thenReturn(false);
         OSMWidget widget = createWidget(promptWithAnswer(null));
-        widget.launchOpenMapKitButton.performClick();
+        widget.binding.launchOpenMapKitButton.performClick();
 
-        assertThat(widget.errorTextView.getVisibility(), is(View.VISIBLE));
-        assertThat(widget.errorTextView.getText(), is(widgetActivity.getString(R.string.invalid_osm_data)));
+        assertThat(widget.binding.errorText.getVisibility(), is(View.VISIBLE));
     }
 
     @Test
     public void clickingButton_whenActivityIsNotAvailable_DoesNotLAunchAnyIntentAndCancelsWaitingForData() {
         when(activityAvailability.isActivityAvailable(ArgumentMatchers.any())).thenReturn(false);
         OSMWidget widget = createWidget(promptWithAnswer(null));
-        widget.launchOpenMapKitButton.performClick();
+        widget.binding.launchOpenMapKitButton.performClick();
 
         assertThat(shadowActivity.getNextStartedActivity(), nullValue());
         assertThat(fakeWaitingForDataRegistry.waiting.isEmpty(), is(true));
@@ -199,7 +212,7 @@ public class OSMWidgetTest {
         when(prompt.getIndex()).thenReturn(formIndex);
 
         OSMWidget widget = createWidget(prompt);
-        widget.launchOpenMapKitButton.performClick();
+        widget.binding.launchOpenMapKitButton.performClick();
 
         assertThat(fakeWaitingForDataRegistry.waiting.contains(formIndex), is(true));
     }
@@ -207,14 +220,14 @@ public class OSMWidgetTest {
     @Test
     public void clickingButton_whenActivityIsAvailableAndPromptDoesNotHaveAnswer_launchesCorrectIntent() {
         OSMWidget widget = createWidget(promptWithAnswer(null));
-        widget.launchOpenMapKitButton.performClick();
+        widget.binding.launchOpenMapKitButton.performClick();
         assertIntentExtrasEquals(null);
     }
 
     @Test
     public void clickingButton_whenActivityIsAvailableAndPromptHasAnswer_launchesCorrectIntent() {
         OSMWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        widget.launchOpenMapKitButton.performClick();
+        widget.binding.launchOpenMapKitButton.performClick();
         assertIntentExtrasEquals("blah");
     }
 
