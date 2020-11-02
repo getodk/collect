@@ -57,7 +57,6 @@ public class PropertyManager implements IPropertyManager {
     public static final String SCHEME_USERNAME     = "username";
     private static final String SCHEME_TEL          = "tel";
     private static final String SCHEME_MAILTO       = "mailto";
-    private static final String SCHEME_IMEI         = "imei";
 
     private final Map<String, String> properties = new HashMap<>();
 
@@ -92,7 +91,7 @@ public class PropertyManager implements IPropertyManager {
 
     public PropertyManager reload() {
         try {
-            putProperty(PROPMGR_DEVICE_ID,     SCHEME_IMEI,         deviceDetailsProvider.getDeviceId());
+            putProperty(PROPMGR_DEVICE_ID,     "",         deviceDetailsProvider.getDeviceId());
             putProperty(PROPMGR_PHONE_NUMBER,  SCHEME_TEL,          deviceDetailsProvider.getLine1Number());
         } catch (SecurityException e) {
             Timber.e(e);
