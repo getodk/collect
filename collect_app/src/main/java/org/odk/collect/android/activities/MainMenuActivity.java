@@ -41,8 +41,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.configure.legacy.LegacySettingsFileImporter;
 import org.odk.collect.android.configure.SettingsImporter;
+import org.odk.collect.android.configure.legacy.LegacySettingsFileImporter;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
@@ -88,7 +88,6 @@ import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
  */
 public class MainMenuActivity extends CollectAbstractActivity implements AdminPasswordDialogFragment.AdminPasswordDialogCallback {
     private static final boolean EXIT = true;
-    public static final String EXTRA_LEGACY_SETTINGS_IMPORTED = "LEGACY_IMPORT";
     // buttons
     private Button manageFilesButton;
     private Button sendDataButton;
@@ -264,20 +263,17 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             return;
         }
 
-        if (getIntent().getBooleanExtra(EXTRA_LEGACY_SETTINGS_IMPORTED, false)) {
+        LegacySettingsFileImporter legacySettingsFileImporter = new LegacySettingsFileImporter(storagePathProvider, analytics, settingsImporter);
+        if (legacySettingsFileImporter.importFromFile()) {
             new MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.successfully_imported_settings)
                     .setMessage(R.string.settings_successfully_loaded_file_notification)
-                    .setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
+                    .setPositiveButton(R.string.ok, (dialog, which) -> {
+                        dialog.dismiss();
+                        recreate();
+                    })
                     .setCancelable(false)
                     .create().show();
-        } else {
-            LegacySettingsFileImporter legacySettingsFileImporter = new LegacySettingsFileImporter(storagePathProvider, analytics, settingsImporter);
-            if (legacySettingsFileImporter.importFromFile()) {
-                Intent intent = getIntent().putExtra(EXTRA_LEGACY_SETTINGS_IMPORTED, true);
-                setIntent(intent);
-                recreate();
-            }
         }
     }
 
