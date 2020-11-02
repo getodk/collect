@@ -20,10 +20,10 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.osm.OSMTag;
 import org.javarosa.core.model.osm.OSMTagItem;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
@@ -43,6 +43,11 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  */
 @SuppressLint("ViewConstructor")
 public class OSMWidget extends QuestionWidget implements WidgetDataReceiver, ButtonClickListener {
+    public static final String FORM_ID = "FORM_ID";
+    public static final String INSTANCE_ID = "INSTANCE_ID";
+    public static final String INSTANCE_DIR = "INSTANCE_DIR";
+    public static final String FORM_FILE_NAME = "FORM_FILE_NAME";
+    public static final String OSM_EDIT_FILE_NAME = "OSM_EDIT_FILE_NAME";
 
     // button colors
     private static final int OSM_GREEN = Color.rgb(126, 188, 111);
@@ -50,8 +55,8 @@ public class OSMWidget extends QuestionWidget implements WidgetDataReceiver, But
 
     final Button launchOpenMapKitButton;
     private final String instanceDirectory;
-    private final TextView errorTextView;
-    private final TextView osmFileNameHeaderTextView;
+    final TextView errorTextView;
+    final TextView osmFileNameHeaderTextView;
     final TextView osmFileNameTextView;
 
     private final List<OSMTag> osmRequiredTags;
@@ -59,13 +64,14 @@ public class OSMWidget extends QuestionWidget implements WidgetDataReceiver, But
     private final int formId;
     private final String formFileName;
     private final WaitingForDataRegistry waitingForDataRegistry;
+    private final ActivityAvailability activityAvailability;
     private String osmFileName;
 
-    public OSMWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
+    public OSMWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry,
+                     ActivityAvailability activityAvailability, FormController formController) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
-
-        FormController formController = Collect.getInstance().getFormController();
+        this.activityAvailability = activityAvailability;
 
         formFileName = FileUtils.getFormBasenameFromMediaFolder(formController.getMediaFolder());
 
@@ -139,29 +145,29 @@ public class OSMWidget extends QuestionWidget implements WidgetDataReceiver, But
             launchIntent.setType("text/plain");
 
             //send form id
-            launchIntent.putExtra("FORM_ID", String.valueOf(formId));
+            launchIntent.putExtra(FORM_ID, String.valueOf(formId));
 
             //send instance id
-            launchIntent.putExtra("INSTANCE_ID", instanceId);
+            launchIntent.putExtra(INSTANCE_ID, instanceId);
 
             //send instance directory
-            launchIntent.putExtra("INSTANCE_DIR", instanceDirectory);
+            launchIntent.putExtra(INSTANCE_DIR, instanceDirectory);
 
             //send form file name
-            launchIntent.putExtra("FORM_FILE_NAME", formFileName);
+            launchIntent.putExtra(FORM_FILE_NAME, formFileName);
 
             //send OSM file name if there was a previous edit
             if (osmFileName != null) {
-                launchIntent.putExtra("OSM_EDIT_FILE_NAME", osmFileName);
+                launchIntent.putExtra(OSM_EDIT_FILE_NAME, osmFileName);
             }
 
             //send encode tag data structure to intent
             writeOsmRequiredTagsToExtras(launchIntent);
 
-            try {
+            if (activityAvailability.isActivityAvailable(launchIntent)) {
                 waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
                 ((Activity) getContext()).startActivityForResult(launchIntent, RequestCodes.OSM_CAPTURE);
-            } catch (ActivityNotFoundException e) {
+            } else {
                 waitingForDataRegistry.cancelWaitingForData();
                 errorTextView.setVisibility(View.VISIBLE);
             }
@@ -170,13 +176,10 @@ public class OSMWidget extends QuestionWidget implements WidgetDataReceiver, But
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle(R.string.alert);
             builder.setMessage(R.string.install_openmapkit);
-            DialogInterface.OnClickListener okClickListener = new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    //TODO: launch to app store?
-                }
+            DialogInterface.OnClickListener okClickListener = (dialog, id) -> {
+                //TODO: launch to app store?
             };
-
-            builder.setPositiveButton("Ok", okClickListener);
+            builder.setPositiveButton(getContext().getString(R.string.ok), okClickListener);
             AlertDialog dialog = builder.create();
             dialog.show();
         }
