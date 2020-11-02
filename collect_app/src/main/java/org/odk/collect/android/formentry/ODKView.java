@@ -29,15 +29,15 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.google.android.material.button.MaterialButton;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormIndex;
@@ -395,18 +395,11 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         v = c.getSpecialFormQuestionText("noAppErrorString");
         errorString = (v != null) ? v : context.getString(R.string.no_app);
 
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
-
         // set button formatting
-        Button launchIntentButton = new Button(getContext());
-        launchIntentButton.setId(View.generateViewId());
+        MaterialButton launchIntentButton = findViewById(R.id.launchIntentButton);
         launchIntentButton.setText(buttonText);
-        launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
-                QuestionFontSizeUtils.getQuestionFontSize() + 2);
-        launchIntentButton.setPadding(20, 20, 20, 20);
-        launchIntentButton.setLayoutParams(params);
-
+        launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getQuestionFontSize() + 2);
+        launchIntentButton.setVisibility(VISIBLE);
         launchIntentButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -450,9 +443,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 }
             }
         });
-
-        widgetsList.addView(getDividerView());
-        widgetsList.addView(launchIntentButton, layout);
     }
 
     public void setFocus(Context context) {
