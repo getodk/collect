@@ -35,6 +35,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.analytics.Analytics;
@@ -91,6 +93,7 @@ import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
  */
 public class MainMenuActivity extends CollectAbstractActivity implements AdminPasswordDialogFragment.AdminPasswordDialogCallback {
     private static final boolean EXIT = true;
+    public static final String EXTRA_LEGACY_IMPORT = "LEGACY_IMPORT";
     // buttons
     private Button manageFilesButton;
     private Button sendDataButton;
@@ -267,6 +270,15 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         }
 
         importSettingsFromLegacyFiles();
+
+        if (getIntent().getBooleanExtra(EXTRA_LEGACY_IMPORT, false)) {
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle(R.string.successfully_imported_settings)
+                    .setMessage(R.string.settings_successfully_loaded_file_notification)
+                    .setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
+                    .setCancelable(false)
+                    .create().show();
+        }
     }
 
     @Override
@@ -585,8 +597,10 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                 String settingsHash = FileUtils.getMd5Hash(new ByteArrayInputStream(settings.getBytes()));
 
                 if (settingsImporter.fromJSON(settings)) {
-                    ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
                     analytics.logEvent(type, "Success", settingsHash);
+
+                    Intent intent = getIntent().putExtra(EXTRA_LEGACY_IMPORT, true);
+                    setIntent(intent);
                     recreate();
                 } else {
                     ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
