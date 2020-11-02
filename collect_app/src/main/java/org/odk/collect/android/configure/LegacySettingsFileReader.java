@@ -16,24 +16,23 @@ import java.util.Map;
 
 public class LegacySettingsFileReader {
 
-    private final StoragePathProvider storagePathProvider;
+    private final File objectFile;
+    private final File jsonFile;
 
     public LegacySettingsFileReader(StoragePathProvider storagePathProvider) {
-        this.storagePathProvider = storagePathProvider;
+        this.objectFile = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings");
+        this.jsonFile = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json");
     }
 
     public String toJSON() throws CorruptSettingsFileException {
-        File f = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings");
-        File j = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json");
-
         try {
-            if (j.exists()) {
-                String settings = readJSONFile(j);
-                j.delete();
+            if (jsonFile.exists()) {
+                String settings = readJSONFile(jsonFile);
+                jsonFile.delete();
                 return settings;
-            } else if (f.exists()) {
-                Pair<Map<String, Object>, Map<String, Object>> settings = readSettingsFile(f);
-                f.delete();
+            } else if (objectFile.exists()) {
+                Pair<Map<String, Object>, Map<String, Object>> settings = readSettingsFile(objectFile);
+                objectFile.delete();
 
                 return new JSONObject()
                         .put("general", new JSONObject(settings.first))
