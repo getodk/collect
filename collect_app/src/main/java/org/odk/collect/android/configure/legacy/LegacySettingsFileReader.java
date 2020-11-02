@@ -1,4 +1,4 @@
-package org.odk.collect.android.configure;
+package org.odk.collect.android.configure.legacy;
 
 import androidx.core.util.Pair;
 
@@ -27,13 +27,9 @@ public class LegacySettingsFileReader {
     public String toJSON() throws CorruptSettingsFileException {
         try {
             if (jsonFile.exists()) {
-                String settings = readJSONFile(jsonFile);
-                jsonFile.delete();
-                return settings;
+                return readJSONFile(jsonFile);
             } else if (objectFile.exists()) {
                 Pair<Map<String, Object>, Map<String, Object>> settings = readSettingsFile(objectFile);
-                objectFile.delete();
-
                 return new JSONObject()
                         .put("general", new JSONObject(settings.first))
                         .put("admin", new JSONObject(settings.second))
@@ -44,6 +40,11 @@ public class LegacySettingsFileReader {
         } catch (IOException | JSONException | ClassNotFoundException e) {
             throw new CorruptSettingsFileException();
         }
+    }
+
+    public void delete() {
+        jsonFile.delete();
+        objectFile.delete();
     }
 
     private String readJSONFile(File src) throws IOException {
