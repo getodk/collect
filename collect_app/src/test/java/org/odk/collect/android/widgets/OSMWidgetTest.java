@@ -163,7 +163,7 @@ public class OSMWidgetTest {
     @Test
     public void setData_updatesWidgetDisplayedAnswer() {
         OSMWidget widget = createWidget(promptWithAnswer(null));
-        widget.setBinaryData("blah");
+        widget.setData("blah");
 
         assertThat(widget.binding.osmFileHeaderText.getVisibility(), is(View.VISIBLE));
         assertThat(widget.binding.osmFileText.getVisibility(), is(View.VISIBLE));
@@ -173,7 +173,7 @@ public class OSMWidgetTest {
     @Test
     public void setData_showsRecaptureOsmButton() {
         OSMWidget widget = createWidget(promptWithAnswer(null));
-        widget.setBinaryData("blah");
+        widget.setData("blah");
         assertThat(widget.binding.launchOpenMapKitButton.getText(), is(widgetActivity.getString(R.string.recapture_osm)));
     }
 
@@ -182,7 +182,7 @@ public class OSMWidgetTest {
         OSMWidget widget = createWidget(promptWithAnswer(null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
 
-        widget.setBinaryData("blah");
+        widget.setData("blah");
         verify(valueChangedListener).widgetValueChanged(widget);
     }
 
