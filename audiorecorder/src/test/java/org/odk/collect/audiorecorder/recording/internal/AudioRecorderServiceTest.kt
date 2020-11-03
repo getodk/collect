@@ -51,6 +51,7 @@ class AudioRecorderServiceTest {
         val notification = shadowOf(service.get()).lastForegroundNotification
         assertThat(notification, not(nullValue()))
         assertThat(shadowOf(notification).contentTitle, equalTo(application.getString(R.string.recording)))
+        assertThat(shadowOf(notification.contentIntent).savedIntent.component?.className, equalTo(ReturnToAppActivity::class.qualifiedName))
     }
 
     @Test

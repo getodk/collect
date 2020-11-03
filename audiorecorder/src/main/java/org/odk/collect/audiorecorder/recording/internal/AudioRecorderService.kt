@@ -36,9 +36,7 @@ class AudioRecorderService : Service() {
                     recordingRepository.start(sessionId)
 
                     setupNotificationChannel()
-
                     val notificationIntent = Intent(this, ReturnToAppActivity::class.java)
-
                     val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
                         .setContentTitle(getLocalizedString(R.string.recording))
                         .setSmallIcon(R.drawable.ic_baseline_mic_24)
