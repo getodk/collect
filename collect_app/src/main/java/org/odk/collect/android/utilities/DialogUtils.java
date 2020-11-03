@@ -128,22 +128,7 @@ public final class DialogUtils {
     }
 
     public static <T extends DialogFragment> void showIfNotShowing(Class<T> dialogClass, @Nullable Bundle args, FragmentManager fragmentManager) {
-        if (fragmentManager.isStateSaved()) {
-            return;
-        }
-
-        String tag = dialogClass.getName();
-        T existingDialog = (T) fragmentManager.findFragmentByTag(tag);
-
-        if (existingDialog == null) {
-            T newDialog = createNewInstance(dialogClass, args);
-            newDialog.show(fragmentManager.beginTransaction(), tag);
-
-            // We need to execute this transaction. Otherwise a follow up call to this method
-            // could happen before the Fragment exists in the Fragment Manager and so the
-            // call to findFragmentByTag would return null and result in second dialog being show.
-            fragmentManager.executePendingTransactions();
-        }
+        showIfNotShowing(createNewInstance(dialogClass, args), dialogClass, fragmentManager);
     }
 
     public static <T extends DialogFragment> void showIfNotShowing(T newDialog, Class<T> dialogClass, FragmentManager fragmentManager) {
