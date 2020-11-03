@@ -10,11 +10,13 @@ import androidx.lifecycle.ViewModelProvider;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
+import org.javarosa.form.api.FormEntryController;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.javarosawrapper.FormController;
 
+import static org.javarosa.form.api.FormEntryController.EVENT_PROMPT_NEW_REPEAT;
 import static org.odk.collect.android.analytics.AnalyticsEvents.ADD_REPEAT;
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
 
@@ -85,7 +87,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         } catch (RuntimeException e) {
             error.setValue(e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
         }
-        
+
         if (!formController.indexIsInFieldList()) {
             try {
                 formController.stepToNextScreenEvent();
@@ -102,7 +104,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
         if (jumpBackIndex != null) {
             analytics.logEvent(ADD_REPEAT, "InlineDecline", formController.getCurrentFormIdentifierHash());
-            
+
             formController.jumpToIndex(jumpBackIndex);
             jumpBackIndex = null;
         } else {
@@ -125,6 +127,40 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
             return !((GroupDef) formDef.getChild(repeatGroupIndex)).noAddRemove;
         } else {
             return false;
+        }
+    }
+
+    public void moveForward() {
+        try {
+            formController.stepToNextScreenEvent();
+        } catch (JavaRosaException e) {
+            error.setValue(e.getCause().getMessage());
+            return;
+        }
+
+        formController.getAuditEventLogger().flush(); // Close events waiting for an end time
+    }
+
+    public void moveBackward() {
+        if (formController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
+            try {
+                int event = formController.stepToPreviousScreenEvent();
+
+                // If we are the beginning of the form, there is no previous view to show
+                if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
+                    event = formController.stepToNextScreenEvent();
+
+                    if (event != EVENT_PROMPT_NEW_REPEAT) {
+                        // Returning here prevents the same view sliding when user is on the first screen
+                        return;
+                    }
+                }
+            } catch (JavaRosaException e) {
+                error.setValue(e.getCause().getMessage());
+                return;
+            }
+
+            formController.getAuditEventLogger().flush(); // Close events waiting for an end time
         }
     }
 

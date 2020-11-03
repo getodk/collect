@@ -90,6 +90,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.FormEntryMenuDelegate;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.FormIndexAnimationHandler;
+import org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction;
 import org.odk.collect.android.formentry.FormLoadingDialogFragment;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
@@ -186,6 +187,8 @@ import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static android.view.animation.AnimationUtils.loadAnimation;
 import static org.javarosa.form.api.FormEntryController.EVENT_PROMPT_NEW_REPEAT;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SAVE_INCOMPLETE;
+import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.BACKWARDS;
+import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.FORWARDS;
 import static org.odk.collect.android.fragments.BarcodeWidgetScannerFragment.BARCODE_RESULT_KEY;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
@@ -389,13 +392,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         nextButton = findViewById(R.id.form_forward_button);
         nextButton.setOnClickListener(v -> {
             swipeHandler.setBeenSwiped(true);
-            showNextView();
+            moveScreen(FORWARDS);
         });
 
         backButton = findViewById(R.id.form_back_button);
         backButton.setOnClickListener(v -> {
             swipeHandler.setBeenSwiped(true);
-            showPreviousView();
+            onSwipeBackward();
         });
 
         questionFontSize = QuestionFontSizeUtils.getQuestionFontSize();
@@ -484,6 +487,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private void formControllerAvailable(@NonNull FormController formController) {
         menuDelegate.formLoaded(formController);
+
         identityPromptViewModel.formLoaded(formController);
         formEntryViewModel.formLoaded(formController);
         formSaveViewModel.formLoaded(formController);
@@ -1122,6 +1126,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return false;
             }
         }
+
         return true;
     }
 
@@ -1192,7 +1197,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public void deleteGroup() {
         FormController formController = getFormController();
         if (formController != null && !formController.indexIsInFieldList()) {
-            showNextView();
+            moveScreen(FORWARDS);
         } else {
             onScreenRefresh();
         }
@@ -1478,90 +1483,57 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         return handled; // this is always true
     }
 
-    /**
-     * Determines what should be displayed on the screen. Possible options are:
-     * a question, an ask repeat dialog, or the submit screen. Also saves
-     * answers to the data model after checking constraints.
-     */
-    public void showNextView() {
-        state = null;
-        try {
-            FormController formController = getFormController();
-            if (saveBeforeNextView(formController)) {
-                return;
-            }
-
-            int originalEvent = formController.getEvent();
-            int event = formController.stepToNextScreenEvent();
-
-            // Helps prevent transition animation at the end of the form (if user swipes left
-            // she will stay on the same screen)
-            if (originalEvent == event && originalEvent == FormEntryController.EVENT_END_OF_FORM) {
-                swipeHandler.setBeenSwiped(false);
-                return;
-            }
-
-            formIndexAnimationHandler.handle(getFormController().getFormIndex());
-        } catch (JavaRosaException e) {
-            Timber.d(e);
-            createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
-        }
+    @Override
+    public void onSwipeForward() {
+        moveScreen(FORWARDS);
     }
 
-    /**
-     * If moving backwards is allowed, displays the view for the previous question or field list.
-     * Steps the global {@link FormController} to the previous question and saves answers to the
-     * data model without checking constraints.
-     */
-    public void showPreviousView() {
-        if (allowMovingBackwards) {
-            state = null;
-            FormController formController = getFormController();
-            if (formController != null) {
+    @Override
+    public void onSwipeBackward() {
+        moveScreen(BACKWARDS);
+    }
+
+    private void moveScreen(Direction direction) {
+        FormController formController = getFormController();
+        if (formController == null) {
+            Timber.w("FormController has a null value");
+            return;
+        }
+
+        if (direction == FORWARDS && formController.getEvent() == FormEntryController.EVENT_END_OF_FORM) {
+            // We're tryin to move forwards at the end of the form so just cancel
+            swipeHandler.setBeenSwiped(false);
+            return;
+        } else if (direction == BACKWARDS && !allowMovingBackwards) {
+            // We're not allowed to move backwards but trying to so just cancel
+            swipeHandler.setBeenSwiped(false);
+            return;
+        }
+
+        state = null; // This is needed for something but is definitely suspect
+
+        switch (direction) {
+            case FORWARDS:
+                if (!saveBeforeNextView(formController)) {
+                    formEntryViewModel.moveForward();
+                    formIndexAnimationHandler.handle(formController.getFormIndex());
+                }
+                break;
+
+            case BACKWARDS:
                 // The answer is saved on a back swipe, but question constraints are ignored.
                 if (formController.currentPromptIsQuestion()) {
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
 
-                try {
-                    if (formController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
-                        int event = formController.stepToPreviousScreenEvent();
-
-                        // If we are the beginning of the form, there is no previous view to show
-                        if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
-                            event = formController.stepToNextScreenEvent();
-                            swipeHandler.setBeenSwiped(false);
-
-                            if (event != EVENT_PROMPT_NEW_REPEAT) {
-                                // Returning here prevents the same view sliding when user is on the first screen
-                                return;
-                            }
-                        }
-
-                        if (event == FormEntryController.EVENT_GROUP
-                                || event == FormEntryController.EVENT_QUESTION) {
-                            // create savepoint
-                            nonblockingCreateSavePointData();
-                        }
-
-                        formController.getAuditEventLogger().flush();    // Close events
-                        formIndexAnimationHandler.handle(formController.getFormIndex());
-                    }
-                } catch (JavaRosaException e) {
-                    Timber.d(e);
-                    createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
-                }
-            } else {
-                Timber.w("FormController has a null value");
-            }
-
-        } else {
-            swipeHandler.setBeenSwiped(false);
+                formEntryViewModel.moveBackward();
+                formIndexAnimationHandler.handle(formController.getFormIndex());
+                break;
         }
     }
 
     @Override
-    public void onScreenChange(FormIndexAnimationHandler.Direction direction) {
+    public void onScreenChange(Direction direction) {
         audioRecorderViewModel.cleanUp();
 
         final int event = getFormController().getEvent();
@@ -1571,6 +1543,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 animateToNextView(event);
                 break;
             case BACKWARDS:
+                if (event == FormEntryController.EVENT_GROUP || event == FormEntryController.EVENT_QUESTION) {
+                    // create savepoint
+                    nonblockingCreateSavePointData();
+                }
+
                 animateToPreviousView(event);
                 break;
         }
@@ -1591,7 +1568,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formIndexAnimationHandler.setLastIndex(getFormController().getFormIndex());
     }
 
-    public void animateToNextView(int event) {
+    private void animateToNextView(int event) {
         switch (event) {
             case FormEntryController.EVENT_QUESTION:
             case FormEntryController.EVENT_GROUP:
@@ -1616,7 +1593,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formIndexAnimationHandler.setLastIndex(getFormController().getFormIndex());
     }
 
-    public void animateToPreviousView(int event) {
+    private void animateToPreviousView(int event) {
         View next = createView(event, false);
         showView(next, AnimationType.LEFT);
 
@@ -1644,7 +1621,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
-        formController.getAuditEventLogger().flush();    // Close events waiting for an end time
         return false;
     }
 
@@ -2232,14 +2208,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 if (event.isAltPressed() && !swipeHandler.beenSwiped()) {
                     swipeHandler.setBeenSwiped(true);
-                    showNextView();
+                    moveScreen(FORWARDS);
                     return true;
                 }
                 break;
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 if (event.isAltPressed() && !swipeHandler.beenSwiped()) {
                     swipeHandler.setBeenSwiped(true);
-                    showPreviousView();
+                    onSwipeBackward();
                     return true;
                 }
                 break;
@@ -2534,7 +2510,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public void next() {
         if (!swipeHandler.beenSwiped()) {
             swipeHandler.setBeenSwiped(true);
-            showNextView();
+            moveScreen(FORWARDS);
         }
     }
 

@@ -280,4 +280,9 @@ public class FormEntryPage extends Page<FormEntryPage> {
         onView(withId(R.id.answer)).check(matches(withText(answer)));
         return this;
     }
+
+    public CancelRecordingDialog swipeToEndScreenWithCancelRecordingConfirmation() {
+        flingLeft();
+        return new CancelRecordingDialog(rule).assertOnPage();
+    }
 }
