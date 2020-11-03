@@ -706,4 +706,5 @@
     <string name="stop_recording">Stop</string>
     <string name="recording">Recording…</string>
     <string name="recording_channel">Audio recording</string>
+    <string name="play_audio">Play audio</string>
 </resources>
