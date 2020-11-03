@@ -2,6 +2,7 @@ package org.odk.collect.audiorecorder.recording.internal
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.os.Build
@@ -36,9 +37,12 @@ class AudioRecorderService : Service() {
 
                     setupNotificationChannel()
 
+                    val notificationIntent = Intent(this, ReturnToAppActivity::class.java)
+
                     val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
                         .setContentTitle(getLocalizedString(R.string.recording))
                         .setSmallIcon(R.drawable.ic_baseline_mic_24)
+                        .setContentIntent(PendingIntent.getActivity(this, 0, notificationIntent, 0))
                         .build()
 
                     startForeground(NOTIFICATION_ID, notification)
