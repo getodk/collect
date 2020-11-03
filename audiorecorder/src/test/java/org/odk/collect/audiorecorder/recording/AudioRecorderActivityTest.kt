@@ -1,6 +1,5 @@
 package org.odk.collect.audiorecorder.recording
 
-import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.app.Application
 import android.net.Uri
@@ -15,81 +14,104 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.audiorecorder.AudioRecorderDependencyModule
-import org.odk.collect.audiorecorder.overrideDependencies
+import org.odk.collect.audiorecorder.TestApplication
 import org.odk.collect.audiorecorder.recorder.Recorder
+import org.odk.collect.audiorecorder.setupDependencies
+import org.robolectric.Shadows.shadowOf
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class AudioRecorderActivityTest {
 
     private val fakeRecorder = FakeRecorder()
+    private val recordingRepository = RecordingRepository()
 
     @Before
     fun setup() {
-        getApplicationContext<Application>().overrideDependencies(
+        getApplicationContext<TestApplication>().setupDependencies(
             object : AudioRecorderDependencyModule() {
                 override fun providesRecorder(application: Application): Recorder {
                     return fakeRecorder
+                }
+
+                override fun providesRecordingRepository(): RecordingRepository {
+                    return recordingRepository
                 }
             }
         )
     }
 
     @Test
-    fun launching_startsRecording() {
-        launchActivity<AudioRecorderActivity>()
-        assertThat(fakeRecorder.isRecording(), equalTo(true))
+    fun launching_startsRecordingService_withStart() {
+        launchActivity<AudioRecorderActivity>().onActivity {
+            val nextStartedService = shadowOf(it).nextStartedService
+            assertThat(nextStartedService.component?.className, equalTo(AudioRecorderService::class.qualifiedName))
+            assertThat(nextStartedService.action, equalTo(AudioRecorderService.ACTION_START))
+        }
     }
 
     @Test
-    fun pressingDone_cancelsRecording_setsResultToRecordedFile_andFinishes() {
+    fun pressingDone_startsRecordingService_withStop() {
+        launchActivity<AudioRecorderActivity>().onActivity {
+            shadowOf(it).clearStartedServices() // Get rid of start command
+
+            it.done.performClick()
+
+            val nextStartedService = shadowOf(it).nextStartedService
+            assertThat(nextStartedService.component?.className, equalTo(AudioRecorderService::class.qualifiedName))
+            assertThat(nextStartedService.action, equalTo(AudioRecorderService.ACTION_STOP))
+        }
+    }
+
+    @Test
+    fun afterPressingDone_whenRecordingAvailable_finishesWithRecordingAsResult() {
         val scenario = launchActivity<AudioRecorderActivity>().onActivity {
             it.done.performClick()
         }
 
-        assertThat(fakeRecorder.isRecording(), equalTo(false))
+        val recording = File.createTempFile("blah", ".mp3")
+        recordingRepository.create(recording)
+
         assertThat(scenario.result.resultCode, equalTo(RESULT_OK))
-        assertThat(scenario.result.resultData.data, equalTo(Uri.parse(fakeRecorder.file.absolutePath)))
+        assertThat(scenario.result.resultData.data, equalTo(Uri.parse(recording.absolutePath)))
     }
 
     @Test
-    fun pressingBack_stopsRecording_doesNotReturnFile() {
-        val scenario = launchActivity<AudioRecorderActivity>()
-        scenario.moveToState(Lifecycle.State.DESTROYED)
+    fun pressingBack_cancelsRecording() {
+        launchActivity<AudioRecorderActivity>().onActivity {
+            shadowOf(it).clearStartedServices() // Get rid of start command
 
-        assertThat(fakeRecorder.isRecording(), equalTo(false))
-        assertThat(fakeRecorder.wasCancelled(), equalTo(true))
-        assertThat(scenario.result.resultCode, equalTo(RESULT_CANCELED))
-    }
-}
+            it.onBackPressed()
 
-private class FakeRecorder : Recorder {
-
-    val file: File = File.createTempFile("recording", ".mp3")
-
-    private var recording = false
-    private var cancelled = false
-
-    fun isRecording(): Boolean {
-        return recording
+            val nextStartedService = shadowOf(it).nextStartedService
+            assertThat(nextStartedService.component?.className, equalTo(AudioRecorderService::class.qualifiedName))
+            assertThat(nextStartedService.action, equalTo(AudioRecorderService.ACTION_CANCEL))
+        }
     }
 
-    fun wasCancelled(): Boolean {
-        return cancelled
-    }
+    @Test
+    fun recordingCanHappenMoreThanOnce() {
+        val scenario1 = launchActivity<AudioRecorderActivity>().onActivity {
+            assertThat(it.isFinishing, equalTo(false))
+            it.done.performClick()
+        }
 
-    override fun start() {
-        recording = true
-        cancelled = false
-    }
+        val recording1 = File.createTempFile("blah1", ".mp3")
+        recordingRepository.create(recording1)
 
-    override fun stop(): File {
-        recording = false
-        return file
-    }
+        assertThat(scenario1.result.resultCode, equalTo(RESULT_OK))
+        assertThat(scenario1.result.resultData.data, equalTo(Uri.parse(recording1.absolutePath)))
+        scenario1.moveToState(Lifecycle.State.DESTROYED)
 
-    override fun cancel() {
-        recording = false
-        cancelled = true
+        val scenario2 = launchActivity<AudioRecorderActivity>().onActivity {
+            assertThat(it.isFinishing, equalTo(false))
+            it.done.performClick()
+        }
+
+        val recording2 = File.createTempFile("blah2", ".mp3")
+        recordingRepository.create(recording2)
+
+        assertThat(scenario2.result.resultCode, equalTo(RESULT_OK))
+        assertThat(scenario2.result.resultData.data, equalTo(Uri.parse(recording2.absolutePath)))
     }
 }

@@ -6,4 +6,6 @@ internal interface Recorder {
     fun start()
     fun stop(): File
     fun cancel()
+
+    fun isRecording(): Boolean
 }

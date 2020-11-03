@@ -29,13 +29,16 @@ internal class MediaRecorderRecorder(private val cacheDir: File, private val med
 
     override fun stop(): File {
         stopAndReleaseMediaRecorder()
-
         return file!!
     }
 
     override fun cancel() {
         stopAndReleaseMediaRecorder()
         file?.delete()
+    }
+
+    override fun isRecording(): Boolean {
+        return mediaRecorder != null
     }
 
     private fun stopAndReleaseMediaRecorder() {

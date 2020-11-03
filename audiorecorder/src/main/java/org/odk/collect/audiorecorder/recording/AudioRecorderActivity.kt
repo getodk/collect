@@ -9,15 +9,14 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_audio_recorder.done
 import org.odk.collect.audiorecorder.R
 import org.odk.collect.audiorecorder.getComponent
-import org.odk.collect.audiorecorder.recorder.Recorder
 import javax.inject.Inject
 
 class AudioRecorderActivity : AppCompatActivity() {
 
     @Inject
-    internal lateinit var recorder: Recorder
+    internal lateinit var recordingRepository: RecordingRepository
 
-    private val viewModel: AudioRecorderViewModel by viewModels { AudioRecorderViewModel.Factory(recorder) }
+    private val viewModel: AudioRecorderViewModel by viewModels { AudioRecorderViewModel.Factory(application, recordingRepository) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,20 +24,27 @@ class AudioRecorderActivity : AppCompatActivity() {
 
         setTheme(intent.getIntExtra(ARGS.THEME, R.style.Theme_MaterialComponents_Light_NoActionBar))
         setContentView(R.layout.activity_audio_recorder)
+        done.setOnClickListener { viewModel.stop() }
 
         viewModel.start()
+        viewModel.recording.observe(this) { file ->
+            if (file != null) {
+                setResult(
+                    Activity.RESULT_OK,
+                    Intent().also {
+                        it.data = Uri.parse(file.absolutePath)
+                    }
+                )
 
-        done.setOnClickListener {
-            val recording = viewModel.stop()
-            setResult(
-                Activity.RESULT_OK,
-                Intent().also {
-                    it.data = Uri.parse(recording.absolutePath)
-                }
-            )
-
-            finish()
+                viewModel.endSession()
+                finish()
+            }
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        viewModel.cancel()
     }
 
     object ARGS {

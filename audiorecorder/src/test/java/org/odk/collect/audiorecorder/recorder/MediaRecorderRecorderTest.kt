@@ -1,4 +1,4 @@
-package org.odk.collect.audiorecorder.recording
+package org.odk.collect.audiorecorder.recorder
 
 import android.media.MediaRecorder
 import com.google.common.io.Files
@@ -6,8 +6,6 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
 import org.junit.Test
-import org.odk.collect.audiorecorder.recorder.MediaRecorderRecorder
-import org.odk.collect.audiorecorder.recorder.MediaRecorderWrapper
 import java.io.File
 
 class MediaRecorderRecorderTest {
@@ -41,6 +39,12 @@ class MediaRecorderRecorderTest {
     }
 
     @Test
+    fun start_setsIsRecording_toTrue() {
+        recorder.start()
+        assertThat(recorder.isRecording(), equalTo(true))
+    }
+
+    @Test
     fun recordingTwice_doesntUseSameOutputFile() {
         var mediaRecorder = FakeMediaRecorderWrapper()
         var recorder = MediaRecorderRecorder(cacheDir) { mediaRecorder }
@@ -70,6 +74,13 @@ class MediaRecorderRecorderTest {
     }
 
     @Test
+    fun stop_setsIsRecording_toFalse() {
+        recorder.start()
+        recorder.stop()
+        assertThat(recorder.isRecording(), equalTo(false))
+    }
+
+    @Test
     fun cancel_releasesMediaRecorder() {
         recorder.start()
         recorder.cancel()
@@ -81,6 +92,13 @@ class MediaRecorderRecorderTest {
         recorder.start()
         recorder.cancel()
         assertThat(mediaRecorder.getOutputFile()!!.exists(), equalTo(false))
+    }
+
+    @Test
+    fun cancel_setsIsRecording_toFalse() {
+        recorder.start()
+        recorder.cancel()
+        assertThat(recorder.isRecording(), equalTo(false))
     }
 
     @Test
