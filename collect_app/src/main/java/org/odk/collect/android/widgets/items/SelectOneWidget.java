@@ -61,7 +61,7 @@ public class SelectOneWidget extends BaseSelectListWidget {
 
     @Override
     protected AbstractSelectListAdapter setUpAdapter() {
-        int numColumns = WidgetAppearanceUtils.getNumberOfColumns(getFormEntryPrompt(), getContext());
+        int numColumns = WidgetAppearanceUtils.getNumberOfColumns(getFormEntryPrompt(), screenUtils);
         boolean noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(getFormEntryPrompt()) || WidgetAppearanceUtils.isNoButtonsAppearance(getFormEntryPrompt());
 
         recyclerViewAdapter = new SelectOneListAdapter(getSelectedValue(), this, getContext(), items,

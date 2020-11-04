@@ -21,6 +21,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
+import static android.content.res.Configuration.SCREENLAYOUT_SIZE_NORMAL;
+import static android.content.res.Configuration.SCREENLAYOUT_SIZE_SMALL;
+import static android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -60,7 +64,7 @@ public class WidgetAppearanceUtilsTest {
     }
 
     @Test
-    public void getNumberOfColumnsTest() {
+    public void getNumberOfColumnsForColumnsNAppearanceTest() {
         when(formEntryPrompt.getAppearanceHint()).thenReturn("");
         assertEquals(1, WidgetAppearanceUtils.getNumberOfColumns(formEntryPrompt, null));
 
@@ -108,6 +112,30 @@ public class WidgetAppearanceUtilsTest {
 
         when(formEntryPrompt.getAppearanceHint()).thenReturn("columns--10");
         assertEquals(1, WidgetAppearanceUtils.getNumberOfColumns(formEntryPrompt, null));
+    }
+
+    @Test
+    public void getNumberOfColumnsForColumnsAppearanceTest() {
+        ScreenUtils screenUtils = mock(ScreenUtils.class);
+        when(screenUtils.getScreenSizeConfiguration()).thenReturn(SCREENLAYOUT_SIZE_SMALL);
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("");
+        assertEquals(1, WidgetAppearanceUtils.getNumberOfColumns(formEntryPrompt, screenUtils));
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("blah columns blah");
+        assertEquals(2, WidgetAppearanceUtils.getNumberOfColumns(formEntryPrompt, screenUtils));
+
+        when(screenUtils.getScreenSizeConfiguration()).thenReturn(SCREENLAYOUT_SIZE_NORMAL);
+        assertEquals(3, WidgetAppearanceUtils.getNumberOfColumns(formEntryPrompt, screenUtils));
+
+        when(screenUtils.getScreenSizeConfiguration()).thenReturn(SCREENLAYOUT_SIZE_LARGE);
+        assertEquals(4, WidgetAppearanceUtils.getNumberOfColumns(formEntryPrompt, screenUtils));
+
+        when(screenUtils.getScreenSizeConfiguration()).thenReturn(SCREENLAYOUT_SIZE_XLARGE);
+        assertEquals(5, WidgetAppearanceUtils.getNumberOfColumns(formEntryPrompt, screenUtils));
+
+        when(screenUtils.getScreenSizeConfiguration()).thenReturn(99999);
+        assertEquals(3, WidgetAppearanceUtils.getNumberOfColumns(formEntryPrompt, screenUtils));
     }
 
     @Test

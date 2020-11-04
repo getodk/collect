@@ -51,6 +51,7 @@ import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -106,6 +107,9 @@ public abstract class QuestionWidget
 
     @Inject
     public Analytics analytics;
+
+    @Inject
+    public ScreenUtils screenUtils;
 
     public QuestionWidget(Context context, QuestionDetails questionDetails) {
         this(context, questionDetails, true);

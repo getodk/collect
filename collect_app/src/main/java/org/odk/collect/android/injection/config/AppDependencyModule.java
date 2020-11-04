@@ -92,6 +92,7 @@ import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.android.views.BarcodeViewDecoder;
@@ -462,6 +463,11 @@ public class AppDependencyModule {
         return new GoogleAccountCredentialGoogleAccountPicker(GoogleAccountCredential
                 .usingOAuth2(context, Collections.singletonList(DriveScopes.DRIVE))
                 .setBackOff(new ExponentialBackOff()));
+    }
+
+    @Provides
+    ScreenUtils providesScreenUtils(Context context) {
+        return new ScreenUtils(context);
     }
 
 }
