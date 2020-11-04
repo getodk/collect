@@ -67,7 +67,7 @@ public class WidgetAppearanceUtilsTest {
         when(formEntryPrompt.getAppearanceHint()).thenReturn("columns-2");
         assertEquals(2, WidgetAppearanceUtils.getNumberOfColumns(formEntryPrompt, null));
 
-        when(formEntryPrompt.getAppearanceHint()).thenReturn("columns-10");
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("blah columns-10");
         assertEquals(10, WidgetAppearanceUtils.getNumberOfColumns(formEntryPrompt, null));
 
         when(formEntryPrompt.getAppearanceHint()).thenReturn("columns-10 quick");
@@ -208,38 +208,38 @@ public class WidgetAppearanceUtilsTest {
     }
 
     @Test
-    public void isFlexAppearance_returnsFalse_whenAppearanceStartsWithCompactN() {
-        when(formEntryPrompt.getAppearanceHint()).thenReturn("COMPACT-N_BLAH");
+    public void isFlexAppearance_returnsFalse_whenAppearanceContainsCompactN() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("BLAH COMPACT-N_BLAH");
         assertFalse(WidgetAppearanceUtils.isFlexAppearance(formEntryPrompt));
 
-        when(formEntryPrompt.getAppearanceHint()).thenReturn("compact-n_blah");
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("blah compact-n_blah");
         assertFalse(WidgetAppearanceUtils.isFlexAppearance(formEntryPrompt));
     }
 
     @Test
-    public void isFlexAppearance_returnsTrue_whenAppearanceStartsWithCompact() {
-        when(formEntryPrompt.getAppearanceHint()).thenReturn("COMPACT_BLAH");
+    public void isFlexAppearance_returnsTrue_whenAppearanceContainsCompact() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("BLAH COMPACT_BLAH");
         assertTrue(WidgetAppearanceUtils.isFlexAppearance(formEntryPrompt));
 
-        when(formEntryPrompt.getAppearanceHint()).thenReturn("compact_blah");
-        assertTrue(WidgetAppearanceUtils.isFlexAppearance(formEntryPrompt));
-    }
-
-    @Test
-    public void isFlexAppearance_returnsTrue_whenAppearanceStartsWithQuickCompact() {
-        when(formEntryPrompt.getAppearanceHint()).thenReturn("QUICKCOMPACT_BLAH");
-        assertTrue(WidgetAppearanceUtils.isFlexAppearance(formEntryPrompt));
-
-        when(formEntryPrompt.getAppearanceHint()).thenReturn("quickcompact_blah");
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("blah compact_blah");
         assertTrue(WidgetAppearanceUtils.isFlexAppearance(formEntryPrompt));
     }
 
     @Test
-    public void isFlexAppearance_returnsTrue_whenAppearanceStartsWithColumnsPack() {
-        when(formEntryPrompt.getAppearanceHint()).thenReturn("COLUMNS-PACK_BLAH");
+    public void isFlexAppearance_returnsTrue_whenAppearanceContainsQuickCompact() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("BLAH QUICKCOMPACT_BLAH");
         assertTrue(WidgetAppearanceUtils.isFlexAppearance(formEntryPrompt));
 
-        when(formEntryPrompt.getAppearanceHint()).thenReturn("columns-pack_blah");
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("blah quickcompact_blah");
+        assertTrue(WidgetAppearanceUtils.isFlexAppearance(formEntryPrompt));
+    }
+
+    @Test
+    public void isFlexAppearance_returnsTrue_whenAppearanceContainsColumnsPack() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("BLAH COLUMNS-PACK_BLAH");
+        assertTrue(WidgetAppearanceUtils.isFlexAppearance(formEntryPrompt));
+
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("blah columns-pack_blah");
         assertTrue(WidgetAppearanceUtils.isFlexAppearance(formEntryPrompt));
     }
 }
