@@ -181,8 +181,8 @@ public class WidgetAppearanceUtils {
     public static boolean isFlexAppearance(FormEntryPrompt prompt) {
         String appearance = getSanitizedAppearanceHint(prompt);
 
-        return !appearance.startsWith(COMPACT_N) && (appearance.startsWith(COMPACT)
-                || appearance.startsWith(QUICKCOMPACT) || appearance.startsWith(COLUMNS_PACK));
+        return !appearance.contains(COMPACT_N) && (appearance.contains(COMPACT)
+                || appearance.contains(QUICKCOMPACT) || appearance.contains(COLUMNS_PACK));
     }
 
     public static boolean isAutocomplete(FormEntryPrompt prompt) {
