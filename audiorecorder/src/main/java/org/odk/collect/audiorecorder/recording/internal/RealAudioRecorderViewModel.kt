@@ -11,22 +11,16 @@ import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Com
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.EXTRA_SESSION_ID
 import java.io.File
 
-internal class RealAudioRecorderViewModel internal constructor(private val application: Application, private val recordingSession: RecordingSession) : AudioRecorderViewModel() {
+internal class RealAudioRecorderViewModel internal constructor(private val application: Application, private val recordingRepository: RecordingRepository) : AudioRecorderViewModel() {
 
-    private val _isRecording: LiveData<Boolean> = map(recordingSession.get()) { it != null && it.second == null }
+    private val _isRecording: LiveData<Boolean> = map(recordingRepository.currentSession) { it != null }
 
     override fun isRecording(): LiveData<Boolean> {
         return _isRecording
     }
 
     override fun getRecording(sessionId: String): LiveData<File?> {
-        return map(recordingSession.get()) {
-            if (it != null && it.first == sessionId) {
-                it.second
-            } else {
-                null
-            }
-        }
+        return recordingRepository.get(sessionId)
     }
 
     override fun start(sessionId: String) {

@@ -12,7 +12,7 @@ import org.odk.collect.audiorecorder.recorder.RealMediaRecorderWrapper
 import org.odk.collect.audiorecorder.recorder.Recorder
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService
-import org.odk.collect.audiorecorder.recording.internal.RecordingSession
+import org.odk.collect.audiorecorder.recording.internal.RecordingRepository
 import javax.inject.Singleton
 
 private var _component: AudioRecorderDependencyComponent? = null
@@ -54,7 +54,7 @@ internal interface AudioRecorderDependencyComponent {
     fun inject(activity: AudioRecorderService)
     fun inject(activity: AudioRecorderViewModelFactory)
 
-    fun recordingSession(): RecordingSession
+    fun recordingSession(): RecordingRepository
 }
 
 @Module
@@ -67,8 +67,8 @@ internal open class AudioRecorderDependencyModule {
 
     @Provides
     @Singleton
-    open fun providesRecordingSession(): RecordingSession {
-        return RecordingSession()
+    open fun providesRecordingSession(): RecordingRepository {
+        return RecordingRepository()
     }
 }
 

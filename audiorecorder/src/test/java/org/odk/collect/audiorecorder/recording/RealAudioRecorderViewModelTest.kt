@@ -16,7 +16,7 @@ import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Com
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_STOP
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.EXTRA_SESSION_ID
 import org.odk.collect.audiorecorder.recording.internal.RealAudioRecorderViewModel
-import org.odk.collect.audiorecorder.recording.internal.RecordingSession
+import org.odk.collect.audiorecorder.recording.internal.RecordingRepository
 import org.odk.collect.testshared.LiveDataTester
 import org.robolectric.Shadows.shadowOf
 import java.io.File.createTempFile
@@ -28,7 +28,7 @@ class RealAudioRecorderViewModelTest {
     val instantTaskExecutor = InstantTaskExecutorRule()
     private val liveDataTester = LiveDataTester()
 
-    private val recordingSession = RecordingSession()
+    private val recordingSession = RecordingRepository()
 
     private val application by lazy { getApplicationContext<Application>() }
     private val viewModel: RealAudioRecorderViewModel by lazy {

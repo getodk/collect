@@ -19,7 +19,7 @@ class AudioRecorderService : Service() {
     internal lateinit var recorder: Recorder
 
     @Inject
-    internal lateinit var recordingSession: RecordingSession
+    internal lateinit var recordingRepository: RecordingRepository
 
     override fun onCreate() {
         super.onCreate()
@@ -32,7 +32,7 @@ class AudioRecorderService : Service() {
                 val sessionId = intent.getStringExtra(EXTRA_SESSION_ID)
 
                 if (!recorder.isRecording() && sessionId != null) {
-                    recordingSession.start(sessionId)
+                    recordingRepository.start(sessionId)
 
                     setupNotificationChannel()
 
@@ -82,13 +82,13 @@ class AudioRecorderService : Service() {
 
     private fun stopRecording() {
         val file = recorder.stop()
-        recordingSession.recordingReady(file)
+        recordingRepository.recordingReady(file)
         stopSelf()
     }
 
     private fun cleanUp() {
         recorder.cancel()
-        recordingSession.end()
+        recordingRepository.clear()
         stopSelf()
     }
 

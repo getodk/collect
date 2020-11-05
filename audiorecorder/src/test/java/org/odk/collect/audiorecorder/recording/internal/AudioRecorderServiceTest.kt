@@ -25,7 +25,7 @@ import org.robolectric.android.controller.ServiceController
 class AudioRecorderServiceTest {
 
     private val application: TestApplication by lazy { ApplicationProvider.getApplicationContext() }
-    private val recordingSession = RecordingSession()
+    private val recordingSession = RecordingRepository()
     private val recorder = FakeRecorder()
 
     @Before
@@ -36,22 +36,11 @@ class AudioRecorderServiceTest {
                     return recorder
                 }
 
-                override fun providesRecordingSession(): RecordingSession {
+                override fun providesRecordingSession(): RecordingRepository {
                     return recordingSession
                 }
             }
         )
-    }
-
-    @Test
-    fun startAction_starsSessionWithId() {
-        val intent = Intent(application, AudioRecorderService::class.java)
-        intent.action = AudioRecorderService.ACTION_START
-        intent.putExtra(AudioRecorderService.EXTRA_SESSION_ID, "123")
-
-        startService(intent)
-
-        assertThat(recordingSession.get().value, equalTo(Pair("123", null)))
     }
 
     @Test
@@ -96,7 +85,7 @@ class AudioRecorderServiceTest {
     }
 
     @Test
-    fun stopAction_stopsRecorder_stopsSelf_andSetsRecordingOnSession() {
+    fun stopAction_stopsRecorder_stopsSelf_andSetsRecordingInRepository() {
         val startIntent = Intent(application, AudioRecorderService::class.java)
         startIntent.action = AudioRecorderService.ACTION_START
         startIntent.putExtra(AudioRecorderService.EXTRA_SESSION_ID, "123")
@@ -107,12 +96,12 @@ class AudioRecorderServiceTest {
         val service = startService(stopIntent)
 
         assertThat(recorder.isRecording(), equalTo(false))
-        assertThat(recordingSession.get().value, equalTo(Pair("123", recorder.file)))
+        assertThat(recordingSession.get("123").value, equalTo(recorder.file))
         assertThat(shadowOf(service.get()).isStoppedBySelf, equalTo(true))
     }
 
     @Test
-    fun cancelAction_cancelsRecorder_stopsSelf_clearsSession() {
+    fun cleanUpAction_whileRecording_cancelsRecorder_stopsSelf() {
         val startIntent = Intent(application, AudioRecorderService::class.java)
         startIntent.action = AudioRecorderService.ACTION_START
         startIntent.putExtra(AudioRecorderService.EXTRA_SESSION_ID, "123")
@@ -124,7 +113,25 @@ class AudioRecorderServiceTest {
 
         assertThat(recorder.isRecording(), equalTo(false))
         assertThat(recorder.wasCancelled(), equalTo(true))
-        assertThat(recordingSession.get().value, equalTo(null))
+        assertThat(shadowOf(service.get()).isStoppedBySelf, equalTo(true))
+    }
+
+    @Test
+    fun cleanUpAction_afterRecording_clearsRepository_stopsSelf() {
+        val startIntent = Intent(application, AudioRecorderService::class.java)
+        startIntent.action = AudioRecorderService.ACTION_START
+        startIntent.putExtra(AudioRecorderService.EXTRA_SESSION_ID, "123")
+        startService(startIntent)
+
+        val stopIntent = Intent(application, AudioRecorderService::class.java)
+        stopIntent.action = AudioRecorderService.ACTION_STOP
+        startService(stopIntent)
+
+        val cancelIntent = Intent(application, AudioRecorderService::class.java)
+        cancelIntent.action = AudioRecorderService.ACTION_CLEAN_UP
+        val service = startService(cancelIntent)
+
+        assertThat(recordingSession.get("123").value, equalTo(null))
         assertThat(shadowOf(service.get()).isStoppedBySelf, equalTo(true))
     }
 
