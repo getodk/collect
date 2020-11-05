@@ -100,7 +100,7 @@ public class QuitFormDialogFragment extends DialogFragment {
                 getActivity().finish();
             }
 
-            audioRecorderViewModel.cancel();
+            audioRecorderViewModel.cleanUp();
 
             if (getDialog() != null) {
                 getDialog().dismiss();

@@ -1551,7 +1551,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     public void onScreenChange(FormIndexAnimationHandler.Direction direction) {
-        audioRecorderViewModel.cancel();
+        audioRecorderViewModel.cleanUp();
 
         final int event = getFormController().getEvent();
 

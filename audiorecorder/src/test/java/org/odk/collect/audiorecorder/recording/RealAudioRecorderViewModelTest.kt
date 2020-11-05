@@ -11,7 +11,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService
-import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_CANCEL
+import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_CLEAN_UP
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_START
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_STOP
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.EXTRA_SESSION_ID
@@ -79,6 +79,15 @@ class RealAudioRecorderViewModelTest {
     }
 
     @Test
+    fun isRecording_whenSessionFinished_isFalse() {
+        recordingSession.start("123")
+        recordingSession.recordingReady(createTempFile("blah", "mp3"))
+
+        val recording = liveDataTester.activate(viewModel.isRecording())
+        assertThat(recording.value, equalTo(false))
+    }
+
+    @Test
     fun start_startsRecordingService_withStartAction() {
         viewModel.start("mySession")
         val nextStartedService = shadowOf(application).nextStartedService
@@ -96,10 +105,10 @@ class RealAudioRecorderViewModelTest {
     }
 
     @Test
-    fun cancel_startsRecordingService_withCancelAction() {
-        viewModel.cancel()
+    fun cleanUp_startsRecordingService_withCleanUpAction() {
+        viewModel.cleanUp()
         val nextStartedService = shadowOf(application).nextStartedService
         assertThat(nextStartedService.component?.className, equalTo(AudioRecorderService::class.qualifiedName))
-        assertThat(nextStartedService.action, equalTo(ACTION_CANCEL))
+        assertThat(nextStartedService.action, equalTo(ACTION_CLEAN_UP))
     }
 }

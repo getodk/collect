@@ -94,7 +94,7 @@ public class AudioRecordingTest {
                 .swipeToEndScreen()
                 .assertTextNotDisplayed(R.string.stop_recording);
 
-        assertThat(fakeAudioRecorderViewModel.wasCancelled, is(true));
+        assertThat(fakeAudioRecorderViewModel.wasCleanedUp, is(true));
 
         page.swipeToPreviousQuestion("What does it sound like?")
                 .assertEnabled(R.string.capture_audio);
@@ -116,7 +116,7 @@ public class AudioRecordingTest {
                 .pressBack(new SaveOrIgnoreDialog<>("Audio Question", new MainMenuPage(rule), rule))
                 .clickSaveChanges();
 
-        assertThat(fakeAudioRecorderViewModel.wasCancelled, is(true));
+        assertThat(fakeAudioRecorderViewModel.wasCleanedUp, is(true));
 
         page.startBlankForm("Audio Question")
                 .assertEnabled(R.string.capture_audio);
@@ -126,7 +126,7 @@ public class AudioRecordingTest {
 
         private final MutableLiveData<Boolean> isRecording = new MutableLiveData<>(false);
         private final MutableLiveData<File> file = new MutableLiveData<>(null);
-        private boolean wasCancelled;
+        private boolean wasCleanedUp;
 
         @NotNull
         @Override
@@ -142,7 +142,7 @@ public class AudioRecordingTest {
 
         @Override
         public void start(@NotNull String sessionId) {
-            wasCancelled = false;
+            wasCleanedUp = false;
             isRecording.setValue(true);
         }
 
@@ -162,8 +162,8 @@ public class AudioRecordingTest {
         }
 
         @Override
-        public void cancel() {
-            wasCancelled = true;
+        public void cleanUp() {
+            wasCleanedUp = true;
             isRecording.setValue(false);
         }
     }

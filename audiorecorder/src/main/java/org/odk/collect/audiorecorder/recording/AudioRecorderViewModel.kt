@@ -9,5 +9,5 @@ abstract class AudioRecorderViewModel : ViewModel() {
     abstract fun getRecording(sessionId: String): LiveData<File?>
     abstract fun start(sessionId: String)
     abstract fun stop()
-    abstract fun cancel()
+    abstract fun cleanUp()
 }

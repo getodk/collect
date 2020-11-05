@@ -47,12 +47,12 @@ class AudioRecorderService : Service() {
                 }
             }
 
-            ACTION_CANCEL -> {
-                cancelRecording()
-            }
-
             ACTION_STOP -> {
                 stopRecording()
+            }
+
+            ACTION_CLEAN_UP -> {
+                cleanUp()
             }
         }
 
@@ -73,7 +73,7 @@ class AudioRecorderService : Service() {
 
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
-        cancelRecording()
+        cleanUp()
     }
 
     override fun onBind(p0: Intent?): IBinder? {
@@ -86,7 +86,7 @@ class AudioRecorderService : Service() {
         stopSelf()
     }
 
-    private fun cancelRecording() {
+    private fun cleanUp() {
         recorder.cancel()
         recordingSession.end()
         stopSelf()
@@ -98,7 +98,7 @@ class AudioRecorderService : Service() {
 
         const val ACTION_START = "START"
         const val ACTION_STOP = "STOP"
-        const val ACTION_CANCEL = "CANCEL"
+        const val ACTION_CLEAN_UP = "CLEAN_UP"
 
         const val EXTRA_SESSION_ID = "EXTRA_SESSION_ID"
     }

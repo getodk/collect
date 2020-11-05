@@ -119,7 +119,7 @@ class AudioRecorderServiceTest {
         startService(startIntent)
 
         val cancelIntent = Intent(application, AudioRecorderService::class.java)
-        cancelIntent.action = AudioRecorderService.ACTION_CANCEL
+        cancelIntent.action = AudioRecorderService.ACTION_CLEAN_UP
         val service = startService(cancelIntent)
 
         assertThat(recorder.isRecording(), equalTo(false))
