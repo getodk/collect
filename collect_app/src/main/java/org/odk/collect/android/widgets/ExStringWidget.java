@@ -31,6 +31,7 @@ import android.widget.Toast;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -38,8 +39,8 @@ import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.util.Map;
@@ -206,6 +207,11 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
                 Timber.d(e);
                 onException(e.getMessage());
             }
+        }
+
+        if (!activityAvailability.isActivityAvailable(i)) {
+            i = Collect.getInstance().getPackageManager().getLaunchIntentForPackage(intentName);
+            i.setFlags(0);
         }
 
         if (activityAvailability.isActivityAvailable(i)) {

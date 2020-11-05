@@ -405,48 +405,49 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         launchIntentButton.setText(buttonText);
         launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getQuestionFontSize() + 2);
         launchIntentButton.setVisibility(VISIBLE);
-        launchIntentButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String intentName = ExternalAppsUtils.extractIntentName(intentString);
-                Map<String, String> parameters = ExternalAppsUtils.extractParameters(
-                        intentString);
+        launchIntentButton.setOnClickListener(view -> {
+            String intentName = ExternalAppsUtils.extractIntentName(intentString);
+            Map<String, String> parameters = ExternalAppsUtils.extractParameters(intentString);
 
-                Intent i = new Intent(intentName);
-                try {
-                    ExternalAppsUtils.populateParameters(i, parameters,
-                            c.getIndex().getReference());
+            Intent i = new Intent(intentName);
+            if (i.resolveActivity(Collect.getInstance().getPackageManager()) == null) {
+                i = Collect.getInstance().getPackageManager().getLaunchIntentForPackage(intentName);
+                i.setFlags(0);
+            }
 
-                    for (FormEntryPrompt p : questionPrompts) {
-                        IFormElement formElement = p.getFormElement();
-                        if (formElement instanceof QuestionDef) {
-                            TreeReference reference =
-                                    (TreeReference) formElement.getBind().getReference();
-                            IAnswerData answerValue = p.getAnswerValue();
-                            Object value =
-                                    answerValue == null ? null : answerValue.getValue();
-                            switch (p.getDataType()) {
-                                case Constants.DATATYPE_TEXT:
-                                case Constants.DATATYPE_INTEGER:
-                                case Constants.DATATYPE_DECIMAL:
-                                case Constants.DATATYPE_BINARY:
-                                    i.putExtra(reference.getNameLast(),
-                                            (Serializable) value);
-                                    break;
-                            }
+            try {
+                ExternalAppsUtils.populateParameters(i, parameters,
+                        c.getIndex().getReference());
+
+                for (FormEntryPrompt p : questionPrompts) {
+                    IFormElement formElement = p.getFormElement();
+                    if (formElement instanceof QuestionDef) {
+                        TreeReference reference =
+                                (TreeReference) formElement.getBind().getReference();
+                        IAnswerData answerValue = p.getAnswerValue();
+                        Object value =
+                                answerValue == null ? null : answerValue.getValue();
+                        switch (p.getDataType()) {
+                            case Constants.DATATYPE_TEXT:
+                            case Constants.DATATYPE_INTEGER:
+                            case Constants.DATATYPE_DECIMAL:
+                            case Constants.DATATYPE_BINARY:
+                                i.putExtra(reference.getNameLast(),
+                                        (Serializable) value);
+                                break;
                         }
                     }
-
-                    ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_GROUP_CAPTURE);
-                } catch (ExternalParamsException e) {
-                    Timber.e(e, "ExternalParamsException");
-
-                    ToastUtils.showShortToast(e.getMessage());
-                } catch (ActivityNotFoundException e) {
-                    Timber.d(e, "ActivityNotFoundExcept");
-
-                    ToastUtils.showShortToast(errorString);
                 }
+
+                ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_GROUP_CAPTURE);
+            } catch (ExternalParamsException e) {
+                Timber.e(e, "ExternalParamsException");
+
+                ToastUtils.showShortToast(e.getMessage());
+            } catch (ActivityNotFoundException e) {
+                Timber.d(e, "ActivityNotFoundExcept");
+
+                ToastUtils.showShortToast(errorString);
             }
         });
     }
