@@ -1062,6 +1062,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             case R.id.menu_goto:
                 state = null;
+                audioRecorderViewModel.cleanUp();
+
                 if (formController != null && formController.currentPromptIsQuestion()) {
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
