@@ -509,7 +509,17 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                                 break;
                             case Constants.DATATYPE_BINARY:
                                 try {
-                                    Uri uri = (Uri) bundle.get(key);
+                                    Object uriValue = bundle.get(key);
+
+                                    Uri uri;
+                                    if (uriValue instanceof Uri) {
+                                        uri = (Uri) uriValue;
+                                    } else if (uriValue instanceof String) {
+                                        uri = Uri.parse(bundle.getString(key));
+                                    } else {
+                                        throw new RuntimeException("The value for " + key + " must be a URI but it is " + uriValue);
+                                    }
+                                    
                                     if (uri != null) {
                                         File destFile = FileUtils.createDestinationMediaFile(formController.getInstanceFile().getParent(), ContentResolverHelper.getFileExtensionFromUri(getContext(), uri));
                                         //TODO might be better to use QuestionMediaManager in the future
