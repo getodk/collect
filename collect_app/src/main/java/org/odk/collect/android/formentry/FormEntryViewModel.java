@@ -83,14 +83,14 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         try {
             formController.newRepeat();
         } catch (RuntimeException e) {
-            error.setValue(e.getCause().getMessage());
+            error.setValue(e.getCause() != null ? e.getCause().getMessage() : "Unknown issue occurred while adding a new group");
         }
         
         if (!formController.indexIsInFieldList()) {
             try {
                 formController.stepToNextScreenEvent();
             } catch (JavaRosaException e) {
-                error.setValue(e.getCause().getMessage());
+                error.setValue(e.getCause() != null ? e.getCause().getMessage() : "Unknown issue occurred while adding a new group");
             }
         }
     }
