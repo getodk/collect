@@ -51,11 +51,22 @@ public class FormEntryViewModelTest {
     }
 
     @Test
-    public void addRepeat_whenThereIsAnErrorCreatingRepeat_setsErrorWithMessage() throws Exception {
+    public void addRepeat_whenThereIsAnErrorCreatingRepeat_setsErrorWithMessage() {
         doThrow(new RuntimeException(new IOException("OH NO"))).when(formController).newRepeat();
 
         viewModel.addRepeat(true);
         assertThat(viewModel.getError().getValue(), equalTo("OH NO"));
+    }
+
+    @Test
+    public void addRepeat_whenThereIsAnErrorCreatingRepeat_setsErrorWithoutCause() {
+        RuntimeException runtimeException = mock(RuntimeException.class);
+        when(runtimeException.getCause()).thenReturn(null);
+
+        doThrow(runtimeException).when(formController).newRepeat();
+
+        viewModel.addRepeat(true);
+        assertThat(viewModel.getError().getValue(), equalTo("Unknown issue occurred while adding a new group"));
     }
 
     @Test
@@ -64,6 +75,17 @@ public class FormEntryViewModelTest {
 
         viewModel.addRepeat(true);
         assertThat(viewModel.getError().getValue(), equalTo("OH NO"));
+    }
+
+    @Test
+    public void addRepeat_whenThereIsAnErrorSteppingToNextScreen_setsErrorWithoutCause() throws Exception {
+        JavaRosaException javaRosaException = mock(JavaRosaException.class);
+        when(javaRosaException.getCause()).thenReturn(null);
+
+        when(formController.stepToNextScreenEvent()).thenThrow(javaRosaException);
+
+        viewModel.addRepeat(true);
+        assertThat(viewModel.getError().getValue(), equalTo("Unknown issue occurred while adding a new group"));
     }
 
     @Test
