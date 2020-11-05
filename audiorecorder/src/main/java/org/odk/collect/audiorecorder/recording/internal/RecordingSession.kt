@@ -24,7 +24,6 @@ class RecordingSession {
 
     fun end() {
         _state.value?.let {
-            it.second?.delete()
             _state.value = null
         }
     }
