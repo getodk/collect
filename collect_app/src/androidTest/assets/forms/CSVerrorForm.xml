@@ -51,7 +51,6 @@
 
 		<bind jr:preload="property" jr:preloadParams="PhoneNumber" nodeset="/CSVerrorForm/PhoneNumber" type="string"/>
 		<bind jr:preload="property" jr:preloadParams="deviceid" nodeset="/CSVerrorForm/deviceid" type="string"/>
-		<bind jr:preload="property" jr:preloadParams="simserial" nodeset="/CSVerrorForm/simid" type="string"/>
 		<bind jr:preload="timestamp" jr:preloadParams="start" nodeset="/CSVerrorForm/TimeStamp" type="dateTime"/>
 		
 		<bind nodeset="/CSVerrorForm/Date" type="date" calculate="date(format-date(/CSVerrorForm/TimeStamp,'%Y-%m-%d'))"/>

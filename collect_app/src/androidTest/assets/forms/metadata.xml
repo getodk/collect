@@ -20,8 +20,6 @@
       <bind nodeset="/preload/email" type="string" jr:preload="property" jr:preloadParams="email" readonly="true()"/>
       <bind nodeset="/preload/phonenumber" type="string" jr:preload="property" jr:preloadParams="phonenumber" readonly="true()"/>
       <bind nodeset="/preload/deviceID" type="string" jr:preload="property" jr:preloadParams="deviceID" readonly="true()"/>
-      <bind nodeset="/preload/subscriberID" type="string" jr:preload="property" jr:preloadParams="subscriberID" readonly="true()"/>
-      <bind nodeset="/preload/simSerial" type="string" jr:preload="property" jr:preloadParams="simSerial" readonly="true()"/>
       <bind calculate="concat('uuid:', uuid())" nodeset="/preload/meta/instanceID" readonly="true()" type="string"/>
     </model>
   </h:head>

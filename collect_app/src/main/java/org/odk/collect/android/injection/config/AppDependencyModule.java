@@ -231,33 +231,20 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public DeviceDetailsProvider providesDeviceDetailsProvider(Context context) {
-        TelephonyManager telMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-
+    public DeviceDetailsProvider providesDeviceDetailsProvider(Context context, InstallIDProvider installIDProvider) {
         return new DeviceDetailsProvider() {
 
             @Override
             @SuppressLint({"MissingPermission", "HardwareIds"})
             public String getDeviceId() {
-                return telMgr.getDeviceId();
+                return installIDProvider.getInstallID();
             }
 
             @Override
             @SuppressLint({"MissingPermission", "HardwareIds"})
             public String getLine1Number() {
+                TelephonyManager telMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
                 return telMgr.getLine1Number();
-            }
-
-            @Override
-            @SuppressLint({"MissingPermission", "HardwareIds"})
-            public String getSubscriberId() {
-                return telMgr.getSubscriberId();
-            }
-
-            @Override
-            @SuppressLint({"MissingPermission", "HardwareIds"})
-            public String getSimSerialNumber() {
-                return telMgr.getSimSerialNumber();
             }
         };
     }

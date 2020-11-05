@@ -465,9 +465,7 @@
     <string name="email">Email address</string>
     <string name="user_defined">User-defined</string>
     <string name="device_defined">Device-defined</string>
-    <string name="device_id">Device ID - will be replaced by Install ID in Collect v1.29</string>
-    <string name="subscriber_id">Subscriber ID - will be removed in Collect v1.29</string>
-    <string name="sim_serial_id">SIM serial number - will be removed in Collect v1.29</string>
+    <string name="device_id">Device ID</string>
     <string name="select_date">Select date</string>
     <string name="select_time">Select time</string>
     <string name="no_date_selected">No date selected</string>
@@ -689,7 +687,6 @@
     <string name="storage_migration_dialog_title">Storage migration</string>
     <string name="storage_migration_progress_msg">Migration in progress.\nThis may take a few seconds…</string>
 
-    <string name="install_id">Install ID - will replace Device ID in Collect v1.29</string>
     <string name="preference_not_available">Not available</string>
     <string name="custom_server_paths">Custom server paths</string>
     <string name="legacy_custom_server_paths_summary">Will be removed in a future version. Please use /formList and /submission on your server.</string>

@@ -2,7 +2,6 @@ package org.odk.collect.android.feature.settings;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
@@ -15,7 +14,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
+import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
@@ -23,8 +22,6 @@ import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
 import org.odk.collect.android.support.pages.UserAndDeviceIdentitySettingsPage;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
-
-import static org.odk.collect.android.preferences.MetaKeys.KEY_INSTALL_ID;
 
 @RunWith(AndroidJUnit4.class)
 public class FormMetadataTest {
@@ -41,7 +38,7 @@ public class FormMetadataTest {
             ))
             .around(new ResetStateRule(new AppDependencyModule() {
                 @Override
-                public DeviceDetailsProvider providesDeviceDetailsProvider(Context context) {
+                public DeviceDetailsProvider providesDeviceDetailsProvider(Context context, InstallIDProvider installIDProvider) {
                     return deviceDetailsProvider;
                 }
             }))
@@ -110,24 +107,14 @@ public class FormMetadataTest {
                 .clickGeneralSettings()
                 .clickUserAndDeviceIdentity()
                 .clickFormMetadata()
-                .assertPreference(R.string.device_id, deviceDetailsProvider.getDeviceId())
-                .assertPreference(R.string.subscriber_id, deviceDetailsProvider.getSubscriberId())
-                .assertPreference(R.string.sim_serial_id, deviceDetailsProvider.getSimSerialNumber())
-                .assertPreference(R.string.install_id, getInstallID());
+                .assertPreference(R.string.device_id, deviceDetailsProvider.getDeviceId());
     }
 
     @Test
     public void deviceIdentifiersCanBeIncludedInAForm() {
         new MainMenuPage(rule)
                 .startBlankForm("Metadata")
-                .scrollToAndAssertText(deviceDetailsProvider.getDeviceId())
-                .scrollToAndAssertText(deviceDetailsProvider.getSubscriberId())
-                .scrollToAndAssertText(deviceDetailsProvider.getSimSerialNumber());
-    }
-
-    private String getInstallID() {
-        SharedPreferences sharedPreferences = rule.getActivity().getSharedPreferences("meta", Context.MODE_PRIVATE);
-        return new SharedPreferencesInstallIDProvider(sharedPreferences, KEY_INSTALL_ID).getInstallID();
+                .scrollToAndAssertText(deviceDetailsProvider.getDeviceId());
     }
 
     private static class FakeDeviceDetailsProvider implements DeviceDetailsProvider {
@@ -140,16 +127,6 @@ public class FormMetadataTest {
         @Override
         public String getLine1Number() {
             return "line1Number";
-        }
-
-        @Override
-        public String getSubscriberId() {
-            return "subscriberID";
-        }
-
-        @Override
-        public String getSimSerialNumber() {
-            return "simSerialNumber";
         }
     }
 }
