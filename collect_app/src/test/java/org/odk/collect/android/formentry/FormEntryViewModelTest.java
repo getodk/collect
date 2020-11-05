@@ -62,6 +62,7 @@ public class FormEntryViewModelTest {
     public void addRepeat_whenThereIsAnErrorCreatingRepeat_setsErrorWithoutCause() {
         RuntimeException runtimeException = mock(RuntimeException.class);
         when(runtimeException.getCause()).thenReturn(null);
+        when(runtimeException.getMessage()).thenReturn("Unknown issue occurred while adding a new group");
 
         doThrow(runtimeException).when(formController).newRepeat();
 
@@ -81,6 +82,7 @@ public class FormEntryViewModelTest {
     public void addRepeat_whenThereIsAnErrorSteppingToNextScreen_setsErrorWithoutCause() throws Exception {
         JavaRosaException javaRosaException = mock(JavaRosaException.class);
         when(javaRosaException.getCause()).thenReturn(null);
+        when(javaRosaException.getMessage()).thenReturn("Unknown issue occurred while adding a new group");
 
         when(formController.stepToNextScreenEvent()).thenThrow(javaRosaException);
 
