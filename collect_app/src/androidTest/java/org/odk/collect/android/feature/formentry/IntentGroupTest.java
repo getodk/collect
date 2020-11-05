@@ -58,8 +58,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.StringEndsWith.endsWith;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.CustomMatchers.withIndex;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 import static org.odk.collect.android.support.actions.NestedScrollToAction.nestedScrollTo;
@@ -181,7 +181,7 @@ public class IntentGroupTest {
         Intent resultIntent = new Intent();
 
         Uri uri = mock(Uri.class);
-        doThrow(new SecurityException()).when(uri);
+        when(uri.getScheme()).thenThrow(new SecurityException());
 
         resultIntent.putExtra("questionImage", uri);
 
@@ -199,7 +199,7 @@ public class IntentGroupTest {
         Intent resultIntent = new Intent();
 
         Uri uri = mock(Uri.class);
-        doThrow(new Error()).when(uri);
+        when(uri.getScheme()).thenThrow(new Error());
 
         resultIntent.putExtra("questionImage", uri);
 
