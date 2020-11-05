@@ -102,23 +102,4 @@ class RealAudioRecorderViewModelTest {
         assertThat(nextStartedService.component?.className, equalTo(AudioRecorderService::class.qualifiedName))
         assertThat(nextStartedService.action, equalTo(ACTION_CANCEL))
     }
-
-    @Test
-    fun endSession_clearsSessionRecording() {
-        recordingSession.start("123")
-        recordingSession.recordingReady(createTempFile("blah", "mp3"))
-
-        viewModel.endSession()
-        assertThat(recordingSession.get().value, equalTo(null))
-    }
-
-    @Test
-    fun endSession_deletesRecording() {
-        recordingSession.start("123")
-        val recording = createTempFile("blah", "mp3")
-        recordingSession.recordingReady(recording)
-
-        viewModel.endSession()
-        assertThat(recording.exists(), equalTo(false))
-    }
 }

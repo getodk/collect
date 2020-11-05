@@ -56,8 +56,6 @@ public class InternalRecordingRequester implements RecordingRequester {
         viewModel.getRecording(prompt.getIndex().toString()).observe(lifecycleOwner, file -> {
             if (file != null) {
                 String fileName = questionMediaManager.createAnswerFile(file);
-                viewModel.endSession();
-
                 recordingAvailableListener.accept(fileName);
             }
         });

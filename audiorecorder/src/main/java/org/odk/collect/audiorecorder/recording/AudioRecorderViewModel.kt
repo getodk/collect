@@ -10,5 +10,4 @@ abstract class AudioRecorderViewModel : ViewModel() {
     abstract fun start(sessionId: String)
     abstract fun stop()
     abstract fun cancel()
-    abstract fun endSession()
 }

@@ -166,10 +166,5 @@ public class AudioRecordingTest {
             wasCancelled = true;
             isRecording.setValue(false);
         }
-
-        @Override
-        public void endSession() {
-            this.file.setValue(null);
-        }
     }
 }

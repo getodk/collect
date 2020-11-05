@@ -88,17 +88,4 @@ public class InternalRecordingRequesterTest {
         liveData.setValue(file);
         verify(listener).accept("copiedFile");
     }
-
-    @Test
-    public void whenViewModelRecordingAvailable_endsSession() throws Exception {
-        FormEntryPrompt prompt = promptWithAnswer(null);
-        MutableLiveData<File> liveData = new MutableLiveData<>(null);
-        when(viewModel.getRecording(prompt.getIndex().toString())).thenReturn(liveData);
-
-        requester.onRecordingAvailable(prompt, mock(Consumer.class));
-
-        File file = File.createTempFile("blah", ".mp3");
-        liveData.setValue(file);
-        verify(viewModel).endSession();
-    }
 }

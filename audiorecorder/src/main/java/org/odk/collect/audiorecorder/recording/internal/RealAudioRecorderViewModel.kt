@@ -49,8 +49,4 @@ internal class RealAudioRecorderViewModel internal constructor(private val appli
             Intent(application, AudioRecorderService::class.java).apply { action = ACTION_CANCEL }
         )
     }
-
-    override fun endSession() {
-        recordingSession.end()
-    }
 }
