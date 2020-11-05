@@ -45,15 +45,12 @@ import timber.log.Timber;
  */
 @SuppressLint("ViewConstructor")
 public class StringWidget extends QuestionWidget {
-
-    boolean readOnly;
     public final EditText answerText;
 
-    protected StringWidget(Context context, QuestionDetails questionDetails, boolean readOnlyOverride) {
+    protected StringWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
 
-        readOnly = questionDetails.getPrompt().isReadOnly() || readOnlyOverride;
-        answerText = getAnswerEditText(readOnly, getFormEntryPrompt());
+        answerText = getAnswerEditText(questionDetails.isReadOnly() || this instanceof ExStringWidget, getFormEntryPrompt());
         setUpLayout(context);
     }
 
@@ -70,8 +67,8 @@ public class StringWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        String s = getAnswerText();
-        return !s.equals("") ? new StringData(s) : null;
+        String answer = getAnswerText();
+        return !answer.isEmpty() ? new StringData(answer) : null;
     }
 
     @NonNull
@@ -81,7 +78,7 @@ public class StringWidget extends QuestionWidget {
 
     @Override
     public void setFocus(Context context) {
-        if (!readOnly) {
+        if (!questionDetails.isReadOnly()) {
             SoftKeyboardUtils.showSoftKeyboard(answerText);
             /*
              * If you do a multi-question screen after a "add another group" dialog, this won't

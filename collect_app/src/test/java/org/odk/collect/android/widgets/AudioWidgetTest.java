@@ -42,6 +42,7 @@ import static org.odk.collect.android.support.RobolectricHelpers.setupMediaPlaye
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndAnswer;
 
 @RunWith(RobolectricTestRunner.class)
 public class AudioWidgetTest {
@@ -376,10 +377,39 @@ public class AudioWidgetTest {
         assertThat(widget.binding.chooseButton.getVisibility(), is(VISIBLE));
     }
 
+    @Test
+    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
+        AudioWidget widget = createWidget(promptWithReadOnlyAndAnswer(new StringData("blah.mp3")));
+        widget.binding.audioController.binding.remove.performClick();
+
+        assertThat(widget.binding.captureButton.getVisibility(), is(View.GONE));
+        assertThat(widget.binding.chooseButton.getVisibility(), is(View.GONE));
+    }
+
+    @Test
+    public void whenReadOnlyOverrideOptionIsUsed_shouldAllClickableElementsBeDisabled() {
+        AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")), true);
+        widget.binding.audioController.binding.remove.performClick();
+
+        assertThat(widget.binding.captureButton.getVisibility(), is(View.GONE));
+        assertThat(widget.binding.chooseButton.getVisibility(), is(View.GONE));
+    }
+
     public AudioWidget createWidget(FormEntryPrompt prompt) {
         return new AudioWidget(
                 widgetActivity,
                 new QuestionDetails(prompt, "formAnalyticsID"),
+                questionMediaManager,
+                audioPlayer,
+                recordingRequester,
+                audioFileRequester
+        );
+    }
+
+    public AudioWidget createWidget(FormEntryPrompt prompt, boolean readOnlyOverride) {
+        return new AudioWidget(
+                widgetActivity,
+                new QuestionDetails(prompt, "formAnalyticsID", readOnlyOverride),
                 questionMediaManager,
                 audioPlayer,
                 recordingRequester,

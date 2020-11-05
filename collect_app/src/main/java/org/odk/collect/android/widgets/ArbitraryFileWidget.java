@@ -163,12 +163,13 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
         LinearLayout widgetLayout = new LinearLayout(getContext());
         widgetLayout.setOrientation(LinearLayout.VERTICAL);
 
-        chooseFileButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.choose_file), getAnswerFontSize(), this);
-        chooseFileButton.setEnabled(!getFormEntryPrompt().isReadOnly());
+        chooseFileButton = createSimpleButton(getContext(), questionDetails.isReadOnly(), getContext().getString(R.string.choose_file), getAnswerFontSize(), this);
+        chooseFileButton.setEnabled(!questionDetails.isReadOnly());
 
         answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.HORIZONTAL);
         answerLayout.setGravity(Gravity.CENTER);
+        answerLayout.setTag("ArbitraryFileWidgetAnswer");
 
         ImageView attachmentImg = new ImageView(getContext());
         attachmentImg.setImageResource(R.drawable.ic_attachment);

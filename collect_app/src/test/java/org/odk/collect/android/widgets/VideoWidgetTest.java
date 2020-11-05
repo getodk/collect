@@ -50,7 +50,7 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
     @NonNull
     @Override
     public VideoWidget createWidget() {
-        return new VideoWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), fileUtil, mediaUtil,
+        return new VideoWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride), fileUtil, mediaUtil,
                 new FakeWaitingForDataRegistry(), new FakeQuestionMediaManager(), new CameraUtils());
     }
 
@@ -136,5 +136,19 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
         assertThat(getSpyWidget().captureButton.getVisibility(), is(View.GONE));
         assertThat(getSpyWidget().chooseButton.getVisibility(), is(View.GONE));
         assertThat(getSpyWidget().playButton.getVisibility(), is(View.VISIBLE));
+        assertThat(getSpyWidget().playButton.isEnabled(), is(Boolean.FALSE));
+        assertThat(getSpyWidget().playButton.getText(), is("Play Video"));
+    }
+
+    @Test
+    public void whenReadOnlyOverrideOptionIsUsed_shouldAllClickableElementsBeDisabled() {
+        readOnlyOverride = true;
+        when(formEntryPrompt.isReadOnly()).thenReturn(false);
+
+        assertThat(getSpyWidget().captureButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().chooseButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().playButton.getVisibility(), is(View.VISIBLE));
+        assertThat(getSpyWidget().playButton.isEnabled(), is(Boolean.FALSE));
+        assertThat(getSpyWidget().playButton.getText(), is("Play Video"));
     }
 }

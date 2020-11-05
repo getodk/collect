@@ -89,7 +89,7 @@ public class WidgetFactory {
                                                         SharedPreferences generalSharedPreferences) {
 
         String appearance = WidgetAppearanceUtils.getSanitizedAppearanceHint(prompt);
-        QuestionDetails questionDetails = new QuestionDetails(prompt, Collect.getCurrentFormIdentifierHash());
+        QuestionDetails questionDetails = new QuestionDetails(prompt, Collect.getCurrentFormIdentifierHash(), readOnlyOverride);
         PermissionUtils permissionUtils = new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert);
         ActivityAvailability activityAvailability = new ActivityAvailability(context);
 
@@ -113,14 +113,14 @@ public class WidgetFactory {
                             questionWidget = new BearingWidget(context, questionDetails, waitingForDataRegistry,
                                     (SensorManager) context.getSystemService(Context.SENSOR_SERVICE));
                         } else {
-                            questionWidget = new DecimalWidget(context, questionDetails, readOnlyOverride);
+                            questionWidget = new DecimalWidget(context, questionDetails);
                         }
                         break;
                     case Constants.DATATYPE_INTEGER:
                         if (appearance.startsWith(WidgetAppearanceUtils.EX)) {
                             questionWidget = new ExIntegerWidget(context, questionDetails, waitingForDataRegistry);
                         } else {
-                            questionWidget = new IntegerWidget(context, questionDetails, readOnlyOverride);
+                            questionWidget = new IntegerWidget(context, questionDetails);
                         }
                         break;
                     case Constants.DATATYPE_GEOPOINT:
@@ -152,17 +152,17 @@ public class WidgetFactory {
                         } else if (appearance.startsWith(WidgetAppearanceUtils.EX)) {
                             questionWidget = new ExStringWidget(context, questionDetails, waitingForDataRegistry);
                         } else if (appearance.contains(WidgetAppearanceUtils.NUMBERS)) {
-                            questionWidget = new StringNumberWidget(context, questionDetails, readOnlyOverride);
+                            questionWidget = new StringNumberWidget(context, questionDetails);
                         } else if (appearance.equals(WidgetAppearanceUtils.URL)) {
                             questionWidget = new UrlWidget(context, questionDetails, new CustomTabHelper());
 
                             analytics.logEvent(PROMPT, "Url", questionDetails.getFormAnalyticsID());
                         } else {
-                            questionWidget = new StringWidget(context, questionDetails, readOnlyOverride);
+                            questionWidget = new StringWidget(context, questionDetails);
                         }
                         break;
                     default:
-                        questionWidget = new StringWidget(context, questionDetails, readOnlyOverride);
+                        questionWidget = new StringWidget(context, questionDetails);
                         break;
                 }
                 break;
@@ -263,13 +263,13 @@ public class WidgetFactory {
                             }
                             break;
                         default:
-                            questionWidget = new StringWidget(context, questionDetails, readOnlyOverride);
+                            questionWidget = new StringWidget(context, questionDetails);
                             break;
                     }
                 }
                 break;
             default:
-                questionWidget = new StringWidget(context, questionDetails, readOnlyOverride);
+                questionWidget = new StringWidget(context, questionDetails);
                 break;
         }
 
