@@ -26,6 +26,7 @@ import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.formentry.RequiresFormController;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditUtils;
+import org.odk.collect.android.forms.FormUtils;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.tasks.SaveFormToDisk;
@@ -321,11 +322,19 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
     @Override
     public String createAnswerFile(File file) {
+        String newFileHash = FileUtils.getMd5Hash(file);
+        String instanceDir = formController.getInstanceFile().getParent();
+
+        File[] answerFiles = new File(instanceDir).listFiles();
+        for (File answerFile : answerFiles) {
+            if (FileUtils.getMd5Hash(answerFile).equals(newFileHash)) {
+                return answerFile.getName();
+            }
+        }
+
         String fileName = file.getName();
         String extension = fileName.substring(fileName.lastIndexOf('.') + 1);
         String newFileName = System.currentTimeMillis() + "." + extension;
-
-        String instanceDir = formController.getInstanceFile().getParent();
         String newFilePath = instanceDir + File.separator + newFileName;
 
         try (InputStream inputStream = new FileInputStream(file)) {
