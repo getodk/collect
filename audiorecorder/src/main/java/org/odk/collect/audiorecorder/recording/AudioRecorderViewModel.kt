@@ -16,7 +16,8 @@ abstract class AudioRecorderViewModel : ViewModel() {
     abstract fun stop()
 
     /**
-     * Stops any in progress recordings, clears recordings (returned from `getRecordings`)
+     * Stops any in progress recordings, clears recordings (returned from `getRecordings`). Should
+     * be called after in-progress or finished recordings are no longer needed
      */
     abstract fun cleanUp()
 }

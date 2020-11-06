@@ -21,6 +21,7 @@ import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.testshared.FakeScheduler;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
@@ -54,6 +55,7 @@ public class FormSaveViewModelTest {
 
     private final SavedStateHandle savedStateHandle = new SavedStateHandle();
     private final FakeFormSaver formSaver = new FakeFormSaver();
+    private final FakeScheduler scheduler = new FakeScheduler();
 
     private AuditEventLogger logger;
     private FormSaveViewModel viewModel;
@@ -73,7 +75,7 @@ public class FormSaveViewModelTest {
         when(formController.getAuditEventLogger()).thenReturn(logger);
         when(logger.isChangeReasonRequired()).thenReturn(false);
 
-        viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, analytics);
+        viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, analytics, scheduler);
         viewModel.formLoaded(formController);
     }
 
@@ -411,7 +413,7 @@ public class FormSaveViewModelTest {
     public void deleteAnswerFile_whenAnswerFileHasAlreadyBeenDeleted_onRecreatingViewModel_actuallyDeletesNewFile() {
         viewModel.deleteAnswerFile("index", "blah1");
 
-        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null);
+        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler);
         restoredViewModel.formLoaded(formController);
         restoredViewModel.deleteAnswerFile("index", "blah2");
 
@@ -434,7 +436,7 @@ public class FormSaveViewModelTest {
     public void replaceAnswerFile_whenAnswerFileHasAlreadyBeenReplaced_afterRecreatingViewModel_deletesPreviousReplacement() {
         viewModel.replaceAnswerFile("index", "blah1");
 
-        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null);
+        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler);
         restoredViewModel.formLoaded(formController);
         restoredViewModel.replaceAnswerFile("index", "blah2");
 
@@ -456,10 +458,11 @@ public class FormSaveViewModelTest {
         when(formController.getInstanceFile()).thenReturn(new File(tempDir + File.separator + "instance.xml"));
 
         File externalFile = File.createTempFile("external", ".file");
-        final String fileName = viewModel.createAnswerFile(externalFile);
+        LiveData<String> answerFile = viewModel.createAnswerFile(externalFile);
+        scheduler.runBackground();
 
         assertThat(tempDir.listFiles().length, is(1));
-        assertThat(fileName, is(tempDir.listFiles()[0].getName()));
+        assertThat(answerFile.getValue(), is(tempDir.listFiles()[0].getName()));
     }
 
     @Test
@@ -468,17 +471,19 @@ public class FormSaveViewModelTest {
         when(formController.getInstanceFile()).thenReturn(new File(tempDir + File.separator + "instance.xml"));
 
         File externalFile = File.createTempFile("external", ".file");
-        String fileName1 = viewModel.createAnswerFile(externalFile);
-        String fileName2 = viewModel.createAnswerFile(externalFile);
+        LiveData<String> fileName1 = viewModel.createAnswerFile(externalFile);
+        scheduler.runBackground();
+        LiveData<String> fileName2 = viewModel.createAnswerFile(externalFile);
+        scheduler.runBackground();
 
-        assertThat(fileName1, is(fileName2));
+        assertThat(fileName1.getValue(), is(fileName2.getValue()));
     }
 
     //endregion
 
     @Test
     public void ignoreChanges_whenFormControllerNotSet_doesNothing() {
-        FormSaveViewModel viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null);
+        FormSaveViewModel viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler);
         viewModel.ignoreChanges(); // Checks nothing explodes
     }
 

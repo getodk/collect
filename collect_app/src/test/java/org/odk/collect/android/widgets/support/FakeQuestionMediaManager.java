@@ -1,5 +1,7 @@
 package org.odk.collect.android.widgets.support;
 
+import androidx.lifecycle.LiveData;
+
 import com.google.common.io.Files;
 
 import org.odk.collect.android.utilities.QuestionMediaManager;
@@ -15,7 +17,7 @@ public class FakeQuestionMediaManager implements QuestionMediaManager {
     private final File tempDir = Files.createTempDir();
 
     @Override
-    public String createAnswerFile(File file) {
+    public LiveData<String> createAnswerFile(File file) {
         return null;
     }
 

@@ -74,7 +74,7 @@ public class InternalRecordingRequesterTest {
     }
 
     @Test
-    public void whenViewModelRecordingAvailable_copiesFileToInstanceFolder_andCallsListenerForSessionWithFilename() throws Exception {
+    public void whenViewModelRecordingAvailable_copiesFileToInstanceFolder_andCallsListenerForSessionWithFilename_andCleansUpViewModel() throws Exception {
         FormEntryPrompt prompt = promptWithAnswer(null);
         MutableLiveData<File> liveData = new MutableLiveData<>(null);
         when(viewModel.getRecording(prompt.getIndex().toString())).thenReturn(liveData);
@@ -83,9 +83,10 @@ public class InternalRecordingRequesterTest {
         requester.onRecordingAvailable(prompt, listener);
 
         File file = File.createTempFile("blah", ".mp3");
-        when(questionMediaManager.createAnswerFile(file)).thenReturn("copiedFile");
-
+        when(questionMediaManager.createAnswerFile(file)).thenReturn(new MutableLiveData<>("copiedFile"));
         liveData.setValue(file);
+
         verify(listener).accept("copiedFile");
+        verify(viewModel).cleanUp();
     }
 }

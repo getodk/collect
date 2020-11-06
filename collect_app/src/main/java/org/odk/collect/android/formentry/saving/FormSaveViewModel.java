@@ -26,7 +26,6 @@ import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.formentry.RequiresFormController;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditUtils;
-import org.odk.collect.android.forms.FormUtils;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.tasks.SaveFormToDisk;
@@ -34,6 +33,7 @@ import org.odk.collect.android.tasks.SaveToDiskResult;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
+import org.odk.collect.async.Scheduler;
 import org.odk.collect.utilities.Clock;
 
 import java.io.File;
@@ -74,13 +74,15 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     private AsyncTask<Void, String, SaveToDiskResult> saveTask;
 
     private final Analytics analytics;
+    private final Scheduler scheduler;
 
-    public FormSaveViewModel(SavedStateHandle stateHandle, Clock clock, FormSaver formSaver, MediaUtils mediaUtils, Analytics analytics) {
+    public FormSaveViewModel(SavedStateHandle stateHandle, Clock clock, FormSaver formSaver, MediaUtils mediaUtils, Analytics analytics, Scheduler scheduler) {
         this.stateHandle = stateHandle;
         this.clock = clock;
         this.formSaver = formSaver;
         this.mediaUtils = mediaUtils;
         this.analytics = analytics;
+        this.scheduler = scheduler;
 
         if (stateHandle.get(ORIGINAL_FILES) != null) {
             originalFiles = stateHandle.get(ORIGINAL_FILES);
@@ -321,31 +323,37 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     @Override
-    public String createAnswerFile(File file) {
-        String newFileHash = FileUtils.getMd5Hash(file);
-        String instanceDir = formController.getInstanceFile().getParent();
+    public LiveData<String> createAnswerFile(File file) {
+        MutableLiveData<String> liveData = new MutableLiveData<>(null);
 
-        File[] answerFiles = new File(instanceDir).listFiles();
-        for (File answerFile : answerFiles) {
-            if (FileUtils.getMd5Hash(answerFile).equals(newFileHash)) {
-                return answerFile.getName();
+        scheduler.immediate(() -> {
+            String newFileHash = FileUtils.getMd5Hash(file);
+            String instanceDir = formController.getInstanceFile().getParent();
+
+            File[] answerFiles = new File(instanceDir).listFiles();
+            for (File answerFile : answerFiles) {
+                if (FileUtils.getMd5Hash(answerFile).equals(newFileHash)) {
+                    return answerFile.getName();
+                }
             }
-        }
 
-        String fileName = file.getName();
-        String extension = fileName.substring(fileName.lastIndexOf('.') + 1);
-        String newFileName = System.currentTimeMillis() + "." + extension;
-        String newFilePath = instanceDir + File.separator + newFileName;
+            String fileName = file.getName();
+            String extension = fileName.substring(fileName.lastIndexOf('.') + 1);
+            String newFileName = System.currentTimeMillis() + "." + extension;
+            String newFilePath = instanceDir + File.separator + newFileName;
 
-        try (InputStream inputStream = new FileInputStream(file)) {
-            try (OutputStream outputStream = new FileOutputStream(newFilePath)) {
-                IOUtils.copy(inputStream, outputStream);
+            try (InputStream inputStream = new FileInputStream(file)) {
+                try (OutputStream outputStream = new FileOutputStream(newFilePath)) {
+                    IOUtils.copy(inputStream, outputStream);
+                }
+            } catch (IOException ignored) {
+                // Ignored
             }
-        } catch (IOException ignored) {
-            // Ignored
-        }
 
-        return newFileName;
+            return newFileName;
+        }, liveData::setValue);
+
+        return liveData;
     }
 
     @Override
@@ -473,16 +481,18 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
     public static class Factory extends AbstractSavedStateViewModelFactory {
         private final Analytics analytics;
+        private final Scheduler scheduler;
 
-        public Factory(@NonNull SavedStateRegistryOwner owner, @Nullable Bundle defaultArgs, Analytics analytics) {
+        public Factory(@NonNull SavedStateRegistryOwner owner, @Nullable Bundle defaultArgs, Analytics analytics, Scheduler scheduler) {
             super(owner, defaultArgs);
             this.analytics = analytics;
+            this.scheduler = scheduler;
         }
 
         @NonNull
         @Override
         protected <T extends ViewModel> T create(@NonNull String key, @NonNull Class<T> modelClass, @NonNull SavedStateHandle handle) {
-            return (T) new FormSaveViewModel(handle, System::currentTimeMillis, new DiskFormSaver(), new MediaUtils(), analytics);
+            return (T) new FormSaveViewModel(handle, System::currentTimeMillis, new DiskFormSaver(), new MediaUtils(), analytics, scheduler);
         }
     }
 }

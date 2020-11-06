@@ -25,6 +25,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.utilities.DialogUtils;
+import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
 
@@ -42,6 +43,9 @@ public class QuitFormDialogFragment extends DialogFragment {
     @Inject
     AudioRecorderViewModelFactory audioRecorderViewModelFactory;
 
+    @Inject
+    Scheduler scheduler;
+
     private FormSaveViewModel formSaveViewModel;
     private AudioRecorderViewModel audioRecorderViewModel;
     private Listener listener;
@@ -51,7 +55,7 @@ public class QuitFormDialogFragment extends DialogFragment {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
 
-        FormSaveViewModel.Factory factory = new FormSaveViewModel.Factory(requireActivity(), null, analytics);
+        FormSaveViewModel.Factory factory = new FormSaveViewModel.Factory(requireActivity(), null, analytics, scheduler);
         formSaveViewModel = new ViewModelProvider(requireActivity(), factory).get(FormSaveViewModel.class);
         audioRecorderViewModel = new ViewModelProvider(requireActivity(), audioRecorderViewModelFactory).get(AudioRecorderViewModel.class);
 
