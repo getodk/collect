@@ -7,7 +7,7 @@ import android.view.MenuItem;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
@@ -19,8 +19,10 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MenuDelegate;
 import org.odk.collect.android.utilities.PlayServicesChecker;
+import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
 
@@ -29,14 +31,23 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
     private final AppCompatActivity activity;
     private final AnswersProvider answersProvider;
     private final FormIndexAnimationHandler formIndexAnimationHandler;
+    private final FormEntryViewModel formEntryViewModel;
+    private final FormSaveViewModel formSaveViewModel;
+    private final BackgroundLocationViewModel backgroundLocationViewModel;
 
     @Nullable
     private FormController formController;
+    private final AudioRecorderViewModel audioRecorderViewModel;
 
     public FormEntryMenuDelegate(AppCompatActivity activity, AnswersProvider answersProvider, FormIndexAnimationHandler formIndexAnimationHandler) {
         this.activity = activity;
         this.answersProvider = answersProvider;
         this.formIndexAnimationHandler = formIndexAnimationHandler;
+
+        audioRecorderViewModel = new ViewModelProvider(activity).get(AudioRecorderViewModel.class);
+        formEntryViewModel = new ViewModelProvider(activity).get(FormEntryViewModel.class);
+        formSaveViewModel = new ViewModelProvider(activity).get(FormSaveViewModel.class);
+        backgroundLocationViewModel = new ViewModelProvider(activity).get(BackgroundLocationViewModel.class);
     }
 
     @Override
@@ -82,40 +93,33 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
             backgroundLocation.setChecked(GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true));
         }
 
-        menu.findItem(R.id.menu_add_repeat).setVisible(getFormEntryViewModel().canAddRepeat());
+        menu.findItem(R.id.menu_add_repeat).setVisible(formEntryViewModel.canAddRepeat());
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_add_repeat:
-                getFormSaveViewModel().saveAnswersForScreen(answersProvider.getAnswers());
-                getFormEntryViewModel().promptForNewRepeat();
-                formIndexAnimationHandler.handle(getFormEntryViewModel().getCurrentIndex());
+                formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
+                formEntryViewModel.promptForNewRepeat();
+                formIndexAnimationHandler.handle(formEntryViewModel.getCurrentIndex());
                 return true;
 
             case R.id.menu_preferences:
+                if (audioRecorderViewModel.isRecording().getValue()) {
+                    DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
+                    return true;
+                }
+
                 Intent pref = new Intent(activity, PreferencesActivity.class);
                 activity.startActivity(pref);
                 return true;
 
             case R.id.track_location:
-                getBackgroundLocationViewModel().backgroundLocationPreferenceToggled();
+                backgroundLocationViewModel.backgroundLocationPreferenceToggled();
                 return true;
         }
 
         return false;
-    }
-
-    private FormEntryViewModel getFormEntryViewModel() {
-        return ViewModelProviders.of(activity).get(FormEntryViewModel.class);
-    }
-
-    private FormSaveViewModel getFormSaveViewModel() {
-        return ViewModelProviders.of(activity).get(FormSaveViewModel.class);
-    }
-
-    private BackgroundLocationViewModel getBackgroundLocationViewModel() {
-        return ViewModelProviders.of(activity).get(BackgroundLocationViewModel.class);
     }
 }
