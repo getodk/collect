@@ -57,7 +57,6 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -95,6 +94,7 @@ import org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction;
 import org.odk.collect.android.formentry.FormLoadingDialogFragment;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
+import org.odk.collect.android.formentry.RecordingWarningDialogFragment;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditUtils;
 import org.odk.collect.android.formentry.audit.ChangesReasonPromptDialogFragment;
@@ -1079,11 +1079,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 if (audioRecorderViewModel.isRecording().getValue()) {
                     // We want the user to stop recording before changing screens
-                    new MaterialAlertDialogBuilder(this)
-                            .setTitle(R.string.recording)
-                            .setMessage(R.string.recording_warning)
-                            .setPositiveButton(R.string.ok, null)
-                            .create().show();
+                    DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
                     return true;
                 }
 
@@ -1512,11 +1508,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         if (audioRecorderViewModel.isRecording().getValue()) {
             // We want the user to stop recording before changing screens
-            new MaterialAlertDialogBuilder(this)
-                    .setTitle(R.string.recording)
-                    .setMessage(R.string.recording_warning)
-                    .setPositiveButton(R.string.ok, null)
-                    .create().show();
+            DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
             return;
         }
 
