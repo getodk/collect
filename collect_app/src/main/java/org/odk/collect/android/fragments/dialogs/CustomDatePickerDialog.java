@@ -60,7 +60,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
                 .setView(R.layout.custom_date_picker_dialog)
                 .setPositiveButton(R.string.ok, (dialog, id) -> {
                     LocalDateTime date = getDateAsGregorian(getOriginalDate());
-                    dateTimeViewModel.setSelectedDateTime(date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
+                    dateTimeViewModel.setSelectedDate(date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
                     dismiss();
                 })
                 .setNegativeButton(R.string.cancel, (dialog, id) -> dismiss())

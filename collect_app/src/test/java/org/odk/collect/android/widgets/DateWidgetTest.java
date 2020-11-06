@@ -2,6 +2,9 @@ package org.odk.collect.android.widgets;
 
 import android.view.View;
 
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProvider;
+
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.DateData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -13,7 +16,12 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.DatePickerDetails;
+import org.odk.collect.android.support.FakeLifecycleOwner;
+import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.DateTimeUtils;
+import org.odk.collect.android.widgets.interfaces.DateTimeWidgetListener;
+import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
+import org.odk.collect.android.widgets.viewmodels.DateTimeViewModel;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,6 +29,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithQuestionDefAndAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndQuestionDef;
@@ -28,23 +37,37 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 
 @RunWith(RobolectricTestRunner.class)
 public class DateWidgetTest {
+    private TestScreenContextActivity widgetActivity;
+    private DateTimeViewModel dateTimeViewModel;
+    private LifecycleOwner fakeLifecycleOwner;
+    private DateTimeWidgetListener dateTimeWidgetListener;
+    private View.OnLongClickListener onLongClickListener;
 
     private QuestionDef questionDef;
-    private View.OnLongClickListener listener;
     private LocalDateTime date;
 
     @Before
     public void setUp() {
+        widgetActivity = widgetTestActivity();
         questionDef = mock(QuestionDef.class);
-        listener = mock(View.OnLongClickListener.class);
+        onLongClickListener = mock(View.OnLongClickListener.class);
+        dateTimeWidgetListener = mock(DateTimeWidgetListener.class);
+        dateTimeViewModel = new ViewModelProvider(widgetActivity).get(DateTimeViewModel.class);
 
-        date = new LocalDateTime().withYear(2010).withMonthOfYear(5).withDayOfMonth(12);
+        fakeLifecycleOwner = new FakeLifecycleOwner();
+        date = DateTimeWidgetUtils.getSelectedDate(new LocalDateTime().withDate(2010, 5, 12));
     }
 
     @Test
     public void usingReadOnlyOption_doesNotShowButton() {
         DateWidget widget = createWidget(promptWithReadOnlyAndQuestionDef(questionDef));
         assertEquals(widget.binding.widgetButton.getVisibility(), View.GONE);
+    }
+
+    @Test
+    public void whenPromptIsNotReadOnly_buttonShowsCorrectText() {
+        DateWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
+        assertEquals(widget.binding.widgetButton.getText(), widget.getContext().getString(R.string.select_date));
     }
 
     @Test
@@ -75,23 +98,67 @@ public class DateWidgetTest {
     }
 
     @Test
-    public void setData_setsCorrectDateInAnswerTextView() {
+    public void updatingValueInDateTimeViewModel_doesNotUpdateAnswer_whenWidgetIsNotWaitingForData() {
+        FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, null);
+        DateWidget widget = createWidget(prompt);
+
+        when(dateTimeWidgetListener.isWidgetWaitingForData(prompt.getIndex())).thenReturn(false);
+
+        dateTimeViewModel.setSelectedDate(2010, 4, 12);
+
+        dateTimeViewModel.getSelectedDate().observe(fakeLifecycleOwner, localDateTime -> {
+            assertEquals(widget.binding.widgetAnswerText.getText(), widget.getContext().getString(R.string.no_date_selected));
+        });
+    }
+
+    @Test
+    public void updatingValueInDateTimeViewModel_updatesAnswer_whenWidgetIsWaitingForData() {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, null);
         DatePickerDetails datePickerDetails = DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
-
         DateWidget widget = createWidget(prompt);
-        widget.setData(date);
 
-        assertEquals(widget.binding.widgetAnswerText.getText(),
-                DateTimeUtils.getDateTimeLabel(date.toDate(), datePickerDetails, false, widget.getContext()));
+        when(dateTimeWidgetListener.isWidgetWaitingForData(prompt.getIndex())).thenReturn(true);
+        dateTimeViewModel.setSelectedDate(2010, 4, 12);
+
+        dateTimeViewModel.getSelectedDate().observe(fakeLifecycleOwner, localDateTime -> {
+            assertEquals(widget.binding.widgetAnswerText.getText(),
+                    DateTimeUtils.getDateTimeLabel(date.toDate(), datePickerDetails, false, widget.getContext()));
+        });
+    }
+
+    @Test
+    public void clickingButton_callsSetWidgetWaitingForData() {
+        FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, null);
+        DateWidget widget = createWidget(prompt);
+        widget.binding.widgetButton.performClick();
+
+        verify(dateTimeWidgetListener).setWidgetWaitingForData(prompt.getIndex());
+    }
+
+    @Test
+    public void clickingButton_callsDisplayDatePickerDialogWithCurrentDate_whenPromptDoesNotHaveAnswer() {
+        FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, null);
+        DateWidget widget = createWidget(prompt);
+        widget.binding.widgetButton.performClick();
+
+        verify(dateTimeWidgetListener).displayDatePickerDialog(widgetActivity, prompt.getIndex(),
+                DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr()), DateTimeWidgetUtils.getCurrentDateTime());
+    }
+
+    @Test
+    public void clickingButton_callsDisplayDatePickerDialogWithSelectedDate_whenPromptHasAnswer() {
+        FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, new DateData(date.toDate()));
+        DateWidget widget = createWidget(prompt);
+        widget.binding.widgetButton.performClick();
+
+        verify(dateTimeWidgetListener).displayDatePickerDialog(widgetActivity, prompt.getIndex(),
+                DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr()), date);
     }
 
     @Test
     public void clearAnswer_clearsWidgetAnswer() {
         DateWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
         widget.clearAnswer();
-
-        assertThat(widget.getAnswer(), nullValue());
         assertEquals(widget.binding.widgetAnswerText.getText(), widget.getContext().getString(R.string.no_date_selected));
     }
 
@@ -106,22 +173,23 @@ public class DateWidgetTest {
 
     public void clickingButtonForLong_callsLongClickListener() {
         DateWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new DateData(date.toDate())));
-        widget.setOnLongClickListener(listener);
+        widget.setOnLongClickListener(onLongClickListener);
         widget.binding.widgetButton.performLongClick();
 
-        verify(listener).onLongClick(widget.binding.widgetButton);
+        verify(onLongClickListener).onLongClick(widget.binding.widgetButton);
     }
 
     @Test
     public void clickingAnswerTextViewForLong_callsLongClickListener() {
         DateWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
-        widget.setOnLongClickListener(listener);
+        widget.setOnLongClickListener(onLongClickListener);
         widget.binding.widgetAnswerText.performLongClick();
 
-        verify(listener).onLongClick(widget.binding.widgetAnswerText);
+        verify(onLongClickListener).onLongClick(widget.binding.widgetAnswerText);
     }
 
     private DateWidget createWidget(FormEntryPrompt prompt) {
-        return new DateWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"));
+        return new DateWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"),
+                fakeLifecycleOwner, dateTimeWidgetListener);
     }
 }

@@ -51,12 +51,6 @@ public class DateTimeUtils {
                 .withMillisOfSecond(0);
     }
 
-    public static DateTime getDateTime(int hourOfDay, int minute) {
-        return new DateTime()
-                .withHourOfDay(hourOfDay)
-                .withMinuteOfHour(minute);
-    }
-
     public static String getDateTimeLabel(Date date, DatePickerDetails datePickerDetails, boolean containsTime, Context context) {
         String gregorianDateText = getGregorianDateTimeLabel(date, datePickerDetails, containsTime, Locale.getDefault());
 

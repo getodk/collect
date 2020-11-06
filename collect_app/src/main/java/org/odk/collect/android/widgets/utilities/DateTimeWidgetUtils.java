@@ -1,13 +1,15 @@
 package org.odk.collect.android.widgets.utilities;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.TimeData;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.dialogs.BikramSambatDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.CopticDatePickerDialog;
@@ -20,15 +22,49 @@ import org.odk.collect.android.fragments.dialogs.PersianDatePickerDialog;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DialogUtils;
+import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
+import org.odk.collect.android.widgets.interfaces.DateTimeWidgetListener;
 
-public class DateTimeWidgetUtils {
+public class DateTimeWidgetUtils implements DateTimeWidgetListener {
     public static final String FORM_INDEX = "formIndex";
     public static final String DATE = "date";
     public static final String DATE_PICKER_DETAILS = "datePickerDetails";
     public static final String DATE_PICKER_THEME = "datePickerTheme";
 
-    private DateTimeWidgetUtils() {
+    public DateTimeWidgetUtils() {
+    }
+
+    @Override
+    public void setWidgetWaitingForData(FormIndex formIndex) {
+        setWaitingForData(formIndex);
+    }
+
+    @Override
+    public boolean isWidgetWaitingForData(FormIndex formIndex) {
+        return isWaitingForData(formIndex);
+    }
+
+    @Override
+    public void displayDatePickerDialog(Context context, FormIndex formIndex, DatePickerDetails datePickerDetails, LocalDateTime selectedDate) {
+        showDatePickerDialog(context, formIndex, datePickerDetails, selectedDate);
+    }
+
+    @Override
+    public void displayTimePickerDialog(Context context, LocalDateTime selectedTime) {
+        showTimePickerDialog(context, selectedTime);
+    }
+
+    public static LocalDateTime getSelectedDate(LocalDateTime localDateTime) {
+        return new LocalDateTime()
+                .withDate(localDateTime.getYear(), localDateTime.getMonthOfYear(), localDateTime.getDayOfMonth())
+                .withTime(DateTime.now().getHourOfDay(), DateTime.now().getMinuteOfHour(), 0, 0);
+    }
+
+    public static LocalDateTime getCurrentDateTime() {
+        return new LocalDateTime()
+                .withDate(DateTime.now().getYear(), DateTime.now().getMonthOfYear(), DateTime.now().getDayOfMonth())
+                .withTime(DateTime.now().getHourOfDay(), DateTime.now().getMinuteOfHour(), 0, 0);
     }
 
     public static TimeData getTimeData(DateTime dateTime) {
@@ -37,25 +73,25 @@ public class DateTimeWidgetUtils {
         return new TimeData(localDateTime.toDate());
     }
 
-    public static LocalDateTime getCurrentDate() {
-        return LocalDateTime
-                .now()
-                .withHourOfDay(0)
-                .withMinuteOfHour(0)
-                .withSecondOfMinute(0)
-                .withMillisOfSecond(0);
-    }
-
-    public static void setWidgetWaitingForData(FormIndex index) {
+    private static void setWaitingForData(FormIndex formIndex) {
         FormController formController = Collect.getInstance().getFormController();
         if (formController != null) {
-            formController.setIndexWaitingForData(index);
+            formController.setIndexWaitingForData(formIndex);
         }
     }
 
-    public static void showDatePickerDialog(FormEntryActivity activity, FormIndex formIndex, DatePickerDetails datePickerDetails,
+    private static boolean isWaitingForData(FormIndex formIndex) {
+        FormControllerWaitingForDataRegistry waitingForDataRegistry = new FormControllerWaitingForDataRegistry();
+        if (waitingForDataRegistry.isWaitingForData(formIndex)) {
+            waitingForDataRegistry.cancelWaitingForData();
+            return true;
+        }
+        return false;
+    }
+
+    private static void showDatePickerDialog(Context context, FormIndex formIndex, DatePickerDetails datePickerDetails,
                                             LocalDateTime date) {
-        ThemeUtils themeUtils = new ThemeUtils(activity);
+        ThemeUtils themeUtils = new ThemeUtils(context);
 
         Bundle bundle = new Bundle();
         bundle.putInt(DATE_PICKER_THEME, getDatePickerTheme(themeUtils, datePickerDetails));
@@ -63,7 +99,7 @@ public class DateTimeWidgetUtils {
         bundle.putSerializable(DATE_PICKER_DETAILS, datePickerDetails);
         bundle.putSerializable(FORM_INDEX, formIndex);
 
-        DialogUtils.showIfNotShowing(getClass(datePickerDetails.getDatePickerType()), bundle, activity.getSupportFragmentManager());
+        DialogUtils.showIfNotShowing(getClass(datePickerDetails.getDatePickerType()), bundle, ((ScreenContext) context).getActivity().getSupportFragmentManager());
     }
 
     private static Class getClass(DatePickerDetails.DatePickerType datePickerType) {
@@ -85,13 +121,13 @@ public class DateTimeWidgetUtils {
         }
     }
 
-    public static void showTimePickerDialog(FormEntryActivity activity, LocalDateTime dateTime) {
-        ThemeUtils themeUtils = new ThemeUtils(activity);
+    private static void showTimePickerDialog(Context context, LocalDateTime dateTime) {
+        ThemeUtils themeUtils = new ThemeUtils(context);
         Bundle bundle = new Bundle();
         bundle.putInt(CustomTimePickerDialog.TIME_PICKER_THEME, themeUtils.getHoloDialogTheme());
         bundle.putSerializable(CustomTimePickerDialog.CURRENT_TIME, dateTime);
 
-        DialogUtils.showIfNotShowing(CustomTimePickerDialog.class, bundle, activity.getSupportFragmentManager());
+        DialogUtils.showIfNotShowing(CustomTimePickerDialog.class, bundle, ((AppCompatActivity) context).getSupportFragmentManager());
     }
 
     private static int getDatePickerTheme(ThemeUtils themeUtils, DatePickerDetails datePickerDetails) {

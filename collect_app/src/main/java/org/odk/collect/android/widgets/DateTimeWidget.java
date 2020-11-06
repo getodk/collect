@@ -20,6 +20,7 @@ import android.content.Context;
 import android.util.TypedValue;
 import android.view.View;
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.javarosa.core.model.data.DateTimeData;
@@ -28,12 +29,12 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.databinding.DateTimeWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
+import org.odk.collect.android.widgets.interfaces.DateTimeWidgetListener;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.odk.collect.android.widgets.viewmodels.DateTimeViewModel;
 
@@ -46,16 +47,18 @@ public class DateTimeWidget extends QuestionWidget {
     DateTimeWidgetAnswerBinding binding;
 
     private final DateTimeViewModel dateTimeViewModel;
+    private final DateTimeWidgetListener listener;
 
     private LocalDateTime selectedDateTime;
     private DatePickerDetails datePickerDetails;
 
-    public DateTimeWidget(Context context, QuestionDetails prompt) {
+    public DateTimeWidget(Context context, QuestionDetails prompt, LifecycleOwner lifecycleOwner, DateTimeWidgetListener listener) {
         super(context, prompt);
+        this.listener = listener;
         dateTimeViewModel = new ViewModelProvider(((ScreenContext) context).getActivity()).get(DateTimeViewModel.class);
 
-        dateTimeViewModel.getSelectedDate().observe(((ScreenContext) context).getViewLifecycle(), localDateTime -> {
-            if (localDateTime != null && dateTimeViewModel.isWidgetWaitingForData(getFormEntryPrompt().getIndex())) {
+        dateTimeViewModel.getSelectedDate().observe(lifecycleOwner, localDateTime -> {
+            if (localDateTime != null && listener.isWidgetWaitingForData(getFormEntryPrompt().getIndex())) {
                 selectedDateTime = getSelectedDate(localDateTime);
                 binding.dateWidget.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
                         localDateTime.toDate(), datePickerDetails, false, getContext()));
@@ -63,8 +66,8 @@ public class DateTimeWidget extends QuestionWidget {
             }
         });
 
-        dateTimeViewModel.getSelectedTime().observe(((ScreenContext) context).getViewLifecycle(), localDateTime -> {
-            if (localDateTime != null && dateTimeViewModel.isWidgetWaitingForData(getFormEntryPrompt().getIndex())) {
+        dateTimeViewModel.getSelectedTime().observe(lifecycleOwner, localDateTime -> {
+            if (localDateTime != null && listener.isWidgetWaitingForData(getFormEntryPrompt().getIndex())) {
                 DateTime selectedTime = localDateTime.toDateTime();
                 selectedDateTime = getSelectedTime(selectedTime);
                 binding.timeWidget.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(selectedTime).getDisplayText());
@@ -89,13 +92,13 @@ public class DateTimeWidget extends QuestionWidget {
             binding.timeWidget.widgetButton.setText(getContext().getString(R.string.select_time));
 
             binding.dateWidget.widgetButton.setOnClickListener(v -> {
-                dateTimeViewModel.setWidgetWaitingForData(prompt.getIndex());
-                DateTimeWidgetUtils.showDatePickerDialog((FormEntryActivity) context, prompt.getIndex(), datePickerDetails, selectedDateTime);
+                listener.setWidgetWaitingForData(prompt.getIndex());
+                listener.displayDatePickerDialog(context, prompt.getIndex(), datePickerDetails, selectedDateTime);
             });
 
             binding.timeWidget.widgetButton.setOnClickListener(v -> {
-                dateTimeViewModel.setWidgetWaitingForData(prompt.getIndex());
-                DateTimeWidgetUtils.showTimePickerDialog((FormEntryActivity) getContext(), selectedDateTime);
+                listener.setWidgetWaitingForData(prompt.getIndex());
+                listener.displayTimePickerDialog(context, selectedDateTime);
             });
         }
         binding.dateWidget.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
