@@ -482,6 +482,20 @@ public class FormSaveViewModelTest {
     //endregion
 
     @Test
+    public void isSavingFileAnswerFile_isTrueWhenWhileIsSaving() throws Exception {
+        File tempDir = Files.createTempDir();
+        when(formController.getInstanceFile()).thenReturn(new File(tempDir + File.separator + "instance.xml"));
+
+        assertThat(viewModel.isSavingAnswerFile().getValue(), is(false));
+
+        viewModel.createAnswerFile(File.createTempFile("external", ".file"));
+        assertThat(viewModel.isSavingAnswerFile().getValue(), is(true));
+
+        scheduler.runBackground();
+        assertThat(viewModel.isSavingAnswerFile().getValue(), is(false));
+    }
+
+    @Test
     public void ignoreChanges_whenFormControllerNotSet_doesNothing() {
         FormSaveViewModel viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler);
         viewModel.ignoreChanges(); // Checks nothing explodes

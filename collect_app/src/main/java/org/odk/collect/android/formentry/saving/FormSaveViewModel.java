@@ -62,6 +62,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     private final MediaUtils mediaUtils;
 
     private final MutableLiveData<SaveResult> saveResult = new MutableLiveData<>(null);
+    private final MutableLiveData<Boolean> isSavingAnswerFile = new MutableLiveData<>(false);
     private String reason = "";
 
     private Map<String, String> originalFiles = new HashMap<>();
@@ -326,6 +327,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     public LiveData<String> createAnswerFile(File file) {
         MutableLiveData<String> liveData = new MutableLiveData<>(null);
 
+        isSavingAnswerFile.setValue(true);
         scheduler.immediate(() -> {
             String newFileHash = FileUtils.getMd5Hash(file);
             String instanceDir = formController.getInstanceFile().getParent();
@@ -351,7 +353,10 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             }
 
             return newFileName;
-        }, liveData::setValue);
+        }, fileName -> {
+            liveData.setValue(fileName);
+            isSavingAnswerFile.setValue(false);
+        });
 
         return liveData;
     }
@@ -364,6 +369,10 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         } else {
             return null;
         }
+    }
+
+    public LiveData<Boolean> isSavingAnswerFile() {
+        return isSavingAnswerFile;
     }
 
     private void clearMediaFiles() {

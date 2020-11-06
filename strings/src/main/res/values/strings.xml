@@ -707,4 +707,5 @@
     <string name="recording">Recording…</string>
     <string name="recording_channel">Audio recording</string>
     <string name="play_audio">Play audio</string>
+    <string name="saving_file">Saving file</string>
 </resources>
