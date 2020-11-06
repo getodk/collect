@@ -83,9 +83,8 @@ public class AudioRecordingTest {
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
                 .swipeToEndScreenWhileRecording()
-
-                .assertText(R.string.recording_warning)
                 .clickOK(new FormEntryPage("Audio Question", rule))
+
                 .assertQuestion("What does it sound like?")
                 .clickOnString(R.string.stop_recording)
                 .assertTextNotDisplayed(R.string.stop_recording)
@@ -100,9 +99,8 @@ public class AudioRecordingTest {
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
                 .clickGoToArrowWhileRecording()
-
-                .assertText(R.string.recording_warning)
                 .clickOK(new FormEntryPage("Audio Question", rule))
+
                 .assertQuestion("What does it sound like?")
                 .clickOnString(R.string.stop_recording)
                 .assertTextNotDisplayed(R.string.stop_recording)
@@ -117,9 +115,8 @@ public class AudioRecordingTest {
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
                 .pressBack(new OkDialog(rule))
-
-                .assertText(R.string.recording_warning)
                 .clickOK(new FormEntryPage("Audio Question", rule))
+
                 .assertQuestion("What does it sound like?")
                 .clickOnString(R.string.stop_recording)
                 .assertTextNotDisplayed(R.string.stop_recording)

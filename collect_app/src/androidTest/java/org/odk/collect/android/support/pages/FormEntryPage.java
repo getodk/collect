@@ -283,11 +283,22 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public OkDialog swipeToEndScreenWhileRecording() {
         flingLeft();
-        return new OkDialog(rule).assertOnPage();
+        OkDialog okDialog = new OkDialog(rule).assertOnPage();
+        assertText(R.string.recording_warning);
+        return okDialog;
     }
 
     public OkDialog clickGoToArrowWhileRecording() {
         onView(withId(R.id.menu_goto)).perform(click());
-        return new OkDialog(rule).assertOnPage();
+        OkDialog okDialog = new OkDialog(rule).assertOnPage();
+        assertText(R.string.recording_warning);
+        return okDialog;
+    }
+
+    public OkDialog clickGeneralSettingsWhileRecording() {
+        onView(withText(getTranslatedString(R.string.general_preferences))).perform(click());
+        OkDialog okDialog = new OkDialog(rule).assertOnPage();
+        assertText(R.string.recording_warning);
+        return okDialog;
     }
 }
