@@ -285,4 +285,9 @@ public class FormEntryPage extends Page<FormEntryPage> {
         flingLeft();
         return new OkDialog(rule).assertOnPage();
     }
+
+    public OkDialog clickGoToArrowWhileRecording() {
+        onView(withId(R.id.menu_goto)).perform(click());
+        return new OkDialog(rule).assertOnPage();
+    }
 }

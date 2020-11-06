@@ -1076,7 +1076,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             case R.id.menu_goto:
                 state = null;
-                audioRecorderViewModel.cleanUp();
+
+                if (audioRecorderViewModel.isRecording().getValue()) {
+                    // We want the user to stop recording before changing screens
+                    new MaterialAlertDialogBuilder(this)
+                            .setTitle(R.string.recording)
+                            .setMessage(R.string.recording_warning)
+                            .setPositiveButton(R.string.ok, null)
+                            .create().show();
+                    return true;
+                }
 
                 if (formController != null && formController.currentPromptIsQuestion()) {
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);

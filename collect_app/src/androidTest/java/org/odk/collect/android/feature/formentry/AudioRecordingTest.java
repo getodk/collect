@@ -17,7 +17,6 @@ import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.android.support.pages.FormHierarchyPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
@@ -98,17 +97,19 @@ public class AudioRecordingTest {
 
     @Test
     public void whileRecording_openingHierarchyMenu_cancelsRecording() {
-        final FormHierarchyPage page = new MainMenuPage(rule).assertOnPage()
+        new MainMenuPage(rule).assertOnPage()
                 .copyForm("audio-question.xml")
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
-                .clickGoToArrow();
+                .clickGoToArrowWhileRecording()
 
-        assertThat(stubAudioRecorderViewModel.getWasCleanedUp(), is(true));
-
-        page.pressBack(new FormEntryPage("Audio Question", rule))
+                .assertText(R.string.recording_warning)
+                .clickOK(new FormEntryPage("Audio Question", rule))
+                .assertQuestion("What does it sound like?")
+                .clickOnString(R.string.stop_recording)
                 .assertTextNotDisplayed(R.string.stop_recording)
-                .assertEnabled(R.string.capture_audio);
+                .assertTextNotDisplayed(R.string.capture_audio)
+                .assertContentDescriptionDisplayed(R.string.play_audio);
     }
 
     @Test
