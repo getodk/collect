@@ -57,6 +57,7 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -1500,6 +1501,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             return;
         }
 
+        if (audioRecorderViewModel.isRecording().getValue()) {
+            // We want the user to stop recording before changing screens
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle(R.string.recording)
+                    .setMessage(R.string.recording_warning)
+                    .setPositiveButton(R.string.ok, null)
+                    .create().show();
+            return;
+        }
+
         if (direction == FORWARDS && formController.getEvent() == FormEntryController.EVENT_END_OF_FORM) {
             // We're tryin to move forwards at the end of the form so just cancel
             swipeHandler.setBeenSwiped(false);
@@ -1534,8 +1545,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     public void onScreenChange(Direction direction) {
-        audioRecorderViewModel.cleanUp();
-
         final int event = getFormController().getEvent();
 
         switch (direction) {

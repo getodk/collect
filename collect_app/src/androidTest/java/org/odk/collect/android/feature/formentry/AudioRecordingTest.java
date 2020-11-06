@@ -16,7 +16,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
-import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.FormHierarchyPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
@@ -81,18 +80,20 @@ public class AudioRecordingTest {
     }
 
     @Test
-    public void whileRecording_swipingToADifferentScreen_cancelsRecording() {
-        final FormEndPage page = new MainMenuPage(rule).assertOnPage()
+    public void whileRecording_swipingToADifferentScreen_showsWarning_andStaysOnSameScreen() {
+        new MainMenuPage(rule).assertOnPage()
                 .copyForm("audio-question.xml")
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
-                .swipeToEndScreen()
-                .assertTextNotDisplayed(R.string.stop_recording);
+                .swipeToEndScreenWhileRecording()
 
-        assertThat(stubAudioRecorderViewModel.getWasCleanedUp(), is(true));
-
-        page.swipeToPreviousQuestion("What does it sound like?")
-                .assertEnabled(R.string.capture_audio);
+                .assertText(R.string.recording_warning)
+                .clickOK(new FormEntryPage("Audio Question", rule))
+                .assertQuestion("What does it sound like?")
+                .clickOnString(R.string.stop_recording)
+                .assertTextNotDisplayed(R.string.stop_recording)
+                .assertTextNotDisplayed(R.string.capture_audio)
+                .assertContentDescriptionDisplayed(R.string.play_audio);
     }
 
     @Test

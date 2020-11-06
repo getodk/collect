@@ -281,8 +281,8 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public CancelRecordingDialog swipeToEndScreenWithCancelRecordingConfirmation() {
+    public OkDialog swipeToEndScreenWhileRecording() {
         flingLeft();
-        return new CancelRecordingDialog(rule).assertOnPage();
+        return new OkDialog(rule).assertOnPage();
     }
 }
