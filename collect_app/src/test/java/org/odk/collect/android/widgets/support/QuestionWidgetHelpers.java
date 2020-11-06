@@ -52,6 +52,13 @@ public class QuestionWidgetHelpers {
                 .build();
     }
 
+    public static FormEntryPrompt promptWithQuestionAndAnswer(QuestionDef questionDef, IAnswerData answer) {
+        return new MockFormEntryPromptBuilder()
+                .withQuestion(questionDef)
+                .withAnswer(answer)
+                .build();
+    }
+
     public static FormEntryPrompt promptWithQuestionDefAndAnswer(QuestionDef questionDef, IAnswerData answer) {
         return new MockFormEntryPromptBuilder()
                 .withQuestion(questionDef)

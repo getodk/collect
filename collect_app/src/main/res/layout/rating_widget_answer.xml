@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:padding="@dimen/margin_small">
+
+    <RatingBar
+        android:id="@+id/rating_bar1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:progressBackgroundTint="#61000000"
+        android:progressTint="@color/highContrastHighlight"
+        android:secondaryProgressTint="@android:color/transparent"
+        android:saveEnabled="false"
+        android:stepSize="1.0" />
+
+    <RatingBar
+        android:id="@+id/rating_bar2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:progressBackgroundTint="#61000000"
+        android:progressTint="@color/highContrastHighlight"
+        android:secondaryProgressTint="@android:color/transparent"
+        android:saveEnabled="false"
+        android:stepSize="1.0" />
+
+</LinearLayout>
