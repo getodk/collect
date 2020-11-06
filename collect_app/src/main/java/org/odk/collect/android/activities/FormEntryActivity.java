@@ -1956,14 +1956,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-    /**
-     * Create a dialog with options to save and exit or quit without
-     * saving
-     */
-    private void createQuitDialog() {
-        showIfNotShowing(QuitFormDialogFragment.class, getSupportFragmentManager());
-    }
-
     @Override
     public void onSaveChangesClicked() {
         saveForm(EXIT, InstancesDaoHelper.isInstanceComplete(false), null, true);
@@ -2213,7 +2205,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
-                createQuitDialog();
+                if (audioRecorderViewModel.isRecording().getValue()) {
+                    // We want the user to stop recording before changing screens
+                    DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
+                    return true;
+                }
+
+                showIfNotShowing(QuitFormDialogFragment.class, getSupportFragmentManager());
                 return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 if (event.isAltPressed() && !swipeHandler.beenSwiped()) {
