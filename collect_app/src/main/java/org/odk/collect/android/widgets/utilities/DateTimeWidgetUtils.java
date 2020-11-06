@@ -10,7 +10,6 @@ import org.joda.time.LocalDateTime;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.fragments.dialogs.BikramSambatDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.CopticDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog;
 import org.odk.collect.android.fragments.dialogs.EthiopianDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog;
@@ -22,15 +21,17 @@ import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 public class DateTimeWidgetUtils {
+    public static final String FORM_INDEX = "formIndex";
+    public static final String DATE = "date";
+    public static final String DATE_PICKER_DETAILS = "datePickerDetails";
+    public static final String DATE_PICKER_THEME = "DATE_PICKER_THEME";
 
     private DateTimeWidgetUtils() {
     }
 
-    public static TimeData getTimeData(int hourOfDay, int minuteOfHour) {
+    public static TimeData getTimeData(DateTime dateTime) {
         // use picker time, convert to today's date, store as utc
-        DateTime localDateTime = new DateTime()
-                .withTime(hourOfDay, minuteOfHour, 0, 0);
-
+        DateTime localDateTime = new DateTime().withTime(dateTime.getHourOfDay(), dateTime.getMinuteOfHour(), 0, 0);
         return new TimeData(localDateTime.toDate());
     }
 
@@ -48,10 +49,10 @@ public class DateTimeWidgetUtils {
         ThemeUtils themeUtils = new ThemeUtils(activity);
 
         Bundle bundle = new Bundle();
-        bundle.putInt(CustomDatePickerDialog.DATE_PICKER_THEME, getTheme(themeUtils, datePickerDetails));
-        bundle.putSerializable(CustomDatePickerDialog.DATE, date);
-        bundle.putSerializable(CustomDatePickerDialog.DATE_PICKER_DETAILS, datePickerDetails);
-        bundle.putSerializable(CustomDatePickerDialog.FORM_INDEX, formIndex);
+        bundle.putInt(DATE_PICKER_THEME, getDatePickerTheme(themeUtils, datePickerDetails));
+        bundle.putSerializable(DATE, date);
+        bundle.putSerializable(DATE_PICKER_DETAILS, datePickerDetails);
+        bundle.putSerializable(FORM_INDEX, formIndex);
 
         DialogUtils.showIfNotShowing(getClass(datePickerDetails.getDatePickerType()), bundle, activity.getSupportFragmentManager());
     }
@@ -75,16 +76,16 @@ public class DateTimeWidgetUtils {
         }
     }
 
-    public static void createTimePickerDialog(FormEntryActivity activity, int hourOfDay, int minuteOfHour) {
+    public static void showTimePickerDialog(FormEntryActivity activity, DateTime dateTime) {
         ThemeUtils themeUtils = new ThemeUtils(activity);
         Bundle bundle = new Bundle();
         bundle.putInt(CustomTimePickerDialog.TIME_PICKER_THEME, themeUtils.getHoloDialogTheme());
-        bundle.putSerializable(CustomTimePickerDialog.CURRENT_TIME, new DateTime().withTime(hourOfDay, minuteOfHour, 0, 0));
+        bundle.putSerializable(CustomTimePickerDialog.CURRENT_TIME, dateTime);
 
         DialogUtils.showIfNotShowing(CustomTimePickerDialog.class, bundle, activity.getSupportFragmentManager());
     }
 
-    private static int getTheme(ThemeUtils themeUtils, DatePickerDetails datePickerDetails) {
+    private static int getDatePickerTheme(ThemeUtils themeUtils, DatePickerDetails datePickerDetails) {
         int theme = 0;
         if (!isBrokenSamsungDevice()) {
             theme = themeUtils.getMaterialDialogTheme();

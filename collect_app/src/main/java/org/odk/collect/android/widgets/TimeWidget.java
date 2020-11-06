@@ -27,17 +27,16 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.databinding.WidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
 import java.util.Date;
 
 @SuppressLint("ViewConstructor")
-public class TimeWidget extends QuestionWidget implements BinaryDataReceiver {
+public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
     WidgetAnswerBinding binding;
 
-    private int hourOfDay;
-    private int minuteOfHour;
+    private DateTime selectedTime;
 
     public TimeWidget(Context context, final QuestionDetails prompt) {
         this(context, prompt, false);
@@ -56,21 +55,17 @@ public class TimeWidget extends QuestionWidget implements BinaryDataReceiver {
         } else {
             binding.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
             binding.widgetButton.setText(getContext().getString(R.string.select_time));
-            binding.widgetButton.setOnClickListener(v -> DateTimeWidgetUtils.createTimePickerDialog(
-                    (FormEntryActivity) getContext(), hourOfDay, minuteOfHour));
+            binding.widgetButton.setOnClickListener(v -> DateTimeWidgetUtils.showTimePickerDialog(
+                    (FormEntryActivity) getContext(), selectedTime));
         }
         binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         if (prompt.getAnswerValue() == null) {
-            setTimeToCurrent();
+            selectedTime = DateTime.now();
             binding.widgetAnswerText.setText(R.string.no_time_selected);
         } else {
-            Date date = (Date) getFormEntryPrompt().getAnswerValue().getValue();
-            DateTime dateTime = new DateTime(date);
-
-            hourOfDay = dateTime.getHourOfDay();
-            minuteOfHour = dateTime.getMinuteOfHour();
-            binding.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(hourOfDay, minuteOfHour).getDisplayText());
+            selectedTime = new DateTime((Date) getFormEntryPrompt().getAnswerValue().getValue());
+            binding.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(selectedTime).getDisplayText());
         }
 
         return binding.getRoot();
@@ -78,16 +73,16 @@ public class TimeWidget extends QuestionWidget implements BinaryDataReceiver {
 
     @Override
     public void clearAnswer() {
-        setTimeToCurrent();
+        selectedTime = DateTime.now();
         binding.widgetAnswerText.setText(R.string.no_time_selected);
         widgetValueChanged();
     }
 
     @Override
     public IAnswerData getAnswer() {
-        return !binding.widgetAnswerText.getText().equals(getContext().getString(R.string.no_time_selected))
-                ? DateTimeWidgetUtils.getTimeData(hourOfDay, minuteOfHour)
-                : null;
+        return binding.widgetAnswerText.getText().equals(getContext().getString(R.string.no_time_selected))
+                ? null
+                : DateTimeWidgetUtils.getTimeData(selectedTime);
     }
 
     @Override
@@ -104,17 +99,10 @@ public class TimeWidget extends QuestionWidget implements BinaryDataReceiver {
     }
 
     @Override
-    public void setBinaryData(Object answer) {
+    public void setData(Object answer) {
         if (answer instanceof DateTime) {
-            hourOfDay = ((DateTime) answer).getHourOfDay();
-            minuteOfHour = ((DateTime) answer).getMinuteOfHour();
-            binding.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(hourOfDay, minuteOfHour).getDisplayText());
+            selectedTime = (DateTime) answer;
+            binding.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(selectedTime).getDisplayText());
         }
-    }
-
-    private void setTimeToCurrent() {
-        DateTime currentDateTime = DateTime.now();
-        hourOfDay = currentDateTime.getHourOfDay();
-        minuteOfHour = currentDateTime.getMinuteOfHour();
     }
 }

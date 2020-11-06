@@ -29,9 +29,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.databinding.DateTimeWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
@@ -48,11 +46,7 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
 
     private LocalDateTime date;
     private DatePickerDetails datePickerDetails;
-    private int hourOfDay;
-    private int minuteOfHour;
-
-    private boolean isDateNull;
-    private boolean isTimeNull;
+    private DateTime time;
 
     public DateTimeWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
@@ -76,7 +70,7 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
             binding.dateWidget.widgetButton.setOnClickListener(v -> DateTimeWidgetUtils.showDatePickerDialog(
                     (FormEntryActivity) context, prompt.getIndex(), datePickerDetails, date));
             binding.timeWidget.widgetButton.setOnClickListener(v ->
-                    DateTimeWidgetUtils.createTimePickerDialog((FormEntryActivity) getContext(), hourOfDay, minuteOfHour));
+                    DateTimeWidgetUtils.showTimePickerDialog((FormEntryActivity) getContext(), time));
         }
         binding.dateWidget.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.timeWidget.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
@@ -85,16 +79,11 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
             clearAnswerWithoutValueChangeListener();
         } else {
             date = new LocalDateTime(getFormEntryPrompt().getAnswerValue().getValue());
-            isDateNull = false;
             binding.dateWidget.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
-                    (Date) getAnswer().getValue(), datePickerDetails, false, context));
+                    date.toDate(), datePickerDetails, false, context));
 
-            Date date = (Date) getFormEntryPrompt().getAnswerValue().getValue();
-            DateTime dateTime = new DateTime(date);
-
-            hourOfDay = dateTime.getHourOfDay();
-            minuteOfHour = dateTime.getMinuteOfHour();
-            binding.timeWidget.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(hourOfDay, minuteOfHour).getDisplayText());
+            time = new DateTime((Date) getFormEntryPrompt().getAnswerValue().getValue());
+            binding.timeWidget.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(time).getDisplayText());
         }
 
         return binding.getRoot();
@@ -106,19 +95,19 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
             return null;
         } else {
             LocalDateTime ldt;
-            if (isTimeNull) {
+            if (isTimeNull()) {
                 ldt = DateTimeUtils.getLocalDateTime(date.getYear(),
                         date.getMonthOfYear(), date.getDayOfMonth(), 0, 0);
-                setTimeToCurrent();
-            } else if (isDateNull) {
+                time = DateTime.now();
+            } else if (isDateNull()) {
                 ldt = new LocalDateTime()
-                        .withHourOfDay(hourOfDay)
-                        .withMinuteOfHour(minuteOfHour);
+                        .withHourOfDay(time.getHourOfDay())
+                        .withMinuteOfHour(time.getMinuteOfHour());
 
                 date = DateTimeWidgetUtils.getCurrentDate();
             } else {
-                ldt = DateTimeUtils.getLocalDateTime(date.getYear(),
-                        date.getMonthOfYear(), date.getDayOfMonth(), hourOfDay, minuteOfHour);
+                ldt = DateTimeUtils.getLocalDateTime(date.getYear(), date.getMonthOfYear(),
+                        date.getDayOfMonth(), time.getHourOfDay(), time.getMinuteOfHour());
             }
             return new DateTimeData(ldt.toDate());
         }
@@ -153,39 +142,34 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
     public void setData(Object answer) {
         if (answer instanceof LocalDateTime) {
             date = (LocalDateTime) answer;
-            isDateNull = false;
-
             binding.dateWidget.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
-                    (Date) getAnswer().getValue(), datePickerDetails, false, getContext()));
+                    date.toDate(), datePickerDetails, false, getContext()));
 
         } else if (answer instanceof DateTime) {
-            hourOfDay = ((DateTime) answer).getHourOfDay();
-            minuteOfHour = ((DateTime) answer).getMinuteOfHour();
-            isTimeNull = false;
-
-            binding.timeWidget.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(hourOfDay, minuteOfHour).getDisplayText());
+            time = (DateTime) answer;
+            binding.timeWidget.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(time).getDisplayText());
         }
     }
 
     private void clearAnswerWithoutValueChangeListener() {
-        isDateNull = true;
         binding.dateWidget.widgetAnswerText.setText(R.string.no_date_selected);
         date = DateTimeWidgetUtils.getCurrentDate();
 
-        isTimeNull = true;
         binding.timeWidget.widgetAnswerText.setText(R.string.no_time_selected);
-        setTimeToCurrent();
-    }
-
-    private void setTimeToCurrent() {
-        DateTime currentDateTime = DateTime.now();
-        hourOfDay = currentDateTime.getHourOfDay();
-        minuteOfHour = currentDateTime.getMinuteOfHour();
+        time = DateTime.now();
     }
 
     private boolean isNullValue() {
         return getFormEntryPrompt().isRequired()
-                ? isDateNull || isTimeNull
-                : isDateNull && isTimeNull;
+                ? isDateNull() || isTimeNull()
+                : isDateNull() && isTimeNull();
+    }
+
+    private boolean isDateNull() {
+        return binding.dateWidget.widgetAnswerText.getText().equals(getContext().getString(R.string.no_date_selected));
+    }
+
+    private boolean isTimeNull() {
+        return binding.timeWidget.widgetAnswerText.getText().equals(getContext().getString(R.string.no_time_selected));
     }
 }

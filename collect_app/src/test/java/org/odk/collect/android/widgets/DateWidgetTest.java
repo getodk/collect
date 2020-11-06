@@ -80,7 +80,7 @@ public class DateWidgetTest {
         DatePickerDetails datePickerDetails = DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
 
         DateWidget widget = createWidget(prompt);
-        widget.setBinaryData(date);
+        widget.setData(date);
 
         assertEquals(widget.binding.widgetAnswerText.getText(),
                 DateTimeUtils.getDateTimeLabel(date.toDate(), datePickerDetails, false, widget.getContext()));

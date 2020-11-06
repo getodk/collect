@@ -99,9 +99,9 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
 
     @Override
     public IAnswerData getAnswer() {
-        return !binding.widgetAnswerText.getText().equals(getContext().getString(R.string.no_date_selected))
-                ? new DateData(selectedDate.toDate())
-                : null;
+        return binding.widgetAnswerText.getText().equals(getContext().getString(R.string.no_date_selected))
+                ? null
+                : new DateData(selectedDate.toDate());
     }
 
     @Override

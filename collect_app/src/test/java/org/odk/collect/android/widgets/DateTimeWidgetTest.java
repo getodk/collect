@@ -47,7 +47,7 @@ public class DateTimeWidgetTest {
                 .withMonthOfYear(5)
                 .withDayOfMonth(12)
                 .withHourOfDay(12)
-                .withMinuteOfHour(0)
+                .withMinuteOfHour(10)
                 .withSecondOfMinute(0)
                 .withMillisOfSecond(0);
     }
@@ -87,7 +87,7 @@ public class DateTimeWidgetTest {
 
         assertEquals(widget.binding.dateWidget.widgetAnswerText.getText(),
                 DateTimeUtils.getDateTimeLabel(date.toDate(), datePickerDetails, false, widget.getContext()));
-        assertEquals(widget.binding.timeWidget.widgetAnswerText.getText(), "12:00");
+        assertEquals(widget.binding.timeWidget.widgetAnswerText.getText(), "12:10");
     }
 
     @Test
@@ -96,7 +96,7 @@ public class DateTimeWidgetTest {
         DatePickerDetails datePickerDetails = DateTimeUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
 
         DateTimeWidget widget = createWidget(prompt);
-        widget.setBinaryData(date);
+        widget.setData(date);
 
         assertEquals(widget.binding.dateWidget.widgetAnswerText.getText(),
                 DateTimeUtils.getDateTimeLabel(date.toDate(), datePickerDetails, false, widget.getContext()));
@@ -105,7 +105,7 @@ public class DateTimeWidgetTest {
     @Test
     public void setBinaryData_timeAnswerTextViewShowsCorrectTime() {
         DateTimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
-        widget.setBinaryData(DateTimeUtils.getDateTime(12, 10));
+        widget.setData(DateTimeUtils.getDateTime(12, 10));
 
         assertEquals(widget.binding.timeWidget.widgetAnswerText.getText(), "12:10");
     }

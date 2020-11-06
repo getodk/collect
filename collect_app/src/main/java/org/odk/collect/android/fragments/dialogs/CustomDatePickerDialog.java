@@ -33,16 +33,12 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.DateTimeUtils;
+import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
 /**
  * @author Grzegorz Orczykowski (gorczykowski@soldevelo.com)
  */
 public abstract class CustomDatePickerDialog extends DialogFragment {
-    public static final String FORM_INDEX = "formIndex";
-    public static final String DATE = "date";
-    public static final String DATE_PICKER_DETAILS = "datePickerDetails";
-    public static final String DATE_PICKER_THEME = "DATE_PICKER_THEME";
-
     private NumberPicker dayPicker;
     private NumberPicker monthPicker;
     private NumberPicker yearPicker;
@@ -71,7 +67,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
                 .setPositiveButton(R.string.ok, (dialog, id) -> {
                     FormController formController = Collect.getInstance().getFormController();
                     if (formController != null) {
-                        formController.setIndexWaitingForData((FormIndex) getArguments().getSerializable(FORM_INDEX));
+                        formController.setIndexWaitingForData((FormIndex) getArguments().getSerializable(DateTimeWidgetUtils.FORM_INDEX));
                     }
                     listener.onDateChanged(getDateAsGregorian(getOriginalDate()));
                     dismiss();
@@ -100,7 +96,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     }
 
     private void hidePickersIfNeeded() {
-        DatePickerDetails datePickerDetails = (DatePickerDetails) getArguments().getSerializable(DATE_PICKER_DETAILS);
+        DatePickerDetails datePickerDetails = (DatePickerDetails) getArguments().getSerializable(DateTimeWidgetUtils.DATE_PICKER_DETAILS);
         if (datePickerDetails.isMonthYearMode()) {
             dayPicker.setVisibility(View.GONE);
             dayPicker.setValue(1);
@@ -121,7 +117,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
 
     protected void updateGregorianDateLabel() {
         String label = DateTimeUtils.getDateTimeLabel(getDateAsGregorian(getOriginalDate()).toDate(),
-                (DatePickerDetails) getArguments().getSerializable(DATE_PICKER_DETAILS), false, getContext());
+                (DatePickerDetails) getArguments().getSerializable(DateTimeWidgetUtils.DATE_PICKER_DETAILS), false, getContext());
         gregorianDateText.setText(label);
     }
 
@@ -132,7 +128,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     protected void setUpDayPicker(int minDay, int dayOfMonth, int daysInMonth) {
         dayPicker.setMinValue(minDay);
         dayPicker.setMaxValue(daysInMonth);
-        if (((DatePickerDetails) getArguments().getSerializable(DATE_PICKER_DETAILS)).isSpinnerMode()) {
+        if (((DatePickerDetails) getArguments().getSerializable(DateTimeWidgetUtils.DATE_PICKER_DETAILS)).isSpinnerMode()) {
             dayPicker.setValue(dayOfMonth);
         }
     }
@@ -143,7 +139,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
         monthPicker.setDisplayedValues(null);
         monthPicker.setMaxValue(monthsArray.length - 1);
         monthPicker.setDisplayedValues(monthsArray);
-        if (!((DatePickerDetails) getArguments().getSerializable(DATE_PICKER_DETAILS)).isYearMode()) {
+        if (!((DatePickerDetails) getArguments().getSerializable(DateTimeWidgetUtils.DATE_PICKER_DETAILS)).isYearMode()) {
             monthPicker.setValue(monthOfYear - 1);
         }
     }
@@ -181,7 +177,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     }
 
     public LocalDateTime getDate() {
-        return (LocalDateTime) getArguments().getSerializable(DATE);
+        return (LocalDateTime) getArguments().getSerializable(DateTimeWidgetUtils.DATE);
     }
 
     public LocalDateTime getDateWithSkippedDaylightSavingGapIfExists() {

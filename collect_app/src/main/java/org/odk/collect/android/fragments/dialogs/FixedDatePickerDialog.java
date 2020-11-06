@@ -23,6 +23,7 @@ import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.ThemeUtils;
+import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -48,8 +49,8 @@ public class FixedDatePickerDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        LocalDateTime date = (LocalDateTime) getArguments().getSerializable(CustomDatePickerDialog.DATE);
-        int theme = getArguments().getInt(CustomDatePickerDialog.DATE_PICKER_THEME);
+        LocalDateTime date = (LocalDateTime) getArguments().getSerializable(DateTimeWidgetUtils.DATE);
+        int theme = getArguments().getInt(DateTimeWidgetUtils.DATE_PICKER_THEME);
 
         DatePickerDialog dialog = new DatePickerDialog(requireActivity(), theme, listener,
                 date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
@@ -72,15 +73,15 @@ public class FixedDatePickerDialog extends DialogFragment {
     }
 
     private void hidePickersIfNeeded(DatePickerDialog dialog) {
-        LocalDateTime date = (LocalDateTime) getArguments().getSerializable(CustomDatePickerDialog.DATE);
-        if (((DatePickerDetails) getArguments().getSerializable(CustomDatePickerDialog.DATE_PICKER_DETAILS)).isYearMode()) {
+        LocalDateTime date = (LocalDateTime) getArguments().getSerializable(DateTimeWidgetUtils.DATE);
+        if (((DatePickerDetails) getArguments().getSerializable(DateTimeWidgetUtils.DATE_PICKER_DETAILS)).isYearMode()) {
             dialog.getDatePicker().findViewById(Resources.getSystem().getIdentifier("day", "id", "android"))
                     .setVisibility(View.GONE);
 
             dialog.getDatePicker().findViewById(Resources.getSystem().getIdentifier("month", "id", "android"))
                     .setVisibility(View.GONE);
             dialog.getDatePicker().updateDate(date.getYear(), 1, 1);
-        } else if (((DatePickerDetails) getArguments().getSerializable(CustomDatePickerDialog.DATE_PICKER_DETAILS)).isMonthYearMode()) {
+        } else if (((DatePickerDetails) getArguments().getSerializable(DateTimeWidgetUtils.DATE_PICKER_DETAILS)).isMonthYearMode()) {
             dialog.getDatePicker().findViewById(Resources.getSystem().getIdentifier("day", "id", "android"))
                     .setVisibility(View.GONE);
             dialog.getDatePicker().updateDate(date.getYear(), date.getMonthOfYear() - 1, 1);

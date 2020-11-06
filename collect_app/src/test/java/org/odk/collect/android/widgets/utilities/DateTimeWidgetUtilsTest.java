@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets.utilities;
 
 import org.javarosa.core.model.FormIndex;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -59,7 +60,7 @@ public class DateTimeWidgetUtilsTest {
 
     @Test
     public void createTimePickerDialog_showsCustomTimePickerDialog() {
-        DateTimeWidgetUtils.createTimePickerDialog(activity, 12, 10);
+        DateTimeWidgetUtils.showTimePickerDialog(activity, new DateTime().withHourOfDay(12).withMinuteOfHour(10));
         CustomTimePickerDialog dialog = (CustomTimePickerDialog) activity.getSupportFragmentManager()
                 .findFragmentByTag(CustomTimePickerDialog.class.getName());
 
