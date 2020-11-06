@@ -20,30 +20,27 @@ import android.content.Context;
 import android.util.TypedValue;
 import android.view.View;
 
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.ViewModelProvider;
-
 import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.TimeData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.DateTimeWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.interfaces.DateTimeWidgetListener;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
-import org.odk.collect.android.widgets.viewmodels.DateTimeViewModel;
 
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not
  * exist.
  */
 @SuppressLint("ViewConstructor")
-public class DateTimeWidget extends QuestionWidget {
+public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver {
     DateTimeWidgetAnswerBinding binding;
 
     private final DateTimeWidgetListener listener;
@@ -51,28 +48,9 @@ public class DateTimeWidget extends QuestionWidget {
     private LocalDateTime selectedDateTime;
     private DatePickerDetails datePickerDetails;
 
-    public DateTimeWidget(Context context, QuestionDetails prompt, LifecycleOwner lifecycleOwner, DateTimeWidgetListener listener) {
+    public DateTimeWidget(Context context, QuestionDetails prompt, DateTimeWidgetListener listener) {
         super(context, prompt);
         this.listener = listener;
-        DateTimeViewModel dateTimeViewModel = new ViewModelProvider(((ScreenContext) context).getActivity()).get(DateTimeViewModel.class);
-
-        dateTimeViewModel.getSelectedDate().observe(lifecycleOwner, localDateTime -> {
-            if (localDateTime != null && listener.isWidgetWaitingForData(getFormEntryPrompt().getIndex())) {
-                selectedDateTime = DateTimeWidgetUtils.getSelectedDate(localDateTime, selectedDateTime);
-                binding.dateWidget.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
-                        localDateTime.toDate(), datePickerDetails, false, getContext()));
-                widgetValueChanged();
-            }
-        });
-
-        dateTimeViewModel.getSelectedTime().observe(lifecycleOwner, localDateTime -> {
-            if (localDateTime != null && listener.isWidgetWaitingForData(getFormEntryPrompt().getIndex())) {
-                DateTime selectedTime = localDateTime.toDateTime();
-                selectedDateTime = DateTimeWidgetUtils.getSelectedTime(selectedTime.toLocalDateTime(), selectedDateTime);
-                binding.timeWidget.widgetAnswerText.setText(DateTimeWidgetUtils.getTimeData(selectedTime).getDisplayText());
-                widgetValueChanged();
-            }
-        });
     }
 
     @Override
@@ -158,6 +136,19 @@ public class DateTimeWidget extends QuestionWidget {
 
         binding.timeWidget.widgetButton.cancelLongPress();
         binding.timeWidget.widgetAnswerText.cancelLongPress();
+    }
+
+    @Override
+    public void setData(Object answer) {
+        if (answer instanceof LocalDateTime) {
+            selectedDateTime = DateTimeWidgetUtils.getSelectedDate((LocalDateTime) answer, selectedDateTime);
+            binding.dateWidget.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
+                    selectedDateTime.toDate(), datePickerDetails, false, getContext()));
+        }
+        if (answer instanceof DateTime) {
+            selectedDateTime = DateTimeWidgetUtils.getSelectedTime(((DateTime) answer).toLocalDateTime(), selectedDateTime);
+            binding.timeWidget.widgetAnswerText.setText(new TimeData(selectedDateTime.toDate()).getDisplayText());
+        }
     }
 
     private void resetAnswerFields() {

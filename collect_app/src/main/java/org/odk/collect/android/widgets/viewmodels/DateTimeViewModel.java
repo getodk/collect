@@ -7,12 +7,13 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
 public class DateTimeViewModel extends ViewModel {
     private final MutableLiveData<LocalDateTime> selectedDate = new MutableLiveData<>();
-    private final MutableLiveData<LocalDateTime> selectedTime = new MutableLiveData<>();
+    private final MutableLiveData<DateTime> selectedTime = new MutableLiveData<>();
 
     private final DatePickerDialog.OnDateSetListener dateSetListener = (view, year, monthOfYear, dayOfMonth) -> {
         view.clearFocus();
@@ -28,7 +29,7 @@ public class DateTimeViewModel extends ViewModel {
         return selectedDate;
     }
 
-    public LiveData<LocalDateTime> getSelectedTime() {
+    public LiveData<DateTime> getSelectedTime() {
         return selectedTime;
     }
 
@@ -37,7 +38,7 @@ public class DateTimeViewModel extends ViewModel {
     }
 
     public void setSelectedTime(int hourOfDay, int minuteOfHour) {
-        selectedTime.postValue(new LocalDateTime().withTime(hourOfDay, minuteOfHour, 0, 0));
+        selectedTime.postValue(new DateTime().withTime(hourOfDay, minuteOfHour, 0, 0));
     }
 
     public DatePickerDialog.OnDateSetListener getOnDateSetListener() {

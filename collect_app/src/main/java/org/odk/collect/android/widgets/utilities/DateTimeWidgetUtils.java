@@ -38,11 +38,6 @@ public class DateTimeWidgetUtils implements DateTimeWidgetListener {
     }
 
     @Override
-    public boolean isWidgetWaitingForData(FormIndex formIndex) {
-        return isWaitingForData(formIndex);
-    }
-
-    @Override
     public void displayDatePickerDialog(Context context, FormIndex formIndex, DatePickerDetails datePickerDetails, LocalDateTime selectedDate) {
         showDatePickerDialog(context, formIndex, datePickerDetails, selectedDate);
     }
@@ -81,15 +76,6 @@ public class DateTimeWidgetUtils implements DateTimeWidgetListener {
         if (formController != null) {
             formController.setIndexWaitingForData(formIndex);
         }
-    }
-
-    private static boolean isWaitingForData(FormIndex formIndex) {
-        FormControllerWaitingForDataRegistry waitingForDataRegistry = new FormControllerWaitingForDataRegistry();
-        if (waitingForDataRegistry.isWaitingForData(formIndex)) {
-            waitingForDataRegistry.cancelWaitingForData();
-            return true;
-        }
-        return false;
     }
 
     private static void showDatePickerDialog(Context context, FormIndex formIndex, DatePickerDetails datePickerDetails,

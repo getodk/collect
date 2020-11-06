@@ -32,7 +32,6 @@ import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
-import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.items.ItemsetWidget;
 import org.odk.collect.android.widgets.items.LabelWidget;
@@ -100,13 +99,13 @@ public class WidgetFactory {
             case Constants.CONTROL_INPUT:
                 switch (prompt.getDataType()) {
                     case Constants.DATATYPE_DATE_TIME:
-                        questionWidget = new DateTimeWidget(context, questionDetails, ((ScreenContext) context).getViewLifecycle(), new DateTimeWidgetUtils());
+                        questionWidget = new DateTimeWidget(context, questionDetails, new DateTimeWidgetUtils());
                         break;
                     case Constants.DATATYPE_DATE:
-                        questionWidget = new DateWidget(context, questionDetails, ((ScreenContext) context).getViewLifecycle(), new DateTimeWidgetUtils());
+                        questionWidget = new DateWidget(context, questionDetails, new DateTimeWidgetUtils());
                         break;
                     case Constants.DATATYPE_TIME:
-                        questionWidget = new TimeWidget(context, questionDetails, ((ScreenContext) context).getViewLifecycle(), new DateTimeWidgetUtils());
+                        questionWidget = new TimeWidget(context, questionDetails, new DateTimeWidgetUtils());
                         break;
                     case Constants.DATATYPE_DECIMAL:
                         if (appearance.startsWith(WidgetAppearanceUtils.EX)) {

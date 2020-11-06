@@ -20,9 +20,6 @@ import android.content.Context;
 import android.util.TypedValue;
 import android.view.View;
 
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.ViewModelProvider;
-
 import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -30,11 +27,8 @@ import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.WidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog.CustomDatePickerViewModel;
-import org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog.FixedDatePickerViewModel;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
-import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.widgets.interfaces.DateTimeWidgetListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
@@ -50,32 +44,9 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
     private LocalDateTime selectedDate;
     private DatePickerDetails datePickerDetails;
 
-    public DateWidget(Context context, QuestionDetails prompt, LifecycleOwner lifecycleOwner, DateTimeWidgetListener listener) {
+    public DateWidget(Context context, QuestionDetails prompt, DateTimeWidgetListener listener) {
         super(context, prompt);
         this.listener = listener;
-        FixedDatePickerViewModel fixedDatePickerViewModel = new ViewModelProvider(((ScreenContext) context).getActivity())
-                .get(FixedDatePickerViewModel.class);
-
-        fixedDatePickerViewModel.getSelectedDate().observe(lifecycleOwner, localDateTime -> {
-            if (localDateTime != null && listener.isWidgetWaitingForData(getFormEntryPrompt().getIndex())) {
-                selectedDate = localDateTime;
-                binding.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
-                        selectedDate.toDate(), datePickerDetails, false, getContext()));
-                widgetValueChanged();
-            }
-        });
-
-/*        CustomDatePickerViewModel customDatePickerViewModel = new ViewModelProvider(((ScreenContext) context).getActivity())
-                .get(CustomDatePickerViewModel.class);
-
-            customDatePickerViewModel.getSelectedDate().observe(lifecycleOwner, localDateTime -> {
-                if (localDateTime != null && listener.isWidgetWaitingForData(getFormEntryPrompt().getIndex())) {
-                    selectedDate = localDateTime;
-                    binding.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
-                            selectedDate.toDate(), datePickerDetails, false, getContext()));
-                    widgetValueChanged();
-                }
-            });*/
     }
 
     @Override
@@ -110,6 +81,13 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
     }
 
     @Override
+    public IAnswerData getAnswer() {
+        return binding.widgetAnswerText.getText().equals(getContext().getString(R.string.no_date_selected))
+                ? null
+                : new DateData(selectedDate.toDate());
+    }
+
+    @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         binding.widgetButton.setOnLongClickListener(l);
         binding.widgetAnswerText.setOnLongClickListener(l);
@@ -130,17 +108,11 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
     }
 
     @Override
-    public IAnswerData getAnswer() {
-        return binding.widgetAnswerText.getText().equals(getContext().getString(R.string.no_date_selected))
-                ? null
-                : new DateData(selectedDate.toDate());
-    }
-
-    @Override
     public void setData(Object answer) {
-        selectedDate = (LocalDateTime) answer;
-        binding.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
-                selectedDate.toDate(), datePickerDetails, false, getContext()));
-        widgetValueChanged();
+        if (answer instanceof LocalDateTime) {
+            selectedDate = DateTimeWidgetUtils.getSelectedDate((LocalDateTime) answer, LocalDateTime.now());
+            binding.widgetAnswerText.setText(DateTimeUtils.getDateTimeLabel(
+                    selectedDate.toDate(), datePickerDetails, false, getContext()));
+        }
     }
 }
