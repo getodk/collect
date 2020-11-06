@@ -28,6 +28,9 @@ class RecordingRepository {
     }
 
     fun clear() {
-        sessions.values.forEach { it.value = null }
+        sessions.values.forEach {
+            it.value?.delete()
+            it.value = null
+        }
     }
 }
