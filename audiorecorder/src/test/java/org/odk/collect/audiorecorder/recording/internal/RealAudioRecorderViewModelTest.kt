@@ -44,7 +44,7 @@ class RealAudioRecorderViewModelTest : AudioRecorderViewModelTest() {
             assertThat(serviceIntent.component?.className, equalTo(AudioRecorderService::class.qualifiedName))
             Robolectric.buildService(AudioRecorderService::class.java, serviceIntent)
                 .create()
-                .startCommand(0, 0);
+                .startCommand(0, 0)
         }
     }
 

@@ -4,14 +4,11 @@ import android.Manifest;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
 
-import org.jetbrains.annotations.NotNull;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -26,8 +23,8 @@ import org.odk.collect.android.support.pages.FormHierarchyPage;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
+import org.odk.collect.audiorecorder.testsupport.StubAudioRecorderViewModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +36,7 @@ import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 @RunWith(AndroidJUnit4.class)
 public class AudioRecordingTest {
 
-    private final FakeAudioRecorderViewModel fakeAudioRecorderViewModel = new FakeAudioRecorderViewModel();
+    private StubAudioRecorderViewModel stubAudioRecorderViewModel;
 
     public final TestDependencies testDependencies = new TestDependencies() {
         @Override
@@ -47,7 +44,19 @@ public class AudioRecordingTest {
             return new AudioRecorderViewModelFactory(application) {
                 @Override
                 public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                    return (T) fakeAudioRecorderViewModel;
+                    if (stubAudioRecorderViewModel == null) {
+                        try {
+                            File stubRecording = File.createTempFile("test", ".4a");
+                            stubRecording.deleteOnExit();
+
+                            copyFileFromAssets("media/test.m4a", stubRecording.getAbsolutePath());
+                            stubAudioRecorderViewModel = new StubAudioRecorderViewModel(stubRecording.getAbsolutePath());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    return (T) stubAudioRecorderViewModel;
                 }
             };
         }
@@ -96,7 +105,7 @@ public class AudioRecordingTest {
                 .swipeToEndScreen()
                 .assertTextNotDisplayed(R.string.stop_recording);
 
-        assertThat(fakeAudioRecorderViewModel.wasCleanedUp, is(true));
+        assertThat(stubAudioRecorderViewModel.getWasCleanedUp(), is(true));
 
         page.swipeToPreviousQuestion("What does it sound like?")
                 .assertEnabled(R.string.capture_audio);
@@ -117,7 +126,7 @@ public class AudioRecordingTest {
                 .clickOnString(R.string.capture_audio)
                 .clickGoToArrow();
 
-        assertThat(fakeAudioRecorderViewModel.wasCleanedUp, is(true));
+        assertThat(stubAudioRecorderViewModel.getWasCleanedUp(), is(true));
 
         page.pressBack(new FormEntryPage("Audio Question", rule))
                 .assertTextNotDisplayed(R.string.stop_recording)
@@ -140,60 +149,9 @@ public class AudioRecordingTest {
                 .pressBack(new SaveOrIgnoreDialog<>("Audio Question", new MainMenuPage(rule), rule))
                 .clickSaveChanges();
 
-        assertThat(fakeAudioRecorderViewModel.wasCleanedUp, is(true));
+        assertThat(stubAudioRecorderViewModel.getWasCleanedUp(), is(true));
 
         page.startBlankForm("Audio Question")
                 .assertEnabled(R.string.capture_audio);
-    }
-
-    private static class FakeAudioRecorderViewModel extends AudioRecorderViewModel {
-
-        private final MutableLiveData<Boolean> isRecording = new MutableLiveData<>(false);
-        private final MutableLiveData<File> file = new MutableLiveData<>(null);
-        private boolean wasCleanedUp;
-        private File tempFile;
-
-        @NotNull
-        @Override
-        public LiveData<Boolean> isRecording() {
-            return isRecording;
-        }
-
-        @NotNull
-        @Override
-        public LiveData<File> getRecording(@NotNull String sessionId) {
-            return file;
-        }
-
-        @Override
-        public void start(@NotNull String sessionId) {
-            wasCleanedUp = false;
-            isRecording.setValue(true);
-        }
-
-        @Override
-        public void stop() {
-            this.isRecording.setValue(false);
-
-            try {
-                tempFile = File.createTempFile("temp", ".m4a");
-                tempFile.deleteOnExit();
-                copyFileFromAssets("media/test.m4a", tempFile.getAbsolutePath());
-
-                this.file.setValue(tempFile);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        @Override
-        public void cleanUp() {
-            if (tempFile != null) {
-                tempFile.delete();
-            }
-
-            isRecording.setValue(false);
-            wasCleanedUp = true;
-        }
     }
 }
