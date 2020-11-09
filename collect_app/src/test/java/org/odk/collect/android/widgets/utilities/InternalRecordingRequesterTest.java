@@ -76,15 +76,16 @@ public class InternalRecordingRequesterTest {
     @Test
     public void whenViewModelRecordingAvailable_copiesFileToInstanceFolder_andCallsListenerForSessionWithFilename_andCleansUpViewModel() throws Exception {
         FormEntryPrompt prompt = promptWithAnswer(null);
-        MutableLiveData<File> liveData = new MutableLiveData<>(null);
-        when(viewModel.getRecording(prompt.getIndex().toString())).thenReturn(liveData);
+        File file = File.createTempFile("blah", ".mp3");
+        MutableLiveData<File> recordingLiveData = new MutableLiveData<>(null);
+        MutableLiveData<String> answerLiveData = new MutableLiveData<>(null);
+        when(viewModel.getRecording(prompt.getIndex().toString())).thenReturn(recordingLiveData);
+        when(questionMediaManager.createAnswerFile(file)).thenReturn(answerLiveData);
 
         Consumer<String> listener = mock(Consumer.class);
         requester.onRecordingAvailable(prompt, listener);
-
-        File file = File.createTempFile("blah", ".mp3");
-        when(questionMediaManager.createAnswerFile(file)).thenReturn(new MutableLiveData<>("copiedFile"));
-        liveData.setValue(file);
+        recordingLiveData.setValue(file);
+        answerLiveData.setValue("copiedFile");
 
         verify(listener).accept("copiedFile");
         verify(viewModel).cleanUp();

@@ -151,6 +151,7 @@ public class AudioRecordingTest {
         private final MutableLiveData<Boolean> isRecording = new MutableLiveData<>(false);
         private final MutableLiveData<File> file = new MutableLiveData<>(null);
         private boolean wasCleanedUp;
+        private File tempFile;
 
         @NotNull
         @Override
@@ -175,7 +176,7 @@ public class AudioRecordingTest {
             this.isRecording.setValue(false);
 
             try {
-                File tempFile = File.createTempFile("temp", ".m4a");
+                tempFile = File.createTempFile("temp", ".m4a");
                 tempFile.deleteOnExit();
                 copyFileFromAssets("media/test.m4a", tempFile.getAbsolutePath());
 
@@ -187,8 +188,12 @@ public class AudioRecordingTest {
 
         @Override
         public void cleanUp() {
-            wasCleanedUp = true;
+            if (tempFile != null) {
+                tempFile.delete();
+            }
+
             isRecording.setValue(false);
+            wasCleanedUp = true;
         }
     }
 }
