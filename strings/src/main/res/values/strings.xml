@@ -670,7 +670,7 @@
     <string name="save_legacy_settings_warning">Will be removed in a future version. Please use the QR code above.</string>
     <string name="reason_for_changes_description">You need to explain the reason for changes to this form</string>
 
-    <string name="scoped_storage_banner_text">You must migrate Collect forms to private storage to comply with Android requirements. In Collect v1.29, <b>the migration will be forced on install</b>.</string>
+    <string name="scoped_storage_banner_text">You must migrate Collect forms to private storage to comply with Android requirements. The migration should have happened automatically. If you still see this message it indicates that something went wrong. Please try to perform migration manually.</string>
     <string name="scoped_storage_learn_more">Learn more and migrate</string>
     <string name="storage_migration_completed">Storage migration completed!</string>
     <string name="scoped_storage_dismiss">Dismiss</string>
