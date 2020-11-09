@@ -35,12 +35,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.configure.LegacySettingsFileReader;
 import org.odk.collect.android.configure.SettingsImporter;
+import org.odk.collect.android.configure.legacy.LegacySettingsFileImporter;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
@@ -61,14 +63,11 @@ import org.odk.collect.android.storage.migration.StorageMigrationResult;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.material.MaterialBanner;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
@@ -77,8 +76,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-import static org.odk.collect.android.analytics.AnalyticsEvents.SETTINGS_IMPORT_JSON;
-import static org.odk.collect.android.analytics.AnalyticsEvents.SETTINGS_IMPORT_SERIALIZED;
 import static org.odk.collect.android.utilities.DialogUtils.getDialog;
 import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
 
@@ -266,7 +263,18 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             return;
         }
 
-        importSettingsFromLegacyFiles();
+        LegacySettingsFileImporter legacySettingsFileImporter = new LegacySettingsFileImporter(storagePathProvider, analytics, settingsImporter);
+        if (legacySettingsFileImporter.importFromFile()) {
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle(R.string.successfully_imported_settings)
+                    .setMessage(R.string.settings_successfully_loaded_file_notification)
+                    .setPositiveButton(R.string.ok, (dialog, which) -> {
+                        dialog.dismiss();
+                        recreate();
+                    })
+                    .setCancelable(false)
+                    .create().show();
+        }
     }
 
     @Override
@@ -573,32 +581,5 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             storageMigrationBanner.setVisibility(View.GONE);
             storageMigrationRepository.clearResult();
         });
-    }
-
-    private void importSettingsFromLegacyFiles() {
-        try {
-            String settings = new LegacySettingsFileReader(storagePathProvider).toJSON();
-
-            if (settings != null) {
-                String type = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json").exists()
-                        ? SETTINGS_IMPORT_JSON : SETTINGS_IMPORT_SERIALIZED;
-                String settingsHash = FileUtils.getMd5Hash(new ByteArrayInputStream(settings.getBytes()));
-
-                if (settingsImporter.fromJSON(settings)) {
-                    ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
-                    analytics.logEvent(type, "Success", settingsHash);
-                    recreate();
-                } else {
-                    ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
-                    analytics.logEvent(type, "Corrupt", settingsHash);
-                }
-            }
-        } catch (LegacySettingsFileReader.CorruptSettingsFileException e) {
-            ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
-
-            String type = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json").exists()
-                    ? SETTINGS_IMPORT_JSON : SETTINGS_IMPORT_SERIALIZED;
-            analytics.logEvent(type, "Corrupt exception", "none");
-        }
     }
 }
