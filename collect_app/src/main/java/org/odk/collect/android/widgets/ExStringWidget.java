@@ -210,8 +210,13 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
         }
 
         if (!activityAvailability.isActivityAvailable(i)) {
-            i = Collect.getInstance().getPackageManager().getLaunchIntentForPackage(intentName);
-            i.setFlags(0);
+            Intent launchIntent = Collect.getInstance().getPackageManager().getLaunchIntentForPackage(intentName);
+
+            if (launchIntent != null) {
+                // Make sure FLAG_ACTIVITY_NEW_TASK is not set because it doesn't work with startActivityForResult
+                launchIntent.setFlags(0);
+                i = launchIntent;
+            }
         }
 
         if (activityAvailability.isActivityAvailable(i)) {

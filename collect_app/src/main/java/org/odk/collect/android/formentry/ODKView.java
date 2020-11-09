@@ -411,8 +411,13 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
             Intent i = new Intent(intentName);
             if (i.resolveActivity(Collect.getInstance().getPackageManager()) == null) {
-                i = Collect.getInstance().getPackageManager().getLaunchIntentForPackage(intentName);
-                i.setFlags(0);
+                Intent launchIntent = Collect.getInstance().getPackageManager().getLaunchIntentForPackage(intentName);
+
+                if (launchIntent != null) {
+                    // Make sure FLAG_ACTIVITY_NEW_TASK is not set because it doesn't work with startActivityForResult
+                    launchIntent.setFlags(0);
+                    i = launchIntent;
+                }
             }
 
             try {
