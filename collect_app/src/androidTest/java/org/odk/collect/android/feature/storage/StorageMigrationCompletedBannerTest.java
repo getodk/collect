@@ -32,7 +32,7 @@ public class StorageMigrationCompletedBannerTest {
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
             ))
-            .around(new ResetStateRule(true, new AppDependencyModule() {
+            .around(new ResetStateRule(new AppDependencyModule() {
                 @Provides
                 @Singleton
                 public StorageMigrationRepository providesStorageMigrationRepository() {

@@ -27,15 +27,11 @@ public class ResetStateRule implements TestRule {
     private AppDependencyModule appDependencyModule;
 
     public ResetStateRule() {
-        this(false, null);
-    }
-
-    public ResetStateRule(boolean useScopedStorage) {
-        this(useScopedStorage, null);
+        this(true, null);
     }
 
     public ResetStateRule(AppDependencyModule appDependencyModule) {
-        this(false, appDependencyModule);
+        this(true, appDependencyModule);
     }
 
     public ResetStateRule(boolean useScopedStorage, AppDependencyModule appDependencyModule) {
