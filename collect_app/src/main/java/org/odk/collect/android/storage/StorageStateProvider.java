@@ -13,6 +13,7 @@ import timber.log.Timber;
 import static org.odk.collect.android.preferences.MetaKeys.KEY_SCOPED_STORAGE_USED;
 
 public class StorageStateProvider {
+    private static long lastMigrationAttempt;
 
     private final SharedPreferences metaSharedPreferences;
 
@@ -75,5 +76,16 @@ public class StorageStateProvider {
             }
         }
         return length;
+    }
+
+    public boolean shouldPerformAutomaticMigration() {
+        return !isScopedStorageUsed() && !alreadyTriedToMigrateDataToday(System.currentTimeMillis());
+    }
+
+    public boolean alreadyTriedToMigrateDataToday(long currentTime) {
+        long oneDayPeriod = 86400000;
+        boolean result = currentTime - lastMigrationAttempt < oneDayPeriod;
+        lastMigrationAttempt = currentTime;
+        return result;
     }
 }

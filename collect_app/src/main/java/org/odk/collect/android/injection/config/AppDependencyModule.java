@@ -269,6 +269,7 @@ public class AppDependencyModule {
     }
 
     @Provides
+    @Singleton
     public StorageStateProvider providesStorageStateProvider() {
         return new StorageStateProvider();
     }

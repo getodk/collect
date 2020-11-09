@@ -290,6 +290,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         setButtonsVisibility();
         invalidateOptionsMenu();
         setUpStorageMigrationBanner();
+        tryToPerformAutomaticMigration();
     }
 
     private void setButtonsVisibility() {
@@ -581,5 +582,14 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             storageMigrationBanner.setVisibility(View.GONE);
             storageMigrationRepository.clearResult();
         });
+    }
+
+    private void tryToPerformAutomaticMigration() {
+        if (storageStateProvider.shouldPerformAutomaticMigration()) {
+            StorageMigrationDialog dialog = showStorageMigrationDialog();
+            if (dialog != null) {
+                dialog.startStorageMigration();
+            }
+        }
     }
 }
