@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.os.StatFs;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.utilities.Clock;
 
 import java.io.File;
 
@@ -16,8 +17,14 @@ public class StorageStateProvider {
     private static long lastMigrationAttempt;
 
     private final SharedPreferences metaSharedPreferences;
+    private final Clock clock;
 
     public StorageStateProvider() {
+        this(System::currentTimeMillis);
+    }
+
+    public StorageStateProvider(Clock clock) {
+        this.clock = clock;
         metaSharedPreferences = Collect.getInstance().getComponent().preferencesProvider().getMetaSharedPreferences();
     }
 
@@ -79,13 +86,20 @@ public class StorageStateProvider {
     }
 
     public boolean shouldPerformAutomaticMigration() {
-        return !isScopedStorageUsed() && !alreadyTriedToMigrateDataToday(System.currentTimeMillis());
+        return !isScopedStorageUsed() && !alreadyTriedToMigrateDataToday(clock.getCurrentTime());
     }
 
     public boolean alreadyTriedToMigrateDataToday(long currentTime) {
         long oneDayPeriod = 86400000;
         boolean result = currentTime - lastMigrationAttempt < oneDayPeriod;
-        lastMigrationAttempt = currentTime;
+        if (!result) {
+            lastMigrationAttempt = currentTime;
+        }
         return result;
+    }
+
+    // just for tests
+    protected void clearLastMigrationAttemptTime() {
+        lastMigrationAttempt = 0;
     }
 }
