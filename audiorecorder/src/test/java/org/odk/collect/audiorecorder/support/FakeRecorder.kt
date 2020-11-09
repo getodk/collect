@@ -5,7 +5,7 @@ import java.io.File
 
 class FakeRecorder : Recorder {
 
-    val file: File = File.createTempFile("recording", ".mp3")
+    var file: File? = null
 
     private val _recordings = mutableListOf<Unit>()
     val recordings: List<Unit> = _recordings
@@ -29,7 +29,9 @@ class FakeRecorder : Recorder {
 
     override fun stop(): File {
         recording = false
-        return file
+        val newFile = File.createTempFile("recording", ".mp3")
+        file = newFile
+        return newFile
     }
 
     override fun cancel() {

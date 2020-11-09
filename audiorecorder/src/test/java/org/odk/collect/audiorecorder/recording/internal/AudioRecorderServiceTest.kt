@@ -25,7 +25,6 @@ import org.robolectric.android.controller.ServiceController
 class AudioRecorderServiceTest {
 
     private val application: TestApplication by lazy { ApplicationProvider.getApplicationContext() }
-    private val recordingRepository = RecordingRepository()
     private val recorder = FakeRecorder()
 
     @Before
@@ -34,10 +33,6 @@ class AudioRecorderServiceTest {
             object : AudioRecorderDependencyModule() {
                 override fun providesRecorder(application: Application): Recorder {
                     return recorder
-                }
-
-                override fun providesRecordingSession(): RecordingRepository {
-                    return recordingRepository
                 }
             }
         )
@@ -73,7 +68,7 @@ class AudioRecorderServiceTest {
     fun startAction_whenRecordingInProgress_doesNothing() {
         val intent = Intent(application, AudioRecorderService::class.java)
         intent.action = AudioRecorderService.ACTION_START
-        intent.putExtra(AudioRecorderService.EXTRA_SESSION_ID, "123")
+        intent.putExtra(AudioRecorderService.EXTRA_SESSION_ID, "456")
         startService(intent)
 
         assertThat(recorder.isRecording(), equalTo(true))
@@ -85,7 +80,7 @@ class AudioRecorderServiceTest {
     }
 
     @Test
-    fun stopAction_stopsRecorder_stopsSelf_andSetsRecordingInRepository() {
+    fun stopAction_stopsSelf() {
         val startIntent = Intent(application, AudioRecorderService::class.java)
         startIntent.action = AudioRecorderService.ACTION_START
         startIntent.putExtra(AudioRecorderService.EXTRA_SESSION_ID, "123")
@@ -95,9 +90,21 @@ class AudioRecorderServiceTest {
         stopIntent.action = AudioRecorderService.ACTION_STOP
         val service = startService(stopIntent)
 
-        assertThat(recorder.isRecording(), equalTo(false))
-        assertThat(recordingRepository.get("123").value, equalTo(recorder.file))
         assertThat(shadowOf(service.get()).isStoppedBySelf, equalTo(true))
+    }
+
+    @Test
+    fun stopAction_stopsRecorder() {
+        val startIntent = Intent(application, AudioRecorderService::class.java)
+        startIntent.action = AudioRecorderService.ACTION_START
+        startIntent.putExtra(AudioRecorderService.EXTRA_SESSION_ID, "123")
+        startService(startIntent)
+
+        val stopIntent = Intent(application, AudioRecorderService::class.java)
+        stopIntent.action = AudioRecorderService.ACTION_STOP
+        startService(stopIntent)
+
+        assertThat(recorder.isRecording(), equalTo(false))
     }
 
     @Test
@@ -116,20 +123,6 @@ class AudioRecorderServiceTest {
     }
 
     @Test
-    fun cleanUpAction_whileRecording_clearsCurrentSessionOnRepository() {
-        val startIntent = Intent(application, AudioRecorderService::class.java)
-        startIntent.action = AudioRecorderService.ACTION_START
-        startIntent.putExtra(AudioRecorderService.EXTRA_SESSION_ID, "123")
-        startService(startIntent)
-
-        val cancelIntent = Intent(application, AudioRecorderService::class.java)
-        cancelIntent.action = AudioRecorderService.ACTION_CLEAN_UP
-        startService(cancelIntent)
-
-        assertThat(recordingRepository.currentSession.value, equalTo(null))
-    }
-
-    @Test
     fun cleanUpAction_whileRecording_stopsSelf() {
         val startIntent = Intent(application, AudioRecorderService::class.java)
         startIntent.action = AudioRecorderService.ACTION_START
@@ -144,7 +137,7 @@ class AudioRecorderServiceTest {
     }
 
     @Test
-    fun cleanUpAction_afterRecording_clearsRepository_stopsSelf_andDeletesFiles() {
+    fun cleanUpAction_afterRecording_stopsSelf_andDeletesFiles() {
         val startIntent = Intent(application, AudioRecorderService::class.java)
         startIntent.action = AudioRecorderService.ACTION_START
         startIntent.putExtra(AudioRecorderService.EXTRA_SESSION_ID, "123")
@@ -158,9 +151,8 @@ class AudioRecorderServiceTest {
         cancelIntent.action = AudioRecorderService.ACTION_CLEAN_UP
         val service = startService(cancelIntent)
 
-        assertThat(recordingRepository.get("123").value, equalTo(null))
         assertThat(shadowOf(service.get()).isStoppedBySelf, equalTo(true))
-        assertThat(recorder.file.exists(), equalTo(false))
+        assertThat(recorder.file?.exists(), equalTo(false))
     }
 
     @Test

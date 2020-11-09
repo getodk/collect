@@ -54,7 +54,7 @@ internal interface AudioRecorderDependencyComponent {
     fun inject(activity: AudioRecorderService)
     fun inject(activity: AudioRecorderViewModelFactory)
 
-    fun recordingSession(): RecordingRepository
+    fun recordingRepository(): RecordingRepository
 }
 
 @Module

@@ -9,6 +9,6 @@ import org.odk.collect.audiorecorder.recording.internal.RealAudioRecorderViewMod
 open class AudioRecorderViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return RealAudioRecorderViewModel(application, application.getComponent().recordingSession()) as T
+        return RealAudioRecorderViewModel(application, application.getComponent().recordingRepository()) as T
     }
 }
