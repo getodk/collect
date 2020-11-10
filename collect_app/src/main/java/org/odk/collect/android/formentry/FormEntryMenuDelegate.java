@@ -7,7 +7,6 @@ import android.view.MenuItem;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
@@ -39,15 +38,15 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
     private FormController formController;
     private final AudioRecorderViewModel audioRecorderViewModel;
 
-    public FormEntryMenuDelegate(AppCompatActivity activity, AnswersProvider answersProvider, FormIndexAnimationHandler formIndexAnimationHandler) {
+    public FormEntryMenuDelegate(AppCompatActivity activity, AnswersProvider answersProvider, FormIndexAnimationHandler formIndexAnimationHandler, FormSaveViewModel formSaveViewModel, FormEntryViewModel formEntryViewModel, AudioRecorderViewModel audioRecorderViewModel, BackgroundLocationViewModel backgroundLocationViewModel) {
         this.activity = activity;
         this.answersProvider = answersProvider;
         this.formIndexAnimationHandler = formIndexAnimationHandler;
 
-        audioRecorderViewModel = new ViewModelProvider(activity).get(AudioRecorderViewModel.class);
-        formEntryViewModel = new ViewModelProvider(activity).get(FormEntryViewModel.class);
-        formSaveViewModel = new ViewModelProvider(activity).get(FormSaveViewModel.class);
-        backgroundLocationViewModel = new ViewModelProvider(activity).get(BackgroundLocationViewModel.class);
+        this.audioRecorderViewModel = audioRecorderViewModel;
+        this.formEntryViewModel = formEntryViewModel;
+        this.formSaveViewModel = formSaveViewModel;
+        this.backgroundLocationViewModel = backgroundLocationViewModel;
     }
 
     @Override

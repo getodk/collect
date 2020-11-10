@@ -139,11 +139,11 @@ public class RobolectricHelpers {
     }
 
     @Nullable
-    public static <F extends Fragment> Fragment getFragmentByClass(FragmentManager fragmentManager, Class<F> fragmentClass) {
+    public static <F extends Fragment> F getFragmentByClass(FragmentManager fragmentManager, Class<F> fragmentClass) {
         List<Fragment> fragments = fragmentManager.getFragments();
         for (Fragment fragment : fragments) {
             if (fragment.getClass().isAssignableFrom(fragmentClass)) {
-                return fragment;
+                return (F) fragment;
             }
         }
 

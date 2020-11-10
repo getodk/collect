@@ -385,7 +385,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         menuDelegate = new FormEntryMenuDelegate(
                 this,
                 () -> getCurrentViewIfODKView().getAnswers(),
-                formIndexAnimationHandler
+                formIndexAnimationHandler,
+                formSaveViewModel,
+                formEntryViewModel,
+                audioRecorderViewModel,
+                backgroundLocationViewModel
         );
 
         waitingForDataRegistry = new FormControllerWaitingForDataRegistry();

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
@@ -32,7 +33,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.RobolectricHelpers.createThemedActivity;
 import static org.odk.collect.android.support.RobolectricHelpers.getFragmentByClass;
-import static org.odk.collect.android.support.RobolectricHelpers.mockViewModelProvider;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(AndroidJUnit4.class)
@@ -51,12 +51,17 @@ public class FormEntryMenuDelegateTest {
         activity = createThemedActivity(AppCompatActivity.class, R.style.Theme_MaterialComponents);
         FormController formController = mock(FormController.class);
         answersProvider = mock(AnswersProvider.class);
-        formEntryViewModel = mockViewModelProvider(activity, FormEntryViewModel.class).get(FormEntryViewModel.class);
-        formSaveViewModel = mockViewModelProvider(activity, FormSaveViewModel.class).get(FormSaveViewModel.class);
-        audioRecorderViewModel = mockViewModelProvider(activity, AudioRecorderViewModel.class).get(AudioRecorderViewModel.class);
-        mockViewModelProvider(activity, BackgroundLocationViewModel.class).get(BackgroundLocationViewModel.class);
+        formEntryViewModel = mock(FormEntryViewModel.class);
+        formSaveViewModel = mock(FormSaveViewModel.class);
+        audioRecorderViewModel = mock(AudioRecorderViewModel.class);
+        BackgroundLocationViewModel backgroundLocationViewModel = mock(BackgroundLocationViewModel.class);
 
-        formEntryMenuDelegate = new FormEntryMenuDelegate(activity, answersProvider, mock(FormIndexAnimationHandler.class));
+        formEntryMenuDelegate = new FormEntryMenuDelegate(
+                activity,
+                answersProvider,
+                mock(FormIndexAnimationHandler.class),
+                formSaveViewModel, formEntryViewModel, audioRecorderViewModel,
+                backgroundLocationViewModel);
         formEntryMenuDelegate.formLoaded(formController);
     }
 
@@ -84,7 +89,6 @@ public class FormEntryMenuDelegateTest {
 
     @Test
     public void onPrepare_whenFormControllerIsNull_hidesAddRepeat() {
-        formEntryMenuDelegate = new FormEntryMenuDelegate(activity, answersProvider, mock(FormIndexAnimationHandler.class));
         formEntryMenuDelegate.formLoaded(null);
 
         RoboMenu menu = new RoboMenu();
@@ -127,7 +131,8 @@ public class FormEntryMenuDelegateTest {
         formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_preferences));
         assertThat(shadowOf(activity).getNextStartedActivity(), is(nullValue()));
 
-        Fragment dialog = getFragmentByClass(activity.getSupportFragmentManager(), RecordingWarningDialogFragment.class);
+        RecordingWarningDialogFragment dialog = getFragmentByClass(activity.getSupportFragmentManager(), RecordingWarningDialogFragment.class);
         assertThat(dialog, is(notNullValue()));
+        assertThat(dialog.getDialog().isShowing(), is(true));
     }
 }
