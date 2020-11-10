@@ -14,7 +14,9 @@ import org.javarosa.form.api.FormEntryController;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.utilities.Clock;
 
 import static org.javarosa.form.api.FormEntryController.EVENT_PROMPT_NEW_REPEAT;
 import static org.odk.collect.android.analytics.AnalyticsEvents.ADD_REPEAT;
@@ -23,6 +25,7 @@ import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGr
 public class FormEntryViewModel extends ViewModel implements RequiresFormController {
 
     private final Analytics analytics;
+    private final Clock clock;
     private final MutableLiveData<String> error = new MutableLiveData<>(null);
 
     @Nullable
@@ -32,8 +35,9 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     private FormIndex jumpBackIndex;
 
     @SuppressWarnings("WeakerAccess")
-    public FormEntryViewModel(Analytics analytics) {
+    public FormEntryViewModel(Analytics analytics, Clock clock) {
         this.analytics = analytics;
+        this.clock = clock;
     }
 
     @Override
@@ -164,6 +168,10 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         }
     }
 
+    public void openHierarchy() {
+        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, clock.getCurrentTime());
+    }
+
     public static class Factory implements ViewModelProvider.Factory {
 
         private final Analytics analytics;
@@ -176,7 +184,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormEntryViewModel(analytics);
+            return (T) new FormEntryViewModel(analytics, System::currentTimeMillis);
         }
     }
 }
