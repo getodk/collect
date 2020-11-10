@@ -1483,12 +1483,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         FormController formController = getFormController();
         if (formController == null) {
             Timber.w("FormController has a null value");
+            swipeHandler.setBeenSwiped(false);
             return;
         }
 
         if (audioRecorderViewModel.isRecording().getValue()) {
             // We want the user to stop recording before changing screens
             DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
+            swipeHandler.setBeenSwiped(false);
             return;
         }
 
