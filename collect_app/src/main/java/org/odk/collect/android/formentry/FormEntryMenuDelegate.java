@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormHierarchyActivity;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
 import org.odk.collect.android.formentry.questions.AnswersProvider;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
@@ -18,6 +19,7 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MenuDelegate;
 import org.odk.collect.android.utilities.PlayServicesChecker;
@@ -97,28 +99,38 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_add_repeat:
-                formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
-                formEntryViewModel.promptForNewRepeat();
-                formIndexAnimationHandler.handle(formEntryViewModel.getCurrentIndex());
-                return true;
-
-            case R.id.menu_preferences:
-                if (audioRecorderViewModel.isRecording().getValue()) {
-                    DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
-                    return true;
-                }
-
+        if (item.getItemId() == R.id.menu_add_repeat) {
+            formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
+            formEntryViewModel.promptForNewRepeat();
+            formIndexAnimationHandler.handle(formEntryViewModel.getCurrentIndex());
+            return true;
+        } else if (item.getItemId() == R.id.menu_preferences) {
+            if (audioRecorderViewModel.isRecording().getValue()) {
+                DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
+            } else {
                 Intent pref = new Intent(activity, PreferencesActivity.class);
                 activity.startActivity(pref);
-                return true;
+            }
 
-            case R.id.track_location:
-                backgroundLocationViewModel.backgroundLocationPreferenceToggled();
-                return true;
+            return true;
+        } else if (item.getItemId() == R.id.track_location) {
+            backgroundLocationViewModel.backgroundLocationPreferenceToggled();
+            return true;
+        } else if (item.getItemId() == R.id.menu_goto) {
+            if (audioRecorderViewModel.isRecording().getValue()) {
+                DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
+            } else {
+                formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
+
+                formEntryViewModel.openHierarchy();
+                Intent i = new Intent(activity, FormHierarchyActivity.class);
+                activity.startActivityForResult(i, ApplicationConstants.RequestCodes.HIERARCHY_ACTIVITY);
+            }
+
+            return true;
+        } else {
+            return false;
         }
 
-        return false;
     }
 }

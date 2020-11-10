@@ -1067,7 +1067,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         // These actions should move into the `FormEntryMenuDelegate`
-        FormController formController = getFormController();
         switch (item.getItemId()) {
             case R.id.menu_languages:
                 createLanguageDialog();
@@ -1076,22 +1075,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case R.id.menu_save:
                 // don't exit
                 saveForm(DO_NOT_EXIT, InstancesDaoHelper.isInstanceComplete(false), null, true);
-                return true;
-
-            case R.id.menu_goto:
-                state = null;
-
-                if (audioRecorderViewModel.isRecording().getValue()) {
-                    // We want the user to stop recording before changing screens
-                    DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
-                    return true;
-                }
-
-                formSaveViewModel.saveAnswersForScreen(getAnswers());
-                formEntryViewModel.openHierarchy();
-
-                Intent i = new Intent(this, FormHierarchyActivity.class);
-                startActivityForResult(i, RequestCodes.HIERARCHY_ACTIVITY);
                 return true;
         }
 

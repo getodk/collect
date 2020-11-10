@@ -93,22 +93,6 @@ public class AudioRecordingTest {
     }
 
     @Test
-    public void whileRecording_openingHierarchyMenu_showsWarning_andStaysOnSameScreen() {
-        new MainMenuPage(rule).assertOnPage()
-                .copyForm("audio-question.xml")
-                .startBlankForm("Audio Question")
-                .clickOnString(R.string.capture_audio)
-                .clickGoToArrowWhileRecording()
-                .clickOK(new FormEntryPage("Audio Question", rule))
-
-                .assertQuestion("What does it sound like?")
-                .clickOnString(R.string.stop_recording)
-                .assertTextNotDisplayed(R.string.stop_recording)
-                .assertTextNotDisplayed(R.string.capture_audio)
-                .assertContentDescriptionDisplayed(R.string.play_audio);
-    }
-
-    @Test
     public void whileRecording_quittingForm_showsWarning_andStaysOnSameScreen() {
         new MainMenuPage(rule).assertOnPage()
                 .copyForm("audio-question.xml")

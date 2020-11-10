@@ -9,18 +9,22 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormHierarchyActivity;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
 import org.odk.collect.android.formentry.questions.AnswersProvider;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 import org.robolectric.Robolectric;
 import org.robolectric.annotation.LooperMode;
 import org.robolectric.fakes.RoboMenu;
 import org.robolectric.fakes.RoboMenuItem;
+import org.robolectric.shadows.ShadowActivity;
 
 import java.util.HashMap;
 
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -52,6 +56,8 @@ public class FormEntryMenuDelegateTest {
         formEntryViewModel = mock(FormEntryViewModel.class);
         formSaveViewModel = mock(FormSaveViewModel.class);
         audioRecorderViewModel = mock(AudioRecorderViewModel.class);
+        when(audioRecorderViewModel.isRecording()).thenReturn(new MutableLiveData<>(false));
+
         BackgroundLocationViewModel backgroundLocationViewModel = mock(BackgroundLocationViewModel.class);
 
         formEntryMenuDelegate = new FormEntryMenuDelegate(
@@ -127,6 +133,57 @@ public class FormEntryMenuDelegateTest {
         when(audioRecorderViewModel.isRecording()).thenReturn(new MutableLiveData<>(true));
 
         formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_preferences));
+        assertThat(shadowOf(activity).getNextStartedActivity(), is(nullValue()));
+
+        RecordingWarningDialogFragment dialog = getFragmentByClass(activity.getSupportFragmentManager(), RecordingWarningDialogFragment.class);
+        assertThat(dialog, is(notNullValue()));
+        assertThat(dialog.getDialog().isShowing(), is(true));
+    }
+
+    @Test
+    public void onItemSelected_whenHierarchy_startsHierarchyActivity() {
+        RoboMenu menu = new RoboMenu();
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+
+        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_goto));
+        ShadowActivity.IntentForResult nextStartedActivity = shadowOf(activity).getNextStartedActivityForResult();
+        assertThat(nextStartedActivity, not(nullValue()));
+        assertThat(nextStartedActivity.intent.getComponent().getClassName(), is(FormHierarchyActivity.class.getName()));
+        assertThat(nextStartedActivity.requestCode, is(ApplicationConstants.RequestCodes.HIERARCHY_ACTIVITY));
+    }
+
+    @Test
+    public void onItemSelected_whenHierarchy_savesScreenAnswers() {
+        RoboMenu menu = new RoboMenu();
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+
+        HashMap answers = new HashMap();
+        when(answersProvider.getAnswers()).thenReturn(answers);
+        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_goto));
+        verify(formSaveViewModel).saveAnswersForScreen(answers);
+    }
+
+    @Test
+    public void onItemSelected_whenHierarchy_callsOpenHierarchy() {
+        RoboMenu menu = new RoboMenu();
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+
+        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_goto));
+        verify(formEntryViewModel).openHierarchy();
+    }
+
+    @Test
+    public void onItemSelected_whenHierarchy_whenRecording_showsWarning() {
+        RoboMenu menu = new RoboMenu();
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+
+        when(audioRecorderViewModel.isRecording()).thenReturn(new MutableLiveData<>(true));
+
+        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_goto));
         assertThat(shadowOf(activity).getNextStartedActivity(), is(nullValue()));
 
         RecordingWarningDialogFragment dialog = getFragmentByClass(activity.getSupportFragmentManager(), RecordingWarningDialogFragment.class);
