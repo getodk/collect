@@ -384,7 +384,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formIndexAnimationHandler = new FormIndexAnimationHandler(this);
         menuDelegate = new FormEntryMenuDelegate(
                 this,
-                () -> getCurrentViewIfODKView().getAnswers(),
+                () -> getAnswers(),
                 formIndexAnimationHandler,
                 formSaveViewModel,
                 formEntryViewModel,
@@ -1087,14 +1087,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     return true;
                 }
 
-                if (formController != null && formController.currentPromptIsQuestion()) {
-                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                }
-
-                if (formController != null) {
-                    formController.getAuditEventLogger().flush();
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
-                }
+                formSaveViewModel.saveAnswersForScreen(getAnswers());
+                formEntryViewModel.openHierarchy();
 
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 startActivityForResult(i, RequestCodes.HIERARCHY_ACTIVITY);
@@ -1118,8 +1112,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // controls to save data from)
         if (formController != null && formController.currentPromptIsQuestion()
                 && getCurrentViewIfODKView() != null) {
-            HashMap<FormIndex, IAnswerData> answers = getCurrentViewIfODKView()
-                    .getAnswers();
+            HashMap<FormIndex, IAnswerData> answers = getAnswers();
             try {
                 FailedConstraint constraint = formController.saveAllScreenAnswers(answers,
                         evaluateConstraints);
@@ -2799,5 +2792,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     // If an answer has changed after saving one of previous answers that means it has been recalculated automatically
     private boolean isQuestionRecalculated(FormEntryPrompt mutableQuestionBeforeSave, ImmutableDisplayableQuestion immutableQuestionBeforeSave) {
         return !Objects.equals(mutableQuestionBeforeSave.getAnswerText(), immutableQuestionBeforeSave.getAnswerText());
+    }
+
+    private HashMap<FormIndex, IAnswerData> getAnswers() {
+        ODKView currentViewIfODKView = getCurrentViewIfODKView();
+
+        if (currentViewIfODKView != null) {
+            return currentViewIfODKView.getAnswers();
+        } else {
+            return new HashMap<>();
+        }
     }
 }
