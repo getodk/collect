@@ -359,19 +359,13 @@ public class FieldListUpdateTest {
         jumpToGroupWithText("Rating");
         onView(withText(startsWith("Source13"))).perform(click());
 
-        for (int i = 1; i <= 10; i++) {
-            onView(withText("Target13")).check(doesNotExist());
-            if (i < 9) {
-                onView(allOf(withId(R.id.rating_bar1), isDisplayed())).perform(setRating((float) i));
-            } else {
-                onView(allOf(withId(R.id.rating_bar2), isDisplayed())).perform(setRating((float) (i - 8)));
-            }
-            onView(withText("Target13")).check(matches(isDisplayed()));
+        onView(withText("Target13")).check(doesNotExist());
+        onView(allOf(withId(R.id.rating_bar1), isDisplayed())).perform(setRating((3.0f)));
+        onView(withText("Target13")).check(matches(isDisplayed()));
 
-            onView(withText("Source13")).perform(longClick());
-            onView(withText(R.string.clear_answer)).perform(click());
-            onView(withText(R.string.discard_answer)).perform(click());
-        }
+        onView(withText("Source13")).perform(longClick());
+        onView(withText(R.string.clear_answer)).perform(click());
+        onView(withText(R.string.discard_answer)).perform(click());
     }
 
     @Test
@@ -419,7 +413,7 @@ public class FieldListUpdateTest {
 
             @Override
             public String getDescription() {
-                return "Custom view action to set rating.";
+                return "Custom view action to set rating on RatingBar";
             }
 
             @Override
