@@ -7,9 +7,4 @@
         app:iconSpaceReserved="false"
         app:title="@string/theme_magenta" />
 
-    <SwitchPreference
-        android:key="external_app_recording"
-        app:iconSpaceReserved="false"
-        app:title="@string/external_app_recording" />
-
 </PreferenceScreen>
