@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:odk="http://www.opendatakit.org/xforms">
     <h:head>
         <h:title>Audio Question</h:title>
         <model>
@@ -8,7 +8,7 @@
                     <sound/>
                 </data>
             </instance>
-            <bind nodeset="sound" type="binary"/>
+            <bind nodeset="sound" type="binary" odk:audio-quality="normal"/>
         </model>
     </h:head>
     <h:body>

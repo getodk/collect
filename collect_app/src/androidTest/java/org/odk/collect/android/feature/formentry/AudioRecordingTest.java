@@ -20,7 +20,6 @@ import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.FormHierarchyPage;
-import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
@@ -72,13 +71,6 @@ public class AudioRecordingTest {
     @Test
     public void onAudioQuestion_canRecordAudio() {
         new MainMenuPage(rule).assertOnPage()
-                .clickOnMenu()
-                .clickGeneralSettings()
-                .clickExperimental()
-                .clickExternalAppRecording()
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
-
                 .copyForm("audio-question.xml")
                 .startBlankForm("Audio Question")
                 .assertTextNotDisplayed(R.string.stop_recording)
@@ -92,13 +84,6 @@ public class AudioRecordingTest {
     @Test
     public void whileRecording_swipingToADifferentScreen_cancelsRecording() {
         final FormEndPage page = new MainMenuPage(rule).assertOnPage()
-                .clickOnMenu()
-                .clickGeneralSettings()
-                .clickExperimental()
-                .clickExternalAppRecording()
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
-
                 .copyForm("audio-question.xml")
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
@@ -114,13 +99,6 @@ public class AudioRecordingTest {
     @Test
     public void whileRecording_openingHierarchyMenu_cancelsRecording() {
         final FormHierarchyPage page = new MainMenuPage(rule).assertOnPage()
-                .clickOnMenu()
-                .clickGeneralSettings()
-                .clickExperimental()
-                .clickExternalAppRecording()
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
-
                 .copyForm("audio-question.xml")
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
@@ -136,13 +114,6 @@ public class AudioRecordingTest {
     @Test
     public void whileRecording_quittingForm_cancelsRecording() {
         final MainMenuPage page = new MainMenuPage(rule).assertOnPage()
-                .clickOnMenu()
-                .clickGeneralSettings()
-                .clickExperimental()
-                .clickExternalAppRecording()
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
-
                 .copyForm("audio-question.xml")
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
