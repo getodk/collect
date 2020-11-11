@@ -67,7 +67,7 @@ internal open class AudioRecorderDependencyModule {
 
     @Provides
     @Singleton
-    open fun providesRecordingSession(): RecordingRepository {
+    open fun providesRecordingRepository(): RecordingRepository {
         return RecordingRepository()
     }
 }

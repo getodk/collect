@@ -60,7 +60,7 @@ class RealAudioRecorderViewModelTest : AudioRecorderViewModelTest() {
                     return fakeRecorder
                 }
 
-                override fun providesRecordingSession(): RecordingRepository {
+                override fun providesRecordingRepository(): RecordingRepository {
                     return recordingRepository
                 }
             }
