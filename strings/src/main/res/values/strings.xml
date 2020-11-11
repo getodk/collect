@@ -720,4 +720,7 @@
 
     <!-- Text to let the user know a file is being saved  -->
     <string name="saving_file">Saving file</string>
+
+    <!-- Text in dialog that instructs the user to stop recording audio before leaving the form -->
+    <string name="recording_warning">Must stop recording before moving on!</string>
 </resources>
