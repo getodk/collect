@@ -11,7 +11,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.odk.collect.audiorecorder.AudioRecorderDependencyModule
-import org.odk.collect.audiorecorder.TestApplication
+import org.odk.collect.audiorecorder.RobolectricApplication
 import org.odk.collect.audiorecorder.recorder.Recorder
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory
@@ -29,7 +29,7 @@ class RealAudioRecorderViewModelTest : AudioRecorderViewModelTest() {
     @get:Rule
     val instantTaskExecutor = InstantTaskExecutorRule()
     private val liveDataTester = LiveDataTester()
-    private val application by lazy { getApplicationContext<TestApplication>() }
+    private val application by lazy { getApplicationContext<RobolectricApplication>() }
 
     private val recordingRepository = RecordingRepository()
     private val fakeRecorder = FakeRecorder()

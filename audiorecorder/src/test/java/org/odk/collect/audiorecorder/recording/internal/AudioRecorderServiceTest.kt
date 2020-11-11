@@ -12,7 +12,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.audiorecorder.AudioRecorderDependencyModule
 import org.odk.collect.audiorecorder.R
-import org.odk.collect.audiorecorder.TestApplication
+import org.odk.collect.audiorecorder.RobolectricApplication
 import org.odk.collect.audiorecorder.recorder.Recorder
 import org.odk.collect.audiorecorder.setupDependencies
 import org.odk.collect.audiorecorder.support.FakeRecorder
@@ -24,7 +24,7 @@ import org.robolectric.android.controller.ServiceController
 @RunWith(RobolectricTestRunner::class)
 class AudioRecorderServiceTest {
 
-    private val application: TestApplication by lazy { ApplicationProvider.getApplicationContext() }
+    private val application: RobolectricApplication by lazy { ApplicationProvider.getApplicationContext() }
     private val recorder = FakeRecorder()
 
     @Before
