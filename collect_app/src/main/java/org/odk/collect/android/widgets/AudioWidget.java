@@ -75,6 +75,13 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
 
         hideButtonsIfNeeded();
         updatePlayerMedia();
+
+        recordingRequester.onIsRecordingChanged(isRecording -> {
+            binding.captureButton.setEnabled(!isRecording);
+            binding.chooseButton.setEnabled(!isRecording);
+        });
+
+        recordingRequester.onRecordingAvailable(getFormEntryPrompt(), this::setData);
     }
 
     @Override

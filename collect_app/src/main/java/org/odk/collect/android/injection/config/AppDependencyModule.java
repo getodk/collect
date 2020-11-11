@@ -97,6 +97,7 @@ import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.android.views.BarcodeViewDecoder;
 import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.File;
@@ -451,4 +452,8 @@ public class AppDependencyModule {
                 .setBackOff(new ExponentialBackOff()));
     }
 
+    @Provides
+    public AudioRecorderViewModelFactory providesAudioRecorderViewModelFactory(Application application) {
+        return new AudioRecorderViewModelFactory(application);
+    }
 }

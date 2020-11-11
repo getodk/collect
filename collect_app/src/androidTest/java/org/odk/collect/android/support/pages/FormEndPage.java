@@ -6,6 +6,7 @@ import org.odk.collect.android.R;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -61,5 +62,11 @@ public class FormEndPage extends Page<FormEndPage> {
     public FormHierarchyPage clickGoToArrow() {
         onView(withId(R.id.menu_goto)).perform(click());
         return new FormHierarchyPage(formName, rule);
+    }
+
+    public FormEntryPage swipeToPreviousQuestion(String questionText) {
+        onView(withId(R.id.questionholder)).perform(swipeRight());
+        assertText(questionText);
+        return new FormEntryPage(formName, rule);
     }
 }
