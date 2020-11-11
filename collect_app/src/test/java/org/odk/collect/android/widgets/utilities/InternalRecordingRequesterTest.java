@@ -38,7 +38,7 @@ public class InternalRecordingRequesterTest {
     @Before
     public void setup() {
         Activity activity = Robolectric.buildActivity(Activity.class).get();
-        requester = new InternalRecordingRequester(activity, viewModel, permissionUtils, new FakeWaitingForDataRegistry(), new FakeLifecycleOwner(), questionMediaManager);
+        requester = new InternalRecordingRequester(activity, viewModel, permissionUtils, new FakeLifecycleOwner(), questionMediaManager);
         permissionUtils.setPermissionGranted(true);
     }
 

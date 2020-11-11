@@ -199,7 +199,7 @@ public class WidgetFactory {
                 } else {
                     ComponentActivity activity = (ComponentActivity) context;
                     AudioRecorderViewModel viewModel = new ViewModelProvider(activity, audioRecorderViewModelFactory).get(AudioRecorderViewModel.class);
-                    recordingRequester = new InternalRecordingRequester(activity, viewModel, permissionUtils, waitingForDataRegistry, ((ScreenContext) context).getViewLifecycle(), questionMediaManager);
+                    recordingRequester = new InternalRecordingRequester(activity, viewModel, permissionUtils, ((ScreenContext) context).getViewLifecycle(), questionMediaManager);
                 }
 
                 questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, recordingRequester, new GetContentAudioFileRequester((Activity) context, activityAvailability, waitingForDataRegistry));
