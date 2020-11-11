@@ -22,7 +22,6 @@ import androidx.activity.ComponentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.javarosa.core.model.Constants;
-import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
@@ -32,6 +31,7 @@ import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.CustomTabHelper;
+import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ScreenContext;
@@ -85,7 +85,6 @@ public class WidgetFactory {
      * @param prompt                   prompt element to be rendered
      * @param context                  Android context
      * @param readOnlyOverride         a flag to be ORed with JR readonly attribute.
-     * @param generalSharedPreferences shared preferences where general settings live
      */
     public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt,
                                                         Context context,
@@ -194,11 +193,8 @@ public class WidgetFactory {
             case Constants.CONTROL_AUDIO_CAPTURE:
                 RecordingRequester recordingRequester;
 
-                Optional<TreeElement> audioQuality = prompt.getBindAttributes().stream().filter(attr -> {
-                    return attr.getName().equals("audio-quality");
-                }).findAny();
-
-                if (audioQuality.isPresent() && audioQuality.get().getAttributeValue().equals("external")) {
+                Optional<String> audioQuality = FormEntryPromptUtils.getAttributeValue(prompt, "audio-quality");
+                if (audioQuality.isPresent() && audioQuality.get().equals("external")) {
                     recordingRequester = new ExternalAppRecordingRequester((Activity) context, activityAvailability, waitingForDataRegistry, permissionUtils);
                 } else {
                     ComponentActivity activity = (ComponentActivity) context;
