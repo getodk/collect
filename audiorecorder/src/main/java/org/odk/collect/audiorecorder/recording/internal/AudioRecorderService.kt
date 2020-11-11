@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.PRIORITY_LOW
 import org.odk.collect.audiorecorder.R
 import org.odk.collect.audiorecorder.getComponent
 import org.odk.collect.audiorecorder.recorder.Recorder
@@ -41,6 +42,7 @@ class AudioRecorderService : Service() {
                         .setContentTitle(getLocalizedString(R.string.recording))
                         .setSmallIcon(R.drawable.ic_baseline_mic_24)
                         .setContentIntent(PendingIntent.getActivity(this, 0, notificationIntent, 0))
+                        .setPriority(PRIORITY_LOW)
                         .build()
 
                     startForeground(NOTIFICATION_ID, notification)
@@ -66,7 +68,7 @@ class AudioRecorderService : Service() {
             val notificationChannel = NotificationChannel(
                 NOTIFICATION_CHANNEL,
                 getLocalizedString(R.string.recording_channel),
-                NotificationManager.IMPORTANCE_DEFAULT
+                NotificationManager.IMPORTANCE_LOW
             )
 
             (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(notificationChannel)
