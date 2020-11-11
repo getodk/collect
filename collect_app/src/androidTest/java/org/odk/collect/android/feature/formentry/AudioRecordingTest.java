@@ -46,7 +46,7 @@ public class AudioRecordingTest {
                 public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
                     if (stubAudioRecorderViewModel == null) {
                         try {
-                            File stubRecording = File.createTempFile("test", ".4a");
+                            File stubRecording = File.createTempFile("test", ".m4a");
                             stubRecording.deleteOnExit();
 
                             copyFileFromAssets("media/test.m4a", stubRecording.getAbsolutePath());
