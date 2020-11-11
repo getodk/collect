@@ -26,7 +26,6 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.async.Scheduler;
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
 
 import java.util.List;
@@ -47,7 +46,6 @@ public class QuitFormDialogFragment extends DialogFragment {
     Scheduler scheduler;
 
     private FormSaveViewModel formSaveViewModel;
-    private AudioRecorderViewModel audioRecorderViewModel;
     private Listener listener;
 
     @Override
@@ -57,7 +55,6 @@ public class QuitFormDialogFragment extends DialogFragment {
 
         FormSaveViewModel.Factory factory = new FormSaveViewModel.Factory(requireActivity(), null, analytics, scheduler);
         formSaveViewModel = new ViewModelProvider(requireActivity(), factory).get(FormSaveViewModel.class);
-        audioRecorderViewModel = new ViewModelProvider(requireActivity(), audioRecorderViewModelFactory).get(AudioRecorderViewModel.class);
 
         if (context instanceof Listener) {
             listener = (Listener) context;
@@ -103,8 +100,6 @@ public class QuitFormDialogFragment extends DialogFragment {
                 }
                 getActivity().finish();
             }
-
-            audioRecorderViewModel.cleanUp();
 
             if (getDialog() != null) {
                 getDialog().dismiss();
