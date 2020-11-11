@@ -63,6 +63,7 @@ import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
@@ -125,6 +126,9 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
     @Inject
     AudioRecorderViewModelFactory audioRecorderViewModelFactory;
+
+    @Inject
+    ActivityAvailability activityAvailability;
 
     /**
      * Builds the view for a specified question or field-list of questions.
@@ -280,7 +284,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      */
     private QuestionWidget configureWidgetForQuestion(FormEntryPrompt question, boolean readOnlyOverride) {
         QuestionWidget qw = WidgetFactory.createWidgetFromPrompt(question, getContext(), readOnlyOverride,
-                waitingForDataRegistry, questionMediaManager, analytics, audioPlayer, preferencesProvider.getGeneralSharedPreferences(), audioRecorderViewModelFactory);
+                waitingForDataRegistry, questionMediaManager, analytics, audioPlayer, activityAvailability, audioRecorderViewModelFactory);
         qw.setOnLongClickListener(this);
         qw.setValueChangedListener(this);
 

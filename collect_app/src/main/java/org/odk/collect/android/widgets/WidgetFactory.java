@@ -16,20 +16,19 @@ package org.odk.collect.android.widgets;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.hardware.SensorManager;
 
 import androidx.activity.ComponentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.javarosa.core.model.Constants;
+import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapProvider;
-import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.CustomTabHelper;
@@ -59,6 +58,8 @@ import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
+
+import java.util.Optional;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.PROMPT;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MAPS;
@@ -93,13 +94,12 @@ public class WidgetFactory {
                                                         QuestionMediaManager questionMediaManager,
                                                         Analytics analytics,
                                                         AudioPlayer audioPlayer,
-                                                        SharedPreferences generalSharedPreferences,
+                                                        ActivityAvailability activityAvailability,
                                                         AudioRecorderViewModelFactory audioRecorderViewModelFactory) {
 
         String appearance = WidgetAppearanceUtils.getSanitizedAppearanceHint(prompt);
         QuestionDetails questionDetails = new QuestionDetails(prompt, Collect.getCurrentFormIdentifierHash(), readOnlyOverride);
         PermissionUtils permissionUtils = new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert);
-        ActivityAvailability activityAvailability = new ActivityAvailability(context);
 
         final QuestionWidget questionWidget;
         switch (prompt.getControlType()) {
@@ -194,7 +194,11 @@ public class WidgetFactory {
             case Constants.CONTROL_AUDIO_CAPTURE:
                 RecordingRequester recordingRequester;
 
-                if (generalSharedPreferences.getBoolean(GeneralKeys.KEY_EXTERNAL_APP_RECORDING, true)) {
+                Optional<TreeElement> audioQuality = prompt.getBindAttributes().stream().filter(attr -> {
+                    return attr.getName().equals("audio-quality");
+                }).findAny();
+
+                if (audioQuality.isPresent() && audioQuality.get().getAttributeValue().equals("external")) {
                     recordingRequester = new ExternalAppRecordingRequester((Activity) context, activityAvailability, waitingForDataRegistry, permissionUtils);
                 } else {
                     ComponentActivity activity = (ComponentActivity) context;
