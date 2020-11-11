@@ -97,6 +97,6 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
         if (prev != null && !formEntryActivity.get().isInstanceStateSaved()) {
             ((DialogFragment) prev).dismiss();
         }
-        formEntryActivity.get().setBinaryWidgetData(result);
+        formEntryActivity.get().setWidgetData(result);
     }
 }

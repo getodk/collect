@@ -796,7 +796,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             } else {
                 String sb = intent.getStringExtra(BARCODE_RESULT_KEY);
                 if (getCurrentViewIfODKView() != null) {
-                    setBinaryWidgetData(sb);
+                    setWidgetData(sb);
                 }
                 return;
             }
@@ -806,7 +806,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case RequestCodes.OSM_CAPTURE:
                 String osmFileName = intent.getStringExtra("OSM_FILE_NAME");
                 if (getCurrentViewIfODKView() != null) {
-                    setBinaryWidgetData(osmFileName);
+                    setWidgetData(osmFileName);
                 }
                 break;
             case RequestCodes.EX_STRING_CAPTURE:
@@ -817,7 +817,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (exists) {
                     Object externalValue = intent.getExtras().get(key);
                     if (getCurrentViewIfODKView() != null) {
-                        setBinaryWidgetData(externalValue);
+                        setWidgetData(externalValue);
                     }
                 }
                 break;
@@ -860,7 +860,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
 
                 if (getCurrentViewIfODKView() != null) {
-                    setBinaryWidgetData(nf);
+                    setWidgetData(nf);
                 }
                 break;
             case RequestCodes.ALIGNED_IMAGE:
@@ -883,7 +883,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
 
                 if (getCurrentViewIfODKView() != null) {
-                    setBinaryWidgetData(nf);
+                    setWidgetData(nf);
                 }
                 break;
             case RequestCodes.ARBITRARY_FILE_CHOOSER:
@@ -930,7 +930,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             outputStream.close();
 
                             if (getCurrentViewIfODKView() != null) {
-                                setBinaryWidgetData(newFile.getName());
+                                setWidgetData(newFile.getName());
                             }
                             saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                         }
@@ -942,7 +942,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case RequestCodes.VIDEO_CAPTURE:
                 mediaUri = intent.getData();
                 if (getCurrentViewIfODKView() != null) {
-                    setBinaryWidgetData(mediaUri);
+                    setWidgetData(mediaUri);
                 }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 String filePath = MediaUtils.getDataColumn(this, mediaUri, null, null);
@@ -958,20 +958,20 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case RequestCodes.LOCATION_CAPTURE:
                 String sl = intent.getStringExtra(LOCATION_RESULT);
                 if (getCurrentViewIfODKView() != null) {
-                    setBinaryWidgetData(sl);
+                    setWidgetData(sl);
                 }
                 break;
             case RequestCodes.GEOSHAPE_CAPTURE:
             case RequestCodes.GEOTRACE_CAPTURE:
                 String gshr = intent.getStringExtra(ANSWER_KEY);
                 if (getCurrentViewIfODKView() != null) {
-                    setBinaryWidgetData(gshr);
+                    setWidgetData(gshr);
                 }
                 break;
             case RequestCodes.BEARING_CAPTURE:
                 String bearing = intent.getStringExtra(BEARING_RESULT);
                 if (getCurrentViewIfODKView() != null) {
-                    setBinaryWidgetData(bearing);
+                    setWidgetData(bearing);
                 }
                 break;
 
@@ -992,7 +992,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     outputStream.close();
 
                     if (getCurrentViewIfODKView() != null) {
-                        setBinaryWidgetData(newFile.getName());
+                        setWidgetData(newFile.getName());
                     }
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 } catch (IOException e) {
@@ -1017,7 +1017,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         return null;
     }
 
-    public void setBinaryWidgetData(Object data) {
+    public void setWidgetData(Object data) {
         ODKView currentViewIfODKView = getCurrentViewIfODKView();
 
         if (currentViewIfODKView != null) {
@@ -2612,7 +2612,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         ODKView odkView = getCurrentViewIfODKView();
         if (odkView != null) {
             QuestionWidget widgetGettingNewValue = getWidgetWaitingForBinaryData();
-            setBinaryWidgetData(items);
+            setWidgetData(items);
             widgetValueChanged(widgetGettingNewValue);
         }
     }
@@ -2633,7 +2633,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         ODKView odkView = getCurrentViewIfODKView();
         if (odkView != null) {
             QuestionWidget widgetGettingNewValue = getWidgetWaitingForBinaryData();
-            setBinaryWidgetData(data);
+            setWidgetData(data);
             widgetValueChanged(widgetGettingNewValue);
         }
     }
