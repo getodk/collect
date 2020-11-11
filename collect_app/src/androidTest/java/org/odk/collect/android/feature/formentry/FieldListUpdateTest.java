@@ -360,7 +360,7 @@ public class FieldListUpdateTest {
         onView(withText(startsWith("Source13"))).perform(click());
 
         onView(withText("Target13")).check(doesNotExist());
-        onView(allOf(withId(R.id.rating_bar1), isDisplayed())).perform(setRating((3.0f)));
+        onView(allOf(withId(R.id.rating_bar1), isDisplayed())).perform(setRating(3.0f));
         onView(withText("Target13")).check(matches(isDisplayed()));
 
         onView(withText("Source13")).perform(longClick());
