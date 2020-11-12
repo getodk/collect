@@ -53,7 +53,7 @@ import org.odk.collect.android.widgets.utilities.GetContentAudioFileRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterFactory;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
+import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.PROMPT;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MAPS;
@@ -82,7 +82,7 @@ public class WidgetFactory {
                                                         Analytics analytics,
                                                         AudioPlayer audioPlayer,
                                                         ActivityAvailability activityAvailability,
-                                                        AudioRecorderViewModelFactory audioRecorderViewModelFactory,
+                                                        AudioRecorderViewModel audioRecorderViewModel,
                                                         boolean useExternalRecorder) {
 
         String appearance = WidgetAppearanceUtils.getSanitizedAppearanceHint(prompt);
@@ -180,8 +180,8 @@ public class WidgetFactory {
                 questionWidget = new OSMWidget(context, questionDetails, waitingForDataRegistry);
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
-                final RecordingRequesterFactory recordingRequesterFactory = new RecordingRequesterFactory(waitingForDataRegistry, questionMediaManager, activityAvailability, audioRecorderViewModelFactory, permissionUtils);
-                RecordingRequester recordingRequester = recordingRequesterFactory.create(prompt, useExternalRecorder, (ComponentActivity) context, ((ScreenContext) (ComponentActivity) context).getViewLifecycle());
+                final RecordingRequesterFactory recordingRequesterFactory = new RecordingRequesterFactory(waitingForDataRegistry, questionMediaManager, activityAvailability, audioRecorderViewModel, permissionUtils, (ComponentActivity) context, ((ScreenContext) (ComponentActivity) context).getViewLifecycle());
+                RecordingRequester recordingRequester = recordingRequesterFactory.create(prompt, useExternalRecorder);
                 questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, recordingRequester, new GetContentAudioFileRequester((Activity) context, activityAvailability, waitingForDataRegistry));
 
                 break;

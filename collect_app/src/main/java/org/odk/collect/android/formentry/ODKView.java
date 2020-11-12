@@ -35,8 +35,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.button.MaterialButton;
 
@@ -78,6 +80,7 @@ import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.audioclips.PlaybackFailedException;
+import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
 
 import java.io.File;
@@ -284,9 +287,11 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      * Note: if the given question is of an unsupported type, a text widget will be created.
      */
     private QuestionWidget configureWidgetForQuestion(FormEntryPrompt question, boolean readOnlyOverride) {
+        AudioRecorderViewModel audioRecorderViewModel = new ViewModelProvider((ComponentActivity) getContext(), audioRecorderViewModelFactory).get(AudioRecorderViewModel.class);
+
         QuestionWidget qw = WidgetFactory.createWidgetFromPrompt(question, getContext(), readOnlyOverride,
                 waitingForDataRegistry, questionMediaManager, analytics, audioPlayer,
-                activityAvailability, audioRecorderViewModelFactory,
+                activityAvailability, audioRecorderViewModel,
                 preferencesProvider.getGeneralSharedPreferences().getBoolean(GeneralKeys.KEY_EXTERNAL_APP_RECORDING, false));
         qw.setOnLongClickListener(this);
         qw.setValueChangedListener(this);
