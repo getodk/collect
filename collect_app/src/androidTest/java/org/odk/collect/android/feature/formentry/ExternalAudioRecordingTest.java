@@ -21,6 +21,7 @@ import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.support.RunnableRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
+import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.utilities.ActivityAvailability;
 
@@ -70,10 +71,28 @@ public class ExternalAudioRecordingTest {
             }));
 
     @Test
-    public void onAudioQuestion_whenAudioQualityIsExternal_clickingRecordSoundSound_opensOtherApp() throws Exception {
+    public void onAudioQuestion_whenAudioQualityIsExternal_usesExternalRecorder() throws Exception {
         new MainMenuPage(rule)
                 .copyForm("external-audio-question.xml")
                 .startBlankForm("External Audio Question")
+                .clickOnString(R.string.capture_audio)
+                .assertTextNotDisplayed(R.string.stop_recording)
+                .assertTextNotDisplayed(R.string.capture_audio)
+                .assertContentDescriptionDisplayed(R.string.play_audio);
+    }
+
+    @Test
+    public void onAudioQuestion_withoutAudioQuality_andCollectIsSetToUseExternal_usesExternalRecorder() {
+        new MainMenuPage(rule)
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .clickFormManagement()
+                .scrollToRecyclerViewItemAndClickText(R.string.external_app_recording)
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
+
+                .copyForm("audio-question.xml")
+                .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
                 .assertTextNotDisplayed(R.string.stop_recording)
                 .assertTextNotDisplayed(R.string.capture_audio)

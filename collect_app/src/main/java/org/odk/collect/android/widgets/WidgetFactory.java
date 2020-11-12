@@ -79,13 +79,7 @@ public class WidgetFactory {
 
     }
 
-    /**
-     * Returns the appropriate QuestionWidget for the given FormEntryPrompt.
-     *
-     * @param prompt                   prompt element to be rendered
-     * @param context                  Android context
-     * @param readOnlyOverride         a flag to be ORed with JR readonly attribute.
-     */
+    @SuppressWarnings("PMD.ExcessiveParameterList")
     public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt,
                                                         Context context,
                                                         boolean readOnlyOverride,
@@ -94,7 +88,8 @@ public class WidgetFactory {
                                                         Analytics analytics,
                                                         AudioPlayer audioPlayer,
                                                         ActivityAvailability activityAvailability,
-                                                        AudioRecorderViewModelFactory audioRecorderViewModelFactory) {
+                                                        AudioRecorderViewModelFactory audioRecorderViewModelFactory,
+                                                        boolean useExternalRecorder) {
 
         String appearance = WidgetAppearanceUtils.getSanitizedAppearanceHint(prompt);
         QuestionDetails questionDetails = new QuestionDetails(prompt, Collect.getCurrentFormIdentifierHash(), readOnlyOverride);
@@ -195,6 +190,8 @@ public class WidgetFactory {
 
                 Optional<String> audioQuality = FormEntryPromptUtils.getAttributeValue(prompt, "audio-quality");
                 if (audioQuality.isPresent() && audioQuality.get().equals("external")) {
+                    recordingRequester = new ExternalAppRecordingRequester((Activity) context, activityAvailability, waitingForDataRegistry, permissionUtils);
+                } else if (useExternalRecorder) {
                     recordingRequester = new ExternalAppRecordingRequester((Activity) context, activityAvailability, waitingForDataRegistry, permissionUtils);
                 } else {
                     ComponentActivity activity = (ComponentActivity) context;

@@ -62,6 +62,7 @@ import org.odk.collect.android.formentry.media.PromptAutoplayer;
 import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileUtils;
@@ -284,7 +285,9 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      */
     private QuestionWidget configureWidgetForQuestion(FormEntryPrompt question, boolean readOnlyOverride) {
         QuestionWidget qw = WidgetFactory.createWidgetFromPrompt(question, getContext(), readOnlyOverride,
-                waitingForDataRegistry, questionMediaManager, analytics, audioPlayer, activityAvailability, audioRecorderViewModelFactory);
+                waitingForDataRegistry, questionMediaManager, analytics, audioPlayer,
+                activityAvailability, audioRecorderViewModelFactory,
+                preferencesProvider.getGeneralSharedPreferences().getBoolean(GeneralKeys.KEY_EXTERNAL_APP_RECORDING, false));
         qw.setOnLongClickListener(this);
         qw.setValueChangedListener(this);
 
