@@ -66,16 +66,16 @@ public class QuestionWidgetHelpers {
                 .build();
     }
 
-    public static FormEntryPrompt promptWithAppearance(String appearance) {
-        return new MockFormEntryPromptBuilder()
-                .withAppearance(appearance)
-                .build();
-    }
-
     public static FormEntryPrompt promptWithReadOnlyAndQuestionDef(QuestionDef questionDef) {
         return new MockFormEntryPromptBuilder()
                 .withReadOnly(true)
                 .withQuestion(questionDef)
+                .build();
+    }
+
+    public static FormEntryPrompt promptWithAppearance(String appearance) {
+        return new MockFormEntryPromptBuilder()
+                .withAppearance(appearance)
                 .build();
     }
 }

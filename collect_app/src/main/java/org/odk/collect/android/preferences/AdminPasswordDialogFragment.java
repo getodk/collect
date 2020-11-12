@@ -71,7 +71,7 @@ public class AdminPasswordDialogFragment extends DialogFragment {
                 .setTitle(getString(R.string.enter_admin_password))
                 .setPositiveButton(getString(R.string.ok), (dialog, whichButton) -> {
                             if (adminPasswordProvider.getAdminPassword().equals(input.getText().toString())) {
-                                callback.onCorrectAdminPassword((Action) getArguments().getSerializable("ACTION"));
+                                callback.onCorrectAdminPassword((Action) getArguments().getSerializable(ARG_ACTION));
                             } else {
                                 callback.onIncorrectAdminPassword();
                             }

@@ -188,9 +188,9 @@ public class AudioWidgetTest {
     @Test
     public void setData_whenPromptDoesNotHaveAnswer_doesNotDeleteOriginalAnswer() throws Exception {
         AudioWidget widget = createWidget(promptWithAnswer(null));
-
         File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
         widget.setData(newFile.getName());
+
         assertThat(questionMediaManager.originalFiles.isEmpty(), equalTo(true));
     }
 
@@ -212,7 +212,6 @@ public class AudioWidgetTest {
     @Test
     public void setData_whenFileExists_updatesWidgetAnswer() throws Exception {
         AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
-
         File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
         widget.setData(newFile.getName());
         assertThat(widget.getAnswer().getDisplayText(), equalTo(newFile.getName()));

@@ -26,7 +26,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.DatePickerDetails;
-import org.odk.collect.android.utilities.DateTimeUtils;
+import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -75,26 +75,26 @@ public class DateTimeUtilsTest {
         calendar.set(1991, 9, 20, 14, 0, 0);
         Date date = calendar.getTime();
 
-        Assert.assertEquals("Oct 20, 1991", DateTimeUtils.getDateTimeLabel(date, gregorianDatePickerDetails, false, context));
-        assertEquals("Oct 20, 1991, 14:00", DateTimeUtils.getDateTimeLabel(date, gregorianDatePickerDetails, true, context));
+        Assert.assertEquals("Oct 20, 1991", DateTimeWidgetUtils.getDateTimeLabel(date, gregorianDatePickerDetails, false, context));
+        assertEquals("Oct 20, 1991, 14:00", DateTimeWidgetUtils.getDateTimeLabel(date, gregorianDatePickerDetails, true, context));
 
-        assertEquals("9 Tikimt 1984 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(date, ethiopianDatePickerDetails, false, context));
-        assertEquals("9 Tikimt 1984, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(date, ethiopianDatePickerDetails, true, context));
+        assertEquals("9 Tikimt 1984 (Oct 20, 1991)", DateTimeWidgetUtils.getDateTimeLabel(date, ethiopianDatePickerDetails, false, context));
+        assertEquals("9 Tikimt 1984, 14:00 (Oct 20, 1991, 14:00)", DateTimeWidgetUtils.getDateTimeLabel(date, ethiopianDatePickerDetails, true, context));
 
-        assertEquals("9 Paopi 1708 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(date, copticDatePickerDetails, false, context));
-        assertEquals("9 Paopi 1708, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(date, copticDatePickerDetails, true, context));
+        assertEquals("9 Paopi 1708 (Oct 20, 1991)", DateTimeWidgetUtils.getDateTimeLabel(date, copticDatePickerDetails, false, context));
+        assertEquals("9 Paopi 1708, 14:00 (Oct 20, 1991, 14:00)", DateTimeWidgetUtils.getDateTimeLabel(date, copticDatePickerDetails, true, context));
 
-        assertEquals("11 Rabi' al-thani 1412 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(date, islamicDatePickerDetails, false, context));
-        assertEquals("11 Rabi' al-thani 1412, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(date, islamicDatePickerDetails, true, context));
+        assertEquals("11 Rabi' al-thani 1412 (Oct 20, 1991)", DateTimeWidgetUtils.getDateTimeLabel(date, islamicDatePickerDetails, false, context));
+        assertEquals("11 Rabi' al-thani 1412, 14:00 (Oct 20, 1991, 14:00)", DateTimeWidgetUtils.getDateTimeLabel(date, islamicDatePickerDetails, true, context));
 
-        assertEquals("3 कार्तिक 2048 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(date, bikramSambatDatePickerDetails, false, context));
-        assertEquals("3 कार्तिक 2048, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(date, bikramSambatDatePickerDetails, true, context));
+        assertEquals("3 कार्तिक 2048 (Oct 20, 1991)", DateTimeWidgetUtils.getDateTimeLabel(date, bikramSambatDatePickerDetails, false, context));
+        assertEquals("3 कार्तिक 2048, 14:00 (Oct 20, 1991, 14:00)", DateTimeWidgetUtils.getDateTimeLabel(date, bikramSambatDatePickerDetails, true, context));
 
-        assertEquals("12 သီတင်းကျွတ် 1353 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(date, myanmarDatePickerDetails, false, context));
-        assertEquals("12 သီတင်းကျွတ် 1353, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(date, myanmarDatePickerDetails, true, context));
+        assertEquals("12 သီတင်းကျွတ် 1353 (Oct 20, 1991)", DateTimeWidgetUtils.getDateTimeLabel(date, myanmarDatePickerDetails, false, context));
+        assertEquals("12 သီတင်းကျွတ် 1353, 14:00 (Oct 20, 1991, 14:00)", DateTimeWidgetUtils.getDateTimeLabel(date, myanmarDatePickerDetails, true, context));
 
-        assertEquals("28 Mehr 1370 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(date, persianDatePickerDetails, false, context));
-        assertEquals("28 Mehr 1370, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(date, persianDatePickerDetails, true, context));
+        assertEquals("28 Mehr 1370 (Oct 20, 1991)", DateTimeWidgetUtils.getDateTimeLabel(date, persianDatePickerDetails, false, context));
+        assertEquals("28 Mehr 1370, 14:00 (Oct 20, 1991, 14:00)", DateTimeWidgetUtils.getDateTimeLabel(date, persianDatePickerDetails, true, context));
     }
 
     @After

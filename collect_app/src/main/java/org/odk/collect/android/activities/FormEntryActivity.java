@@ -71,12 +71,15 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.jetbrains.annotations.NotNull;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.backgroundwork.FormSubmitManager;
+import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
+import org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.dao.helpers.FormsDaoHelper;
@@ -104,7 +107,6 @@ import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.SaveAnswerFileProgressDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
-import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
@@ -208,12 +210,12 @@ import static org.odk.collect.android.utilities.ToastUtils.showShortToast;
 public class FormEntryActivity extends CollectAbstractActivity implements AnimationListener,
         FormLoaderListener, AdvanceToNextListener, SwipeHandler.OnSwipeListener,
         SavePointListener, NumberPickerDialog.NumberPickerListener,
-        CustomDatePickerDialog.CustomDatePickerDialogListener, RankingWidgetDialog.RankingListener,
-        SaveFormIndexTask.SaveFormIndexListener, WidgetValueChangedListener,
-        ScreenContext, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
+        RankingWidgetDialog.RankingListener, SaveFormIndexTask.SaveFormIndexListener,
+        WidgetValueChangedListener, ScreenContext, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
         AudioControllerView.SwipableParent, FormIndexAnimationHandler.Listener,
         QuitFormDialogFragment.Listener, DeleteRepeatDialogFragment.DeleteRepeatDialogCallback,
-        SelectMinimalDialog.SelectMinimalDialogListener {
+        SelectMinimalDialog.SelectMinimalDialogListener, CustomDatePickerDialog.DateChangeListener,
+        CustomTimePickerDialog.TimeChangeListener {
 
     // Defines for FormEntryActivity
     private static final boolean EXIT = true;
@@ -808,7 +810,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             } else {
                 String sb = intent.getStringExtra(BARCODE_RESULT_KEY);
                 if (getCurrentViewIfODKView() != null) {
-                    setBinaryWidgetData(sb);
+                    setWidgetData(sb);
                 }
                 return;
             }
@@ -818,7 +820,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case RequestCodes.OSM_CAPTURE:
                 String osmFileName = intent.getStringExtra("OSM_FILE_NAME");
                 if (getCurrentViewIfODKView() != null) {
-                    setBinaryWidgetData(osmFileName);
+                    setWidgetData(osmFileName);
                 }
                 break;
             case RequestCodes.EX_STRING_CAPTURE:
@@ -829,7 +831,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (exists) {
                     Object externalValue = intent.getExtras().get(key);
                     if (getCurrentViewIfODKView() != null) {
-                        setBinaryWidgetData(externalValue);
+                        setWidgetData(externalValue);
                     }
                 }
                 break;
@@ -872,7 +874,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
 
                 if (getCurrentViewIfODKView() != null) {
-                    setBinaryWidgetData(nf);
+                    setWidgetData(nf);
                 }
                 break;
             case RequestCodes.ALIGNED_IMAGE:
@@ -895,7 +897,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
 
                 if (getCurrentViewIfODKView() != null) {
-                    setBinaryWidgetData(nf);
+                    setWidgetData(nf);
                 }
                 break;
             case RequestCodes.ARBITRARY_FILE_CHOOSER:
@@ -942,7 +944,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             outputStream.close();
 
                             if (getCurrentViewIfODKView() != null) {
-                                setBinaryWidgetData(newFile.getName());
+                                setWidgetData(newFile.getName());
                             }
                             saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                         }
@@ -954,7 +956,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case RequestCodes.VIDEO_CAPTURE:
                 mediaUri = intent.getData();
                 if (getCurrentViewIfODKView() != null) {
-                    setBinaryWidgetData(mediaUri);
+                    setWidgetData(mediaUri);
                 }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 String filePath = MediaUtils.getDataColumn(this, mediaUri, null, null);
@@ -970,20 +972,20 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case RequestCodes.LOCATION_CAPTURE:
                 String sl = intent.getStringExtra(LOCATION_RESULT);
                 if (getCurrentViewIfODKView() != null) {
-                    setBinaryWidgetData(sl);
+                    setWidgetData(sl);
                 }
                 break;
             case RequestCodes.GEOSHAPE_CAPTURE:
             case RequestCodes.GEOTRACE_CAPTURE:
                 String gshr = intent.getStringExtra(ANSWER_KEY);
                 if (getCurrentViewIfODKView() != null) {
-                    setBinaryWidgetData(gshr);
+                    setWidgetData(gshr);
                 }
                 break;
             case RequestCodes.BEARING_CAPTURE:
                 String bearing = intent.getStringExtra(BEARING_RESULT);
                 if (getCurrentViewIfODKView() != null) {
-                    setBinaryWidgetData(bearing);
+                    setWidgetData(bearing);
                 }
                 break;
         }
@@ -1004,7 +1006,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         return null;
     }
 
-    public void setBinaryWidgetData(Object data) {
+    public void setWidgetData(Object data) {
         ODKView currentViewIfODKView = getCurrentViewIfODKView();
 
         if (currentViewIfODKView != null) {
@@ -2589,23 +2591,18 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     @Override
-    public void onDateChanged(LocalDateTime date) {
-        ODKView odkView = getCurrentViewIfODKView();
-        if (odkView != null) {
-            QuestionWidget widgetGettingNewValue = getWidgetWaitingForBinaryData();
-            setBinaryWidgetData(date);
-            widgetValueChanged(widgetGettingNewValue);
-        }
+    public void onDateChanged(LocalDateTime selectedDate) {
+        onDataChanged(selectedDate);
+    }
+
+    @Override
+    public void onTimeChanged(DateTime selectedTime) {
+        onDataChanged(selectedTime);
     }
 
     @Override
     public void onRankingChanged(List<SelectChoice> items) {
-        ODKView odkView = getCurrentViewIfODKView();
-        if (odkView != null) {
-            QuestionWidget widgetGettingNewValue = getWidgetWaitingForBinaryData();
-            setBinaryWidgetData(items);
-            widgetValueChanged(widgetGettingNewValue);
-        }
+        onDataChanged(items);
     }
 
     /*
@@ -2617,7 +2614,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         ODKView odkView = getCurrentViewIfODKView();
         if (odkView != null) {
             QuestionWidget widgetGettingNewValue = getWidgetWaitingForBinaryData();
-            setBinaryWidgetData(items);
+            setWidgetData(items);
             widgetValueChanged(widgetGettingNewValue);
         }
     }
@@ -2632,6 +2629,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             t.destroy();
         }
         finish();
+    }
+
+    private void onDataChanged(Object data) {
+        ODKView odkView = getCurrentViewIfODKView();
+        if (odkView != null) {
+            QuestionWidget widgetGettingNewValue = getWidgetWaitingForBinaryData();
+            setWidgetData(data);
+            widgetValueChanged(widgetGettingNewValue);
+        }
     }
 
     /**
@@ -2807,4 +2813,3 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         return !Objects.equals(mutableQuestionBeforeSave.getAnswerText(), immutableQuestionBeforeSave.getAnswerText());
     }
 }
-
