@@ -8,7 +8,7 @@
                     <sound/>
                 </data>
             </instance>
-            <bind nodeset="sound" type="binary" odk:audio-quality="external"/>
+            <bind nodeset="sound" type="binary" odk:quality="external"/>
         </model>
     </h:head>
     <h:body>

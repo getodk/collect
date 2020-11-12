@@ -31,17 +31,15 @@ public class RecordingRequesterFactory {
     }
 
     public RecordingRequester create(FormEntryPrompt prompt, boolean externalRecorderPreferred, ComponentActivity activity, LifecycleOwner viewLifecycle) {
-        RecordingRequester recordingRequester;
+        Optional<String> audioQuality = FormEntryPromptUtils.getAttributeValue(prompt, "quality");
 
-        Optional<String> audioQuality = FormEntryPromptUtils.getAttributeValue(prompt, "audio-quality");
         if (audioQuality.isPresent() && audioQuality.get().equals("external")) {
-            recordingRequester = new ExternalAppRecordingRequester(activity, activityAvailability, waitingForDataRegistry, permissionUtils);
+            return new ExternalAppRecordingRequester(activity, activityAvailability, waitingForDataRegistry, permissionUtils);
         } else if (externalRecorderPreferred) {
-            recordingRequester = new ExternalAppRecordingRequester(activity, activityAvailability, waitingForDataRegistry, permissionUtils);
+            return new ExternalAppRecordingRequester(activity, activityAvailability, waitingForDataRegistry, permissionUtils);
         } else {
             AudioRecorderViewModel viewModel = new ViewModelProvider(activity, audioRecorderViewModelFactory).get(AudioRecorderViewModel.class);
-            recordingRequester = new InternalRecordingRequester(activity, viewModel, permissionUtils, viewLifecycle, questionMediaManager);
+            return new InternalRecordingRequester(activity, viewModel, permissionUtils, viewLifecycle, questionMediaManager);
         }
-        return recordingRequester;
     }
 }
