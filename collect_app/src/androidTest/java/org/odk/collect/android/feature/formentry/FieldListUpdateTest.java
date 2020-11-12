@@ -366,6 +366,7 @@ public class FieldListUpdateTest {
         onView(withText("Source13")).perform(longClick());
         onView(withText(R.string.clear_answer)).perform(click());
         onView(withText(R.string.discard_answer)).perform(click());
+        onView(withText("Target13")).check(doesNotExist());
     }
 
     @Test
