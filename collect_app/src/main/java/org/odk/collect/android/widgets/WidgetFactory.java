@@ -19,7 +19,6 @@ import android.content.Context;
 import android.hardware.SensorManager;
 
 import androidx.activity.ComponentActivity;
-import androidx.lifecycle.ViewModelProvider;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -31,7 +30,6 @@ import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.CustomTabHelper;
-import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ScreenContext;
@@ -50,16 +48,12 @@ import org.odk.collect.android.widgets.items.SelectOneMinimalWidget;
 import org.odk.collect.android.widgets.items.SelectOneWidget;
 import org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
-import org.odk.collect.android.widgets.utilities.ExternalAppRecordingRequester;
-import org.odk.collect.android.widgets.utilities.GetContentAudioFileRequester;
-import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
-import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
+import org.odk.collect.android.widgets.utilities.GetContentAudioFileRequester;
+import org.odk.collect.android.widgets.utilities.RecordingRequester;
+import org.odk.collect.android.widgets.utilities.RecordingRequesterFactory;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
-
-import java.util.Optional;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.PROMPT;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MAPS;
@@ -186,19 +180,8 @@ public class WidgetFactory {
                 questionWidget = new OSMWidget(context, questionDetails, waitingForDataRegistry);
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
-                RecordingRequester recordingRequester;
-
-                Optional<String> audioQuality = FormEntryPromptUtils.getAttributeValue(prompt, "audio-quality");
-                if (audioQuality.isPresent() && audioQuality.get().equals("external")) {
-                    recordingRequester = new ExternalAppRecordingRequester((Activity) context, activityAvailability, waitingForDataRegistry, permissionUtils);
-                } else if (useExternalRecorder) {
-                    recordingRequester = new ExternalAppRecordingRequester((Activity) context, activityAvailability, waitingForDataRegistry, permissionUtils);
-                } else {
-                    ComponentActivity activity = (ComponentActivity) context;
-                    AudioRecorderViewModel viewModel = new ViewModelProvider(activity, audioRecorderViewModelFactory).get(AudioRecorderViewModel.class);
-                    recordingRequester = new InternalRecordingRequester(activity, viewModel, permissionUtils, ((ScreenContext) context).getViewLifecycle(), questionMediaManager);
-                }
-
+                final RecordingRequesterFactory recordingRequesterFactory = new RecordingRequesterFactory(waitingForDataRegistry, questionMediaManager, activityAvailability, audioRecorderViewModelFactory, permissionUtils);
+                RecordingRequester recordingRequester = recordingRequesterFactory.create(prompt, useExternalRecorder, (ComponentActivity) context, ((ScreenContext) (ComponentActivity) context).getViewLifecycle());
                 questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, recordingRequester, new GetContentAudioFileRequester((Activity) context, activityAvailability, waitingForDataRegistry));
 
                 break;
@@ -282,4 +265,5 @@ public class WidgetFactory {
 
         return questionWidget;
     }
+
 }
