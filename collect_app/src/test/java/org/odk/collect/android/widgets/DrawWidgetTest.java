@@ -51,7 +51,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
     @NonNull
     @Override
     public DrawWidget createWidget() {
-        return new DrawWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"),
+        return new DrawWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride),
                 new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry());
     }
 
@@ -91,6 +91,14 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
     @Test
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
+
+        assertThat(getSpyWidget().drawButton.getVisibility(), is(View.GONE));
+    }
+
+    @Test
+    public void whenReadOnlyOverrideOptionIsUsed_shouldAllClickableElementsBeDisabled() {
+        readOnlyOverride = true;
+        when(formEntryPrompt.isReadOnly()).thenReturn(false);
 
         assertThat(getSpyWidget().drawButton.getVisibility(), is(View.GONE));
     }

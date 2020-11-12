@@ -269,18 +269,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
             // otherwise, do the normal aggregate/other thing.
             Intent i = new Intent(this, InstanceUploaderActivity.class);
             i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
-            // Not required but without this permission a Device ID attached to a request will be empty.
-            permissionUtils.requestReadPhoneStatePermission(this, false, new PermissionListener() {
-                @Override
-                public void granted() {
-                    startActivityForResult(i, INSTANCE_UPLOADER);
-                }
-
-                @Override
-                public void denied() {
-                    startActivityForResult(i, INSTANCE_UPLOADER);
-                }
-            });
+            startActivityForResult(i, INSTANCE_UPLOADER);
         }
     }
 

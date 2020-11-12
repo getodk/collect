@@ -1,4 +1,4 @@
-package org.odk.collect.audiorecorder.recording
+package org.odk.collect.audiorecorder.recording.internal
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -29,26 +29,30 @@ class AudioRecorderService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
             ACTION_START -> {
-                setupNotificationChannel()
+                val sessionId = intent.getStringExtra(EXTRA_SESSION_ID)
 
-                val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
-                    .setContentTitle(getLocalizedString(R.string.recording))
-                    .setSmallIcon(R.drawable.ic_baseline_mic_24)
-                    .build()
+                if (!recorder.isRecording() && sessionId != null) {
+                    recordingRepository.start(sessionId)
 
-                startForeground(NOTIFICATION_ID, notification)
+                    setupNotificationChannel()
 
-                if (!recorder.isRecording()) {
+                    val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
+                        .setContentTitle(getLocalizedString(R.string.recording))
+                        .setSmallIcon(R.drawable.ic_baseline_mic_24)
+                        .build()
+
+                    startForeground(NOTIFICATION_ID, notification)
+
                     recorder.start()
                 }
             }
 
-            ACTION_CANCEL -> {
-                cancelRecording()
-            }
-
             ACTION_STOP -> {
                 stopRecording()
+            }
+
+            ACTION_CLEAN_UP -> {
+                cleanUp()
             }
         }
 
@@ -69,7 +73,7 @@ class AudioRecorderService : Service() {
 
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
-        cancelRecording()
+        cleanUp()
     }
 
     override fun onBind(p0: Intent?): IBinder? {
@@ -78,21 +82,24 @@ class AudioRecorderService : Service() {
 
     private fun stopRecording() {
         val file = recorder.stop()
-        recordingRepository.create(file)
+        recordingRepository.recordingReady(file)
         stopSelf()
     }
 
-    private fun cancelRecording() {
+    private fun cleanUp() {
         recorder.cancel()
+        recordingRepository.clear()
         stopSelf()
     }
 
     companion object {
-        const val NOTIFICATION_ID = 1
-        const val NOTIFICATION_CHANNEL = "recording_channel"
+        private const val NOTIFICATION_ID = 1
+        private const val NOTIFICATION_CHANNEL = "recording_channel"
 
         const val ACTION_START = "START"
         const val ACTION_STOP = "STOP"
-        const val ACTION_CANCEL = "CANCEL"
+        const val ACTION_CLEAN_UP = "CLEAN_UP"
+
+        const val EXTRA_SESSION_ID = "EXTRA_SESSION_ID"
     }
 }

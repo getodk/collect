@@ -79,7 +79,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
 
     private final FormEntryPrompt formEntryPrompt;
     private final AudioVideoImageTextLabel audioVideoImageTextLabel;
-    private final QuestionDetails questionDetails;
+    protected final QuestionDetails questionDetails;
     private final TextView helpTextView;
     private final View helpTextLayout;
     private final View guidanceTextLayout;

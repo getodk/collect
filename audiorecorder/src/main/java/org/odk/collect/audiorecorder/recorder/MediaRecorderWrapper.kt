@@ -6,7 +6,7 @@ import android.media.MediaRecorder
  * Allows faking/stubbing/mocking with our interactions with Android's MediaRecorder
  */
 
-interface MediaRecorderWrapper {
+internal interface MediaRecorderWrapper {
     fun setAudioSource(audioSource: Int)
     fun setOutputFormat(outputFormat: Int)
     fun setOutputFile(path: String)

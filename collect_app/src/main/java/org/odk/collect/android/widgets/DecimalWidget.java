@@ -27,8 +27,8 @@ import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
 @SuppressLint("ViewConstructor")
 public class DecimalWidget extends StringWidget {
 
-    public DecimalWidget(Context context, QuestionDetails questionDetails, boolean readOnlyOverride) {
-        super(context, questionDetails, readOnlyOverride);
+    public DecimalWidget(Context context, QuestionDetails questionDetails) {
+        super(context, questionDetails);
         StringWidgetUtils.adjustEditTextAnswerToDecimalWidget(answerText, questionDetails.getPrompt());
     }
 

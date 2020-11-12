@@ -19,6 +19,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.hardware.SensorManager;
 
+import androidx.activity.ComponentActivity;
+import androidx.lifecycle.ViewModelProvider;
+
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
@@ -32,6 +35,7 @@ import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
+import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.items.ItemsetWidget;
 import org.odk.collect.android.widgets.items.LabelWidget;
@@ -53,6 +57,8 @@ import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
+import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.PROMPT;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MAPS;
@@ -87,10 +93,11 @@ public class WidgetFactory {
                                                         QuestionMediaManager questionMediaManager,
                                                         Analytics analytics,
                                                         AudioPlayer audioPlayer,
-                                                        SharedPreferences generalSharedPreferences) {
+                                                        SharedPreferences generalSharedPreferences,
+                                                        AudioRecorderViewModelFactory audioRecorderViewModelFactory) {
 
         String appearance = WidgetAppearanceUtils.getSanitizedAppearanceHint(prompt);
-        QuestionDetails questionDetails = new QuestionDetails(prompt, Collect.getCurrentFormIdentifierHash());
+        QuestionDetails questionDetails = new QuestionDetails(prompt, Collect.getCurrentFormIdentifierHash(), readOnlyOverride);
         PermissionUtils permissionUtils = new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert);
         ActivityAvailability activityAvailability = new ActivityAvailability(context);
 
@@ -114,14 +121,14 @@ public class WidgetFactory {
                             questionWidget = new BearingWidget(context, questionDetails, waitingForDataRegistry,
                                     (SensorManager) context.getSystemService(Context.SENSOR_SERVICE));
                         } else {
-                            questionWidget = new DecimalWidget(context, questionDetails, readOnlyOverride);
+                            questionWidget = new DecimalWidget(context, questionDetails);
                         }
                         break;
                     case Constants.DATATYPE_INTEGER:
                         if (appearance.startsWith(WidgetAppearanceUtils.EX)) {
                             questionWidget = new ExIntegerWidget(context, questionDetails, waitingForDataRegistry);
                         } else {
-                            questionWidget = new IntegerWidget(context, questionDetails, readOnlyOverride);
+                            questionWidget = new IntegerWidget(context, questionDetails);
                         }
                         break;
                     case Constants.DATATYPE_GEOPOINT:
@@ -153,17 +160,17 @@ public class WidgetFactory {
                         } else if (appearance.startsWith(WidgetAppearanceUtils.EX)) {
                             questionWidget = new ExStringWidget(context, questionDetails, waitingForDataRegistry);
                         } else if (appearance.contains(WidgetAppearanceUtils.NUMBERS)) {
-                            questionWidget = new StringNumberWidget(context, questionDetails, readOnlyOverride);
+                            questionWidget = new StringNumberWidget(context, questionDetails);
                         } else if (appearance.equals(WidgetAppearanceUtils.URL)) {
                             questionWidget = new UrlWidget(context, questionDetails, new CustomTabHelper());
 
                             analytics.logEvent(PROMPT, "Url", questionDetails.getFormAnalyticsID());
                         } else {
-                            questionWidget = new StringWidget(context, questionDetails, readOnlyOverride);
+                            questionWidget = new StringWidget(context, questionDetails);
                         }
                         break;
                     default:
-                        questionWidget = new StringWidget(context, questionDetails, readOnlyOverride);
+                        questionWidget = new StringWidget(context, questionDetails);
                         break;
                 }
                 break;
@@ -190,7 +197,9 @@ public class WidgetFactory {
                 if (generalSharedPreferences.getBoolean(GeneralKeys.KEY_EXTERNAL_APP_RECORDING, true)) {
                     recordingRequester = new ExternalAppRecordingRequester((Activity) context, activityAvailability, waitingForDataRegistry, permissionUtils);
                 } else {
-                    recordingRequester = new InternalRecordingRequester((Activity) context, waitingForDataRegistry, permissionUtils);
+                    ComponentActivity activity = (ComponentActivity) context;
+                    AudioRecorderViewModel viewModel = new ViewModelProvider(activity, audioRecorderViewModelFactory).get(AudioRecorderViewModel.class);
+                    recordingRequester = new InternalRecordingRequester(activity, viewModel, permissionUtils, waitingForDataRegistry, ((ScreenContext) context).getViewLifecycle(), questionMediaManager);
                 }
 
                 questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, recordingRequester, new GetContentAudioFileRequester((Activity) context, activityAvailability, waitingForDataRegistry));
@@ -264,13 +273,13 @@ public class WidgetFactory {
                             }
                             break;
                         default:
-                            questionWidget = new StringWidget(context, questionDetails, readOnlyOverride);
+                            questionWidget = new StringWidget(context, questionDetails);
                             break;
                     }
                 }
                 break;
             default:
-                questionWidget = new StringWidget(context, questionDetails, readOnlyOverride);
+                questionWidget = new StringWidget(context, questionDetails);
                 break;
         }
 

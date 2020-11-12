@@ -444,9 +444,7 @@
   <string name="email">Adresse mail</string>
   <string name="user_defined">Défini par l\'utilisateur</string>
   <string name="device_defined">Défini par l\'appareil</string>
-  <string name="device_id">ID de l\'appareil - sera remplacé par l\'ID d\'installation dans Collect v1.29</string>
-  <string name="subscriber_id">ID de l\'abonné - sera supprimé dans Collect v1.29</string>
-  <string name="sim_serial_id">Numéro de série SIM - sera supprimé dans Collect v1.29</string>
+  <string name="device_id">ID de l\'appareil</string>
   <string name="select_date">Choisir la date</string>
   <string name="select_time">Choisir l\'heure</string>
   <string name="no_date_selected">Aucune date choisie</string>
@@ -664,7 +662,6 @@
   <string name="storage_migration_failed">Le transfert des données a échoué. Veuillez réessayer.</string>
   <string name="storage_migration_dialog_title">Transfert des données</string>
   <string name="storage_migration_progress_msg">Transfert en cours.\nCeci pourrait prendre quelques secondes…</string>
-  <string name="install_id">ID d\'installation - remplacera l\'ID de l\'appareil dans Collect v1.29</string>
   <string name="preference_not_available">Pas disponible</string>
   <string name="custom_server_paths">Chemins d\'accès au serveur personnalisés</string>
   <string name="legacy_custom_server_paths_summary">Sera supprimé dans une prochaine version. Veuillez utiliser /formList et /submission sur votre serveur.</string>

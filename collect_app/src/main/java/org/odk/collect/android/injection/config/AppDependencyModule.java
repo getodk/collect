@@ -97,6 +97,7 @@ import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.android.views.BarcodeViewDecoder;
 import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.File;
@@ -231,33 +232,20 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public DeviceDetailsProvider providesDeviceDetailsProvider(Context context) {
-        TelephonyManager telMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-
+    public DeviceDetailsProvider providesDeviceDetailsProvider(Context context, InstallIDProvider installIDProvider) {
         return new DeviceDetailsProvider() {
 
             @Override
             @SuppressLint({"MissingPermission", "HardwareIds"})
             public String getDeviceId() {
-                return telMgr.getDeviceId();
+                return installIDProvider.getInstallID();
             }
 
             @Override
             @SuppressLint({"MissingPermission", "HardwareIds"})
             public String getLine1Number() {
+                TelephonyManager telMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
                 return telMgr.getLine1Number();
-            }
-
-            @Override
-            @SuppressLint({"MissingPermission", "HardwareIds"})
-            public String getSubscriberId() {
-                return telMgr.getSubscriberId();
-            }
-
-            @Override
-            @SuppressLint({"MissingPermission", "HardwareIds"})
-            public String getSimSerialNumber() {
-                return telMgr.getSimSerialNumber();
             }
         };
     }
@@ -464,4 +452,8 @@ public class AppDependencyModule {
                 .setBackOff(new ExponentialBackOff()));
     }
 
+    @Provides
+    public AudioRecorderViewModelFactory providesAudioRecorderViewModelFactory(Application application) {
+        return new AudioRecorderViewModelFactory(application);
+    }
 }

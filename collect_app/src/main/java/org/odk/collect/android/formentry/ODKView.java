@@ -22,6 +22,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -29,15 +30,15 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.google.android.material.button.MaterialButton;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormIndex;
@@ -52,8 +53,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
-import org.odk.collect.android.preferences.PreferencesProvider;
-import org.odk.collect.android.widgets.utilities.AudioPlayer;
+import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
@@ -62,6 +62,8 @@ import org.odk.collect.android.formentry.media.PromptAutoplayer;
 import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ScreenContext;
@@ -70,9 +72,13 @@ import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.StringWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.audioclips.PlaybackFailedException;
+import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -116,6 +122,9 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
     @Inject
     PreferencesProvider preferencesProvider;
+
+    @Inject
+    AudioRecorderViewModelFactory audioRecorderViewModelFactory;
 
     /**
      * Builds the view for a specified question or field-list of questions.
@@ -271,7 +280,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      */
     private QuestionWidget configureWidgetForQuestion(FormEntryPrompt question, boolean readOnlyOverride) {
         QuestionWidget qw = WidgetFactory.createWidgetFromPrompt(question, getContext(), readOnlyOverride,
-                waitingForDataRegistry, questionMediaManager, analytics, audioPlayer, preferencesProvider.getGeneralSharedPreferences());
+                waitingForDataRegistry, questionMediaManager, analytics, audioPlayer, preferencesProvider.getGeneralSharedPreferences(), audioRecorderViewModelFactory);
         qw.setOnLongClickListener(this);
         qw.setValueChangedListener(this);
 
@@ -395,18 +404,11 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         v = c.getSpecialFormQuestionText("noAppErrorString");
         errorString = (v != null) ? v : context.getString(R.string.no_app);
 
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
-
         // set button formatting
-        Button launchIntentButton = new Button(getContext());
-        launchIntentButton.setId(View.generateViewId());
+        MaterialButton launchIntentButton = findViewById(R.id.launchIntentButton);
         launchIntentButton.setText(buttonText);
-        launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
-                QuestionFontSizeUtils.getQuestionFontSize() + 2);
-        launchIntentButton.setPadding(20, 20, 20, 20);
-        launchIntentButton.setLayoutParams(params);
-
+        launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getQuestionFontSize() + 2);
+        launchIntentButton.setVisibility(VISIBLE);
         launchIntentButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -431,6 +433,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                                 case Constants.DATATYPE_TEXT:
                                 case Constants.DATATYPE_INTEGER:
                                 case Constants.DATATYPE_DECIMAL:
+                                case Constants.DATATYPE_BINARY:
                                     i.putExtra(reference.getNameLast(),
                                             (Serializable) value);
                                     break;
@@ -450,9 +453,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 }
             }
         });
-
-        widgetsList.addView(getDividerView());
-        widgetsList.addView(launchIntentButton, layout);
     }
 
     public void setFocus(Context context) {
@@ -480,39 +480,56 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      * Saves answers for the widgets in this view. Called when the widgets are in an intent group.
      */
     public void setDataForFields(Bundle bundle) throws JavaRosaException {
-        if (bundle == null) {
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController == null) {
             return;
         }
-        FormController formController = Collect.getInstance().getFormController();
-        Set<String> keys = bundle.keySet();
-        for (String key : keys) {
-            for (QuestionWidget questionWidget : widgets) {
-                FormEntryPrompt prompt = questionWidget.getFormEntryPrompt();
-                TreeReference treeReference =
-                        (TreeReference) prompt.getFormElement().getBind().getReference();
 
-                if (treeReference.getNameLast().equals(key)) {
-                    switch (prompt.getDataType()) {
-                        case Constants.DATATYPE_TEXT:
-                            formController.saveAnswer(prompt.getIndex(),
-                                    ExternalAppsUtils.asStringData(bundle.get(key)));
-                            break;
-                        case Constants.DATATYPE_INTEGER:
-                            formController.saveAnswer(prompt.getIndex(),
-                                    ExternalAppsUtils.asIntegerData(bundle.get(key)));
-                            break;
-                        case Constants.DATATYPE_DECIMAL:
-                            formController.saveAnswer(prompt.getIndex(),
-                                    ExternalAppsUtils.asDecimalData(bundle.get(key)));
-                            break;
-                        default:
-                            throw new RuntimeException(
-                                    getContext().getString(R.string.ext_assign_value_error,
-                                            treeReference.toString(false)));
+        if (bundle != null) {
+            Set<String> keys = bundle.keySet();
+            for (String key : keys) {
+                for (QuestionWidget questionWidget : widgets) {
+                    FormEntryPrompt prompt = questionWidget.getFormEntryPrompt();
+                    TreeReference treeReference =
+                            (TreeReference) prompt.getFormElement().getBind().getReference();
+
+                    if (treeReference.getNameLast().equals(key)) {
+                        switch (prompt.getDataType()) {
+                            case Constants.DATATYPE_TEXT:
+                                formController.saveAnswer(prompt.getIndex(),
+                                        ExternalAppsUtils.asStringData(bundle.get(key)));
+                                ((StringWidget) questionWidget).setDisplayValueFromModel();
+                                break;
+                            case Constants.DATATYPE_INTEGER:
+                                formController.saveAnswer(prompt.getIndex(),
+                                        ExternalAppsUtils.asIntegerData(bundle.get(key)));
+                                ((StringWidget) questionWidget).setDisplayValueFromModel();
+                                break;
+                            case Constants.DATATYPE_DECIMAL:
+                                formController.saveAnswer(prompt.getIndex(),
+                                        ExternalAppsUtils.asDecimalData(bundle.get(key)));
+                                ((StringWidget) questionWidget).setDisplayValueFromModel();
+                                break;
+                            case Constants.DATATYPE_BINARY:
+                                try {
+                                    Uri uri = (Uri) bundle.get(key);
+                                    if (uri != null) {
+                                        File destFile = FileUtils.createDestinationMediaFile(formController.getInstanceFile().getParent(), ContentResolverHelper.getFileExtensionFromUri(getContext(), uri));
+                                        //TODO might be better to use QuestionMediaManager in the future
+                                        FileUtils.saveAnswerFileFromUri(uri, destFile, getContext());
+                                        ((WidgetDataReceiver) questionWidget).setData(destFile);
+                                    }
+                                } catch (Exception | Error e) {
+                                    Timber.w(e);
+                                }
+                                break;
+                            default:
+                                throw new RuntimeException(
+                                        getContext().getString(R.string.ext_assign_value_error,
+                                                treeReference.toString(false)));
+                        }
+                        break;
                     }
-
-                    ((StringWidget) questionWidget).setDisplayValueFromModel();
-                    break;
                 }
             }
         }

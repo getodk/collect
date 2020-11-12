@@ -68,4 +68,13 @@ public abstract class GeneralStringWidgetTest<W extends StringWidget, A extends 
         assertThat(getSpyWidget().answerText.getVisibility(), is(View.VISIBLE));
         assertThat(getSpyWidget().answerText.isEnabled(), is(Boolean.FALSE));
     }
+
+    @Test
+    public void whenReadOnlyOverrideOptionIsUsed_shouldAllClickableElementsBeDisabled() {
+        readOnlyOverride = true;
+        when(formEntryPrompt.isReadOnly()).thenReturn(false);
+
+        assertThat(getSpyWidget().answerText.getVisibility(), is(View.VISIBLE));
+        assertThat(getSpyWidget().answerText.isEnabled(), is(Boolean.FALSE));
+    }
 }
