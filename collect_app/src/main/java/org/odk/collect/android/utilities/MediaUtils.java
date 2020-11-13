@@ -95,6 +95,11 @@ public class MediaUtils {
         return getPath(ctxt, uri);
     }
 
+    public String getDestinationPathFromSourcePath(@NonNull String sourcePath, String instanceFolder, FileUtil fileUtil) {
+        String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
+        return instanceFolder + File.separator + fileUtil.getRandomFilename() + extension;
+    }
+
     /**
      * Get a file path from a Uri. This will get the the path for Storage Access
      * Framework Documents, as well as the _data field for the MediaStore and
