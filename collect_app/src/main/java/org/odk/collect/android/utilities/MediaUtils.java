@@ -23,7 +23,6 @@ import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.provider.MediaStore.Images;
 import android.provider.OpenableColumns;
 import android.webkit.MimeTypeMap;
 
@@ -33,7 +32,6 @@ import androidx.annotation.Nullable;
 import org.apache.commons.io.IOUtils;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.network.NetworkStateProvider;
 
@@ -61,37 +59,6 @@ import static org.odk.collect.android.utilities.FileUtils.deleteAndReport;
  * @author paulburke
  */
 public class MediaUtils {
-
-    protected static String escapePathForLikeSQLClause(String path) {
-        String ep = path;
-        ep = ep.replaceAll("\\!", "!!");
-        ep = ep.replaceAll("_", "!_");
-        ep = ep.replaceAll("%", "!%");
-        return ep;
-    }
-
-    public static final Uri getImageUriFromMediaProvider(String imageFile) {
-        String selection = Images.ImageColumns.DATA + "=?";
-        String[] selectArgs = {imageFile};
-        String[] projection = {Images.ImageColumns._ID};
-        try (Cursor c = Collect
-                .getInstance()
-                .getContentResolver()
-                .query(Images.Media.EXTERNAL_CONTENT_URI,
-                        projection, selection, selectArgs, null)) {
-            if (c != null && c.getCount() > 0) {
-                c.moveToFirst();
-                String id = c.getString(c
-                        .getColumnIndex(Images.ImageColumns._ID));
-
-                return Uri
-                        .withAppendedPath(
-                                Images.Media.EXTERNAL_CONTENT_URI,
-                                id);
-            }
-            return null;
-        }
-    }
 
     public void deleteMediaFile(String imageFile) {
         deleteAndReport(new File(imageFile));
