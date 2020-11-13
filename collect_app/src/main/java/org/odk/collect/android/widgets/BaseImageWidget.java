@@ -68,11 +68,14 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
+    private final MediaUtils mediaUtils;
 
-    public BaseImageWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
+    public BaseImageWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager,
+                           WaitingForDataRegistry waitingForDataRegistry, MediaUtils mediaUtils) {
         super(context, prompt);
         this.questionMediaManager = questionMediaManager;
         this.waitingForDataRegistry = waitingForDataRegistry;
+        this.mediaUtils = mediaUtils;
     }
 
     @Override
@@ -194,22 +197,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
         @Override
         public void clickImage(String context) {
-            Intent i = new Intent("android.intent.action.VIEW");
-            Uri uri = MediaUtils.getImageUriFromMediaProvider(
-                    getInstanceFolder() + File.separator + binaryName);
-            if (uri != null) {
-                Timber.i("setting view path to: %s", uri.toString());
-                i.setDataAndType(uri, "image/*");
-
-                try {
-                    getContext().startActivity(i);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(getContext(),
-                            getContext().getString(R.string.activity_not_found,
-                                    getContext().getString(R.string.view_image)),
-                            Toast.LENGTH_SHORT).show();
-                }
-            }
+            mediaUtils.openFile(getContext(), new File(getInstanceFolder() + File.separator + binaryName));
         }
     }
 
