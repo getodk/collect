@@ -17,7 +17,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.FileUtil;
-import org.odk.collect.android.utilities.MediaUtil;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
@@ -37,7 +37,7 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
     Uri uri;
 
     @Mock
-    MediaUtil mediaUtil;
+    MediaUtils mediaUtils;
 
     @Mock
     FileUtil fileUtil;
@@ -50,7 +50,7 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
     @NonNull
     @Override
     public VideoWidget createWidget() {
-        return new VideoWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride), fileUtil, mediaUtil,
+        return new VideoWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride), fileUtil, mediaUtils,
                 new FakeWaitingForDataRegistry(), new FakeQuestionMediaManager(), new CameraUtils());
     }
 
@@ -92,7 +92,7 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
     public void prepareForSetAnswer() {
         when(formEntryPrompt.isReadOnly()).thenReturn(false);
 
-        when(mediaUtil.getPathFromUri(
+        when(mediaUtils.getPathFromUri(
                 activity,
                 uri,
                 MediaStore.Video.Media.DATA)

@@ -44,7 +44,7 @@ import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MediaUtil;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
@@ -77,7 +77,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
     public static final boolean DEFAULT_HIGH_RESOLUTION = true;
 
     @NonNull
-    private MediaUtil mediaUtil;
+    private MediaUtils mediaUtils;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
@@ -93,15 +93,15 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
     private boolean selfie;
 
     public VideoWidget(Context context, QuestionDetails prompt,  QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
-        this(context, prompt, new FileUtil(), new MediaUtil(), waitingForDataRegistry, questionMediaManager, new CameraUtils());
+        this(context, prompt, new FileUtil(), new MediaUtils(), waitingForDataRegistry, questionMediaManager, new CameraUtils());
     }
 
-    public VideoWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil,
+    public VideoWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtils mediaUtils,
                        WaitingForDataRegistry waitingForDataRegistry, QuestionMediaManager questionMediaManager, CameraUtils cameraUtils) {
         super(context, questionDetails);
 
         this.fileUtil = fileUtil;
-        this.mediaUtil = mediaUtil;
+        this.mediaUtils = mediaUtils;
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
 
@@ -214,7 +214,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
     }
 
     private String getSourcePathFromUri(@NonNull Uri uri) {
-        return mediaUtil.getPathFromUri(getContext(), uri, Video.Media.DATA);
+        return mediaUtils.getPathFromUri(getContext(), uri, Video.Media.DATA);
     }
 
     @Override

@@ -41,7 +41,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MediaUtil;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
@@ -64,7 +64,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
     private FileUtil fileUtil;
 
     @NonNull
-    private MediaUtil mediaUtil;
+    private MediaUtils mediaUtils;
 
     private final QuestionMediaManager questionMediaManager;
     private final WaitingForDataRegistry waitingForDataRegistry;
@@ -76,14 +76,14 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
     private LinearLayout answerLayout;
 
     public ArbitraryFileWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
-        this(context, prompt, new FileUtil(), new MediaUtil(), questionMediaManager, waitingForDataRegistry);
+        this(context, prompt, new FileUtil(), new MediaUtils(), questionMediaManager, waitingForDataRegistry);
     }
 
-    ArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil,
+    ArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtils mediaUtils,
                         QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails);
         this.fileUtil = fileUtil;
-        this.mediaUtil = mediaUtil;
+        this.mediaUtils = mediaUtils;
         this.questionMediaManager = questionMediaManager;
         this.waitingForDataRegistry = waitingForDataRegistry;
 
@@ -195,7 +195,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
     }
 
     private String getSourcePathFromUri(@NonNull Uri uri) {
-        return mediaUtil.getPathFromUri(getContext(), uri, MediaStore.Files.FileColumns.DATA);
+        return mediaUtils.getPathFromUri(getContext(), uri, MediaStore.Files.FileColumns.DATA);
     }
 
     public String getMimeType(String url) {
