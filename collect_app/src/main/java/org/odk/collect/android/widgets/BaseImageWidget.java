@@ -18,12 +18,10 @@ package org.odk.collect.android.widgets;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
@@ -110,24 +108,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
         File newImage = (File) newImageObj;
         if (newImage.exists()) {
-            // Add the new image to the Media content provider so that the
-            // viewing is fast in Android 2.0+
-            ContentValues values = new ContentValues(6);
-            values.put(MediaStore.Images.Media.TITLE, newImage.getName());
-            values.put(MediaStore.Images.Media.DISPLAY_NAME, newImage.getName());
-            values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
-            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-            values.put(MediaStore.Images.Media.DATA, newImage.getAbsolutePath());
-
             questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
-
-            Uri imageURI = getContext().getContentResolver().insert(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-
-            if (imageURI != null) {
-                Timber.i("Inserting image returned uri = %s", imageURI.toString());
-            }
-
             binaryName = newImage.getName();
             Timber.i("Setting current answer to %s", newImage.getName());
 
