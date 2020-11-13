@@ -450,9 +450,7 @@
   <string name="email">Emailová adresa</string>
   <string name="user_defined">Uživatelsky definované</string>
   <string name="device_defined">Definované podle zařízení</string>
-  <string name="device_id">Device ID - bude nahrazeno Install ID v Collect v1.29</string>
-  <string name="subscriber_id">Subscriber ID - bude odebráno v Collect v1.29</string>
-  <string name="sim_serial_id">Sériové číslo SIM - bude odebráno v Collect v1.29</string>
+  <string name="device_id">Device ID</string>
   <string name="select_date">Vybrat datum</string>
   <string name="select_time">Vybrat čas</string>
   <string name="no_date_selected">Nevybrán žádný datum</string>
@@ -671,7 +669,6 @@
   <string name="storage_migration_dialog_title">Migrace úložiště</string>
   <string name="storage_migration_progress_msg">Probíhá migrace. 
 Může to trvat několik sekund …</string>
-  <string name="install_id">Install ID  - nahradí Device ID v Collect v1.29</string>
   <string name="preference_not_available">Není dostupný</string>
   <string name="custom_server_paths">Vlastní cesty serveru</string>
   <string name="legacy_custom_server_paths_summary">Bude odebráno v budoucí verzi. Použijte prosím / formList a / odeslání  na váš server.</string>

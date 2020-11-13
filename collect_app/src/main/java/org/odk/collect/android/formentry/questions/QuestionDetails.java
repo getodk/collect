@@ -11,10 +11,16 @@ public class QuestionDetails {
 
     private final FormEntryPrompt prompt;
     private final String formAnalyticsID;
+    private final boolean isReadOnly;
 
     public QuestionDetails(FormEntryPrompt prompt, String formAnalyticsID) {
+        this(prompt, formAnalyticsID, false);
+    }
+
+    public QuestionDetails(FormEntryPrompt prompt, String formAnalyticsID, boolean readOnlyOverride) {
         this.prompt = prompt;
         this.formAnalyticsID = formAnalyticsID;
+        this.isReadOnly = readOnlyOverride || prompt.isReadOnly();
     }
 
     public FormEntryPrompt getPrompt() {
@@ -23,5 +29,9 @@ public class QuestionDetails {
 
     public String getFormAnalyticsID() {
         return formAnalyticsID;
+    }
+
+    public boolean isReadOnly() {
+        return isReadOnly;
     }
 }

@@ -2,64 +2,146 @@ package org.odk.collect.android.widgets;
 
 import android.view.View;
 
-import androidx.annotation.NonNull;
-
 import org.javarosa.core.model.QuestionDef;
-import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.TimeData;
-import org.joda.time.DateTime;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.joda.time.LocalDateTime;
+import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
+import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.widgets.base.GeneralDateTimeWidgetTest;
+import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.utilities.DateTimeUtils;
+import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
+import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithQuestionDefAndAnswer;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndQuestionDef;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 
-/**
- * @author James Knight
- */
-public class TimeWidgetTest extends GeneralDateTimeWidgetTest<TimeWidget, TimeData> {
+@RunWith(RobolectricTestRunner.class)
+public class TimeWidgetTest {
+    private TestScreenContextActivity widgetActivity;
+    private DateTimeWidgetUtils widgetUtils;
+    private View.OnLongClickListener onLongClickListener;
 
-    @Mock
-    QuestionDef questionDef;
+    private QuestionDef questionDef;
+    private LocalDateTime timeAnswer;
 
-    @NonNull
-    @Override
-    public TimeWidget createWidget() {
-        return new TimeWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
-    }
+    @Before
+    public void setUp() {
+        widgetActivity = widgetTestActivity();
 
-    @NonNull
-    @Override
-    public TimeData getNextAnswer() {
-        return new TimeData(getNextDateTime().toDate());
-    }
+        questionDef = mock(QuestionDef.class);
+        onLongClickListener = mock(View.OnLongClickListener.class);
+        widgetUtils = mock(DateTimeWidgetUtils.class);
 
-    @Override
-    public TimeData getInitialAnswer() {
-        return getNextAnswer();
-    }
-
-    @Test
-    public void updatingTheDateAndTimeWidgetsShouldUpdateTheAnswer() {
-        TimeWidget widget = getSpyWidget();
-
-        DateTime dateTime = getNextDateTime();
-        widget.updateTime(dateTime);
-
-        IAnswerData answer = widget.getAnswer();
-        DateTime answerDateTime = new DateTime(answer.getValue());
-
-        assertEquals(dateTime, answerDateTime);
+        timeAnswer = DateTimeUtils.getSelectedTime(new LocalDateTime().withTime(12, 10, 0, 0), LocalDateTime.now());
     }
 
     @Test
-    public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
-        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+    public void usingReadOnlyOption_doesNotShowButton() {
+        TimeWidget widget = createWidget(promptWithReadOnlyAndQuestionDef(questionDef));
+        assertEquals(widget.binding.timeButton.getVisibility(), View.GONE);
+    }
 
-        assertThat(getSpyWidget().timeButton.getVisibility(), is(View.GONE));
+    @Test
+    public void whenPromptIsNotReadOnly_buttonShowsCorrectText() {
+        TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
+        assertEquals(widget.binding.timeButton.getText(), widget.getContext().getString(R.string.select_time));
+    }
+
+    @Test
+    public void getAnswer_whenPromptDoesNotHaveAnswer_returnsNull() {
+        assertThat(createWidget(promptWithQuestionDefAndAnswer(questionDef, null)).getAnswer(), nullValue());
+    }
+
+    @Test
+    public void getAnswer_whenPromptHasAnswer_returnsTime() {
+        TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new TimeData(timeAnswer.toDateTime().toDate())));
+        assertEquals(widget.getAnswer().getDisplayText(), new TimeData(timeAnswer.toDateTime().toDate()).getDisplayText());
+    }
+
+    @Test
+    public void whenPromptDoesNotHaveAnswer_answerTextViewShowsNoTimeSelected() {
+        TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
+        assertEquals(widget.binding.timeAnswerText.getText(), widget.getContext().getString(R.string.no_time_selected));
+    }
+
+    @Test
+    public void whenPromptHasAnswer_answerTextViewShowsCorrectTime() {
+        TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new TimeData(timeAnswer.toDateTime().toDate())));
+        assertEquals(widget.binding.timeAnswerText.getText(), DateTimeUtils.getTimeData(timeAnswer.toDateTime()).getDisplayText());
+    }
+
+    @Test
+    public void clickingButton_callsDisplayTimePickerDialogWithCurrentTime_whenPromptDoesNotHaveAnswer() {
+        FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, null);
+        TimeWidget widget = createWidget(prompt);
+        widget.binding.timeButton.performClick();
+
+        verify(widgetUtils).showTimePickerDialog(widgetActivity, DateTimeUtils.getCurrentDateTime());
+    }
+
+    @Test
+    public void clickingButton_callsDisplayTimePickerDialogWithSelectedTime_whenPromptHasAnswer() {
+        FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, new TimeData(timeAnswer.toDateTime().toDate()));
+        TimeWidget widget = createWidget(prompt);
+        widget.binding.timeButton.performClick();
+
+        verify(widgetUtils).showTimePickerDialog(widgetActivity, timeAnswer);
+    }
+
+    @Test
+    public void clearAnswer_clearsWidgetAnswer() {
+        TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new TimeData(timeAnswer.toDateTime().toDate())));
+        widget.clearAnswer();
+        assertEquals(widget.binding.timeAnswerText.getText(), widget.getContext().getString(R.string.no_time_selected));
+    }
+
+    @Test
+    public void clearAnswer_callsValueChangeListener() {
+        TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new TimeData(timeAnswer.toDateTime().toDate())));
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+        widget.clearAnswer();
+
+        verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void clickingButtonAndAnswerTextViewForLong_callsLongClickListener() {
+        TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
+        widget.setOnLongClickListener(onLongClickListener);
+        widget.binding.timeButton.performLongClick();
+        widget.binding.timeAnswerText.performLongClick();
+
+        verify(onLongClickListener).onLongClick(widget.binding.timeButton);
+        verify(onLongClickListener).onLongClick(widget.binding.timeAnswerText);
+    }
+
+    @Test
+    public void setData_updatesWidgetAnswer() {
+        TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
+        widget.setData(timeAnswer.toDateTime());
+        assertEquals(widget.getAnswer().getDisplayText(), new TimeData(timeAnswer.toDateTime().toDate()).getDisplayText());
+    }
+
+    @Test
+    public void setData_updatesValueDisplayedInAnswerTextView() {
+        TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
+        widget.setData(timeAnswer.toDateTime());
+        assertEquals(widget.binding.timeAnswerText.getText(), DateTimeUtils.getTimeData(timeAnswer.toDateTime()).getDisplayText());
+    }
+
+    private TimeWidget createWidget(FormEntryPrompt prompt) {
+        return new TimeWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"), widgetUtils);
     }
 }

@@ -48,7 +48,7 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
     @NonNull
     @Override
     public SignatureWidget createWidget() {
-        return new SignatureWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"),
+        return new SignatureWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride),
                 new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry());
     }
 
@@ -87,6 +87,14 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
     @Test
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
+
+        assertThat(getSpyWidget().signButton.getVisibility(), is(View.GONE));
+    }
+
+    @Test
+    public void whenReadOnlyOverrideOptionIsUsed_shouldAllClickableElementsBeDisabled() {
+        readOnlyOverride = true;
+        when(formEntryPrompt.isReadOnly()).thenReturn(false);
 
         assertThat(getSpyWidget().signButton.getVisibility(), is(View.GONE));
     }

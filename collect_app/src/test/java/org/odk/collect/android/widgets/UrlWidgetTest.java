@@ -102,7 +102,6 @@ public class UrlWidgetTest {
         UrlWidget widget = createWidget(promptWithAnswer(null));
         widget.setOnLongClickListener(listener);
         widget.binding.urlButton.performLongClick();
-
         verify(listener).onLongClick(widget.binding.urlButton);
     }
 

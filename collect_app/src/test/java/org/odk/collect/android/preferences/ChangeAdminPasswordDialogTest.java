@@ -3,12 +3,10 @@ package org.odk.collect.android.preferences;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.text.InputType;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -17,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.fragments.support.DialogFragmentHelpers;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestActivityScenario;
 import org.robolectric.RobolectricTestRunner;
@@ -65,7 +64,8 @@ public class ChangeAdminPasswordDialogTest {
 
     @Test
     public void whenScreenIsRotated_passwordAndCheckboxValueIsRetained() {
-        TestActivityScenario<DialogFragmentTestActivity> activityScenario = TestActivityScenario.launch(DialogFragmentTestActivity.class);
+        TestActivityScenario<DialogFragmentHelpers.DialogFragmentTestActivity> activityScenario = TestActivityScenario
+                .launch(DialogFragmentHelpers.DialogFragmentTestActivity.class);
         activityScenario.onActivity(activity -> {
             dialogFragment.show(activity.getSupportFragmentManager(), "TAG");
             AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
@@ -127,14 +127,5 @@ public class ChangeAdminPasswordDialogTest {
 
         passwordCheckBox.setChecked(false);
         assertThat(passwordEditText.getInputType(), equalTo(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD));
-    }
-
-    private static class DialogFragmentTestActivity extends FragmentActivity {
-
-        @Override
-        protected void onCreate(@Nullable Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setTheme(R.style.Theme_AppCompat); // Needed for androidx.appcompat.app.AlertDialog
-        }
     }
 }

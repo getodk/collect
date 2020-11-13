@@ -381,7 +381,7 @@
     <string name="unrecognized_uri">Unrecognized URI: %s</string>
     <!-- &lt; and &gt; surrounds the text so it will appear as <no form loaded> -->
     <string name="no_form_loaded">&lt;no form loaded&gt;</string>
-    <string name="settings_successfully_loaded_file_notification">Settings successfully loaded from file</string>
+    <string name="settings_successfully_loaded_file_notification">Settings were successfully imported from a .settings file. This functionality will be removed in a future version. Please use QR code configuration instead.</string>
     <string name="corrupt_settings_file_notification">Sorry, settings file is corrupt and should be deleted or replaced</string>
     <string name="selected_invalid_image">Selected file is not a valid image</string>
     <string name="edited_osm_file">Edited OSM XML File:</string>
@@ -465,9 +465,7 @@
     <string name="email">Email address</string>
     <string name="user_defined">User-defined</string>
     <string name="device_defined">Device-defined</string>
-    <string name="device_id">Device ID - will be replaced by Install ID in Collect v1.29</string>
-    <string name="subscriber_id">Subscriber ID - will be removed in Collect v1.29</string>
-    <string name="sim_serial_id">SIM serial number - will be removed in Collect v1.29</string>
+    <string name="device_id">Device ID</string>
     <string name="select_date">Select date</string>
     <string name="select_time">Select time</string>
     <string name="no_date_selected">No date selected</string>
@@ -689,7 +687,6 @@
     <string name="storage_migration_dialog_title">Storage migration</string>
     <string name="storage_migration_progress_msg">Migration in progress.\nThis may take a few seconds…</string>
 
-    <string name="install_id">Install ID - will replace Device ID in Collect v1.29</string>
     <string name="preference_not_available">Not available</string>
     <string name="custom_server_paths">Custom server paths</string>
     <string name="legacy_custom_server_paths_summary">Will be removed in a future version. Please use /formList and /submission on your server.</string>
@@ -706,7 +703,9 @@
     <string name="failure">Failure</string>
     <string name="form_update_succeeded">Form update succeeded</string>
     <string name="external_app_recording">Use external app for audio recording</string>
-    <string name="stop_recording">Stop recording</string>
+    <string name="stop_recording">Stop</string>
     <string name="recording">Recording…</string>
     <string name="recording_channel">Audio recording</string>
+    <string name="play_audio">Play audio</string>
+    <string name="saving_file">Saving file</string>
 </resources>

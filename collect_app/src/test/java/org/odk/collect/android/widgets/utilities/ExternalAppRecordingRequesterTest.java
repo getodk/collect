@@ -19,12 +19,15 @@ import org.robolectric.Robolectric;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowToast;
 
+import java.util.function.Consumer;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 import static org.robolectric.Shadows.shadowOf;
@@ -88,5 +91,12 @@ public class ExternalAppRecordingRequesterTest {
         assertThat(intentForResult.requestCode, equalTo(ApplicationConstants.RequestCodes.AUDIO_CAPTURE));
 
         assertThat(waitingForDataRegistry.waiting.contains(prompt.getIndex()), equalTo(true));
+    }
+
+    @Test
+    public void onIsRecordingChanged_alwaysCallsBackWithFalse() {
+        Consumer<Boolean> listener = mock(Consumer.class);
+        requester.onIsRecordingChanged(listener);
+        verify(listener).accept(false);
     }
 }

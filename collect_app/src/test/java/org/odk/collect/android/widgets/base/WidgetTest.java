@@ -29,6 +29,8 @@ public abstract class WidgetTest {
     @Mock
     public IFormElement formElement;
 
+    public boolean readOnlyOverride;
+
     @Before
     @OverridingMethodsMustInvokeSuper
     public void setUp() throws Exception {

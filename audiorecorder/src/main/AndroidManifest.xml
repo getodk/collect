@@ -2,17 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.odk.collect.audiorecorder">
 
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application>
-        <activity
-            android:name=".recording.AudioRecorderActivity"
-            android:label="Audio Recorder"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
-
-        <service android:name=".recording.AudioRecorderService" />
-
+        <service android:name=".recording.internal.AudioRecorderService" />
     </application>
 
 </manifest>

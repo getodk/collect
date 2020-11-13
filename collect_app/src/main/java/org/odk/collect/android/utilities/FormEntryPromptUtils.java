@@ -27,6 +27,7 @@ import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.dao.ItemsetDao;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -65,13 +66,13 @@ public class FormEntryPromptUtils {
         }
 
         if (data instanceof DateTimeData) {
-            return DateTimeUtils.getDateTimeLabel((Date) data.getValue(),
-                    DateTimeUtils.getDatePickerDetails(appearance), true, context);
+            return DateTimeWidgetUtils.getDateTimeLabel((Date) data.getValue(),
+                    DateTimeWidgetUtils.getDatePickerDetails(appearance), true, context);
         }
 
         if (data instanceof DateData) {
-            return DateTimeUtils.getDateTimeLabel((Date) data.getValue(),
-                    DateTimeUtils.getDatePickerDetails(appearance), false, context);
+            return DateTimeWidgetUtils.getDateTimeLabel((Date) data.getValue(),
+                    DateTimeWidgetUtils.getDatePickerDetails(appearance), false, context);
         }
 
         if (data != null && appearance != null && appearance.contains(WidgetAppearanceUtils.THOUSANDS_SEP)) {

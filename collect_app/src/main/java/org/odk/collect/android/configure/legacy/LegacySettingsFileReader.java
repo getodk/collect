@@ -1,4 +1,4 @@
-package org.odk.collect.android.configure;
+package org.odk.collect.android.configure.legacy;
 
 import androidx.core.util.Pair;
 
@@ -16,25 +16,20 @@ import java.util.Map;
 
 public class LegacySettingsFileReader {
 
-    private final StoragePathProvider storagePathProvider;
+    private final File objectFile;
+    private final File jsonFile;
 
     public LegacySettingsFileReader(StoragePathProvider storagePathProvider) {
-        this.storagePathProvider = storagePathProvider;
+        this.objectFile = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings");
+        this.jsonFile = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json");
     }
 
     public String toJSON() throws CorruptSettingsFileException {
-        File f = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings");
-        File j = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json");
-
         try {
-            if (j.exists()) {
-                String settings = readJSONFile(j);
-                j.delete();
-                return settings;
-            } else if (f.exists()) {
-                Pair<Map<String, Object>, Map<String, Object>> settings = readSettingsFile(f);
-                f.delete();
-
+            if (jsonFile.exists()) {
+                return readJSONFile(jsonFile);
+            } else if (objectFile.exists()) {
+                Pair<Map<String, Object>, Map<String, Object>> settings = readSettingsFile(objectFile);
                 return new JSONObject()
                         .put("general", new JSONObject(settings.first))
                         .put("admin", new JSONObject(settings.second))
@@ -45,6 +40,11 @@ public class LegacySettingsFileReader {
         } catch (IOException | JSONException | ClassNotFoundException e) {
             throw new CorruptSettingsFileException();
         }
+    }
+
+    public void delete() {
+        jsonFile.delete();
+        objectFile.delete();
     }
 
     private String readJSONFile(File src) throws IOException {

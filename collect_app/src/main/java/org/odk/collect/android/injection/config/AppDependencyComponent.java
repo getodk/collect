@@ -19,6 +19,7 @@ import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
+import org.odk.collect.android.audio.AudioRecordingControllerFragment;
 import org.odk.collect.android.backgroundwork.AutoSendTaskSpec;
 import org.odk.collect.android.backgroundwork.AutoUpdateTaskSpec;
 import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec;
@@ -213,6 +214,8 @@ public interface AppDependencyComponent {
     void inject(AdminPreferencesFragment.MainMenuAccessPreferences mainMenuAccessPreferences);
 
     void inject(SelectMinimalDialog selectMinimalDialog);
+
+    void inject(AudioRecordingControllerFragment audioRecordingControllerFragment);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 

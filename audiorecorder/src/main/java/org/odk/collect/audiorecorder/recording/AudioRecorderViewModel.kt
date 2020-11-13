@@ -1,46 +1,23 @@
 package org.odk.collect.audiorecorder.recording
 
-import android.app.Application
-import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import org.odk.collect.audiorecorder.recording.AudioRecorderService.Companion.ACTION_CANCEL
-import org.odk.collect.audiorecorder.recording.AudioRecorderService.Companion.ACTION_START
-import org.odk.collect.audiorecorder.recording.AudioRecorderService.Companion.ACTION_STOP
 import java.io.File
-import javax.inject.Inject
 
-internal class AudioRecorderViewModel(private val application: Application, private val recordingRepository: RecordingRepository) : ViewModel() {
+/**
+ * Interface for a ViewModel that records audio. Can only record once session
+ * at a time but supports cases where multiple views can start/playback different
+ * recordings through a `sessionsId` passed to `start` and `getRecording`.
+ */
+abstract class AudioRecorderViewModel : ViewModel() {
+    abstract fun isRecording(): LiveData<Boolean>
+    abstract fun getRecording(sessionId: String): LiveData<File?>
+    abstract fun start(sessionId: String)
+    abstract fun stop()
 
-    val recording: LiveData<File?> = recordingRepository.getRecording()
-
-    fun start() {
-        application.startService(
-            Intent(application, AudioRecorderService::class.java).apply { action = ACTION_START }
-        )
-    }
-
-    fun stop() {
-        application.startService(
-            Intent(application, AudioRecorderService::class.java).apply { action = ACTION_STOP }
-        )
-    }
-
-    fun cancel() {
-        application.startService(
-            Intent(application, AudioRecorderService::class.java).apply { action = ACTION_CANCEL }
-        )
-    }
-
-    fun endSession() {
-        recordingRepository.clear()
-    }
-
-    class Factory @Inject constructor(private val application: Application, private val recordingRepository: RecordingRepository) : ViewModelProvider.Factory {
-
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return AudioRecorderViewModel(application, recordingRepository) as T
-        }
-    }
+    /**
+     * Stops any in progress recordings, clears recordings (returned from `getRecordings`). Should
+     * be called after in-progress or finished recordings are no longer needed
+     */
+    abstract fun cleanUp()
 }

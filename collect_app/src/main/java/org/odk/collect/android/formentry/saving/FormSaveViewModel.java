@@ -13,6 +13,7 @@ import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 import androidx.savedstate.SavedStateRegistryOwner;
 
+import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryController;
@@ -32,9 +33,15 @@ import org.odk.collect.android.tasks.SaveToDiskResult;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
+import org.odk.collect.async.Scheduler;
 import org.odk.collect.utilities.Clock;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,6 +62,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     private final MediaUtils mediaUtils;
 
     private final MutableLiveData<SaveResult> saveResult = new MutableLiveData<>(null);
+    private final MutableLiveData<Boolean> isSavingAnswerFile = new MutableLiveData<>(false);
     private String reason = "";
 
     private Map<String, String> originalFiles = new HashMap<>();
@@ -67,13 +75,15 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     private AsyncTask<Void, String, SaveToDiskResult> saveTask;
 
     private final Analytics analytics;
+    private final Scheduler scheduler;
 
-    public FormSaveViewModel(SavedStateHandle stateHandle, Clock clock, FormSaver formSaver, MediaUtils mediaUtils, Analytics analytics) {
+    public FormSaveViewModel(SavedStateHandle stateHandle, Clock clock, FormSaver formSaver, MediaUtils mediaUtils, Analytics analytics, Scheduler scheduler) {
         this.stateHandle = stateHandle;
         this.clock = clock;
         this.formSaver = formSaver;
         this.mediaUtils = mediaUtils;
         this.analytics = analytics;
+        this.scheduler = scheduler;
 
         if (stateHandle.get(ORIGINAL_FILES) != null) {
             originalFiles = stateHandle.get(ORIGINAL_FILES);
@@ -314,6 +324,44 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     @Override
+    public LiveData<String> createAnswerFile(File file) {
+        MutableLiveData<String> liveData = new MutableLiveData<>(null);
+
+        isSavingAnswerFile.setValue(true);
+        scheduler.immediate(() -> {
+            String newFileHash = FileUtils.getMd5Hash(file);
+            String instanceDir = formController.getInstanceFile().getParent();
+
+            File[] answerFiles = new File(instanceDir).listFiles();
+            for (File answerFile : answerFiles) {
+                if (FileUtils.getMd5Hash(answerFile).equals(newFileHash)) {
+                    return answerFile.getName();
+                }
+            }
+
+            String fileName = file.getName();
+            String extension = fileName.substring(fileName.lastIndexOf('.') + 1);
+            String newFileName = System.currentTimeMillis() + "." + extension;
+            String newFilePath = instanceDir + File.separator + newFileName;
+
+            try (InputStream inputStream = new FileInputStream(file)) {
+                try (OutputStream outputStream = new FileOutputStream(newFilePath)) {
+                    IOUtils.copy(inputStream, outputStream);
+                }
+            } catch (IOException ignored) {
+                // Ignored
+            }
+
+            return newFileName;
+        }, fileName -> {
+            liveData.setValue(fileName);
+            isSavingAnswerFile.setValue(false);
+        });
+
+        return liveData;
+    }
+
+    @Override
     @Nullable
     public File getAnswerFile(String fileName) {
         if (formController != null && formController.getInstanceFile() != null) {
@@ -321,6 +369,10 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         } else {
             return null;
         }
+    }
+
+    public LiveData<Boolean> isSavingAnswerFile() {
+        return isSavingAnswerFile;
     }
 
     private void clearMediaFiles() {
@@ -438,16 +490,18 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
     public static class Factory extends AbstractSavedStateViewModelFactory {
         private final Analytics analytics;
+        private final Scheduler scheduler;
 
-        public Factory(@NonNull SavedStateRegistryOwner owner, @Nullable Bundle defaultArgs, Analytics analytics) {
+        public Factory(@NonNull SavedStateRegistryOwner owner, @Nullable Bundle defaultArgs, Analytics analytics, Scheduler scheduler) {
             super(owner, defaultArgs);
             this.analytics = analytics;
+            this.scheduler = scheduler;
         }
 
         @NonNull
         @Override
         protected <T extends ViewModel> T create(@NonNull String key, @NonNull Class<T> modelClass, @NonNull SavedStateHandle handle) {
-            return (T) new FormSaveViewModel(handle, System::currentTimeMillis, new DiskFormSaver(), new MediaUtils(), analytics);
+            return (T) new FormSaveViewModel(handle, System::currentTimeMillis, new DiskFormSaver(), new MediaUtils(), analytics, scheduler);
         }
     }
 }

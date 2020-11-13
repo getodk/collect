@@ -16,11 +16,9 @@
 
 package org.odk.collect.android.fragments.dialogs;
 
-import org.javarosa.core.model.FormIndex;
 import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.IslamicChronology;
 import org.odk.collect.android.R;
-import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
 
 import java.util.Arrays;
@@ -31,13 +29,6 @@ public class IslamicDatePickerDialog extends CustomDatePickerDialog {
     private static final int MAX_SUPPORTED_YEAR = 1524; //2100 in Gregorian calendar
 
     private String[] monthsArray;
-
-    public static IslamicDatePickerDialog newInstance(FormIndex formIndex, LocalDateTime date, DatePickerDetails datePickerDetails) {
-        IslamicDatePickerDialog dialog = new IslamicDatePickerDialog();
-        dialog.setArguments(getArgs(formIndex, date, datePickerDetails));
-
-        return dialog;
-    }
 
     @Override
     public void onResume() {
@@ -81,6 +72,9 @@ public class IslamicDatePickerDialog extends CustomDatePickerDialog {
         LocalDateTime islamicDate = new LocalDateTime(islamicYear, islamicMonth + 1, 1, 0, 0, 0, 0, IslamicChronology.getInstance());
         if (islamicDay > islamicDate.dayOfMonth().getMaximumValue()) {
             islamicDay = islamicDate.dayOfMonth().getMaximumValue();
+        }
+        if (islamicDay < islamicDate.dayOfMonth().getMinimumValue()) {
+            islamicDay = islamicDate.dayOfMonth().getMinimumValue();
         }
 
         return new LocalDateTime(islamicYear, islamicMonth + 1, islamicDay, 0, 0, 0, 0, IslamicChronology.getInstance());

@@ -27,14 +27,15 @@ import android.view.View;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.databinding.AudioWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.AudioFileRequester;
+import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.audioclips.Clip;
@@ -75,6 +76,13 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
 
         hideButtonsIfNeeded();
         updatePlayerMedia();
+
+        recordingRequester.onIsRecordingChanged(isRecording -> {
+            binding.captureButton.setEnabled(!isRecording);
+            binding.chooseButton.setEnabled(!isRecording);
+        });
+
+        recordingRequester.onRecordingAvailable(getFormEntryPrompt(), this::setData);
     }
 
     @Override
@@ -173,7 +181,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
             binding.audioController.setVisibility(View.VISIBLE);
         }
 
-        if (getFormEntryPrompt().isReadOnly()) {
+        if (questionDetails.isReadOnly()) {
             binding.captureButton.setVisibility(View.GONE);
             binding.chooseButton.setVisibility(View.GONE);
         }

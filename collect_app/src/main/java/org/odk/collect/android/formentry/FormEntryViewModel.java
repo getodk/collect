@@ -83,14 +83,14 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         try {
             formController.newRepeat();
         } catch (RuntimeException e) {
-            error.setValue(e.getCause().getMessage());
+            error.setValue(e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
         }
         
         if (!formController.indexIsInFieldList()) {
             try {
                 formController.stepToNextScreenEvent();
             } catch (JavaRosaException e) {
-                error.setValue(e.getCause().getMessage());
+                error.setValue(e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
             }
         }
     }

@@ -12,6 +12,8 @@ import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.PermissionUtils;
 
+import java.util.function.Consumer;
+
 public class ExternalAppRecordingRequester implements RecordingRequester {
 
     private final Activity activity;
@@ -49,5 +51,15 @@ public class ExternalAppRecordingRequester implements RecordingRequester {
             public void denied() {
             }
         });
+    }
+
+    @Override
+    public void onIsRecordingChanged(Consumer<Boolean> isRecordingListener) {
+        isRecordingListener.accept(false);
+    }
+
+    @Override
+    public void onRecordingAvailable(FormEntryPrompt prompt, Consumer<String> recordingAvailableListener) {
+        // This could be implemented using the new Activity Result API  once it's stable
     }
 }

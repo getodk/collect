@@ -16,8 +16,8 @@ public class ExperimentalPage extends Page<ExperimentalPage> {
         return this;
     }
 
-    public ExperimentalPage clickMatchExactly() {
-        clickOnString(R.string.match_exactly);
+    public ExperimentalPage clickExternalAppRecording() {
+        clickOnString(R.string.external_app_recording);
         return this;
     }
 }

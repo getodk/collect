@@ -1,48 +1,88 @@
-<?xml version="1.0"?>
-<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<?xml version="1.0" encoding="UTF-8"?>
+<h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <h:head>
     <h:title>intent-group</h:title>
-    <model>
+    <model odk:xforms-version="1.0.0">
       <itext>
-        <translation lang="English (en)">
-          <text id="/intent-group/mygroup:label">
+        <translation lang="English">
+          <text id="/data/group:label">
             <value>Fields to populate</value>
             <value form="noAppErrorString">This is noAppErrorString</value>
             <value form="buttonText">This is buttonText</value>
           </text>
-          <text id="/intent-group/mygroup/sometext:label">
-            <value>Some text</value>
+          <text id="/data/group/questionInteger:label">
+            <value>Integer external</value>
           </text>
-          <text id="/intent-group/mygroup/someinteger:label">
-            <value>Some integer</value>
+          <text id="/data/group/questionDecimal:label">
+            <value>Decimal external</value>
+          </text>
+          <text id="/data/group/questionText:label">
+            <value>Text external</value>
+          </text>
+          <text id="/data/group/questionImage:label">
+            <value>Image external</value>
+          </text>
+          <text id="/data/group/questionAudio:label">
+            <value>Audio external</value>
+          </text>
+          <text id="/data/group/questionVideo:label">
+            <value>Video external</value>
+          </text>
+          <text id="/data/group/questionFile:label">
+            <value>File external</value>
           </text>
         </translation>
       </itext>
       <instance>
-        <intent-group id="intent-group">
-          <mygroup>
-            <sometext/>
-            <someinteger/>
-          </mygroup>
+        <data id="intent-group">
+          <group>
+            <questionInteger />
+            <questionDecimal />
+            <questionText />
+            <questionImage />
+            <questionAudio />
+            <questionVideo />
+            <questionFile />
+          </group>
           <meta>
-            <instanceID/>
+            <instanceID />
           </meta>
-        </intent-group>
+        </data>
       </instance>
-      <bind nodeset="/intent-group/mygroup/sometext" type="string"/>
-      <bind nodeset="/intent-group/mygroup/someinteger" type="int"/>
-      <bind calculate="concat('uuid:', uuid())" nodeset="/intent-group/meta/instanceID" readonly="true()" type="string"/>
+      <bind nodeset="/data/group/questionInteger" type="int" />
+      <bind nodeset="/data/group/questionDecimal" type="decimal" />
+      <bind nodeset="/data/group/questionText" type="string" />
+      <bind nodeset="/data/group/questionImage" type="binary" />
+      <bind nodeset="/data/group/questionAudio" type="binary" />
+      <bind nodeset="/data/group/questionVideo" type="binary" />
+      <bind nodeset="/data/group/questionFile" type="binary" />
+      <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string" />
     </model>
   </h:head>
   <h:body>
-    <group appearance="field-list" intent="org.mycompany.myapp(sometext='Some text', uuid=/intent-group/meta/instanceID)"  ref="/intent-group/mygroup">
-      <label ref="jr:itext('/intent-group/mygroup:label')"/>
-      <input ref="/intent-group/mygroup/sometext">
-        <label ref="jr:itext('/intent-group/mygroup/sometext:label')"/>
+    <group appearance="field-list" intent="org.mycompany.myapp(sometext='Some text', uuid=/intent-group/meta/instanceID)" ref="/data/group">
+      <label ref="jr:itext('/data/group:label')" />
+      <input ref="/data/group/questionInteger">
+        <label ref="jr:itext('/data/group/questionInteger:label')" />
       </input>
-      <input ref="/intent-group/mygroup/someinteger">
-        <label ref="jr:itext('/intent-group/mygroup/someinteger:label')"/>
+      <input ref="/data/group/questionDecimal">
+        <label ref="jr:itext('/data/group/questionDecimal:label')" />
       </input>
+      <input ref="/data/group/questionText">
+        <label ref="jr:itext('/data/group/questionText:label')" />
+      </input>
+      <upload mediatype="image/*" ref="/data/group/questionImage">
+        <label ref="jr:itext('/data/group/questionImage:label')" />
+      </upload>
+      <upload mediatype="audio/*" ref="/data/group/questionAudio">
+        <label ref="jr:itext('/data/group/questionAudio:label')" />
+      </upload>
+      <upload mediatype="video/*" ref="/data/group/questionVideo">
+        <label ref="jr:itext('/data/group/questionVideo:label')" />
+      </upload>
+      <upload mediatype="application/*" ref="/data/group/questionFile">
+        <label ref="jr:itext('/data/group/questionFile:label')" />
+      </upload>
     </group>
   </h:body>
 </h:html>

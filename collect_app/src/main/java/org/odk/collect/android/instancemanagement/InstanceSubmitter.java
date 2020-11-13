@@ -92,7 +92,7 @@ public class InstanceSubmitter {
             uploader = new InstanceServerUploader(httpInterface,
                     new WebCredentialsUtils(), new HashMap<>());
             deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
-                    .getSingularProperty(PropertyManager.withUri(PropertyManager.PROPMGR_DEVICE_ID));
+                    .getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID);
         }
 
         for (Instance instance : toUpload) {

@@ -441,9 +441,7 @@
   <string name="email">Alamat Email</string>
   <string name="user_defined">Ditentukan-pengguna</string>
   <string name="device_defined">Ditentukan-perangkat</string>
-  <string name="device_id">ID perangkat - akan diganti oleh ID instalasi di Collect v1.29</string>
-  <string name="subscriber_id">ID Pengikut - akan di hapus di Collect v1.29</string>
-  <string name="sim_serial_id">ID Pengikut - akan di hapus di Collect v1.29</string>
+  <string name="device_id">ID perangkat</string>
   <string name="select_date">Pilih tanggal</string>
   <string name="select_time">Pilih waktu</string>
   <string name="no_date_selected">Tanggal tidak dipilih</string>
@@ -661,7 +659,6 @@
   <string name="storage_migration_failed">Migrasi data tidak berhasil. Mohon coba lagi.</string>
   <string name="storage_migration_dialog_title">Migrasi penyimpanan</string>
   <string name="storage_migration_progress_msg">Migrasi sedang berlangsung.\nProses ini mungkin perlu beberapa detik…</string>
-  <string name="install_id">Install ID - akan menggantikan ID perangkat di Collect v1.29</string>
   <string name="preference_not_available">Tidak tersedia</string>
   <string name="custom_server_paths">Jalur server khusus</string>
   <string name="legacy_custom_server_paths_summary">Akan dihapus di versi mendatang. Silakan gunakan /formList dan /submission di server anda.</string>

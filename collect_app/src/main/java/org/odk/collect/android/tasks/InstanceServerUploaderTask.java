@@ -66,7 +66,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
         List<Instance> instancesToUpload = uploader.getInstancesFromIds(instanceIdsToUpload);
 
         String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
-                    .getSingularProperty(PropertyManager.withUri(PropertyManager.PROPMGR_DEVICE_ID));
+                    .getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID);
 
         for (int i = 0; i < instancesToUpload.size(); i++) {
             if (isCancelled()) {

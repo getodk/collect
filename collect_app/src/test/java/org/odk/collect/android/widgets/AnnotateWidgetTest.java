@@ -46,7 +46,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     @NonNull
     @Override
     public AnnotateWidget createWidget() {
-        return new AnnotateWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"),
+        return new AnnotateWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride),
                 new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry());
     }
 
@@ -89,6 +89,16 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     @Test
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
+
+        assertThat(getSpyWidget().captureButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().chooseButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().annotateButton.getVisibility(), is(View.GONE));
+    }
+
+    @Test
+    public void whenReadOnlyOverrideOptionIsUsed_shouldAllClickableElementsBeDisabled() {
+        readOnlyOverride = true;
+        when(formEntryPrompt.isReadOnly()).thenReturn(false);
 
         assertThat(getSpyWidget().captureButton.getVisibility(), is(View.GONE));
         assertThat(getSpyWidget().chooseButton.getVisibility(), is(View.GONE));

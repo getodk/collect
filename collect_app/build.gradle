@@ -70,8 +70,8 @@ def mapboxToken = secrets.getProperty('MAPBOX_ACCESS_TOKEN', '')
 android {
     compileSdkVersion rootProject.androidCompileSdk
 
-    viewBinding {
-        enabled = true
+    buildFeatures {
+        viewBinding true
     }
 
     defaultConfig {

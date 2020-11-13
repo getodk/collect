@@ -22,6 +22,7 @@ import android.widget.DatePicker;
 import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.junit.After;
 import org.junit.Before;
@@ -33,7 +34,7 @@ import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.DateWidget;
-import org.odk.collect.android.widgets.TimeWidget;
+import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.TimeZone;
@@ -54,10 +55,14 @@ public class DaylightSavingTest {
     private static final String EAT_IME_ZONE = "Africa/Nairobi";
     private static final String CET_TIME_ZONE = "Europe/Warsaw";
 
+    private TestScreenContextActivity widgetActivity;
+    private DateTimeWidgetUtils widgetUtils;
     private TimeZone currentTimeZone;
 
     @Before
     public void setUp() {
+        widgetActivity = RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
+        widgetUtils = mock(DateTimeWidgetUtils.class);
         currentTimeZone = TimeZone.getDefault();
     }
 
@@ -112,7 +117,7 @@ public class DaylightSavingTest {
         when(datePickerDialog.getDatePicker().getMonth()).thenReturn(month);
         when(datePickerDialog.getDatePicker().getDayOfMonth()).thenReturn(day);
 
-        return new DateWidget(RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get(), new QuestionDetails(formEntryPromptStub, "formAnalyticsID"));
+        return new DateWidget(widgetActivity, new QuestionDetails(formEntryPromptStub, "formAnalyticsID"), widgetUtils);
     }
 
     private DateTimeWidget prepareDateTimeWidget(int year, int month, int day, int hour, int minute) {
@@ -128,16 +133,9 @@ public class DaylightSavingTest {
         when(formEntryPromptStub.getFormElement()).thenReturn(iformElementStub);
         when(formEntryPromptStub.getQuestion().getAppearanceAttr()).thenReturn("no-calendar");
 
-        DateWidget dateWidget = mock(DateWidget.class);
-        when(dateWidget.getDate()).thenReturn(new LocalDateTime().withYear(year).withMonthOfYear(month).withDayOfMonth(day));
-
-        TimeWidget timeWidget = mock(TimeWidget.class);
-        when(timeWidget.getHour()).thenReturn(hour);
-        when(timeWidget.getMinute()).thenReturn(minute);
-
-        DateTimeWidget dateTimeWidget = new DateTimeWidget(RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get(), new QuestionDetails(formEntryPromptStub, "formAnalyticsID"));
-        dateTimeWidget.setDateWidget(dateWidget);
-        dateTimeWidget.setTimeWidget(timeWidget);
+        DateTimeWidget dateTimeWidget = new DateTimeWidget(widgetActivity, new QuestionDetails(formEntryPromptStub, "formAnalyticsID"), widgetUtils);
+        dateTimeWidget.setData(new LocalDateTime().withDate(year, month, day));
+        dateTimeWidget.setData(new DateTime().withTime(hour, minute, 0, 0));
 
         return dateTimeWidget;
     }

@@ -445,9 +445,7 @@
   <string name="email">Dirección de correo electrónico</string>
   <string name="user_defined">Definido por el usuario</string>
   <string name="device_defined">Definido por el dispositivo</string>
-  <string name="device_id">ID de dispositivo - será reemplazado por ID de instalación  en versión v1.29 </string>
-  <string name="subscriber_id">ID de suscriptor - será removido en versión v1.29</string>
-  <string name="sim_serial_id">Número de serie SIM - será removido en la versión v1.29</string>
+  <string name="device_id">ID de dispositivo</string>
   <string name="select_date">Seleccione la fecha</string>
   <string name="select_time">Seleccione la hora</string>
   <string name="no_date_selected">No se ha seleccionado una fecha</string>
@@ -665,7 +663,6 @@
   <string name="storage_migration_failed">La migración de datos falló. Inténtalo de nuevo.</string>
   <string name="storage_migration_dialog_title">Migración de almacenamiento</string>
   <string name="storage_migration_progress_msg">Migración en progreso.\nEsto puede tomar algunos segundos.</string>
-  <string name="install_id">ID Instalación - reemplazará al IMEI en Collect v1.29</string>
   <string name="preference_not_available">No disponible</string>
   <string name="custom_server_paths">Rutas de servidor personalizadas</string>
   <string name="legacy_custom_server_paths_summary">Será removido en una próxima versión. Favor usar /formList y /submission en su servidor.</string>
