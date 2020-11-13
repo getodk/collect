@@ -16,6 +16,7 @@ package org.odk.collect.android.utilities;
 
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
@@ -24,10 +25,14 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.provider.OpenableColumns;
+import android.webkit.MimeTypeMap;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.apache.commons.io.IOUtils;
+import org.odk.collect.android.BuildConfig;
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.network.NetworkStateProvider;
@@ -90,6 +95,28 @@ public class MediaUtils {
 
     public void deleteMediaFile(String imageFile) {
         deleteAndReport(new File(imageFile));
+    }
+
+    public void openFile(Context context, File file) {
+        Uri fileUri = Uri.fromFile(file);
+        Uri contentUri = ContentUriProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", file);
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setDataAndType(contentUri, getMimeType(getPathFromUri(context, fileUri, null)));
+        FileUtils.grantFileReadPermissions(intent, contentUri, context);
+
+        if (new ActivityAvailability(context).isActivityAvailable(intent)) {
+            context.startActivity(intent);
+        } else {
+            String message = context.getString(R.string.activity_not_found, context.getString(R.string.open_file));
+            ToastUtils.showLongToast(message);
+            Timber.w(message);
+        }
+    }
+
+    public String getMimeType(String url) {
+        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+        return extension != null ? MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension) : null;
     }
 
     /**

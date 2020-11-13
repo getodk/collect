@@ -24,7 +24,6 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import androidx.annotation.NonNull;
 import android.view.Gravity;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,18 +31,13 @@ import android.widget.TextView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtil;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
-import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
@@ -179,7 +173,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
         answerLayout.addView(attachmentImg);
         answerLayout.addView(chosenFileNameTextView);
         answerLayout.setVisibility(binaryName == null ? GONE : VISIBLE);
-        answerLayout.setOnClickListener(view -> openFile());
+        answerLayout.setOnClickListener(view -> mediaUtils.openFile(getContext(), new File(getInstanceFolder() + File.separator + binaryName)));
 
         widgetLayout.addView(chooseFileButton);
         widgetLayout.addView(answerLayout);
@@ -196,30 +190,5 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
 
     private String getSourcePathFromUri(@NonNull Uri uri) {
         return mediaUtils.getPathFromUri(getContext(), uri, MediaStore.Files.FileColumns.DATA);
-    }
-
-    public String getMimeType(String url) {
-        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
-        return extension != null ? MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension) : null;
-    }
-
-    private void openFile() {
-
-        Uri fileUri = Uri.fromFile(new File(getInstanceFolder() + File.separator + binaryName));
-        Uri contentUri = ContentUriProvider.getUriForFile(getContext(),
-                BuildConfig.APPLICATION_ID + ".provider",
-                new File(getInstanceFolder() + File.separator + binaryName));
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(contentUri, getMimeType(getSourcePathFromUri(fileUri)));
-        FileUtils.grantFileReadPermissions(intent, contentUri, getContext());
-
-        if (new ActivityAvailability(getContext()).isActivityAvailable(intent)) {
-            getContext().startActivity(intent);
-        } else {
-            String message = getContext().getString(R.string.activity_not_found, getContext().getString(R.string.open_file));
-            ToastUtils.showLongToast(message);
-            Timber.w(message);
-        }
     }
 }
