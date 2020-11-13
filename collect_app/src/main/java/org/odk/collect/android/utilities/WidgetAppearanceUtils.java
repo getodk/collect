@@ -16,7 +16,6 @@
 
 package org.odk.collect.android.utilities;
 
-import android.content.Context;
 import android.content.res.Configuration;
 
 import org.javarosa.form.api.FormEntryPrompt;
@@ -114,7 +113,7 @@ public class WidgetAppearanceUtils {
     appearance (compact-n for backwards compatibility), that number is determined from the n in the
     appearance string. For columns (without any number), this is determined by the device screen size.
      */
-    public static int getNumberOfColumns(FormEntryPrompt formEntryPrompt, Context context) {
+    public static int getNumberOfColumns(FormEntryPrompt formEntryPrompt, ScreenUtils screenUtils) {
         int numColumns = 1;
         String appearance = getSanitizedAppearanceHint(formEntryPrompt);
         if (appearance.contains(COLUMNS_N) || appearance.contains(COMPACT_N)) {
@@ -141,7 +140,7 @@ public class WidgetAppearanceUtils {
                 Timber.e(EXCEPTION_PARSING_COLUMNS);
             }
         } else if (appearance.contains(COLUMNS)) {
-            switch (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) {
+            switch (screenUtils.getScreenSizeConfiguration()) {
                 case Configuration.SCREENLAYOUT_SIZE_SMALL:
                     numColumns = 2;
                     break;
@@ -181,8 +180,8 @@ public class WidgetAppearanceUtils {
     public static boolean isFlexAppearance(FormEntryPrompt prompt) {
         String appearance = getSanitizedAppearanceHint(prompt);
 
-        return !appearance.startsWith(COMPACT_N) && (appearance.startsWith(COMPACT)
-                || appearance.startsWith(QUICKCOMPACT) || appearance.startsWith(COLUMNS_PACK));
+        return !appearance.contains(COMPACT_N) && (appearance.contains(COMPACT)
+                || appearance.contains(QUICKCOMPACT) || appearance.contains(COLUMNS_PACK));
     }
 
     public static boolean isAutocomplete(FormEntryPrompt prompt) {
