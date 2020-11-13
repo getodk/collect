@@ -88,7 +88,7 @@ public class MediaUtils {
         }
     }
 
-    public void deleteImageFileFromMediaProvider(String imageFile) {
+    public void deleteMediaFile(String imageFile) {
         deleteAndReport(new File(imageFile));
     }
 
