@@ -39,9 +39,28 @@ public class ImageConverter {
     private ImageConverter() {
     }
 
+    /**
+     * Before proceed with scaling or rotating, make sure existing exif information is stored/restored.
+     * @author Khuong Ninh (khuong.ninh@it-development.com)
+     */
     public static void execute(String imagePath, QuestionWidget questionWidget, Context context) {
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(imagePath);
+        } catch (IOException e) {
+            Timber.w(e);
+        }
+
         rotateImageIfNeeded(imagePath);
         scaleDownImageIfNeeded(imagePath, questionWidget, context);
+        
+        if (exif != null) {
+            try {
+                exif.saveAttributes();
+            } catch (IOException e) {
+                Timber.w(e);
+            }
+        }
     }
 
     private static void scaleDownImageIfNeeded(String imagePath, QuestionWidget questionWidget, Context context) {
