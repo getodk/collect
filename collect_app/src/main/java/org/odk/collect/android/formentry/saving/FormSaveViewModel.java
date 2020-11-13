@@ -46,8 +46,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import timber.log.Timber;
-
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED;
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED_AND_EXIT;
 import static org.odk.collect.android.utilities.StringUtils.isBlank;
@@ -152,16 +150,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
                 // if it's not already saved, erase everything
                 if (!InstancesDaoHelper.isInstanceAvailable(getAbsoluteInstancePath())) {
-                    // delete media first
                     String instanceFolder = formController.getInstanceFile().getParent();
-                    Timber.i("Attempting to delete: %s", instanceFolder);
-                    File file = formController.getInstanceFile().getParentFile();
-                    int images = MediaUtils.deleteImagesInFolderFromMediaProvider(file);
-                    int audio = MediaUtils.deleteAudioInFolderFromMediaProvider(file);
-                    int video = MediaUtils.deleteVideoInFolderFromMediaProvider(file);
-
-                    Timber.i("Removed from content providers: %d image files, %d audio files and %d audio files.",
-                            images, audio, video);
                     FileUtils.purgeMediaPath(instanceFolder);
                 }
             }

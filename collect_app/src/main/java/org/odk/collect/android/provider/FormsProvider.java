@@ -261,16 +261,6 @@ public class FormsProvider extends ContentProvider {
         File file = new File(fileName);
         if (file.exists()) {
             if (file.isDirectory()) {
-                // delete any media entries for files in this directory...
-                int images = MediaUtils
-                        .deleteImagesInFolderFromMediaProvider(file);
-                int audio = MediaUtils
-                        .deleteAudioInFolderFromMediaProvider(file);
-                int video = MediaUtils
-                        .deleteVideoInFolderFromMediaProvider(file);
-
-                Timber.i("removed from content providers: %d image files, %d audio files, and %d video files.", images, audio, video);
-
                 // delete all the containing files
                 File[] files = file.listFiles();
                 if (files != null) {
