@@ -47,6 +47,8 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.FileUtils.deleteAndReport;
+
 /**
  * Consolidate all interactions with media providers here.
  * <p>
@@ -91,49 +93,8 @@ public class MediaUtils {
         }
     }
 
-    public int deleteImageFileFromMediaProvider(String imageFile) {
-        ContentResolver cr = Collect.getInstance().getContentResolver();
-        // images
-        int count = 0;
-        Cursor imageCursor = null;
-        try {
-            String select = Images.Media.DATA + "=?";
-            String[] selectArgs = {imageFile};
-
-            String[] projection = {Images.ImageColumns._ID};
-            imageCursor = cr
-                    .query(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                            projection, select, selectArgs, null);
-            if (imageCursor.getCount() > 0) {
-                imageCursor.moveToFirst();
-                List<Uri> imagesToDelete = new ArrayList<>();
-                do {
-                    String id = imageCursor.getString(imageCursor
-                            .getColumnIndex(Images.ImageColumns._ID));
-
-                    imagesToDelete
-                            .add(Uri.withAppendedPath(
-                                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                                    id));
-                } while (imageCursor.moveToNext());
-
-                for (Uri uri : imagesToDelete) {
-                    Timber.i("attempting to delete: %s", uri.toString());
-                    count += cr.delete(uri, null, null);
-                }
-            }
-        } catch (Exception e) {
-            Timber.e(e, "Unable to delete image file from media provider");
-        } finally {
-            if (imageCursor != null) {
-                imageCursor.close();
-            }
-        }
-        File f = new File(imageFile);
-        if (f.exists()) {
-            f.delete();
-        }
-        return count;
+    public void deleteImageFileFromMediaProvider(String imageFile) {
+        deleteAndReport(new File(imageFile));
     }
 
     public static final int deleteImagesInFolderFromMediaProvider(File folder) {
