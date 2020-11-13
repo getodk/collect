@@ -116,7 +116,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
         // get the file path and create a copy in the instance folder
         if (object instanceof Uri) {
             String sourcePath = mediaUtils.getPath(getContext(), (Uri) object);
-            String destinationPath = mediaUtils.getDestinationPathFromSourcePath(sourcePath, getInstanceFolder(), fileUtil);
+            String destinationPath = mediaUtils.getDestinationPathFromSourcePath(sourcePath, getInstanceFolder());
             File source = fileUtil.getFileAtPath(sourcePath);
             newFile = fileUtil.getFileAtPath(destinationPath);
             fileUtil.copyFile(source, newFile);

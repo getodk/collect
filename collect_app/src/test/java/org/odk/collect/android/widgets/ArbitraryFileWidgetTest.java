@@ -1,6 +1,5 @@
 package org.odk.collect.android.widgets;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
@@ -25,7 +24,6 @@ import java.io.File;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -108,10 +106,9 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
     public void prepareForSetAnswer() {
         when(formEntryPrompt.isReadOnly()).thenReturn(false);
 
-        when(mediaUtils.getPath(any(Context.class), any(Uri.class)))
-                .thenReturn(String.format("%s.pdf", RandomString.make()));
-
-        when(fileUtil.getRandomFilename()).thenReturn(destinationName);
+        String sourcePath = String.format("%s.pdf", RandomString.make());
+        when(mediaUtils.getPath(activity, uri)).thenReturn(sourcePath);
+        when(mediaUtils.getDestinationPathFromSourcePath(sourcePath, "")).thenReturn(File.separator + destinationName + ".pdf");
 
         File firstFile = mock(File.class);
 

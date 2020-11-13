@@ -179,7 +179,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         // get the file path and create a copy in the instance folder
         if (object instanceof Uri) {
             String sourcePath = mediaUtils.getPath(getContext(), (Uri) object);
-            String destinationPath = mediaUtils.getDestinationPathFromSourcePath(sourcePath, getInstanceFolder(), fileUtil);
+            String destinationPath = mediaUtils.getDestinationPathFromSourcePath(sourcePath, getInstanceFolder());
             File source = fileUtil.getFileAtPath(sourcePath);
             newVideo = fileUtil.getFileAtPath(destinationPath);
             fileUtil.copyFile(source, newVideo);

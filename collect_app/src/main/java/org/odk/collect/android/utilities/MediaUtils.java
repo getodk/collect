@@ -86,9 +86,9 @@ public class MediaUtils {
         return extension != null ? MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension) : null;
     }
 
-    public String getDestinationPathFromSourcePath(@NonNull String sourcePath, String instanceFolder, FileUtil fileUtil) {
+    public String getDestinationPathFromSourcePath(@NonNull String sourcePath, String instanceFolder) {
         String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
-        return instanceFolder + File.separator + fileUtil.getRandomFilename() + extension;
+        return instanceFolder + File.separator + new FileUtil().getRandomFilename() + extension;
     }
 
     /**

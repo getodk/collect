@@ -92,13 +92,11 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
     public void prepareForSetAnswer() {
         when(formEntryPrompt.isReadOnly()).thenReturn(false);
 
-        when(mediaUtils.getPath(activity, uri)
+        String sourcePath = String.format("%s.mp4", RandomString.make());
+        when(mediaUtils.getPath(activity, uri)).thenReturn(sourcePath);
+        when(mediaUtils.getDestinationPathFromSourcePath(sourcePath, "")).thenReturn(File.separator + destinationName + ".mp4");
 
-        ).thenReturn(String.format("%s.mp4", RandomString.make()));
-
-        when(fileUtil.getRandomFilename()).thenReturn(destinationName);
-        when(fileUtil.getFileAtPath(File.separator + destinationName + ".mp4"))
-                .thenReturn(file);
+        when(fileUtil.getFileAtPath(File.separator + destinationName + ".mp4")).thenReturn(file);
 
         when(file.getName()).thenReturn(destinationName);
     }
