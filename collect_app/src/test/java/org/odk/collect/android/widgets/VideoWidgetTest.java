@@ -92,10 +92,7 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
     public void prepareForSetAnswer() {
         when(formEntryPrompt.isReadOnly()).thenReturn(false);
 
-        when(mediaUtils.getPathFromUri(
-                activity,
-                uri,
-                MediaStore.Video.Media.DATA)
+        when(mediaUtils.getPath(activity, uri)
 
         ).thenReturn(String.format("%s.mp4", RandomString.make()));
 

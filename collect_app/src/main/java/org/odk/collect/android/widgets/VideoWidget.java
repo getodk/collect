@@ -178,7 +178,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         File newVideo = null;
         // get the file path and create a copy in the instance folder
         if (object instanceof Uri) {
-            String sourcePath = getSourcePathFromUri((Uri) object);
+            String sourcePath = mediaUtils.getPath(getContext(), (Uri) object);
             String destinationPath = mediaUtils.getDestinationPathFromSourcePath(sourcePath, getInstanceFolder(), fileUtil);
             File source = fileUtil.getFileAtPath(sourcePath);
             newVideo = fileUtil.getFileAtPath(destinationPath);
@@ -210,10 +210,6 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
                 && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains(WidgetAppearanceUtils.NEW))) {
             chooseButton.setVisibility(View.GONE);
         }
-    }
-
-    private String getSourcePathFromUri(@NonNull Uri uri) {
-        return mediaUtils.getPathFromUri(getContext(), uri, Video.Media.DATA);
     }
 
     @Override

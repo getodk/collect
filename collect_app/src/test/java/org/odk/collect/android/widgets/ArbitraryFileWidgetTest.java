@@ -108,7 +108,7 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
     public void prepareForSetAnswer() {
         when(formEntryPrompt.isReadOnly()).thenReturn(false);
 
-        when(mediaUtils.getPathFromUri(any(Context.class), any(Uri.class), any(String.class)))
+        when(mediaUtils.getPath(any(Context.class), any(Uri.class)))
                 .thenReturn(String.format("%s.pdf", RandomString.make()));
 
         when(fileUtil.getRandomFilename()).thenReturn(destinationName);

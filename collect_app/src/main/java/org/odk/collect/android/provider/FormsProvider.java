@@ -34,7 +34,6 @@ import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MediaUtils;
 
 import java.io.File;
 import java.util.HashMap;
