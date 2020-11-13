@@ -18,8 +18,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.hardware.SensorManager;
 
-import androidx.activity.ComponentActivity;
-
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
@@ -32,7 +30,6 @@ import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
-import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.items.ItemsetWidget;
 import org.odk.collect.android.widgets.items.LabelWidget;
@@ -53,7 +50,6 @@ import org.odk.collect.android.widgets.utilities.GetContentAudioFileRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterFactory;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.PROMPT;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MAPS;
@@ -69,22 +65,37 @@ public class WidgetFactory {
 
     private static final String PICKER_APPEARANCE = "picker";
 
-    private WidgetFactory() {
+    private final Activity context;
+    private final boolean readOnlyOverride;
+    private final boolean useExternalRecorder;
+    private final WaitingForDataRegistry waitingForDataRegistry;
+    private final QuestionMediaManager questionMediaManager;
+    private final Analytics analytics;
+    private final AudioPlayer audioPlayer;
+    private final ActivityAvailability activityAvailability;
+    private final RecordingRequesterFactory recordingRequesterFactory;
 
+    public WidgetFactory(Activity activity,
+                         boolean readOnlyOverride,
+                         boolean useExternalRecorder,
+                         WaitingForDataRegistry waitingForDataRegistry,
+                         QuestionMediaManager questionMediaManager,
+                         Analytics analytics,
+                         AudioPlayer audioPlayer,
+                         ActivityAvailability activityAvailability,
+                         RecordingRequesterFactory recordingRequesterFactory) {
+        this.context = activity;
+        this.readOnlyOverride = readOnlyOverride;
+        this.useExternalRecorder = useExternalRecorder;
+        this.waitingForDataRegistry = waitingForDataRegistry;
+        this.questionMediaManager = questionMediaManager;
+        this.analytics = analytics;
+        this.audioPlayer = audioPlayer;
+        this.activityAvailability = activityAvailability;
+        this.recordingRequesterFactory = recordingRequesterFactory;
     }
 
-    @SuppressWarnings("PMD.ExcessiveParameterList")
-    public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt,
-                                                        Context context,
-                                                        boolean readOnlyOverride,
-                                                        WaitingForDataRegistry waitingForDataRegistry,
-                                                        QuestionMediaManager questionMediaManager,
-                                                        Analytics analytics,
-                                                        AudioPlayer audioPlayer,
-                                                        ActivityAvailability activityAvailability,
-                                                        AudioRecorderViewModel audioRecorderViewModel,
-                                                        boolean useExternalRecorder) {
-
+    public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt) {
         String appearance = WidgetAppearanceUtils.getSanitizedAppearanceHint(prompt);
         QuestionDetails questionDetails = new QuestionDetails(prompt, Collect.getCurrentFormIdentifierHash(), readOnlyOverride);
         PermissionUtils permissionUtils = new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert);
@@ -180,10 +191,8 @@ public class WidgetFactory {
                 questionWidget = new OSMWidget(context, questionDetails, waitingForDataRegistry);
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
-                final RecordingRequesterFactory recordingRequesterFactory = new RecordingRequesterFactory(waitingForDataRegistry, questionMediaManager, activityAvailability, audioRecorderViewModel, permissionUtils, (ComponentActivity) context, ((ScreenContext) (ComponentActivity) context).getViewLifecycle());
                 RecordingRequester recordingRequester = recordingRequesterFactory.create(prompt, useExternalRecorder);
-                questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, recordingRequester, new GetContentAudioFileRequester((Activity) context, activityAvailability, waitingForDataRegistry));
-
+                questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, recordingRequester, new GetContentAudioFileRequester(context, activityAvailability, waitingForDataRegistry));
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
                 questionWidget = new VideoWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);

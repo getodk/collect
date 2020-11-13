@@ -1305,7 +1305,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .of(this, factory)
                 .get(AudioClipViewModel.class), odkViewLifecycle);
 
-        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer);
+        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorderViewModel);
     }
 
     @Override
@@ -2803,7 +2803,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     && !questionsAfterSave[i].getIndex().equals(lastChangedIndex)) {
                 // The values of widgets in intent groups are set by the view so widgetValueChanged
                 // is never called. This means readOnlyOverride can always be set to false.
-                odkView.addWidgetForQuestion(questionsAfterSave[i], false, i);
+                odkView.addWidgetForQuestion(questionsAfterSave[i], i);
             }
         }
     }
