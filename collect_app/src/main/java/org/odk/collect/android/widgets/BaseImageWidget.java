@@ -49,6 +49,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
+import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.io.File;
@@ -101,14 +102,10 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     }
 
     @Override
-    public void setData(Object newImageObj) {
-        // you are replacing an answer. delete the previous image using the
-        // content provider.
-        if (binaryName != null) {
-            deleteFile();
-        }
-
-        File newImage = (File) newImageObj;
+    public void setData(Object object) {
+        binaryName = FileWidgetUtils.updateWidgetAnswer(getContext(), object, getFormEntryPrompt().getIndex().toString(),
+                getInstanceFolder(), binaryName, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true);
+        File newImage = (File) object;
         if (newImage.exists()) {
             // Add the new image to the Media content provider so that the
             // viewing is fast in Android 2.0+
@@ -132,10 +129,8 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             Timber.i("Setting current answer to %s", newImage.getName());
 
             addCurrentImageToLayout();
-            widgetValueChanged();
-        } else {
-            Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }
+        widgetValueChanged();
     }
 
     @Override

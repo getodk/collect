@@ -6,19 +6,19 @@
     <org.odk.collect.android.views.MultiClickSafeButton
         android:id="@+id/capture_video"
         style="@style/Widget.Collect.Button.CustomLayout"
-        android:text="@string/capture_audio">
+        android:text="@string/capture_video">
     </org.odk.collect.android.views.MultiClickSafeButton>
 
     <org.odk.collect.android.views.MultiClickSafeButton
         android:id="@+id/choose_video"
         style="@style/Widget.Collect.Button.CustomLayout"
-        android:text="@string/choose_sound">
+        android:text="@string/choose_video">
     </org.odk.collect.android.views.MultiClickSafeButton>
 
     <org.odk.collect.android.views.MultiClickSafeButton
         android:id="@+id/play_video"
         style="@style/Widget.Collect.Button.CustomLayout"
-        android:text="@string/capture_audio">
+        android:text="@string/play_video">
     </org.odk.collect.android.views.MultiClickSafeButton>
 
 </LinearLayout>

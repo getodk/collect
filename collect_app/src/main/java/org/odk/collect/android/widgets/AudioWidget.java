@@ -16,10 +16,8 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.media.MediaMetadataRetriever;
-import android.net.Uri;
 import android.provider.MediaStore.Audio;
 import android.util.TypedValue;
 import android.view.View;
@@ -37,13 +35,12 @@ import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.AudioFileRequester;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
+import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.audioclips.Clip;
 
 import java.io.File;
 import java.util.Locale;
-
-import timber.log.Timber;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -114,11 +111,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
 
     @Override
     public IAnswerData getAnswer() {
-        if (binaryName != null) {
-            return new StringData(binaryName);
-        } else {
-            return null;
-        }
+        return binaryName != null ? new StringData(binaryName) : null;
     }
 
     /**
@@ -127,47 +120,12 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
      */
     @Override
     public void setData(Object object) {
-        // Support being handed a File as well
-        if (object instanceof File) {
-            object = (String) ((File) object).getName();
-        }
-        if (object instanceof String) {
-            String fileName = (String) object;
-            File newAudio = questionMediaManager.getAnswerFile(fileName);
+        binaryName = FileWidgetUtils.updateWidgetAnswer(getContext(), object, getFormEntryPrompt().getIndex().toString(),
+                getInstanceFolder(), binaryName, Audio.Media.EXTERNAL_CONTENT_URI, false);
+        widgetValueChanged();
 
-            if (newAudio != null && newAudio.exists()) {
-                // Add the copy to the content provider
-                ContentValues values = new ContentValues(6);
-                values.put(Audio.Media.TITLE, newAudio.getName());
-                values.put(Audio.Media.DISPLAY_NAME, newAudio.getName());
-                values.put(Audio.Media.DATE_ADDED, System.currentTimeMillis());
-                values.put(Audio.Media.DATA, newAudio.getAbsolutePath());
-
-                questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
-                Uri audioURI = getContext().getContentResolver().insert(Audio.Media.EXTERNAL_CONTENT_URI, values);
-
-                if (audioURI != null) {
-                    Timber.i("Inserting AUDIO returned uri = %s", audioURI.toString());
-                }
-
-                // when replacing an answer. remove the current media.
-                if (binaryName != null && !binaryName.equals(newAudio.getName())) {
-                    deleteFile();
-                }
-
-                binaryName = newAudio.getName();
-                Timber.i("Setting current answer to %s", newAudio.getName());
-
-                hideButtonsIfNeeded();
-                updatePlayerMedia();
-                widgetValueChanged();
-            } else {
-                Timber.e("Inserting Audio file FAILED");
-            }
-        } else {
-            Timber.w("AudioWidget's setBinaryData must receive a File object.");
-            return;
-        }
+        hideButtonsIfNeeded();
+        updatePlayerMedia();
     }
 
     private void hideButtonsIfNeeded() {

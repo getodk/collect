@@ -16,18 +16,15 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore.Video;
+import android.provider.MediaStore;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -45,10 +42,7 @@ import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.CameraUtilsProvider;
 import org.odk.collect.android.utilities.ContentUriFetcher;
 import org.odk.collect.android.utilities.ContentUriProvider;
-import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FileUtils;
-
-import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
@@ -84,27 +78,18 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
     private final ActivityAvailability activityAvailability;
     private final ContentUriFetcher contentUriFetcher;
 
-    @NonNull
-    private MediaUtil mediaUtil;
-
-    @NonNull
-    private FileUtil fileUtil;
-
     private String binaryName;
     private boolean selfie;
 
     public VideoWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
-        this(context, prompt, new FileUtil(), new MediaUtil(), waitingForDataRegistry, new CameraUtils(), MediaManager.INSTANCE,
+        this(context, prompt, waitingForDataRegistry, new CameraUtils(), MediaManager.INSTANCE,
                 new ActivityAvailability(context), new ContentUriProvider());
     }
 
-    public VideoWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil,
-                       WaitingForDataRegistry waitingForDataRegistry, CameraUtilsProvider cameraUtilsProvider,
+    public VideoWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, CameraUtilsProvider cameraUtilsProvider,
                        QuestionMediaManager questionMediaManager, ActivityAvailability activityAvailability, ContentUriFetcher contentUriFetcher) {
         super(context, questionDetails);
 
-        this.fileUtil = fileUtil;
-        this.mediaUtil = mediaUtil;
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
         this.activityAvailability = activityAvailability;
@@ -161,17 +146,12 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
 
         // reset buttons
         binding.playVideo.setEnabled(false);
-
         widgetValueChanged();
     }
 
     @Override
     public IAnswerData getAnswer() {
-        if (binaryName != null) {
-            return new StringData(binaryName);
-        } else {
-            return null;
-        }
+        return binaryName != null ? new StringData(binaryName) : null;
     }
 
     /**
@@ -187,49 +167,10 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
      */
     @Override
     public void setData(Object object) {
-        File newVideo = null;
-        // get the file path and create a copy in the instance folder
-        if (object instanceof Uri) {
-            String sourcePath = getSourcePathFromUri((Uri) object);
-            String destinationPath = FileWidgetUtils.getDestinationPathFromSourcePath(sourcePath, getInstanceFolder(), fileUtil);
-            File source = fileUtil.getFileAtPath(sourcePath);
-            newVideo = fileUtil.getFileAtPath(destinationPath);
-            fileUtil.copyFile(source, newVideo);
-        } else if (object instanceof File) {
-            newVideo = (File) object;
-        } else {
-            Timber.w("VideoWidget's setBinaryData must receive a File or Uri object.");
-            return;
-        }
-
-        if (newVideo.exists()) {
-            // Add the copy to the content provier
-            ContentValues values = new ContentValues(6);
-            values.put(Video.Media.TITLE, newVideo.getName());
-            values.put(Video.Media.DISPLAY_NAME, newVideo.getName());
-            values.put(Video.Media.DATE_ADDED, System.currentTimeMillis());
-            values.put(Video.Media.DATA, newVideo.getAbsolutePath());
-
-            questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newVideo.getAbsolutePath());
-
-            Uri videoURI = getContext().getContentResolver().insert(
-                    Video.Media.EXTERNAL_CONTENT_URI, values);
-
-            if (videoURI != null) {
-                Timber.i("Inserting VIDEO returned uri = %s", videoURI.toString());
-            }
-
-            // you are replacing an answer. remove the media.
-            if (binaryName != null && !binaryName.equals(newVideo.getName())) {
-                deleteFile();
-            }
-
-            binaryName = newVideo.getName();
-            widgetValueChanged();
-            binding.playVideo.setEnabled(binaryName != null);
-        } else {
-            Timber.e("Inserting Video file FAILED");
-        }
+        binaryName = FileWidgetUtils.updateWidgetAnswer(getContext(), object, getFormEntryPrompt().getIndex().toString(),
+                getInstanceFolder(), binaryName, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, false);
+        binding.playVideo.setEnabled(binaryName != null);
+        widgetValueChanged();
     }
 
     private void hideButtonsIfNeeded() {
@@ -237,10 +178,6 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
                 && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains(WidgetAppearanceUtils.NEW))) {
             binding.chooseVideo.setVisibility(View.GONE);
         }
-    }
-
-    private String getSourcePathFromUri(@NonNull Uri uri) {
-        return mediaUtil.getPathFromUri(getContext(), uri, Video.Media.DATA);
     }
 
     @Override
@@ -290,8 +227,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
             intent = new Intent(getContext(), CaptureSelfieVideoActivity.class);
         } else {
             intent = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
-            intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                    Video.Media.EXTERNAL_CONTENT_URI.toString());
+            intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString());
         }
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
 

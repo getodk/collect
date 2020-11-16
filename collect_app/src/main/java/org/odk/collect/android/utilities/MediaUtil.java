@@ -9,7 +9,10 @@ import androidx.annotation.NonNull;
  */
 public class MediaUtil {
 
-    public String getPathFromUri(@NonNull Context ctxt, @NonNull Uri uri, @NonNull String pathKey) {
+    private MediaUtil() {
+    }
+
+    public static String getPathFromUri(@NonNull Context ctxt, @NonNull Uri uri, @NonNull String pathKey) {
         return MediaUtils.getPathFromUri(ctxt, uri, pathKey);
     }
 
