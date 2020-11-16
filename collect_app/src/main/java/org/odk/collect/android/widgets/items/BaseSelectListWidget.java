@@ -22,7 +22,6 @@ import static org.odk.collect.android.analytics.AnalyticsEvents.PROMPT;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
 
 public abstract class BaseSelectListWidget extends ItemsWidget implements MultiChoiceWidget, SelectItemClickListener {
-    private static final String SEARCH_TEXT = "search_text";
 
     SelectListWidgetAnswerBinding binding;
     protected AbstractSelectListAdapter recyclerViewAdapter;
@@ -31,7 +30,6 @@ public abstract class BaseSelectListWidget extends ItemsWidget implements MultiC
         super(context, questionDetails);
         logAnalytics(questionDetails);
         binding.choicesRecyclerView.initRecyclerView(setUpAdapter(), WidgetAppearanceUtils.isFlexAppearance(getQuestionDetails().getPrompt()));
-        restoreSavedSearchText();
     }
 
     @Override
@@ -41,12 +39,6 @@ public abstract class BaseSelectListWidget extends ItemsWidget implements MultiC
             setUpSearchBox();
         }
         return binding.getRoot();
-    }
-
-    @Override
-    protected void saveState() {
-        super.saveState();
-        getState().putString(SEARCH_TEXT + getFormEntryPrompt().getIndex(), binding.choicesSearchBox.getText().toString());
     }
 
     @Override
@@ -89,17 +81,6 @@ public abstract class BaseSelectListWidget extends ItemsWidget implements MultiC
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
         });
-    }
-
-    private void restoreSavedSearchText() {
-        String searchText = null;
-        if (getState() != null) {
-            searchText = getState().getString(SEARCH_TEXT + getFormEntryPrompt().getIndex());
-        }
-        if (searchText != null && !searchText.isEmpty()) {
-            binding.choicesSearchBox.setText(searchText);
-            Selection.setSelection(binding.choicesSearchBox.getText(), binding.choicesSearchBox.getText().toString().length());
-        }
     }
 
     private void logAnalytics(QuestionDetails questionDetails) {
