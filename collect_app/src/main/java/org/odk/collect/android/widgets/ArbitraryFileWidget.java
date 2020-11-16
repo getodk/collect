@@ -41,7 +41,6 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -50,7 +49,7 @@ import java.io.File;
 import timber.log.Timber;
 
 @SuppressLint("ViewConstructor")
-public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, WidgetDataReceiver {
+public class ArbitraryFileWidget extends QuestionWidget implements WidgetDataReceiver {
     ArbitraryFileWidgetAnswerBinding binding;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
@@ -97,21 +96,17 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, W
     }
 
     @Override
-    public void deleteFile() {
-        questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
-                getInstanceFolder() + File.separator + binaryName);
-        binaryName = null;
-    }
-
-    @Override
     public IAnswerData getAnswer() {
         return binaryName != null ? new StringData(binaryName) : null;
     }
 
     @Override
     public void clearAnswer() {
+        questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
+                FileWidgetUtils.getInstanceFolder() + File.separator + binaryName);
+        binaryName = null;
         binding.answerLayout.setVisibility(GONE);
-        deleteFile();
+
         widgetValueChanged();
     }
 
@@ -120,7 +115,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, W
         File newFile = FileWidgetUtils.getFile(getContext(), object);
         if (newFile.exists()) {
             if (binaryName != null && !binaryName.equals(newFile.getName())) {
-                questionMediaManager.markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
+                questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
                         FileWidgetUtils.getInstanceFolder() + File.separator + binaryName);
             }
             binaryName = newFile.getName();

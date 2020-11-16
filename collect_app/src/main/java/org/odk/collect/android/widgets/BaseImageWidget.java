@@ -49,7 +49,6 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -59,7 +58,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerImageView;
 
-public abstract class BaseImageWidget extends QuestionWidget implements FileWidget, WidgetDataReceiver {
+public abstract class BaseImageWidget extends QuestionWidget implements WidgetDataReceiver {
 
     @Nullable
     protected ImageView imageView;
@@ -97,20 +96,16 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
     @Override
     public void clearAnswer() {
-        deleteFile();
+        questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
+                FileWidgetUtils.getInstanceFolder() + File.separator + binaryName);
+        binaryName = null;
+
         if (imageView != null) {
             imageView.setImageDrawable(null);
         }
 
         errorTextView.setVisibility(View.GONE);
         widgetValueChanged();
-    }
-
-    @Override
-    public void deleteFile() {
-        questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
-                        getInstanceFolder() + File.separator + binaryName);
-        binaryName = null;
     }
 
     @Override

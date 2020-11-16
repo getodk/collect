@@ -45,7 +45,6 @@ import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -65,7 +64,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDataReceiver {
+public class VideoWidget extends QuestionWidget implements WidgetDataReceiver {
     public static final boolean DEFAULT_HIGH_RESOLUTION = true;
 
     VideoWidgetAnswerBinding binding;
@@ -130,19 +129,15 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
     }
 
     @Override
-    public void deleteFile() {
-        questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
-                        FileWidgetUtils.getInstanceFolder() + File.separator + binaryName);
-        binaryName = null;
-    }
-
-    @Override
     public void clearAnswer() {
         // remove the file
-        deleteFile();
+        questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
+                FileWidgetUtils.getInstanceFolder() + File.separator + binaryName);
+        binaryName = null;
 
         // reset buttons
         binding.playVideo.setEnabled(false);
+
         widgetValueChanged();
     }
 

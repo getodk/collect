@@ -161,24 +161,6 @@ public class VideoWidgetTest {
     }
 
     @Test
-    public void deleteFile_removesWidgetAnswer() {
-        VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
-        widget.deleteFile();
-        assertThat(widget.getAnswer(), nullValue());
-    }
-
-    @Test
-    public void deleteFile_callsMarkOriginalFileOrDelete() {
-        FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.mp4"));
-        when(prompt.getIndex()).thenReturn(formIndex);
-        VideoWidget widget = createWidget(prompt);
-        widget.deleteFile();
-
-        verify(questionMediaManager).markOriginalFileOrDelete("questionIndex",
-                "null" + File.separator + "blah.mp4");
-    }
-
-    @Test
     public void clearAnswer_removesAnswer() {
         VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
         widget.clearAnswer();

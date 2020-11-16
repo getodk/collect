@@ -33,7 +33,6 @@ import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.AudioFileRequester;
-import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
@@ -54,7 +53,7 @@ import static org.odk.collect.android.widgets.utilities.FileWidgetUtils.getInsta
  */
 
 @SuppressLint("ViewConstructor")
-public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDataReceiver {
+public class AudioWidget extends QuestionWidget implements WidgetDataReceiver {
     AudioWidgetAnswerBinding binding;
 
     private final AudioPlayer audioPlayer;
@@ -99,15 +98,10 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
     }
 
     @Override
-    public void deleteFile() {
+    public void clearAnswer() {
         audioPlayer.stop();
         questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(), getAudioFile().getAbsolutePath());
-        binaryName = null;
-    }
 
-    @Override
-    public void clearAnswer() {
-        deleteFile();
         widgetValueChanged();
         hideButtonsIfNeeded();
     }

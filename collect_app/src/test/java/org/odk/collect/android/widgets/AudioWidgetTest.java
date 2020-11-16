@@ -110,25 +110,6 @@ public class AudioWidgetTest {
     }
 
     @Test
-    public void deleteFile_removesWidgetAnswerAndStopsPlayingMedia() {
-        AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
-        widget.deleteFile();
-
-        assertThat(widget.getAnswer(), nullValue());
-        assertThat(audioPlayer.getCurrentClip(), nullValue());
-    }
-
-    @Test
-    public void deleteFile_setsFileAsideForDeleting() {
-        FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.mp3"));
-        when(prompt.getIndex()).thenReturn(formIndex);
-
-        AudioWidget widget = createWidget(prompt);
-        widget.deleteFile();
-        assertThat(questionMediaManager.originalFiles.get("questionIndex"), equalTo(questionMediaManager.getAnswerFile("blah.mp3").toString()));
-    }
-
-    @Test
     public void clearAnswer_removesAnswerAndHidesPlayer() {
         AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
         widget.clearAnswer();

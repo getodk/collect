@@ -7,14 +7,13 @@ import net.bytebuddy.utility.RandomString;
 import org.javarosa.core.model.data.StringData;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.odk.collect.android.widgets.interfaces.FileWidget;
+import org.odk.collect.android.widgets.interfaces.Widget;
 
 import java.io.File;
 
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public abstract class FileWidgetTest<W extends FileWidget> extends BinaryWidgetTest<W, StringData> {
+public abstract class FileWidgetTest<W extends Widget> extends BinaryWidgetTest<W, StringData> {
 
     @Mock
     public File instancePath;
@@ -34,11 +33,8 @@ public abstract class FileWidgetTest<W extends FileWidget> extends BinaryWidgetT
     }
 
     @Test
-    public void callingClearAnswerShouldCallDeleteMediaAndRemoveTheExistingAnswer() {
+    public void callingClearAnswerShouldRemoveTheExistingAnswer() {
         super.callingClearShouldRemoveTheExistingAnswer();
-
-        W widget = getSpyWidget();
-        verify(widget).deleteFile();
     }
 
     @Override

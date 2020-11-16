@@ -104,24 +104,6 @@ public class ArbitraryFileWidgetTest {
     }
 
     @Test
-    public void deleteFile_removesWidgetAnswer() {
-        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
-        widget.deleteFile();
-        assertNull(widget.getAnswer());
-    }
-
-    @Test
-    public void deleteFile_callsMarkOriginalFileOrDelete() {
-        FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.txt"));
-        when(prompt.getIndex()).thenReturn(formIndex);
-
-        ArbitraryFileWidget widget = createWidget(prompt);
-        widget.deleteFile();
-        verify(mockedQuestionMediaManager).markOriginalFileOrDelete("questionIndex",
-                "null" + File.separator + "blah.txt");
-    }
-
-    @Test
     public void clearAnswer_hidesAnswerLayout() {
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
         widget.clearAnswer();
