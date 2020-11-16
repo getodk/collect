@@ -4,20 +4,32 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
+import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.views.MultiClickSafeButton;
 
 import java.io.File;
+import java.util.Locale;
 
 import timber.log.Timber;
 
 public class FileWidgetUtils {
 
     private FileWidgetUtils() {
+    }
+
+    public static void hideButtonsIfNeeded(FormEntryPrompt prompt, MultiClickSafeButton button) {
+        if (prompt.getAppearanceHint() != null
+                && prompt.getAppearanceHint().toLowerCase(Locale.ENGLISH).contains(WidgetAppearanceUtils.NEW)) {
+            button.setVisibility(View.GONE);
+        }
     }
 
     public static File getFile(Context context, Object object, String instanceFolder) {

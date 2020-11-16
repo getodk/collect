@@ -52,7 +52,6 @@ import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.io.File;
-import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -103,7 +102,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
         binaryName = questionDetails.getPrompt().getAnswerText();
         binding.playVideo.setEnabled(binaryName != null);
 
-        hideButtonsIfNeeded();
+        FileWidgetUtils.hideButtonsIfNeeded(getFormEntryPrompt(), binding.chooseVideo);
         if (selfie) {
             if (!cameraUtilsProvider.checkFrontCameraAvailability()) {
                 binding.captureVideo.setEnabled(false);
@@ -171,13 +170,6 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
                 getInstanceFolder(), binaryName, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, false);
         binding.playVideo.setEnabled(binaryName != null);
         widgetValueChanged();
-    }
-
-    private void hideButtonsIfNeeded() {
-        if (selfie || (getFormEntryPrompt().getAppearanceHint() != null
-                && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains(WidgetAppearanceUtils.NEW))) {
-            binding.chooseVideo.setVisibility(View.GONE);
-        }
     }
 
     @Override

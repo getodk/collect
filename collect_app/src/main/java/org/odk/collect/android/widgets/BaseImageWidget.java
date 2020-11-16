@@ -18,7 +18,6 @@ package org.odk.collect.android.widgets;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
