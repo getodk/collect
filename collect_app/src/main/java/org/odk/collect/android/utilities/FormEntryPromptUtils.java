@@ -24,6 +24,7 @@ import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.MultipleItemsData;
 import org.javarosa.core.model.data.helper.Selection;
+import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.dao.ItemsetDao;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -34,6 +35,9 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
+import javax.annotation.Nullable;
 
 import static org.javarosa.core.model.Constants.DATATYPE_TEXT;
 
@@ -123,5 +127,15 @@ public class FormEntryPromptUtils {
         }
 
         return questionText;
+    }
+
+    @Nullable
+    public static String getAttributeValue(FormEntryPrompt prompt, String attributeName) {
+        List<TreeElement> attributes = prompt.getBindAttributes();
+        Optional<TreeElement> attribute = attributes.stream().filter(attr ->
+                attr.getName().equals(attributeName)
+        ).findAny();
+
+        return attribute.map(TreeElement::getAttributeValue).orElse(null);
     }
 }

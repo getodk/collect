@@ -15,9 +15,4 @@ public class ExperimentalPage extends Page<ExperimentalPage> {
         assertToolbarTitle(getTranslatedString(R.string.experimental));
         return this;
     }
-
-    public ExperimentalPage clickExternalAppRecording() {
-        clickOnString(R.string.external_app_recording);
-        return this;
-    }
 }
