@@ -12,7 +12,7 @@ import java.io.File
 abstract class AudioRecorderViewModel : ViewModel() {
     abstract fun isRecording(): LiveData<Boolean>
     abstract fun getRecording(sessionId: String): LiveData<File?>
-    abstract fun start(sessionId: String)
+    abstract fun start(sessionId: String, output: Output)
     abstract fun stop()
 
     /**

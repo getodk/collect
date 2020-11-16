@@ -6,9 +6,11 @@ import androidx.lifecycle.LifecycleOwner;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
+import org.odk.collect.audiorecorder.recording.Output;
 
 import java.util.function.Consumer;
 
@@ -33,7 +35,12 @@ public class InternalRecordingRequester implements RecordingRequester {
         permissionUtils.requestRecordAudioPermission(activity, new PermissionListener() {
             @Override
             public void granted() {
-                viewModel.start(prompt.getIndex().toString());
+                String quality = FormEntryPromptUtils.getAttributeValue(prompt, "quality");
+                if (quality != null && quality.equals("voice-only")) {
+                    viewModel.start(prompt.getIndex().toString(), Output.AMR);
+                } else {
+                    viewModel.start(prompt.getIndex().toString(), Output.AAC);
+                }
             }
 
             @Override

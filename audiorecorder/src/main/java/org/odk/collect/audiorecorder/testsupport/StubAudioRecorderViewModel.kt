@@ -3,6 +3,7 @@ package org.odk.collect.audiorecorder.testsupport
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel
+import org.odk.collect.audiorecorder.recording.Output
 import java.io.File
 
 /**
@@ -26,7 +27,7 @@ class StubAudioRecorderViewModel(private val stubRecordingPath: String) : AudioR
         return recordings.getOrPut(sessionId) { MutableLiveData(null) }
     }
 
-    override fun start(sessionId: String) {
+    override fun start(sessionId: String, output: Output) {
         wasCleanedUp = false
         lastSession = sessionId
         isRecording.value = true

@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations.map
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel
+import org.odk.collect.audiorecorder.recording.Output
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_CLEAN_UP
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_START
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_STOP
@@ -23,7 +24,7 @@ internal class RealAudioRecorderViewModel internal constructor(private val appli
         return recordingRepository.get(sessionId)
     }
 
-    override fun start(sessionId: String) {
+    override fun start(sessionId: String, output: Output) {
         application.startService(
             Intent(application, AudioRecorderService::class.java).apply {
                 action = ACTION_START
