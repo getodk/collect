@@ -102,11 +102,10 @@ public class AudioWidgetTest {
     }
 
     @Test
-    public void whenWidgetIsNew_chooseSoundButtonIsNotShown() {
+    public void whenWidgetHasNewAppearance_chooseSoundButtonIsNotShown() {
         FormEntryPrompt prompt = promptWithReadOnly();
         when(prompt.getAppearanceHint()).thenReturn(WidgetAppearanceUtils.NEW);
         AudioWidget widget = createWidget(prompt);
-
         assertThat(widget.binding.chooseButton.getVisibility(), equalTo(GONE));
     }
 
@@ -126,7 +125,6 @@ public class AudioWidgetTest {
 
         AudioWidget widget = createWidget(prompt);
         widget.deleteFile();
-
         assertThat(questionMediaManager.originalFiles.get("questionIndex"), equalTo(questionMediaManager.getAnswerFile("blah.mp3").toString()));
     }
 
@@ -146,7 +144,6 @@ public class AudioWidgetTest {
 
         AudioWidget widget = createWidget(prompt);
         widget.clearAnswer();
-
         assertThat(questionMediaManager.originalFiles.get("questionIndex"), equalTo(questionMediaManager.getAnswerFile("blah.mp3").toString()));
     }
 
@@ -245,7 +242,6 @@ public class AudioWidgetTest {
     @Test
     public void setData_whenFileExists_hidesButtonsAndShowsAudioController() throws Exception {
         AudioWidget widget = createWidget(promptWithAnswer(null));
-
         File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
         widget.setData(newFile.getName());
 

@@ -177,6 +177,11 @@ public class WidgetAppearanceUtils {
         return appearance.contains(FRONT) || appearance.contains(NEW_FRONT) || appearance.contains(SELFIE);
     }
 
+    public static boolean isFrontCameraAppearance(FormEntryPrompt prompt) {
+        String appearance = getSanitizedAppearanceHint(prompt);
+        return appearance.contains(FRONT) || appearance.contains(NEW_FRONT) || appearance.contains(SELFIE);
+    }
+
     public static boolean isFlexAppearance(FormEntryPrompt prompt) {
         String appearance = getSanitizedAppearanceHint(prompt);
 
@@ -187,5 +192,9 @@ public class WidgetAppearanceUtils {
     public static boolean isAutocomplete(FormEntryPrompt prompt) {
         String appearance = getSanitizedAppearanceHint(prompt);
         return appearance.contains(WidgetAppearanceUtils.SEARCH) || appearance.contains(WidgetAppearanceUtils.AUTOCOMPLETE);
+    }
+
+    public static boolean isNewWidget(FormEntryPrompt prompt) {
+        return getSanitizedAppearanceHint(prompt).contains(NEW);
     }
 }

@@ -40,6 +40,7 @@ import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.audioclips.Clip;
 
 import java.io.File;
+
 import java.util.Locale;
 
 /**
@@ -92,6 +93,9 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
         binding.captureButton.setOnClickListener(v -> recordingRequester.requestRecording(getFormEntryPrompt()));
         binding.chooseButton.setOnClickListener(v -> audioFileRequester.requestFile(getFormEntryPrompt()));
 
+        binaryName = prompt.getAnswerText();
+        updatePlayerMedia();
+
         return binding.getRoot();
     }
 
@@ -111,7 +115,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
 
     @Override
     public IAnswerData getAnswer() {
-        return binaryName != null ? new StringData(binaryName) : null;
+        return binaryName == null || binaryName.isEmpty() ? null : new StringData(binaryName);
     }
 
     /**

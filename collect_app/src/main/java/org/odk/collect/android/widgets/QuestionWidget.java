@@ -443,29 +443,6 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         warningText.setText(warningBody);
     }
 
-    //region Accessors
-
-    /**
-     * @deprecated widgets shouldn't need to know about the instance folder. They can use
-     * {@link org.odk.collect.android.utilities.QuestionMediaManager} to access media attached
-     * to the instance.
-     */
-    @Nullable
-    @Deprecated
-    public final String getInstanceFolder() {
-        Collect collect = Collect.getInstance();
-        if (collect == null) {
-            throw new IllegalStateException("Collect application instance is null.");
-        }
-
-        FormController formController = collect.getFormController();
-        if (formController == null) {
-            return null;
-        }
-
-        return formController.getInstanceFile().getParent();
-    }
-
     public int getAnswerFontSize() {
         return (int) questionTextSizeHelper.getHeadline6();
     }

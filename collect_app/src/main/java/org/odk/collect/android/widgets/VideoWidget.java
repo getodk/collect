@@ -76,34 +76,25 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
     private final QuestionMediaManager questionMediaManager;
     private final ActivityAvailability activityAvailability;
     private final ContentUriFetcher contentUriFetcher;
+    private final FileWidgetUtils fileWidgetUtils;
 
     private String binaryName;
-    private boolean selfie;
 
-    public VideoWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
-        this(context, prompt, waitingForDataRegistry, new CameraUtils(), MediaManager.INSTANCE,
-                new ActivityAvailability(context), new ContentUriProvider());
+    public VideoWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
+        this(context, prompt, waitingForDataRegistry, new CameraUtils(), questionMediaManager,
+                new ActivityAvailability(context), new ContentUriProvider(), new FileWidgetUtils());
     }
 
     public VideoWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, CameraUtilsProvider cameraUtilsProvider,
-                       QuestionMediaManager questionMediaManager, ActivityAvailability activityAvailability, ContentUriFetcher contentUriFetcher) {
+                       QuestionMediaManager questionMediaManager, ActivityAvailability activityAvailability, ContentUriFetcher contentUriFetcher, FileWidgetUtils fileWidgetUtils) {
         super(context, questionDetails);
-
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
         this.activityAvailability = activityAvailability;
         this.contentUriFetcher = contentUriFetcher;
+        this.fileWidgetUtils = fileWidgetUtils;
 
-        String appearance = getFormEntryPrompt().getAppearanceHint();
-        selfie = appearance != null && (appearance.equalsIgnoreCase(WidgetAppearanceUtils.SELFIE) ||
-                appearance.equalsIgnoreCase(WidgetAppearanceUtils.NEW_FRONT));
-
-        // retrieve answer from data model and update ui
-        binaryName = questionDetails.getPrompt().getAnswerText();
-        binding.playVideo.setEnabled(binaryName != null);
-
-        FileWidgetUtils.hideButtonsIfNeeded(getFormEntryPrompt(), binding.chooseVideo);
-        if (selfie) {
+        if (WidgetAppearanceUtils.isFrontCameraAppearance(getFormEntryPrompt())) {
             if (!cameraUtilsProvider.checkFrontCameraAvailability()) {
                 binding.captureVideo.setEnabled(false);
                 ToastUtils.showLongToast(R.string.error_front_camera_unavailable);
@@ -120,13 +111,22 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
             binding.chooseVideo.setVisibility(View.GONE);
         } else {
             binding.captureVideo.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-            binding.chooseVideo.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-
             binding.captureVideo.setOnClickListener(v -> onCaptureVideoButtonClick());
-            binding.chooseVideo.setOnClickListener(v -> chooseVideo());
+
+            if (WidgetAppearanceUtils.isNewWidget(prompt)) {
+                binding.chooseVideo.setVisibility(View.GONE);
+            } else {
+                binding.chooseVideo.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+                binding.chooseVideo.setOnClickListener(v -> chooseVideo());
+            }
         }
+
         binding.playVideo.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.playVideo.setOnClickListener(v -> playVideoFile());
+
+        // retrieve answer from data model and update ui
+        binaryName = prompt.getAnswerText();
+        binding.playVideo.setEnabled(binaryName != null && binaryName.isEmpty());
 
         return binding.getRoot();
     }
@@ -134,7 +134,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
     @Override
     public void deleteFile() {
         questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
-                        getInstanceFolder() + File.separator + binaryName);
+                        FileWidgetUtils.getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
     }
 
@@ -166,8 +166,8 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
      */
     @Override
     public void setData(Object object) {
-        binaryName = FileWidgetUtils.updateWidgetAnswer(getContext(), object, getFormEntryPrompt().getIndex().toString(),
-                getInstanceFolder(), binaryName, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, false);
+        binaryName = fileWidgetUtils.getUpdatedWidgetAnswer(getContext(), questionMediaManager, object, getFormEntryPrompt().getIndex().toString(),
+                binaryName, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, false);
         binding.playVideo.setEnabled(binaryName != null);
         widgetValueChanged();
     }
@@ -188,7 +188,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
     }
 
     private void onCaptureVideoButtonClick() {
-        if (selfie) {
+        if (WidgetAppearanceUtils.isFrontCameraAppearance(getFormEntryPrompt())) {
             getPermissionUtils().requestCameraAndRecordAudioPermissions((Activity) getContext(), new PermissionListener() {
                 @Override
                 public void granted() {
@@ -215,7 +215,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
 
     private void captureVideo() {
         Intent intent;
-        if (selfie) {
+        if (WidgetAppearanceUtils.isFrontCameraAppearance(getFormEntryPrompt())) {
             intent = new Intent(getContext(), CaptureSelfieVideoActivity.class);
         } else {
             intent = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
@@ -258,7 +258,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
 
     private void playVideoFile() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        File file = new File(getInstanceFolder() + File.separator + binaryName);
+        File file = new File(FileWidgetUtils.getInstanceFolder() + File.separator + binaryName);
 
         Uri uri = null;
         try {

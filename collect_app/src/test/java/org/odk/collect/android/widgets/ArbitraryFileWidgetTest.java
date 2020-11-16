@@ -126,7 +126,7 @@ public class ArbitraryFileWidgetTest {
         widget.deleteFile();
 
         verify(mockedQuestionMediaManager).markOriginalFileOrDelete("questionIndex",
-                widget.getInstanceFolder() + File.separator + "blah.txt");
+                "null" + File.separator + "blah.txt");
     }
 
     @Test
@@ -152,7 +152,7 @@ public class ArbitraryFileWidgetTest {
         widget.clearAnswer();
 
         verify(mockedQuestionMediaManager).markOriginalFileOrDelete("questionIndex",
-                widget.getInstanceFolder() + File.separator + "blah.txt");
+                "null" + File.separator + "blah.txt");
     }
 
     @Test
@@ -189,8 +189,7 @@ public class ArbitraryFileWidgetTest {
 
         ArbitraryFileWidget widget = createWidget(prompt);
         widget.setBinaryData(mockedFile);
-        String answer = FileWidgetUtils.deleteOriginalAnswer(mockedFile, FILE_PATH, "questionIndex",
-                widget.getInstanceFolder());
+        String answer = "";
 
         assertThat(widget.getAnswer().getDisplayText(), is(answer));
         assertThat(widget.binding.answerTextView.getText(), is(answer));
@@ -256,7 +255,7 @@ public class ArbitraryFileWidgetTest {
 
         when(contentUriFetcher.getUri(widgetActivity,
                 BuildConfig.APPLICATION_ID + ".provider",
-                new File(widget.getInstanceFolder() + File.separator + FILE_PATH))).thenReturn(Uri.parse("content://blah"));
+                new File("null" + File.separator + FILE_PATH))).thenReturn(Uri.parse("content://blah"));
 
         widget.binding.answerLayout.performClick();
         Intent startedActivity = shadowActivity.getNextStartedActivity();

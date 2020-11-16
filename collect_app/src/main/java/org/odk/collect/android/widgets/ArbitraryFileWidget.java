@@ -61,8 +61,8 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, W
 
     private String binaryName;
 
-    public ArbitraryFileWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
-        this(context, prompt, waitingForDataRegistry, MediaManager.INSTANCE,
+    public ArbitraryFileWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
+        this(context, prompt, waitingForDataRegistry, questionMediaManager,
                 new ActivityAvailability(context), new ContentUriProvider());
     }
 
@@ -123,10 +123,13 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, W
 
     @Override
     public void setData(Object object) {
-        File newFile = FileWidgetUtils.getFile(getContext(), object, getInstanceFolder());
+        File newFile = FileWidgetUtils.getFile(getContext(), object);
         if (newFile.exists()) {
-            binaryName = FileWidgetUtils.deleteOriginalAnswer(newFile, binaryName, getFormEntryPrompt().getIndex().toString(),
-                    getInstanceFolder());
+            if (binaryName != null && !binaryName.equals(newFile.getName())) {
+                questionMediaManager.markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
+                        FileWidgetUtils.getInstanceFolder() + File.separator + binaryName);
+            }
+            binaryName = newFile.getName();
             Timber.i("Setting current answer to %s", newFile.getName());
 
             binding.answerTextView.setText(binaryName);
@@ -156,11 +159,11 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, W
     }
 
     private void openFile() {
-        Uri fileUri = Uri.fromFile(new File(getInstanceFolder() + File.separator + binaryName));
+        Uri fileUri = Uri.fromFile(new File(FileWidgetUtils.getInstanceFolder() + File.separator + binaryName));
 
         Uri contentUri = contentUriFetcher.getUri(getContext(),
                 BuildConfig.APPLICATION_ID + ".provider",
-                new File(getInstanceFolder() + File.separator + binaryName));
+                new File(FileWidgetUtils.getInstanceFolder() + File.separator + binaryName));
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         intent.setDataAndType(contentUri, getMimeType(

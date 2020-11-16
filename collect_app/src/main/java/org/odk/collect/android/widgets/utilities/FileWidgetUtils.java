@@ -4,39 +4,55 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.FileUtil;
-import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-import org.odk.collect.android.views.MultiClickSafeButton;
+import org.odk.collect.android.utilities.QuestionMediaManager;
+import org.odk.collect.android.widgets.interfaces.MediaWidgetDataRequester;
 
 import java.io.File;
-import java.util.Locale;
 
 import timber.log.Timber;
 
-public class FileWidgetUtils {
+public class FileWidgetUtils implements MediaWidgetDataRequester {
 
-    private FileWidgetUtils() {
-    }
-
-    public static void hideButtonsIfNeeded(FormEntryPrompt prompt, MultiClickSafeButton button) {
-        if (prompt.getAppearanceHint() != null
-                && prompt.getAppearanceHint().toLowerCase(Locale.ENGLISH).contains(WidgetAppearanceUtils.NEW)) {
-            button.setVisibility(View.GONE);
+    @Override
+    public String getUpdatedWidgetAnswer(Context context, QuestionMediaManager questionMediaManager, Object object,
+                                         String questionIndex, String binaryName, Uri uri, boolean isImageType) {
+        File newFile;
+        if (isImageType) {
+            newFile = (File) object;
+        } else {
+            newFile = FileWidgetUtils.getFile(context, object);
+            if (newFile == null) {
+                return binaryName;
+            }
         }
+        if (newFile.exists()) {
+            questionMediaManager.replaceRecentFileForQuestion(questionIndex, newFile.getAbsolutePath());
+
+            updateContentValues(context, newFile, uri, isImageType);
+            if (binaryName != null && !binaryName.equals(newFile.getName())) {
+                questionMediaManager.markOriginalFileOrDelete(questionIndex,
+                        getInstanceFolder() + File.separator + binaryName);
+            }
+
+            binaryName = newFile.getName();
+        } else {
+            Timber.e("No media file found at : %s", newFile.getAbsolutePath());
+        }
+        return binaryName;
     }
 
-    public static File getFile(Context context, Object object, String instanceFolder) {
+    public static File getFile(Context context, Object object) {
         File file = null;
         if (object instanceof Uri) {
             String sourcePath = getSourcePathFromUri(context, (Uri) object, MediaStore.MediaColumns.DATA);
-            String destinationPath = FileWidgetUtils.getDestinationPathFromSourcePath(sourcePath, instanceFolder);
+            String destinationPath = getDestinationPathFromSourcePath(sourcePath);
             File source = FileUtil.getFileAtPath(sourcePath);
             file = FileUtil.getFileAtPath(destinationPath);
             FileUtil.copyFile(source, file);
@@ -49,39 +65,27 @@ public class FileWidgetUtils {
         return file;
     }
 
+    public static String getInstanceFolder() {
+        Collect collect = Collect.getInstance();
+        if (collect == null) {
+            throw new IllegalStateException("Collect application instance is null.");
+        }
+
+        FormController formController = collect.getFormController();
+        if (formController == null) {
+            return null;
+        }
+
+        return formController.getInstanceFile().getParent();
+    }
+
     public static String getSourcePathFromUri(Context context, @NonNull Uri uri, String dataType) {
         return MediaUtil.getPathFromUri(context, uri, dataType);
     }
 
-    public static String updateWidgetAnswer(Context context, Object object, String questionIndex, String instanceFolder,
-                                            String binaryName, Uri uri, boolean isImageType) {
-        File newFile = null;
-        if (isImageType) {
-            newFile = (File) object;
-        } else {
-            newFile = FileWidgetUtils.getFile(context, object, instanceFolder);
-            if (newFile == null) {
-                return binaryName;
-            }
-        }
-
-        if (newFile.exists()) {
-            MediaManager.INSTANCE.replaceRecentFileForQuestion(questionIndex, newFile.getAbsolutePath());
-
-            updateContentValues(context, newFile, uri, isImageType);
-            binaryName = deleteOriginalAnswer(newFile, binaryName, questionIndex, instanceFolder);
-        } else {
-            Timber.e("No media file found at : %s", newFile.getAbsolutePath());
-        }
-        return binaryName;
-    }
-
-    public static String deleteOriginalAnswer(File newFile, String originalAnswer, String questionIndex, String instanceFolder) {
-        if (originalAnswer != null && !originalAnswer.equals(newFile.getName())) {
-            MediaManager.INSTANCE.markOriginalFileOrDelete(questionIndex,
-                    instanceFolder + File.separator + originalAnswer);
-        }
-        return newFile.getName();
+    public static String getDestinationPathFromSourcePath(@NonNull String sourcePath) {
+        String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
+        return getInstanceFolder() + File.separator + FileUtil.getRandomFilename() + extension;
     }
 
     private static void updateContentValues(Context context, File file, Uri uri, boolean isImageType) {
@@ -99,10 +103,5 @@ public class FileWidgetUtils {
         if (newFileUri != null) {
             Timber.i("Inserting media returned uri = %s", newFileUri.toString());
         }
-    }
-
-    public static String getDestinationPathFromSourcePath(@NonNull String sourcePath, String instanceFolder) {
-        String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
-        return instanceFolder + File.separator + FileUtil.getRandomFilename() + extension;
     }
 }

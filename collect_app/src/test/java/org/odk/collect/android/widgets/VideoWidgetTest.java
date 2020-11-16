@@ -26,6 +26,7 @@ import org.odk.collect.android.utilities.CameraUtilsProvider;
 import org.odk.collect.android.utilities.ContentUriFetcher;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.robolectric.RobolectricTestRunner;
@@ -64,6 +65,7 @@ public class VideoWidgetTest {
     private FakePermissionUtils permissionUtils;
     private ActivityAvailability activityAvailability;
     private ContentUriFetcher contentUriFetcher;
+    private FileWidgetUtils fileWidgetUtils;
 
     @Before
     public void setUp() {
@@ -74,6 +76,7 @@ public class VideoWidgetTest {
         questionMediaManager = mock(QuestionMediaManager.class);
         activityAvailability = mock(ActivityAvailability.class);
         contentUriFetcher = mock(ContentUriFetcher.class);
+        fileWidgetUtils = mock(FileWidgetUtils.class);
         formIndex = mock(FormIndex.class);
         mockedFile = mock(File.class);
 
@@ -179,7 +182,7 @@ public class VideoWidgetTest {
         widget.deleteFile();
 
         verify(questionMediaManager).markOriginalFileOrDelete("questionIndex",
-                widget.getInstanceFolder() + File.separator + FILE_PATH);
+                "null" + File.separator + FILE_PATH);
     }
 
     @Test
@@ -197,7 +200,7 @@ public class VideoWidgetTest {
         widget.clearAnswer();
 
         verify(questionMediaManager).markOriginalFileOrDelete("questionIndex",
-                widget.getInstanceFolder() + File.separator + FILE_PATH);
+                "null" + File.separator + FILE_PATH);
     }
 
     @Test
@@ -214,8 +217,8 @@ public class VideoWidgetTest {
         VideoWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
         widget.setBinaryData(mockedFile);
 
-        assertThat(widget.getAnswer().getDisplayText(), equalTo(FileWidgetUtils.updateWidgetAnswer(widgetActivity, mockedFile, "questionIndex",
-                widget.getInstanceFolder(), FILE_PATH, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, false)));
+        assertThat(widget.getAnswer().getDisplayText(), equalTo(fileWidgetUtils.getUpdatedWidgetAnswer(widgetActivity, questionMediaManager, mockedFile,
+                "questionIndex", "null", MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, false)));
     }
 
     @Test
@@ -366,7 +369,7 @@ public class VideoWidgetTest {
         VideoWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
         when(contentUriFetcher.getUri(widgetActivity,
                 BuildConfig.APPLICATION_ID + ".provider",
-                new File(widget.getInstanceFolder() + File.separator + FILE_PATH))).thenReturn(Uri.parse("content://blah"));
+                new File("null" + File.separator + FILE_PATH))).thenReturn(Uri.parse("content://blah"));
         widget.setPermissionUtils(permissionUtils);
 
         widget.binding.playVideo.performClick();
@@ -393,6 +396,6 @@ public class VideoWidgetTest {
 
     public VideoWidget createWidget(FormEntryPrompt prompt) {
         return new VideoWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"),
-                waitingForDataRegistry, cameraUtilsProvider, questionMediaManager, activityAvailability, contentUriFetcher);
+                waitingForDataRegistry, cameraUtilsProvider, questionMediaManager, activityAvailability, contentUriFetcher, fileWidgetUtils);
     }
 }

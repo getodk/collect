@@ -18,6 +18,7 @@ package org.odk.collect.android.widgets;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -70,11 +71,19 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
+    private final FileWidgetUtils fileWidgetUtils;
 
-    public BaseImageWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
+    public BaseImageWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager,
+                           WaitingForDataRegistry waitingForDataRegistry) {
+        this(context, prompt, questionMediaManager, waitingForDataRegistry, new FileWidgetUtils());
+    }
+
+    public BaseImageWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager,
+                           WaitingForDataRegistry waitingForDataRegistry, FileWidgetUtils fileWidgetUtils) {
         super(context, prompt);
         this.questionMediaManager = questionMediaManager;
         this.waitingForDataRegistry = waitingForDataRegistry;
+        this.fileWidgetUtils = fileWidgetUtils;
     }
 
     @Override
@@ -102,8 +111,8 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
     @Override
     public void setData(Object object) {
-        binaryName = FileWidgetUtils.updateWidgetAnswer(getContext(), object, getFormEntryPrompt().getIndex().toString(),
-                getInstanceFolder(), binaryName, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true);
+        binaryName = fileWidgetUtils.getUpdatedWidgetAnswer(getContext(), questionMediaManager, object, getFormEntryPrompt().getIndex().toString(),
+                 binaryName, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true);
         File newImage = (File) object;
         if (newImage.exists()) {
             // Add the new image to the Media content provider so that the
@@ -209,7 +218,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         public void clickImage(String context) {
             Intent i = new Intent("android.intent.action.VIEW");
             Uri uri = MediaUtils.getImageUriFromMediaProvider(
-                    getInstanceFolder() + File.separator + binaryName);
+                    FileWidgetUtils.getInstanceFolder() + File.separator + binaryName);
             if (uri != null) {
                 Timber.i("setting view path to: %s", uri.toString());
                 i.setDataAndType(uri, "image/*");
@@ -309,7 +318,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     }
 
     private File getFile() {
-        File file = new File(getInstanceFolder() + File.separator + binaryName);
+        File file = new File(FileWidgetUtils.getInstanceFolder() + File.separator + binaryName);
         if (!file.exists() && doesSupportDefaultValues()) {
             file = new File(getDefaultFilePath());
         }

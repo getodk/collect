@@ -20,8 +20,6 @@ import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class FileWidgetUtilsTest {
-    private static final String INSTANCE_FOLDER_PATH = "instanceFolder";
-
     private final Context context = ApplicationProvider.getApplicationContext();
 
     private File file;
@@ -34,16 +32,16 @@ public class FileWidgetUtilsTest {
 
     @Test
     public void getFile_whenObjectIsNotOfRequiredType_returnsNull() {
-        assertNull(FileWidgetUtils.getFile(context, "blah", INSTANCE_FOLDER_PATH));
+        assertNull(FileWidgetUtils.getFile(context, "blah"));
     }
 
     @Test
     public void getFile_whenObjectIsOfFileType_returnsFile() {
-        assertThat(FileWidgetUtils.getFile(context, file, INSTANCE_FOLDER_PATH), is(file));
+        assertThat(FileWidgetUtils.getFile(context, file), is(file));
     }
 
     @Test
     public void getFile_whenObjectIsOfUriType_returnsFile() {
-        assertThat(FileWidgetUtils.getFile(context, Uri.fromFile(file), INSTANCE_FOLDER_PATH), is(file));
+        assertThat(FileWidgetUtils.getFile(context, Uri.fromFile(file)), is(file));
     }
 }
