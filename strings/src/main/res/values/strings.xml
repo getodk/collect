@@ -709,18 +709,18 @@
     <!-- Text for button that stops audio recording  -->
     <string name="stop_recording">Stop</string>
 
-    <!-- Text to let the user now a recording is in progress  -->
+    <!-- Text to let the user know a recording is in progress  -->
     <string name="recording">Recording…</string>
 
     <!-- Title of Android Notification Channel for audio recording notifications  -->
     <string name="recording_channel">Audio recording</string>
 
     <!-- Text for button that plays audio clip  -->
-    <string name="play_audio">Play chosen audio</string>
+    <string name="play_audio">Play audio</string>
 
     <!-- Text to let the user know a file is being saved  -->
     <string name="saving_file">Saving file</string>
 
     <!-- Text in dialog that instructs the user to stop recording audio before leaving the form -->
-    <string name="recording_warning">Must stop recording before moving on!</string>
+    <string name="recording_warning">You must stop recording before leaving this screen.</string>
 </resources>
