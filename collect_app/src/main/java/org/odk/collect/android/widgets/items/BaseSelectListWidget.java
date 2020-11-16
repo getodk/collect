@@ -3,7 +3,6 @@ package org.odk.collect.android.widgets.items;
 import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
-import android.text.Selection;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.View;
