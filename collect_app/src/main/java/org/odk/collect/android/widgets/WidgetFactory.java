@@ -31,7 +31,9 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.ActivityAvailability;
+
 import org.odk.collect.android.utilities.CameraUtils;
+import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
@@ -175,7 +177,8 @@ public class WidgetFactory {
                 }
                 break;
             case Constants.CONTROL_FILE_CAPTURE:
-                questionWidget = new ArbitraryFileWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
+                questionWidget = new ArbitraryFileWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry,
+                        new ActivityAvailability(context), new ContentUriProvider());
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
                 if (appearance.equals(WidgetAppearanceUtils.SIGNATURE)) {

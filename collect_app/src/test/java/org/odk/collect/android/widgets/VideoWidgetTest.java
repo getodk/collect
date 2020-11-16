@@ -94,7 +94,7 @@ public class VideoWidgetTest {
     }
 
     @Test
-    public void getAnswer_whenPromptDoesNotHaveAnswer_returnsNullAndHidesAudioPlayer() {
+    public void getAnswer_whenPromptDoesNotHaveAnswer_returnsNull() {
         VideoWidget widget = createWidget(promptWithAnswer(null));
         assertThat(widget.getAnswer(), nullValue());
     }
@@ -112,7 +112,7 @@ public class VideoWidgetTest {
     }
 
     @Test
-    public void whenWidgetIsNew_chooseSoundButtonIsNotShown() {
+    public void whenWidgetIsNew_chooseVideoButtonIsNotShown() {
         FormEntryPrompt prompt = promptWithReadOnly();
         when(prompt.getAppearanceHint()).thenReturn(WidgetAppearanceUtils.NEW);
         VideoWidget widget = createWidget(prompt);
@@ -121,7 +121,7 @@ public class VideoWidgetTest {
     }
 
     @Test
-    public void usingSelfieWidget_hidesChooseButton() {
+    public void usingSelfieAppearance_hidesChooseButton() {
         FormEntryPrompt prompt = promptWithReadOnly();
         when(prompt.getAppearanceHint()).thenReturn(WidgetAppearanceUtils.SELFIE);
         VideoWidget widget = createWidget(prompt);
@@ -179,7 +179,7 @@ public class VideoWidgetTest {
     }
 
     @Test
-    public void clearAnswer_removesAnswerAndHidesPlayer() {
+    public void clearAnswer_removesAnswer() {
         VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
         widget.clearAnswer();
         assertThat(widget.getAnswer(), nullValue());

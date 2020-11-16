@@ -6,6 +6,8 @@
 
     <org.odk.collect.android.views.MultiClickSafeButton
         android:id="@+id/capture_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         style="@style/Widget.Collect.Button.WidgetAnswer"
         android:layout_marginHorizontal="@dimen/margin_standard"
         android:layout_marginTop="@dimen/margin_standard"
@@ -13,6 +15,8 @@
 
     <org.odk.collect.android.views.MultiClickSafeButton
         android:id="@+id/choose_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         style="@style/Widget.Collect.Button.WidgetAnswer"
         android:layout_marginHorizontal="@dimen/margin_standard"
         android:layout_marginTop="@dimen/margin_extra_small"

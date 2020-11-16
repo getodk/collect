@@ -5,16 +5,22 @@
 
     <org.odk.collect.android.views.MultiClickSafeButton
         android:id="@+id/capture_video"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         style="@style/Widget.Collect.Button.WidgetAnswer"
         android:text="@string/capture_video" />
 
     <org.odk.collect.android.views.MultiClickSafeButton
         android:id="@+id/choose_video"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         style="@style/Widget.Collect.Button.WidgetAnswer"
         android:text="@string/choose_video" />
 
     <org.odk.collect.android.views.MultiClickSafeButton
         android:id="@+id/play_video"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         style="@style/Widget.Collect.Button.WidgetAnswer"
         android:text="@string/play_video" />
 

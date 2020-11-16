@@ -6,6 +6,8 @@
 
     <org.odk.collect.android.views.MultiClickSafeButton
         android:id="@+id/bearing_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         style="@style/Widget.Collect.Button.WidgetAnswer"
         android:text="@string/get_bearing" />
 

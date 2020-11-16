@@ -26,6 +26,7 @@ import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowToast;
 
 import java.io.File;
+import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -50,7 +51,6 @@ public class ArbitraryFileWidgetTest {
     private FakeWaitingForDataRegistry waitingForDataRegistry;
     private QuestionMediaManager mockedQuestionMediaManager;
     private FormIndex formIndex;
-    private File mockedFile;
     private ActivityAvailability activityAvailability;
     private ContentUriProvider contentUriProvider;
 
@@ -63,14 +63,10 @@ public class ArbitraryFileWidgetTest {
         activityAvailability = mock(ActivityAvailability.class);
         contentUriProvider = mock(ContentUriProvider.class);
         formIndex = mock(FormIndex.class);
-        mockedFile = mock(File.class);
 
         waitingForDataRegistry = new FakeWaitingForDataRegistry();
 
         when(activityAvailability.isActivityAvailable(ArgumentMatchers.any())).thenReturn(true);
-        when(mockedFile.exists()).thenReturn(true);
-        when(mockedFile.getName()).thenReturn("newFile.txt");
-        when(mockedFile.getAbsolutePath()).thenReturn("newFilePath");
         when(formIndex.toString()).thenReturn("questionIndex");
     }
 
@@ -80,7 +76,7 @@ public class ArbitraryFileWidgetTest {
     }
 
     @Test
-    public void whenPromptDoesNotHaveAnswer_AnswerLayoutIsNotDisplayed() {
+    public void whenPromptDoesNotHaveAnswer_answerLayoutIsNotDisplayed() {
         assertThat(createWidget(promptWithAnswer(null)).binding.answerLayout.getVisibility(), is(View.GONE));
     }
 
@@ -108,7 +104,7 @@ public class ArbitraryFileWidgetTest {
     }
 
     @Test
-    public void deleteFile_removesWidgetAnswerAndStopsPlayingMedia() {
+    public void deleteFile_removesWidgetAnswer() {
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
         widget.deleteFile();
         assertNull(widget.getAnswer());
@@ -121,7 +117,6 @@ public class ArbitraryFileWidgetTest {
 
         ArbitraryFileWidget widget = createWidget(prompt);
         widget.deleteFile();
-
         verify(mockedQuestionMediaManager).markOriginalFileOrDelete("questionIndex",
                 "null" + File.separator + "blah.txt");
     }
@@ -147,7 +142,6 @@ public class ArbitraryFileWidgetTest {
 
         ArbitraryFileWidget widget = createWidget(prompt);
         widget.clearAnswer();
-
         verify(mockedQuestionMediaManager).markOriginalFileOrDelete("questionIndex",
                 "null" + File.separator + "blah.txt");
     }
@@ -180,28 +174,31 @@ public class ArbitraryFileWidgetTest {
     }
 
     @Test
-    public void setData_whenFileExists_updatesWidgetAnswer() {
-        FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.txt"));
-        when(prompt.getIndex()).thenReturn(formIndex);
+    public void setData_whenFileExists_updatesWidgetAnswer() throws IOException {
+        File tempFile = File.createTempFile("newFile", "txt");
+        tempFile.deleteOnExit();
 
-        ArbitraryFileWidget widget = createWidget(prompt);
-        widget.setBinaryData(mockedFile);
+        ArbitraryFileWidget widget = createWidget(promptWithAnswer(null));
+        widget.setBinaryData(tempFile);
 
-        assertThat(widget.getAnswer().getDisplayText(), is("newFile.txt"));
-        assertThat(widget.binding.answerTextView.getText(), is("newFile.txt"));
+        assertThat(widget.getAnswer().getDisplayText(), is(tempFile.getName()));
+        assertThat(widget.binding.answerTextView.getText(), is(tempFile.getName()));
     }
 
     @Test
-    public void setData_whenFileExists_callsValueChangeListener() {
-        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
-        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.setBinaryData(mockedFile);
+    public void setData_whenFileExists_callsValueChangeListener() throws IOException {
+        File tempFile = File.createTempFile("newFile", "txt");
+        tempFile.deleteOnExit();
 
+        ArbitraryFileWidget widget = createWidget(promptWithAnswer(null));
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+
+        widget.setBinaryData(tempFile);
         verify(valueChangedListener).widgetValueChanged(widget);
     }
 
     @Test
-    public void clickingButtonAndAnswerLayoutForLong_callsOnLongClickListeners() {
+    public void clickingButtonAndAnswerForLong_callsOnLongClickListeners() {
         View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(null));
         widget.setOnLongClickListener(listener);
@@ -214,7 +211,7 @@ public class ArbitraryFileWidgetTest {
     }
 
     @Test
-    public void clickingChooseFileButton_startsOpenDocumentIntentAndSetsWidgetWaitingForData() {
+    public void clickingChooseFileButton_startsOpenDocumentIntent_andSetsWidgetWaitingForData() {
         FormEntryPrompt prompt = promptWithAnswer(null);
         when(prompt.getIndex()).thenReturn(formIndex);
 
@@ -234,7 +231,7 @@ public class ArbitraryFileWidgetTest {
     }
 
     @Test
-    public void clickingAnswerLayout_whenActivityIsNotAvailable_doesNotStartAnyIntent() {
+    public void clickingAnswer_whenActivityIsNotAvailable_doesNotStartAnyIntent() {
         when(activityAvailability.isActivityAvailable(any())).thenReturn(false);
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
         widget.binding.answerLayout.performClick();
@@ -245,7 +242,7 @@ public class ArbitraryFileWidgetTest {
     }
 
     @Test
-    public void clickingAnswerLayout_whenActivityIsAvailable_startsViewIntent() {
+    public void clickingAnswer_whenActivityIsAvailable_startsViewIntent() {
         when(activityAvailability.isActivityAvailable(any())).thenReturn(true);
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
 
@@ -263,6 +260,6 @@ public class ArbitraryFileWidgetTest {
 
     public ArbitraryFileWidget createWidget(FormEntryPrompt prompt) {
         return new ArbitraryFileWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"),
-                waitingForDataRegistry, mockedQuestionMediaManager, activityAvailability, contentUriProvider);
+                mockedQuestionMediaManager, waitingForDataRegistry, activityAvailability, contentUriProvider);
     }
 }
