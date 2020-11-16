@@ -10,8 +10,6 @@ import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 
-import java.util.Optional;
-
 public class RecordingRequesterFactory {
 
     private final WaitingForDataRegistry waitingForDataRegistry;
@@ -33,11 +31,11 @@ public class RecordingRequesterFactory {
     }
 
     public RecordingRequester create(FormEntryPrompt prompt, boolean externalRecorderPreferred) {
-        Optional<String> audioQuality = FormEntryPromptUtils.getAttributeValue(prompt, "quality");
+        String audioQuality = FormEntryPromptUtils.getAttributeValue(prompt, "quality");
 
-        if (audioQuality.isPresent() && (audioQuality.get().equals("normal") || audioQuality.get().equals("voice-only"))) {
+        if (audioQuality != null && (audioQuality.equals("normal") || audioQuality.equals("voice-only"))) {
             return new InternalRecordingRequester(activity, audioRecorderViewModel, permissionUtils, lifecycle, questionMediaManager);
-        } else if (audioQuality.isPresent() && audioQuality.get().equals("external")) {
+        } else if (audioQuality != null && audioQuality.equals("external")) {
             return new ExternalAppRecordingRequester(activity, activityAvailability, waitingForDataRegistry, permissionUtils);
         } else if (externalRecorderPreferred) {
             return new ExternalAppRecordingRequester(activity, activityAvailability, waitingForDataRegistry, permissionUtils);

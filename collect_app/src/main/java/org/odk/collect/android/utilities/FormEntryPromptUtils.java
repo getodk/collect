@@ -37,6 +37,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.Nullable;
+
 import static org.javarosa.core.model.Constants.DATATYPE_TEXT;
 
 public class FormEntryPromptUtils {
@@ -127,12 +129,13 @@ public class FormEntryPromptUtils {
         return questionText;
     }
 
-    public static Optional<String> getAttributeValue(FormEntryPrompt prompt, String attributeName) {
+    @Nullable
+    public static String getAttributeValue(FormEntryPrompt prompt, String attributeName) {
         List<TreeElement> attributes = prompt.getBindAttributes();
-        Optional<TreeElement> attribute = attributes.stream().filter(attr -> {
-            return attr.getName().equals(attributeName);
-        }).findAny();
+        Optional<TreeElement> attribute = attributes.stream().filter(attr ->
+                attr.getName().equals(attributeName)
+        ).findAny();
 
-        return attribute.map(TreeElement::getAttributeValue);
+        return attribute.map(TreeElement::getAttributeValue).orElse(null);
     }
 }
