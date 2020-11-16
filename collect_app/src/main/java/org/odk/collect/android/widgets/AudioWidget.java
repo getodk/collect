@@ -41,11 +41,7 @@ import org.odk.collect.audioclips.Clip;
 
 import java.io.File;
 
-import java.util.Locale;
-
 import timber.log.Timber;
-
-import static org.odk.collect.android.widgets.utilities.FileWidgetUtils.getInstanceFolder;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -102,9 +98,7 @@ public class AudioWidget extends QuestionWidget implements WidgetDataReceiver {
 
     @Override
     public void clearAnswer() {
-        audioPlayer.stop();
-        questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(), getAudioFile().getAbsolutePath());
-
+        deleteFile();
         widgetValueChanged();
         hideButtonsIfNeeded();
     }
@@ -120,39 +114,48 @@ public class AudioWidget extends QuestionWidget implements WidgetDataReceiver {
      */
     @Override
     public void setData(Object object) {
-        // get the file path and create a copy in the instance folder
-        File newAudio = FileWidgetUtils.getFile(getContext(), object);
-        if (newAudio == null) {
-            Timber.w("AudioWidget's setBinaryData must receive a File or Uri object.");
+        // Support being handed a File as well
+        if (object instanceof File) {
+            object = (String) ((File) object).getName();
+        }
+        if (object instanceof String) {
+            String fileName = (String) object;
+            File newAudio = questionMediaManager.getAnswerFile(fileName);
+
+            if (newAudio != null && newAudio.exists()) {
+                questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
+
+                Uri audioURI = getContext().getContentResolver().insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                        FileWidgetUtils.getContentValues(newAudio, false));
+
+                if (audioURI != null) {
+                    Timber.i("Inserting AUDIO returned uri = %s", audioURI.toString());
+                }
+
+                // when replacing an answer. remove the current media.
+                if (binaryName != null && !binaryName.equals(newAudio.getName())) {
+                    deleteFile();
+                }
+
+                binaryName = newAudio.getName();
+                Timber.i("Setting current answer to %s", newAudio.getName());
+
+                hideButtonsIfNeeded();
+                updatePlayerMedia();
+                widgetValueChanged();
+            } else {
+                Timber.e("Inserting Audio file FAILED");
+            }
+        } else {
+            Timber.w("AudioWidget's setBinaryData must receive a File object.");
             return;
         }
+    }
 
-        if (newAudio.exists()) {
-            // Add the copy to the content provider
-            Uri audioURI = getContext().getContentResolver().insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                    FileWidgetUtils.getContentValues(newAudio, false));
-
-            questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
-
-            if (audioURI != null) {
-                Timber.i("Inserting audio returned uri = %s", audioURI.toString());
-            }
-
-            // Remove the media when replacing the answer
-            if (binaryName != null && !binaryName.equals(newAudio.getName())) {
-                questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
-                        getInstanceFolder() + File.separator + binaryName);
-            }
-            binaryName = newAudio.getName();
-
-            hideButtonsIfNeeded();
-            updatePlayerMedia();
-            widgetValueChanged();
-
-            Timber.i("Setting current answer to %s", newAudio.getName());
-        } else {
-            Timber.e("Inserting Audio file FAILED");
-        }
+    private void deleteFile() {
+        audioPlayer.stop();
+        questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(), getAudioFile().getAbsolutePath());
+        binaryName = null;
     }
 
     private void hideButtonsIfNeeded() {
@@ -171,7 +174,7 @@ public class AudioWidget extends QuestionWidget implements WidgetDataReceiver {
             binding.chooseButton.setVisibility(View.GONE);
         }
 
-        if (getFormEntryPrompt().getAppearanceHint() != null && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains(WidgetAppearanceUtils.NEW)) {
+        if (WidgetAppearanceUtils.isNewWidget(getFormEntryPrompt())) {
             binding.chooseButton.setVisibility(View.GONE);
         }
     }

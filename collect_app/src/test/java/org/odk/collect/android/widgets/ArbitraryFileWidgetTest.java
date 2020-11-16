@@ -137,7 +137,7 @@ public class ArbitraryFileWidgetTest {
     @Test
     public void setData_whenFileDoesNotExist_doesNotUpdateWidgetAnswer() {
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
-        widget.setBinaryData(new File("newFilePath"));
+        widget.setData(new File("newFilePath"));
 
         assertThat(widget.getAnswer().getDisplayText(), is("blah.txt"));
         assertThat(widget.binding.answerTextView.getText(), is("blah.txt"));
@@ -147,7 +147,7 @@ public class ArbitraryFileWidgetTest {
     public void setData_whenFileDoesNotExist_doesNotCallValueChangeListener() {
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.setBinaryData(new File("newFilePath"));
+        widget.setData(new File("newFilePath"));
 
         verify(valueChangedListener, never()).widgetValueChanged(widget);
     }
@@ -158,7 +158,7 @@ public class ArbitraryFileWidgetTest {
         tempFile.deleteOnExit();
 
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(null));
-        widget.setBinaryData(tempFile);
+        widget.setData(tempFile);
 
         assertThat(widget.getAnswer().getDisplayText(), is(tempFile.getName()));
         assertThat(widget.binding.answerTextView.getText(), is(tempFile.getName()));
@@ -171,7 +171,7 @@ public class ArbitraryFileWidgetTest {
         tempFile.deleteOnExit();
 
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(tempFile.getName())));
-        widget.setBinaryData(tempFile);
+        widget.setData(tempFile);
         assertThat(fakeQuestionMediaManager.originalFiles.isEmpty(), is(true));
     }
 
@@ -184,7 +184,7 @@ public class ArbitraryFileWidgetTest {
         when(prompt.getIndex()).thenReturn(formIndex);
 
         ArbitraryFileWidget widget = createWidget(prompt);
-        widget.setBinaryData(tempFile);
+        widget.setData(tempFile);
         assertThat(fakeQuestionMediaManager.originalFiles.get("questionIndex"),
                 is("null" + File.separator + "blah.txt"));
     }
@@ -197,7 +197,7 @@ public class ArbitraryFileWidgetTest {
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
 
-        widget.setBinaryData(tempFile);
+        widget.setData(tempFile);
         verify(valueChangedListener).widgetValueChanged(widget);
     }
 

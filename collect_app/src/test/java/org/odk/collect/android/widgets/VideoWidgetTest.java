@@ -188,14 +188,14 @@ public class VideoWidgetTest {
     @Test
     public void setData_whenDataIsOfIncorrectType_answerIsNotUpdated() {
         VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
-        widget.setBinaryData("newFile.mp4");
+        widget.setData("newFile.mp4");
         assertThat(widget.getAnswer().getDisplayText(), is("blah.mp4"));
     }
 
     @Test
     public void setData_whenDataIsNull_doesNotReplaceAnswer() {
         VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
-        widget.setBinaryData(null);
+        widget.setData(null);
 
         assertThat(fakeQuestionMediaManager.originalFiles.isEmpty(), is(true));
         assertThat(widget.getAnswer().getDisplayText(), is("blah.mp4"));
@@ -204,7 +204,7 @@ public class VideoWidgetTest {
     @Test
     public void setData_whenVideoDoesNotExist_doesNotReplaceAnswer() {
         VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
-        widget.setBinaryData(newFile);
+        widget.setData(newFile);
 
         assertThat(fakeQuestionMediaManager.originalFiles.isEmpty(), is(true));
         assertThat(fakeQuestionMediaManager.recentFiles.isEmpty(), is(true));
@@ -220,9 +220,9 @@ public class VideoWidgetTest {
         when(prompt.getIndex()).thenReturn(formIndex);
 
         VideoWidget widget = createWidget(prompt);
-        widget.setBinaryData(tempFile);
+        widget.setData(tempFile);
 
-        assertThat(fakeQuestionMediaManager.originalFiles.get("questionIndex"), is("null/blah.mp4"));
+        assertThat(fakeQuestionMediaManager.originalFiles.get("questionIndex"), is("null\blah.mp4"));
         assertThat(fakeQuestionMediaManager.recentFiles.get("questionIndex"), is(tempFile.getAbsolutePath()));
         assertThat(widget.getAnswer().getDisplayText(), is(tempFile.getName()));
     }
@@ -233,7 +233,7 @@ public class VideoWidgetTest {
         tempFile.deleteOnExit();
 
         VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
-        widget.setBinaryData(tempFile);
+        widget.setData(tempFile);
 
         assertThat(widget.binding.playVideo.isEnabled(), is(true));
     }
@@ -242,7 +242,7 @@ public class VideoWidgetTest {
     public void setData_whenVideoDoesNotExist_doesNotCallValueChangeListener() {
         VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.setBinaryData(newFile);
+        widget.setData(newFile);
 
         verify(valueChangedListener, never()).widgetValueChanged(any());
     }
@@ -254,7 +254,7 @@ public class VideoWidgetTest {
 
         VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.setBinaryData(tempFile);
+        widget.setData(tempFile);
 
         verify(valueChangedListener).widgetValueChanged(widget);
     }

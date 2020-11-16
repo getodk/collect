@@ -55,7 +55,6 @@ import timber.log.Timber;
 import static org.odk.collect.android.analytics.AnalyticsEvents.REQUEST_HIGH_RES_VIDEO;
 import static org.odk.collect.android.analytics.AnalyticsEvents.REQUEST_VIDEO_NOT_HIGH_RES;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.android.widgets.utilities.FileWidgetUtils.getInstanceFolder;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -129,14 +128,8 @@ public class VideoWidget extends QuestionWidget implements WidgetDataReceiver {
 
     @Override
     public void clearAnswer() {
-        // remove the file
-        questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
-                FileWidgetUtils.getInstanceFolder() + File.separator + binaryName);
-        binaryName = null;
-
-        // reset buttons
+        deleteFile();
         binding.playVideo.setEnabled(false);
-
         widgetValueChanged();
     }
 
@@ -146,47 +139,51 @@ public class VideoWidget extends QuestionWidget implements WidgetDataReceiver {
     }
 
     /**
-     * Set this widget with the actual file returned by OnActivityResult.
-     * Both of Uri and File are supported.
-     * If the file is local, a Uri is enough for the copy task below.
-     * If the chose file is from cloud(such as Google Drive),
-     * The retrieve and copy task is already executed in the previous step,
-     * so a File object would be presented.
-     *
-     * @param object Uri or File of the chosen file.
-     * @see org.odk.collect.android.activities.FormEntryActivity#onActivityResult(int, int, Intent)
+     * @param object file name of media file that will be available in the {@link QuestionMediaManager}
+     * @see org.odk.collect.android.activities.FormEntryActivity
      */
     @Override
     public void setData(Object object) {
-        File newVideo = FileWidgetUtils.getFile(getContext(), object);
-        if (newVideo == null) {
-            Timber.w("VideoWidget's setBinaryData must receive a File or Uri object.");
+        // Support being handed a File as well
+        if (object instanceof File) {
+            object = (String) ((File) object).getName();
+        }
+        if (object instanceof String) {
+            String fileName = (String) object;
+            File newVideo = questionMediaManager.getAnswerFile(fileName);
+
+            if (newVideo != null && newVideo.exists()) {
+                questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newVideo.getAbsolutePath());
+
+                // Add the copy to the content provider
+                Uri videoURI = getContext().getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                        FileWidgetUtils.getContentValues(newVideo, false));
+
+                if (videoURI != null) {
+                    Timber.i("Inserting video returned uri = %s", videoURI.toString());
+                }
+
+                // Remove the media when replacing the answer
+                if (binaryName != null && !binaryName.equals(newVideo.getName())) {
+                    deleteFile();
+                }
+                binaryName = newVideo.getName();
+                Timber.i("Setting current answer to %s", newVideo.getName());
+
+                binding.playVideo.setEnabled(binaryName != null || !binaryName.isEmpty());
+                widgetValueChanged();
+            } else {
+                Timber.e("Inserting video file FAILED");
+            }
+        }else {
+            Timber.w("VideoWidget's setBinaryData must receive a File object.");
             return;
         }
+    }
 
-        if (newVideo.exists()) {
-            // Add the copy to the content provider
-            Uri videoURI = getContext().getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                    FileWidgetUtils.getContentValues(newVideo, false));
-
-            questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newVideo.getAbsolutePath());
-
-            if (videoURI != null) {
-                Timber.i("Inserting video returned uri = %s", videoURI.toString());
-            }
-
-            // Remove the media when replacing the answer
-            if (binaryName != null && !binaryName.equals(newVideo.getName())) {
-                questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
-                        getInstanceFolder() + File.separator + binaryName);
-            }
-            binaryName = newVideo.getName();
-
-            binding.playVideo.setEnabled(binaryName != null || !binaryName.isEmpty());
-            widgetValueChanged();
-        } else {
-            Timber.e("Inserting video file FAILED");
-        }
+    private void deleteFile() {
+        questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(), getVideoFile().getAbsolutePath());
+        binaryName = null;
     }
 
     @Override
@@ -275,7 +272,7 @@ public class VideoWidget extends QuestionWidget implements WidgetDataReceiver {
 
     private void playVideoFile() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        File file = new File(getInstanceFolder() + File.separator + binaryName);
+        File file = getVideoFile();
 
         Uri uri = null;
         try {
@@ -293,5 +290,12 @@ public class VideoWidget extends QuestionWidget implements WidgetDataReceiver {
             Toast.makeText(getContext(), getContext().getString(R.string.activity_not_found,
                     getContext().getString(R.string.view_video)), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * Returns the video file added to the widget for the current instance
+     */
+    private File getVideoFile() {
+        return questionMediaManager.getAnswerFile(binaryName);
     }
 }
