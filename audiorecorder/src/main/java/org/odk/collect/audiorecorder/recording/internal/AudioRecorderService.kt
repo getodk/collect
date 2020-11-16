@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.PRIORITY_LOW
 import org.odk.collect.audiorecorder.R
 import org.odk.collect.audiorecorder.getComponent
+import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recorder.Recorder
 import org.odk.collect.strings.getLocalizedString
 import javax.inject.Inject
@@ -32,6 +33,7 @@ class AudioRecorderService : Service() {
         when (intent?.action) {
             ACTION_START -> {
                 val sessionId = intent.getStringExtra(EXTRA_SESSION_ID)
+                val output = intent.getSerializableExtra(EXTRA_OUTPUT) as Output
 
                 if (!recorder.isRecording() && sessionId != null) {
                     recordingRepository.start(sessionId)
@@ -47,7 +49,7 @@ class AudioRecorderService : Service() {
 
                     startForeground(NOTIFICATION_ID, notification)
 
-                    recorder.start()
+                    recorder.start(output)
                 }
             }
 
@@ -105,5 +107,6 @@ class AudioRecorderService : Service() {
         const val ACTION_CLEAN_UP = "CLEAN_UP"
 
         const val EXTRA_SESSION_ID = "EXTRA_SESSION_ID"
+        const val EXTRA_OUTPUT = "EXTRA_OUTPUT"
     }
 }

@@ -8,19 +8,33 @@ internal class MediaRecorderRecorder(private val cacheDir: File, private val med
     private var mediaRecorder: MediaRecorderWrapper? = null
     private var file: File? = null
 
-    override fun start() {
-        val tempFile = File.createTempFile("recording", ".m4a", cacheDir)
-        file = tempFile
-
+    override fun start(output: Output) {
         mediaRecorder = mediaRecorderFactory().also {
             it.setAudioSource(MediaRecorder.AudioSource.MIC)
-            it.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
 
-            it.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-            it.setAudioEncodingSampleRate(32000)
-            it.setAudioEncodingBitRate(128000)
+            when (output) {
+                Output.AMR -> {
+                    val tempFile = File.createTempFile("recording", ".amr", cacheDir)
+                    file = tempFile
 
-            it.setOutputFile(tempFile.absolutePath)
+                    it.setOutputFormat(MediaRecorder.OutputFormat.AMR_NB)
+                    it.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+                    it.setAudioEncodingSampleRate(8000)
+                    it.setAudioEncodingBitRate(12200)
+                    it.setOutputFile(tempFile.absolutePath)
+                }
+
+                Output.AAC -> {
+                    val tempFile = File.createTempFile("recording", ".m4a", cacheDir)
+                    file = tempFile
+
+                    it.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+                    it.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+                    it.setAudioEncodingSampleRate(32000)
+                    it.setAudioEncodingBitRate(64000)
+                    it.setOutputFile(tempFile.absolutePath)
+                }
+            }
 
             it.prepare()
             it.start()

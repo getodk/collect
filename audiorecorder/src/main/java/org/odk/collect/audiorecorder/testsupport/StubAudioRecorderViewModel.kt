@@ -2,8 +2,8 @@ package org.odk.collect.audiorecorder.testsupport
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel
-import org.odk.collect.audiorecorder.recording.Output
 import java.io.File
 
 /**

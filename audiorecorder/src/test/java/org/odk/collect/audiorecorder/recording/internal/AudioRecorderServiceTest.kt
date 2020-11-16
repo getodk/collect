@@ -13,6 +13,7 @@ import org.junit.runner.RunWith
 import org.odk.collect.audiorecorder.AudioRecorderDependencyModule
 import org.odk.collect.audiorecorder.R
 import org.odk.collect.audiorecorder.RobolectricApplication
+import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recorder.Recorder
 import org.odk.collect.audiorecorder.setupDependencies
 import org.odk.collect.audiorecorder.support.FakeRecorder
@@ -40,11 +41,7 @@ class AudioRecorderServiceTest {
 
     @Test
     fun startAction_startsInForegroundWithNotification() {
-        val intent = Intent(application, AudioRecorderService::class.java)
-        intent.action = AudioRecorderService.ACTION_START
-        intent.putExtra(AudioRecorderService.EXTRA_SESSION_ID, "123")
-
-        val service = buildService(AudioRecorderService::class.java, intent)
+        val service = buildService(AudioRecorderService::class.java, createStartIntent("123"))
             .create()
             .startCommand(0, 0)
 
@@ -56,36 +53,25 @@ class AudioRecorderServiceTest {
 
     @Test
     fun startAction_startsRecorder() {
-        val intent = Intent(application, AudioRecorderService::class.java)
-        intent.action = AudioRecorderService.ACTION_START
-        intent.putExtra(AudioRecorderService.EXTRA_SESSION_ID, "123")
-
-        startService(intent)
-
+        startService(createStartIntent("123"))
         assertThat(recorder.isRecording(), equalTo(true))
     }
 
     @Test
     fun startAction_whenRecordingInProgress_doesNothing() {
-        val intent = Intent(application, AudioRecorderService::class.java)
-        intent.action = AudioRecorderService.ACTION_START
-        intent.putExtra(AudioRecorderService.EXTRA_SESSION_ID, "456")
-        startService(intent)
+        val intent = createStartIntent("456")
 
+        startService(intent)
         assertThat(recorder.isRecording(), equalTo(true))
 
         startService(intent)
-
         assertThat(recorder.isRecording(), equalTo(true))
         assertThat(recorder.recordings.size, equalTo(1))
     }
 
     @Test
     fun stopAction_stopsSelf() {
-        val startIntent = Intent(application, AudioRecorderService::class.java)
-        startIntent.action = AudioRecorderService.ACTION_START
-        startIntent.putExtra(AudioRecorderService.EXTRA_SESSION_ID, "123")
-        startService(startIntent)
+        startService(createStartIntent("123"))
 
         val stopIntent = Intent(application, AudioRecorderService::class.java)
         stopIntent.action = AudioRecorderService.ACTION_STOP
@@ -96,10 +82,7 @@ class AudioRecorderServiceTest {
 
     @Test
     fun stopAction_stopsRecorder() {
-        val startIntent = Intent(application, AudioRecorderService::class.java)
-        startIntent.action = AudioRecorderService.ACTION_START
-        startIntent.putExtra(AudioRecorderService.EXTRA_SESSION_ID, "123")
-        startService(startIntent)
+        startService(createStartIntent("123"))
 
         val stopIntent = Intent(application, AudioRecorderService::class.java)
         stopIntent.action = AudioRecorderService.ACTION_STOP
@@ -110,10 +93,7 @@ class AudioRecorderServiceTest {
 
     @Test
     fun cleanUpAction_whileRecording_cancelsRecorder() {
-        val startIntent = Intent(application, AudioRecorderService::class.java)
-        startIntent.action = AudioRecorderService.ACTION_START
-        startIntent.putExtra(AudioRecorderService.EXTRA_SESSION_ID, "123")
-        startService(startIntent)
+        startService(createStartIntent("123"))
 
         val cancelIntent = Intent(application, AudioRecorderService::class.java)
         cancelIntent.action = AudioRecorderService.ACTION_CLEAN_UP
@@ -125,10 +105,7 @@ class AudioRecorderServiceTest {
 
     @Test
     fun cleanUpAction_whileRecording_stopsSelf() {
-        val startIntent = Intent(application, AudioRecorderService::class.java)
-        startIntent.action = AudioRecorderService.ACTION_START
-        startIntent.putExtra(AudioRecorderService.EXTRA_SESSION_ID, "123")
-        startService(startIntent)
+        startService(createStartIntent("123"))
 
         val cancelIntent = Intent(application, AudioRecorderService::class.java)
         cancelIntent.action = AudioRecorderService.ACTION_CLEAN_UP
@@ -139,10 +116,7 @@ class AudioRecorderServiceTest {
 
     @Test
     fun cleanUpAction_afterRecording_stopsSelf_andDeletesFiles() {
-        val startIntent = Intent(application, AudioRecorderService::class.java)
-        startIntent.action = AudioRecorderService.ACTION_START
-        startIntent.putExtra(AudioRecorderService.EXTRA_SESSION_ID, "123")
-        startService(startIntent)
+        startService(createStartIntent("123"))
 
         val stopIntent = Intent(application, AudioRecorderService::class.java)
         stopIntent.action = AudioRecorderService.ACTION_STOP
@@ -158,17 +132,21 @@ class AudioRecorderServiceTest {
 
     @Test
     fun whenUserKillsAppFromTaskManager_cancelsRecorder_stopsSelf() {
-        val intent = Intent(application, AudioRecorderService::class.java)
-        intent.action = AudioRecorderService.ACTION_START
-        intent.putExtra(AudioRecorderService.EXTRA_SESSION_ID, "123")
-
-        val service = startService(intent)
+        val service = startService(createStartIntent("123"))
 
         service.get().onTaskRemoved(Intent())
 
         assertThat(recorder.isRecording(), equalTo(false))
         assertThat(recorder.wasCancelled(), equalTo(true))
         assertThat(shadowOf(service.get()).isStoppedBySelf, equalTo(true))
+    }
+
+    private fun createStartIntent(sessionId: String): Intent {
+        val intent = Intent(application, AudioRecorderService::class.java)
+        intent.action = AudioRecorderService.ACTION_START
+        intent.putExtra(AudioRecorderService.EXTRA_SESSION_ID, sessionId)
+        intent.putExtra(AudioRecorderService.EXTRA_OUTPUT, Output.AAC)
+        return intent
     }
 
     private fun startService(intent: Intent): ServiceController<AudioRecorderService> {

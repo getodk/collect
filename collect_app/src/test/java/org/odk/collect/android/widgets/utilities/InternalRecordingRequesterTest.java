@@ -13,7 +13,7 @@ import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
-import org.odk.collect.audiorecorder.recording.Output;
+import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.testshared.FakeLifecycleOwner;
 import org.robolectric.Robolectric;
 

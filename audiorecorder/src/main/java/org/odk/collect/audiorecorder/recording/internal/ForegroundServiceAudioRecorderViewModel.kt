@@ -4,15 +4,16 @@ import android.app.Application
 import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations.map
+import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel
-import org.odk.collect.audiorecorder.recording.Output
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_CLEAN_UP
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_START
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_STOP
+import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.EXTRA_OUTPUT
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.EXTRA_SESSION_ID
 import java.io.File
 
-internal class RealAudioRecorderViewModel internal constructor(private val application: Application, private val recordingRepository: RecordingRepository) : AudioRecorderViewModel() {
+internal class ForegroundServiceAudioRecorderViewModel internal constructor(private val application: Application, private val recordingRepository: RecordingRepository) : AudioRecorderViewModel() {
 
     private val _isRecording: LiveData<Boolean> = map(recordingRepository.currentSession) { it != null }
 
@@ -29,6 +30,7 @@ internal class RealAudioRecorderViewModel internal constructor(private val appli
             Intent(application, AudioRecorderService::class.java).apply {
                 action = ACTION_START
                 putExtra(EXTRA_SESSION_ID, sessionId)
+                putExtra(EXTRA_OUTPUT, output)
             }
         )
     }

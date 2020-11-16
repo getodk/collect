@@ -2,7 +2,9 @@ package org.odk.collect.audiorecorder.recording
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.junit.After
 import org.junit.Test
+import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.testshared.LiveDataTester
 import java.io.File
 
@@ -13,6 +15,11 @@ abstract class AudioRecorderViewModelTest {
     abstract val viewModel: AudioRecorderViewModel
     abstract fun runBackground()
     abstract fun getLastRecordedFile(): File?
+
+    @After
+    fun teardown() {
+        liveDataTester.teardown()
+    }
 
     @Test
     fun isRecording_whenNoSession_isFalse() {

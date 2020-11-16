@@ -2,6 +2,7 @@ package org.odk.collect.audiorecorder.recording
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import org.odk.collect.audiorecorder.recorder.Output
 import java.io.File
 
 /**

@@ -10,7 +10,7 @@ import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
-import org.odk.collect.audiorecorder.recording.Output;
+import org.odk.collect.audiorecorder.recorder.Output;
 
 import java.util.function.Consumer;
 
