@@ -215,7 +215,6 @@ public class AudioWidgetTest {
 
         File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
         widget.setData(newFile.getName());
-
         verify(valueChangedListener).widgetValueChanged(widget);
     }
 

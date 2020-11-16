@@ -18,7 +18,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.media.MediaMetadataRetriever;
-import android.provider.MediaStore.Audio;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -41,6 +42,8 @@ import org.odk.collect.audioclips.Clip;
 import java.io.File;
 
 import java.util.Locale;
+
+import timber.log.Timber;
 
 import static org.odk.collect.android.widgets.utilities.FileWidgetUtils.getInstanceFolder;
 
@@ -117,12 +120,39 @@ public class AudioWidget extends QuestionWidget implements WidgetDataReceiver {
      */
     @Override
     public void setData(Object object) {
-        binaryName = FileWidgetUtils.updateWidgetAnswer(getContext(), object, getFormEntryPrompt().getIndex().toString(),
-                getInstanceFolder(), binaryName, Audio.Media.EXTERNAL_CONTENT_URI, false);
-        widgetValueChanged();
+        // get the file path and create a copy in the instance folder
+        File newAudio = FileWidgetUtils.getFile(getContext(), object);
+        if (newAudio == null) {
+            Timber.w("AudioWidget's setBinaryData must receive a File or Uri object.");
+            return;
+        }
 
-        hideButtonsIfNeeded();
-        updatePlayerMedia();
+        if (newAudio.exists()) {
+            // Add the copy to the content provider
+            Uri audioURI = getContext().getContentResolver().insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                    FileWidgetUtils.getContentValues(newAudio, false));
+
+            questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
+
+            if (audioURI != null) {
+                Timber.i("Inserting audio returned uri = %s", audioURI.toString());
+            }
+
+            // Remove the media when replacing the answer
+            if (binaryName != null && !binaryName.equals(newAudio.getName())) {
+                questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
+                        getInstanceFolder() + File.separator + binaryName);
+            }
+            binaryName = newAudio.getName();
+
+            hideButtonsIfNeeded();
+            updatePlayerMedia();
+            widgetValueChanged();
+
+            Timber.i("Setting current answer to %s", newAudio.getName());
+        } else {
+            Timber.e("Inserting Audio file FAILED");
+        }
     }
 
     private void hideButtonsIfNeeded() {

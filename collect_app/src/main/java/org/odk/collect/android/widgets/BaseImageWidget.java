@@ -18,7 +18,6 @@ package org.odk.collect.android.widgets;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -73,19 +72,17 @@ public abstract class BaseImageWidget extends QuestionWidget implements WidgetDa
 
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
-    private final FileWidgetUtils fileWidgetUtils;
 
     public BaseImageWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager,
                            WaitingForDataRegistry waitingForDataRegistry) {
-        this(context, prompt, questionMediaManager, waitingForDataRegistry, new ContentUriProvider(), new FileWidgetUtils());
+        this(context, prompt, questionMediaManager, waitingForDataRegistry, new ContentUriProvider());
     }
 
     public BaseImageWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager,
-                           WaitingForDataRegistry waitingForDataRegistry, ContentUriProvider contentUriProvider, FileWidgetUtils fileWidgetUtils) {
+                           WaitingForDataRegistry waitingForDataRegistry, ContentUriProvider contentUriProvider) {
         super(context, prompt);
         this.questionMediaManager = questionMediaManager;
         this.waitingForDataRegistry = waitingForDataRegistry;
-        this.fileWidgetUtils = fileWidgetUtils;
         this.contentUriProvider = contentUriProvider;
     }
 
@@ -110,34 +107,32 @@ public abstract class BaseImageWidget extends QuestionWidget implements WidgetDa
 
     @Override
     public void setData(Object object) {
-        binaryName = fileWidgetUtils.getUpdatedWidgetAnswer(getContext(), questionMediaManager, object, getFormEntryPrompt().getIndex().toString(),
-                 binaryName, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true);
+        // you are replacing an answer. delete the previous image using the content provider
+        if (binaryName != null) {
+            questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
+                    FileWidgetUtils.getInstanceFolder() + File.separator + binaryName);
+        }
         File newImage = (File) object;
         if (newImage.exists()) {
             // Add the new image to the Media content provider so that the
             // viewing is fast in Android 2.0+
-            ContentValues values = new ContentValues(6);
-            values.put(MediaStore.Images.Media.TITLE, newImage.getName());
-            values.put(MediaStore.Images.Media.DISPLAY_NAME, newImage.getName());
-            values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
-            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-            values.put(MediaStore.Images.Media.DATA, newImage.getAbsolutePath());
+            Timber.i("Setting current answer to %s", newImage.getName());
 
             questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
 
-            Uri imageURI = getContext().getContentResolver().insert(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-
+            Uri imageURI = getContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    FileWidgetUtils.getContentValues(newImage, true));
             if (imageURI != null) {
                 Timber.i("Inserting image returned uri = %s", imageURI.toString());
             }
 
             binaryName = newImage.getName();
-            Timber.i("Setting current answer to %s", newImage.getName());
 
             addCurrentImageToLayout();
+            widgetValueChanged();
+        } else {
+            Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }
-        widgetValueChanged();
     }
 
     @Override

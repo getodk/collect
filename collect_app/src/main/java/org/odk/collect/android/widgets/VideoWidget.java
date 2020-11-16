@@ -55,6 +55,7 @@ import timber.log.Timber;
 import static org.odk.collect.android.analytics.AnalyticsEvents.REQUEST_HIGH_RES_VIDEO;
 import static org.odk.collect.android.analytics.AnalyticsEvents.REQUEST_VIDEO_NOT_HIGH_RES;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+import static org.odk.collect.android.widgets.utilities.FileWidgetUtils.getInstanceFolder;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -73,23 +74,21 @@ public class VideoWidget extends QuestionWidget implements WidgetDataReceiver {
     private final QuestionMediaManager questionMediaManager;
     private final ActivityAvailability activityAvailability;
     private final ContentUriProvider contentUriProvider;
-    private final FileWidgetUtils fileWidgetUtils;
 
     private String binaryName;
 
     public VideoWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
         this(context, prompt, waitingForDataRegistry, new CameraUtils(), questionMediaManager,
-                new ActivityAvailability(context), new ContentUriProvider(), new FileWidgetUtils());
+                new ActivityAvailability(context), new ContentUriProvider());
     }
 
     public VideoWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, CameraUtils cameraUtils,
-                       QuestionMediaManager questionMediaManager, ActivityAvailability activityAvailability, ContentUriProvider contentUriProvider, FileWidgetUtils fileWidgetUtils) {
+                       QuestionMediaManager questionMediaManager, ActivityAvailability activityAvailability, ContentUriProvider contentUriProvider) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
         this.activityAvailability = activityAvailability;
         this.contentUriProvider = contentUriProvider;
-        this.fileWidgetUtils = fileWidgetUtils;
 
         if (WidgetAppearanceUtils.isFrontCameraAppearance(getFormEntryPrompt())) {
             if (!cameraUtils.isFrontCameraAvailable()) {
@@ -159,10 +158,35 @@ public class VideoWidget extends QuestionWidget implements WidgetDataReceiver {
      */
     @Override
     public void setData(Object object) {
-        binaryName = fileWidgetUtils.getUpdatedWidgetAnswer(getContext(), questionMediaManager, object, getFormEntryPrompt().getIndex().toString(),
-                binaryName, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, false);
-        binding.playVideo.setEnabled(!binaryName.isEmpty());
-        widgetValueChanged();
+        File newVideo = FileWidgetUtils.getFile(getContext(), object);
+        if (newVideo == null) {
+            Timber.w("VideoWidget's setBinaryData must receive a File or Uri object.");
+            return;
+        }
+
+        if (newVideo.exists()) {
+            // Add the copy to the content provider
+            Uri videoURI = getContext().getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                    FileWidgetUtils.getContentValues(newVideo, false));
+
+            questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newVideo.getAbsolutePath());
+
+            if (videoURI != null) {
+                Timber.i("Inserting video returned uri = %s", videoURI.toString());
+            }
+
+            // Remove the media when replacing the answer
+            if (binaryName != null && !binaryName.equals(newVideo.getName())) {
+                questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
+                        getInstanceFolder() + File.separator + binaryName);
+            }
+            binaryName = newVideo.getName();
+
+            binding.playVideo.setEnabled(binaryName != null || !binaryName.isEmpty());
+            widgetValueChanged();
+        } else {
+            Timber.e("Inserting video file FAILED");
+        }
     }
 
     @Override
@@ -251,7 +275,7 @@ public class VideoWidget extends QuestionWidget implements WidgetDataReceiver {
 
     private void playVideoFile() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        File file = new File(FileWidgetUtils.getInstanceFolder() + File.separator + binaryName);
+        File file = new File(getInstanceFolder() + File.separator + binaryName);
 
         Uri uri = null;
         try {

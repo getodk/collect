@@ -24,21 +24,22 @@ import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.ContentUriProvider;
-import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-import org.odk.collect.android.widgets.support.FakeFileWidgetUtils;
+import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowToast;
 
 import java.io.File;
+import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
@@ -52,16 +53,16 @@ import static org.robolectric.Shadows.shadowOf;
  */
 @RunWith(RobolectricTestRunner.class)
 public class VideoWidgetTest {
-    private final FakeFileWidgetUtils fakeFileWidgetUtils = new FakeFileWidgetUtils();
+
+    private final FakeQuestionMediaManager fakeQuestionMediaManager = new FakeQuestionMediaManager();
+    private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
+    private final FakePermissionUtils permissionUtils = new FakePermissionUtils();
     private final File newFile = new File("newFile.mp4");
 
     private TestScreenContextActivity widgetActivity;
     private ShadowActivity shadowActivity;
-    private FakeWaitingForDataRegistry waitingForDataRegistry;
     private CameraUtils cameraUtils;
-    private QuestionMediaManager questionMediaManager;
     private FormIndex formIndex;
-    private FakePermissionUtils permissionUtils;
     private ActivityAvailability activityAvailability;
     private ContentUriProvider contentUriProvider;
 
@@ -71,13 +72,10 @@ public class VideoWidgetTest {
         shadowActivity = shadowOf(widgetActivity);
 
         cameraUtils = mock(CameraUtils.class);
-        questionMediaManager = mock(QuestionMediaManager.class);
         activityAvailability = mock(ActivityAvailability.class);
         contentUriProvider = mock(ContentUriProvider.class);
         formIndex = mock(FormIndex.class);
 
-        waitingForDataRegistry = new FakeWaitingForDataRegistry();
-        permissionUtils = new FakePermissionUtils();
         permissionUtils.setPermissionGranted(true);
 
         when(activityAvailability.isActivityAvailable(ArgumentMatchers.any())).thenReturn(true);
@@ -174,8 +172,8 @@ public class VideoWidgetTest {
         VideoWidget widget = createWidget(prompt);
         widget.clearAnswer();
 
-        verify(questionMediaManager).markOriginalFileOrDelete("questionIndex",
-                "null" + File.separator + "blah.mp4");
+        assertThat(fakeQuestionMediaManager.originalFiles.get("questionIndex"),
+                is("null" + File.separator + "blah.mp4"));
     }
 
     @Test
@@ -188,37 +186,75 @@ public class VideoWidgetTest {
     }
 
     @Test
-    public void setData_updatesWidgetAnswer() {
+    public void setData_whenDataIsOfIncorrectType_answerIsNotUpdated() {
         VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
-        widget.setBinaryData(newFile);
-
-        assertThat(fakeFileWidgetUtils.object, equalTo(newFile));
-        assertThat(fakeFileWidgetUtils.binaryName, equalTo("blah.mp4"));
-        assertThat(fakeFileWidgetUtils.uri, equalTo(MediaStore.Video.Media.EXTERNAL_CONTENT_URI));
-        assertThat(fakeFileWidgetUtils.isImageType, equalTo(false));
-
-        assertThat(widget.getAnswer().getDisplayText(), equalTo("newFile.mp4"));
+        widget.setBinaryData("newFile.mp4");
+        assertThat(widget.getAnswer().getDisplayText(), is("blah.mp4"));
     }
 
     @Test
-    public void setData_whenFileExists_enablesPlayButton() {
-        VideoWidget widget = createWidget(promptWithAnswer(null));
+    public void setData_whenDataIsNull_doesNotReplaceAnswer() {
+        VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
+        widget.setBinaryData(null);
+
+        assertThat(fakeQuestionMediaManager.originalFiles.isEmpty(), is(true));
+        assertThat(widget.getAnswer().getDisplayText(), is("blah.mp4"));
+    }
+
+    @Test
+    public void setData_whenVideoDoesNotExist_doesNotReplaceAnswer() {
+        VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
         widget.setBinaryData(newFile);
+
+        assertThat(fakeQuestionMediaManager.originalFiles.isEmpty(), is(true));
+        assertThat(fakeQuestionMediaManager.recentFiles.isEmpty(), is(true));
+        assertThat(widget.getAnswer().getDisplayText(), is("blah.mp4"));
+    }
+
+    @Test
+    public void setData_whenVideoExists_replaceFileAndUpdatesAnswer() throws IOException {
+        File tempFile = File.createTempFile("newFile", "mp4");
+        tempFile.deleteOnExit();
+
+        FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.mp4"));
+        when(prompt.getIndex()).thenReturn(formIndex);
+
+        VideoWidget widget = createWidget(prompt);
+        widget.setBinaryData(tempFile);
+
+        assertThat(fakeQuestionMediaManager.originalFiles.get("questionIndex"), is("null/blah.mp4"));
+        assertThat(fakeQuestionMediaManager.recentFiles.get("questionIndex"), is(tempFile.getAbsolutePath()));
+        assertThat(widget.getAnswer().getDisplayText(), is(tempFile.getName()));
+    }
+
+    @Test
+    public void setData_whenVideoExists_enablesPlayButton() throws IOException {
+        File tempFile = File.createTempFile("newFile", "mp4");
+        tempFile.deleteOnExit();
+
+        VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
+        widget.setBinaryData(tempFile);
+
         assertThat(widget.binding.playVideo.isEnabled(), is(true));
     }
 
     @Test
-    public void setData_whenFileDoesNotExist_enablesPlayButton() {
-        VideoWidget widget = createWidget(promptWithAnswer(null));
-        widget.setBinaryData(new File(""));
-        assertThat(widget.binding.playVideo.isEnabled(), is(false));
-    }
-
-    @Test
-    public void setData_callsValueChangeListener() {
+    public void setData_whenVideoDoesNotExist_doesNotCallValueChangeListener() {
         VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.setBinaryData(newFile);
+
+        verify(valueChangedListener, never()).widgetValueChanged(any());
+    }
+
+    @Test
+    public void setData_whenVideoExists_callsValueChangeListener() throws IOException {
+        File tempFile = File.createTempFile("newFile", "mp4");
+        tempFile.deleteOnExit();
+
+        VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+        widget.setBinaryData(tempFile);
 
         verify(valueChangedListener).widgetValueChanged(widget);
     }
@@ -275,9 +311,9 @@ public class VideoWidgetTest {
         assertThat(startedIntent.getComponent().getClassName(), is(CaptureSelfieVideoActivity.class.getName()));
 
         ShadowActivity.IntentForResult intentForResult = shadowActivity.getNextStartedActivityForResult();
-        assertThat(intentForResult.requestCode, equalTo(ApplicationConstants.RequestCodes.VIDEO_CAPTURE));
+        assertThat(intentForResult.requestCode, is(ApplicationConstants.RequestCodes.VIDEO_CAPTURE));
 
-        assertThat(waitingForDataRegistry.waiting.contains(formIndex), equalTo(true));
+        assertThat(waitingForDataRegistry.waiting.contains(formIndex), is(true));
     }
 
     @Test
@@ -294,9 +330,9 @@ public class VideoWidgetTest {
         assertThat(startedIntent.getComponent().getClassName(), is(CaptureSelfieVideoActivity.class.getName()));
 
         ShadowActivity.IntentForResult intentForResult = shadowActivity.getNextStartedActivityForResult();
-        assertThat(intentForResult.requestCode, equalTo(ApplicationConstants.RequestCodes.VIDEO_CAPTURE));
+        assertThat(intentForResult.requestCode, is(ApplicationConstants.RequestCodes.VIDEO_CAPTURE));
 
-        assertThat(waitingForDataRegistry.waiting.contains(formIndex), equalTo(true));
+        assertThat(waitingForDataRegistry.waiting.contains(formIndex), is(true));
     }
 
     @Test
@@ -313,9 +349,9 @@ public class VideoWidgetTest {
         assertThat(startedIntent.getStringExtra(MediaStore.EXTRA_OUTPUT), is(MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString()));
 
         ShadowActivity.IntentForResult intentForResult = shadowActivity.getNextStartedActivityForResult();
-        assertThat(intentForResult.requestCode, equalTo(ApplicationConstants.RequestCodes.VIDEO_CAPTURE));
+        assertThat(intentForResult.requestCode, is(ApplicationConstants.RequestCodes.VIDEO_CAPTURE));
 
-        assertThat(waitingForDataRegistry.waiting.contains(formIndex), equalTo(true));
+        assertThat(waitingForDataRegistry.waiting.contains(formIndex), is(true));
     }
 
     @Test
@@ -345,9 +381,9 @@ public class VideoWidgetTest {
         assertThat(startedIntent.getType(), is("video/*"));
 
         ShadowActivity.IntentForResult intentForResult = shadowActivity.getNextStartedActivityForResult();
-        assertThat(intentForResult.requestCode, equalTo(ApplicationConstants.RequestCodes.VIDEO_CHOOSER));
+        assertThat(intentForResult.requestCode, is(ApplicationConstants.RequestCodes.VIDEO_CHOOSER));
 
-        assertThat(waitingForDataRegistry.waiting.contains(formIndex), equalTo(true));
+        assertThat(waitingForDataRegistry.waiting.contains(formIndex), is(true));
     }
 
     @Test
@@ -382,6 +418,6 @@ public class VideoWidgetTest {
 
     public VideoWidget createWidget(FormEntryPrompt prompt) {
         return new VideoWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"),
-                waitingForDataRegistry, cameraUtils, questionMediaManager, activityAvailability, contentUriProvider, fakeFileWidgetUtils);
+                waitingForDataRegistry, cameraUtils, fakeQuestionMediaManager, activityAvailability, contentUriProvider);
     }
 }

@@ -19,7 +19,7 @@ import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ContentUriProvider;
-import org.odk.collect.android.utilities.QuestionMediaManager;
+import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowActivity;
@@ -29,7 +29,6 @@ import java.io.File;
 import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -46,10 +45,11 @@ import static org.robolectric.Shadows.shadowOf;
 @RunWith(RobolectricTestRunner.class)
 public class ArbitraryFileWidgetTest {
 
+    private final FakeQuestionMediaManager fakeQuestionMediaManager = new FakeQuestionMediaManager();
+    private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
+
     private TestScreenContextActivity widgetActivity;
     private ShadowActivity shadowActivity;
-    private FakeWaitingForDataRegistry waitingForDataRegistry;
-    private QuestionMediaManager mockedQuestionMediaManager;
     private FormIndex formIndex;
     private ActivityAvailability activityAvailability;
     private ContentUriProvider contentUriProvider;
@@ -59,12 +59,9 @@ public class ArbitraryFileWidgetTest {
         widgetActivity = widgetTestActivity();
         shadowActivity = shadowOf(widgetActivity);
 
-        mockedQuestionMediaManager = mock(QuestionMediaManager.class);
         activityAvailability = mock(ActivityAvailability.class);
         contentUriProvider = mock(ContentUriProvider.class);
         formIndex = mock(FormIndex.class);
-
-        waitingForDataRegistry = new FakeWaitingForDataRegistry();
 
         when(activityAvailability.isActivityAvailable(ArgumentMatchers.any())).thenReturn(true);
         when(formIndex.toString()).thenReturn("questionIndex");
@@ -124,8 +121,8 @@ public class ArbitraryFileWidgetTest {
 
         ArbitraryFileWidget widget = createWidget(prompt);
         widget.clearAnswer();
-        verify(mockedQuestionMediaManager).markOriginalFileOrDelete("questionIndex",
-                "null" + File.separator + "blah.txt");
+        assertThat(fakeQuestionMediaManager.originalFiles.get("questionIndex"),
+                is("null" + File.separator + "blah.txt"));
     }
 
     @Test
@@ -165,6 +162,31 @@ public class ArbitraryFileWidgetTest {
 
         assertThat(widget.getAnswer().getDisplayText(), is(tempFile.getName()));
         assertThat(widget.binding.answerTextView.getText(), is(tempFile.getName()));
+        assertThat(widget.binding.answerLayout.getVisibility(), is(View.VISIBLE));
+    }
+
+    @Test
+    public void setData_whenFileExists_doesNotDeleteOriginalFile_whenWidgetHasSameAnswer() throws IOException {
+        File tempFile = File.createTempFile("newFile", "txt");
+        tempFile.deleteOnExit();
+
+        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(tempFile.getName())));
+        widget.setBinaryData(tempFile);
+        assertThat(fakeQuestionMediaManager.originalFiles.isEmpty(), is(true));
+    }
+
+    @Test
+    public void setData_whenFileExists_deletesOriginalFile_whenWidgetHasDifferentAnswer() throws IOException {
+        File tempFile = File.createTempFile("newFile", "txt");
+        tempFile.deleteOnExit();
+
+        FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.txt"));
+        when(prompt.getIndex()).thenReturn(formIndex);
+
+        ArbitraryFileWidget widget = createWidget(prompt);
+        widget.setBinaryData(tempFile);
+        assertThat(fakeQuestionMediaManager.originalFiles.get("questionIndex"),
+                is("null" + File.separator + "blah.txt"));
     }
 
     @Test
@@ -202,14 +224,14 @@ public class ArbitraryFileWidgetTest {
 
         Intent startedActivity = shadowActivity.getNextStartedActivity();
 
-        assertThat(startedActivity.getAction(), equalTo(Intent.ACTION_OPEN_DOCUMENT));
+        assertThat(startedActivity.getAction(), is(Intent.ACTION_OPEN_DOCUMENT));
         assertThat(startedActivity.getCategories().contains(Intent.CATEGORY_OPENABLE), is(true));
-        assertThat(startedActivity.getType(), equalTo("*/*"));
+        assertThat(startedActivity.getType(), is("*/*"));
 
         ShadowActivity.IntentForResult intentForResult = shadowActivity.getNextStartedActivityForResult();
-        assertThat(intentForResult.requestCode, equalTo(ApplicationConstants.RequestCodes.ARBITRARY_FILE_CHOOSER));
+        assertThat(intentForResult.requestCode, is(ApplicationConstants.RequestCodes.ARBITRARY_FILE_CHOOSER));
 
-        assertThat(waitingForDataRegistry.waiting.contains(formIndex), equalTo(true));
+        assertThat(waitingForDataRegistry.waiting.contains(formIndex), is(true));
     }
 
     @Test
@@ -235,13 +257,13 @@ public class ArbitraryFileWidgetTest {
         widget.binding.answerLayout.performClick();
         Intent startedActivity = shadowActivity.getNextStartedActivity();
 
-        assertThat(startedActivity.getAction(), equalTo(Intent.ACTION_VIEW));
+        assertThat(startedActivity.getAction(), is(Intent.ACTION_VIEW));
         assertThat(startedActivity.getData(), is(Uri.parse("content://blah")));
-        assertThat(startedActivity.getFlags(), equalTo(Intent.FLAG_GRANT_READ_URI_PERMISSION));
+        assertThat(startedActivity.getFlags(), is(Intent.FLAG_GRANT_READ_URI_PERMISSION));
     }
 
     public ArbitraryFileWidget createWidget(FormEntryPrompt prompt) {
         return new ArbitraryFileWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"),
-                mockedQuestionMediaManager, waitingForDataRegistry, activityAvailability, contentUriProvider);
+                fakeQuestionMediaManager, waitingForDataRegistry, activityAvailability, contentUriProvider);
     }
 }
