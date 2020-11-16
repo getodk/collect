@@ -42,6 +42,7 @@ import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.CameraUtils;
+import org.odk.collect.android.utilities.CameraUtilsProvider;
 import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FileUtils;
@@ -93,12 +94,12 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
 
     private boolean selfie;
 
-    public VideoWidget(Context context, QuestionDetails prompt,  QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
-        this(context, prompt, new FileUtil(), new MediaUtil(), waitingForDataRegistry, questionMediaManager, new CameraUtils());
+    public VideoWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
+        this(context, prompt, new FileUtil(), new MediaUtil(), questionMediaManager, waitingForDataRegistry, new CameraUtils());
     }
 
     public VideoWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil,
-                       WaitingForDataRegistry waitingForDataRegistry, QuestionMediaManager questionMediaManager, CameraUtils cameraUtils) {
+                       QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, CameraUtilsProvider cameraUtilsProvider) {
         super(context, questionDetails);
 
         this.fileUtil = fileUtil;
@@ -130,7 +131,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         hideButtonsIfNeeded();
 
         if (selfie) {
-            if (!cameraUtils.isFrontCameraAvailable()) {
+            if (!cameraUtilsProvider.checkFrontCameraAvailability()) {
                 captureButton.setEnabled(false);
                 ToastUtils.showLongToast(R.string.error_front_camera_unavailable);
             }
