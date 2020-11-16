@@ -87,24 +87,36 @@ public class ArbitraryFileWidgetTest {
 
     @Test
     public void usingReadOnlyOption_doesNotDisplayChooseFileButton() {
-        assertThat(createWidget(promptWithReadOnly()).chooseFileButton.getVisibility(), is(View.GONE));
+        assertThat(createWidget(promptWithReadOnly()).binding.chooseFileButton.getVisibility(), is(View.GONE));
     }
 
     @Test
     public void whenPromptDoesNotHaveAnswer_AnswerLayoutIsNotDisplayed() {
-        assertThat(createWidget(promptWithAnswer(null)).answerLayout.getVisibility(), is(View.GONE));
+        assertThat(createWidget(promptWithAnswer(null)).binding.answerLayout.getVisibility(), is(View.GONE));
     }
 
     @Test
     public void getAnswer_whenPromptDoesNotHaveAnswer_returnsNullAndHidesAudioPlayer() {
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(null));
-        assertThat(widget.getAnswer(), nullValue());
+        assertNull(widget.getAnswer());
     }
 
     @Test
     public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
         assertThat(widget.getAnswer().getDisplayText(), is(FILE_PATH));
+    }
+
+    @Test
+    public void whenPromptDoesNotHaveAnswer_answerTextViewShowsEmptyString() {
+        ArbitraryFileWidget widget = createWidget(promptWithAnswer(null));
+        assertThat(widget.binding.answerTextView.getText(), is(""));
+    }
+
+    @Test
+    public void whenPromptHasAnswer_answerTextViewShowsFileName() {
+        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+        assertThat(widget.binding.answerTextView.getText(), is(FILE_PATH));
     }
 
     @Test
@@ -130,7 +142,7 @@ public class ArbitraryFileWidgetTest {
     public void clearAnswer_hidesAnswerLayout() {
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
         widget.clearAnswer();
-        assertThat(widget.answerLayout.getVisibility(), is(View.GONE));
+        assertThat(widget.binding.answerLayout.getVisibility(), is(View.GONE));
     }
 
     @Test
@@ -234,11 +246,11 @@ public class ArbitraryFileWidgetTest {
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(null));
         widget.setOnLongClickListener(listener);
 
-        widget.chooseFileButton.performLongClick();
-        widget.answerLayout.performLongClick();
+        widget.binding.chooseFileButton.performLongClick();
+        widget.binding.answerLayout.performLongClick();
 
-        verify(listener).onLongClick(widget.chooseFileButton);
-        verify(listener).onLongClick(widget.answerLayout);
+        verify(listener).onLongClick(widget.binding.chooseFileButton);
+        verify(listener).onLongClick(widget.binding.answerLayout);
     }
 
     @Test
@@ -247,7 +259,7 @@ public class ArbitraryFileWidgetTest {
         when(prompt.getIndex()).thenReturn(formIndex);
 
         ArbitraryFileWidget widget = createWidget(prompt);
-        widget.chooseFileButton.performClick();
+        widget.binding.chooseFileButton.performClick();
 
         Intent startedActivity = shadowActivity.getNextStartedActivity();
 
@@ -265,7 +277,7 @@ public class ArbitraryFileWidgetTest {
     public void clickingAnswerLayout_whenActivityIsNotAvailable_doesNotStartAnyIntent() {
         when(activityAvailability.isActivityAvailable(any())).thenReturn(false);
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
-        widget.answerLayout.performClick();
+        widget.binding.answerLayout.performClick();
 
         assertNull(shadowActivity.getNextStartedActivity());
         assertThat(ShadowToast.getTextOfLatestToast(), is(widgetActivity.getString(R.string.activity_not_found,
@@ -281,7 +293,7 @@ public class ArbitraryFileWidgetTest {
                 BuildConfig.APPLICATION_ID + ".provider",
                 new File(widget.getInstanceFolder() + File.separator + FILE_PATH))).thenReturn(Uri.parse("content://blah"));
 
-        widget.answerLayout.performClick();
+        widget.binding.answerLayout.performClick();
         Intent startedActivity = shadowActivity.getNextStartedActivity();
 
         assertThat(startedActivity.getAction(), equalTo(Intent.ACTION_VIEW));

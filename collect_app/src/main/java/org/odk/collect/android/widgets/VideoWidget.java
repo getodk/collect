@@ -23,6 +23,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Video;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Toast;
 
@@ -134,9 +135,13 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
             binding.captureVideo.setVisibility(View.GONE);
             binding.chooseVideo.setVisibility(View.GONE);
         } else {
+            binding.captureVideo.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+            binding.chooseVideo.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+
             binding.captureVideo.setOnClickListener(v -> onCaptureVideoButtonClick());
             binding.chooseVideo.setOnClickListener(v -> chooseVideo());
         }
+        binding.playVideo.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.playVideo.setOnClickListener(v -> playVideoFile());
 
         return binding.getRoot();

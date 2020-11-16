@@ -19,13 +19,12 @@
         android:layout_gravity="center">
 
         <ImageView
-            android:id="@+id/attachment_image"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             app:srcCompat="@drawable/ic_attachment"/>
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/answer_text"
+            android:id="@+id/answer_text_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
