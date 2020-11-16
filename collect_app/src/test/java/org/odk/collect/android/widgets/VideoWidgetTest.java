@@ -24,11 +24,10 @@ import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.CameraUtilsProvider;
 import org.odk.collect.android.utilities.ContentUriFetcher;
-import org.odk.collect.android.utilities.FileUtil;
-import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
+import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowToast;
@@ -40,7 +39,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
@@ -55,13 +53,10 @@ import static org.robolectric.Shadows.shadowOf;
 @RunWith(RobolectricTestRunner.class)
 public class VideoWidgetTest {
     private static final String FILE_PATH = "blah.mp4";
-    private static final String SOURCE_FILE_PATH = "sourceFile.mp4";
 
     private TestScreenContextActivity widgetActivity;
     private ShadowActivity shadowActivity;
     private FakeWaitingForDataRegistry waitingForDataRegistry;
-    private FileUtil fileUtil;
-    private MediaUtil mediaUtil;
     private CameraUtilsProvider cameraUtilsProvider;
     private QuestionMediaManager questionMediaManager;
     private FormIndex formIndex;
@@ -75,8 +70,6 @@ public class VideoWidgetTest {
         widgetActivity = widgetTestActivity();
         shadowActivity = shadowOf(widgetActivity);
 
-        fileUtil = mock(FileUtil.class);
-        mediaUtil = mock(MediaUtil.class);
         cameraUtilsProvider = mock(CameraUtilsProvider.class);
         questionMediaManager = mock(QuestionMediaManager.class);
         activityAvailability = mock(ActivityAvailability.class);
@@ -217,87 +210,12 @@ public class VideoWidgetTest {
     }
 
     @Test
-    public void setData_whenFileDoesNotExist_doesNotUpdateWidgetAnswer() {
-        VideoWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
-        widget.setBinaryData(new File("newFile.mp4"));
-        assertThat(widget.getAnswer().getDisplayText(), is(FILE_PATH));
-    }
-
-    @Test
-    public void setData_whenDataIsUri_copiesNewFileToSource() {
-        Uri newFileUri = Uri.fromFile(mockedFile);
-        File sourceFile = new File(SOURCE_FILE_PATH);
-
-        VideoWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
-
-        when(mediaUtil.getPathFromUri(widget.getContext(), newFileUri, MediaStore.Audio.Media.DATA)).thenReturn(SOURCE_FILE_PATH);
-        when(fileUtil.getFileAtPath(SOURCE_FILE_PATH)).thenReturn(sourceFile);
-        when(fileUtil.getFileAtPath("null/null.mp4")).thenReturn(mockedFile);
-
-        widget.setBinaryData(newFileUri);
-        verify(fileUtil).copyFile(sourceFile, mockedFile);
-    }
-
-    @Test
-    public void setData_whenFileExists_callsReplaceRecentFileForQuestion() {
-        FormEntryPrompt prompt = promptWithAnswer(new StringData(FILE_PATH));
-        when(prompt.getIndex()).thenReturn(formIndex);
-        when(mockedFile.getAbsolutePath()).thenReturn("newFilePath/newFile.mp4");
-
-        VideoWidget widget = createWidget(prompt);
-        widget.setBinaryData(mockedFile);
-
-        verify(questionMediaManager).replaceRecentFileForQuestion("questionIndex", "newFilePath/newFile.mp4");
-    }
-
-    @Test
-    public void setData_whenPromptHasDifferentAnswer_deletesOriginalAnswer() {
-        FormEntryPrompt prompt = promptWithAnswer(new StringData(FILE_PATH));
-        when(prompt.getIndex()).thenReturn(formIndex);
-
-        VideoWidget widget = createWidget(prompt);
-        widget.setBinaryData(mockedFile);
-
-        verify(questionMediaManager).markOriginalFileOrDelete("questionIndex",
-                widget.getInstanceFolder() + File.separator + "blah.mp4");
-    }
-
-    @Test
-    public void setData_whenPromptDoesNotHaveAnswer_doesNotDeleteOriginalAnswer() {
-        FormEntryPrompt prompt = promptWithAnswer(null);
-        when(prompt.getIndex()).thenReturn(formIndex);
-
-        VideoWidget widget = createWidget(prompt);
-        widget.setBinaryData(mockedFile);
-
-        verify(questionMediaManager, never()).markOriginalFileOrDelete("questionIndex",
-                widget.getInstanceFolder() + File.separator + "blah.mp4");
-    }
-
-    @Test
-    public void setData_whenPromptHasSameAnswer_doesNotDeleteOriginalAnswer() {
-        FormEntryPrompt prompt = promptWithAnswer(new StringData("newFile.mp4"));
-        when(prompt.getIndex()).thenReturn(formIndex);
-
-        VideoWidget widget = createWidget(prompt);
-        widget.setBinaryData(mockedFile);
-
-        verify(questionMediaManager, never()).markOriginalFileOrDelete("questionIndex",
-                widget.getInstanceFolder() + File.separator + "newFile.mp4");
-    }
-
-    @Test
-    public void setData_whenFileDoesNotExists_doesNotChangeWidgetAnswer() {
-        VideoWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
-        widget.setBinaryData(new File("newFile.mp4"));
-        assertThat(widget.getAnswer().getDisplayText(), is(FILE_PATH));
-    }
-
-    @Test
-    public void setData_whenFileExists_updatesWidgetAnswer() {
+    public void setData_updatesWidgetAnswer() {
         VideoWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
         widget.setBinaryData(mockedFile);
-        assertThat(widget.getAnswer().getDisplayText(), equalTo("newFile.mp4"));
+
+        assertThat(widget.getAnswer().getDisplayText(), equalTo(FileWidgetUtils.updateWidgetAnswer(widgetActivity, mockedFile, "questionIndex",
+                widget.getInstanceFolder(), FILE_PATH, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, false)));
     }
 
     @Test

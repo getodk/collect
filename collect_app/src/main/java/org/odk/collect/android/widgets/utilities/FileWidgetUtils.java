@@ -22,6 +22,9 @@ import timber.log.Timber;
 
 public class FileWidgetUtils {
 
+    private FileWidgetUtils() {
+    }
+
     public static void hideButtonsIfNeeded(FormEntryPrompt prompt, MultiClickSafeButton button) {
         if (prompt.getAppearanceHint() != null
                 && prompt.getAppearanceHint().toLowerCase(Locale.ENGLISH).contains(WidgetAppearanceUtils.NEW)) {

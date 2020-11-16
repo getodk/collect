@@ -21,8 +21,6 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class FileWidgetUtilsTest {
     private static final String INSTANCE_FOLDER_PATH = "instanceFolder";
-    private static final String QUESTION_INDEX = "questionIndex";
-    private static final String FILE_PATH = "file";
 
     private final Context context = ApplicationProvider.getApplicationContext();
 

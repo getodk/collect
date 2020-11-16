@@ -2,7 +2,6 @@ package org.odk.collect.android.widgets;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.view.View;
 
 import org.javarosa.core.model.FormIndex;
@@ -20,11 +19,9 @@ import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ContentUriFetcher;
-import org.odk.collect.android.utilities.FileUtil;
-import org.odk.collect.android.utilities.MediaUtil;
-import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
+import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowToast;
@@ -34,7 +31,6 @@ import java.io.File;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -50,13 +46,10 @@ import static org.robolectric.Shadows.shadowOf;
 @RunWith(RobolectricTestRunner.class)
 public class ArbitraryFileWidgetTest {
     private static final String FILE_PATH = "blah.txt";
-    private static final String SOURCE_FILE_PATH = "sourceFile.txt";
 
     private TestScreenContextActivity widgetActivity;
     private ShadowActivity shadowActivity;
     private FakeWaitingForDataRegistry waitingForDataRegistry;
-    private FileUtil fileUtil;
-    private MediaUtil mediaUtil;
     private QuestionMediaManager mockedQuestionMediaManager;
     private FormIndex formIndex;
     private File mockedFile;
@@ -68,8 +61,6 @@ public class ArbitraryFileWidgetTest {
         widgetActivity = widgetTestActivity();
         shadowActivity = shadowOf(widgetActivity);
 
-        fileUtil = mock(FileUtil.class);
-        mediaUtil = mock(MediaUtil.class);
         mockedQuestionMediaManager = mock(QuestionMediaManager.class);
         activityAvailability = mock(ActivityAvailability.class);
         contentUriFetcher = mock(ContentUriFetcher.class);
@@ -123,7 +114,7 @@ public class ArbitraryFileWidgetTest {
     public void deleteFile_removesWidgetAnswerAndStopsPlayingMedia() {
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
         widget.deleteFile();
-        assertThat(widget.getAnswer(), nullValue());
+        assertNull(widget.getAnswer());
     }
 
     @Test
@@ -149,7 +140,7 @@ public class ArbitraryFileWidgetTest {
     public void clearAnswer_removesAnswer() {
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
         widget.clearAnswer();
-        assertThat(widget.getAnswer(), nullValue());
+        assertNull(widget.getAnswer());
     }
 
     @Test
@@ -174,61 +165,35 @@ public class ArbitraryFileWidgetTest {
     }
 
     @Test
-    public void setData_whenDataIsUri_copiesNewFileToSource() {
-        Uri newFileUri = Uri.fromFile(mockedFile);
-        File sourceFile = new File(SOURCE_FILE_PATH);
-
+    public void setData_whenFileDoesNotExist_doesNotUpdateWidgetAnswer() {
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+        widget.setBinaryData(new File("newFilePath"));
 
-        when(mediaUtil.getPathFromUri(widgetActivity, newFileUri, MediaStore.Audio.Media.DATA)).thenReturn(SOURCE_FILE_PATH);
-        when(fileUtil.getFileAtPath(SOURCE_FILE_PATH)).thenReturn(sourceFile);
-        when(fileUtil.getFileAtPath("null/null.txt")).thenReturn(mockedFile);
-
-        widget.setBinaryData(newFileUri);
-        verify(fileUtil).copyFile(sourceFile, mockedFile);
+        assertThat(widget.getAnswer().getDisplayText(), is(FILE_PATH));
+        assertThat(widget.binding.answerTextView.getText(), is(FILE_PATH));
     }
 
     @Test
-    public void setData_whenPromptHasDifferentAnswer_deletesOriginalAnswer() {
+    public void setData_whenFileDoesNotExist_doesNotCallValueChangeListener() {
+        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+        widget.setBinaryData(new File("newFilePath"));
+
+        verify(valueChangedListener, never()).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void setData_whenFileExists_updatesWidgetAnswer() {
         FormEntryPrompt prompt = promptWithAnswer(new StringData(FILE_PATH));
         when(prompt.getIndex()).thenReturn(formIndex);
 
         ArbitraryFileWidget widget = createWidget(prompt);
         widget.setBinaryData(mockedFile);
+        String answer = FileWidgetUtils.deleteOriginalAnswer(mockedFile, FILE_PATH, "questionIndex",
+                widget.getInstanceFolder());
 
-        verify(mockedQuestionMediaManager).markOriginalFileOrDelete("questionIndex",
-                widget.getInstanceFolder() + File.separator + "blah.txt");
-    }
-
-    @Test
-    public void setData_whenPromptDoesNotHaveAnswer_doesNotDeleteOriginalAnswer() {
-        FormEntryPrompt prompt = promptWithAnswer(null);
-        when(prompt.getIndex()).thenReturn(formIndex);
-
-        ArbitraryFileWidget widget = createWidget(prompt);
-        widget.setBinaryData(mockedFile);
-
-        verify(mockedQuestionMediaManager, never()).markOriginalFileOrDelete("questionIndex",
-                widget.getInstanceFolder() + File.separator + "blah.txt");
-    }
-
-    @Test
-    public void setData_whenPromptHasSameAnswer_doesNotDeleteOriginalAnswer() {
-        FormEntryPrompt prompt = promptWithAnswer(new StringData("newFile.txt"));
-        when(prompt.getIndex()).thenReturn(formIndex);
-
-        ArbitraryFileWidget widget = createWidget(prompt);
-        widget.setBinaryData(mockedFile);
-
-        verify(mockedQuestionMediaManager, never()).markOriginalFileOrDelete("questionIndex",
-                widget.getInstanceFolder() + File.separator + "newFile.txt");
-    }
-
-    @Test
-    public void setData_whenFileExists_updatesWidgetAnswer() {
-        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
-        widget.setBinaryData(mockedFile);
-        assertThat(widget.getAnswer().getDisplayText(), equalTo("newFile.txt"));
+        assertThat(widget.getAnswer().getDisplayText(), is(answer));
+        assertThat(widget.binding.answerTextView.getText(), is(answer));
     }
 
     @Test
