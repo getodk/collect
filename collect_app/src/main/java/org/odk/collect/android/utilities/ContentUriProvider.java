@@ -20,10 +20,12 @@ import java.io.OutputStream;
 
 import timber.log.Timber;
 
-public class ContentUriProvider {
+public class ContentUriProvider implements ContentUriFetcher {
     private static final String HUAWEI_MANUFACTURER = "Huawei";
 
-    private ContentUriProvider() {
+    @Override
+    public Uri getUri(@NonNull Context context, @NonNull String authority, @NonNull File file) {
+        return getUriForFile(context, authority, file);
     }
 
     // https://stackoverflow.com/a/41309223/5479029

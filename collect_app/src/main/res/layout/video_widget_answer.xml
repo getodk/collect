@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <org.odk.collect.android.views.MultiClickSafeButton
+        android:id="@+id/capture_video"
+        style="@style/Widget.Collect.Button.CustomLayout"
+        android:text="@string/capture_audio">
+    </org.odk.collect.android.views.MultiClickSafeButton>
+
+    <org.odk.collect.android.views.MultiClickSafeButton
+        android:id="@+id/choose_video"
+        style="@style/Widget.Collect.Button.CustomLayout"
+        android:text="@string/choose_sound">
+    </org.odk.collect.android.views.MultiClickSafeButton>
+
+    <org.odk.collect.android.views.MultiClickSafeButton
+        android:id="@+id/play_video"
+        style="@style/Widget.Collect.Button.CustomLayout"
+        android:text="@string/capture_audio">
+    </org.odk.collect.android.views.MultiClickSafeButton>
+
+</LinearLayout>

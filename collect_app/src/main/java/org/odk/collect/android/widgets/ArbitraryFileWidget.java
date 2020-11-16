@@ -39,6 +39,7 @@ import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ContentUriProvider;
+import org.odk.collect.android.utilities.ContentUriFetcher;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtil;
@@ -59,6 +60,10 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.create
 
 @SuppressLint("ViewConstructor")
 public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, ButtonClickListener, WidgetDataReceiver {
+    private final WaitingForDataRegistry waitingForDataRegistry;
+    private final QuestionMediaManager questionMediaManager;
+    private final ActivityAvailability activityAvailability;
+    private final ContentUriFetcher contentUriFetcher;
 
     @NonNull
     private FileUtil fileUtil;
@@ -66,21 +71,19 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
     @NonNull
     private MediaUtil mediaUtil;
 
-    private final QuestionMediaManager questionMediaManager;
-    private final WaitingForDataRegistry waitingForDataRegistry;
-
     private String binaryName;
-
     Button chooseFileButton;
     TextView chosenFileNameTextView;
-    private LinearLayout answerLayout;
+    LinearLayout answerLayout;
 
-    public ArbitraryFileWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
-        this(context, prompt, new FileUtil(), new MediaUtil(), questionMediaManager, waitingForDataRegistry);
+    public ArbitraryFileWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
+        this(context, prompt, new FileUtil(), new MediaUtil(), waitingForDataRegistry, MediaManager.INSTANCE,
+                new ActivityAvailability(context), new ContentUriProvider());
     }
 
     ArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil,
-                        QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
+                        WaitingForDataRegistry waitingForDataRegistry, QuestionMediaManager questionMediaManager,
+                        ActivityAvailability activityAvailability, ContentUriFetcher contentUriFetcher) {
         super(context, questionDetails);
         this.fileUtil = fileUtil;
         this.mediaUtil = mediaUtil;
@@ -88,6 +91,9 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
         this.waitingForDataRegistry = waitingForDataRegistry;
 
         binaryName = questionDetails.getPrompt().getAnswerText();
+
+        this.activityAvailability = activityAvailability;
+        this.contentUriFetcher = contentUriFetcher;
 
         setUpLayout(context);
     }
@@ -108,7 +114,6 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
     public void clearAnswer() {
         answerLayout.setVisibility(GONE);
         deleteFile();
-
         widgetValueChanged();
     }
 
@@ -163,7 +168,8 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
         LinearLayout widgetLayout = new LinearLayout(getContext());
         widgetLayout.setOrientation(LinearLayout.VERTICAL);
 
-        chooseFileButton = createSimpleButton(getContext(), questionDetails.isReadOnly(), getContext().getString(R.string.choose_file), getAnswerFontSize(), this);
+        chooseFileButton = createSimpleButton(getContext(), questionDetails.isReadOnly(),
+                getContext().getString(R.string.choose_file), getAnswerFontSize(), this);
         chooseFileButton.setEnabled(!questionDetails.isReadOnly());
 
         answerLayout = new LinearLayout(getContext());
@@ -198,15 +204,15 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
         return mediaUtil.getPathFromUri(getContext(), uri, MediaStore.Files.FileColumns.DATA);
     }
 
-    public String getMimeType(String url) {
+    private String getMimeType(String url) {
         String extension = MimeTypeMap.getFileExtensionFromUrl(url);
         return extension != null ? MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension) : null;
     }
 
     private void openFile() {
-
         Uri fileUri = Uri.fromFile(new File(getInstanceFolder() + File.separator + binaryName));
-        Uri contentUri = ContentUriProvider.getUriForFile(getContext(),
+
+        Uri contentUri = contentUriFetcher.getUri(getContext(),
                 BuildConfig.APPLICATION_ID + ".provider",
                 new File(getInstanceFolder() + File.separator + binaryName));
         Intent intent = new Intent();
@@ -214,7 +220,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
         intent.setDataAndType(contentUri, getMimeType(getSourcePathFromUri(fileUri)));
         FileUtils.grantFileReadPermissions(intent, contentUri, getContext());
 
-        if (new ActivityAvailability(getContext()).isActivityAvailable(intent)) {
+        if (activityAvailability.isActivityAvailable(intent)) {
             getContext().startActivity(intent);
         } else {
             String message = getContext().getString(R.string.activity_not_found, getContext().getString(R.string.open_file));

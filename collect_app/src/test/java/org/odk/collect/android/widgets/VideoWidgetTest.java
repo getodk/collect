@@ -27,7 +27,6 @@ import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
-import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowToast;
@@ -62,7 +61,7 @@ public class VideoWidgetTest {
     private FileUtil fileUtil;
     private MediaUtil mediaUtil;
     private CameraUtilsProvider cameraUtilsProvider;
-    private QuestionMediaManager mediaManagerListener;
+    private QuestionMediaManager questionMediaManager;
     private FormIndex formIndex;
     private File mockedFile;
     private FakePermissionUtils permissionUtils;
@@ -76,7 +75,7 @@ public class VideoWidgetTest {
         fileUtil = mock(FileUtil.class);
         mediaUtil = mock(MediaUtil.class);
         cameraUtilsProvider = mock(CameraUtilsProvider.class);
-        mediaManagerListener = mock(QuestionMediaManager.class);
+        questionMediaManager = mock(QuestionMediaManager.class);
         activityAvailability = mock(ActivityAvailability.class);
         formIndex = mock(FormIndex.class);
         mockedFile = mock(File.class);
@@ -96,9 +95,9 @@ public class VideoWidgetTest {
     public void usingReadOnlyOption_showsOnlyPlayButton() {
         VideoWidget widget = createWidget(promptWithReadOnly());
 
-        assertThat(widget.captureButton.getVisibility(), is(View.GONE));
-        assertThat(widget.chooseButton.getVisibility(), is(View.GONE));
-        assertThat(widget.playButton.getVisibility(), is(View.VISIBLE));
+        assertThat(widget.binding.captureVideo.getVisibility(), is(View.GONE));
+        assertThat(widget.binding.chooseVideo.getVisibility(), is(View.GONE));
+        assertThat(widget.binding.playVideo.getVisibility(), is(View.VISIBLE));
     }
 
     @Test
@@ -116,7 +115,7 @@ public class VideoWidgetTest {
     @Test
     public void whenPromptDoesNotHaveAnswer_playButtonIsDisabled() {
         VideoWidget widget = createWidget(promptWithAnswer(null));
-        assertThat(widget.playButton.isEnabled(), is(false));
+        assertThat(widget.binding.playVideo.isEnabled(), is(false));
     }
 
     @Test
@@ -125,7 +124,7 @@ public class VideoWidgetTest {
         when(prompt.getAppearanceHint()).thenReturn(WidgetAppearanceUtils.NEW);
         VideoWidget widget = createWidget(prompt);
 
-        assertThat(widget.chooseButton.getVisibility(), is(View.GONE));
+        assertThat(widget.binding.chooseVideo.getVisibility(), is(View.GONE));
     }
 
     @Test
@@ -134,7 +133,7 @@ public class VideoWidgetTest {
         when(prompt.getAppearanceHint()).thenReturn(WidgetAppearanceUtils.SELFIE);
         VideoWidget widget = createWidget(prompt);
 
-        assertThat(widget.chooseButton.getVisibility(), is(View.GONE));
+        assertThat(widget.binding.chooseVideo.getVisibility(), is(View.GONE));
     }
 
     @Test
@@ -143,7 +142,7 @@ public class VideoWidgetTest {
         when(prompt.getAppearanceHint()).thenReturn(WidgetAppearanceUtils.NEW_FRONT);
         VideoWidget widget = createWidget(prompt);
 
-        assertThat(widget.chooseButton.getVisibility(), is(View.GONE));
+        assertThat(widget.binding.chooseVideo.getVisibility(), is(View.GONE));
     }
 
     @Test
@@ -153,7 +152,7 @@ public class VideoWidgetTest {
         when(prompt.getAppearanceHint()).thenReturn(WidgetAppearanceUtils.SELFIE);
         VideoWidget widget = createWidget(prompt);
 
-        assertThat(widget.captureButton.isEnabled(), is(false));
+        assertThat(widget.binding.captureVideo.isEnabled(), is(false));
         assertThat(ShadowToast.getTextOfLatestToast(), is(widget.getContext().getString(R.string.error_front_camera_unavailable)));
     }
 
@@ -164,7 +163,7 @@ public class VideoWidgetTest {
         when(prompt.getAppearanceHint()).thenReturn(WidgetAppearanceUtils.NEW_FRONT);
         VideoWidget widget = createWidget(prompt);
 
-        assertThat(widget.captureButton.isEnabled(), is(false));
+        assertThat(widget.binding.captureVideo.isEnabled(), is(false));
         assertThat(ShadowToast.getTextOfLatestToast(), is(widget.getContext().getString(R.string.error_front_camera_unavailable)));
     }
 
@@ -176,13 +175,13 @@ public class VideoWidgetTest {
     }
 
     @Test
-    public void deleteFile_callsMediaManagerListener() {
+    public void deleteFile_callsMarkOriginalFileOrDelete() {
         FormEntryPrompt prompt = promptWithAnswer(new StringData(FILE_PATH));
         when(prompt.getIndex()).thenReturn(formIndex);
         VideoWidget widget = createWidget(prompt);
         widget.deleteFile();
 
-        verify(mediaManagerListener).markOriginalFileOrDelete("questionIndex",
+        verify(questionMediaManager).markOriginalFileOrDelete("questionIndex",
                 widget.getInstanceFolder() + File.separator + FILE_PATH);
     }
 
@@ -194,13 +193,13 @@ public class VideoWidgetTest {
     }
 
     @Test
-    public void clearAnswer_callsMediaManagerListener() {
+    public void clearAnswer_callsMarkOriginalFileOrDelete() {
         FormEntryPrompt prompt = promptWithAnswer(new StringData(FILE_PATH));
         when(prompt.getIndex()).thenReturn(formIndex);
         VideoWidget widget = createWidget(prompt);
         widget.clearAnswer();
 
-        verify(mediaManagerListener).markOriginalFileOrDelete("questionIndex",
+        verify(questionMediaManager).markOriginalFileOrDelete("questionIndex",
                 widget.getInstanceFolder() + File.separator + FILE_PATH);
     }
 
@@ -226,18 +225,17 @@ public class VideoWidgetTest {
         File sourceFile = new File(SOURCE_FILE_PATH);
 
         VideoWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
-        String destinationPath = FileWidgetUtils.getDestinationPathFromSourcePath(SOURCE_FILE_PATH, widget.getInstanceFolder(), fileUtil);
 
         when(mediaUtil.getPathFromUri(widget.getContext(), newFileUri, MediaStore.Audio.Media.DATA)).thenReturn(SOURCE_FILE_PATH);
         when(fileUtil.getFileAtPath(SOURCE_FILE_PATH)).thenReturn(sourceFile);
-        when(fileUtil.getFileAtPath(destinationPath)).thenReturn(mockedFile);
+        when(fileUtil.getFileAtPath("null/null.mp4")).thenReturn(mockedFile);
 
         widget.setBinaryData(newFileUri);
         verify(fileUtil).copyFile(sourceFile, mockedFile);
     }
 
     @Test
-    public void setData_whenFileExists_callsMediaManagerListener() {
+    public void setData_whenFileExists_callsReplaceRecentFileForQuestion() {
         FormEntryPrompt prompt = promptWithAnswer(new StringData(FILE_PATH));
         when(prompt.getIndex()).thenReturn(formIndex);
         when(mockedFile.getAbsolutePath()).thenReturn("newFilePath/newFile.mp4");
@@ -245,7 +243,7 @@ public class VideoWidgetTest {
         VideoWidget widget = createWidget(prompt);
         widget.setBinaryData(mockedFile);
 
-        verify(mediaManagerListener).replaceRecentFileForQuestion("questionIndex", "newFilePath/newFile.mp4");
+        verify(questionMediaManager).replaceRecentFileForQuestion("questionIndex", "newFilePath/newFile.mp4");
     }
 
     @Test
@@ -256,7 +254,7 @@ public class VideoWidgetTest {
         VideoWidget widget = createWidget(prompt);
         widget.setBinaryData(mockedFile);
 
-        verify(mediaManagerListener).markOriginalFileOrDelete("questionIndex",
+        verify(questionMediaManager).markOriginalFileOrDelete("questionIndex",
                 widget.getInstanceFolder() + File.separator + "blah.mp4");
     }
 
@@ -268,7 +266,7 @@ public class VideoWidgetTest {
         VideoWidget widget = createWidget(prompt);
         widget.setBinaryData(mockedFile);
 
-        verify(mediaManagerListener, never()).markOriginalFileOrDelete("questionIndex",
+        verify(questionMediaManager, never()).markOriginalFileOrDelete("questionIndex",
                 widget.getInstanceFolder() + File.separator + "blah.mp4");
     }
 
@@ -280,7 +278,7 @@ public class VideoWidgetTest {
         VideoWidget widget = createWidget(prompt);
         widget.setBinaryData(mockedFile);
 
-        verify(mediaManagerListener, never()).markOriginalFileOrDelete("questionIndex",
+        verify(questionMediaManager, never()).markOriginalFileOrDelete("questionIndex",
                 widget.getInstanceFolder() + File.separator + "newFile.mp4");
     }
 
@@ -302,7 +300,7 @@ public class VideoWidgetTest {
     public void setData_whenFileExists_enablesPlayButton() {
         VideoWidget widget = createWidget(promptWithAnswer(null));
         widget.setBinaryData(mockedFile);
-        assertThat(widget.playButton.isEnabled(), is(true));
+        assertThat(widget.binding.playVideo.isEnabled(), is(true));
     }
 
     @Test
@@ -320,13 +318,13 @@ public class VideoWidgetTest {
         VideoWidget widget = createWidget(promptWithAnswer(null));
         widget.setOnLongClickListener(listener);
 
-        widget.captureButton.performLongClick();
-        widget.chooseButton.performLongClick();
-        widget.playButton.performLongClick();
+        widget.binding.captureVideo.performLongClick();
+        widget.binding.chooseVideo.performLongClick();
+        widget.binding.playVideo.performLongClick();
 
-        verify(listener).onLongClick(widget.captureButton);
-        verify(listener).onLongClick(widget.chooseButton);
-        verify(listener).onLongClick(widget.playButton);
+        verify(listener).onLongClick(widget.binding.captureVideo);
+        verify(listener).onLongClick(widget.binding.chooseVideo);
+        verify(listener).onLongClick(widget.binding.playVideo);
     }
 
     @Test
@@ -334,7 +332,7 @@ public class VideoWidgetTest {
         VideoWidget widget = createWidget(promptWithAnswer(null));
         widget.setPermissionUtils(permissionUtils);
         permissionUtils.setPermissionGranted(false);
-        widget.captureButton.performClick();
+        widget.binding.captureVideo.performClick();
 
         assertThat(shadowActivity.getNextStartedActivity(), nullValue());
     }
@@ -344,7 +342,7 @@ public class VideoWidgetTest {
         when(activityAvailability.isActivityAvailable(ArgumentMatchers.any())).thenReturn(false);
         VideoWidget widget = createWidget(promptWithAnswer(null));
         widget.setPermissionUtils(permissionUtils);
-        widget.captureButton.performClick();
+        widget.binding.captureVideo.performClick();
 
         assertThat(shadowActivity.getNextStartedActivity(), nullValue());
         assertThat(ShadowToast.getTextOfLatestToast(), is(widget.getContext().getString(R.string.activity_not_found,
@@ -360,7 +358,7 @@ public class VideoWidgetTest {
 
         VideoWidget widget = createWidget(prompt);
         widget.setPermissionUtils(permissionUtils);
-        widget.captureButton.performClick();
+        widget.binding.captureVideo.performClick();
 
         Intent startedIntent = shadowActivity.getNextStartedActivity();
         assertThat(startedIntent.getComponent().getClassName(), is(CaptureSelfieVideoActivity.class.getName()));
@@ -379,7 +377,7 @@ public class VideoWidgetTest {
 
         VideoWidget widget = createWidget(prompt);
         widget.setPermissionUtils(permissionUtils);
-        widget.captureButton.performClick();
+        widget.binding.captureVideo.performClick();
 
         Intent startedIntent = shadowActivity.getNextStartedActivity();
         assertThat(startedIntent.getComponent().getClassName(), is(CaptureSelfieVideoActivity.class.getName()));
@@ -397,7 +395,7 @@ public class VideoWidgetTest {
 
         VideoWidget widget = createWidget(prompt);
         widget.setPermissionUtils(permissionUtils);
-        widget.captureButton.performClick();
+        widget.binding.captureVideo.performClick();
 
         Intent startedIntent = shadowActivity.getNextStartedActivity();
         assertThat(startedIntent.getAction(), is(MediaStore.ACTION_VIDEO_CAPTURE));
@@ -414,7 +412,7 @@ public class VideoWidgetTest {
         when(activityAvailability.isActivityAvailable(ArgumentMatchers.any())).thenReturn(false);
         VideoWidget widget = createWidget(promptWithAnswer(null));
         widget.setPermissionUtils(permissionUtils);
-        widget.chooseButton.performClick();
+        widget.binding.chooseVideo.performClick();
 
         assertThat(shadowActivity.getNextStartedActivity(), nullValue());
         assertThat(ShadowToast.getTextOfLatestToast(), is(widget.getContext().getString(R.string.activity_not_found,
@@ -429,7 +427,7 @@ public class VideoWidgetTest {
 
         VideoWidget widget = createWidget(prompt);
         widget.setPermissionUtils(permissionUtils);
-        widget.chooseButton.performClick();
+        widget.binding.chooseVideo.performClick();
 
         Intent startedIntent = shadowActivity.getNextStartedActivity();
         assertThat(startedIntent.getAction(), is(Intent.ACTION_GET_CONTENT));
@@ -445,7 +443,7 @@ public class VideoWidgetTest {
     public void clickingPlayVideoButton_launchesCorrectIntent() {
         VideoWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
         widget.setPermissionUtils(permissionUtils);
-        widget.playButton.performClick();
+        widget.binding.playVideo.performClick();
         Intent startedIntent = shadowActivity.getNextStartedActivity();
 
         assertThat(startedIntent.getAction(), is(Intent.ACTION_VIEW));
@@ -457,7 +455,7 @@ public class VideoWidgetTest {
         when(activityAvailability.isActivityAvailable(ArgumentMatchers.any())).thenReturn(false);
         VideoWidget widget = createWidget(promptWithAnswer(null));
         widget.setPermissionUtils(permissionUtils);
-        widget.playButton.performClick();
+        widget.binding.playVideo.performClick();
 
         assertThat(shadowActivity.getNextStartedActivity(), nullValue());
         assertThat(ShadowToast.getTextOfLatestToast(), is(widget.getContext().getString(R.string.activity_not_found,
@@ -466,6 +464,6 @@ public class VideoWidgetTest {
 
     public VideoWidget createWidget(FormEntryPrompt prompt) {
         return new VideoWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"),
-                fileUtil, mediaUtil, waitingForDataRegistry, cameraUtilsProvider, mediaManagerListener, activityAvailability);
+                fileUtil, mediaUtil, waitingForDataRegistry, cameraUtilsProvider, questionMediaManager, activityAvailability);
     }
 }
