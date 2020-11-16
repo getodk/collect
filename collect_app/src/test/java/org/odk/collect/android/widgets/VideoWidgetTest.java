@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.View;
@@ -10,16 +11,20 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.odk.collect.android.R;
+
+import org.odk.collect.android.activities.CaptureSelfieVideoActivity;
+import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.utilities.ActivityAvailability;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.CameraUtilsProvider;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.QuestionMediaManager;
-import org.odk.collect.android.widgets.base.FileWidgetTest;
-import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
@@ -35,7 +40,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
@@ -61,6 +65,8 @@ public class VideoWidgetTest {
     private QuestionMediaManager mediaManagerListener;
     private FormIndex formIndex;
     private File mockedFile;
+    private FakePermissionUtils permissionUtils;
+    private ActivityAvailability activityAvailability;
 
     @Before
     public void setUp() {
@@ -71,11 +77,15 @@ public class VideoWidgetTest {
         mediaUtil = mock(MediaUtil.class);
         cameraUtilsProvider = mock(CameraUtilsProvider.class);
         mediaManagerListener = mock(QuestionMediaManager.class);
+        activityAvailability = mock(ActivityAvailability.class);
         formIndex = mock(FormIndex.class);
         mockedFile = mock(File.class);
 
         waitingForDataRegistry = new FakeWaitingForDataRegistry();
+        permissionUtils = new FakePermissionUtils();
+        permissionUtils.setPermissionGranted(true);
 
+        when(activityAvailability.isActivityAvailable(ArgumentMatchers.any())).thenReturn(true);
         when(mockedFile.exists()).thenReturn(true);
         when(mockedFile.getName()).thenReturn("newFile.mp4");
         when(mockedFile.getAbsolutePath()).thenReturn("newFilePath");
@@ -275,17 +285,10 @@ public class VideoWidgetTest {
     }
 
     @Test
-    public void setData_whenFileDoesNotExists_setsWidgetAnswerToNull() {
+    public void setData_whenFileDoesNotExists_doesNotChangeWidgetAnswer() {
         VideoWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
         widget.setBinaryData(new File("newFile.mp4"));
-        assertThat(widget.getAnswer(), nullValue());
-    }
-
-    @Test
-    public void setData_whenFileDoesNotExists_disablesPlayButton() {
-        VideoWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
-        widget.setBinaryData(new File("newFile.mp4"));
-        assertThat(widget.playButton.isEnabled(), is(false));
+        assertThat(widget.getAnswer().getDisplayText(), is(FILE_PATH));
     }
 
     @Test
@@ -311,8 +314,158 @@ public class VideoWidgetTest {
         verify(valueChangedListener).widgetValueChanged(widget);
     }
 
+    @Test
+    public void clickingButtonsForLong_callsOnLongClickListeners() {
+        View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
+        VideoWidget widget = createWidget(promptWithAnswer(null));
+        widget.setOnLongClickListener(listener);
+
+        widget.captureButton.performLongClick();
+        widget.chooseButton.performLongClick();
+        widget.playButton.performLongClick();
+
+        verify(listener).onLongClick(widget.captureButton);
+        verify(listener).onLongClick(widget.chooseButton);
+        verify(listener).onLongClick(widget.playButton);
+    }
+
+    @Test
+    public void clickingCaptureVideoButton_doesNotLaunchAnyIntent_whenPermissionIsNotGranted() {
+        VideoWidget widget = createWidget(promptWithAnswer(null));
+        widget.setPermissionUtils(permissionUtils);
+        permissionUtils.setPermissionGranted(false);
+        widget.captureButton.performClick();
+
+        assertThat(shadowActivity.getNextStartedActivity(), nullValue());
+    }
+
+    @Test
+    public void clickingCaptureVideoButton_doesNotLaunchAnyIntentAndCancelsWaitingForData_whenIntentIsNotAvailable() {
+        when(activityAvailability.isActivityAvailable(ArgumentMatchers.any())).thenReturn(false);
+        VideoWidget widget = createWidget(promptWithAnswer(null));
+        widget.setPermissionUtils(permissionUtils);
+        widget.captureButton.performClick();
+
+        assertThat(shadowActivity.getNextStartedActivity(), nullValue());
+        assertThat(ShadowToast.getTextOfLatestToast(), is(widget.getContext().getString(R.string.activity_not_found,
+                widget.getContext().getString(R.string.capture_video))));
+        assertThat(waitingForDataRegistry.waiting.isEmpty(), is(true));
+    }
+
+    @Test
+    public void clickingCaptureVideoButton_launchesCaptureSelfieVideoActivityAndWaitsForData_inCaseOfSelfieWidget() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        when(prompt.getIndex()).thenReturn(formIndex);
+        when(prompt.getAppearanceHint()).thenReturn(WidgetAppearanceUtils.SELFIE);
+
+        VideoWidget widget = createWidget(prompt);
+        widget.setPermissionUtils(permissionUtils);
+        widget.captureButton.performClick();
+
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
+        assertThat(startedIntent.getComponent().getClassName(), is(CaptureSelfieVideoActivity.class.getName()));
+
+        ShadowActivity.IntentForResult intentForResult = shadowActivity.getNextStartedActivityForResult();
+        assertThat(intentForResult.requestCode, equalTo(ApplicationConstants.RequestCodes.VIDEO_CAPTURE));
+
+        assertThat(waitingForDataRegistry.waiting.contains(formIndex), equalTo(true));
+    }
+
+    @Test
+    public void clickingCaptureVideoButton_launchesCaptureSelfieVideoActivityAndWaitsForData_whenUsingMediaAppearanceNewFront() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        when(prompt.getIndex()).thenReturn(formIndex);
+        when(prompt.getAppearanceHint()).thenReturn(WidgetAppearanceUtils.NEW_FRONT);
+
+        VideoWidget widget = createWidget(prompt);
+        widget.setPermissionUtils(permissionUtils);
+        widget.captureButton.performClick();
+
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
+        assertThat(startedIntent.getComponent().getClassName(), is(CaptureSelfieVideoActivity.class.getName()));
+
+        ShadowActivity.IntentForResult intentForResult = shadowActivity.getNextStartedActivityForResult();
+        assertThat(intentForResult.requestCode, equalTo(ApplicationConstants.RequestCodes.VIDEO_CAPTURE));
+
+        assertThat(waitingForDataRegistry.waiting.contains(formIndex), equalTo(true));
+    }
+
+    @Test
+    public void clickingCaptureVideoButton_launchesVideoCaptureIntentAndWaitsForData() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        when(prompt.getIndex()).thenReturn(formIndex);
+
+        VideoWidget widget = createWidget(prompt);
+        widget.setPermissionUtils(permissionUtils);
+        widget.captureButton.performClick();
+
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
+        assertThat(startedIntent.getAction(), is(MediaStore.ACTION_VIDEO_CAPTURE));
+        assertThat(startedIntent.getStringExtra(MediaStore.EXTRA_OUTPUT), is(MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString()));
+
+        ShadowActivity.IntentForResult intentForResult = shadowActivity.getNextStartedActivityForResult();
+        assertThat(intentForResult.requestCode, equalTo(ApplicationConstants.RequestCodes.VIDEO_CAPTURE));
+
+        assertThat(waitingForDataRegistry.waiting.contains(formIndex), equalTo(true));
+    }
+
+    @Test
+    public void clickingChooseVideoButton_doesNotLaunchAnyIntentAndCancelsWaitingForData_whenIntentIsNotAvailable() {
+        when(activityAvailability.isActivityAvailable(ArgumentMatchers.any())).thenReturn(false);
+        VideoWidget widget = createWidget(promptWithAnswer(null));
+        widget.setPermissionUtils(permissionUtils);
+        widget.chooseButton.performClick();
+
+        assertThat(shadowActivity.getNextStartedActivity(), nullValue());
+        assertThat(ShadowToast.getTextOfLatestToast(), is(widget.getContext().getString(R.string.activity_not_found,
+                widget.getContext().getString(R.string.choose_video))));
+        assertThat(waitingForDataRegistry.waiting.isEmpty(), is(true));
+    }
+
+    @Test
+    public void clickingChooseVideoButton_launchesGetContentIntentAndWaitsForData() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        when(prompt.getIndex()).thenReturn(formIndex);
+
+        VideoWidget widget = createWidget(prompt);
+        widget.setPermissionUtils(permissionUtils);
+        widget.chooseButton.performClick();
+
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
+        assertThat(startedIntent.getAction(), is(Intent.ACTION_GET_CONTENT));
+        assertThat(startedIntent.getType(), is("video/*"));
+
+        ShadowActivity.IntentForResult intentForResult = shadowActivity.getNextStartedActivityForResult();
+        assertThat(intentForResult.requestCode, equalTo(ApplicationConstants.RequestCodes.VIDEO_CHOOSER));
+
+        assertThat(waitingForDataRegistry.waiting.contains(formIndex), equalTo(true));
+    }
+
+    @Test
+    public void clickingPlayVideoButton_launchesCorrectIntent() {
+        VideoWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+        widget.setPermissionUtils(permissionUtils);
+        widget.playButton.performClick();
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
+
+        assertThat(startedIntent.getAction(), is(Intent.ACTION_VIEW));
+        assertThat(startedIntent.getType(), is("video/*"));
+    }
+
+    @Test
+    public void clickingPlayVideoButton_doesNotLaunchAnyIntentAndShowsActivityNotFoundToast_whenIntentIsNotAvailable() {
+        when(activityAvailability.isActivityAvailable(ArgumentMatchers.any())).thenReturn(false);
+        VideoWidget widget = createWidget(promptWithAnswer(null));
+        widget.setPermissionUtils(permissionUtils);
+        widget.playButton.performClick();
+
+        assertThat(shadowActivity.getNextStartedActivity(), nullValue());
+        assertThat(ShadowToast.getTextOfLatestToast(), is(widget.getContext().getString(R.string.activity_not_found,
+                widget.getContext().getString(R.string.view_video))));
+    }
+
     public VideoWidget createWidget(FormEntryPrompt prompt) {
         return new VideoWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"),
-                fileUtil, mediaUtil, mediaManagerListener, waitingForDataRegistry, cameraUtilsProvider);
+                fileUtil, mediaUtil, waitingForDataRegistry, cameraUtilsProvider, mediaManagerListener, activityAvailability);
     }
 }

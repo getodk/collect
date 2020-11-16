@@ -335,7 +335,6 @@ public class AudioWidgetTest {
     @Test
     public void afterSetBinaryData_canSkipClipForward() throws Exception {
         FormEntryPrompt prompt = promptWithAnswer(null);
-
         File audioFile = File.createTempFile("blah", ".mp3", questionMediaManager.getDir());
         Clip expectedClip = getExpectedClip(prompt, audioFile.getName());
         setupMediaPlayerDataSource(expectedClip.getURI(), 322450);
