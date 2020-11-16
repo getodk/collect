@@ -303,6 +303,6 @@ public class ArbitraryFileWidgetTest {
 
     public ArbitraryFileWidget createWidget(FormEntryPrompt prompt) {
         return new ArbitraryFileWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"),
-                fileUtil, mediaUtil, waitingForDataRegistry, mockedQuestionMediaManager, activityAvailability, contentUriFetcher);
+                waitingForDataRegistry, mockedQuestionMediaManager, activityAvailability, contentUriFetcher);
     }
 }

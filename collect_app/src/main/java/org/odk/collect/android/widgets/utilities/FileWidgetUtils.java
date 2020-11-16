@@ -22,9 +22,6 @@ import timber.log.Timber;
 
 public class FileWidgetUtils {
 
-    private FileWidgetUtils() {
-    }
-
     public static void hideButtonsIfNeeded(FormEntryPrompt prompt, MultiClickSafeButton button) {
         if (prompt.getAppearanceHint() != null
                 && prompt.getAppearanceHint().toLowerCase(Locale.ENGLISH).contains(WidgetAppearanceUtils.NEW)) {
@@ -101,7 +98,7 @@ public class FileWidgetUtils {
         }
     }
 
-    private static String getDestinationPathFromSourcePath(@NonNull String sourcePath, String instanceFolder) {
+    public static String getDestinationPathFromSourcePath(@NonNull String sourcePath, String instanceFolder) {
         String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
         return instanceFolder + File.separator + FileUtil.getRandomFilename() + extension;
     }

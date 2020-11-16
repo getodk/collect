@@ -58,7 +58,6 @@ public class AudioWidgetTest {
     @Before
     public void setUp() throws Exception {
         widgetActivity = RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
-
         formIndex = mock(FormIndex.class);
         when(formIndex.toString()).thenReturn("questionIndex");
 

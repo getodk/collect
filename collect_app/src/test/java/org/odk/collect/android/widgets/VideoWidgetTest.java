@@ -475,6 +475,6 @@ public class VideoWidgetTest {
 
     public VideoWidget createWidget(FormEntryPrompt prompt) {
         return new VideoWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"),
-                fileUtil, mediaUtil, waitingForDataRegistry, cameraUtilsProvider, questionMediaManager, activityAvailability, contentUriFetcher);
+                waitingForDataRegistry, cameraUtilsProvider, questionMediaManager, activityAvailability, contentUriFetcher);
     }
 }
