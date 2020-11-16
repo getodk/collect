@@ -8,9 +8,6 @@ import static java.util.Arrays.asList;
 
 public class FileUtil {
 
-    private FileUtil() {
-    }
-
     public static String copyFile(File sourceFile, File destFile) {
         return FileUtils.copyFile(sourceFile, destFile);
     }
@@ -23,7 +20,7 @@ public class FileUtil {
         return Long.toString(System.currentTimeMillis());
     }
 
-    public static File getItemsetFile(String mediaFolderPath) {
+    public File getItemsetFile(String mediaFolderPath) {
         return new File(mediaFolderPath + "/itemsets.csv");
     }
 

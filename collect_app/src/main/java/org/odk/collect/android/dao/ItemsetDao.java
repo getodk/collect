@@ -32,7 +32,7 @@ public class ItemsetDao {
         String itemLabel = null;
 
         ItemsetDbAdapter adapter = new ItemsetDbAdapter();
-        File itemsetFile = FileUtil.getItemsetFile(mediaFolderPath);
+        File itemsetFile = new FileUtil().getItemsetFile(mediaFolderPath);
         if (itemsetFile.exists()) {
             adapter.open();
 

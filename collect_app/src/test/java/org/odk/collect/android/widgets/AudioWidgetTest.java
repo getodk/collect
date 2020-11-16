@@ -174,7 +174,6 @@ public class AudioWidgetTest {
         when(prompt.getIndex()).thenReturn(formIndex);
 
         AudioWidget widget = createWidget(prompt);
-
         File newFile = File.createTempFile("newFIle", ".mp3", questionMediaManager.getDir());
         widget.setData(newFile.getName());
 

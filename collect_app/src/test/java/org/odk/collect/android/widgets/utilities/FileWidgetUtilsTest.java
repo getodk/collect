@@ -1,7 +1,6 @@
 package org.odk.collect.android.widgets.utilities;
 
 import android.content.Context;
-import android.net.Uri;
 
 import androidx.test.core.app.ApplicationProvider;
 
@@ -38,10 +37,5 @@ public class FileWidgetUtilsTest {
     @Test
     public void getFile_whenObjectIsOfFileType_returnsFile() {
         assertThat(FileWidgetUtils.getFile(context, file), is(file));
-    }
-
-    @Test
-    public void getFile_whenObjectIsOfUriType_returnsFile() {
-        assertThat(FileWidgetUtils.getFile(context, Uri.fromFile(file)), is(file));
     }
 }

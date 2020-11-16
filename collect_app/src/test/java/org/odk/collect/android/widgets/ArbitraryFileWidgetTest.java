@@ -21,7 +21,6 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ContentUriFetcher;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
-import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowToast;
@@ -45,7 +44,6 @@ import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 public class ArbitraryFileWidgetTest {
-    private static final String FILE_PATH = "blah.txt";
 
     private TestScreenContextActivity widgetActivity;
     private ShadowActivity shadowActivity;
@@ -87,15 +85,14 @@ public class ArbitraryFileWidgetTest {
     }
 
     @Test
-    public void getAnswer_whenPromptDoesNotHaveAnswer_returnsNullAndHidesAudioPlayer() {
-        ArbitraryFileWidget widget = createWidget(promptWithAnswer(null));
-        assertNull(widget.getAnswer());
+    public void getAnswer_whenPromptDoesNotHaveAnswer_returnsNull() {
+        assertNull(createWidget(promptWithAnswer(null)).getAnswer());
     }
 
     @Test
     public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
-        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
-        assertThat(widget.getAnswer().getDisplayText(), is(FILE_PATH));
+        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
+        assertThat(widget.getAnswer().getDisplayText(), is("blah.txt"));
     }
 
     @Test
@@ -106,20 +103,20 @@ public class ArbitraryFileWidgetTest {
 
     @Test
     public void whenPromptHasAnswer_answerTextViewShowsFileName() {
-        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
-        assertThat(widget.binding.answerTextView.getText(), is(FILE_PATH));
+        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
+        assertThat(widget.binding.answerTextView.getText(), is("blah.txt"));
     }
 
     @Test
     public void deleteFile_removesWidgetAnswerAndStopsPlayingMedia() {
-        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
         widget.deleteFile();
         assertNull(widget.getAnswer());
     }
 
     @Test
     public void deleteFile_callsMarkOriginalFileOrDelete() {
-        FormEntryPrompt prompt = promptWithAnswer(new StringData(FILE_PATH));
+        FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.txt"));
         when(prompt.getIndex()).thenReturn(formIndex);
 
         ArbitraryFileWidget widget = createWidget(prompt);
@@ -131,21 +128,21 @@ public class ArbitraryFileWidgetTest {
 
     @Test
     public void clearAnswer_hidesAnswerLayout() {
-        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
         widget.clearAnswer();
         assertThat(widget.binding.answerLayout.getVisibility(), is(View.GONE));
     }
 
     @Test
     public void clearAnswer_removesAnswer() {
-        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
         widget.clearAnswer();
         assertNull(widget.getAnswer());
     }
 
     @Test
     public void clearAnswer_callsMarkOriginalFileOrDelete() {
-        FormEntryPrompt prompt = promptWithAnswer(new StringData(FILE_PATH));
+        FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.txt"));
         when(prompt.getIndex()).thenReturn(formIndex);
 
         ArbitraryFileWidget widget = createWidget(prompt);
@@ -157,7 +154,7 @@ public class ArbitraryFileWidgetTest {
 
     @Test
     public void clearAnswer_callsValueChangeListeners() {
-        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.clearAnswer();
 
@@ -166,16 +163,16 @@ public class ArbitraryFileWidgetTest {
 
     @Test
     public void setData_whenFileDoesNotExist_doesNotUpdateWidgetAnswer() {
-        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
         widget.setBinaryData(new File("newFilePath"));
 
-        assertThat(widget.getAnswer().getDisplayText(), is(FILE_PATH));
-        assertThat(widget.binding.answerTextView.getText(), is(FILE_PATH));
+        assertThat(widget.getAnswer().getDisplayText(), is("blah.txt"));
+        assertThat(widget.binding.answerTextView.getText(), is("blah.txt"));
     }
 
     @Test
     public void setData_whenFileDoesNotExist_doesNotCallValueChangeListener() {
-        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.setBinaryData(new File("newFilePath"));
 
@@ -184,20 +181,19 @@ public class ArbitraryFileWidgetTest {
 
     @Test
     public void setData_whenFileExists_updatesWidgetAnswer() {
-        FormEntryPrompt prompt = promptWithAnswer(new StringData(FILE_PATH));
+        FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.txt"));
         when(prompt.getIndex()).thenReturn(formIndex);
 
         ArbitraryFileWidget widget = createWidget(prompt);
         widget.setBinaryData(mockedFile);
-        String answer = "";
 
-        assertThat(widget.getAnswer().getDisplayText(), is(answer));
-        assertThat(widget.binding.answerTextView.getText(), is(answer));
+        assertThat(widget.getAnswer().getDisplayText(), is("newFile.txt"));
+        assertThat(widget.binding.answerTextView.getText(), is("newFile.txt"));
     }
 
     @Test
     public void setData_whenFileExists_callsValueChangeListener() {
-        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.setBinaryData(mockedFile);
 
@@ -240,7 +236,7 @@ public class ArbitraryFileWidgetTest {
     @Test
     public void clickingAnswerLayout_whenActivityIsNotAvailable_doesNotStartAnyIntent() {
         when(activityAvailability.isActivityAvailable(any())).thenReturn(false);
-        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
         widget.binding.answerLayout.performClick();
 
         assertNull(shadowActivity.getNextStartedActivity());
@@ -251,11 +247,11 @@ public class ArbitraryFileWidgetTest {
     @Test
     public void clickingAnswerLayout_whenActivityIsAvailable_startsViewIntent() {
         when(activityAvailability.isActivityAvailable(any())).thenReturn(true);
-        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
 
         when(contentUriFetcher.getUri(widgetActivity,
                 BuildConfig.APPLICATION_ID + ".provider",
-                new File("null" + File.separator + FILE_PATH))).thenReturn(Uri.parse("content://blah"));
+                new File("null" + File.separator + "blah.txt"))).thenReturn(Uri.parse("content://blah"));
 
         widget.binding.answerLayout.performClick();
         Intent startedActivity = shadowActivity.getNextStartedActivity();

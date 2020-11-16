@@ -22,6 +22,6 @@ public class FakeFileWidgetUtils extends FileWidgetUtils implements MediaWidgetD
         this.uri = uri;
         this.isImageType = isImageType;
 
-        return object.toString();
+        return object == null ? "" : object.toString();
     }
 }

@@ -168,7 +168,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
     public void setData(Object object) {
         binaryName = fileWidgetUtils.getUpdatedWidgetAnswer(getContext(), questionMediaManager, object, getFormEntryPrompt().getIndex().toString(),
                 binaryName, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, false);
-        binding.playVideo.setEnabled(binaryName != null);
+        binding.playVideo.setEnabled(!binaryName.isEmpty());
         widgetValueChanged();
     }
 

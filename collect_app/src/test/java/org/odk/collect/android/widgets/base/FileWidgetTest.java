@@ -34,16 +34,6 @@ public abstract class FileWidgetTest<W extends FileWidget> extends BinaryWidgetT
     }
 
     @Test
-    public void settingANewAnswerShouldCallDeleteMediaToRemoveTheOldFile() {
-        prepareForSetAnswer();
-
-        super.settingANewAnswerShouldRemoveTheOldAnswer();
-
-        W widget = getSpyWidget();
-        verify(widget).deleteFile();
-    }
-
-    @Test
     public void callingClearAnswerShouldCallDeleteMediaAndRemoveTheExistingAnswer() {
         super.callingClearShouldRemoveTheExistingAnswer();
 

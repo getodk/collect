@@ -61,7 +61,8 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, W
 
     private String binaryName;
 
-    public ArbitraryFileWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
+    public ArbitraryFileWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager,
+                               WaitingForDataRegistry waitingForDataRegistry) {
         this(context, prompt, waitingForDataRegistry, questionMediaManager,
                 new ActivityAvailability(context), new ContentUriProvider());
     }

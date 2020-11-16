@@ -43,6 +43,8 @@ import java.io.File;
 
 import java.util.Locale;
 
+import static org.odk.collect.android.widgets.utilities.FileWidgetUtils.getInstanceFolder;
+
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
  * form.
@@ -92,9 +94,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
 
         binding.captureButton.setOnClickListener(v -> recordingRequester.requestRecording(getFormEntryPrompt()));
         binding.chooseButton.setOnClickListener(v -> audioFileRequester.requestFile(getFormEntryPrompt()));
-
-        binaryName = prompt.getAnswerText();
-        updatePlayerMedia();
 
         return binding.getRoot();
     }

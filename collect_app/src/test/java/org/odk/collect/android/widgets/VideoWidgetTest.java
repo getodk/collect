@@ -26,9 +26,8 @@ import org.odk.collect.android.utilities.CameraUtilsProvider;
 import org.odk.collect.android.utilities.ContentUriFetcher;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-import org.odk.collect.android.widgets.interfaces.FileWidget;
+import org.odk.collect.android.widgets.support.FakeFileWidgetUtils;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
-import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowToast;
@@ -53,7 +52,8 @@ import static org.robolectric.Shadows.shadowOf;
  */
 @RunWith(RobolectricTestRunner.class)
 public class VideoWidgetTest {
-    private static final String FILE_PATH = "blah.mp4";
+    private final FakeFileWidgetUtils fakeFileWidgetUtils = new FakeFileWidgetUtils();
+    private final File newFile = new File("newFile.mp4");
 
     private TestScreenContextActivity widgetActivity;
     private ShadowActivity shadowActivity;
@@ -61,11 +61,9 @@ public class VideoWidgetTest {
     private CameraUtilsProvider cameraUtilsProvider;
     private QuestionMediaManager questionMediaManager;
     private FormIndex formIndex;
-    private File mockedFile;
     private FakePermissionUtils permissionUtils;
     private ActivityAvailability activityAvailability;
     private ContentUriFetcher contentUriFetcher;
-    private FileWidgetUtils fileWidgetUtils;
 
     @Before
     public void setUp() {
@@ -76,18 +74,13 @@ public class VideoWidgetTest {
         questionMediaManager = mock(QuestionMediaManager.class);
         activityAvailability = mock(ActivityAvailability.class);
         contentUriFetcher = mock(ContentUriFetcher.class);
-        fileWidgetUtils = mock(FileWidgetUtils.class);
         formIndex = mock(FormIndex.class);
-        mockedFile = mock(File.class);
 
         waitingForDataRegistry = new FakeWaitingForDataRegistry();
         permissionUtils = new FakePermissionUtils();
         permissionUtils.setPermissionGranted(true);
 
         when(activityAvailability.isActivityAvailable(ArgumentMatchers.any())).thenReturn(true);
-        when(mockedFile.exists()).thenReturn(true);
-        when(mockedFile.getName()).thenReturn("newFile.mp4");
-        when(mockedFile.getAbsolutePath()).thenReturn("newFilePath");
         when(formIndex.toString()).thenReturn("questionIndex");
     }
 
@@ -108,8 +101,8 @@ public class VideoWidgetTest {
 
     @Test
     public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
-        VideoWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
-        assertThat(widget.getAnswer().getDisplayText(), is(FILE_PATH));
+        VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
+        assertThat(widget.getAnswer().getDisplayText(), is("blah.mp4"));
     }
 
     @Test
@@ -169,43 +162,43 @@ public class VideoWidgetTest {
 
     @Test
     public void deleteFile_removesWidgetAnswer() {
-        VideoWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+        VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
         widget.deleteFile();
         assertThat(widget.getAnswer(), nullValue());
     }
 
     @Test
     public void deleteFile_callsMarkOriginalFileOrDelete() {
-        FormEntryPrompt prompt = promptWithAnswer(new StringData(FILE_PATH));
+        FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.mp4"));
         when(prompt.getIndex()).thenReturn(formIndex);
         VideoWidget widget = createWidget(prompt);
         widget.deleteFile();
 
         verify(questionMediaManager).markOriginalFileOrDelete("questionIndex",
-                "null" + File.separator + FILE_PATH);
+                "null" + File.separator + "blah.mp4");
     }
 
     @Test
     public void clearAnswer_removesAnswerAndHidesPlayer() {
-        VideoWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+        VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
         widget.clearAnswer();
         assertThat(widget.getAnswer(), nullValue());
     }
 
     @Test
     public void clearAnswer_callsMarkOriginalFileOrDelete() {
-        FormEntryPrompt prompt = promptWithAnswer(new StringData(FILE_PATH));
+        FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.mp4"));
         when(prompt.getIndex()).thenReturn(formIndex);
         VideoWidget widget = createWidget(prompt);
         widget.clearAnswer();
 
         verify(questionMediaManager).markOriginalFileOrDelete("questionIndex",
-                "null" + File.separator + FILE_PATH);
+                "null" + File.separator + "blah.mp4");
     }
 
     @Test
     public void clearAnswer_callsValueChangeListeners() {
-        VideoWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+        VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.clearAnswer();
 
@@ -214,25 +207,36 @@ public class VideoWidgetTest {
 
     @Test
     public void setData_updatesWidgetAnswer() {
-        VideoWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
-        widget.setBinaryData(mockedFile);
+        VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
+        widget.setBinaryData(newFile);
 
-        assertThat(widget.getAnswer().getDisplayText(), equalTo(fileWidgetUtils.getUpdatedWidgetAnswer(widgetActivity, questionMediaManager, mockedFile,
-                "questionIndex", "null", MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, false)));
+        assertThat(fakeFileWidgetUtils.object, equalTo(newFile));
+        assertThat(fakeFileWidgetUtils.binaryName, equalTo("blah.mp4"));
+        assertThat(fakeFileWidgetUtils.uri, equalTo(MediaStore.Video.Media.EXTERNAL_CONTENT_URI));
+        assertThat(fakeFileWidgetUtils.isImageType, equalTo(false));
+
+        assertThat(widget.getAnswer().getDisplayText(), equalTo("newFile.mp4"));
     }
 
     @Test
     public void setData_whenFileExists_enablesPlayButton() {
         VideoWidget widget = createWidget(promptWithAnswer(null));
-        widget.setBinaryData(mockedFile);
+        widget.setBinaryData(newFile);
         assertThat(widget.binding.playVideo.isEnabled(), is(true));
     }
 
     @Test
-    public void setData_whenFileExists_callsValueChangeListener() {
-        VideoWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+    public void setData_whenFileDoesNotExist_enablesPlayButton() {
+        VideoWidget widget = createWidget(promptWithAnswer(null));
+        widget.setBinaryData(new File(""));
+        assertThat(widget.binding.playVideo.isEnabled(), is(false));
+    }
+
+    @Test
+    public void setData_callsValueChangeListener() {
+        VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.setBinaryData(mockedFile);
+        widget.setBinaryData(newFile);
 
         verify(valueChangedListener).widgetValueChanged(widget);
     }
@@ -366,10 +370,10 @@ public class VideoWidgetTest {
 
     @Test
     public void clickingPlayVideoButton_launchesCorrectIntent() {
-        VideoWidget widget = createWidget(promptWithAnswer(new StringData(FILE_PATH)));
+        VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
         when(contentUriFetcher.getUri(widgetActivity,
                 BuildConfig.APPLICATION_ID + ".provider",
-                new File("null" + File.separator + FILE_PATH))).thenReturn(Uri.parse("content://blah"));
+                new File("null" + File.separator + "blah.mp4"))).thenReturn(Uri.parse("content://blah"));
         widget.setPermissionUtils(permissionUtils);
 
         widget.binding.playVideo.performClick();
@@ -396,6 +400,6 @@ public class VideoWidgetTest {
 
     public VideoWidget createWidget(FormEntryPrompt prompt) {
         return new VideoWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"),
-                waitingForDataRegistry, cameraUtilsProvider, questionMediaManager, activityAvailability, contentUriFetcher, fileWidgetUtils);
+                waitingForDataRegistry, cameraUtilsProvider, questionMediaManager, activityAvailability, contentUriFetcher, fakeFileWidgetUtils);
     }
 }
