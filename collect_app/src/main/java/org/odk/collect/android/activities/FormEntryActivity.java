@@ -1482,16 +1482,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             return false;
         }
 
-        if (direction == FORWARDS && formController.getEvent() == FormEntryController.EVENT_END_OF_FORM) {
-            // We're trying to move forwards at the end of the form so just cancel
-            return false;
-        } else if (direction == BACKWARDS && !allowMovingBackwards) {
-            // We're not allowed to move backwards but trying to so just cancel
-            return false;
-        }
-
         switch (direction) {
             case FORWARDS:
+                if (formController.getEvent() == FormEntryController.EVENT_END_OF_FORM) {
+                    // We're trying to move forwards at the end of the form so just cancel
+                    return false;
+                }
+
                 if (!saveBeforeNextView(formController)) {
                     formEntryViewModel.moveForward();
                     formIndexAnimationHandler.handle(formController.getFormIndex());
@@ -1501,6 +1498,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
 
             case BACKWARDS:
+                if (!allowMovingBackwards) {
+                    // We're not allowed to move backwards but trying to so just cancel
+                    return false;
+                }
+
                 // The answer is saved on a back swipe, but question constraints are ignored.
                 if (formController.currentPromptIsQuestion()) {
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
