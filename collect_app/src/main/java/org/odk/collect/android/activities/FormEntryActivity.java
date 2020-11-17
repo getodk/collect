@@ -56,7 +56,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.lifecycle.ViewModelStore;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -315,8 +314,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private boolean showNavigationButtons;
 
-    private Bundle state;
-
     @Inject
     RxEventBus eventBus;
 
@@ -501,7 +498,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private void setupFields(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            state = savedInstanceState;
             if (savedInstanceState.containsKey(KEY_FORMPATH)) {
                 formPath = savedInstanceState.getString(KEY_FORMPATH);
             }
@@ -699,9 +695,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formLoaderTask.execute(formPath);
     }
 
-    public Bundle getState() {
-        return state;
-    }
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -761,14 +754,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         outState.putBoolean(KEY_AUTO_SAVED, autoSaved);
         outState.putBoolean(KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED, readPhoneStatePermissionRequestNeeded);
         outState.putBoolean(KEY_LOCATION_PERMISSIONS_GRANTED, locationPermissionsPreviouslyGranted);
-
-        if (currentView instanceof ODKView) {
-            outState.putAll(((ODKView) currentView).getState());
-            // This value is originally set in onCreate() method but if you only minimize the app or
-            // block/unblock the screen, onCreate() method might not be called (if the activity is just paused
-            // not stopped https://developer.android.com/guide/components/activities/activity-lifecycle.html)
-            state = outState;
-        }
     }
 
     @Override
@@ -1504,8 +1489,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             swipeHandler.setBeenSwiped(false);
             return;
         }
-
-        state = null; // This is needed for something but is definitely suspect
 
         switch (direction) {
             case FORWARDS:
