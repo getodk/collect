@@ -420,48 +420,54 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         launchIntentButton.setText(buttonText);
         launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getQuestionFontSize() + 2);
         launchIntentButton.setVisibility(VISIBLE);
-        launchIntentButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String intentName = ExternalAppsUtils.extractIntentName(intentString);
-                Map<String, String> parameters = ExternalAppsUtils.extractParameters(
-                        intentString);
+        launchIntentButton.setOnClickListener(view -> {
+            String intentName = ExternalAppsUtils.extractIntentName(intentString);
+            Map<String, String> parameters = ExternalAppsUtils.extractParameters(intentString);
 
-                Intent i = new Intent(intentName);
-                try {
-                    ExternalAppsUtils.populateParameters(i, parameters,
-                            c.getIndex().getReference());
+            Intent i = new Intent(intentName);
+            if (i.resolveActivity(Collect.getInstance().getPackageManager()) == null) {
+                Intent launchIntent = Collect.getInstance().getPackageManager().getLaunchIntentForPackage(intentName);
 
-                    for (FormEntryPrompt p : questionPrompts) {
-                        IFormElement formElement = p.getFormElement();
-                        if (formElement instanceof QuestionDef) {
-                            TreeReference reference =
-                                    (TreeReference) formElement.getBind().getReference();
-                            IAnswerData answerValue = p.getAnswerValue();
-                            Object value =
-                                    answerValue == null ? null : answerValue.getValue();
-                            switch (p.getDataType()) {
-                                case Constants.DATATYPE_TEXT:
-                                case Constants.DATATYPE_INTEGER:
-                                case Constants.DATATYPE_DECIMAL:
-                                case Constants.DATATYPE_BINARY:
-                                    i.putExtra(reference.getNameLast(),
-                                            (Serializable) value);
-                                    break;
-                            }
+                if (launchIntent != null) {
+                    // Make sure FLAG_ACTIVITY_NEW_TASK is not set because it doesn't work with startActivityForResult
+                    launchIntent.setFlags(0);
+                    i = launchIntent;
+                }
+            }
+
+            try {
+                ExternalAppsUtils.populateParameters(i, parameters,
+                        c.getIndex().getReference());
+
+                for (FormEntryPrompt p : questionPrompts) {
+                    IFormElement formElement = p.getFormElement();
+                    if (formElement instanceof QuestionDef) {
+                        TreeReference reference =
+                                (TreeReference) formElement.getBind().getReference();
+                        IAnswerData answerValue = p.getAnswerValue();
+                        Object value =
+                                answerValue == null ? null : answerValue.getValue();
+                        switch (p.getDataType()) {
+                            case Constants.DATATYPE_TEXT:
+                            case Constants.DATATYPE_INTEGER:
+                            case Constants.DATATYPE_DECIMAL:
+                            case Constants.DATATYPE_BINARY:
+                                i.putExtra(reference.getNameLast(),
+                                        (Serializable) value);
+                                break;
                         }
                     }
-
-                    ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_GROUP_CAPTURE);
-                } catch (ExternalParamsException e) {
-                    Timber.e(e, "ExternalParamsException");
-
-                    ToastUtils.showShortToast(e.getMessage());
-                } catch (ActivityNotFoundException e) {
-                    Timber.d(e, "ActivityNotFoundExcept");
-
-                    ToastUtils.showShortToast(errorString);
                 }
+
+                ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_GROUP_CAPTURE);
+            } catch (ExternalParamsException e) {
+                Timber.e(e, "ExternalParamsException");
+
+                ToastUtils.showShortToast(e.getMessage());
+            } catch (ActivityNotFoundException e) {
+                Timber.d(e, "ActivityNotFoundExcept");
+
+                ToastUtils.showShortToast(errorString);
             }
         });
     }
@@ -523,7 +529,17 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                                 break;
                             case Constants.DATATYPE_BINARY:
                                 try {
-                                    Uri uri = (Uri) bundle.get(key);
+                                    Object uriValue = bundle.get(key);
+
+                                    Uri uri;
+                                    if (uriValue instanceof Uri) {
+                                        uri = (Uri) uriValue;
+                                    } else if (uriValue instanceof String) {
+                                        uri = Uri.parse(bundle.getString(key));
+                                    } else {
+                                        throw new RuntimeException("The value for " + key + " must be a URI but it is " + uriValue);
+                                    }
+                                    
                                     if (uri != null) {
                                         File destFile = FileUtils.createDestinationMediaFile(formController.getInstanceFile().getParent(), ContentResolverHelper.getFileExtensionFromUri(getContext(), uri));
                                         //TODO might be better to use QuestionMediaManager in the future
