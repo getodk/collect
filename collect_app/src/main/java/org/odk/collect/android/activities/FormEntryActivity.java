@@ -1457,37 +1457,37 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     public void onSwipeForward() {
-        moveScreen(FORWARDS);
+        if (!moveScreen(FORWARDS)) {
+            swipeHandler.setBeenSwiped(false);
+        }
     }
 
     @Override
     public void onSwipeBackward() {
-        moveScreen(BACKWARDS);
+        if (!moveScreen(BACKWARDS)) {
+            swipeHandler.setBeenSwiped(false);
+        }
     }
 
-    private void moveScreen(Direction direction) {
+    private boolean moveScreen(Direction direction) {
         FormController formController = getFormController();
         if (formController == null) {
             Timber.w("FormController has a null value");
-            swipeHandler.setBeenSwiped(false);
-            return;
+            return false;
         }
 
         if (audioRecorderViewModel.isRecording().getValue()) {
             // We want the user to stop recording before changing screens
             DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
-            swipeHandler.setBeenSwiped(false);
-            return;
+            return false;
         }
 
         if (direction == FORWARDS && formController.getEvent() == FormEntryController.EVENT_END_OF_FORM) {
-            // We're tryin to move forwards at the end of the form so just cancel
-            swipeHandler.setBeenSwiped(false);
-            return;
+            // We're trying to move forwards at the end of the form so just cancel
+            return false;
         } else if (direction == BACKWARDS && !allowMovingBackwards) {
             // We're not allowed to move backwards but trying to so just cancel
-            swipeHandler.setBeenSwiped(false);
-            return;
+            return false;
         }
 
         switch (direction) {
@@ -1495,8 +1495,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (!saveBeforeNextView(formController)) {
                     formEntryViewModel.moveForward();
                     formIndexAnimationHandler.handle(formController.getFormIndex());
+                    return true;
+                } else {
+                    return false;
                 }
-                break;
 
             case BACKWARDS:
                 // The answer is saved on a back swipe, but question constraints are ignored.
@@ -1506,7 +1508,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 formEntryViewModel.moveBackward();
                 formIndexAnimationHandler.handle(formController.getFormIndex());
-                break;
+                return true;
+
+            default:
+                // Java switch statements aren't smart enough to know there are only two possibilities
+                return false;
         }
     }
 
