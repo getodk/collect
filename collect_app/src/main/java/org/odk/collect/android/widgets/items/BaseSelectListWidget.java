@@ -7,6 +7,9 @@ import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.View;
 
+import androidx.activity.ComponentActivity;
+import androidx.lifecycle.ViewModelProvider;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
@@ -16,6 +19,7 @@ import org.odk.collect.android.listeners.SelectItemClickListener;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
+import org.odk.collect.android.widgets.utilities.SearchQueryViewModel;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.PROMPT;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
@@ -29,14 +33,14 @@ public abstract class BaseSelectListWidget extends ItemsWidget implements MultiC
         super(context, questionDetails);
         logAnalytics(questionDetails);
         binding.choicesRecyclerView.initRecyclerView(setUpAdapter(), WidgetAppearanceUtils.isFlexAppearance(getQuestionDetails().getPrompt()));
+        if (WidgetAppearanceUtils.isAutocomplete(getQuestionDetails().getPrompt())) {
+            setUpSearchBox();
+        }
     }
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = SelectListWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
-        if (WidgetAppearanceUtils.isAutocomplete(getQuestionDetails().getPrompt())) {
-            setUpSearchBox();
-        }
         return binding.getRoot();
     }
 
@@ -59,6 +63,9 @@ public abstract class BaseSelectListWidget extends ItemsWidget implements MultiC
     }
 
     private void setUpSearchBox() {
+        ComponentActivity activity = (ComponentActivity) getContext();
+        SearchQueryViewModel searchQueryViewModel = new ViewModelProvider(activity).get(SearchQueryViewModel.class);
+
         binding.choicesSearchBox.setVisibility(View.VISIBLE);
         binding.choicesSearchBox.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         binding.choicesSearchBox.addTextChangedListener(new TextWatcher() {
@@ -68,6 +75,7 @@ public abstract class BaseSelectListWidget extends ItemsWidget implements MultiC
             public void afterTextChanged(Editable s) {
                 if (!s.toString().equals(oldText)) {
                     recyclerViewAdapter.getFilter().filter(s.toString());
+                    searchQueryViewModel.setQuery(getFormEntryPrompt().getIndex().toString(), s.toString());
                 }
             }
 
@@ -80,6 +88,8 @@ public abstract class BaseSelectListWidget extends ItemsWidget implements MultiC
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
         });
+
+        binding.choicesSearchBox.setText(searchQueryViewModel.getQuery(getFormEntryPrompt().getIndex().toString()));
     }
 
     private void logAnalytics(QuestionDetails questionDetails) {
