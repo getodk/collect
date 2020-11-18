@@ -148,11 +148,11 @@ public class ArbitraryFileWidget extends QuestionWidget implements WidgetDataRec
     }
 
     private void openFile() {
-        Uri fileUri = Uri.fromFile(new File(FileWidgetUtils.getInstanceFolder() + File.separator + binaryName));
+        Uri fileUri = Uri.fromFile(questionMediaManager.getAnswerFile(binaryName));
 
         Uri contentUri = contentUriProvider.getUriForFile(getContext(),
                 BuildConfig.APPLICATION_ID + ".provider",
-                new File(FileWidgetUtils.getInstanceFolder() + File.separator + binaryName));
+                questionMediaManager.getAnswerFile(binaryName));
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         intent.setDataAndType(contentUri, getMimeType(
