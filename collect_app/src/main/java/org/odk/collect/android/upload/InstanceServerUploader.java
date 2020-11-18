@@ -148,12 +148,12 @@ public class InstanceServerUploader extends InstanceUploader {
                     }
                 }
             } else {
-                Timber.w("Status code on Head request: %d", headResult.getStatusCode());
                 if (headResult.getStatusCode() >= HttpsURLConnection.HTTP_OK
                         && headResult.getStatusCode() < HttpsURLConnection.HTTP_MULT_CHOICE) {
                     saveFailedStatusToDatabase(instance);
-                    throw new UploadException(FAIL + "Invalid status code on Head request. If "
-                            + "you have a web proxy, you may need to log in to your network.");
+                    throw new UploadException("Failed to send to " + uri + ". Is this an OpenRosa " +
+                            "submission endpoint? If you have a web proxy you may need to log in to " +
+                            "your network.\n\nHEAD request result status code: " + headResult.getStatusCode());
                 }
             }
         }
