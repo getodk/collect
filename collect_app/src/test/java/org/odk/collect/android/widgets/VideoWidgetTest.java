@@ -398,9 +398,8 @@ public class VideoWidgetTest {
         File file = File.createTempFile("blah", ".mp4", fakeQuestionMediaManager.getDir());
 
         VideoWidget widget = createWidget(promptWithAnswer(new StringData(file.getName())));
-        when(contentUriProvider.getUriForFile(widgetActivity,
-                BuildConfig.APPLICATION_ID + ".provider",
-                fakeQuestionMediaManager.getAnswerFile(file.getName()))).thenReturn(Uri.parse("content://blah"));
+        when(contentUriProvider.getUriForFile(widgetActivity, BuildConfig.APPLICATION_ID + ".provider", file))
+                .thenReturn(Uri.parse("content://blah"));
         widget.setPermissionUtils(permissionUtils);
 
         widget.binding.playVideo.performClick();

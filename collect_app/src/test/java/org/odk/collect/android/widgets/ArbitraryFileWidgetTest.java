@@ -246,13 +246,13 @@ public class ArbitraryFileWidgetTest {
     }
 
     @Test
-    public void clickingAnswer_whenActivityIsAvailable_startsViewIntent() {
+    public void clickingAnswer_whenActivityIsAvailable_startsViewIntent() throws IOException {
+        File file = File.createTempFile("blah", ".txt", fakeQuestionMediaManager.getDir());
         when(activityAvailability.isActivityAvailable(any())).thenReturn(true);
-        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
 
-        when(contentUriProvider.getUriForFile(widgetActivity,
-                BuildConfig.APPLICATION_ID + ".provider",
-                new File("null" + File.separator + "blah.txt"))).thenReturn(Uri.parse("content://blah"));
+        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(file.getName())));
+        when(contentUriProvider.getUriForFile(widgetActivity, BuildConfig.APPLICATION_ID + ".provider", file))
+                .thenReturn(Uri.parse("content://blah"));
 
         widget.binding.answerLayout.performClick();
         Intent startedActivity = shadowActivity.getNextStartedActivity();
