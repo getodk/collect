@@ -18,7 +18,6 @@ import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.utilities.Clock;
 
-import static org.javarosa.form.api.FormEntryController.EVENT_PROMPT_NEW_REPEAT;
 import static org.odk.collect.android.analytics.AnalyticsEvents.ADD_REPEAT;
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
 
@@ -151,12 +150,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
             // If we are the beginning of the form we need to move back to the first actual screen
             if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
-                event = formController.stepToNextScreenEvent();
-
-                if (event != EVENT_PROMPT_NEW_REPEAT) {
-                    // Returning here prevents the same view sliding when user is on the first screen
-                    return;
-                }
+                formController.stepToNextScreenEvent();
             }
         } catch (JavaRosaException e) {
             error.setValue(e.getCause().getMessage());
