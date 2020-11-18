@@ -112,7 +112,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements WidgetDataRec
 
     @Override
     public void setData(Object object) {
-        File newFile = FileWidgetUtils.getFile(getContext(), object);
+        File newFile = (File) object;
         if (newFile.exists()) {
             if (binaryName != null && !binaryName.equals(newFile.getName())) {
                 questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),

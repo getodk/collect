@@ -155,6 +155,7 @@ import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangePickerDecimalWidget;
 import org.odk.collect.android.widgets.RangePickerIntegerWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.odk.collect.android.widgets.utilities.FormControllerWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
@@ -956,7 +957,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case RequestCodes.VIDEO_CAPTURE:
                 mediaUri = intent.getData();
                 if (getCurrentViewIfODKView() != null) {
-                    setWidgetData(mediaUri);
+                    setWidgetData(FileWidgetUtils.getFile(this, mediaUri));
                 }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 String filePath = MediaUtils.getDataColumn(this, mediaUri, null, null);

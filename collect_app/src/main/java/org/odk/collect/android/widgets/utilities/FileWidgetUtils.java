@@ -19,18 +19,14 @@ public class FileWidgetUtils {
     private FileWidgetUtils() {
     }
 
-    public static File getFile(Context context, Object object) {
-        File file = null;
-        if (object instanceof Uri) {
-            String sourcePath = getSourcePathFromUri(context, (Uri) object, MediaStore.MediaColumns.DATA);
-            String destinationPath = getDestinationPathFromSourcePath(sourcePath);
-            File source = FileUtil.getFileAtPath(sourcePath);
-            file = FileUtil.getFileAtPath(destinationPath);
-            FileUtil.copyFile(source, file);
+    public static File getFile(Context context, Uri fileUri) {
+        String sourcePath = getSourcePathFromUri(context, fileUri, MediaStore.MediaColumns.DATA);
+        String destinationPath = getDestinationPathFromSourcePath(sourcePath);
 
-        } else if (object instanceof File) {
-            file = (File) object;
-        }
+        File source = FileUtil.getFileAtPath(sourcePath);
+        File file = FileUtil.getFileAtPath(destinationPath);
+        FileUtil.copyFile(source, file);
+
         return file;
     }
 

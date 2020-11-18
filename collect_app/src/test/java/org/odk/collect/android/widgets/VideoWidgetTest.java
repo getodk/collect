@@ -35,11 +35,10 @@ import java.io.File;
 import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
@@ -57,7 +56,6 @@ public class VideoWidgetTest {
     private final FakeQuestionMediaManager fakeQuestionMediaManager = new FakeQuestionMediaManager();
     private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
     private final FakePermissionUtils permissionUtils = new FakePermissionUtils();
-    private final File newFile = new File("newFile.mp4");
 
     private TestScreenContextActivity widgetActivity;
     private ShadowActivity shadowActivity;
@@ -159,21 +157,22 @@ public class VideoWidgetTest {
     }
 
     @Test
-    public void clearAnswer_removesAnswer() {
+    public void clearAnswer_removesAnswerAndDisablesPlayButton() {
         VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
         widget.clearAnswer();
         assertThat(widget.getAnswer(), nullValue());
+        assertThat(widget.binding.playVideo.isEnabled(), is(false));
     }
 
     @Test
-    public void clearAnswer_callsMarkOriginalFileOrDelete() {
+    public void clearAnswer_setsFileAsideForDeleting() {
         FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.mp4"));
         when(prompt.getIndex()).thenReturn(formIndex);
+
         VideoWidget widget = createWidget(prompt);
         widget.clearAnswer();
-
         assertThat(fakeQuestionMediaManager.originalFiles.get("questionIndex"),
-                is("null" + File.separator + "blah.mp4"));
+                is(fakeQuestionMediaManager.getAnswerFile("blah.mp4").toString()));
     }
 
     @Test
@@ -181,82 +180,90 @@ public class VideoWidgetTest {
         VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.clearAnswer();
-
         verify(valueChangedListener).widgetValueChanged(widget);
     }
 
     @Test
-    public void setData_whenDataIsOfIncorrectType_answerIsNotUpdated() {
-        VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
-        widget.setData("newFile.mp4");
-        assertThat(widget.getAnswer().getDisplayText(), is("blah.mp4"));
+    public void setData_whenFileExists_replacesOriginalFileWithNewFile() throws Exception {
+        FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.mp4"));
+        when(prompt.getIndex()).thenReturn(formIndex);
+        VideoWidget widget = createWidget(prompt);
+
+        File newFile = File.createTempFile("newFIle", ".mp4", fakeQuestionMediaManager.getDir());
+        widget.setData(newFile.getName());
+
+        assertThat(fakeQuestionMediaManager.recentFiles.get("questionIndex"), equalTo(newFile.getAbsolutePath()));
     }
 
     @Test
-    public void setData_whenDataIsNull_doesNotReplaceAnswer() {
-        VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
-        widget.setData(null);
-
-        assertThat(fakeQuestionMediaManager.originalFiles.isEmpty(), is(true));
-        assertThat(widget.getAnswer().getDisplayText(), is("blah.mp4"));
-    }
-
-    @Test
-    public void setData_whenVideoDoesNotExist_doesNotReplaceAnswer() {
-        VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
-        widget.setData(newFile);
-
-        assertThat(fakeQuestionMediaManager.originalFiles.isEmpty(), is(true));
-        assertThat(fakeQuestionMediaManager.recentFiles.isEmpty(), is(true));
-        assertThat(widget.getAnswer().getDisplayText(), is("blah.mp4"));
-    }
-
-    @Test
-    public void setData_whenVideoExists_replaceFileAndUpdatesAnswer() throws IOException {
-        File tempFile = File.createTempFile("newFile", "mp4");
-        tempFile.deleteOnExit();
-
+    public void setData_whenPromptHasDifferentAudioFile_deletesOriginalAnswer() throws Exception {
         FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.mp4"));
         when(prompt.getIndex()).thenReturn(formIndex);
 
         VideoWidget widget = createWidget(prompt);
-        widget.setData(tempFile);
+        File newFile = File.createTempFile("newFIle", ".mp4", fakeQuestionMediaManager.getDir());
+        widget.setData(newFile.getName());
 
-        assertThat(fakeQuestionMediaManager.originalFiles.get("questionIndex"), is("null\blah.mp4"));
-        assertThat(fakeQuestionMediaManager.recentFiles.get("questionIndex"), is(tempFile.getAbsolutePath()));
-        assertThat(widget.getAnswer().getDisplayText(), is(tempFile.getName()));
+        assertThat(fakeQuestionMediaManager.originalFiles.get("questionIndex"), equalTo(fakeQuestionMediaManager.getAnswerFile("blah.mp4").toString()));
     }
 
     @Test
-    public void setData_whenVideoExists_enablesPlayButton() throws IOException {
-        File tempFile = File.createTempFile("newFile", "mp4");
-        tempFile.deleteOnExit();
+    public void setData_whenPromptDoesNotHaveAnswer_doesNotDeleteOriginalAnswer() throws Exception {
+        VideoWidget widget = createWidget(promptWithAnswer(null));
+        File newFile = File.createTempFile("newFIle", ".mp4", fakeQuestionMediaManager.getDir());
+        widget.setData(newFile.getName());
 
-        VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
-        widget.setData(tempFile);
-
-        assertThat(widget.binding.playVideo.isEnabled(), is(true));
+        assertThat(fakeQuestionMediaManager.originalFiles.isEmpty(), equalTo(true));
     }
 
     @Test
-    public void setData_whenVideoDoesNotExist_doesNotCallValueChangeListener() {
+    public void setData_whenPromptHasSameAnswer_doesNotDeleteOriginalAnswer() throws Exception {
+        File newFile = File.createTempFile("newFIle", ".mp4", fakeQuestionMediaManager.getDir());
+        VideoWidget widget = createWidget(promptWithAnswer(new StringData(newFile.getName())));
+        widget.setData(newFile.getName());
+        assertThat(fakeQuestionMediaManager.originalFiles.isEmpty(), equalTo(true));
+    }
+
+    @Test
+    public void setData_whenFileDoesNotExist_doesNotUpdateWidgetAnswer() {
         VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
-        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+        widget.setData("newFile.mp4");
+        assertThat(widget.getAnswer().getDisplayText(), equalTo("blah.mp4"));
+    }
+
+    @Test
+    public void setData_whenFileExists_updatesWidgetAnswer() throws Exception {
+        VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
+        File newFile = File.createTempFile("newFIle", ".mp4", fakeQuestionMediaManager.getDir());
+        widget.setData(newFile.getName());
+        assertThat(widget.getAnswer().getDisplayText(), equalTo(newFile.getName()));
+    }
+
+    @Test
+    public void setData_supportsFilesAsWellAsStrings() throws Exception {
+        VideoWidget widget = createWidget(promptWithAnswer(null));
+
+        File newFile = File.createTempFile("newFIle", ".mp4", fakeQuestionMediaManager.getDir());
         widget.setData(newFile);
-
-        verify(valueChangedListener, never()).widgetValueChanged(any());
+        assertThat(widget.getAnswer().getDisplayText(), equalTo(newFile.getName()));
     }
 
     @Test
-    public void setData_whenVideoExists_callsValueChangeListener() throws IOException {
-        File tempFile = File.createTempFile("newFile", "mp4");
-        tempFile.deleteOnExit();
-
-        VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
+    public void setData_whenFileExists_callsValueChangeListener() throws Exception {
+        VideoWidget widget = createWidget(promptWithAnswer(null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.setData(tempFile);
 
+        File newFile = File.createTempFile("newFIle", ".mp4", fakeQuestionMediaManager.getDir());
+        widget.setData(newFile.getName());
         verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void setData_whenFileExists_enablesPlayButton() throws Exception {
+        VideoWidget widget = createWidget(promptWithAnswer(null));
+        File newFile = File.createTempFile("newFIle", ".mp4", fakeQuestionMediaManager.getDir());
+        widget.setData(newFile.getName());
+        assertThat(widget.binding.playVideo.isEnabled(), is(true));
     }
 
     @Test
@@ -387,11 +394,13 @@ public class VideoWidgetTest {
     }
 
     @Test
-    public void clickingPlayVideoButton_launchesCorrectIntent() {
-        VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
+    public void clickingPlayVideoButton_launchesCorrectIntent() throws IOException {
+        File file = File.createTempFile("blah", ".mp4", fakeQuestionMediaManager.getDir());
+
+        VideoWidget widget = createWidget(promptWithAnswer(new StringData(file.getName())));
         when(contentUriProvider.getUriForFile(widgetActivity,
                 BuildConfig.APPLICATION_ID + ".provider",
-                new File("null" + File.separator + "blah.mp4"))).thenReturn(Uri.parse("content://blah"));
+                fakeQuestionMediaManager.getAnswerFile(file.getName()))).thenReturn(Uri.parse("content://blah"));
         widget.setPermissionUtils(permissionUtils);
 
         widget.binding.playVideo.performClick();
@@ -406,7 +415,7 @@ public class VideoWidgetTest {
     @Test
     public void clickingPlayVideoButton_doesNotLaunchAnyIntentAndShowsActivityNotFoundToast_whenIntentIsNotAvailable() {
         when(activityAvailability.isActivityAvailable(ArgumentMatchers.any())).thenReturn(false);
-        VideoWidget widget = createWidget(promptWithAnswer(null));
+        VideoWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp4")));
 
         widget.setPermissionUtils(permissionUtils);
         widget.binding.playVideo.performClick();

@@ -146,7 +146,7 @@ public class VideoWidget extends QuestionWidget implements WidgetDataReceiver {
     public void setData(Object object) {
         // Support being handed a File as well
         if (object instanceof File) {
-            object = (String) ((File) object).getName();
+            object = ((File) object).getName();
         }
         if (object instanceof String) {
             String fileName = (String) object;
@@ -155,27 +155,27 @@ public class VideoWidget extends QuestionWidget implements WidgetDataReceiver {
             if (newVideo != null && newVideo.exists()) {
                 questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newVideo.getAbsolutePath());
 
-                // Add the copy to the content provider
-                Uri videoURI = getContext().getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                Uri videoURI = getContext().getContentResolver().insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                         FileWidgetUtils.getContentValues(newVideo, false));
 
                 if (videoURI != null) {
-                    Timber.i("Inserting video returned uri = %s", videoURI.toString());
+                    Timber.i("Inserting VIDEO returned uri = %s", videoURI.toString());
                 }
 
-                // Remove the media when replacing the answer
+                // when replacing an answer. remove the current media.
                 if (binaryName != null && !binaryName.equals(newVideo.getName())) {
                     deleteFile();
                 }
+
                 binaryName = newVideo.getName();
                 Timber.i("Setting current answer to %s", newVideo.getName());
 
-                binding.playVideo.setEnabled(binaryName != null || !binaryName.isEmpty());
+                binding.playVideo.setEnabled(binaryName != null);
                 widgetValueChanged();
             } else {
-                Timber.e("Inserting video file FAILED");
+                Timber.e("Inserting Video file FAILED");
             }
-        }else {
+        } else {
             Timber.w("VideoWidget's setBinaryData must receive a File object.");
             return;
         }

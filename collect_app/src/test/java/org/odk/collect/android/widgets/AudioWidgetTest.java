@@ -133,7 +133,6 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.clearAnswer();
-
         verify(valueChangedListener).widgetValueChanged(widget);
     }
 
