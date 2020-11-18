@@ -2182,7 +2182,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 if (event.isAltPressed() && !swipeHandler.beenSwiped()) {
                     swipeHandler.setBeenSwiped(true);
-                    moveScreen(FORWARDS);
+                    onSwipeForward();
                     return true;
                 }
                 break;
