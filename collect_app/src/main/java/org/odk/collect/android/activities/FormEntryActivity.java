@@ -1484,7 +1484,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         if (direction == FORWARDS) {
             if (formController.getEvent() == FormEntryController.EVENT_END_OF_FORM) {
-                // We're trying to move forwards at the end of the form so just cancel
                 return false;
             }
 
@@ -1497,7 +1496,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         } else {
             if (!allowMovingBackwards) {
-                // We're not allowed to move backwards but trying to so just cancel
                 return false;
             }
 

@@ -146,26 +146,24 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     }
 
     public void moveBackward() {
-        if (formController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
-            try {
-                int event = formController.stepToPreviousScreenEvent();
+        try {
+            int event = formController.stepToPreviousScreenEvent();
 
-                // If we are the beginning of the form, there is no previous view to show
-                if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
-                    event = formController.stepToNextScreenEvent();
+            // If we are the beginning of the form we need to move back to the first actual screen
+            if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
+                event = formController.stepToNextScreenEvent();
 
-                    if (event != EVENT_PROMPT_NEW_REPEAT) {
-                        // Returning here prevents the same view sliding when user is on the first screen
-                        return;
-                    }
+                if (event != EVENT_PROMPT_NEW_REPEAT) {
+                    // Returning here prevents the same view sliding when user is on the first screen
+                    return;
                 }
-            } catch (JavaRosaException e) {
-                error.setValue(e.getCause().getMessage());
-                return;
             }
-
-            formController.getAuditEventLogger().flush(); // Close events waiting for an end time
+        } catch (JavaRosaException e) {
+            error.setValue(e.getCause().getMessage());
+            return;
         }
+
+        formController.getAuditEventLogger().flush(); // Close events waiting for an end time
     }
 
     public void openHierarchy() {
