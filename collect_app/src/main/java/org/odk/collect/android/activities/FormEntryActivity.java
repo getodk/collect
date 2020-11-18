@@ -1482,39 +1482,33 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             return false;
         }
 
-        switch (direction) {
-            case FORWARDS:
-                if (formController.getEvent() == FormEntryController.EVENT_END_OF_FORM) {
-                    // We're trying to move forwards at the end of the form so just cancel
-                    return false;
-                }
+        if (direction == FORWARDS) {
+            if (formController.getEvent() == FormEntryController.EVENT_END_OF_FORM) {
+                // We're trying to move forwards at the end of the form so just cancel
+                return false;
+            }
 
-                if (!saveBeforeNextView(formController)) {
-                    formEntryViewModel.moveForward();
-                    formIndexAnimationHandler.handle(formController.getFormIndex());
-                    return true;
-                } else {
-                    return false;
-                }
-
-            case BACKWARDS:
-                if (!allowMovingBackwards) {
-                    // We're not allowed to move backwards but trying to so just cancel
-                    return false;
-                }
-
-                // The answer is saved on a back swipe, but question constraints are ignored.
-                if (formController.currentPromptIsQuestion()) {
-                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                }
-
-                formEntryViewModel.moveBackward();
+            if (!saveBeforeNextView(formController)) {
+                formEntryViewModel.moveForward();
                 formIndexAnimationHandler.handle(formController.getFormIndex());
                 return true;
-
-            default:
-                // Java switch statements aren't smart enough to know there are only two possibilities
+            } else {
                 return false;
+            }
+        } else {
+            if (!allowMovingBackwards) {
+                // We're not allowed to move backwards but trying to so just cancel
+                return false;
+            }
+
+            // The answer is saved on a back swipe, but question constraints are ignored.
+            if (formController.currentPromptIsQuestion()) {
+                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+            }
+
+            formEntryViewModel.moveBackward();
+            formIndexAnimationHandler.handle(formController.getFormIndex());
+            return true;
         }
     }
 
