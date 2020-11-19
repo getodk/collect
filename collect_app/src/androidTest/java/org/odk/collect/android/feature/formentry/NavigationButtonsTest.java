@@ -35,33 +35,8 @@ public class NavigationButtonsTest {
             .around(rule);
 
     @Test
-    public void notShownByDefault() {
+    public void showsAndHidesButtonsCorrectlyOnEachScreen() {
         rule.mainMenu()
-                .copyForm("two-question.xml")
-
-                .startBlankForm("Two Question")
-                .assertTextNotDisplayed(R.string.form_backward)
-                .assertTextNotDisplayed(R.string.form_forward)
-
-                .swipeToNextQuestion("What is your age?")
-                .assertTextNotDisplayed(R.string.form_backward)
-                .assertTextNotDisplayed(R.string.form_forward)
-
-                .swipeToEndScreen()
-                .assertTextNotDisplayed(R.string.form_backward)
-                .assertTextNotDisplayed(R.string.form_forward);
-    }
-
-    @Test
-    public void whenButtonsEnabled_showsAndHidesButtonsCorrectlyOnEachScreen() {
-        rule.mainMenu()
-                .clickOnMenu()
-                .clickGeneralSettings()
-                .clickOnUserInterface()
-                .clickNavigation()
-                .clickUseNavigationButtons()
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
                 .copyForm("two-question.xml")
 
                 .startBlankForm("Two Question")
@@ -81,16 +56,8 @@ public class NavigationButtonsTest {
     }
 
     @Test
-    public void whenButtonsEnabled_whenNavigatingBackwardsIsDisabled_showsAndHidesButtonsCorrectlyOnEachScreen() {
+    public void whenNavigatingBackwardsIsDisabled_showsAndHidesButtonsCorrectlyOnEachScreen() {
         rule.mainMenu()
-                .clickOnMenu()
-                .clickGeneralSettings()
-                .clickOnUserInterface()
-                .clickNavigation()
-                .clickUseNavigationButtons()
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
-
                 .clickOnMenu()
                 .clickAdminSettings()
                 .clickFormEntrySettings()
@@ -110,6 +77,31 @@ public class NavigationButtonsTest {
                 .assertTextNotDisplayed(R.string.form_backward)
 
                 .clickForwardButtonToEndScreen()
+                .assertTextNotDisplayed(R.string.form_backward)
+                .assertTextNotDisplayed(R.string.form_forward);
+    }
+
+    @Test
+    public void whenButtonsDisabled_buttonsNotShown() {
+        rule.mainMenu()
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .clickOnUserInterface()
+                .clickNavigation()
+                .clickSwipes()
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
+                .copyForm("two-question.xml")
+
+                .startBlankForm("Two Question")
+                .assertTextNotDisplayed(R.string.form_backward)
+                .assertTextNotDisplayed(R.string.form_forward)
+
+                .swipeToNextQuestion("What is your age?")
+                .assertTextNotDisplayed(R.string.form_backward)
+                .assertTextNotDisplayed(R.string.form_forward)
+
+                .swipeToEndScreen()
                 .assertTextNotDisplayed(R.string.form_backward)
                 .assertTextNotDisplayed(R.string.form_forward);
     }

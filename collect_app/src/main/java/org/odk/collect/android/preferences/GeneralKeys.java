@@ -73,8 +73,9 @@ public final class GeneralKeys {
 
     // values
     public static final String NAVIGATION_SWIPE             = "swipe";
-    public static final String CONSTRAINT_BEHAVIOR_ON_SWIPE = "on_swipe";
     public static final String NAVIGATION_BUTTONS           = "buttons";
+    public static final String NAVIGATION_BOTH              = "swipe_buttons";
+    public static final String CONSTRAINT_BEHAVIOR_ON_SWIPE = "on_swipe";
     private static final String AUTOSEND_OFF                = "off";
     private static final String GUIDANCE_HINT_OFF           = "no";
     static final String KEY_AUTOSEND_WIFI                   = "autosend_wifi";
@@ -133,7 +134,7 @@ public final class GeneralKeys {
         hashMap.put(KEY_APP_THEME,                  Collect.getInstance().getString(R.string.app_theme_light));
         hashMap.put(KEY_APP_LANGUAGE,               "");
         hashMap.put(KEY_FONT_SIZE,                  String.valueOf(QuestionFontSizeUtils.DEFAULT_FONT_SIZE));
-        hashMap.put(KEY_NAVIGATION,                 NAVIGATION_SWIPE);
+        hashMap.put(KEY_NAVIGATION,                 NAVIGATION_BOTH);
         hashMap.put(KEY_SHOW_SPLASH,                false);
         hashMap.put(KEY_SPLASH_PATH,                Collect.getInstance().getString(R.string.default_splash_path));
         hashMap.put(KEY_MAGENTA_THEME,              false);

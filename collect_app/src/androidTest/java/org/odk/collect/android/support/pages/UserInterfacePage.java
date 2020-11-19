@@ -51,4 +51,9 @@ public class UserInterfacePage extends Page<UserInterfacePage> {
         clickOnString(R.string.buttons_navigation);
         return this;
     }
+
+    public UserInterfacePage clickSwipes() {
+        clickOnString(R.string.swipe_navigation);
+        return this;
+    }
 }
