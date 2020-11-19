@@ -67,29 +67,30 @@ public class ArbitraryFileWidget extends QuestionWidget implements WidgetDataRec
         this.questionMediaManager = questionMediaManager;
         this.activityAvailability = activityAvailability;
         this.contentUriProvider = contentUriProvider;
+
+        if (questionDetails.getPrompt().isReadOnly()) {
+            binding.chooseFileButton.setVisibility(View.GONE);
+        }
+
+        binaryName = questionDetails.getPrompt().getAnswerText();
+        if (binaryName == null) {
+            binding.answerLayout.setVisibility(View.GONE);
+        } else {
+            binding.answerTextView.setText(binaryName);
+        }
     }
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = ArbitraryFileWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
-        if (prompt.isReadOnly()) {
-            binding.chooseFileButton.setVisibility(View.GONE);
-        } else {
-            binding.chooseFileButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-            binding.chooseFileButton.setOnClickListener(view -> {
-                waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-                performFileSearch();
-            });
-        }
-        binding.answerTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.chooseFileButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.chooseFileButton.setOnClickListener(view -> {
+            waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
+            performFileSearch();
+        });
 
-        binaryName = prompt.getAnswerText();
-        if (binaryName == null) {
-            binding.answerLayout.setVisibility(View.GONE);
-        } else {
-            binding.answerTextView.setText(binaryName);
-        }
+        binding.answerTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.answerLayout.setOnClickListener(view -> openFile());
 
         return binding.getRoot();

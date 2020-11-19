@@ -92,8 +92,10 @@ public abstract class BaseImageWidget extends QuestionWidget implements WidgetDa
 
     @Override
     public void clearAnswer() {
-        questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(), getImageFile().getAbsolutePath());
-        binaryName = null;
+        if (binaryName != null) {
+            questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(), getImageFile().getAbsolutePath());
+            binaryName = null;
+        }
 
         if (imageView != null) {
             imageView.setImageDrawable(null);
