@@ -143,6 +143,8 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     public void setImage(@NonNull File imageFile) {
         if (imageFile.exists()) {
+            imageView.layout(0, 0, 0, 0);
+
             Glide.with(this)
                     .load(imageFile)
                     .centerInside()
