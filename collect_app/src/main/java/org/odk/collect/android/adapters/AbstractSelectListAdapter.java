@@ -176,15 +176,37 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
         void bind(final int index) {
             if (noButtonsMode) {
-                noButtonsItem.setUpView(filteredItems.get(index), prompt, numColumns > 1);
+                File imageFile = getImageFile(index);
+                noButtonsItem.setUpNoButtonsItem(imageFile, getChoiceText(index), getErrorMsg(imageFile), numColumns > 1);
                 noButtonsItem.setOnClickListener(v -> onItemClick(filteredItems.get(index).selection(), v));
-                noButtonsItem.setEnabled(!prompt.isReadOnly());
-                noButtonsItem.setLongClickable(true);
             } else {
                 addMediaFromChoice(audioVideoImageTextLabel, index, createButton(index, audioVideoImageTextLabel), filteredItems);
                 audioVideoImageTextLabel.setEnabled(!prompt.isReadOnly());
                 enableLongClickToAllowRemovingAnswers(itemView);
             }
+        }
+
+        private File getImageFile(int index) {
+            SelectChoice selectChoice = filteredItems.get(index);
+            String imageURI = selectChoice instanceof ExternalSelectChoice
+                    ? ((ExternalSelectChoice) selectChoice).getImage()
+                    : prompt.getSpecialFormSelectChoiceText(selectChoice, FormEntryCaption.TEXT_FORM_IMAGE);
+
+            try {
+                return new File(ReferenceManager.instance().deriveReference(imageURI).getLocalURI());
+            } catch (InvalidReferenceException e) {
+                Timber.w(e);
+            }
+            return null;
+        }
+
+        private String getChoiceText(int index) {
+            SelectChoice selectChoice = filteredItems.get(index);
+            return StringUtils.textToHtml(prompt.getSelectChoiceText(selectChoice)).toString();
+        }
+
+        private String getErrorMsg(File imageFile) {
+            return context.getString(R.string.file_missing, imageFile);
         }
 
         private void enableLongClickToAllowRemovingAnswers(View view) {

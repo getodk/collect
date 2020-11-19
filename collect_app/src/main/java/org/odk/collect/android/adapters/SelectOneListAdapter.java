@@ -61,7 +61,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder(noButtonsMode
-                ? new NoButtonsItem(context)
+                ? new NoButtonsItem(context, !prompt.isReadOnly())
                 : new AudioVideoImageTextLabel(context));
     }
 

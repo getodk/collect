@@ -59,7 +59,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder(noButtonsMode
-                ? new NoButtonsItem(context)
+                ? new NoButtonsItem(context, !prompt.isReadOnly())
                 : new AudioVideoImageTextLabel(context));
     }
 
