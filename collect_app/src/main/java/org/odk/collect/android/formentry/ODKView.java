@@ -316,18 +316,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     }
 
     /**
-     * Addresses 'bitmap size exceeds VM budget' crash.
-     * http://code.google.com/p/android/issues/detail?id=8488
-     */
-    public void recycleDrawables() {
-        this.destroyDrawingCache();
-        widgetsList.destroyDrawingCache();
-        for (QuestionWidget q : widgets) {
-            q.recycleDrawables();
-        }
-    }
-
-    /**
      * @return a HashMap of answers entered by the user for this set of widgets
      */
     public HashMap<FormIndex, IAnswerData> getAnswers() {
