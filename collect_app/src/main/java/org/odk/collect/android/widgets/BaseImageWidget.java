@@ -48,7 +48,6 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.io.File;
@@ -93,8 +92,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements WidgetDa
 
     @Override
     public void clearAnswer() {
-        questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
-                FileWidgetUtils.getInstanceFolder() + File.separator + binaryName);
+        questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(), getImageFile().getAbsolutePath());
         binaryName = null;
 
         if (imageView != null) {
@@ -109,8 +107,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements WidgetDa
     public void setData(Object object) {
         // you are replacing an answer. delete the previous image using the content provider
         if (binaryName != null) {
-            questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
-                    FileWidgetUtils.getInstanceFolder() + File.separator + binaryName);
+            questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(), getImageFile().getAbsolutePath());
         }
         File newImage = (File) object;
         if (newImage.exists()) {
@@ -121,7 +118,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements WidgetDa
             questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
 
             Uri imageURI = getContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    FileWidgetUtils.getContentValues(newImage, true));
+                    ContentUriProvider.getContentValues(newImage, true));
             if (imageURI != null) {
                 Timber.i("Inserting image returned uri = %s", imageURI.toString());
             }
@@ -211,8 +208,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements WidgetDa
         @Override
         public void clickImage(String context) {
             Intent i = new Intent("android.intent.action.VIEW");
-            Uri uri = MediaUtils.getImageUriFromMediaProvider(
-                    FileWidgetUtils.getInstanceFolder() + File.separator + binaryName);
+            Uri uri = MediaUtils.getImageUriFromMediaProvider(getImageFile().getAbsolutePath());
             if (uri != null) {
                 Timber.i("setting view path to: %s", uri.toString());
                 i.setDataAndType(uri, "image/*");
@@ -312,7 +308,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements WidgetDa
     }
 
     private File getFile() {
-        File file = new File(FileWidgetUtils.getInstanceFolder() + File.separator + binaryName);
+        File file = getImageFile();
         if (!file.exists() && doesSupportDefaultValues()) {
             file = new File(getDefaultFilePath());
         }
@@ -328,6 +324,13 @@ public abstract class BaseImageWidget extends QuestionWidget implements WidgetDa
         }
 
         return "";
+    }
+
+    /**
+     * Returns the image file added to the widget for the current instance
+     */
+    private File getImageFile() {
+        return questionMediaManager.getAnswerFile(binaryName);
     }
 
     protected abstract boolean doesSupportDefaultValues();

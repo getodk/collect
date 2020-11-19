@@ -101,17 +101,11 @@ public class ArbitraryFileWidgetTest {
     }
 
     @Test
-    public void clearAnswer_hidesAnswerLayout() {
-        ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
-        widget.clearAnswer();
-        assertThat(widget.binding.answerLayout.getVisibility(), is(View.GONE));
-    }
-
-    @Test
-    public void clearAnswer_removesAnswer() {
+    public void clearAnswer_removesAnswerAndhidesAnswerLayout() {
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
         widget.clearAnswer();
         assertNull(widget.getAnswer());
+        assertThat(widget.binding.answerLayout.getVisibility(), is(View.GONE));
     }
 
     @Test
@@ -122,7 +116,7 @@ public class ArbitraryFileWidgetTest {
         ArbitraryFileWidget widget = createWidget(prompt);
         widget.clearAnswer();
         assertThat(fakeQuestionMediaManager.originalFiles.get("questionIndex"),
-                is("null" + File.separator + "blah.txt"));
+                is(fakeQuestionMediaManager.getAnswerFile("blah.txt").toString()));
     }
 
     @Test
@@ -130,7 +124,6 @@ public class ArbitraryFileWidgetTest {
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.clearAnswer();
-
         verify(valueChangedListener).widgetValueChanged(widget);
     }
 
@@ -148,13 +141,12 @@ public class ArbitraryFileWidgetTest {
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData("blah.txt")));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.setData(new File("newFilePath"));
-
         verify(valueChangedListener, never()).widgetValueChanged(widget);
     }
 
     @Test
     public void setData_whenFileExists_updatesWidgetAnswer() throws IOException {
-        File tempFile = File.createTempFile("newFile", "txt");
+        File tempFile = File.createTempFile("newFile", "txt", fakeQuestionMediaManager.getDir());
         tempFile.deleteOnExit();
 
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(null));
@@ -167,9 +159,7 @@ public class ArbitraryFileWidgetTest {
 
     @Test
     public void setData_whenFileExists_doesNotDeleteOriginalFile_whenWidgetHasSameAnswer() throws IOException {
-        File tempFile = File.createTempFile("newFile", "txt");
-        tempFile.deleteOnExit();
-
+        File tempFile = File.createTempFile("newFile", "txt", fakeQuestionMediaManager.getDir());
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(new StringData(tempFile.getName())));
         widget.setData(tempFile);
         assertThat(fakeQuestionMediaManager.originalFiles.isEmpty(), is(true));
@@ -177,23 +167,19 @@ public class ArbitraryFileWidgetTest {
 
     @Test
     public void setData_whenFileExists_deletesOriginalFile_whenWidgetHasDifferentAnswer() throws IOException {
-        File tempFile = File.createTempFile("newFile", "txt");
-        tempFile.deleteOnExit();
-
+        File tempFile = File.createTempFile("newFile", "txt", fakeQuestionMediaManager.getDir());
         FormEntryPrompt prompt = promptWithAnswer(new StringData("blah.txt"));
         when(prompt.getIndex()).thenReturn(formIndex);
 
         ArbitraryFileWidget widget = createWidget(prompt);
         widget.setData(tempFile);
         assertThat(fakeQuestionMediaManager.originalFiles.get("questionIndex"),
-                is("null" + File.separator + "blah.txt"));
+                is(fakeQuestionMediaManager.getAnswerFile("blah.txt").toString()));
     }
 
     @Test
     public void setData_whenFileExists_callsValueChangeListener() throws IOException {
-        File tempFile = File.createTempFile("newFile", "txt");
-        tempFile.deleteOnExit();
-
+        File tempFile = File.createTempFile("newFile", "txt", fakeQuestionMediaManager.getDir());
         ArbitraryFileWidget widget = createWidget(promptWithAnswer(null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
 

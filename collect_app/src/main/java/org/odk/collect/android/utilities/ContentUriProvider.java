@@ -1,8 +1,10 @@
 package org.odk.collect.android.utilities;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
@@ -58,5 +60,18 @@ public class ContentUriProvider {
         } else {
             return FileProvider.getUriForFile(context, authority, file);
         }
+    }
+
+    public static ContentValues getContentValues(File file, boolean isImageType) {
+        // Add the copy to the content provider
+        ContentValues values = new ContentValues(6);
+        values.put(MediaStore.MediaColumns.TITLE, file.getName());
+        values.put(MediaStore.MediaColumns.DISPLAY_NAME, file.getName());
+        values.put(MediaStore.MediaColumns.DATE_ADDED, System.currentTimeMillis());
+        values.put(MediaStore.MediaColumns.DATA, file.getAbsolutePath());
+        if (isImageType) {
+            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+        }
+        return values;
     }
 }

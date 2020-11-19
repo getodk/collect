@@ -45,7 +45,6 @@ import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.io.File;
@@ -89,7 +88,20 @@ public class VideoWidget extends QuestionWidget implements WidgetDataReceiver {
         this.activityAvailability = activityAvailability;
         this.contentUriProvider = contentUriProvider;
 
-        if (WidgetAppearanceUtils.isFrontCameraAppearance(getFormEntryPrompt())) {
+        if (questionDetails.isReadOnly()) {
+            binding.captureVideo.setVisibility(View.GONE);
+            binding.chooseVideo.setVisibility(View.GONE);
+        }
+
+        if (WidgetAppearanceUtils.isNewWidget(questionDetails.getPrompt())) {
+            binding.chooseVideo.setVisibility(View.GONE);
+        }
+
+        // retrieve answer from data model and update ui
+        binaryName = questionDetails.getPrompt().getAnswerText();
+        binding.playVideo.setEnabled(binaryName != null && binaryName.isEmpty());
+
+        if (WidgetAppearanceUtils.isFrontCameraAppearance(questionDetails.getPrompt())) {
             if (!cameraUtils.isFrontCameraAvailable()) {
                 binding.captureVideo.setEnabled(false);
                 ToastUtils.showLongToast(R.string.error_front_camera_unavailable);
@@ -101,27 +113,14 @@ public class VideoWidget extends QuestionWidget implements WidgetDataReceiver {
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = VideoWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
-        if (prompt.isReadOnly()) {
-            binding.captureVideo.setVisibility(View.GONE);
-            binding.chooseVideo.setVisibility(View.GONE);
-        } else {
-            binding.captureVideo.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-            binding.captureVideo.setOnClickListener(v -> onCaptureVideoButtonClick());
+        binding.captureVideo.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.captureVideo.setOnClickListener(v -> onCaptureVideoButtonClick());
 
-            if (WidgetAppearanceUtils.isNewWidget(prompt)) {
-                binding.chooseVideo.setVisibility(View.GONE);
-            } else {
-                binding.chooseVideo.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-                binding.chooseVideo.setOnClickListener(v -> chooseVideo());
-            }
-        }
+        binding.chooseVideo.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.chooseVideo.setOnClickListener(v -> chooseVideo());
 
         binding.playVideo.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.playVideo.setOnClickListener(v -> playVideoFile());
-
-        // retrieve answer from data model and update ui
-        binaryName = prompt.getAnswerText();
-        binding.playVideo.setEnabled(binaryName != null && binaryName.isEmpty());
 
         return binding.getRoot();
     }
@@ -156,7 +155,7 @@ public class VideoWidget extends QuestionWidget implements WidgetDataReceiver {
                 questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newVideo.getAbsolutePath());
 
                 Uri videoURI = getContext().getContentResolver().insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                        FileWidgetUtils.getContentValues(newVideo, false));
+                        ContentUriProvider.getContentValues(newVideo, false));
 
                 if (videoURI != null) {
                     Timber.i("Inserting VIDEO returned uri = %s", videoURI.toString());
@@ -177,7 +176,6 @@ public class VideoWidget extends QuestionWidget implements WidgetDataReceiver {
             }
         } else {
             Timber.w("VideoWidget's setBinaryData must receive a File object.");
-            return;
         }
     }
 

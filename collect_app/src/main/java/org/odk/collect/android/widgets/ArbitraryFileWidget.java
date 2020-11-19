@@ -38,10 +38,10 @@ import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.io.File;
@@ -103,7 +103,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements WidgetDataRec
     @Override
     public void clearAnswer() {
         questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
-                FileWidgetUtils.getInstanceFolder() + File.separator + binaryName);
+                getFile().getAbsolutePath());
         binaryName = null;
         binding.answerLayout.setVisibility(GONE);
 
@@ -116,7 +116,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements WidgetDataRec
         if (newFile.exists()) {
             if (binaryName != null && !binaryName.equals(newFile.getName())) {
                 questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
-                        FileWidgetUtils.getInstanceFolder() + File.separator + binaryName);
+                        getFile().getAbsolutePath());
             }
             binaryName = newFile.getName();
             Timber.i("Setting current answer to %s", newFile.getName());
@@ -156,7 +156,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements WidgetDataRec
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         intent.setDataAndType(contentUri, getMimeType(
-                FileWidgetUtils.getSourcePathFromUri(getContext(), fileUri, MediaStore.Files.FileColumns.DATA)));
+                MediaUtils.getPathFromUri(getContext(), fileUri, MediaStore.Files.FileColumns.DATA)));
         FileUtils.grantFileReadPermissions(intent, contentUri, getContext());
 
         if (activityAvailability.isActivityAvailable(intent)) {
@@ -166,5 +166,12 @@ public class ArbitraryFileWidget extends QuestionWidget implements WidgetDataRec
             ToastUtils.showLongToast(message);
             Timber.w(message);
         }
+    }
+
+    /**
+     * Returns the file added to the widget for the current instance
+     */
+    private File getFile() {
+        return questionMediaManager.getAnswerFile(binaryName);
     }
 }
