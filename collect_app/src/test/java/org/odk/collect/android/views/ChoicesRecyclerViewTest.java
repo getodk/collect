@@ -23,6 +23,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.adapters.SelectMultipleListAdapter;
 import org.odk.collect.android.adapters.SelectOneListAdapter;
@@ -536,7 +537,7 @@ public class ChoicesRecyclerViewTest {
     private void assertVisibleItemsInNoButtonsMode(String... items) {
         assertThat(recyclerView.getAdapter().getItemCount(), is(items.length));
         for (int i = 0; i < getVisibleItems().size(); i++) {
-            assertThat(((TextView) getChoiceView(i).getChildAt(0)).getText().toString(), is(items[i]));
+            assertThat(((TextView) getChoiceView(i).findViewById(R.id.label)).getText().toString(), is(items[i]));
         }
     }
 
