@@ -34,7 +34,7 @@ public class NavigationButtonsTest {
     public RuleChain copyFormChain = TestRuleChain.chain()
             .around(rule);
 
-    @Test
+    @Test //TestCase14
     public void showsAndHidesButtonsCorrectlyOnEachScreen() {
         rule.mainMenu()
                 .copyForm("two-question.xml")
