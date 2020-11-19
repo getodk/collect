@@ -1,8 +1,6 @@
 package org.odk.collect.android.formentry.questions;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -11,6 +9,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
@@ -18,11 +18,8 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalSelectChoice;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.StringUtils;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 import java.io.File;
 
@@ -62,18 +59,12 @@ public class NoButtonsItem extends FrameLayout {
             try {
                 final File imageFile = new File(ReferenceManager.instance().deriveReference(imageURI).getLocalURI());
                 if (imageFile.exists()) {
-                    Bitmap bitmap = FileUtils.getBitmap(imageFile.getPath(), new BitmapFactory.Options());
+                    imageView.setVisibility(View.VISIBLE);
 
-                    if (bitmap != null) {
-                        imageView.setVisibility(View.VISIBLE);
-                        if (!WidgetAppearanceUtils.isFlexAppearance(prompt)) {
-                            bitmap = ImageConverter.scaleImageToNewWidth(bitmap, getContext().getResources().getDisplayMetrics().widthPixels / numColumns);
-                        }
-                        imageView.setImageBitmap(bitmap);
-                        imageView.setAdjustViewBounds(true);
-                    } else {
-                        errorMsg = getContext().getString(R.string.file_invalid, imageFile);
-                    }
+                    Glide.with(this)
+                            .load(imageFile)
+                            .centerInside()
+                            .into(imageView);
                 } else {
                     errorMsg = getContext().getString(R.string.file_missing, imageFile);
                 }
