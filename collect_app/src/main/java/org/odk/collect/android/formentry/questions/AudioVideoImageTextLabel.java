@@ -143,7 +143,30 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     }
 
     public void setImage(@NonNull File imageFile) {
-        setupImage(imageFile);
+        String errorMsg = null;
+
+        if (imageFile.exists()) {
+            Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile, ScreenUtils.getScreenHeight(), ScreenUtils.getScreenWidth());
+            if (b != null) {
+                imageView.setVisibility(VISIBLE);
+                imageView.setImageBitmap(b);
+                imageView.setOnClickListener(this);
+            } else {
+                // Loading the image failed, so it's likely a bad file.
+                errorMsg = getContext().getString(R.string.file_invalid, imageFile);
+            }
+        } else {
+            // We should have an image, but the file doesn't exist.
+            errorMsg = getContext().getString(R.string.file_missing, imageFile);
+        }
+
+        if (errorMsg != null) {
+            // errorMsg is only set when an error has occurred
+            Timber.e(errorMsg);
+            imageView.setVisibility(View.GONE);
+            missingImage.setVisibility(VISIBLE);
+            missingImage.setText(errorMsg);
+        };
     }
 
     public void setBigImage(@NonNull File bigImageFile) {
@@ -256,33 +279,6 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         }
         if (listener != null) {
             listener.onItemClicked();
-        }
-    }
-
-    private void setupImage(File imageFile) {
-        String errorMsg = null;
-
-        if (imageFile.exists()) {
-            Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile, ScreenUtils.getScreenHeight(), ScreenUtils.getScreenWidth());
-            if (b != null) {
-                imageView.setVisibility(VISIBLE);
-                imageView.setImageBitmap(b);
-                imageView.setOnClickListener(this);
-            } else {
-                // Loading the image failed, so it's likely a bad file.
-                errorMsg = getContext().getString(R.string.file_invalid, imageFile);
-            }
-        } else {
-            // We should have an image, but the file doesn't exist.
-            errorMsg = getContext().getString(R.string.file_missing, imageFile);
-        }
-
-        if (errorMsg != null) {
-            // errorMsg is only set when an error has occurred
-            Timber.e(errorMsg);
-            imageView.setVisibility(View.GONE);
-            missingImage.setVisibility(VISIBLE);
-            missingImage.setText(errorMsg);
         }
     }
 
