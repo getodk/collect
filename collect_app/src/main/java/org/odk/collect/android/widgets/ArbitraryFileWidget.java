@@ -68,7 +68,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements WidgetDataRec
         this.activityAvailability = activityAvailability;
         this.contentUriProvider = contentUriProvider;
 
-        if (questionDetails.getPrompt().isReadOnly()) {
+        if (questionDetails.isReadOnly()) {
             binding.chooseFileButton.setVisibility(View.GONE);
         }
 
