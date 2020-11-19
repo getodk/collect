@@ -49,7 +49,7 @@ public class NoButtonsItem extends FrameLayout {
         ButterKnife.bind(this);
     }
 
-    public void setUpView(SelectChoice selectChoice, FormEntryPrompt prompt, int numColumns) {
+    public void setUpView(SelectChoice selectChoice, FormEntryPrompt prompt, boolean gridView) {
         String imageURI = selectChoice instanceof ExternalSelectChoice
                 ? ((ExternalSelectChoice) selectChoice).getImage()
                 : prompt.getSpecialFormSelectChoiceText(selectChoice, FormEntryCaption.TEXT_FORM_IMAGE);
@@ -60,11 +60,17 @@ public class NoButtonsItem extends FrameLayout {
                 final File imageFile = new File(ReferenceManager.instance().deriveReference(imageURI).getLocalURI());
                 if (imageFile.exists()) {
                     imageView.setVisibility(View.VISIBLE);
-
-                    Glide.with(this)
-                            .load(imageFile)
-                            .centerInside()
-                            .into(imageView);
+                    if (gridView) {
+                        Glide.with(this)
+                                .load(imageFile)
+                                .fitCenter()
+                                .into(imageView);
+                    } else {
+                        Glide.with(this)
+                                .load(imageFile)
+                                .centerInside()
+                                .into(imageView);
+                    }
                 } else {
                     errorMsg = getContext().getString(R.string.file_missing, imageFile);
                 }

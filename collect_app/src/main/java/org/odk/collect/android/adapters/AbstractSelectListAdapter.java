@@ -176,7 +176,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
         void bind(final int index) {
             if (noButtonsMode) {
-                noButtonsItem.setUpView(filteredItems.get(index), prompt, numColumns);
+                noButtonsItem.setUpView(filteredItems.get(index), prompt, numColumns > 1);
                 noButtonsItem.setOnClickListener(v -> onItemClick(filteredItems.get(index).selection(), v));
                 noButtonsItem.setEnabled(!prompt.isReadOnly());
                 noButtonsItem.setLongClickable(true);
