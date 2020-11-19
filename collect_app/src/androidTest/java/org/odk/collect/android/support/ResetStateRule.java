@@ -12,6 +12,8 @@ import org.junit.runners.model.Statement;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.provider.FormsProvider;
+import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.utilities.ApplicationResetter;
 import org.odk.collect.android.utilities.MultiClickGuard;
@@ -27,15 +29,11 @@ public class ResetStateRule implements TestRule {
     private AppDependencyModule appDependencyModule;
 
     public ResetStateRule() {
-        this(false, null);
-    }
-
-    public ResetStateRule(boolean useScopedStorage) {
-        this(useScopedStorage, null);
+        this(true, null);
     }
 
     public ResetStateRule(AppDependencyModule appDependencyModule) {
-        this(false, appDependencyModule);
+        this(true, appDependencyModule);
     }
 
     public ResetStateRule(boolean useScopedStorage, AppDependencyModule appDependencyModule) {
@@ -98,6 +96,9 @@ public class ResetStateRule implements TestRule {
         } else {
             new StorageStateProvider().disableUsingScopedStorage();
         }
+
+        FormsProvider.recreateDatabaseHelper();
+        InstanceProvider.recreateDatabaseHelper();
     }
 
     private void resetDagger() {

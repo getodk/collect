@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
@@ -15,11 +16,21 @@ import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.StorageMigrationDialogPage;
 
 import static java.util.Arrays.asList;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class StorageMigrationTest {
 
-    final TestDependencies testDependencies = new TestDependencies();
+    final TestDependencies testDependencies = new TestDependencies() {
+        @Override
+        public StorageStateProvider providesStorageStateProvider() {
+            StorageStateProvider storageStateProvider = spy(new StorageStateProvider());
+            when(storageStateProvider.shouldPerformAutomaticMigration()).thenReturn(false);
+            return storageStateProvider;
+        }
+    };
+
     final IntentsTestRule<MainMenuActivity> rule = new IntentsTestRule<>(MainMenuActivity.class);
 
     @Rule

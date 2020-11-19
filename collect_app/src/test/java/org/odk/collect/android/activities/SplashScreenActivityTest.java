@@ -23,6 +23,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.utilities.UserAgentProvider;
@@ -69,6 +70,8 @@ public class SplashScreenActivityTest {
             Assert.assertTrue("File " + dirName + "does not exist", dir.exists());
             Assert.assertTrue("File" + dirName + "does not exist", dir.isDirectory());
         }
+
+        assertThat(new StorageStateProvider().isScopedStorageUsed(), is(true));
     }
 
     @Test

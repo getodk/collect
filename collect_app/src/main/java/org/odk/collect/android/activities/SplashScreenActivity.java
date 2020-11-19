@@ -33,6 +33,8 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StorageInitializer;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
@@ -66,6 +68,12 @@ public class SplashScreenActivity extends Activity {
     @Inject
     GeneralSharedPreferences generalSharedPreferences;
 
+    @Inject
+    StorageStateProvider storageStateProvider;
+
+    @Inject
+    StoragePathProvider storagePathProvider;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +86,7 @@ public class SplashScreenActivity extends Activity {
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
                 try {
+                    enableScopedStorageForFreshInstalls();
                     new StorageInitializer().createOdkDirsOnStorage();
                 } catch (RuntimeException e) {
                     DialogUtils.showDialog(DialogUtils.createErrorDialog(SplashScreenActivity.this,
@@ -178,5 +187,11 @@ public class SplashScreenActivity extends Activity {
         }
 
         new Handler().postDelayed(this::endSplashScreen, SPLASH_TIMEOUT);
+    }
+
+    private void enableScopedStorageForFreshInstalls() {
+        if (!storageStateProvider.isScopedStorageUsed() && !new File(storagePathProvider.getUnscopedStorageRootDirPath()).exists()) {
+            storageStateProvider.enableUsingScopedStorage();
+        }
     }
 }
