@@ -31,6 +31,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.RobolectricHelpers.createThemedActivity;
@@ -122,6 +123,22 @@ public class FormEntryMenuDelegateTest {
         when(answersProvider.getAnswers()).thenReturn(answers);
         formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_add_repeat));
         verify(formSaveViewModel).saveAnswersForScreen(answers);
+    }
+
+    @Test
+    public void onItemSelected_whenAddRepeat_whenRecording_showsWarning() {
+        RoboMenu menu = new RoboMenu();
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+
+        when(audioRecorderViewModel.isRecording()).thenReturn(new MutableLiveData<>(true));
+
+        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_add_repeat));
+        verify(formEntryViewModel, never()).promptForNewRepeat();
+
+        RecordingWarningDialogFragment dialog = getFragmentByClass(activity.getSupportFragmentManager(), RecordingWarningDialogFragment.class);
+        assertThat(dialog, is(notNullValue()));
+        assertThat(dialog.getDialog().isShowing(), is(true));
     }
 
     @Test

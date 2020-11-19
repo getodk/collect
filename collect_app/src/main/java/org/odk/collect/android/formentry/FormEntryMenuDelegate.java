@@ -100,9 +100,14 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_add_repeat) {
-            formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
-            formEntryViewModel.promptForNewRepeat();
-            formIndexAnimationHandler.handle(formEntryViewModel.getCurrentIndex());
+            if (audioRecorderViewModel.isRecording().getValue()) {
+                DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
+            } else {
+                formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
+                formEntryViewModel.promptForNewRepeat();
+                formIndexAnimationHandler.handle(formEntryViewModel.getCurrentIndex());
+            }
+
             return true;
         } else if (item.getItemId() == R.id.menu_preferences) {
             if (audioRecorderViewModel.isRecording().getValue()) {
