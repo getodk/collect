@@ -33,6 +33,7 @@
   <string name="data_saved_error">Formularen kunne ikke gemmes</string>
   <string name="data_saved_ok">Formular gemt </string>
   <string name="save_point_error">Kunne ikke gemme gendannelsespunkt: %s</string>
+  <string name="default_completed">Standard til færdigjort</string>
   <string name="default_completed_summary">Markér formularen afsluttet som standard.</string>
   <string name="delete_confirm">Slet 1%s formular(er)?</string>
   <string name="delete_file">Slet valgte</string>
@@ -64,7 +65,7 @@
   <string name="forms">Ikke-udfyldte(tomme) skabeloner</string>
   <string name="getting_location">Finder lokation</string>
   <string name="get_barcode">Hent stregkode</string>
-  <string name="get_forms">Hent tom skabelon</string>
+  <string name="get_forms">Hent tom formular</string>
   <string name="get_location">Gem lokation</string>
   <string name="provider_disabled_error">Geolokation er slået fra</string>
   <string name="invalid_answer_error"> Opfylder ikke svarmuligheder</string>
@@ -95,6 +96,7 @@
   <string name="quit_entry">Gem formular og afslut</string>
   <string name="refresh">Opdatér</string>
   <string name="group_label">Gruppe</string>
+  <string name="repeatable_group_label">Gentagelig gruppe</string>
   <string name="replace_barcode">Erstat stregkode</string>
   <string name="required_answer_error">Skal udfyldes</string>
   <string name="review_data">Redigér gemt formular</string>
@@ -117,11 +119,13 @@
   <string name="uploading_data">Uploader formular</string>
   <string name="url_error">Invalid webadresse</string>
   <string name="username">Brugernavn</string>
+  <string name="view_hierarchy">Gå til prompt</string>
   <string name="general_preferences">Generelle Indstilinger</string>
   <string name="client">Brugergrænseflade</string>
   <string name="show_splash_summary">Vises når applikationen starter</string>
   <string name="default_splash_path">ODK Standardopsætning</string>
   <string name="select_another_image">Vælg et andet billede</string>
+  <string name="use_odk_default">Benyt standard billede</string>
   <string name="change_splash_path">Udskift billede</string>
   <string name="keep_changes">Gem ændringer</string>
   <string name="change_formlist_url">Sti til formularoverblik(tilføjet til webadresse) </string>
@@ -144,6 +148,7 @@
   <string name="select_answer">Vælg svarmulighed</string>
   <string name="save_form_as">Navngiv formular</string>
   <string name="save_as_error">Den gemte titel må ikke være tom - skal hedde noget.</string>
+  <string name="edit_prompt">Rediger prompt</string>
   <string name="selected_google_account_text">Google-konto</string>
   <string name="font_size_extra_large">Ekstra stor</string>
   <string name="font_size_large">Stor</string>
@@ -153,11 +158,17 @@
   <string name="change_view">Skift vinkel</string>
   <string name="show_sent_and_unsent_forms">Vis afsendte(uploadede) og ikke-afsendte formularer</string>
   <string name="show_unsent_forms">Vis ikke-afsendte formularer</string>
+  <string name="added_on_date_at_time">\'Tilføjet til\' EEE, MMM dd, yyyy \'kl\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="saved_on_date_at_time">\'Gemt på\' EEE, MMM dd, yyyy \'kl\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="finalized_on_date_at_time">\'Afsluttet på\' EEE, MMM dd, yyyy \'kl\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sent_on_date_at_time">\'Sendt på\' EEE, MMM dd, yyyy \'kl\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sending_failed_on_date_at_time">\'Sending mislykkedes til\' EEE, MMM dd, yyyy \'kl\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="deleted_on_date_at_time">\'Slettet på\' EEE, MMM dd, yyyy \'kl\' HH:mm</string>
   <string name="submission_deleted">Indberetning slettet</string>
   <string name="version">Version:</string>
   <string name="launch_app">Start</string>
@@ -237,17 +248,161 @@
   <string name="missing_submission_url">Mangler indberetningsadresse</string>
   <string name="google_sheets_access_denied">Adgang ikke tilladt. Tjek om ejeren af regnearket/spreadsheet har givet dig editerings-rettigheder.</string>
   <string name="google_sheets_missing_columns">Regnearket mangler følgende kolonner: %1$s</string>
+  <string name="about_preferences">Om</string>
+  <string name="tell_your_friends">Del ODK Collect</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <string name="maps">Kort</string>
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
       These strings are only being used to preserve compatibility with pre-existing
        tile caches, and are not shown in the UI.-->
+  <string name="openmap_stamen_terrain">Stamen Terræn</string>
+  <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
+  <string name="basemap">Basemap</string>
+  <string name="basemap_source">Kilde</string>
+  <string name="streets">Gader</string>
+  <string name="terrain">Terræn</string>
+  <string name="hybrid">Hybrid</string>
+  <string name="satellite">Satellit</string>
+  <string name="light">Lys</string>
+  <string name="dark">Mørk</string>
+  <string name="outdoors">Udendørs</string>
+  <string name="topographic">Topografisk</string>
+  <string name="carto_map_style_positron">Positron</string>
+  <string name="reference_layer">Referencelag</string>
+  <string name="save_point">Gem GeoPoint</string>
+  <string name="get_point">Start GeoPoint</string>
+  <string name="geopoint_view_read_only">Vis GeoPoint</string>
+  <string name="geoshape_view_read_only">Vis GeoShape</string>
+  <string name="geotrace_view_read_only">Vis GeoTrace</string>
+  <string name="get_shape">Start GeoShape</string>
+  <string name="get_trace">Start GeoTrace</string>
+  <string name="geoshape_title">GeoShape</string>
+  <string name="input_method">Inputmetode</string>
+  <string name="start">Start</string>
+  <string name="enable_gps">Tænd GPS</string>
+  <string name="geotrace_title">GeoTrace</string>
+  <string name="gps_enable_message">GPS er slukket på dit udstyr. Har du lyst til at tænde den?</string>
+  <string name="geo_clear_warning">Funktion allerede oprettet. Vil du fjerne funktionen?</string>
+  <string name="geo_exit_warning">Fortryd ændringer og returnér til ODK?</string>
+  <string name="polygon_validator">Du skal have mindst 3 punkter for at lave et polygon</string>
+  <string name="polyline_validator">Du skal have mindst 2 punkter for at lave en polylinje</string>
+  <string name="clear">Ryd</string>
+  <string name="placement_mode">Placering ved tapping</string>
+  <string name="manual_mode">Manuel optagelse af lokation</string>
+  <string name="automatic_mode">Automatisk optagelse af lokation</string>
+  <string name="recording_interval">Optagelsesinterval:</string>
+  <plurals name="number_of_seconds">
+    <item quantity="one">%d sekunder</item>
+    <item quantity="other">%d sekunder</item>
+  </plurals>
+  <plurals name="number_of_minutes">
+    <item quantity="one">%d minutter</item>
+    <item quantity="other">%d minutter</item>
+  </plurals>
+  <string name="accuracy_requirement">Nødvendig præcision:</string>
+  <string name="none">Ingen</string>
+  <plurals name="number_of_meters">
+    <item quantity="one">%d meter</item>
+    <item quantity="other">%d meter</item>
+  </plurals>
+  <string name="location_status_searching">Søger efter lokation, vent venligst…</string>
+  <string name="location_status_accuracy">Lokations nøjagtighed: %.2f m</string>
+  <string name="location_status_acceptable">Lokations nøjagtighed: %.2f m (acceptabel)</string>
+  <string name="location_status_unacceptable">Lokations nøjagtighed: %.2f m (uacceptabel)</string>
+  <string name="collection_status_paused">Punkter indtastet: %d</string>
+  <string name="collection_status_placement">Punkter indtastet: %d(Tryk for at placere punkter)</string>
+  <string name="collection_status_manual">Punkter indtastet: %d(manuel optagelse)</string>
+  <string name="collection_status_auto_seconds">Punkter indtastet: %1$d(optager hver %2$dsekund)</string>
+  <string name="discard">Kassér</string>
+  <string name="geoshape_view_change_location">Gennemse eller ændr´ GeoShape</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="alert">Advarsel</string>
+  <string name="install_openmapkit">Installer venligst OpenMapKit!</string>
+  <string name="go_back">Gå tilbage</string>
+  <string name="download_selected">Download valgte</string>
+  <string name="odk_website">Besøg ODK websiden</string>
+  <string name="all_open_source_licenses">Open source biblioteker/licenser</string>
+  <string name="all_open_source_licenses_msg">Vi står på skuldrene af giganter!</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <string name="west">V %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <string name="east">Ø %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <string name="south">S %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="north">N %1$s%2$s%3$s</string>
+  <string name="analytics_preferences">Brugerdata</string>
+  <string name="select_all">Vælg alle</string>
+  <string name="clear_all">Ryd alle</string>
+  <string name="reset_settings_dialog">Nulstil applikation…</string>
   <string name="reset_settings_button_reset">Nulstil</string>
+  <string name="reset_in_progress">Nulstiller…</string>
+  <string name="exit">Forlad</string>
+  <string name="instance_scan_completed">Afsluttede scanning.</string>
+  <string name="sort_by_name_asc">Navn, A-Z</string>
+  <string name="sort_by_name_desc">Navn, A-Z</string>
+  <string name="sort_by_date_asc">Dato - nyeste først</string>
+  <string name="sort_by_date_desc">Dato - ældste først</string>
+  <string name="sort_by_status_asc">Status - færdiggjorte først</string>
+  <string name="sort_by_status_desc">Status - ikke-færdiggjorte først</string>
+  <string name="sort_the_list">Sortér liste</string>
+  <string name="filter_the_list">Filtrér liste</string>
+  <string name="language">Sprog</string>
+  <string name="google_auth_io_exception_msg">Ikke muligt at foretage API-kald. Hvis du kører med en lokal deployment, læs da projekt \"readme\".</string>
+  <string name="form_metadata_title">Metadata(formular)</string>
+  <string name="form_metadata">Metadata(formular)</string>
+  <string name="form_metadata_summary">Disse værdier vil blive tilføjet til formularer der har brugernavn, email og/eller telefonnr. til ved forudindlæste felter for at identificere inventøreren.</string>
+  <string name="phone_number">Telefonnummer</string>
+  <string name="email">Mailadresse</string>
+  <string name="user_defined">Brugerdefineret</string>
+  <string name="device_defined">Defineret af enhed</string>
+  <string name="select_date">Vælg dato</string>
+  <string name="select_time">Vælg tidspunkt</string>
+  <string name="no_date_selected">Ingen dato valgt</string>
+  <string name="no_time_selected">Intet tidspunkt valgt</string>
+  <string name="scan_qr_code_fragment_title">Scan</string>
+  <string name="view_qr_code_fragment_title">QR kode</string>
+  <string name="share">Del</string>
+  <string name="error_front_camera_unavailable">Frontkamera er ikke tilgængeligt på dette device</string>
+  <string name="user_settings">Brugerindstillinger</string>
   <string name="autosend_selector_title">Auto-send</string>
+  <string name="image_size_title">Billedstørrelse</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
+  <string name="search">Søg</string>
+  <string name="image_size_large">Stor (3072px)</string>
+  <string name="image_size_medium">Mellem (2048px)</string>
+  <string name="image_size_small">Lille (1024px)</string>
+  <string name="image_size_very_small">Meget lille (640px)</string>
+  <string name="ethiopian_month_1">Meskerem</string>
+  <string name="ethiopian_month_2">Tikimt</string>
+  <string name="ethiopian_month_3">Hidar</string>
+  <string name="ethiopian_month_4">Tahsas</string>
+  <string name="ethiopian_month_5">Tir</string>
+  <string name="ethiopian_month_6">Yekatit</string>
+  <string name="ethiopian_month_7">Megabit</string>
+  <string name="ethiopian_month_8">Miazia</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="persian_month_4">Tir</string>
+  <string name="every_fifteen_minutes">Hver 15 minutter</string>
+  <string name="every_one_hour">Hver time</string>
+  <string name="every_six_hours">Hver sjette time</string>
+  <string name="every_24_hours">Hver 24. time</string>
+  <string name="automatic_download">Automatisk download</string>
+  <string name="app_theme">Tema</string>
+  <string name="theme_light">Lyst tema</string>
+  <string name="theme_dark">Mørkt tema</string>
+  <string name="open_file">Åben fil</string>
+  <string name="reading_files">Læser filer</string>
+  <string name="close">Luk</string>
+  <string name="save">Gem</string>
+  <string name="storage_migration_more_details">Flere detaljer</string>
+  <string name="try_again">Prøv igen</string>
+  <string name="error">Fejl:</string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

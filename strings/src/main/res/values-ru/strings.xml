@@ -129,7 +129,7 @@
   <string name="font_size">Размер шрифта</string>
   <string name="change_font_size">Размер шрифта</string>
   <string name="form_download_progress">%1$s. Загрузка медиа-файлов: %2$s из %3$s</string>
-    <string name="success">Успешно</string>
+  <string name="success">Успешно</string>
   <string name="failures">Неудачи</string>
   <string name="no_forms_uploaded">Опрос НЕ выгружен</string>
   <string name="upload_results">Результаты выгрузки</string>
@@ -312,7 +312,6 @@
   <string name="unrecognized_uri">Не удалось распознать URI: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;опросник не загружен&gt;</string>
-  <string name="settings_successfully_loaded_file_notification">Настройки успешно загружены из файла</string>
   <string name="corrupt_settings_file_notification">Извините, файл настроек повреждён и должен быть удалён или изменён</string>
   <string name="selected_invalid_image">Выбрайнный файл не является изображением</string>
   <string name="edited_osm_file">Редактируемый файл OSM XML:</string>
@@ -389,6 +388,7 @@
   <string name="email">Адрес эл. почты</string>
   <string name="user_defined">Пользовательские данные</string>
   <string name="device_defined">Автоматически определено</string>
+  <string name="device_id">Идентификатор устройства</string>
   <string name="select_date">Выберете дату</string>
   <string name="select_time">Выберете время</string>
   <string name="no_date_selected">Дата не выбрана</string>
@@ -538,4 +538,11 @@
   <string name="loading_form_failed">Ошибка загрузки. Попробуйте ещё раз.</string>
   <string name="missing_google_account_dialog_title">Учётная запись Google не установлена</string>
   <string name="missing_google_account_dialog_desc">Для отправки ответов через Google таблицы необходимо указать учётную запись через которую это будет происходить</string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

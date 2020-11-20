@@ -132,7 +132,7 @@
   <string name="font_size">Tekstgrootte</string>
   <string name="change_font_size">Tekstgrootte</string>
   <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
-    <string name="success">Voltooid</string>
+  <string name="success">Voltooid</string>
   <string name="no_forms_uploaded">Sorry, no form was uploaded.</string>
   <string name="upload_results">Upload Results</string>
   <string name="xform_parse_error">Fout tijdens XForm parse voor %1$s: %2$s ontbreekt of is ongeldig</string>
@@ -302,6 +302,7 @@
   <string name="email">emailadres</string>
   <string name="user_defined">gebruiker gedefineerd</string>
   <string name="device_defined">Apparaat gedefinieerd</string>
+  <string name="device_id">Apparaat ID</string>
   <string name="select_date">Selecteer datum</string>
   <string name="select_time">Selecteer tijd</string>
   <string name="no_date_selected">Geen datum geselecteerd</string>
@@ -342,4 +343,11 @@
   <string name="notification_channel_name">Algemene notificaties</string>
   <string name="go_to_settings">Ga naar instellingen</string>
   <string name="open_file">Open bestand</string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

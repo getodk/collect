@@ -138,4 +138,11 @@
   <string name="theme_dark">تیاره مدار</string>
   <string name="hide_old_form_versions_setting_title">زاړه بڼه نسخه پټ کړئ</string>
   <string name="hide_old_form_versions_setting_summary">یواځې نوې نسخه به په خالي فارم کې راښکاره شي</string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

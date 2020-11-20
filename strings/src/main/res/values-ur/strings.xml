@@ -126,7 +126,7 @@
   <string name="font_size">ٹیکسٹ فونٹ سائز</string>
   <string name="change_font_size">ٹیکسٹ فونٹ سائز</string>
   <string name="form_download_progress"> ‎‏ %1$s۔میڈیا فائل حاصل کی جا رہی ہے :‎‏  %2$s آف%3$s</string>
-    <string name="success">کامیابی</string>
+  <string name="success">کامیابی</string>
   <string name="failures">ناکامی </string>
   <string name="no_forms_uploaded">معافی، کوئی فارم اپ لوڈ نہیں کیا گیا</string>
   <string name="upload_results">نتیجہ اپ لوڈ کریں</string>
@@ -305,7 +305,6 @@
   <string name="unrecognized_uri">ناقابل شناخت یوآرائی:%s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;کوئی فارم نہیں لوڈ کیا گیا&gt;</string>
-  <string name="settings_successfully_loaded_file_notification">سیٹنگز کامیابی سے فائل سے لوڈ کر دی گئی ہیں</string>
   <string name="corrupt_settings_file_notification">معذرت،سیٹنگز فائل خراب ہے اور اسے ڈیلیٹ کر دیا جائے یا تبدیل کرنا چاہئے</string>
   <string name="selected_invalid_image">منتخب فائل ایک درست تصویر نہیں ہے</string>
   <string name="edited_osm_file">ترمیم او ایس ایم ایکس ایم ال فائل:</string>
@@ -385,6 +384,7 @@
   <string name="email">ای میل ایڈریس </string>
   <string name="user_defined">یوزر-ڈیفائینڈ </string>
   <string name="device_defined">ڈیوائس-ڈیفائینڈ </string>
+  <string name="device_id">ڈیوائس آئی ڈی </string>
   <string name="select_date">تاریخ منتخب کریں</string>
   <string name="select_time">وقت منتخب کریں</string>
   <string name="no_date_selected">کوئی تاریخ منتخب نہیں کی گئی </string>
@@ -553,4 +553,11 @@
   <string name="try_again">دوبارہ کوشش کریں</string>
   <string name="preference_not_available">موجود نھیں ہے</string>
   <string name="failure">ناکامی </string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

@@ -136,7 +136,7 @@
   <string name="font_size">Ukuran teks font</string>
   <string name="change_font_size">Ukuran teks font</string>
   <string name="form_download_progress">%1$s. Sedang mengunduh berkas media: %2$s dari %3$s</string>
-    <string name="success">Berhasil</string>
+  <string name="success">Berhasil</string>
   <string name="failures">Tidak Berhasil</string>
   <string name="no_forms_uploaded">Maaf, tidak ada formulir yang telah diunggah.</string>
   <string name="upload_results">Unggahan</string>
@@ -359,7 +359,6 @@
   <string name="unrecognized_uri">URI tidak dikenal: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;tidak ada formulir yang dimuat&gt;</string>
-  <string name="settings_successfully_loaded_file_notification">Pengaturan berhasil dimuat dari berkas</string>
   <string name="corrupt_settings_file_notification">Maaf, berkas pengaturan rusak dan harus dihapus atau diganti</string>
   <string name="selected_invalid_image">Berkas terpilih bukan gambar yang valid</string>
   <string name="edited_osm_file">Ubah berkas OSM XML</string>
@@ -441,7 +440,7 @@
   <string name="email">Alamat Email</string>
   <string name="user_defined">Ditentukan-pengguna</string>
   <string name="device_defined">Ditentukan-perangkat</string>
-  <string name="device_id">ID perangkat</string>
+  <string name="device_id">ID Perangkat</string>
   <string name="select_date">Pilih tanggal</string>
   <string name="select_time">Pilih waktu</string>
   <string name="no_date_selected">Tanggal tidak dipilih</string>
@@ -643,7 +642,6 @@
   <string name="save_legacy_settings">Simpan barkas .settings lawas ke disk</string>
   <string name="save_legacy_settings_warning">Akan dihapus pada versi mendatang. Mohon gunakan kode QR di atas.</string>
   <string name="reason_for_changes_description">Anda perlu menjelaskan alasan atas perubahan yang terjadi pada formulir ini</string>
-  <string name="scoped_storage_banner_text">Kamu harus melakukan migrasi formulir aplikasi Collect ke penyimpanan pribadi untuk memenuhi persyaratan Android. Di dalam aplikasi Collect v1.29, <b>migrasi akan dipaksa saat diinstal</b>.</string>
   <string name="scoped_storage_learn_more">Pelajari lebih lanjut dan lakukan migrasi</string>
   <string name="storage_migration_completed">Migrasi penyimpanan berhasil!</string>
   <string name="scoped_storage_dismiss">Singkirkan</string>
@@ -674,4 +672,11 @@
   <string name="security_error">ODK Collect tidak dapat menghubung server di %s. Apakah anda sudah memasukkan URL dengan benar?</string>
   <string name="failure">Tidak Berhasil</string>
   <string name="form_update_succeeded">Pembaruan formulir berhasil</string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

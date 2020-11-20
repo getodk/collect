@@ -114,7 +114,7 @@
   <string name="font_size">Teksti suurus</string>
   <string name="change_font_size">Teksti suurus</string>
   <string name="form_download_progress">%1$s. Laeb faile: %2$s of %3$s</string>
-    <string name="success">Õnnestus</string>
+  <string name="success">Õnnestus</string>
   <string name="no_forms_uploaded">Vabandage, ühtegi vormi ei ole üles laetud.</string>
   <string name="upload_results">Tulemuste üles laadimine</string>
   <string name="choose_sound">Vali heli</string>
@@ -271,7 +271,6 @@
   <string name="unrecognized_uri">Tundmatu veebiaadress: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;vorm laadimata&gt;</string>
-  <string name="settings_successfully_loaded_file_notification">Sätete laadimine failist õnnestus</string>
   <string name="corrupt_settings_file_notification">Sätete fail on vigane. Palun kustutage või asendage</string>
   <string name="selected_invalid_image">Valitud fail ei ole pilt</string>
   <string name="edited_osm_file">Muudetud OSM XML fail:</string>
@@ -328,4 +327,11 @@
   <string name="no_date_selected">Kuupäev valimata</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

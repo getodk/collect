@@ -118,7 +118,7 @@
   <string name="font_size">字体大小</string>
   <string name="change_font_size">字体大小</string>
   <string name="form_download_progress">%1$s. 加载媒体文件: %3$s 中的 %2$s</string>
-    <string name="success">成功</string>
+  <string name="success">成功</string>
   <string name="no_forms_uploaded">没有表格被上传.</string>
   <string name="upload_results">上传结果</string>
   <string name="choose_sound">选择音频</string>
@@ -211,4 +211,11 @@
   <string name="autosend_selector_title">自动发送</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>
