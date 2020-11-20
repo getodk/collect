@@ -1496,7 +1496,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return false;
             }
         } else {
-            if (!allowMovingBackwards) {
+            if (formController.isCurrentQuestionFirstInForm() || !allowMovingBackwards) {
                 return false;
             }
 
