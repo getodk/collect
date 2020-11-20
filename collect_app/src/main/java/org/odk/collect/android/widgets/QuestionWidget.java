@@ -18,7 +18,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -65,7 +64,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.inject.Inject;
 
 import timber.log.Timber;
@@ -87,9 +85,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     private final View textLayout;
     private final TextView warningText;
     private PermissionUtils permissionUtils;
-    private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
     private AtomicBoolean expanded;
-    private Bundle state;
     protected final ThemeUtils themeUtils;
     protected AudioHelper audioHelper;
     private final ViewGroup containerView;
@@ -118,7 +114,6 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         themeUtils = new ThemeUtils(context);
 
         if (context instanceof FormEntryActivity) {
-            state = ((FormEntryActivity) context).getState();
             permissionUtils = new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert);
         }
 
@@ -215,13 +210,6 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         guidance = configureGuidanceTextView(guidanceTextView, guidanceHint);
 
         expanded = new AtomicBoolean(false);
-
-        if (getState() != null) {
-            if (getState().containsKey(GUIDANCE_EXPANDED_STATE + getFormEntryPrompt().getIndex())) {
-                Boolean result = getState().getBoolean(GUIDANCE_EXPANDED_STATE + getFormEntryPrompt().getIndex());
-                expanded = new AtomicBoolean(result);
-            }
-        }
 
         if (setting.equals(GuidanceHint.Yes)) {
             guidanceTextLayout.setVisibility(VISIBLE);
@@ -351,24 +339,6 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
         containerView.addView(v, params);
-    }
-
-    public Bundle getState() {
-        return state;
-    }
-
-    public Bundle getCurrentState() {
-        saveState();
-        return state;
-    }
-
-    @OverridingMethodsMustInvokeSuper
-    protected void saveState() {
-        state = new Bundle();
-
-        if (expanded != null) {
-            state.putBoolean(GUIDANCE_EXPANDED_STATE + getFormEntryPrompt().getIndex(), expanded.get());
-        }
     }
 
     private TextView setupHelpText(TextView helpText, FormEntryPrompt prompt) {

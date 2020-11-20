@@ -10,10 +10,13 @@ import androidx.lifecycle.ViewModelProvider;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
+import org.javarosa.form.api.FormEntryController;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.utilities.Clock;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.ADD_REPEAT;
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
@@ -21,6 +24,7 @@ import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGr
 public class FormEntryViewModel extends ViewModel implements RequiresFormController {
 
     private final Analytics analytics;
+    private final Clock clock;
     private final MutableLiveData<String> error = new MutableLiveData<>(null);
 
     @Nullable
@@ -30,8 +34,9 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     private FormIndex jumpBackIndex;
 
     @SuppressWarnings("WeakerAccess")
-    public FormEntryViewModel(Analytics analytics) {
+    public FormEntryViewModel(Analytics analytics, Clock clock) {
         this.analytics = analytics;
+        this.clock = clock;
     }
 
     @Override
@@ -85,7 +90,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         } catch (RuntimeException e) {
             error.setValue(e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
         }
-        
+
         if (!formController.indexIsInFieldList()) {
             try {
                 formController.stepToNextScreenEvent();
@@ -102,7 +107,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
         if (jumpBackIndex != null) {
             analytics.logEvent(ADD_REPEAT, "InlineDecline", formController.getCurrentFormIdentifierHash());
-            
+
             formController.jumpToIndex(jumpBackIndex);
             jumpBackIndex = null;
         } else {
@@ -128,6 +133,37 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         }
     }
 
+    public void moveForward() {
+        try {
+            formController.stepToNextScreenEvent();
+        } catch (JavaRosaException e) {
+            error.setValue(e.getCause().getMessage());
+            return;
+        }
+
+        formController.getAuditEventLogger().flush(); // Close events waiting for an end time
+    }
+
+    public void moveBackward() {
+        try {
+            int event = formController.stepToPreviousScreenEvent();
+
+            // If we are the beginning of the form we need to move back to the first actual screen
+            if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
+                formController.stepToNextScreenEvent();
+            }
+        } catch (JavaRosaException e) {
+            error.setValue(e.getCause().getMessage());
+            return;
+        }
+
+        formController.getAuditEventLogger().flush(); // Close events waiting for an end time
+    }
+
+    public void openHierarchy() {
+        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, clock.getCurrentTime());
+    }
+
     public static class Factory implements ViewModelProvider.Factory {
 
         private final Analytics analytics;
@@ -140,7 +176,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormEntryViewModel(analytics);
+            return (T) new FormEntryViewModel(analytics, System::currentTimeMillis);
         }
     }
 }

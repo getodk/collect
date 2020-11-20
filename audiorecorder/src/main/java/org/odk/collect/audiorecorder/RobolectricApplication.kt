@@ -5,7 +5,7 @@ import android.app.Application
 /**
  * Used as the Application in tests in in the `test/src` root. This is setup in `robolectric.properties`
  */
-internal class TestApplication : Application() {
+internal class RobolectricApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()

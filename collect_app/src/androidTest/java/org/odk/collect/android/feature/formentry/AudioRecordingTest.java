@@ -16,19 +16,15 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
-import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.android.support.pages.FormHierarchyPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
+import org.odk.collect.android.support.pages.OkDialog;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorderViewModel;
 
 import java.io.File;
 import java.io.IOException;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
 @RunWith(AndroidJUnit4.class)
@@ -81,47 +77,34 @@ public class AudioRecordingTest {
     }
 
     @Test
-    public void whileRecording_swipingToADifferentScreen_cancelsRecording() {
-        final FormEndPage page = new MainMenuPage(rule).assertOnPage()
+    public void whileRecording_swipingToADifferentScreen_showsWarning_andStaysOnSameScreen() {
+        new MainMenuPage(rule).assertOnPage()
                 .copyForm("audio-question.xml")
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
-                .swipeToEndScreen()
-                .assertTextNotDisplayed(R.string.stop_recording);
+                .swipeToEndScreenWhileRecording()
+                .clickOK(new FormEntryPage("Audio Question", rule))
 
-        assertThat(stubAudioRecorderViewModel.getWasCleanedUp(), is(true));
-
-        page.swipeToPreviousQuestion("What does it sound like?")
-                .assertEnabled(R.string.capture_audio);
-    }
-
-    @Test
-    public void whileRecording_openingHierarchyMenu_cancelsRecording() {
-        final FormHierarchyPage page = new MainMenuPage(rule).assertOnPage()
-                .copyForm("audio-question.xml")
-                .startBlankForm("Audio Question")
-                .clickOnString(R.string.capture_audio)
-                .clickGoToArrow();
-
-        assertThat(stubAudioRecorderViewModel.getWasCleanedUp(), is(true));
-
-        page.pressBack(new FormEntryPage("Audio Question", rule))
+                .assertQuestion("What does it sound like?")
+                .clickOnString(R.string.stop_recording)
                 .assertTextNotDisplayed(R.string.stop_recording)
-                .assertEnabled(R.string.capture_audio);
+                .assertTextNotDisplayed(R.string.capture_audio)
+                .assertContentDescriptionDisplayed(R.string.play_audio);
     }
 
     @Test
-    public void whileRecording_quittingForm_cancelsRecording() {
-        final MainMenuPage page = new MainMenuPage(rule).assertOnPage()
+    public void whileRecording_quittingForm_showsWarning_andStaysOnSameScreen() {
+        new MainMenuPage(rule).assertOnPage()
                 .copyForm("audio-question.xml")
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
-                .pressBack(new SaveOrIgnoreDialog<>("Audio Question", new MainMenuPage(rule), rule))
-                .clickSaveChanges();
+                .pressBack(new OkDialog(rule))
+                .clickOK(new FormEntryPage("Audio Question", rule))
 
-        assertThat(stubAudioRecorderViewModel.getWasCleanedUp(), is(true));
-
-        page.startBlankForm("Audio Question")
-                .assertEnabled(R.string.capture_audio);
+                .assertQuestion("What does it sound like?")
+                .clickOnString(R.string.stop_recording)
+                .assertTextNotDisplayed(R.string.stop_recording)
+                .assertTextNotDisplayed(R.string.capture_audio)
+                .assertContentDescriptionDisplayed(R.string.play_audio);
     }
 }

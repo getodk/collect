@@ -27,7 +27,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class OkDialog extends Page<OkDialog> {
-
     public OkDialog(ActivityTestRule rule) {
         super(rule);
     }

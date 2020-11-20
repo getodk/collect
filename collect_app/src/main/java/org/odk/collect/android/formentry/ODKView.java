@@ -306,15 +306,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         return divider;
     }
 
-    public Bundle getState() {
-        Bundle state = new Bundle();
-        for (QuestionWidget qw : getWidgets()) {
-            state.putAll(qw.getCurrentState());
-        }
-
-        return state;
-    }
-
     /**
      * Addresses 'bitmap size exceeds VM budget' crash.
      * http://code.google.com/p/android/issues/detail?id=8488

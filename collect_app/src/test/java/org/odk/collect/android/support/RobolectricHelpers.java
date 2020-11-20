@@ -8,8 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -28,6 +31,8 @@ import org.robolectric.shadows.ShadowEnvironment;
 import org.robolectric.shadows.ShadowMediaMetadataRetriever;
 import org.robolectric.shadows.ShadowMediaPlayer;
 import org.robolectric.shadows.util.DataSource;
+
+import java.util.List;
 
 import static org.mockito.Mockito.mock;
 import static org.robolectric.Shadows.shadowOf;
@@ -131,5 +136,17 @@ public class RobolectricHelpers {
                 return (T) mock(viewModelClass);
             }
         });
+    }
+
+    @Nullable
+    public static <F extends Fragment> F getFragmentByClass(FragmentManager fragmentManager, Class<F> fragmentClass) {
+        List<Fragment> fragments = fragmentManager.getFragments();
+        for (Fragment fragment : fragments) {
+            if (fragment.getClass().isAssignableFrom(fragmentClass)) {
+                return (F) fragment;
+            }
+        }
+
+        return null;
     }
 }
