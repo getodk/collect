@@ -14,13 +14,14 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
-import org.odk.collect.android.utilities.ApplicationResetter;
 import org.odk.collect.android.utilities.MultiClickGuard;
 
-import java.util.Arrays;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
 
+import static org.apache.commons.io.FileUtils.deleteDirectory;
 import static org.odk.collect.android.preferences.AdminPreferencesFragment.ADMIN_PREFERENCES;
 
 public class ResetStateRule implements TestRule {
@@ -75,20 +76,13 @@ public class ResetStateRule implements TestRule {
     }
 
     private void clearDisk() {
-        // Reset the app in both the old and new storage locations (just nuke dirs)
-        List<Integer> resetActions = Arrays.asList(
-                ApplicationResetter.ResetAction.RESET_PREFERENCES,
-                ApplicationResetter.ResetAction.RESET_INSTANCES,
-                ApplicationResetter.ResetAction.RESET_FORMS,
-                ApplicationResetter.ResetAction.RESET_LAYERS,
-                ApplicationResetter.ResetAction.RESET_CACHE,
-                ApplicationResetter.ResetAction.RESET_OSM_DROID
-        );
-
-        new StorageStateProvider().disableUsingScopedStorage();
-        new ApplicationResetter().reset(resetActions);
-        new StorageStateProvider().enableUsingScopedStorage();
-        new ApplicationResetter().reset(resetActions);
+        try {
+            StoragePathProvider storagePathProvider = new StoragePathProvider();
+            deleteDirectory(new File(storagePathProvider.getUnscopedStorageRootDirPath()));
+            deleteDirectory(new File(storagePathProvider.getScopedStorageRootDirPath()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         // Setup storage location for tests
         if (useScopedStorage) {
