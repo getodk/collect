@@ -395,7 +395,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         nextButton = findViewById(R.id.form_forward_button);
         nextButton.setOnClickListener(v -> {
             swipeHandler.setBeenSwiped(true);
-            moveScreen(FORWARDS);
+            onSwipeForward();
         });
 
         backButton = findViewById(R.id.form_back_button);
@@ -1169,7 +1169,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public void deleteGroup() {
         FormController formController = getFormController();
         if (formController != null && !formController.indexIsInFieldList()) {
-            moveScreen(FORWARDS);
+            swipeHandler.setBeenSwiped(true);
+            onSwipeForward();
         } else {
             onScreenRefresh();
         }
@@ -2484,7 +2485,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public void next() {
         if (!swipeHandler.beenSwiped()) {
             swipeHandler.setBeenSwiped(true);
-            moveScreen(FORWARDS);
+            onSwipeForward();
         }
     }
 
