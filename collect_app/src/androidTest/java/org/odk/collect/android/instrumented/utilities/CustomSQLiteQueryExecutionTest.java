@@ -20,18 +20,18 @@ import android.Manifest;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import androidx.test.rule.GrantPermissionRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.GrantPermissionRule;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.RunnableRule;
 import org.odk.collect.android.utilities.CustomSQLiteQueryExecutor;
+
+import java.io.File;
+import java.io.IOException;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
@@ -39,11 +39,10 @@ import static junit.framework.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class CustomSQLiteQueryExecutionTest {
-    private static final String DATABASE_PATH = new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA) + "/test.db";
+
     private static final String TEST_TABLE_NAME = "testTable";
     private static final String TEST_TABLE_NAME_2 = "testTable2";
-
-    private final String[] tableColumns = {"_id", "col1", "col2", "col3"};
+    private static final String[] TABLE_COLUMNS = {"_id", "col1", "col2", "col3"};
 
     private SQLiteDatabase sqLiteDatabase;
 
@@ -53,14 +52,15 @@ public class CustomSQLiteQueryExecutionTest {
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
-            .around(new ResetStateRule());
-
-    @Before
-    public void setUp() {
-        sqLiteDatabase = SQLiteDatabase.openOrCreateDatabase(DATABASE_PATH, null, null);
-        dropTable(TEST_TABLE_NAME);
-        dropTable(TEST_TABLE_NAME_2);
-    }
+            .around(new RunnableRule(() -> {
+                try {
+                    File dbPath = File.createTempFile("test", ".db");
+                    dbPath.deleteOnExit();
+                    sqLiteDatabase = SQLiteDatabase.openOrCreateDatabase(dbPath.getAbsolutePath(), null, null);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }));
 
     @Test
     public void dropTableTest() {
@@ -113,9 +113,9 @@ public class CustomSQLiteQueryExecutionTest {
         CustomSQLiteQueryExecutor
                 .begin(sqLiteDatabase)
                 .insertInto(TEST_TABLE_NAME)
-                .columnsForInsert(tableColumns)
+                .columnsForInsert(TABLE_COLUMNS)
                 .select()
-                .columnsForSelect(tableColumns)
+                .columnsForSelect(TABLE_COLUMNS)
                 .from(TEST_TABLE_NAME_2)
                 .end();
 
@@ -150,14 +150,6 @@ public class CustomSQLiteQueryExecutionTest {
         assertEquals("col2", columnNames[2]);
         assertEquals("col3", columnNames[3]);
         assertEquals("col4", columnNames[4]);
-    }
-
-    private void dropTable(String tableName) {
-        CustomSQLiteQueryExecutor
-                .begin(sqLiteDatabase)
-                .dropIfExists(tableName)
-                .end();
-        assertFalse(tableExists(tableName));
     }
 
     private void checkValues(String tableName) {
