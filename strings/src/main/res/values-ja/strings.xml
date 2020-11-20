@@ -136,7 +136,7 @@
   <string name="font_size">文字フォントサイズ</string>
   <string name="change_font_size">文字フォントサイズ</string>
   <string name="form_download_progress">%1$s。 メディア ファイルの取得中: %2$s / %3$s</string>
-    <string name="success">成功しました</string>
+  <string name="success">成功しました</string>
   <string name="failures">失敗</string>
   <string name="no_forms_uploaded">申し訳ありません、アップロードしたフォームはありません。</string>
   <string name="upload_results">アップロード結果</string>
@@ -307,6 +307,8 @@
   <string name="save_point">地理位置を保存</string>
   <string name="get_point">地理位置を開始</string>
   <string name="geopoint_view_read_only">地理位置を表示</string>
+  <string name="geoshape_view_read_only">GeoShape を表示</string>
+  <string name="geotrace_view_read_only">GeoTrace を表示</string>
   <string name="get_shape">GeoShape を開始</string>
   <string name="get_trace">GeoTrace を開始</string>
   <string name="geoshape_title">GeoShape</string>
@@ -359,7 +361,6 @@
   <string name="unrecognized_uri">認識できない URI: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;フォームが読み込まれていません&gt;</string>
-  <string name="settings_successfully_loaded_file_notification">ファイルから設定が読み込まれました</string>
   <string name="corrupt_settings_file_notification">申し訳ありません。設定ファイルが壊れているため、削除または置き換えしてください</string>
   <string name="selected_invalid_image">選択したファイルは有効な画像ではありません</string>
   <string name="edited_osm_file">編集した OSM XML ファイル:</string>
@@ -441,6 +442,7 @@
   <string name="email">メールアドレス</string>
   <string name="user_defined">ユーザー定義</string>
   <string name="device_defined">デバイス定義</string>
+  <string name="device_id">デバイス ID</string>
   <string name="select_date">日付を選択</string>
   <string name="select_time">時間を選択</string>
   <string name="no_date_selected">日付が選択されていません</string>
@@ -642,10 +644,10 @@
   <string name="save_legacy_settings">以前の .settings ファイルをディスクに保存する</string>
   <string name="save_legacy_settings_warning">将来のバージョンで削除されます。上の QR コードを使用してください。</string>
   <string name="reason_for_changes_description">このフォームを変更する理由を説明する必要があります</string>
-  <string name="scoped_storage_banner_text">Android の要件に準拠するため、Collect のフォームをプライベートストレージに移行する必要があります。 Collect v1.29では、<b>インストール時に移行が強制されます</b>。</string>
   <string name="scoped_storage_learn_more">詳細と移行について</string>
   <string name="storage_migration_completed">ストレージの移行が完了しました!</string>
   <string name="scoped_storage_dismiss">消去</string>
+  <string name="storage_migration_dialog_message1">Android要件が変更され、Collectで使用するファイルを移行する必要があります。</string>
   <string name="storage_migration_dialog_message2">未送信の提出が %d あります。移行する前にすべてのデータを提出することをお勧めします。</string>
   <string name="storage_migration_dialog_message3">OpenMapKitなどの外部アプリケーション統合を使用している場合は、まだ移行しないでください。</string>
   <string name="storage_migration_more_details">詳細について</string>
@@ -662,10 +664,24 @@
   <string name="legacy_custom_server_paths_summary">将来のバージョンでは削除されます。 お使いのサーバーでは /formList と /submission を使用してください。</string>
   <string name="experimental">実験的</string>
   <string name="match_exactly">完全に一致するサーバー</string>
+  <string name="manual">手動</string>
   <string name="form_update_mode_title">空のフォーム更新モード</string>
   <string name="previously_downloaded_only">以前ダウンロードしたフォームのみ</string>
   <string name="form_update_frequency_title">自動更新の頻度</string>
   <string name="form_update_error">フォームを更新できませんでした</string>
   <string name="report_to_project_lead">この問題が引き続き発生する場合は、データの収集を依頼した人に報告してください。</string>
   <string name="unreachable_error">Collect が %s のサーバーに到達できません。 URL を正しく入力しましたか?</string>
+  <string name="security_error">Collect が %s のサーバーに安全に接続できません。 URL を正しく入力しましたか?</string>
+  <string name="failure">失敗</string>
+  <string name="form_update_succeeded">フォームの更新に成功しました</string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <string name="external_app_recording">オーディオ録音の外部アプリを使用する</string>
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <string name="recording">録音中…</string>
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <string name="recording_channel">オーディオ録音</string>
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

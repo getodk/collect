@@ -126,7 +126,7 @@
   <string name="font_size">Velikost črk</string>
   <string name="change_font_size">Velikost črk</string>
   <string name="form_download_progress">%1$s. Pridobivam medijske datoteke: %2$s od %3$s</string>
-    <string name="success">Uspešno</string>
+  <string name="success">Uspešno</string>
   <string name="failures">Neuspehi</string>
   <string name="no_forms_uploaded">Napaka. Obrazec ni naložen.</string>
   <string name="upload_results">Rezultati nalaganja</string>
@@ -265,7 +265,6 @@
   <string name="discard">Zavrzi</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;noben obrazec ni naložen&gt;</string>
-  <string name="settings_successfully_loaded_file_notification">Nastavitve uspešno naložene</string>
   <string name="install_openmapkit">Prosim, namestite OpenMapKit!</string>
   <string name="all_open_source_licenses_msg">Stojimo na ramenih velikanov!</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
@@ -327,4 +326,11 @@
   <string name="cannot_create_directory">Ne morem narediti mape: %s</string>
   <string name="not_a_directory">%s obstaja, vendar ni mapa</string>
   <string name="hide_old_form_versions_setting_title">Skrij stare različice obrazca</string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

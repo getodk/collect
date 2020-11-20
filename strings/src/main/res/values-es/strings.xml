@@ -136,7 +136,7 @@
   <string name="font_size">Tamaño del Texto</string>
   <string name="change_font_size">Tamaño del Texto</string>
   <string name="form_download_progress">%1$s. Obteniendo los archivos: %2$s de %3$s</string>
-    <string name="success">Correcto</string>
+  <string name="success">Correcto</string>
   <string name="failures">Fallas</string>
   <string name="no_forms_uploaded">No se ha cargado ningún formulario.</string>
   <string name="upload_results">Resultados de la carga</string>
@@ -308,6 +308,8 @@
   <string name="save_point">Guardar Ubicación</string>
   <string name="get_point">Buscar Ubicación</string>
   <string name="geopoint_view_read_only">Ver Ubicación</string>
+  <string name="geoshape_view_read_only">Ver GeoArea</string>
+  <string name="geotrace_view_read_only">Ver GeoLínea</string>
   <string name="get_shape">Iniciar GeoArea</string>
   <string name="get_trace">Iniciar GeoLínea</string>
   <string name="geoshape_title">GeoArea</string>
@@ -363,7 +365,7 @@
   <string name="unrecognized_uri">URI no reconocido: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;formulario no cargado&gt;</string>
-  <string name="settings_successfully_loaded_file_notification">Configuraciones correctamente cargadas desde el archivo</string>
+  <string name="settings_successfully_loaded_file_notification">La configuración fué importada exitosamente  del archivo  .settings. Esta funcionalidad será removida en una versión futura. Se recomienda usar la configuración con QR.</string>
   <string name="corrupt_settings_file_notification">Lo sentimos, el archivo de configuración está dañado y debe ser eliminado o reemplazado</string>
   <string name="selected_invalid_image">El archivo seleccionado no es una imagen válida</string>
   <string name="edited_osm_file">Archivo OSM XML editado:</string>
@@ -647,7 +649,7 @@
   <string name="save_legacy_settings">Guardar ajustes heredados a disco</string>
   <string name="save_legacy_settings_warning">Será removido en una versión futura. Favor usar el código QR de arriba</string>
   <string name="reason_for_changes_description">Favor explicar el motivo de los cambios para este formulario</string>
-  <string name="scoped_storage_banner_text">Se debe migrar los formularios a un almacenamiento privado para cumplir con los nuevos requerimientos de Android. En Collect v1.29, <b>la migración será forzada durante la instalación</b>.</string>
+  <string name="scoped_storage_banner_text">Debe migrar los formularios a un almacenamiento privado para cumplir con los requisitos de Android. Error en un intento de migración automática. Favor migrar manualmente.</string>
   <string name="scoped_storage_learn_more">Conocer más y migrar</string>
   <string name="storage_migration_completed">¡Migración de almacenamiento completada!</string>
   <string name="scoped_storage_dismiss">Descartar</string>
@@ -678,4 +680,18 @@
   <string name="security_error">La aplicación no se puede conectar de forma segura al servidor en %s. ¿Ingresaste la URL correctamente?</string>
   <string name="failure">Falla</string>
   <string name="form_update_succeeded">La actualización del formulario se realizó correctamente</string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <string name="external_app_recording">Use una aplicación externa para grabación de audio</string>
+  <!--Text for button that stops audio recording-->
+  <string name="stop_recording">Parar</string>
+  <!--Text to let the user know a recording is in progress-->
+  <string name="recording">Grabando…</string>
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <string name="recording_channel">Grabación de audio</string>
+  <!--Text for button that plays audio clip-->
+  <string name="play_audio">Reproducir audio</string>
+  <!--Text to let the user know a file is being saved-->
+  <string name="saving_file">Guardando archivo</string>
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="recording_warning">Debe detener la grabación antes de salir de esta pantalla.</string>
 </resources>

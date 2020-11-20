@@ -123,7 +123,7 @@
   <string name="font_size">Madhësia tekstit</string>
   <string name="change_font_size">Madhësia e tekstit</string>
   <string name="form_download_progress">%1$s. Duke ngarkuar media: %2$s of %3$s</string>
-    <string name="success">Sukses</string>
+  <string name="success">Sukses</string>
   <string name="no_forms_uploaded">Nuk është ngarkuar asnjë formular.</string>
   <string name="upload_results">Ngarko rezultatet</string>
   <string name="xform_parse_error">Gabim në dekodimin e XForm për %1$s: %2$s mungon ose i pavlefshëm.</string>
@@ -272,7 +272,6 @@
   <string name="unrecognized_uri">URL e panjohur: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;nuk u ngarkua formular&gt;</string>
-  <string name="settings_successfully_loaded_file_notification">Parametrat u ngarkuan me sukses nga file</string>
   <string name="corrupt_settings_file_notification">File i parametrave është i korruptuar dhe duhet fshirë ose zëvendësuar</string>
   <string name="selected_invalid_image">File i përzgjedhur nuk është imazh i vlefshëm</string>
   <string name="edited_osm_file">File OSM XML i modifikuar:</string>
@@ -349,6 +348,7 @@
   <string name="email">Adresa email</string>
   <string name="user_defined">Përdoruesi u përcaktua.</string>
   <string name="device_defined">Aparati u përckatua</string>
+  <string name="device_id">Identifikimi i aparatit</string>
   <string name="select_date">Zgjidh datën</string>
   <string name="select_time">Zgjidh orën</string>
   <string name="no_date_selected">Data nuk është përzgjedhur</string>
@@ -442,4 +442,11 @@
   <string name="go_to_settings">Shko tek parametrat</string>
   <string name="track_location">Gjurmo vendndodhjen</string>
   <string name="open_file">Hap file</string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

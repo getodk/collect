@@ -131,7 +131,7 @@
   <string name="font_size">Textstorlek</string>
   <string name="change_font_size">Textstorlek</string>
   <string name="form_download_progress">%1$s. Hämtar mediafil: %2$s av %3$s</string>
-    <string name="success">Lyckades</string>
+  <string name="success">Lyckades</string>
   <string name="failures">Fel</string>
   <string name="no_forms_uploaded">Tyvärr, inga formulär laddades upp</string>
   <string name="upload_results">Uppladdningsresultat</string>
@@ -325,7 +325,6 @@ Dela ODK Collect med dem.</string>
   <string name="unrecognized_uri">Okänd URI: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;inget formulär laddat&gt;</string>
-  <string name="settings_successfully_loaded_file_notification">Inläsning av inställningar från fil lyckades</string>
   <string name="corrupt_settings_file_notification">Tyvärr, filen med inställningar är korrupt och bör raderas eller ersättas</string>
   <string name="selected_invalid_image">Vald fil är inte en giltig bild</string>
   <string name="edited_osm_file">Redigerad OSM XML fil:</string>
@@ -406,6 +405,7 @@ Dela ODK Collect med dem.</string>
   <string name="email">E-postadress</string>
   <string name="user_defined">Användardefinierad</string>
   <string name="device_defined">Enhetsdefinierad</string>
+  <string name="device_id">ID enhet</string>
   <string name="select_date">Välj datum</string>
   <string name="select_time">Välj tid</string>
   <string name="no_date_selected">Inget datum valt</string>
@@ -555,4 +555,11 @@ Dela ODK Collect med dem.</string>
   <string name="reason_for_changes">Anledning till ändringarna</string>
   <string name="reason">Anledning</string>
   <string name="save">Spara</string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

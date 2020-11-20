@@ -108,7 +108,7 @@
   <string name="font_size">ຂະໜາດຕົວອັກສອນ</string>
   <string name="change_font_size">ຂະໜາດຕົວອັກສອນ</string>
   <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
-    <string name="success">ສຳເລັດແລ້ວ</string>
+  <string name="success">ສຳເລັດແລ້ວ</string>
   <string name="no_forms_uploaded">ບໍ່ສາມາດ ອັບໂລດ ແບບຟອມໄດ້</string>
   <string name="upload_results">ຜົນໄດ້ຮັບ​ຂອງ​ການ​ ອັບໂລດ</string>
   <string name="choose_sound">ເລືອກຮູບແບບສຽງ</string>
@@ -227,4 +227,11 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

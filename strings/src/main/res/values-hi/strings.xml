@@ -122,7 +122,7 @@
   <string name="font_size">अक्षर फॉन्ट आकार</string>
   <string name="change_font_size">अक्षर फॉन्ट आकार</string>
   <string name="form_download_progress">%1$s. %3$sकी %2$sमीडिया फाइलें मिल रही हैं: </string>
-    <string name="success">सफल</string>
+  <string name="success">सफल</string>
   <string name="no_forms_uploaded">क्षमा करें, कोई फॉर्म अपलोड नहीं किया गया.</string>
   <string name="upload_results">परिणाम अपलोड करें</string>
   <string name="xform_parse_error">%1$sके लिए XForm पार्स गलती: %2$sलापता या अमान्य है. </string>
@@ -285,7 +285,6 @@
   <string name="unrecognized_uri">अपरिचित URl: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&amp; Lt; कोई फॉर्म लोड नहीं हुआ &amp; gt;</string>
-  <string name="settings_successfully_loaded_file_notification">फाइल से सफलतापूर्वक सेटिंग्स लोड हो गईं</string>
   <string name="corrupt_settings_file_notification">क्षमा करें, सेटिंग्स फाइल ख़राब है और इसे मिटाया या प्रतिस्थापित किया जाना चाहिए</string>
   <string name="selected_invalid_image">चयनित फाइल मान्य इमेज नहीं है</string>
   <string name="edited_osm_file">संपादित OSM XML फाइल:</string>
@@ -358,6 +357,7 @@
   <string name="email">इमेल एड्रेस </string>
   <string name="user_defined">उपयोगकर्ता-परिभाषित</string>
   <string name="device_defined">डिवाइस-से-परिभाषित</string>
+  <string name="device_id">डिवाइस आईडी</string>
   <string name="select_date">तारीख़ चुनें</string>
   <string name="select_time">समय चुनें</string>
   <string name="no_date_selected">कोई दिनांक चयनित नहीं</string>
@@ -406,4 +406,11 @@
   <string name="yes">हाँ</string>
   <string name="no">नहीं</string>
   <string name="start_video_capture_instruction">रिकॉर्डिंग प्रारंभ करने के लिए स्क्रीन को टैप करें</string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

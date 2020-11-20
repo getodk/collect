@@ -129,7 +129,7 @@
   <string name="font_size">Розмір шрифту</string>
   <string name="change_font_size">Розмір шрифту</string>
   <string name="form_download_progress">%1$s. Отримання медіа файлу: %2$s з %3$s</string>
-    <string name="success">Успішно!</string>
+  <string name="success">Успішно!</string>
   <string name="failures">Невдалі</string>
   <string name="no_forms_uploaded">Вибачте, жодна анкета не була вивантажена.</string>
   <string name="upload_results">Вивантаження результатів</string>
@@ -342,7 +342,6 @@
   <string name="unrecognized_uri">Нерозпізнаний URI: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;анкети не завантажені&gt;</string>
-  <string name="settings_successfully_loaded_file_notification">Нлаштування успішно завантажені з файлу</string>
   <string name="corrupt_settings_file_notification">Вибачте, файл налаштувань ушкоджений і має бути видалений або замінений</string>
   <string name="selected_invalid_image">Обраний файл не є коректним зображенням</string>
   <string name="edited_osm_file">Відредагований OSM XML файл:</string>
@@ -424,6 +423,7 @@
   <string name="email">Електронна адреса</string>
   <string name="user_defined">Визначено користувачем</string>
   <string name="device_defined">Визначено пристроєм</string>
+  <string name="device_id">ID пристрою</string>
   <string name="select_date">Обрати дату</string>
   <string name="select_time">Обрати час</string>
   <string name="no_date_selected">Дата не обрана</string>
@@ -586,4 +586,11 @@
   <string name="background_location_disabled">Ця анкета хоче відслідковувати ваше розташування але відслідковування вимкнене. Будь ласка, увімкніть його в %1$s меню.</string>
   <string name="background_location_enabled">Ця анкета відслідковує ваше розташування. Ви можете вимкнути відслідковування в %1$s меню.</string>
   <string name="open_file">Відкрити файл</string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

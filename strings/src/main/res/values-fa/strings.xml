@@ -240,6 +240,7 @@
   <string name="email">ایمیل آدرس</string>
   <string name="user_defined">تعریف شده توسط کاربر</string>
   <string name="device_defined">تعریف شده توسط دستگاه</string>
+  <string name="device_id">نمبر شناسایی دستگاه</string>
   <string name="select_date">انتخاب تاریخ</string>
   <string name="select_time">انتخاب زمان</string>
   <string name="no_date_selected">هیچ تاریخی انتخاب نشده است</string>
@@ -292,4 +293,11 @@
   <string name="go_to_settings">رفتن به تنظیمات </string>
   <string name="reading_files">خواندن فایل ها</string>
   <string name="not_granted_permission">فعالیتی که شما میخواهید آنرا انجام دهید به مجوزی ضرورت دارد که به شما اعطا نشده است. </string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>
