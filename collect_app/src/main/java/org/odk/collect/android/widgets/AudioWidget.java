@@ -16,11 +16,8 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.media.MediaMetadataRetriever;
-import android.net.Uri;
-import android.provider.MediaStore.Audio;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -136,19 +133,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
             File newAudio = questionMediaManager.getAnswerFile(fileName);
 
             if (newAudio != null && newAudio.exists()) {
-                // Add the copy to the content provider
-                ContentValues values = new ContentValues(6);
-                values.put(Audio.Media.TITLE, newAudio.getName());
-                values.put(Audio.Media.DISPLAY_NAME, newAudio.getName());
-                values.put(Audio.Media.DATE_ADDED, System.currentTimeMillis());
-                values.put(Audio.Media.DATA, newAudio.getAbsolutePath());
-
                 questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
-                Uri audioURI = getContext().getContentResolver().insert(Audio.Media.EXTERNAL_CONTENT_URI, values);
-
-                if (audioURI != null) {
-                    Timber.i("Inserting AUDIO returned uri = %s", audioURI.toString());
-                }
 
                 // when replacing an answer. remove the current media.
                 if (binaryName != null && !binaryName.equals(newAudio.getName())) {

@@ -46,8 +46,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import timber.log.Timber;
-
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED;
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED_AND_EXIT;
 import static org.odk.collect.android.utilities.StringUtils.isBlank;
@@ -152,16 +150,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
                 // if it's not already saved, erase everything
                 if (!InstancesDaoHelper.isInstanceAvailable(getAbsoluteInstancePath())) {
-                    // delete media first
                     String instanceFolder = formController.getInstanceFile().getParent();
-                    Timber.i("Attempting to delete: %s", instanceFolder);
-                    File file = formController.getInstanceFile().getParentFile();
-                    int images = MediaUtils.deleteImagesInFolderFromMediaProvider(file);
-                    int audio = MediaUtils.deleteAudioInFolderFromMediaProvider(file);
-                    int video = MediaUtils.deleteVideoInFolderFromMediaProvider(file);
-
-                    Timber.i("Removed from content providers: %d image files, %d audio files and %d audio files.",
-                            images, audio, video);
                     FileUtils.purgeMediaPath(instanceFolder);
                 }
             }
@@ -302,7 +291,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             // We don't want to delete the "original" answer file as we might need to restore it
             // but we can delete any follow up deletions
             if (originalFiles.containsKey(questionIndex)) {
-                mediaUtils.deleteImageFileFromMediaProvider(fileName);
+                mediaUtils.deleteMediaFile(fileName);
             } else {
                 originalFiles.put(questionIndex, fileName);
                 stateHandle.set(ORIGINAL_FILES, originalFiles);
@@ -316,7 +305,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             // If we're replacing an answer's file for a second time we can just get rid of the
             // first (replacement) file we were going to use
             if (recentFiles.containsKey(questionIndex)) {
-                mediaUtils.deleteImageFileFromMediaProvider(recentFiles.get(questionIndex));
+                mediaUtils.deleteMediaFile(recentFiles.get(questionIndex));
             }
             recentFiles.put(questionIndex, fileName);
             stateHandle.set(RECENT_FILES, recentFiles);

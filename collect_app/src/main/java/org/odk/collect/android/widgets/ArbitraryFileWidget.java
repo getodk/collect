@@ -21,10 +21,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.provider.MediaStore;
 import androidx.annotation.NonNull;
 import android.view.Gravity;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,22 +30,16 @@ import android.widget.TextView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtil;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MediaUtil;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
-import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
-import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.io.File;
@@ -64,7 +56,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
     private FileUtil fileUtil;
 
     @NonNull
-    private MediaUtil mediaUtil;
+    private MediaUtils mediaUtils;
 
     private final QuestionMediaManager questionMediaManager;
     private final WaitingForDataRegistry waitingForDataRegistry;
@@ -76,14 +68,14 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
     private LinearLayout answerLayout;
 
     public ArbitraryFileWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
-        this(context, prompt, new FileUtil(), new MediaUtil(), questionMediaManager, waitingForDataRegistry);
+        this(context, prompt, new FileUtil(), new MediaUtils(), questionMediaManager, waitingForDataRegistry);
     }
 
-    ArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil,
+    ArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtils mediaUtils,
                         QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails);
         this.fileUtil = fileUtil;
-        this.mediaUtil = mediaUtil;
+        this.mediaUtils = mediaUtils;
         this.questionMediaManager = questionMediaManager;
         this.waitingForDataRegistry = waitingForDataRegistry;
 
@@ -123,8 +115,8 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
         File newFile;
         // get the file path and create a copy in the instance folder
         if (object instanceof Uri) {
-            String sourcePath = getSourcePathFromUri((Uri) object);
-            String destinationPath = FileWidgetUtils.getDestinationPathFromSourcePath(sourcePath, getInstanceFolder(), fileUtil);
+            String sourcePath = mediaUtils.getPath(getContext(), (Uri) object);
+            String destinationPath = mediaUtils.getDestinationPathFromSourcePath(sourcePath, getInstanceFolder());
             File source = fileUtil.getFileAtPath(sourcePath);
             newFile = fileUtil.getFileAtPath(destinationPath);
             fileUtil.copyFile(source, newFile);
@@ -179,7 +171,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
         answerLayout.addView(attachmentImg);
         answerLayout.addView(chosenFileNameTextView);
         answerLayout.setVisibility(binaryName == null ? GONE : VISIBLE);
-        answerLayout.setOnClickListener(view -> openFile());
+        answerLayout.setOnClickListener(view -> mediaUtils.openFile(getContext(), new File(getInstanceFolder() + File.separator + binaryName)));
 
         widgetLayout.addView(chooseFileButton);
         widgetLayout.addView(answerLayout);
@@ -192,34 +184,5 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*"); // all file types
         ((Activity) getContext()).startActivityForResult(intent, ApplicationConstants.RequestCodes.ARBITRARY_FILE_CHOOSER);
-    }
-
-    private String getSourcePathFromUri(@NonNull Uri uri) {
-        return mediaUtil.getPathFromUri(getContext(), uri, MediaStore.Files.FileColumns.DATA);
-    }
-
-    public String getMimeType(String url) {
-        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
-        return extension != null ? MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension) : null;
-    }
-
-    private void openFile() {
-
-        Uri fileUri = Uri.fromFile(new File(getInstanceFolder() + File.separator + binaryName));
-        Uri contentUri = ContentUriProvider.getUriForFile(getContext(),
-                BuildConfig.APPLICATION_ID + ".provider",
-                new File(getInstanceFolder() + File.separator + binaryName));
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(contentUri, getMimeType(getSourcePathFromUri(fileUri)));
-        FileUtils.grantFileReadPermissions(intent, contentUri, getContext());
-
-        if (new ActivityAvailability(getContext()).isActivityAvailable(intent)) {
-            getContext().startActivity(intent);
-        } else {
-            String message = getContext().getString(R.string.activity_not_found, getContext().getString(R.string.open_file));
-            ToastUtils.showLongToast(message);
-            Timber.w(message);
-        }
     }
 }

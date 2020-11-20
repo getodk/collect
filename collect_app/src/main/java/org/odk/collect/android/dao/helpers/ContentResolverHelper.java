@@ -83,7 +83,7 @@ public final class ContentResolverHelper {
      * @return The file's extension without a dot eg. "mp3" not ".mp3"
      */
     public static String getFileExtensionFromUri(Context context, Uri fileUri) {
-        String fileName = MediaUtils.getFileNameFromUri(context, fileUri);
+        String fileName = new MediaUtils().getFileNameFromUri(context, fileUri);
         if (fileName != null && fileName.contains(".")) {
             return fileName.substring(fileName.lastIndexOf('.') + 1);
         } else {

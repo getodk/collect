@@ -406,7 +406,7 @@ public class FormSaveViewModelTest {
         viewModel.deleteAnswerFile("index", "blah1");
         viewModel.deleteAnswerFile("index", "blah2");
 
-        verify(mediaUtils).deleteImageFileFromMediaProvider("blah2");
+        verify(mediaUtils).deleteMediaFile("blah2");
     }
 
     @Test
@@ -417,7 +417,7 @@ public class FormSaveViewModelTest {
         restoredViewModel.formLoaded(formController);
         restoredViewModel.deleteAnswerFile("index", "blah2");
 
-        verify(mediaUtils).deleteImageFileFromMediaProvider("blah2");
+        verify(mediaUtils).deleteMediaFile("blah2");
     }
 
     /**
@@ -429,7 +429,7 @@ public class FormSaveViewModelTest {
         viewModel.replaceAnswerFile("index", "blah1");
         viewModel.replaceAnswerFile("index", "blah2");
 
-        verify(mediaUtils).deleteImageFileFromMediaProvider("blah1");
+        verify(mediaUtils).deleteMediaFile("blah1");
     }
 
     @Test
@@ -440,7 +440,7 @@ public class FormSaveViewModelTest {
         restoredViewModel.formLoaded(formController);
         restoredViewModel.replaceAnswerFile("index", "blah2");
 
-        verify(mediaUtils).deleteImageFileFromMediaProvider("blah1");
+        verify(mediaUtils).deleteMediaFile("blah1");
     }
 
     @Test

@@ -954,7 +954,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     setWidgetData(mediaUri);
                 }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                String filePath = MediaUtils.getDataColumn(this, mediaUri, null, null);
+                String filePath = new MediaUtils().getDataColumn(this, mediaUri, null, null);
                 if (filePath != null) {
                     new File(filePath).delete();
                 }
