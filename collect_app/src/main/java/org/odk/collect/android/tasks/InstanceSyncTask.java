@@ -195,9 +195,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                     }
                 }
                 if (counter > 0) {
-                    currentStatus += String.format(
-                            TranslationHandler.getString(Collect.getInstance(), R.string.instance_scan_count),
-                            counter);
+                    currentStatus += TranslationHandler.getString(Collect.getInstance(), R.string.instance_scan_count, counter);
                 }
             }
         } finally {

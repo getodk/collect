@@ -13,6 +13,7 @@
 -keepclassmembers class * {
   @com.google.api.client.util.Key <fields>;
 }
+-keep class * extends androidx.fragment.app.Fragment{}
 
 -dontobfuscate
 
