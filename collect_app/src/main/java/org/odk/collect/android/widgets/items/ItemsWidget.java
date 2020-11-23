@@ -21,8 +21,12 @@ import android.content.Context;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
+import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.utilities.FastExternalItemsReader;
+import org.odk.collect.android.utilities.FileUtil;
+import org.odk.collect.android.utilities.XPathParseTool;
 import org.odk.collect.android.widgets.QuestionWidget;
 
 import java.io.FileNotFoundException;
@@ -40,7 +44,15 @@ public abstract class ItemsWidget extends QuestionWidget {
 
     public ItemsWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
-        readItems();
+        if (isFastExternalItemsetWidget()) {
+            items = new FastExternalItemsReader(getFormEntryPrompt(), new XPathParseTool(), new ItemsetDbAdapter(), new FileUtil()).getItems();
+        } else {
+            readItems();
+        }
+    }
+
+    private boolean isFastExternalItemsetWidget() {
+        return getFormEntryPrompt().getQuestion().getAdditionalAttribute(null, "query") != null;
     }
 
     protected void readItems() {
