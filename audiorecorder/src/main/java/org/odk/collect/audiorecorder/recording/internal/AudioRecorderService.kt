@@ -9,11 +9,14 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.PRIORITY_LOW
+import org.odk.collect.async.Cancellable
+import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.R
 import org.odk.collect.audiorecorder.getComponent
 import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recorder.Recorder
 import org.odk.collect.strings.getLocalizedString
+import java.util.Locale
 import javax.inject.Inject
 
 class AudioRecorderService : Service() {
@@ -23,6 +26,12 @@ class AudioRecorderService : Service() {
 
     @Inject
     internal lateinit var recordingRepository: RecordingRepository
+
+    @Inject
+    internal lateinit var scheduler: Scheduler
+
+    private var duration = -1
+    private var durationUpdates: Cancellable? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -40,14 +49,24 @@ class AudioRecorderService : Service() {
 
                     setupNotificationChannel()
                     val notificationIntent = Intent(this, ReturnToAppActivity::class.java)
-                    val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
+                    val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
                         .setContentTitle(getLocalizedString(R.string.recording))
+                        .setContentText("00:00")
                         .setSmallIcon(R.drawable.ic_baseline_mic_24)
                         .setContentIntent(PendingIntent.getActivity(this, 0, notificationIntent, 0))
                         .setPriority(PRIORITY_LOW)
+                    val notification = notificationBuilder
                         .build()
 
                     startForeground(NOTIFICATION_ID, notification)
+                    durationUpdates = scheduler.repeat(
+                        {
+                            duration += 1
+                            notificationBuilder.setContentText(LengthFormatter.formatLength(duration.toLong() * 1000))
+                            (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).notify(NOTIFICATION_ID, notificationBuilder.build())
+                        },
+                        1000L
+                    )
 
                     recorder.start(output)
                 }
@@ -87,12 +106,17 @@ class AudioRecorderService : Service() {
     }
 
     private fun stopRecording() {
+        durationUpdates?.cancel()
+
         val file = recorder.stop()
         recordingRepository.recordingReady(file)
+
         stopSelf()
     }
 
     private fun cleanUp() {
+        durationUpdates?.cancel()
+
         recorder.cancel()
         recordingRepository.clear()
         stopSelf()
@@ -108,5 +132,21 @@ class AudioRecorderService : Service() {
 
         const val EXTRA_SESSION_ID = "EXTRA_SESSION_ID"
         const val EXTRA_OUTPUT = "EXTRA_OUTPUT"
+    }
+}
+
+object LengthFormatter {
+    const val ONE_HOUR = 3600000
+    const val ONE_MINUTE = 60000
+    const val ONE_SECOND = 1000
+    fun formatLength(milliseconds: Long): String {
+        val hours = milliseconds / ONE_HOUR
+        val minutes = milliseconds % ONE_HOUR / ONE_MINUTE
+        val seconds = milliseconds % ONE_MINUTE / ONE_SECOND
+        return if (milliseconds < ONE_HOUR) {
+            String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
+        } else {
+            String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds)
+        }
     }
 }

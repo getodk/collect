@@ -3,10 +3,13 @@ package org.odk.collect.audiorecorder
 import android.app.Application
 import android.content.Context
 import android.media.MediaRecorder
+import androidx.work.WorkManager
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import org.odk.collect.async.CoroutineAndWorkManagerScheduler
+import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.recorder.MediaRecorderRecorder
 import org.odk.collect.audiorecorder.recorder.RealMediaRecorderWrapper
 import org.odk.collect.audiorecorder.recorder.Recorder
@@ -69,6 +72,11 @@ internal open class AudioRecorderDependencyModule {
     @Singleton
     open fun providesRecordingRepository(): RecordingRepository {
         return RecordingRepository()
+    }
+
+    @Provides
+    open fun providesScheduler(application: Application): Scheduler {
+        return CoroutineAndWorkManagerScheduler(WorkManager.getInstance(application))
     }
 }
 

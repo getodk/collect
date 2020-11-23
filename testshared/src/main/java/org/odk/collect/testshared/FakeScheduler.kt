@@ -10,6 +10,8 @@ class FakeScheduler : Scheduler {
 
     private var foregroundTask: Runnable? = null
     private var backgroundTask: Runnable? = null
+    private var lastRepeatRun: Long = 0
+    private var repeatTask: Pair<Long, Runnable>? = null
     private var cancelled = false
     private var isRepeatRunning = false
 
@@ -27,6 +29,7 @@ class FakeScheduler : Scheduler {
 
     override fun repeat(foreground: Runnable, repeatPeriod: Long): Cancellable {
         foregroundTask = foreground
+        repeatTask = Pair(repeatPeriod, foreground)
         isRepeatRunning = true
         return object : Cancellable {
             override fun cancel(): Boolean {
@@ -40,12 +43,32 @@ class FakeScheduler : Scheduler {
     fun runForeground() {
         if (foregroundTask != null) {
             foregroundTask!!.run()
+            foregroundTask = null
+        }
+
+        repeatTask?.let {
+            it.second.run()
+        }
+    }
+
+    fun runForeground(currentTime: Long) {
+        if (foregroundTask != null) {
+            foregroundTask!!.run()
+            foregroundTask = null
+        }
+
+        repeatTask?.let {
+            if ((currentTime - lastRepeatRun) >= it.first) {
+                it.second.run()
+                lastRepeatRun = currentTime
+            }
         }
     }
 
     fun runBackground() {
         if (backgroundTask != null) {
             backgroundTask!!.run()
+            backgroundTask = null
         }
     }
 
@@ -53,7 +76,7 @@ class FakeScheduler : Scheduler {
         return cancelled
     }
 
-    fun checkRepeatRunning(): Boolean {
+    fun isRepeatRunning(): Boolean {
         return isRepeatRunning
     }
 
