@@ -14,7 +14,6 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
-import org.odk.collect.android.widgets.items.ItemsetWidgetTest;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.Widget;
 
@@ -104,7 +103,7 @@ public abstract class QuestionWidgetTest<W extends Widget, A extends IAnswerData
     @Test
     public void getAnswerShouldReturnExistingAnswerIfPromptHasExistingAnswer() {
         A answer = getInitialAnswer();
-        if (answer instanceof StringData && !(this instanceof ItemsetWidgetTest)) {
+        if (answer instanceof StringData) {
             when(formEntryPrompt.getAnswerText()).thenReturn((String) answer.getValue());
         } else {
             when(formEntryPrompt.getAnswerValue()).thenReturn(answer);
