@@ -16,6 +16,7 @@ import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.javarosawrapper.FormController;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class FastExternalItemsReader {
         this.fileUtil = fileUtil;
     }
 
-    public List<SelectChoice> getItems() {
+    public List<SelectChoice> getItems() throws FileNotFoundException {
         String nodesetString = getNodesetString();
 
         List<String> arguments = new ArrayList<>();
@@ -174,7 +175,7 @@ public class FastExternalItemsReader {
         return selectionArgs;
     }
 
-    private List<SelectChoice> getItemsFromDatabase(String selection, String[] selectionArgs, FormController formController) {
+    private List<SelectChoice> getItemsFromDatabase(String selection, String[] selectionArgs, FormController formController) throws FileNotFoundException {
         List<SelectChoice> items = new ArrayList<>();
 
         File itemsetFile =  fileUtil.getItemsetFile(formController.getMediaFolder().getAbsolutePath());
@@ -224,7 +225,7 @@ public class FastExternalItemsReader {
                 adapter.close();
             }
         } else {
-            //showWarning(getContext().getString(R.string.file_missing, itemsetFile.getAbsolutePath()));
+            throw new FileNotFoundException(itemsetFile.getAbsolutePath());
         }
         return items;
     }

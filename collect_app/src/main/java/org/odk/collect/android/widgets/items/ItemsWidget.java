@@ -45,7 +45,11 @@ public abstract class ItemsWidget extends QuestionWidget {
     public ItemsWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
         if (isFastExternalItemsetWidget()) {
-            items = new FastExternalItemsReader(getFormEntryPrompt(), new XPathParseTool(), new ItemsetDbAdapter(), new FileUtil()).getItems();
+            try {
+                items = new FastExternalItemsReader(getFormEntryPrompt(), new XPathParseTool(), new ItemsetDbAdapter(), new FileUtil()).getItems();
+            } catch (FileNotFoundException e) {
+                showWarning(getContext().getString(R.string.file_missing, e.getMessage()));
+            }
         } else {
             readItems();
         }
