@@ -47,15 +47,7 @@ public abstract class ItemsWidget extends QuestionWidget {
     public ItemsWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
         if (isFastExternalItemsetWidget()) {
-            try {
-                items = new FastExternalItemsReader(getFormEntryPrompt(), new XPathParseTool(), new ItemsetDbAdapter(), new FileUtil()).getItems();
-            } catch (FileNotFoundException e) {
-                showWarning(getContext().getString(R.string.file_missing, e.getMessage()));
-            } catch (XPathSyntaxException e) {
-                TextView error = new TextView(getContext());
-                error.setText(String.format(getContext().getString(R.string.parser_exception), e.getMessage()));
-                addAnswerView(error);
-            }
+            readFastExternalItems();
         } else {
             readItems();
         }
@@ -65,7 +57,7 @@ public abstract class ItemsWidget extends QuestionWidget {
         return getFormEntryPrompt().getQuestion().getAdditionalAttribute(null, "query") != null;
     }
 
-    protected void readItems() {
+    private void readItems() {
         // SurveyCTO-added support for dynamic select content (from .csv files)
         XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(getFormEntryPrompt().getAppearanceHint());
         if (xpathFuncExpr != null) {
@@ -76,6 +68,18 @@ public abstract class ItemsWidget extends QuestionWidget {
             }
         } else {
             items = getFormEntryPrompt().getSelectChoices();
+        }
+    }
+
+    private void readFastExternalItems() {
+        try {
+            items = new FastExternalItemsReader(getFormEntryPrompt(), new XPathParseTool(), new ItemsetDbAdapter(), new FileUtil()).getItems();
+        } catch (FileNotFoundException e) {
+            showWarning(getContext().getString(R.string.file_missing, e.getMessage()));
+        } catch (XPathSyntaxException e) {
+            TextView error = new TextView(getContext());
+            error.setText(String.format(getContext().getString(R.string.parser_exception), e.getMessage()));
+            addAnswerView(error);
         }
     }
 
