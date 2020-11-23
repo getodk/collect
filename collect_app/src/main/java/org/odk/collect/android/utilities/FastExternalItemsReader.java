@@ -24,10 +24,10 @@ import timber.log.Timber;
 public class FastExternalItemsReader {
     private static final String QUOTATION_MARK = "\"";
 
-    private FormEntryPrompt formEntryPrompt;
-    private XPathParseTool pathParseTool;
-    private ItemsetDbAdapter adapter;
-    private FileUtil fileUtil;
+    private final FormEntryPrompt formEntryPrompt;
+    private final XPathParseTool pathParseTool;
+    private final ItemsetDbAdapter adapter;
+    private final FileUtil fileUtil;
 
     public FastExternalItemsReader(FormEntryPrompt formEntryPrompt, XPathParseTool parseTool, ItemsetDbAdapter adapter, FileUtil fileUtil) {
         this.formEntryPrompt = formEntryPrompt;
