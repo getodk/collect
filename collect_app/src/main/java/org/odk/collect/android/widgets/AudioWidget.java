@@ -24,15 +24,15 @@ import android.view.View;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-
 import org.odk.collect.android.audio.AudioControllerView;
+import org.odk.collect.android.audio.LengthFormatter;
 import org.odk.collect.android.databinding.AudioWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.AudioFileRequester;
-import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.audioclips.Clip;
@@ -77,6 +77,13 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
         recordingRequester.onIsRecordingChanged(isRecording -> {
             binding.captureButton.setEnabled(!isRecording);
             binding.chooseButton.setEnabled(!isRecording);
+        });
+
+        recordingRequester.onDurationChanged(getFormEntryPrompt(), duration -> {
+            binding.captureButton.setVisibility(GONE);
+            binding.chooseButton.setVisibility(GONE);
+            binding.recordingDuration.setVisibility(VISIBLE);
+            binding.recordingDuration.setText(LengthFormatter.formatLength(duration));
         });
 
         recordingRequester.onRecordingAvailable(getFormEntryPrompt(), this::setData);
@@ -157,22 +164,23 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
 
     private void hideButtonsIfNeeded() {
         if (getAnswer() == null) {
-            binding.captureButton.setVisibility(View.VISIBLE);
-            binding.chooseButton.setVisibility(View.VISIBLE);
-            binding.audioController.setVisibility(View.GONE);
+            binding.captureButton.setVisibility(VISIBLE);
+            binding.chooseButton.setVisibility(VISIBLE);
+            binding.audioController.setVisibility(GONE);
         } else {
-            binding.captureButton.setVisibility(View.GONE);
-            binding.chooseButton.setVisibility(View.GONE);
-            binding.audioController.setVisibility(View.VISIBLE);
+            binding.captureButton.setVisibility(GONE);
+            binding.chooseButton.setVisibility(GONE);
+            binding.recordingDuration.setVisibility(GONE);
+            binding.audioController.setVisibility(VISIBLE);
         }
 
         if (questionDetails.isReadOnly()) {
-            binding.captureButton.setVisibility(View.GONE);
-            binding.chooseButton.setVisibility(View.GONE);
+            binding.captureButton.setVisibility(GONE);
+            binding.chooseButton.setVisibility(GONE);
         }
 
         if (getFormEntryPrompt().getAppearanceHint() != null && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains(WidgetAppearanceUtils.NEW)) {
-            binding.chooseButton.setVisibility(View.GONE);
+            binding.chooseButton.setVisibility(GONE);
         }
     }
 
@@ -205,9 +213,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
                 }
             });
 
-            binding.audioController.setVisibility(View.VISIBLE);
-        } else {
-            binding.audioController.setVisibility(GONE);
         }
     }
 

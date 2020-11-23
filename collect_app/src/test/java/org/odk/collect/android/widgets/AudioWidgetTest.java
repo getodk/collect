@@ -300,13 +300,38 @@ public class AudioWidgetTest {
     }
 
     @Test
-    public void whenRecordingAvailable__updatesWidgetAnswer() throws Exception {
+    public void whenThereIsADuration_showsDurationInsteadOfButtons() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        AudioWidget widget = createWidget(prompt);
+
+        recordingRequester.setDuration(prompt.getIndex().toString(), 0);
+        assertThat(widget.binding.captureButton.getVisibility(), is(GONE));
+        assertThat(widget.binding.chooseButton.getVisibility(), is(GONE));
+        assertThat(widget.binding.recordingDuration.getVisibility(), is(VISIBLE));
+        assertThat(widget.binding.recordingDuration.getText(), is("00:00"));
+
+        recordingRequester.setDuration(prompt.getIndex().toString(), 42000);
+        assertThat(widget.binding.recordingDuration.getText(), is("00:42"));
+    }
+
+    @Test
+    public void whenRecordingAvailable_updatesWidgetAnswer() throws Exception {
         FormEntryPrompt prompt = promptWithAnswer(null);
         AudioWidget widget = createWidget(prompt);
 
         File newFile = File.createTempFile("newFile", ".mp3", questionMediaManager.getDir());
         recordingRequester.setRecording(prompt.getIndex().toString(), newFile);
         assertThat(widget.getAnswer().getDisplayText(), equalTo(newFile.getName()));
+    }
+
+    @Test
+    public void whenRecordingAvailable_hidesDuration() throws Exception {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        AudioWidget widget = createWidget(prompt);
+
+        File newFile = File.createTempFile("newFile", ".mp3", questionMediaManager.getDir());
+        recordingRequester.setRecording(prompt.getIndex().toString(), newFile);
+        assertThat(widget.binding.recordingDuration.getVisibility(), equalTo(GONE));
     }
 
     @Test
@@ -504,11 +529,12 @@ public class AudioWidgetTest {
         }
     }
 
-    private class FakeRecordingRequester implements RecordingRequester {
+    private static class FakeRecordingRequester implements RecordingRequester {
 
         FormEntryPrompt requestedRecordingFor;
         private Consumer<Boolean> isRecordingListener;
         private final Map<String, Consumer<String>> recordingAvailableListeners = new HashMap<>();
+        private final Map<String, Consumer<Long>> durationListeners = new HashMap<>();
 
         @Override
         public void requestRecording(FormEntryPrompt prompt) {
@@ -525,6 +551,11 @@ public class AudioWidgetTest {
             recordingAvailableListeners.put(prompt.getIndex().toString(), recordingAvailableListener);
         }
 
+        @Override
+        public void onDurationChanged(FormEntryPrompt prompt, Consumer<Long> durationListener) {
+            durationListeners.put(prompt.getIndex().toString(), durationListener);
+        }
+
         public void startRecording() {
             isRecordingListener.accept(true);
         }
@@ -535,6 +566,10 @@ public class AudioWidgetTest {
 
         public void setRecording(String sessionId, File file) {
             recordingAvailableListeners.get(sessionId).accept(file.getName());
+        }
+
+        public void setDuration(String sessionId, long duration) {
+            durationListeners.get(sessionId).accept(duration);
         }
     }
 }

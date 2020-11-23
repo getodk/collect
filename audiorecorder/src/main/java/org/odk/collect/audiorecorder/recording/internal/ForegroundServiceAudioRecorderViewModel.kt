@@ -6,23 +6,23 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations.map
 import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel
+import org.odk.collect.audiorecorder.recording.RecordingSession
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_CLEAN_UP
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_START
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_STOP
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.EXTRA_OUTPUT
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.EXTRA_SESSION_ID
-import java.io.File
 
 internal class ForegroundServiceAudioRecorderViewModel internal constructor(private val application: Application, private val recordingRepository: RecordingRepository) : AudioRecorderViewModel() {
 
-    private val _isRecording: LiveData<Boolean> = map(recordingRepository.currentSession) { it != null }
+    private val _isRecording: LiveData<Boolean> = map(recordingRepository.currentSession) { it != null && it.file == null }
 
     override fun isRecording(): LiveData<Boolean> {
         return _isRecording
     }
 
-    override fun getRecording(sessionId: String): LiveData<File?> {
-        return recordingRepository.get(sessionId)
+    override fun getCurrentSession(): LiveData<RecordingSession?> {
+        return recordingRepository.currentSession
     }
 
     override fun start(sessionId: String, output: Output) {

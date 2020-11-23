@@ -59,66 +59,39 @@ abstract class AudioRecorderViewModelTest {
     }
 
     @Test
-    fun getRecording_beforeRecording_isNull() {
-        val recording = liveDataTester.activate(viewModel.getRecording("session1"))
+    fun getCurrentSession_beforeRecording_isNull() {
+        val recording = liveDataTester.activate(viewModel.getCurrentSession())
 
         runBackground()
         assertThat(recording.value, equalTo(null))
     }
 
     @Test
-    fun getRecording_whenRecording_isNull() {
-        val recording = liveDataTester.activate(viewModel.getRecording("session1"))
+    fun getCurrentSession_whenRecording_returnsSessionWithId() {
+        val recording = liveDataTester.activate(viewModel.getCurrentSession())
         viewModel.start("session1", Output.AAC)
 
         runBackground()
-        assertThat(recording.value, equalTo(null))
+        assertThat(recording.value, equalTo(RecordingSession("session1", null, 0)))
     }
 
     @Test
-    fun getRecording_afterStop_isRecordedFile() {
-        val recording = liveDataTester.activate(viewModel.getRecording("session1"))
+    fun getCurrentSession_afterStop_isRecordedFile() {
+        val recording = liveDataTester.activate(viewModel.getCurrentSession())
         viewModel.start("session1", Output.AAC)
         viewModel.stop()
 
         runBackground()
-        assertThat(recording.value, equalTo(getLastRecordedFile()))
+        assertThat(recording.value, equalTo(RecordingSession("session1", getLastRecordedFile(), 0)))
     }
 
     @Test
-    fun getRecording_afterCleanUp_isNull() {
-        val recording = liveDataTester.activate(viewModel.getRecording("session1"))
+    fun getCurrentSession_afterCleanUp_isNull() {
+        val recording = liveDataTester.activate(viewModel.getCurrentSession())
         viewModel.start("session1", Output.AAC)
         viewModel.cleanUp()
 
         runBackground()
         assertThat(recording.value, equalTo(null))
-    }
-
-    @Test
-    fun getRecording_worksForMultipleSessions() {
-        val recording1 = liveDataTester.activate(viewModel.getRecording("session1"))
-        val recording2 = liveDataTester.activate(viewModel.getRecording("session2"))
-        viewModel.start("session2", Output.AAC)
-        viewModel.stop()
-
-        runBackground()
-        val recording2File = getLastRecordedFile()
-        assertThat(recording1.value, equalTo(null))
-        assertThat(recording2.value, equalTo(recording2File))
-
-        viewModel.start("session1", Output.AAC)
-        viewModel.stop()
-
-        runBackground()
-        val recording1File = getLastRecordedFile()
-        assertThat(recording1.value, equalTo(recording1File))
-        assertThat(recording2.value, equalTo(recording2File))
-
-        // Check cleanup cleans up everything
-        viewModel.cleanUp()
-        runBackground()
-        assertThat(recording1.value, equalTo(null))
-        assertThat(recording2.value, equalTo(null))
     }
 }

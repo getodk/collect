@@ -62,4 +62,9 @@ public class ExternalAppRecordingRequester implements RecordingRequester {
     public void onRecordingAvailable(FormEntryPrompt prompt, Consumer<String> recordingAvailableListener) {
         // This could be implemented using the new Activity Result API  once it's stable
     }
+
+    @Override
+    public void onDurationChanged(FormEntryPrompt prompt, Consumer<Long> durationListener) {
+        // No-op
+    }
 }

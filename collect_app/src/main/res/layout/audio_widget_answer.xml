@@ -18,6 +18,12 @@
         android:layout_marginTop="@dimen/margin_extra_small"
         android:text="@string/choose_sound" />
 
+    <TextView
+        android:id="@+id/recording_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
     <org.odk.collect.android.audio.AudioControllerView
         android:id="@+id/audio_controller"
         android:layout_width="match_parent"

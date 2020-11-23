@@ -9,8 +9,8 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 import org.odk.collect.audiorecorder.recorder.Output;
+import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 
 import java.util.function.Consumer;
 
@@ -57,14 +57,23 @@ public class InternalRecordingRequester implements RecordingRequester {
 
     @Override
     public void onRecordingAvailable(FormEntryPrompt prompt, Consumer<String> recordingAvailableListener) {
-        viewModel.getRecording(prompt.getIndex().toString()).observe(lifecycleOwner, file -> {
-            if (file != null) {
-                questionMediaManager.createAnswerFile(file).observe(lifecycleOwner, fileName -> {
+        viewModel.getCurrentSession().observe(lifecycleOwner, session -> {
+            if (session != null && session.getId().equals(prompt.getIndex().toString()) && session.getFile() != null) {
+                questionMediaManager.createAnswerFile(session.getFile()).observe(lifecycleOwner, fileName -> {
                     if (fileName != null) {
                         viewModel.cleanUp();
                         recordingAvailableListener.accept(fileName);
                     }
                 });
+            }
+        });
+    }
+
+    @Override
+    public void onDurationChanged(FormEntryPrompt prompt, Consumer<Long> durationListener) {
+        viewModel.getCurrentSession().observe(lifecycleOwner, session -> {
+            if (session != null && session.getId().equals(prompt.getIndex().toString())) {
+                durationListener.accept(session.getDuration());
             }
         });
     }

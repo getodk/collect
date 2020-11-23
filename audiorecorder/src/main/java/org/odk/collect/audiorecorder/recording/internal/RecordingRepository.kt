@@ -2,37 +2,25 @@ package org.odk.collect.audiorecorder.recording.internal
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import org.odk.collect.audiorecorder.recording.RecordingSession
 import java.io.File
 
 class RecordingRepository {
 
-    private val _currentSession = MutableLiveData<String?>(null)
-    val currentSession: LiveData<String?> = _currentSession
-
-    private val sessions = mutableMapOf<String, MutableLiveData<File?>>()
-
-    fun get(sessionId: String): LiveData<File?> {
-        return sessions.getOrPut(sessionId) { MutableLiveData(null) }
-    }
+    private val _currentSession = MutableLiveData<RecordingSession?>(null)
+    val currentSession: LiveData<RecordingSession?> = _currentSession
 
     fun start(sessionId: String) {
-        _currentSession.value = sessionId
+        _currentSession.value = RecordingSession(sessionId, null, 0)
     }
 
     fun recordingReady(recording: File) {
         _currentSession.value?.let {
-            sessions.getOrPut(it) { MutableLiveData(null) }.value = recording
+            _currentSession.value = it.copy(file = recording)
         }
-
-        _currentSession.value = null
     }
 
     fun clear() {
         _currentSession.value = null
-
-        sessions.values.forEach {
-            it.value?.delete()
-            it.value = null
-        }
     }
 }

@@ -7,12 +7,12 @@ import java.io.File
 
 /**
  * Interface for a ViewModel that records audio. Can only record once session
- * at a time but supports cases where multiple views can start/playback different
- * recordings through a `sessionsId` passed to `start` and `getRecording`.
+ * at a time.
  */
 abstract class AudioRecorderViewModel : ViewModel() {
     abstract fun isRecording(): LiveData<Boolean>
-    abstract fun getRecording(sessionId: String): LiveData<File?>
+    abstract fun getCurrentSession(): LiveData<RecordingSession?>
+
     abstract fun start(sessionId: String, output: Output)
     abstract fun stop()
 
@@ -22,3 +22,5 @@ abstract class AudioRecorderViewModel : ViewModel() {
      */
     abstract fun cleanUp()
 }
+
+data class RecordingSession(val id: String, val file: File?, val duration: Long)
