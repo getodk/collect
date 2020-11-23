@@ -37,7 +37,7 @@ public class FastExternalItemsReader {
         this.fileUtil = fileUtil;
     }
 
-    public List<SelectChoice> getItems() throws FileNotFoundException {
+    public List<SelectChoice> getItems() throws FileNotFoundException, XPathSyntaxException {
         String nodesetString = getNodesetString();
 
         List<String> arguments = new ArrayList<>();
@@ -127,7 +127,8 @@ public class FastExternalItemsReader {
         return selectionString.toString();
     }
 
-    private String[] getSelectionArgs(List<String> arguments, String nodesetStr, FormController formController) {
+    @SuppressWarnings("PMD.AvoidThrowingNewInstanceOfSameException")
+    private String[] getSelectionArgs(List<String> arguments, String nodesetStr, FormController formController) throws XPathSyntaxException {
         // +1 is for the list_name
         String[] selectionArgs = new String[arguments.size() + 1];
 
@@ -147,11 +148,7 @@ public class FastExternalItemsReader {
             try {
                 xpr = pathParseTool.parseXPath(arguments.get(i));
             } catch (XPathSyntaxException e) {
-                Timber.e(e);
-//                TextView error = new TextView(getContext());
-//                error.setText(String.format(getContext().getString(R.string.parser_exception), arguments.get(i)));
-//                addAnswerView(error);
-                break;
+                throw new XPathSyntaxException(arguments.get(i));
             }
 
             if (xpr != null) {

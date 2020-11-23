@@ -17,9 +17,11 @@
 package org.odk.collect.android.widgets.items;
 
 import android.content.Context;
+import android.widget.TextView;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.xpath.expr.XPathFuncExpr;
+import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.external.ExternalDataUtil;
@@ -49,6 +51,10 @@ public abstract class ItemsWidget extends QuestionWidget {
                 items = new FastExternalItemsReader(getFormEntryPrompt(), new XPathParseTool(), new ItemsetDbAdapter(), new FileUtil()).getItems();
             } catch (FileNotFoundException e) {
                 showWarning(getContext().getString(R.string.file_missing, e.getMessage()));
+            } catch (XPathSyntaxException e) {
+                TextView error = new TextView(getContext());
+                error.setText(String.format(getContext().getString(R.string.parser_exception), e.getMessage()));
+                addAnswerView(error);
             }
         } else {
             readItems();
