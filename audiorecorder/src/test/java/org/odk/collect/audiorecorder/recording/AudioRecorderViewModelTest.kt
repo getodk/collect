@@ -71,7 +71,7 @@ abstract class AudioRecorderViewModelTest {
     }
 
     @Test
-    fun getCurrentSession_afterStop_isRecordedFile() {
+    fun getCurrentSession_afterStop_hasRecordedFile() {
         val recording = liveDataTester.activate(viewModel.getCurrentSession())
         viewModel.start("session1", Output.AAC)
         viewModel.stop()
@@ -88,5 +88,60 @@ abstract class AudioRecorderViewModelTest {
 
         runBackground()
         assertThat(recording.value, equalTo(null))
+    }
+
+    @Test
+    fun getCurrentSession_whenRecording_isNotPaused() {
+        val session = liveDataTester.activate(viewModel.getCurrentSession())
+        viewModel.start("session", Output.AAC)
+
+        runBackground()
+        assertThat(session.value?.paused, equalTo(false))
+    }
+
+    @Test
+    fun getCurrentSession_afterStop_isNotPaused() {
+        val session = liveDataTester.activate(viewModel.getCurrentSession())
+
+        viewModel.start("session", Output.AAC)
+        viewModel.stop()
+
+        runBackground()
+        assertThat(session.value?.paused, equalTo(false))
+    }
+
+    @Test
+    fun getCurrentSession_afterPause_isPaused() {
+        val session = liveDataTester.activate(viewModel.getCurrentSession())
+
+        viewModel.start("session", Output.AAC)
+        viewModel.pause()
+
+        runBackground()
+        assertThat(session.value?.paused, equalTo(true))
+    }
+
+    @Test
+    fun getCurrentSession_afterPauseAndResume_isNotPaused() {
+        val session = liveDataTester.activate(viewModel.getCurrentSession())
+
+        viewModel.start("session", Output.AAC)
+        viewModel.pause()
+        viewModel.resume()
+
+        runBackground()
+        assertThat(session.value?.paused, equalTo(false))
+    }
+
+    @Test
+    fun getCurrentSession_afterPauseAndStop_isNotPaused() {
+        val session = liveDataTester.activate(viewModel.getCurrentSession())
+
+        viewModel.start("session", Output.AAC)
+        viewModel.pause()
+        viewModel.stop()
+
+        runBackground()
+        assertThat(session.value?.paused, equalTo(false))
     }
 }

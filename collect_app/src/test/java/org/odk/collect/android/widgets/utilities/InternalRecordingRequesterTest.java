@@ -84,7 +84,7 @@ public class InternalRecordingRequesterTest {
         requester.onIsRecordingChanged(listener);
         verify(listener).accept(false);
 
-        liveData.setValue(new RecordingSession("blah", null, 0, 0));
+        liveData.setValue(new RecordingSession("blah", null, 0, 0, false));
         verify(listener).accept(true);
     }
 
@@ -100,7 +100,7 @@ public class InternalRecordingRequesterTest {
 
         Consumer<String> listener = mock(Consumer.class);
         requester.onRecordingAvailable(prompt, listener);
-        sessionLiveData.setValue(new RecordingSession(prompt.getIndex().toString(), file, 0, 0));
+        sessionLiveData.setValue(new RecordingSession(prompt.getIndex().toString(), file, 0, 0, false));
         answerLiveData.setValue("copiedFile");
 
         verify(listener).accept("copiedFile");
@@ -117,7 +117,7 @@ public class InternalRecordingRequesterTest {
         requester.onRecordingAvailable(prompt, listener);
 
         File file = File.createTempFile("blah", ".mp3");
-        sessionLiveData.setValue(new RecordingSession("something else", file, 0, 0));
+        sessionLiveData.setValue(new RecordingSession("something else", file, 0, 0, false));
 
         verifyNoInteractions(listener);
         verifyNoInteractions(questionMediaManager);
@@ -132,7 +132,7 @@ public class InternalRecordingRequesterTest {
         Consumer<Pair<Long, Integer>> listener = mock(Consumer.class);
         requester.onRecordingInProgress(prompt, listener);
 
-        sessionLiveData.setValue(new RecordingSession(prompt.getIndex().toString(), null, 1200L, 25));
+        sessionLiveData.setValue(new RecordingSession(prompt.getIndex().toString(), null, 1200L, 25, false));
         verify(listener).accept(new Pair<>(1200L, 25));
     }
 
@@ -145,7 +145,7 @@ public class InternalRecordingRequesterTest {
         Consumer<Pair<Long, Integer>> listener = mock(Consumer.class);
         requester.onRecordingInProgress(prompt, listener);
 
-        sessionLiveData.setValue(new RecordingSession("something else", null, 1200L, 0));
+        sessionLiveData.setValue(new RecordingSession("something else", null, 1200L, 0, false));
         verifyNoInteractions(listener);
     }
 }

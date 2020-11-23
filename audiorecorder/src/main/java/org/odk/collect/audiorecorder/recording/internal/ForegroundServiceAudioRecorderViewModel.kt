@@ -33,6 +33,14 @@ internal class ForegroundServiceAudioRecorderViewModel internal constructor(priv
         )
     }
 
+    override fun pause() {
+        TODO("Not yet implemented")
+    }
+
+    override fun resume() {
+        TODO("Not yet implemented")
+    }
+
     override fun stop() {
         application.startService(
             Intent(application, AudioRecorderService::class.java).apply { action = ACTION_STOP }

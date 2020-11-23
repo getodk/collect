@@ -1,0 +1,102 @@
+package org.odk.collect.android.audio;
+
+import android.app.Application;
+import android.content.Context;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.testing.FragmentScenario;
+import androidx.lifecycle.ViewModel;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
+import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.audiorecorder.recorder.Output;
+import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
+import org.odk.collect.audiorecorder.testsupport.StubAudioRecorderViewModel;
+
+import java.io.File;
+import java.io.IOException;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
+@RunWith(AndroidJUnit4.class)
+public class AudioRecordingControllerFragmentTest {
+
+    public StubAudioRecorderViewModel audioRecorderViewModel;
+    private Context context;
+
+    @Before
+    public void setup() throws IOException {
+        File stubRecording = File.createTempFile("test", ".m4a");
+        stubRecording.deleteOnExit();
+
+        audioRecorderViewModel = new StubAudioRecorderViewModel(stubRecording.getAbsolutePath());
+
+        RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+            @Override
+            public AudioRecorderViewModelFactory providesAudioRecorderViewModelFactory(Application application) {
+                return new AudioRecorderViewModelFactory(application) {
+                    @Override
+                    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                        return (T) audioRecorderViewModel;
+                    }
+                };
+            }
+        });
+
+        // Needed to inflate views with theme attributes
+        context = ApplicationProvider.getApplicationContext();
+        context.setTheme(R.style.Theme_MaterialComponents);
+
+        // View only shows when recording in progress
+        audioRecorderViewModel.start("session", Output.AAC);
+    }
+
+    @Test
+    public void clickingPause_pausesRecording() {
+        FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
+        scenario.onFragment(fragment -> {
+            fragment.binding.pauseRecording.performClick();
+            assertThat(audioRecorderViewModel.getCurrentSession().getValue().getPaused(), is(true));
+        });
+    }
+
+    @Test
+    public void whenRecordingPaused_clickingPause_resumesRecording() {
+        audioRecorderViewModel.pause();
+
+        FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
+        scenario.onFragment(fragment -> {
+            fragment.binding.pauseRecording.performClick();
+            assertThat(audioRecorderViewModel.getCurrentSession().getValue().getPaused(), is(false));
+        });
+    }
+
+    @Test
+    public void whenRecordingPaused_pauseTextChangesToResume() {
+        audioRecorderViewModel.pause();
+
+        FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
+        scenario.onFragment(fragment -> {
+            assertThat(fragment.binding.pauseRecording.getText(), is(context.getString(R.string.resume_recording)));
+        });
+    }
+
+    @Test
+    public void whenRecordingResumed_pauseTextChangesToPause() {
+        audioRecorderViewModel.pause();
+        audioRecorderViewModel.resume();
+
+        FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
+        scenario.onFragment(fragment -> {
+            assertThat(fragment.binding.pauseRecording.getText(), is(context.getString(R.string.pause_recording)));
+        });
+    }
+
+}
