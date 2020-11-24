@@ -17,7 +17,6 @@
 package org.odk.collect.android.widgets.items;
 
 import android.content.Context;
-import android.widget.TextView;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.xpath.expr.XPathFuncExpr;
@@ -76,9 +75,7 @@ public abstract class ItemsWidget extends QuestionWidget {
         } catch (FileNotFoundException e) {
             showWarning(getContext().getString(R.string.file_missing, e.getMessage()));
         } catch (XPathSyntaxException e) {
-            TextView error = new TextView(getContext());
-            error.setText(String.format(getContext().getString(R.string.parser_exception), e.getMessage()));
-            addAnswerView(error);
+            showWarning(getContext().getString(R.string.parser_exception, e.getMessage()));
         }
     }
 
