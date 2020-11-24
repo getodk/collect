@@ -28,6 +28,7 @@ import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
+import org.odk.collect.android.formentry.questions.NoButtonsItem;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.injection.config.AppDependencyModule;
@@ -98,7 +99,7 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
     public void whenNoButtonsModeExist_shouldFrameLayoutBeUsedAsItemView() {
         when(formEntryPrompt.getAppearanceHint()).thenReturn("no-buttons");
         populateRecyclerView(getWidget());
-        assertThat(getChoiceView(getWidget(), 0).getClass().getName(), is(FrameLayout.class.getName()));
+        assertThat(getChoiceView(getWidget(), 0).getClass().getName(), is(NoButtonsItem.class.getName()));
     }
 
     @Test

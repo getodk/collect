@@ -320,6 +320,9 @@ dependencies {
     // Better "Subjects" for Rx:
     implementation "com.jakewharton.rxrelay2:rxrelay:2.1.1"
 
+    // Glide
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+
     implementation project(':nbistubs')
     implementation project(':strings')
     implementation project(':material')

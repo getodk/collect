@@ -271,7 +271,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private Animation inAnimation;
     private Animation outAnimation;
-    private View staleView;
 
     private FrameLayout questionHolder;
     private View currentView;
@@ -1660,7 +1659,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
         // adjust which view is in the layout container...
-        staleView = currentView;
+        View staleView = currentView;
         currentView = next;
         swipeHandler.setOdkView(getCurrentViewIfODKView());
         questionHolder.addView(currentView, lp);
@@ -2229,14 +2228,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private int animationCompletionSet;
 
     private void afterAllAnimations() {
-        if (staleView != null) {
-            if (staleView instanceof ODKView) {
-                // http://code.google.com/p/android/issues/detail?id=8488
-                ((ODKView) staleView).recycleDrawables();
-            }
-            staleView = null;
-        }
-
         if (getCurrentViewIfODKView() != null) {
             getCurrentViewIfODKView().setFocus(this);
         }

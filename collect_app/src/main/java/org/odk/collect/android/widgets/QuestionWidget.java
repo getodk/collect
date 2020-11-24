@@ -15,16 +15,12 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -59,8 +55,6 @@ import org.odk.collect.android.widgets.interfaces.Widget;
 import org.odk.collect.android.widgets.items.SelectImageMapWidget;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -277,40 +271,6 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
 
     public QuestionDetails getQuestionDetails() {
         return questionDetails;
-    }
-
-    // http://code.google.com/p/android/issues/detail?id=8488
-    private void recycleDrawablesRecursive(ViewGroup viewGroup, List<ImageView> images) {
-
-        int childCount = viewGroup.getChildCount();
-        for (int index = 0; index < childCount; index++) {
-            View child = viewGroup.getChildAt(index);
-            if (child instanceof ImageView) {
-                images.add((ImageView) child);
-            } else if (child instanceof ViewGroup) {
-                recycleDrawablesRecursive((ViewGroup) child, images);
-            }
-        }
-        viewGroup.destroyDrawingCache();
-    }
-
-    // http://code.google.com/p/android/issues/detail?id=8488
-    public void recycleDrawables() {
-        List<ImageView> images = new ArrayList<>();
-        // collect all the image views
-        recycleDrawablesRecursive(this, images);
-        for (ImageView imageView : images) {
-            imageView.destroyDrawingCache();
-            Drawable d = imageView.getDrawable();
-            if (d != null && d instanceof BitmapDrawable) {
-                imageView.setImageDrawable(null);
-                BitmapDrawable bd = (BitmapDrawable) d;
-                Bitmap bmp = bd.getBitmap();
-                if (bmp != null) {
-                    bmp.recycle();
-                }
-            }
-        }
     }
 
     public void setFocus(Context context) {

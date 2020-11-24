@@ -17,7 +17,6 @@ package org.odk.collect.android.formentry.questions;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.text.method.LinkMovementMethod;
@@ -36,6 +35,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -48,7 +48,6 @@ import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ScreenContext;
-import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -143,7 +142,20 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     }
 
     public void setImage(@NonNull File imageFile) {
-        setupImage(imageFile);
+        if (imageFile.exists()) {
+            imageView.layout(0, 0, 0, 0);
+
+            Glide.with(this)
+                    .load(imageFile)
+                    .centerInside()
+                    .into(imageView);
+
+            imageView.setVisibility(VISIBLE);
+            imageView.setOnClickListener(this);
+        } else {
+            missingImage.setVisibility(VISIBLE);
+            missingImage.setText(getContext().getString(R.string.file_missing, imageFile));
+        }
     }
 
     public void setBigImage(@NonNull File bigImageFile) {
@@ -256,33 +268,6 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         }
         if (listener != null) {
             listener.onItemClicked();
-        }
-    }
-
-    private void setupImage(File imageFile) {
-        String errorMsg = null;
-
-        if (imageFile.exists()) {
-            Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile, ScreenUtils.getScreenHeight(), ScreenUtils.getScreenWidth());
-            if (b != null) {
-                imageView.setVisibility(VISIBLE);
-                imageView.setImageBitmap(b);
-                imageView.setOnClickListener(this);
-            } else {
-                // Loading the image failed, so it's likely a bad file.
-                errorMsg = getContext().getString(R.string.file_invalid, imageFile);
-            }
-        } else {
-            // We should have an image, but the file doesn't exist.
-            errorMsg = getContext().getString(R.string.file_missing, imageFile);
-        }
-
-        if (errorMsg != null) {
-            // errorMsg is only set when an error has occurred
-            Timber.e(errorMsg);
-            imageView.setVisibility(View.GONE);
-            missingImage.setVisibility(VISIBLE);
-            missingImage.setText(errorMsg);
         }
     }
 

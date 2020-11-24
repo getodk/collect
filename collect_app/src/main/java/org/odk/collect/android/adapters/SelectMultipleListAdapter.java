@@ -21,7 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatCheckBox;
@@ -34,6 +33,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
+import org.odk.collect.android.formentry.questions.NoButtonsItem;
 import org.odk.collect.android.listeners.SelectItemClickListener;
 
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder(noButtonsMode
-                ? new FrameLayout(parent.getContext())
+                ? new NoButtonsItem(context, !prompt.isReadOnly())
                 : new AudioVideoImageTextLabel(context));
     }
 
@@ -67,7 +67,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
         ViewHolder(View v) {
             super(v);
             if (noButtonsMode) {
-                view = (FrameLayout) v;
+                noButtonsItem = (NoButtonsItem) v;
             } else {
                 audioVideoImageTextLabel = (AudioVideoImageTextLabel) v;
                 audioVideoImageTextLabel.setPlayTextColor(playColor);
@@ -78,10 +78,10 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
         void bind(final int index) {
             super.bind(index);
             if (noButtonsMode) {
-                view.setBackground(null);
+                noButtonsItem.setBackground(null);
                 for (Selection selectedItem : selectedItems) {
                     if (filteredItems.get(index).getValue().equals(selectedItem.getValue())) {
-                        view.setBackground(ContextCompat.getDrawable(view.getContext(), R.drawable.select_item_border));
+                        noButtonsItem.setBackground(ContextCompat.getDrawable(noButtonsItem.getContext(), R.drawable.select_item_border));
                         break;
                     }
                 }

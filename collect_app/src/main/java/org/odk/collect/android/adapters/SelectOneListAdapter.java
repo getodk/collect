@@ -21,7 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.FrameLayout;
 import android.widget.RadioButton;
 
 import androidx.annotation.NonNull;
@@ -34,6 +33,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
+import org.odk.collect.android.formentry.questions.NoButtonsItem;
 import org.odk.collect.android.listeners.SelectItemClickListener;
 
 import java.util.ArrayList;
@@ -61,7 +61,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder(noButtonsMode
-                ? new FrameLayout(parent.getContext())
+                ? new NoButtonsItem(context, !prompt.isReadOnly())
                 : new AudioVideoImageTextLabel(context));
     }
 
@@ -84,7 +84,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
         ViewHolder(View v) {
             super(v);
             if (noButtonsMode) {
-                view = (FrameLayout) v;
+                noButtonsItem = (NoButtonsItem) v;
             } else {
                 audioVideoImageTextLabel = (AudioVideoImageTextLabel) v;
                 audioVideoImageTextLabel.setPlayTextColor(playColor);
@@ -96,10 +96,10 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
             super.bind(index);
             if (noButtonsMode) {
                 if (filteredItems.get(index).getValue().equals(selectedValue)) {
-                    view.setBackground(ContextCompat.getDrawable(view.getContext(), R.drawable.select_item_border));
-                    selectedItem = view;
+                    noButtonsItem.setBackground(ContextCompat.getDrawable(noButtonsItem.getContext(), R.drawable.select_item_border));
+                    selectedItem = noButtonsItem;
                 } else {
-                    view.setBackground(null);
+                    noButtonsItem.setBackground(null);
                 }
             } else {
                 adjustAudioVideoImageTextLabelForFlexAppearance();

@@ -17,8 +17,6 @@
 package org.odk.collect.android.adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -26,8 +24,6 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -44,8 +40,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.ImageConverter;
+import org.odk.collect.android.formentry.questions.NoButtonsItem;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
@@ -142,68 +137,6 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         button.setTextAlignment(isRTL() ? View.TEXT_ALIGNMENT_TEXT_END : View.TEXT_ALIGNMENT_TEXT_START);
     }
 
-    View setUpNoButtonsView(int index) {
-        View view = new View(context);
-
-        SelectChoice selectChoice = filteredItems.get(index);
-
-        String imageURI = selectChoice instanceof ExternalSelectChoice
-                ? ((ExternalSelectChoice) selectChoice).getImage()
-                : prompt.getSpecialFormSelectChoiceText(selectChoice, FormEntryCaption.TEXT_FORM_IMAGE);
-
-        String errorMsg = null;
-        if (imageURI != null) {
-            try {
-                final File imageFile = new File(ReferenceManager.instance().deriveReference(imageURI).getLocalURI());
-                if (imageFile.exists()) {
-                    Bitmap bitmap = FileUtils.getBitmap(imageFile.getPath(), new BitmapFactory.Options());
-
-                    if (bitmap != null) {
-                        ImageView imageView = new ImageView(context);
-                        if (!WidgetAppearanceUtils.isFlexAppearance(prompt)) {
-                            bitmap = ImageConverter.scaleImageToNewWidth(bitmap, context.getResources().getDisplayMetrics().widthPixels / numColumns);
-                        }
-                        imageView.setImageBitmap(bitmap);
-                        imageView.setAdjustViewBounds(true);
-                        view = imageView;
-                    } else {
-                        errorMsg = context.getString(R.string.file_invalid, imageFile);
-                    }
-                } else {
-                    errorMsg = context.getString(R.string.file_missing, imageFile);
-                }
-            } catch (InvalidReferenceException e) {
-                Timber.e("Image invalid reference due to %s ", e.getMessage());
-            }
-        } else {
-            errorMsg = "";
-        }
-
-        if (errorMsg != null) {
-            TextView missingImage = new TextView(context);
-            missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getQuestionFontSize());
-            missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
-            String choiceText = StringUtils.textToHtml(prompt.getSelectChoiceText(selectChoice)).toString();
-
-            if (!choiceText.isEmpty()) {
-                missingImage.setText(choiceText);
-            } else {
-                Timber.e(errorMsg);
-                missingImage.setText(errorMsg);
-            }
-
-            missingImage.setId(R.id.text_label);
-            view = missingImage;
-        }
-
-        int itemPadding = context.getResources().getDimensionPixelSize(R.dimen.select_item_border);
-        int paddingStart = context.getResources().getDimensionPixelSize(R.dimen.margin_standard);
-
-        view.setPadding(paddingStart, itemPadding, itemPadding, itemPadding);
-
-        return view;
-    }
-
     boolean isItemSelected(List<Selection> selectedItems, @NonNull Selection item) {
         for (Selection selectedItem : selectedItems) {
             if (item.getValue().equalsIgnoreCase(selectedItem.getValue())) {
@@ -235,7 +168,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
     abstract class ViewHolder extends RecyclerView.ViewHolder {
         AudioVideoImageTextLabel audioVideoImageTextLabel;
-        FrameLayout view;
+        NoButtonsItem noButtonsItem;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -243,16 +176,37 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
         void bind(final int index) {
             if (noButtonsMode) {
-                view.removeAllViews();
-                view.addView(setUpNoButtonsView(index));
-                view.setOnClickListener(v -> onItemClick(filteredItems.get(index).selection(), v));
-                view.setEnabled(!prompt.isReadOnly());
-                view.setLongClickable(true);
+                File imageFile = getImageFile(index);
+                noButtonsItem.setUpNoButtonsItem(imageFile, getChoiceText(index), getErrorMsg(imageFile), numColumns > 1);
+                noButtonsItem.setOnClickListener(v -> onItemClick(filteredItems.get(index).selection(), v));
             } else {
                 addMediaFromChoice(audioVideoImageTextLabel, index, createButton(index, audioVideoImageTextLabel), filteredItems);
                 audioVideoImageTextLabel.setEnabled(!prompt.isReadOnly());
                 enableLongClickToAllowRemovingAnswers(itemView);
             }
+        }
+
+        private File getImageFile(int index) {
+            SelectChoice selectChoice = filteredItems.get(index);
+            String imageURI = selectChoice instanceof ExternalSelectChoice
+                    ? ((ExternalSelectChoice) selectChoice).getImage()
+                    : prompt.getSpecialFormSelectChoiceText(selectChoice, FormEntryCaption.TEXT_FORM_IMAGE);
+
+            try {
+                return new File(ReferenceManager.instance().deriveReference(imageURI).getLocalURI());
+            } catch (InvalidReferenceException e) {
+                Timber.w(e);
+            }
+            return null;
+        }
+
+        private String getChoiceText(int index) {
+            SelectChoice selectChoice = filteredItems.get(index);
+            return StringUtils.textToHtml(prompt.getSelectChoiceText(selectChoice)).toString();
+        }
+
+        private String getErrorMsg(File imageFile) {
+            return context.getString(R.string.file_missing, imageFile);
         }
 
         private void enableLongClickToAllowRemovingAnswers(View view) {
