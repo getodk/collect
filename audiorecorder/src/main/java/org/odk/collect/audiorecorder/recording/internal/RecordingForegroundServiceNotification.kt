@@ -10,6 +10,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import org.odk.collect.audiorecorder.R
 import org.odk.collect.audiorecorder.recording.RecordingSession
+import org.odk.collect.strings.format.formatLength
 import org.odk.collect.strings.getLocalizedString
 
 internal class RecordingForegroundServiceNotification(private val service: Service, private val recordingRepository: RecordingRepository) {
@@ -17,7 +18,7 @@ internal class RecordingForegroundServiceNotification(private val service: Servi
     private val notificationIntent = Intent(service, ReturnToAppActivity::class.java)
     private val notificationBuilder = NotificationCompat.Builder(service, NOTIFICATION_CHANNEL)
         .setContentTitle(service.getLocalizedString(R.string.recording))
-        .setContentText(LengthFormatter.formatLength(0))
+        .setContentText(formatLength(0))
         .setSmallIcon(R.drawable.ic_baseline_mic_24)
         .setContentIntent(PendingIntent.getActivity(service, 0, notificationIntent, 0))
         .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -26,7 +27,7 @@ internal class RecordingForegroundServiceNotification(private val service: Servi
 
     private val sessionObserver: (RecordingSession?) -> Unit = {
         if (it != null) {
-            notificationBuilder.setContentText(LengthFormatter.formatLength(it.duration))
+            notificationBuilder.setContentText(formatLength(it.duration))
             notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
         }
     }

@@ -25,7 +25,6 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.audio.AudioControllerView;
-import org.odk.collect.android.audio.LengthFormatter;
 import org.odk.collect.android.databinding.AudioWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.QuestionMediaManager;
@@ -41,6 +40,8 @@ import java.io.File;
 import java.util.Locale;
 
 import timber.log.Timber;
+
+import static org.odk.collect.strings.format.LengthFormatterKt.formatLength;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -83,7 +84,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
             binding.captureButton.setVisibility(GONE);
             binding.chooseButton.setVisibility(GONE);
             binding.recordingDuration.setVisibility(VISIBLE);
-            binding.recordingDuration.setText(LengthFormatter.formatLength(duration));
+            binding.recordingDuration.setText(formatLength(duration));
         });
 
         recordingRequester.onRecordingAvailable(getFormEntryPrompt(), this::setData);
