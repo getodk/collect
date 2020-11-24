@@ -16,10 +16,10 @@ class StubAudioRecorderViewModel(private val stubRecordingPath: String) : AudioR
     var lastSession: String? = null
     var wasCleanedUp = false
 
-    private val isRecording = MutableLiveData(false)
+    private var isRecording = false
     private val currentSession = MutableLiveData<RecordingSession>(null)
 
-    override fun isRecording(): LiveData<Boolean> {
+    override fun isRecording(): Boolean {
         return isRecording
     }
 
@@ -30,12 +30,12 @@ class StubAudioRecorderViewModel(private val stubRecordingPath: String) : AudioR
     override fun start(sessionId: String, output: Output) {
         wasCleanedUp = false
         lastSession = sessionId
-        isRecording.value = true
+        isRecording = true
         currentSession.value = RecordingSession(sessionId, null, 0)
     }
 
     override fun stop() {
-        isRecording.value = false
+        isRecording = false
 
         val newFile = File.createTempFile("temp", ".m4a")
         File(stubRecordingPath).copyTo(newFile, overwrite = true)
@@ -48,7 +48,7 @@ class StubAudioRecorderViewModel(private val stubRecordingPath: String) : AudioR
     }
 
     override fun cleanUp() {
-        isRecording.value = false
+        isRecording = false
         currentSession.value = null
         wasCleanedUp = true
     }

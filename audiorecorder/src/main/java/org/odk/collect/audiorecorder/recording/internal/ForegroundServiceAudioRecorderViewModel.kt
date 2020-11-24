@@ -3,7 +3,6 @@ package org.odk.collect.audiorecorder.recording.internal
 import android.app.Application
 import android.content.Intent
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations.map
 import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel
 import org.odk.collect.audiorecorder.recording.RecordingSession
@@ -15,10 +14,9 @@ import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Com
 
 internal class ForegroundServiceAudioRecorderViewModel internal constructor(private val application: Application, private val recordingRepository: RecordingRepository) : AudioRecorderViewModel() {
 
-    private val _isRecording: LiveData<Boolean> = map(recordingRepository.currentSession) { it != null && it.file == null }
-
-    override fun isRecording(): LiveData<Boolean> {
-        return _isRecording
+    override fun isRecording(): Boolean {
+        val currentSession = recordingRepository.currentSession.value
+        return currentSession != null && currentSession.file == null
     }
 
     override fun getCurrentSession(): LiveData<RecordingSession?> {

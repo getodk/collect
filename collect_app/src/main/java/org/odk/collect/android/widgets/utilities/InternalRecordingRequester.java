@@ -52,7 +52,9 @@ public class InternalRecordingRequester implements RecordingRequester {
 
     @Override
     public void onIsRecordingChanged(Consumer<Boolean> isRecordingListener) {
-        viewModel.isRecording().observe(lifecycleOwner, isRecordingListener::accept);
+        viewModel.getCurrentSession().observe(lifecycleOwner, session -> {
+            isRecordingListener.accept(session != null && session.getFile() == null);
+        });
     }
 
     @Override

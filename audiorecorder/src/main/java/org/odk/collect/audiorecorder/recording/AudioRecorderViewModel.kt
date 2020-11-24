@@ -10,7 +10,7 @@ import java.io.File
  * at a time.
  */
 abstract class AudioRecorderViewModel : ViewModel() {
-    abstract fun isRecording(): LiveData<Boolean>
+    abstract fun isRecording(): Boolean
     abstract fun getCurrentSession(): LiveData<RecordingSession?>
 
     abstract fun start(sessionId: String, output: Output)

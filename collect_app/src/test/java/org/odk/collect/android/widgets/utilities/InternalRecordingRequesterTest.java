@@ -75,16 +75,16 @@ public class InternalRecordingRequesterTest {
     }
 
     @Test
-    public void onIsRecordingChanged_listensToIsRecording() {
-        MutableLiveData<Boolean> liveData = new MutableLiveData<>(false);
-        when(viewModel.isRecording()).thenReturn(liveData);
+    public void onIsRecordingChanged_listensToCurrentSession() {
+        MutableLiveData<RecordingSession> liveData = new MutableLiveData<>(null);
+        when(viewModel.getCurrentSession()).thenReturn(liveData);
 
         Consumer<Boolean> listener = mock(Consumer.class);
         requester.onIsRecordingChanged(listener);
         verify(listener).accept(false);
 
-        liveData.setValue(true);
-        verify(listener).accept(false);
+        liveData.setValue(new RecordingSession("blah", null, 0));
+        verify(listener).accept(true);
     }
 
     @Test

@@ -23,39 +23,34 @@ abstract class AudioRecorderViewModelTest {
 
     @Test
     fun isRecording_whenNoSession_isFalse() {
-        val recording = liveDataTester.activate(viewModel.isRecording())
-
         runBackground()
-        assertThat(recording.value, equalTo(false))
+        assertThat(viewModel.isRecording(), equalTo(false))
     }
 
     @Test
     fun isRecording_whenRecording_isTrue() {
-        val recording = liveDataTester.activate(viewModel.isRecording())
         viewModel.start("session1", Output.AAC)
 
         runBackground()
-        assertThat(recording.value, equalTo(true))
+        assertThat(viewModel.isRecording(), equalTo(true))
     }
 
     @Test
     fun isRecording_afterStop_isFalse() {
-        val recording = liveDataTester.activate(viewModel.isRecording())
         viewModel.start("session1", Output.AAC)
         viewModel.stop()
 
         runBackground()
-        assertThat(recording.value, equalTo(false))
+        assertThat(viewModel.isRecording(), equalTo(false))
     }
 
     @Test
     fun isRecording_afterCleanUp_isFalse() {
-        val recording = liveDataTester.activate(viewModel.isRecording())
         viewModel.start("session1", Output.AAC)
         viewModel.cleanUp()
 
         runBackground()
-        assertThat(recording.value, equalTo(false))
+        assertThat(viewModel.isRecording(), equalTo(false))
     }
 
     @Test
