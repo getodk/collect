@@ -1,4 +1,4 @@
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.fastexternalitemset;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
@@ -12,8 +12,9 @@ import org.javarosa.xpath.XPathNodeset;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.utilities.FileUtil;
+import org.odk.collect.android.utilities.XPathParseTool;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,7 +23,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public class FastExternalItemsReader {
+public class ItemsetReader {
     private static final String QUOTATION_MARK = "\"";
 
     private final FormEntryPrompt formEntryPrompt;
@@ -30,7 +31,7 @@ public class FastExternalItemsReader {
     private final ItemsetDbAdapter adapter;
     private final FileUtil fileUtil;
 
-    public FastExternalItemsReader(FormEntryPrompt formEntryPrompt, XPathParseTool parseTool, ItemsetDbAdapter adapter, FileUtil fileUtil) {
+    public ItemsetReader(FormEntryPrompt formEntryPrompt, XPathParseTool parseTool, ItemsetDbAdapter adapter, FileUtil fileUtil) {
         this.formEntryPrompt = formEntryPrompt;
         this.pathParseTool = parseTool;
         this.adapter = adapter;

@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.dao;
+package org.odk.collect.android.fastexternalitemset;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 
-import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.utilities.FileUtil;
 
 import java.io.File;

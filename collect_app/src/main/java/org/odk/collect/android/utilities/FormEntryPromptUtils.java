@@ -26,7 +26,7 @@ import org.javarosa.core.model.data.MultipleItemsData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.dao.ItemsetDao;
+import org.odk.collect.android.fastexternalitemset.ItemsetDao;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 

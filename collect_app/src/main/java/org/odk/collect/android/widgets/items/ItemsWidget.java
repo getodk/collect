@@ -23,10 +23,10 @@ import org.javarosa.core.model.SelectChoice;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.ItemsetDbAdapter;
+import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.FastExternalItemsReader;
+import org.odk.collect.android.fastexternalitemset.ItemsetReader;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.XPathParseTool;
 import org.odk.collect.android.widgets.QuestionWidget;
@@ -73,7 +73,7 @@ public abstract class ItemsWidget extends QuestionWidget {
 
     private void readFastExternalItems() {
         try {
-            items = new FastExternalItemsReader(getFormEntryPrompt(), new XPathParseTool(), new ItemsetDbAdapter(), new FileUtil()).getItems();
+            items = new ItemsetReader(getFormEntryPrompt(), new XPathParseTool(), new ItemsetDbAdapter(), new FileUtil()).getItems();
         } catch (FileNotFoundException e) {
             showWarning(getContext().getString(R.string.file_missing, e.getMessage()));
         } catch (XPathSyntaxException e) {
