@@ -14,6 +14,8 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
@@ -655,20 +657,22 @@ public class FillBlankFormTest {
 
     @Test
     public void missingFileMessage_shouldBeDisplayedIfExternalFIleIsMissing() {
+        String formsDirPath = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS);
+
         //TestCase55
         new MainMenuPage(rule)
                 .startBlankForm("search_and_select")
-                .assertText("File: /storage/emulated/0/odk/forms/search_and_select-media/nombre.csv is missing.")
-                .assertText("File: /storage/emulated/0/odk/forms/search_and_select-media/nombre2.csv is missing.")
+                .assertText("File: " + formsDirPath + "/search_and_select-media/nombre.csv is missing.")
+                .assertText("File: " + formsDirPath + "/search_and_select-media/nombre2.csv is missing.")
                 .swipeToEndScreen()
                 .clickSaveAndExit()
 
                 .startBlankForm("cascading select test")
                 .clickOnText("Texas")
                 .swipeToNextQuestion()
-                .assertText("File: /storage/emulated/0/odk/forms/select_one_external-media/itemsets.csv is missing.")
+                .assertText("File: " + formsDirPath + "/select_one_external-media/itemsets.csv is missing.")
                 .swipeToNextQuestion()
-                .assertText("File: /storage/emulated/0/odk/forms/select_one_external-media/itemsets.csv is missing.")
+                .assertText("File: " + formsDirPath + "/select_one_external-media/itemsets.csv is missing.")
                 .swipeToNextQuestion(3)
                 .swipeToEndScreen()
                 .clickSaveAndExit()
@@ -678,7 +682,7 @@ public class FillBlankFormTest {
                 .clickGoUpIcon()
                 .clickOnElementInHierarchy(14)
                 .clickOnQuestion("Source15")
-                .assertText("File: /storage/emulated/0/odk/forms/fieldlist-updates_nocsv-media/fruits.csv is missing.")
+                .assertText("File: " + formsDirPath + "/fieldlist-updates_nocsv-media/fruits.csv is missing.")
                 .swipeToEndScreen()
                 .clickSaveAndExit();
     }

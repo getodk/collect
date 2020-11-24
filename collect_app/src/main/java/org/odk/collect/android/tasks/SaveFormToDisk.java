@@ -374,7 +374,7 @@ public class SaveFormToDisk {
         String instancePath = formController.getInstanceFile().getAbsolutePath();
 
         for (String fileName : tempFiles) {
-            mediaUtils.deleteImageFileFromMediaProvider(fileName);
+            mediaUtils.deleteMediaFile(fileName);
         }
 
         progressListener.onProgressUpdate(TranslationHandler.getString(Collect.getInstance(), R.string.survey_saving_saving_message));

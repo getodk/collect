@@ -117,7 +117,7 @@
   <string name="font_size">मजकूर फॉन्ट आकार</string>
   <string name="change_font_size">मजकूर फॉन्ट आकार</string>
   <string name="form_download_progress">%1$s मीडिया फायली मिळवत आहे: %2$s पैकी %3$s</string>
-    <string name="success">यश</string>
+  <string name="success">यश</string>
   <string name="no_forms_uploaded">क्षमस्व, कोणताही फॉर्म अपलोड करण्यात आला नाही</string>
   <string name="upload_results">परिणाम अपलोड करा</string>
   <string name="xform_parse_error">%1$s साठी XForm parse त्रुटी: %2$s गहाळ आहे किंवा अवैध आहे</string>
@@ -280,7 +280,6 @@
   <string name="unrecognized_uri">अपरिचित युरएल: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&amp; Lt; कोणतेही फॉर्म लोड झाले &amp; gt;</string>
-  <string name="settings_successfully_loaded_file_notification">फाइलमधून सेटिंग्ज यशस्वीरित्या लोड झाली</string>
   <string name="corrupt_settings_file_notification">क्षमस्व, सेटिंग्ज फाईल दूषित आहेत आणि हटविल्या गेल्या किंवा पुनर्स्थित केल्या गेल्या पाहिजे</string>
   <string name="selected_invalid_image">निवडलेली फाईल वैध प्रतिमा नाही</string>
   <string name="edited_osm_file">संपादित OSM XML फाइल:</string>
@@ -349,6 +348,7 @@
   <string name="email">ईमेल पत्ता</string>
   <string name="user_defined">वापरकर्ता परिभाषित</string>
   <string name="device_defined">डिव्हाइस-परिभाषित</string>
+  <string name="device_id">डिव्हाइस ID</string>
   <string name="select_date">तारीख निवडा</string>
   <string name="select_time">वेळेची निवड करा</string>
   <string name="no_date_selected">तारीख निवडली नाही</string>
@@ -391,4 +391,11 @@
   <string name="use_device_language">डिव्हाइस भाषा वापरा</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

@@ -136,7 +136,7 @@
   <string name="font_size">Tekstin koko</string>
   <string name="change_font_size">Tekstin koko</string>
   <string name="form_download_progress">%1$s. Haetaan mediatiedostoja: %2$s / %3$s</string>
-    <string name="success">Onnistui</string>
+  <string name="success">Onnistui</string>
   <string name="failures">Epäonnistuneet</string>
   <string name="no_forms_uploaded">Pahoittelut, lomaketta ei siirretty.</string>
   <string name="upload_results">Siirrä tulokset.</string>
@@ -307,6 +307,8 @@
   <string name="save_point">Tallenna GeoPoint</string>
   <string name="get_point">Käynnistä GeoPoint</string>
   <string name="geopoint_view_read_only">Tarkastele GeoPoint</string>
+  <string name="geoshape_view_read_only">Katso GeoShape</string>
+  <string name="geotrace_view_read_only">Katso GeoTrace</string>
   <string name="get_shape">Aloita GeoShape</string>
   <string name="get_trace">Aloita GeoTrace</string>
   <string name="geoshape_title">GeoShape</string>
@@ -362,7 +364,7 @@
   <string name="unrecognized_uri">Tunnistamaton URI: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;ei ladattua lomaketta&gt;</string>
-  <string name="settings_successfully_loaded_file_notification">Asetusten lataaminen tiedostosta onnistui</string>
+  <string name="settings_successfully_loaded_file_notification">Asetukset tuotu onnistuneesti .settings -tiedostosta. Tämä toiminnallisuus poistetaan tulevassa versiossa. Ole hyvä ja käytä sen asemasta konfigurointia QR-koodilla.</string>
   <string name="corrupt_settings_file_notification">Pahoittelut, asetustiedosto on viallinen ja pitäisi poistaa tai korvata</string>
   <string name="selected_invalid_image">Valittu tiedosto ei ole kelvollinen kuva</string>
   <string name="edited_osm_file">Muokattu OSM XML -tiedosto:</string>
@@ -444,7 +446,7 @@
   <string name="email">Sähköpostiosoite</string>
   <string name="user_defined">Käyttäjän määrittelemä</string>
   <string name="device_defined">Laitteen määrittelemä</string>
-  <string name="device_id">Laitetunnus Device ID</string>
+  <string name="device_id">Laitetunnus</string>
   <string name="select_date">Valitse päivämäärä</string>
   <string name="select_time">Valitse aika</string>
   <string name="no_date_selected">Päivämäärä valitsematta</string>
@@ -646,7 +648,6 @@
   <string name="save_legacy_settings">Tallenna vanhanmuotoinen .settings -tiedosto</string>
   <string name="save_legacy_settings_warning">Poistetaan tulevassa versiossa. Käytä QR-koodia yllä.</string>
   <string name="reason_for_changes_description">Tämän lomakkeen muutoksille tarvitaan selitys</string>
-  <string name="scoped_storage_banner_text">Collect-lomakkeet on siirrettävä yksityiseen tallennustilaan Androidin vaatimusten täyttämiseksi. Asentaessa Collect-versiota 1.29 <b>siirtyminen tehdään pakotettuna </b>.</string>
   <string name="scoped_storage_learn_more">Lisätiedot ja siirtyminen</string>
   <string name="storage_migration_completed">Tietojen tallennuksen siirto valmis!</string>
   <string name="scoped_storage_dismiss">Hylkää</string>
@@ -677,4 +678,17 @@
   <string name="security_error">Collect ei saa turvattua yhteyttä palvelimeen %s. Syötitkö URL:in oikein?</string>
   <string name="failure">Epäonnistui</string>
   <string name="form_update_succeeded">Lomakkeen päivitys onnistui</string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <string name="external_app_recording">Käytä ulkoista sovellusta äänen tallentamiseen</string>
+  <!--Text for button that stops audio recording-->
+  <string name="stop_recording">Pysäytä</string>
+  <!--Text to let the user know a recording is in progress-->
+  <string name="recording">Äänitetään…</string>
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <string name="recording_channel">Äänen tallennus</string>
+  <!--Text for button that plays audio clip-->
+  <string name="play_audio">Soita äänitiedosto</string>
+  <!--Text to let the user know a file is being saved-->
+  <string name="saving_file">Tallennetaan tiedostoa</string>
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

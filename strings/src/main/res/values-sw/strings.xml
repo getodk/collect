@@ -132,7 +132,7 @@
   <string name="font_size">Ukubwa wa maandishi</string>
   <string name="change_font_size">Ukubwa wa maandishi</string>
   <string name="form_download_progress">%1$s. inapata kabrasha za media: %2$s kati ya %3$s</string>
-    <string name="success">Mafanikio</string>
+  <string name="success">Mafanikio</string>
   <string name="failures">Zimeshindikana</string>
   <string name="no_forms_uploaded">Pole, hakuna fomu Iliyopakiwa.</string>
   <string name="upload_results">Matokeo ya kupakiwa</string>
@@ -336,7 +336,6 @@
   <string name="unrecognized_uri">URI  Isiyotambulika: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&amp;It;Hakuna fomu iliyowekwa&amp;gt;</string>
-  <string name="settings_successfully_loaded_file_notification">Mpangilio umekamilika kuwekwa katika faili</string>
   <string name="corrupt_settings_file_notification">Samahani, mpangilio wa mafaili yako umeharibika na unatakiwa kufutwa au kubadilishwa</string>
   <string name="selected_invalid_image">Faili lillilochaguliwa sio picha sahihi</string>
   <string name="edited_osm_file">Faili la OSM XML lililohaririwa:</string>
@@ -418,6 +417,7 @@
   <string name="email">Anuwani ya barua pepe</string>
   <string name="user_defined">Mtumiaji ametambulika</string>
   <string name="device_defined">Kifaa kimetambulika</string>
+  <string name="device_id">Utambulisho wa kifaa</string>
   <string name="select_date">Chagua tarehe</string>
   <string name="select_time">Chagua muda</string>
   <string name="no_date_selected">Hakuna tarehe iliyochaguliwa</string>
@@ -576,4 +576,11 @@
   <string name="storage_migration_dialog_title">Uhamiaji wa uhifadhi</string>
   <string name="storage_migration_progress_msg">Uhamiaji unaendelea. \ Hii inaweza kuchukua sekunde chache…</string>
   <string name="preference_not_available">Haipatikani</string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

@@ -90,9 +90,11 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.FormEntryMenuDelegate;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.FormIndexAnimationHandler;
+import org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction;
 import org.odk.collect.android.formentry.FormLoadingDialogFragment;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
+import org.odk.collect.android.formentry.RecordingWarningDialogFragment;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditUtils;
 import org.odk.collect.android.formentry.audit.ChangesReasonPromptDialogFragment;
@@ -186,6 +188,8 @@ import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static android.view.animation.AnimationUtils.loadAnimation;
 import static org.javarosa.form.api.FormEntryController.EVENT_PROMPT_NEW_REPEAT;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SAVE_INCOMPLETE;
+import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.BACKWARDS;
+import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.FORWARDS;
 import static org.odk.collect.android.fragments.BarcodeWidgetScannerFragment.BARCODE_RESULT_KEY;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
@@ -309,8 +313,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private boolean showNavigationButtons;
 
-    private Bundle state;
-
     @Inject
     RxEventBus eventBus;
 
@@ -379,8 +381,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formIndexAnimationHandler = new FormIndexAnimationHandler(this);
         menuDelegate = new FormEntryMenuDelegate(
                 this,
-                () -> getCurrentViewIfODKView().getAnswers(),
-                formIndexAnimationHandler
+                () -> getAnswers(),
+                formIndexAnimationHandler,
+                formSaveViewModel,
+                formEntryViewModel,
+                audioRecorderViewModel,
+                backgroundLocationViewModel
         );
 
         waitingForDataRegistry = new FormControllerWaitingForDataRegistry();
@@ -388,13 +394,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         nextButton = findViewById(R.id.form_forward_button);
         nextButton.setOnClickListener(v -> {
             swipeHandler.setBeenSwiped(true);
-            showNextView();
+            onSwipeForward();
         });
 
         backButton = findViewById(R.id.form_back_button);
         backButton.setOnClickListener(v -> {
             swipeHandler.setBeenSwiped(true);
-            showPreviousView();
+            onSwipeBackward();
         });
 
         questionFontSize = QuestionFontSizeUtils.getQuestionFontSize();
@@ -483,6 +489,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private void formControllerAvailable(@NonNull FormController formController) {
         menuDelegate.formLoaded(formController);
+
         identityPromptViewModel.formLoaded(formController);
         formEntryViewModel.formLoaded(formController);
         formSaveViewModel.formLoaded(formController);
@@ -490,7 +497,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private void setupFields(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            state = savedInstanceState;
             if (savedInstanceState.containsKey(KEY_FORMPATH)) {
                 formPath = savedInstanceState.getString(KEY_FORMPATH);
             }
@@ -688,9 +694,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formLoaderTask.execute(formPath);
     }
 
-    public Bundle getState() {
-        return state;
-    }
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -750,14 +753,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         outState.putBoolean(KEY_AUTO_SAVED, autoSaved);
         outState.putBoolean(KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED, readPhoneStatePermissionRequestNeeded);
         outState.putBoolean(KEY_LOCATION_PERMISSIONS_GRANTED, locationPermissionsPreviouslyGranted);
-
-        if (currentView instanceof ODKView) {
-            outState.putAll(((ODKView) currentView).getState());
-            // This value is originally set in onCreate() method but if you only minimize the app or
-            // block/unblock the screen, onCreate() method might not be called (if the activity is just paused
-            // not stopped https://developer.android.com/guide/components/activities/activity-lifecycle.html)
-            state = outState;
-        }
     }
 
     @Override
@@ -958,7 +953,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     setWidgetData(mediaUri);
                 }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                String filePath = MediaUtils.getDataColumn(this, mediaUri, null, null);
+                String filePath = new MediaUtils().getDataColumn(this, mediaUri, null, null);
                 if (filePath != null) {
                     new File(filePath).delete();
                 }
@@ -1057,7 +1052,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         // These actions should move into the `FormEntryMenuDelegate`
-        FormController formController = getFormController();
         switch (item.getItemId()) {
             case R.id.menu_languages:
                 createLanguageDialog();
@@ -1066,23 +1060,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case R.id.menu_save:
                 // don't exit
                 saveForm(DO_NOT_EXIT, InstancesDaoHelper.isInstanceComplete(false), null, true);
-                return true;
-
-            case R.id.menu_goto:
-                state = null;
-                audioRecorderViewModel.cleanUp();
-
-                if (formController != null && formController.currentPromptIsQuestion()) {
-                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                }
-
-                if (formController != null) {
-                    formController.getAuditEventLogger().flush();
-                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
-                }
-
-                Intent i = new Intent(this, FormHierarchyActivity.class);
-                startActivityForResult(i, RequestCodes.HIERARCHY_ACTIVITY);
                 return true;
         }
 
@@ -1103,8 +1080,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // controls to save data from)
         if (formController != null && formController.currentPromptIsQuestion()
                 && getCurrentViewIfODKView() != null) {
-            HashMap<FormIndex, IAnswerData> answers = getCurrentViewIfODKView()
-                    .getAnswers();
+            HashMap<FormIndex, IAnswerData> answers = getAnswers();
             try {
                 FailedConstraint constraint = formController.saveAllScreenAnswers(answers,
                         evaluateConstraints);
@@ -1121,6 +1097,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return false;
             }
         }
+
         return true;
     }
 
@@ -1191,7 +1168,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public void deleteGroup() {
         FormController formController = getFormController();
         if (formController != null && !formController.indexIsInFieldList()) {
-            showNextView();
+            swipeHandler.setBeenSwiped(true);
+            onSwipeForward();
         } else {
             onScreenRefresh();
         }
@@ -1477,92 +1455,63 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         return handled; // this is always true
     }
 
-    /**
-     * Determines what should be displayed on the screen. Possible options are:
-     * a question, an ask repeat dialog, or the submit screen. Also saves
-     * answers to the data model after checking constraints.
-     */
-    public void showNextView() {
-        state = null;
-        try {
-            FormController formController = getFormController();
-            if (saveBeforeNextView(formController)) {
-                return;
-            }
-
-            int originalEvent = formController.getEvent();
-            int event = formController.stepToNextScreenEvent();
-
-            // Helps prevent transition animation at the end of the form (if user swipes left
-            // she will stay on the same screen)
-            if (originalEvent == event && originalEvent == FormEntryController.EVENT_END_OF_FORM) {
-                swipeHandler.setBeenSwiped(false);
-                return;
-            }
-
-            formIndexAnimationHandler.handle(getFormController().getFormIndex());
-        } catch (JavaRosaException e) {
-            Timber.d(e);
-            createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
-        }
-    }
-
-    /**
-     * If moving backwards is allowed, displays the view for the previous question or field list.
-     * Steps the global {@link FormController} to the previous question and saves answers to the
-     * data model without checking constraints.
-     */
-    public void showPreviousView() {
-        if (allowMovingBackwards) {
-            state = null;
-            FormController formController = getFormController();
-            if (formController != null) {
-                // The answer is saved on a back swipe, but question constraints are ignored.
-                if (formController.currentPromptIsQuestion()) {
-                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                }
-
-                try {
-                    if (formController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
-                        int event = formController.stepToPreviousScreenEvent();
-
-                        // If we are the beginning of the form, there is no previous view to show
-                        if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
-                            event = formController.stepToNextScreenEvent();
-                            swipeHandler.setBeenSwiped(false);
-
-                            if (event != EVENT_PROMPT_NEW_REPEAT) {
-                                // Returning here prevents the same view sliding when user is on the first screen
-                                return;
-                            }
-                        }
-
-                        if (event == FormEntryController.EVENT_GROUP
-                                || event == FormEntryController.EVENT_QUESTION) {
-                            // create savepoint
-                            nonblockingCreateSavePointData();
-                        }
-
-                        formController.getAuditEventLogger().flush();    // Close events
-                        formIndexAnimationHandler.handle(formController.getFormIndex());
-                    }
-                } catch (JavaRosaException e) {
-                    Timber.d(e);
-                    createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
-                }
-            } else {
-                Timber.w("FormController has a null value");
-            }
-
-        } else {
+    @Override
+    public void onSwipeForward() {
+        if (!moveScreen(FORWARDS)) {
             swipeHandler.setBeenSwiped(false);
         }
     }
 
     @Override
-    public void onScreenChange(FormIndexAnimationHandler.Direction direction) {
-        audioRecorderViewModel.cleanUp();
+    public void onSwipeBackward() {
+        if (!moveScreen(BACKWARDS)) {
+            swipeHandler.setBeenSwiped(false);
+        }
+    }
 
+    private boolean moveScreen(Direction direction) {
+        FormController formController = getFormController();
+        if (formController == null) {
+            Timber.w("FormController has a null value");
+            return false;
+        }
+
+        if (audioRecorderViewModel.isRecording().getValue()) {
+            // We want the user to stop recording before changing screens
+            DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
+            return false;
+        }
+
+        if (direction == FORWARDS) {
+            if (formController.getEvent() == FormEntryController.EVENT_END_OF_FORM) {
+                return false;
+            }
+
+            if (!saveBeforeNextView(formController)) {
+                formEntryViewModel.moveForward();
+                formIndexAnimationHandler.handle(formController.getFormIndex());
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            if (formController.isCurrentQuestionFirstInForm() || !allowMovingBackwards) {
+                return false;
+            }
+
+            // The answer is saved on a back swipe, but question constraints are ignored.
+            if (formController.currentPromptIsQuestion()) {
+                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+            }
+
+            formEntryViewModel.moveBackward();
+            formIndexAnimationHandler.handle(formController.getFormIndex());
+            return true;
+        }
+    }
+
+    @Override
+    public void onScreenChange(Direction direction) {
         final int event = getFormController().getEvent();
 
         switch (direction) {
@@ -1570,6 +1519,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 animateToNextView(event);
                 break;
             case BACKWARDS:
+                if (event == FormEntryController.EVENT_GROUP || event == FormEntryController.EVENT_QUESTION) {
+                    // create savepoint
+                    nonblockingCreateSavePointData();
+                }
+
                 animateToPreviousView(event);
                 break;
         }
@@ -1590,7 +1544,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formIndexAnimationHandler.setLastIndex(getFormController().getFormIndex());
     }
 
-    public void animateToNextView(int event) {
+    private void animateToNextView(int event) {
         switch (event) {
             case FormEntryController.EVENT_QUESTION:
             case FormEntryController.EVENT_GROUP:
@@ -1615,7 +1569,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formIndexAnimationHandler.setLastIndex(getFormController().getFormIndex());
     }
 
-    public void animateToPreviousView(int event) {
+    private void animateToPreviousView(int event) {
         View next = createView(event, false);
         showView(next, AnimationType.LEFT);
 
@@ -1643,7 +1597,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
-        formController.getAuditEventLogger().flush();    // Close events waiting for an end time
         return false;
     }
 
@@ -1969,14 +1922,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-    /**
-     * Create a dialog with options to save and exit or quit without
-     * saving
-     */
-    private void createQuitDialog() {
-        showIfNotShowing(QuitFormDialogFragment.class, getSupportFragmentManager());
-    }
-
     @Override
     public void onSaveChangesClicked() {
         saveForm(EXIT, InstancesDaoHelper.isInstanceComplete(false), null, true);
@@ -2226,19 +2171,25 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
-                createQuitDialog();
+                if (audioRecorderViewModel.isRecording().getValue()) {
+                    // We want the user to stop recording before changing screens
+                    DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
+                    return true;
+                }
+
+                showIfNotShowing(QuitFormDialogFragment.class, getSupportFragmentManager());
                 return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 if (event.isAltPressed() && !swipeHandler.beenSwiped()) {
                     swipeHandler.setBeenSwiped(true);
-                    showNextView();
+                    onSwipeForward();
                     return true;
                 }
                 break;
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 if (event.isAltPressed() && !swipeHandler.beenSwiped()) {
                     swipeHandler.setBeenSwiped(true);
-                    showPreviousView();
+                    onSwipeBackward();
                     return true;
                 }
                 break;
@@ -2525,7 +2476,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public void next() {
         if (!swipeHandler.beenSwiped()) {
             swipeHandler.setBeenSwiped(true);
-            showNextView();
+            onSwipeForward();
         }
     }
 
@@ -2802,5 +2753,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     // If an answer has changed after saving one of previous answers that means it has been recalculated automatically
     private boolean isQuestionRecalculated(FormEntryPrompt mutableQuestionBeforeSave, ImmutableDisplayableQuestion immutableQuestionBeforeSave) {
         return !Objects.equals(mutableQuestionBeforeSave.getAnswerText(), immutableQuestionBeforeSave.getAnswerText());
+    }
+
+    private HashMap<FormIndex, IAnswerData> getAnswers() {
+        ODKView currentViewIfODKView = getCurrentViewIfODKView();
+
+        if (currentViewIfODKView != null) {
+            return currentViewIfODKView.getAnswers();
+        } else {
+            return new HashMap<>();
+        }
     }
 }

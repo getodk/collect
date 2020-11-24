@@ -105,7 +105,7 @@
   <string name="font_size">Ukubwa wa fonti za nakala</string>
   <string name="change_font_size">Ukubwa wa fonti za nakala</string>
   <string name="form_download_progress">%1$s. Kupata faili za vyombo vya habari: %2$s kati ya %3$s</string>
-    <string name="success">Mafanikio</string>
+  <string name="success">Mafanikio</string>
   <string name="no_forms_uploaded">Samahani, hakuna fomu ilipakiwa.</string>
   <string name="upload_results">Pakia matokeo</string>
   <string name="choose_sound">Chagua sauti</string>
@@ -209,4 +209,11 @@
   <string name="select_time">Chagua wakati</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

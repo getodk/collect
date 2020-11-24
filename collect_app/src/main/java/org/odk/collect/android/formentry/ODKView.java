@@ -306,15 +306,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         return divider;
     }
 
-    public Bundle getState() {
-        Bundle state = new Bundle();
-        for (QuestionWidget qw : getWidgets()) {
-            state.putAll(qw.getCurrentState());
-        }
-
-        return state;
-    }
-
     /**
      * @return a HashMap of answers entered by the user for this set of widgets
      */

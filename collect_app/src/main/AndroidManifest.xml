@@ -78,7 +78,9 @@ the specific language governing permissions and limitations under the License.
         android:largeHeap="true"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        android:allowBackup="true">
+        android:allowBackup="true"
+        android:requestLegacyExternalStorage="true"
+        android:networkSecurityConfig="@xml/network_security_config">
 
         <provider
             android:name="androidx.core.content.FileProvider"

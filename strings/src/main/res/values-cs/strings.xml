@@ -136,7 +136,7 @@
   <string name="font_size">Velikost písma</string>
   <string name="change_font_size">Velikost písma</string>
   <string name="form_download_progress">%1$s. Stahuji mediální soubory: %2$s z %3$s</string>
-    <string name="success">Úspěch</string>
+  <string name="success">Úspěch</string>
   <string name="failures">Selhání</string>
   <string name="no_forms_uploaded">Žádný dotazník nebyl nahrán.</string>
   <string name="upload_results">Výsledky nahrávání</string>
@@ -307,6 +307,8 @@
   <string name="save_point">Uložit GeoPoint</string>
   <string name="get_point">Začít GeoPoint</string>
   <string name="geopoint_view_read_only">Zobrazit GeoPoint</string>
+  <string name="geoshape_view_read_only">Zobrazit GeoShape</string>
+  <string name="geotrace_view_read_only">Zobrazit GeoTrace</string>
   <string name="get_shape">Začít GeoShape</string>
   <string name="get_trace">Začít GeoTrace</string>
   <string name="geoshape_title">GeoShape</string>
@@ -368,7 +370,7 @@
   <string name="unrecognized_uri">Nerozpoznaný identifikátor URI: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;formulář nenačten&gt;</string>
-  <string name="settings_successfully_loaded_file_notification">Nastavení úspěšně načtena ze souboru</string>
+  <string name="settings_successfully_loaded_file_notification">Nastavení byla úspěšně importována ze souboru .settings. Tato funkce bude v budoucí verzi odebrána. Místo toho použijte konfiguraci QR kódu.</string>
   <string name="corrupt_settings_file_notification">Soubor nastavení je poškozen a měl by být smazán nebo nahrazen</string>
   <string name="selected_invalid_image">Vybraný soubor není platný obrázek</string>
   <string name="edited_osm_file">Upravený soubor XML OSM:</string>
@@ -450,7 +452,7 @@
   <string name="email">Emailová adresa</string>
   <string name="user_defined">Uživatelsky definované</string>
   <string name="device_defined">Definované podle zařízení</string>
-  <string name="device_id">Device ID</string>
+  <string name="device_id">ID zařízení</string>
   <string name="select_date">Vybrat datum</string>
   <string name="select_time">Vybrat čas</string>
   <string name="no_date_selected">Nevybrán žádný datum</string>
@@ -652,7 +654,6 @@
   <string name="save_legacy_settings">Uložit starší soubor .settings na disk</string>
   <string name="save_legacy_settings_warning">Bude odebráno v budoucí verzi. Použijte výše uvedený kód QR.</string>
   <string name="reason_for_changes_description">Musíte vysvětlit důvod změn tohoto formuláře</string>
-  <string name="scoped_storage_banner_text">Aby bylo možné vyhovět požadavkům systému Android, musíte migrovat formuláře Collect do soukromého úložiště. V Collect v1.29 <b>bude migrace vynucena při instalaci</b>.</string>
   <string name="scoped_storage_learn_more">Další informace a migrace</string>
   <string name="storage_migration_completed">Migrace úložiště byla dokončena!</string>
   <string name="scoped_storage_dismiss">Zavrhnout</string>
@@ -684,4 +685,14 @@ Může to trvat několik sekund …</string>
   <string name="security_error">Collect se nemůže bezpečně připojit k serveru na %s. Zadali jste URL správně?</string>
   <string name="failure">Selhání</string>
   <string name="form_update_succeeded">Aktualizace formuláře byla úspěšná</string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <string name="external_app_recording">K nahrávání zvuku použít externí aplikaci</string>
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <string name="recording">Záznam…</string>
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <string name="recording_channel">Záznam zvuku</string>
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

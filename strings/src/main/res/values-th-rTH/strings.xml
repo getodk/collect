@@ -116,7 +116,7 @@
   <string name="font_size">ขนาดตัวอักษร</string>
   <string name="change_font_size">ขนาดอักษร</string>
   <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
-    <string name="success">สำเร็จ</string>
+  <string name="success">สำเร็จ</string>
   <string name="no_forms_uploaded">ขออภัย ไม่สามารถส่งแบบสำรวจได้</string>
   <string name="upload_results">ส่งผลสำรวจ</string>
   <string name="choose_file">เลือกไฟล์</string>
@@ -316,6 +316,7 @@
   <string name="email">ที่อยู่อีเมล์</string>
   <string name="user_defined">กำหนดโดยผู้ใช้งาน</string>
   <string name="device_defined">กำหนดโดยโทรศัพท์</string>
+  <string name="device_id">รหัสประจำเครื่อง</string>
   <string name="select_date">เลือกวันที่</string>
   <string name="select_time">เลือกเวลา</string>
   <string name="no_date_selected">ยังไม่ได้เลือกวันที่</string>
@@ -323,4 +324,11 @@
   <string name="autosend_selector_title">ส่งอัตโนมัติ</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

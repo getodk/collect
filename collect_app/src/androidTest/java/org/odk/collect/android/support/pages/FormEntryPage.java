@@ -280,4 +280,25 @@ public class FormEntryPage extends Page<FormEntryPage> {
         onView(withId(R.id.answer)).check(matches(withText(answer)));
         return this;
     }
+
+    public OkDialog swipeToEndScreenWhileRecording() {
+        flingLeft();
+        OkDialog okDialog = new OkDialog(rule).assertOnPage();
+        assertText(R.string.recording_warning);
+        return okDialog;
+    }
+
+    public OkDialog clickGoToArrowWhileRecording() {
+        onView(withId(R.id.menu_goto)).perform(click());
+        OkDialog okDialog = new OkDialog(rule).assertOnPage();
+        assertText(R.string.recording_warning);
+        return okDialog;
+    }
+
+    public OkDialog clickGeneralSettingsWhileRecording() {
+        onView(withText(getTranslatedString(R.string.general_preferences))).perform(click());
+        OkDialog okDialog = new OkDialog(rule).assertOnPage();
+        assertText(R.string.recording_warning);
+        return okDialog;
+    }
 }

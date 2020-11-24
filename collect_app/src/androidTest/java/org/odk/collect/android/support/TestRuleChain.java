@@ -13,11 +13,11 @@ public class TestRuleChain {
     }
 
     public static RuleChain chain() {
-        return chain(false, new TestDependencies());
+        return chain(true, new TestDependencies());
     }
 
     public static RuleChain chain(TestDependencies testDependencies) {
-        return chain(false, testDependencies);
+        return chain(true, testDependencies);
     }
 
     public static RuleChain chain(boolean useScopedStorage, TestDependencies testDependencies) {

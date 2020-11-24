@@ -135,7 +135,7 @@
   <string name="font_size">Tamanho da Fonte do Texto</string>
   <string name="change_font_size">Tamanho da Fonte do Texto</string>
   <string name="form_download_progress">%1$s. Acessando arquivos de mídia: %2$s de %3$s</string>
-    <string name="success">Sucesso</string>
+  <string name="success">Sucesso</string>
   <string name="failures">Falhas</string>
   <string name="no_forms_uploaded">Desculpe, nenhum formulário foi enviado.</string>
   <string name="upload_results">Enviar Resultados</string>
@@ -362,7 +362,6 @@ Escolher Imagem</string>
   <string name="unrecognized_uri">URL não reconhecida: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;nenhum formulário carregado&gt;</string>
-  <string name="settings_successfully_loaded_file_notification">Configurações do arquivo carregadas com sucesso</string>
   <string name="corrupt_settings_file_notification">Desculpe, o arquivo de configurações está corrompido e deveria ser deletado ou substituído</string>
   <string name="selected_invalid_image">O arquivo selecionado não é uma imagem válida</string>
   <string name="edited_osm_file">Arquivo OSM XML Editado:</string>
@@ -444,6 +443,7 @@ Escolher Imagem</string>
   <string name="email">Endereço de e-mail</string>
   <string name="user_defined">Definidos pelo usuário</string>
   <string name="device_defined">Definidos pelo dispositivo</string>
+  <string name="device_id">ID do dispositivo</string>
   <string name="select_date">Selecionar data</string>
   <string name="select_time">Selecionar hora</string>
   <string name="no_date_selected">Nenhuma data selecionada</string>
@@ -660,4 +660,11 @@ Escolher Imagem</string>
   <string name="preference_not_available">Não está disponível</string>
   <string name="custom_server_paths">Caminhos (paths) personalizados do servidor</string>
   <string name="legacy_custom_server_paths_summary">Será removido em uma versão futura. Por favor use /formList e /submission no seu servidor.</string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

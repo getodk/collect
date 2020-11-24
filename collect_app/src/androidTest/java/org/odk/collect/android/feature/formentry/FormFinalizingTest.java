@@ -21,6 +21,8 @@ public class FormFinalizingTest {
 
     private static final String FORM = "one-question.xml";
 
+    public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
+
     @Rule
     public RuleChain copyFormChain = RuleChain
             .outerRule(GrantPermissionRule.grant(
@@ -29,10 +31,9 @@ public class FormFinalizingTest {
                     Manifest.permission.READ_PHONE_STATE
             ))
             .around(new ResetStateRule())
-            .around(new CopyFormRule(FORM));
+            .around(new CopyFormRule(FORM))
+            .around(rule);
 
-    @Rule
-    public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
 
     @Test
     public void fillingForm_andPressingSaveAndExit_finalizesForm() {

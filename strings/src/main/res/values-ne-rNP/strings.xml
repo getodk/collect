@@ -127,7 +127,7 @@
   <string name="font_size">अक्षरको आकार</string>
   <string name="change_font_size">अक्षरको आकार</string>
   <string name="form_download_progress">%1$s. मिडिया फाइलहरु प्राप्त गरिदैछ: %3$s मध्येको %2$s</string>
-    <string name="success">सफल</string>
+  <string name="success">सफल</string>
   <string name="no_forms_uploaded">माफ गर्नुहोस्, कुनै फारम पनि अपलोड गरिएन |</string>
   <string name="upload_results">अपलोडको परिणामहरु </string>
   <string name="xform_parse_error">X फारमको शब्द-सम्मतीमा गल्ति भयो | %1$s मा %2$s तत्व छुटेको छ |</string>
@@ -311,6 +311,7 @@
   <string name="form_metadata_summary">यी सूचनाहरु प्रयोगकर्ता नाम , ईमेल र / वा फोन नम्बर भरिएको फारमहरुमा डाटा भरेर बुझाउने व्यक्तीको पहिचान गर्न थप गरिनेछन् ।</string>
   <string name="phone_number">फोन नम्बर</string>
   <string name="email">ईमेल</string>
+  <string name="device_id">यन्त्र पहिचान नम्बर</string>
   <string name="select_date">मिति छान्नुहोस्</string>
   <string name="select_time">समय छान्नुहोस्</string>
   <string name="no_date_selected">मिति छानिएको छैन</string>
@@ -345,4 +346,11 @@
   <string name="yes">हो</string>
   <string name="no">होइन</string>
   <string name="stop_video_capture_instruction">रेकर्डिङ सुरु भयो। रोक्न फेरि छुनुहोस् ।</string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

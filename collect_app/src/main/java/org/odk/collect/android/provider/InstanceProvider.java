@@ -35,7 +35,6 @@ import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.utilities.MediaUtils;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -221,13 +220,6 @@ public class InstanceProvider extends ContentProvider {
             // manage the lifetimes of its filled-in form data
             // media attachments.
             if (directory.isDirectory() && !Collect.isODKTablesInstanceDataDirectory(directory)) {
-                // delete any media entries for files in this directory...
-                int images = MediaUtils.deleteImagesInFolderFromMediaProvider(directory);
-                int audio = MediaUtils.deleteAudioInFolderFromMediaProvider(directory);
-                int video = MediaUtils.deleteVideoInFolderFromMediaProvider(directory);
-
-                Timber.i("removed from content providers: %d image files, %d audio files, and %d video files.", images, audio, video);
-
                 // delete all the files in the directory
                 File[] files = directory.listFiles();
                 if (files != null) {

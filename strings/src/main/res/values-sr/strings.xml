@@ -129,7 +129,7 @@
   <string name="font_size">Veličina teksta</string>
   <string name="change_font_size">Veličina teksta</string>
   <string name="form_download_progress">%1$s. Preuzimam media fajlove: %2$s od %3$s</string>
-    <string name="success">Uspjeh</string>
+  <string name="success">Uspjeh</string>
   <string name="failures">Neuspijeh</string>
   <string name="no_forms_uploaded">Nijedan formular nije otpremljen.</string>
   <string name="upload_results">Rezultati otpremljivanja</string>
@@ -339,7 +339,6 @@
   <string name="unrecognized_uri">Nepoznat URL: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;formular nije učitan&gt;</string>
-  <string name="settings_successfully_loaded_file_notification">Podešavanja su uspješno preuzeta iz fajla</string>
   <string name="corrupt_settings_file_notification">Izvini, fajl sa podešavanjima je iskvaren i treba biti obrisan ili zamijenjen</string>
   <string name="selected_invalid_image">Odabrani fajl nije validna slika</string>
   <string name="edited_osm_file">Izmijenjen OSM XML fajl:</string>
@@ -421,6 +420,7 @@
   <string name="email">Email adresa</string>
   <string name="user_defined">Definiše korisnik</string>
   <string name="device_defined">Definiše uređaj</string>
+  <string name="device_id">ID uređaja</string>
   <string name="select_date">Odaberi datum</string>
   <string name="select_time">Odaberi vrijeme</string>
   <string name="no_date_selected">Datum nije odabran</string>
@@ -589,4 +589,11 @@
   <string name="reading_files">Učitavanje fajlova</string>
   <string name="qr_code_not_found">QR kod nije pronađen na odabranoj slici</string>
   <string name="not_granted_permission">Aktivnost koju pokušavate da pokrenete zahtijeva dozvolu koja nije odobrena.</string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

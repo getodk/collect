@@ -75,6 +75,9 @@
   <string name="jump_to_end">الذهاب إلى النهاية</string>
   <string name="jump_to_previous">الذهاب صعودًا</string>
   <string name="loading_form">تحميل الاستمارة</string>
+  <string name="load_remote_form_error">خطأ في تنزيل قائمة الإستمارة</string>
+  <string name="location_accuracy">الدقة: %1$s متر </string>
+  <string name="location_provider">مزود خدمة تحديد الموقع: %s</string>
   <string name="manage_files">حذف الاستمارة المحفوظة</string>
   <string name="mark_finished">حدد الاستمارة كاستمارة منتهية</string>
   <string name="noselect_error">عذرًا، لم تختَر أيّ استمارة!</string>
@@ -97,6 +100,7 @@
   <string name="replace_barcode">استبدال الباركود</string>
   <string name="required_answer_error">عذرًا، يجب الإجابة على هذا السؤال!</string>
   <string name="review_data">تعديل الاستمارة المحفوظة</string>
+  <string name="view_data">عرض الإستمارات المحفوظة</string>
   <string name="review_data_button">تعديل الاستمارة المحفوظة (%s)</string>
   <string name="save_all_answers">حفظ الاستمارة</string>
   <string name="save_enter_data_description">إنّك في نهاية الـ%s.</string>
@@ -132,7 +136,7 @@
   <string name="font_size">حجم الخط</string>
   <string name="change_font_size">حجم الخط</string>
   <string name="form_download_progress">%1$s. الحصول على ملفات الوسائط المتعددة:  %2$s  من %3$s</string>
-    <string name="success">نجاح</string>
+  <string name="success">نجاح</string>
   <string name="failures">فشل</string>
   <string name="no_forms_uploaded">عذرا، لا يوجد استمارة للتحميل.</string>
   <string name="upload_results">تحميل النتائج</string>
@@ -303,6 +307,8 @@
   <string name="save_point">حفظ النقطة</string>
   <string name="get_point">البدء بتحديد النقطة</string>
   <string name="geopoint_view_read_only">عرض نقاط الخريطة</string>
+  <string name="geoshape_view_read_only">عرض GeoShape</string>
+  <string name="geotrace_view_read_only">عرض GeoTrace</string>
   <string name="get_shape">البدء بتحديد مضلع</string>
   <string name="get_trace">البدء بتتبع المسار</string>
   <string name="geoshape_title">مضلع</string>
@@ -346,6 +352,10 @@
     <item quantity="many">%dمتر </item>
     <item quantity="other">%dمتر </item>
   </plurals>
+  <string name="location_status_searching">يتم البحث عن الموقع، يرجى الإنتظار…</string>
+  <string name="location_status_accuracy">دقة الموقع: %.2f متر</string>
+  <string name="location_status_acceptable">دقة الموقع: %.2f متر (مقبول)</string>
+  <string name="location_status_unacceptable">دقة الموقع: %.2f متر (غير مقبول)</string>
   <string name="collection_status_paused">النقاط التي تم إدخالها: %d</string>
   <string name="collection_status_placement">النقاط التي تم إدخالها: %d (انقر لوضع نقاط)</string>
   <string name="collection_status_manual">النقاط التي تم إدخالها: %d (التسجيل اليدوي)</string>
@@ -366,7 +376,7 @@
   <string name="unrecognized_uri">عنوان غير معروف: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&gt;لم يتم تحميل أي استمارات&lt;</string>
-  <string name="settings_successfully_loaded_file_notification">تم تحميل ملف الإعدادت بنجاح</string>
+  <string name="settings_successfully_loaded_file_notification">تم استيراد الإعدادات بنجاح من ملف .settings. ستتم إزالة هذه الوظيفة في إصدار مستقبلي. الرجاء استخدام تكوين رمز QR بدلا من ذلك.</string>
   <string name="corrupt_settings_file_notification">عذرا، ملف الإعدادات تالف ويجب حذفه أو استبداله</string>
   <string name="selected_invalid_image">الملف المحدد ليس صورة بتنسيق مقبول</string>
   <string name="edited_osm_file">تعديل ملف OSM XML:</string>
@@ -381,6 +391,7 @@
   <string name="version_number">الإصدار: %s</string>
   <string name="id_number">المعرف : %s</string>
   <string name="odk_website">زيارة موقع ODK</string>
+  <string name="odk_website_summary">يستخدم ODK لجمع البيانات من أجل الصالح الاجتماعي في البيئات الصعبة.</string>
   <string name="odk_forum">انضم إلى منتدى ODK</string>
   <string name="odk_forum_summary">انضم إلى المنتدى للحصول على الدعم وطلب الميزات والمساهمة بالكود / الترجمات!</string>
   <string name="all_open_source_licenses">مكتبات و تراخيص مفتوحة المصدر</string>
@@ -447,15 +458,24 @@
   <string name="email">البريد الالكتروني</string>
   <string name="user_defined">معرف المستخدم</string>
   <string name="device_defined">معرف الجهاز</string>
+  <string name="device_id">رقم معرف الجهاز</string>
   <string name="select_date">اختر التاريخ</string>
   <string name="select_time">اختر الوقت</string>
   <string name="no_date_selected">لم يتم اختيار تاريخ</string>
   <string name="no_time_selected">لم يتم اختيار وقت</string>
+  <string name="configure_via_qr_code">إعداد عن طريق رمز QR</string>
+  <string name="qr_code">إعدادات رمز QR</string>
+  <string name="scan_qr_code_fragment_title">مسح</string>
+  <string name="view_qr_code_fragment_title">رمز QR</string>
+  <string name="import_qrcode_sd">استيراد رمز QR</string>
   <string name="successfully_imported_settings">تم استيراد الإعدادات بنجاح</string>
   <string name="encoding_max_limit">تم الوصول إلى الحد الأقصى من عدد المحارف: لا يمكن توليد كود QR لجميع الإعدادات</string>
   <string name="share">مشاركة</string>
   <string name="turn_on_flashlight">تشغيل الإضاءة الخلفية</string>
   <string name="turn_off_flashlight">إيقاف الإضاءة الخلفية</string>
+  <string name="qrcode_with_both_passwords">يحوي معلومات حساسة: <b> المدير </b> و <b> كلمات مرور المخدم </b></string>
+  <string name="qrcode_without_passwords">رمز الـ QR لا يحوي <b> المدير </b> أو <b> المخدم </b> كلمات مرور، انقر للقيام بالإعداد</string>
+  <string name="qrcode_with_admin_password">يحتوي على معلومات حساسة: <b> كلمة مرور </b> المدير </string>
   <string name="barcode_scanner_prompt">ضع الباركود داخل المستطيل</string>
   <string name="server_password">كلمة مرور الخادم</string>
   <string name="include_password_dialog">تضمين كلمات المرور في الكود</string>
@@ -471,6 +491,7 @@
   <string name="user_setting_summary">إنقر لإدارة عناصر الإعدادات العامة</string>
   <string name="main_menu_settings">إعدادات القائمة الرئيسة</string>
   <string name="main_menu_settings_summary">إنقر لإدارة عناصر القائمة الرئيسية</string>
+  <string name="app_configuration">إعداد تكوين التطبيق</string>
   <string name="user_access_control">قيود المستخدم</string>
   <string name="autosend_selector_title">الإرسال التلقائي</string>
   <string name="off">مغلق</string>
@@ -634,6 +655,45 @@
   <string name="reason_for_changes">سبب التغيير</string>
   <string name="reason">السبب</string>
   <string name="save">حفظ</string>
+  <string name="save_legacy_settings_warning">ستتم إزالته في إصدار مستقبلي. الرجاء استخدام رمز QR أعلاه.</string>
   <string name="reason_for_changes_description">أنت بحاجة إلى توضيح سبب التغييرات في هذه الاستمارة</string>
   <string name="scoped_storage_learn_more">تعلم المزيد وقم بالترحيل</string>
+  <string name="storage_migration_completed">اكتمل ترحيل التخزين!</string>
+  <string name="storage_migration_dialog_message1">تغيرت متطلبات Android ويجب ترحيل الملفات المستخدمة بواسطة Collect.</string>
+  <string name="storage_migration_more_details">تفاصيل أكثر</string>
+  <string name="try_again">حاول مرة أخرى</string>
+  <string name="migrate">ترحيل</string>
+  <string name="error">خطأ:</string>
+  <string name="storage_migration_not_enough_space">ليس لديك مساحة كافية على وحدة التخزين الداخلية لترحيل بياناتك. يرجى إخلاء بعض المساحة والمحاولة مرة أخرى.</string>
+  <string name="changes_in_progress">الإرسال التلقائي أو تنزيل نموذج فارغ قيد التشغيل. الرجاء معاودة المحاولة في وقت لاحق.</string>
+  <string name="storage_migration_failed">فشل ترحيل البيانات. حاول مرة اخرى.</string>
+  <string name="storage_migration_dialog_title">ترحيل التخزين</string>
+  <string name="storage_migration_progress_msg">الترحيل قيد التقدم.\nقد يستغرق هذا بضع ثوان…</string>
+  <string name="preference_not_available">غير متوفر</string>
+  <string name="custom_server_paths">مسارات مخدم مخصصة</string>
+  <string name="experimental">تجريبي</string>
+  <string name="match_exactly">تتطابق مع السيرفر تمامًا</string>
+  <string name="manual">يدوي</string>
+  <string name="form_update_mode_title">وضع تحديث الإستمارات الفارغة</string>
+  <string name="previously_downloaded_only">فقط الإستمارات التي تم تنزيلها مسبقًا</string>
+  <string name="form_update_frequency_title">تكرار التحديث التلقائي</string>
+  <string name="form_update_error">فشل تحديث الإستمارة</string>
+  <string name="report_to_project_lead">إذا استمرت هذه المشكلة، فأبلغ عنها الشخص الذي طلب منك جمع البيانات.</string>
+  <string name="unreachable_error">التطبيق لا يمكن أن يصل إلى الخادم في %s. هل أدخلت عنوان URL بشكل صحيح؟</string>
+  <string name="security_error">التطبيق لا يمكن أن يصل إلى الخادم في %s بشكل آمن. هل أدخلت عنوان URL بشكل صحيح؟</string>
+  <string name="failure">فشل</string>
+  <string name="form_update_succeeded">نجاح تحديث الإستمارة</string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <string name="external_app_recording">استخدام تطبيق خارجي لتسجيل الصوت</string>
+  <!--Text for button that stops audio recording-->
+  <string name="stop_recording">توقف</string>
+  <!--Text to let the user know a recording is in progress-->
+  <string name="recording">تسجيل…</string>
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <string name="recording_channel">تسجيل الصوت</string>
+  <!--Text for button that plays audio clip-->
+  <string name="play_audio">تشغيل الصوت</string>
+  <!--Text to let the user know a file is being saved-->
+  <string name="saving_file">حفظ الملف</string>
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

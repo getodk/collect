@@ -19,7 +19,7 @@ private var _component: AudioRecorderDependencyComponent? = null
 
 internal fun Context.getComponent(): AudioRecorderDependencyComponent {
     return _component.let {
-        if (it == null && applicationContext is TestApplication) {
+        if (it == null && applicationContext is RobolectricApplication) {
             throw IllegalStateException("Dependencies not specified!")
         }
 
@@ -72,11 +72,11 @@ internal open class AudioRecorderDependencyModule {
     }
 }
 
-internal fun TestApplication.clearDependencies() {
+internal fun RobolectricApplication.clearDependencies() {
     _component = null
 }
 
-internal fun TestApplication.setupDependencies(module: AudioRecorderDependencyModule) {
+internal fun RobolectricApplication.setupDependencies(module: AudioRecorderDependencyModule) {
     _component = DaggerAudioRecorderDependencyComponent.builder()
         .application(this)
         .dependencyModule(module)

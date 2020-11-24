@@ -115,7 +115,7 @@
   <string name="font_size">Mida del text</string>
   <string name="change_font_size">Mida del text</string>
   <string name="form_download_progress">%1$s. Obtenint arxius multimèdia: %2$s de %3$s</string>
-    <string name="success">Correcte</string>
+  <string name="success">Correcte</string>
   <string name="no_forms_uploaded">No s\'ha carregat cap formulari.</string>
   <string name="upload_results">Resultats de la càrrega</string>
   <string name="choose_sound">Escollir so</string>
@@ -268,7 +268,6 @@
   <string name="unrecognized_uri">URI no reconeguda: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;cap formulari carregat&gt;</string>
-  <string name="settings_successfully_loaded_file_notification">Configuració carregada correctament des d\'arxiu</string>
   <string name="corrupt_settings_file_notification">Arxiu de configuració corrupte. Cal se esborrat o reemplaçat</string>
   <string name="selected_invalid_image">L\'arxiu seleccionat no és una imatge vàlida</string>
   <string name="edited_osm_file">Arxiu OSM XML editat:</string>
@@ -303,6 +302,7 @@
   <string name="email">Direcció email</string>
   <string name="user_defined">definit per l\'usuari</string>
   <string name="device_defined">definit pel dispositiu</string>
+  <string name="device_id">ID dispositiu</string>
   <string name="select_date">Selecciona data</string>
   <string name="select_time">Selecciona hora</string>
   <string name="no_date_selected">Data no seleccionada</string>
@@ -317,4 +317,11 @@
   <string name="main_menu_settings">Menú principal de configuració</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

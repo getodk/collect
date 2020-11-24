@@ -193,4 +193,11 @@
   <string name="moving_backwards_title">پیچھے جائیں</string>
   <string name="scoped_storage_dismiss">ختم کریں</string>
   <string name="preference_not_available">موجود نھیں</string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>
