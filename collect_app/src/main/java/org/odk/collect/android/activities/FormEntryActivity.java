@@ -78,6 +78,7 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.backgroundwork.FormSubmitManager;
+import org.odk.collect.android.forms.FormDesignException;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog;
 import org.odk.collect.android.dao.FormsDao;
@@ -1091,9 +1092,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                     return false;
                 }
-            } catch (JavaRosaException e) {
+            } catch (JavaRosaException | FormDesignException e) {
                 Timber.e(e);
-                createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
+                createErrorDialog(e.getMessage(), DO_NOT_EXIT);
                 return false;
             }
         }
@@ -1236,7 +1237,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     Timber.i("Created view for group %s %s",
                             groups.length > 0 ? groups[groups.length - 1].getLongText() : "[top]",
                             prompts.length > 0 ? prompts[0].getQuestionText() : "[no question]");
-                } catch (RuntimeException e) {
+                } catch (RuntimeException | FormDesignException e) {
                     Timber.e(e);
                     // this is badness to avoid a crash.
                     try {
@@ -1680,18 +1681,23 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (formController.getEvent() == FormEntryController.EVENT_QUESTION
                 || formController.getEvent() == FormEntryController.EVENT_GROUP
                 || formController.getEvent() == FormEntryController.EVENT_REPEAT) {
-            FormEntryPrompt[] prompts = getFormController()
-                    .getQuestionPrompts();
-            for (FormEntryPrompt p : prompts) {
-                List<TreeElement> attrs = p.getBindAttributes();
-                for (int i = 0; i < attrs.size(); i++) {
-                    if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
-                        analytics.logEvent(SAVE_INCOMPLETE, "saveIncomplete", Collect.getCurrentFormIdentifierHash());
 
-                        saveForm(false, false, null, false);
-                        autoSaved = true;
+            try {
+                FormEntryPrompt[] prompts = getFormController().getQuestionPrompts();
+                for (FormEntryPrompt p : prompts) {
+                    List<TreeElement> attrs = p.getBindAttributes();
+                    for (int i = 0; i < attrs.size(); i++) {
+                        if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
+                            analytics.logEvent(SAVE_INCOMPLETE, "saveIncomplete", Collect.getCurrentFormIdentifierHash());
+
+                            saveForm(false, false, null, false);
+                            autoSaved = true;
+                        }
                     }
                 }
+            } catch (FormDesignException e) {
+                Timber.e(e);
+                createErrorDialog(e.getMessage(), DO_NOT_EXIT);
             }
         }
     }
@@ -2670,17 +2676,22 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    updateFieldListQuestions(changedWidget.getFormEntryPrompt().getIndex());
+                    try {
+                        updateFieldListQuestions(changedWidget.getFormEntryPrompt().getIndex());
 
-                    odkView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-                        @Override
-                        public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                            if (!odkView.isDisplayed(changedWidget)) {
-                                odkView.scrollTo(changedWidget);
+                        odkView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                            @Override
+                            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                                if (!odkView.isDisplayed(changedWidget)) {
+                                    odkView.scrollTo(changedWidget);
+                                }
+                                odkView.removeOnLayoutChangeListener(this);
                             }
-                            odkView.removeOnLayoutChangeListener(this);
-                        }
-                    });
+                        });
+                    } catch (FormDesignException e) {
+                        Timber.e(e);
+                        createErrorDialog(e.getMessage(), DO_NOT_EXIT);
+                    }
                 }
             });
         }
@@ -2695,7 +2706,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * <p>
      * The widget corresponding to the {@param lastChangedIndex} is never changed.
      */
-    private void updateFieldListQuestions(FormIndex lastChangedIndex) {
+    private void updateFieldListQuestions(FormIndex lastChangedIndex) throws FormDesignException {
         // Save the user-visible state for all questions in this field-list
         FormEntryPrompt[] questionsBeforeSave = Collect.getInstance().getFormController().getQuestionPrompts();
         List<ImmutableDisplayableQuestion> immutableQuestionsBeforeSave = new ArrayList<>();
