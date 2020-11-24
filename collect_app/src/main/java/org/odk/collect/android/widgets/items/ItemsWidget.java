@@ -27,7 +27,7 @@ import org.odk.collect.android.fastexternalitemset.ItemsetDao;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.XPathParseTool;
+import org.odk.collect.android.fastexternalitemset.XPathParseTool;
 import org.odk.collect.android.widgets.QuestionWidget;
 
 import java.io.FileNotFoundException;

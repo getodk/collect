@@ -29,7 +29,6 @@ import org.javarosa.xpath.expr.XPathExpression;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.utilities.XPathParseTool;
 
 import java.io.File;
 import java.io.FileNotFoundException;
