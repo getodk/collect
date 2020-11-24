@@ -8,11 +8,11 @@ import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.R
+import org.odk.collect.audiorecorder.recording.RecordingSession
 import org.odk.collect.strings.getLocalizedString
 
-class RecordingNotification(private val service: Service, private val scheduler: Scheduler) {
+internal class RecordingForegroundServiceNotification(private val service: Service, private val recordingRepository: RecordingRepository) {
 
     private val notificationIntent = Intent(service, ReturnToAppActivity::class.java)
     private val notificationBuilder = NotificationCompat.Builder(service, NOTIFICATION_CHANNEL)
@@ -22,12 +22,27 @@ class RecordingNotification(private val service: Service, private val scheduler:
         .setContentIntent(PendingIntent.getActivity(service, 0, notificationIntent, 0))
         .setPriority(NotificationCompat.PRIORITY_LOW)
 
+    private val notificationManager = (service.getSystemService(NOTIFICATION_SERVICE) as NotificationManager)
+
+    private val sessionObserver: (RecordingSession?) -> Unit = {
+        if (it != null) {
+            notificationBuilder.setContentText(LengthFormatter.formatLength(it.duration))
+            notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
+        }
+    }
+
     fun show() {
         setupNotificationChannel()
         val notification = notificationBuilder
             .build()
 
         service.startForeground(NOTIFICATION_ID, notification)
+        recordingRepository.currentSession.observeForever(sessionObserver)
+    }
+
+    fun dismiss() {
+        recordingRepository.currentSession.removeObserver(sessionObserver)
+        service.stopSelf()
     }
 
     private fun setupNotificationChannel() {
@@ -38,13 +53,8 @@ class RecordingNotification(private val service: Service, private val scheduler:
                 NotificationManager.IMPORTANCE_LOW
             )
 
-            (service.getSystemService(Service.NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(notificationChannel)
+            notificationManager.createNotificationChannel(notificationChannel)
         }
-    }
-
-    fun setDuration(duration: Long) {
-        notificationBuilder.setContentText(LengthFormatter.formatLength(duration))
-        (service.getSystemService(NOTIFICATION_SERVICE) as NotificationManager).notify(NOTIFICATION_ID, notificationBuilder.build())
     }
 
     companion object {

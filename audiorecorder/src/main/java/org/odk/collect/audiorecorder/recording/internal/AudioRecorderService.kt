@@ -22,14 +22,14 @@ class AudioRecorderService : Service() {
     @Inject
     internal lateinit var scheduler: Scheduler
 
-    private var recordingNotification: RecordingNotification? = null
-
+    private lateinit var notification: RecordingForegroundServiceNotification
     private var duration = 0L
     private var durationUpdates: Cancellable? = null
 
     override fun onCreate() {
         super.onCreate()
         getComponent().inject(this)
+        notification = RecordingForegroundServiceNotification(this, recordingRepository)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -39,15 +39,13 @@ class AudioRecorderService : Service() {
                 val output = intent.getSerializableExtra(EXTRA_OUTPUT) as Output
 
                 if (!recorder.isRecording() && sessionId != null) {
+                    notification.show()
+
                     recordingRepository.start(sessionId)
                     recorder.start(output)
-
-                    recordingNotification = RecordingNotification(this, scheduler).apply { show() }
-
                     durationUpdates = scheduler.repeat(
                         {
                             recordingRepository.setDuration(duration)
-                            recordingNotification?.setDuration(duration)
                             duration += 1000
                         },
                         1000L
@@ -78,19 +76,18 @@ class AudioRecorderService : Service() {
 
     private fun stopRecording() {
         durationUpdates?.cancel()
+        notification.dismiss()
 
         val file = recorder.stop()
         recordingRepository.recordingReady(file)
-
-        stopSelf()
     }
 
     private fun cleanUp() {
         durationUpdates?.cancel()
+        notification.dismiss()
 
         recorder.cancel()
         recordingRepository.clear()
-        stopSelf()
     }
 
     companion object {
