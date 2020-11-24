@@ -18,6 +18,7 @@ package org.odk.collect.android.widgets.items;
 
 import android.content.Context;
 
+import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.javarosa.xpath.parser.XPathSyntaxException;
@@ -52,7 +53,8 @@ public abstract class ItemsWidget extends QuestionWidget {
     }
 
     private boolean isFastExternalItemsetWidget() {
-        return getFormEntryPrompt().getQuestion().getAdditionalAttribute(null, "query") != null;
+        QuestionDef questionDef = getFormEntryPrompt().getQuestion();
+        return questionDef != null && questionDef.getAdditionalAttribute(null, "query") != null;
     }
 
     private void readItems() {
