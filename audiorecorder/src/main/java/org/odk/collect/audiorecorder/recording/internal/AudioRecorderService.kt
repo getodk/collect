@@ -3,6 +3,7 @@ package org.odk.collect.audiorecorder.recording.internal
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import org.odk.collect.async.Cancellable
 import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.getComponent
 import org.odk.collect.audiorecorder.recorder.Output
@@ -23,6 +24,9 @@ class AudioRecorderService : Service() {
 
     private var recordingNotification: RecordingNotification? = null
 
+    private var duration = 0L
+    private var durationUpdates: Cancellable? = null
+
     override fun onCreate() {
         super.onCreate()
         getComponent().inject(this)
@@ -39,6 +43,15 @@ class AudioRecorderService : Service() {
                     recorder.start(output)
 
                     recordingNotification = RecordingNotification(this, scheduler).apply { show() }
+
+                    durationUpdates = scheduler.repeat(
+                        {
+                            recordingRepository.setDuration(duration)
+                            recordingNotification?.setDuration(duration)
+                            duration += 1000
+                        },
+                        1000L
+                    )
                 }
             }
 
@@ -64,7 +77,7 @@ class AudioRecorderService : Service() {
     }
 
     private fun stopRecording() {
-        recordingNotification?.dismiss()
+        durationUpdates?.cancel()
 
         val file = recorder.stop()
         recordingRepository.recordingReady(file)
@@ -73,7 +86,7 @@ class AudioRecorderService : Service() {
     }
 
     private fun cleanUp() {
-        recordingNotification?.dismiss()
+        durationUpdates?.cancel()
 
         recorder.cancel()
         recordingRepository.clear()

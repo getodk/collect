@@ -14,6 +14,12 @@ class RecordingRepository {
         _currentSession.value = RecordingSession(sessionId, null, 0)
     }
 
+    fun setDuration(duration: Long) {
+        _currentSession.value?.let {
+            _currentSession.value = it.copy(duration = duration)
+        }
+    }
+
     fun recordingReady(recording: File) {
         _currentSession.value?.let {
             _currentSession.value = it.copy(file = recording)
@@ -21,6 +27,10 @@ class RecordingRepository {
     }
 
     fun clear() {
+        _currentSession.value?.let {
+            it.file?.delete()
+        }
+
         _currentSession.value = null
     }
 }

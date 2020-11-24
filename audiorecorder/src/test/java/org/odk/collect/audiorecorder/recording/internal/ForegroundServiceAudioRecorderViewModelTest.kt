@@ -10,6 +10,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.AudioRecorderDependencyModule
 import org.odk.collect.audiorecorder.RobolectricApplication
 import org.odk.collect.audiorecorder.recorder.Output
@@ -19,6 +20,7 @@ import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelTest
 import org.odk.collect.audiorecorder.setupDependencies
 import org.odk.collect.audiorecorder.support.FakeRecorder
+import org.odk.collect.testshared.FakeScheduler
 import org.robolectric.Robolectric
 import org.robolectric.Shadows.shadowOf
 import java.io.File
@@ -32,6 +34,7 @@ class ForegroundServiceAudioRecorderViewModelTest : AudioRecorderViewModelTest()
 
     private val recordingRepository = RecordingRepository()
     private val fakeRecorder = FakeRecorder()
+    private val scheduler = FakeScheduler()
 
     override val viewModel: AudioRecorderViewModel by lazy {
         AudioRecorderViewModelFactory(application).create(AudioRecorderViewModel::class.java)
@@ -62,6 +65,10 @@ class ForegroundServiceAudioRecorderViewModelTest : AudioRecorderViewModelTest()
                 override fun providesRecordingRepository(): RecordingRepository {
                     return recordingRepository
                 }
+
+                override fun providesScheduler(application: Application): Scheduler {
+                    return scheduler
+                }
             }
         )
     }
@@ -77,5 +84,21 @@ class ForegroundServiceAudioRecorderViewModelTest : AudioRecorderViewModelTest()
         viewModel.stop()
         runBackground()
         assertThat(fakeRecorder.output, equalTo(Output.AMR))
+    }
+
+    @Test
+    fun start_updatesDurationEverySecond() {
+        viewModel.start("blah", Output.AAC)
+        runBackground()
+
+        val currentSession = recordingRepository.currentSession
+        scheduler.runForeground(0)
+        assertThat(currentSession.value?.duration, equalTo(0))
+
+        scheduler.runForeground(500)
+        assertThat(currentSession.value?.duration, equalTo(0))
+
+        scheduler.runForeground(1000)
+        assertThat(currentSession.value?.duration, equalTo(1000))
     }
 }
