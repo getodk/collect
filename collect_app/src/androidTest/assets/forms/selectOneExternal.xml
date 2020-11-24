@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>selectOneExternal</h:title>
+        <model odk:xforms-version="1.0.0">
+            <itext>
+                <translation lang="English">
+                    <text id="/data/state:label">
+                        <value>state</value>
+                    </text>
+                    <text id="/data/state/a1:label">
+                        <value>Texas</value>
+                    </text>
+                    <text id="/data/state/a2:label">
+                        <value>Washington</value>
+                    </text>
+                    <text id="/data/county:label">
+                        <value>county</value>
+                    </text>
+                    <text id="/data/city:label">
+                        <value>city</value>
+                    </text>
+                    <text id="/data/state2:label">
+                        <value>state</value>
+                    </text>
+                    <text id="/data/state2/a1:label">
+                        <value>Texas</value>
+                    </text>
+                    <text id="/data/state2/a2:label">
+                        <value>Washington</value>
+                    </text>
+                    <text id="/data/county2:label">
+                        <value>county</value>
+                    </text>
+                    <text id="/data/city2:label">
+                        <value>city</value>
+                    </text>
+                </translation>
+                <translation lang="French">
+                    <text id="/data/state:label">
+                        <value>Le state</value>
+                    </text>
+                    <text id="/data/state/a1:label">
+                        <value>Le Texas</value>
+                    </text>
+                    <text id="/data/state/a2:label">
+                        <value>La Washington</value>
+                    </text>
+                    <text id="/data/county:label">
+                        <value>Pays</value>
+                    </text>
+                    <text id="/data/city:label">
+                        <value>Ville</value>
+                    </text>
+                    <text id="/data/state2:label">
+                        <value>Le state</value>
+                    </text>
+                    <text id="/data/state2/a1:label">
+                        <value>Le Texas</value>
+                    </text>
+                    <text id="/data/state2/a2:label">
+                        <value>La Washington</value>
+                    </text>
+                    <text id="/data/county2:label">
+                        <value>Pays</value>
+                    </text>
+                    <text id="/data/city2:label">
+                        <value>Ville</value>
+                    </text>
+                </translation>
+            </itext>
+            <instance>
+                <data id="cascading_select_test">
+                    <state />
+                    <county />
+                    <city />
+                    <state2 />
+                    <county2 />
+                    <city2 />
+                    <meta>
+                        <instanceID />
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/state" type="string" />
+            <bind nodeset="/data/county" type="string" />
+            <bind nodeset="/data/city" type="string" />
+            <bind nodeset="/data/state2" type="string" />
+            <bind nodeset="/data/county2" type="string" />
+            <bind nodeset="/data/city2" type="string" />
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string" />
+        </model>
+    </h:head>
+    <h:body>
+        <select1 ref="/data/state">
+            <label ref="jr:itext('/data/state:label')" />
+            <item>
+                <label ref="jr:itext('/data/state/a1:label')" />
+                <value>a1</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/state/a2:label')" />
+                <value>a2</value>
+            </item>
+        </select1>
+        <input query="instance('counties')/root/item[state= /data/state ]" ref="/data/county">
+            <label ref="jr:itext('/data/county:label')" />
+        </input>
+        <input query="instance('cities')/root/item[state= /data/state  and county= /data/county ]" ref="/data/city">
+            <label ref="jr:itext('/data/city:label')" />
+        </input>
+        <select1 appearance="minimal" ref="/data/state2">
+            <label ref="jr:itext('/data/state2:label')" />
+            <hint>minimal</hint>
+            <item>
+                <label ref="jr:itext('/data/state2/a1:label')" />
+                <value>a1</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/state2/a2:label')" />
+                <value>a2</value>
+            </item>
+        </select1>
+        <input appearance="minimal" query="instance('counties')/root/item[state= /data/state2 ]" ref="/data/county2">
+            <label ref="jr:itext('/data/county2:label')" />
+            <hint>minimal</hint>
+        </input>
+        <input appearance="minimal autocomplete" query="instance('cities')/root/item[state= /data/state2  and county= /data/county2 ]" ref="/data/city2">
+            <label ref="jr:itext('/data/city2:label')" />
+            <hint>minimal autocomplete</hint>
+        </input>
+    </h:body>
+</h:html>
