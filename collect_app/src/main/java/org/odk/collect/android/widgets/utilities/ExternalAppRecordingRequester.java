@@ -64,7 +64,7 @@ public class ExternalAppRecordingRequester implements RecordingRequester {
     }
 
     @Override
-    public void onDurationChanged(FormEntryPrompt prompt, Consumer<Long> durationListener) {
+    public void onRecordingInProgress(FormEntryPrompt prompt, Consumer<Long> durationListener) {
         // No-op
     }
 }

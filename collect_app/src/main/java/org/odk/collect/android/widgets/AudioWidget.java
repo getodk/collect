@@ -53,14 +53,16 @@ import static org.odk.collect.strings.format.LengthFormatterKt.formatLength;
 
 @SuppressLint("ViewConstructor")
 public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDataReceiver {
+
     AudioWidgetAnswerBinding binding;
 
     private final AudioPlayer audioPlayer;
     private final RecordingRequester recordingRequester;
     private final QuestionMediaManager questionMediaManager;
-
-    private String binaryName;
     private final AudioFileRequester audioFileRequester;
+
+    private boolean recordingInProgress;
+    private String binaryName;
 
     public AudioWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager, AudioPlayer audioPlayer, RecordingRequester recordingRequester, AudioFileRequester audioFileRequester) {
         super(context, questionDetails);
@@ -72,7 +74,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
 
         binaryName = questionDetails.getPrompt().getAnswerText();
 
-        hideButtonsIfNeeded();
+        updateVisibilities();
         updatePlayerMedia();
 
         recordingRequester.onIsRecordingChanged(isRecording -> {
@@ -80,14 +82,17 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
             binding.chooseButton.setEnabled(!isRecording);
         });
 
-        recordingRequester.onDurationChanged(getFormEntryPrompt(), duration -> {
-            binding.captureButton.setVisibility(GONE);
-            binding.chooseButton.setVisibility(GONE);
-            binding.recordingDuration.setVisibility(VISIBLE);
+        recordingRequester.onRecordingInProgress(getFormEntryPrompt(), duration -> {
+            recordingInProgress = true;
+            updateVisibilities();
+
             binding.recordingDuration.setText(formatLength(duration));
         });
 
-        recordingRequester.onRecordingAvailable(getFormEntryPrompt(), this::setData);
+        recordingRequester.onRecordingAvailable(getFormEntryPrompt(), recording -> {
+            recordingInProgress = false;
+            setData(recording);
+        });
     }
 
     @Override
@@ -114,7 +119,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
     public void clearAnswer() {
         deleteFile();
         widgetValueChanged();
-        hideButtonsIfNeeded();
+        updateVisibilities();
     }
 
     @Override
@@ -151,7 +156,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
                 binaryName = newAudio.getName();
                 Timber.i("Setting current answer to %s", newAudio.getName());
 
-                hideButtonsIfNeeded();
+                updateVisibilities();
                 updatePlayerMedia();
                 widgetValueChanged();
             } else {
@@ -163,10 +168,16 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
         }
     }
 
-    private void hideButtonsIfNeeded() {
-        if (getAnswer() == null) {
+    private void updateVisibilities() {
+        if (recordingInProgress) {
+            binding.captureButton.setVisibility(GONE);
+            binding.chooseButton.setVisibility(GONE);
+            binding.recordingDuration.setVisibility(VISIBLE);
+            binding.audioController.setVisibility(GONE);
+        } else if (getAnswer() == null) {
             binding.captureButton.setVisibility(VISIBLE);
             binding.chooseButton.setVisibility(VISIBLE);
+            binding.recordingDuration.setVisibility(GONE);
             binding.audioController.setVisibility(GONE);
         } else {
             binding.captureButton.setVisibility(GONE);

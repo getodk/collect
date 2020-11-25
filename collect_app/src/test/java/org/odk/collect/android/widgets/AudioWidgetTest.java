@@ -66,20 +66,22 @@ public class AudioWidgetTest {
     }
 
     @Test
-    public void whenPromptDoesNotHaveAnswer_showsButtonsAndHidesAudioController() {
+    public void whenPromptDoesNotHaveAnswer_showsButtons() {
         AudioWidget widget = createWidget(promptWithAnswer(null));
 
+        assertThat(widget.binding.audioController.getVisibility(), is(GONE));
+        assertThat(widget.binding.recordingDuration.getVisibility(), is(GONE));
         assertThat(widget.binding.captureButton.getVisibility(), is(VISIBLE));
         assertThat(widget.binding.chooseButton.getVisibility(), is(VISIBLE));
-        assertThat(widget.binding.audioController.getVisibility(), is(GONE));
     }
 
     @Test
-    public void whenPromptHasAnswer_hidesButtonsAndShowsAudioController() {
+    public void whenPromptHasAnswer_showsAudioController() {
         AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
 
         assertThat(widget.binding.captureButton.getVisibility(), is(GONE));
         assertThat(widget.binding.chooseButton.getVisibility(), is(GONE));
+        assertThat(widget.binding.recordingDuration.getVisibility(), is(GONE));
         assertThat(widget.binding.audioController.getVisibility(), is(VISIBLE));
     }
 
@@ -300,14 +302,23 @@ public class AudioWidgetTest {
     }
 
     @Test
-    public void whenThereIsADuration_showsDurationInsteadOfButtons() {
+    public void whenRecordingInProgress_showsDurationInsteadOfButtons() {
         FormEntryPrompt prompt = promptWithAnswer(null);
         AudioWidget widget = createWidget(prompt);
 
         recordingRequester.setDuration(prompt.getIndex().toString(), 0);
         assertThat(widget.binding.captureButton.getVisibility(), is(GONE));
         assertThat(widget.binding.chooseButton.getVisibility(), is(GONE));
+        assertThat(widget.binding.audioController.getVisibility(), is(GONE));
         assertThat(widget.binding.recordingDuration.getVisibility(), is(VISIBLE));
+    }
+
+    @Test
+    public void whenRecordingInProgress_updatesDuration() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        AudioWidget widget = createWidget(prompt);
+
+        recordingRequester.setDuration(prompt.getIndex().toString(), 0);
         assertThat(widget.binding.recordingDuration.getText(), is("00:00"));
 
         recordingRequester.setDuration(prompt.getIndex().toString(), 42000);
@@ -552,7 +563,7 @@ public class AudioWidgetTest {
         }
 
         @Override
-        public void onDurationChanged(FormEntryPrompt prompt, Consumer<Long> durationListener) {
+        public void onRecordingInProgress(FormEntryPrompt prompt, Consumer<Long> durationListener) {
             durationListeners.put(prompt.getIndex().toString(), durationListener);
         }
 

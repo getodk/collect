@@ -9,7 +9,7 @@ public interface RecordingRequester {
 
     void onIsRecordingChanged(Consumer<Boolean> isRecordingListener);
 
-    void onRecordingAvailable(FormEntryPrompt prompt, Consumer<String> recordingAvailableListener);
+    void onRecordingInProgress(FormEntryPrompt prompt, Consumer<Long> durationListener);
 
-    void onDurationChanged(FormEntryPrompt prompt, Consumer<Long> durationListener);
+    void onRecordingAvailable(FormEntryPrompt prompt, Consumer<String> recordingAvailableListener);
 }

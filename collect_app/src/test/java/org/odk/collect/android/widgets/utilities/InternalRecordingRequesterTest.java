@@ -123,13 +123,13 @@ public class InternalRecordingRequesterTest {
     }
 
     @Test
-    public void whenViewModelDurationUpdates_callsSessionListener() {
+    public void whenViewModelDurationUpdates_callsInProgressListener() {
         FormEntryPrompt prompt = promptWithAnswer(null);
         MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
         when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
 
         Consumer<Long> listener = mock(Consumer.class);
-        requester.onDurationChanged(prompt, listener);
+        requester.onRecordingInProgress(prompt, listener);
 
         sessionLiveData.setValue(new RecordingSession(prompt.getIndex().toString(), null, 1200L));
         verify(listener).accept(1200L);
@@ -142,7 +142,7 @@ public class InternalRecordingRequesterTest {
         when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
 
         Consumer<Long> listener = mock(Consumer.class);
-        requester.onDurationChanged(prompt, listener);
+        requester.onRecordingInProgress(prompt, listener);
 
         sessionLiveData.setValue(new RecordingSession("something else", null, 1200L));
         verifyNoInteractions(listener);

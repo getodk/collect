@@ -72,7 +72,7 @@ public class InternalRecordingRequester implements RecordingRequester {
     }
 
     @Override
-    public void onDurationChanged(FormEntryPrompt prompt, Consumer<Long> durationListener) {
+    public void onRecordingInProgress(FormEntryPrompt prompt, Consumer<Long> durationListener) {
         viewModel.getCurrentSession().observe(lifecycleOwner, session -> {
             if (session != null && session.getId().equals(prompt.getIndex().toString())) {
                 durationListener.accept(session.getDuration());
