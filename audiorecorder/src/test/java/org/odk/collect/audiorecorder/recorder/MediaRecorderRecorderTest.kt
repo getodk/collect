@@ -229,6 +229,10 @@ private class FakeMediaRecorderWrapper : MediaRecorderWrapper {
         released = true
     }
 
+    override fun getMaxAmplitude(): Int {
+        return 0
+    }
+
     fun hasStarted(): Boolean {
         return started
     }

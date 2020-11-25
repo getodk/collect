@@ -18,6 +18,7 @@ internal interface MediaRecorderWrapper {
     fun start()
     fun stop()
     fun release()
+    fun getMaxAmplitude(): Int
 }
 
 class RealMediaRecorderWrapper(private val mediaRecorder: MediaRecorder) : MediaRecorderWrapper {
@@ -60,5 +61,9 @@ class RealMediaRecorderWrapper(private val mediaRecorder: MediaRecorder) : Media
 
     override fun release() {
         mediaRecorder.release()
+    }
+
+    override fun getMaxAmplitude(): Int {
+        return mediaRecorder.maxAmplitude
     }
 }

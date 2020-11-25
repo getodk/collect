@@ -87,7 +87,7 @@ class ForegroundServiceAudioRecorderViewModelTest : AudioRecorderViewModelTest()
     }
 
     @Test
-    fun start_updatesDurationEverySecond() {
+    fun start_incrementsDurationEverySecond() {
         viewModel.start("blah", Output.AAC)
         runBackground()
 
@@ -100,5 +100,21 @@ class ForegroundServiceAudioRecorderViewModelTest : AudioRecorderViewModelTest()
 
         scheduler.runForeground(1000)
         assertThat(currentSession.value?.duration, equalTo(1000))
+    }
+
+    @Test
+    fun start_updatesAmplitude() {
+        viewModel.start("blah", Output.AAC)
+        runBackground()
+
+        val currentSession = recordingRepository.currentSession
+
+        fakeRecorder.amplitude = 12
+        scheduler.runForeground()
+        assertThat(currentSession.value?.amplitude, equalTo(12))
+
+        fakeRecorder.amplitude = 45
+        scheduler.runForeground()
+        assertThat(currentSession.value?.amplitude, equalTo(45))
     }
 }

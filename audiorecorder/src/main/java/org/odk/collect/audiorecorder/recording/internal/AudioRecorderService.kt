@@ -24,6 +24,7 @@ class AudioRecorderService : Service() {
     private lateinit var notification: RecordingForegroundServiceNotification
     private var duration = 0L
     private var durationUpdates: Cancellable? = null
+    private var amplitudeUpdates: Cancellable? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -49,6 +50,8 @@ class AudioRecorderService : Service() {
                         },
                         1000L
                     )
+
+                    amplitudeUpdates = scheduler.repeat({ recordingRepository.setAmplitude(recorder.amplitude) }, 100L)
                 }
             }
 
@@ -74,6 +77,7 @@ class AudioRecorderService : Service() {
     }
 
     private fun stopRecording() {
+        amplitudeUpdates?.cancel()
         durationUpdates?.cancel()
         notification.dismiss()
 
@@ -82,6 +86,7 @@ class AudioRecorderService : Service() {
     }
 
     private fun cleanUp() {
+        amplitudeUpdates?.cancel()
         durationUpdates?.cancel()
         notification.dismiss()
 

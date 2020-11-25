@@ -3,24 +3,22 @@ package org.odk.collect.testshared
 import org.odk.collect.async.Cancellable
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.TaskSpec
+import java.util.LinkedList
 import java.util.function.Consumer
 import java.util.function.Supplier
 
 class FakeScheduler : Scheduler {
 
-    private var foregroundTask: Runnable? = null
+    private var foregroundTasks = LinkedList<Runnable>()
     private var backgroundTask: Runnable? = null
-    private var lastRepeatRun: Long = 0
-    private var repeatTask: Pair<Long, Runnable>? = null
-    private var cancelled = false
-    private var isRepeatRunning = false
+    private var repeatTasks = ArrayList<RepeatTask>()
 
     override fun <T> immediate(foreground: Supplier<T>, background: Consumer<T>) {
         backgroundTask = Runnable { background.accept(foreground.get()) }
     }
 
     override fun immediate(foreground: Runnable) {
-        foregroundTask = foreground
+        foregroundTasks.push(foreground)
     }
 
     override fun networkDeferred(tag: String, spec: TaskSpec) {}
@@ -28,39 +26,36 @@ class FakeScheduler : Scheduler {
     override fun networkDeferred(tag: String, taskSpec: TaskSpec, repeatPeriod: Long) {}
 
     override fun repeat(foreground: Runnable, repeatPeriod: Long): Cancellable {
-        foregroundTask = foreground
-        repeatTask = Pair(repeatPeriod, foreground)
-        isRepeatRunning = true
+        foregroundTasks.add(foreground)
+
+        val task = RepeatTask(repeatPeriod, foreground, 0)
+        repeatTasks.add(task)
+
         return object : Cancellable {
             override fun cancel(): Boolean {
-                isRepeatRunning = false
-                cancelled = true
+                repeatTasks.remove(task)
                 return true
             }
         }
     }
 
     fun runForeground() {
-        if (foregroundTask != null) {
-            foregroundTask!!.run()
-            foregroundTask = null
+        while (foregroundTasks.isNotEmpty()) {
+            foregroundTasks.remove().run()
         }
 
-        repeatTask?.let {
-            it.second.run()
-        }
+        repeatTasks.forEach { it.runnable.run() }
     }
 
     fun runForeground(currentTime: Long) {
-        if (foregroundTask != null) {
-            foregroundTask!!.run()
-            foregroundTask = null
+        while (foregroundTasks.isNotEmpty()) {
+            foregroundTasks.remove().run()
         }
 
-        repeatTask?.let {
-            if ((currentTime - lastRepeatRun) >= it.first) {
-                it.second.run()
-                lastRepeatRun = currentTime
+        repeatTasks.forEach {
+            if ((currentTime - it.lastRun) >= it.interval) {
+                it.runnable.run()
+                it.lastRun = currentTime
             }
         }
     }
@@ -72,12 +67,8 @@ class FakeScheduler : Scheduler {
         }
     }
 
-    fun hasBeenCancelled(): Boolean {
-        return cancelled
-    }
-
     fun isRepeatRunning(): Boolean {
-        return isRepeatRunning
+        return repeatTasks.isNotEmpty()
     }
 
     override fun isRunning(tag: String): Boolean {
@@ -86,3 +77,5 @@ class FakeScheduler : Scheduler {
 
     override fun cancelDeferred(tag: String) {}
 }
+
+private data class RepeatTask(val interval: Long, val runnable: Runnable, var lastRun: Long)

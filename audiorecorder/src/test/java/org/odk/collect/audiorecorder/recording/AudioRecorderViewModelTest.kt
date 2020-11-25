@@ -67,7 +67,7 @@ abstract class AudioRecorderViewModelTest {
         viewModel.start("session1", Output.AAC)
 
         runBackground()
-        assertThat(recording.value, equalTo(RecordingSession("session1", null, 0)))
+        assertThat(recording.value, equalTo(RecordingSession("session1", null, 0, 0)))
     }
 
     @Test
@@ -77,7 +77,7 @@ abstract class AudioRecorderViewModelTest {
         viewModel.stop()
 
         runBackground()
-        assertThat(recording.value, equalTo(RecordingSession("session1", getLastRecordedFile(), 0)))
+        assertThat(recording.value, equalTo(RecordingSession("session1", getLastRecordedFile(), 0, 0)))
     }
 
     @Test

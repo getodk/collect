@@ -7,6 +7,7 @@ internal interface Recorder {
     fun stop(): File
     fun cancel()
 
+    val amplitude: Int
     fun isRecording(): Boolean
 }
 

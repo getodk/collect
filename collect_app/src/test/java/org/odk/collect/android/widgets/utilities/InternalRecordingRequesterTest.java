@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets.utilities;
 
 import android.app.Activity;
+import android.util.Pair;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -83,7 +84,7 @@ public class InternalRecordingRequesterTest {
         requester.onIsRecordingChanged(listener);
         verify(listener).accept(false);
 
-        liveData.setValue(new RecordingSession("blah", null, 0));
+        liveData.setValue(new RecordingSession("blah", null, 0, 0));
         verify(listener).accept(true);
     }
 
@@ -99,7 +100,7 @@ public class InternalRecordingRequesterTest {
 
         Consumer<String> listener = mock(Consumer.class);
         requester.onRecordingAvailable(prompt, listener);
-        sessionLiveData.setValue(new RecordingSession(prompt.getIndex().toString(), file, 0));
+        sessionLiveData.setValue(new RecordingSession(prompt.getIndex().toString(), file, 0, 0));
         answerLiveData.setValue("copiedFile");
 
         verify(listener).accept("copiedFile");
@@ -116,35 +117,35 @@ public class InternalRecordingRequesterTest {
         requester.onRecordingAvailable(prompt, listener);
 
         File file = File.createTempFile("blah", ".mp3");
-        sessionLiveData.setValue(new RecordingSession("something else", file, 0));
+        sessionLiveData.setValue(new RecordingSession("something else", file, 0, 0));
 
         verifyNoInteractions(listener);
         verifyNoInteractions(questionMediaManager);
     }
 
     @Test
-    public void whenViewModelDurationUpdates_callsInProgressListener() {
+    public void whenViewModelSessionUpdates_callsInProgressListener() {
         FormEntryPrompt prompt = promptWithAnswer(null);
         MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
         when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
 
-        Consumer<Long> listener = mock(Consumer.class);
+        Consumer<Pair<Long, Integer>> listener = mock(Consumer.class);
         requester.onRecordingInProgress(prompt, listener);
 
-        sessionLiveData.setValue(new RecordingSession(prompt.getIndex().toString(), null, 1200L));
-        verify(listener).accept(1200L);
+        sessionLiveData.setValue(new RecordingSession(prompt.getIndex().toString(), null, 1200L, 25));
+        verify(listener).accept(new Pair<>(1200L, 25));
     }
 
     @Test
-    public void whenViewModelDurationUpdates_forDifferentSession_doesNothing() {
+    public void whenViewModelSessionUpdates_forDifferentSession_doesNothing() {
         FormEntryPrompt prompt = promptWithAnswer(null);
         MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
         when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
 
-        Consumer<Long> listener = mock(Consumer.class);
+        Consumer<Pair<Long, Integer>> listener = mock(Consumer.class);
         requester.onRecordingInProgress(prompt, listener);
 
-        sessionLiveData.setValue(new RecordingSession("something else", null, 1200L));
+        sessionLiveData.setValue(new RecordingSession("something else", null, 1200L, 0));
         verifyNoInteractions(listener);
     }
 }

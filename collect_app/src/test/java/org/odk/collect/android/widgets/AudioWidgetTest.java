@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets;
 
+import android.util.Pair;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -71,6 +72,7 @@ public class AudioWidgetTest {
 
         assertThat(widget.binding.audioController.getVisibility(), is(GONE));
         assertThat(widget.binding.recordingDuration.getVisibility(), is(GONE));
+        assertThat(widget.binding.waveform.getVisibility(), is(GONE));
         assertThat(widget.binding.captureButton.getVisibility(), is(VISIBLE));
         assertThat(widget.binding.chooseButton.getVisibility(), is(VISIBLE));
     }
@@ -81,6 +83,7 @@ public class AudioWidgetTest {
 
         assertThat(widget.binding.captureButton.getVisibility(), is(GONE));
         assertThat(widget.binding.chooseButton.getVisibility(), is(GONE));
+        assertThat(widget.binding.waveform.getVisibility(), is(GONE));
         assertThat(widget.binding.recordingDuration.getVisibility(), is(GONE));
         assertThat(widget.binding.audioController.getVisibility(), is(VISIBLE));
     }
@@ -302,7 +305,7 @@ public class AudioWidgetTest {
     }
 
     @Test
-    public void whenRecordingInProgress_showsDurationInsteadOfButtons() {
+    public void whenRecordingInProgress_showsDurationAndWaveform() {
         FormEntryPrompt prompt = promptWithAnswer(null);
         AudioWidget widget = createWidget(prompt);
 
@@ -311,6 +314,7 @@ public class AudioWidgetTest {
         assertThat(widget.binding.chooseButton.getVisibility(), is(GONE));
         assertThat(widget.binding.audioController.getVisibility(), is(GONE));
         assertThat(widget.binding.recordingDuration.getVisibility(), is(VISIBLE));
+        assertThat(widget.binding.waveform.getVisibility(), is(VISIBLE));
     }
 
     @Test
@@ -333,16 +337,6 @@ public class AudioWidgetTest {
         File newFile = File.createTempFile("newFile", ".mp3", questionMediaManager.getDir());
         recordingRequester.setRecording(prompt.getIndex().toString(), newFile);
         assertThat(widget.getAnswer().getDisplayText(), equalTo(newFile.getName()));
-    }
-
-    @Test
-    public void whenRecordingAvailable_hidesDuration() throws Exception {
-        FormEntryPrompt prompt = promptWithAnswer(null);
-        AudioWidget widget = createWidget(prompt);
-
-        File newFile = File.createTempFile("newFile", ".mp3", questionMediaManager.getDir());
-        recordingRequester.setRecording(prompt.getIndex().toString(), newFile);
-        assertThat(widget.binding.recordingDuration.getVisibility(), equalTo(GONE));
     }
 
     @Test
@@ -545,7 +539,7 @@ public class AudioWidgetTest {
         FormEntryPrompt requestedRecordingFor;
         private Consumer<Boolean> isRecordingListener;
         private final Map<String, Consumer<String>> recordingAvailableListeners = new HashMap<>();
-        private final Map<String, Consumer<Long>> durationListeners = new HashMap<>();
+        private final Map<String, Consumer<Pair<Long, Integer>>> durationListeners = new HashMap<>();
 
         @Override
         public void requestRecording(FormEntryPrompt prompt) {
@@ -563,7 +557,7 @@ public class AudioWidgetTest {
         }
 
         @Override
-        public void onRecordingInProgress(FormEntryPrompt prompt, Consumer<Long> durationListener) {
+        public void onRecordingInProgress(FormEntryPrompt prompt, Consumer<Pair<Long, Integer>> durationListener) {
             durationListeners.put(prompt.getIndex().toString(), durationListener);
         }
 
@@ -580,7 +574,7 @@ public class AudioWidgetTest {
         }
 
         public void setDuration(String sessionId, long duration) {
-            durationListeners.get(sessionId).accept(duration);
+            durationListeners.get(sessionId).accept(new Pair<>(duration, 0));
         }
     }
 }

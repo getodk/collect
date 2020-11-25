@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -29,6 +30,20 @@
         android:layout_marginBottom="@dimen/margin_standard"
         android:textColor="?colorSecondary"
         tools:text="00:07" />
+
+    <com.visualizer.amplitude.AudioRecordView
+        android:id="@+id/waveform"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:layout_marginHorizontal="@dimen/margin_standard"
+        app:chunkAlignTo="center"
+        app:chunkColor="?colorSecondary"
+        app:chunkMaxHeight="48dp"
+        app:chunkMinHeight="2dp"
+        app:chunkRoundedCorners="true"
+        app:chunkSoftTransition="true"
+        app:chunkSpace="1dp"
+        app:chunkWidth="2dp" />
 
     <org.odk.collect.android.audio.AudioControllerView
         android:id="@+id/audio_controller"

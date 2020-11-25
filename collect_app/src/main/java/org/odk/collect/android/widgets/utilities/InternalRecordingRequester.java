@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets.utilities;
 
 import android.app.Activity;
+import android.util.Pair;
 
 import androidx.lifecycle.LifecycleOwner;
 
@@ -72,10 +73,10 @@ public class InternalRecordingRequester implements RecordingRequester {
     }
 
     @Override
-    public void onRecordingInProgress(FormEntryPrompt prompt, Consumer<Long> durationListener) {
+    public void onRecordingInProgress(FormEntryPrompt prompt, Consumer<Pair<Long, Integer>> durationListener) {
         viewModel.getCurrentSession().observe(lifecycleOwner, session -> {
             if (session != null && session.getId().equals(prompt.getIndex().toString())) {
-                durationListener.accept(session.getDuration());
+                durationListener.accept(new Pair<>(session.getDuration(), session.getAmplitude()));
             }
         });
     }

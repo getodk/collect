@@ -23,4 +23,4 @@ abstract class AudioRecorderViewModel : ViewModel() {
     abstract fun cleanUp()
 }
 
-data class RecordingSession(val id: String, val file: File?, val duration: Long)
+data class RecordingSession(val id: String, val file: File?, val duration: Long, val amplitude: Int)

@@ -114,7 +114,7 @@ class AudioRecorderServiceTest {
     }
 
     @Test
-    fun stopAction_stopsDurationUpdates() {
+    fun stopAction_stopsUpdates() {
         startService(createStartIntent("123"))
 
         val stopIntent = Intent(application, AudioRecorderService::class.java)
@@ -148,7 +148,7 @@ class AudioRecorderServiceTest {
     }
 
     @Test
-    fun cleanUpAction_whileRecording_stopsDurationUpdates() {
+    fun cleanUpAction_whileRecording_stopsUpdates() {
         startService(createStartIntent("123"))
 
         val cancelIntent = Intent(application, AudioRecorderService::class.java)

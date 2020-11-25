@@ -204,7 +204,7 @@ class AudioClipViewModelTest {
     fun background_cancelsScheduler() {
         viewModel.play(Clip("clip1", "file://audio.mp3"))
         viewModel.background()
-        assertThat(fakeScheduler.hasBeenCancelled(), equalTo(true))
+        assertThat(fakeScheduler.isRepeatRunning(), equalTo(false))
     }
 
     @Test
@@ -317,7 +317,7 @@ class AudioClipViewModelTest {
     fun onCleared_cancelsScheduler() {
         viewModel.play(Clip("clip1", "file://audio.mp3"))
         viewModel.onCleared()
-        assertThat(fakeScheduler.hasBeenCancelled(), equalTo(true))
+        assertThat(fakeScheduler.isRepeatRunning(), equalTo(false))
     }
 
     @Test
@@ -326,7 +326,7 @@ class AudioClipViewModelTest {
         val captor = ArgumentCaptor.forClass(MediaPlayer.OnCompletionListener::class.java)
         verify(mediaPlayer).setOnCompletionListener(captor.capture())
         captor.value.onCompletion(mediaPlayer)
-        assertThat(fakeScheduler.hasBeenCancelled(), equalTo(true))
+        assertThat(fakeScheduler.isRepeatRunning(), equalTo(false))
     }
 
     @Test

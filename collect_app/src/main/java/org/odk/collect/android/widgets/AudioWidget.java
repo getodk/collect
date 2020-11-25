@@ -82,11 +82,12 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
             binding.chooseButton.setEnabled(!isRecording);
         });
 
-        recordingRequester.onRecordingInProgress(getFormEntryPrompt(), duration -> {
+        recordingRequester.onRecordingInProgress(getFormEntryPrompt(), session -> {
             recordingInProgress = true;
             updateVisibilities();
 
-            binding.recordingDuration.setText(formatLength(duration));
+            binding.recordingDuration.setText(formatLength(session.first));
+            binding.waveform.update(session.second);
         });
 
         recordingRequester.onRecordingAvailable(getFormEntryPrompt(), recording -> {
@@ -173,16 +174,19 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
             binding.captureButton.setVisibility(GONE);
             binding.chooseButton.setVisibility(GONE);
             binding.recordingDuration.setVisibility(VISIBLE);
+            binding.waveform.setVisibility(VISIBLE);
             binding.audioController.setVisibility(GONE);
         } else if (getAnswer() == null) {
             binding.captureButton.setVisibility(VISIBLE);
             binding.chooseButton.setVisibility(VISIBLE);
             binding.recordingDuration.setVisibility(GONE);
+            binding.waveform.setVisibility(GONE);
             binding.audioController.setVisibility(GONE);
         } else {
             binding.captureButton.setVisibility(GONE);
             binding.chooseButton.setVisibility(GONE);
             binding.recordingDuration.setVisibility(GONE);
+            binding.waveform.setVisibility(GONE);
             binding.audioController.setVisibility(VISIBLE);
         }
 
