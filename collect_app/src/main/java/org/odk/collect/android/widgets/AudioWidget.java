@@ -15,10 +15,10 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.media.MediaMetadataRetriever;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import org.javarosa.core.model.data.IAnswerData;
@@ -87,7 +87,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
             updateVisibilities();
 
             binding.recordingDuration.setText(formatLength(session.first));
-            binding.waveform.update(session.second);
+            binding.waveform.addAmplitude(session.second);
         });
 
         recordingRequester.onRecordingAvailable(getFormEntryPrompt(), recording -> {
@@ -98,12 +98,15 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        binding = AudioWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
+        binding = AudioWidgetAnswerBinding.inflate(LayoutInflater.from(context));
 
         binding.captureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        binding.captureButton.setOnClickListener(v -> recordingRequester.requestRecording(getFormEntryPrompt()));
+        binding.captureButton.setOnClickListener(v -> {
+            binding.waveform.clear();
+            recordingRequester.requestRecording(getFormEntryPrompt());
+        });
         binding.chooseButton.setOnClickListener(v -> audioFileRequester.requestFile(getFormEntryPrompt()));
 
         return binding.getRoot();

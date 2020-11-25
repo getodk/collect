@@ -283,12 +283,13 @@ public class AudioWidgetTest {
     }
 
     @Test
-    public void clickingCaptureButton_requestsRecording() {
+    public void clickingCaptureButton_clearsWaveform() {
         FormEntryPrompt prompt = promptWithAnswer(null);
         AudioWidget widget = createWidget(prompt);
 
+        recordingRequester.setAmplitude(prompt.getIndex().toString(), 11);
         widget.binding.captureButton.performClick();
-        assertThat(recordingRequester.requestedRecordingFor, is(prompt));
+        assertThat(widget.binding.waveform.getLatestAmplitude(), nullValue());
     }
 
     @Test
@@ -327,6 +328,18 @@ public class AudioWidgetTest {
 
         recordingRequester.setDuration(prompt.getIndex().toString(), 42000);
         assertThat(widget.binding.recordingDuration.getText(), is("00:42"));
+    }
+
+    @Test
+    public void whenRecordingInProgress_updatesWaveform() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        AudioWidget widget = createWidget(prompt);
+
+        recordingRequester.setAmplitude(prompt.getIndex().toString(), 5);
+        assertThat(widget.binding.waveform.getLatestAmplitude(), is(5));
+
+        recordingRequester.setAmplitude(prompt.getIndex().toString(), 67);
+        assertThat(widget.binding.waveform.getLatestAmplitude(), is(67));
     }
 
     @Test
@@ -539,7 +552,7 @@ public class AudioWidgetTest {
         FormEntryPrompt requestedRecordingFor;
         private Consumer<Boolean> isRecordingListener;
         private final Map<String, Consumer<String>> recordingAvailableListeners = new HashMap<>();
-        private final Map<String, Consumer<Pair<Long, Integer>>> durationListeners = new HashMap<>();
+        private final Map<String, Consumer<Pair<Long, Integer>>> inProgressListeners = new HashMap<>();
 
         @Override
         public void requestRecording(FormEntryPrompt prompt) {
@@ -558,7 +571,7 @@ public class AudioWidgetTest {
 
         @Override
         public void onRecordingInProgress(FormEntryPrompt prompt, Consumer<Pair<Long, Integer>> durationListener) {
-            durationListeners.put(prompt.getIndex().toString(), durationListener);
+            inProgressListeners.put(prompt.getIndex().toString(), durationListener);
         }
 
         public void startRecording() {
@@ -574,7 +587,11 @@ public class AudioWidgetTest {
         }
 
         public void setDuration(String sessionId, long duration) {
-            durationListeners.get(sessionId).accept(new Pair<>(duration, 0));
+            inProgressListeners.get(sessionId).accept(new Pair<>(duration, 0));
+        }
+
+        public void setAmplitude(String sessionId, int amplitude) {
+            inProgressListeners.get(sessionId).accept(new Pair<>(0L, amplitude));
         }
     }
 }
