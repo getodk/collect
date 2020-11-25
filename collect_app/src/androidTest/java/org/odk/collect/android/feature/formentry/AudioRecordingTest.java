@@ -82,11 +82,7 @@ public class AudioRecordingTest {
     public void loadingAudioQuestionForTheFirstTime_showsInternalRecordingWarning() {
         new MainMenuPage(rule).assertOnPage()
                 .copyForm("audio-question.xml")
-
-                .clickFillBlankForm()
-                .clickOnFormWithAudioWarning("Audio Question")
-                .assertText(R.string.internal_recorder_warning)
-                .clickOK(new FormEntryPage("Audio Question", rule))
+                .startBlankFormIgnoringAudioWarning("Audio Question")
                 .pressBack(new SaveOrIgnoreDialog<>("Audio Question", new MainMenuPage(rule), rule))
                 .clickIgnoreChanges()
 

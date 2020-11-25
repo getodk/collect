@@ -36,7 +36,7 @@ import java.io.ObjectOutputStream;
 import timber.log.Timber;
 
 import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
-import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
+import static org.odk.collect.android.preferences.PreferencesActivity.EXTRA_ADMIN_MODE;
 
 /**
  * Handles admin preferences, which are password-protectable and govern which app features and
@@ -90,7 +90,7 @@ public class AdminPreferencesActivity extends CollectAbstractActivity implements
 
         Fragment fragment = new AdminPreferencesFragment();
         Bundle args = new Bundle();
-        args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
+        args.putBoolean(EXTRA_ADMIN_MODE, true);
         fragment.setArguments(args);
         if (savedInstanceState == null) {
             getSupportFragmentManager()

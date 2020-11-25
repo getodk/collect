@@ -21,6 +21,7 @@ import androidx.test.rule.ActivityTestRule;
 import org.odk.collect.android.R;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -40,5 +41,10 @@ public class OkDialog extends Page<OkDialog> {
     public <D extends Page<D>> D clickOK(D destination) {
         clickOnId(android.R.id.button1);
         return destination.assertOnPage();
+    }
+
+    public FormManagementPage clickChange() {
+        onView(withText(R.string.internal_recorder_warning_go_to_settings)).inRoot(isDialog()).perform(click());
+        return new FormManagementPage(rule);
     }
 }

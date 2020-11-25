@@ -46,6 +46,8 @@ import static org.odk.collect.android.preferences.utilities.PreferencesUtils.dis
 
 public class FormManagementPreferences extends BasePreferenceFragment {
 
+    public static final String ARG_EXTERNAL_RECORDING = "external_recording";
+
     @Inject
     Analytics analytics;
 
@@ -73,6 +75,10 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         initGuidancePrefs();
 
         updateDisabledPrefs();
+
+        if (getArguments() != null && getArguments().getBoolean(ARG_EXTERNAL_RECORDING, false)) {
+            scrollToPreference(GeneralKeys.KEY_EXTERNAL_APP_RECORDING);
+        }
     }
 
     @Override

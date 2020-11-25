@@ -20,7 +20,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 
 import javax.inject.Inject;
 
-import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
+import static org.odk.collect.android.preferences.PreferencesActivity.EXTRA_ADMIN_MODE;
 
 public abstract class BasePreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -82,6 +82,6 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat im
     }
 
     protected boolean isInAdminMode() {
-        return getArguments() != null && getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false);
+        return getArguments() != null && getArguments().getBoolean(EXTRA_ADMIN_MODE, false);
     }
 }

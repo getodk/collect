@@ -779,6 +779,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             return;
         }
 
+        // Returning from settings so need to reload
+        if (requestCode == RequestCodes.CHANGE_SETTINGS) {
+            onScreenRefresh();
+            return;
+        }
+
         if (resultCode == RESULT_CANCELED) {
             waitingForDataRegistry.cancelWaitingForData();
             return;

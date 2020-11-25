@@ -21,6 +21,7 @@ import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.support.RunnableRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
+import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.utilities.ActivityAvailability;
@@ -93,6 +94,23 @@ public class ExternalAudioRecordingTest {
 
                 .copyForm("audio-question.xml")
                 .startBlankFormIgnoringAudioWarning("Audio Question")
+                .clickOnString(R.string.capture_audio)
+                .assertTextNotDisplayed(R.string.stop_recording)
+                .assertTextNotDisplayed(R.string.capture_audio)
+                .assertContentDescriptionDisplayed(R.string.play_audio);
+    }
+
+    @Test
+    public void onAudioQuestion_withoutAudioQuality_andUserUsesWarningToSwitchToExternal_usesExternalRecorder() {
+        new MainMenuPage(rule)
+                .copyForm("audio-question.xml")
+                .clickFillBlankForm()
+                .clickOnFormWithAudioWarning("Audio Question")
+                .assertText(R.string.internal_recorder_warning)
+                .clickChange()
+                .clickOnString(R.string.external_app_recording) // Shouldn't need to scroll
+                .pressBack(new FormEntryPage("Audio Question", rule))
+
                 .clickOnString(R.string.capture_audio)
                 .assertTextNotDisplayed(R.string.stop_recording)
                 .assertTextNotDisplayed(R.string.capture_audio)

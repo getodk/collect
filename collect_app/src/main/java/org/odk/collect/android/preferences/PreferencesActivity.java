@@ -32,7 +32,8 @@ import javax.inject.Inject;
 public class PreferencesActivity extends CollectAbstractActivity {
 
     public static final String TAG = "GeneralPreferencesFragment";
-    public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
+    public static final String EXTRA_ADMIN_MODE = "adminMode";
+    public static final String EXTRA_EXTERNAL_RECORDING = "external_recording";
 
     private OnBackPressedListener onBackPressedListener;
 
@@ -49,12 +50,25 @@ public class PreferencesActivity extends CollectAbstractActivity {
 
         setTitle(R.string.general_preferences);
         if (savedInstanceState == null) {
-            Fragment fragment = new GeneralPreferencesFragment();
-            fragment.setArguments(getIntent().getExtras());
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.preferences_fragment_container, fragment, TAG)
-                    .commit();
+            if (getIntent().getBooleanExtra(EXTRA_EXTERNAL_RECORDING, false)) {
+                Fragment fragment = new FormManagementPreferences();
+
+                Bundle args = new Bundle();
+                args.putBoolean(FormManagementPreferences.ARG_EXTERNAL_RECORDING, true);
+                fragment.setArguments(args);
+
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.preferences_fragment_container, fragment, TAG)
+                        .commit();
+            } else {
+                Fragment fragment = new GeneralPreferencesFragment();
+                fragment.setArguments(getIntent().getExtras());
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.preferences_fragment_container, fragment, TAG)
+                        .commit();
+            }
         }
     }
 

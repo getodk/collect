@@ -68,6 +68,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.MetaKeys;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileUtils;
@@ -198,7 +199,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         showInternalRecorderWarningIfNeeded(context);
     }
 
-    private void showInternalRecorderWarningIfNeeded(Context context) {
+    private void showInternalRecorderWarningIfNeeded(ComponentActivity activity) {
         SharedPreferences metaPrefs = preferencesProvider.getMetaSharedPreferences();
         SharedPreferences adminPrefs = preferencesProvider.getAdminSharedPreferences();
 
@@ -207,9 +208,15 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         boolean externalRecordingDisabled = !adminPrefs.getBoolean(AdminKeys.KEY_EXTERNAL_APP_RECORDING, true);
 
         if (audioWidgetOnScreen && !warningAlreadyShown && !externalRecordingDisabled) {
-            new MaterialAlertDialogBuilder(context)
+            new MaterialAlertDialogBuilder(activity)
                     .setMessage(R.string.internal_recorder_warning)
                     .setPositiveButton(R.string.ok, null)
+                    .setNegativeButton(R.string.internal_recorder_warning_go_to_settings, (dialog, which) -> {
+                        Intent intent = new Intent(activity, PreferencesActivity.class);
+                        intent.putExtra(PreferencesActivity.EXTRA_EXTERNAL_RECORDING, true);
+
+                        activity.startActivityForResult(intent, RequestCodes.CHANGE_SETTINGS);
+                    })
                     .show();
 
             metaPrefs.edit()
