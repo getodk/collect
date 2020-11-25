@@ -80,6 +80,10 @@
             android:title="@string/image_size_title"
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
+            android:key="external_app_recording"
+            android:title="@string/external_app_recording"
+            app:iconSpaceReserved="false" />
+        <CheckBoxPreference
             android:key="guidance_hint"
             android:title="@string/guidance_hint_title"
             app:iconSpaceReserved="false" />

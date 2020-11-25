@@ -34,6 +34,7 @@ public final class AdminKeys {
     public static final String KEY_CHANGE_FONT_SIZE            = "change_font_size";
     public static final String KEY_NAVIGATION                  = "change_navigation";
     public static final String KEY_SHOW_SPLASH_SCREEN          = "show_splash_screen";
+    public static final String KEY_EXTERNAL_APP_RECORDING      = "external_app_recording";
 
     static final String KEY_MAPS                                = "maps";
 
@@ -94,7 +95,8 @@ public final class AdminKeys {
             ag(KEY_CONSTRAINT_BEHAVIOR,        GeneralKeys.KEY_CONSTRAINT_BEHAVIOR),
 
             ag(KEY_ANALYTICS,                  GeneralKeys.KEY_ANALYTICS),
-            ag(KEY_FORM_UPDATE_MODE,           GeneralKeys.KEY_FORM_UPDATE_MODE)
+            ag(KEY_FORM_UPDATE_MODE,           GeneralKeys.KEY_FORM_UPDATE_MODE),
+            ag(KEY_EXTERNAL_APP_RECORDING,     GeneralKeys.KEY_EXTERNAL_APP_RECORDING)
     };
 
     /** Admin keys other than those in adminToGeneral above */
