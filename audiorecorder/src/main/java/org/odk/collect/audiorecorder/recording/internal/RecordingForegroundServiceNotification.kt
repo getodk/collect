@@ -8,6 +8,7 @@ import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.Observer
 import org.odk.collect.audiorecorder.R
 import org.odk.collect.audiorecorder.recording.RecordingSession
 import org.odk.collect.strings.format.formatLength
@@ -25,7 +26,7 @@ internal class RecordingForegroundServiceNotification(private val service: Servi
 
     private val notificationManager = (service.getSystemService(NOTIFICATION_SERVICE) as NotificationManager)
 
-    private val sessionObserver: (RecordingSession?) -> Unit = {
+    private val sessionObserver = Observer<RecordingSession?> {
         if (it != null) {
             notificationBuilder.setContentText(formatLength(it.duration))
             notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
