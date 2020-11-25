@@ -45,30 +45,22 @@ public abstract class ItemsWidget extends QuestionWidget {
 
     public ItemsWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
-        if (isFastExternalItemsetWidget()) {
+        if (isFastExternalItemsetUsed()) {
             readFastExternalItems();
+        } else if (isSearchPulldataItemsetUsed()) {
+            readSearchPulldataItems();
         } else {
-            readItems();
+            items = getFormEntryPrompt().getSelectChoices();
         }
     }
 
-    private boolean isFastExternalItemsetWidget() {
+    private boolean isFastExternalItemsetUsed() {
         QuestionDef questionDef = getFormEntryPrompt().getQuestion();
         return questionDef != null && questionDef.getAdditionalAttribute(null, "query") != null;
     }
 
-    private void readItems() {
-        // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(getFormEntryPrompt().getAppearanceHint());
-        if (xpathFuncExpr != null) {
-            try {
-                items = ExternalDataUtil.populateExternalChoices(getFormEntryPrompt(), xpathFuncExpr);
-            } catch (FileNotFoundException e) {
-                showWarning(getContext().getString(R.string.file_missing, e.getMessage()));
-            }
-        } else {
-            items = getFormEntryPrompt().getSelectChoices();
-        }
+    private boolean isSearchPulldataItemsetUsed() {
+        return ExternalDataUtil.getSearchXPathExpression(getFormEntryPrompt().getAppearanceHint()) != null;
     }
 
     private void readFastExternalItems() {
@@ -78,6 +70,16 @@ public abstract class ItemsWidget extends QuestionWidget {
             showWarning(getContext().getString(R.string.file_missing, e.getMessage()));
         } catch (XPathSyntaxException e) {
             showWarning(getContext().getString(R.string.parser_exception, e.getMessage()));
+        }
+    }
+
+    private void readSearchPulldataItems() {
+        // SurveyCTO-added support for dynamic select content (from .csv files)
+        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(getFormEntryPrompt().getAppearanceHint());
+        try {
+            items = ExternalDataUtil.populateExternalChoices(getFormEntryPrompt(), xpathFuncExpr);
+        } catch (FileNotFoundException e) {
+            showWarning(getContext().getString(R.string.file_missing, e.getMessage()));
         }
     }
 
