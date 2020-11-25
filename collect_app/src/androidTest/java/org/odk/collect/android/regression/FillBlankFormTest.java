@@ -704,29 +704,6 @@ public class FillBlankFormTest {
     }
 
     @Test
-    public void backwardButton_shouldNotBeClickableOnTheFirstFormPage() {
-        //TestCase14
-        new MainMenuPage(rule)
-                .startBlankForm("All widgets")
-                .checkAreNavigationButtonsNotDisplayed()
-                .clickOptionsIcon()
-                .clickGeneralSettings()
-                .clickOnUserInterface()
-                .clickNavigation()
-                .clickUseNavigationButtons()
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new FormEntryPage("All widgets", rule))
-                .checkBackNavigationButtonIsNotsDisplayed()
-                .checkNextNavigationButtonIsDisplayed()
-                .rotateToLandscape(new FormEntryPage("All widgets", rule))
-                .checkBackNavigationButtonIsNotsDisplayed()
-                .checkNextNavigationButtonIsDisplayed()
-                .rotateToPortrait(new FormEntryPage("All widgets", rule))
-                .checkBackNavigationButtonIsNotsDisplayed()
-                .checkNextNavigationButtonIsDisplayed();
-    }
-
-    @Test
     public void groups_shouldBeVisibleInHierarchyView() {
         //TestCase28
         new MainMenuPage(rule)
