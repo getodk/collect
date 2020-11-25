@@ -16,6 +16,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
+import org.odk.collect.android.support.pages.AdminSettingsPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.OkDialog;
@@ -90,6 +91,22 @@ public class AudioRecordingTest {
                 .clickIgnoreChanges()
 
                 // Check that the warning isn't shown again
+                .clickFillBlankForm()
+                .clickOnForm("Audio Question")
+                .assertQuestion("What does it sound like?");
+    }
+
+    @Test
+    public void loadingAudioQuestionForTheFirstTime_whenAdminHasDisabledExternal_recordingDoesNotShowWarning() {
+        new MainMenuPage(rule).assertOnPage()
+                .copyForm("audio-question.xml")
+                .clickOnMenu()
+                .clickAdminSettings()
+                .clickOnString(R.string.user_settings)
+                .scrollToRecyclerViewItemAndClickText(R.string.external_app_recording)
+                .pressBack(new AdminSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
+
                 .clickFillBlankForm()
                 .clickOnForm("Audio Question")
                 .assertQuestion("What does it sound like?");

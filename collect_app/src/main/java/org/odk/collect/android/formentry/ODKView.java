@@ -66,6 +66,7 @@ import org.odk.collect.android.formentry.media.PromptAutoplayer;
 import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.MetaKeys;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
@@ -199,10 +200,13 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
     private void showInternalRecorderWarningIfNeeded(Context context) {
         SharedPreferences metaPrefs = preferencesProvider.getMetaSharedPreferences();
+        SharedPreferences adminPrefs = preferencesProvider.getAdminSharedPreferences();
+
         boolean audioWidgetOnScreen = widgets.stream().anyMatch(widget -> widget instanceof AudioWidget);
         boolean warningAlreadyShown = metaPrefs.getBoolean(MetaKeys.KEY_SHOWN_INTERNAL_RECORDER_WARNING, false);
+        boolean externalRecordingDisabled = !adminPrefs.getBoolean(AdminKeys.KEY_EXTERNAL_APP_RECORDING, true);
 
-        if (audioWidgetOnScreen && !warningAlreadyShown) {
+        if (audioWidgetOnScreen && !warningAlreadyShown && !externalRecordingDisabled) {
             new MaterialAlertDialogBuilder(context)
                     .setMessage(R.string.internal_recorder_warning)
                     .setPositiveButton(R.string.ok, null)
