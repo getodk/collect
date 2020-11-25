@@ -19,13 +19,13 @@ import org.robolectric.annotation.LooperMode;
 import timber.log.Timber;
 
 import static junit.framework.Assert.assertFalse;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
+import static org.odk.collect.android.preferences.PreferencesActivity.EXTRA_ADMIN_MODE;
 import static org.robolectric.Shadows.shadowOf;
 import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 
@@ -90,7 +90,7 @@ public class AdminPreferencesActivityTest {
         Intent expectedIntent = new Intent(activityController.get(), PreferencesActivity.class);
         Intent actual = shadowOf(RuntimeEnvironment.application).getNextStartedActivity();
         assertThat(expectedIntent.getComponent(), is(actual.getComponent()));
-        assertThat(actual.getExtras().getBoolean(INTENT_KEY_ADMIN_MODE), is(true));
+        assertThat(actual.getExtras().getBoolean(EXTRA_ADMIN_MODE), is(true));
     }
 
     @Test

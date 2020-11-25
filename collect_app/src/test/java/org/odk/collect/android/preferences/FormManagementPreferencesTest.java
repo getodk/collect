@@ -20,15 +20,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 import static org.odk.collect.android.preferences.FormUpdateMode.MANUAL;
 import static org.odk.collect.android.preferences.FormUpdateMode.MATCH_EXACTLY;
 import static org.odk.collect.android.preferences.FormUpdateMode.PREVIOUSLY_DOWNLOADED_ONLY;
-import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORM_UPDATE_MODE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
-import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
+import static org.odk.collect.android.preferences.PreferencesActivity.EXTRA_ADMIN_MODE;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(AndroidJUnit4.class)
@@ -188,7 +188,7 @@ public class FormManagementPreferencesTest {
     @Test
     public void visiblePreferences_shouldBeVisibleIfOpenedFromAdminPreferences() {
         Bundle args = new Bundle();
-        args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
+        args.putBoolean(EXTRA_ADMIN_MODE, true);
 
         FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class, args);
         scenario.onFragment(fragment -> {
@@ -254,7 +254,7 @@ public class FormManagementPreferencesTest {
         adminSharedPreferences.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false);
 
         Bundle args = new Bundle();
-        args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
+        args.putBoolean(EXTRA_ADMIN_MODE, true);
 
         FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class, args);
         scenario.onFragment(fragment -> {

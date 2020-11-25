@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
-import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
+import static org.odk.collect.android.preferences.PreferencesActivity.EXTRA_ADMIN_MODE;
 
 @RunWith(AndroidJUnit4.class)
 public class IdentityPreferencesFragmentTest {
@@ -29,7 +29,7 @@ public class IdentityPreferencesFragmentTest {
     @Test
     public void visiblePreferences_shouldBeVisibleIfOpenedFromAdminPreferences() {
         Bundle args = new Bundle();
-        args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
+        args.putBoolean(EXTRA_ADMIN_MODE, true);
 
         FragmentScenario<IdentityPreferences> scenario = FragmentScenario.launch(IdentityPreferences.class, args);
         scenario.onFragment(fragment -> {
@@ -56,7 +56,7 @@ public class IdentityPreferencesFragmentTest {
         adminSharedPreferences.save(AdminKeys.KEY_ANALYTICS, false);
 
         Bundle args = new Bundle();
-        args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
+        args.putBoolean(EXTRA_ADMIN_MODE, true);
 
         FragmentScenario<IdentityPreferences> scenario = FragmentScenario.launch(IdentityPreferences.class, args);
         scenario.onFragment(fragment -> {

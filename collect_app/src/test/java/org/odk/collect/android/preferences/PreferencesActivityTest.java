@@ -19,7 +19,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
+import static org.odk.collect.android.preferences.PreferencesActivity.EXTRA_ADMIN_MODE;
 
 @LooperMode(LooperMode.Mode.PAUSED)
 @RunWith(ParameterizedRobolectricTestRunner.class)
@@ -43,7 +43,7 @@ public class PreferencesActivityTest {
     @Before
     public void setUp() throws Exception {
         Intent intent = new Intent();
-        intent.putExtra(INTENT_KEY_ADMIN_MODE, accessedFromAdminSettings);
+        intent.putExtra(EXTRA_ADMIN_MODE, accessedFromAdminSettings);
         activityController = Robolectric
                 .buildActivity(PreferencesActivity.class, intent)
                 .setup();
