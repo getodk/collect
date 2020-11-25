@@ -252,5 +252,11 @@ public class MainMenuPage extends Page<MainMenuPage> {
         onView(withText(getTranslatedString(R.string.manage_files))).perform(scrollTo(), click());
         return new DeleteSavedFormPage(rule).assertOnPage();
     }
+
+    public FormEntryPage startBlankFormIgnoringAudioWarning(String formTitle) {
+        return clickFillBlankForm()
+                .clickOnFormWithAudioWarning(formTitle)
+                .clickOK(new FormEntryPage(formTitle, rule));
+    }
 }
 

@@ -14,6 +14,8 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.FormActivityTestRule;
 import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.pages.FormEntryPage;
+import org.odk.collect.android.support.pages.OkDialog;
 import org.odk.collect.android.utilities.ActivityAvailability;
 
 import tools.fastlane.screengrab.Screengrab;
@@ -345,6 +347,7 @@ public class AllWidgetsFormTest {
     public void testAudioWidget() {
         Screengrab.screenshot("audio");
 
+        new OkDialog(activityTestRule).clickOK(new FormEntryPage("All widgets", activityTestRule)); // Warning shown on first audio widget
         onView(withText("Audio widget")).perform(swipeLeft());
     }
 

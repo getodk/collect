@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,6 +42,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormIndex;
@@ -64,6 +66,7 @@ import org.odk.collect.android.formentry.media.PromptAutoplayer;
 import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.odk.collect.android.preferences.MetaKeys;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileUtils;
@@ -73,6 +76,7 @@ import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.widgets.AudioWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.StringWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
@@ -190,6 +194,24 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
         setupAudioErrors();
         autoplayIfNeeded(advancingPage);
+        showInternalRecorderWarningIfNeeded(context);
+    }
+
+    private void showInternalRecorderWarningIfNeeded(Context context) {
+        SharedPreferences metaPrefs = preferencesProvider.getMetaSharedPreferences();
+        boolean audioWidgetOnScreen = widgets.stream().anyMatch(widget -> widget instanceof AudioWidget);
+        boolean warningAlreadyShown = metaPrefs.getBoolean(MetaKeys.KEY_SHOWN_INTERNAL_RECORDER_WARNING, false);
+
+        if (audioWidgetOnScreen && !warningAlreadyShown) {
+            new MaterialAlertDialogBuilder(context)
+                    .setMessage(R.string.internal_recorder_warning)
+                    .setPositiveButton(R.string.ok, null)
+                    .show();
+
+            metaPrefs.edit()
+                    .putBoolean(MetaKeys.KEY_SHOWN_INTERNAL_RECORDER_WARNING, true)
+                    .apply();
+        }
     }
 
     private void setupAudioErrors() {

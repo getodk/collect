@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="internal_recorder_warning">Collect now records audio without using an external app. You can disable this if you\'d still like to use an extenal app for recording.</string>
+</resources>

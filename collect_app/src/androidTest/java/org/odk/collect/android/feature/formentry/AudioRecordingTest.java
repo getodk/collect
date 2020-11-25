@@ -19,6 +19,7 @@ import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.OkDialog;
+import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorderViewModel;
 
@@ -67,7 +68,7 @@ public class AudioRecordingTest {
     public void onAudioQuestion_canRecordAudio() {
         new MainMenuPage(rule).assertOnPage()
                 .copyForm("audio-question.xml")
-                .startBlankForm("Audio Question")
+                .startBlankFormIgnoringAudioWarning("Audio Question")
                 .assertTextNotDisplayed(R.string.stop_recording)
                 .clickOnString(R.string.capture_audio)
                 .clickOnString(R.string.stop_recording)
@@ -77,10 +78,28 @@ public class AudioRecordingTest {
     }
 
     @Test
+    public void loadingAudioQuestionForTheFirstTime_showsInternalRecordingWarning() {
+        new MainMenuPage(rule).assertOnPage()
+                .copyForm("audio-question.xml")
+
+                .clickFillBlankForm()
+                .clickOnFormWithAudioWarning("Audio Question")
+                .assertText(R.string.internal_recorder_warning)
+                .clickOK(new FormEntryPage("Audio Question", rule))
+                .pressBack(new SaveOrIgnoreDialog<>("Audio Question", new MainMenuPage(rule), rule))
+                .clickIgnoreChanges()
+
+                // Check that the warning isn't shown again
+                .clickFillBlankForm()
+                .clickOnForm("Audio Question")
+                .assertQuestion("What does it sound like?");
+    }
+
+    @Test
     public void whileRecording_swipingToADifferentScreen_showsWarning_andStaysOnSameScreen() {
         new MainMenuPage(rule).assertOnPage()
                 .copyForm("audio-question.xml")
-                .startBlankForm("Audio Question")
+                .startBlankFormIgnoringAudioWarning("Audio Question")
                 .clickOnString(R.string.capture_audio)
                 .swipeToEndScreenWhileRecording()
                 .clickOK(new FormEntryPage("Audio Question", rule))
@@ -96,7 +115,7 @@ public class AudioRecordingTest {
     public void whileRecording_quittingForm_showsWarning_andStaysOnSameScreen() {
         new MainMenuPage(rule).assertOnPage()
                 .copyForm("audio-question.xml")
-                .startBlankForm("Audio Question")
+                .startBlankFormIgnoringAudioWarning("Audio Question")
                 .clickOnString(R.string.capture_audio)
                 .pressBack(new OkDialog(rule))
                 .clickOK(new FormEntryPage("Audio Question", rule))

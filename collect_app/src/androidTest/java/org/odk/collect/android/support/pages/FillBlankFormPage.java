@@ -129,4 +129,9 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
         assertText(R.string.no_items_display_forms);
         return this;
     }
+
+    public OkDialog clickOnFormWithAudioWarning(String formName) {
+        clickOnFormButton(formName);
+        return new OkDialog(rule).assertOnPage();
+    }
 }
