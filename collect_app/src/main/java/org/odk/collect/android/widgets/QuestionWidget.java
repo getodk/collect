@@ -131,7 +131,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
             addAnswerView(answerView);
         }
 
-        if (context instanceof FormEntryActivity && !getFormEntryPrompt().isReadOnly()) {
+        if (context instanceof FormEntryActivity && !questionDetails.isReadOnly()) {
             registerToClearAnswerOnLongPress((FormEntryActivity) context, this);
         }
     }
