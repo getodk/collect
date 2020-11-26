@@ -221,8 +221,7 @@ public class IntentGroupTest {
     }
 
     private void assertVideoWidgetWithoutAnswer() {
-        onView(withId(R.id.play_video)).check(matches(isDisplayed()));
-        onView(withId(R.id.play_video)).check(matches(not(isEnabled())));
+        onView(withId(R.id.play_video)).check(matches(not(isDisplayed())));
     }
 
     private void assertFileWidgetWithoutAnswer() {
