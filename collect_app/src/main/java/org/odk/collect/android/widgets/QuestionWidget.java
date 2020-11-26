@@ -342,6 +342,19 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         }
 
         answerContainer.addView(v, params);
+        hideAnswerContainerIfNeeded();
+    }
+
+    private void hideAnswerContainerIfNeeded() {
+        if (questionDetails.isReadOnly() && formEntryPrompt.getAnswerValue() == null) {
+            findViewById(R.id.space_box).setVisibility(VISIBLE);
+            findViewById(R.id.answer_container).setVisibility(GONE);
+        }
+    }
+
+    public void showAnswerContainer() {
+        findViewById(R.id.space_box).setVisibility(GONE);
+        findViewById(R.id.answer_container).setVisibility(VISIBLE);
     }
 
     /**

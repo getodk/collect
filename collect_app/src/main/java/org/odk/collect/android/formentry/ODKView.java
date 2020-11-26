@@ -490,6 +490,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                             (TreeReference) prompt.getFormElement().getBind().getReference();
 
                     if (treeReference.getNameLast().equals(key)) {
+                        questionWidget.showAnswerContainer();
                         switch (prompt.getDataType()) {
                             case Constants.DATATYPE_TEXT:
                                 formController.saveAnswer(prompt.getIndex(),
