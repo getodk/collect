@@ -144,4 +144,13 @@ public abstract class QuestionWidgetTest<W extends Widget, A extends IAnswerData
         assertThat(widget.findViewById(R.id.answer_container).getVisibility(), is(View.GONE));
         assertThat(widget.findViewById(R.id.space_box).getVisibility(), is(View.VISIBLE));
     }
+
+    @Test
+    public void whenReadOnlyQuestionHasAnswer_answerContainerShouldBeDisplayed() {
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+        when(formEntryPrompt.getAnswerValue()).thenReturn(getInitialAnswer());
+        QuestionWidget widget = (QuestionWidget) getWidget();
+        assertThat(widget.findViewById(R.id.answer_container).getVisibility(), is(View.VISIBLE));
+        assertThat(widget.findViewById(R.id.space_box).getVisibility(), is(View.GONE));
+    }
 }
