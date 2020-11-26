@@ -134,6 +134,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         if (context instanceof FormEntryActivity && !questionDetails.isReadOnly()) {
             registerToClearAnswerOnLongPress((FormEntryActivity) context, this);
         }
+        hideAnswerContainerIfNeeded();
     }
 
     /**
@@ -342,7 +343,6 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         }
 
         answerContainer.addView(v, params);
-        hideAnswerContainerIfNeeded();
     }
 
     private void hideAnswerContainerIfNeeded() {

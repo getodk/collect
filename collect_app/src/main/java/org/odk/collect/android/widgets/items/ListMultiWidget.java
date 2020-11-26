@@ -73,7 +73,7 @@ public class ListMultiWidget extends ItemsWidget implements MultiChoiceWidget {
         checkBoxes = new ArrayList<>();
 
         // Layout holds the horizontal list of buttons
-        LinearLayout buttonLayout = findViewById(R.id.list_items);
+        LinearLayout buttonLayout = findViewById(R.id.answer_container);
 
         List<Selection> ve = new ArrayList<>();
         if (questionDetails.getPrompt().getAnswerValue() != null) {

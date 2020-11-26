@@ -59,7 +59,7 @@ public class LabelWidget extends ItemsWidget {
 
     private void addItems(Context context, QuestionDetails questionDetails) {
         // Layout holds the horizontal list of buttons
-        LinearLayout listItems = findViewById(R.id.list_items);
+        LinearLayout listItems = findViewById(R.id.answer_container);
 
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {

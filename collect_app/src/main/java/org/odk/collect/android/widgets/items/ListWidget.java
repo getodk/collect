@@ -82,7 +82,7 @@ public class ListWidget extends ItemsWidget implements MultiChoiceWidget, OnChec
         buttons = new ArrayList<>();
 
         // Layout holds the horizontal list of buttons
-        LinearLayout buttonLayout = findViewById(R.id.list_items);
+        LinearLayout buttonLayout = findViewById(R.id.answer_container);
 
         String s = null;
         if (questionDetails.getPrompt().getAnswerValue() != null) {
