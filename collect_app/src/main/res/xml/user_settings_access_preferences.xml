@@ -40,7 +40,7 @@
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="periodic_form_updates_check"
-            android:title="@string/periodic_form_updates_check_title"
+            android:title="@string/form_update_frequency_title"
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="automatic_update"
