@@ -54,7 +54,7 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
     }
 
     public AdminSettingsPage uncheckServerOption() {
-        clickOnString(R.string.server);
+        clickOnString(R.string.server_settings_title);
         return this;
     }
 }

@@ -436,7 +436,6 @@
   <string name="use_device_language">Использовать язык устройства</string>
   <string name="invalid_email_address">Неверный адрес почты!</string>
   <string name="sort_by">Сортировать по</string>
-  <string name="server">Сервер</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">Выбрать значение</string>
   <string name="edit_value">Изменить значение</string>

@@ -823,8 +823,6 @@
     <string name="moving_backwards_enabled_title">Moving backwards enabled</string>
     <string name="moving_backwards_enabled_message">You may wish to review the following settings:\n\n\u2022 Edit Saved Form\n\u2022 Save Form\n\u2022 Go To Prompt\n\u2022 Constraint processing</string>
 
-    <string name="server">Server</string>
-
     <!-- Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end -->
     <string name="save_mid">Save Form</string>
 

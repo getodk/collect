@@ -471,7 +471,6 @@
   <string name="use_device_language">Використовувати мову пристрою</string>
   <string name="invalid_email_address">Некоректна електронна адреса!</string>
   <string name="sort_by">Сортувати за</string>
-  <string name="server">Сервер</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">Обрати заначення</string>
   <string name="edit_value">Редагувати значення</string>

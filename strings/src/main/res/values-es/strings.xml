@@ -505,7 +505,6 @@
   <string name="use_device_language">Usar el idioma del dispositivo</string>
   <string name="invalid_email_address">Email inválido</string>
   <string name="sort_by">Ordenar por</string>
-  <string name="server">Servidor</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">Seleccionar valor</string>
   <string name="edit_value">Editar valor</string>

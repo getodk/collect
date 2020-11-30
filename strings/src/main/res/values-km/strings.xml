@@ -441,7 +441,6 @@
   <string name="use_device_language">ប្រើ​ប្រាស់​ភាសារបស់​ឧបករណ៍</string>
   <string name="invalid_email_address">អាសយដ្ឋាន​អ៊ីម៉េល​មិនត្រឹមត្រូវ!</string>
   <string name="sort_by">តំរៀបតាម</string>
-  <string name="server">ម៉ាស៊ីនម៉េ</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">ជ្រើសរើសតម្លៃ</string>
   <string name="edit_value">កែប្រែ​តម្លៃ</string>

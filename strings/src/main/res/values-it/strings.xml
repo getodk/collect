@@ -486,8 +486,6 @@
   <string name="use_device_language">Utilizza lingua del dispositivo</string>
   <string name="invalid_email_address">Indirizzo email invalido!</string>
   <string name="sort_by">Ordina per</string>
-  <string name="server">Server</string>
-  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">Selezione valore</string>
   <string name="edit_value">Modifica valore</string>
   <string name="no_value_selected">Nessun valore selezionato</string>

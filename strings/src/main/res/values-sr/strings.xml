@@ -468,7 +468,6 @@
   <string name="use_device_language">Koristi jezik uređaja</string>
   <string name="invalid_email_address">Pogrešna email adresa!</string>
   <string name="sort_by">Sortiraj na osnovu</string>
-  <string name="server">Server</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">Odaberi vrijednost</string>
   <string name="edit_value">Izmijeni vrijednost</string>

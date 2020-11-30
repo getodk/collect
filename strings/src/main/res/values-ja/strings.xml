@@ -500,7 +500,6 @@
   <string name="use_device_language">デバイスの言語を使用する</string>
   <string name="invalid_email_address">メールアドレスが無効です!</string>
   <string name="sort_by">並び順</string>
-  <string name="server">サーバー</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">値を選択</string>
   <string name="edit_value">値を編集</string>

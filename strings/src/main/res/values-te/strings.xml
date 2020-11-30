@@ -489,7 +489,6 @@
   <string name="use_device_language">పరికర భాషను ఉపయోగించండి</string>
   <string name="invalid_email_address">చెల్లని ఇమెయిల్ చిరునామా!</string>
   <string name="sort_by">క్రమబద్ధీకరణ </string>
-  <string name="server">సర్వర్</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">ఎదేని విలువ ఎంచుకోండీ</string>
   <string name="edit_value">విలువ మార్చండి</string>

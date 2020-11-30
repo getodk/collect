@@ -316,7 +316,6 @@
   <string name="server_settings_title">Server</string>
   <string name="type">Type</string>
   <string name="sort_by">Sorteer op</string>
-  <string name="server">Server</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="image_size_large">Groot (3072px)</string>
   <string name="image_size_medium">Gemiddeld (2048px)</string>

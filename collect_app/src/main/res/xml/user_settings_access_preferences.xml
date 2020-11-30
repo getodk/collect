@@ -8,13 +8,8 @@
         app:iconSpaceReserved="false">
         <CheckBoxPreference
             android:key="change_server"
-            android:title="@string/server"
+            android:title="@string/server_settings_title"
             app:iconSpaceReserved="false" />
-        <!--<org.odk.collect.android.preferences.ExtendedCheckboxPreference-->
-        <!--android:key="change_submission_transport"-->
-        <!--android:title="@string/submission_transport_admin_setting"-->
-        <!--android:dependency="change_server"-->
-        <!--/>-->
         <CheckBoxPreference
             android:key="change_app_theme"
             android:title="@string/app_theme"

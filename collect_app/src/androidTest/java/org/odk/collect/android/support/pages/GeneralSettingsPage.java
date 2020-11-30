@@ -50,7 +50,7 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
     }
 
     public ServerSettingsPage clickServerSettings() {
-        clickOnString(R.string.server);
+        clickOnString(R.string.server_settings_title);
         return new ServerSettingsPage(rule).assertOnPage();
     }
 
@@ -66,7 +66,7 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
     }
 
     public GeneralSettingsPage checkIfServerOptionIsDisplayed() {
-        onView(withText(getTranslatedString(R.string.server))).check(matches(isDisplayed()));
+        onView(withText(getTranslatedString(R.string.server_settings_title))).check(matches(isDisplayed()));
         return this;
     }
 
