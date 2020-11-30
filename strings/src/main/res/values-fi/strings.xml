@@ -424,7 +424,6 @@
   <string name="encrypted_form">Salattu lomake</string>
   <string name="deleted_form">Poistettu lomake</string>
   <string name="exit">Poistu</string>
-  <string name="instance_scan_completed">Skannaus valmis.</string>
   <string name="instance_scan_count">%1$d lomaketta lisätty.</string>
   <string name="instance_sync">Lomakkeet viimeistellään tuodessa</string>
   <string name="instance_sync_summary">Vaikuttaa lomakkeisiin jotka lisätään suoraan Instances -kansioon.</string>

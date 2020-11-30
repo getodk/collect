@@ -430,7 +430,6 @@
   <string name="encrypted_form">Šifrovaný formulář</string>
   <string name="deleted_form">Smazaný formulář</string>
   <string name="exit">Odejít</string>
-  <string name="instance_scan_completed">Dokončené skenování.</string>
   <string name="instance_scan_count">%1$d formulářů přidáno. </string>
   <string name="instance_sync">Dokončení formulářů při importu</string>
   <string name="instance_sync_summary">Ovlivňuje formuláře přidávané přímo do složky instance.</string>

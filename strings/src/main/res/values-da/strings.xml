@@ -337,8 +337,7 @@
   <string name="reset_settings_button_reset">Nulstil</string>
   <string name="reset_in_progress">Nulstiller…</string>
   <string name="exit">Forlad</string>
-  <string name="instance_scan_completed">Afsluttede scanning.</string>
-  <string name="sort_by_name_asc">Navn, A-Z</string>
+    <string name="sort_by_name_asc">Navn, A-Z</string>
   <string name="sort_by_name_desc">Navn, A-Z</string>
   <string name="sort_by_date_asc">Dato - nyeste først</string>
   <string name="sort_by_date_desc">Dato - ældste først</string>

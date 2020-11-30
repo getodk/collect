@@ -371,7 +371,6 @@
   <string name="encrypted_form">បម្លែងសំណុំបែបបទ​ជារហស្សលិខ</string>
   <string name="deleted_form">សំណុំបែបបទដែលបានលុប​</string>
   <string name="exit">ចាកចេញ</string>
-  <string name="instance_scan_completed">បញ្ចប់ការស្កេន.</string>
   <string name="instance_scan_count">%1$d សំណុំបែបបទបានបន្ថែម។</string>
   <string name="instance_sync">ទម្រង់បញ្ចប់ដែលនាំចូល</string>
   <string name="instance_sync_summary">ទម្រង់ដែលប៉ះពាល់ត្រូវបានបន្ថែមដោយផ្ទាល់ទៅកាន់ថតទម្រង់</string>

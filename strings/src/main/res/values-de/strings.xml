@@ -424,7 +424,6 @@
   <string name="encrypted_form">Verschlüsseltes Formular</string>
   <string name="deleted_form">Formular gelöscht</string>
   <string name="exit">Beenden</string>
-  <string name="instance_scan_completed">Scan abgeschlossen.</string>
   <string name="instance_scan_count">%1$d Formular(e) hinzugefügt.</string>
   <string name="instance_sync">Formulare beim Import abschließen</string>
   <string name="instance_sync_summary">Betrifft Formulare, die direkt dem instances-Ordner hinzugefügt werden.</string>

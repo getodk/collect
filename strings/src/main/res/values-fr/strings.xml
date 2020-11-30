@@ -424,7 +424,6 @@
   <string name="encrypted_form">Formulaires encryptés</string>
   <string name="deleted_form">Formulaire supprimé</string>
   <string name="exit">Sortir</string>
-  <string name="instance_scan_completed">Recherche terminée.</string>
   <string name="instance_scan_count">%1$d formulaires ajoutés.</string>
   <string name="instance_sync">Importer les formulaires enregistrés comme terminés</string>
   <string name="instance_sync_summary">Impacte sur les formulaires ajoutés directement au dossier instances.</string>

@@ -419,7 +419,6 @@
   <string name="encrypted_form">Formularz zaszyfrowany</string>
   <string name="deleted_form">Formularz usunięty</string>
   <string name="exit">Wyjdź</string>
-  <string name="instance_scan_completed">Skanowanie zakończone.</string>
   <string name="instance_scan_count">Dodano %1$d formularzy.</string>
   <string name="instance_sync">Finalizuj formularze podczas importu</string>
   <string name="instance_sync_summary">Wpływa na formularze dodawane bezpośrednio do folderu formularzy.</string>

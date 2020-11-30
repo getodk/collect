@@ -87,7 +87,6 @@
     # FILL BLANK FORM
     ##############################################
     -->
-    <string name="instance_scan_completed">Finished scanning.</string>
     <string name="instance_scan_count">%1$d forms added.</string>
     <string name="finished_disk_scan">Finished scanning. All forms loaded.</string>
     <string name="xform_parse_error">XForm parse error for %1$s: %2$s is missing or invalid.</string>

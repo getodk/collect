@@ -425,7 +425,6 @@
   <string name="encrypted_form">Formulario encriptado</string>
   <string name="deleted_form">Formulario borrado</string>
   <string name="exit">Salir</string>
-  <string name="instance_scan_completed">Terminado el escaneo.</string>
   <string name="instance_scan_count">%1$d formularios añadidos.</string>
   <string name="instance_sync">Finalizar formularios en importación</string>
   <string name="instance_sync_summary">Afecta los formularios agregados directamente a la carpeta de instances</string>

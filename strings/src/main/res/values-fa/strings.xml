@@ -230,8 +230,7 @@
   <string name="reset_layers_result">لایه های نقشه:: %s</string>
   <string name="deleted_form">حذف فورم</string>
   <string name="exit">خروج</string>
-  <string name="instance_scan_completed">اسکن تمام شد.</string>
-  <string name="instance_scan_count">%1$dفورم ها اضافه شدند.</string>
+    <string name="instance_scan_count">%1$dفورم ها اضافه شدند.</string>
   <string name="sort_by_name_asc">اسم، الف-ی</string>
   <string name="filter_the_list">فلتر لیست</string>
   <string name="language">زبان</string>

@@ -416,7 +416,6 @@
   <string name="encrypted_form">గుప్తీకరించిన రూపం</string>
   <string name="deleted_form">తొలగించిన ఫారమ్</string>
   <string name="exit">నిష్క్రమించు</string>
-  <string name="instance_scan_completed">స్కానింగ్ పూర్తయింది.</string>
   <string name="instance_scan_count">%1$dఫారంలు జోడించబడ్డాయి.</string>
   <string name="instance_sync">దిగుమతులపై ఫారమ్‌లను ముగించండి</string>
   <string name="instance_sync_summary">ఇన్‌స్టాన్స్ ఫోల్డర్‌కు నేరుగా జోడించిన ఫారమ్‌లను ప్రభావితం చేస్తుంది.</string>

@@ -283,7 +283,6 @@
   <string name="encrypted_form">Versleuteld formulier</string>
   <string name="deleted_form">Verwijderd formulier</string>
   <string name="exit">Verlaten</string>
-  <string name="instance_scan_completed">Scannen voltooid.</string>
   <string name="instance_scan_count">%1$d formulieren toegevoegd.</string>
   <string name="sort_by_name_asc">Naam, A-Z</string>
   <string name="sort_by_name_desc">Naam, Z-A</string>

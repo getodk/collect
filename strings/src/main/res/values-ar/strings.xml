@@ -436,7 +436,6 @@
   <string name="encrypted_form">استمارة مشفرة</string>
   <string name="deleted_form">استمارة محذوفة</string>
   <string name="exit">خروج</string>
-  <string name="instance_scan_completed">انتهت عملية البحث.</string>
   <string name="instance_scan_count">تم إضافة %1$d إستمارة</string>
   <string name="instance_sync">حدد الاستمارات كمنتهية عند الاستيراد</string>
   <string name="instance_sync_summary">يؤثر على الاستمارات المضافة مباشرة إلى مجلد النماذج.</string>

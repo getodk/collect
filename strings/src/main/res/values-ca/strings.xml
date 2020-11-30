@@ -294,8 +294,7 @@
   <string name="encrypted_form">Formulari encriptat</string>
   <string name="deleted_form">Formulari esborrat</string>
   <string name="exit">Sortir</string>
-  <string name="instance_scan_completed">Escanejat finalitzat</string>
-  <string name="filter_the_list">Filtra la llista</string>
+    <string name="filter_the_list">Filtra la llista</string>
   <string name="language">Idioma</string>
   <string name="phone_number">Telèfon</string>
   <string name="email">Direcció email</string>

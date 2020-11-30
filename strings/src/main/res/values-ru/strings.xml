@@ -367,7 +367,6 @@
   <string name="encrypted_form">Зашифрованный опрос</string>
   <string name="deleted_form">Удалённая форма</string>
   <string name="exit">Выйти</string>
-  <string name="instance_scan_completed">Сканирование завершено.</string>
   <string name="instance_scan_count">Добавлено опросников: %1$d шт.</string>
   <string name="instance_sync">Финализировать опросы при импорте</string>
   <string name="sort_by_name_asc">А-Я</string>

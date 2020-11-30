@@ -334,8 +334,7 @@
   <string name="encrypted_form">कूटबद्ध फॉर्म</string>
   <string name="deleted_form">फॉर्म हटविला</string>
   <string name="exit">निर्गमन करा</string>
-  <string name="instance_scan_completed">पूर्ण स्कॅनिंग</string>
-  <string name="instance_scan_count">%1$d  फॉर्म जोडले.</string>
+    <string name="instance_scan_count">%1$d  फॉर्म जोडले.</string>
   <string name="sort_the_list">सूची क्रमवारी लावा</string>
   <string name="filter_the_list">सूची फिल्टर करा</string>
   <string name="language">भाषा</string>

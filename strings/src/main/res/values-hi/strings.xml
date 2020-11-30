@@ -338,8 +338,7 @@
   <string name="encrypted_form">एन्क्रिप्ट किए गए फॉर्म</string>
   <string name="deleted_form">समाप्त फॉर्म</string>
   <string name="exit">बाहर आयें</string>
-  <string name="instance_scan_completed">स्कैनिंग समाप्त.</string>
-  <string name="instance_scan_count">%1$dफॉर्म जोड दिया.</string>
+    <string name="instance_scan_count">%1$dफॉर्म जोड दिया.</string>
   <string name="sort_by_name_asc">नाम, A-Z</string>
   <string name="sort_by_name_desc">नाम, Z-A</string>
   <string name="sort_by_date_asc">दिनांक, नयी पहले </string>

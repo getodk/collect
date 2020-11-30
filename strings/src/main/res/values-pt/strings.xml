@@ -421,7 +421,6 @@ Escolher Imagem</string>
   <string name="encrypted_form">Formulário encriptado</string>
   <string name="deleted_form">Formulário apagado</string>
   <string name="exit">Sair</string>
-  <string name="instance_scan_completed">Terminado o escaneamento.</string>
   <string name="instance_scan_count">%1$dformulários adicionados.</string>
   <string name="instance_sync">Finalizar formulários na importação</string>
   <string name="instance_sync_summary">Afeta formulários adicionados diretamente na pasta instances.</string>

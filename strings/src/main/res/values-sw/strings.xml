@@ -395,7 +395,6 @@
   <string name="encrypted_form">Fomu yenye usimbaji fiche</string>
   <string name="deleted_form">Fomu iliyofutwa</string>
   <string name="exit">Toka</string>
-  <string name="instance_scan_completed">Malizika kukagua.</string>
   <string name="instance_scan_count">%1$dfomu zimeongezwa.</string>
   <string name="instance_sync">Kukamilisha fomu katika kuingiza</string>
   <string name="instance_sync_summary">Inaathiri fomu zilizowekwa moja kwa moja kwenye makabrasha ya mifano.</string>

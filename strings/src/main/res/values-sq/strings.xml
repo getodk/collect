@@ -328,7 +328,6 @@
   <string name="encrypted_form">Formular i koduar</string>
   <string name="deleted_form">Formular i fshirë</string>
   <string name="exit">Dil</string>
-  <string name="instance_scan_completed">Skanimi përfundoi</string>
   <string name="instance_scan_count">%1$d formë/a u shtuan.</string>
   <string name="instance_sync">Finalizo format në importim</string>
   <string name="sort_by_name_asc">Emër, A-Z</string>

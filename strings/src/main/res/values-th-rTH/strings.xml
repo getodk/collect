@@ -305,7 +305,6 @@
   <string name="reset_layers_result">ชั้นข้อมูลแผนที่ :: %s</string>
   <string name="encrypted_form">แบบสำรวจเข้ารหัส</string>
   <string name="deleted_form">แบบสำรวจที่ถูกลบ</string>
-  <string name="instance_scan_completed">สแกนเสร็จสิ้น</string>
   <string name="sort_the_list">จัดเรียงรายการ</string>
   <string name="language">ภาษา</string>
   <string name="form_metadata_title">Metadata ของแบบสำรวจ</string>

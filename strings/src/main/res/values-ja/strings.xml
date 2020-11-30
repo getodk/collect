@@ -420,7 +420,6 @@
   <string name="encrypted_form">暗号化フォーム</string>
   <string name="deleted_form">削除済フォーム</string>
   <string name="exit">終了</string>
-  <string name="instance_scan_completed">スキャンが終了しました。</string>
   <string name="instance_scan_count">%1$d フォームを追加しました。</string>
   <string name="instance_sync">インポート時にフォームを確定済にする</string>
   <string name="instance_sync_summary">インスタンスフォルダーに直接追加されたフォームに影響します。</string>

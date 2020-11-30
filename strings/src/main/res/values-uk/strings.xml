@@ -401,7 +401,6 @@
   <string name="encrypted_form">Зашифровані анкети</string>
   <string name="deleted_form">Видалені анкети</string>
   <string name="exit">Вийти</string>
-  <string name="instance_scan_completed">Завершені сканування.</string>
   <string name="instance_scan_count">%1$d анкет додано.</string>
   <string name="instance_sync">Завершувати форми під час імпорту</string>
   <string name="instance_sync_summary">Брати до уваги форми додані безпосередньо до директорії екземплярів.</string>

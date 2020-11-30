@@ -398,7 +398,6 @@
   <string name="encrypted_form">Formular pod enkripcijom</string>
   <string name="deleted_form">Obrisan formular</string>
   <string name="exit">Izađi</string>
-  <string name="instance_scan_completed">Završeno skeniranje.</string>
   <string name="instance_scan_count">%1$d dodatih formulara.</string>
   <string name="instance_sync">Finaliziraj formular pri unosu</string>
   <string name="instance_sync_summary">Odnosi se na fomrulare direktno dodate folderu instanci.</string>

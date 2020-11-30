@@ -408,7 +408,6 @@
   <string name="encrypted_form">Modulo crittografato</string>
   <string name="deleted_form">Modulo cancellato</string>
   <string name="exit">Esci</string>
-  <string name="instance_scan_completed">Scansione completata</string>
   <string name="instance_scan_count">%1$d moduli aggiunti.</string>
   <string name="instance_sync">Finalizza moduli per importazione</string>
   <string name="instance_sync_summary">Riguarda un modulo aggiunto direttamente alla cartella esempi</string>

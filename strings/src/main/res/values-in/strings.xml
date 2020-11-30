@@ -418,7 +418,6 @@
   <string name="encrypted_form">Formulir terenkripsi</string>
   <string name="deleted_form">Hapus formulir</string>
   <string name="exit">Keluar</string>
-  <string name="instance_scan_completed">Pemindaian selesai.</string>
   <string name="instance_scan_count">Formulir %1$d ditambahkan.</string>
   <string name="instance_sync">Selesaikan formulir saat impor</string>
   <string name="instance_sync_summary">Formulir yang rusak akan langsung ditambahkan ke berkas instance</string>

@@ -383,7 +383,6 @@ Dela ODK Collect med dem.</string>
   <string name="encrypted_form">Krypterat formulär</string>
   <string name="deleted_form">Raderat formulär</string>
   <string name="exit">Avsluta</string>
-  <string name="instance_scan_completed">Avslutat sökning</string>
   <string name="instance_scan_count">%1$d formulär tillagda.</string>
   <string name="instance_sync">Avsluta formulär vid import</string>
   <string name="instance_sync_summary">Påverkar formulär som lagts till direkt i mappen \'instances\'.</string>
