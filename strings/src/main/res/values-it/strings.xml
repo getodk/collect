@@ -242,8 +242,7 @@
   <string name="survey_saving_encrypting_message">Crittografia dati…</string>
   <string name="high_resolution_summary">Permetti la registrazione di video ad alta risoluzione</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="google_drive">Google Drive</string>
-  <string name="go_drive">My Drive</string>
+    <string name="go_drive">My Drive</string>
   <string name="go_shared">Condiviso con Me</string>
   <string name="modified_on_date_at_time">\'Modificato il\' EEE, dd MMM yyyy \'alle\' HH:mm</string>
   <string name="google_sheets_url_hint">I moduli devono avere un URL di destinazione. Se non ne viene specificato uno, sarà utilizzato il seguente URL.</string>

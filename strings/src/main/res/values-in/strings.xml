@@ -245,8 +245,7 @@
   <string name="survey_saving_encrypting_message">Mengenkripsi data…</string>
   <string name="high_resolution_summary">Mengaktifkan perekaman video beresolusi tinggi</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="google_drive">Google Drive</string>
-  <string name="go_drive">Drive saya</string>
+    <string name="go_drive">Drive saya</string>
   <string name="go_shared">Berbagi dengan saya</string>
   <string name="modified_on_date_at_time">\'Diubah pada tanggal\' EEE, dd MMM yyyy\', pukul\' HH:mm</string>
   <string name="google_sheets_url_hint">URL pengiriman harus ditetapkan pada formulir. Jika tidak, URL ini yang akan digunakan.</string>

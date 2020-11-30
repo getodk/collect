@@ -233,8 +233,7 @@
   <string name="survey_saving_encrypting_message">Šifriram podatke…</string>
   <string name="high_resolution_summary">Omogoči video zapis visoke resolucije</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="google_drive">Google Drive</string>
-  <string name="go_drive">My Drive</string>
+    <string name="go_drive">My Drive</string>
   <string name="go_shared">Deljeno z menoj</string>
   <string name="modified_on_date_at_time">\'Spremenjeno\' EEE, MMM dd,  yyyy \'ob\' HH:mm</string>
   <string name="google_sheets_url_hint">Obrazci morajo nastaviti URL za predložitev. Če ne, bo uporabljen ta URL.</string>

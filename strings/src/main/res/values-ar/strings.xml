@@ -245,8 +245,7 @@
   <string name="survey_saving_encrypting_message">تشفير البيانات</string>
   <string name="high_resolution_summary">تمكين تسجيلات الفيديو عالية الدقة</string>
   <string name="server_platform_google_sheets">محرك الجوجل، صفحات الجوجل</string>
-  <string name="google_drive">محرك الجوجل</string>
-  <string name="go_drive">المحرك الخاص بي</string>
+    <string name="go_drive">المحرك الخاص بي</string>
   <string name="go_shared">مشاركة معي</string>
   <string name="modified_on_date_at_time">\'تم التعديل ب \' yyyy, dd MMM, EEE  \'في الساعة\' mm:HH</string>
   <string name="google_sheets_url_hint">يجب أن تقوم الاستمارات بتعيين رابط للارسال. إذا لم يفعلوا ذلك، فسيتم استخدام عنوان الرابط هذا.</string>

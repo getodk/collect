@@ -225,8 +225,7 @@
   <string name="survey_saving_encrypting_message">डेटा एन्क्रिप्ट कर रहा है…</string>
   <string name="high_resolution_summary">उच्च-रिज़ॉल्यूशन वीडियो रिकॉर्डिंग सक्षम करें</string>
   <string name="server_platform_google_sheets">गूगल ड्राइव, गूगल शीट्</string>
-  <string name="google_drive">गूगल ड्राइव</string>
-  <string name="go_drive">माई ड्राइव</string>
+    <string name="go_drive">माई ड्राइव</string>
   <string name="go_shared">मेरे साथ साझा किया हुआ </string>
   <string name="modified_on_date_at_time">EEE, MMM dd, yyyy \'पर संशोधित\' HH:mm \'पर\' </string>
   <string name="google_sheets_url_hint">फॉर्म को एक सबमिशन URL सेट करना होगा यदि नहीं तो इस URL का उपयोग किया जाएगा।</string>

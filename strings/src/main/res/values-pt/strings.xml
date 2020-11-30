@@ -245,8 +245,7 @@ Escolher Imagem</string>
   <string name="survey_saving_encrypting_message">Criptografando dados…</string>
   <string name="high_resolution_summary">Ativar gravação de vídeos em alta resolução</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="google_drive">Google Drive</string>
-  <string name="go_drive">Meu Disco</string>
+    <string name="go_drive">Meu Disco</string>
   <string name="go_shared">Compartilhado comigo</string>
   <string name="modified_on_date_at_time">\'Modificado em\' EEE, MMM dd, yyyy \'às\' HH:mm</string>
   <string name="google_sheets_url_hint">Os formulários devem configurar um envio. Se não foram, esta URL será utilizada.</string>

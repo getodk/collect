@@ -245,8 +245,7 @@
   <string name="survey_saving_encrypting_message">డేటాను గుప్తీకరిస్తోంది…</string>
   <string name="high_resolution_summary">అధిక రిజల్యూషన్ ఉన్న వీడియో రికార్డింగ్‌ చేయడానికి వీలు కల్పించండి </string>
   <string name="server_platform_google_sheets">గూగుల్ డ్రైవ్, గూగుల్ షీట్స్</string>
-  <string name="google_drive">గూగుల్ డ్రైవ్</string>
-  <string name="go_drive">నా డ్రైవ్</string>
+    <string name="go_drive">నా డ్రైవ్</string>
   <string name="go_shared">నాతో పంచుకున్నవి </string>
   <string name="modified_on_date_at_time">\'సవరించిన తేదీ\' EEE, MMM dd, yyyy \'సమయం\' HH:mm </string>
   <string name="google_sheets_url_hint">ఫారమ్‌లు తప్పనిసరిగా సబ్మిషన్ URL ని సెట్ చేయాలి. లేకపోతే, ఈ URL ఉపయోగించబడుతుంది.</string>

@@ -206,8 +206,7 @@
   <string name="survey_saving_finalizing_message">ກຳ​ລັງ​ເຮັດ​ໃຫ້ ກາດ​ຄວາມ​ຈຳ​ພາຍນອກ ສຳ​ເລັດ​ສົມ​ບູນ…</string>
   <string name="survey_saving_encrypting_message">​ກຳ​ລັງ​ເຂົ້າ​ລະ​ຫັດ​ຂໍ້​ມູນ…</string>
   <string name="high_resolution_summary">ເປີດ​ການ​ນຳ​ໃຊ້ ການ​ບັນ​ທຶກວີ​ດີ​ໂອ​ແບບ​ຄວາມ​ລະ​ອຽດ​ສູງ</string>
-  <string name="google_drive">Google Drive</string>
-  <string name="go_drive">ຊ້ອງຂອງຂ້ອຍ</string>
+    <string name="go_drive">ຊ້ອງຂອງຂ້ອຍ</string>
   <string name="go_shared">ແບ່ງກັບຂ້ອຍ</string>
   <string name="modified_on_date_at_time">\'ດັດແກ້ວັນທີ\' EEE, MMM dd, yyyy \'ເວລາ\' HH:mm</string>
   <string name="drive_get_file">ໄດ້ %1$s ຂອງເອກະສານ.</string>

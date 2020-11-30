@@ -238,8 +238,7 @@
   <string name="survey_saving_encrypting_message">Шифрування даних…</string>
   <string name="high_resolution_summary">Дозволяє запис відео високої якості</string>
   <string name="server_platform_google_sheets">Google Диск, Google Сторінки</string>
-  <string name="google_drive">Google Диск</string>
-  <string name="go_drive">Мій диск</string>
+    <string name="go_drive">Мій диск</string>
   <string name="go_shared">Розділене зі мною</string>
   <string name="modified_on_date_at_time">\'Зімінено в\' EEE, dd MMM, yyyy \'at\' HH:mm</string>
   <string name="google_sheets_url_hint">URL для відправки має бути зазначено в анкетах. Інакше, буде використано цей URL.</string>

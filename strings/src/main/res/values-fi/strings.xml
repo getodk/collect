@@ -245,8 +245,7 @@
   <string name="survey_saving_encrypting_message">Salataan dataa…</string>
   <string name="high_resolution_summary">Aktivoi korkean resoluution videotallennukset</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="google_drive">Google Drive</string>
-  <string name="go_drive">Oma Drive</string>
+    <string name="go_drive">Oma Drive</string>
   <string name="go_shared">Minun kanssani jaetut</string>
   <string name="modified_on_date_at_time">\'Muokattu\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
   <string name="google_sheets_url_hint">Lomakkeiden täytyy asettaa URL lähetystä varten. Jos ei, käytetään tätä URL:ää.</string>

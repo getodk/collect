@@ -220,8 +220,7 @@
   <string name="survey_saving_encrypting_message">डेटा एन्क्रिप्ट करत आहे …</string>
   <string name="high_resolution_summary">उच्च-रिजोल्यूशन व्हिडिओ रेकॉर्डिंग सक्षम करा</string>
   <string name="server_platform_google_sheets">गूगल ड्राइव्ह, गूगल पत्रक</string>
-  <string name="google_drive">गूगल ड्राइव्ह</string>
-  <string name="go_drive">माझे ड्राइव्ह</string>
+    <string name="go_drive">माझे ड्राइव्ह</string>
   <string name="go_shared">माझ्यासह शेअर केलेले</string>
   <string name="modified_on_date_at_time">\'सुधारित\' वर EEE, d MMM, yyyy \'at\' HH: mm</string>
   <string name="google_sheets_url_hint">फॉर्म एक सबमिशन युरएल सेट करणे आवश्यक आहे नसल्यास, ही युरएल वापरली जाईल.</string>

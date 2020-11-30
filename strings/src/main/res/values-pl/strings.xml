@@ -241,8 +241,7 @@
   <string name="survey_saving_encrypting_message">Szyfruję dane…</string>
   <string name="high_resolution_summary">Włącz nagrywanie wideo wysokiej rozdzielczości</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="google_drive">Google Drive</string>
-  <string name="go_drive">Mój Dysk</string>
+    <string name="go_drive">Mój Dysk</string>
   <string name="go_shared">Dzielone ze Mną</string>
   <string name="modified_on_date_at_time">\'Zmieniony\' EEE, MMM dd, yyyy \'o\' HH:mm</string>
   <string name="google_sheets_url_hint">Formularze muszą ustawić URL przesyłania. Jeśli nie, ten adres URL zostanie użyty.</string>

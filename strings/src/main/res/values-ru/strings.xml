@@ -238,8 +238,7 @@
   <string name="survey_saving_encrypting_message">Шифрование данных…</string>
   <string name="high_resolution_summary">Разрешить запись видео высокого разрешения</string>
   <string name="server_platform_google_sheets">Google диск и таблицы</string>
-  <string name="google_drive">Google диск</string>
-  <string name="go_drive">Мой диск</string>
+    <string name="go_drive">Мой диск</string>
   <string name="go_shared">Доступные мне</string>
   <string name="modified_on_date_at_time">\'Изменено\' EEE, dd MMM yyyy \'в\' HH:mm</string>
   <string name="google_sheets_url_hint">В опроснике должен быть указан URL-выгрузки. Иначе, будет применён этот адрес.</string>

@@ -233,8 +233,7 @@
   <string name="survey_saving_encrypting_message">ڈیٹا انکرپٹ ہورہا ہے</string>
   <string name="high_resolution_summary">اعلی کوالٹی ویڈیو ریکارڈنگ کو فعال کریں</string>
   <string name="server_platform_google_sheets">گوگل ڈرائیو ، گوگل شیٹس </string>
-  <string name="google_drive">گوگل ڈرائیو </string>
-  <string name="go_drive">مائی ڈرائیو</string>
+    <string name="go_drive">مائی ڈرائیو</string>
   <string name="go_shared">میرے ساتھ شیئر کیا ہوا</string>
   <string name="modified_on_date_at_time"> EEE, MMM dd, yyyy\'کو\' HH:mm \'پر موڈیفائی کیا گیا\'</string>
   <string name="google_sheets_url_hint">فارم جمع کرانے کا یو آرال مقرر کرنا لازمی ہے. اگر مقررنہیں کرتے تو یہ یو آرال استعمال کیا جائے گا</string>

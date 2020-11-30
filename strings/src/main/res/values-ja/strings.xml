@@ -245,8 +245,7 @@
   <string name="survey_saving_encrypting_message">データを暗号化中…</string>
   <string name="high_resolution_summary">高解像度のビデオ録画を有効にします</string>
   <string name="server_platform_google_sheets">Google ドライブ, Google スプレッドシート</string>
-  <string name="google_drive">Google ドライブ</string>
-  <string name="go_drive">マイ ドライブ</string>
+    <string name="go_drive">マイ ドライブ</string>
   <string name="go_shared">私と共有</string>
   <string name="modified_on_date_at_time">yyyy/MM/dd HH:mm \'に変更しました\'</string>
   <string name="google_sheets_url_hint">フォームは送信 URL を設定する必要があります。 そうしない場合に、この URL が使用されます。</string>

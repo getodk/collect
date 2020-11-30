@@ -240,8 +240,7 @@
   <string name="survey_saving_encrypting_message">Krypterar data…</string>
   <string name="high_resolution_summary">Tillåt högupplösta filminspelningar</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="google_drive">Google Drive</string>
-  <string name="go_drive">My Drive</string>
+    <string name="go_drive">My Drive</string>
   <string name="go_shared">Delat med mig</string>
   <string name="modified_on_date_at_time">\'Ändrad\' yyyy-MM-dd (EEE) \'kl\' HH:mm</string>
   <string name="google_sheets_url_hint">Formulären måste ange en uppladdnings-URL. Om dem inte gör det används denna URL.</string>

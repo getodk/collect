@@ -193,8 +193,7 @@
   <string name="ext_import_completed_message">读取数据已完成！</string>
   <string name="survey_loading_reading_csv_message">正在读取CSV文件…</string>
   <string name="survey_saving_saving_message">正在保存至SD卡…</string>
-  <string name="google_drive">谷歌云盘</string>
-  <string name="no_google_account">无选中的谷歌账号！</string>
+    <string name="no_google_account">无选中的谷歌账号！</string>
   <string name="delete_after_send">发送后自动删除</string>
   <string name="change_server_url">服務器 URL</string>
   <string name="about_preferences">关于</string>

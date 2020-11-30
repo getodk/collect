@@ -239,8 +239,7 @@
   <string name="survey_saving_encrypting_message">Data versleutelen…</string>
   <string name="high_resolution_summary">Hoge resolutie video opnames toestaan</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="google_drive">Google Drive</string>
-  <string name="go_drive">Mijn Drive</string>
+    <string name="go_drive">Mijn Drive</string>
   <string name="go_shared">Gedeeld met mij</string>
   <string name="modified_on_date_at_time">\'Gewijzigd op\' EEE dd MMM yyyy \'om\' HH:mm</string>
   <string name="no_google_account">Geen Google account geselecteerd!</string>

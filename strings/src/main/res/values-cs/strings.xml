@@ -245,8 +245,7 @@
   <string name="survey_saving_encrypting_message">Šifruji data…</string>
   <string name="high_resolution_summary">Povolit vysoké rozlišení videonahrávek</string>
   <string name="server_platform_google_sheets">Disk Google, Tabulky Google</string>
-  <string name="google_drive">Google Drive</string>
-  <string name="go_drive">Můj disk</string>
+    <string name="go_drive">Můj disk</string>
   <string name="go_shared">Sdíleno se mnou</string>
   <string name="modified_on_date_at_time">\'Upraveno v \' EEE, dd MMM, yyyy \'v\' HH:mm</string>
   <string name="google_sheets_url_hint">Formuláře musí obsahovat adresu URL pro podání. Pokud tomu tak není, použije se tato adresa URL.</string>

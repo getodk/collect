@@ -241,8 +241,7 @@
   <string name="survey_saving_encrypting_message">Kuongeza usalama katika taarifa…</string>
   <string name="high_resolution_summary">Ruhusu kurekodi video zenye kiwango cha juu</string>
   <string name="server_platform_google_sheets">Hifadhi ya Google ,makaratasi ya google</string>
-  <string name="google_drive"> Hifadhi ya Google </string>
-  <string name="go_drive">Hifadhi yangu</string>
+    <string name="go_drive">Hifadhi yangu</string>
   <string name="go_shared">Imeshirikishwa na mimi</string>
   <string name="modified_on_date_at_time">\'Imerekebishwa\' EEE, MMM dd, yyyy \'katika\' HH:mm</string>
   <string name="google_sheets_url_hint">Fomu lazima iwe na URL ya uwasilishaji. Kama haina, hii URL itatumika.</string>

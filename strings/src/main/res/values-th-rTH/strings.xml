@@ -214,8 +214,7 @@
   <string name="survey_saving_encrypting_message">กำลังเข้ารหัสข้อมูล</string>
   <string name="high_resolution_summary">เปิดใช้งานการบันทึกวีดีโอความละเอียดสูง</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="google_drive">Google Drive</string>
-  <string name="go_drive">My Drive</string>
+    <string name="go_drive">My Drive</string>
   <string name="go_shared">แบ่งปันกับฉัน</string>
   <string name="modified_on_date_at_time">\'แก้ไขเมื่อ\' EEE, MMM dd, yyy \'เวลา\' HH:mm</string>
   <string name="drive_get_file">ได้รับ %1$s และไฟล์ภาพและเสียง</string>

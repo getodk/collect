@@ -245,8 +245,7 @@
   <string name="survey_saving_encrypting_message">Daten werden verschlüsselt…</string>
   <string name="high_resolution_summary">HD-Videoaufnahmen aktivieren</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="google_drive">Google Drive</string>
-  <string name="go_drive">My Drive</string>
+    <string name="go_drive">My Drive</string>
   <string name="go_shared">Shared with Me</string>
   <string name="modified_on_date_at_time">\'Geändert am\' EEE, dd.MM.yyyy \'um\' HH:mm</string>
   <string name="google_sheets_url_hint">Formulare müssen eine Übermittlungs-URL setzen. Wenn nicht, wird diese URL verwendet.</string>

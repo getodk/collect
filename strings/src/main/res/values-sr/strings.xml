@@ -238,8 +238,7 @@
   <string name="survey_saving_encrypting_message">Enkripcija podataka je u toku…</string>
   <string name="high_resolution_summary">Omogući snimanje video sadržaja visoke rezolucije</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="google_drive">Google Drive</string>
-  <string name="go_drive">Moj Drive</string>
+    <string name="go_drive">Moj Drive</string>
   <string name="go_shared">Podijeljeno sa mnom</string>
   <string name="modified_on_date_at_time">\'Modifikovano na\' EEE, MMM dd, yyyy \'u\' HH:mm</string>
   <string name="google_sheets_url_hint">Formular mora podesiti URL za otpremanje. Ukoliko to nije slučaj, ovaj URL će biti korišćen.</string>
