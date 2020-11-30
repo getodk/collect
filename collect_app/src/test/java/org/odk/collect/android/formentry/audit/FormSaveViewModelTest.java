@@ -433,6 +433,14 @@ public class FormSaveViewModelTest {
     }
 
     @Test
+    public void ignoreChanges_whenThereAreUnsavedFiles_shouldDeleteThoseFiles() {
+        viewModel.replaceAnswerFile("index", "blah1");
+        viewModel.ignoreChanges();
+
+        verify(mediaUtils).deleteMediaFile("blah1");
+    }
+
+    @Test
     public void replaceAnswerFile_whenAnswerFileHasAlreadyBeenReplaced_afterRecreatingViewModel_deletesPreviousReplacement() {
         viewModel.replaceAnswerFile("index", "blah1");
 
