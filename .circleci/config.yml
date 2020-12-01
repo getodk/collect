@@ -99,6 +99,10 @@ jobs:
       - store_test_results:
           path: collect_app/build/test-results
 
+      - run:
+          name: Assemble connected test build
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleDebugAndroidTest
+
   test_instrumented:
     <<: *android_config
     environment:
