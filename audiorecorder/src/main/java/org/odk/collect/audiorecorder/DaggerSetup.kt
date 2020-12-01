@@ -10,9 +10,9 @@ import dagger.Provides
 import kotlinx.coroutines.Dispatchers
 import org.odk.collect.async.CoroutineScheduler
 import org.odk.collect.async.Scheduler
-import org.odk.collect.audiorecorder.recorder.MediaRecorderRecorder
-import org.odk.collect.audiorecorder.recorder.RealMediaRecorderWrapper
 import org.odk.collect.audiorecorder.recorder.Recorder
+import org.odk.collect.audiorecorder.recorder.RecordingResourceRecorder
+import org.odk.collect.audiorecorder.recorder.resources.MediaRecorderRecordingResource
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService
 import org.odk.collect.audiorecorder.recording.internal.RecordingRepository
@@ -65,7 +65,7 @@ internal open class AudioRecorderDependencyModule {
 
     @Provides
     open fun providesRecorder(application: Application): Recorder {
-        return MediaRecorderRecorder(application.cacheDir) { RealMediaRecorderWrapper(MediaRecorder()) }
+        return RecordingResourceRecorder(application.cacheDir) { MediaRecorderRecordingResource(MediaRecorder()) }
     }
 
     @Provides

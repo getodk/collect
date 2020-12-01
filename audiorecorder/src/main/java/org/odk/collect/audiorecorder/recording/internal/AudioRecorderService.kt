@@ -39,20 +39,18 @@ class AudioRecorderService : Service() {
                 val output = intent.getSerializableExtra(EXTRA_OUTPUT) as Output
 
                 if (!recorder.isRecording() && sessionId != null) {
-                    notification.show()
-
-                    recordingRepository.start(sessionId)
-                    recorder.start(output)
-                    durationUpdates = scheduler.repeat(
-                        {
-                            recordingRepository.setDuration(duration)
-                            duration += 1000
-                        },
-                        1000L
-                    )
-
-                    amplitudeUpdates = scheduler.repeat({ recordingRepository.setAmplitude(recorder.amplitude) }, 100L)
+                    startRecording(sessionId, output)
                 }
+            }
+
+            ACTION_PAUSE -> {
+                recorder.pause()
+                recordingRepository.setPaused(true)
+            }
+
+            ACTION_RESUME -> {
+                recorder.resume()
+                recordingRepository.setPaused(false)
             }
 
             ACTION_STOP -> {
@@ -65,6 +63,22 @@ class AudioRecorderService : Service() {
         }
 
         return START_STICKY
+    }
+
+    private fun startRecording(sessionId: String, output: Output) {
+        notification.show()
+
+        recordingRepository.start(sessionId)
+        recorder.start(output)
+        durationUpdates = scheduler.repeat(
+            {
+                recordingRepository.setDuration(duration)
+                duration += 1000
+            },
+            1000L
+        )
+
+        amplitudeUpdates = scheduler.repeat({ recordingRepository.setAmplitude(recorder.amplitude) }, 100L)
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
@@ -96,6 +110,8 @@ class AudioRecorderService : Service() {
 
     companion object {
         const val ACTION_START = "START"
+        const val ACTION_PAUSE = "PAUSE"
+        const val ACTION_RESUME = "RESUME"
         const val ACTION_STOP = "STOP"
         const val ACTION_CLEAN_UP = "CLEAN_UP"
 

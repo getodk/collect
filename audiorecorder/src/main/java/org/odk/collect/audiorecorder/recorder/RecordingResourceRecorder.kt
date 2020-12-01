@@ -3,13 +3,16 @@ package org.odk.collect.audiorecorder.recorder
 import android.media.MediaRecorder
 import java.io.File
 
-internal class MediaRecorderRecorder(private val cacheDir: File, private val mediaRecorderFactory: () -> MediaRecorderWrapper) : Recorder {
+internal class RecordingResourceRecorder(private val cacheDir: File, private val recordingResourceFactory: () -> RecordingResource) : Recorder {
 
-    private var mediaRecorder: MediaRecorderWrapper? = null
+    override val amplitude: Int
+        get() = recordingResource?.getMaxAmplitude() ?: 0
+
+    private var recordingResource: RecordingResource? = null
     private var file: File? = null
 
     override fun start(output: Output) {
-        mediaRecorder = mediaRecorderFactory().also {
+        recordingResource = recordingResourceFactory().also {
             it.setAudioSource(MediaRecorder.AudioSource.MIC)
 
             when (output) {
@@ -41,6 +44,14 @@ internal class MediaRecorderRecorder(private val cacheDir: File, private val med
         }
     }
 
+    override fun pause() {
+        recordingResource?.pause()
+    }
+
+    override fun resume() {
+        recordingResource?.resume()
+    }
+
     override fun stop(): File {
         stopAndReleaseMediaRecorder()
         return file!!
@@ -51,19 +62,16 @@ internal class MediaRecorderRecorder(private val cacheDir: File, private val med
         file?.delete()
     }
 
-    override val amplitude: Int
-        get() = mediaRecorder?.getMaxAmplitude() ?: 0
-
     override fun isRecording(): Boolean {
-        return mediaRecorder != null
+        return recordingResource != null
     }
 
     private fun stopAndReleaseMediaRecorder() {
-        mediaRecorder?.apply {
+        recordingResource?.apply {
             stop()
             release()
         }
 
-        mediaRecorder = null
+        recordingResource = null
     }
 }

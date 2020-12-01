@@ -26,9 +26,15 @@ class RecordingRepository {
         }
     }
 
+    fun setPaused(paused: Boolean) {
+        _currentSession.value?.let {
+            _currentSession.value = it.copy(paused = paused)
+        }
+    }
+
     fun recordingReady(recording: File) {
         _currentSession.value?.let {
-            _currentSession.value = it.copy(file = recording)
+            _currentSession.value = it.copy(file = recording, paused = false)
         }
     }
 

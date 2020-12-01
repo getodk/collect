@@ -4,6 +4,8 @@ import java.io.File
 
 internal interface Recorder {
     fun start(output: Output)
+    fun pause()
+    fun resume()
     fun stop(): File
     fun cancel()
 

@@ -7,6 +7,13 @@ import java.io.File
 class FakeRecorder : Recorder {
 
     override var amplitude: Int = 0
+
+    private var _paused = false
+    val paused: Boolean
+        get() {
+            return _paused
+        }
+
     var file: File? = null
     lateinit var output: Output
 
@@ -29,6 +36,14 @@ class FakeRecorder : Recorder {
         cancelled = false
         this.output = output
         _recordings.add(Unit)
+    }
+
+    override fun pause() {
+        _paused = true
+    }
+
+    override fun resume() {
+        _paused = false
     }
 
     override fun stop(): File {
