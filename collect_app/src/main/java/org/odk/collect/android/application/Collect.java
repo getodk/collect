@@ -19,9 +19,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.StrictMode;
-import android.preference.PreferenceManager;
 import android.location.Location;       // smap
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.multidex.MultiDex;
@@ -29,38 +27,25 @@ import androidx.multidex.MultiDex;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.amazonaws.mobile.AWSMobileClient;
+import org.odk.collect.android.amazonaws.mobile.AWSMobileClient;  // smap
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.external.ExternalDataManager;
-import org.odk.collect.android.external.handler.SmapRemoteDataItem; 
-import org.odk.collect.android.geo.MapboxUtils;
+import org.odk.collect.android.external.handler.SmapRemoteDataItem;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.loaders.GeofenceEntry;
-import org.odk.collect.android.logic.FormInfo;
-import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.taskModel.FormLaunchDetail;
 import org.odk.collect.android.taskModel.FormRestartDetails;
-import org.odk.collect.android.utilities.LocaleHelper;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
-import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.external.ExternalDataManager;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
-import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.NotificationUtils;
-import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Stack;
 
 import java.io.ByteArrayInputStream;

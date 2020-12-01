@@ -673,6 +673,9 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
      */
     private void importSettingsFromLegacyFiles() {
         try {
+            if(storagePathProvider == null) {
+                storagePathProvider = new StoragePathProvider();        // Why is this needed here when not required in main menu
+            }
             String settings = new LegacySettingsFileReader(storagePathProvider).toJSON();
 
             if (settings != null) {

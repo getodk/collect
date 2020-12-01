@@ -113,7 +113,7 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
 
         } else {        // Use the text field
             useSpinner = false;
-            urlSpinner.setVisibility(View.GONE);
+           // urlSpinner.setVisibility(View.GONE);  // smap disable for the moment
             urlText.setText(url);
         }
 

@@ -15,7 +15,7 @@
 	both modified:   collect_app/src/main/java/org/odk/collect/android/adapters/AbstractSelectListAdapter.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/adapters/SelectMultipleListAdapter.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/adapters/SelectOneListAdapter.java
-	both modified:   collect_app/src/main/java/org/odk/collect/android/application/Collect.java
+r	both modified:   collect_app/src/main/java/org/odk/collect/android/application/Collect.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/dao/FormsDao.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/dao/InstancesDao.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/database/FormDatabaseMigrator.java
