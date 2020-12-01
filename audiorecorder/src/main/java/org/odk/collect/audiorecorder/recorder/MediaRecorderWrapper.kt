@@ -3,7 +3,8 @@ package org.odk.collect.audiorecorder.recorder
 import android.media.MediaRecorder
 
 /**
- * Allows faking/stubbing/mocking with our interactions with Android's MediaRecorder
+ * Allows faking/stubbing/mocking with our interactions with Android's MediaRecorder. Could also
+ * wrap multiple implementations in the future.
  */
 
 internal interface MediaRecorderWrapper {

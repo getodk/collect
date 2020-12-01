@@ -6,29 +6,28 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.audiorecorder.AudioRecorderDependencyModule
 import org.odk.collect.audiorecorder.RobolectricApplication
+import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recorder.Recorder
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelTest
 import org.odk.collect.audiorecorder.setupDependencies
 import org.odk.collect.audiorecorder.support.FakeRecorder
-import org.odk.collect.testshared.LiveDataTester
 import org.robolectric.Robolectric
 import org.robolectric.Shadows.shadowOf
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
-class RealAudioRecorderViewModelTest : AudioRecorderViewModelTest() {
+class ForegroundServiceAudioRecorderViewModelTest : AudioRecorderViewModelTest() {
 
     @get:Rule
     val instantTaskExecutor = InstantTaskExecutorRule()
-    private val liveDataTester = LiveDataTester()
     private val application by lazy { getApplicationContext<RobolectricApplication>() }
 
     private val recordingRepository = RecordingRepository()
@@ -67,8 +66,16 @@ class RealAudioRecorderViewModelTest : AudioRecorderViewModelTest() {
         )
     }
 
-    @After
-    fun teardown() {
-        liveDataTester.teardown()
+    @Test
+    fun start_passesOutputToRecorder() {
+        viewModel.start("blah", Output.AAC)
+        viewModel.stop()
+        runBackground()
+        assertThat(fakeRecorder.output, equalTo(Output.AAC))
+
+        viewModel.start("blah", Output.AMR)
+        viewModel.stop()
+        runBackground()
+        assertThat(fakeRecorder.output, equalTo(Output.AMR))
     }
 }
