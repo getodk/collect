@@ -60,6 +60,11 @@ public class AudioRecordingControllerFragment extends Fragment {
                     binding.pauseRecording.setText(R.string.pause_recording);
                     binding.pauseRecording.setOnClickListener(v -> viewModel.pause());
                 }
+
+                // Pause not available before API 24
+                if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N) {
+                    binding.pauseRecording.setVisibility(GONE);
+                }
             } else {
                 binding.getRoot().setVisibility(GONE);
             }

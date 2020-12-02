@@ -2,6 +2,7 @@ package org.odk.collect.android.audio;
 
 import android.app.Application;
 import android.content.Context;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.testing.FragmentScenario;
@@ -10,6 +11,7 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
@@ -18,6 +20,7 @@ import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorderViewModel;
+import org.robolectric.annotation.Config;
 
 import java.io.File;
 import java.io.IOException;
@@ -99,4 +102,21 @@ public class AudioRecordingControllerFragmentTest {
         });
     }
 
+    @Test
+    @Config(sdk = 23)
+    public void whenSDKOlderThan24_hidesPauseButton() {
+        FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
+        scenario.onFragment(fragment -> {
+            assertThat(fragment.binding.pauseRecording.getVisibility(), is(View.GONE));
+        });
+    }
+
+    @Test
+    @Config(sdk = 24)
+    public void whenSDK24OrNewer_showsPauseButton() {
+        FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
+        scenario.onFragment(fragment -> {
+            assertThat(fragment.binding.pauseRecording.getVisibility(), is(View.VISIBLE));
+        });
+    }
 }
