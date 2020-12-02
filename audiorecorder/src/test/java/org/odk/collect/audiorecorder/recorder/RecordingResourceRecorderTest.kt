@@ -7,22 +7,23 @@ import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
 import org.junit.Test
 import java.io.File
+import java.io.IOException
 
 class RecordingResourceRecorderTest {
 
     private val cacheDir = Files.createTempDir()
-    private val mediaRecorder = FakeRecordingResource()
+    private val recordingResource = FakeRecordingResource()
 
     private var lastOutput: Output? = null
     private val recorder = RecordingResourceRecorder(cacheDir) { output ->
         lastOutput = output
-        mediaRecorder
+        recordingResource
     }
 
     @Test
     fun start_startsMediaRecorder() {
         recorder.start(Output.AAC)
-        assertThat(mediaRecorder.hasStarted(), equalTo(true))
+        assertThat(recordingResource.hasStarted(), equalTo(true))
     }
 
     @Test
@@ -40,15 +41,15 @@ class RecordingResourceRecorderTest {
     @Test
     fun start_createsAndRecordsToM4AFileInCacheDir() {
         recorder.start(Output.AAC)
-        assertThat(mediaRecorder.getOutputFile()!!.parent, equalTo(cacheDir.absolutePath))
-        assertThat(mediaRecorder.getOutputFile()!!.absolutePath, endsWith(".m4a"))
+        assertThat(recordingResource.getOutputFile()!!.parent, equalTo(cacheDir.absolutePath))
+        assertThat(recordingResource.getOutputFile()!!.absolutePath, endsWith(".m4a"))
     }
 
     @Test
     fun start_createsAndRecordsToAMRFileInCacheDir() {
         recorder.start(Output.AMR)
-        assertThat(mediaRecorder.getOutputFile()!!.parent, equalTo(cacheDir.absolutePath))
-        assertThat(mediaRecorder.getOutputFile()!!.absolutePath, endsWith(".amr"))
+        assertThat(recordingResource.getOutputFile()!!.parent, equalTo(cacheDir.absolutePath))
+        assertThat(recordingResource.getOutputFile()!!.absolutePath, endsWith(".amr"))
     }
 
     @Test
@@ -72,18 +73,30 @@ class RecordingResourceRecorderTest {
         assertThat(outputFile1!!.absolutePath, not(equalTo(outputFile2!!.absolutePath)))
     }
 
+    @Test(expected = RecordingException::class)
+    fun start_whenFileCantBeCreated_throwsRecordingException() {
+        cacheDir.deleteRecursively()
+        recorder.start(Output.AAC)
+    }
+
+    @Test(expected = RecordingException::class)
+    fun start_whenPrepareFails_throwsRecordingException() {
+        recordingResource.failOnPrepare()
+        recorder.start(Output.AAC)
+    }
+
     @Test
     fun stop_releasesMediaRecorder() {
         recorder.start(Output.AAC)
         recorder.stop()
-        assertThat(mediaRecorder.isReleased(), equalTo(true))
+        assertThat(recordingResource.isReleased(), equalTo(true))
     }
 
     @Test
     fun stop_returnsOutputFile() {
         recorder.start(Output.AAC)
         val file = recorder.stop()
-        assertThat(file.absolutePath, equalTo(mediaRecorder.getOutputFile()!!.absolutePath))
+        assertThat(file.absolutePath, equalTo(recordingResource.getOutputFile()!!.absolutePath))
     }
 
     @Test
@@ -97,14 +110,14 @@ class RecordingResourceRecorderTest {
     fun cancel_releasesMediaRecorder() {
         recorder.start(Output.AAC)
         recorder.cancel()
-        assertThat(mediaRecorder.isReleased(), equalTo(true))
+        assertThat(recordingResource.isReleased(), equalTo(true))
     }
 
     @Test
     fun cancel_deletesOutputFile() {
         recorder.start(Output.AAC)
         recorder.cancel()
-        assertThat(mediaRecorder.getOutputFile()!!.exists(), equalTo(false))
+        assertThat(recordingResource.getOutputFile()!!.exists(), equalTo(false))
     }
 
     @Test
@@ -123,7 +136,7 @@ class RecordingResourceRecorderTest {
     fun pause_pausesMediaRecorder() {
         recorder.start(Output.AAC)
         recorder.pause()
-        assertThat(mediaRecorder.isPaused(), equalTo(true))
+        assertThat(recordingResource.isPaused(), equalTo(true))
     }
 
     @Test
@@ -131,20 +144,19 @@ class RecordingResourceRecorderTest {
         recorder.start(Output.AAC)
         recorder.pause()
         recorder.resume()
-        assertThat(mediaRecorder.isPaused(), equalTo(false))
+        assertThat(recordingResource.isPaused(), equalTo(false))
     }
 }
 
 private class FakeRecordingResource : RecordingResource {
 
     private var file: File? = null
-    private var audioSource: Int? = null
-    private var outputFormat: Int? = null
 
     private var started: Boolean = false
     private var prepared: Boolean = false
     private var released: Boolean = false
     private var paused: Boolean = false
+    private var failOnPrepare: Boolean = false
 
     override fun setOutputFile(path: String) {
         if (prepared) {
@@ -158,8 +170,13 @@ private class FakeRecordingResource : RecordingResource {
         file = File(path)
     }
 
+    @Throws(IOException::class)
     override fun prepare() {
-        prepared = true
+        if (failOnPrepare) {
+            throw IOException()
+        } else {
+            prepared = true
+        }
     }
 
     override fun start() {
@@ -216,5 +233,9 @@ private class FakeRecordingResource : RecordingResource {
 
     fun isPaused(): Boolean {
         return paused
+    }
+
+    fun failOnPrepare() {
+        failOnPrepare = true
     }
 }

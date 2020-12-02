@@ -1,6 +1,7 @@
 package org.odk.collect.audiorecorder.recorder
 
 import java.io.File
+import java.io.IOException
 
 internal class RecordingResourceRecorder(private val cacheDir: File, private val recordingResourceFactory: (Output) -> RecordingResource) : Recorder {
 
@@ -12,20 +13,26 @@ internal class RecordingResourceRecorder(private val cacheDir: File, private val
 
     override fun start(output: Output) {
         recordingResource = recordingResourceFactory(output).also {
-            val tempFile = when (output) {
-                Output.AMR -> {
-                    File.createTempFile("recording", ".amr", cacheDir)
-                }
+            val suffix = when (output) {
+                Output.AMR -> ".amr"
+                Output.AAC -> ".m4a"
+            }
 
-                Output.AAC -> {
-                    File.createTempFile("recording", ".m4a", cacheDir)
-                }
+            val tempFile = try {
+                File.createTempFile("recording", suffix, cacheDir)
+            } catch (e: IOException) {
+                throw RecordingException()
             }
 
             it.setOutputFile(tempFile.absolutePath)
             file = tempFile
 
-            it.prepare()
+            try {
+                it.prepare()
+            } catch (e: IOException) {
+                throw RecordingException()
+            }
+
             it.start()
         }
     }
