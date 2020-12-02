@@ -21,7 +21,6 @@ import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.support.RunnableRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
-import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.utilities.ActivityAvailability;
 
@@ -82,15 +81,8 @@ public class ExternalAudioRecordingTest {
     }
 
     @Test
-    public void onAudioQuestion_withoutAudioQuality_andCollectIsSetToUseExternal_usesExternalRecorder() {
+    public void onAudioQuestion_withoutAudioQuality_usesExternalRecorder() {
         new MainMenuPage(rule)
-                .clickOnMenu()
-                .clickGeneralSettings()
-                .clickFormManagement()
-                .scrollToRecyclerViewItemAndClickText(R.string.external_app_recording)
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
-
                 .copyForm("audio-question.xml")
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
