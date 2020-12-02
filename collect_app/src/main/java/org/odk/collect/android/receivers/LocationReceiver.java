@@ -16,7 +16,6 @@ import org.odk.collect.android.loaders.GeofenceEntry;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.Constants;
-import org.odk.collect.android.utilities.NotificationUtils;
 
 import java.util.ArrayList;
 

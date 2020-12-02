@@ -35,12 +35,10 @@ import com.google.android.gms.location.LocationServices;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.notifications.NotificationManagerNotifier;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.receivers.LocationReceiver;
 import org.odk.collect.android.utilities.Constants;
-import org.odk.collect.android.utilities.NotificationUtils;
 
 import java.util.Timer;
 import java.util.TimerTask;

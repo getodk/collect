@@ -53,7 +53,6 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.provider.FormsProviderAPI;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
 import org.odk.collect.android.loaders.TaskEntry;
@@ -64,7 +63,6 @@ import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.ManageForm.ManageFormDetails;
 import org.odk.collect.android.utilities.ManageFormResponse;
 import org.odk.collect.android.utilities.MultiFormDownloader;
-import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.Utilities;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 

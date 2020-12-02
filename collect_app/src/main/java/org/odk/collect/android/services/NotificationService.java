@@ -26,7 +26,6 @@ import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.tasks.DownloadTasksTask;
-import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.Utilities;
 
 import javax.inject.Inject;
