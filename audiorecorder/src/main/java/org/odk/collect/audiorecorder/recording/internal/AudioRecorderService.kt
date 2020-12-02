@@ -46,11 +46,15 @@ class AudioRecorderService : Service() {
             ACTION_PAUSE -> {
                 recorder.pause()
                 recordingRepository.setPaused(true)
+
+                stopUpdates()
             }
 
             ACTION_RESUME -> {
                 recorder.resume()
                 recordingRepository.setPaused(false)
+
+                startUpdates()
             }
 
             ACTION_STOP -> {
@@ -70,15 +74,7 @@ class AudioRecorderService : Service() {
 
         recordingRepository.start(sessionId)
         recorder.start(output)
-        durationUpdates = scheduler.repeat(
-            {
-                recordingRepository.setDuration(duration)
-                duration += 1000
-            },
-            1000L
-        )
-
-        amplitudeUpdates = scheduler.repeat({ recordingRepository.setAmplitude(recorder.amplitude) }, 100L)
+        startUpdates()
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
@@ -91,8 +87,7 @@ class AudioRecorderService : Service() {
     }
 
     private fun stopRecording() {
-        amplitudeUpdates?.cancel()
-        durationUpdates?.cancel()
+        stopUpdates()
         notification.dismiss()
 
         val file = recorder.stop()
@@ -100,12 +95,28 @@ class AudioRecorderService : Service() {
     }
 
     private fun cleanUp() {
-        amplitudeUpdates?.cancel()
-        durationUpdates?.cancel()
+        stopUpdates()
         notification.dismiss()
 
         recorder.cancel()
         recordingRepository.clear()
+    }
+
+    private fun startUpdates() {
+        durationUpdates = scheduler.repeat(
+            {
+                recordingRepository.setDuration(duration)
+                duration += 1000
+            },
+            1000L
+        )
+
+        amplitudeUpdates = scheduler.repeat({ recordingRepository.setAmplitude(recorder.amplitude) }, 100L)
+    }
+
+    private fun stopUpdates() {
+        amplitudeUpdates?.cancel()
+        durationUpdates?.cancel()
     }
 
     companion object {
