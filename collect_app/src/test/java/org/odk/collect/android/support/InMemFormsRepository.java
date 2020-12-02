@@ -34,6 +34,10 @@ public class InMemFormsRepository implements FormsRepository {
     }
 
     @Override
+    public List<Form> getAll(String jrFormId, @Nullable String jrVersion) {
+        return forms.stream().filter(f -> f.getJrFormId().equals(jrFormId) && Objects.equals(f.getJrVersion(), jrVersion)).collect(toList());
+    }
+
     public List<Form> getAllNotDeleted(String jrFormId, @Nullable String jrVersion) {
         return forms.stream().filter(f -> f.getJrFormId().equals(jrFormId) && Objects.equals(f.getJrVersion(), jrVersion) && !f.isDeleted()).collect(toList());
     }
@@ -48,11 +52,6 @@ public class InMemFormsRepository implements FormsRepository {
     @Override
     public Form get(String jrFormId, @Nullable String jrVersion) {
         return forms.stream().filter(f -> f.getJrFormId().equals(jrFormId) && Objects.equals(f.getJrVersion(), jrVersion)).findFirst().orElse(null);
-    }
-
-    @Override
-    public List<Form> getAll(String jrFormId, @Nullable String jrVersion) {
-        return forms.stream().filter(f -> f.getJrFormId().equals(jrFormId) && Objects.equals(f.getJrVersion(), jrVersion)).collect(toList());
     }
 
     @Nullable

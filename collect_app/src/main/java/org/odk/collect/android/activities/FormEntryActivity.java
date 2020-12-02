@@ -599,7 +599,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             instancePath = formInfo.getInstancePath();
             List<Form> candidateForms = formsRepository.getAll(formInfo.getFormId(), formInfo.getFormVersion());
 
-            if (candidateForms.size() < 1) {
+            if (candidateForms.isEmpty()) {
                 createErrorDialog(getString(
                         R.string.parent_form_not_present,
                         formInfo.getFormId())

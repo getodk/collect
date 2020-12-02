@@ -76,7 +76,7 @@ public class DatabaseFormsRepository implements FormsRepository {
     @Override
     public Form get(String jrFormId, @Nullable String jrVersion) {
         List<Form> all = getAll(jrFormId, jrVersion);
-        if (all.size() > 0) {
+        if (!all.isEmpty()) {
             return all.get(0);
         } else {
             return null;
