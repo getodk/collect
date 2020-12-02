@@ -51,8 +51,13 @@ public class ServerFormDownloader implements FormDownloader {
     @Override
     public void downloadForm(ServerFormDetails form, @Nullable ProgressReporter progressReporter, @Nullable Supplier<Boolean> isCancelled) throws FormDownloadException, InterruptedException {
         Form formOnDevice = formsRepository.get(form.getFormId(), form.getFormVersion());
-        if (formOnDevice != null && formOnDevice.isDeleted()) {
-            formsRepository.restore(formOnDevice.getId());
+        if (formOnDevice != null) {
+            if (formOnDevice.isDeleted()) {
+                formsRepository.restore(formOnDevice.getId());
+            } else if (!(form.getHash().equals(formOnDevice.getMD5Hash()))) {
+                throw new FormDownloadException("You've already downloaded a form with the same ID and version but with different contents. " +
+                        "Before downloading, please send all data you have collected with the existing form and delete the data and blank form.");
+            }
         }
 
         File tempDir = new File(cacheDir, "download-" + UUID.randomUUID().toString());
