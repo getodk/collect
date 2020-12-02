@@ -152,11 +152,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         enterDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (MultiClickGuard.allowClick(getClass().getName())) {
-                    Intent i = new Intent(getApplicationContext(),
-                            FillBlankFormActivity.class);
-                    startActivity(i);
-                }
+                Intent i = new Intent(getApplicationContext(),
+                        FillBlankFormActivity.class);
+                startActivity(i);
             }
         });
 
@@ -166,12 +164,10 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         reviewDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (MultiClickGuard.allowClick(getClass().getName())) {
-                    Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
-                    i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
-                            ApplicationConstants.FormModes.EDIT_SAVED);
-                    startActivity(i);
-                }
+                Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
+                        ApplicationConstants.FormModes.EDIT_SAVED);
+                startActivity(i);
             }
         });
 
@@ -181,11 +177,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         sendDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (MultiClickGuard.allowClick(getClass().getName())) {
-                    Intent i = new Intent(getApplicationContext(),
-                            InstanceUploaderListActivity.class);
-                    startActivity(i);
-                }
+                Intent i = new Intent(getApplicationContext(),
+                        InstanceUploaderListActivity.class);
+                startActivity(i);
             }
         });
 
@@ -194,12 +188,10 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         viewSentFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (MultiClickGuard.allowClick(getClass().getName())) {
-                    Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
-                    i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
-                            ApplicationConstants.FormModes.VIEW_SENT);
-                    startActivity(i);
-                }
+                Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
+                        ApplicationConstants.FormModes.VIEW_SENT);
+                startActivity(i);
             }
         });
 
@@ -209,26 +201,24 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         getFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (MultiClickGuard.allowClick(getClass().getName())) {
-                    SharedPreferences sharedPreferences = PreferenceManager
-                            .getDefaultSharedPreferences(MainMenuActivity.this);
-                    String protocol = sharedPreferences.getString(
-                            GeneralKeys.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
-                    Intent i = null;
-                    if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
-                        if (new PlayServicesChecker().isGooglePlayServicesAvailable(MainMenuActivity.this)) {
-                            i = new Intent(getApplicationContext(),
-                                    GoogleDriveActivity.class);
-                        } else {
-                            new PlayServicesChecker().showGooglePlayServicesAvailabilityErrorDialog(MainMenuActivity.this);
-                            return;
-                        }
-                    } else {
+                SharedPreferences sharedPreferences = PreferenceManager
+                        .getDefaultSharedPreferences(MainMenuActivity.this);
+                String protocol = sharedPreferences.getString(
+                        GeneralKeys.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
+                Intent i = null;
+                if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
+                    if (new PlayServicesChecker().isGooglePlayServicesAvailable(MainMenuActivity.this)) {
                         i = new Intent(getApplicationContext(),
-                                FormDownloadListActivity.class);
+                                GoogleDriveActivity.class);
+                    } else {
+                        new PlayServicesChecker().showGooglePlayServicesAvailabilityErrorDialog(MainMenuActivity.this);
+                        return;
                     }
-                    startActivity(i);
+                } else {
+                    i = new Intent(getApplicationContext(),
+                            FormDownloadListActivity.class);
                 }
+                startActivity(i);
             }
         });
 
@@ -238,11 +228,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         manageFilesButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (MultiClickGuard.allowClick(getClass().getName())) {
-                    Intent i = new Intent(getApplicationContext(),
-                            DeleteSavedFormActivity.class);
-                    startActivity(i);
-                }
+                Intent i = new Intent(getApplicationContext(),
+                        DeleteSavedFormActivity.class);
+                startActivity(i);
             }
         });
 
