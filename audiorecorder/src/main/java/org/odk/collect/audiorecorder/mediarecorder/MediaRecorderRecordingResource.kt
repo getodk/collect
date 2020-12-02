@@ -1,4 +1,4 @@
-package org.odk.collect.audiorecorder.recorder.resources
+package org.odk.collect.audiorecorder.mediarecorder
 
 import android.media.MediaRecorder
 import org.odk.collect.audiorecorder.recorder.RecordingResource
