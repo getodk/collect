@@ -49,6 +49,15 @@ public class DatabaseFormsRepository implements FormsRepository {
     }
 
     @Override
+    public List<Form> getAll(String jrFormId, @Nullable String jrVersion) {
+        if (jrVersion != null) {
+            return queryForForms(JR_FORM_ID + "=? AND " + JR_VERSION + "=?", new String[]{jrFormId, jrVersion});
+        } else {
+            return queryForForms(JR_FORM_ID + "=? AND " + JR_VERSION + " IS NULL", new String[]{jrFormId});
+        }
+    }
+
+    @Override
     public List<Form> getAllNotDeleted(String jrFormId, @Nullable String jrVersion) {
         if (jrVersion != null) {
             return queryForForms(DELETED_DATE + " IS NULL AND " + JR_FORM_ID + "=? AND " + JR_VERSION + "=?", new String[]{jrFormId, jrVersion});
@@ -66,10 +75,11 @@ public class DatabaseFormsRepository implements FormsRepository {
     @Nullable
     @Override
     public Form get(String jrFormId, @Nullable String jrVersion) {
-        if (jrVersion != null) {
-            return queryForForm(JR_FORM_ID + "=? AND " + JR_VERSION + "=?", new String[]{jrFormId, jrVersion});
+        List<Form> all = getAll(jrFormId, jrVersion);
+        if (all.size() > 0) {
+            return all.get(0);
         } else {
-            return queryForForm(JR_FORM_ID + "=? AND " + JR_VERSION + " IS NULL", new String[]{jrFormId});
+            return null;
         }
     }
 
@@ -164,10 +174,9 @@ public class DatabaseFormsRepository implements FormsRepository {
         }
     }
 
-    @Nullable
     private List<Form> queryForForms(String selection, String[] selectionArgs) {
         try (Cursor cursor = new FormsDao().getFormsCursor(selection, selectionArgs)) {
-            return new FormsDao().getFormsFromCursor(cursor);
+            return FormsDao.getFormsFromCursor(cursor);
         }
     }
 

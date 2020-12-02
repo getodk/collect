@@ -95,6 +95,10 @@ public class StoragePathProvider {
         return getAbsoluteFilePath(getDirPath(StorageSubdirectory.INSTANCES), filePath);
     }
 
+    public String getAbsoluteFormFilePath(String filePath) {
+        return getAbsoluteFilePath(getDirPath(StorageSubdirectory.FORMS), filePath);
+    }
+
     public String getFormDbPath(String filePath) {
         return getDbPath(getDirPath(StorageSubdirectory.FORMS), filePath);
     }
