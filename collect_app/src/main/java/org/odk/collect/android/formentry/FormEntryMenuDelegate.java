@@ -100,7 +100,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_add_repeat) {
-            if (audioRecorderViewModel.isRecording().getValue()) {
+            if (audioRecorderViewModel.isRecording()) {
                 DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
             } else {
                 formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
@@ -110,7 +110,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
 
             return true;
         } else if (item.getItemId() == R.id.menu_preferences) {
-            if (audioRecorderViewModel.isRecording().getValue()) {
+            if (audioRecorderViewModel.isRecording()) {
                 DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
             } else {
                 Intent pref = new Intent(activity, PreferencesActivity.class);
@@ -122,7 +122,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
             backgroundLocationViewModel.backgroundLocationPreferenceToggled();
             return true;
         } else if (item.getItemId() == R.id.menu_goto) {
-            if (audioRecorderViewModel.isRecording().getValue()) {
+            if (audioRecorderViewModel.isRecording()) {
                 DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
             } else {
                 formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());

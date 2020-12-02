@@ -36,8 +36,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.support.CopyFormRule;
-import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.FormLoadingUtils;
+import org.odk.collect.android.support.ResetStateRule;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,8 +55,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -70,7 +70,6 @@ import static org.odk.collect.android.support.actions.NestedScrollToAction.neste
 public class IntentGroupTest {
     private static final String INTENT_GROUP_FORM = "intent-group.xml";
 
-    @Rule
     public ActivityTestRule<FormEntryActivity> activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(INTENT_GROUP_FORM);
 
     @Rule
@@ -80,7 +79,8 @@ public class IntentGroupTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
             ))
             .around(new ResetStateRule())
-            .around(new CopyFormRule(INTENT_GROUP_FORM, true));
+            .around(new CopyFormRule(INTENT_GROUP_FORM, true))
+            .around(activityTestRule);
 
     // Verifies that a value given to the label text with form buttonText is used as the button text.
     @Test
@@ -128,7 +128,7 @@ public class IntentGroupTest {
         resultIntent.setClipData(clipData);
         resultIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent));
-        onView(withText("This is buttonText")).perform(click());
+        onView(withText("This is buttonText")).perform(nestedScrollTo(), click());
 
         assertImageWidgetWithAnswer();
         assertAudioWidgetWithAnswer();
@@ -162,7 +162,7 @@ public class IntentGroupTest {
         resultIntent.setClipData(clipData);
         resultIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent));
-        onView(withText("This is buttonText")).perform(click());
+        onView(withText("This is buttonText")).perform(nestedScrollTo(), click());
 
         onView(withIndex(withClassName(endsWith("EditText")), 0)).check(matches(withText("")));
         onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText("")));
@@ -221,7 +221,7 @@ public class IntentGroupTest {
     }
 
     private void assertVideoWidgetWithoutAnswer() {
-        onView(withId(R.id.play_video)).check(matches(isDisplayed()));
+        onView(withId(R.id.play_video)).perform(nestedScrollTo()).check(matches(isDisplayed()));
         onView(withId(R.id.play_video)).check(matches(not(isEnabled())));
     }
 

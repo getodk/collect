@@ -51,6 +51,9 @@ internal class MediaRecorderRecorder(private val cacheDir: File, private val med
         file?.delete()
     }
 
+    override val amplitude: Int
+        get() = mediaRecorder?.getMaxAmplitude() ?: 0
+
     override fun isRecording(): Boolean {
         return mediaRecorder != null
     }

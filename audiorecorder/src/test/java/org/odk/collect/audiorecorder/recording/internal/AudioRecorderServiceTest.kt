@@ -1,6 +1,8 @@
 package org.odk.collect.audiorecorder.recording.internal
 
 import android.app.Application
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
 import org.hamcrest.MatcherAssert.assertThat
@@ -10,6 +12,7 @@ import org.hamcrest.Matchers.nullValue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.AudioRecorderDependencyModule
 import org.odk.collect.audiorecorder.R
 import org.odk.collect.audiorecorder.RobolectricApplication
@@ -17,6 +20,7 @@ import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recorder.Recorder
 import org.odk.collect.audiorecorder.setupDependencies
 import org.odk.collect.audiorecorder.support.FakeRecorder
+import org.odk.collect.testshared.FakeScheduler
 import org.robolectric.Robolectric.buildService
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
@@ -27,6 +31,9 @@ class AudioRecorderServiceTest {
 
     private val application: RobolectricApplication by lazy { ApplicationProvider.getApplicationContext() }
     private val recorder = FakeRecorder()
+    private val scheduler = FakeScheduler()
+
+    private var serviceInstance: ServiceController<AudioRecorderService>? = null
 
     @Before
     fun setup() {
@@ -34,6 +41,10 @@ class AudioRecorderServiceTest {
             object : AudioRecorderDependencyModule() {
                 override fun providesRecorder(application: Application): Recorder {
                     return recorder
+                }
+
+                override fun providesScheduler(application: Application): Scheduler {
+                    return scheduler
                 }
             }
         )
@@ -70,6 +81,28 @@ class AudioRecorderServiceTest {
     }
 
     @Test
+    fun startAction_updatesDurationOnNotificationEverySecond() {
+        val intent = createStartIntent("456")
+        val service = startService(intent)
+
+        val notificationId = shadowOf(service.get()).lastForegroundNotificationId
+        val notificationManager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val shadowNotificationManager = shadowOf(notificationManager)
+
+        scheduler.runForeground(0)
+        assertThat(shadowOf(shadowNotificationManager.getNotification(notificationId)).contentText, equalTo("00:00"))
+
+        scheduler.runForeground(500)
+        assertThat(shadowOf(shadowNotificationManager.getNotification(notificationId)).contentText, equalTo("00:00"))
+
+        scheduler.runForeground(1000)
+        assertThat(shadowOf(shadowNotificationManager.getNotification(notificationId)).contentText, equalTo("00:01"))
+
+        scheduler.runForeground(2000)
+        assertThat(shadowOf(shadowNotificationManager.getNotification(notificationId)).contentText, equalTo("00:02"))
+    }
+
+    @Test
     fun stopAction_stopsSelf() {
         startService(createStartIntent("123"))
 
@@ -78,6 +111,17 @@ class AudioRecorderServiceTest {
         val service = startService(stopIntent)
 
         assertThat(shadowOf(service.get()).isStoppedBySelf, equalTo(true))
+    }
+
+    @Test
+    fun stopAction_stopsUpdates() {
+        startService(createStartIntent("123"))
+
+        val stopIntent = Intent(application, AudioRecorderService::class.java)
+        stopIntent.action = AudioRecorderService.ACTION_STOP
+        startService(stopIntent)
+
+        assertThat(scheduler.isRepeatRunning(), equalTo(false))
     }
 
     @Test
@@ -101,6 +145,17 @@ class AudioRecorderServiceTest {
 
         assertThat(recorder.isRecording(), equalTo(false))
         assertThat(recorder.wasCancelled(), equalTo(true))
+    }
+
+    @Test
+    fun cleanUpAction_whileRecording_stopsUpdates() {
+        startService(createStartIntent("123"))
+
+        val cancelIntent = Intent(application, AudioRecorderService::class.java)
+        cancelIntent.action = AudioRecorderService.ACTION_CLEAN_UP
+        startService(cancelIntent)
+
+        assertThat(scheduler.isRepeatRunning(), equalTo(false))
     }
 
     @Test
@@ -150,8 +205,17 @@ class AudioRecorderServiceTest {
     }
 
     private fun startService(intent: Intent): ServiceController<AudioRecorderService> {
-        return buildService(AudioRecorderService::class.java, intent)
-            .create()
-            .startCommand(0, 0)
+        return serviceInstance.let {
+            if (it == null) {
+                val serviceController = buildService(AudioRecorderService::class.java, intent)
+                    .create()
+                    .startCommand(0, 0)
+                serviceInstance = serviceController
+                serviceController
+            } else {
+                it.withIntent(intent)
+                    .startCommand(0, 0)
+            }
+        }
     }
 }

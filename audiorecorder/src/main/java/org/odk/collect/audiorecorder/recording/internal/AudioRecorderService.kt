@@ -1,19 +1,13 @@
 package org.odk.collect.audiorecorder.recording.internal
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
-import android.os.Build
 import android.os.IBinder
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationCompat.PRIORITY_LOW
-import org.odk.collect.audiorecorder.R
+import org.odk.collect.async.Cancellable
+import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.getComponent
 import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recorder.Recorder
-import org.odk.collect.strings.getLocalizedString
 import javax.inject.Inject
 
 class AudioRecorderService : Service() {
@@ -24,9 +18,18 @@ class AudioRecorderService : Service() {
     @Inject
     internal lateinit var recordingRepository: RecordingRepository
 
+    @Inject
+    internal lateinit var scheduler: Scheduler
+
+    private lateinit var notification: RecordingForegroundServiceNotification
+    private var duration = 0L
+    private var durationUpdates: Cancellable? = null
+    private var amplitudeUpdates: Cancellable? = null
+
     override fun onCreate() {
         super.onCreate()
         getComponent().inject(this)
+        notification = RecordingForegroundServiceNotification(this, recordingRepository)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -36,20 +39,19 @@ class AudioRecorderService : Service() {
                 val output = intent.getSerializableExtra(EXTRA_OUTPUT) as Output
 
                 if (!recorder.isRecording() && sessionId != null) {
+                    notification.show()
+
                     recordingRepository.start(sessionId)
-
-                    setupNotificationChannel()
-                    val notificationIntent = Intent(this, ReturnToAppActivity::class.java)
-                    val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
-                        .setContentTitle(getLocalizedString(R.string.recording))
-                        .setSmallIcon(R.drawable.ic_baseline_mic_24)
-                        .setContentIntent(PendingIntent.getActivity(this, 0, notificationIntent, 0))
-                        .setPriority(PRIORITY_LOW)
-                        .build()
-
-                    startForeground(NOTIFICATION_ID, notification)
-
                     recorder.start(output)
+                    durationUpdates = scheduler.repeat(
+                        {
+                            recordingRepository.setDuration(duration)
+                            duration += 1000
+                        },
+                        1000L
+                    )
+
+                    amplitudeUpdates = scheduler.repeat({ recordingRepository.setAmplitude(recorder.amplitude) }, 100L)
                 }
             }
 
@@ -65,18 +67,6 @@ class AudioRecorderService : Service() {
         return START_STICKY
     }
 
-    private fun setupNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel = NotificationChannel(
-                NOTIFICATION_CHANNEL,
-                getLocalizedString(R.string.recording_channel),
-                NotificationManager.IMPORTANCE_LOW
-            )
-
-            (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(notificationChannel)
-        }
-    }
-
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
         cleanUp()
@@ -87,21 +77,24 @@ class AudioRecorderService : Service() {
     }
 
     private fun stopRecording() {
+        amplitudeUpdates?.cancel()
+        durationUpdates?.cancel()
+        notification.dismiss()
+
         val file = recorder.stop()
         recordingRepository.recordingReady(file)
-        stopSelf()
     }
 
     private fun cleanUp() {
+        amplitudeUpdates?.cancel()
+        durationUpdates?.cancel()
+        notification.dismiss()
+
         recorder.cancel()
         recordingRepository.clear()
-        stopSelf()
     }
 
     companion object {
-        private const val NOTIFICATION_ID = 1
-        private const val NOTIFICATION_CHANNEL = "recording_channel"
-
         const val ACTION_START = "START"
         const val ACTION_STOP = "STOP"
         const val ACTION_CLEAN_UP = "CLEAN_UP"

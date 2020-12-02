@@ -6,6 +6,7 @@ import java.io.File
 
 class FakeRecorder : Recorder {
 
+    override var amplitude: Int = 0
     var file: File? = null
     lateinit var output: Output
 

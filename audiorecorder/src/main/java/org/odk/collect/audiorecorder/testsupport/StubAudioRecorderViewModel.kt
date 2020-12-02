@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel
+import org.odk.collect.audiorecorder.recording.RecordingSession
 import java.io.File
 
 /**
@@ -13,40 +14,42 @@ class StubAudioRecorderViewModel(private val stubRecordingPath: String) : AudioR
 
     var lastRecording: File? = null
     var lastSession: String? = null
-
     var wasCleanedUp = false
 
-    private val isRecording = MutableLiveData(false)
-    private val recordings = mutableMapOf<String, MutableLiveData<File?>>()
+    private var isRecording = false
+    private val currentSession = MutableLiveData<RecordingSession>(null)
 
-    override fun isRecording(): LiveData<Boolean> {
+    override fun isRecording(): Boolean {
         return isRecording
     }
 
-    override fun getRecording(sessionId: String): LiveData<File?> {
-        return recordings.getOrPut(sessionId) { MutableLiveData(null) }
+    override fun getCurrentSession(): LiveData<RecordingSession?> {
+        return currentSession
     }
 
     override fun start(sessionId: String, output: Output) {
         wasCleanedUp = false
         lastSession = sessionId
-        isRecording.value = true
+        isRecording = true
+        currentSession.value = RecordingSession(sessionId, null, 0, 0)
     }
 
     override fun stop() {
-        isRecording.value = false
+        isRecording = false
 
         val newFile = File.createTempFile("temp", ".m4a")
         File(stubRecordingPath).copyTo(newFile, overwrite = true)
         newFile.deleteOnExit()
-        recordings.getOrPut(lastSession!!) { MutableLiveData(null) }.value = newFile
+        currentSession.value?.let {
+            currentSession.value = it.copy(file = newFile)
+        }
 
         lastRecording = newFile
     }
 
     override fun cleanUp() {
-        isRecording.value = false
-        recordings.values.forEach { it.value = null }
+        isRecording = false
+        currentSession.value = null
         wasCleanedUp = true
     }
 }

@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets.utilities;
 
 import android.app.Activity;
+import android.util.Pair;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -12,8 +13,9 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.utilities.QuestionMediaManager;
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 import org.odk.collect.audiorecorder.recorder.Output;
+import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
+import org.odk.collect.audiorecorder.recording.RecordingSession;
 import org.odk.collect.testshared.FakeLifecycleOwner;
 import org.robolectric.Robolectric;
 
@@ -24,6 +26,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 
@@ -73,33 +76,76 @@ public class InternalRecordingRequesterTest {
     }
 
     @Test
-    public void onIsRecordingChanged_listensToIsRecording() {
-        MutableLiveData<Boolean> liveData = new MutableLiveData<>(false);
-        when(viewModel.isRecording()).thenReturn(liveData);
+    public void onIsRecordingChanged_listensToCurrentSession() {
+        MutableLiveData<RecordingSession> liveData = new MutableLiveData<>(null);
+        when(viewModel.getCurrentSession()).thenReturn(liveData);
 
         Consumer<Boolean> listener = mock(Consumer.class);
         requester.onIsRecordingChanged(listener);
         verify(listener).accept(false);
 
-        liveData.setValue(true);
-        verify(listener).accept(false);
+        liveData.setValue(new RecordingSession("blah", null, 0, 0));
+        verify(listener).accept(true);
     }
 
     @Test
     public void whenViewModelRecordingAvailable_copiesFileToInstanceFolder_andCallsListenerForSessionWithFilename_andCleansUpViewModel() throws Exception {
         FormEntryPrompt prompt = promptWithAnswer(null);
-        File file = File.createTempFile("blah", ".mp3");
-        MutableLiveData<File> recordingLiveData = new MutableLiveData<>(null);
+        MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
+        when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
+
         MutableLiveData<String> answerLiveData = new MutableLiveData<>(null);
-        when(viewModel.getRecording(prompt.getIndex().toString())).thenReturn(recordingLiveData);
+        File file = File.createTempFile("blah", ".mp3");
         when(questionMediaManager.createAnswerFile(file)).thenReturn(answerLiveData);
 
         Consumer<String> listener = mock(Consumer.class);
         requester.onRecordingAvailable(prompt, listener);
-        recordingLiveData.setValue(file);
+        sessionLiveData.setValue(new RecordingSession(prompt.getIndex().toString(), file, 0, 0));
         answerLiveData.setValue("copiedFile");
 
         verify(listener).accept("copiedFile");
         verify(viewModel).cleanUp();
+    }
+
+    @Test
+    public void whenViewModelRecordingAvailable_forDifferentSession_doesNothing() throws Exception {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
+        when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
+
+        Consumer<String> listener = mock(Consumer.class);
+        requester.onRecordingAvailable(prompt, listener);
+
+        File file = File.createTempFile("blah", ".mp3");
+        sessionLiveData.setValue(new RecordingSession("something else", file, 0, 0));
+
+        verifyNoInteractions(listener);
+        verifyNoInteractions(questionMediaManager);
+    }
+
+    @Test
+    public void whenViewModelSessionUpdates_callsInProgressListener() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
+        when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
+
+        Consumer<Pair<Long, Integer>> listener = mock(Consumer.class);
+        requester.onRecordingInProgress(prompt, listener);
+
+        sessionLiveData.setValue(new RecordingSession(prompt.getIndex().toString(), null, 1200L, 25));
+        verify(listener).accept(new Pair<>(1200L, 25));
+    }
+
+    @Test
+    public void whenViewModelSessionUpdates_forDifferentSession_doesNothing() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
+        when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
+
+        Consumer<Pair<Long, Integer>> listener = mock(Consumer.class);
+        requester.onRecordingInProgress(prompt, listener);
+
+        sessionLiveData.setValue(new RecordingSession("something else", null, 1200L, 0));
+        verifyNoInteractions(listener);
     }
 }

@@ -68,10 +68,10 @@ class AudioClipViewModelTest {
     @Test
     fun playMultipleClips_updatesProgress_forAllClips() {
         viewModel.play(Clip("clip1", "file://audio.mp3"))
-        assertThat(fakeScheduler.checkRepeatRunning(), equalTo(true))
+        assertThat(fakeScheduler.isRepeatRunning(), equalTo(true))
         viewModel.onCleared()
         viewModel.play(Clip("clip1", "file://audio.mp3"))
-        assertThat(fakeScheduler.checkRepeatRunning(), equalTo(true))
+        assertThat(fakeScheduler.isRepeatRunning(), equalTo(true))
     }
 
     @Test
@@ -88,14 +88,14 @@ class AudioClipViewModelTest {
         val onCompletionListener = captor.value
         verify(mediaPlayer).setDataSource("file://audio1.mp3")
         verify(mediaPlayer, times(1)).start()
-        assertThat(fakeScheduler.checkRepeatRunning(), equalTo(true))
+        assertThat(fakeScheduler.isRepeatRunning(), equalTo(true))
         onCompletionListener.onCompletion(mediaPlayer)
         verify(mediaPlayer).setDataSource("file://audio2.mp3")
         verify(mediaPlayer, times(2)).start()
-        assertThat(fakeScheduler.checkRepeatRunning(), equalTo(true))
+        assertThat(fakeScheduler.isRepeatRunning(), equalTo(true))
         onCompletionListener.onCompletion(mediaPlayer)
         verify(mediaPlayer, times(2)).start()
-        assertThat(fakeScheduler.checkRepeatRunning(), equalTo(false))
+        assertThat(fakeScheduler.isRepeatRunning(), equalTo(false))
     }
 
     @Test
@@ -204,7 +204,7 @@ class AudioClipViewModelTest {
     fun background_cancelsScheduler() {
         viewModel.play(Clip("clip1", "file://audio.mp3"))
         viewModel.background()
-        assertThat(fakeScheduler.hasBeenCancelled(), equalTo(true))
+        assertThat(fakeScheduler.isRepeatRunning(), equalTo(false))
     }
 
     @Test
@@ -317,7 +317,7 @@ class AudioClipViewModelTest {
     fun onCleared_cancelsScheduler() {
         viewModel.play(Clip("clip1", "file://audio.mp3"))
         viewModel.onCleared()
-        assertThat(fakeScheduler.hasBeenCancelled(), equalTo(true))
+        assertThat(fakeScheduler.isRepeatRunning(), equalTo(false))
     }
 
     @Test
@@ -326,7 +326,7 @@ class AudioClipViewModelTest {
         val captor = ArgumentCaptor.forClass(MediaPlayer.OnCompletionListener::class.java)
         verify(mediaPlayer).setOnCompletionListener(captor.capture())
         captor.value.onCompletion(mediaPlayer)
-        assertThat(fakeScheduler.hasBeenCancelled(), equalTo(true))
+        assertThat(fakeScheduler.isRepeatRunning(), equalTo(false))
     }
 
     @Test
