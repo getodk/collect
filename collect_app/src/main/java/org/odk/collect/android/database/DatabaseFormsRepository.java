@@ -48,6 +48,15 @@ public class DatabaseFormsRepository implements FormsRepository {
         }
     }
 
+    @Override
+    public List<Form> getAllNotDeleted(String jrFormId, @Nullable String jrVersion) {
+        if (jrVersion != null) {
+            return queryForForms(DELETED_DATE + " IS NULL AND " + JR_FORM_ID + "=? AND " + JR_VERSION + "=?", new String[]{jrFormId, jrVersion});
+        } else {
+            return queryForForms(DELETED_DATE + " IS NULL AND " + JR_FORM_ID + "=? AND " + JR_VERSION + " IS NULL", new String[]{jrFormId});
+        }
+    }
+
     @Nullable
     @Override
     public Form get(Long id) {

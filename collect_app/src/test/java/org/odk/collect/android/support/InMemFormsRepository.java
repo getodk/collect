@@ -33,6 +33,11 @@ public class InMemFormsRepository implements FormsRepository {
         return new ArrayList<>(forms); // Avoid anything  mutating the list externally
     }
 
+    @Override
+    public List<Form> getAllNotDeleted(String jrFormId, @Nullable String jrVersion) {
+        return forms.stream().filter(f -> f.getJrFormId().equals(jrFormId) && f.getJrVersion().equals(jrVersion) && !f.isDeleted()).collect(toList());
+    }
+
     @Nullable
     @Override
     public Form get(Long id) {

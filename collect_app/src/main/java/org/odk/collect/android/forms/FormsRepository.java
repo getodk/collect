@@ -12,6 +12,8 @@ public interface FormsRepository {
 
     List<Form> getAll();
 
+    List<Form> getAllNotDeleted(String jrFormId, @Nullable String jrVersion);
+
     @Nullable
     Form get(Long id);
 
