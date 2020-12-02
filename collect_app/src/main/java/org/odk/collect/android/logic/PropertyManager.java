@@ -139,7 +139,12 @@ public class PropertyManager implements IPropertyManager {
     // telephonyManager.getDeviceId() requires permission READ_PHONE_STATE (ISSUE #2506). Permission should be handled or exception caught.
     private IdAndPrefix findDeviceId(Context context, DeviceDetailsProvider deviceDetailsProvider) throws SecurityException {
         final String androidIdName = Settings.Secure.ANDROID_ID;
-        String deviceId = deviceDetailsProvider.getDeviceId();
+        String deviceId = null;
+        try { // smap
+            deviceId = deviceDetailsProvider.getDeviceId();
+        } catch(Exception e) {
+            Timber.i(e.getMessage());
+        }
         String scheme = null;
 
         if (deviceId != null) {

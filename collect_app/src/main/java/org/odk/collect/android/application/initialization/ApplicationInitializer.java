@@ -84,8 +84,12 @@ public class ApplicationInitializer {
 
     private void initializeJavaRosa() {
         propertyManager.reload();
-        org.javarosa.core.services.PropertyManager
-                .setPropertyManager(propertyManager);
+        try {  // smap
+            org.javarosa.core.services.PropertyManager
+                    .setPropertyManager(propertyManager);
+        } catch (Exception e) {
+            Timber.i(e.getMessage());
+        }
 
         // Register prototypes for classes that FormDef uses
         PrototypeManager.registerPrototypes(JavaRosaCoreModule.classNames);

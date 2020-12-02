@@ -45,6 +45,7 @@ import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
@@ -111,6 +112,9 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
     @Inject
     MultiFormDownloader multiFormDownloader;
+
+    @Inject
+    Notifier notifier;
     
     private FormsDao formsDao;
 	
@@ -181,7 +185,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
         try {
 
-            NotificationUtils.showNotification(null,
+            notifier.showNotification(null,
                     NotificationActivity.NOTIFICATION_ID,
                     R.string.app_name,
                     Collect.getInstance().getBaseContext().getString(R.string.smap_refresh_started),
@@ -198,7 +202,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), 0,
                     notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            NotificationUtils.showNotification(pendingNotify,
+            notifier.showNotification(pendingNotify,
                     NotificationActivity.NOTIFICATION_ID,
                     R.string.app_name,
                     message.toString().trim(),

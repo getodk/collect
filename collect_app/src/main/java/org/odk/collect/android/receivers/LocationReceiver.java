@@ -13,11 +13,14 @@ import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.TraceUtilities;
 import org.odk.collect.android.loaders.GeofenceEntry;
+import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.Constants;
 import org.odk.collect.android.utilities.NotificationUtils;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import timber.log.Timber;
@@ -32,6 +35,9 @@ public class LocationReceiver  extends BroadcastReceiver {
 
     public static final String ACTION_PROCESS_UPDATES =
             "au.com.smap.location_service.action.PROCESS_UPDATES";
+
+    @Inject
+    Notifier notifier;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -92,7 +98,7 @@ public class LocationReceiver  extends BroadcastReceiver {
                         Timber.i("######## send org.smap.smapTask.refresh from location service");  // smap
                     }
                     if (notify) {
-                        NotificationUtils.showNotification(null,
+                        notifier.showNotification(null,
                                 NotificationActivity.NOTIFICATION_ID,
                                 R.string.app_name,
                                 context.getString(R.string.smap_geofence_tasks), false);

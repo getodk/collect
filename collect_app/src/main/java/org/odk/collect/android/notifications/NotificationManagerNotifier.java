@@ -1,6 +1,7 @@
 package org.odk.collect.android.notifications;
 
 import android.app.Application;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
@@ -17,6 +19,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FillBlankFormActivity;
 import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.NotificationActivity;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.FormApiExceptionMapper;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.openrosa.api.FormApiException;
@@ -43,7 +46,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 
 public class NotificationManagerNotifier implements Notifier {
 
-    private static final String COLLECT_NOTIFICATION_CHANNEL = "collect_notification_channel";
+    public static final String COLLECT_NOTIFICATION_CHANNEL = "smap_notification_channel"; // smap changed channel id and made public
     private final Application application;
     private final NotificationManager notificationManager;
     private final PreferencesProvider preferencesProvider;
@@ -181,4 +184,29 @@ public class NotificationManagerNotifier implements Notifier {
         Context localizedContext = context.createConfigurationContext(conf);
         return localizedContext.getResources();
     }
+
+    /*
+     * Smap - this method is called explicitely by smap extensions
+     */
+    @Override
+    public void showNotification(PendingIntent contentIntent,
+                                        int notificationId,
+                                        int title,
+                                        String contentText,
+                                        boolean start) {    // smap add start/end of notification
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(application, COLLECT_NOTIFICATION_CHANNEL).setContentIntent(contentIntent);
+
+        builder
+                .setContentTitle(application.getString(title))
+                .setContentText(contentText)
+                .setSmallIcon(start ? R.drawable.notification_icon_go : IconUtils.getNotificationAppIcon())     // smap add start
+                .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
+                        R.mipmap.ic_nav))        // added for smap
+                .setAutoCancel(true)
+                .setChannelId(COLLECT_NOTIFICATION_CHANNEL);
+
+        notificationManager.notify(notificationId, builder.build());
+    }
+
 }

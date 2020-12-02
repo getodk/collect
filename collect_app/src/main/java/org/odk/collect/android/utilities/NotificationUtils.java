@@ -35,41 +35,6 @@ public class NotificationUtils {
     private NotificationUtils() {
     }
 
-    public static void createNotificationChannel(Collect collect) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationManager notificationManager = collect.getSystemService(NotificationManager.class);
 
-            if (notificationManager != null) {
-                notificationManager.createNotificationChannel(new NotificationChannel(
-                                        CHANNEL_ID,
-                                        collect.getString(R.string.notification_channel_name),
-                                        NotificationManager.IMPORTANCE_DEFAULT)
-                );
-            }
-        }
-    }
 
-    public static void showNotification(PendingIntent contentIntent,
-                                        int notificationId,
-                                        int title,
-                                        String contentText,
-                                        boolean start) {    // smap add start/end of notification
-        Context context = Collect.getInstance();
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID).setContentIntent(contentIntent);
-
-        builder
-                .setContentTitle(context.getString(title))
-                .setContentText(contentText)
-                .setSmallIcon(start ? R.drawable.notification_icon_go : IconUtils.getNotificationAppIcon())     // smap add start
-                .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
-                        R.mipmap.ic_nav))        // added for smap
-                .setAutoCancel(true)
-                .setChannelId(CHANNEL_ID);
-
-        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (manager != null) {
-            manager.notify(notificationId, builder.build());
-        }
-    }
 }

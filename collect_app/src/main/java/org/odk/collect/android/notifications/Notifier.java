@@ -1,5 +1,7 @@
 package org.odk.collect.android.notifications;
 
+import android.app.PendingIntent;
+
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.openrosa.api.FormApiException;
 
@@ -15,4 +17,11 @@ public interface Notifier {
     void onSync(FormApiException exception);
 
     void onSubmission(boolean failure, String message);
+
+    void showNotification(PendingIntent contentIntent,
+                          int notificationId,
+                          int title,
+                          String contentText,
+                          boolean start);        // smap
+
 }

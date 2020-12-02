@@ -15,6 +15,8 @@
 package org.odk.collect.android.services;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -33,6 +35,8 @@ import com.google.android.gms.location.LocationServices;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.notifications.NotificationManagerNotifier;
+import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.receivers.LocationReceiver;
 import org.odk.collect.android.utilities.Constants;
@@ -40,6 +44,8 @@ import org.odk.collect.android.utilities.NotificationUtils;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.inject.Inject;
 
 import androidx.core.app.NotificationCompat;
 import timber.log.Timber;
@@ -60,6 +66,10 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private FusedLocationProviderClient fusedLocationClient;
     private boolean isRecordingLocation = false;
     private Timer mTimer;
+    String FG_CHANNEL_ID = "smap_foreground_channel";
+
+    @Inject
+    Notifier notifier;
 
     public LocationService() {
     }
@@ -87,7 +97,11 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-            Notification.Builder builder = new Notification.Builder(this, NotificationUtils.CHANNEL_ID)
+            NotificationChannel chan = new NotificationChannel(FG_CHANNEL_ID, "Notifications", NotificationManager.IMPORTANCE_NONE);
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            manager.createNotificationChannel(chan);
+
+            Notification.Builder builder = new Notification.Builder(this, FG_CHANNEL_ID)
                     .setContentTitle(getString(R.string.app_name))
                     .setContentText("some text")
                     .setAutoCancel(true);
