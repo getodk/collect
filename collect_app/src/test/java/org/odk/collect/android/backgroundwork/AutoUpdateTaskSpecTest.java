@@ -12,20 +12,21 @@ import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
-import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.forms.FormSource;
 import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.forms.ManifestFile;
 import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.android.forms.FormSource;
-import org.odk.collect.android.forms.ManifestFile;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.BooleanChangeLock;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
@@ -63,7 +64,7 @@ public class AutoUpdateTaskSpecTest {
             }
 
             @Override
-            public FormDownloader providesFormDownloader(FormSource formSource, FormsRepository formsRepository, StoragePathProvider storagePathProvider) {
+            public FormDownloader providesFormDownloader(FormSource formSource, FormsRepository formsRepository, StoragePathProvider storagePathProvider, Analytics analytics) {
                 return formDownloader;
             }
 

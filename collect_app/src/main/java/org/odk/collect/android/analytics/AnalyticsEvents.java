@@ -78,6 +78,11 @@ public class AnalyticsEvents {
     public static final String SCOPED_STORAGE_MIGRATION = "ScopedStorageMigration";
 
     /**
+     * Track attempts to download a form with the same formid/version as one already on the device.
+     */
+    public static final String DOWNLOAD_SAME_FORMID_VERSION = "DownloadSameFormidVersion";
+
+    /**
      * Track downloads initiated when there are no downloaded forms on the device. The action should
      * be in the format: {number of downloaded forms}/{total forms}-{form server hash}
      *

@@ -3,6 +3,7 @@ package org.odk.collect.android.formmanagement;
 import android.net.Uri;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormSource;
@@ -15,6 +16,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.Validator;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -30,6 +32,7 @@ import javax.annotation.Nullable;
 import timber.log.Timber;
 
 import static org.apache.commons.io.FileUtils.deleteDirectory;
+import static org.odk.collect.android.analytics.AnalyticsEvents.DOWNLOAD_SAME_FORMID_VERSION;
 import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
 public class ServerFormDownloader implements FormDownloader {
@@ -40,12 +43,16 @@ public class ServerFormDownloader implements FormDownloader {
     private final String formsDirPath;
     private final FormMetadataParser formMetadataParser;
 
-    public ServerFormDownloader(FormSource formSource, FormsRepository formsRepository, File cacheDir, String formsDirPath, FormMetadataParser formMetadataParser) {
+    private final Analytics analytics;
+
+    public ServerFormDownloader(FormSource formSource, FormsRepository formsRepository, File cacheDir, String formsDirPath, FormMetadataParser formMetadataParser, Analytics analytics) {
         this.cacheDir = cacheDir;
         this.formsDirPath = formsDirPath;
         this.multiFormDownloader = new MultiFormDownloader(formsRepository, formSource);
         this.formsRepository = formsRepository;
         this.formMetadataParser = formMetadataParser;
+
+        this.analytics = analytics;
     }
 
     @Override
@@ -55,6 +62,9 @@ public class ServerFormDownloader implements FormDownloader {
             if (formOnDevice.isDeleted()) {
                 formsRepository.restore(formOnDevice.getId());
             } else if (!(form.getHash().equals(formOnDevice.getMD5Hash()))) {
+                String formIdentifier = formOnDevice.getDisplayName() + " " + formOnDevice.getId();
+                String formIdHash = FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
+                analytics.logFormEvent(DOWNLOAD_SAME_FORMID_VERSION, formIdHash);
                 throw new FormDownloadException("You've already downloaded a form with the same ID and version but with different contents. " +
                         "Before downloading, please send all data you have collected with the existing form and delete the data and blank form.");
             }

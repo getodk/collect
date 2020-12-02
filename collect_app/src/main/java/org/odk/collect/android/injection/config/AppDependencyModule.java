@@ -172,8 +172,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormDownloader providesFormDownloader(FormSource formSource, FormsRepository formsRepository, StoragePathProvider storagePathProvider) {
-        return new ServerFormDownloader(formSource, formsRepository, new File(storagePathProvider.getDirPath(StorageSubdirectory.CACHE)), storagePathProvider.getDirPath(StorageSubdirectory.FORMS), new FormMetadataParser(ReferenceManager.instance()));
+    public FormDownloader providesFormDownloader(FormSource formSource, FormsRepository formsRepository, StoragePathProvider storagePathProvider, Analytics analytics) {
+        return new ServerFormDownloader(formSource, formsRepository, new File(storagePathProvider.getDirPath(StorageSubdirectory.CACHE)), storagePathProvider.getDirPath(StorageSubdirectory.FORMS), new FormMetadataParser(ReferenceManager.instance()), analytics);
     }
 
     @Provides
