@@ -31,7 +31,7 @@ class StubAudioRecorderViewModel(private val stubRecordingPath: String) : AudioR
         wasCleanedUp = false
         lastSession = sessionId
         isRecording = true
-        currentSession.value = RecordingSession(sessionId, null, 0, 0)
+        currentSession.value = RecordingSession(sessionId, null, 0, 0, false)
     }
 
     override fun pause() {

@@ -11,7 +11,7 @@ class RecordingRepository {
     val currentSession: LiveData<RecordingSession?> = _currentSession
 
     fun start(sessionId: String) {
-        _currentSession.value = RecordingSession(sessionId, null, 0, 0)
+        _currentSession.value = RecordingSession(sessionId, null, 0, 0, false)
     }
 
     fun setDuration(duration: Long) {
