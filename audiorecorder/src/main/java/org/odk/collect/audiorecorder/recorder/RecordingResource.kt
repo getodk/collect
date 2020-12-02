@@ -6,12 +6,7 @@ package org.odk.collect.audiorecorder.recorder
  */
 
 internal interface RecordingResource {
-    fun setAudioSource(audioSource: Int)
-    fun setOutputFormat(outputFormat: Int)
     fun setOutputFile(path: String)
-    fun setAudioEncoder(audioEncoder: Int)
-    fun setAudioEncodingSampleRate(sampleRate: Int)
-    fun setAudioEncodingBitRate(bitRate: Int)
     fun prepare()
     fun start()
     fun pause()
