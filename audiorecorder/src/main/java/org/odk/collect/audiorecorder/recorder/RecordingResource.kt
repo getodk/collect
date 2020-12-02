@@ -1,5 +1,7 @@
 package org.odk.collect.audiorecorder.recorder
 
+import java.io.IOException
+
 /**
  * Allows faking/stubbing/mocking with our interactions with Android's MediaRecorder. Could also
  * wrap multiple implementations in the future.
@@ -7,7 +9,10 @@ package org.odk.collect.audiorecorder.recorder
 
 internal interface RecordingResource {
     fun setOutputFile(path: String)
+
+    @Throws(IOException::class)
     fun prepare()
+
     fun start()
     fun pause()
     fun resume()
