@@ -65,16 +65,9 @@ public class AudioRecordingTest {
             .around(rule);
 
     @Test
-    public void onAudioQuestion_withExternalRecordingDisabled_canRecordAudio() {
+    public void onAudioQuestion_withQualitySpecified_canRecordAudioInApp() {
         new MainMenuPage(rule).assertOnPage()
-                .clickOnMenu()
-                .clickGeneralSettings()
-                .clickFormManagement()
-                .scrollToRecyclerViewItemAndClickText(R.string.external_app_recording)
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
-
-                .copyForm("audio-question.xml")
+                .copyForm("internal-audio-question.xml")
                 .startBlankForm("Audio Question")
                 .assertTextNotDisplayed(R.string.stop_recording)
                 .clickOnString(R.string.capture_audio)
@@ -94,7 +87,7 @@ public class AudioRecordingTest {
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule))
 
-                .copyForm("audio-question.xml")
+                .copyForm("internal-audio-question.xml")
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
                 .swipeToEndScreenWhileRecording()
@@ -117,7 +110,7 @@ public class AudioRecordingTest {
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule))
 
-                .copyForm("audio-question.xml")
+                .copyForm("internal-audio-question.xml")
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
                 .pressBack(new OkDialog(rule))
