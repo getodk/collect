@@ -188,6 +188,9 @@
     <!-- Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown -->
     <string name="unrecognized_uri">Unrecognized URI: %s</string>
 
+    <!-- Text displayed when audio recording fails to start -->
+    <string name="start_recording_failed">Could not start recording!</string>
+
     <!--
     ##############################################
     # FORM FEATURES
