@@ -1,109 +1,108 @@
 /*
- * Copyright (C) 2009 University of Washington
+ * Copyright 2018 Nafundi
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing permissions and limitations under
- * the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-package org.odk.collect.android.widgets.items;
+package org.odk.collect.android.fastexternalitemset;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
-import android.widget.TextView;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.condition.EvaluationContext;
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
-import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.model.instance.TreeElement;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.XPathNodeset;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.javarosa.xpath.parser.XPathSyntaxException;
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.ItemsetDbAdapter;
-import org.odk.collect.android.formentry.questions.ItemsetQuestionDetails;
-import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.utilities.FileUtil;
-import org.odk.collect.android.utilities.XPathParseTool;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
 
-/**
- * The most basic widget that allows for entry of any text.
- *
- * @author Carl Hartung (carlhartung@gmail.com)
- * @author Yaw Anokwa (yanokwa@gmail.com)
- */
-@SuppressLint("ViewConstructor")
-public class ItemsetWidget extends SelectOneWidget {
-
+public class ItemsetDao {
     private static final String QUOTATION_MARK = "\"";
 
-    public ItemsetWidget(Context context, QuestionDetails formEntryPrompt, boolean autoAdvanceToNext) {
-        this(context, new ItemsetQuestionDetails(formEntryPrompt.getPrompt(), formEntryPrompt.getFormAnalyticsID(), new XPathParseTool(), new ItemsetDbAdapter(), new FileUtil()), autoAdvanceToNext);
+    private final ItemsetDbAdapter adapter;
+
+    public ItemsetDao(ItemsetDbAdapter adapter) {
+        this.adapter = adapter;
     }
 
-    public ItemsetWidget(Context context, ItemsetQuestionDetails formEntryPrompt, boolean autoAdvance) {
-        super(context, formEntryPrompt, autoAdvance);
+    public String getItemLabel(String itemName, String mediaFolderPath, String language) {
+        String itemLabel = null;
+
+        File itemsetFile = getItemsetFile(mediaFolderPath);
+        if (itemsetFile.exists()) {
+            adapter.open();
+
+            // name of the itemset table for this form
+            String pathHash = ItemsetDbAdapter.getMd5FromString(itemsetFile.getAbsolutePath());
+            try {
+                String selection = "name=?";
+                String[] selectionArgs = {itemName};
+
+                Cursor c = adapter.query(pathHash, selection, selectionArgs);
+                if (c != null) {
+                    c.move(-1);
+                    while (c.moveToNext()) {
+                        // apparently you only need the double quotes in the
+                        // column name when creating the column with a : included
+                        String labelLang = "label" + "::" + language;
+                        int langCol = c.getColumnIndex(labelLang);
+                        if (langCol == -1) {
+                            itemLabel = c.getString(c.getColumnIndex("label"));
+                        } else {
+                            itemLabel = c.getString(c.getColumnIndex(labelLang));
+                        }
+
+                    }
+                    c.close();
+                }
+            } catch (SQLiteException e) {
+                Timber.i(e);
+            } finally {
+                adapter.close();
+            }
+        }
+
+        return itemLabel;
     }
 
-    @Override
-    public IAnswerData getAnswer() {
-        Selection selectedItem = recyclerViewAdapter.getSelectedItems().isEmpty()
-                ? null
-                : recyclerViewAdapter.getSelectedItems().get(0);
-
-        return selectedItem == null
-                ? null
-                : new StringData(selectedItem.getValue());
-    }
-
-    @Override
-    protected void readItems() {
-        items = getItems();
-    }
-
-    @Override
-    protected String getSelectedValue() {
-        return getQuestionDetails().getPrompt().getAnswerValue() == null
-                ? null
-                : getQuestionDetails().getPrompt().getAnswerValue().getDisplayText();
-    }
-
-    private List<SelectChoice> getItems() {
-        String nodesetString = getNodesetString();
+    public List<SelectChoice> getItems(FormEntryPrompt formEntryPrompt, XPathParseTool pathParseTool) throws FileNotFoundException, XPathSyntaxException {
+        String nodesetString = getNodesetString(formEntryPrompt);
 
         List<String> arguments = new ArrayList<>();
         String selectionString = getSelectionStringAndPopulateArguments(getQueryString(nodesetString), arguments);
 
         FormController formController = Collect.getInstance().getFormController();
-        String[] selectionArgs = getSelectionArgs(arguments, nodesetString, formController);
+        String[] selectionArgs = getSelectionArgs(arguments, nodesetString, formController, pathParseTool, formEntryPrompt);
 
-        return selectionArgs == null ? null : getItemsFromDatabase(selectionString, selectionArgs, formController);
+        return selectionArgs == null ? null : getItemsFromDatabase(selectionString, selectionArgs, formController, adapter);
     }
 
-    private String getNodesetString() {
+    private String getNodesetString(FormEntryPrompt formEntryPrompt) {
         // the format of the query should be something like this:
         // query="instance('cities')/root/item[state=/data/state and county=/data/county]"
         // "query" is what we're using to notify that this is an itemset widget.
-        return getFormEntryPrompt().getQuestion().getAdditionalAttribute(null, "query");
+        return formEntryPrompt.getQuestion().getAdditionalAttribute(null, "query");
     }
 
     private String getQueryString(String nodesetStr) {
@@ -177,7 +176,8 @@ public class ItemsetWidget extends SelectOneWidget {
         return selectionString.toString();
     }
 
-    private String[] getSelectionArgs(List<String> arguments, String nodesetStr, FormController formController) {
+    @SuppressWarnings("PMD.AvoidThrowingNewInstanceOfSameException")
+    private String[] getSelectionArgs(List<String> arguments, String nodesetStr, FormController formController, XPathParseTool pathParseTool, FormEntryPrompt formEntryPrompt) throws XPathSyntaxException {
         // +1 is for the list_name
         String[] selectionArgs = new String[arguments.size() + 1];
 
@@ -195,19 +195,15 @@ public class ItemsetWidget extends SelectOneWidget {
         for (int i = 0; i < arguments.size(); i++) {
             XPathExpression xpr;
             try {
-                xpr = ((ItemsetQuestionDetails) getQuestionDetails()).getParseTool().parseXPath(arguments.get(i));
+                xpr = pathParseTool.parseXPath(arguments.get(i));
             } catch (XPathSyntaxException e) {
-                Timber.e(e);
-                TextView error = new TextView(getContext());
-                error.setText(String.format(getContext().getString(R.string.parser_exception), arguments.get(i)));
-                addAnswerView(error);
-                break;
+                throw new XPathSyntaxException(arguments.get(i));
             }
 
             if (xpr != null) {
                 FormDef form = formController.getFormDef();
                 TreeElement treeElement = form.getMainInstance().resolveReference(
-                        getFormEntryPrompt().getIndex().getReference());
+                        formEntryPrompt.getIndex().getReference());
                 EvaluationContext ec = new EvaluationContext(form.getEvaluationContext(),
                         treeElement.getRef());
                 Object value = xpr.eval(form.getMainInstance(), ec);
@@ -225,18 +221,18 @@ public class ItemsetWidget extends SelectOneWidget {
         return selectionArgs;
     }
 
-    private List<SelectChoice> getItemsFromDatabase(String selection, String[] selectionArgs, FormController formController) {
+    private List<SelectChoice> getItemsFromDatabase(String selection, String[] selectionArgs, FormController formController, ItemsetDbAdapter adapter) throws FileNotFoundException {
         List<SelectChoice> items = new ArrayList<>();
 
-        File itemsetFile =  ((ItemsetQuestionDetails) getQuestionDetails()).getFileUtil().getItemsetFile(formController.getMediaFolder().getAbsolutePath());
+        File itemsetFile = getItemsetFile(formController.getMediaFolder().getAbsolutePath());
 
         if (itemsetFile.exists()) {
-            ((ItemsetQuestionDetails) getQuestionDetails()).getAdapter().open();
+            adapter.open();
 
             // name of the itemset table for this form
             String pathHash = ItemsetDbAdapter.getMd5FromString(itemsetFile.getAbsolutePath());
             try {
-                Cursor c = ((ItemsetQuestionDetails) getQuestionDetails()).getAdapter().query(pathHash, selection, selectionArgs);
+                Cursor c = adapter.query(pathHash, selection, selectionArgs);
                 if (c != null) {
                     c.move(-1);
                     int index = 0;
@@ -272,11 +268,15 @@ public class ItemsetWidget extends SelectOneWidget {
             } catch (SQLiteException e) {
                 Timber.i(e);
             } finally {
-                ((ItemsetQuestionDetails) getQuestionDetails()).getAdapter().close();
+                adapter.close();
             }
         } else {
-            showWarning(getContext().getString(R.string.file_missing, itemsetFile.getAbsolutePath()));
+            throw new FileNotFoundException(itemsetFile.getAbsolutePath());
         }
         return items;
+    }
+
+    public File getItemsetFile(String mediaFolderPath) {
+        return new File(mediaFolderPath + "/itemsets.csv");
     }
 }

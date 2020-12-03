@@ -167,7 +167,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         this.widgetFactory = new WidgetFactory(
                 context,
                 readOnlyOverride,
-                preferencesProvider.getGeneralSharedPreferences().getBoolean(KEY_EXTERNAL_APP_RECORDING, false),
+                preferencesProvider.getGeneralSharedPreferences().getBoolean(KEY_EXTERNAL_APP_RECORDING, true),
                 waitingForDataRegistry,
                 questionMediaManager,
                 analytics,

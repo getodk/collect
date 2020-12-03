@@ -28,6 +28,7 @@ import org.odk.collect.android.databinding.AudioControllerLayoutBinding;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static org.odk.collect.strings.format.LengthFormatterKt.formatLength;
 
 public class AudioControllerView extends FrameLayout {
 
@@ -126,7 +127,7 @@ public class AudioControllerView extends FrameLayout {
     public void setDuration(Integer duration) {
         this.duration = duration;
 
-        totalDurationLabel.setText(LengthFormatter.formatLength((long) duration));
+        totalDurationLabel.setText(formatLength((long) duration));
         seekBar.setMax(duration);
         setPosition(0);
     }
@@ -134,7 +135,7 @@ public class AudioControllerView extends FrameLayout {
     private void renderPosition(Integer position) {
         this.position = position;
 
-        currentDurationLabel.setText(LengthFormatter.formatLength((long) position));
+        currentDurationLabel.setText(formatLength((long) position));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             seekBar.setProgress(position, true);

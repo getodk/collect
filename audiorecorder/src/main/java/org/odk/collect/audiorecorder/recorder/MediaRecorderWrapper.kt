@@ -3,7 +3,8 @@ package org.odk.collect.audiorecorder.recorder
 import android.media.MediaRecorder
 
 /**
- * Allows faking/stubbing/mocking with our interactions with Android's MediaRecorder
+ * Allows faking/stubbing/mocking with our interactions with Android's MediaRecorder. Could also
+ * wrap multiple implementations in the future.
  */
 
 internal interface MediaRecorderWrapper {
@@ -17,6 +18,7 @@ internal interface MediaRecorderWrapper {
     fun start()
     fun stop()
     fun release()
+    fun getMaxAmplitude(): Int
 }
 
 class RealMediaRecorderWrapper(private val mediaRecorder: MediaRecorder) : MediaRecorderWrapper {
@@ -59,5 +61,9 @@ class RealMediaRecorderWrapper(private val mediaRecorder: MediaRecorder) : Media
 
     override fun release() {
         mediaRecorder.release()
+    }
+
+    override fun getMaxAmplitude(): Int {
+        return mediaRecorder.maxAmplitude
     }
 }

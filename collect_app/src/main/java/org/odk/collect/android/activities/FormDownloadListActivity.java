@@ -39,15 +39,17 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.formentry.RefreshFormListDialogFragment;
-import org.odk.collect.android.formmanagement.FormSourceExceptionMapper;
 import org.odk.collect.android.formmanagement.FormDownloader;
+import org.odk.collect.android.formmanagement.FormSourceExceptionMapper;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
+import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
+import org.odk.collect.android.openrosa.HttpCredentialsInterface;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
@@ -58,8 +60,6 @@ import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
-import org.odk.collect.android.openrosa.HttpCredentialsInterface;
-import org.odk.collect.android.forms.FormSourceException;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -73,6 +73,8 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.forms.FormSourceException.Type.AUTH_REQUIRED;
 
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the forms directory. One
@@ -573,25 +575,19 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
                 performDownloadModeDownload();
             }
         } else {
-            switch (exception.getType()) {
-                case FETCH_ERROR:
-                case UNREACHABLE:
-                    String dialogMessage = new FormSourceExceptionMapper(this).getMessage(exception);
-                    String dialogTitle = getString(R.string.load_remote_form_error);
+            if (exception.getType() == AUTH_REQUIRED) {
+                createAuthDialog();
+            } else {
+                String dialogMessage = new FormSourceExceptionMapper(this).getMessage(exception);
+                String dialogTitle = getString(R.string.load_remote_form_error);
 
-                    if (viewModel.isDownloadOnlyMode()) {
-                        setReturnResult(false, dialogMessage, viewModel.getFormResults());
-                    }
+                if (viewModel.isDownloadOnlyMode()) {
+                    setReturnResult(false, dialogMessage, viewModel.getFormResults());
+                }
 
-                    createAlertDialog(dialogTitle, dialogMessage, DO_NOT_EXIT);
-                    break;
-
-                case AUTH_REQUIRED:
-                    createAuthDialog();
-                    break;
+                createAlertDialog(dialogTitle, dialogMessage, DO_NOT_EXIT);
             }
         }
-
     }
 
     private void performDownloadModeDownload() {

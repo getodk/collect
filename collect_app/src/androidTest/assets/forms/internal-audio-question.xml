@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:odk="http://www.opendatakit.org/xforms">
+    <h:head>
+        <h:title>Audio Question</h:title>
+        <model>
+            <instance>
+                <data id="audio_question" orx:version="1">
+                    <sound/>
+                </data>
+            </instance>
+            <bind nodeset="sound" type="binary" odk:quality="normal"/>
+        </model>
+    </h:head>
+    <h:body>
+        <upload mediatype="audio/*" ref="/data/sound">
+            <label>What does it sound like?</label>
+        </upload>
+    </h:body>
+</h:html>

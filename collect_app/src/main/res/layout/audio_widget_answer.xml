@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -18,10 +20,26 @@
         android:layout_marginTop="@dimen/margin_extra_small"
         android:text="@string/choose_sound" />
 
+    <TextView
+        android:id="@+id/recording_duration"
+        style="@style/TextAppearance.Collect.Headline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/margin_standard"
+        android:textColor="?colorSecondary"
+        tools:text="00:07" />
+
+    <org.odk.collect.android.audio.Waveform
+        android:layout_marginTop="@dimen/margin_small"
+        android:id="@+id/waveform"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginHorizontal="@dimen/margin_standard" />
+
     <org.odk.collect.android.audio.AudioControllerView
         android:id="@+id/audio_controller"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
 
 </LinearLayout>

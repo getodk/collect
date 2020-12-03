@@ -58,6 +58,9 @@ jobs:
           name: Run async unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 async:testDebug
       - run:
+          name: Run strings unit tests
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 strings:testDebug
+      - run:
           name: Run material unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 material:testDebug
       - run:

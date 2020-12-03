@@ -7,6 +7,9 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.Dispatchers
+import org.odk.collect.async.CoroutineScheduler
+import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.recorder.MediaRecorderRecorder
 import org.odk.collect.audiorecorder.recorder.RealMediaRecorderWrapper
 import org.odk.collect.audiorecorder.recorder.Recorder
@@ -69,6 +72,11 @@ internal open class AudioRecorderDependencyModule {
     @Singleton
     open fun providesRecordingRepository(): RecordingRepository {
         return RecordingRepository()
+    }
+
+    @Provides
+    open fun providesScheduler(application: Application): Scheduler {
+        return CoroutineScheduler(Dispatchers.Main, Dispatchers.IO)
     }
 }
 

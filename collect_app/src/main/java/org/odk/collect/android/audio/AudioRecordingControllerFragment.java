@@ -46,7 +46,7 @@ public class AudioRecordingControllerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         final AudioRecorderViewModel viewModel = new ViewModelProvider(requireActivity(), audioRecorderViewModelFactory).get(AudioRecorderViewModel.class);
 
-        viewModel.isRecording().observe(getViewLifecycleOwner(), recording -> binding.getRoot().setVisibility(recording ? VISIBLE : GONE));
+        viewModel.getCurrentSession().observe(getViewLifecycleOwner(), session -> binding.getRoot().setVisibility(session != null && session.getFile() == null ? VISIBLE : GONE));
         binding.stopRecording.setOnClickListener(v -> viewModel.stop());
     }
 }

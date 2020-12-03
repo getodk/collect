@@ -47,6 +47,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
     implementation project(':strings')
     implementation "com.google.dagger:dagger:${rootProject.daggerVersion}"
+    implementation project(path: ':async')
     testImplementation project(path: ':testshared')
     kapt "com.google.dagger:dagger-compiler:${rootProject.daggerVersion}"
 

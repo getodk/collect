@@ -3,6 +3,7 @@ package org.odk.collect.android.widgets.utilities;
 import android.app.Activity;
 import android.content.Intent;
 import android.provider.MediaStore;
+import android.util.Pair;
 import android.widget.Toast;
 
 import org.javarosa.form.api.FormEntryPrompt;
@@ -61,5 +62,10 @@ public class ExternalAppRecordingRequester implements RecordingRequester {
     @Override
     public void onRecordingAvailable(FormEntryPrompt prompt, Consumer<String> recordingAvailableListener) {
         // This could be implemented using the new Activity Result API  once it's stable
+    }
+
+    @Override
+    public void onRecordingInProgress(FormEntryPrompt prompt, Consumer<Pair<Long, Integer>> durationListener) {
+        // No-op
     }
 }
