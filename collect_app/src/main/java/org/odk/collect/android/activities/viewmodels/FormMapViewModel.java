@@ -56,7 +56,7 @@ public class FormMapViewModel extends ViewModel {
     }
 
     private void initializeFormInstances() {
-        List<Instance> instances = instancesRepository.getAllByJrFormId(form.getJrFormId());
+        List<Instance> instances = instancesRepository.getAllByFormId(form.getJrFormId());
 
         // Ideally we could observe database changes instead of re-computing this every time.
         totalInstanceCount = instances.size();

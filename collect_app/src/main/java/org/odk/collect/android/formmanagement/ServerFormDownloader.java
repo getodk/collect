@@ -57,7 +57,7 @@ public class ServerFormDownloader implements FormDownloader {
 
     @Override
     public void downloadForm(ServerFormDetails form, @Nullable ProgressReporter progressReporter, @Nullable Supplier<Boolean> isCancelled) throws FormDownloadException, InterruptedException {
-        Form formOnDevice = formsRepository.get(form.getFormId(), form.getFormVersion());
+        Form formOnDevice = formsRepository.getOneByFormIdAndVersion(form.getFormId(), form.getFormVersion());
         if (formOnDevice != null) {
             if (formOnDevice.isDeleted()) {
                 formsRepository.restore(formOnDevice.getId());
@@ -245,7 +245,7 @@ public class ServerFormDownloader implements FormDownloader {
             } else {
                 String md5Hash = FileUtils.getMd5Hash(fileResult.file);
                 if (md5Hash != null) {
-                    formsRepository.deleteFormsByMd5Hash(md5Hash);
+                    formsRepository.deleteByMd5Hash(md5Hash);
                 }
                 FileUtils.deleteAndReport(fileResult.getFile());
             }
@@ -269,7 +269,7 @@ public class ServerFormDownloader implements FormDownloader {
             String mediaPath = FileUtils.constructMediaPath(formFilePath);
 
             FileUtils.checkMediaPath(new File(mediaPath));
-            Form form = formsRepository.getByPath(formFile.getAbsolutePath());
+            Form form = formsRepository.getOneByPath(formFile.getAbsolutePath());
 
             if (form == null) {
                 uri = saveNewForm(formInfo, formFile, mediaPath);
@@ -323,7 +323,7 @@ public class ServerFormDownloader implements FormDownloader {
 
             // we've downloaded the file, and we may have renamed it
             // make sure it's not the same as a file we already have
-            Form form = formsRepository.getByMd5Hash(FileUtils.getMd5Hash(tempFormFile));
+            Form form = formsRepository.getOneByMd5Hash(FileUtils.getMd5Hash(tempFormFile));
             if (form != null) {
                 isNew = false;
 

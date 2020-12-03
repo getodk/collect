@@ -21,22 +21,9 @@ public final class InMemInstancesRepository implements InstancesRepository {
     }
 
     @Override
-    public List<Instance> getAllFinalized() {
-        List<Instance> result = new ArrayList<>();
-
+    public Instance get(Long databaseId) {
         for (Instance instance : instances) {
-            if (instance.getStatus().equals(Instance.STATUS_COMPLETE) || instance.getStatus().equals(Instance.STATUS_SUBMISSION_FAILED)) {
-                result.add(instance);
-            }
-        }
-
-        return result;
-    }
-
-    @Override
-    public Instance get(long databaseId) {
-        for (Instance instance : instances) {
-            if (instance.getId() == databaseId) {
+            if (instance.getId().equals(databaseId)) {
                 return instance;
             }
         }
@@ -45,36 +32,7 @@ public final class InMemInstancesRepository implements InstancesRepository {
     }
 
     @Override
-    public List<Instance> getAllByJrFormId(String formId) {
-        List<Instance> result = new ArrayList<>();
-
-        for (Instance instance : instances) {
-            if (instance.getJrFormId().equals(formId)) {
-                result.add(instance);
-            }
-        }
-
-        return result;
-    }
-
-    @Override
-    public List<Instance> getAllByJrFormIdAndJrVersion(String jrFormId, String jrVersion) {
-        return instances.stream().filter(instance -> {
-            return Objects.equals(instance.getJrFormId(), jrFormId) && Objects.equals(instance.getJrVersion(), jrVersion);
-        }).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Instance> getAllByJrFormIdAndJrVersionNotDeleted(String jrFormId, String jrVersion) {
-        return instances.stream().filter(instance -> {
-            return Objects.equals(instance.getJrFormId(), jrFormId)
-                    && Objects.equals(instance.getJrVersion(), jrVersion)
-                    && instance.getDeletedDate() == null;
-        }).collect(Collectors.toList());
-    }
-
-    @Override
-    public Instance getByPath(String instancePath) {
+    public Instance getOneByPath(String instancePath) {
         List<Instance> result = new ArrayList<>();
 
         for (Instance instance : instances) {
@@ -88,6 +46,41 @@ public final class InMemInstancesRepository implements InstancesRepository {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public List<Instance> getAllFinalized() {
+        List<Instance> result = new ArrayList<>();
+
+        for (Instance instance : instances) {
+            if (instance.getStatus().equals(Instance.STATUS_COMPLETE) || instance.getStatus().equals(Instance.STATUS_SUBMISSION_FAILED)) {
+                result.add(instance);
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<Instance> getAllByFormId(String formId) {
+        List<Instance> result = new ArrayList<>();
+
+        for (Instance instance : instances) {
+            if (instance.getJrFormId().equals(formId)) {
+                result.add(instance);
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<Instance> getAllByFormIdAndVersionNotDeleted(String formId, String version) {
+        return instances.stream().filter(instance -> {
+            return Objects.equals(instance.getJrFormId(), formId)
+                    && Objects.equals(instance.getJrVersion(), version)
+                    && instance.getDeletedDate() == null;
+        }).collect(Collectors.toList());
     }
 
     @Override

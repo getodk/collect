@@ -17,31 +17,6 @@ public class InMemFormsRepository implements FormsRepository {
 
     private final List<Form> forms = new ArrayList<>();
 
-    @Override
-    public Uri save(Form form) {
-        forms.add(form);
-        return null;
-    }
-
-    @Override
-    public List<Form> getByJrFormIdNotDeleted(String jrFormId) {
-        return forms.stream().filter(f -> f.getJrFormId().equals(jrFormId) && !f.isDeleted()).collect(toList());
-    }
-
-    @Override
-    public List<Form> getAll() {
-        return new ArrayList<>(forms); // Avoid anything  mutating the list externally
-    }
-
-    @Override
-    public List<Form> getAll(String jrFormId, @Nullable String jrVersion) {
-        return forms.stream().filter(f -> f.getJrFormId().equals(jrFormId) && Objects.equals(f.getJrVersion(), jrVersion)).collect(toList());
-    }
-
-    public List<Form> getAllNotDeleted(String jrFormId, @Nullable String jrVersion) {
-        return forms.stream().filter(f -> f.getJrFormId().equals(jrFormId) && Objects.equals(f.getJrVersion(), jrVersion) && !f.isDeleted()).collect(toList());
-    }
-
     @Nullable
     @Override
     public Form get(Long id) {
@@ -50,20 +25,45 @@ public class InMemFormsRepository implements FormsRepository {
 
     @Nullable
     @Override
-    public Form get(String jrFormId, @Nullable String jrVersion) {
-        return forms.stream().filter(f -> f.getJrFormId().equals(jrFormId) && Objects.equals(f.getJrVersion(), jrVersion)).findFirst().orElse(null);
+    public Form getOneByFormIdAndVersion(String formId, @Nullable String version) {
+        return forms.stream().filter(f -> f.getJrFormId().equals(formId) && Objects.equals(f.getJrVersion(), version)).findFirst().orElse(null);
     }
 
     @Nullable
     @Override
-    public Form getByMd5Hash(String hash) {
+    public Form getOneByMd5Hash(String hash) {
         return forms.stream().filter(f -> f.getMD5Hash().equals(hash)).findFirst().orElse(null);
     }
 
     @Nullable
     @Override
-    public Form getByPath(String path) {
+    public Form getOneByPath(String path) {
         return forms.stream().filter(f -> f.getFormFilePath().equals(path)).findFirst().orElse(null);
+    }
+
+    @Override
+    public List<Form> getAll() {
+        return new ArrayList<>(forms); // Avoid anything  mutating the list externally
+    }
+
+    @Override
+    public List<Form> getAllByFormIdAndVersion(String jrFormId, @Nullable String jrVersion) {
+        return forms.stream().filter(f -> f.getJrFormId().equals(jrFormId) && Objects.equals(f.getJrVersion(), jrVersion)).collect(toList());
+    }
+
+    @Override
+    public List<Form> getAllNotDeletedByFormId(String jrFormId) {
+        return forms.stream().filter(f -> f.getJrFormId().equals(jrFormId) && !f.isDeleted()).collect(toList());
+    }
+
+    public List<Form> getAllNotDeletedByFormIdAndVersion(String jrFormId, @Nullable String jrVersion) {
+        return forms.stream().filter(f -> f.getJrFormId().equals(jrFormId) && Objects.equals(f.getJrVersion(), jrVersion) && !f.isDeleted()).collect(toList());
+    }
+
+    @Override
+    public Uri save(Form form) {
+        forms.add(form);
+        return null;
     }
 
     @Override
@@ -84,6 +84,11 @@ public class InMemFormsRepository implements FormsRepository {
     }
 
     @Override
+    public void deleteByMd5Hash(String md5Hash) {
+        forms.removeIf(f -> f.getMD5Hash().equals(md5Hash));
+    }
+
+    @Override
     public void restore(Long id) {
         Form form = forms.stream().filter(f -> f.getId().equals(id)).findFirst().orElse(null);
 
@@ -93,10 +98,5 @@ public class InMemFormsRepository implements FormsRepository {
                     .deleted(false)
                     .build());
         }
-    }
-
-    @Override
-    public void deleteFormsByMd5Hash(String md5Hash) {
-        forms.removeIf(f -> f.getMD5Hash().equals(md5Hash));
     }
 }

@@ -93,7 +93,7 @@ public class InstanceUploaderUtilsTest {
         for (int i = 1; i <= NUMBER_OF_INSTANCES_TO_SEND; i++) {
             long time = System.currentTimeMillis();
             Instance instance = new Instance.Builder()
-                    .id(Long.valueOf(i))
+                    .id((long) i)
                     .displayName("InstanceTest")
                     .jrFormId("instanceTest")
                     .status(Instance.STATUS_COMPLETE)

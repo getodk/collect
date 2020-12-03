@@ -210,7 +210,7 @@ public class SaveFormToDisk {
 
             // Set uri to handle encrypted case (see exportData)
             InstancesRepository instances = new DatabaseInstancesRepository();
-            Instance instance = instances.getByPath(instancePath);
+            Instance instance = instances.getOneByPath(instancePath);
             if (instance != null) {
                 uri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, instance.getId().toString());
 

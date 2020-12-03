@@ -22,7 +22,7 @@ public abstract class FormsRepositoryTest {
         formsRepository.save(buildForm(1L, "1", null, getFormFilesPath())
                 .build());
 
-        Form form = formsRepository.get("1", null);
+        Form form = formsRepository.getOneByFormIdAndVersion("1", null);
         assertThat(form, notNullValue());
         assertThat(form.getId(), is(1L));
     }
@@ -61,7 +61,7 @@ public abstract class FormsRepositoryTest {
                 .build()
         );
 
-        List<Form> forms = formsRepository.getByJrFormIdNotDeleted("1");
+        List<Form> forms = formsRepository.getAllNotDeletedByFormId("1");
         assertThat(forms.size(), is(1));
         assertThat(forms.get(0).getJrVersion(), equalTo("not-deleted"));
     }

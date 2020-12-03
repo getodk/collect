@@ -297,7 +297,7 @@ public class EncryptionUtils {
 
                 // OK to finalize with form definition that was soft-deleted. OK if there are multiple
                 // forms with the same formid/version as long as only one is active (not deleted).
-                if (formCursor.getCount() == 0 || new DatabaseFormsRepository().getAllNotDeleted(formId, formVersion).size() > 1) {
+                if (formCursor.getCount() == 0 || new DatabaseFormsRepository().getAllNotDeletedByFormIdAndVersion(formId, formVersion).size() > 1) {
                     String msg = TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_blank_form_for_this_form_id);
                     Timber.d(msg);
                     throw new EncryptionException(msg, null);

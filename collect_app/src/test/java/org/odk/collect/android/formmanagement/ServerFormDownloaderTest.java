@@ -334,7 +334,7 @@ public class ServerFormDownloaderTest {
 
         ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()), mock(Analytics.class));
         downloader.downloadForm(serverFormDetails, null, null);
-        assertThat(formsRepository.getAll(form.getJrFormId(), form.getJrVersion()).size(), is(1));
+        assertThat(formsRepository.getAllByFormIdAndVersion(form.getJrFormId(), form.getJrVersion()).size(), is(1));
     }
 
     private String getFormFilesPath() {
