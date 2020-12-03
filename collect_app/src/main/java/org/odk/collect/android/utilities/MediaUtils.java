@@ -59,6 +59,7 @@ import static org.odk.collect.android.utilities.FileUtils.deleteAndReport;
  * @author paulburke
  */
 public class MediaUtils {
+    private static Uri filePathUri;
 
     public void deleteMediaFile(String imageFile) {
         deleteAndReport(new File(imageFile));
@@ -106,6 +107,7 @@ public class MediaUtils {
      * @author paulburke
      */
     public String getPath(final Context context, final Uri uri) {
+        filePathUri = uri;
 
         // DocumentProvider
         if (DocumentsContract.isDocumentUri(context, uri)) {
@@ -319,6 +321,10 @@ public class MediaUtils {
                 final int column_index = cursor.getColumnIndexOrThrow(column);
                 return cursor.getString(column_index);
             }
+        } catch (IllegalArgumentException e) {
+            File file = new File(context.getCacheDir(), "tmp");
+            FileUtils.saveAnswerFileFromUri(filePathUri, file, context);
+            return file.getAbsolutePath();
         } finally {
             if (cursor != null) {
                 cursor.close();
