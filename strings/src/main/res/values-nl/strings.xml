@@ -239,8 +239,7 @@
   <string name="survey_saving_encrypting_message">Data versleutelen…</string>
   <string name="high_resolution_summary">Hoge resolutie video opnames toestaan</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="google_drive">Google Drive</string>
-  <string name="go_drive">Mijn Drive</string>
+    <string name="go_drive">Mijn Drive</string>
   <string name="go_shared">Gedeeld met mij</string>
   <string name="modified_on_date_at_time">\'Gewijzigd op\' EEE dd MMM yyyy \'om\' HH:mm</string>
   <string name="no_google_account">Geen Google account geselecteerd!</string>
@@ -284,7 +283,6 @@
   <string name="encrypted_form">Versleuteld formulier</string>
   <string name="deleted_form">Verwijderd formulier</string>
   <string name="exit">Verlaten</string>
-  <string name="instance_scan_completed">Scannen voltooid.</string>
   <string name="instance_scan_count">%1$d formulieren toegevoegd.</string>
   <string name="sort_by_name_asc">Naam, A-Z</string>
   <string name="sort_by_name_desc">Naam, Z-A</string>
@@ -317,7 +315,6 @@
   <string name="server_settings_title">Server</string>
   <string name="type">Type</string>
   <string name="sort_by">Sorteer op</string>
-  <string name="server">Server</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="image_size_large">Groot (3072px)</string>
   <string name="image_size_medium">Gemiddeld (2048px)</string>
@@ -327,8 +324,7 @@
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="no">Nee</string>
   <string name="form_update_category">Formulier update</string>
-  <string name="periodic_form_updates_check_title">Periodieke check op formulier updates</string>
-  <string name="every_fifteen_minutes">Elke vijftien minuten</string>
+    <string name="every_fifteen_minutes">Elke vijftien minuten</string>
   <string name="every_one_hour">Elk uur</string>
   <string name="every_six_hours">Elke zes uur</string>
   <string name="every_24_hours">Elke 24 uur</string>

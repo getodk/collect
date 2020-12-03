@@ -241,8 +241,7 @@
   <string name="survey_saving_encrypting_message">Szyfruję dane…</string>
   <string name="high_resolution_summary">Włącz nagrywanie wideo wysokiej rozdzielczości</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="google_drive">Google Drive</string>
-  <string name="go_drive">Mój Dysk</string>
+    <string name="go_drive">Mój Dysk</string>
   <string name="go_shared">Dzielone ze Mną</string>
   <string name="modified_on_date_at_time">\'Zmieniony\' EEE, MMM dd, yyyy \'o\' HH:mm</string>
   <string name="google_sheets_url_hint">Formularze muszą ustawić URL przesyłania. Jeśli nie, ten adres URL zostanie użyty.</string>
@@ -420,7 +419,6 @@
   <string name="encrypted_form">Formularz zaszyfrowany</string>
   <string name="deleted_form">Formularz usunięty</string>
   <string name="exit">Wyjdź</string>
-  <string name="instance_scan_completed">Skanowanie zakończone.</string>
   <string name="instance_scan_count">Dodano %1$d formularzy.</string>
   <string name="instance_sync">Finalizuj formularze podczas importu</string>
   <string name="instance_sync_summary">Wpływa na formularze dodawane bezpośrednio do folderu formularzy.</string>
@@ -490,7 +488,6 @@
   <string name="use_device_language">Użyj języka urządzenia</string>
   <string name="invalid_email_address">Nieprawidłowy adres email!</string>
   <string name="sort_by">Sortuj według</string>
-  <string name="server">Serwer</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">Wybierz wartość</string>
   <string name="edit_value">Edytuj wartość</string>
@@ -584,7 +581,6 @@
   <string name="read_phone_state_runtime_permission_denied_title">Sprawdź uprawnienia dostępu do właściwości telefonu</string>
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect nie wykonuje połączeń, ale wymaga dostępu do niektórych właściwości twojego urządzenia, w tym do numeru telefonu i numeru ID</string>
   <string name="form_update_category">Aktualizacja formularza</string>
-  <string name="periodic_form_updates_check_title">Cykliczne sprawdzenie możliwych aktualizacji</string>
   <string name="every_fifteen_minutes">Co piętnaście minut</string>
   <string name="every_one_hour">Co godzinę</string>
   <string name="every_six_hours">Co sześć godzin</string>

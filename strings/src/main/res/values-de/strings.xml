@@ -245,8 +245,7 @@
   <string name="survey_saving_encrypting_message">Daten werden verschlüsselt…</string>
   <string name="high_resolution_summary">HD-Videoaufnahmen aktivieren</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="google_drive">Google Drive</string>
-  <string name="go_drive">My Drive</string>
+    <string name="go_drive">My Drive</string>
   <string name="go_shared">Shared with Me</string>
   <string name="modified_on_date_at_time">\'Geändert am\' EEE, dd.MM.yyyy \'um\' HH:mm</string>
   <string name="google_sheets_url_hint">Formulare müssen eine Übermittlungs-URL setzen. Wenn nicht, wird diese URL verwendet.</string>
@@ -425,7 +424,6 @@
   <string name="encrypted_form">Verschlüsseltes Formular</string>
   <string name="deleted_form">Formular gelöscht</string>
   <string name="exit">Beenden</string>
-  <string name="instance_scan_completed">Scan abgeschlossen.</string>
   <string name="instance_scan_count">%1$d Formular(e) hinzugefügt.</string>
   <string name="instance_sync">Formulare beim Import abschließen</string>
   <string name="instance_sync_summary">Betrifft Formulare, die direkt dem instances-Ordner hinzugefügt werden.</string>
@@ -505,7 +503,6 @@
   <string name="use_device_language">Gerätesprache benutzen</string>
   <string name="invalid_email_address">Ungültige E-Mail-Adresse!</string>
   <string name="sort_by">Sortieren nach</string>
-  <string name="server">Server</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">Wert auswählen</string>
   <string name="edit_value">Wert bearbeiten</string>
@@ -599,7 +596,6 @@
   <string name="read_phone_state_runtime_permission_denied_title">Berechtigung Telefonstatus abrufen</string>
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect macht keine Telefonanrufe aber benötigt Zugriff auf bestimmte Eigenschaften Ihres Geräts, wie die Telefonnummer und Geräte-ID.</string>
   <string name="form_update_category">Formular-Update</string>
-  <string name="periodic_form_updates_check_title">Periodischer Formular-Update-Check</string>
   <string name="every_fifteen_minutes">Alle 15 Minuten</string>
   <string name="every_one_hour">Jede Stunde</string>
   <string name="every_six_hours">Alle 6 Stunden</string>

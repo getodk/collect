@@ -233,8 +233,7 @@
   <string name="survey_saving_encrypting_message">ڈیٹا انکرپٹ ہورہا ہے</string>
   <string name="high_resolution_summary">اعلی کوالٹی ویڈیو ریکارڈنگ کو فعال کریں</string>
   <string name="server_platform_google_sheets">گوگل ڈرائیو ، گوگل شیٹس </string>
-  <string name="google_drive">گوگل ڈرائیو </string>
-  <string name="go_drive">مائی ڈرائیو</string>
+    <string name="go_drive">مائی ڈرائیو</string>
   <string name="go_shared">میرے ساتھ شیئر کیا ہوا</string>
   <string name="modified_on_date_at_time"> EEE, MMM dd, yyyy\'کو\' HH:mm \'پر موڈیفائی کیا گیا\'</string>
   <string name="google_sheets_url_hint">فارم جمع کرانے کا یو آرال مقرر کرنا لازمی ہے. اگر مقررنہیں کرتے تو یہ یو آرال استعمال کیا جائے گا</string>
@@ -363,7 +362,6 @@
   <string name="encrypted_form">انکرپٹڈ فارم</string>
   <string name="deleted_form">ڈیلیٹڈ فارم</string>
   <string name="exit">باہر نکلیں</string>
-  <string name="instance_scan_completed"> سکیننگ ختم</string>
   <string name="instance_scan_count">%1$dفارم شامل ہیں.</string>
   <string name="instance_sync">امپورٹ پر فارم کو حتمی شکل دیں</string>
   <string name="instance_sync_summary">افیکٹس فارمز براہ راست انسٹنسز فولڈر میں شامل کیا گئے.</string>
@@ -433,7 +431,6 @@
   <string name="use_device_language">ڈیوائس کی زبان استعمال کریں</string>
   <string name="invalid_email_address">غلط ای میل ایڈریس!</string>
   <string name="sort_by">بہ ترتیب</string>
-  <string name="server">سرور </string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">سلیکٹ ویلیو </string>
   <string name="edit_value">ایڈٹ ویلیو </string>
@@ -516,7 +513,6 @@
   <string name="read_phone_state_runtime_permission_denied_title">ریڈ فون اسٹیٹ پرمیشن</string>
   <string name="read_phone_state_runtime_permission_denied_desc">او ڈی کے کولیکٹ  کالز نہیں کرتا، لیکن یہ آپ کےڈیوائس  کے بارے میں مخصوص خصوصیات جیسے فون نمبر اور ڈیوائس آئی ڈٰی تک رسائی حاصل کرنے کی ضرورت ہے.</string>
   <string name="form_update_category">فارم اپ ڈیٹ</string>
-  <string name="periodic_form_updates_check_title">دورانیہ فارم اپ ڈیٹ چیک</string>
   <string name="every_fifteen_minutes">ہر پندرہ منٹ</string>
   <string name="every_one_hour">ہر گھنٹے </string>
   <string name="every_six_hours">ہر چھ گھنٹے </string>

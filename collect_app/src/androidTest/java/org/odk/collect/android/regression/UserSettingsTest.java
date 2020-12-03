@@ -31,6 +31,6 @@ public class UserSettingsTest {
                 .openUserSettings()
                 .assertTextDoesNotExist("Type")
                 .assertTextDoesNotExist("Submission transport")
-                .assertText(R.string.server);
+                .assertText(R.string.server_settings_title);
     }
 }

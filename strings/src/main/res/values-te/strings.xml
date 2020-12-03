@@ -245,8 +245,7 @@
   <string name="survey_saving_encrypting_message">డేటాను గుప్తీకరిస్తోంది…</string>
   <string name="high_resolution_summary">అధిక రిజల్యూషన్ ఉన్న వీడియో రికార్డింగ్‌ చేయడానికి వీలు కల్పించండి </string>
   <string name="server_platform_google_sheets">గూగుల్ డ్రైవ్, గూగుల్ షీట్స్</string>
-  <string name="google_drive">గూగుల్ డ్రైవ్</string>
-  <string name="go_drive">నా డ్రైవ్</string>
+    <string name="go_drive">నా డ్రైవ్</string>
   <string name="go_shared">నాతో పంచుకున్నవి </string>
   <string name="modified_on_date_at_time">\'సవరించిన తేదీ\' EEE, MMM dd, yyyy \'సమయం\' HH:mm </string>
   <string name="google_sheets_url_hint">ఫారమ్‌లు తప్పనిసరిగా సబ్మిషన్ URL ని సెట్ చేయాలి. లేకపోతే, ఈ URL ఉపయోగించబడుతుంది.</string>
@@ -417,7 +416,6 @@
   <string name="encrypted_form">గుప్తీకరించిన రూపం</string>
   <string name="deleted_form">తొలగించిన ఫారమ్</string>
   <string name="exit">నిష్క్రమించు</string>
-  <string name="instance_scan_completed">స్కానింగ్ పూర్తయింది.</string>
   <string name="instance_scan_count">%1$dఫారంలు జోడించబడ్డాయి.</string>
   <string name="instance_sync">దిగుమతులపై ఫారమ్‌లను ముగించండి</string>
   <string name="instance_sync_summary">ఇన్‌స్టాన్స్ ఫోల్డర్‌కు నేరుగా జోడించిన ఫారమ్‌లను ప్రభావితం చేస్తుంది.</string>
@@ -490,7 +488,6 @@
   <string name="use_device_language">పరికర భాషను ఉపయోగించండి</string>
   <string name="invalid_email_address">చెల్లని ఇమెయిల్ చిరునామా!</string>
   <string name="sort_by">క్రమబద్ధీకరణ </string>
-  <string name="server">సర్వర్</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">ఎదేని విలువ ఎంచుకోండీ</string>
   <string name="edit_value">విలువ మార్చండి</string>
@@ -584,7 +581,6 @@
   <string name="read_phone_state_runtime_permission_denied_title">ఫోన్ స్టేట్ అనుమతి చదవండి</string>
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect ఎటువంటి కాల్స్ చేయదు. కాని దీనికి మీ పరికరం గురించిన ఫోన్ నంబర్, పరికరం ID వంటి కొంత సమాచారాన్ని సేకరించవలసి ఉంటుంది.</string>
   <string name="form_update_category">ఫారం నవీకరణ</string>
-  <string name="periodic_form_updates_check_title">ఫారంలో జరిగిన మార్పులను ఎంత సమయంలో చూడాలి</string>
   <string name="every_fifteen_minutes">ప్రతి పదిహేను నిమిషాలకు</string>
   <string name="every_one_hour">ప్రతి గంట</string>
   <string name="every_six_hours">ప్రతి ఆరు గంటలకు</string>

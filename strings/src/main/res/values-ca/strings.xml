@@ -216,8 +216,7 @@
   <string name="survey_saving_encrypting_message">Encriptant dades…</string>
   <string name="high_resolution_summary">Activant enregistrament de  vídeos HD</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="google_drive">Google Drive</string>
-  <string name="go_drive">El meu disc</string>
+    <string name="go_drive">El meu disc</string>
   <string name="go_shared">Comparteix amb mi</string>
   <string name="modified_on_date_at_time">\'Modificat el\' EEE, dd-MMM-yyyy \'a les\' HH:mm</string>
   <string name="drive_get_file">Capturant %1$s i arxius multimedia.</string>
@@ -295,8 +294,7 @@
   <string name="encrypted_form">Formulari encriptat</string>
   <string name="deleted_form">Formulari esborrat</string>
   <string name="exit">Sortir</string>
-  <string name="instance_scan_completed">Escanejat finalitzat</string>
-  <string name="filter_the_list">Filtra la llista</string>
+    <string name="filter_the_list">Filtra la llista</string>
   <string name="language">Idioma</string>
   <string name="phone_number">Telèfon</string>
   <string name="email">Direcció email</string>

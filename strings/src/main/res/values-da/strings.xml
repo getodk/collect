@@ -228,8 +228,7 @@
   <string name="survey_saving_encrypting_message">Krypterer data…</string>
   <string name="high_resolution_summary">Aktivér højt-opløselige video-indstillnger</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="google_drive">Google Drive</string>
-  <string name="go_drive">Mit Drev (Google Drive)</string>
+    <string name="go_drive">Mit Drev (Google Drive)</string>
   <string name="go_shared">Delt med mig</string>
   <string name="google_sheets_url_hint">Formularer skal definere en webadresse til til indberetninger. Hvis ikke den bliver defineret , vil denne webadresse blive anvendt.</string>
   <string name="drive_get_file">Henter%1$s og mediefiler.</string>
@@ -338,8 +337,7 @@
   <string name="reset_settings_button_reset">Nulstil</string>
   <string name="reset_in_progress">Nulstiller…</string>
   <string name="exit">Forlad</string>
-  <string name="instance_scan_completed">Afsluttede scanning.</string>
-  <string name="sort_by_name_asc">Navn, A-Z</string>
+    <string name="sort_by_name_asc">Navn, A-Z</string>
   <string name="sort_by_name_desc">Navn, A-Z</string>
   <string name="sort_by_date_asc">Dato - nyeste først</string>
   <string name="sort_by_date_desc">Dato - ældste først</string>

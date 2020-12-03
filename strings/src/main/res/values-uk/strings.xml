@@ -238,8 +238,7 @@
   <string name="survey_saving_encrypting_message">Шифрування даних…</string>
   <string name="high_resolution_summary">Дозволяє запис відео високої якості</string>
   <string name="server_platform_google_sheets">Google Диск, Google Сторінки</string>
-  <string name="google_drive">Google Диск</string>
-  <string name="go_drive">Мій диск</string>
+    <string name="go_drive">Мій диск</string>
   <string name="go_shared">Розділене зі мною</string>
   <string name="modified_on_date_at_time">\'Зімінено в\' EEE, dd MMM, yyyy \'at\' HH:mm</string>
   <string name="google_sheets_url_hint">URL для відправки має бути зазначено в анкетах. Інакше, буде використано цей URL.</string>
@@ -402,7 +401,6 @@
   <string name="encrypted_form">Зашифровані анкети</string>
   <string name="deleted_form">Видалені анкети</string>
   <string name="exit">Вийти</string>
-  <string name="instance_scan_completed">Завершені сканування.</string>
   <string name="instance_scan_count">%1$d анкет додано.</string>
   <string name="instance_sync">Завершувати форми під час імпорту</string>
   <string name="instance_sync_summary">Брати до уваги форми додані безпосередньо до директорії екземплярів.</string>
@@ -472,7 +470,6 @@
   <string name="use_device_language">Використовувати мову пристрою</string>
   <string name="invalid_email_address">Некоректна електронна адреса!</string>
   <string name="sort_by">Сортувати за</string>
-  <string name="server">Сервер</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">Обрати заначення</string>
   <string name="edit_value">Редагувати значення</string>
@@ -555,7 +552,6 @@
   <string name="read_phone_state_runtime_permission_denied_title">Сатус телефону</string>
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect не робить телефонних дзвінків але потребує доступу до певних властивостей вашого пристрою як то номер телефну та ID пристрою</string>
   <string name="form_update_category">Оновлення анкети</string>
-  <string name="periodic_form_updates_check_title">Періодична перерівка оновлень анкет</string>
   <string name="every_fifteen_minutes">Кожних п\'ятнадцять хвилин</string>
   <string name="every_one_hour">Щогодини</string>
   <string name="every_six_hours">Кожні шість годин</string>

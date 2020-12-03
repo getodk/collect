@@ -899,14 +899,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case RequestCodes.AUDIO_CHOOSER:
             case RequestCodes.VIDEO_CHOOSER:
             case RequestCodes.IMAGE_CHOOSER:
-                /*
-                 * We have a saved image somewhere, but we really want it to be in:
-                 * /sdcard/odk/instances/[current instnace]/something.jpg so we move
-                 * it there before inserting it into the content provider. Once the
-                 * android image capture bug gets fixed, (read, we move on from
-                 * Android 1.6) we want to handle images the audio and video
-                 */
-
                 ProgressDialogFragment progressDialog = new ProgressDialogFragment();
                 progressDialog.setMessage(getString(R.string.please_wait));
                 progressDialog.show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);

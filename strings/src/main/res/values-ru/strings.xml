@@ -238,8 +238,7 @@
   <string name="survey_saving_encrypting_message">Шифрование данных…</string>
   <string name="high_resolution_summary">Разрешить запись видео высокого разрешения</string>
   <string name="server_platform_google_sheets">Google диск и таблицы</string>
-  <string name="google_drive">Google диск</string>
-  <string name="go_drive">Мой диск</string>
+    <string name="go_drive">Мой диск</string>
   <string name="go_shared">Доступные мне</string>
   <string name="modified_on_date_at_time">\'Изменено\' EEE, dd MMM yyyy \'в\' HH:mm</string>
   <string name="google_sheets_url_hint">В опроснике должен быть указан URL-выгрузки. Иначе, будет применён этот адрес.</string>
@@ -368,7 +367,6 @@
   <string name="encrypted_form">Зашифрованный опрос</string>
   <string name="deleted_form">Удалённая форма</string>
   <string name="exit">Выйти</string>
-  <string name="instance_scan_completed">Сканирование завершено.</string>
   <string name="instance_scan_count">Добавлено опросников: %1$d шт.</string>
   <string name="instance_sync">Финализировать опросы при импорте</string>
   <string name="sort_by_name_asc">А-Я</string>
@@ -437,7 +435,6 @@
   <string name="use_device_language">Использовать язык устройства</string>
   <string name="invalid_email_address">Неверный адрес почты!</string>
   <string name="sort_by">Сортировать по</string>
-  <string name="server">Сервер</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">Выбрать значение</string>
   <string name="edit_value">Изменить значение</string>
@@ -517,7 +514,6 @@
   <string name="record_audio_runtime_permission_denied_desc">Без данного разрешения Collect не сможет использовать микрофон. Попробуйте снова когда будете готовы предоставить доступ.</string>
   <string name="get_accounts_runtime_permission_denied_desc">Без данного разрешения Collect не сможет получить доступ к учётным записям. Попробуйте снова когда будете готовы предоставить доступ.</string>
   <string name="form_update_category">ОБНОВЛЕНИЕ БЛАНКОВ</string>
-  <string name="periodic_form_updates_check_title">Периодичность проверки обновлений</string>
   <string name="every_fifteen_minutes">Каждые ¼ часа</string>
   <string name="every_one_hour">Каждый 1 час</string>
   <string name="every_six_hours">Каждые 6 часов</string>

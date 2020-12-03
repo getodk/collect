@@ -210,8 +210,7 @@
   <string name="survey_saving_encrypting_message">Criptez datele…</string>
   <string name="high_resolution_summary">Activați înregistrările video high-resolution</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="google_drive">Google Drive</string>
-  <string name="go_drive">Discul meu</string>
+    <string name="go_drive">Discul meu</string>
   <string name="go_shared">Partajate cu mine</string>
   <string name="modified_on_date_at_time">\'Modificat în\' EEE, dd MMM yyyy \'la\' HH:mm</string>
   <string name="drive_get_file">Preluare %1$s și fișiere media.</string>

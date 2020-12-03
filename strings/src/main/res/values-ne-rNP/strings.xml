@@ -234,8 +234,7 @@
   <string name="survey_saving_encrypting_message">तथ्यांक गुप्तिकृत गरिदैछ…</string>
   <string name="high_resolution_summary">उच्च स्तरीय भिडियो रेकर्ड गर्ने क्षमता सक्रिय गर्नुस् </string>
   <string name="server_platform_google_sheets">गुगल ड्राइभ, गुगल सिट्स</string>
-  <string name="google_drive">गुगल ड्राइभ</string>
-  <string name="go_drive">मेरो ड्राइभ</string>
+    <string name="go_drive">मेरो ड्राइभ</string>
   <string name="go_shared">म संग साझा गरिएको </string>
   <string name="modified_on_date_at_time">EEE, MMM dd, yyyy \'को\' HH:mm \'मा परिवर्तन गरिएको\'</string>
   <string name="google_sheets_url_hint">फारमहरु पठाउनको लागि URL सेट गर्नुपर्दछ । अन्यथा यही URL प्रयोग हुनेछ ।</string>

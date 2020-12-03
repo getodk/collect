@@ -216,8 +216,7 @@
   <string name="survey_saving_validating_message">მიმდინარეობს პასუხების შემოწმება</string>
   <string name="survey_saving_collecting_message">მიმდინარეობს მონაცემთა შეგროვება</string>
   <string name="survey_saving_saving_message">მიმდინარეობს SD-ბარათზე შენახვა</string>
-  <string name="google_drive">Google Drive</string>
-  <string name="go_drive">ჩემი Drive</string>
+    <string name="go_drive">ჩემი Drive</string>
   <string name="notification_error">შეცდომა შეტყობინების ტექსტის ჩვენებისას</string>
   <string name="delete_after_send">გაგზავნის შემდგომ წაშლა</string>
   <string name="change_server_url">სერვერის ვებ-მისამართი</string>

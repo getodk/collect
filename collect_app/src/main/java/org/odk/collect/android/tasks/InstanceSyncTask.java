@@ -84,7 +84,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 File[] instanceFolders = instancesPath.listFiles();
                 if (instanceFolders == null || instanceFolders.length == 0) {
                     Timber.i("[%d] Empty instance folder. Stopping scan process.", instance);
-                    Timber.d(TranslationHandler.getString(Collect.getInstance(), R.string.instance_scan_completed));
+                    Timber.d("Instance scan completed");
                     return currentStatus;
                 }
 

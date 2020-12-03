@@ -245,8 +245,7 @@
   <string name="survey_saving_encrypting_message">Salataan dataa…</string>
   <string name="high_resolution_summary">Aktivoi korkean resoluution videotallennukset</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="google_drive">Google Drive</string>
-  <string name="go_drive">Oma Drive</string>
+    <string name="go_drive">Oma Drive</string>
   <string name="go_shared">Minun kanssani jaetut</string>
   <string name="modified_on_date_at_time">\'Muokattu\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
   <string name="google_sheets_url_hint">Lomakkeiden täytyy asettaa URL lähetystä varten. Jos ei, käytetään tätä URL:ää.</string>
@@ -425,7 +424,6 @@
   <string name="encrypted_form">Salattu lomake</string>
   <string name="deleted_form">Poistettu lomake</string>
   <string name="exit">Poistu</string>
-  <string name="instance_scan_completed">Skannaus valmis.</string>
   <string name="instance_scan_count">%1$d lomaketta lisätty.</string>
   <string name="instance_sync">Lomakkeet viimeistellään tuodessa</string>
   <string name="instance_sync_summary">Vaikuttaa lomakkeisiin jotka lisätään suoraan Instances -kansioon.</string>
@@ -505,7 +503,6 @@
   <string name="use_device_language">Käytä laitteen oletuskieltä</string>
   <string name="invalid_email_address">Virheellinen sähköpostiosoite!</string>
   <string name="sort_by">Lajitteluperuste</string>
-  <string name="server">Palvelin</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">Valitse arvo</string>
   <string name="edit_value">Muokkaa arvoa</string>
@@ -599,7 +596,6 @@
   <string name="read_phone_state_runtime_permission_denied_title">Puhelimen tilan lukemisen käyttölupa</string>
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect ei soita puheluita, mutta se tarvitsee tiedot joistakin laitteesi tiedoista, kuten puhelinnumero ja laitteen ID.</string>
   <string name="form_update_category">Lomakepäivitys</string>
-  <string name="periodic_form_updates_check_title">Ajastettu lomakepäivitysten tarkistus</string>
   <string name="every_fifteen_minutes">Vartin välein</string>
   <string name="every_one_hour">Tunnin välein</string>
   <string name="every_six_hours">Kuuden tunnin välein</string>

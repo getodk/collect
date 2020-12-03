@@ -245,8 +245,7 @@
   <string name="survey_saving_encrypting_message">Chiffrement des données…</string>
   <string name="high_resolution_summary">Activer l\'option vidéos en haute résolution</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="google_drive">Google Drive</string>
-  <string name="go_drive">Mon Drive</string>
+    <string name="go_drive">Mon Drive</string>
   <string name="go_shared">Partagé avec moi</string>
   <string name="modified_on_date_at_time">\'Modifié\' EEE, MMM dd, yyyy \'à\' HH:mm</string>
   <string name="google_sheets_url_hint">Les formulaires doivent définir une URL de soumission. Si ce n\'est pas le cas, cette URL sera utilisée.</string>
@@ -425,7 +424,6 @@
   <string name="encrypted_form">Formulaires encryptés</string>
   <string name="deleted_form">Formulaire supprimé</string>
   <string name="exit">Sortir</string>
-  <string name="instance_scan_completed">Recherche terminée.</string>
   <string name="instance_scan_count">%1$d formulaires ajoutés.</string>
   <string name="instance_sync">Importer les formulaires enregistrés comme terminés</string>
   <string name="instance_sync_summary">Impacte sur les formulaires ajoutés directement au dossier instances.</string>
@@ -505,7 +503,6 @@
   <string name="use_device_language">Utiliser la langue de l\'appareil</string>
   <string name="invalid_email_address">Adresse mail invalide!</string>
   <string name="sort_by">Trier par</string>
-  <string name="server">Serveur</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">Choisir valeur</string>
   <string name="edit_value">Modifier valeur</string>
@@ -599,7 +596,6 @@
   <string name="read_phone_state_runtime_permission_denied_title">Lire la permission de l\'état du téléphone</string>
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect ne passe pas d\'appels, mais il doit accéder à certaines propriétés de votre périphérique, telles que le numéro de téléphone et l\'ID de périphérique.</string>
   <string name="form_update_category">Mise à jour d\'un fomulaire</string>
-  <string name="periodic_form_updates_check_title">Vérification périodique des mises à jour des formulaires</string>
   <string name="every_fifteen_minutes">Toutes les quinze minutes</string>
   <string name="every_one_hour">Toutes les heures</string>
   <string name="every_six_hours">Toutes les six heures</string>

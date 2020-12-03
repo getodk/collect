@@ -162,8 +162,7 @@
   <string name="survey_saving_encrypting_message">رمزگذاری داده ها…</string>
   <string name="high_resolution_summary">فعال ساختن ظبط ویدیو با رزولوشن بالا</string>
   <string name="server_platform_google_sheets">گوگل درایو، گوگل شیت</string>
-  <string name="google_drive">گوگل درایو</string>
-  <string name="go_drive">درایو من</string>
+    <string name="go_drive">درایو من</string>
   <string name="go_shared">با من در اشتراک گذاشته شده است</string>
   <string name="odk_auto_note">نتایج ارسال خودکار ODK</string>
   <string name="odk_auto_download_notification_title">نتیاج دانلود خودکار ODK</string>
@@ -231,8 +230,7 @@
   <string name="reset_layers_result">لایه های نقشه:: %s</string>
   <string name="deleted_form">حذف فورم</string>
   <string name="exit">خروج</string>
-  <string name="instance_scan_completed">اسکن تمام شد.</string>
-  <string name="instance_scan_count">%1$dفورم ها اضافه شدند.</string>
+    <string name="instance_scan_count">%1$dفورم ها اضافه شدند.</string>
   <string name="sort_by_name_asc">اسم، الف-ی</string>
   <string name="filter_the_list">فلتر لیست</string>
   <string name="language">زبان</string>
@@ -260,7 +258,6 @@
   <string name="use_device_language">از زبان دستگاه استفاده کنید</string>
   <string name="invalid_email_address">آدرس ایمیل اعتبار ندارد</string>
   <string name="sort_by">دسته بندی بر اساس</string>
-  <string name="server">سرور</string>
   <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
   <string name="select_value">انتخاب مقدار</string>
   <string name="edit_value">ویرایش مقدار</string>

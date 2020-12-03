@@ -176,8 +176,7 @@
   <string name="survey_saving_encrypting_message">ውሂብ በማመስጠር ላይ …</string>
   <string name="high_resolution_summary">ባለከፍተኛ ጥራት ቪዲዮ ቀረጻዎችን ያንቁ</string>
   <string name="server_platform_google_sheets">ጉግል Drive, ጉግል ሉሆች</string>
-  <string name="google_drive">ጉግል Drive</string>
-  <string name="go_drive">የእኔ Drive</string>
+    <string name="go_drive">የእኔ Drive</string>
   <string name="go_shared">ከእኔ ጋር የተጋሩ</string>
   <string name="no_google_account">ምንም የ Google መለያ አልተመረጠም!</string>
   <string name="google_set_account">Google ሉሆችን እንደ አገልጋይዎ መርጠዋል, እባክዎ ከመቀጠልዎ በፊት በአጠቃላይ ቅንብሮች ውስጥ ተዛማጅ የ Google መለያ ይምረጡ</string>

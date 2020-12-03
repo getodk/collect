@@ -208,8 +208,7 @@
   <string name="survey_saving_encrypting_message">Krypterer data…</string>
   <string name="high_resolution_summary">Slå på høyoppløst videoopptak.</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="google_drive">Google Drive</string>
-  <string name="go_drive">Min Drive</string>
+    <string name="go_drive">Min Drive</string>
   <string name="go_shared">Delt med meg</string>
   <string name="modified_on_date_at_time">\'Endret den\' EEE, MMM dd, yyyy \'kl\' HH:mm</string>
   <string name="drive_get_file">Henter %1$s og mediafiler.</string>
