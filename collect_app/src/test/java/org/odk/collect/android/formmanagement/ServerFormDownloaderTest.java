@@ -33,7 +33,6 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -310,12 +309,12 @@ public class ServerFormDownloaderTest {
             downloader.downloadForm(serverFormDetails, null, null);
             fail("Expected exception");
         } catch (FormDownloadException e) {
-            assertThat(e.getMessage(), notNullValue());
+            assertThat(e.getType(), is(FormDownloadException.Type.DUPLICATE_FORMID_VERSION));
         }
     }
 
     @Test
-    public void whenFormWithSameIdAndVersion_andSameContentsOnDevice_downloadsSuccessfully() throws Exception {
+    public void whenFormWithSameIdAndVersion_andSameContentsOnDevice_doesNotDuplicateForm() throws Exception {
         Form form = buildForm(1L, "form", "version", getFormFilesPath(), "contents1").build();
         formsRepository.save(form);
 

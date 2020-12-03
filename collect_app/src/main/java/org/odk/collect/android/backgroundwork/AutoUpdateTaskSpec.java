@@ -23,6 +23,7 @@ import androidx.work.WorkerParameters;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formmanagement.FormDownloadException;
+import org.odk.collect.android.formmanagement.FormDownloadExceptionMapper;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
@@ -86,7 +87,7 @@ public class AutoUpdateTaskSpec implements TaskSpec {
                                         formDownloader.downloadForm(serverFormDetails, null, null);
                                         results.put(serverFormDetails, TranslationHandler.getString(context, R.string.success));
                                     } catch (FormDownloadException e) {
-                                        results.put(serverFormDetails, TranslationHandler.getString(context, R.string.failure));
+                                        results.put(serverFormDetails, new FormDownloadExceptionMapper(context).getMessage(e));
                                     } catch (InterruptedException e) {
                                         break;
                                     }

@@ -65,8 +65,8 @@ public class ServerFormDownloader implements FormDownloader {
                 String formIdentifier = formOnDevice.getDisplayName() + " " + formOnDevice.getId();
                 String formIdHash = FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
                 analytics.logFormEvent(DOWNLOAD_SAME_FORMID_VERSION, formIdHash);
-                throw new FormDownloadException("You've already downloaded a form with the same ID and version but with different contents. " +
-                        "Before downloading, please send all data you have collected with the existing form and delete the data and blank form.");
+
+                throw new FormDownloadException(FormDownloadException.Type.DUPLICATE_FORMID_VERSION);
             }
         }
 
