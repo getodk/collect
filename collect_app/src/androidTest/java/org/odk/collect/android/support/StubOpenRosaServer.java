@@ -119,8 +119,8 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
         this.password = password;
     }
 
-    public void addForm(String formLabel, String id, String formXML) {
-        forms.add(new FormManifestEntry(formLabel, formXML, id, "1"));
+    public void addForm(String formLabel, String id, String version, String formXML) {
+        forms.add(new FormManifestEntry(formLabel, formXML, id, version));
     }
 
     public void removeForm(String formLabel) {

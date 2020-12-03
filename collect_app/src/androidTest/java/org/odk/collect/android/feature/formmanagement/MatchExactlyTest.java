@@ -42,8 +42,8 @@ public class MatchExactlyTest {
                 .assertText("One Question")
                 .assertText("One Question Repeat");
 
-        testDependencies.server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
-        testDependencies.server.addForm("Two Question", "two_question", "two-question.xml");
+        testDependencies.server.addForm("One Question Updated", "one_question", "2", "one-question-updated.xml");
+        testDependencies.server.addForm("Two Question", "two_question", "1", "two-question.xml");
 
         page.clickRefresh()
                 .assertText("Two Question") // Check new form downloaded
@@ -73,7 +73,7 @@ public class MatchExactlyTest {
 
     @Test
     public void whenMatchExactlyEnabled_clickingFillBlankForm_andClickingRefresh_whenThereIsAnAuthenticationError_promptsForCredentials() throws Exception {
-        testDependencies.server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
+        testDependencies.server.addForm("One Question Updated", "one_question", "2", "one-question-updated.xml");
         testDependencies.server.setCredentials("Klay", "Thompson");
 
         rule.mainMenu()
@@ -94,8 +94,8 @@ public class MatchExactlyTest {
                 .setServer(testDependencies.server.getURL())
                 .enableMatchExactly();
 
-        testDependencies.server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
-        testDependencies.server.addForm("Two Question", "two_question", "two-question.xml");
+        testDependencies.server.addForm("One Question Updated", "one_question", "2", "one-question-updated.xml");
+        testDependencies.server.addForm("Two Question", "two_question", "1", "two-question.xml");
         testDependencies.scheduler.runDeferredTasks();
 
         page = page.clickFillBlankForm()
