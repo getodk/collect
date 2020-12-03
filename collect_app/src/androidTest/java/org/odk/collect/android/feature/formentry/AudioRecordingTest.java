@@ -87,6 +87,13 @@ public class AudioRecordingTest {
     @Test
     public void whileRecording_swipingToADifferentScreen_showsWarning_andStaysOnSameScreen() {
         new MainMenuPage(rule).assertOnPage()
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .clickFormManagement()
+                .scrollToRecyclerViewItemAndClickText(R.string.external_app_recording)
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
+
                 .copyForm("audio-question.xml")
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
@@ -103,6 +110,13 @@ public class AudioRecordingTest {
     @Test
     public void whileRecording_quittingForm_showsWarning_andStaysOnSameScreen() {
         new MainMenuPage(rule).assertOnPage()
+                .clickOnMenu()
+                .clickGeneralSettings()
+                .clickFormManagement()
+                .scrollToRecyclerViewItemAndClickText(R.string.external_app_recording)
+                .pressBack(new GeneralSettingsPage(rule))
+                .pressBack(new MainMenuPage(rule))
+
                 .copyForm("audio-question.xml")
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
