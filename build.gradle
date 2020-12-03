@@ -77,4 +77,5 @@ ext {
     fragmentVersion = '1.2.5'
     daggerVersion = '2.29.1'
     okhttp3Version = '4.9.0'
+    timberVersion = '4.7.1'
 }

@@ -1,5 +1,6 @@
 package org.odk.collect.audiorecorder.recorder
 
+import timber.log.Timber
 import java.io.File
 import java.io.IOException
 
@@ -30,6 +31,7 @@ internal class RecordingResourceRecorder(private val cacheDir: File, private val
             try {
                 it.prepare()
             } catch (e: IOException) {
+                Timber.e(e)
                 throw RecordingException()
             }
 
