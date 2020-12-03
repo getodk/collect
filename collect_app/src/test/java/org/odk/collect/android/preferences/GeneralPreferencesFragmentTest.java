@@ -137,6 +137,7 @@ public class GeneralPreferencesFragmentTest {
         adminSharedPreferences.save(AdminKeys.KEY_IMAGE_SIZE, false);
         adminSharedPreferences.save(AdminKeys.KEY_GUIDANCE_HINT, false);
         adminSharedPreferences.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false);
+        adminSharedPreferences.save(AdminKeys.KEY_EXTERNAL_APP_RECORDING, false);
 
         FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference("form_management"),  nullValue()));
