@@ -424,7 +424,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     }
 
     private void continueOnBackPressed() {
-
         ((PreferencesActivity) getActivity()).setOnBackPressedListener(null);
         getActivity().onBackPressed();
     }

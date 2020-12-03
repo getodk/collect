@@ -56,7 +56,7 @@ r	both modified:   collect_app/src/main/java/org/odk/collect/android/application
 	both modified:   collect_app/src/main/java/org/odk/collect/android/utilities/ApplicationResetter.java
 	deleted by them: collect_app/src/main/java/org/odk/collect/android/utilities/FormListDownloader.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/utilities/MultiFormDownloader.java
-	deleted by them: collect_app/src/main/java/org/odk/collect/android/utilities/NotificationUtils.java
+r	deleted by them: collect_app/src/main/java/org/odk/collect/android/utilities/NotificationUtils.java (and by us)
 	both modified:   collect_app/src/main/java/org/odk/collect/android/widgets/AudioWidget.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/widgets/BarcodeWidget.java
 	deleted by them: collect_app/src/main/java/org/odk/collect/android/widgets/BaseGridWidget.java
@@ -95,7 +95,7 @@ r	1) Aggregate preferences replaced by odk_server_preferences
 r		b) FormListDownloader was deleted. What smap changes from that need to be added
 		c) FormDetails replaced by ServerFormDetails
 	6) Check tab colors
-	7) NotificationUtils - they deleted we retained - review
+r	7) NotificationUtils - they deleted we retained - review
 	8) strings.xml - had to change a string and I don't know why
 	9) FormsDatabaseMigrator is new
 	10) FormsDatabaseHelper is new (moved from helpers folder to parent)
