@@ -1,27 +1,9 @@
-package org.odk.collect.audiorecorder.recorder
+package org.odk.collect.audiorecorder.mediarecorder
 
 import android.media.MediaRecorder
+import org.odk.collect.audiorecorder.recorder.RecordingResource
 
-/**
- * Allows faking/stubbing/mocking with our interactions with Android's MediaRecorder. Could also
- * wrap multiple implementations in the future.
- */
-
-internal interface MediaRecorderWrapper {
-    fun setAudioSource(audioSource: Int)
-    fun setOutputFormat(outputFormat: Int)
-    fun setOutputFile(path: String)
-    fun setAudioEncoder(audioEncoder: Int)
-    fun setAudioEncodingSampleRate(sampleRate: Int)
-    fun setAudioEncodingBitRate(bitRate: Int)
-    fun prepare()
-    fun start()
-    fun stop()
-    fun release()
-    fun getMaxAmplitude(): Int
-}
-
-class RealMediaRecorderWrapper(private val mediaRecorder: MediaRecorder) : MediaRecorderWrapper {
+internal class MediaRecorderRecordingResource(private val mediaRecorder: MediaRecorder) : RecordingResource {
 
     override fun setAudioSource(audioSource: Int) {
         mediaRecorder.setAudioSource(audioSource)
@@ -53,6 +35,18 @@ class RealMediaRecorderWrapper(private val mediaRecorder: MediaRecorder) : Media
 
     override fun start() {
         mediaRecorder.start()
+    }
+
+    override fun pause() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            mediaRecorder.pause()
+        }
+    }
+
+    override fun resume() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            mediaRecorder.resume()
+        }
     }
 
     override fun stop() {

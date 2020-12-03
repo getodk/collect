@@ -7,6 +7,8 @@ import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel
 import org.odk.collect.audiorecorder.recording.RecordingSession
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_CLEAN_UP
+import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_PAUSE
+import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_RESUME
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_START
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_STOP
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.EXTRA_OUTPUT
@@ -30,6 +32,18 @@ internal class ForegroundServiceAudioRecorderViewModel internal constructor(priv
                 putExtra(EXTRA_SESSION_ID, sessionId)
                 putExtra(EXTRA_OUTPUT, output)
             }
+        )
+    }
+
+    override fun pause() {
+        application.startService(
+            Intent(application, AudioRecorderService::class.java).apply { action = ACTION_PAUSE }
+        )
+    }
+
+    override fun resume() {
+        application.startService(
+            Intent(application, AudioRecorderService::class.java).apply { action = ACTION_RESUME }
         )
     }
 

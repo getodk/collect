@@ -9,11 +9,11 @@ import org.hamcrest.Matchers.not
 import org.junit.Test
 import java.io.File
 
-class MediaRecorderRecorderTest {
+class RecordingResourceRecorderTest {
 
     private val cacheDir = Files.createTempDir()
-    private val mediaRecorder = FakeMediaRecorderWrapper()
-    private val recorder = MediaRecorderRecorder(cacheDir) { mediaRecorder }
+    private val mediaRecorder = FakeRecordingResource()
+    private val recorder = RecordingResourceRecorder(cacheDir) { mediaRecorder }
 
     @Test
     fun start_startsMediaRecorder() {
@@ -67,13 +67,13 @@ class MediaRecorderRecorderTest {
 
     @Test
     fun recordingTwice_doesntUseSameOutputFile() {
-        var mediaRecorder = FakeMediaRecorderWrapper()
-        var recorder = MediaRecorderRecorder(cacheDir) { mediaRecorder }
+        var mediaRecorder = FakeRecordingResource()
+        var recorder = RecordingResourceRecorder(cacheDir) { mediaRecorder }
         recorder.start(Output.AAC)
         val outputFile1 = mediaRecorder.getOutputFile()
 
-        mediaRecorder = FakeMediaRecorderWrapper()
-        recorder = MediaRecorderRecorder(cacheDir) { mediaRecorder }
+        mediaRecorder = FakeRecordingResource()
+        recorder = RecordingResourceRecorder(cacheDir) { mediaRecorder }
         recorder.start(Output.AAC)
         val outputFile2 = mediaRecorder.getOutputFile()
 
@@ -126,9 +126,24 @@ class MediaRecorderRecorderTest {
     fun cancel_beforeStart_works() {
         recorder.cancel()
     }
+
+    @Test
+    fun pause_pausesMediaRecorder() {
+        recorder.start(Output.AAC)
+        recorder.pause()
+        assertThat(mediaRecorder.isPaused(), equalTo(true))
+    }
+
+    @Test
+    fun resume_resumesMediaRecorder() {
+        recorder.start(Output.AAC)
+        recorder.pause()
+        recorder.resume()
+        assertThat(mediaRecorder.isPaused(), equalTo(false))
+    }
 }
 
-private class FakeMediaRecorderWrapper : MediaRecorderWrapper {
+private class FakeRecordingResource : RecordingResource {
 
     private var bitRate: Int? = null
     private var sampleRate: Int? = null
@@ -140,6 +155,7 @@ private class FakeMediaRecorderWrapper : MediaRecorderWrapper {
     private var started: Boolean = false
     private var prepared: Boolean = false
     private var released: Boolean = false
+    private var paused: Boolean = false
 
     override fun setAudioSource(audioSource: Int) {
         if (prepared) {
@@ -217,6 +233,22 @@ private class FakeMediaRecorderWrapper : MediaRecorderWrapper {
         started = true
     }
 
+    override fun pause() {
+        if (!started) {
+            throw IllegalStateException("MediaRecorder not started!")
+        }
+
+        paused = true
+    }
+
+    override fun resume() {
+        if (!started) {
+            throw IllegalStateException("MediaRecorder not started!")
+        }
+
+        paused = false
+    }
+
     override fun stop() {
         started = false
     }
@@ -255,6 +287,10 @@ private class FakeMediaRecorderWrapper : MediaRecorderWrapper {
 
     fun isReleased(): Boolean {
         return released
+    }
+
+    fun isPaused(): Boolean {
+        return paused
     }
 
     fun getAudioEncodingSampleRate(): Int? {

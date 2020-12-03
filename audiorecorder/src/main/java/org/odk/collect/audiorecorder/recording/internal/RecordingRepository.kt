@@ -11,7 +11,7 @@ class RecordingRepository {
     val currentSession: LiveData<RecordingSession?> = _currentSession
 
     fun start(sessionId: String) {
-        _currentSession.value = RecordingSession(sessionId, null, 0, 0)
+        _currentSession.value = RecordingSession(sessionId, null, 0, 0, false)
     }
 
     fun setDuration(duration: Long) {
@@ -26,9 +26,15 @@ class RecordingRepository {
         }
     }
 
+    fun setPaused(paused: Boolean) {
+        _currentSession.value?.let {
+            _currentSession.value = it.copy(paused = paused)
+        }
+    }
+
     fun recordingReady(recording: File) {
         _currentSession.value?.let {
-            _currentSession.value = it.copy(file = recording)
+            _currentSession.value = it.copy(file = recording, paused = false)
         }
     }
 

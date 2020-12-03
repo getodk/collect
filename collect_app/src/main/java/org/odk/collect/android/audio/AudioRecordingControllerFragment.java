@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.AudioRecordingControllerFragmentBinding;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
@@ -26,7 +27,7 @@ public class AudioRecordingControllerFragment extends Fragment {
     @Inject
     AudioRecorderViewModelFactory audioRecorderViewModelFactory;
 
-    private AudioRecordingControllerFragmentBinding binding;
+    public AudioRecordingControllerFragmentBinding binding;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -46,7 +47,29 @@ public class AudioRecordingControllerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         final AudioRecorderViewModel viewModel = new ViewModelProvider(requireActivity(), audioRecorderViewModelFactory).get(AudioRecorderViewModel.class);
 
-        viewModel.getCurrentSession().observe(getViewLifecycleOwner(), session -> binding.getRoot().setVisibility(session != null && session.getFile() == null ? VISIBLE : GONE));
+        viewModel.getCurrentSession().observe(getViewLifecycleOwner(), session -> {
+            if (session == null) {
+                binding.getRoot().setVisibility(GONE);
+            } else if (session.getFile() == null) {
+                binding.getRoot().setVisibility(VISIBLE);
+
+                if (session.getPaused()) {
+                    binding.pauseRecording.setText(R.string.resume_recording);
+                    binding.pauseRecording.setOnClickListener(v -> viewModel.resume());
+                } else {
+                    binding.pauseRecording.setText(R.string.pause_recording);
+                    binding.pauseRecording.setOnClickListener(v -> viewModel.pause());
+                }
+
+                // Pause not available before API 24
+                if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N) {
+                    binding.pauseRecording.setVisibility(GONE);
+                }
+            } else {
+                binding.getRoot().setVisibility(GONE);
+            }
+        });
+
         binding.stopRecording.setOnClickListener(v -> viewModel.stop());
     }
 }

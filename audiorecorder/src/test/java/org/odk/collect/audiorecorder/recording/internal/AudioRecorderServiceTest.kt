@@ -196,6 +196,58 @@ class AudioRecorderServiceTest {
         assertThat(shadowOf(service.get()).isStoppedBySelf, equalTo(true))
     }
 
+    @Test
+    fun pauseAction_pausesRecorder() {
+        startService(createStartIntent("123"))
+
+        val pauseIntent = Intent(application, AudioRecorderService::class.java)
+        pauseIntent.action = AudioRecorderService.ACTION_PAUSE
+        startService(pauseIntent)
+
+        assertThat(recorder.paused, equalTo(true))
+    }
+
+    @Test
+    fun pauseAction_stopsUpdates() {
+        startService(createStartIntent("123"))
+
+        val pauseIntent = Intent(application, AudioRecorderService::class.java)
+        pauseIntent.action = AudioRecorderService.ACTION_PAUSE
+        startService(pauseIntent)
+
+        assertThat(scheduler.isRepeatRunning(), equalTo(false))
+    }
+
+    @Test
+    fun pauseAction_andThenResumeAction_resumesRecorder() {
+        startService(createStartIntent("123"))
+
+        val pauseIntent = Intent(application, AudioRecorderService::class.java)
+        pauseIntent.action = AudioRecorderService.ACTION_PAUSE
+        startService(pauseIntent)
+
+        val resumeIntent = Intent(application, AudioRecorderService::class.java)
+        resumeIntent.action = AudioRecorderService.ACTION_RESUME
+        startService(resumeIntent)
+
+        assertThat(recorder.paused, equalTo(false))
+    }
+
+    @Test
+    fun pauseAction_andThenResumeAction_startsUpdates() {
+        startService(createStartIntent("123"))
+
+        val pauseIntent = Intent(application, AudioRecorderService::class.java)
+        pauseIntent.action = AudioRecorderService.ACTION_PAUSE
+        startService(pauseIntent)
+
+        val resumeIntent = Intent(application, AudioRecorderService::class.java)
+        resumeIntent.action = AudioRecorderService.ACTION_RESUME
+        startService(resumeIntent)
+
+        assertThat(scheduler.isRepeatRunning(), equalTo(true))
+    }
+
     private fun createStartIntent(sessionId: String): Intent {
         val intent = Intent(application, AudioRecorderService::class.java)
         intent.action = AudioRecorderService.ACTION_START

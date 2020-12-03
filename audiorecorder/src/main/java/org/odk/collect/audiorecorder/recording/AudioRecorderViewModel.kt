@@ -14,6 +14,8 @@ abstract class AudioRecorderViewModel : ViewModel() {
     abstract fun getCurrentSession(): LiveData<RecordingSession?>
 
     abstract fun start(sessionId: String, output: Output)
+    abstract fun pause()
+    abstract fun resume()
     abstract fun stop()
 
     /**
@@ -23,4 +25,4 @@ abstract class AudioRecorderViewModel : ViewModel() {
     abstract fun cleanUp()
 }
 
-data class RecordingSession(val id: String, val file: File?, val duration: Long, val amplitude: Int)
+data class RecordingSession(val id: String, val file: File?, val duration: Long, val amplitude: Int, val paused: Boolean)

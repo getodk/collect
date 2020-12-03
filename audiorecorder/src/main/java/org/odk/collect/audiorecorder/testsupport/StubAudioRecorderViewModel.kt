@@ -31,7 +31,19 @@ class StubAudioRecorderViewModel(private val stubRecordingPath: String) : AudioR
         wasCleanedUp = false
         lastSession = sessionId
         isRecording = true
-        currentSession.value = RecordingSession(sessionId, null, 0, 0)
+        currentSession.value = RecordingSession(sessionId, null, 0, 0, false)
+    }
+
+    override fun pause() {
+        currentSession.value?.let {
+            currentSession.value = it.copy(paused = true)
+        }
+    }
+
+    override fun resume() {
+        currentSession.value?.let {
+            currentSession.value = it.copy(paused = false)
+        }
     }
 
     override fun stop() {
@@ -41,7 +53,7 @@ class StubAudioRecorderViewModel(private val stubRecordingPath: String) : AudioR
         File(stubRecordingPath).copyTo(newFile, overwrite = true)
         newFile.deleteOnExit()
         currentSession.value?.let {
-            currentSession.value = it.copy(file = newFile)
+            currentSession.value = it.copy(file = newFile, paused = false)
         }
 
         lastRecording = newFile
@@ -49,6 +61,7 @@ class StubAudioRecorderViewModel(private val stubRecordingPath: String) : AudioR
 
     override fun cleanUp() {
         isRecording = false
+
         currentSession.value = null
         wasCleanedUp = true
     }
