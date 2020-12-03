@@ -23,7 +23,7 @@ public class InstanceDeleter {
 
         Form form = formsRepository.getOneByFormIdAndVersion(instance.getJrFormId(), instance.getJrVersion());
         if (form != null && form.isDeleted()) {
-            List<Instance> otherInstances = instancesRepository.getAllByFormIdAndVersionNotDeleted(form.getJrFormId(), form.getJrVersion());
+            List<Instance> otherInstances = instancesRepository.getAllNotDeletedByFormIdAndVersion(form.getJrFormId(), form.getJrVersion());
             if (otherInstances.isEmpty()) {
                 formsRepository.delete(form.getId());
             }

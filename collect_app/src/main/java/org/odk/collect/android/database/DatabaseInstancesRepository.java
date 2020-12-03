@@ -1,5 +1,6 @@
 package org.odk.collect.android.database;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
@@ -66,7 +67,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     }
 
     @Override
-    public List<Instance> getAllByFormIdAndVersionNotDeleted(String jrFormId, String jrVersion) {
+    public List<Instance> getAllNotDeletedByFormIdAndVersion(String jrFormId, String jrVersion) {
         if (jrVersion != null) {
             return dao.getInstancesFromCursor(dao.getInstancesCursor(JR_FORM_ID + " = ? AND " + JR_VERSION + " = ? AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId, jrVersion}));
         } else {
@@ -78,5 +79,11 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     public void delete(Long id) {
         Uri uri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id.toString());
         Collect.getInstance().getContentResolver().delete(uri, null, null);
+    }
+
+    @Override
+    public Uri save(Instance instance) {
+        ContentValues values = dao.getValuesFromInstanceObject(instance);
+        return dao.saveInstance(values);
     }
 }

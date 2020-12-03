@@ -1,5 +1,7 @@
 package org.odk.collect.android.instances;
 
+import android.net.Uri;
+
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -27,7 +29,9 @@ public interface InstancesRepository {
 
     List<Instance> getAllByFormId(String formId);
 
-    List<Instance> getAllByFormIdAndVersionNotDeleted(String formId, String version);
+    List<Instance> getAllNotDeletedByFormIdAndVersion(String formId, String version);
 
     void delete(Long id);
+
+    Uri save(Instance instance);
 }

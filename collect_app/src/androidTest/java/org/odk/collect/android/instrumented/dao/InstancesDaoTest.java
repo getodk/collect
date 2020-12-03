@@ -119,7 +119,8 @@ public class InstancesDaoTest {
 
     @Test
     public void getInstancesCursorForFilePathTest() {
-        Cursor cursor = instancesDao.getInstancesCursorForFilePath(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/Hypertension Screening_2017-02-20_14-03-53/Hypertension Screening_2017-02-20_14-03-53.xml");
+        String instancePath = storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/Hypertension Screening_2017-02-20_14-03-53/Hypertension Screening_2017-02-20_14-03-53.xml";
+        Cursor cursor = instancesDao.getInstancesCursorForFilePath(instancePath);
         List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
 
         assertEquals(1, instances.size());
@@ -147,7 +148,8 @@ public class InstancesDaoTest {
 
     @Test
     public void updateInstanceTest() {
-        Cursor cursor = instancesDao.getInstancesCursorForFilePath(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml");
+        String filePath = storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml";
+        Cursor cursor = instancesDao.getInstancesCursorForFilePath(filePath);
         List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
 
         assertEquals(1, instances.size());
@@ -155,18 +157,18 @@ public class InstancesDaoTest {
 
         biggestNOfSetInstance = new Instance.Builder()
                 .displayName("Biggest N of Set")
-                .instanceFilePath(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml")
+                .instanceFilePath(storagePathProvider.getInstanceDbPath(filePath))
                 .jrFormId("N_Biggest")
                 .status(Instance.STATUS_SUBMITTED)
                 .lastStatusChangeDate(1487597090653L)
                 .build();
 
         String where = InstanceColumns.INSTANCE_FILE_PATH + "=?";
-        String[] whereArgs = {storagePathProvider.getInstanceDbPath("Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml")};
+        String[] whereArgs = {storagePathProvider.getInstanceDbPath(filePath)};
 
         assertEquals(instancesDao.updateInstance(instancesDao.getValuesFromInstanceObject(biggestNOfSet2Instance), where, whereArgs), 1);
 
-        cursor = instancesDao.getInstancesCursorForFilePath(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml");
+        cursor = instancesDao.getInstancesCursorForFilePath(filePath);
 
         instances = instancesDao.getInstancesFromCursor(cursor);
 
@@ -178,7 +180,7 @@ public class InstancesDaoTest {
         Instance formWithGeopointInstance = new Instance.Builder()
                 .jrFormId("fake")
                 .displayName("Form with geopoint")
-                .instanceFilePath("/my/fake/path")
+                .instanceFilePath(new StoragePathProvider().getInstanceDbPath("/my/fake/path"))
                 .status(Instance.STATUS_SUBMITTED)
                 .lastStatusChangeDate(1487595836793L)
                 .geometryType("Point")
@@ -196,36 +198,40 @@ public class InstancesDaoTest {
     }
 
     private void fillDatabase() {
+        String hypertensionScreeningPath = storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/Hypertension Screening_2017-02-20_14-03-53/Hypertension Screening_2017-02-20_14-03-53.xml";
         hypertensionScreeningInstance = new Instance.Builder()
                 .displayName("Hypertension Screening")
-                .instanceFilePath(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/Hypertension Screening_2017-02-20_14-03-53/Hypertension Screening_2017-02-20_14-03-53.xml")
+                .instanceFilePath(storagePathProvider.getInstanceDbPath(hypertensionScreeningPath))
                 .jrFormId("hypertension")
                 .status(Instance.STATUS_INCOMPLETE)
                 .lastStatusChangeDate(1487595836793L)
                 .build();
         instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(hypertensionScreeningInstance));
 
+        String cascadingSelectInstancePath = storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/Cascading Select Form_2017-02-20_14-06-44/Cascading Select Form_2017-02-20_14-06-44.xml";
         cascadingSelectInstance = new Instance.Builder()
                 .displayName("Cascading Select Form")
-                .instanceFilePath(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/Cascading Select Form_2017-02-20_14-06-44/Cascading Select Form_2017-02-20_14-06-44.xml")
+                .instanceFilePath(storagePathProvider.getInstanceDbPath(cascadingSelectInstancePath))
                 .jrFormId("CascadingSelect")
                 .status(Instance.STATUS_INCOMPLETE)
                 .lastStatusChangeDate(1487596015000L)
                 .build();
         instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(cascadingSelectInstance));
 
+        String biggestN1Path = storagePathProvider.getInstanceDbPath(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/Biggest N of Set_2017-02-20_14-06-51/Biggest N of Set_2017-02-20_14-06-51.xml");
         biggestNOfSetInstance = new Instance.Builder()
                 .displayName("Biggest N of Set")
-                .instanceFilePath(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/Biggest N of Set_2017-02-20_14-06-51/Biggest N of Set_2017-02-20_14-06-51.xml")
+                .instanceFilePath(storagePathProvider.getInstanceDbPath(biggestN1Path))
                 .jrFormId("N_Biggest")
                 .status(Instance.STATUS_SUBMITTED)
                 .lastStatusChangeDate(1487596015100L)
                 .build();
         instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(biggestNOfSetInstance));
 
+        String widgetPath = storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/Widgets_2017-02-20_14-06-58/Widgets_2017-02-20_14-06-58.xml";
         widgetsInstance = new Instance.Builder()
                 .displayName("Widgets")
-                .instanceFilePath(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/Widgets_2017-02-20_14-06-58/Widgets_2017-02-20_14-06-58.xml")
+                .instanceFilePath(storagePathProvider.getInstanceDbPath(widgetPath))
                 .jrFormId("widgets")
                 .status(Instance.STATUS_SUBMITTED)
                 .lastStatusChangeDate(1487596020803L)
@@ -233,18 +239,20 @@ public class InstancesDaoTest {
                 .build();
         instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(widgetsInstance));
 
+        String samplePath = storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/sample_2017-02-20_14-07-03/sample_2017-02-20_14-07-03.xml";
         sampleInstance = new Instance.Builder()
                 .displayName("sample")
-                .instanceFilePath(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/sample_2017-02-20_14-07-03/sample_2017-02-20_14-07-03.xml")
+                .instanceFilePath(storagePathProvider.getInstanceDbPath(samplePath))
                 .jrFormId("sample")
                 .status(Instance.STATUS_INCOMPLETE)
                 .lastStatusChangeDate(1487596026373L)
                 .build();
         instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(sampleInstance));
 
+        String biggestN2Path = storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml";
         biggestNOfSet2Instance = new Instance.Builder()
                 .displayName("Biggest N of Set")
-                .instanceFilePath(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml")
+                .instanceFilePath(storagePathProvider.getInstanceDbPath(biggestN2Path))
                 .jrFormId("N_Biggest")
                 .status(Instance.STATUS_COMPLETE)
                 .lastStatusChangeDate(1487597090653L)

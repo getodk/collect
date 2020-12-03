@@ -78,7 +78,8 @@ public class InstanceUploaderUtilsTest {
 
     @Test
     public void getUploadResultMessageTest() {
-        assertThat(getExpectedResultMsg(), is(InstanceUploaderUtils.getUploadResultMessage(getTestInstancesRepository(), null, getTestUploadResult())));
+        assertThat(InstanceUploaderUtils.getUploadResultMessage(getTestInstancesRepository(), null, getTestUploadResult()),
+                is(getExpectedResultMsg()));
     }
 
     @Test

@@ -1,5 +1,7 @@
 package org.odk.collect.android.support;
 
+import android.net.Uri;
+
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 
@@ -75,7 +77,7 @@ public final class InMemInstancesRepository implements InstancesRepository {
     }
 
     @Override
-    public List<Instance> getAllByFormIdAndVersionNotDeleted(String formId, String version) {
+    public List<Instance> getAllNotDeletedByFormIdAndVersion(String formId, String version) {
         return instances.stream().filter(instance -> {
             return Objects.equals(instance.getJrFormId(), formId)
                     && Objects.equals(instance.getJrVersion(), version)
@@ -88,8 +90,10 @@ public final class InMemInstancesRepository implements InstancesRepository {
         instances.removeIf(instance -> instance.getId().equals(id));
     }
 
-    public void save(Instance instance) {
+    @Override
+    public Uri save(Instance instance) {
         instances.add(instance);
+        return null;
     }
 
     public void removeInstanceById(Long databaseId) {
