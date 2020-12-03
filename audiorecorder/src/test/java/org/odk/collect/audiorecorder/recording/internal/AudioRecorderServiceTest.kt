@@ -103,6 +103,14 @@ class AudioRecorderServiceTest {
     }
 
     @Test
+    fun startAction_whenRecorderStartThrowsException_stopsSelf() {
+        recorder.failOnStart()
+
+        val service = startService(createStartIntent("123"))
+        assertThat(shadowOf(service.get()).isStoppedBySelf, equalTo(true))
+    }
+
+    @Test
     fun stopAction_stopsSelf() {
         startService(createStartIntent("123"))
 
