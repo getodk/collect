@@ -236,10 +236,11 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                                          ContentValues values, InstancesDao instancesDao)
             throws EncryptionException, IOException {
 
-        Cursor instanceCursor = new InstancesDao().getInstancesCursorForFilePath(candidateInstance);
-        if (instanceCursor != null && instanceCursor.moveToFirst()) {
-            if (shouldInstanceBeEncrypted(formCursor)) {
-                encryptInstance(instanceCursor, candidateInstance, values, instancesDao);
+        try (Cursor instanceCursor = new InstancesDao().getInstancesCursorForFilePath(candidateInstance)) {
+            if (instanceCursor != null && instanceCursor.moveToFirst()) {
+                if (shouldInstanceBeEncrypted(formCursor)) {
+                    encryptInstance(instanceCursor, candidateInstance, values, instancesDao);
+                }
             }
         }
     }
