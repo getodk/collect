@@ -140,7 +140,8 @@ public final class AdminKeys {
             KEY_HIGH_RESOLUTION,
             KEY_IMAGE_SIZE,
             KEY_GUIDANCE_HINT,
-            KEY_INSTANCE_FORM_SYNC
+            KEY_INSTANCE_FORM_SYNC,
+            KEY_EXTERNAL_APP_RECORDING
     );
 
     static Collection<String> userInterfaceKeys = Arrays.asList(
