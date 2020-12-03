@@ -8,6 +8,7 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.getComponent
 import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recorder.Recorder
+import org.odk.collect.audiorecorder.recorder.RecordingException
 import javax.inject.Inject
 
 class AudioRecorderService : Service() {
@@ -72,9 +73,13 @@ class AudioRecorderService : Service() {
     private fun startRecording(sessionId: String, output: Output) {
         notification.show()
 
-        recordingRepository.start(sessionId)
-        recorder.start(output)
-        startUpdates()
+        try {
+            recorder.start(output)
+            recordingRepository.start(sessionId)
+            startUpdates()
+        } catch (e: RecordingException) {
+            recordingRepository.failToStart(sessionId)
+        }
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {

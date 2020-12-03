@@ -45,4 +45,8 @@ class RecordingRepository {
 
         _currentSession.value = null
     }
+
+    fun failToStart(sessionId: String) {
+        _currentSession.value = RecordingSession(sessionId, null, 0, 0, paused = false, failedToStart = true)
+    }
 }

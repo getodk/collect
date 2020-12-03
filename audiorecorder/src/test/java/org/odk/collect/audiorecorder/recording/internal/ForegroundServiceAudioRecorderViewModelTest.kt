@@ -32,7 +32,6 @@ class ForegroundServiceAudioRecorderViewModelTest : AudioRecorderViewModelTest()
     val instantTaskExecutor = InstantTaskExecutorRule()
     private val application by lazy { getApplicationContext<RobolectricApplication>() }
 
-    private val recordingRepository = RecordingRepository()
     private val fakeRecorder = FakeRecorder()
     private val scheduler = FakeScheduler()
 
@@ -62,10 +61,6 @@ class ForegroundServiceAudioRecorderViewModelTest : AudioRecorderViewModelTest()
                     return fakeRecorder
                 }
 
-                override fun providesRecordingRepository(): RecordingRepository {
-                    return recordingRepository
-                }
-
                 override fun providesScheduler(application: Application): Scheduler {
                     return scheduler
                 }
@@ -91,7 +86,7 @@ class ForegroundServiceAudioRecorderViewModelTest : AudioRecorderViewModelTest()
         viewModel.start("blah", Output.AAC)
         runBackground()
 
-        val currentSession = recordingRepository.currentSession
+        val currentSession = viewModel.getCurrentSession()
         scheduler.runForeground(0)
         assertThat(currentSession.value?.duration, equalTo(0))
 
@@ -107,7 +102,7 @@ class ForegroundServiceAudioRecorderViewModelTest : AudioRecorderViewModelTest()
         viewModel.start("blah", Output.AAC)
         runBackground()
 
-        val currentSession = recordingRepository.currentSession
+        val currentSession = viewModel.getCurrentSession()
 
         fakeRecorder.amplitude = 12
         scheduler.runForeground()
@@ -116,5 +111,14 @@ class ForegroundServiceAudioRecorderViewModelTest : AudioRecorderViewModelTest()
         fakeRecorder.amplitude = 45
         scheduler.runForeground()
         assertThat(currentSession.value?.amplitude, equalTo(45))
+    }
+
+    @Test
+    fun start_whenRecorderStartThrowsException_setsFailedToStartToTrue() {
+        fakeRecorder.failOnStart()
+
+        viewModel.start("blah", Output.AAC)
+        runBackground()
+        assertThat(viewModel.getCurrentSession().value?.failedToStart, equalTo(true))
     }
 }
