@@ -28,6 +28,24 @@ public class RecordingRequesterFactoryTest {
     );
 
     @Test
+    public void whenNoQualitySpecified_andSettingExternalNotPreferred_createsInternalRecordingRequester() {
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .build();
+
+        RecordingRequester recordingRequester = factory.create(prompt, false);
+        assertThat(recordingRequester, instanceOf(InternalRecordingRequester.class));
+    }
+
+    @Test
+    public void whenNoQualitySpecified_andSettingExternalPreferred_createsExternalRecordingRequester() {
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .build();
+
+        RecordingRequester recordingRequester = factory.create(prompt, true);
+        assertThat(recordingRequester, instanceOf(ExternalAppRecordingRequester.class));
+    }
+
+    @Test
     public void whenQualityIsNormal_andSettingExternalPreferred_createsInternalRecordingRequester() {
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withBindAttribute("odk", "quality", "normal")
@@ -45,5 +63,25 @@ public class RecordingRequesterFactoryTest {
 
         RecordingRequester recordingRequester = factory.create(prompt, true);
         assertThat(recordingRequester, instanceOf(InternalRecordingRequester.class));
+    }
+
+    @Test
+    public void whenQualityIsExternal_andSettingExternalPreferred_createsExternalRecordingRequester() {
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withBindAttribute("odk", "quality", "external")
+                .build();
+
+        RecordingRequester recordingRequester = factory.create(prompt, true);
+        assertThat(recordingRequester, instanceOf(ExternalAppRecordingRequester.class));
+    }
+
+    @Test
+    public void whenQualityIsExternal_andSettingExternalNotPreferred_createsExternalRecordingRequester() {
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withBindAttribute("odk", "quality", "external")
+                .build();
+
+        RecordingRequester recordingRequester = factory.create(prompt, false);
+        assertThat(recordingRequester, instanceOf(ExternalAppRecordingRequester.class));
     }
 }
