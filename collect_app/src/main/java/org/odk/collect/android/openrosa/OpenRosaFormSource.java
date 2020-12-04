@@ -3,14 +3,17 @@ package org.odk.collect.android.openrosa;
 import org.javarosa.xform.parse.XFormParser;
 import org.jetbrains.annotations.NotNull;
 import org.kxml2.kdom.Element;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.forms.FormListItem;
 import org.odk.collect.android.forms.FormSource;
 import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.android.forms.ManifestFile;
 import org.odk.collect.android.forms.MediaFile;
 import org.odk.collect.android.utilities.DocumentFetchResult;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -21,6 +24,7 @@ import javax.net.ssl.SSLException;
 
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
+import static org.odk.collect.android.analytics.AnalyticsEvents.LEGACY_FORM_LIST;
 import static org.odk.collect.android.forms.FormSourceException.Type.AUTH_REQUIRED;
 import static org.odk.collect.android.forms.FormSourceException.Type.FETCH_ERROR;
 import static org.odk.collect.android.forms.FormSourceException.Type.SECURITY_ERROR;
@@ -38,10 +42,14 @@ public class OpenRosaFormSource implements FormSource {
     private String serverURL;
     private final String formListPath;
 
-    public OpenRosaFormSource(String serverURL, String formListPath, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils) {
+    private final Analytics analytics;
+
+    public OpenRosaFormSource(String serverURL, String formListPath, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils, Analytics analytics) {
         this.openRosaXMLFetcher = new OpenRosaXmlFetcher(openRosaHttpInterface, webCredentialsUtils);
         this.serverURL = serverURL;
         this.formListPath = formListPath;
+
+        this.analytics = analytics;
     }
 
     @Override
@@ -66,6 +74,8 @@ public class OpenRosaFormSource implements FormSource {
         if (result.isOpenRosaResponse) {
             return parseFormList(result);
         } else {
+            String serverHash = FileUtils.getMd5Hash(new ByteArrayInputStream(serverURL.getBytes()));
+            analytics.logServerEvent(LEGACY_FORM_LIST, serverHash);
             return parseLegacyFormList(result);
         }
     }

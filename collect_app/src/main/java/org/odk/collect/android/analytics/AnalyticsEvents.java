@@ -148,4 +148,9 @@ public class AnalyticsEvents {
      * should be a hash of the endpoint setting.
      */
     public static final String CUSTOM_ENDPOINT_SUB = "CustomEndpointSub";
+
+    /**
+     * Track usage of legacy Aggregate < 1 form list API code paths.
+     */
+    public static final String LEGACY_FORM_LIST = "LegacyFormList";
 }
