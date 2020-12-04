@@ -21,9 +21,12 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.databinding.AudioWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -228,7 +231,12 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
 
                 @Override
                 public void onRemoveClicked() {
-                    clearAnswer();
+                    new MaterialAlertDialogBuilder(getContext())
+                            .setTitle(R.string.delete_answer_file_question)
+                            .setMessage(R.string.answer_file_delete_warning)
+                            .setPositiveButton(R.string.delete_answer_file, (dialog, which) -> clearAnswer())
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
                 }
             });
 

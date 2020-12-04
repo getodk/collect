@@ -254,6 +254,13 @@
     <string name="capture_audio">Record Sound</string>
     <string name="choose_sound">Choose Sound</string>
     <string name="choose_audio">Choose Audio</string>
+    <string name="pause_recording">Pause</string>
+    <string name="resume_recording">Resume</string>
+
+    <string name="delete_answer_file_question">Delete file?</string>
+    <string name="answer_file_delete_warning">You will not be able to recover this file once it is deleted. Are you sure you want to proceed?</string>
+    <string name="delete_answer_file">Delete</string>
+
     <!-- Text for button that stops audio recording  -->
     <string name="stop_recording">Stop</string>
     <!-- Text to let the user know a recording is in progress  -->

@@ -4,6 +4,7 @@ import android.util.Pair;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.StringData;
@@ -35,6 +36,7 @@ import static android.view.View.VISIBLE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -44,6 +46,7 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mock
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndAnswer;
+import static org.robolectric.shadows.ShadowDialog.getLatestDialog;
 
 @RunWith(RobolectricTestRunner.class)
 public class AudioWidgetTest {
@@ -425,17 +428,34 @@ public class AudioWidgetTest {
     }
 
     @Test
-    public void clickingRemove_clearsAnswer() {
+    public void clickingRemove_andConfirming_clearsAnswer() {
         AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
         widget.binding.audioController.binding.remove.performClick();
+
+        AlertDialog dialog = (AlertDialog) getLatestDialog();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).performClick();
 
         assertThat(widget.getAnswer(), nullValue());
     }
 
     @Test
-    public void clickingRemove_hidesAudioControllerAndShowsButtons() {
+    public void clickingRemove_andCancelling_doesNothing() {
         AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
         widget.binding.audioController.binding.remove.performClick();
+
+        AlertDialog dialog = (AlertDialog) getLatestDialog();
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).performClick();
+
+        assertThat(widget.getAnswer(), notNullValue());
+    }
+
+    @Test
+    public void clickingRemove_andConfirming_hidesAudioControllerAndShowsButtons() {
+        AudioWidget widget = createWidget(promptWithAnswer(new StringData("blah.mp3")));
+        widget.binding.audioController.binding.remove.performClick();
+
+        AlertDialog dialog = (AlertDialog) getLatestDialog();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).performClick();
 
         assertThat(widget.binding.audioController.getVisibility(), is(GONE));
         assertThat(widget.binding.captureButton.getVisibility(), is(VISIBLE));
