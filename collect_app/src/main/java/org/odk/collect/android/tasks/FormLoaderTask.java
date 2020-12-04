@@ -311,16 +311,17 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                     importData(instanceXml, fec);
                     formDef.initialize(false, instanceInit);
                 } catch (IOException | RuntimeException e) {
-                    Timber.e(e);
-
                     // Skip a savepoint file that is corrupted or 0-sized
                     if (usedSavepoint && !(e.getCause() instanceof XPathTypeMismatchException)) {
                         usedSavepoint = false;
                         instancePath = null;
                         formDef.initialize(true, instanceInit);
+                        Timber.e(e, "Bad savepoint");
                     } else {
                         // The saved instance is corrupted.
-                        throw e;
+                        Timber.e(e, "Corrupt saved instance");
+                        throw new RuntimeException("An unknown error has occurred. Please ask your project leadership to email support@getodk.org with information about this form."
+                            + "\n\n" + e.getMessage());
                     }
                 }
             } else {
