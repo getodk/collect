@@ -112,6 +112,10 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
 
     @Override
     public void setData(Object object) {
+        if (binaryName != null) {
+            deleteFile();
+        }
+
         File newFile;
         // get the file path and create a copy in the instance folder
         if (object instanceof Uri) {
@@ -129,11 +133,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
         }
 
         if (newFile.exists()) {
-            // when replacing an answer remove the current one.
-            if (binaryName != null && !binaryName.equals(newFile.getName())) {
-                deleteFile();
-            }
-
+            questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newFile.getAbsolutePath());
             binaryName = newFile.getName();
             chosenFileNameTextView.setText(binaryName);
             answerLayout.setVisibility(VISIBLE);
