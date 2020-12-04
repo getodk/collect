@@ -34,6 +34,7 @@ public final class AdminKeys {
     public static final String KEY_CHANGE_FONT_SIZE            = "change_font_size";
     public static final String KEY_NAVIGATION                  = "change_navigation";
     public static final String KEY_SHOW_SPLASH_SCREEN          = "show_splash_screen";
+    public static final String KEY_EXTERNAL_APP_RECORDING      = "external_app_recording";
 
     static final String KEY_MAPS                                = "maps";
 
@@ -94,7 +95,8 @@ public final class AdminKeys {
             ag(KEY_CONSTRAINT_BEHAVIOR,        GeneralKeys.KEY_CONSTRAINT_BEHAVIOR),
 
             ag(KEY_ANALYTICS,                  GeneralKeys.KEY_ANALYTICS),
-            ag(KEY_FORM_UPDATE_MODE,           GeneralKeys.KEY_FORM_UPDATE_MODE)
+            ag(KEY_FORM_UPDATE_MODE,           GeneralKeys.KEY_FORM_UPDATE_MODE),
+            ag(KEY_EXTERNAL_APP_RECORDING,     GeneralKeys.KEY_EXTERNAL_APP_RECORDING)
     };
 
     /** Admin keys other than those in adminToGeneral above */
@@ -138,7 +140,8 @@ public final class AdminKeys {
             KEY_HIGH_RESOLUTION,
             KEY_IMAGE_SIZE,
             KEY_GUIDANCE_HINT,
-            KEY_INSTANCE_FORM_SYNC
+            KEY_INSTANCE_FORM_SYNC,
+            KEY_EXTERNAL_APP_RECORDING
     );
 
     static Collection<String> userInterfaceKeys = Arrays.asList(

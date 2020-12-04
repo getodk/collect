@@ -220,6 +220,7 @@ public class FormManagementPreferencesTest {
         adminSharedPreferences.save(AdminKeys.KEY_IMAGE_SIZE, false);
         adminSharedPreferences.save(AdminKeys.KEY_GUIDANCE_HINT, false);
         adminSharedPreferences.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false);
+        adminSharedPreferences.save(AdminKeys.KEY_EXTERNAL_APP_RECORDING, false);
 
         FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class);
         scenario.onFragment(fragment -> {
@@ -234,6 +235,7 @@ public class FormManagementPreferencesTest {
             assertThat(fragment.findPreference(GeneralKeys.KEY_IMAGE_SIZE), nullValue());
             assertThat(fragment.findPreference(GeneralKeys.KEY_GUIDANCE_HINT), nullValue());
             assertThat(fragment.findPreference(GeneralKeys.KEY_INSTANCE_SYNC), nullValue());
+            assertThat(fragment.findPreference(GeneralKeys.KEY_EXTERNAL_APP_RECORDING), nullValue());
         });
     }
 
