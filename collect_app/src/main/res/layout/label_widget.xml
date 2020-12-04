@@ -33,7 +33,7 @@
         android:layout_centerInParent="true" />
 
     <LinearLayout
-        android:id="@+id/list_items"
+        android:id="@+id/answer_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -44,5 +44,12 @@
         tools:ignore="RtlHardcoded">
 
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/space_box"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/help_text"
+        android:visibility="gone"/>
 
 </RelativeLayout>

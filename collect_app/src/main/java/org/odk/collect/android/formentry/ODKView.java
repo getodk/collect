@@ -484,6 +484,10 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         if (bundle != null) {
             Set<String> keys = bundle.keySet();
             for (String key : keys) {
+                Object answer = bundle.get(key);
+                if (answer == null) {
+                    continue;
+                }
                 for (QuestionWidget questionWidget : widgets) {
                     FormEntryPrompt prompt = questionWidget.getFormEntryPrompt();
                     TreeReference treeReference =
@@ -493,30 +497,31 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                         switch (prompt.getDataType()) {
                             case Constants.DATATYPE_TEXT:
                                 formController.saveAnswer(prompt.getIndex(),
-                                        ExternalAppsUtils.asStringData(bundle.get(key)));
+                                        ExternalAppsUtils.asStringData(answer));
                                 ((StringWidget) questionWidget).setDisplayValueFromModel();
+                                questionWidget.showAnswerContainer();
                                 break;
                             case Constants.DATATYPE_INTEGER:
                                 formController.saveAnswer(prompt.getIndex(),
-                                        ExternalAppsUtils.asIntegerData(bundle.get(key)));
+                                        ExternalAppsUtils.asIntegerData(answer));
                                 ((StringWidget) questionWidget).setDisplayValueFromModel();
+                                questionWidget.showAnswerContainer();
                                 break;
                             case Constants.DATATYPE_DECIMAL:
                                 formController.saveAnswer(prompt.getIndex(),
-                                        ExternalAppsUtils.asDecimalData(bundle.get(key)));
+                                        ExternalAppsUtils.asDecimalData(answer));
                                 ((StringWidget) questionWidget).setDisplayValueFromModel();
+                                questionWidget.showAnswerContainer();
                                 break;
                             case Constants.DATATYPE_BINARY:
                                 try {
-                                    Object uriValue = bundle.get(key);
-
                                     Uri uri;
-                                    if (uriValue instanceof Uri) {
-                                        uri = (Uri) uriValue;
-                                    } else if (uriValue instanceof String) {
+                                    if (answer instanceof Uri) {
+                                        uri = (Uri) answer;
+                                    } else if (answer instanceof String) {
                                         uri = Uri.parse(bundle.getString(key));
                                     } else {
-                                        throw new RuntimeException("The value for " + key + " must be a URI but it is " + uriValue);
+                                        throw new RuntimeException("The value for " + key + " must be a URI but it is " + answer);
                                     }
                                     
                                     if (uri != null) {
@@ -525,6 +530,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                                         FileUtils.saveAnswerFileFromUri(uri, destFile, getContext());
                                         ((WidgetDataReceiver) questionWidget).setData(destFile);
                                     }
+                                    questionWidget.showAnswerContainer();
                                 } catch (Exception | Error e) {
                                     Timber.w(e);
                                 }
