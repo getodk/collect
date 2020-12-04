@@ -3,6 +3,8 @@ package org.odk.collect.android.application;
 import androidx.work.Configuration;
 import androidx.work.WorkManager;
 
+import org.odk.collect.android.provider.FormsProvider;
+import org.odk.collect.android.provider.InstanceProvider;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowApplication;
 
@@ -38,5 +40,9 @@ public class RobolectricApplication extends Collect {
         shadowApplication.grantPermissions("android.permission.READ_PHONE_STATE");
         shadowApplication.grantPermissions("android.permission.RECORD_AUDIO");
         shadowApplication.grantPermissions("android.permission.GET_ACCOUNTS");
+
+        // These clear static state that can't persist from test to test
+        FormsProvider.releaseDatabaseHelper();
+        InstanceProvider.releaseDatabaseHelper();
     }
 }
