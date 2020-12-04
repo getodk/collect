@@ -17,13 +17,12 @@ limitations under the License.
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin_standard"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="@dimen/margin_standard">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/margin_standard">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/play"
@@ -31,7 +30,6 @@ limitations under the License.
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginStart="@dimen/margin_standard"
             app:icon="@drawable/ic_play_arrow_24dp" />
 
         <TextView
@@ -40,6 +38,7 @@ limitations under the License.
             android:layout_height="wrap_content"
             android:layout_below="@+id/play"
             android:layout_alignParentStart="true"
+            android:layout_marginStart="@dimen/margin_standard"
             android:textColor="?colorOnSurface"
             android:textSize="@dimen/text_size_small"
             android:textStyle="bold"
@@ -51,6 +50,7 @@ limitations under the License.
             android:layout_height="wrap_content"
             android:layout_below="@+id/play"
             android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/margin_standard"
             android:textColor="?colorOnSurface"
             android:textSize="@dimen/text_size_small"
             android:textStyle="bold"
@@ -61,8 +61,8 @@ limitations under the License.
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/currentDuration"
-            android:paddingStart="0dp"
-            android:paddingEnd="0dp"
+            android:minHeight="24dp"
+            android:padding="@dimen/margin_standard"
             android:thumbOffset="3dp" />
     </RelativeLayout>
 
