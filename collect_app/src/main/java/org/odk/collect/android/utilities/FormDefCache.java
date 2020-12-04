@@ -80,20 +80,21 @@ public class FormDefCache {
     public static FormDef readCache(File formXml) {
         final File cachedForm = getCacheFile(formXml);
         if (cachedForm.exists()) {
-            Timber.i("Attempting to load %s from cached file: %s.",
-                    formXml.getName(), cachedForm.getName());
+            Timber.i("Attempting to load %s from cached file: %s.", formXml.getName(), cachedForm.getName());
             final long start = System.currentTimeMillis();
-            final FormDef deserializedFormDef = deserializeFormDef(cachedForm);
-            if (deserializedFormDef != null) {
-                Timber.i("Loaded in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
-                return deserializedFormDef;
-            }
 
-            // An error occurred with deserialization. Remove the file, and make a
-            // new .formdef from xml.
-            Timber.w("Deserialization FAILED! Deleting cache file: %s",
-                    cachedForm.getAbsolutePath());
-            cachedForm.delete();
+            try {
+                final FormDef deserializedFormDef = deserializeFormDef(cachedForm);
+                if (deserializedFormDef != null) {
+                    Timber.i("Loaded in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
+                    return deserializedFormDef;
+                }
+            } catch (Exception e) {
+                // New .formdef will be created from XML
+                Timber.w("Deserialization FAILED! Deleting cache file: %s", cachedForm.getAbsolutePath());
+                Timber.e(e);
+                cachedForm.delete();
+            }
         }
         return null;
     }
@@ -108,17 +109,11 @@ public class FormDefCache {
                 FileUtils.getMd5Hash(formXml) + ".formdef");
     }
 
-    private static FormDef deserializeFormDef(File serializedFormDef) {
+    private static FormDef deserializeFormDef(File serializedFormDef) throws Exception {
         FormDef fd;
         try (DataInputStream dis = new DataInputStream(new FileInputStream(serializedFormDef))) {
-            // create new form def
             fd = new FormDef();
-
-            // read serialized formdef into new formdef
             fd.readExternal(dis, ExtUtil.defaultPrototypes());
-        } catch (Exception e) {
-            Timber.e(e);
-            fd = null;
         }
 
         return fd;
