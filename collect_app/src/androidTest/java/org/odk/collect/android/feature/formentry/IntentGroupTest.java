@@ -221,7 +221,8 @@ public class IntentGroupTest {
     }
 
     private void assertVideoWidgetWithoutAnswer() {
-        onView(withId(R.id.play_video)).perform(nestedScrollTo()).check(matches(not(isDisplayed())));
+        onView(withText(is("Video external"))).perform(nestedScrollTo()).check(matches(isDisplayed()));
+        onView(withId(R.id.play_video)).check(matches(not(isDisplayed())));
     }
 
     private void assertFileWidgetWithoutAnswer() {
