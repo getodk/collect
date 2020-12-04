@@ -19,9 +19,12 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
+
+import com.google.android.material.button.MaterialButton;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.AudioControllerLayoutBinding;
@@ -32,15 +35,11 @@ import static org.odk.collect.strings.format.LengthFormatterKt.formatLength;
 
 public class AudioControllerView extends FrameLayout {
 
-    public static final int ONE_HOUR = 3600000;
-    public static final int ONE_MINUTE = 60000;
-    public static final int ONE_SECOND = 1000;
-
     public final AudioControllerLayoutBinding binding;
 
     private final TextView currentDurationLabel;
     private final TextView totalDurationLabel;
-    private final ImageButton playButton;
+    private final MaterialButton playButton;
     private final SeekBar seekBar;
     private final SwipeListener swipeListener;
 
@@ -65,22 +64,9 @@ public class AudioControllerView extends FrameLayout {
 
         swipeListener = new SwipeListener();
         seekBar.setOnSeekBarChangeListener(swipeListener);
-        playButton.setImageResource(R.drawable.ic_play_arrow_24dp);
 
-        binding.fastForwardBtn.setOnClickListener(view -> fastForwardMedia());
-        binding.fastRewindBtn.setOnClickListener(view -> rewindMedia());
         binding.play.setOnClickListener(view -> playClicked());
         binding.remove.setOnClickListener(view -> listener.onRemoveClicked());
-    }
-
-    private void fastForwardMedia() {
-        int newPosition = position + 5000;
-        onPositionChanged(newPosition);
-    }
-
-    private void rewindMedia() {
-        int newPosition = position - 5000;
-        onPositionChanged(newPosition);
     }
 
     private void playClicked() {
@@ -108,9 +94,9 @@ public class AudioControllerView extends FrameLayout {
         this.playing = playing;
 
         if (playing) {
-            playButton.setImageResource(R.drawable.ic_pause_24dp);
+            playButton.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_pause_24dp));
         } else {
-            playButton.setImageResource(R.drawable.ic_play_arrow_24dp);
+            playButton.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_play_arrow_24dp));
         }
     }
 

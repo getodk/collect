@@ -10,6 +10,7 @@
     tools:ignore="RtlSymmetry">
 
     <TextView
+        android:id="@+id/time_code"
         style="@style/TextAppearance.Collect.Subtitle1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,23 +33,19 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/pause_recording"
-            style="@style/Widget.MaterialComponents.Button"
+            style="@style/Widget.Collect.Button.IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_standard"
-            android:backgroundTint="?colorSecondary"
-            android:text="@string/resume_recording"
+            android:backgroundTint="#666666"
             app:icon="@drawable/ic_pause_24dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/stop_recording"
-            style="@style/Widget.MaterialComponents.Button"
+            style="@style/Widget.Collect.Button.IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_standard"
-            android:backgroundTint="?colorSecondary"
-            android:text="@string/stop_recording"
-            android:textColor="?colorOnSecondary"
             app:icon="@drawable/ic_stop_black_24dp" />
     </LinearLayout>
 </RelativeLayout>

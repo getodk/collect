@@ -17,7 +17,7 @@
         <item name="colorSecondaryVariant">?colorSecondary</item>
         <item name="colorSurface">#FFFFFF</item>
         <item name="colorOnPrimary">#000000</item>
-        <item name="colorOnSecondary">#000000</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
         <item name="colorOnBackground">#000000</item>
         <item name="colorOnError">#000000</item>
         <item name="colorOnSurface">#000000</item>

@@ -58,60 +58,6 @@ public class AudioControllerViewTest {
     }
 
     @Test
-    public void clickingFastForward_skipsForward() {
-        AudioControllerView.Listener listener = mock(AudioControllerView.Listener.class);
-
-        view.setListener(listener);
-        view.setDuration(12000);
-        view.setPosition(5000);
-
-        view.findViewById(R.id.fastForwardBtn).performClick();
-        assertThat(innerText(view.findViewById(R.id.currentDuration)), equalTo("00:10"));
-        verify(listener).onPositionChanged(10000);
-    }
-
-    @Test
-    public void clickingFastForward_whenPositionAtDuration_skipsToDuration() {
-        AudioControllerView.Listener listener = mock(AudioControllerView.Listener.class);
-
-        view.setListener(listener);
-        view.setDuration(1000);
-        view.setPosition(1000);
-
-        view.findViewById(R.id.fastForwardBtn).performClick();
-
-        assertThat(innerText(view.findViewById(R.id.currentDuration)), equalTo("00:01"));
-        verify(listener).onPositionChanged(1000);
-    }
-
-    @Test
-    public void clickingFastRewind_skipsBackwards() {
-        AudioControllerView.Listener listener = mock(AudioControllerView.Listener.class);
-
-        view.setListener(listener);
-        view.setDuration(12000);
-        view.setPosition(6000);
-
-        view.findViewById(R.id.fastRewindBtn).performClick();
-        assertThat(innerText(view.findViewById(R.id.currentDuration)), equalTo("00:01"));
-        verify(listener).onPositionChanged(1000);
-    }
-
-    @Test
-    public void clickingFastRewind_whenPositionAtZero_skipsTo0() {
-        AudioControllerView.Listener listener = mock(AudioControllerView.Listener.class);
-
-        view.setListener(listener);
-        view.setDuration(1000);
-        view.setPosition(0);
-
-        view.findViewById(R.id.fastRewindBtn).performClick();
-
-        assertThat(innerText(view.findViewById(R.id.currentDuration)), equalTo("00:00"));
-        verify(listener).onPositionChanged(0);
-    }
-
-    @Test
     public void swipingSeekBar_whenPaused_skipsToPositionOnceStopped() {
         AudioControllerView.Listener listener = mock(AudioControllerView.Listener.class);
 

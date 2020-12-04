@@ -25,45 +25,14 @@ limitations under the License.
         android:layout_height="wrap_content"
         android:padding="@dimen/margin_standard">
 
-        <ImageButton
-            android:id="@+id/fastRewindBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_extra_small"
-            android:layout_marginRight="@dimen/margin_extra_small"
-            android:layout_toStartOf="@id/play"
-            android:background="?android:attr/selectableItemBackground"
-            android:minWidth="@dimen/touch_target_size"
-            android:minHeight="@dimen/touch_target_size"
-            android:padding="@dimen/margin_small"
-            app:srcCompat="@drawable/ic_replay_5_black_24dp" />
-
-        <ImageButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/play"
+            style="@style/Widget.Collect.Button.IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginLeft="@dimen/margin_extra_small"
-            android:layout_marginRight="@dimen/margin_extra_small"
-            android:background="?android:attr/selectableItemBackground"
-            android:contentDescription="@string/play_audio"
-            android:minWidth="@dimen/touch_target_size"
-            android:minHeight="@dimen/touch_target_size"
-            android:padding="@dimen/margin_small"
-            app:srcCompat="@drawable/ic_play_arrow_24dp" />
-
-        <ImageButton
-            android:id="@+id/fastForwardBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_extra_small"
-            android:layout_marginRight="@dimen/margin_extra_small"
-            android:layout_toEndOf="@id/play"
-            android:background="?android:attr/selectableItemBackground"
-            android:minWidth="@dimen/touch_target_size"
-            android:minHeight="@dimen/touch_target_size"
-            android:padding="@dimen/margin_small"
-            app:srcCompat="@drawable/ic_forward_5_black_24dp" />
+            android:layout_marginStart="@dimen/margin_standard"
+            app:icon="@drawable/ic_play_arrow_24dp" />
 
         <TextView
             android:id="@+id/currentDuration"

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -16,6 +17,7 @@ import org.odk.collect.android.databinding.AudioRecordingControllerFragmentBindi
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
+import org.odk.collect.strings.format.LengthFormatterKt;
 
 import javax.inject.Inject;
 
@@ -53,11 +55,13 @@ public class AudioRecordingControllerFragment extends Fragment {
             } else if (session.getFile() == null) {
                 binding.getRoot().setVisibility(VISIBLE);
 
+                binding.timeCode.setText(LengthFormatterKt.formatLength(session.getDuration()));
+
                 if (session.getPaused()) {
-                    binding.pauseRecording.setText(R.string.resume_recording);
+                    binding.pauseRecording.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_play_arrow_24dp));
                     binding.pauseRecording.setOnClickListener(v -> viewModel.resume());
                 } else {
-                    binding.pauseRecording.setText(R.string.pause_recording);
+                    binding.pauseRecording.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_pause_24dp));
                     binding.pauseRecording.setOnClickListener(v -> viewModel.pause());
                 }
 

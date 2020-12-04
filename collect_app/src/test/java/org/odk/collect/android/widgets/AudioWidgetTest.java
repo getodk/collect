@@ -379,22 +379,6 @@ public class AudioWidgetTest {
     }
 
     @Test
-    public void afterSetBinaryData_canSkipClipForward() throws Exception {
-        FormEntryPrompt prompt = promptWithAnswer(null);
-
-        File audioFile = File.createTempFile("blah", ".mp3", questionMediaManager.getDir());
-        Clip expectedClip = getExpectedClip(prompt, audioFile.getName());
-        setupMediaPlayerDataSource(expectedClip.getURI(), 322450);
-
-        AudioWidget widget = createWidget(prompt);
-        widget.setData(audioFile.getName());
-
-        AudioControllerView audioController = widget.binding.audioController;
-        audioController.binding.fastForwardBtn.performClick();
-        assertThat(audioPlayer.getPosition(expectedClip.getClipID()), is(5000));
-    }
-
-    @Test
     public void afterSetBinaryData_whenPositionOfClipChanges_updatesPosition() throws Exception {
         FormEntryPrompt prompt = promptWithAnswer(null);
 

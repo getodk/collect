@@ -1,7 +1,6 @@
 package org.odk.collect.android.audio;
 
 import android.app.Application;
-import android.content.Context;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -25,13 +24,14 @@ import java.io.File;
 import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(AndroidJUnit4.class)
 public class AudioRecordingControllerFragmentTest {
 
     public StubAudioRecorderViewModel audioRecorderViewModel;
-    private Context context;
 
     @Before
     public void setup() throws IOException {
@@ -53,11 +53,21 @@ public class AudioRecordingControllerFragmentTest {
         });
 
         // Needed to inflate views with theme attributes
-        context = ApplicationProvider.getApplicationContext();
-        context.setTheme(R.style.Theme_MaterialComponents);
+        ApplicationProvider.getApplicationContext().setTheme(R.style.Theme_MaterialComponents);
 
         // View only shows when recording in progress
         audioRecorderViewModel.start("session", Output.AAC);
+    }
+
+    @Test
+    public void updatesTimecode() {
+        FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
+        scenario.onFragment(fragment -> {
+            assertThat(fragment.binding.timeCode.getText().toString(), equalTo("00:00"));
+
+            audioRecorderViewModel.setDuration(40000);
+            assertThat(fragment.binding.timeCode.getText().toString(), equalTo("00:40"));
+        });
     }
 
     @Test
@@ -81,23 +91,23 @@ public class AudioRecordingControllerFragmentTest {
     }
 
     @Test
-    public void whenRecordingPaused_pauseTextChangesToResume() {
+    public void whenRecordingPaused_pauseIconChangesToResume() {
         audioRecorderViewModel.pause();
 
         FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
-            assertThat(fragment.binding.pauseRecording.getText(), is(context.getString(R.string.resume_recording)));
+            assertThat(shadowOf(fragment.binding.pauseRecording.getIcon()).getCreatedFromResId(), is(R.drawable.ic_play_arrow_24dp));
         });
     }
 
     @Test
-    public void whenRecordingResumed_pauseTextChangesToPause() {
+    public void whenRecordingResumed_pauseIconChangesToPause() {
         audioRecorderViewModel.pause();
         audioRecorderViewModel.resume();
 
         FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
-            assertThat(fragment.binding.pauseRecording.getText(), is(context.getString(R.string.pause_recording)));
+            assertThat(shadowOf(fragment.binding.pauseRecording.getIcon()).getCreatedFromResId(), is(R.drawable.ic_pause_24dp));
         });
     }
 
