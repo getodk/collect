@@ -554,7 +554,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     formControllerAvailable(formController);
                     onScreenRefresh();
                 } else {
-                    Timber.w("Reloading form and restoring state.");
+                    Timber.d("Reloading form and restoring state.");
                     formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath);
                     showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
                     formLoaderTask.execute(formPath);
@@ -685,7 +685,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
             }
         } else {
-            Timber.e("Unrecognized URI: %s", uri);
+            Timber.i("Unrecognized URI: %s", uri);
             createErrorDialog(getString(R.string.unrecognized_uri, uri), EXIT);
             return;
         }
@@ -787,7 +787,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // intent is needed for all requestCodes except of DRAW_IMAGE, ANNOTATE_IMAGE, SIGNATURE_CAPTURE, IMAGE_CAPTURE and HIERARCHY_ACTIVITY
         if (intent == null && requestCode != RequestCodes.DRAW_IMAGE && requestCode != RequestCodes.ANNOTATE_IMAGE
                 && requestCode != RequestCodes.SIGNATURE_CAPTURE && requestCode != RequestCodes.IMAGE_CAPTURE) {
-            Timber.w("The intent has a null value for requestCode: %s", requestCode);
+            Timber.d("The intent has a null value for requestCode: %s", requestCode);
             showLongToast(getString(R.string.null_intent_value));
             return;
         }
@@ -863,7 +863,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 File nf = new File(s);
                 if (!fi.renameTo(nf)) {
-                    Timber.e("Failed to rename %s", fi.getAbsolutePath());
+                    Timber.d("Failed to rename %s", fi.getAbsolutePath());
                 } else {
                     Timber.i("Renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
                 }
@@ -886,7 +886,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 nf = new File(s);
                 if (!fi.renameTo(nf)) {
-                    Timber.e("Failed to rename %s", fi.getAbsolutePath());
+                    Timber.d("Failed to rename %s", fi.getAbsolutePath());
                 } else {
                     Timber.i("Renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
                 }
@@ -1016,7 +1016,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
 
             if (!set) {
-                Timber.w("Attempting to return data to a widget or set of widgets not looking for data");
+                Timber.e("Attempting to return data to a widget or set of widgets not looking for data");
             }
         }
     }
@@ -1109,7 +1109,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 try {
                     formController.saveOneScreenAnswer(answer.getKey(), answer.getValue(), false);
                 } catch (JavaRosaException e) {
-                    Timber.w(e);
+                    Timber.e(e);
                 }
             }
             index++;
@@ -1465,7 +1465,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private boolean moveScreen(Direction direction) {
         FormController formController = getFormController();
         if (formController == null) {
-            Timber.w("FormController has a null value");
+            Timber.d("FormController has a null value");
             return false;
         }
 
@@ -1555,7 +1555,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // skip repeat junctures until we implement them
                 break;
             default:
-                Timber.w("JavaRosa added a new EVENT type and didn't tell us... shame on them.");
+                Timber.d("JavaRosa added a new EVENT type and didn't tell us... shame on them.");
                 break;
         }
 
