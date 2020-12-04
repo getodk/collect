@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?colorPrimary"
     android:paddingVertical="@dimen/margin_small"
-    android:paddingStart="16dp"
-    android:paddingEnd="@dimen/margin_standard">
+    android:paddingEnd="@dimen/margin_standard"
+    tools:ignore="RtlSymmetry">
 
     <TextView
         style="@style/TextAppearance.Collect.Subtitle1"
