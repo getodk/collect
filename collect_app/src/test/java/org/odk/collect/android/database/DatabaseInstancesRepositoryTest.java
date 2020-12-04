@@ -16,12 +16,10 @@ package org.odk.collect.android.database;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.instances.InstancesRepositoryTest;
-import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.support.RobolectricHelpers;
 
@@ -31,11 +29,6 @@ public class DatabaseInstancesRepositoryTest extends InstancesRepositoryTest {
     public void setup() {
         RobolectricHelpers.mountExternalStorage();
         new StorageInitializer().createOdkDirsOnStorage();
-    }
-
-    @After
-    public void teardown() {
-        InstanceProvider.releaseDatabaseHelper();
     }
 
     @Override
