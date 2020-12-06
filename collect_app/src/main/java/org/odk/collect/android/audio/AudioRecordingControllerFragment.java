@@ -59,9 +59,11 @@ public class AudioRecordingControllerFragment extends Fragment {
 
                 if (session.getPaused()) {
                     binding.pauseRecording.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_play_arrow_24dp));
+                    binding.pauseRecording.setContentDescription(getString(R.string.resume_recording));
                     binding.pauseRecording.setOnClickListener(v -> viewModel.resume());
                 } else {
                     binding.pauseRecording.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_pause_24dp));
+                    binding.pauseRecording.setContentDescription(getString(R.string.pause_recording));
                     binding.pauseRecording.setOnClickListener(v -> viewModel.pause());
                 }
 
