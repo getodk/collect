@@ -69,10 +69,10 @@ public class AudioRecordingTest {
         new MainMenuPage(rule).assertOnPage()
                 .copyForm("internal-audio-question.xml")
                 .startBlankForm("Audio Question")
-                .assertTextNotDisplayed(R.string.stop_recording)
+                .assertContentDescriptionNotDisplayed(R.string.stop_recording)
                 .clickOnString(R.string.capture_audio)
-                .clickOnString(R.string.stop_recording)
-                .assertTextNotDisplayed(R.string.stop_recording)
+                .clickOnContentDescription(R.string.stop_recording)
+                .assertContentDescriptionNotDisplayed(R.string.stop_recording)
                 .assertTextNotDisplayed(R.string.capture_audio)
                 .assertContentDescriptionDisplayed(R.string.play_audio);
     }
@@ -94,8 +94,8 @@ public class AudioRecordingTest {
                 .clickOK(new FormEntryPage("Audio Question", rule))
 
                 .assertQuestion("What does it sound like?")
-                .clickOnString(R.string.stop_recording)
-                .assertTextNotDisplayed(R.string.stop_recording)
+                .clickOnContentDescription(R.string.stop_recording)
+                .assertContentDescriptionNotDisplayed(R.string.stop_recording)
                 .assertTextNotDisplayed(R.string.capture_audio)
                 .assertContentDescriptionDisplayed(R.string.play_audio);
     }
@@ -117,8 +117,8 @@ public class AudioRecordingTest {
                 .clickOK(new FormEntryPage("Audio Question", rule))
 
                 .assertQuestion("What does it sound like?")
-                .clickOnString(R.string.stop_recording)
-                .assertTextNotDisplayed(R.string.stop_recording)
+                .clickOnContentDescription(R.string.stop_recording)
+                .assertContentDescriptionNotDisplayed(R.string.stop_recording)
                 .assertTextNotDisplayed(R.string.capture_audio)
                 .assertContentDescriptionDisplayed(R.string.play_audio);
     }

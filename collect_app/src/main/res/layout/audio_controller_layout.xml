@@ -30,6 +30,7 @@ limitations under the License.
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:contentDescription="@string/play_audio"
             app:icon="@drawable/ic_play_arrow_24dp" />
 
         <TextView
