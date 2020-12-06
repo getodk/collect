@@ -6,8 +6,7 @@
   <string name="annotate_image">تصویر شرحه کړی</string>
   <string name="signature_capture">د امضا ثبت کول</string>
   <string name="view_video">ویډیو ښودل</string>
-  <string name="choose_audio">غږیږ وټاکی</string>
-  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+    <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
   <string name="cancel">فسخ کول</string>
   <string name="cancel_loading_form">فسخ کول</string>
   <string name="cancel_location">فسخ کول</string>
