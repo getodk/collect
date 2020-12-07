@@ -43,7 +43,7 @@ public class GetAndSubmitFormTest {
 
     @Test
     public void canGetBlankForm_fillItIn_andSubmit() {
-        server.addForm("One Question", "one-question", "one-question.xml");
+        server.addForm("One Question", "one-question", "1", "one-question.xml");
 
         rule.mainMenu()
                 .setServer(server.getURL())

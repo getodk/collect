@@ -1,10 +1,8 @@
 package org.odk.collect.android.database;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
@@ -37,44 +35,14 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     private final InstancesDao dao = new InstancesDao();
 
     @Override
-    public List<Instance> getAllFinalized() {
-        Cursor c = dao.getFinalizedInstancesCursor();
-        return dao.getInstancesFromCursor(c);
-    }
-
-    @Override
-    public Instance get(long databaseId) {
+    public Instance get(Long databaseId) {
         Cursor c = dao.getInstancesCursorForId(Long.toString(databaseId));
         List<Instance> result = dao.getInstancesFromCursor(c);
         return !result.isEmpty() ? result.get(0) : null;
     }
 
     @Override
-    public List<Instance> getAllByJrFormId(String formId) {
-        Cursor c = dao.getInstancesCursor(JR_FORM_ID + " = ?", new String[] {formId});
-        return dao.getInstancesFromCursor(c);
-    }
-
-    @Override
-    public List<Instance> getAllByJrFormIdAndJrVersion(@NonNull String jrFormId, @Nullable String jrVersion) {
-        if (jrVersion != null) {
-            return dao.getInstancesFromCursor(dao.getInstancesCursor(JR_FORM_ID + " = ? AND " + JR_VERSION + " = ?", new String[]{jrFormId, jrVersion}));
-        } else {
-            return dao.getInstancesFromCursor(dao.getInstancesCursor(JR_FORM_ID + " = ? AND " + JR_VERSION + " IS NULL", new String[]{jrFormId}));
-        }
-    }
-
-    @Override
-    public List<Instance> getAllByJrFormIdAndJrVersionNotDeleted(String jrFormId, String jrVersion) {
-        if (jrVersion != null) {
-            return dao.getInstancesFromCursor(dao.getInstancesCursor(JR_FORM_ID + " = ? AND " + JR_VERSION + " = ? AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId, jrVersion}));
-        } else {
-            return dao.getInstancesFromCursor(dao.getInstancesCursor(JR_FORM_ID + " = ? AND " + JR_VERSION + " IS NULL AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId}));
-        }
-    }
-
-    @Override
-    public Instance getByPath(String instancePath) {
+    public Instance getOneByPath(String instancePath) {
         Cursor c = dao.getInstancesCursor(InstanceColumns.INSTANCE_FILE_PATH + "=?",
                 new String[] {new StoragePathProvider().getInstanceDbPath(instancePath)});
         List<Instance> instances = dao.getInstancesFromCursor(c);
@@ -86,8 +54,36 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     }
 
     @Override
+    public List<Instance> getAllFinalized() {
+        Cursor c = dao.getFinalizedInstancesCursor();
+        return dao.getInstancesFromCursor(c);
+    }
+
+
+    @Override
+    public List<Instance> getAllByFormId(String formId) {
+        Cursor c = dao.getInstancesCursor(JR_FORM_ID + " = ?", new String[] {formId});
+        return dao.getInstancesFromCursor(c);
+    }
+
+    @Override
+    public List<Instance> getAllNotDeletedByFormIdAndVersion(String jrFormId, String jrVersion) {
+        if (jrVersion != null) {
+            return dao.getInstancesFromCursor(dao.getInstancesCursor(JR_FORM_ID + " = ? AND " + JR_VERSION + " = ? AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId, jrVersion}));
+        } else {
+            return dao.getInstancesFromCursor(dao.getInstancesCursor(JR_FORM_ID + " = ? AND " + JR_VERSION + " IS NULL AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId}));
+        }
+    }
+
+    @Override
     public void delete(Long id) {
         Uri uri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id.toString());
         Collect.getInstance().getContentResolver().delete(uri, null, null);
+    }
+
+    @Override
+    public Uri save(Instance instance) {
+        ContentValues values = dao.getValuesFromInstanceObject(instance);
+        return dao.saveInstance(values);
     }
 }

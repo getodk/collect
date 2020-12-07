@@ -64,7 +64,7 @@ public class DeleteBlankFormTest {
 
     @Test
     public void afterFillingAForm_andDeletingIt_allowsFormToBeReDownloaded() {
-        testDependencies.server.addForm("One Question", "one_question", "one-question.xml");
+        testDependencies.server.addForm("One Question", "one_question", "1", "one-question.xml");
 
         rule.mainMenu()
                 .setServer(testDependencies.server.getURL())

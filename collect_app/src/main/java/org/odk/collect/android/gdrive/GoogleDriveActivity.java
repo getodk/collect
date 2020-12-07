@@ -913,7 +913,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
             // If the form already exists in the DB and is soft deleted we need to restore it
             String md5Hash = FileUtils.getMd5Hash(file);
-            Form form = formsRepository.getByMd5Hash(md5Hash);
+            Form form = formsRepository.getOneByMd5Hash(md5Hash);
             if (form != null && form.isDeleted()) {
                 formsRepository.restore(form.getId());
             }

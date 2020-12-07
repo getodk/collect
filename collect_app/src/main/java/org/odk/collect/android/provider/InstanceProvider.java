@@ -80,6 +80,14 @@ public class InstanceProvider extends ContentProvider {
         dbHelper = new InstancesDatabaseHelper();
     }
 
+    @SuppressWarnings("PMD.NonThreadSafeSingleton") // PMD thinks the `= null` is setting a singleton here
+    public static void releaseDatabaseHelper() {
+        if (dbHelper != null) {
+            dbHelper.close();
+            dbHelper = null;
+        }
+    }
+
     @Override
     public boolean onCreate() {
         if (!areStoragePermissionsGranted(getContext())) {

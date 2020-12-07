@@ -32,7 +32,7 @@ public class ServerSettingsTest {
     @Test
     public void whenUsingODKServer_canAddCredentialsForServer() {
         testDependencies.server.setCredentials("Joe", "netsky");
-        testDependencies.server.addForm("One Question", "one-question", "one-question.xml");
+        testDependencies.server.addForm("One Question", "one-question", "1", "one-question.xml");
 
         new MainMenuPage(rule).assertOnPage()
                 .clickOnMenu()

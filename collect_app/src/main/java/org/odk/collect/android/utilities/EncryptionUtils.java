@@ -29,6 +29,7 @@ import org.kxml2.kdom.Node;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.javarosawrapper.FormController.InstanceMetadata;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -271,40 +272,32 @@ public class EncryptionUtils {
         Cursor formCursor = null;
         try {
             if (InstanceColumns.CONTENT_ITEM_TYPE.equals(cr.getType(uri))) {
-                // chain back to the Form record...
-                String[] selectionArgs = null;
-                String selection = null;
-                Cursor instanceCursor = null;
-                try {
-                    instanceCursor = cr.query(uri, null, null, null, null);
+                String[] selectionArgs;
+                String selection = FormsColumns.JR_FORM_ID + " =? AND ";
+                try (Cursor instanceCursor = cr.query(uri, null, null, null, null)) {
                     if (instanceCursor.getCount() != 1) {
                         String msg = TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_record_for_this_instance);
                         Timber.e(msg);
                         throw new EncryptionException(msg, null);
                     }
                     instanceCursor.moveToFirst();
-                    String jrFormId = instanceCursor.getString(
-                            instanceCursor.getColumnIndex(InstanceColumns.JR_FORM_ID));
+                    formId = instanceCursor.getString(instanceCursor.getColumnIndex(InstanceColumns.JR_FORM_ID));
                     int idxJrVersion = instanceCursor.getColumnIndex(InstanceColumns.JR_VERSION);
+                    formVersion = instanceCursor.getString(idxJrVersion);
                     if (!instanceCursor.isNull(idxJrVersion)) {
-                        selectionArgs = new String[]{jrFormId, instanceCursor.getString(
-                                idxJrVersion)};
-                        selection = FormsColumns.JR_FORM_ID + " =? AND " + FormsColumns.JR_VERSION
-                                + "=?";
+                        selectionArgs = new String[]{formId, instanceCursor.getString(idxJrVersion)};
+                        selection += FormsColumns.JR_VERSION + "=?";
                     } else {
-                        selectionArgs = new String[]{jrFormId};
-                        selection = FormsColumns.JR_FORM_ID + " =? AND " + FormsColumns.JR_VERSION
-                                + " IS NULL";
-                    }
-                } finally {
-                    if (instanceCursor != null) {
-                        instanceCursor.close();
+                        selectionArgs = new String[]{formId};
+                        selection += FormsColumns.JR_VERSION + " IS NULL";
                     }
                 }
 
                 formCursor = new FormsDao().getFormsCursor(selection, selectionArgs);
 
-                if (formCursor.getCount() != 1) {
+                // OK to finalize with form definition that was soft-deleted. OK if there are multiple
+                // forms with the same formid/version as long as only one is active (not deleted).
+                if (formCursor.getCount() == 0 || new DatabaseFormsRepository().getAllNotDeletedByFormIdAndVersion(formId, formVersion).size() > 1) {
                     String msg = TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_blank_form_for_this_form_id);
                     Timber.d(msg);
                     throw new EncryptionException(msg, null);

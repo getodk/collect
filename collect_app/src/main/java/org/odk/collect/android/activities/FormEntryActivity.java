@@ -78,9 +78,6 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.backgroundwork.FormSubmitManager;
-import org.odk.collect.android.forms.FormDesignException;
-import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.dao.helpers.FormsDaoHelper;
@@ -109,7 +106,12 @@ import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.SaveAnswerFileProgressDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
+import org.odk.collect.android.forms.Form;
+import org.odk.collect.android.forms.FormDesignException;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
+import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
+import org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog;
 import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
@@ -325,6 +327,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     StoragePathProvider storagePathProvider;
+
+    @Inject
+    FormsRepository formsRepository;
 
     @Inject
     PropertyManager propertyManager;
@@ -584,8 +589,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             formPath = intent.getStringExtra(EXTRA_TESTING_PATH);
 
         } else if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
-            // get the formId and version for this instance...
-
             FormInfo formInfo = ContentResolverHelper.getFormDetails(uri);
 
             if (formInfo == null) {
@@ -594,46 +597,22 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
 
             instancePath = formInfo.getInstancePath();
+            List<Form> candidateForms = formsRepository.getAllByFormIdAndVersion(formInfo.getFormId(), formInfo.getFormVersion());
 
-            String jrFormId = formInfo.getFormId();
-            String jrVersion = formInfo.getFormVersion();
-
-            String[] selectionArgs;
-            String selection;
-            if (jrVersion == null) {
-                selectionArgs = new String[]{jrFormId};
-                selection = FormsColumns.JR_FORM_ID + "=? AND "
-                        + FormsColumns.JR_VERSION + " IS NULL";
-            } else {
-                selectionArgs = new String[]{jrFormId, jrVersion};
-                selection = FormsColumns.JR_FORM_ID + "=? AND "
-                        + FormsColumns.JR_VERSION + "=?";
-            }
-
-            int formCount = FormsDaoHelper.getFormsCount(selection, selectionArgs);
-            if (formCount < 1) {
+            if (candidateForms.isEmpty()) {
                 createErrorDialog(getString(
                         R.string.parent_form_not_present,
-                        jrFormId)
-                                + ((jrVersion == null) ? ""
-                                : "\n"
-                                + getString(R.string.version)
-                                + " "
-                                + jrVersion),
+                        formInfo.getFormId())
+                                + ((formInfo.getFormVersion() == null) ? ""
+                                : "\n" + getString(R.string.version) + " " + formInfo.getFormVersion()),
                         EXIT);
                 return;
-            } else {
-                formPath = FormsDaoHelper.getFormPath(selection, selectionArgs);
-
-                /**
-                 * Still take the first entry, but warn that there are multiple rows. User will
-                 * need to hand-edit the SQLite database to fix it.
-                 */
-                if (formCount > 1) {
-                    createErrorDialog(getString(R.string.survey_multiple_forms_error), EXIT);
-                    return;
-                }
+            } else if (candidateForms.stream().filter(f -> !f.isDeleted()).count() > 1) {
+                createErrorDialog(getString(R.string.survey_multiple_forms_error), EXIT);
+                return;
             }
+
+            formPath = storagePathProvider.getAbsoluteFormFilePath(candidateForms.get(0).getFormFilePath());
         } else if (uriMimeType != null
                 && uriMimeType.equals(FormsColumns.CONTENT_ITEM_TYPE)) {
             formPath = ContentResolverHelper.getFormPath(uri);

@@ -3,6 +3,7 @@ package org.odk.collect.android.formmanagement;
 import android.net.Uri;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormSource;
@@ -15,6 +16,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.Validator;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -30,6 +32,7 @@ import javax.annotation.Nullable;
 import timber.log.Timber;
 
 import static org.apache.commons.io.FileUtils.deleteDirectory;
+import static org.odk.collect.android.analytics.AnalyticsEvents.DOWNLOAD_SAME_FORMID_VERSION;
 import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
 public class ServerFormDownloader implements FormDownloader {
@@ -40,19 +43,32 @@ public class ServerFormDownloader implements FormDownloader {
     private final String formsDirPath;
     private final FormMetadataParser formMetadataParser;
 
-    public ServerFormDownloader(FormSource formSource, FormsRepository formsRepository, File cacheDir, String formsDirPath, FormMetadataParser formMetadataParser) {
+    private final Analytics analytics;
+
+    public ServerFormDownloader(FormSource formSource, FormsRepository formsRepository, File cacheDir, String formsDirPath, FormMetadataParser formMetadataParser, Analytics analytics) {
         this.cacheDir = cacheDir;
         this.formsDirPath = formsDirPath;
         this.multiFormDownloader = new MultiFormDownloader(formsRepository, formSource);
         this.formsRepository = formsRepository;
         this.formMetadataParser = formMetadataParser;
+
+        this.analytics = analytics;
     }
 
     @Override
     public void downloadForm(ServerFormDetails form, @Nullable ProgressReporter progressReporter, @Nullable Supplier<Boolean> isCancelled) throws FormDownloadException, InterruptedException {
-        Form formOnDevice = formsRepository.get(form.getFormId(), form.getFormVersion());
-        if (formOnDevice != null && formOnDevice.isDeleted()) {
-            formsRepository.restore(formOnDevice.getId());
+        Form formOnDevice = formsRepository.getOneByFormIdAndVersion(form.getFormId(), form.getFormVersion());
+        if (formOnDevice != null) {
+            String remoteFormHash = form.getHash().startsWith("md5:") ? form.getHash().substring("md5:".length()) : form.getHash();
+            if (formOnDevice.isDeleted()) {
+                formsRepository.restore(formOnDevice.getId());
+            } else if (!remoteFormHash.equals(formOnDevice.getMD5Hash())) {
+                String formIdentifier = formOnDevice.getDisplayName() + " " + formOnDevice.getId();
+                String formIdHash = FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
+                analytics.logFormEvent(DOWNLOAD_SAME_FORMID_VERSION, formIdHash);
+
+                throw new FormDownloadException(FormDownloadException.Type.DUPLICATE_FORMID_VERSION);
+            }
         }
 
         File tempDir = new File(cacheDir, "download-" + UUID.randomUUID().toString());
@@ -230,7 +246,7 @@ public class ServerFormDownloader implements FormDownloader {
             } else {
                 String md5Hash = FileUtils.getMd5Hash(fileResult.file);
                 if (md5Hash != null) {
-                    formsRepository.deleteFormsByMd5Hash(md5Hash);
+                    formsRepository.deleteByMd5Hash(md5Hash);
                 }
                 FileUtils.deleteAndReport(fileResult.getFile());
             }
@@ -254,7 +270,7 @@ public class ServerFormDownloader implements FormDownloader {
             String mediaPath = FileUtils.constructMediaPath(formFilePath);
 
             FileUtils.checkMediaPath(new File(mediaPath));
-            Form form = formsRepository.getByPath(formFile.getAbsolutePath());
+            Form form = formsRepository.getOneByPath(formFile.getAbsolutePath());
 
             if (form == null) {
                 uri = saveNewForm(formInfo, formFile, mediaPath);
@@ -308,7 +324,7 @@ public class ServerFormDownloader implements FormDownloader {
 
             // we've downloaded the file, and we may have renamed it
             // make sure it's not the same as a file we already have
-            Form form = formsRepository.getByMd5Hash(FileUtils.getMd5Hash(tempFormFile));
+            Form form = formsRepository.getOneByMd5Hash(FileUtils.getMd5Hash(tempFormFile));
             if (form != null) {
                 isNew = false;
 

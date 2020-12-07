@@ -42,12 +42,12 @@ public class PreviouslyDownloadedOnlyTest {
                 .setServer(testDependencies.server.getURL())
                 .enablePreviouslyDownloadedOnlyUpdates();
 
-        testDependencies.server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
+        testDependencies.server.addForm("One Question Updated", "one_question", "2", "one-question-updated.xml");
         testDependencies.scheduler.runDeferredTasks();
         notificationDrawer.open()
                 .assertAndDismissNotification("ODK Collect", "Form updates available");
 
-        testDependencies.server.addForm("Two Question Updated", "two_question", "two-question-updated.xml");
+        testDependencies.server.addForm("Two Question Updated", "two_question", "1", "two-question-updated.xml");
         testDependencies.scheduler.runDeferredTasks();
         notificationDrawer.open()
                 .assertAndDismissNotification("ODK Collect", "Form updates available");
@@ -59,7 +59,7 @@ public class PreviouslyDownloadedOnlyTest {
                 .setServer(testDependencies.server.getURL())
                 .enablePreviouslyDownloadedOnlyUpdates();
 
-        testDependencies.server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
+        testDependencies.server.addForm("One Question Updated", "one_question", "2", "one-question-updated.xml");
         testDependencies.scheduler.runDeferredTasks();
 
         notificationDrawer.open()

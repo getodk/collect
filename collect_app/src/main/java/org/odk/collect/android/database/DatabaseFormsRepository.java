@@ -36,18 +36,6 @@ public class DatabaseFormsRepository implements FormsRepository {
         storagePathProvider = new StoragePathProvider();
     }
 
-    @Override
-    public List<Form> getByJrFormIdNotDeleted(String jrFormId) {
-        return queryForForms(JR_FORM_ID + "=? AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId});
-    }
-
-    @Override
-    public List<Form> getAll() {
-        try (Cursor cursor = new FormsDao().getFormsCursor()) {
-            return new FormsDao().getFormsFromCursor(cursor);
-        }
-    }
-
     @Nullable
     @Override
     public Form get(Long id) {
@@ -56,17 +44,26 @@ public class DatabaseFormsRepository implements FormsRepository {
 
     @Nullable
     @Override
-    public Form get(String jrFormId, @Nullable String jrVersion) {
-        if (jrVersion != null) {
-            return queryForForm(JR_FORM_ID + "=? AND " + JR_VERSION + "=?", new String[]{jrFormId, jrVersion});
+    public Form getOneByFormIdAndVersion(String jrFormId, @Nullable String jrVersion) {
+        List<Form> all = getAllByFormIdAndVersion(jrFormId, jrVersion);
+        if (!all.isEmpty()) {
+            return all.get(0);
         } else {
-            return queryForForm(JR_FORM_ID + "=? AND " + JR_VERSION + " IS NULL", new String[]{jrFormId});
+            return null;
         }
     }
 
     @Nullable
     @Override
-    public Form getByMd5Hash(String hash) {
+    public Form getOneByPath(String path) {
+        try (Cursor cursor = new FormsDao().getFormsCursorForFormFilePath(path)) {
+            return getFormOrNull(cursor);
+        }
+    }
+
+    @Nullable
+    @Override
+    public Form getOneByMd5Hash(String hash) {
         FormsDao formsDao = new FormsDao();
 
         try (Cursor cursor = formsDao.getFormsCursorForMd5Hash(hash)) {
@@ -74,11 +71,34 @@ public class DatabaseFormsRepository implements FormsRepository {
         }
     }
 
-    @Nullable
     @Override
-    public Form getByPath(String path) {
-        try (Cursor cursor = new FormsDao().getFormsCursorForFormFilePath(path)) {
-            return getFormOrNull(cursor);
+    public List<Form> getAll() {
+        try (Cursor cursor = new FormsDao().getFormsCursor()) {
+            return FormsDao.getFormsFromCursor(cursor);
+        }
+    }
+
+    @Override
+    public List<Form> getAllByFormIdAndVersion(String jrFormId, @Nullable String jrVersion) {
+        if (jrVersion != null) {
+            return queryForForms(JR_FORM_ID + "=? AND " + JR_VERSION + "=?", new String[]{jrFormId, jrVersion});
+        } else {
+            return queryForForms(JR_FORM_ID + "=? AND " + JR_VERSION + " IS NULL", new String[]{jrFormId});
+        }
+    }
+
+    @Override
+    public List<Form> getAllNotDeletedByFormId(String jrFormId) {
+        return queryForForms(JR_FORM_ID + "=? AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId});
+    }
+
+
+    @Override
+    public List<Form> getAllNotDeletedByFormIdAndVersion(String jrFormId, @Nullable String jrVersion) {
+        if (jrVersion != null) {
+            return queryForForms(DELETED_DATE + " IS NULL AND " + JR_FORM_ID + "=? AND " + JR_VERSION + "=?", new String[]{jrFormId, jrVersion});
+        } else {
+            return queryForForms(DELETED_DATE + " IS NULL AND " + JR_FORM_ID + "=? AND " + JR_VERSION + " IS NULL", new String[]{jrFormId});
         }
     }
 
@@ -118,14 +138,7 @@ public class DatabaseFormsRepository implements FormsRepository {
     }
 
     @Override
-    public void restore(Long id) {
-        ContentValues values = new ContentValues();
-        values.putNull(DELETED_DATE);
-        new FormsDao().updateForm(values, _ID + "=?", new String[]{id.toString()});
-    }
-
-    @Override
-    public void deleteFormsByMd5Hash(String md5Hash) {
+    public void deleteByMd5Hash(String md5Hash) {
         FormsDao formsDao = new FormsDao();
         List<String> idsToDelete = new ArrayList<>();
         Cursor c = null;
@@ -148,6 +161,13 @@ public class DatabaseFormsRepository implements FormsRepository {
         formsDao.deleteFormsFromIDs(idsToDelete.toArray(new String[idsToDelete.size()]));
     }
 
+    @Override
+    public void restore(Long id) {
+        ContentValues values = new ContentValues();
+        values.putNull(DELETED_DATE);
+        new FormsDao().updateForm(values, _ID + "=?", new String[]{id.toString()});
+    }
+
     @Nullable
     private Form queryForForm(String selection, String[] selectionArgs) {
         try (Cursor cursor = new FormsDao().getFormsCursor(selection, selectionArgs)) {
@@ -155,10 +175,9 @@ public class DatabaseFormsRepository implements FormsRepository {
         }
     }
 
-    @Nullable
     private List<Form> queryForForms(String selection, String[] selectionArgs) {
         try (Cursor cursor = new FormsDao().getFormsCursor(selection, selectionArgs)) {
-            return new FormsDao().getFormsFromCursor(cursor);
+            return FormsDao.getFormsFromCursor(cursor);
         }
     }
 

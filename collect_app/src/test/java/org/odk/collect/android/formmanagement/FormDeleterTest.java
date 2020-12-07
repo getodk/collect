@@ -20,7 +20,7 @@ public class FormDeleterTest {
     private final FormDeleter formDeleter = new FormDeleter(formsRepository, instancesRepository);
 
     @Test
-    public void whenFormHasSoftDeletedInstances_deletesForm() {
+    public void whenFormHasDeletedInstances_deletesForm() {
         formsRepository.save(new Form.Builder()
                 .id(1L)
                 .jrFormId("id")
@@ -101,5 +101,30 @@ public class FormDeleterTest {
         List<Form> forms = formsRepository.getAll();
         assertThat(forms.size(), is(1));
         assertThat(forms.get(0).isDeleted(), is(true));
+    }
+
+    @Test
+    public void whenFormIdAndVersionCombinationIsNotUnique_andInstanceExists_hardDeletesForm() {
+        formsRepository.save(new Form.Builder()
+                .id(1L)
+                .jrFormId("id")
+                .jrVersion("version")
+                .build());
+
+        instancesRepository.save(new Instance.Builder()
+                .jrFormId("id")
+                .jrVersion("version")
+                .build());
+
+        formsRepository.save(new Form.Builder()
+                .id(2L)
+                .jrFormId("id")
+                .jrVersion("version")
+                .build());
+
+        formDeleter.delete(1L);
+        List<Form> forms = formsRepository.getAll();
+        assertThat(forms.size(), is(1));
+        assertThat(forms.get(0).getId(), is(2L));
     }
 }
