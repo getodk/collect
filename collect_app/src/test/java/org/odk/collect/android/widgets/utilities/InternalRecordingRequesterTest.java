@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.utilities.QuestionMediaManager;
+import org.odk.collect.android.utilities.QuestionMediaManager.CreateAnswerFileResult;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
@@ -76,12 +77,12 @@ public class InternalRecordingRequesterTest {
     }
 
     @Test
-    public void onIsRecordingChanged_listensToCurrentSession() {
+    public void onIsRecordingChangedBlocked_listensToCurrentSession() {
         MutableLiveData<RecordingSession> liveData = new MutableLiveData<>(null);
         when(viewModel.getCurrentSession()).thenReturn(liveData);
 
         Consumer<Boolean> listener = mock(Consumer.class);
-        requester.onIsRecordingChanged(listener);
+        requester.onIsRecordingBlocked(listener);
         verify(listener).accept(false);
 
         liveData.setValue(new RecordingSession("blah", null, 0, 0, false));
@@ -94,16 +95,35 @@ public class InternalRecordingRequesterTest {
         MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
         when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
 
-        MutableLiveData<String> answerLiveData = new MutableLiveData<>(null);
+        MutableLiveData<CreateAnswerFileResult> answerLiveData = new MutableLiveData<>(null);
         File file = File.createTempFile("blah", ".mp3");
         when(questionMediaManager.createAnswerFile(file)).thenReturn(answerLiveData);
 
         Consumer<String> listener = mock(Consumer.class);
-        requester.onRecordingAvailable(prompt, listener);
+        requester.onRecordingFinished(prompt, listener);
         sessionLiveData.setValue(new RecordingSession(prompt.getIndex().toString(), file, 0, 0, false));
-        answerLiveData.setValue("copiedFile");
+        answerLiveData.setValue(new CreateAnswerFileResult("copiedFile"));
 
         verify(listener).accept("copiedFile");
+        verify(viewModel).cleanUp();
+    }
+
+    @Test
+    public void whenViewModelRecordingAvailable_andCopyingFails_callsListenerWithNull_andCallsCleanUp() throws Exception {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
+        when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
+
+        MutableLiveData<CreateAnswerFileResult> answerLiveData = new MutableLiveData<>(null);
+        File file = File.createTempFile("blah", ".mp3");
+        when(questionMediaManager.createAnswerFile(file)).thenReturn(answerLiveData);
+
+        Consumer<String> listener = mock(Consumer.class);
+        requester.onRecordingFinished(prompt, listener);
+        sessionLiveData.setValue(new RecordingSession(prompt.getIndex().toString(), file, 0, 0, false));
+        answerLiveData.setValue(new CreateAnswerFileResult(null));
+
+        verify(listener).accept(null);
         verify(viewModel).cleanUp();
     }
 
@@ -114,7 +134,7 @@ public class InternalRecordingRequesterTest {
         when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
 
         Consumer<String> listener = mock(Consumer.class);
-        requester.onRecordingAvailable(prompt, listener);
+        requester.onRecordingFinished(prompt, listener);
 
         File file = File.createTempFile("blah", ".mp3");
         sessionLiveData.setValue(new RecordingSession("something else", file, 0, 0, false));

@@ -80,9 +80,9 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
         updateVisibilities();
         updatePlayerMedia();
 
-        recordingRequester.onIsRecordingChanged(isRecording -> {
-            binding.captureButton.setEnabled(!isRecording);
-            binding.chooseButton.setEnabled(!isRecording);
+        recordingRequester.onIsRecordingBlocked(isRecordingBlocked -> {
+            binding.captureButton.setEnabled(!isRecordingBlocked);
+            binding.chooseButton.setEnabled(!isRecordingBlocked);
         });
 
         recordingRequester.onRecordingInProgress(getFormEntryPrompt(), session -> {
@@ -93,9 +93,14 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
             binding.waveform.addAmplitude(session.second);
         });
 
-        recordingRequester.onRecordingAvailable(getFormEntryPrompt(), recording -> {
+        recordingRequester.onRecordingFinished(getFormEntryPrompt(), recording -> {
             recordingInProgress = false;
-            setData(recording);
+
+            if (recording != null) {
+                setData(recording);
+            } else {
+                updateVisibilities();
+            }
         });
     }
 

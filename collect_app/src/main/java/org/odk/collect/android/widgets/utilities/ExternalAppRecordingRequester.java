@@ -55,12 +55,12 @@ public class ExternalAppRecordingRequester implements RecordingRequester {
     }
 
     @Override
-    public void onIsRecordingChanged(Consumer<Boolean> isRecordingListener) {
+    public void onIsRecordingBlocked(Consumer<Boolean> isRecordingListener) {
         isRecordingListener.accept(false);
     }
 
     @Override
-    public void onRecordingAvailable(FormEntryPrompt prompt, Consumer<String> recordingAvailableListener) {
+    public void onRecordingFinished(FormEntryPrompt prompt, Consumer<String> recordingAvailableListener) {
         // This could be implemented using the new Activity Result API  once it's stable
     }
 

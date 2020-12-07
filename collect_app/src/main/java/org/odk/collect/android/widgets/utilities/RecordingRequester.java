@@ -9,9 +9,9 @@ import java.util.function.Consumer;
 public interface RecordingRequester {
     void requestRecording(FormEntryPrompt prompt);
 
-    void onIsRecordingChanged(Consumer<Boolean> isRecordingListener);
+    void onIsRecordingBlocked(Consumer<Boolean> isRecordingListener);
 
     void onRecordingInProgress(FormEntryPrompt prompt, Consumer<Pair<Long, Integer>> durationListener);
 
-    void onRecordingAvailable(FormEntryPrompt prompt, Consumer<String> recordingAvailableListener);
+    void onRecordingFinished(FormEntryPrompt prompt, Consumer<String> recordingAvailableListener);
 }

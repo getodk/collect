@@ -52,23 +52,9 @@ public class InternalRecordingRequester implements RecordingRequester {
     }
 
     @Override
-    public void onIsRecordingChanged(Consumer<Boolean> isRecordingListener) {
+    public void onIsRecordingBlocked(Consumer<Boolean> isRecordingBlockedListener) {
         viewModel.getCurrentSession().observe(lifecycleOwner, session -> {
-            isRecordingListener.accept(session != null && session.getFile() == null);
-        });
-    }
-
-    @Override
-    public void onRecordingAvailable(FormEntryPrompt prompt, Consumer<String> recordingAvailableListener) {
-        viewModel.getCurrentSession().observe(lifecycleOwner, session -> {
-            if (session != null && session.getId().equals(prompt.getIndex().toString()) && session.getFile() != null) {
-                questionMediaManager.createAnswerFile(session.getFile()).observe(lifecycleOwner, fileName -> {
-                    if (fileName != null) {
-                        viewModel.cleanUp();
-                        recordingAvailableListener.accept(fileName);
-                    }
-                });
-            }
+            isRecordingBlockedListener.accept(session != null && session.getFile() == null);
         });
     }
 
@@ -77,6 +63,20 @@ public class InternalRecordingRequester implements RecordingRequester {
         viewModel.getCurrentSession().observe(lifecycleOwner, session -> {
             if (session != null && session.getId().equals(prompt.getIndex().toString()) && !session.getFailedToStart()) {
                 durationListener.accept(new Pair<>(session.getDuration(), session.getAmplitude()));
+            }
+        });
+    }
+
+    @Override
+    public void onRecordingFinished(FormEntryPrompt prompt, Consumer<String> recordingAvailableListener) {
+        viewModel.getCurrentSession().observe(lifecycleOwner, session -> {
+            if (session != null && session.getId().equals(prompt.getIndex().toString()) && session.getFile() != null) {
+                questionMediaManager.createAnswerFile(session.getFile()).observe(lifecycleOwner, result -> {
+                    if (result != null) {
+                        viewModel.cleanUp();
+                        recordingAvailableListener.accept(result.get());
+                    }
+                });
             }
         });
     }

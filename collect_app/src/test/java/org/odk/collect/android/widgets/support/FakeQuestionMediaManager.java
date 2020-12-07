@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 
 import com.google.common.io.Files;
 
+import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 
 import java.io.File;
@@ -17,7 +18,7 @@ public class FakeQuestionMediaManager implements QuestionMediaManager {
     private final File tempDir = Files.createTempDir();
 
     @Override
-    public LiveData<String> createAnswerFile(File file) {
+    public LiveData<FormSaveViewModel.CreateAnswerFileResult> createAnswerFile(File file) {
         return null;
     }
 

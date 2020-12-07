@@ -316,8 +316,8 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     @Override
-    public LiveData<String> createAnswerFile(File file) {
-        MutableLiveData<String> liveData = new MutableLiveData<>(null);
+    public LiveData<CreateAnswerFileResult> createAnswerFile(File file) {
+        MutableLiveData<CreateAnswerFileResult> liveData = new MutableLiveData<>(null);
 
         isSavingAnswerFile.setValue(true);
         scheduler.immediate(() -> {
@@ -346,7 +346,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
             return newFileName;
         }, fileName -> {
-            liveData.setValue(fileName);
+            liveData.setValue(new CreateAnswerFileResult(fileName));
             isSavingAnswerFile.setValue(false);
         });
 
