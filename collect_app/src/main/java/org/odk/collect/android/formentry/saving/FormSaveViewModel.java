@@ -355,7 +355,10 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         }, fileName -> {
             liveData.setValue(new CreateAnswerFileResult(fileName));
             isSavingAnswerFile.setValue(false);
-            answerFileError.setValue(file.getAbsolutePath());
+
+            if (fileName == null) {
+                answerFileError.setValue(file.getAbsolutePath());
+            }
         });
 
         return liveData;
@@ -382,6 +385,10 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
     public LiveData<String> getAnswerFileError() {
         return answerFileError;
+    }
+
+    public void answerFileErrorDisplayed() {
+        answerFileError.setValue(null);
     }
 
     public static class SaveResult {

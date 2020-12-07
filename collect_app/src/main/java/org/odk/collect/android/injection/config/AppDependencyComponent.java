@@ -29,6 +29,7 @@ import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.configure.qr.ShowQRCodeFragment;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
+import org.odk.collect.android.formentry.saving.SaveAnswerFileErrorDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
 import org.odk.collect.android.fragments.BlankFormListFragment;
@@ -216,6 +217,8 @@ public interface AppDependencyComponent {
     void inject(SelectMinimalDialog selectMinimalDialog);
 
     void inject(AudioRecordingControllerFragment audioRecordingControllerFragment);
+
+    void inject(SaveAnswerFileErrorDialogFragment saveAnswerFileErrorDialogFragment);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 
