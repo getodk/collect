@@ -46,6 +46,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import timber.log.Timber;
+
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED;
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED_AND_EXIT;
 import static org.odk.collect.android.utilities.StringUtils.isBlank;
@@ -340,7 +342,8 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
                 try (OutputStream outputStream = new FileOutputStream(newFilePath)) {
                     IOUtils.copy(inputStream, outputStream);
                 }
-            } catch (IOException ignored) {
+            } catch (IOException e) {
+                Timber.e(e);
                 return null;
             }
 
