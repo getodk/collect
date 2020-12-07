@@ -25,6 +25,7 @@ import org.robolectric.Robolectric.buildService
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.android.controller.ServiceController
+import java.io.File
 
 @RunWith(RobolectricTestRunner::class)
 class AudioRecorderServiceTest {
@@ -39,7 +40,7 @@ class AudioRecorderServiceTest {
     fun setup() {
         application.setupDependencies(
             object : AudioRecorderDependencyModule() {
-                override fun providesRecorder(application: Application): Recorder {
+                override fun providesRecorder(cacheDir: File): Recorder {
                     return recorder
                 }
 

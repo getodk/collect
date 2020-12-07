@@ -57,7 +57,7 @@ class ForegroundServiceAudioRecorderViewModelTest : AudioRecorderViewModelTest()
     fun setup() {
         application.setupDependencies(
             object : AudioRecorderDependencyModule() {
-                override fun providesRecorder(application: Application): Recorder {
+                override fun providesRecorder(cacheDir: File): Recorder {
                     return fakeRecorder
                 }
 

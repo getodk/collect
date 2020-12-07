@@ -18,6 +18,7 @@ import org.odk.collect.audiorecorder.recorder.RecordingResourceRecorder
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService
 import org.odk.collect.audiorecorder.recording.internal.RecordingRepository
+import java.io.File
 import javax.inject.Singleton
 
 private var _component: AudioRecorderDependencyComponent? = null
@@ -66,8 +67,14 @@ internal interface AudioRecorderDependencyComponent {
 internal open class AudioRecorderDependencyModule {
 
     @Provides
-    open fun providesRecorder(application: Application): Recorder {
-        return RecordingResourceRecorder(application.cacheDir) { output ->
+    open fun providesCacheDir(application: Application): File {
+        val externalFilesDir = application.getExternalFilesDir(null)
+        return File(externalFilesDir, "recordings").also { it.mkdirs() }
+    }
+
+    @Provides
+    open fun providesRecorder(cacheDir: File): Recorder {
+        return RecordingResourceRecorder(cacheDir) { output ->
             when (output) {
                 Output.AMR -> {
                     AMRRecordingResource(MediaRecorder())
