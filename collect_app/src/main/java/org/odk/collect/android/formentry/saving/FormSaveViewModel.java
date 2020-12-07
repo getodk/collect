@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.AbstractSavedStateViewModelFactory;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.savedstate.SavedStateRegistryOwner;
 
 import org.apache.commons.io.IOUtils;
@@ -53,6 +53,7 @@ import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED_AND_EXIT;
 import static org.odk.collect.android.utilities.StringUtils.isBlank;
 
 public class FormSaveViewModel extends ViewModel implements ProgressDialogFragment.Cancellable, RequiresFormController, QuestionMediaManager {
+
     public static final String ORIGINAL_FILES = "originalFiles";
     public static final String RECENT_FILES = "recentFiles";
 
@@ -491,20 +492,15 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         }
     }
 
-    public static class Factory extends AbstractSavedStateViewModelFactory {
-        private final Analytics analytics;
-        private final Scheduler scheduler;
+    /**
+     * The ViewModel factory here needs a reference to the Activity (the SavedStateRegistry) so
+     * we need factory to be able to create it in Dagger (as we won't have access to the Activity).
+     *
+     * Could potentially be solved using Dagger's per Activity scopes.
+     */
 
-        public Factory(@NonNull SavedStateRegistryOwner owner, @Nullable Bundle defaultArgs, Analytics analytics, Scheduler scheduler) {
-            super(owner, defaultArgs);
-            this.analytics = analytics;
-            this.scheduler = scheduler;
-        }
+    public interface FactoryFactory {
 
-        @NonNull
-        @Override
-        protected <T extends ViewModel> T create(@NonNull String key, @NonNull Class<T> modelClass, @NonNull SavedStateHandle handle) {
-            return (T) new FormSaveViewModel(handle, System::currentTimeMillis, new DiskFormSaver(), new MediaUtils(), analytics, scheduler);
-        }
+        ViewModelProvider.Factory create(@NonNull SavedStateRegistryOwner owner, @Nullable Bundle defaultArgs);
     }
 }

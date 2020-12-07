@@ -343,6 +343,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Inject
     AudioRecorderViewModelFactory audioRecorderViewModelFactory;
 
+    @Inject
+    FormSaveViewModel.FactoryFactory formSaveViewModelFactoryFactory;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -479,8 +482,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
-        FormSaveViewModel.Factory factory = new FormSaveViewModel.Factory(this, null, analytics, scheduler);
-        formSaveViewModel = new ViewModelProvider(this, factory).get(FormSaveViewModel.class);
+        formSaveViewModel = new ViewModelProvider(this, formSaveViewModelFactoryFactory.create(this, null)).get(FormSaveViewModel.class);
         formSaveViewModel.getSaveResult().observe(this, this::handleSaveResult);
         formSaveViewModel.isSavingAnswerFile().observe(this, isSavingAnswerFile -> {
             if (isSavingAnswerFile) {
