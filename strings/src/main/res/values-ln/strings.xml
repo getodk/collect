@@ -3,8 +3,7 @@
   <string name="show_password">lakisa kombo ebombami</string>
   <string name="view_image">lakisa bilili</string>
   <string name="view_video">lakisa video</string>
-  <string name="choose_audio">pona elili</string>
-  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+    <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
   <string name="cancel">longola</string>
   <string name="cancel_loading_form">longola</string>
   <string name="cancel_location">longola</string>

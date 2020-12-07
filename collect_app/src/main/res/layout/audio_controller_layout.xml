@@ -17,53 +17,21 @@ limitations under the License.
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin_standard"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="@dimen/margin_standard">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/margin_standard">
+        android:layout_height="wrap_content">
 
-        <ImageButton
-            android:id="@+id/fastRewindBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_extra_small"
-            android:layout_marginRight="@dimen/margin_extra_small"
-            android:layout_toStartOf="@id/play"
-            android:background="?android:attr/selectableItemBackground"
-            android:minWidth="@dimen/touch_target_size"
-            android:minHeight="@dimen/touch_target_size"
-            android:padding="@dimen/margin_small"
-            app:srcCompat="@drawable/ic_replay_5_black_24dp" />
-
-        <ImageButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/play"
+            style="@style/Widget.Collect.Button.IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginLeft="@dimen/margin_extra_small"
-            android:layout_marginRight="@dimen/margin_extra_small"
-            android:background="?android:attr/selectableItemBackground"
             android:contentDescription="@string/play_audio"
-            android:minWidth="@dimen/touch_target_size"
-            android:minHeight="@dimen/touch_target_size"
-            android:padding="@dimen/margin_small"
-            app:srcCompat="@drawable/ic_play_arrow_24dp" />
-
-        <ImageButton
-            android:id="@+id/fastForwardBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_extra_small"
-            android:layout_marginRight="@dimen/margin_extra_small"
-            android:layout_toEndOf="@id/play"
-            android:background="?android:attr/selectableItemBackground"
-            android:minWidth="@dimen/touch_target_size"
-            android:minHeight="@dimen/touch_target_size"
-            android:padding="@dimen/margin_small"
-            app:srcCompat="@drawable/ic_forward_5_black_24dp" />
+            app:icon="@drawable/ic_play_arrow_24dp" />
 
         <TextView
             android:id="@+id/currentDuration"
@@ -71,6 +39,7 @@ limitations under the License.
             android:layout_height="wrap_content"
             android:layout_below="@+id/play"
             android:layout_alignParentStart="true"
+            android:layout_marginStart="@dimen/margin_standard"
             android:textColor="?colorOnSurface"
             android:textSize="@dimen/text_size_small"
             android:textStyle="bold"
@@ -82,6 +51,7 @@ limitations under the License.
             android:layout_height="wrap_content"
             android:layout_below="@+id/play"
             android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/margin_standard"
             android:textColor="?colorOnSurface"
             android:textSize="@dimen/text_size_small"
             android:textStyle="bold"
@@ -92,15 +62,15 @@ limitations under the License.
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/currentDuration"
-            android:paddingStart="0dp"
-            android:paddingEnd="0dp"
+            android:minHeight="24dp"
+            android:padding="@dimen/margin_standard"
             android:thumbOffset="3dp" />
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginStart="@dimen/margin_standard"
         android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
@@ -109,7 +79,7 @@ limitations under the License.
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="@string/clear_answer"
+            android:text="@string/delete_answer_file"
             android:textColor="?colorError"
             app:icon="@drawable/ic_baseline_delete_outline_24"
             app:iconTint="?colorError"

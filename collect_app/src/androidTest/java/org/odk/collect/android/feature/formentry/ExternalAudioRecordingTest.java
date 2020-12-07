@@ -75,7 +75,7 @@ public class ExternalAudioRecordingTest {
                 .copyForm("external-audio-question.xml")
                 .startBlankForm("External Audio Question")
                 .clickOnString(R.string.capture_audio)
-                .assertTextNotDisplayed(R.string.stop_recording)
+                .assertContentDescriptionNotDisplayed(R.string.stop_recording)
                 .assertTextNotDisplayed(R.string.capture_audio)
                 .assertContentDescriptionDisplayed(R.string.play_audio);
     }
@@ -86,7 +86,7 @@ public class ExternalAudioRecordingTest {
                 .copyForm("audio-question.xml")
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
-                .assertTextNotDisplayed(R.string.stop_recording)
+                .assertContentDescriptionNotDisplayed(R.string.stop_recording)
                 .assertTextNotDisplayed(R.string.capture_audio)
                 .assertContentDescriptionDisplayed(R.string.play_audio);
     }

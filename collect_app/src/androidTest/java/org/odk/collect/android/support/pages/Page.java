@@ -416,8 +416,19 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
-    public void assertContentDescriptionDisplayed(int stringId) {
-        onView(withContentDescription(stringId)).check(matches(isDisplayed()));
+    public T assertContentDescriptionDisplayed(int string) {
+        onView(withContentDescription(string)).check(matches(isDisplayed()));
+        return (T) this;
+    }
+
+    public T assertContentDescriptionNotDisplayed(int string) {
+        onView(withContentDescription(string)).check(matches(not(isDisplayed())));
+        return (T) this;
+    }
+
+    public T clickOnContentDescription(int string) {
+        onView(withContentDescription(string)).perform(click());
+        return (T) this;
     }
 }
 

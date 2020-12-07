@@ -14,6 +14,14 @@ class StubAudioRecorderViewModel(private val stubRecordingPath: String) : AudioR
 
     var lastRecording: File? = null
     var lastSession: String? = null
+    var duration: Int = 0
+        set(value) {
+            field = value
+            currentSession.value?.let {
+                currentSession.value = it.copy(duration = value.toLong())
+            }
+        }
+
     var wasCleanedUp = false
 
     private var isRecording = false

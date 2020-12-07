@@ -12,7 +12,13 @@ import com.visualizer.amplitude.AudioRecordView;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.databinding.WaveformLayoutBinding;
 
+import java.util.Random;
+
 public class Waveform extends FrameLayout {
+
+    // Allows us to play with the waveform on an emulator
+    @SuppressWarnings("PMD.RedundantFieldInitializer")
+    public static final boolean SIMULATED = false;
 
     private AudioRecordView audioRecordView;
     private Integer lastAmplitude;
@@ -37,6 +43,10 @@ public class Waveform extends FrameLayout {
     }
 
     public void addAmplitude(int amplitude) {
+        if (SIMULATED) {
+            amplitude = new Random().nextInt(22760);
+        }
+
         lastAmplitude = amplitude;
 
         /*

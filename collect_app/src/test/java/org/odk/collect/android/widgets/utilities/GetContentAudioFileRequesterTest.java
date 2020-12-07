@@ -52,7 +52,7 @@ public class GetContentAudioFileRequesterTest {
 
         assertThat(startedActivity, nullValue());
         assertThat(waitingForDataRegistry.waiting.isEmpty(), equalTo(true));
-        assertThat(toastMessage, equalTo(activity.getString(R.string.activity_not_found, activity.getString(R.string.choose_audio))));
+        assertThat(toastMessage, equalTo(activity.getString(R.string.activity_not_found, activity.getString(R.string.choose_sound))));
     }
 
     @Test

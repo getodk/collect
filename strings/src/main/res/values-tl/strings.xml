@@ -2,8 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="activity_not_found">Hindi mapangasiwaan: %s</string>
   <string name="view_image">Ipakita ang Imahe</string>
-  <string name="choose_audio">Pumili ng audio</string>
-  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+    <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
   <string name="add_another_menu">Magdagdag pa</string>
   <string name="cancel">Urong</string>
   <string name="cancel_loading_form">Urong</string>
