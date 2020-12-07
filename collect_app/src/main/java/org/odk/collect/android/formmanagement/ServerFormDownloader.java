@@ -59,9 +59,10 @@ public class ServerFormDownloader implements FormDownloader {
     public void downloadForm(ServerFormDetails form, @Nullable ProgressReporter progressReporter, @Nullable Supplier<Boolean> isCancelled) throws FormDownloadException, InterruptedException {
         Form formOnDevice = formsRepository.getOneByFormIdAndVersion(form.getFormId(), form.getFormVersion());
         if (formOnDevice != null) {
+            String remoteFormHash = form.getHash().startsWith("md5:") ? form.getHash().substring("md5:".length()) : form.getHash();
             if (formOnDevice.isDeleted()) {
                 formsRepository.restore(formOnDevice.getId());
-            } else if (!(form.getHash().equals(formOnDevice.getMD5Hash()))) {
+            } else if (!remoteFormHash.equals(formOnDevice.getMD5Hash())) {
                 String formIdentifier = formOnDevice.getDisplayName() + " " + formOnDevice.getId();
                 String formIdHash = FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
                 analytics.logFormEvent(DOWNLOAD_SAME_FORMID_VERSION, formIdHash);
