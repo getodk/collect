@@ -316,7 +316,7 @@ public class FieldListUpdateTest {
 
         // FormEntryActivity expects an image at a fixed path so copy the app logo there
         Bitmap icon = BitmapFactory.decodeResource(ApplicationProvider.getApplicationContext().getResources(), R.drawable.notes);
-        File tmpJpg = new File(new StoragePathProvider().getTmpFilePath());
+        File tmpJpg = new File(new StoragePathProvider().getTmpImageFilePath());
         tmpJpg.createNewFile();
         FileOutputStream fos = new FileOutputStream(tmpJpg);
         icon.compress(Bitmap.CompressFormat.JPEG, 90, fos);

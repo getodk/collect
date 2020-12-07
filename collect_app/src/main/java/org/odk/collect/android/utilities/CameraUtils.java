@@ -77,6 +77,6 @@ public class CameraUtils {
     }
 
     public static String getVideoFilePath() {
-        return new StoragePathProvider().getTmpVideoPath();
+        return new StoragePathProvider().getTmpVideoFilePath();
     }
 }

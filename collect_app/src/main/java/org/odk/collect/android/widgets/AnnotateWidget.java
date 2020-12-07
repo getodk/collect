@@ -187,7 +187,7 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
         try {
             Uri uri = ContentUriProvider.getUriForFile(getContext(),
                     BuildConfig.APPLICATION_ID + ".provider",
-                    new File(new StoragePathProvider().getTmpFilePath()));
+                    new File(new StoragePathProvider().getTmpImageFilePath()));
             // if this gets modified, the onActivityResult in
             // FormEntyActivity will also need to be updated.
             intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
