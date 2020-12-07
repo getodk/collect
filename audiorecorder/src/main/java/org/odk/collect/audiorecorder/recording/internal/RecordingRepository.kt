@@ -39,10 +39,6 @@ class RecordingRepository {
     }
 
     fun clear() {
-        _currentSession.value?.let {
-            it.file?.delete()
-        }
-
         _currentSession.value = null
     }
 

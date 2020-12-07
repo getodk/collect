@@ -179,7 +179,7 @@ class AudioRecorderServiceTest {
     }
 
     @Test
-    fun cleanUpAction_afterRecording_stopsSelf_andDeletesFiles() {
+    fun cleanUpAction_afterRecording_stopsSelf() {
         startService(createStartIntent("123"))
 
         val stopIntent = Intent(application, AudioRecorderService::class.java)
@@ -191,7 +191,6 @@ class AudioRecorderServiceTest {
         val service = startService(cancelIntent)
 
         assertThat(shadowOf(service.get()).isStoppedBySelf, equalTo(true))
-        assertThat(recorder.file?.exists(), equalTo(false))
     }
 
     @Test
