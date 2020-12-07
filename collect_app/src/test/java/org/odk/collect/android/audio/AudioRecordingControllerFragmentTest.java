@@ -96,7 +96,7 @@ public class AudioRecordingControllerFragmentTest {
 
         FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
-            assertThat(shadowOf(fragment.binding.pauseRecording.getIcon()).getCreatedFromResId(), is(R.drawable.ic_baseline_fiber_manual_record_24));
+            assertThat(shadowOf(fragment.binding.pauseRecording.getIcon()).getCreatedFromResId(), is(R.drawable.ic_baseline_mic_24));
             assertThat(fragment.binding.pauseRecording.getContentDescription(), is(fragment.getString(R.string.resume_recording)));
         });
     }
