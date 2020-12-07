@@ -23,7 +23,6 @@ import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -74,9 +73,5 @@ public class CameraUtils {
         } catch (IOException e) {
             Timber.e(e);
         }
-    }
-
-    public static String getVideoFilePath() {
-        return new StoragePathProvider().getTmpVideoFilePath();
     }
 }
