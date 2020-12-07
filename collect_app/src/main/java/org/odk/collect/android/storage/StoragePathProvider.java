@@ -87,6 +87,10 @@ public class StoragePathProvider {
         return getDirPath(StorageSubdirectory.CACHE) + File.separator + "tmpDraw.jpg";
     }
 
+    public String getTmpVideoPath() {
+        return getDirPath(StorageSubdirectory.CACHE) + File.separator + "tmp.mp4";
+    }
+
     public String getInstanceDbPath(String filePath) {
         return getDbPath(getDirPath(StorageSubdirectory.INSTANCES), filePath);
     }
