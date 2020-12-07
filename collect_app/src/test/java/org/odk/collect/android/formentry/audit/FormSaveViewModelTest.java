@@ -477,7 +477,7 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void createAnswerFile_whenThereIsAnError_returnsNull() throws Exception {
+    public void createAnswerFile_whenThereIsAnError_returnsNull_andSetsAnswerFileErrorToFilePath() throws Exception {
         File tempDir = Files.createTempDir();
         tempDir.setWritable(false);
         when(formController.getInstanceFile()).thenReturn(new File(tempDir + File.separator + "instance.xml"));
@@ -487,6 +487,7 @@ public class FormSaveViewModelTest {
         scheduler.runBackground();
 
         assertThat(answerFile.getValue().get(), nullValue());
+        assertThat(viewModel.getAnswerFileError().getValue(), equalTo(externalFile.getAbsolutePath()));
     }
 
     @Test
