@@ -102,6 +102,16 @@ public class AudioRecordingControllerFragmentTest {
     }
 
     @Test
+    public void whenRecordingPaused_recordingStatusChangesToPaused() {
+        audioRecorderViewModel.pause();
+
+        FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
+        scenario.onFragment(fragment -> {
+            assertThat(shadowOf(fragment.binding.recordingStatus.getDrawable()).getCreatedFromResId(), is(R.drawable.ic_pause_24dp));
+        });
+    }
+
+    @Test
     public void whenRecordingResumed_pauseIconChangesToPause() {
         audioRecorderViewModel.pause();
         audioRecorderViewModel.resume();
@@ -110,6 +120,17 @@ public class AudioRecordingControllerFragmentTest {
         scenario.onFragment(fragment -> {
             assertThat(shadowOf(fragment.binding.pauseRecording.getIcon()).getCreatedFromResId(), is(R.drawable.ic_pause_24dp));
             assertThat(fragment.binding.pauseRecording.getContentDescription(), is(fragment.getString(R.string.pause_recording)));
+        });
+    }
+
+    @Test
+    public void whenRecordingResumed_recordingStatusChangesToRecording() {
+        audioRecorderViewModel.pause();
+        audioRecorderViewModel.resume();
+
+        FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
+        scenario.onFragment(fragment -> {
+            assertThat(shadowOf(fragment.binding.recordingStatus.getDrawable()).getCreatedFromResId(), is(R.drawable.ic_baseline_mic_24));
         });
     }
 

@@ -61,10 +61,14 @@ public class AudioRecordingControllerFragment extends Fragment {
                     binding.pauseRecording.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_fiber_manual_record_24));
                     binding.pauseRecording.setContentDescription(getString(R.string.resume_recording));
                     binding.pauseRecording.setOnClickListener(v -> viewModel.resume());
+
+                    binding.recordingStatus.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_pause_24dp));
                 } else {
                     binding.pauseRecording.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_pause_24dp));
                     binding.pauseRecording.setContentDescription(getString(R.string.pause_recording));
                     binding.pauseRecording.setOnClickListener(v -> viewModel.pause());
+
+                    binding.recordingStatus.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_mic_24));
                 }
 
                 // Pause not available before API 24
