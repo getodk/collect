@@ -35,6 +35,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.utilities.Clock;
+import org.odk.collect.utilities.Result;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -322,8 +323,8 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     @Override
-    public LiveData<CreateAnswerFileResult> createAnswerFile(File file) {
-        MutableLiveData<CreateAnswerFileResult> liveData = new MutableLiveData<>(null);
+    public LiveData<Result<String>> createAnswerFile(File file) {
+        MutableLiveData<Result<String>> liveData = new MutableLiveData<>(null);
 
         isSavingAnswerFile.setValue(true);
         scheduler.immediate(() -> {
@@ -353,7 +354,8 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
             return newFileName;
         }, fileName -> {
-            liveData.setValue(new CreateAnswerFileResult(fileName));
+            String fileName1 = fileName;
+            liveData.setValue(new Result<String>(fileName1));
             isSavingAnswerFile.setValue(false);
 
             if (fileName == null) {

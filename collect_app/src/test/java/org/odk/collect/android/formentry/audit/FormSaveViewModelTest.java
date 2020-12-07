@@ -22,8 +22,8 @@ import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.utilities.QuestionMediaManager.CreateAnswerFileResult;
 import org.odk.collect.testshared.FakeScheduler;
+import org.odk.collect.utilities.Result;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
@@ -469,7 +469,7 @@ public class FormSaveViewModelTest {
         when(formController.getInstanceFile()).thenReturn(new File(tempDir + File.separator + "instance.xml"));
 
         File externalFile = File.createTempFile("external", ".file");
-        LiveData<CreateAnswerFileResult> answerFile = viewModel.createAnswerFile(externalFile);
+        LiveData<Result<String>> answerFile = viewModel.createAnswerFile(externalFile);
         scheduler.runBackground();
 
         assertThat(tempDir.listFiles().length, is(1));
@@ -483,7 +483,7 @@ public class FormSaveViewModelTest {
         when(formController.getInstanceFile()).thenReturn(new File(tempDir + File.separator + "instance.xml"));
 
         File externalFile = File.createTempFile("external", ".file");
-        LiveData<CreateAnswerFileResult> answerFile = viewModel.createAnswerFile(externalFile);
+        LiveData<Result<String>> answerFile = viewModel.createAnswerFile(externalFile);
         scheduler.runBackground();
 
         assertThat(answerFile.getValue().getOrNull(), nullValue());
@@ -496,9 +496,9 @@ public class FormSaveViewModelTest {
         when(formController.getInstanceFile()).thenReturn(new File(tempDir + File.separator + "instance.xml"));
 
         File externalFile = File.createTempFile("external", ".file");
-        LiveData<CreateAnswerFileResult> fileName1 = viewModel.createAnswerFile(externalFile);
+        LiveData<Result<String>> fileName1 = viewModel.createAnswerFile(externalFile);
         scheduler.runBackground();
-        LiveData<CreateAnswerFileResult> fileName2 = viewModel.createAnswerFile(externalFile);
+        LiveData<Result<String>> fileName2 = viewModel.createAnswerFile(externalFile);
         scheduler.runBackground();
 
         assertThat(fileName1.getValue().getOrNull(), is(fileName2.getValue().getOrNull()));

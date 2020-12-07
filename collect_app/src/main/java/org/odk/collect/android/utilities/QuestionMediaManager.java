@@ -3,7 +3,7 @@ package org.odk.collect.android.utilities;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
-import org.odk.collect.android.formentry.saving.FormSaveViewModel;
+import org.odk.collect.utilities.Result;
 
 import java.io.File;
 
@@ -14,7 +14,7 @@ import java.io.File;
  */
 public interface QuestionMediaManager {
 
-    LiveData<FormSaveViewModel.CreateAnswerFileResult> createAnswerFile(File file);
+    LiveData<Result<String>> createAnswerFile(File file);
 
     @Nullable
     File getAnswerFile(String fileName);
@@ -22,22 +22,4 @@ public interface QuestionMediaManager {
     void deleteAnswerFile(String questionIndex, String fileName);
 
     void replaceAnswerFile(String questionIndex, String fileName);
-
-    class CreateAnswerFileResult {
-
-        private final String fileName;
-
-        public CreateAnswerFileResult(@Nullable String fileName) {
-            this.fileName = fileName;
-        }
-
-        @Nullable
-        public String getOrNull() {
-            return fileName;
-        }
-
-        public boolean isSuccess() {
-            return fileName != null;
-        }
-    }
 }

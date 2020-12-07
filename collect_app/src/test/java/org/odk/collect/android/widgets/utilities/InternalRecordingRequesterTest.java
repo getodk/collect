@@ -13,11 +13,11 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.utilities.QuestionMediaManager;
-import org.odk.collect.android.utilities.QuestionMediaManager.CreateAnswerFileResult;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
 import org.odk.collect.testshared.FakeLifecycleOwner;
+import org.odk.collect.utilities.Result;
 import org.robolectric.Robolectric;
 
 import java.io.File;
@@ -97,14 +97,14 @@ public class InternalRecordingRequesterTest {
         MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
         when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
 
-        MutableLiveData<CreateAnswerFileResult> answerLiveData = new MutableLiveData<>(null);
+        MutableLiveData<Result<String>> answerLiveData = new MutableLiveData<>(null);
         File file = File.createTempFile("blah", ".mp3");
         when(questionMediaManager.createAnswerFile(file)).thenReturn(answerLiveData);
 
         Consumer<String> listener = mock(Consumer.class);
         requester.onRecordingFinished(prompt, listener);
         sessionLiveData.setValue(new RecordingSession(prompt.getIndex().toString(), file, 0, 0, false));
-        answerLiveData.setValue(new CreateAnswerFileResult("copiedFile"));
+        answerLiveData.setValue(new Result<String>("copiedFile"));
 
         verify(listener).accept("copiedFile");
         verify(viewModel).cleanUp();
@@ -117,14 +117,14 @@ public class InternalRecordingRequesterTest {
         MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
         when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
 
-        MutableLiveData<CreateAnswerFileResult> answerLiveData = new MutableLiveData<>(null);
+        MutableLiveData<Result<String>> answerLiveData = new MutableLiveData<>(null);
         File file = File.createTempFile("blah", ".mp3");
         when(questionMediaManager.createAnswerFile(file)).thenReturn(answerLiveData);
 
         Consumer<String> listener = mock(Consumer.class);
         requester.onRecordingFinished(prompt, listener);
         sessionLiveData.setValue(new RecordingSession(prompt.getIndex().toString(), file, 0, 0, false));
-        answerLiveData.setValue(new CreateAnswerFileResult(null));
+        answerLiveData.setValue(new Result<String>(null));
 
         verify(listener).accept(null);
         verify(viewModel).cleanUp();
