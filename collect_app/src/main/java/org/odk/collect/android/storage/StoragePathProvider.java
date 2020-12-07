@@ -83,10 +83,6 @@ public class StoragePathProvider {
         return getDirPath(StorageSubdirectory.CACHE) + File.separator + "tmp.jpg";
     }
 
-    public String getTmpDrawFilePath() {
-        return getDirPath(StorageSubdirectory.CACHE) + File.separator + "tmpDraw.jpg";
-    }
-
     public String getTmpVideoPath() {
         return getDirPath(StorageSubdirectory.CACHE) + File.separator + "tmp.mp4";
     }
