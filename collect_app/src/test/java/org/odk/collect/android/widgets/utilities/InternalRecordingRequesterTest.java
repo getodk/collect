@@ -23,6 +23,8 @@ import org.robolectric.Robolectric;
 import java.io.File;
 import java.util.function.Consumer;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -90,7 +92,7 @@ public class InternalRecordingRequesterTest {
     }
 
     @Test
-    public void whenViewModelRecordingAvailable_copiesFileToInstanceFolder_andCallsListenerForSessionWithFilename_andCleansUpViewModel() throws Exception {
+    public void whenViewModelRecordingAvailable_movesFileToInstanceFolder_andCallsListenerForSessionWithFilename_andCleansUpViewModel() throws Exception {
         FormEntryPrompt prompt = promptWithAnswer(null);
         MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
         when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
@@ -106,10 +108,11 @@ public class InternalRecordingRequesterTest {
 
         verify(listener).accept("copiedFile");
         verify(viewModel).cleanUp();
+        assertThat(file.exists(), is(false));
     }
 
     @Test
-    public void whenViewModelRecordingAvailable_andCopyingFails_callsListenerWithNull_andCallsCleanUp() throws Exception {
+    public void whenViewModelRecordingAvailable_andCopyingFails_callsListenerWithNull_andCallsCleanUp_andDoesNotDeleteFile() throws Exception {
         FormEntryPrompt prompt = promptWithAnswer(null);
         MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
         when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
@@ -125,6 +128,7 @@ public class InternalRecordingRequesterTest {
 
         verify(listener).accept(null);
         verify(viewModel).cleanUp();
+        assertThat(file.exists(), is(true));
     }
 
     @Test

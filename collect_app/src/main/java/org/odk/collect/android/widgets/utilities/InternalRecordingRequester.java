@@ -73,8 +73,12 @@ public class InternalRecordingRequester implements RecordingRequester {
             if (session != null && session.getId().equals(prompt.getIndex().toString()) && session.getFile() != null) {
                 questionMediaManager.createAnswerFile(session.getFile()).observe(lifecycleOwner, result -> {
                     if (result != null) {
+                        if (result.isSuccess()) {
+                            session.getFile().delete();
+                        }
+
                         viewModel.cleanUp();
-                        recordingAvailableListener.accept(result.get());
+                        recordingAvailableListener.accept(result.getOrNull());
                     }
                 });
             }

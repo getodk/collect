@@ -473,7 +473,7 @@ public class FormSaveViewModelTest {
         scheduler.runBackground();
 
         assertThat(tempDir.listFiles().length, is(1));
-        assertThat(answerFile.getValue().get(), is(tempDir.listFiles()[0].getName()));
+        assertThat(answerFile.getValue().getOrNull(), is(tempDir.listFiles()[0].getName()));
     }
 
     @Test
@@ -486,7 +486,7 @@ public class FormSaveViewModelTest {
         LiveData<CreateAnswerFileResult> answerFile = viewModel.createAnswerFile(externalFile);
         scheduler.runBackground();
 
-        assertThat(answerFile.getValue().get(), nullValue());
+        assertThat(answerFile.getValue().getOrNull(), nullValue());
         assertThat(viewModel.getAnswerFileError().getValue(), equalTo(externalFile.getAbsolutePath()));
     }
 
@@ -501,7 +501,7 @@ public class FormSaveViewModelTest {
         LiveData<CreateAnswerFileResult> fileName2 = viewModel.createAnswerFile(externalFile);
         scheduler.runBackground();
 
-        assertThat(fileName1.getValue().get(), is(fileName2.getValue().get()));
+        assertThat(fileName1.getValue().getOrNull(), is(fileName2.getValue().getOrNull()));
     }
 
     //endregion

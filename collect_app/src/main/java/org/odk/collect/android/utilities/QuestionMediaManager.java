@@ -32,8 +32,12 @@ public interface QuestionMediaManager {
         }
 
         @Nullable
-        public String get() {
+        public String getOrNull() {
             return fileName;
+        }
+
+        public boolean isSuccess() {
+            return fileName != null;
         }
     }
 }
