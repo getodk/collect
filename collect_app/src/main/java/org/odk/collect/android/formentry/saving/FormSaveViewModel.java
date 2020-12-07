@@ -341,7 +341,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
                     IOUtils.copy(inputStream, outputStream);
                 }
             } catch (IOException ignored) {
-                // Ignored
+                return null;
             }
 
             return newFileName;

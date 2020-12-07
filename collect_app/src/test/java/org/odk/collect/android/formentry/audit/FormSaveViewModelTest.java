@@ -34,6 +34,7 @@ import java.util.HashMap;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.javarosa.form.api.FormEntryController.EVENT_GROUP;
 import static org.javarosa.form.api.FormEntryController.EVENT_QUESTION;
 import static org.javarosa.form.api.FormEntryController.EVENT_REPEAT;
@@ -472,6 +473,19 @@ public class FormSaveViewModelTest {
 
         assertThat(tempDir.listFiles().length, is(1));
         assertThat(answerFile.getValue(), is(tempDir.listFiles()[0].getName()));
+    }
+
+    @Test
+    public void createAnswerFile_whenThereIsAnError_returnsNull() throws Exception {
+        File tempDir = Files.createTempDir();
+        tempDir.setWritable(false);
+        when(formController.getInstanceFile()).thenReturn(new File(tempDir + File.separator + "instance.xml"));
+
+        File externalFile = File.createTempFile("external", ".file");
+        LiveData<String> answerFile = viewModel.createAnswerFile(externalFile);
+        scheduler.runBackground();
+
+        assertThat(answerFile.getValue(), nullValue());
     }
 
     @Test
