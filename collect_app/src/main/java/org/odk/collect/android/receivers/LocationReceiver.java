@@ -57,7 +57,7 @@ public class LocationReceiver  extends BroadcastReceiver {
 
     public void onLocationChanged(Context context, Location location) {
 
-        Timber.i("+++++ location changed");
+        //Timber.i("+++++ location changed");
 
         if(isValidLocation(location) && isAccurateLocation(location)) {
 
