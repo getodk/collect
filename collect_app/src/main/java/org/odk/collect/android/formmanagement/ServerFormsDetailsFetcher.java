@@ -49,8 +49,11 @@ public class ServerFormsDetailsFetcher {
         this.diskFormsSynchronizer = diskFormsSynchronizer;
     }
 
-    public void updateFormListApi(String url, WebCredentialsUtils webCredentialsUtils) {
+    public void updateUrl(String url) {
         formSource.updateUrl(url);
+    }
+
+    public void updateCredentials(WebCredentialsUtils webCredentialsUtils) {
         formSource.updateWebCredentialsUtils(webCredentialsUtils);
     }
 
