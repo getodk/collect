@@ -32,6 +32,9 @@ public final class Form {
     private final String description;
     private final String jrFormId;
     private final String jrVersion;
+    private final String project;       // smap
+    private final String tasksOnly;     // smap
+    private final String source;        // smap
     private final String formFilePath;
     private final String submissionUri;
     private final String base64RSAPublicKey;
@@ -50,6 +53,9 @@ public final class Form {
         displayName = builder.displayName;
         description = builder.description;
         jrFormId = builder.jrFormId;
+        project = builder.project;  // smap
+        tasksOnly = builder.tasksOnly;  // smap
+        source = builder.source;        // smap
         jrVersion = builder.jrVersion;
         formFilePath = builder.formFilePath;
         submissionUri = builder.submissionUri;
@@ -71,6 +77,9 @@ public final class Form {
         private String description;
         private String jrFormId;
         private String jrVersion;
+        private String project;     // smap
+        private String tasksOnly;   // smap
+        private String source;      // smap
         private String formFilePath;
         private String submissionUri;
         private String base64RSAPublicKey;
@@ -92,6 +101,9 @@ public final class Form {
             displayName = form.displayName;
             description = form.description;
             jrFormId = form.jrFormId;
+            project = form.project;         // smap
+            tasksOnly = form.tasksOnly;     // smap
+            source = form.source;           // smap
             jrVersion = form.jrVersion;
             formFilePath = form.formFilePath;
             submissionUri = form.submissionUri;
@@ -124,6 +136,24 @@ public final class Form {
 
         public Builder jrFormId(String jrFormId) {
             this.jrFormId = jrFormId;
+            return this;
+        }
+
+        // smap
+        public Builder project(String project) {
+            this.project = project;
+            return this;
+        }
+
+        // smap
+        public Builder tasksOnly(String tasksOnly) {
+            this.tasksOnly = tasksOnly;
+            return this;
+        }
+
+        // smap
+        public Builder source(String source) {
+            this.source = source;
             return this;
         }
 
@@ -213,6 +243,18 @@ public final class Form {
     public String getJrFormId() {
         return jrFormId;
     }
+
+    public String getProject() {
+        return project;
+    }       // smap
+
+    public String getTasksOnly() {
+        return tasksOnly;
+    }     // smap
+
+    public String getSource() {
+        return source;
+    }     // smap
 
     @Nullable
     public String getJrVersion() {
