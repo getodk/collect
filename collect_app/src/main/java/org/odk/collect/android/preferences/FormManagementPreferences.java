@@ -71,7 +71,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         initListPref(KEY_IMAGE_SIZE);
         initGuidancePrefs();
 
-        updateDisabledPrefs();
+        // updateDisabledPrefs();   // smap
     }
 
     @Override
@@ -79,7 +79,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         super.onSharedPreferenceChanged(sharedPreferences, key);
 
         if (key.equals(KEY_FORM_UPDATE_MODE) || key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
-            updateDisabledPrefs();
+            // updateDisabledPrefs();  // smap
         }
     }
 
