@@ -128,6 +128,11 @@ public class RobolectricHelpers {
         });
     }
 
+    /**
+     * @deprecated should switch out ViewModel in test using Dagger - @Inject factory into
+     * component and then override in test.
+     */
+    @Deprecated
     public static <V> ViewModelProvider mockViewModelProvider(FragmentActivity activity, final Class<V> viewModelClass) {
         return ViewModelProviders.of(activity, new ViewModelProvider.Factory() {
             @NonNull

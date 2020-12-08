@@ -96,7 +96,7 @@ public class ExternalAppRecordingRequesterTest {
     @Test
     public void onIsRecordingChanged_alwaysCallsBackWithFalse() {
         Consumer<Boolean> listener = mock(Consumer.class);
-        requester.onIsRecordingChanged(listener);
+        requester.onIsRecordingBlocked(listener);
         verify(listener).accept(false);
     }
 }

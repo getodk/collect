@@ -3,16 +3,22 @@ package org.odk.collect.android.formentry;
 import android.content.DialogInterface;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
+import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.async.Scheduler;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowDialog;
 
@@ -23,17 +29,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.RobolectricHelpers.mockViewModelProvider;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 public class QuitFormDialogFragmentTest {
 
+    private final FormSaveViewModel formSaveViewModel = mock(FormSaveViewModel.class);
+
     private FragmentActivity activity;
     private FragmentManager fragmentManager;
     private QuitFormDialogFragment dialogFragment;
-    private FormSaveViewModel formSaveViewModel;
 
     @Before
     public void setup() {
@@ -41,7 +48,19 @@ public class QuitFormDialogFragmentTest {
         fragmentManager = activity.getSupportFragmentManager();
         dialogFragment = new QuitFormDialogFragment();
 
-        formSaveViewModel = mockViewModelProvider(activity, FormSaveViewModel.class).get(FormSaveViewModel.class);
+        RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+            @Override
+            public FormSaveViewModel.FactoryFactory providesFormSaveViewModelFactoryFactory(Analytics analytics, Scheduler scheduler) {
+                return (owner, defaultArgs) -> new ViewModelProvider.Factory() {
+
+                    @NonNull
+                    @Override
+                    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                        return (T) formSaveViewModel;
+                    }
+                };
+            }
+        });
     }
 
     @Test

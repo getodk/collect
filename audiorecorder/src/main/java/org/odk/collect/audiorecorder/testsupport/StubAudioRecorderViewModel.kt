@@ -25,6 +25,7 @@ class StubAudioRecorderViewModel(private val stubRecordingPath: String) : AudioR
     var wasCleanedUp = false
 
     private var isRecording = false
+    private var failOnStart = false
     private val currentSession = MutableLiveData<RecordingSession>(null)
 
     override fun isRecording(): Boolean {
@@ -36,10 +37,14 @@ class StubAudioRecorderViewModel(private val stubRecordingPath: String) : AudioR
     }
 
     override fun start(sessionId: String, output: Output) {
-        wasCleanedUp = false
-        lastSession = sessionId
-        isRecording = true
-        currentSession.value = RecordingSession(sessionId, null, 0, 0, false)
+        if (failOnStart) {
+            currentSession.value = RecordingSession(sessionId, null, 0, 0, paused = false, failedToStart = true)
+        } else {
+            wasCleanedUp = false
+            lastSession = sessionId
+            isRecording = true
+            currentSession.value = RecordingSession(sessionId, null, 0, 0, false)
+        }
     }
 
     override fun pause() {
@@ -72,5 +77,9 @@ class StubAudioRecorderViewModel(private val stubRecordingPath: String) : AudioR
 
         currentSession.value = null
         wasCleanedUp = true
+    }
+
+    fun failOnStart() {
+        failOnStart = true
     }
 }

@@ -84,6 +84,10 @@ abstract class Page<T extends Page<T>> {
 
     public abstract T assertOnPage();
 
+    public <P extends Page<P>> P assertOnPage(P page) {
+        return page.assertOnPage();
+    }
+
     /**
      * Presses back and then returns the Page object passed in after
      * asserting we're there

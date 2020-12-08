@@ -12,6 +12,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.AudioRecordingControllerFragmentBinding;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -52,6 +54,12 @@ public class AudioRecordingControllerFragment extends Fragment {
         viewModel.getCurrentSession().observe(getViewLifecycleOwner(), session -> {
             if (session == null) {
                 binding.getRoot().setVisibility(GONE);
+            } else if (session.getFailedToStart()) {
+                binding.getRoot().setVisibility(GONE);
+                new MaterialAlertDialogBuilder(requireContext())
+                        .setMessage(R.string.start_recording_failed)
+                        .setPositiveButton(R.string.ok, (dialog, which) -> viewModel.cleanUp())
+                        .show();
             } else if (session.getFile() == null) {
                 binding.getRoot().setVisibility(VISIBLE);
 

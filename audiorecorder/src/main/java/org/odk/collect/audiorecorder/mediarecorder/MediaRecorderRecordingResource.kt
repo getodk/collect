@@ -3,33 +3,16 @@ package org.odk.collect.audiorecorder.mediarecorder
 import android.media.MediaRecorder
 import org.odk.collect.audiorecorder.recorder.RecordingResource
 
-internal class MediaRecorderRecordingResource(private val mediaRecorder: MediaRecorder) : RecordingResource {
+internal abstract class MediaRecorderRecordingResource(private val mediaRecorder: MediaRecorder) : RecordingResource {
 
-    override fun setAudioSource(audioSource: Int) {
-        mediaRecorder.setAudioSource(audioSource)
-    }
-
-    override fun setOutputFormat(outputFormat: Int) {
-        mediaRecorder.setOutputFormat(outputFormat)
-    }
+    protected abstract fun beforePrepare(mediaRecorder: MediaRecorder)
 
     override fun setOutputFile(path: String) {
         mediaRecorder.setOutputFile(path)
     }
 
-    override fun setAudioEncoder(audioEncoder: Int) {
-        mediaRecorder.setAudioEncoder(audioEncoder)
-    }
-
-    override fun setAudioEncodingSampleRate(sampleRate: Int) {
-        mediaRecorder.setAudioSamplingRate(sampleRate)
-    }
-
-    override fun setAudioEncodingBitRate(bitRate: Int) {
-        mediaRecorder.setAudioEncodingBitRate(bitRate)
-    }
-
     override fun prepare() {
+        beforePrepare(mediaRecorder)
         mediaRecorder.prepare()
     }
 
@@ -59,5 +42,27 @@ internal class MediaRecorderRecordingResource(private val mediaRecorder: MediaRe
 
     override fun getMaxAmplitude(): Int {
         return mediaRecorder.maxAmplitude
+    }
+}
+
+internal class AACRecordingResource(mediaRecorder: MediaRecorder) : MediaRecorderRecordingResource(mediaRecorder) {
+
+    override fun beforePrepare(mediaRecorder: MediaRecorder) {
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+        mediaRecorder.setAudioSamplingRate(32000)
+        mediaRecorder.setAudioEncodingBitRate(64000)
+    }
+}
+
+internal class AMRRecordingResource(mediaRecorder: MediaRecorder) : MediaRecorderRecordingResource(mediaRecorder) {
+
+    override fun beforePrepare(mediaRecorder: MediaRecorder) {
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.AMR_NB)
+        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+        mediaRecorder.setAudioSamplingRate(8000)
+        mediaRecorder.setAudioEncodingBitRate(12200)
     }
 }

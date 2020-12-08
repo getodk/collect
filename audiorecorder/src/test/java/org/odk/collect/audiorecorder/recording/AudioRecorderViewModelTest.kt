@@ -144,4 +144,13 @@ abstract class AudioRecorderViewModelTest {
         runBackground()
         assertThat(session.value?.paused, equalTo(false))
     }
+
+    @Test
+    fun getCurrentSession_whenRecording_failedToStartIsFalse() {
+        val session = liveDataTester.activate(viewModel.getCurrentSession())
+        viewModel.start("session", Output.AAC)
+
+        runBackground()
+        assertThat(session.value?.failedToStart, equalTo(false))
+    }
 }

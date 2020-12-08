@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import com.google.common.io.Files;
 
 import org.odk.collect.android.utilities.QuestionMediaManager;
+import org.odk.collect.utilities.Result;
 
 import java.io.File;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ public class FakeQuestionMediaManager implements QuestionMediaManager {
     private final File tempDir = Files.createTempDir();
 
     @Override
-    public LiveData<String> createAnswerFile(File file) {
+    public LiveData<Result<String>> createAnswerFile(File file) {
         return null;
     }
 

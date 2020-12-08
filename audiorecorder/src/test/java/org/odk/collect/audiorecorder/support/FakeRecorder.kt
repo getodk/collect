@@ -2,6 +2,7 @@ package org.odk.collect.audiorecorder.support
 
 import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recorder.Recorder
+import org.odk.collect.audiorecorder.recorder.RecordingException
 import java.io.File
 
 class FakeRecorder : Recorder {
@@ -22,6 +23,7 @@ class FakeRecorder : Recorder {
 
     private var recording = false
     private var cancelled = false
+    private var failOnStart = false
 
     override fun isRecording(): Boolean {
         return recording
@@ -31,11 +33,16 @@ class FakeRecorder : Recorder {
         return cancelled
     }
 
+    @Throws(RecordingException::class)
     override fun start(output: Output) {
-        recording = true
-        cancelled = false
-        this.output = output
-        _recordings.add(Unit)
+        if (!failOnStart) {
+            recording = true
+            cancelled = false
+            this.output = output
+            _recordings.add(Unit)
+        } else {
+            throw RecordingException()
+        }
     }
 
     override fun pause() {
@@ -56,5 +63,9 @@ class FakeRecorder : Recorder {
     override fun cancel() {
         recording = false
         cancelled = true
+    }
+
+    fun failOnStart() {
+        failOnStart = true
     }
 }

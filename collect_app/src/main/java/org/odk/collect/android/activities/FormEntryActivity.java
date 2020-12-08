@@ -104,6 +104,7 @@ import org.odk.collect.android.formentry.loading.FormInstanceFileCreator;
 import org.odk.collect.android.formentry.repeats.AddRepeatDialog;
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
+import org.odk.collect.android.formentry.saving.SaveAnswerFileErrorDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveAnswerFileProgressDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.forms.Form;
@@ -343,6 +344,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Inject
     AudioRecorderViewModelFactory audioRecorderViewModelFactory;
 
+    @Inject
+    FormSaveViewModel.FactoryFactory formSaveViewModelFactoryFactory;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -479,14 +483,19 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
-        FormSaveViewModel.Factory factory = new FormSaveViewModel.Factory(this, null, analytics, scheduler);
-        formSaveViewModel = new ViewModelProvider(this, factory).get(FormSaveViewModel.class);
+        formSaveViewModel = new ViewModelProvider(this, formSaveViewModelFactoryFactory.create(this, null)).get(FormSaveViewModel.class);
         formSaveViewModel.getSaveResult().observe(this, this::handleSaveResult);
         formSaveViewModel.isSavingAnswerFile().observe(this, isSavingAnswerFile -> {
             if (isSavingAnswerFile) {
-                showIfNotShowing(SaveAnswerFileProgressDialogFragment.class, getSupportFragmentManager());
+                DialogUtils.showIfNotShowing(SaveAnswerFileProgressDialogFragment.class, getSupportFragmentManager());
             } else {
                 DialogUtils.dismissDialog(SaveAnswerFileProgressDialogFragment.class, getSupportFragmentManager());
+            }
+        });
+
+        formSaveViewModel.getAnswerFileError().observe(this, file -> {
+            if (file != null) {
+                DialogUtils.showIfNotShowing(SaveAnswerFileErrorDialogFragment.class, getSupportFragmentManager());
             }
         });
 

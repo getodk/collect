@@ -45,6 +45,9 @@ public class QuitFormDialogFragment extends DialogFragment {
     @Inject
     Scheduler scheduler;
 
+    @Inject
+    FormSaveViewModel.FactoryFactory formSaveViewModelFactoryFactory;
+
     private FormSaveViewModel formSaveViewModel;
     private Listener listener;
 
@@ -53,7 +56,7 @@ public class QuitFormDialogFragment extends DialogFragment {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
 
-        FormSaveViewModel.Factory factory = new FormSaveViewModel.Factory(requireActivity(), null, analytics, scheduler);
+        ViewModelProvider.Factory factory = formSaveViewModelFactoryFactory.create(requireActivity(), null);
         formSaveViewModel = new ViewModelProvider(requireActivity(), factory).get(FormSaveViewModel.class);
 
         if (context instanceof Listener) {

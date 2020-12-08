@@ -1,6 +1,5 @@
 package org.odk.collect.audiorecorder.recorder
 
-import android.media.MediaRecorder
 import com.google.common.io.Files
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.endsWith
@@ -8,55 +7,49 @@ import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
 import org.junit.Test
 import java.io.File
+import java.io.IOException
 
 class RecordingResourceRecorderTest {
 
     private val cacheDir = Files.createTempDir()
-    private val mediaRecorder = FakeRecordingResource()
-    private val recorder = RecordingResourceRecorder(cacheDir) { mediaRecorder }
+    private val recordingResource = FakeRecordingResource()
+
+    private var lastOutput: Output? = null
+    private val recorder = RecordingResourceRecorder(cacheDir) { output ->
+        lastOutput = output
+        recordingResource
+    }
 
     @Test
     fun start_startsMediaRecorder() {
         recorder.start(Output.AAC)
-        assertThat(mediaRecorder.hasStarted(), equalTo(true))
+        assertThat(recordingResource.hasStarted(), equalTo(true))
     }
 
     @Test
-    fun start_withAAC_setsUpAACRecordingFromMic() {
+    fun start_withAAC_setsUpAACRecording() {
         recorder.start(Output.AAC)
-
-        assertThat(mediaRecorder.getAudioEncoder(), equalTo(MediaRecorder.AudioEncoder.AAC))
-        assertThat(mediaRecorder.getAudioEncodingSampleRate(), equalTo(32000))
-        assertThat(mediaRecorder.getAudioEncodingBitRate(), equalTo(64000))
-        assertThat(mediaRecorder.getOutputFormat(), equalTo(MediaRecorder.OutputFormat.MPEG_4))
-
-        assertThat(mediaRecorder.getAudioSource(), equalTo(MediaRecorder.AudioSource.MIC))
+        assertThat(lastOutput, equalTo(Output.AAC))
     }
 
     @Test
-    fun start_withAMR_setsUpAMRRecordingFromMic() {
+    fun start_withAMR_setsUpAMRRecording() {
         recorder.start(Output.AMR)
-
-        assertThat(mediaRecorder.getAudioEncoder(), equalTo(MediaRecorder.AudioEncoder.AMR_NB))
-        assertThat(mediaRecorder.getAudioEncodingSampleRate(), equalTo(8000))
-        assertThat(mediaRecorder.getAudioEncodingBitRate(), equalTo(12200))
-        assertThat(mediaRecorder.getOutputFormat(), equalTo(MediaRecorder.OutputFormat.AMR_NB))
-
-        assertThat(mediaRecorder.getAudioSource(), equalTo(MediaRecorder.AudioSource.MIC))
+        assertThat(lastOutput, equalTo(Output.AMR))
     }
 
     @Test
     fun start_createsAndRecordsToM4AFileInCacheDir() {
         recorder.start(Output.AAC)
-        assertThat(mediaRecorder.getOutputFile()!!.parent, equalTo(cacheDir.absolutePath))
-        assertThat(mediaRecorder.getOutputFile()!!.absolutePath, endsWith(".m4a"))
+        assertThat(recordingResource.getOutputFile()!!.parent, equalTo(cacheDir.absolutePath))
+        assertThat(recordingResource.getOutputFile()!!.absolutePath, endsWith(".m4a"))
     }
 
     @Test
     fun start_createsAndRecordsToAMRFileInCacheDir() {
         recorder.start(Output.AMR)
-        assertThat(mediaRecorder.getOutputFile()!!.parent, equalTo(cacheDir.absolutePath))
-        assertThat(mediaRecorder.getOutputFile()!!.absolutePath, endsWith(".amr"))
+        assertThat(recordingResource.getOutputFile()!!.parent, equalTo(cacheDir.absolutePath))
+        assertThat(recordingResource.getOutputFile()!!.absolutePath, endsWith(".amr"))
     }
 
     @Test
@@ -80,18 +73,30 @@ class RecordingResourceRecorderTest {
         assertThat(outputFile1!!.absolutePath, not(equalTo(outputFile2!!.absolutePath)))
     }
 
+    @Test(expected = RecordingException::class)
+    fun start_whenFileCantBeCreated_throwsRecordingException() {
+        cacheDir.deleteRecursively()
+        recorder.start(Output.AAC)
+    }
+
+    @Test(expected = RecordingException::class)
+    fun start_whenPrepareFails_throwsRecordingException() {
+        recordingResource.failOnPrepare()
+        recorder.start(Output.AAC)
+    }
+
     @Test
     fun stop_releasesMediaRecorder() {
         recorder.start(Output.AAC)
         recorder.stop()
-        assertThat(mediaRecorder.isReleased(), equalTo(true))
+        assertThat(recordingResource.isReleased(), equalTo(true))
     }
 
     @Test
     fun stop_returnsOutputFile() {
         recorder.start(Output.AAC)
         val file = recorder.stop()
-        assertThat(file.absolutePath, equalTo(mediaRecorder.getOutputFile()!!.absolutePath))
+        assertThat(file.absolutePath, equalTo(recordingResource.getOutputFile()!!.absolutePath))
     }
 
     @Test
@@ -105,14 +110,14 @@ class RecordingResourceRecorderTest {
     fun cancel_releasesMediaRecorder() {
         recorder.start(Output.AAC)
         recorder.cancel()
-        assertThat(mediaRecorder.isReleased(), equalTo(true))
+        assertThat(recordingResource.isReleased(), equalTo(true))
     }
 
     @Test
     fun cancel_deletesOutputFile() {
         recorder.start(Output.AAC)
         recorder.cancel()
-        assertThat(mediaRecorder.getOutputFile()!!.exists(), equalTo(false))
+        assertThat(recordingResource.getOutputFile()!!.exists(), equalTo(false))
     }
 
     @Test
@@ -131,7 +136,7 @@ class RecordingResourceRecorderTest {
     fun pause_pausesMediaRecorder() {
         recorder.start(Output.AAC)
         recorder.pause()
-        assertThat(mediaRecorder.isPaused(), equalTo(true))
+        assertThat(recordingResource.isPaused(), equalTo(true))
     }
 
     @Test
@@ -139,47 +144,19 @@ class RecordingResourceRecorderTest {
         recorder.start(Output.AAC)
         recorder.pause()
         recorder.resume()
-        assertThat(mediaRecorder.isPaused(), equalTo(false))
+        assertThat(recordingResource.isPaused(), equalTo(false))
     }
 }
 
 private class FakeRecordingResource : RecordingResource {
 
-    private var bitRate: Int? = null
-    private var sampleRate: Int? = null
     private var file: File? = null
-    private var audioSource: Int? = null
-    private var outputFormat: Int? = null
-    private var audioEncoder: Int? = null
 
     private var started: Boolean = false
     private var prepared: Boolean = false
     private var released: Boolean = false
     private var paused: Boolean = false
-
-    override fun setAudioSource(audioSource: Int) {
-        if (prepared) {
-            throw IllegalStateException("MediaRecorder already prepared!")
-        }
-
-        if (outputFormat != null) {
-            throw IllegalStateException("Can't setup audio source after setting output form on MediaRecorder")
-        }
-
-        this.audioSource = audioSource
-    }
-
-    override fun setOutputFormat(outputFormat: Int) {
-        if (prepared) {
-            throw IllegalStateException("MediaRecorder already prepared!")
-        }
-
-        if (audioSource == null) {
-            throw IllegalStateException("Need to set audio source before setting output format")
-        }
-
-        this.outputFormat = outputFormat
-    }
+    private var failOnPrepare: Boolean = false
 
     override fun setOutputFile(path: String) {
         if (prepared) {
@@ -193,36 +170,13 @@ private class FakeRecordingResource : RecordingResource {
         file = File(path)
     }
 
-    override fun setAudioEncoder(audioEncoder: Int) {
-        if (prepared) {
-            throw IllegalStateException("MediaRecorder already prepared!")
-        }
-
-        if (outputFormat == null) {
-            throw IllegalStateException("MediaRecorder needs an output format before an encoding can be set")
-        }
-
-        this.audioEncoder = audioEncoder
-    }
-
-    override fun setAudioEncodingSampleRate(sampleRate: Int) {
-        if (prepared) {
-            throw IllegalStateException("MediaRecorder already prepared!")
-        }
-
-        this.sampleRate = sampleRate
-    }
-
-    override fun setAudioEncodingBitRate(bitRate: Int) {
-        if (prepared) {
-            throw IllegalStateException("MediaRecorder already prepared!")
-        }
-
-        this.bitRate = bitRate
-    }
-
+    @Throws(IOException::class)
     override fun prepare() {
-        prepared = true
+        if (failOnPrepare) {
+            throw IOException()
+        } else {
+            prepared = true
+        }
     }
 
     override fun start() {
@@ -269,18 +223,6 @@ private class FakeRecordingResource : RecordingResource {
         return started
     }
 
-    fun getAudioEncoder(): Int? {
-        return audioEncoder
-    }
-
-    fun getOutputFormat(): Int? {
-        return outputFormat
-    }
-
-    fun getAudioSource(): Int? {
-        return audioSource
-    }
-
     fun getOutputFile(): File? {
         return file
     }
@@ -293,11 +235,7 @@ private class FakeRecordingResource : RecordingResource {
         return paused
     }
 
-    fun getAudioEncodingSampleRate(): Int? {
-        return sampleRate
-    }
-
-    fun getAudioEncodingBitRate(): Int? {
-        return bitRate
+    fun failOnPrepare() {
+        failOnPrepare = true
     }
 }

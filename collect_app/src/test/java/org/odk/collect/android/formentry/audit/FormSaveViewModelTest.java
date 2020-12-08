@@ -23,6 +23,7 @@ import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.testshared.FakeScheduler;
+import org.odk.collect.utilities.Result;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
@@ -34,6 +35,7 @@ import java.util.HashMap;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.javarosa.form.api.FormEntryController.EVENT_GROUP;
 import static org.javarosa.form.api.FormEntryController.EVENT_QUESTION;
 import static org.javarosa.form.api.FormEntryController.EVENT_REPEAT;
@@ -467,11 +469,25 @@ public class FormSaveViewModelTest {
         when(formController.getInstanceFile()).thenReturn(new File(tempDir + File.separator + "instance.xml"));
 
         File externalFile = File.createTempFile("external", ".file");
-        LiveData<String> answerFile = viewModel.createAnswerFile(externalFile);
+        LiveData<Result<String>> answerFile = viewModel.createAnswerFile(externalFile);
         scheduler.runBackground();
 
         assertThat(tempDir.listFiles().length, is(1));
-        assertThat(answerFile.getValue(), is(tempDir.listFiles()[0].getName()));
+        assertThat(answerFile.getValue().getOrNull(), is(tempDir.listFiles()[0].getName()));
+    }
+
+    @Test
+    public void createAnswerFile_whenThereIsAnError_returnsNull_andSetsAnswerFileErrorToFilePath() throws Exception {
+        File tempDir = Files.createTempDir();
+        tempDir.setWritable(false);
+        when(formController.getInstanceFile()).thenReturn(new File(tempDir + File.separator + "instance.xml"));
+
+        File externalFile = File.createTempFile("external", ".file");
+        LiveData<Result<String>> answerFile = viewModel.createAnswerFile(externalFile);
+        scheduler.runBackground();
+
+        assertThat(answerFile.getValue().getOrNull(), nullValue());
+        assertThat(viewModel.getAnswerFileError().getValue(), equalTo(externalFile.getAbsolutePath()));
     }
 
     @Test
@@ -480,12 +496,12 @@ public class FormSaveViewModelTest {
         when(formController.getInstanceFile()).thenReturn(new File(tempDir + File.separator + "instance.xml"));
 
         File externalFile = File.createTempFile("external", ".file");
-        LiveData<String> fileName1 = viewModel.createAnswerFile(externalFile);
+        LiveData<Result<String>> fileName1 = viewModel.createAnswerFile(externalFile);
         scheduler.runBackground();
-        LiveData<String> fileName2 = viewModel.createAnswerFile(externalFile);
+        LiveData<Result<String>> fileName2 = viewModel.createAnswerFile(externalFile);
         scheduler.runBackground();
 
-        assertThat(fileName1.getValue(), is(fileName2.getValue()));
+        assertThat(fileName1.getValue().getOrNull(), is(fileName2.getValue().getOrNull()));
     }
 
     //endregion

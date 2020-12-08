@@ -346,13 +346,28 @@ public class AudioWidgetTest {
     }
 
     @Test
-    public void whenRecordingAvailable_updatesWidgetAnswer() throws Exception {
+    public void whenRecordingFinished_updatesWidgetAnswer() throws Exception {
         FormEntryPrompt prompt = promptWithAnswer(null);
         AudioWidget widget = createWidget(prompt);
 
         File newFile = File.createTempFile("newFile", ".mp3", questionMediaManager.getDir());
         recordingRequester.setRecording(prompt.getIndex().toString(), newFile);
         assertThat(widget.getAnswer().getDisplayText(), equalTo(newFile.getName()));
+    }
+
+    @Test
+    public void whenRecordingFinished_afterRecordingInProgress_whenFileIsNull_showsButtons() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        AudioWidget widget = createWidget(prompt);
+
+        recordingRequester.setDuration(prompt.getIndex().toString(), 5);
+        recordingRequester.setRecording(prompt.getIndex().toString(), null);
+
+        assertThat(widget.binding.audioController.getVisibility(), is(GONE));
+        assertThat(widget.binding.recordingDuration.getVisibility(), is(GONE));
+        assertThat(widget.binding.waveform.getVisibility(), is(GONE));
+        assertThat(widget.binding.captureButton.getVisibility(), is(VISIBLE));
+        assertThat(widget.binding.chooseButton.getVisibility(), is(VISIBLE));
     }
 
     @Test
@@ -564,12 +579,12 @@ public class AudioWidgetTest {
         }
 
         @Override
-        public void onIsRecordingChanged(Consumer<Boolean> isRecordingListener) {
+        public void onIsRecordingBlocked(Consumer<Boolean> isRecordingListener) {
             this.isRecordingListener = isRecordingListener;
         }
 
         @Override
-        public void onRecordingAvailable(FormEntryPrompt prompt, Consumer<String> recordingAvailableListener) {
+        public void onRecordingFinished(FormEntryPrompt prompt, Consumer<String> recordingAvailableListener) {
             recordingAvailableListeners.put(prompt.getIndex().toString(), recordingAvailableListener);
         }
 
@@ -587,7 +602,7 @@ public class AudioWidgetTest {
         }
 
         public void setRecording(String sessionId, File file) {
-            recordingAvailableListeners.get(sessionId).accept(file.getName());
+            recordingAvailableListeners.get(sessionId).accept(file != null ? file.getName() : null);
         }
 
         public void setDuration(String sessionId, long duration) {

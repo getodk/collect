@@ -3,6 +3,8 @@ package org.odk.collect.android.utilities;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
+import org.odk.collect.utilities.Result;
+
 import java.io.File;
 
 /**
@@ -12,7 +14,7 @@ import java.io.File;
  */
 public interface QuestionMediaManager {
 
-    LiveData<String> createAnswerFile(File file);
+    LiveData<Result<String>> createAnswerFile(File file);
 
     @Nullable
     File getAnswerFile(String fileName);

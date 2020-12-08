@@ -1,8 +1,11 @@
 package org.odk.collect.audiorecorder.recorder
 
 import java.io.File
+import java.lang.Exception
 
 internal interface Recorder {
+
+    @Throws(RecordingException::class)
     fun start(output: Output)
     fun pause()
     fun resume()
@@ -17,3 +20,5 @@ enum class Output {
     AMR,
     AAC
 }
+
+internal class RecordingException() : Exception()

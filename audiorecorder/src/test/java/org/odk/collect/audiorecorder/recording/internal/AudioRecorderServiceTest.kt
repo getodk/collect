@@ -25,6 +25,7 @@ import org.robolectric.Robolectric.buildService
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.android.controller.ServiceController
+import java.io.File
 
 @RunWith(RobolectricTestRunner::class)
 class AudioRecorderServiceTest {
@@ -39,7 +40,7 @@ class AudioRecorderServiceTest {
     fun setup() {
         application.setupDependencies(
             object : AudioRecorderDependencyModule() {
-                override fun providesRecorder(application: Application): Recorder {
+                override fun providesRecorder(cacheDir: File): Recorder {
                     return recorder
                 }
 
@@ -100,6 +101,14 @@ class AudioRecorderServiceTest {
 
         scheduler.runForeground(2000)
         assertThat(shadowOf(shadowNotificationManager.getNotification(notificationId)).contentText, equalTo("00:02"))
+    }
+
+    @Test
+    fun startAction_whenRecorderStartThrowsException_stopsSelf() {
+        recorder.failOnStart()
+
+        val service = startService(createStartIntent("123"))
+        assertThat(shadowOf(service.get()).isStoppedBySelf, equalTo(true))
     }
 
     @Test
@@ -170,7 +179,7 @@ class AudioRecorderServiceTest {
     }
 
     @Test
-    fun cleanUpAction_afterRecording_stopsSelf_andDeletesFiles() {
+    fun cleanUpAction_afterRecording_stopsSelf() {
         startService(createStartIntent("123"))
 
         val stopIntent = Intent(application, AudioRecorderService::class.java)
@@ -182,7 +191,6 @@ class AudioRecorderServiceTest {
         val service = startService(cancelIntent)
 
         assertThat(shadowOf(service.get()).isStoppedBySelf, equalTo(true))
-        assertThat(recorder.file?.exists(), equalTo(false))
     }
 
     @Test
