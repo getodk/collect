@@ -35,6 +35,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.AboutActivity;
+import org.odk.collect.android.activities.DeleteSavedFormActivity;
 import org.odk.collect.android.activities.FillBlankFormActivity;
 import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.FormMapActivity;
@@ -523,7 +524,7 @@ public class SmapFormListFragment extends ListFragment {
     }
 
     private void processManageFiles() {
-        Intent i = new Intent(getContext(), FormDownloadListActivity.class);
+        Intent i = new Intent(getContext(), DeleteSavedFormActivity.class);
         startActivity(i);
     }
 
