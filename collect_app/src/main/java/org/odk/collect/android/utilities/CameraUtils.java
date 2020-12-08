@@ -16,13 +16,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import android.app.Activity;
 import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
-import android.view.Surface;
 
 import org.odk.collect.android.application.Collect;
 
@@ -33,36 +31,6 @@ import java.io.IOException;
 import timber.log.Timber;
 
 public class CameraUtils {
-
-    public static Camera getCameraInstance(Activity activity, int cameraId) {
-        Camera camera = Camera.open(cameraId);
-        camera.setDisplayOrientation(90);
-
-        // Set the rotation of the camera which the output picture need.
-        Camera.Parameters parameters = camera.getParameters();
-        int rotation = getRotationInt(activity.getWindowManager().getDefaultDisplay().getRotation());
-        parameters.setRotation(calcCameraRotation(cameraId, rotation));
-        camera.setParameters(parameters);
-
-        return camera;
-    }
-
-    private static int getRotationInt(int rotation) {
-        switch (rotation) {
-            case Surface.ROTATION_0:
-                return 0;
-            case Surface.ROTATION_90:
-                return 90;
-            case Surface.ROTATION_180:
-                return 180;
-            case Surface.ROTATION_270:
-                return 270;
-            default:
-                Timber.e(new IllegalArgumentException(), "Invalid rotation");
-                return -1;
-        }
-    }
-
     public static int getFrontCameraId() {
         for (int camNo = 0; camNo < Camera.getNumberOfCameras(); camNo++) {
             Camera.CameraInfo camInfo = new Camera.CameraInfo();
@@ -97,23 +65,6 @@ public class CameraUtils {
         return false; // No front-facing camera found
     }
 
-    /**
-     * Calculates the front camera rotation
-     * <p>
-     * This calculation is applied to the output JPEG either via Exif Orientation tag
-     * or by actually transforming the bitmap. (Determined by vendor camera API implementation)
-     * <p>
-     * Note: This is not the same calculation as the display orientation
-     *
-     * @param screenOrientationDegrees Screen orientation in degrees
-     * @return Number of degrees to rotate image in order for it to view correctly.
-     */
-    public static int calcCameraRotation(int cameraId, int screenOrientationDegrees) {
-        Camera.CameraInfo camInfo = new Camera.CameraInfo();
-        Camera.getCameraInfo(cameraId, camInfo);
-        return (camInfo.orientation + screenOrientationDegrees) % 360;
-    }
-
     public static void savePhoto(String path, byte[] data) {
         File tempFile = new File(path);
         try (FileOutputStream fos = new FileOutputStream(tempFile)) {
@@ -122,11 +73,5 @@ public class CameraUtils {
         } catch (IOException e) {
             Timber.e(e);
         }
-    }
-  
-    public static String getVideoFilePath(Context context) {
-        final File dir = context.getExternalFilesDir(null);
-        return (dir == null ? "" : (dir.getAbsolutePath() + "/"))
-                + System.currentTimeMillis() + ".mp4";
     }
 }

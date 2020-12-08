@@ -833,8 +833,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                  */
                 // The intent is empty, but we know we saved the image to the temp
                 // file
-                ImageConverter.execute(storagePathProvider.getTmpFilePath(), getWidgetWaitingForBinaryData(), this);
-                File fi = new File(storagePathProvider.getTmpFilePath());
+                ImageConverter.execute(storagePathProvider.getTmpImageFilePath(), getWidgetWaitingForBinaryData(), this);
+                File fi = new File(storagePathProvider.getTmpImageFilePath());
 
                 String instanceFolder = formController.getInstanceFile()
                         .getParent();

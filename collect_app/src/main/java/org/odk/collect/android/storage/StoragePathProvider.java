@@ -79,12 +79,12 @@ public class StoragePathProvider {
                 : getUnscopedStorageRootDirPath();
     }
 
-    public String getTmpFilePath() {
+    public String getTmpImageFilePath() {
         return getDirPath(StorageSubdirectory.CACHE) + File.separator + "tmp.jpg";
     }
 
-    public String getTmpDrawFilePath() {
-        return getDirPath(StorageSubdirectory.CACHE) + File.separator + "tmpDraw.jpg";
+    public String getTmpVideoFilePath() {
+        return getDirPath(StorageSubdirectory.CACHE) + File.separator + "tmp.mp4";
     }
 
     public String getInstanceDbPath(String filePath) {

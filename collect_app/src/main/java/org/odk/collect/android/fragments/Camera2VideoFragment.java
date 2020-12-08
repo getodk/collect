@@ -48,8 +48,8 @@ import android.view.ViewGroup;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.dialogs.ErrorDialog;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
@@ -500,7 +500,7 @@ public class Camera2VideoFragment extends Fragment
         mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         if (nextVideoAbsolutePath == null || nextVideoAbsolutePath.isEmpty()) {
-            nextVideoAbsolutePath = CameraUtils.getVideoFilePath(getActivity());
+            nextVideoAbsolutePath = new StoragePathProvider().getTmpVideoFilePath();
         }
         mediaRecorder.setOutputFile(nextVideoAbsolutePath);
         mediaRecorder.setVideoEncodingBitRate(10000000);
