@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import org.odk.collect.audiorecorder.recording.RecordingSession
 import java.io.File
 
-class RecordingRepository {
+internal class RecordingRepository {
 
     private val _currentSession = MutableLiveData<RecordingSession?>(null)
     val currentSession: LiveData<RecordingSession?> = _currentSession

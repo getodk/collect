@@ -79,8 +79,13 @@ internal open class AudioRecorderDependencyModule {
                 Output.AMR -> {
                     AMRRecordingResource(MediaRecorder())
                 }
+
                 Output.AAC -> {
-                    AACRecordingResource(MediaRecorder())
+                    AACRecordingResource(MediaRecorder(), 64)
+                }
+
+                Output.AAC_LOW -> {
+                    AACRecordingResource(MediaRecorder(), 24)
                 }
             }
         }

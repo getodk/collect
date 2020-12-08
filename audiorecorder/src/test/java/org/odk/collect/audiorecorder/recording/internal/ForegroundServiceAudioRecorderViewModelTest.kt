@@ -70,15 +70,12 @@ class ForegroundServiceAudioRecorderViewModelTest : AudioRecorderViewModelTest()
 
     @Test
     fun start_passesOutputToRecorder() {
-        viewModel.start("blah", Output.AAC)
-        viewModel.stop()
-        runBackground()
-        assertThat(fakeRecorder.output, equalTo(Output.AAC))
-
-        viewModel.start("blah", Output.AMR)
-        viewModel.stop()
-        runBackground()
-        assertThat(fakeRecorder.output, equalTo(Output.AMR))
+        Output.values().forEach {
+            viewModel.start("blah", it)
+            viewModel.stop()
+            runBackground()
+            assertThat(fakeRecorder.output, equalTo(it))
+        }
     }
 
     @Test

@@ -17,6 +17,7 @@ internal class RecordingResourceRecorder(private val cacheDir: File, private val
             val suffix = when (output) {
                 Output.AMR -> ".amr"
                 Output.AAC -> ".m4a"
+                Output.AAC_LOW -> ".m4a"
             }
 
             val tempFile = try {
