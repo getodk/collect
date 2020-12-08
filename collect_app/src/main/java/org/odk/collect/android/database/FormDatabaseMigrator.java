@@ -65,6 +65,11 @@ public class FormDatabaseMigrator {
         //SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, GEOMETRY_XPATH, "text");
 
     }
+
+    public void onDowngrade(SQLiteDatabase db) throws SQLException {
+        // smap - no action
+    }
+
     // smap
     private static void createLatestVersion(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
@@ -92,18 +97,6 @@ public class FormDatabaseMigrator {
 
                 + "displaySubtext text "   // Smap keep for downgrading
                 +");");
-    }
-
-    public static boolean databaseNeedsUpgrade() {
-        boolean isDatabaseHelperOutOfDate = false;
-        try {
-            SQLiteDatabase db = SQLiteDatabase.openDatabase(FormsDatabaseHelper.getDatabasePath(), null, SQLiteDatabase.OPEN_READONLY);
-            isDatabaseHelperOutOfDate = FORMS_DATABASE_VERSION != db.getVersion();
-            db.close();
-        } catch (SQLException e) {
-            Timber.i(e);
-        }
-        return isDatabaseHelperOutOfDate;
     }
 
     // smap
