@@ -81,7 +81,7 @@ public class AudioRecordingTest {
         FormEntryPage formEntryPage = new MainMenuPage(rule).assertOnPage()
                 .copyForm("internal-audio-question.xml")
                 .startBlankForm("Audio Question")
-                .assertTextNotDisplayed(R.string.stop_recording);
+                .assertContentDescriptionNotDisplayed(R.string.stop_recording);
 
         stubAudioRecorderViewModel.failOnStart();
 
@@ -90,7 +90,7 @@ public class AudioRecordingTest {
                 .assertOnPage(new OkDialog(rule))
                 .assertText(R.string.start_recording_failed)
                 .clickOK(new FormEntryPage("Audio Question", rule))
-                .assertTextNotDisplayed(R.string.stop_recording)
+                .assertContentDescriptionNotDisplayed(R.string.stop_recording)
                 .assertEnabled(R.string.capture_audio);
     }
 
