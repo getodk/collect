@@ -166,6 +166,7 @@ public class MultiFormDownloader {
             // do not download additional forms.
             throw e;
         } catch (Exception e) {
+            Timber.e(e);  // smap
             return false;
         }
 

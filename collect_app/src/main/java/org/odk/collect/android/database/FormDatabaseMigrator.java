@@ -2,22 +2,19 @@ package org.odk.collect.android.database;
 
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
-import org.odk.collect.android.database.DatabaseContext;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.SQLiteUtils;
-
-import java.io.File;
 
 import timber.log.Timber;
 
 import static android.provider.BaseColumns._ID;
+import static org.odk.collect.android.database.DatabaseConstants.FORMS_DATABASE_VERSION;
+import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DATE;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DELETED_DATE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DESCRIPTION;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DISPLAY_NAME;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_FILE_PATH;
@@ -35,32 +32,26 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.TAS
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SOURCE;        // smap
 
 public class FormDatabaseMigrator {
-    private static final String DATABASE_NAME = "forms.db";
-    public static final String FORMS_TABLE_NAME = "forms";
-
-    static final int DATABASE_VERSION = 17;     // smap
 
 
     public void onCreate(SQLiteDatabase db) {
-        createFormsTableV17(db);    // smap
+        createLatestVersion(db);    // smap
     }
 
     @SuppressWarnings({"checkstyle:FallThrough"})
     public void onUpgrade(SQLiteDatabase db, int oldVersion) {
         try {
 
-            if(oldVersion < 17) {   // smap - start from 17
-                upgradeToVersion17(db);
+            if(oldVersion < FORMS_DATABASE_VERSION) {   // smap
+                upgradeToLatestVersion(db);
             }
         } catch (SQLException e) {
             throw e;
         }
     }
 
-
-
     // smap sarting point for upgrades
-    private void upgradeToVersion17(SQLiteDatabase db) {
+    private void upgradeToLatestVersion(SQLiteDatabase db) {
         SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, AUTO_SEND, "text");     // Version 5
         SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, AUTO_DELETE, "text");   // Version 7
 
@@ -69,12 +60,13 @@ public class FormDatabaseMigrator {
         SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, PROJECT, "text");
         SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, TASKS_ONLY, "text");
         SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, SOURCE, "text");
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, DELETED_DATE, "integer");
 
         //SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, GEOMETRY_XPATH, "text");
 
     }
     // smap
-    private static void createFormsTableV17(SQLiteDatabase db) {
+    private static void createLatestVersion(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
                 + _ID + " integer primary key, "
                 + DISPLAY_NAME + " text not null, "
@@ -96,6 +88,7 @@ public class FormDatabaseMigrator {
                 + PROJECT + " text,"
                 + TASKS_ONLY + " text,"
                 + SOURCE + " text,"
+                + DELETED_DATE + " integer,"
 
                 + "displaySubtext text "   // Smap keep for downgrading
                 +");");
@@ -105,7 +98,7 @@ public class FormDatabaseMigrator {
         boolean isDatabaseHelperOutOfDate = false;
         try {
             SQLiteDatabase db = SQLiteDatabase.openDatabase(FormsDatabaseHelper.getDatabasePath(), null, SQLiteDatabase.OPEN_READONLY);
-            isDatabaseHelperOutOfDate = DATABASE_VERSION != db.getVersion();
+            isDatabaseHelperOutOfDate = FORMS_DATABASE_VERSION != db.getVersion();
             db.close();
         } catch (SQLException e) {
             Timber.i(e);
@@ -119,7 +112,7 @@ public class FormDatabaseMigrator {
         try {
             SQLiteDatabase db = SQLiteDatabase.openDatabase(FormsDatabaseHelper.getDatabasePath(), null, SQLiteDatabase.OPEN_READWRITE);
             SQLiteUtils.dropTable(db, FORMS_TABLE_NAME);
-            createFormsTableV17(db);
+            createLatestVersion(db);
             db.close();
         } catch (SQLException e) {
             Timber.i(e);

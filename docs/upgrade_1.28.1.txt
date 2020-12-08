@@ -38,7 +38,7 @@ r	both modified:   collect_app/src/main/java/org/odk/collect/android/application
 	both modified:   collect_app/src/main/java/org/odk/collect/android/preferences/GeneralPreferencesFragment.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/preferences/IdentityPreferences.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/preferences/ResetDialogPreference.java
-	deleted by them: collect_app/src/main/java/org/odk/collect/android/preferences/ServerPreferences.java
+r	deleted by them: collect_app/src/main/java/org/odk/collect/android/preferences/ServerPreferences.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/preferences/ServerPreferencesFragment.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/preferences/UserInterfacePreferencesFragment.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/provider/FormsProvider.java
@@ -492,7 +492,7 @@ r	7) NotificationUtils - they deleted we retained - review
     	modified:   collect_app/src/main/java/org/odk/collect/android/preferences/ResetDialogPreference.java
     	new file:   collect_app/src/main/java/org/odk/collect/android/preferences/ResetDialogPreferenceFragmentCompat.java
     	new file:   collect_app/src/main/java/org/odk/collect/android/preferences/ServerAuthDialogFragment.java
-    	deleted:    collect_app/src/main/java/org/odk/collect/android/preferences/ServerPreferences.java
+r    	deleted:    collect_app/src/main/java/org/odk/collect/android/preferences/ServerPreferences.java
     	modified:   collect_app/src/main/java/org/odk/collect/android/preferences/ServerPreferencesFragment.java
     	deleted:    collect_app/src/main/java/org/odk/collect/android/preferences/Transport.java
     	modified:   collect_app/src/main/java/org/odk/collect/android/preferences/UserInterfacePreferencesFragment.java
