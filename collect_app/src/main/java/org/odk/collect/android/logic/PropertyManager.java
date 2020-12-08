@@ -115,9 +115,13 @@ public class PropertyManager implements IPropertyManager {
             // Device-defined properties
             IdAndPrefix idp = findDeviceId(context, deviceDetailsProvider);
             putProperty(PROPMGR_DEVICE_ID,     idp.prefix,          idp.id);
-            putProperty(PROPMGR_PHONE_NUMBER,  SCHEME_TEL,          deviceDetailsProvider.getLine1Number());
-            putProperty(PROPMGR_SUBSCRIBER_ID, SCHEME_IMSI,         deviceDetailsProvider.getSubscriberId());
-            putProperty(PROPMGR_SIM_SERIAL,    SCHEME_SIMSERIAL,    deviceDetailsProvider.getSimSerialNumber());
+            try {   // smap don't care about these
+                putProperty(PROPMGR_PHONE_NUMBER, SCHEME_TEL, deviceDetailsProvider.getLine1Number());
+                putProperty(PROPMGR_SUBSCRIBER_ID, SCHEME_IMSI, deviceDetailsProvider.getSubscriberId());
+                putProperty(PROPMGR_SIM_SERIAL, SCHEME_SIMSERIAL, deviceDetailsProvider.getSimSerialNumber());
+            } catch(Exception ex) {
+                // smap ignore
+            }
         } catch (SecurityException e) {
             Timber.e(e);
         }
