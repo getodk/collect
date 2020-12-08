@@ -348,9 +348,9 @@ public class MultiFormDownloader {
                 .displayName(formInfo.get(FileUtils.TITLE))
                 .jrVersion(formInfo.get(FileUtils.VERSION))
                 .jrFormId(formInfo.get(FileUtils.FORMID))
-                .project(formInfo.get(FileUtils.PROJECT))      // smap
-                .tasksOnly(formInfo.get(FileUtils.TASKS_ONLY))   // smap
-                .source(formInfo.get(FileUtils.SOURCE))       // smap
+                .project(project)      // smap
+                .tasksOnly(tasks_only ? "yes" : "no")   // smap
+                .source(source)       // smap
                 .submissionUri(formInfo.get(FileUtils.SUBMISSIONURI))
                 .base64RSAPublicKey(formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY))
                 .autoDelete(formInfo.get(FileUtils.AUTO_DELETE))
