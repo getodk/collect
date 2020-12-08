@@ -36,7 +36,7 @@ android {
         applicationId "org.smap.smapTask.android"
         minSdkVersion(21)
         targetSdkVersion(28)
-        versionCode(6213)
+        versionCode(6300)
         versionName getVersionName()
         testInstrumentationRunner('androidx.test.runner.AndroidJUnitRunner')
         multiDexEnabled true
@@ -60,47 +60,47 @@ android {
     productFlavors {
         standard {
             applicationId "org.smap.smapTask.android"
-            versionName "6.213"
+            versionName "6.300"
         }
         plan {
             applicationId "org.smap.smapTask.android.plan"
-            versionName "6.213-plan"
+            versionName "6.300-plan"
         }
         kontrolid {
             applicationId "org.smap.smapTask.android.kontrolid"
-            versionName "6.213-kontrolid"
+            versionName "6.300-kontrolid"
         }
         supply {
             applicationId "org.smap.smapTask.android.supply"
-            versionName "6.213-supply"
+            versionName "6.300-supply"
         }
         seracis {
             applicationId "org.smap.smapTask.android.seracis"
-            versionName "6.213-seracis"
+            versionName "6.300-seracis"
         }
         meqa {
             applicationId "org.smap.smapTask.android.meqa"
-            versionName "6.213-meqa"
+            versionName "6.300-meqa"
         }
         atempi {
             applicationId "org.smap.smapTask.android.atempi"
-            versionName "6.213-atempi"
+            versionName "6.300-atempi"
         }
         pop {
             applicationId "org.smap.smapTask.android.pop"
-            versionName "6.213-pop"
+            versionName "6.300-pop"
         }
         tdh {
             applicationId "org.smap.smapTask.android.tdh"
-            versionName "6.213-tdh"
+            versionName "6.300-tdh"
         }
         assignfield {
             applicationId "org.smap.smapTask.android.assignfield"
-            versionName "6.213-assignfield"
+            versionName "6.300-assignfield"
         }
         informEd {
             applicationId "org.smap.smapTask.android.informEd"
-            versionName "6.213-informEd"
+            versionName "6.300-informEd"
         }
     }
 

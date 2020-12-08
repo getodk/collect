@@ -1,7 +1,7 @@
 	Merge
 	------
 	both modified:   README.md
-	both modified:   collect_app/build.gradle
+r	both modified:   collect_app/build.gradle
 	deleted by us:   collect_app/google-services.json
 	deleted by us:   collect_app/src/debug/google-services.json
 	both modified:   collect_app/src/main/AndroidManifest.xml
