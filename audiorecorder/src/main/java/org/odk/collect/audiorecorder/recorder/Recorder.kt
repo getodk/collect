@@ -18,7 +18,8 @@ internal interface Recorder {
 
 enum class Output {
     AMR,
-    AAC
+    AAC,
+    AAC_LOW
 }
 
-internal class RecordingException() : Exception()
+internal class RecordingException : Exception()

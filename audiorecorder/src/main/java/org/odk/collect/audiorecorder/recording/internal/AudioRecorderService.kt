@@ -11,7 +11,7 @@ import org.odk.collect.audiorecorder.recorder.Recorder
 import org.odk.collect.audiorecorder.recorder.RecordingException
 import javax.inject.Inject
 
-class AudioRecorderService : Service() {
+internal class AudioRecorderService : Service() {
 
     @Inject
     internal lateinit var recorder: Recorder

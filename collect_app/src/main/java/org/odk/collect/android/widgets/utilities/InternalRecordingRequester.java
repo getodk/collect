@@ -39,6 +39,8 @@ public class InternalRecordingRequester implements RecordingRequester {
                 String quality = FormEntryPromptUtils.getAttributeValue(prompt, "quality");
                 if (quality != null && quality.equals("voice-only")) {
                     viewModel.start(prompt.getIndex().toString(), Output.AMR);
+                } else if (quality != null && quality.equals("low")) {
+                    viewModel.start(prompt.getIndex().toString(), Output.AAC_LOW);
                 } else {
                     viewModel.start(prompt.getIndex().toString(), Output.AAC);
                 }

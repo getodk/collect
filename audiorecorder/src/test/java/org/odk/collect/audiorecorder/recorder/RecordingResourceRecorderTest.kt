@@ -27,15 +27,15 @@ class RecordingResourceRecorderTest {
     }
 
     @Test
-    fun start_withAAC_setsUpAACRecording() {
-        recorder.start(Output.AAC)
-        assertThat(lastOutput, equalTo(Output.AAC))
-    }
+    fun start_usesOutputToCreateResourceRecorder() {
+        Output.values().forEach {
+            RecordingResourceRecorder(cacheDir) { output ->
+                lastOutput = output
+                FakeRecordingResource()
+            }.start(it)
 
-    @Test
-    fun start_withAMR_setsUpAMRRecording() {
-        recorder.start(Output.AMR)
-        assertThat(lastOutput, equalTo(Output.AMR))
+            assertThat(lastOutput, equalTo(it))
+        }
     }
 
     @Test
@@ -50,6 +50,13 @@ class RecordingResourceRecorderTest {
         recorder.start(Output.AMR)
         assertThat(recordingResource.getOutputFile()!!.parent, equalTo(cacheDir.absolutePath))
         assertThat(recordingResource.getOutputFile()!!.absolutePath, endsWith(".amr"))
+    }
+
+    @Test
+    fun start_createsAndRecordsToAACLOWFileInCacheDir() {
+        recorder.start(Output.AAC_LOW)
+        assertThat(recordingResource.getOutputFile()!!.parent, equalTo(cacheDir.absolutePath))
+        assertThat(recordingResource.getOutputFile()!!.absolutePath, endsWith(".m4a"))
     }
 
     @Test

@@ -33,7 +33,7 @@ public class RecordingRequesterFactory {
     public RecordingRequester create(FormEntryPrompt prompt, boolean externalRecorderPreferred) {
         String audioQuality = FormEntryPromptUtils.getAttributeValue(prompt, "quality");
 
-        if (audioQuality != null && (audioQuality.equals("normal") || audioQuality.equals("voice-only"))) {
+        if (audioQuality != null && (audioQuality.equals("normal") || audioQuality.equals("voice-only") || audioQuality.equals("low"))) {
             return new InternalRecordingRequester(activity, audioRecorderViewModel, permissionUtils, lifecycle, questionMediaManager);
         } else if (audioQuality != null && audioQuality.equals("external")) {
             return new ExternalAppRecordingRequester(activity, activityAvailability, waitingForDataRegistry, permissionUtils);

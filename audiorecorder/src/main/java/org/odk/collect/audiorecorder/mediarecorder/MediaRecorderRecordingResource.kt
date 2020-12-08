@@ -45,14 +45,14 @@ internal abstract class MediaRecorderRecordingResource(private val mediaRecorder
     }
 }
 
-internal class AACRecordingResource(mediaRecorder: MediaRecorder) : MediaRecorderRecordingResource(mediaRecorder) {
+internal class AACRecordingResource(mediaRecorder: MediaRecorder, private val kbitRate: Int) : MediaRecorderRecordingResource(mediaRecorder) {
 
     override fun beforePrepare(mediaRecorder: MediaRecorder) {
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
         mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
         mediaRecorder.setAudioSamplingRate(32000)
-        mediaRecorder.setAudioEncodingBitRate(64000)
+        mediaRecorder.setAudioEncodingBitRate(kbitRate * 1000)
     }
 }
 

@@ -46,6 +46,16 @@ public class RecordingRequesterFactoryTest {
     }
 
     @Test
+    public void whenQualityIsNormal_andSettingExternalNotPreferred_createsInternalRecordingRequester() {
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withBindAttribute("odk", "quality", "normal")
+                .build();
+
+        RecordingRequester recordingRequester = factory.create(prompt, false);
+        assertThat(recordingRequester, instanceOf(InternalRecordingRequester.class));
+    }
+
+    @Test
     public void whenQualityIsNormal_andSettingExternalPreferred_createsInternalRecordingRequester() {
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withBindAttribute("odk", "quality", "normal")
@@ -56,9 +66,39 @@ public class RecordingRequesterFactoryTest {
     }
 
     @Test
+    public void whenQualityIsVoiceOnly_andSettingExternalNotPreferred_createsInternalRecordingRequester() {
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withBindAttribute("odk", "quality", "voice-only")
+                .build();
+
+        RecordingRequester recordingRequester = factory.create(prompt, false);
+        assertThat(recordingRequester, instanceOf(InternalRecordingRequester.class));
+    }
+
+    @Test
     public void whenQualityIsVoiceOnly_andSettingExternalPreferred_createsInternalRecordingRequester() {
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withBindAttribute("odk", "quality", "voice-only")
+                .build();
+
+        RecordingRequester recordingRequester = factory.create(prompt, true);
+        assertThat(recordingRequester, instanceOf(InternalRecordingRequester.class));
+    }
+
+    @Test
+    public void whenQualityIsLow_andSettingExternalNotPreferred_createsInternalRecordingRequester() {
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withBindAttribute("odk", "quality", "low")
+                .build();
+
+        RecordingRequester recordingRequester = factory.create(prompt, false);
+        assertThat(recordingRequester, instanceOf(InternalRecordingRequester.class));
+    }
+
+    @Test
+    public void whenQualityIsLow_andSettingExternalPreferred_createsInternalRecordingRequester() {
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withBindAttribute("odk", "quality", "low")
                 .build();
 
         RecordingRequester recordingRequester = factory.create(prompt, true);
