@@ -19,7 +19,6 @@ import android.os.AsyncTask;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.FormDownloadException;
-import org.odk.collect.android.formmanagement.FormDownloadExceptionMapper;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
@@ -71,7 +70,7 @@ public class DownloadFormsTask extends
 
                 results.put(serverFormDetails, Collect.getInstance().getString(R.string.success));
             } catch (FormDownloadException e) {
-                results.put(serverFormDetails, new FormDownloadExceptionMapper(Collect.getInstance()).getMessage(e));
+                results.put(serverFormDetails, Collect.getInstance().getString(R.string.failure));
             } catch (InterruptedException e) {
                 return emptyMap();
             }
