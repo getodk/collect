@@ -17,7 +17,6 @@
 package org.odk.collect.android.preferences;
 
 import android.accounts.AccountManager;
-import android.app.Activity;
 import androidx.appcompat.app.AlertDialog;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import timber.log.Timber;
@@ -109,7 +108,8 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.server_preferences, rootKey);
-        initProtocolPrefs();
+        //initProtocolPrefs(); smap only allow server authentication
+        addAggregatePreferences();  // smap - cut straight to the chase
     }
 
     @Override
@@ -188,6 +188,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
             editText.setFilters(new InputFilter[]{new ControlCharacterFilter()});
         });
 
+        /* smap don't need this
         findPreference("custom_server_paths").setOnPreferenceClickListener(preference -> {
             if (MultiClickGuard.allowClick(getClass().getName())) {
                 Fragment fragment = new CustomServerPathsFragment();
@@ -201,6 +202,8 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 return false;
             }
         });
+        */
+
     }
 
     private void urlDropdownSetup(EditText editText) {
