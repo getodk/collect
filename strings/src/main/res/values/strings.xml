@@ -189,10 +189,10 @@
     <string name="unrecognized_uri">Unrecognized URI: %s</string>
 
     <!-- Text displayed when audio recording fails to start -->
-    <string name="start_recording_failed">Could not start recording!</string>
+    <string name="start_recording_failed">Could not start recording.</string>
 
-    <!-- Message letting the user know where to find the original recording file is after it fails to save in the form -->
-    <string name="answer_file_copy_failed_message">File is still available at %1$s</string>
+    <!-- Error message displayed when copying media from a temporary directory fails -->
+    <string name="answer_file_copy_failed_message">Media could not be attached to form but is available at %1$s</string>
 
     <!--
     ##############################################
