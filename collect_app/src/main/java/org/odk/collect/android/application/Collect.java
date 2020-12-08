@@ -156,12 +156,12 @@ public class Collect extends Application {
     private void setupStrictMode() {
         if (BuildConfig.DEBUG) {
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                    .detectAll()
+                    //.detectAll()  // smap
                     .permitDiskReads()  // shared preferences are being read on main thread
                     .penaltyLog()
                     .build());
             StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-                    .detectAll()
+                    //.detectAll()  // smap
                     .penaltyLog()
                     .build());
         }
