@@ -98,10 +98,15 @@ public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<Serv
 
     public void setAlternateCredentials(WebCredentialsUtils webCredentialsUtils, String url, String username, String password) {
         this.webCredentialsUtils = webCredentialsUtils;
+        serverFormsDetailsFetcher.updateCredentials(webCredentialsUtils);
+
         this.url = url;
+        if (url != null && !url.isEmpty()) {
+            serverFormsDetailsFetcher.updateUrl(url);
+        }
+
         this.username = username;
         this.password = password;
-        serverFormsDetailsFetcher.updateFormListApi(url, webCredentialsUtils);
     }
 
     private void setTemporaryCredentials() {
