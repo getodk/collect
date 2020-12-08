@@ -69,6 +69,17 @@ public class InternalRecordingRequesterTest {
     }
 
     @Test
+    public void requestRecording_whenPromptQualityIsLow_startsWithAACLow() {
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withBindAttribute("odk", "quality", "low")
+                .build();
+
+        requester.requestRecording(prompt);
+
+        verify(viewModel).start(prompt.getIndex().toString(), Output.AAC_LOW);
+    }
+
+    @Test
     public void requestRecording_whenPermissionDenied_doesNothing() {
         permissionUtils.setPermissionGranted(false);
 
