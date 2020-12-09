@@ -157,4 +157,9 @@ public class AnalyticsEvents {
      * Tracks how many forms include an audio question.
      */
     public static final String AUDIO_QUESTION = "AudioQuestion";
+
+    /**
+     * Tracks how often pause action is used while recording audio
+     */
+    public static final String AUDIO_RECORDING_PAUSE = "AudioRecordingPause";
 }

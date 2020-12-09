@@ -40,6 +40,14 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         this.formController = formController;
     }
 
+    public String getFormIdentifierHash() {
+        if (formController != null) {
+            return formController.getCurrentFormIdentifierHash();
+        } else {
+            return "";
+        }
+    }
+
     @Nullable
     public FormIndex getCurrentIndex() {
         if (formController != null) {
