@@ -144,7 +144,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
             return;
         }
 
-        formEntryViewModel = new ViewModelProvider(this, new FormEntryViewModel.Factory(analytics)).get(FormEntryViewModel.class);
+        formEntryViewModel = new ViewModelProvider(this, new FormEntryViewModel.Factory()).get(FormEntryViewModel.class);
         formEntryViewModel.formLoaded(Collect.getInstance().getFormController());
 
         startIndex = formController.getFormIndex();
@@ -273,7 +273,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
             case R.id.menu_add_repeat:
                 Collect.getInstance().getFormController().jumpToIndex(repeatGroupPickerIndex);
                 formEntryViewModel.jumpToNewRepeat();
-                formEntryViewModel.addRepeat(false);
+                formEntryViewModel.addRepeat();
 
                 finish();
                 return true;

@@ -7,12 +7,6 @@ public class AnalyticsEvents {
     }
 
     /**
-     * Used to measure how popular different methods of adding repeats are. The "action" should
-     * describe the way the repeat was added. The label should be the form hash identifier.
-     */
-    public static final String ADD_REPEAT = "AddRepeat";
-
-    /**
      * Track changes to the server URL setting. The action should be the scheme followed by a space
      * followed by one of Appspot, Ona, Kobo or Other. The label should be a hash of the URL.
      */

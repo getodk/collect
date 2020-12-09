@@ -473,7 +473,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
         formEntryViewModel = ViewModelProviders
-                .of(this, new FormEntryViewModel.Factory(analytics))
+                .of(this, new FormEntryViewModel.Factory())
                 .get(FormEntryViewModel.class);
 
         formEntryViewModel.getError().observe(this, error -> {
@@ -1740,7 +1740,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             public void onAddRepeatClicked() {
                 swipeHandler.setBeenSwiped(false);
                 shownAlertDialogIsGroupRepeat = false;
-                formEntryViewModel.addRepeat(true);
+                formEntryViewModel.addRepeat();
                 formIndexAnimationHandler.handle(formEntryViewModel.getCurrentIndex());
             }
 
