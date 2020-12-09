@@ -135,18 +135,19 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
     private final WidgetFactory widgetFactory;
     private final LifecycleOwner viewLifecycle;
+    private final FormEntryViewModel formEntryViewModel;
 
     /**
      * Builds the view for a specified question or field-list of questions.
-     *
-     * @param context         the activity creating this view
+     *  @param context         the activity creating this view
      * @param questionPrompts the questions to be included in this view
      * @param groups          the group hierarchy that this question or field list is in
      * @param advancingPage   whether this view is being created after a forward swipe through the
      */
-    public ODKView(ComponentActivity context, final FormEntryPrompt[] questionPrompts, FormEntryCaption[] groups, boolean advancingPage, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, AudioPlayer audioPlayer, AudioRecorderViewModel audioRecorderViewModel) {
+    public ODKView(ComponentActivity context, final FormEntryPrompt[] questionPrompts, FormEntryCaption[] groups, boolean advancingPage, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, AudioPlayer audioPlayer, AudioRecorderViewModel audioRecorderViewModel, FormEntryViewModel formEntryViewModel) {
         super(context);
         viewLifecycle = ((ScreenContext) context).getViewLifecycle();
+        this.formEntryViewModel = formEntryViewModel;
 
         getComponent(context).inject(this);
         this.audioHelper = audioHelperFactory.create(context);
@@ -668,7 +669,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             if (widget instanceof UrlWidget) {
                 analytics.logEvent(PROMPT, "Url", Collect.getCurrentFormIdentifierHash());
             } else if (widget instanceof AudioWidget) {
-                analytics.logFormEvent(AnalyticsEvents.AUDIO_QUESTION, Collect.getCurrentFormIdentifierHash());
+                formEntryViewModel.logFormEvent(AnalyticsEvents.AUDIO_QUESTION);
             }
         }
     }
