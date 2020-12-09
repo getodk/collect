@@ -12,16 +12,20 @@ import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
 import org.javarosa.form.api.FormEntryController;
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.utilities.Clock;
+
+import javax.inject.Inject;
 
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
 
 public class FormEntryViewModel extends ViewModel implements RequiresFormController {
 
     private final Clock clock;
+    private final Analytics analytics;
     private final MutableLiveData<String> error = new MutableLiveData<>(null);
 
     @Nullable
@@ -31,21 +35,14 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     private FormIndex jumpBackIndex;
 
     @SuppressWarnings("WeakerAccess")
-    public FormEntryViewModel(Clock clock) {
+    public FormEntryViewModel(Clock clock, Analytics analytics) {
         this.clock = clock;
+        this.analytics = analytics;
     }
 
     @Override
     public void formLoaded(@NotNull FormController formController) {
         this.formController = formController;
-    }
-
-    public String getFormIdentifierHash() {
-        if (formController != null) {
-            return formController.getCurrentFormIdentifierHash();
-        } else {
-            return "";
-        }
     }
 
     @Nullable
@@ -159,13 +156,34 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, clock.getCurrentTime());
     }
 
+    public void logFormEvent(String event) {
+        analytics.logFormEvent(event, getFormIdentifierHash());
+    }
+
+    private String getFormIdentifierHash() {
+        if (formController != null) {
+            return formController.getCurrentFormIdentifierHash();
+        } else {
+            return "";
+        }
+    }
+
     public static class Factory implements ViewModelProvider.Factory {
+
+        private final Clock clock;
+        private final Analytics analytics;
+
+        @Inject
+        public Factory(Clock clock, Analytics analytics) {
+            this.clock = clock;
+            this.analytics = analytics;
+        }
 
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormEntryViewModel(System::currentTimeMillis);
+            return (T) new FormEntryViewModel(clock, analytics);
         }
     }
 }

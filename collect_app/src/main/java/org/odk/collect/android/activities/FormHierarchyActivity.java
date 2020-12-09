@@ -40,7 +40,6 @@ import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.HierarchyListAdapter;
-import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.FormEntryViewModel;
@@ -117,7 +116,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
     protected RecyclerView recyclerView;
 
     @Inject
-    Analytics analytics;
+    FormEntryViewModel.Factory formEntryViewModelFactory;
 
     private FormEntryViewModel formEntryViewModel;
 
@@ -144,7 +143,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
             return;
         }
 
-        formEntryViewModel = new ViewModelProvider(this, new FormEntryViewModel.Factory()).get(FormEntryViewModel.class);
+        formEntryViewModel = new ViewModelProvider(this, formEntryViewModelFactory).get(FormEntryViewModel.class);
         formEntryViewModel.formLoaded(Collect.getInstance().getFormController());
 
         startIndex = formController.getFormIndex();

@@ -347,6 +347,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Inject
     FormSaveViewModel.FactoryFactory formSaveViewModelFactoryFactory;
 
+    @Inject
+    FormEntryViewModel.Factory formEntryViewModelFactory;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -473,7 +476,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
         formEntryViewModel = ViewModelProviders
-                .of(this, new FormEntryViewModel.Factory())
+                .of(this, formEntryViewModelFactory)
                 .get(FormEntryViewModel.class);
 
         formEntryViewModel.getError().observe(this, error -> {

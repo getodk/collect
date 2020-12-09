@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.databinding.AudioRecordingControllerFragmentBinding;
 import org.odk.collect.android.formentry.FormEntryViewModel;
@@ -36,9 +35,6 @@ public class AudioRecordingControllerFragment extends Fragment {
 
     @Inject
     FormEntryViewModel.Factory formEntryViewModelFactory;
-
-    @Inject
-    Analytics analytics;
 
     public AudioRecordingControllerFragmentBinding binding;
     private AudioRecorderViewModel audioRecorderViewModel;
@@ -88,7 +84,7 @@ public class AudioRecordingControllerFragment extends Fragment {
                     binding.pauseRecording.setContentDescription(getString(R.string.pause_recording));
                     binding.pauseRecording.setOnClickListener(v -> {
                         audioRecorderViewModel.pause();
-                        analytics.logFormEvent(AnalyticsEvents.AUDIO_RECORDING_PAUSE, formEntryViewModel.getFormIdentifierHash());
+                        formEntryViewModel.logFormEvent(AnalyticsEvents.AUDIO_RECORDING_PAUSE);
                     });
 
                     binding.recordingStatus.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_mic_24));
