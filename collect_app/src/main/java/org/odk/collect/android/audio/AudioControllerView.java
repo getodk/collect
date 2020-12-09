@@ -56,6 +56,7 @@ public class AudioControllerView extends FrameLayout {
     private Integer duration = 0;
 
     private Listener listener;
+    private AnalyticsListener analytics;
 
     public AudioControllerView(Context context) {
         super(context);
@@ -70,12 +71,20 @@ public class AudioControllerView extends FrameLayout {
 
     @OnClick(R.id.fastForwardBtn)
     void fastForwardMedia() {
+        if (analytics != null) {
+            analytics.onFastFwdOrFastRwd();
+        }
+
         int newPosition = position + 5000;
         onPositionChanged(newPosition);
     }
 
     @OnClick(R.id.fastRewindBtn)
     void rewindMedia() {
+        if (analytics != null) {
+            analytics.onFastFwdOrFastRwd();
+        }
+
         int newPosition = position - 5000;
         onPositionChanged(newPosition);
     }
@@ -83,10 +92,18 @@ public class AudioControllerView extends FrameLayout {
     @OnClick(R.id.playBtn)
     void playClicked() {
         if (playing) {
+            if (analytics != null) {
+                analytics.onPlay();
+            }
+
             listener.onPauseClicked();
         } else {
             listener.onPlayClicked();
         }
+    }
+
+    public void setAnalytics(AnalyticsListener analytics) {
+        this.analytics = analytics;
     }
 
     private void onPositionChanged(Integer newPosition) {
@@ -193,10 +210,20 @@ public class AudioControllerView extends FrameLayout {
                 listener.onPlayClicked();
                 wasPlaying = false;
             }
+
+            if (analytics != null) {
+                analytics.onSeek();
+            }
         }
 
         Boolean isSwiping() {
             return swiping;
         }
+    }
+
+    public interface AnalyticsListener {
+        void onPlay();
+        void onFastFwdOrFastRwd();
+        void onSeek();
     }
 }

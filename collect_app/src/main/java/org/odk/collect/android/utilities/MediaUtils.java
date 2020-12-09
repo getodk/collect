@@ -447,9 +447,12 @@ public class MediaUtils {
             } else if (isDownloadsDocument(uri)) {
                 // DownloadsProvider
 
-                final String id = DocumentsContract.getDocumentId(uri);
+                String id = DocumentsContract.getDocumentId(uri);
                 if (id.startsWith("raw:")) {
                     return id.replaceFirst("raw:", "");
+                }
+                if (id.startsWith("msf:")) {
+                    id = id.replaceFirst("msf:", "");
                 }
 
                 String[] contentUriPrefixesToTry = {

@@ -150,6 +150,25 @@ public class FormManagementPreferencesTest {
     }
 
     @Test
+    public void changingFormUpdateMode_shouldNotCauseAnyCrashIfRelatedPreferncesAreDisabledInAdminSettings() {
+        adminSharedPreferences.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false);
+        adminSharedPreferences.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false);
+
+        FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class);
+        scenario.onFragment(f -> {
+            assertThat(f.findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK), nullValue());
+            assertThat(f.findPreference(KEY_AUTOMATIC_UPDATE), nullValue());
+
+            ListPreference updateMode = f.findPreference(KEY_FORM_UPDATE_MODE);
+            updateMode.setValue(PREVIOUSLY_DOWNLOADED_ONLY.getValue(context));
+
+            updateMode.setValue(MATCH_EXACTLY.getValue(context));
+
+            updateMode.setValue(MANUAL.getValue(context));
+        });
+    }
+
+    @Test
     public void visiblePreferences_shouldBeVisibleIfOpenedFromGeneralPreferences() {
         FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class);
         scenario.onFragment(fragment -> {

@@ -252,8 +252,7 @@ dependencies {
     //}
 
     implementation('net.sf.kxml:kxml2:2.3.0')                       // smap javarosa dependency
-    implementation files('libs/javarosa-3.0.2.jar')    // smap javarosa
-
+    implementation files('libs/javarosa-3.0.3.jar')    // smap javarosa
 
     implementation "com.karumi:dexter:6.1.2"
     implementation "org.osmdroid:osmdroid-android:6.1.6"

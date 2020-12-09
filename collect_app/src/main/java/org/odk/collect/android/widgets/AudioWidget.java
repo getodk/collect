@@ -32,6 +32,8 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.audio.Clip;
@@ -65,6 +67,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 
 @SuppressLint("ViewConstructor")
 public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDataReceiver {
+    private final Analytics analytics;
     public AudioWidgetAnswerBinding binding;	// smap make public
     AudioControllerView audioController;
 
@@ -80,14 +83,16 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
     private QuestionMediaManager questionMediaManager;
     private String binaryName;
 
-    public AudioWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
+    public AudioWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, Analytics analytics) {
         this(context, prompt, new FileUtil(), new MediaUtil(), null, questionMediaManager,
-                waitingForDataRegistry, null, new ActivityAvailability(context));
+                waitingForDataRegistry, null, new ActivityAvailability(context), analytics);
     }
 
+    @SuppressWarnings("PMD.ExcessiveParameterList")
     AudioWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, @NonNull AudioControllerView audioController,
-                QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, AudioHelper audioHelper, ActivityAvailability activityAvailability) {
+                QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, AudioHelper audioHelper, ActivityAvailability activityAvailability, Analytics analytics) {
         super(context, questionDetails);
+        this.analytics = analytics;
 
         if (audioHelper != null) {
             this.audioHelper = audioHelper;
@@ -112,6 +117,22 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
         binding = AudioWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
         audioController = new AudioControllerView(context);
+        audioController.setAnalytics(new AudioControllerView.AnalyticsListener() {
+            @Override
+            public void onPlay() {
+                analytics.logFormEvent(AnalyticsEvents.AUDIO_PLAY, getQuestionDetails().getFormAnalyticsID());
+            }
+
+            @Override
+            public void onFastFwdOrFastRwd() {
+                analytics.logFormEvent(AnalyticsEvents.AUDIO_FAST_FWD_RWD, getQuestionDetails().getFormAnalyticsID());
+            }
+
+            @Override
+            public void onSeek() {
+                analytics.logFormEvent(AnalyticsEvents.AUDIO_SEEK, getQuestionDetails().getFormAnalyticsID());
+            }
+        });
 
         binding.getRoot().addView(audioController);
         if (prompt.isReadOnly()) {
@@ -251,6 +272,8 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
     }
 
     private void onCaptureAudioButtonClicked() {
+        analytics.logFormEvent(AnalyticsEvents.AUDIO_RECORD, getQuestionDetails().getFormAnalyticsID());
+
         getPermissionUtils().requestRecordAudioPermission((Activity) getContext(), new PermissionListener() {
             @Override
             public void granted() {
@@ -279,6 +302,8 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
     }
 
     private void chooseSound() {
+        analytics.logFormEvent(AnalyticsEvents.AUDIO_CHOOSE, getQuestionDetails().getFormAnalyticsID());
+
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("audio/*");
 

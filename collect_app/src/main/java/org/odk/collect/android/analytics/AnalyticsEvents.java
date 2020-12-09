@@ -80,13 +80,13 @@ public class AnalyticsEvents {
     /**
      * Track downloads initiated when there are no downloaded forms on the device. The action should
      * be in the format: {number of downloaded forms}/{total forms}-{form server hash}
-     *
+     * <p>
      * Questions to answer to help shape new on-boarding and multi-tenancy experience:
-     *      - Does it look like some projects instruct data collectors to download all forms on
-     *      first launch and others to download a subset?
-     *      - If it looks like there's a clear process split, which of the two processes is most
-     *      common? Is project scale or number of forms hosted on server relevant to the process?
-     *      - Are subsequent manual downloads common? Are all forms downloaded or a subset?
+     * - Does it look like some projects instruct data collectors to download all forms on
+     * first launch and others to download a subset?
+     * - If it looks like there's a clear process split, which of the two processes is most
+     * common? Is project scale or number of forms hosted on server relevant to the process?
+     * - Are subsequent manual downloads common? Are all forms downloaded or a subset?
      */
     public static final String FIRST_FORM_DOWNLOAD = "FirstFormDownload";
 
@@ -143,4 +143,15 @@ public class AnalyticsEvents {
      * should be a hash of the endpoint setting.
      */
     public static final String CUSTOM_ENDPOINT_SUB = "CustomEndpointSub";
+
+    /**
+     * These events track how often different actions are used in audio questions. Should be
+     * sent with form ID so it's clear if a particular form/project is using a one workflow more than
+     * the other.
+     */
+    public static final String AUDIO_RECORD = "AudioRecord";
+    public static final String AUDIO_CHOOSE = "AudioChoose";
+    public static final String AUDIO_PLAY = "AudioPlay";
+    public static final String AUDIO_SEEK = "AudioSeek";
+    public static final String AUDIO_FAST_FWD_RWD = "AudioFastFwdRwd";
 }
