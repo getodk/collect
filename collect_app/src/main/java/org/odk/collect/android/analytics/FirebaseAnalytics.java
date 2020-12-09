@@ -35,7 +35,7 @@ public class FirebaseAnalytics implements Analytics {
     public void logFormEvent(String event, String formId) {
         Bundle bundle = new Bundle();
         bundle.putString("form", formId);
-        firebaseAnalytics.logEvent(event, bundle);
+        //firebaseAnalytics.logEvent(event, bundle);  // smap
     }
 
     private void setupRemoteAnalytics() {

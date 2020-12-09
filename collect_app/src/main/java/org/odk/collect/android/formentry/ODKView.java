@@ -421,7 +421,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      */
     private QuestionWidget configureWidgetForQuestion(FormEntryPrompt question, boolean readOnlyOverride) {
         QuestionWidget qw = WidgetFactory.createWidgetFromPrompt(question, getContext(),
-                readOnlyOverride, questionMediaManager, waitingForDataRegistry, analytics);
+                readOnlyOverride, questionMediaManager, waitingForDataRegistry, null);   // smap null out anaalytics
         qw.setOnLongClickListener(this);
         qw.setValueChangedListener(this);
 
