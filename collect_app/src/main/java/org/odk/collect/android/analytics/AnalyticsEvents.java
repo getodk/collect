@@ -152,4 +152,9 @@ public class AnalyticsEvents {
      * Tracks how often the audio player seek bar is used.
      */
     public static final String AUDIO_PLAYER_SEEK = "AudioPlayerSeek";
+
+    /**
+     * Tracks how many forms include an audio question.
+     */
+    public static final String AUDIO_QUESTION = "AudioQuestion";
 }

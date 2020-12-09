@@ -53,6 +53,7 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
@@ -73,6 +74,7 @@ import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.widgets.AudioWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.StringWidget;
 import org.odk.collect.android.widgets.UrlWidget;
@@ -665,6 +667,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         for (QuestionWidget widget : widgets) {
             if (widget instanceof UrlWidget) {
                 analytics.logEvent(PROMPT, "Url", Collect.getCurrentFormIdentifierHash());
+            } else if (widget instanceof AudioWidget) {
+                analytics.logFormEvent(AnalyticsEvents.AUDIO_QUESTION, Collect.getCurrentFormIdentifierHash());
             }
         }
     }
