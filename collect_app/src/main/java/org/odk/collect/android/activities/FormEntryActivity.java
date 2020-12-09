@@ -762,7 +762,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         // If we're coming back from the hierarchy view, the user has either tapped the back
         // button or another question to jump to so we need to rebuild the view.
-        if (requestCode == RequestCodes.HIERARCHY_ACTIVITY) {
+        if (requestCode == RequestCodes.HIERARCHY_ACTIVITY || requestCode == RequestCodes.CHANGE_SETTINGS) {
             onScreenRefresh();
             return;
         }
