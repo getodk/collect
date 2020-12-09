@@ -147,4 +147,9 @@ public class AnalyticsEvents {
      * Track usage of legacy Aggregate < 1 form list API code paths.
      */
     public static final String LEGACY_FORM_LIST = "LegacyFormList";
+
+    /**
+     * Tracks how often the audio player seek bar is used.
+     */
+    public static final String AUDIO_PLAYER_SEEK = "AudioPlayerSeek";
 }
