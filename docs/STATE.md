@@ -32,6 +32,7 @@ and update this document as the code evolves.
 * Code goes through static analysis using CheckStyle, PMD, SpotBugs and Android Lint
 * Code is mostly organized into packages based around what kind of object they are which has become unwieldy
 * Forms get into the app from three different sources (Open Rosa servers, Google Drive and disk) but the logic for this is disparate and they don't sit behind a common interface
+* Instances are linked to the forms they are instances of through formid and version. However, the same formid and version combination could represent multiple forms in storage
 
 ## Where we're going
 
