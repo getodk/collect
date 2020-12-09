@@ -162,4 +162,12 @@ public class AnalyticsEvents {
      * Tracks how often pause action is used while recording audio
      */
     public static final String AUDIO_RECORDING_PAUSE = "AudioRecordingPause";
+
+    /**
+     * Tracks usage or internal recording vs external recording vs choosing files for
+     * audio question
+     */
+    public static final String AUDIO_RECORDING_INTERNAL = "AudioRecordingInternal";
+    public static final String AUDIO_RECORDING_EXTERNAL = "AudioRecordingExternal";
+    public static final String AUDIO_RECORDING_CHOOSE = "AudioRecordingChoose";
 }

@@ -22,6 +22,7 @@ import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
@@ -70,6 +71,7 @@ public class WidgetFactory {
     private final AudioPlayer audioPlayer;
     private final ActivityAvailability activityAvailability;
     private final RecordingRequesterFactory recordingRequesterFactory;
+    private final FormEntryViewModel formEntryViewModel;
 
     public WidgetFactory(Activity activity,
                          boolean readOnlyOverride,
@@ -78,7 +80,7 @@ public class WidgetFactory {
                          QuestionMediaManager questionMediaManager,
                          AudioPlayer audioPlayer,
                          ActivityAvailability activityAvailability,
-                         RecordingRequesterFactory recordingRequesterFactory) {
+                         RecordingRequesterFactory recordingRequesterFactory, FormEntryViewModel formEntryViewModel) {
         this.context = activity;
         this.readOnlyOverride = readOnlyOverride;
         this.useExternalRecorder = useExternalRecorder;
@@ -87,6 +89,7 @@ public class WidgetFactory {
         this.audioPlayer = audioPlayer;
         this.activityAvailability = activityAvailability;
         this.recordingRequesterFactory = recordingRequesterFactory;
+        this.formEntryViewModel = formEntryViewModel;
     }
 
     public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt) {
@@ -184,7 +187,7 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
                 RecordingRequester recordingRequester = recordingRequesterFactory.create(prompt, useExternalRecorder);
-                questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, recordingRequester, new GetContentAudioFileRequester(context, activityAvailability, waitingForDataRegistry));
+                questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, recordingRequester, new GetContentAudioFileRequester(context, activityAvailability, waitingForDataRegistry, formEntryViewModel));
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
                 questionWidget = new VideoWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);

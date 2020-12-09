@@ -177,8 +177,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 questionMediaManager,
                 audioPlayer,
                 activityAvailability,
-                new RecordingRequesterFactory(waitingForDataRegistry, questionMediaManager, activityAvailability, audioRecorderViewModel, permissionUtils, context, viewLifecycle)
-        );
+                new RecordingRequesterFactory(waitingForDataRegistry, questionMediaManager, activityAvailability, audioRecorderViewModel, permissionUtils, context, viewLifecycle, formEntryViewModel),
+                formEntryViewModel);
 
         widgets = new ArrayList<>();
         widgetsList = findViewById(R.id.widgets);

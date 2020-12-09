@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.fakes.FakePermissionUtils;
+import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.audiorecorder.recorder.Output;
@@ -45,7 +46,7 @@ public class InternalRecordingRequesterTest {
     @Before
     public void setup() {
         Activity activity = Robolectric.buildActivity(Activity.class).get();
-        requester = new InternalRecordingRequester(activity, viewModel, permissionUtils, new FakeLifecycleOwner(), questionMediaManager);
+        requester = new InternalRecordingRequester(activity, viewModel, permissionUtils, new FakeLifecycleOwner(), questionMediaManager, mock(FormEntryViewModel.class));
         permissionUtils.setPermissionGranted(true);
     }
 

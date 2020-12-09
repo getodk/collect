@@ -5,6 +5,7 @@ import androidx.lifecycle.LifecycleOwner;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Test;
+import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.PermissionUtils;
@@ -24,8 +25,8 @@ public class RecordingRequesterFactoryTest {
             mock(AudioRecorderViewModel.class),
             mock(PermissionUtils.class),
             mock(ComponentActivity.class),
-            mock(LifecycleOwner.class)
-    );
+            mock(LifecycleOwner.class),
+            mock(FormEntryViewModel.class));
 
     @Test
     public void whenNoQualitySpecified_andSettingExternalNotPreferred_createsInternalRecordingRequester() {
