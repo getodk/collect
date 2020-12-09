@@ -198,14 +198,11 @@ public class FillBlankFormActivity extends FormListActivity implements
                 setResult(RESULT_OK, new Intent().setData(formUri));
             } else {
                 // caller wants to view/edit a form, so launch formentryactivity
-                // startActivity(new Intent(Intent.ACTION_EDIT, formUri)); smap
-
-                // start smap
-                Intent i = new Intent(this, org.odk.collect.android.activities.FormEntryActivity.class);
-                //i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
-                i.setData(formUri);
-                startActivity(i);
-                // end smap
+                //Intent intent = new Intent(Intent.ACTION_EDIT, formUri);  // smap
+                Intent intent = new Intent(this, org.odk.collect.android.activities.FormEntryActivity.class);
+                intent.setData(formUri);   // smap
+                intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+                startActivity(intent);
             }
 
             finish();

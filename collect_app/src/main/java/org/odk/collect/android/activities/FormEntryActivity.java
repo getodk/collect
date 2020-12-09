@@ -87,7 +87,6 @@ import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
-import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.external.handler.SmapRemoteDataItem;    // smap
 import org.odk.collect.android.formentry.FormEntryMenuDelegate;
 import org.odk.collect.android.formentry.FormEntryViewModel;
@@ -184,7 +183,6 @@ import timber.log.Timber;
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static android.view.animation.AnimationUtils.loadAnimation;
-import static java.lang.Thread.sleep;
 import static org.javarosa.form.api.FormEntryController.EVENT_PROMPT_NEW_REPEAT;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SAVE_INCOMPLETE;
 import static org.odk.collect.android.fragments.BarcodeWidgetScannerFragment.BARCODE_RESULT_KEY;
@@ -1803,7 +1801,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
                         // analytics.logEvent(SAVE_INCOMPLETE, "saveIncomplete", Collect.getCurrentFormIdentifierHash());
 
-                        saveForm(false, false, null, false);        // smap add "save message" as true ???? Removed in upgrade
+                        saveForm(false, false, null, false);
                         autoSaved = true;
                     }
                 }
@@ -2336,7 +2334,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
-        //Collect.getInstance().setFormEntryActivity(null);   // smap - commented out because on destroy for old activity cn be called after on Create for new
         releaseOdkView();
         if (progressBar != null) {    // smap
             progressBar.dismiss();

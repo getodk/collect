@@ -2,12 +2,12 @@
 	------
 	both modified:   README.md
 r	both modified:   collect_app/build.gradle
-	deleted by us:   collect_app/google-services.json
-	deleted by us:   collect_app/src/debug/google-services.json
-	both modified:   collect_app/src/main/AndroidManifest.xml
+r	deleted by us:   collect_app/google-services.json
+r	deleted by us:   collect_app/src/debug/google-services.json
+r	both modified:   collect_app/src/main/AndroidManifest.xml
 	deleted by them: collect_app/src/main/java/org/odk/collect/android/activities/FileManagerTabs.java
-	both modified:   collect_app/src/main/java/org/odk/collect/android/activities/FillBlankFormActivity.java
-	both modified:   collect_app/src/main/java/org/odk/collect/android/activities/FormEntryActivity.java
+r	both modified:   collect_app/src/main/java/org/odk/collect/android/activities/FillBlankFormActivity.java
+r	both modified:   collect_app/src/main/java/org/odk/collect/android/activities/FormEntryActivity.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/activities/InstanceUploaderActivity.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/activities/InstanceUploaderListActivity.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/activities/MainMenuActivity.java
