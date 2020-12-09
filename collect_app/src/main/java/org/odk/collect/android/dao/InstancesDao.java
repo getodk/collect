@@ -365,8 +365,7 @@ public class InstancesDao {
                     int updateidColumnIndex = cursor.getColumnIndex(InstanceColumns.T_UPDATEID);                     // smap
                     int locationTriggerColumnIndex = cursor.getColumnIndex(InstanceColumns.T_LOCATION_TRIGGER);     // smap
                     int surveyNotesColumnIndex = cursor.getColumnIndex(InstanceColumns.T_SURVEY_NOTES);             // smap
-                    int assignmentIdColumnIndex = cursor.getColumnIndex(InstanceColumns.T_ASS_ID);
-                    // smap
+                    int assignmentIdColumnIndex = cursor.getColumnIndex(InstanceColumns.T_ASS_ID);                  // smap
                     int geometryTypeColumnIndex = cursor.getColumnIndex(InstanceColumns.GEOMETRY_TYPE);
                     int geometryColumnIndex = cursor.getColumnIndex(InstanceColumns.GEOMETRY);
 

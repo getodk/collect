@@ -8,16 +8,16 @@ r	both modified:   collect_app/src/main/AndroidManifest.xml
 	deleted by them: collect_app/src/main/java/org/odk/collect/android/activities/FileManagerTabs.java
 r	both modified:   collect_app/src/main/java/org/odk/collect/android/activities/FillBlankFormActivity.java
 r	both modified:   collect_app/src/main/java/org/odk/collect/android/activities/FormEntryActivity.java
-	both modified:   collect_app/src/main/java/org/odk/collect/android/activities/InstanceUploaderActivity.java
-	both modified:   collect_app/src/main/java/org/odk/collect/android/activities/InstanceUploaderListActivity.java
-	both modified:   collect_app/src/main/java/org/odk/collect/android/activities/MainMenuActivity.java
-	both modified:   collect_app/src/main/java/org/odk/collect/android/activities/SplashScreenActivity.java
-	both modified:   collect_app/src/main/java/org/odk/collect/android/adapters/AbstractSelectListAdapter.java
-	both modified:   collect_app/src/main/java/org/odk/collect/android/adapters/SelectMultipleListAdapter.java
-	both modified:   collect_app/src/main/java/org/odk/collect/android/adapters/SelectOneListAdapter.java
+r	both modified:   collect_app/src/main/java/org/odk/collect/android/activities/InstanceUploaderActivity.java
+r	both modified:   collect_app/src/main/java/org/odk/collect/android/activities/InstanceUploaderListActivity.java
+r	both modified:   collect_app/src/main/java/org/odk/collect/android/activities/MainMenuActivity.java
+r	both modified:   collect_app/src/main/java/org/odk/collect/android/activities/SplashScreenActivity.java
+r	both modified:   collect_app/src/main/java/org/odk/collect/android/adapters/AbstractSelectListAdapter.java
+r	both modified:   collect_app/src/main/java/org/odk/collect/android/adapters/SelectMultipleListAdapter.java
+r	both modified:   collect_app/src/main/java/org/odk/collect/android/adapters/SelectOneListAdapter.java
 r	both modified:   collect_app/src/main/java/org/odk/collect/android/application/Collect.java
-	both modified:   collect_app/src/main/java/org/odk/collect/android/dao/FormsDao.java
-	both modified:   collect_app/src/main/java/org/odk/collect/android/dao/InstancesDao.java
+r	both modified:   collect_app/src/main/java/org/odk/collect/android/dao/FormsDao.java
+r	both modified:   collect_app/src/main/java/org/odk/collect/android/dao/InstancesDao.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/database/FormDatabaseMigrator.java
 	added by us:     collect_app/src/main/java/org/odk/collect/android/database/SmapTraceDatabaseHelper.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/formentry/FormEntryViewModel.java
@@ -78,8 +78,7 @@ r	deleted by them: collect_app/src/main/java/org/odk/collect/android/utilities/N
 	both modified:   collect_app/src/main/res/xml/general_preferences.xml
 	both modified:   collect_app/src/main/res/xml/identity_preferences.xml
 	both modified:   collect_app/src/main/res/xml/server_preferences.xml
-	deleted by us:   collect_app/src/release/google-services.json
-	both modified:   settings.gradle
+r	both modified:   settings.gradle
 
 	Follow Up
 	---------
@@ -102,8 +101,8 @@ r	7) NotificationUtils - they deleted we retained - review
 	11) FileManagerTabs replaced by DeleteSavedFormActivity
 	12) FormChooserListActivity replaced by FillBlankFormActivity
 	13) BikramSambatDatePickerDialog.java, DateTimeUtils.java Hacked in temporary solution
-	14) AboutPreferencesFragment has been deleted
-	15) FormEntryActivity - save form - show message has been removed
+r	14) AboutPreferencesFragment has been deleted
+r	15) FormEntryActivity - save form - show message has been removed
 
 	Complete List of Changes
 	-------------------------

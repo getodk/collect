@@ -357,6 +357,8 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         instancesToSend = updatedToSend;
 
         this.url = url.toString();
+
+        /** Once credentials are provided in the dialog, {@link #updatedCredentials()} is called */
         showDialog(AUTH_DIALOG);
     }
 

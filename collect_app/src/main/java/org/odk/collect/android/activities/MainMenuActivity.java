@@ -29,7 +29,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
-//import com.google.android.gms.analytics.GoogleAnalytics;  // smap
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
