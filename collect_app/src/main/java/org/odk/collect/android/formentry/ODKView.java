@@ -75,6 +75,7 @@ import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.StringWidget;
+import org.odk.collect.android.widgets.UrlWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
@@ -96,6 +97,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.analytics.AnalyticsEvents.PROMPT;
 import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_EXTERNAL_APP_RECORDING;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
@@ -170,7 +172,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 preferencesProvider.getGeneralSharedPreferences().getBoolean(KEY_EXTERNAL_APP_RECORDING, true),
                 waitingForDataRegistry,
                 questionMediaManager,
-                analytics,
                 audioPlayer,
                 activityAvailability,
                 new RecordingRequesterFactory(waitingForDataRegistry, questionMediaManager, activityAvailability, audioRecorderViewModel, permissionUtils, context, viewLifecycle)
@@ -190,6 +191,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
         setupAudioErrors();
         autoplayIfNeeded(advancingPage);
+
+        logAnalyticsForWidgets();
     }
 
     private void setupAudioErrors() {
@@ -655,6 +658,14 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     public void widgetValueChanged(QuestionWidget changedWidget) {
         if (widgetValueChangedListener != null) {
             widgetValueChangedListener.widgetValueChanged(changedWidget);
+        }
+    }
+
+    private void logAnalyticsForWidgets() {
+        for (QuestionWidget widget : widgets) {
+            if (widget instanceof UrlWidget) {
+                analytics.logEvent(PROMPT, "Url", Collect.getCurrentFormIdentifierHash());
+            }
         }
     }
 }
