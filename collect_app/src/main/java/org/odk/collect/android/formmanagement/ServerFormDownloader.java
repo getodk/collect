@@ -174,7 +174,7 @@ public class ServerFormDownloader implements FormDownloader {
             if (fileResult.isNew) {
                 try {
                     final long start = System.currentTimeMillis();
-                    Timber.w("Parsing document %s", fileResult.file.getAbsolutePath());
+                    Timber.i("Parsing document %s", fileResult.file.getAbsolutePath());
 
                     parsedFields = formMetadataParser
                             .parse(fileResult.file, new File(tempMediaPath));
@@ -228,10 +228,10 @@ public class ServerFormDownloader implements FormDownloader {
                 if (uriResult.isNew() && fileResult.isNew()) {
                     // this means we should delete the entire form together with the metadata
                     Uri uri = uriResult.getUri();
-                    Timber.w("The form is new. We should delete the entire form.");
+                    Timber.d("The form is new. We should delete the entire form.");
                     int deletedCount = Collect.getInstance().getContentResolver().delete(uri,
                             null, null);
-                    Timber.w("Deleted %d rows using uri %s", deletedCount, uri.toString());
+                    Timber.d("Deleted %d rows using uri %s", deletedCount, uri.toString());
                 }
             }
             return false;
@@ -239,7 +239,7 @@ public class ServerFormDownloader implements FormDownloader {
 
         private void cleanUp(FileResult fileResult, String tempMediaPath) {
             if (fileResult == null) {
-                Timber.w("The user cancelled (or an exception happened) the download of a form at the very beginning.");
+                Timber.d("The user cancelled (or an exception happened) the download of a form at the very beginning.");
             } else {
                 String md5Hash = FileUtils.getMd5Hash(fileResult.file);
                 if (md5Hash != null) {
@@ -326,13 +326,13 @@ public class ServerFormDownloader implements FormDownloader {
                 isNew = false;
 
                 // delete the file we just downloaded, because it's a duplicate
-                Timber.w("A duplicate file has been found, we need to remove the downloaded file and return the other one.");
+                Timber.d("A duplicate file has been found, we need to remove the downloaded file and return the other one.");
                 FileUtils.deleteAndReport(tempFormFile);
 
                 // set the file returned to the file we already had
                 String existingPath = getAbsoluteFilePath(formsDirPath, form.getFormFilePath());
                 tempFormFile = new File(existingPath);
-                Timber.w("Will use %s", existingPath);
+                Timber.d("Will use %s", existingPath);
             }
 
             return new FileResult(tempFormFile, isNew);
@@ -427,12 +427,11 @@ public class ServerFormDownloader implements FormDownloader {
             String errorMessage = FileUtils.copyFile(tempFile, file);
 
             if (file.exists()) {
-                Timber.w("Copied %s over %s", tempFile.getAbsolutePath(), file.getAbsolutePath());
+                Timber.d("Copied %s over %s", tempFile.getAbsolutePath(), file.getAbsolutePath());
                 FileUtils.deleteAndReport(tempFile);
             } else {
                 String msg = Collect.getInstance().getString(R.string.fs_file_copy_error,
                         tempFile.getAbsolutePath(), file.getAbsolutePath(), errorMessage);
-                Timber.w(msg);
                 throw new RuntimeException(msg);
             }
         }
