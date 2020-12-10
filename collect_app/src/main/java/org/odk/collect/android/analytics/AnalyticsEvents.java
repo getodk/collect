@@ -170,4 +170,9 @@ public class AnalyticsEvents {
     public static final String AUDIO_RECORDING_INTERNAL = "AudioRecordingInternal";
     public static final String AUDIO_RECORDING_EXTERNAL = "AudioRecordingExternal";
     public static final String AUDIO_RECORDING_CHOOSE = "AudioRecordingChoose";
+
+    /**
+     * Tracks how often questions are answered while an audio recording is being made
+     */
+    public static final String ANSWER_WHILE_RECORDING = "AnswerWhileRecording";
 }

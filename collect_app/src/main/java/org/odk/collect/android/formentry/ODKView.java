@@ -135,6 +135,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
     private final WidgetFactory widgetFactory;
     private final LifecycleOwner viewLifecycle;
+    private final AudioRecorderViewModel audioRecorderViewModel;
     private final FormEntryViewModel formEntryViewModel;
 
     /**
@@ -147,6 +148,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     public ODKView(ComponentActivity context, final FormEntryPrompt[] questionPrompts, FormEntryCaption[] groups, boolean advancingPage, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, AudioPlayer audioPlayer, AudioRecorderViewModel audioRecorderViewModel, FormEntryViewModel formEntryViewModel) {
         super(context);
         viewLifecycle = ((ScreenContext) context).getViewLifecycle();
+        this.audioRecorderViewModel = audioRecorderViewModel;
         this.formEntryViewModel = formEntryViewModel;
 
         getComponent(context).inject(this);
@@ -659,9 +661,14 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     }
 
     public void widgetValueChanged(QuestionWidget changedWidget) {
+        if (audioRecorderViewModel.isRecording()) {
+            formEntryViewModel.logFormEvent(AnalyticsEvents.ANSWER_WHILE_RECORDING);
+        }
+
         if (widgetValueChangedListener != null) {
             widgetValueChangedListener.widgetValueChanged(changedWidget);
         }
+
     }
 
     private void logAnalyticsForWidgets() {
