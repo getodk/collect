@@ -53,6 +53,7 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
@@ -75,6 +76,7 @@ import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.StringWidget;
+import org.odk.collect.android.widgets.UrlWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
@@ -131,18 +133,21 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
     private final WidgetFactory widgetFactory;
     private final LifecycleOwner viewLifecycle;
+    private final AudioRecorderViewModel audioRecorderViewModel;
+    private final FormEntryViewModel formEntryViewModel;
 
     /**
      * Builds the view for a specified question or field-list of questions.
-     *
-     * @param context         the activity creating this view
+     *  @param context         the activity creating this view
      * @param questionPrompts the questions to be included in this view
      * @param groups          the group hierarchy that this question or field list is in
      * @param advancingPage   whether this view is being created after a forward swipe through the
      */
-    public ODKView(ComponentActivity context, final FormEntryPrompt[] questionPrompts, FormEntryCaption[] groups, boolean advancingPage, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, AudioPlayer audioPlayer, AudioRecorderViewModel audioRecorderViewModel) {
+    public ODKView(ComponentActivity context, final FormEntryPrompt[] questionPrompts, FormEntryCaption[] groups, boolean advancingPage, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, AudioPlayer audioPlayer, AudioRecorderViewModel audioRecorderViewModel, FormEntryViewModel formEntryViewModel) {
         super(context);
         viewLifecycle = ((ScreenContext) context).getViewLifecycle();
+        this.audioRecorderViewModel = audioRecorderViewModel;
+        this.formEntryViewModel = formEntryViewModel;
 
         getComponent(context).inject(this);
         this.audioHelper = audioHelperFactory.create(context);
@@ -170,11 +175,10 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 preferencesProvider.getGeneralSharedPreferences().getBoolean(KEY_EXTERNAL_APP_RECORDING, true),
                 waitingForDataRegistry,
                 questionMediaManager,
-                analytics,
                 audioPlayer,
                 activityAvailability,
-                new RecordingRequesterFactory(waitingForDataRegistry, questionMediaManager, activityAvailability, audioRecorderViewModel, permissionUtils, context, viewLifecycle)
-        );
+                new RecordingRequesterFactory(waitingForDataRegistry, questionMediaManager, activityAvailability, audioRecorderViewModel, permissionUtils, context, viewLifecycle, formEntryViewModel),
+                formEntryViewModel);
 
         widgets = new ArrayList<>();
         widgetsList = findViewById(R.id.widgets);
@@ -190,6 +194,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
         setupAudioErrors();
         autoplayIfNeeded(advancingPage);
+
+        logAnalyticsForWidgets();
     }
 
     private void setupAudioErrors() {
@@ -653,8 +659,21 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     }
 
     public void widgetValueChanged(QuestionWidget changedWidget) {
+        if (audioRecorderViewModel.isRecording()) {
+            formEntryViewModel.logFormEvent(AnalyticsEvents.ANSWER_WHILE_RECORDING);
+        }
+
         if (widgetValueChangedListener != null) {
             widgetValueChangedListener.widgetValueChanged(changedWidget);
+        }
+
+    }
+
+    private void logAnalyticsForWidgets() {
+        for (QuestionWidget widget : widgets) {
+            if (widget instanceof UrlWidget) {
+                formEntryViewModel.logFormEvent(AnalyticsEvents.URL_QUESTION);
+            }
         }
     }
 }

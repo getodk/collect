@@ -346,6 +346,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Inject
     FormSaveViewModel.FactoryFactory formSaveViewModelFactoryFactory;
 
+    @Inject
+    FormEntryViewModel.Factory formEntryViewModelFactory;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -469,7 +472,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
         formEntryViewModel = ViewModelProviders
-                .of(this, new FormEntryViewModel.Factory(analytics))
+                .of(this, formEntryViewModelFactory)
                 .get(FormEntryViewModel.class);
 
         formEntryViewModel.getError().observe(this, error -> {
@@ -1259,7 +1262,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .of(this, factory)
                 .get(AudioClipViewModel.class), odkViewLifecycle);
 
-        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorderViewModel);
+        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorderViewModel, formEntryViewModel);
     }
 
     @Override
@@ -1736,7 +1739,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             public void onAddRepeatClicked() {
                 swipeHandler.setBeenSwiped(false);
                 shownAlertDialogIsGroupRepeat = false;
-                formEntryViewModel.addRepeat(true);
+                formEntryViewModel.addRepeat();
                 formIndexAnimationHandler.handle(formEntryViewModel.getCurrentIndex());
             }
 

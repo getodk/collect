@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
@@ -39,7 +40,7 @@ public class GetContentAudioFileRequesterTest {
     @Before
     public void setup() {
         activity = Robolectric.buildActivity(Activity.class).get();
-        requester = new GetContentAudioFileRequester(activity, activityAvailability, waitingForDataRegistry);
+        requester = new GetContentAudioFileRequester(activity, activityAvailability, waitingForDataRegistry, mock(FormEntryViewModel.class));
     }
 
     @Test

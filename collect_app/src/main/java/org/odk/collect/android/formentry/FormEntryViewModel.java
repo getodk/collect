@@ -18,13 +18,14 @@ import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.utilities.Clock;
 
-import static org.odk.collect.android.analytics.AnalyticsEvents.ADD_REPEAT;
+import javax.inject.Inject;
+
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
 
 public class FormEntryViewModel extends ViewModel implements RequiresFormController {
 
-    private final Analytics analytics;
     private final Clock clock;
+    private final Analytics analytics;
     private final MutableLiveData<String> error = new MutableLiveData<>(null);
 
     @Nullable
@@ -34,9 +35,9 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     private FormIndex jumpBackIndex;
 
     @SuppressWarnings("WeakerAccess")
-    public FormEntryViewModel(Analytics analytics, Clock clock) {
-        this.analytics = analytics;
+    public FormEntryViewModel(Clock clock, Analytics analytics) {
         this.clock = clock;
+        this.analytics = analytics;
     }
 
     @Override
@@ -71,19 +72,12 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         formController.jumpToNewRepeatPrompt();
     }
 
-    public void addRepeat(boolean fromPrompt) {
+    public void addRepeat() {
         if (formController == null) {
             return;
         }
 
-        if (jumpBackIndex != null) {
-            jumpBackIndex = null;
-            analytics.logEvent(ADD_REPEAT, "Inline", formController.getCurrentFormIdentifierHash());
-        } else if (fromPrompt) {
-            analytics.logEvent(ADD_REPEAT, "Prompt", formController.getCurrentFormIdentifierHash());
-        } else {
-            analytics.logEvent(ADD_REPEAT, "Hierarchy", formController.getCurrentFormIdentifierHash());
-        }
+        jumpBackIndex = null;
 
         try {
             formController.newRepeat();
@@ -106,8 +100,6 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         }
 
         if (jumpBackIndex != null) {
-            analytics.logEvent(ADD_REPEAT, "InlineDecline", formController.getCurrentFormIdentifierHash());
-
             formController.jumpToIndex(jumpBackIndex);
             jumpBackIndex = null;
         } else {
@@ -164,11 +156,26 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, clock.getCurrentTime());
     }
 
+    public void logFormEvent(String event) {
+        analytics.logFormEvent(event, getFormIdentifierHash());
+    }
+
+    private String getFormIdentifierHash() {
+        if (formController != null) {
+            return formController.getCurrentFormIdentifierHash();
+        } else {
+            return "";
+        }
+    }
+
     public static class Factory implements ViewModelProvider.Factory {
 
+        private final Clock clock;
         private final Analytics analytics;
 
-        public Factory(Analytics analytics) {
+        @Inject
+        public Factory(Clock clock, Analytics analytics) {
+            this.clock = clock;
             this.analytics = analytics;
         }
 
@@ -176,7 +183,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormEntryViewModel(analytics, System::currentTimeMillis);
+            return (T) new FormEntryViewModel(clock, analytics);
         }
     }
 }

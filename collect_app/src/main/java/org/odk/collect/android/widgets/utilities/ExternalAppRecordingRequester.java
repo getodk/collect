@@ -8,6 +8,8 @@ import android.widget.Toast;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.AnalyticsEvents;
+import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -21,12 +23,14 @@ public class ExternalAppRecordingRequester implements RecordingRequester {
     private final PermissionUtils permissionUtils;
     private final ActivityAvailability activityAvailability;
     private final WaitingForDataRegistry waitingForDataRegistry;
+    private final FormEntryViewModel formEntryViewModel;
 
-    public ExternalAppRecordingRequester(Activity activity, ActivityAvailability activityAvailability, WaitingForDataRegistry waitingForDataRegistry, PermissionUtils permissionUtils) {
+    public ExternalAppRecordingRequester(Activity activity, ActivityAvailability activityAvailability, WaitingForDataRegistry waitingForDataRegistry, PermissionUtils permissionUtils, FormEntryViewModel formEntryViewModel) {
         this.activity = activity;
         this.permissionUtils = permissionUtils;
         this.activityAvailability = activityAvailability;
         this.waitingForDataRegistry = waitingForDataRegistry;
+        this.formEntryViewModel = formEntryViewModel;
     }
 
     @Override
@@ -52,6 +56,8 @@ public class ExternalAppRecordingRequester implements RecordingRequester {
             public void denied() {
             }
         });
+
+        formEntryViewModel.logFormEvent(AnalyticsEvents.AUDIO_RECORDING_EXTERNAL);
     }
 
     @Override

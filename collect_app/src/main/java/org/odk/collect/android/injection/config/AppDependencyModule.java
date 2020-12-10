@@ -106,6 +106,7 @@ import org.odk.collect.android.views.BarcodeViewDecoder;
 import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
+import org.odk.collect.utilities.Clock;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.File;
@@ -355,8 +356,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SettingsChangeHandler providesSettingsChangeHandler(PropertyManager propertyManager, FormUpdateManager formUpdateManager, ServerRepository serverRepository) {
-        return new CollectSettingsChangeHandler(propertyManager, formUpdateManager, serverRepository);
+    public SettingsChangeHandler providesSettingsChangeHandler(PropertyManager propertyManager, FormUpdateManager formUpdateManager, ServerRepository serverRepository, Analytics analytics, PreferencesProvider preferencesProvider) {
+        return new CollectSettingsChangeHandler(propertyManager, formUpdateManager, serverRepository, analytics, preferencesProvider);
     }
 
     @Provides
@@ -395,7 +396,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormSource providesFormAPI(GeneralSharedPreferences generalSharedPreferences, Context context, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils, Analytics analytics) {
+    public FormSource providesFormSource(GeneralSharedPreferences generalSharedPreferences, Context context, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils, Analytics analytics) {
         SharedPreferences generalPrefs = generalSharedPreferences.getSharedPreferences();
         String serverURL = generalPrefs.getString(GeneralKeys.KEY_SERVER_URL, context.getString(R.string.default_server_url));
         String formListPath = generalPrefs.getString(GeneralKeys.KEY_FORMLIST_URL, context.getString(R.string.default_odk_formlist));
@@ -480,5 +481,10 @@ public class AppDependencyModule {
                 return (T) new FormSaveViewModel(handle, System::currentTimeMillis, new DiskFormSaver(), new MediaUtils(), analytics, scheduler);
             }
         };
+    }
+
+    @Provides
+    public Clock providesClock() {
+        return System::currentTimeMillis;
     }
 }

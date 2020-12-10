@@ -21,8 +21,8 @@ import android.hardware.SensorManager;
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
@@ -50,7 +50,6 @@ import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterFactory;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
-import static org.odk.collect.android.analytics.AnalyticsEvents.PROMPT;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MAPS;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.PLACEMENT_MAP;
 import static org.odk.collect.android.utilities.WidgetAppearanceUtils.hasAppearance;
@@ -69,29 +68,28 @@ public class WidgetFactory {
     private final boolean useExternalRecorder;
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
-    private final Analytics analytics;
     private final AudioPlayer audioPlayer;
     private final ActivityAvailability activityAvailability;
     private final RecordingRequesterFactory recordingRequesterFactory;
+    private final FormEntryViewModel formEntryViewModel;
 
     public WidgetFactory(Activity activity,
                          boolean readOnlyOverride,
                          boolean useExternalRecorder,
                          WaitingForDataRegistry waitingForDataRegistry,
                          QuestionMediaManager questionMediaManager,
-                         Analytics analytics,
                          AudioPlayer audioPlayer,
                          ActivityAvailability activityAvailability,
-                         RecordingRequesterFactory recordingRequesterFactory) {
+                         RecordingRequesterFactory recordingRequesterFactory, FormEntryViewModel formEntryViewModel) {
         this.context = activity;
         this.readOnlyOverride = readOnlyOverride;
         this.useExternalRecorder = useExternalRecorder;
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
-        this.analytics = analytics;
         this.audioPlayer = audioPlayer;
         this.activityAvailability = activityAvailability;
         this.recordingRequesterFactory = recordingRequesterFactory;
+        this.formEntryViewModel = formEntryViewModel;
     }
 
     public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt) {
@@ -161,8 +159,6 @@ public class WidgetFactory {
                             questionWidget = new StringNumberWidget(context, questionDetails);
                         } else if (appearance.equals(WidgetAppearanceUtils.URL)) {
                             questionWidget = new UrlWidget(context, questionDetails, new CustomTabHelper());
-
-                            analytics.logEvent(PROMPT, "Url", questionDetails.getFormAnalyticsID());
                         } else {
                             questionWidget = new StringWidget(context, questionDetails);
                         }
@@ -191,7 +187,7 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
                 RecordingRequester recordingRequester = recordingRequesterFactory.create(prompt, useExternalRecorder);
-                questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, recordingRequester, new GetContentAudioFileRequester(context, activityAvailability, waitingForDataRegistry));
+                questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, recordingRequester, new GetContentAudioFileRequester(context, activityAvailability, waitingForDataRegistry, formEntryViewModel));
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
                 questionWidget = new VideoWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);

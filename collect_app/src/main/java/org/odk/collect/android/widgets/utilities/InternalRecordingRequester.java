@@ -6,6 +6,8 @@ import android.util.Pair;
 import androidx.lifecycle.LifecycleOwner;
 
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.analytics.AnalyticsEvents;
+import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
@@ -22,13 +24,15 @@ public class InternalRecordingRequester implements RecordingRequester {
     private final PermissionUtils permissionUtils;
     private final LifecycleOwner lifecycleOwner;
     private final QuestionMediaManager questionMediaManager;
+    private final FormEntryViewModel formEntryViewModel;
 
-    public InternalRecordingRequester(Activity activity, AudioRecorderViewModel viewModel, PermissionUtils permissionUtils, LifecycleOwner lifecycleOwner, QuestionMediaManager questionMediaManager) {
+    public InternalRecordingRequester(Activity activity, AudioRecorderViewModel viewModel, PermissionUtils permissionUtils, LifecycleOwner lifecycleOwner, QuestionMediaManager questionMediaManager, FormEntryViewModel formEntryViewModel) {
         this.activity = activity;
         this.viewModel = viewModel;
         this.permissionUtils = permissionUtils;
         this.lifecycleOwner = lifecycleOwner;
         this.questionMediaManager = questionMediaManager;
+        this.formEntryViewModel = formEntryViewModel;
     }
 
     @Override
@@ -51,6 +55,8 @@ public class InternalRecordingRequester implements RecordingRequester {
 
             }
         });
+
+        formEntryViewModel.logFormEvent(AnalyticsEvents.AUDIO_RECORDING_INTERNAL);
     }
 
     @Override
