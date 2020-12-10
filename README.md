@@ -1,46 +1,45 @@
-[Smap fieldTask](http://www.smap.com.au) 
+# Field Task
 
-fieldTask is a clone of [odkCollect](http://opendatakit.org/use/collect/) with Task Management functionality. 
+Field Task is an Android app that can be used for collecting data for Monitoring and Evaluation from outside the office including locations without data connectivity. It also has task management functionality which enables it to be used for work force management applications.
+
+Field Task is a fork of [odkCollect](http://opendatakit.org/use/collect/). 
  
-Follow the latest news about Smap on our [blog](http://blog.smap.com.au)
 
-Frequently Asked Questions
----------------------------
-##### How to install and run
-* Install Android Studio
-* In Android Studio open the SDK manager (from the tools menu)
-* Under "Extras" install:
-    * Android Support Repository
-    * Android Support Library
-    * Google Play Services
-    * Google Repository
-* Clone as a GIT project into Android Studio
-* Checkout branch "producion"
-* Select fieldTask and run as an Android application
+## Table of Contents
+* [Dependencies](#dependencies)
+* [Setting up your development environment](#setting-up-your-development-environment)
 
-Instructions on installing a Smap server can be found in the operations manual [here](http://www.smap.com.au/downloads.shtml)
+## Dependencies
+Most dependencies are managed using gradle, however some Field Task functionality requires a modified version of JavaRosa(https://github.com/smap-consulting/javarosa).  You will need to download this to your development environment in order to access these features.
 
-Task Management 
----------------
+## Setting up your development environment
 
-A user of fieldTask can be assigned tasks to complete as per this [video](http://www.smap.com.au/taskManagement.shtml). 
+1. Download and install [Git](https://git-scm.com/downloads) and add it to your PATH
 
-##### Get existing survey data as an XForm instance XML file
-https://hostname/instanceXML/{survey id}/0?datakey={key name}&datakeyvalue={value of key}
+1. Download and install [Android Studio](https://developer.android.com/studio/index.html) 
 
-##### Update existing results
-https://{hostname}/submission/{instanceid}
+1. Fork the Field Task project ([why and how to fork](https://help.github.com/articles/fork-a-repo/))
 
-Note the instance id of the existing data is included in the instanceXML.  It should be replaced with a new instance id before the results are submitted. However the instance id of the data to be replaced needs to be included in teh submission URL.
+1. Clone your fork of the project locally. At the command line:
 
-This API allows you to maintain data using surveys. In the following video the data is published on a map, however it could also be published in a table as a patient registry or list of assets. fieldTask needs to be customised to access these links using the data keys in a similar way to web forms.
+        git clone https://github.com/YOUR-GITHUB-USERNAME/fieldTask4
 
-[![ScreenShot](http://img.youtube.com/vi/FUNPOmMnt1I/0.jpg)](https://www.youtube.com/watch?v=FUNPOmMnt1I)
+1. Use Android Studio to import the project from its Gradle settings. To run the project, click on the green arrow at the top of the screen.
 
-Development
------------
-* Code contributions are very welcome. 
-* [Issue Tracker](https://github.com/smap-consulting/fieldTask4/issues)
+1. Windows developers: continue configuring Android Studio with the steps in this document: [Developing ODK Collect on Windows](docs/WindowsDevSetup.md).
+
+1. Make sure you can run unit tests by running everything under `collect_app/src/test/java` in Android Studio or on the command line:
+
+    ```
+    ./gradlew testDebug
+    ```
+
+1. Make sure you can run instrumented tests by running everything under `collect_app/src/androidTest/java` in Android Studio or on the command line:
+
+    ```
+    ./gradlew connectedAndroidTest
+    ```
+
 
 Acknowledgements
 ----------------
