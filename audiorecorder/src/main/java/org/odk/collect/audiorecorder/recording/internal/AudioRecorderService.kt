@@ -59,7 +59,9 @@ internal class AudioRecorderService : Service() {
             }
 
             ACTION_STOP -> {
-                stopRecording()
+                if (recorder.isRecording()) {
+                    stopRecording()
+                }
             }
 
             ACTION_CLEAN_UP -> {

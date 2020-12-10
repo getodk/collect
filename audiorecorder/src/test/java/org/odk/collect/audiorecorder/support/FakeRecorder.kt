@@ -16,6 +16,8 @@ class FakeRecorder : Recorder {
         }
 
     var file: File? = null
+        private set
+
     lateinit var output: Output
 
     private val _recordings = mutableListOf<Unit>()
@@ -40,6 +42,9 @@ class FakeRecorder : Recorder {
             cancelled = false
             this.output = output
             _recordings.add(Unit)
+
+            val newFile = File.createTempFile("recording", ".mp3")
+            file = newFile
         } else {
             throw RecordingException()
         }
@@ -55,9 +60,7 @@ class FakeRecorder : Recorder {
 
     override fun stop(): File {
         recording = false
-        val newFile = File.createTempFile("recording", ".mp3")
-        file = newFile
-        return newFile
+        return file!!
     }
 
     override fun cancel() {

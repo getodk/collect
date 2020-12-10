@@ -145,6 +145,16 @@ class AudioRecorderServiceTest {
     }
 
     @Test
+    fun stopAction_beforeStart_doesNothing() {
+        val stopIntent = Intent(application, AudioRecorderService::class.java)
+        stopIntent.action = AudioRecorderService.ACTION_STOP
+        val service = startService(stopIntent)
+
+        val notification = shadowOf(service.get()).lastForegroundNotification
+        assertThat(notification, nullValue())
+    }
+
+    @Test
     fun cleanUpAction_whileRecording_cancelsRecorder() {
         startService(createStartIntent("123"))
 
