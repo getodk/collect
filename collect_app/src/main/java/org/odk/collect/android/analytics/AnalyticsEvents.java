@@ -175,4 +175,9 @@ public class AnalyticsEvents {
      * Tracks how often questions are answered while an audio recording is being made
      */
     public static final String ANSWER_WHILE_RECORDING = "AnswerWhileRecording";
+
+    /**
+     * Tracks how many users have opted in to internal recording as their default
+     */
+    public static final String INTERNAL_RECORDING_OPT_IN = "InternalRecordingOptIn";
 }
