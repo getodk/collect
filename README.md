@@ -47,6 +47,30 @@ Most dependencies are managed using gradle, however some Field Task functionalit
 
 ## Incorporating the latest ODK release
 
+1. Update the master branch to the latest version. On the commnad line
+
+        git checkout master
+        git fetch upstream
+        git merge upstream/master
+        
+1. Create a branch with the version you want to merge into Field Task
+
+        git branch merge_master <tag name>
+        
+   <tag name> is the tag in odk collect identifying the version that you want.  merge_master is the temporary branch that will be created. You can name it as you wish.
+ 
+ 1. Create a branch in which to merge the code
+
+        git checkout production
+        git checkout -b merge
+        git merge --no-commit merge_master
+        
+    This creates a temporary branch called merge from the latest production branch and then merges code from merge_master without committing the changes
+    
+    
+        
+   <tag name> is the tag in odk collect identifying the version that you want.  merge_master is the temporary branch that will be created. You can name it as you wish.
+ 
 
 Acknowledgements
 ----------------
