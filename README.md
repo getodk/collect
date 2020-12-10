@@ -66,10 +66,6 @@ Most dependencies are managed using gradle, however some Field Task functionalit
         git merge --no-commit merge_master
         
     This creates a temporary branch called merge from the latest production branch and then merges code from merge_master without committing the changes
-    
-    
-        
-   <tag name> is the tag in odk collect identifying the version that you want.  merge_master is the temporary branch that will be created. You can name it as you wish.
  
 
 Acknowledgements
