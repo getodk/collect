@@ -13,6 +13,7 @@ import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationVi
 import org.odk.collect.android.formentry.questions.AnswersProvider;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 import org.robolectric.Robolectric;
@@ -142,6 +143,19 @@ public class FormEntryMenuDelegateTest {
     }
 
     @Test
+    public void onItemSelected_whenPreferences_startsPreferencesActivityWithChangeSettingsRequest() {
+        RoboMenu menu = new RoboMenu();
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+
+        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_preferences));
+        ShadowActivity.IntentForResult nextStartedActivity = shadowOf(activity).getNextStartedActivityForResult();
+        assertThat(nextStartedActivity, not(nullValue()));
+        assertThat(nextStartedActivity.intent.getComponent().getClassName(), is(PreferencesActivity.class.getName()));
+        assertThat(nextStartedActivity.requestCode, is(ApplicationConstants.RequestCodes.CHANGE_SETTINGS));
+    }
+
+    @Test
     public void onItemSelected_whenPreferences_whenRecording_showsWarning() {
         RoboMenu menu = new RoboMenu();
         formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
@@ -150,7 +164,7 @@ public class FormEntryMenuDelegateTest {
         when(audioRecorderViewModel.isRecording()).thenReturn(true);
 
         formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_preferences));
-        assertThat(shadowOf(activity).getNextStartedActivity(), is(nullValue()));
+        assertThat(shadowOf(activity).getNextStartedActivityForResult(), is(nullValue()));
 
         RecordingWarningDialogFragment dialog = getFragmentByClass(activity.getSupportFragmentManager(), RecordingWarningDialogFragment.class);
         assertThat(dialog, is(notNullValue()));

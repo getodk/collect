@@ -114,7 +114,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
                 DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
             } else {
                 Intent pref = new Intent(activity, PreferencesActivity.class);
-                activity.startActivity(pref);
+                activity.startActivityForResult(pref, ApplicationConstants.RequestCodes.CHANGE_SETTINGS);
             }
 
             return true;

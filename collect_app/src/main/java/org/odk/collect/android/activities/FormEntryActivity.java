@@ -151,7 +151,6 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesChecker;
-import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
@@ -356,7 +355,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * detection of location permissions changes while the activity is in the background.
      */
     private boolean locationPermissionsPreviouslyGranted;
-    private int questionFontSize;
 
     private BackgroundLocationViewModel backgroundLocationViewModel;
     private IdentityPromptViewModel identityPromptViewModel;
@@ -412,8 +410,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             swipeHandler.setBeenSwiped(true);
             onSwipeBackward();
         });
-
-        questionFontSize = QuestionFontSizeUtils.getQuestionFontSize();
 
         if (savedInstanceState == null) {
             mediaLoadingFragment = new MediaLoadingFragment();
@@ -762,7 +758,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         // If we're coming back from the hierarchy view, the user has either tapped the back
         // button or another question to jump to so we need to rebuild the view.
-        if (requestCode == RequestCodes.HIERARCHY_ACTIVITY) {
+        if (requestCode == RequestCodes.HIERARCHY_ACTIVITY || requestCode == RequestCodes.CHANGE_SETTINGS) {
             onScreenRefresh();
             return;
         }
@@ -2025,13 +2021,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         nextButton.setVisibility(formController.getEvent() != FormEntryController.EVENT_END_OF_FORM ? View.VISIBLE : View.GONE);
     }
 
-    private void adjustFontSize() {
-        if (questionFontSize != QuestionFontSizeUtils.getQuestionFontSize()) {
-            questionFontSize = QuestionFontSizeUtils.getQuestionFontSize();
-            onScreenRefresh();
-        }
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -2082,7 +2071,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             onResumeWasCalledWithoutPermissions = true;
             return;
         }
-        adjustFontSize();
 
         String navigation = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_NAVIGATION);
         showNavigationButtons = navigation.contains(GeneralKeys.NAVIGATION_BUTTONS);
