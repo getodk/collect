@@ -266,6 +266,16 @@ class AudioRecorderServiceTest {
         assertThat(scheduler.isRepeatRunning(), equalTo(true))
     }
 
+    @Test
+    fun pauseAction_afterStop_doesNothing() {
+        val pauseIntent = Intent(application, AudioRecorderService::class.java)
+        pauseIntent.action = AudioRecorderService.ACTION_PAUSE
+        val service = startService(pauseIntent)
+
+        val notification = shadowOf(service.get()).lastForegroundNotification
+        assertThat(notification, nullValue())
+    }
+
     private fun createStartIntent(sessionId: String): Intent {
         val intent = Intent(application, AudioRecorderService::class.java)
         intent.action = AudioRecorderService.ACTION_START
