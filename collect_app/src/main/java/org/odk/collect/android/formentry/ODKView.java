@@ -74,7 +74,6 @@ import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.widgets.AudioWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.StringWidget;
 import org.odk.collect.android.widgets.UrlWidget;
@@ -99,7 +98,6 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.analytics.AnalyticsEvents.PROMPT;
 import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_EXTERNAL_APP_RECORDING;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
@@ -674,9 +672,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     private void logAnalyticsForWidgets() {
         for (QuestionWidget widget : widgets) {
             if (widget instanceof UrlWidget) {
-                analytics.logEvent(PROMPT, "Url", Collect.getCurrentFormIdentifierHash());
-            } else if (widget instanceof AudioWidget) {
-                formEntryViewModel.logFormEvent(AnalyticsEvents.AUDIO_QUESTION);
+                formEntryViewModel.logFormEvent(AnalyticsEvents.URL_QUESTION);
             }
         }
     }

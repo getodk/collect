@@ -154,11 +154,6 @@ public class AnalyticsEvents {
     public static final String AUDIO_PLAYER_SEEK = "AudioPlayerSeek";
 
     /**
-     * Tracks how many forms include an audio question.
-     */
-    public static final String AUDIO_QUESTION = "AudioQuestion";
-
-    /**
      * Tracks how often pause action is used while recording audio
      */
     public static final String AUDIO_RECORDING_PAUSE = "AudioRecordingPause";
@@ -180,4 +175,9 @@ public class AnalyticsEvents {
      * Tracks how many users have opted in to internal recording as their default
      */
     public static final String INTERNAL_RECORDING_OPT_IN = "InternalRecordingOptIn";
+
+    /**
+     * Tracks how often people see the URL question
+     */
+    public static final String URL_QUESTION = "UrlQuestion";
 }
