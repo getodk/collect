@@ -8,6 +8,8 @@ Field Task is a fork of [odkCollect](http://opendatakit.org/use/collect/).
 ## Table of Contents
 * [Dependencies](#dependencies)
 * [Setting up your development environment](#setting-up-your-development-environment)
+* [Branches](#branches)
+* [Incorporating the latest ODK release](#incorporating-the-latest-odk-release)
 
 ## Dependencies
 Most dependencies are managed using gradle, however some Field Task functionality requires a modified version of JavaRosa(https://github.com/smap-consulting/javarosa).  You will need to download this to your development environment in order to access these features.
@@ -39,6 +41,11 @@ Most dependencies are managed using gradle, however some Field Task functionalit
     ```
     ./gradlew connectedAndroidTest
     ```
+## Branches
+* production - The latest Field Task code
+* master - The latest unmodifield code from ODK
+
+## Incorporating the latest ODK release
 
 
 Acknowledgements
