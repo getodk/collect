@@ -38,7 +38,7 @@
         android:layout_alignParentEnd="true"
         android:orientation="horizontal">
 
-        <org.odk.collect.android.views.MultiClickSafeButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/pause_recording"
             style="@style/Widget.Collect.Button.OutlinedIconButton"
             android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
             app:icon="@drawable/ic_pause_24dp"
             app:iconTint="?colorOnPrimary" />
 
-        <org.odk.collect.android.views.MultiClickSafeButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/stop_recording"
             style="@style/Widget.Collect.Button.IconButton"
             android:layout_width="wrap_content"
