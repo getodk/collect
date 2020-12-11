@@ -85,13 +85,16 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     @Inject
     FormsRepository formsRepository;
 
+    @Inject
+    PermissionUtils permissionUtils;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
 
         // This activity is accessed directly externally
-        new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestStoragePermissions(this, new PermissionListener() {
+        permissionUtils.requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent

@@ -353,6 +353,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Inject
     SoftKeyboardController softKeyboardController;
 
+    @Inject
+    PermissionUtils permissionUtils;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -425,7 +428,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             mediaLoadingFragment = (MediaLoadingFragment) getFragmentManager().findFragmentByTag(TAG_MEDIA_LOADING_FRAGMENT);
         }
 
-        new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestStoragePermissions(this, new PermissionListener() {
+        permissionUtils.requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
@@ -2269,7 +2272,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         if (formController != null) {
             if (readPhoneStatePermissionRequestNeeded) {
-                new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestReadPhoneStatePermission(this, true, new PermissionListener() {
+                permissionUtils.requestReadPhoneStatePermission(this, true, new PermissionListener() {
                     @Override
                     public void granted() {
                         readPhoneStatePermissionRequestNeeded = false;
@@ -2604,7 +2607,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         displayUIFor(backgroundLocationViewModel.activityDisplayed());
 
         if (backgroundLocationViewModel.isBackgroundLocationPermissionsCheckNeeded()) {
-            new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestLocationPermissions(this, new PermissionListener() {
+            permissionUtils.requestLocationPermissions(this, new PermissionListener() {
                 @Override
                 public void granted() {
                     displayUIFor(backgroundLocationViewModel.locationPermissionsGranted());

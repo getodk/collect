@@ -94,6 +94,9 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     @Inject
     PreferencesProvider preferencesProvider;
 
+    @Inject
+    PermissionUtils permissionUtils;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -172,7 +175,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     }
 
     private void selectAccount() {
-        new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestGetAccountsPermission(this, new PermissionListener() {
+        permissionUtils.requestGetAccountsPermission(this, new PermissionListener() {
             @Override
             public void granted() {
                 String account = accountsManager.getLastSelectedAccountIfValid();

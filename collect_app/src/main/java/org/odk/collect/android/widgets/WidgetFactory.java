@@ -20,7 +20,6 @@ import android.hardware.SensorManager;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -92,10 +91,9 @@ public class WidgetFactory {
         this.formEntryViewModel = formEntryViewModel;
     }
 
-    public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt) {
+    public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, PermissionUtils permissionUtils) {
         String appearance = WidgetAppearanceUtils.getSanitizedAppearanceHint(prompt);
         QuestionDetails questionDetails = new QuestionDetails(prompt, Collect.getCurrentFormIdentifierHash(), readOnlyOverride);
-        PermissionUtils permissionUtils = new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert);
 
         final QuestionWidget questionWidget;
         switch (prompt.getControlType()) {

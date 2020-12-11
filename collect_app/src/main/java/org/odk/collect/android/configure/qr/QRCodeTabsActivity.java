@@ -57,6 +57,9 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
     @Inject
     JsonPreferencesGenerator jsonPreferencesGenerator;
 
+    @Inject
+    PermissionUtils permissionUtils;
+
     private QRCodeMenuDelegate menuDelegate;
     private QRCodeActivityResultDelegate activityResultDelegate;
 
@@ -72,7 +75,7 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         initToolbar(getString(R.string.configure_via_qr_code));
         menuDelegate = new QRCodeMenuDelegate(this, activityAvailability, qrCodeGenerator, jsonPreferencesGenerator, fileProvider, preferencesProvider, scheduler);
 
-        new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestCameraPermission(this, new PermissionListener() {
+        permissionUtils.requestCameraPermission(this, new PermissionListener() {
             @Override
             public void granted() {
                 setupViewPager();

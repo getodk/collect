@@ -130,6 +130,9 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     @Inject
     FormsRepository formsRepository;
 
+    @Inject
+    PermissionUtils permissionUtils;
+
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setTitle(getString(R.string.google_drive));
@@ -264,7 +267,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     }
 
     private void selectAccount() {
-        new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestGetAccountsPermission(this, new PermissionListener() {
+        permissionUtils.requestGetAccountsPermission(this, new PermissionListener() {
             @Override
             public void granted() {
                 String account = accountsManager.getLastSelectedAccountIfValid();

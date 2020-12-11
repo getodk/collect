@@ -131,6 +131,9 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     @Inject
     ActivityAvailability activityAvailability;
 
+    @Inject
+    PermissionUtils permissionUtils;
+
     private final WidgetFactory widgetFactory;
     private final LifecycleOwner viewLifecycle;
     private final AudioRecorderViewModel audioRecorderViewModel;
@@ -166,8 +169,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 addIntentLaunchButton(context, questionPrompts, c, intentString);
             }
         }
-
-        PermissionUtils permissionUtils = new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert);
 
         this.widgetFactory = new WidgetFactory(
                 context,
@@ -297,7 +298,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      * Note: if the given question is of an unsupported type, a text widget will be created.
      */
     private QuestionWidget configureWidgetForQuestion(FormEntryPrompt question) {
-        QuestionWidget qw = widgetFactory.createWidgetFromPrompt(question);
+        QuestionWidget qw = widgetFactory.createWidgetFromPrompt(question, permissionUtils);
         qw.setOnLongClickListener(this);
         qw.setValueChangedListener(this);
 
