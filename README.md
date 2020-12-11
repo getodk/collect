@@ -71,7 +71,7 @@ Most dependencies are managed using gradle, however some Field Task functionalit
     
 1. Fix merge issues.  
 
-    There are likely to be many of these.  Smap changes from ODK are either in their own files or marked with the comment "smap"
+    There are likely to be many of these.  Smap changes from ODK are either in their own files or marked with the comment "smap".  If there is a difference and no "smap" commentt then you can generally accept the version from ODK.  Otherwise a manual merge is required to preserve the smap functionality.
  
 ## Changes in the Field Task fork
 
