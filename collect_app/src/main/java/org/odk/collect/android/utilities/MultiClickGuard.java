@@ -3,7 +3,7 @@ package org.odk.collect.android.utilities;
 import android.os.SystemClock;
 
 public class MultiClickGuard {
-    private static final int CLICK_DEBOUNCE_MS = 500;
+    private static final int CLICK_DEBOUNCE_MS = 1000;
     public static boolean test;
 
     private static long lastClickTime;
