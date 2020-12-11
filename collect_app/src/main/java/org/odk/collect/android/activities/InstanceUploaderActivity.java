@@ -28,7 +28,6 @@ import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.storage.StorageInitializer;
-import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ArrayUtils;
@@ -114,7 +113,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
                 // The activity has to finish because ODK Collect cannot function without these permissions.
                 finish();
             }
-        }, new StorageStateProvider().isScopedStorageUsed());
+        });
 
     }
 

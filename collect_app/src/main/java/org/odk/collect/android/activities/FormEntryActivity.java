@@ -138,7 +138,6 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveFormIndexTask;
@@ -457,7 +456,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // The activity has to finish because ODK Collect cannot function without these permissions.
                 finishAllActivities(FormEntryActivity.this);
             }
-        }, new StorageStateProvider().isScopedStorageUsed());
+        });
     }
 
     private void setupViewModels() {

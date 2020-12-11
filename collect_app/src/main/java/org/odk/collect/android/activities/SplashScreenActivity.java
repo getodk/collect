@@ -93,7 +93,7 @@ public class SplashScreenActivity extends Activity {
                 // The activity has to finish because ODK Collect cannot function without these permissions.
                 finish();
             }
-        }, storageStateProvider.isScopedStorageUsed());
+        });
     }
 
     private void init() {

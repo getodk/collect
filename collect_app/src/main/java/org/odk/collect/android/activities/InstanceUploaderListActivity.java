@@ -46,7 +46,6 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PermissionUtils;
@@ -133,7 +132,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
                 // The activity has to finish because ODK Collect cannot function without these permissions.
                 finishAllActivities(InstanceUploaderListActivity.this);
             }
-        }, new StorageStateProvider().isScopedStorageUsed());
+        });
     }
 
     @OnClick({R.id.upload_button})
