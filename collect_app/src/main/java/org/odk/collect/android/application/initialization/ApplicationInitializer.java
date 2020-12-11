@@ -17,6 +17,7 @@ import org.javarosa.model.xform.XFormsModule;
 import org.javarosa.xform.parse.XFormParser;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.application.AppStateProvider;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.geo.MapboxUtils;
@@ -24,6 +25,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.util.Locale;
@@ -41,13 +43,18 @@ public class ApplicationInitializer {
     private final Analytics analytics;
     private final GeneralSharedPreferences generalSharedPreferences;
     private final AdminSharedPreferences adminSharedPreferences;
+    private final AppStateProvider appStateProvider;
+    private final StorageStateProvider storageStateProvider;
 
-    public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager, Analytics analytics) {
+    public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator,
+                                  PropertyManager propertyManager, Analytics analytics, AppStateProvider appStateProvider, StorageStateProvider storageStateProvider) {
         this.context = context;
         this.userAgentProvider = userAgentProvider;
         this.preferenceMigrator = preferenceMigrator;
         this.propertyManager = propertyManager;
         this.analytics = analytics;
+        this.appStateProvider = appStateProvider;
+        this.storageStateProvider = storageStateProvider;
 
         generalSharedPreferences = GeneralSharedPreferences.getInstance();
         adminSharedPreferences = AdminSharedPreferences.getInstance();
@@ -57,6 +64,10 @@ public class ApplicationInitializer {
         initializePreferences();
         initializeFrameworks();
         initializeLocale();
+
+        if (appStateProvider.isFreshInstall(context)) {
+            storageStateProvider.enableUsingScopedStorage();
+        }
     }
 
     private void initializePreferences() {
