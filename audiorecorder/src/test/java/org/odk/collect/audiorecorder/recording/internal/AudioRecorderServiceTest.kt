@@ -145,6 +145,16 @@ class AudioRecorderServiceTest {
     }
 
     @Test
+    fun stopAction_beforeStart_doesNothing() {
+        val stopIntent = Intent(application, AudioRecorderService::class.java)
+        stopIntent.action = AudioRecorderService.ACTION_STOP
+        val service = startService(stopIntent)
+
+        val notification = shadowOf(service.get()).lastForegroundNotification
+        assertThat(notification, nullValue())
+    }
+
+    @Test
     fun cleanUpAction_whileRecording_cancelsRecorder() {
         startService(createStartIntent("123"))
 
@@ -254,6 +264,16 @@ class AudioRecorderServiceTest {
         startService(resumeIntent)
 
         assertThat(scheduler.isRepeatRunning(), equalTo(true))
+    }
+
+    @Test
+    fun pauseAction_afterStop_doesNothing() {
+        val pauseIntent = Intent(application, AudioRecorderService::class.java)
+        pauseIntent.action = AudioRecorderService.ACTION_PAUSE
+        val service = startService(pauseIntent)
+
+        val notification = shadowOf(service.get()).lastForegroundNotification
+        assertThat(notification, nullValue())
     }
 
     private fun createStartIntent(sessionId: String): Intent {

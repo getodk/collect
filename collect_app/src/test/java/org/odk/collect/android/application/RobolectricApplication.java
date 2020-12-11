@@ -5,6 +5,7 @@ import androidx.work.WorkManager;
 
 import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
+import org.odk.collect.android.utilities.MultiClickGuard;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowApplication;
 
@@ -44,5 +45,8 @@ public class RobolectricApplication extends Collect {
         // These clear static state that can't persist from test to test
         FormsProvider.releaseDatabaseHelper();
         InstanceProvider.releaseDatabaseHelper();
+
+        // We don't want any clicks to be blocked
+        MultiClickGuard.test = true;
     }
 }
