@@ -22,6 +22,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StorageInitializer;
+import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.robolectric.shadows.ShadowEnvironment;
 
@@ -95,7 +96,7 @@ public class FormDownloadListActivityTest {
 
     private static class AlwaysGrantStoragePermissionsPermissionUtils extends PermissionUtils {
         private AlwaysGrantStoragePermissionsPermissionUtils() {
-            super(R.style.Theme_Collect_Dialog_PermissionAlert);
+            super(R.style.Theme_Collect_Dialog_PermissionAlert, new StorageStateProvider());
         }
 
         @Override

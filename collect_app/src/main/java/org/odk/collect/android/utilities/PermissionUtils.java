@@ -20,6 +20,7 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.storage.StorageStateProvider;
 
 import java.util.List;
 
@@ -34,9 +35,11 @@ import timber.log.Timber;
 public class PermissionUtils {
 
     private final int dialogTheme;
+    private final StorageStateProvider storageStateProvider;
 
-    public PermissionUtils(int dialogTheme) {
+    public PermissionUtils(int dialogTheme, StorageStateProvider storageStateProvider) {
         this.dialogTheme = dialogTheme;
+        this.storageStateProvider = storageStateProvider;
     }
 
     public static boolean areStoragePermissionsGranted(Context context) {

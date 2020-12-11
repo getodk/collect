@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.utilities.PermissionUtils;
 
 /**
@@ -18,7 +19,7 @@ public class FakePermissionUtils extends PermissionUtils {
     private boolean isPermissionGranted;
 
     public FakePermissionUtils() {
-        super(R.style.Theme_Collect_Dialog_PermissionAlert);
+        super(R.style.Theme_Collect_Dialog_PermissionAlert, new StorageStateProvider());
     }
 
     @Override

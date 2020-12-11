@@ -196,7 +196,7 @@ public class AppDependencyModule {
 
     @Provides
     public PermissionUtils providesPermissionUtils() {
-        return new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert);
+        return new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert, providesStorageStateProvider());
     }
 
     @Provides

@@ -14,6 +14,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.metadata.InstallIDProvider;
+import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.PermissionUtils;
@@ -106,7 +107,7 @@ public class FormMetadataFragmentTest {
         private boolean granted;
 
         private FakePhoneStatePermissionUtils() {
-            super(R.style.Theme_Collect_Dialog_PermissionAlert);
+            super(R.style.Theme_Collect_Dialog_PermissionAlert, new StorageStateProvider());
         }
 
         @Override
