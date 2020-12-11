@@ -92,7 +92,12 @@ public class PermissionUtils {
      * @param activity needed for requesting permissions
      * @param action is a listener that provides the calling component with the permission result.
      */
-    public void requestStoragePermissions(Activity activity, @NonNull PermissionListener action) {
+    public void requestStoragePermissions(Activity activity, @NonNull PermissionListener action, boolean isScopedStorageUsed) {
+        if (isScopedStorageUsed) {
+            action.granted();
+            return;
+        }
+
         requestPermissions(activity, new PermissionListener() {
             @Override
             public void granted() {

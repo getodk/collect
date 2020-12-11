@@ -38,6 +38,7 @@ import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
+import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
@@ -108,7 +109,7 @@ public class InstanceChooserList extends InstanceListActivity implements
                 // The activity has to finish because ODK Collect cannot function without these permissions.
                 finishAllActivities(InstanceChooserList.this);
             }
-        });
+        }, new StorageStateProvider().isScopedStorageUsed());
     }
 
     private void init() {

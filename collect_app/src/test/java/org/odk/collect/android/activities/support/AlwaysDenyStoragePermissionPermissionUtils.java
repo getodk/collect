@@ -15,7 +15,7 @@ public class AlwaysDenyStoragePermissionPermissionUtils extends PermissionUtils 
     }
 
     @Override
-    public void requestStoragePermissions(Activity activity, @NonNull PermissionListener action) {
+    public void requestStoragePermissions(Activity activity, @NonNull PermissionListener action, boolean isScopedStorageUsed) {
         action.denied();
     }
 }

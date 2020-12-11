@@ -99,7 +99,7 @@ public class FormDownloadListActivityTest {
         }
 
         @Override
-        public void requestStoragePermissions(Activity activity, @NonNull PermissionListener action) {
+        public void requestStoragePermissions(Activity activity, @NonNull PermissionListener action, boolean isScopedStorageUsed) {
             action.granted();
         }
     }

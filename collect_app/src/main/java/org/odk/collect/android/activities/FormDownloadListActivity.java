@@ -51,6 +51,7 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
 import org.odk.collect.android.storage.StorageInitializer;
+import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -179,7 +180,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
                 // The activity has to finish because ODK Collect cannot function without these permissions.
                 finish();
             }
-        });
+        }, new StorageStateProvider().isScopedStorageUsed());
     }
 
     private void init(Bundle savedInstanceState) {

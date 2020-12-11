@@ -46,6 +46,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.ServerAuthDialogFragment;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StorageInitializer;
+import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -129,7 +130,7 @@ public class FillBlankFormActivity extends FormListActivity implements
                 // The activity has to finish because ODK Collect cannot function without these permissions.
                 finishAllActivities(FillBlankFormActivity.this);
             }
-        });
+        }, new StorageStateProvider().isScopedStorageUsed());
     }
 
     @Override
