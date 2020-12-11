@@ -1,8 +1,6 @@
 # Field Task
 
 Field Task is an Android app that can be used for collecting data for Monitoring and Evaluation from outside the office including locations without data connectivity. It also has task management functionality which enables it to be used for work force management applications.
-
-Field Task is a fork of [odkCollect](http://opendatakit.org/use/collect/). 
  
 
 ## Table of Contents
@@ -12,13 +10,15 @@ Field Task is a fork of [odkCollect](http://opendatakit.org/use/collect/).
 * [Incorporating the latest ODK release](#incorporating-the-latest-odk-release)
 
 ## Dependencies
-Most dependencies are managed using gradle, however some Field Task functionality requires a modified version of JavaRosa(https://github.com/smap-consulting/javarosa).  You will need to download this to your development environment in order to access these features.
+Most dependencies are managed using gradle, however some Field Task functionality requires a modified version of JavaRosa(https://github.com/smap-consulting/javarosa).  You will need to add this to your development environment in order to access these features.
 
 ## Setting up your development environment
 
 1. Download and install [Git](https://git-scm.com/downloads) and add it to your PATH
 
 1. Download and install [Android Studio](https://developer.android.com/studio/index.html) 
+
+1. [Add the Smap JavaRosa project to your Android Studio environment](https://github.com/smap-consulting/javarosa)
 
 1. Fork the Field Task project ([why and how to fork](https://help.github.com/articles/fork-a-repo/))
 
@@ -71,6 +71,6 @@ Most dependencies are managed using gradle, however some Field Task functionalit
 Acknowledgements
 ----------------
 
-This project includes:
-* the odkCollect Library of (http://opendatakit.org/)
-* the Android SDK from [MapBox] (https://www.mapbox.com/)
+This project:
+* forks the odkCollect Library of (http://opendatakit.org/)
+* includes the Android SDK from [MapBox] (https://www.mapbox.com/)
