@@ -42,7 +42,7 @@ public class SelectMultiMinimalWidget extends SelectMinimalWidget {
         int numColumns = WidgetAppearanceUtils.getNumberOfColumns(getFormEntryPrompt(), screenUtils);
         boolean noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(getFormEntryPrompt()) || WidgetAppearanceUtils.isNoButtonsAppearance(getFormEntryPrompt());
 
-        SelectMultiMinimalDialog dialog = new SelectMultiMinimalDialog(getSavedSelectedItems(),
+        SelectMultiMinimalDialog dialog = new SelectMultiMinimalDialog(new ArrayList<>(selectedItems),
                 WidgetAppearanceUtils.isFlexAppearance(getFormEntryPrompt()),
                 WidgetAppearanceUtils.isAutocomplete(getFormEntryPrompt()), getContext(), items,
                 getFormEntryPrompt(), getReferenceManager(),
@@ -93,9 +93,5 @@ public class SelectMultiMinimalWidget extends SelectMinimalWidget {
             }
             binding.answer.setText(builder.toString());
         }
-    }
-
-    private List<Selection> getSavedSelectedItems() {
-        return selectedItems;
     }
 }
