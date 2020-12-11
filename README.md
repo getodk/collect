@@ -8,6 +8,8 @@ Field Task is an Android app that can be used for collecting data for Monitoring
 * [Setting up your development environment](#setting-up-your-development-environment)
 * [Branches](#branches)
 * [Incorporating the latest ODK release](#incorporating-the-latest-odk-release)
+* [Changes in the Field Task fork](#changes-in-the-field-task-fork)
+* [Acknowledgements](#acknowledgements)
 
 ## Dependencies
 Most dependencies are managed using gradle, however some Field Task functionality requires a modified version of JavaRosa(https://github.com/smap-consulting/javarosa).  You will need to add this to your development environment in order to access these features.
