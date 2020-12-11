@@ -1,6 +1,6 @@
 # Field Task
 
-Field Task is an Android app that can be used for collecting data for Monitoring and Evaluation from outside the office including locations without data connectivity. It also has task management functionality which enables it to be used for work force management applications.
+Field Task is an Android app that can be used for collecting data for Monitoring and Evaluation from outside the office including locations without data connectivity. It also has task management functionality which enables it to be used for work force management applications.  Further details on installing and testing Field Task can be found [here](https://www.smap.com.au/docs/fieldTask.html).  [Set up an account] (https://www.smap.com.au/docs/getting-started.html#create-an-account-on-the-hosted-server) on the free hosted server to test the app.
  
 
 ## Table of Contents
@@ -66,7 +66,33 @@ Most dependencies are managed using gradle, however some Field Task functionalit
         git merge --no-commit merge_master
         
     This creates a temporary branch called merge from the latest production branch and then merges code from merge_master without committing the changes
+    
+1. Fix merge issues.  
+
+    There are likely to be many of these.  Smap changes from ODK are either in their own files or marked with the comment "smap"
  
+## Changes in the Field Task fork
+
+The following changes from the ODK implementation will need to be merged and then tested before releasing a new version.
+
+*  Login Page.   
+*  One touch synchronisation
+*  Form List, Task List and Map Tabs on the home page.
+*  Automatic synchronisation when a form is changed on the server.
+*  Geofencing for showing and downloading of forms
+*  Chart Widget
+*  Form Launcher Widget
+*  NFC Widget
+*  Auto launching camera, barcode and other widgets
+*  Task Management
+*  Self Assigned Tasks
+*  Navigation to tasks using google maps
+*  Online lookup of choice values
+*  Online pulldata
+*  Online lookup of images for annotation
+*  Online lookup of labels in images
+*  Searching for choice values using "in" and "not in" functions
+*  pulldata acting on multiple records
 
 Acknowledgements
 ----------------
