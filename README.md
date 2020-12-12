@@ -7,7 +7,7 @@ Field Task is an Android app that can be used for collecting data for Monitoring
 * [Dependencies](#dependencies)
 * [Setting up your development environment](#setting-up-your-development-environment)
 * [Branches](#branches)
-* [Incorporating the latest ODK release](#incorporating-the-latest-odk-release)
+* [Incorporating the latest upstream changes](#incorporating-the-latest-upstream-changes)
 * [Changes in the Field Task fork](#changes-in-the-field-task-fork)
 * [Acknowledgements](#acknowledgements)
 
@@ -30,8 +30,6 @@ Most dependencies are managed using gradle, however some Field Task functionalit
 
 1. Use Android Studio to import the project from its Gradle settings. To run the project, click on the green arrow at the top of the screen.
 
-1. Windows developers: continue configuring Android Studio with the steps in this document: [Developing ODK Collect on Windows](docs/WindowsDevSetup.md).
-
 1. Make sure you can run unit tests by running everything under `collect_app/src/test/java` in Android Studio or on the command line:
 
     ```
@@ -45,9 +43,9 @@ Most dependencies are managed using gradle, however some Field Task functionalit
     ```
 ## Branches
 * production - The latest Field Task code
-* master - The latest unmodifield code from ODK
+* master - The latest unmodifield code from the upstream repository
 
-## Incorporating the latest ODK release
+## Incorporating the latest upstream changes
 
 1. Update the master branch to the latest version. On the commnad line
 
@@ -75,7 +73,7 @@ Most dependencies are managed using gradle, however some Field Task functionalit
  
 ## Changes in the Field Task fork
 
-The following changes from the ODK implementation will need to be merged and then tested before releasing a new version.
+The following changes from the upstream implementation will need to be merged and then tested before releasing a new version that includes upstream updates/
 
 *  Login Page.   
 *  One touch synchronisation
