@@ -1,50 +1,102 @@
-[Smap fieldTask](http://www.smap.com.au) 
+# Field Task
 
-fieldTask is a clone of [odkCollect](http://opendatakit.org/use/collect/) with Task Management functionality. 
+Field Task is an Android app that can be used for collecting data for Monitoring and Evaluation from outside the office including locations without data connectivity. It also has task management functionality which enables it to be used for work force management applications.  Further details on installing and testing Field Task on an Android device can be found [here](https://www.smap.com.au/docs/fieldTask.html).  You will need to [set up an account](https://www.smap.com.au/docs/getting-started.html#create-an-account-on-the-hosted-server) on the free hosted server to test the app.
  
-Follow the latest news about Smap on our [blog](http://blog.smap.com.au)
 
-Frequently Asked Questions
----------------------------
-##### How to install and run
-* Install Android Studio
-* In Android Studio open the SDK manager (from the tools menu)
-* Under "Extras" install:
-    * Android Support Repository
-    * Android Support Library
-    * Google Play Services
-    * Google Repository
-* Clone as a GIT project into Android Studio
-* Checkout branch "producion"
-* Select fieldTask and run as an Android application
+## Table of Contents
+* [Dependencies](#dependencies)
+* [Setting up your development environment](#setting-up-your-development-environment)
+* [Branches](#branches)
+* [Incorporating the latest upstream changes](#incorporating-the-latest-upstream-changes)
+* [Changes in the Field Task fork](#changes-in-the-field-task-fork)
+* [Acknowledgements](#acknowledgements)
 
-Instructions on installing a Smap server can be found in the operations manual [here](http://www.smap.com.au/downloads.shtml)
+## Dependencies
+Most dependencies are managed using gradle, however some Field Task functionality requires a modified version of JavaRosa(https://github.com/smap-consulting/javarosa).  You will need to add this to your development environment in order to access these features.
 
-Task Management 
----------------
+## Setting up your development environment
 
-A user of fieldTask can be assigned tasks to complete as per this [video](http://www.smap.com.au/taskManagement.shtml). 
+1. Download and install [Git](https://git-scm.com/downloads) and add it to your PATH
 
-##### Get existing survey data as an XForm instance XML file
-https://hostname/instanceXML/{survey id}/0?datakey={key name}&datakeyvalue={value of key}
+1. Download and install [Android Studio](https://developer.android.com/studio/index.html) 
 
-##### Update existing results
-https://{hostname}/submission/{instanceid}
+1. [Add the Smap JavaRosa project to your Android Studio environment](https://github.com/smap-consulting/javarosa)
 
-Note the instance id of the existing data is included in the instanceXML.  It should be replaced with a new instance id before the results are submitted. However the instance id of the data to be replaced needs to be included in teh submission URL.
+1. Fork the Field Task project ([why and how to fork](https://help.github.com/articles/fork-a-repo/))
 
-This API allows you to maintain data using surveys. In the following video the data is published on a map, however it could also be published in a table as a patient registry or list of assets. fieldTask needs to be customised to access these links using the data keys in a similar way to web forms.
+1. Clone your fork of the project locally. At the command line:
 
-[![ScreenShot](http://img.youtube.com/vi/FUNPOmMnt1I/0.jpg)](https://www.youtube.com/watch?v=FUNPOmMnt1I)
+        git clone https://github.com/YOUR-GITHUB-USERNAME/fieldTask4
 
-Development
------------
-* Code contributions are very welcome. 
-* [Issue Tracker](https://github.com/smap-consulting/fieldTask4/issues)
+1. Use Android Studio to import the project from its Gradle settings. To run the project, click on the green arrow at the top of the screen.
+
+1. Make sure you can run unit tests by running everything under `collect_app/src/test/java` in Android Studio or on the command line:
+
+    ```
+    ./gradlew testDebug
+    ```
+
+1. Make sure you can run instrumented tests by running everything under `collect_app/src/androidTest/java` in Android Studio or on the command line:
+
+    ```
+    ./gradlew connectedAndroidTest
+    ```
+## Branches
+* production - The latest Field Task code
+* master - The latest unmodifield code from the upstream repository
+
+## Incorporating the latest upstream changes
+
+1. Update the master branch to the latest version. On the commnad line
+
+        git checkout master
+        git fetch upstream
+        git merge upstream/master
+        
+1. Create a branch with the version you want to merge into Field Task
+
+        git branch merge_master <tag name>
+        
+   <tag name> is the tag in odk collect identifying the version that you want.  merge_master is the temporary branch that will be created. You can name it as you wish.
+ 
+ 1. Create a branch in which to merge the code
+
+        git checkout production
+        git checkout -b merge
+        git merge --no-commit merge_master
+        
+    This creates a temporary branch called merge from the latest production branch and then merges code from merge_master without committing the changes
+    
+1. Fix merge issues.  
+
+    There are likely to be many of these.  Smap changes from ODK are either in their own files or marked with the comment "smap".  If there is a difference and no "smap" commentt then you can generally accept the version from ODK.  Otherwise a manual merge is required to preserve the smap functionality.
+ 
+## Changes in the Field Task fork
+
+The following changes from the upstream implementation will need to be merged and then tested before releasing a new version that includes upstream updates/
+
+*  Login Page.   
+*  One touch synchronisation
+*  Form List, Task List and Map Tabs on the home page.
+*  Automatic synchronisation when a form is changed on the server.
+*  Geofencing for showing and downloading of forms
+*  Chart Widget
+*  Form Launcher Widget
+*  NFC Widget
+*  Auto launching camera, barcode and other widgets
+*  Task Management
+*  Self Assigned Tasks
+*  Navigation to tasks using google maps
+*  Online lookup of choice values
+*  Online pulldata
+*  Online lookup of images for annotation
+*  Online lookup of labels in images
+*  Searching for choice values using "in" and "not in" functions
+*  pulldata acting on multiple records
 
 Acknowledgements
 ----------------
 
-This project includes:
-* the odkCollect Library of (http://opendatakit.org/)
-* the Android SDK from [MapBox] (https://www.mapbox.com/)
+This project:
+* forks the odkCollect Library of (http://opendatakit.org/)
+* includes the Android SDK from [MapBox] (https://www.mapbox.com/)
