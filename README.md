@@ -16,13 +16,13 @@ Most dependencies are managed using gradle, however some Field Task functionalit
 
 ## Setting up your development environment
 
-1. Download and install [Git](https://git-scm.com/downloads) and add it to your PATH
+1. Download and install [Git](https://git-scm.com/downloads) if you don't have it already
 
-1. Download and install [Android Studio](https://developer.android.com/studio/index.html) 
+1. Download and install [Android Studio](https://developer.android.com/studio/index.html) if you don't have it already
 
-1. [Add the Smap JavaRosa project to your Android Studio environment](https://github.com/smap-consulting/javarosa)
+1. [Add Smap JavaRosa as a project in Android Studio](https://github.com/smap-consulting/javarosa)
 
-        Follow the instructions in the javarosa repository to build the latest production java rosa version. Currently tip of production branch.
+        Follow the readme instructions in the javarosa repository to build the latest production java rosa version. Currently tip of production branch.
         copy the generated jar file to fieldTask/collect_app/libs. You may need to create the libs folder
         The version of java rosa that you need is referenced in the application's build.gradle
 
