@@ -22,25 +22,33 @@ Most dependencies are managed using gradle, however some Field Task functionalit
 
 1. [Add the Smap JavaRosa project to your Android Studio environment](https://github.com/smap-consulting/javarosa)
 
+        Follow the instructions in the javarosa repository to build the latest production java rosa version. Currently tip of production branch.
+        copy the generated jar file to fieldTask/collect_app/libs. You may need to create the libs folder
+        The version of java rosa that you need is referenced in the application's build.gradle
+
 1. Fork the Field Task project ([why and how to fork](https://help.github.com/articles/fork-a-repo/))
 
-1. Clone your fork of the project locally. At the command line:
+1. Clone your fork of the project locally. At the command line type "git clone" and then the url provided by git hub.
 
-        git clone https://github.com/YOUR-GITHUB-USERNAME/fieldTask4
+        git clone https://github.com/YOUR-GITHUB-USERNAME/fieldTask4.git
+        
+1. Checkout the production branch
 
-1. Use Android Studio to import the project from its Gradle settings. To run the project, click on the green arrow at the top of the screen.
+        git checkout production
 
-1. Make sure you can run unit tests by running everything under `collect_app/src/test/java` in Android Studio or on the command line:
+1. Use Android Studio to import the project
 
-    ```
-    ./gradlew testDebug
-    ```
+1. Get a Google services json file
 
-1. Make sure you can run instrumented tests by running everything under `collect_app/src/androidTest/java` in Android Studio or on the command line:
+        Sign into the firebase console
+        Add a project
+        Select Android to add firebase to your Android app
+        Specify the package as: org.smap.smapTask.android
+        Register the app 
+        Download the google-services.json file and place it in the fieldTas4/collect_app folder
 
-    ```
-    ./gradlew connectedAndroidTest
-    ```
+1. Select run
+
 ## Branches
 * production - The latest Field Task code
 * master - The latest unmodifield code from the upstream repository
