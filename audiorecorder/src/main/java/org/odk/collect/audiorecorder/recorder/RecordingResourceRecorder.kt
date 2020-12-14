@@ -12,7 +12,7 @@ internal class RecordingResourceRecorder(private val cacheDir: File, private val
     private var recordingResource: RecordingResource? = null
     private var file: File? = null
 
-    @Throws(RecordingException::class, MicInUseException::class)
+    @Throws(SetupException::class, MicInUseException::class)
     override fun start(output: Output) {
         recordingResource = recordingResourceFactory(output).also {
             val suffix = when (output) {
@@ -24,7 +24,7 @@ internal class RecordingResourceRecorder(private val cacheDir: File, private val
             val tempFile = try {
                 File.createTempFile("recording", suffix, cacheDir)
             } catch (e: IOException) {
-                throw RecordingException()
+                throw SetupException()
             }
 
             it.setOutputFile(tempFile.absolutePath)
@@ -34,7 +34,7 @@ internal class RecordingResourceRecorder(private val cacheDir: File, private val
                 it.prepare()
             } catch (e: IOException) {
                 Timber.e(e)
-                throw RecordingException()
+                throw SetupException()
             }
 
             try {

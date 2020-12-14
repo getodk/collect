@@ -5,7 +5,7 @@ import java.lang.Exception
 
 internal interface Recorder {
 
-    @Throws(RecordingException::class, MicInUseException::class)
+    @Throws(SetupException::class, MicInUseException::class)
     fun start(output: Output)
     fun pause()
     fun resume()
@@ -22,5 +22,5 @@ enum class Output {
     AAC_LOW
 }
 
-internal class RecordingException : Exception()
+internal class SetupException : Exception()
 internal class MicInUseException : Exception()

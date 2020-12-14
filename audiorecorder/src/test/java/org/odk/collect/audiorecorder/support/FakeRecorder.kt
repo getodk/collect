@@ -3,7 +3,7 @@ package org.odk.collect.audiorecorder.support
 import org.odk.collect.audiorecorder.recorder.MicInUseException
 import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recorder.Recorder
-import org.odk.collect.audiorecorder.recorder.RecordingException
+import org.odk.collect.audiorecorder.recorder.SetupException
 import java.io.File
 
 class FakeRecorder : Recorder {
@@ -36,7 +36,7 @@ class FakeRecorder : Recorder {
         return cancelled
     }
 
-    @Throws(RecordingException::class, MicInUseException::class)
+    @Throws(SetupException::class, MicInUseException::class)
     override fun start(output: Output) {
         if (!failOnStart) {
             recording = true

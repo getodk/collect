@@ -65,12 +65,6 @@ class RecordingResourceRecorderTest {
         assertThat(recorder.isRecording(), equalTo(true))
     }
 
-    @Test(expected = MicInUseException::class)
-    fun start_whenMicIsInUse_throwsMicInUseException() {
-        recordingResource.micInUse()
-        recorder.start(Output.AAC)
-    }
-
     @Test
     fun recordingTwice_doesntUseSameOutputFile() {
         var mediaRecorder = FakeRecordingResource()
@@ -86,15 +80,21 @@ class RecordingResourceRecorderTest {
         assertThat(outputFile1!!.absolutePath, not(equalTo(outputFile2!!.absolutePath)))
     }
 
-    @Test(expected = RecordingException::class)
-    fun start_whenFileCantBeCreated_throwsRecordingException() {
+    @Test(expected = SetupException::class)
+    fun start_whenFileCantBeCreated_throwsSetupException() {
         cacheDir.deleteRecursively()
         recorder.start(Output.AAC)
     }
 
-    @Test(expected = RecordingException::class)
-    fun start_whenPrepareFails_throwsRecordingException() {
+    @Test(expected = SetupException::class)
+    fun start_whenPrepareFails_throwsSetupException() {
         recordingResource.failOnPrepare()
+        recorder.start(Output.AAC)
+    }
+
+    @Test(expected = MicInUseException::class)
+    fun start_whenMicIsInUse_throwsMicInUseException() {
+        recordingResource.micInUse()
         recorder.start(Output.AAC)
     }
 
