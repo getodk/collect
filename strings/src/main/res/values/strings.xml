@@ -503,16 +503,19 @@
     <string name="manual_mode">Manual location recording</string>
     <string name="automatic_mode">Automatic location recording</string>
     <string name="recording_interval">Recording interval:</string>
+    <!-- Used to display choices for location recording interval in geotrace and geoshape questions -->
     <plurals name="number_of_seconds">
         <item quantity="one">%d second</item>
         <item quantity="other">%d seconds</item>
     </plurals>
+    <!-- Used to display choices for location recording interval in geotrace and geoshape questions -->
     <plurals name="number_of_minutes">
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>
     </plurals>
     <string name="accuracy_requirement">Accuracy requirement:</string>
     <string name="none">None</string>
+    <!-- Used to display choices for accuracy requirements in geotrace and geoshape questions -->
     <plurals name="number_of_meters">
         <item quantity="one">%d meter</item>
         <item quantity="other">%d meters</item>

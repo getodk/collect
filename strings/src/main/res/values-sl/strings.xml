@@ -1,206 +1,182 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="show_password">Pokaži geslo</string>
-  <string name="activity_not_found">Ne najdem aktivnosti za obravnavo %s</string>
-  <string name="view_image">Poglej sliko</string>
-  <string name="annotate_image">Označi na sliki</string>
-  <string name="signature_capture">Zajem podpisa</string>
-  <string name="view_video">Poglej video</string>
-    <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
-  <string name="cancel">Prekini</string>
-  <string name="cancel_loading_form">Prekini</string>
-  <string name="cancel_location">Prekini</string>
-  <string name="canceling">Prekinjam</string>
-  <string name="cannot_edit_completed_form">Obrazca ni moč popravljati ko je bil zaključen. Lahko pa ga šifrirate.</string>
-  <string name="capture_audio">Posnemi zvok</string>
-  <string name="capture_image">Fotografiraj</string>
-  <string name="capture_osm">Zaženi OpenMapKit</string>
-  <string name="recapture_osm">Ponovi OSM označevanje</string>
-  <string name="capture_video">Posnemi video</string>
-  <string name="change_language">Zamenjaj jezik</string>
-  <string name="change_password">ODk geslo</string>
-  <string name="change_username">ODK uporabniško ime</string>
-  <string name="clearanswer_confirm">Odstranim odgovor za \"%s\"?</string>
-  <string name="clear_answer">Odstrani odgovor</string>
-  <string name="clear_answer_ask">Odstranim odgovor?</string>
-  <string name="clear_answer_no">Prekini</string>
-  <string name="data">Shranjeni obrazci</string>
-  <string name="data_saved_error">Shranjevanje obrazca ni uspelo!</string>
-  <string name="data_saved_ok">Obrazec uspešno shranjen!</string>
-  <string name="save_point_error">Napaka pri shranjevanju  obnovitvene točke %s</string>
-  <string name="default_completed">Zaključeno naj bo privzeto</string>
-  <string name="default_completed_summary">Privzeto označi obrazec kot zaključen</string>
-  <string name="delete_confirm">Izbrišem %sobrazec(obrazce)?</string>
-  <string name="delete_file">Izbriši izbrano</string>
-  <string name="delete_no">Ne briši</string>
-  <string name="delete_repeat">Odstrani skupino</string>
-  <string name="delete_repeat_ask">Odstranim to skupino?</string>
-  <string name="delete_repeat_confirm">Odstranim skupino %s in vse njene podskupine?</string>
-  <string name="delete_repeat_no">Prekini</string>
-  <string name="delete_yes">Izbriši obrazce</string>
-  <string name="discard_answer">Odstrani odgovor</string>
-  <string name="discard_group">Odstrani skupino</string>
-  <string name="download">Prevzami izbrane</string>
-  <string name="download_forms_result">Rezultati nalaganja</string>
-  <string name="downloading_data">Povezujem se s strežnikom</string>
-  <string name="do_not_change">Prekini</string>
-  <string name="do_not_exit">Prekini</string>
-  <string name="do_not_save">Zavrzi spremembe</string>
+  <!--Text for an action button on the main screen.-->
   <string name="enter_data">Izpolni prazen obrazec</string>
+  <!--Text for an action button on the main screen.-->
   <string name="enter_data_button">Izpolni prazen obrazec</string>
-  <string name="error_occured">Nastala je napaka</string>
-  <string name="error_attaching_binary_file">Napaka pri dodajanju medijske vsebine: %s</string>
-  <string name="fetching_file">Pridobivam %1$s.\n\nObrazec %2$s od %3$sobrazcev.</string>
-  <string name="file_deleted_error">Napaka. %1$s od %2$s izbranih obrazcev nisem uspel zbrisati.</string>
-  <string name="file_deleted_ok">%s obrazcev uspešno zbrisanih!</string>
-  <string name="file_delete_in_progress">Brisanje obrazca že poteka!</string>
-  <string name="file_invalid">Datoteka %s je napačna.</string>
-  <string name="file_missing">Ne najdem datoteke %s.</string>
-  <string name="finished_disk_scan">Končano skeniranje. Vsi obrazci so naloženi.</string>
-  <string name="forms">Prazni obrazci</string>
-  <string name="getting_location">Nalagam lokacijo</string>
-  <string name="get_barcode">Pridobi črtno kodo</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="review_data">Uredi shranjen ubrazec</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="review_data_button">Uredi shranjen obrazec(%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="send_data">Pošlji zaključen obrazec</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="send_data_button">Pošlji zaključen obrazec (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="view_sent_forms">Preglej poslan obrazec</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="view_sent_forms_button">Preglej poslan obrazec (%s)</string>
+  <!--Text for an action button on the main screen.-->
   <string name="get_forms">Prevzami prazen obrazec</string>
-  <string name="get_location">Zapiši lokacijo</string>
-  <string name="provider_disabled_error">Ponudniki lociranja so onemogočeni!</string>
-  <string name="invalid_answer_error">Ta odgovor je napačen!</string>
-  <string name="invalid_space_in_answer_singular">Opozorilo: vrednost %s vsebuje presledke</string>
-  <string name="invalid_space_in_answer_plural">Opozorila: vrednosti %s vsebujejo presledke</string>
-  <string name="jump_to_beginning">Pojdi na začetek</string>
-  <string name="jump_to_end">Pojdi na konec</string>
-  <string name="jump_to_previous">Pojdi gor</string>
-  <string name="loading_form">Nalagam obrazec</string>
+  <!--Text for an action button on the main screen.-->
   <string name="manage_files">Briši shranjen obrazec</string>
-  <string name="mark_finished">Označi obrazec kot zaključen</string>
-  <string name="noselect_error">Niste izbrali obrazca!</string>
-  <string name="no_connection">Mrežna povezava ni na voljo</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="added_on_date_at_time">\'Dodan na\' EEE,MMM dd, yyyy \'ob\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="saved_on_date_at_time">\'Shranjen na\' EEE,MMM dd, yyyy \'ob\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="finalized_on_date_at_time">\'Zaključen na\' EEE,MMM dd, yyyy \'ob\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sent_on_date_at_time">\'Poslan na\' EEE,MMM dd, yyyy \'ob\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sending_failed_on_date_at_time">\'Pošiljanje ni uspelo na\' EEE,MMM dd, yyyy \'ob\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="deleted_on_date_at_time">\'Brsian na\' EEE,MMM dd, yyyy \'ob\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="modified_on_date_at_time">\'Spremenjeno\' EEE, MMM dd,  yyyy \'ob\' HH:mm</string>
+  <string name="encrypted_form">Šifriran obrazec</string>
+  <string name="sort_by_date_asc">Datum, najprej najnovejši</string>
+  <string name="sort_by_date_desc">Datum, najprej najstarejši</string>
+  <string name="sort_by_status_asc">Status, najprej zaključeni</string>
+  <string name="sort_by_status_desc">Status, najprej ne-zaključeni</string>
+  <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="no_items_display">Ničesar nimam za prikaz</string>
   <string name="no_items_display_forms">Ničesar ni za prikaz.\n\nPoskusi  naložiti in izpolniti prazen obrazec.</string>
   <string name="no_items_display_sent_forms">Ničesar ni za prikaz.\n\nPoskusi poslati zaključen obrazec pred pregledovanjem.</string>
   <string name="no_items_display_instances">Ničesar ni za prikaz.\n\nPoskusi zaključiti shranjene obrazce pred pošiljanjem.</string>
-  <string name="ok">OK</string>
-  <string name="parse_error">Napaka, ne morem opredeliti obrazca.</string>
-  <string name="password">Geslo</string>
-  <string name="play_video">Predvajaj video</string>
-  <string name="please_wait">Malo počakaj, prosim.</string>
-  <string name="please_wait_long">Počakaj. To lahko traja nekaj minut.</string>
-  <string name="quit_application">Izhod %s</string>
-  <string name="quit_entry">Shrani obrazec in zapri</string>
-  <string name="refresh">Obnovi</string>
-  <string name="replace_barcode">Zamenjaj črtno kodo</string>
-  <string name="required_answer_error">Ta odgovor je obvezen</string>
-  <string name="review_data">Uredi shranjen ubrazec</string>
-  <string name="review_data_button">Uredi shranjen obrazec(%s)</string>
-  <string name="save_all_answers">Shrani obrazec</string>
-  <string name="save_enter_data_description">Si pri koncu %s</string>
-  <string name="saving_form">Shrani obrazec</string>
-  <string name="sending_items">Pošiljam %1$s od %2$s obrazcev</string>
-  <string name="send_data">Pošlji zaključen obrazec</string>
-  <string name="send_data_button">Pošlji zaključen obrazec (%s)</string>
-  <string name="send_selected_data">Pošlji izbrane</string>
-  <string name="view_sent_forms">Preglej poslan obrazec</string>
-  <string name="view_sent_forms_button">Preglej poslan obrazec (%s)</string>
-  <string name="server_auth_credentials">Napačno uporabniško ime ali geslo za strežnik: %s</string>
-  <string name="server_requires_auth">Strežnik zahteva prijavo</string>
-  <string name="server_url">URL</string>
-  <string name="server_preferences">Nastavitve strežnika</string>
-  <string name="trigger">OK. Nadaljuj</string>
-  <string name="uploading_data">Pošiljam obrazec</string>
-  <string name="url_error">Napaka, neveljaven URL!</string>
-  <string name="username">Uporabniško ime</string>
-  <string name="view_hierarchy">Pojdi na vprašanje</string>
-  <string name="general_preferences">Splošne nastavitve</string>
-  <string name="client">Uporabniški vmesnik</string>
-  <string name="show_splash_summary">Vidna ob zagonu aplikacije</string>
-  <string name="splash_path">Izbrana zagonska slika</string>
-  <string name="default_splash_path">ODK privzeto</string>
-  <string name="select_another_image">Izberi drugo sliko</string>
-  <string name="use_odk_default">Uporabi privzeto sliko</string>
-  <string name="change_splash_path">Zamenjaj sliko</string>
-  <string name="keep_changes">Shrani spremembe</string>
-  <string name="change_formlist_url">Pot seznama obrazcev (dodana URL)</string>
-  <string name="change_submission_url">Pot prispevkov (dodana URL)</string>
-  <string name="formlist_url">Pot seznama obrazcev</string>
-  <string name="submission_url">Pot prispevkov</string>
-  <string name="font_size">Velikost črk</string>
-  <string name="change_font_size">Velikost črk</string>
-  <string name="form_download_progress">%1$s. Pridobivam medijske datoteke: %2$s od %3$s</string>
-  <string name="success">Uspešno</string>
-  <string name="failures">Neuspehi</string>
-  <string name="no_forms_uploaded">Napaka. Obrazec ni naložen.</string>
-  <string name="upload_results">Rezultati nalaganja</string>
+  <string name="storage_runtime_permission_denied_desc">Brez teh dovoljenj, Collect ne more dostopati do vaših obrazcev ali shraniti odgovorov. Aplikacijo znova odprite, ko ste jih pripravljeni odobriti.</string>
+  <string name="location_runtime_permissions_denied_desc">Brez teh dovoljenj Collect ne more zabeležiti vaše lokacije. Prosim, poskusite znova, ko ste jih pripravljeni odobriti.</string>
+  <string name="camera_runtime_permission_denied_title">Dovljenje za fotoaparat</string>
+  <string name="camera_runtime_permission_denied_desc">Brez tega dovoljenja Collect ne more dostopati do fotoaparata. Prosimo, poskusite znova, ko ste pripravljeni odobriti.</string>
+  <string name="record_audio_runtime_permission_denied_desc">Brez tega dovoljenja Collect ne more dostopati do mikrofona. Prosimo, poskusite znova, ko ste pripravljeni odobriti.</string>
+  <!--##############################################
+    # FILL BLANK FORM
+    ##############################################-->
+  <string name="instance_scan_count">%1$d obrazcev dodanih.</string>
+  <string name="finished_disk_scan">Končano skeniranje. Vsi obrazci so naloženi.</string>
   <string name="xform_parse_error">Xform napaka obravnave za %1$s: %2$s manjka ali je napačen.</string>
-  <string name="choose_file">Izberi datoteko</string>
-  <string name="choose_sound">Izberi zvočno datoteko</string>
-  <string name="choose_video">Izberi video</string>
-  <string name="choose_image">Izberi sliko</string>
-  <string name="selected">Izbrano:</string>
-  <string name="select_answer">Izberi odgovor</string>
+  <string name="loading_form">Nalagam obrazec</string>
+  <string name="survey_loading_reading_form_message">Berem definicijo obrazca …</string>
+  <string name="survey_loading_reading_data_message">Berem podatke obrazcev…</string>
+  <string name="survey_loading_reading_csv_message">Berem CSV datoteke…</string>
+  <string name="parse_error">Napaka, ne morem opredeliti obrazca.</string>
+  <string name="parent_form_not_present">Ne morem urejati shranjen obrazec ker je bil pripadajoči prazen obrazec  %1$s izbrisan ali ni na voljo.</string>
+  <string name="cannot_edit_completed_form">Obrazca ni moč popravljati ko je bil zaključen. Lahko pa ga šifrirate.</string>
+  <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
+  <string name="savepoint_used">Neshranjene spremembe vrnjene na shranjeno točko.</string>
+  <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
+  <string name="change_language">Zamenjaj jezik</string>
+  <!--Text for button displayed in the form filling menu to see the form's table of contents-->
+  <string name="view_hierarchy">Pojdi na vprašanje</string>
+  <!--Text for button displayed in the form filling menu to save the form-->
+  <string name="save_all_answers">Shrani obrazec</string>
+  <!--Text of button from the form's table of contents to jump to the beginning of the form-->
+  <string name="jump_to_beginning">Pojdi na začetek</string>
+  <!--Text of button from the form's table of contents to jump to the end of the form-->
+  <string name="jump_to_end">Pojdi na konec</string>
+  <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
+  <string name="jump_to_previous">Pojdi gor</string>
+  <!--Displayed below group names in a form's table of contents-->
+  <!--Displayed below repeat names in a form's table of contents-->
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <!--Title of overlay menu displayed when long pressing on a question in a form-->
+  <string name="edit_prompt">Uredi</string>
+  <string name="clearanswer_confirm">Odstranim odgovor za \"%s\"?</string>
+  <string name="clear_answer">Odstrani odgovor</string>
+  <string name="clear_answer_ask">Odstranim odgovor?</string>
+  <string name="clear_answer_no">Prekini</string>
+  <string name="discard_answer">Odstrani odgovor</string>
+  <string name="discard_group">Odstrani skupino</string>
+  <string name="delete_repeat">Odstrani skupino</string>
+  <string name="delete_repeat_ask">Odstranim to skupino?</string>
+  <string name="delete_repeat_confirm">Odstranim skupino %s in vse njene podskupine?</string>
+  <string name="delete_repeat_no">Prekini</string>
+  <string name="invalid_answer_error">Ta odgovor je napačen!</string>
+  <string name="required_answer_error">Ta odgovor je obvezen</string>
+  <string name="invalid_space_in_answer_singular">Opozorilo: vrednost %s vsebuje presledke</string>
+  <string name="invalid_space_in_answer_plural">Opozorila: vrednosti %s vsebujejo presledke</string>
+  <string name="survey_internal_error">Interna napaka. Korak k vprašanju ni uspel.</string>
+  <string name="save_enter_data_description">Si pri koncu %s</string>
   <string name="save_form_as">Poimenuj obrazec</string>
   <string name="save_as_error">Shranjeno ime ne more biti prazno!</string>
-  <string name="edit_prompt">Uredi</string>
-  <string name="selected_google_account_text">Goggle račun</string>
-  <string name="font_size_extra_large">Extra veliko</string>
-  <string name="font_size_large">Veliko</string>
-  <string name="font_size_medium">Srednje</string>
-  <string name="font_size_small">Malo</string>
-  <string name="font_size_extra_small">Extra malo</string>
-  <string name="change_view">Spremeni pogled</string>
-  <string name="show_sent_and_unsent_forms">Pokaži poslane in neposlane obrazce</string>
-  <string name="show_unsent_forms">Pokaži neposlane obrazce</string>
-  <string name="added_on_date_at_time">\'Dodan na\' EEE,MMM dd, yyyy \'ob\' HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="saved_on_date_at_time">\'Shranjen na\' EEE,MMM dd, yyyy \'ob\' HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="finalized_on_date_at_time">\'Zaključen na\' EEE,MMM dd, yyyy \'ob\' HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sent_on_date_at_time">\'Poslan na\' EEE,MMM dd, yyyy \'ob\' HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sending_failed_on_date_at_time">\'Pošiljanje ni uspelo na\' EEE,MMM dd, yyyy \'ob\' HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="deleted_on_date_at_time">\'Brsian na\' EEE,MMM dd, yyyy \'ob\' HH:mm</string>
-  <string name="version">Verzija:</string>
-  <string name="parent_form_not_present">Ne morem urejati shranjen obrazec ker je bil pripadajoči prazen obrazec  %1$s izbrisan ali ni na voljo.</string>
+  <string name="mark_finished">Označi obrazec kot zaključen</string>
+  <string name="quit_entry">Shrani obrazec in zapri</string>
+  <string name="data_saved_error">Shranjevanje obrazca ni uspelo!</string>
+  <string name="data_saved_ok">Obrazec uspešno shranjen!</string>
+  <string name="save_point_error">Napaka pri shranjevanju  obnovitvene točke %s</string>
+  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <string name="quit_application">Izhod %s</string>
+  <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="no_form_loaded">&lt;noben obrazec ni naložen&gt;</string>
+  <string name="do_not_save">Zavrzi spremembe</string>
+  <string name="keep_changes">Shrani spremembe</string>
+  <string name="saving_form">Shrani obrazec</string>
+  <string name="survey_saving_validating_message">Vrednotim odgovore…</string>
+  <string name="survey_saving_collecting_message">Zbiram podatke…</string>
+  <string name="survey_saving_saving_message">Shranjujem na SD kartico…</string>
+  <string name="survey_saving_finalizing_message">Zaključujem na SD kartico…</string>
+  <string name="survey_saving_encrypting_message">Šifriram podatke…</string>
+  <string name="phone_does_not_support_rsa">Telefon ne podpira RSA šifriranja.</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <!--Text displayed when audio recording fails to start-->
+  <!--Error message displayed when copying media from a temporary directory fails-->
+  <!--##############################################
+    # FORM FEATURES
+    ##############################################-->
+  <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
   <string name="launch_app">Zaženi</string>
+  <string name="activity_not_found">Ne najdem aktivnosti za obravnavo %s</string>
   <string name="no_app">Zahtevane aplikacije ne najdem ali ni na voljo. Ročno vnesi vrednost.</string>
-  <string name="savepoint_used">Neshranjene spremembe vrnjene na shranjeno točko.</string>
+  <string name="launch_printer">Zaženi tiskanje</string>
+  <string name="no_printer">Želen tiskalnik ni nameščen. Namesti tiskalnik.</string>
+  <string name="open_url">Odpri URL</string>
+  <string name="capture_osm">Zaženi OpenMapKit</string>
+  <string name="recapture_osm">Ponovi OSM označevanje</string>
+  <string name="install_openmapkit">Prosim, namestite OpenMapKit!</string>
+  <string name="get_barcode">Pridobi črtno kodo</string>
+  <string name="replace_barcode">Zamenjaj črtno kodo</string>
+  <string name="capture_image">Fotografiraj</string>
+  <string name="choose_image">Izberi sliko</string>
+  <string name="view_image">Poglej sliko</string>
+  <string name="take_picture_instruction">Klikni na ekran za fotografiranje</string>
+  <string name="error_front_camera_unavailable">Prednja kamera ni na voljo v tej napravi.</string>
+  <string name="annotate_image">Označi na sliki</string>
+  <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">Shrani in zapri</string>
+  <string name="signature_capture">Zajem podpisa</string>
   <string name="sign_button">Podpiši</string>
   <string name="markup_image">Označi sliko</string>
   <string name="draw_image">Skiciraj sliko</string>
   <string name="reset_image">Resetiraj</string>
   <string name="set_color">Nastavi barvo</string>
-  <string name="admin_preferences">Admin nastavitve</string>
-  <string name="admin_access_settings">Klikni za admin dostop do nastavitev</string>
-  <string name="save_mid">Shrani obrazec</string>
-  <string name="enter_new_password">Vnesi novo geslo</string>
-  <string name="admin_password">Admin geslo</string>
-  <string name="admin_password_changed">Admin geslo uspešno spremenjeno</string>
-  <string name="admin_password_disabled">Admin geslo onemogočeno</string>
-  <string name="admin_password_incorrect">Geslo je napačno</string>
-  <string name="enter_admin_password">Vnesi Admin geslo</string>
-  <string name="change_admin_password">Spremeni Admin geslo</string>
-  <string name="autosend">Samodejno pošlji</string>
-  <string name="found_in_main">Ne izberi da ne prikaže v Glavnem meniju</string>
-  <string name="found_in_settings">Ne izberi da ne prikaže v Splošne nastavitve</string>
-  <string name="form_forward">Naprej</string>
-  <string name="navigation">Navigacija</string>
-  <string name="swipe_navigation">Uporabi horizontalne potege</string>
-  <string name="buttons_navigation">Uporabi naprej/nazaj tipke</string>
-  <string name="swipe_buttons_navigation">Uporabi potege in tipke</string>
-  <string name="launch_printer">Zaženi tiskanje</string>
-  <string name="no_printer">Želen tiskalnik ni nameščen. Namesti tiskalnik.</string>
-  <string name="constraint_behavior">Način obravnave omejitev</string>
-  <string name="constraint_behavior_on_swipe">Ovrednoti ob potegu naprej</string>
-  <string name="constraint_behavior_on_finalize">Zadrži vrednotenje do zaključka</string>
-  <string name="view_change_location">Poglej ali spremeni lokacijo</string>
-  <string name="change_location">Spremeni lokacijo</string>
-  <string name="open_url">Odpri URL</string>
-  <string name="get_bearing">Zabeleži smer</string>
-  <string name="replace_bearing">Zamenjaj smer</string>
-  <string name="getting_bearing">Nalagam smer</string>
-  <string name="accept_bearing">Zabeleži smer</string>
-  <string name="sdcard_unmounted">Collect ne more do SD kartice. Mogoče je nameščena preko USB? (trenutno stanje %s)</string>
+  <string name="capture_video">Posnemi video</string>
+  <string name="choose_video">Izberi video</string>
+  <string name="view_video">Poglej video</string>
+  <string name="play_video">Predvajaj video</string>
+  <string name="choose_file">Izberi datoteko</string>
+  <!--Text for button that deletes a file that is the answer to a question-->
+  <!--Text for button that starts recording sound-->
+  <string name="capture_audio">Posnemi zvok</string>
+  <!--Text for button that lets the user choose a sound file on their device-->
+  <string name="choose_sound">Izberi zvočno datoteko</string>
+  <!--Description text for button that that pauses recording sound-->
+  <!--Description text for button that that resumes recording sound-->
+  <!--Title for dialog asking the user if they want to delete a file-->
+  <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="error_attaching_binary_file">Napaka pri dodajanju medijske vsebine: %s</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="select_answer">Izberi odgovor</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="selected">Izbrano:</string>
+  <string name="trigger">OK. Nadaljuj</string>
   <string name="ext_file_no_data_error">Datoteka ne vsebuje podatkov</string>
   <string name="ext_conflicting_columns_error">Stolpci %s se ujemajo!</string>
   <string name="ext_sortBy_numeric_error">Razvrsti stolpec po vrednostih naj bi vseboval le številčne vrednosti. Težava je pri vrednost  \' %s\'.</string>
@@ -217,54 +193,37 @@
   <string name="ext_import_csv_missing_error">Zunanji podatki za %1$s niso bili uvoženi. Morda si pozabil vključiti %2$s csv datoteko v obrazec?</string>
   <string name="ext_search_generic_error">Sintaktična napaka v search() funkciji: %s</string>
   <string name="ext_assign_value_error">Ne morem pripisati vrednosti k \'%s\'.</string>
-  <string name="fs_delete_media_path_if_file_error">Ne morem izbrisati\'%s\'. Izbriši datoteko ročno in ponovno naloži obrazec.</string>
-  <string name="fs_create_media_folder_error">Ne morem ustvariti medijsko mapo \'%s\'.</string>
-  <string name="fs_file_copy_error">Ne morem kopirat \'%1$s\' preko \'%2$s\'. Razlog: %3$s.</string>
-  <string name="survey_internal_error">Interna napaka. Korak k vprašanju ni uspel.</string>
-  <string name="survey_multiple_forms_error">Naložili ste dva različna obrazca z istim ID obrazca in verzijo. Izbrišite enega od obeh.</string>
-  <string name="survey_loading_reading_form_message">Berem definicijo obrazca …</string>
-  <string name="survey_loading_reading_data_message">Berem podatke obrazcev…</string>
-  <string name="survey_loading_reading_csv_message">Berem CSV datoteke…</string>
-  <string name="survey_saving_validating_message">Vrednotim odgovore…</string>
-  <string name="survey_saving_collecting_message">Zbiram podatke…</string>
-  <string name="survey_saving_saving_message">Shranjujem na SD kartico…</string>
-  <string name="survey_saving_finalizing_message">Zaključujem na SD kartico…</string>
-  <string name="survey_saving_encrypting_message">Šifriram podatke…</string>
-  <string name="high_resolution_summary">Omogoči video zapis visoke resolucije</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-    <string name="go_drive">My Drive</string>
-  <string name="go_shared">Deljeno z menoj</string>
-  <string name="modified_on_date_at_time">\'Spremenjeno\' EEE, MMM dd,  yyyy \'ob\' HH:mm</string>
-  <string name="google_sheets_url_hint">Obrazci morajo nastaviti URL za predložitev. Če ne, bo uporabljen ta URL.</string>
-  <string name="drive_get_file">Pridobivam %1$s in medijske datoteke.</string>
-  <string name="no_google_account">Google račun ni izbran!</string>
-  <string name="google_set_account">Za svoj strežnik ste izbrali Googlove tabele, pred nadaljevanjem prosim izberite ustrezen Google Račun v splošnih nastavitvah</string>
-  <string name="media_upload_error">Medijske datoteke %1$s ni bilo mogoče naložiti, ker ne obstaja.</string>
-  <string name="odk_auto_note">Rezultati ODK samodejnega pošiljanja</string>
-  <string name="odk_auto_download_notification_title">Rezultati ODK samodejnega prenosa</string>
-  <string name="notification_error">Napaka pri prikazu obvestila</string>
-  <string name="google_sheets_url">URL za nadomestno predložitev</string>
-  <string name="send_in_progress">Pošiljanja se izvaja v ozadju, prosim poskusite znova cez malo časa</string>
-  <string name="google_sheets_access_denied">Dostop zavrnjen. Prosim, prepričajte se, da je lastnik preglednice odobril urejanje.</string>
-  <string name="google_sheets_missing_columns">Preglednici manjkajo naslednji stolpci: %1$s</string>
-  <string name="password_error_whitespace">Presledki na začetku ali na koncu gesla niso dovoljeni</string>
-  <string name="username_error_whitespace">Presledki na začetku ali na koncu uporabniškega imena niso dovoljeni</string>
-  <string name="tell_your_friends_msg">Ali vaši kolegi še vedno zbirajo podatke na papirju? Delite ODK Collect z njimi.</string>
-  <!--Geo string added in feature-geofeatures branch-->
+  <string name="get_bearing">Zabeleži smer</string>
+  <string name="replace_bearing">Zamenjaj smer</string>
+  <string name="getting_bearing">Nalagam smer</string>
+  <string name="accept_bearing">Zabeleži smer</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
+  <string name="file_invalid">Datoteka %s je napačna.</string>
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
+  <string name="file_missing">Ne najdem datoteke %s.</string>
+  <!--Heading for a dialog which prompts the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Explanation for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Action to close a full screen dialog-->
+  <!--Heading for a dialog which prompts the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Action to save the contents of a full screen dialog-->
+  <!--##############################################
+    # GEO
+    ##############################################-->
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-      These strings are only being used to preserve compatibility with pre-existing
-       tile caches, and are not shown in the UI.-->
+   These strings are only being used to preserve compatibility with pre-existing
+    tile caches, and are not shown in the UI.-->
   <string name="satellite">Satelit</string>
-  <string name="start">Začni</string>
-  <string name="enable_gps">Omogoči GPS</string>
-  <string name="geo_clear_warning">Funkcija je že narejena. Želite izbrisati funkcijo?</string>
-  <string name="geo_exit_warning">Želite zavreči spremembe in se vrniti v ODK?</string>
-  <string name="clear">Počisti</string>
-  <string name="discard">Zavrzi</string>
-  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-  <string name="no_form_loaded">&lt;noben obrazec ni naložen&gt;</string>
-  <string name="install_openmapkit">Prosim, namestite OpenMapKit!</string>
-  <string name="all_open_source_licenses_msg">Stojimo na ramenih velikanov!</string>
+  <string name="view_change_location">Poglej ali spremeni lokacijo</string>
+  <string name="change_location">Spremeni lokacijo</string>
+  <string name="getting_location">Nalagam lokacijo</string>
+  <string name="get_location">Zapiši lokacijo</string>
+  <string name="provider_disabled_error">Ponudniki lociranja so onemogočeni!</string>
+  <!--Action to go to Android settings. Displayed when location providers are disabled.-->
+  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">Z %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -273,62 +232,230 @@
   <string name="south">J %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">S %1$s%2$s%3$s</string>
-  <string name="phone_does_not_support_rsa">Telefon ne podpira RSA šifriranja.</string>
+  <string name="start">Začni</string>
+  <string name="enable_gps">Omogoči GPS</string>
+  <string name="geo_clear_warning">Funkcija je že narejena. Želite izbrisati funkcijo?</string>
+  <string name="geo_exit_warning">Želite zavreči spremembe in se vrniti v ODK?</string>
+  <string name="clear">Počisti</string>
+  <string name="discard">Zavrzi</string>
+  <!--Name of an action button-->
+  <!--##############################################
+    # SEND FINALIZED FORM
+    ##############################################-->
+  <string name="uploading_data">Pošiljam obrazec</string>
+  <string name="noselect_error">Niste izbrali obrazca!</string>
+  <string name="no_connection">Mrežna povezava ni na voljo</string>
+  <string name="sending_items">Pošiljam %1$s od %2$s obrazcev</string>
+  <string name="send_selected_data">Pošlji izbrane</string>
+  <string name="server_auth_credentials">Napačno uporabniško ime ali geslo za strežnik: %s</string>
+  <string name="server_requires_auth">Strežnik zahteva prijavo</string>
+  <string name="no_forms_uploaded">Napaka. Obrazec ni naložen.</string>
+  <string name="upload_results">Rezultati nalaganja</string>
+  <!--Name of option in Send Finalized Form menu to show only unsent forms (default) or show sent and unsent forms-->
+  <string name="change_view">Spremeni pogled</string>
+  <string name="show_sent_and_unsent_forms">Pokaži poslane in neposlane obrazce</string>
+  <string name="show_unsent_forms">Pokaži neposlane obrazce</string>
+  <string name="media_upload_error">Medijske datoteke %1$s ni bilo mogoče naložiti, ker ne obstaja.</string>
+  <string name="send_in_progress">Pošiljanja se izvaja v ozadju, prosim poskusite znova cez malo časa</string>
+  <string name="odk_auto_note">Rezultati ODK samodejnega pošiljanja</string>
+  <string name="odk_auto_download_notification_title">Rezultati ODK samodejnega prenosa</string>
+  <string name="notification_error">Napaka pri prikazu obvestila</string>
+  <!--##############################################
+    # GET BLANK FORM
+    ##############################################-->
+  <string name="refresh">Obnovi</string>
+  <string name="download">Prevzami izbrane</string>
+  <string name="download_forms_result">Rezultati nalaganja</string>
+  <string name="downloading_data">Povezujem se s strežnikom</string>
+  <string name="fetching_file">Pridobivam %1$s.\n\nObrazec %2$s od %3$sobrazcev.</string>
+  <string name="form_download_progress">%1$s. Pridobivam medijske datoteke: %2$s od %3$s</string>
+  <string name="version">Verzija:</string>
+  <!--##############################################
+    # DELETE SAVED FORM
+    ##############################################-->
+  <!--Title of a section in "Delete Saved Forms" for deleting filled/saved forms (as opposed to blank forms)-->
+  <string name="data">Shranjeni obrazci</string>
+  <!--Title of a section in "Delete Saved Forms" for deleting blank forms (as opposed to filled/saved forms)-->
+  <string name="forms">Prazni obrazci</string>
+  <string name="delete_confirm">Izbrišem %sobrazec(obrazce)?</string>
+  <string name="delete_file">Izbriši izbrano</string>
+  <string name="delete_no">Ne briši</string>
+  <string name="delete_yes">Izbriši obrazce</string>
+  <string name="file_deleted_error">Napaka. %1$s od %2$s izbranih obrazcev nisem uspel zbrisati.</string>
+  <string name="form_delete_message">Izbriši izbrane obrazce</string>
+  <string name="file_deleted_ok">%s obrazcev uspešno zbrisanih!</string>
+  <string name="file_delete_in_progress">Brisanje obrazca že poteka!</string>
+  <!--##############################################
+    # GENERAL SETTINGS
+    ##############################################-->
+  <string name="general_preferences">Splošne nastavitve</string>
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <string name="client">Uporabniški vmesnik</string>
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section only available in beta or development builds.-->
+  <string name="server_preferences">Nastavitve strežnika</string>
+  <!--Label for server type setting-->
+  <string name="server_url">URL</string>
+  <!--Title of dialog for configuring server URL-->
+  <string name="url_error">Napaka, neveljaven URL!</string>
+  <string name="username">Uporabniško ime</string>
+  <string name="change_username">ODK uporabniško ime</string>
+  <string name="password">Geslo</string>
+  <string name="change_password">ODk geslo</string>
+  <string name="password_error_whitespace">Presledki na začetku ali na koncu gesla niso dovoljeni</string>
+  <string name="username_error_whitespace">Presledki na začetku ali na koncu uporabniškega imena niso dovoljeni</string>
+  <string name="change_formlist_url">Pot seznama obrazcev (dodana URL)</string>
+  <string name="change_submission_url">Pot prispevkov (dodana URL)</string>
+  <string name="formlist_url">Pot seznama obrazcev</string>
+  <string name="submission_url">Pot prispevkov</string>
+  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
+  <string name="selected_google_account_text">Goggle račun</string>
+  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
+  <string name="google_sheets_url">URL za nadomestno predložitev</string>
+  <!--Description for Fallback submission URL setting-->
+  <string name="google_sheets_url_hint">Obrazci morajo nastaviti URL za predložitev. Če ne, bo uporabljen ta URL.</string>
+  <string name="app_theme">Tema</string>
+  <string name="theme_light">Svetla tema</string>
+  <string name="theme_dark">Temna tema</string>
+  <string name="language">Jezik</string>
+  <string name="font_size">Velikost črk</string>
+  <string name="change_font_size">Velikost črk</string>
+  <string name="font_size_extra_large">Extra veliko</string>
+  <string name="font_size_large">Veliko</string>
+  <string name="font_size_medium">Srednje</string>
+  <string name="font_size_small">Malo</string>
+  <string name="font_size_extra_small">Extra malo</string>
+  <string name="navigation">Navigacija</string>
+  <string name="swipe_navigation">Uporabi horizontalne potege</string>
+  <string name="buttons_navigation">Uporabi naprej/nazaj tipke</string>
+  <string name="swipe_buttons_navigation">Uporabi potege in tipke</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="form_forward">Naprej</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="show_splash_summary">Vidna ob zagonu aplikacije</string>
+  <string name="splash_path">Izbrana zagonska slika</string>
+  <string name="default_splash_path">ODK privzeto</string>
+  <string name="select_another_image">Izberi drugo sliko</string>
+  <string name="use_odk_default">Uporabi privzeto sliko</string>
+  <string name="change_splash_path">Zamenjaj sliko</string>
+  <!--Heading for the settings category about updating blank forms-->
+  <!--Name of the setting that defines how blank forms are updated from the server.-->
+  <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
+  <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
+  <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
+  <!--Name of the setting that defines how often blank forms are updated from the server.-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_fifteen_minutes">Vsakih petnajst minut</string>
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_one_hour">Vsako uro</string>
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_six_hours">Vsakih šest ur</string>
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_24_hours">Vsakih 24 ur</string>
+  <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
+  <string name="automatic_download">Samodejni prenos</string>
+  <string name="automatic_download_summary">Samodejno prenesi posodobljene različice obrazcev</string>
+  <string name="hide_old_form_versions_setting_title">Skrij stare različice obrazca</string>
+  <string name="form_submission_category">Predložitev obrazca</string>
+  <string name="autosend_selector_title">Samodejno pošlji</string>
+  <string name="autosend">Samodejno pošlji</string>
+  <string name="wifi_autosend">Samo WiFi</string>
+  <string name="cellular_autosend">Samo mobilno omrežje</string>
+  <string name="wifi_cellular_autosend">WiFi ali mobilno omrežje</string>
+  <string name="default_completed">Zaključeno naj bo privzeto</string>
+  <string name="default_completed_summary">Privzeto označi obrazec kot zaključen</string>
+  <string name="constraint_behavior">Način obravnave omejitev</string>
+  <string name="constraint_behavior_on_swipe">Ovrednoti ob potegu naprej</string>
+  <string name="constraint_behavior_on_finalize">Zadrži vrednotenje do zaključka</string>
+  <string name="high_resolution_summary">Omogoči video zapis visoke resolucije</string>
+  <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
+  <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
   <string name="analytics">Zberi anonimne podatke o uporabi</string>
   <string name="analytics_summary">Anonimni podatki o uporabi pomagajo ODK ekipi določiti prednost popravkov in funkcij</string>
+  <string name="form_metadata_summary">Vrednosti bodo dodane obrazcem, ki imajo uporabnisko ime, email ali telefonsko stevilko …</string>
+  <string name="phone_number">Telefonska številka</string>
+  <!--Displayed when a device property such as the phone number is not available-->
+  <!--##############################################
+     # ADMIN SETTINGS
+     ##############################################-->
+  <string name="admin_preferences">Admin nastavitve</string>
+  <string name="admin_access_settings">Klikni za admin dostop do nastavitev</string>
+  <string name="enter_new_password">Vnesi novo geslo</string>
+  <string name="admin_password">Admin geslo</string>
+  <string name="admin_password_changed">Admin geslo uspešno spremenjeno</string>
+  <string name="admin_password_disabled">Admin geslo onemogočeno</string>
+  <string name="admin_password_incorrect">Geslo je napačno</string>
+  <string name="enter_admin_password">Vnesi Admin geslo</string>
+  <string name="change_admin_password">Spremeni Admin geslo</string>
+  <string name="show_password">Pokaži geslo</string>
+  <string name="found_in_main">Ne izberi da ne prikaže v Glavnem meniju</string>
+  <string name="found_in_settings">Ne izberi da ne prikaže v Splošne nastavitve</string>
   <string name="clear_all">Počisti vse.</string>
   <string name="reset_saved_forms">Shranjeni obrazci</string>
   <string name="reset_settings_button_reset">Resetiraj</string>
   <string name="reset_app_state_warning">Vsi izbrani podatki bodo trajno izbrisani. Razveljavitev ni mogoča.</string>
   <string name="reset_saved_forms_result">Shranjeni obrazci :: %s</string>
   <string name="reset_blank_forms_result">Prazni obrazci :: %s</string>
-  <string name="encrypted_form">Šifriran obrazec</string>
-  <string name="instance_scan_count">%1$d obrazcev dodanih.</string>
-  <string name="sort_by_date_asc">Datum, najprej najnovejši</string>
-  <string name="sort_by_date_desc">Datum, najprej najstarejši</string>
-  <string name="sort_by_status_asc">Status, najprej zaključeni</string>
-  <string name="sort_by_status_desc">Status, najprej ne-zaključeni</string>
-  <string name="language">Jezik</string>
-  <string name="form_metadata_summary">Vrednosti bodo dodane obrazcem, ki imajo uporabnisko ime, email ali telefonsko stevilko …</string>
-  <string name="phone_number">Telefonska številka</string>
+  <string name="form_entry_setting">Nastavitve za vnos obrazca</string>
+  <!--Name of a setting that determines whether users can navigate backwards in a form-->
+  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <string name="save_mid">Shrani obrazec</string>
+  <!--##############################################
+     # GOOGLE DRIVE, GOOGLE SHEETS
+     ##############################################-->
+  <!--Title of the screen that lists forms in user's Google Drive-->
+  <string name="go_drive">My Drive</string>
+  <!--Title of the screen that lists forms shared with Google Drive user-->
+  <string name="go_shared">Deljeno z menoj</string>
+  <!--Button for navigating across Google Drive folders-->
+  <string name="drive_get_file">Pridobivam %1$s in medijske datoteke.</string>
+  <string name="no_google_account">Google račun ni izbran!</string>
+  <string name="google_set_account">Za svoj strežnik ste izbrali Googlove tabele, pred nadaljevanjem prosim izberite ustrezen Google Račun v splošnih nastavitvah</string>
+  <string name="google_sheets_access_denied">Dostop zavrnjen. Prosim, prepričajte se, da je lastnik preglednice odobril urejanje.</string>
+  <string name="google_sheets_missing_columns">Preglednici manjkajo naslednji stolpci: %1$s</string>
+  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
+  <string name="multiple_media_folders_detected_notification">Več kot ena medijska mapa je najdena. Odstranite eno in poskusite znova</string>
+  <!--##############################################
+     # ABOUT
+     ##############################################-->
+  <string name="tell_your_friends_msg">Ali vaši kolegi še vedno zbirajo podatke na papirju? Delite ODK Collect z njimi.</string>
+  <string name="all_open_source_licenses_msg">Stojimo na ramenih velikanov!</string>
+  <!--##############################################
+     # SETTINGS IMPORT
+     ##############################################-->
   <string name="successfully_imported_settings">Nastavitve uspešno uvožene</string>
   <string name="turn_on_flashlight">Vklopi svetilko</string>
   <string name="turn_off_flashlight">Izklopi svetilko</string>
   <string name="server_password">Geslo strežnika</string>
-  <string name="take_picture_instruction">Klikni na ekran za fotografiranje</string>
-  <string name="error_front_camera_unavailable">Prednja kamera ni na voljo v tej napravi.</string>
-  <string name="form_entry_setting">Nastavitve za vnos obrazca</string>
-  <string name="autosend_selector_title">Samodejno pošlji</string>
-  <string name="wifi_autosend">Samo WiFi</string>
-  <string name="cellular_autosend">Samo mobilno omrežje</string>
-  <string name="wifi_cellular_autosend">WiFi ali mobilno omrežje</string>
-  <string name="form_submission_category">Predložitev obrazca</string>
-  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
-  <string name="form_delete_message">Izbriši izbrane obrazce</string>
-  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <string name="multiple_media_folders_detected_notification">Več kot ena medijska mapa je najdena. Odstranite eno in poskusite znova</string>
-  <string name="storage_runtime_permission_denied_desc">Brez teh dovoljenj, Collect ne more dostopati do vaših obrazcev ali shraniti odgovorov. Aplikacijo znova odprite, ko ste jih pripravljeni odobriti.</string>
-  <string name="location_runtime_permissions_denied_desc">Brez teh dovoljenj Collect ne more zabeležiti vaše lokacije. Prosim, poskusite znova, ko ste jih pripravljeni odobriti.</string>
-  <string name="camera_runtime_permission_denied_title">Dovljenje za fotoaparat</string>
-  <string name="camera_runtime_permission_denied_desc">Brez tega dovoljenja Collect ne more dostopati do fotoaparata. Prosimo, poskusite znova, ko ste pripravljeni odobriti.</string>
-  <string name="record_audio_runtime_permission_denied_desc">Brez tega dovoljenja Collect ne more dostopati do mikrofona. Prosimo, poskusite znova, ko ste pripravljeni odobriti.</string>
-  <string name="every_fifteen_minutes">Vsakih petnajst minut</string>
-  <string name="every_one_hour">Vsako uro</string>
-  <string name="every_six_hours">Vsakih šest ur</string>
-  <string name="every_24_hours">Vsakih 24 ur</string>
-  <string name="automatic_download">Samodejni prenos</string>
-  <string name="automatic_download_summary">Samodejno prenesi posodobljene različice obrazcev</string>
-  <string name="app_theme">Tema</string>
-  <string name="theme_light">Svetla tema</string>
-  <string name="theme_dark">Temna tema</string>
+  <!--##############################################
+     # SCOPED STORAGE MIGRATION
+     ##############################################-->
+  <!--Action to begin a storage migration-->
+  <!--##############################################
+     # MISC
+     ##############################################-->
+  <string name="ok">OK</string>
+  <!--Used in many dialogs to dismiss the dialog without taking any action-->
+  <string name="cancel">Prekini</string>
+  <string name="cancel_loading_form">Prekini</string>
+  <string name="cancel_location">Prekini</string>
+  <string name="do_not_change">Prekini</string>
+  <string name="do_not_exit">Prekini</string>
+  <string name="canceling">Prekinjam</string>
+  <string name="success">Uspešno</string>
+  <string name="failures">Neuspehi</string>
+  <string name="error_occured">Nastala je napaka</string>
+  <string name="please_wait">Malo počakaj, prosim.</string>
+  <string name="please_wait_long">Počakaj. To lahko traja nekaj minut.</string>
+  <string name="sdcard_unmounted">Collect ne more do SD kartice. Mogoče je nameščena preko USB? (trenutno stanje %s)</string>
+  <string name="fs_delete_media_path_if_file_error">Ne morem izbrisati\'%s\'. Izbriši datoteko ročno in ponovno naloži obrazec.</string>
+  <string name="fs_create_media_folder_error">Ne morem ustvariti medijsko mapo \'%s\'.</string>
+  <string name="fs_file_copy_error">Ne morem kopirat \'%1$s\' preko \'%2$s\'. Razlog: %3$s.</string>
+  <string name="survey_multiple_forms_error">Naložili ste dva različna obrazca z istim ID obrazca in verzijo. Izbrišite enega od obeh.</string>
   <string name="cannot_create_directory">Ne morem narediti mape: %s</string>
   <string name="not_a_directory">%s obstaja, vendar ni mapa</string>
-  <string name="hide_old_form_versions_setting_title">Skrij stare različice obrazca</string>
-  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
-  <!--Text for button that stops audio recording-->
-  <!--Text to let the user know a recording is in progress-->
-  <!--Title of Android Notification Channel for audio recording notifications-->
-  <!--Text for button that plays audio clip-->
-  <!--Text to let the user know a file is being saved-->
-  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
 </resources>

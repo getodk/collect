@@ -1,151 +1,271 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="activity_not_found">Hindi mapangasiwaan: %s</string>
-  <string name="view_image">Ipakita ang Imahe</string>
-    <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
-  <string name="add_another_menu">Magdagdag pa</string>
-  <string name="cancel">Urong</string>
-  <string name="cancel_loading_form">Urong</string>
-  <string name="cancel_location">Urong</string>
-  <string name="capture_audio">Mag-tala ng Tunog</string>
-  <string name="capture_image">Kumuha ng Larawan</string>
-  <string name="capture_video">Mag-tala ng Bidyo</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data">Punan ang Blangkong Form</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data_button">Punan ang Form</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="review_data">Patnugutan ang inimpok na Form</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <!--Text for an action button on the main screen.-->
+  <string name="send_data">Ipadala ang mga Yaring Form</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <!--Text for an action button on the main screen.-->
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <!--Text for an action button on the main screen.-->
+  <string name="get_forms">Kumuha ng Blangkong Form</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="manage_files">Burahin ang Inimpok na Form</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="added_on_date_at_time">\'Added on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="saved_on_date_at_time">\'Saved on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="finalized_on_date_at_time">\'Niyari noong \' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sent_on_date_at_time">\'Sent on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sending_failed_on_date_at_time">\'Sending failed on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Displayed in search boxes for form lists or question types that involve search-->
+  <string name="no_items_display">Walang maipakita.</string>
+  <!--##############################################
+    # FILL BLANK FORM
+    ##############################################-->
+  <string name="finished_disk_scan">Tapos na ang pag-scan. Naka-karga na ang lahat ng forms.</string>
+  <string name="loading_form">Kina-karga ang Form</string>
+  <string name="parse_error">Paumanhin, hindi ma-suri ang form.</string>
+  <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
+  <string name="savepoint_used">Nabawi sa savepoint ang mga pagbabagong hindi na-Impukin!</string>
+  <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
   <string name="change_language">Palitan ang Wika</string>
-  <string name="change_password">Hudyat</string>
-  <string name="change_username">ODK Username</string>
+  <!--Text for button displayed in the form filling menu to see the form's table of contents-->
+  <string name="view_hierarchy">Pumunta sa Udyok</string>
+  <!--Text for button displayed in the form filling menu to save the form-->
+  <string name="save_all_answers">Impukin ang mga sagot sa Form</string>
+  <!--Text of button from the form's table of contents to jump to the beginning of the form-->
+  <string name="jump_to_beginning">Punta sa Simula</string>
+  <!--Text of button from the form's table of contents to jump to the end of the form-->
+  <string name="jump_to_end">Punta sa Dulo</string>
+  <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
+  <string name="jump_to_previous">Punta Pataas</string>
+  <!--Displayed below group names in a form's table of contents-->
+  <!--Displayed below repeat names in a form's table of contents-->
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <string name="add_another_menu">Magdagdag pa</string>
+  <!--Title of overlay menu displayed when long pressing on a question in a form-->
+  <string name="edit_prompt">Pamatnugutan ang Udyok</string>
   <string name="clearanswer_confirm">Tanggalin ang tugon sa \"%s\"?</string>
   <string name="clear_answer">Tanggalin ang tugon</string>
   <string name="clear_answer_ask">Tanggalin ang tugon na ito?</string>
   <string name="clear_answer_no">Urong</string>
-  <string name="data">Mga Inimpok na Form</string>
-  <string name="data_saved_error">Paumanhin, nabigo ang pag-impok ng form!</string>
-  <string name="data_saved_ok">Matagumpay na inimpok ang Form!</string>
-  <string name="default_completed">Yari ang paunang \'tukoy</string>
-  <string name="default_completed_summary">Markahang Yari ang Form bilang paunang tukoy</string>
-  <string name="delete_confirm">Burahin ang %s form(s)?</string>
-  <string name="delete_file">Burahin ang mga napili</string>
-  <string name="delete_no">Huwag burahin</string>
+  <string name="discard_answer">Tanggalin ang tugon</string>
+  <string name="discard_group">Tanggalin ang pangkat</string>
   <string name="delete_repeat">Tanggalin ang pangkat</string>
   <string name="delete_repeat_ask">Tanggalin ang Pangkat na Ito?</string>
   <string name="delete_repeat_confirm">Tanggaling ang pangkat ng \"%s\" kasama ang pangkat sa ilalim nito?</string>
   <string name="delete_repeat_no">Urong</string>
-  <string name="delete_yes">Oo, Burahin</string>
-  <string name="discard_answer">Tanggalin ang tugon</string>
-  <string name="discard_group">Tanggalin ang pangkat</string>
-  <string name="download">I-karga ang Pinili</string>
-  <string name="downloading_data">Kumakabit sa Server</string>
-  <string name="do_not_change">Urong</string>
-  <string name="do_not_exit">Urong</string>
-  <string name="do_not_save">Balewalain ang mga binago</string>
-  <string name="enter_data">Punan ang Blangkong Form</string>
-  <string name="enter_data_button">Punan ang Form</string>
-  <string name="error_occured">May Maling Nangyari</string>
-  <string name="file_deleted_error">Paumanhin, %1$s of %2$s ang mga piniling form(s) ay nabigong ma-i-karga!</string>
-  <string name="file_deleted_ok">%s na (mga) form ay matagumpay na binura!</string>
-  <string name="file_delete_in_progress">Paumanhin, ang form ay kasalukuyang binubura!</string>
-  <string name="file_invalid">Talaksa: %s ay walang kabuluhan.</string>
-  <string name="file_missing">Talaksa: %s ay nawawala.</string>
-  <string name="finished_disk_scan">Tapos na ang pag-scan. Naka-karga na ang lahat ng forms.</string>
-  <string name="forms">Mga Blangkong Form</string>
-  <string name="getting_location">Sini-set ang Kinalalagyan</string>
-  <string name="get_barcode">Kunin ang Barcode</string>
-  <string name="get_forms">Kumuha ng Blangkong Form</string>
-  <string name="get_location">Itala ang Kinalalagyan</string>
-  <string name="provider_disabled_error">Paumanhin, ang mga provider ng Kinalalagyan ay hindi pinagana!</string>
   <string name="invalid_answer_error">Paumanhin, ang tugon na into ay hindi wasto!</string>
-  <string name="jump_to_beginning">Punta sa Simula</string>
-  <string name="jump_to_end">Punta sa Dulo</string>
-  <string name="jump_to_previous">Punta Pataas</string>
-  <string name="loading_form">Kina-karga ang Form</string>
-  <string name="manage_files">Burahin ang Inimpok na Form</string>
-  <string name="mark_finished">Markahan Yari ang Form</string>
-  <string name="noselect_error">Paumanhin, walang form na pinili!</string>
-  <string name="no_connection">Wala koneksyon sa network</string>
-  <string name="no_items_display">Walang maipakita.</string>
-  <string name="ok">OK</string>
-  <string name="parse_error">Paumanhin, hindi ma-suri ang form.</string>
-  <string name="password">Kontrasenyas</string>
-  <string name="play_video">I-play ang Bidyo</string>
-  <string name="please_wait">Mag-hintay ng ilang sandali.</string>
-  <string name="please_wait_long">Mag-hintay. Ito ay maaring tumagal ng ilang minuto.</string>
-  <string name="quit_application">Alisan %s</string>
-  <string name="quit_entry">Impukin ang Form at Lumabas</string>
-  <string name="refresh">Sariwain</string>
-  <string name="replace_barcode">Palitan ang Barcode</string>
   <string name="required_answer_error">Paumanhin, ang tugon na ito ay kailangan!</string>
-  <string name="review_data">Patnugutan ang inimpok na Form</string>
-  <string name="save_all_answers">Impukin ang mga sagot sa Form</string>
   <string name="save_enter_data_description">Ikaw ay nasa dulo ng \"%s\".</string>
-  <string name="saving_form">Ini-impok ang Form</string>
-  <string name="sending_items">Pinapadala ang %1$s sa %2$s na (mga) form</string>
-  <string name="send_data">Ipadala ang mga Yaring Form</string>
-  <string name="send_selected_data">Ipadala ang mga pinili</string>
-  <string name="server_requires_auth">Nangangailagan ng Authentication ang Server</string>
-  <string name="server_url">URL</string>
-  <string name="server_preferences">Server</string>
-  <string name="trigger">Sige. Magpatuloy.</string>
-  <string name="uploading_data">Pinapadala ang Form</string>
-  <string name="url_error">Paumanhin, may mali sa URL!</string>
-  <string name="username">Username</string>
-  <string name="view_hierarchy">Pumunta sa Udyok</string>
-  <string name="general_preferences">Palitan ang Settings</string>
-  <string name="show_splash_summary">Pinapakita sa umpisa ng application</string>
-  <string name="splash_path">Piniling larawan para sa Panimulang Tabing</string>
-  <string name="default_splash_path">Paunang natukoy ng ODK</string>
-  <string name="select_another_image">Pumili ng Ibang Imahe</string>
-  <string name="use_odk_default">Gamitin ang Paunang natukoy na Imahe</string>
-  <string name="change_splash_path">Palitan ang Imahe</string>
-  <string name="keep_changes">Impukin ang mga binago</string>
-  <string name="change_formlist_url">Form List Path (appended to Server URL)</string>
-  <string name="change_submission_url">Submission Path (appended to Server URL)</string>
-  <string name="formlist_url">Form List Path</string>
-  <string name="submission_url">Submission Path</string>
-  <string name="font_size">Laki ng Teklado</string>
-  <string name="change_font_size">Laki ng Tipo ng Teksto</string>
-  <string name="form_download_progress">%1$s. Kinukuha ang talaksang media : %2$s of %3$s</string>
-  <string name="success">Tagumpay</string>
-  <string name="no_forms_uploaded">Sorry, no form was uploaded.</string>
-  <string name="upload_results">Upload Results</string>
-  <string name="choose_sound">Pumili ng Tunog</string>
-  <string name="choose_video">Pumili ng Bidyo</string>
-  <string name="choose_image">Pumili ng Imahe</string>
-  <string name="selected">Pinili: </string>
-  <string name="select_answer">Pumili ng Sagot</string>
   <string name="save_form_as">Panglanan ang Form:</string>
   <string name="save_as_error">Hindi maaaring blangko ang pangalan ng form!</string>
-  <string name="edit_prompt">Pamatnugutan ang Udyok</string>
-  <string name="selected_google_account_text">Google Account</string>
-  <string name="font_size_extra_large">Labis na Malaki</string>
-  <string name="font_size_large">Malaki</string>
-  <string name="font_size_medium">Katamtaman</string>
-  <string name="font_size_small">Maliit</string>
-  <string name="font_size_extra_small">Labis na Maliit</string>
-  <string name="change_view">Palitan ang Tanaw</string>
-  <string name="show_sent_and_unsent_forms">Mga Napadala a at \'di pa napapadalang Forms</string>
-  <string name="show_unsent_forms">Mga hindi pa napapadalang Forms  lang</string>
-  <string name="added_on_date_at_time">\'Added on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="saved_on_date_at_time">\'Saved on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="finalized_on_date_at_time">\'Niyari noong \' EEE, MMM dd, yyyy \'at\' HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sent_on_date_at_time">\'Sent on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sending_failed_on_date_at_time">\'Sending failed on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="version">Version:</string>
+  <string name="mark_finished">Markahan Yari ang Form</string>
+  <string name="quit_entry">Impukin ang Form at Lumabas</string>
+  <string name="data_saved_error">Paumanhin, nabigo ang pag-impok ng form!</string>
+  <string name="data_saved_ok">Matagumpay na inimpok ang Form!</string>
+  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <string name="quit_application">Alisan %s</string>
+  <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="do_not_save">Balewalain ang mga binago</string>
+  <string name="keep_changes">Impukin ang mga binago</string>
+  <string name="saving_form">Ini-impok ang Form</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <!--Text displayed when audio recording fails to start-->
+  <!--Error message displayed when copying media from a temporary directory fails-->
+  <!--##############################################
+    # FORM FEATURES
+    ##############################################-->
+  <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
   <string name="launch_app">Ilunsad</string>
+  <string name="activity_not_found">Hindi mapangasiwaan: %s</string>
   <string name="no_app">Ang hiniling na application ay nawawala. Paki-pasok ng mano-mano ang detalye.</string>
-  <string name="savepoint_used">Nabawi sa savepoint ang mga pagbabagong hindi na-Impukin!</string>
+  <string name="launch_printer">Initiate Printing</string>
+  <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
+  <string name="get_barcode">Kunin ang Barcode</string>
+  <string name="replace_barcode">Palitan ang Barcode</string>
+  <string name="capture_image">Kumuha ng Larawan</string>
+  <string name="choose_image">Pumili ng Imahe</string>
+  <string name="view_image">Ipakita ang Imahe</string>
+  <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">Impukin at Isara</string>
   <string name="sign_button">Kalapin ang Pirma</string>
   <string name="markup_image">Markahan ang Imahe</string>
   <string name="draw_image">Guhitan ang Imahe</string>
   <string name="reset_image">I-reset</string>
   <string name="set_color">I-set ang Kulay</string>
+  <string name="capture_video">Mag-tala ng Bidyo</string>
+  <string name="choose_video">Pumili ng Bidyo</string>
+  <string name="play_video">I-play ang Bidyo</string>
+  <!--Text for button that deletes a file that is the answer to a question-->
+  <!--Text for button that starts recording sound-->
+  <string name="capture_audio">Mag-tala ng Tunog</string>
+  <!--Text for button that lets the user choose a sound file on their device-->
+  <string name="choose_sound">Pumili ng Tunog</string>
+  <!--Description text for button that that pauses recording sound-->
+  <!--Description text for button that that resumes recording sound-->
+  <!--Title for dialog asking the user if they want to delete a file-->
+  <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="select_answer">Pumili ng Sagot</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="selected">Pinili: </string>
+  <string name="trigger">Sige. Magpatuloy.</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
+  <string name="file_invalid">Talaksa: %s ay walang kabuluhan.</string>
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
+  <string name="file_missing">Talaksa: %s ay nawawala.</string>
+  <!--Heading for a dialog which prompts the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Explanation for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Action to close a full screen dialog-->
+  <!--Heading for a dialog which prompts the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Action to save the contents of a full screen dialog-->
+  <!--##############################################
+    # GEO
+    ##############################################-->
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+   These strings are only being used to preserve compatibility with pre-existing
+    tile caches, and are not shown in the UI.-->
+  <string name="change_location">Palitan ang Lokasyon</string>
+  <string name="getting_location">Sini-set ang Kinalalagyan</string>
+  <string name="get_location">Itala ang Kinalalagyan</string>
+  <string name="provider_disabled_error">Paumanhin, ang mga provider ng Kinalalagyan ay hindi pinagana!</string>
+  <!--Action to go to Android settings. Displayed when location providers are disabled.-->
+  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--Name of an action button-->
+  <!--##############################################
+    # SEND FINALIZED FORM
+    ##############################################-->
+  <string name="uploading_data">Pinapadala ang Form</string>
+  <string name="noselect_error">Paumanhin, walang form na pinili!</string>
+  <string name="no_connection">Wala koneksyon sa network</string>
+  <string name="sending_items">Pinapadala ang %1$s sa %2$s na (mga) form</string>
+  <string name="send_selected_data">Ipadala ang mga pinili</string>
+  <string name="server_requires_auth">Nangangailagan ng Authentication ang Server</string>
+  <string name="no_forms_uploaded">Sorry, no form was uploaded.</string>
+  <string name="upload_results">Upload Results</string>
+  <!--Name of option in Send Finalized Form menu to show only unsent forms (default) or show sent and unsent forms-->
+  <string name="change_view">Palitan ang Tanaw</string>
+  <string name="show_sent_and_unsent_forms">Mga Napadala a at \'di pa napapadalang Forms</string>
+  <string name="show_unsent_forms">Mga hindi pa napapadalang Forms  lang</string>
+  <!--##############################################
+    # GET BLANK FORM
+    ##############################################-->
+  <string name="refresh">Sariwain</string>
+  <string name="download">I-karga ang Pinili</string>
+  <string name="downloading_data">Kumakabit sa Server</string>
+  <string name="form_download_progress">%1$s. Kinukuha ang talaksang media : %2$s of %3$s</string>
+  <string name="version">Version:</string>
+  <!--##############################################
+    # DELETE SAVED FORM
+    ##############################################-->
+  <!--Title of a section in "Delete Saved Forms" for deleting filled/saved forms (as opposed to blank forms)-->
+  <string name="data">Mga Inimpok na Form</string>
+  <!--Title of a section in "Delete Saved Forms" for deleting blank forms (as opposed to filled/saved forms)-->
+  <string name="forms">Mga Blangkong Form</string>
+  <string name="delete_confirm">Burahin ang %s form(s)?</string>
+  <string name="delete_file">Burahin ang mga napili</string>
+  <string name="delete_no">Huwag burahin</string>
+  <string name="delete_yes">Oo, Burahin</string>
+  <string name="file_deleted_error">Paumanhin, %1$s of %2$s ang mga piniling form(s) ay nabigong ma-i-karga!</string>
+  <string name="file_deleted_ok">%s na (mga) form ay matagumpay na binura!</string>
+  <string name="file_delete_in_progress">Paumanhin, ang form ay kasalukuyang binubura!</string>
+  <!--##############################################
+    # GENERAL SETTINGS
+    ##############################################-->
+  <string name="general_preferences">Palitan ang Settings</string>
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section only available in beta or development builds.-->
+  <string name="server_preferences">Server</string>
+  <!--Label for server type setting-->
+  <string name="server_url">URL</string>
+  <!--Title of dialog for configuring server URL-->
+  <string name="change_server_url">URL ng Server</string>
+  <string name="url_error">Paumanhin, may mali sa URL!</string>
+  <string name="username">Username</string>
+  <string name="change_username">ODK Username</string>
+  <string name="password">Kontrasenyas</string>
+  <string name="change_password">Hudyat</string>
+  <string name="change_formlist_url">Form List Path (appended to Server URL)</string>
+  <string name="change_submission_url">Submission Path (appended to Server URL)</string>
+  <string name="formlist_url">Form List Path</string>
+  <string name="submission_url">Submission Path</string>
+  <string name="selected_google_account_text">Google Account</string>
+  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
+  <!--Description for Fallback submission URL setting-->
+  <string name="font_size">Laki ng Teklado</string>
+  <string name="change_font_size">Laki ng Tipo ng Teksto</string>
+  <string name="font_size_extra_large">Labis na Malaki</string>
+  <string name="font_size_large">Malaki</string>
+  <string name="font_size_medium">Katamtaman</string>
+  <string name="font_size_small">Maliit</string>
+  <string name="font_size_extra_small">Labis na Maliit</string>
+  <string name="navigation">Navigation</string>
+  <string name="swipe_navigation">Use horizontal swipes</string>
+  <string name="buttons_navigation">Use forward/backward buttons</string>
+  <string name="swipe_buttons_navigation">Use swipes and buttons</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="form_forward">Next</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="show_splash_summary">Pinapakita sa umpisa ng application</string>
+  <string name="splash_path">Piniling larawan para sa Panimulang Tabing</string>
+  <string name="default_splash_path">Paunang natukoy ng ODK</string>
+  <string name="select_another_image">Pumili ng Ibang Imahe</string>
+  <string name="use_odk_default">Gamitin ang Paunang natukoy na Imahe</string>
+  <string name="change_splash_path">Palitan ang Imahe</string>
+  <!--Heading for the settings category about updating blank forms-->
+  <!--Name of the setting that defines how blank forms are updated from the server.-->
+  <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
+  <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
+  <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
+  <!--Name of the setting that defines how often blank forms are updated from the server.-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
+  <string name="default_completed">Yari ang paunang \'tukoy</string>
+  <string name="default_completed_summary">Markahang Yari ang Form bilang paunang tukoy</string>
+  <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
+  <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Displayed when a device property such as the phone number is not available-->
+  <!--##############################################
+     # ADMIN SETTINGS
+     ##############################################-->
   <string name="admin_preferences">Admin Settings</string>
   <string name="admin_access_settings">Tap for admin access to settings</string>
-  <string name="save_mid">Impukin ang mga sagot sa Form</string>
   <string name="enter_new_password">Enter new password</string>
   <string name="admin_password_changed">Admin password successfully changed</string>
   <string name="admin_password_disabled">Admin password disabled</string>
@@ -153,31 +273,38 @@
   <string name="enter_admin_password">Enter Admin Password</string>
   <string name="found_in_main">Uncheck to hide from Main Menu</string>
   <string name="found_in_settings">Uncheck to hide from General Settings</string>
-  <string name="form_forward">Next</string>
-  <string name="navigation">Navigation</string>
-  <string name="swipe_navigation">Use horizontal swipes</string>
-  <string name="buttons_navigation">Use forward/backward buttons</string>
-  <string name="swipe_buttons_navigation">Use swipes and buttons</string>
-  <string name="launch_printer">Initiate Printing</string>
-  <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
-  <string name="change_location">Palitan ang Lokasyon</string>
-  <string name="change_server_url">URL ng Server</string>
-  <!--Geo string added in feature-geofeatures branch-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-      These strings are only being used to preserve compatibility with pre-existing
-       tile caches, and are not shown in the UI.-->
-  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
-  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
-  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
-  <!--Text for button that stops audio recording-->
-  <!--Text to let the user know a recording is in progress-->
-  <!--Title of Android Notification Channel for audio recording notifications-->
-  <!--Text for button that plays audio clip-->
-  <!--Text to let the user know a file is being saved-->
-  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <!--Name of a setting that determines whether users can navigate backwards in a form-->
+  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <string name="save_mid">Impukin ang mga sagot sa Form</string>
+  <!--##############################################
+     # GOOGLE DRIVE, GOOGLE SHEETS
+     ##############################################-->
+  <!--Title of the screen that lists forms in user's Google Drive-->
+  <!--Title of the screen that lists forms shared with Google Drive user-->
+  <!--Button for navigating across Google Drive folders-->
+  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
+  <!--##############################################
+     # ABOUT
+     ##############################################-->
+  <!--##############################################
+     # SETTINGS IMPORT
+     ##############################################-->
+  <!--##############################################
+     # SCOPED STORAGE MIGRATION
+     ##############################################-->
+  <!--Action to begin a storage migration-->
+  <!--##############################################
+     # MISC
+     ##############################################-->
+  <string name="ok">OK</string>
+  <!--Used in many dialogs to dismiss the dialog without taking any action-->
+  <string name="cancel">Urong</string>
+  <string name="cancel_loading_form">Urong</string>
+  <string name="cancel_location">Urong</string>
+  <string name="do_not_change">Urong</string>
+  <string name="do_not_exit">Urong</string>
+  <string name="success">Tagumpay</string>
+  <string name="error_occured">May Maling Nangyari</string>
+  <string name="please_wait">Mag-hintay ng ilang sandali.</string>
+  <string name="please_wait_long">Mag-hintay. Ito ay maaring tumagal ng ilang minuto.</string>
 </resources>

@@ -1,191 +1,171 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="show_password">Mostra clau d\'accés</string>
-  <string name="activity_not_found">Cap activitat pendent trobada: %s</string>
-  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
-  <string name="cancel">Cancel·lar</string>
-  <string name="cancel_loading_form">Cancel·lar</string>
-  <string name="cancel_location">Cancel·lar</string>
-  <string name="cannot_edit_completed_form">No es pot editar un formulari un cop finalitzat.  Pot estar encriptat.</string>
-  <string name="capture_audio">Enregistrar so</string>
-  <string name="capture_image">Pren foto</string>
-  <string name="capture_osm">Executa OpenMapKit</string>
-  <string name="recapture_osm">Refer signatura OSM</string>
-  <string name="capture_video">Enregistrar Vídeo</string>
-  <string name="change_language">Canvia idioma</string>
-  <string name="change_password">Clau d\'accés ODK</string>
-  <string name="change_username">nom d\'usuari ODK</string>
-  <string name="clearanswer_confirm">Eliminar la resposta a \"%s\"?</string>
-  <string name="clear_answer">Eliminar resposta</string>
-  <string name="clear_answer_ask">Eliminar aquesta resposta?</string>
-  <string name="clear_answer_no">Cancel·lar</string>
-  <string name="data">F.desats</string>
-  <string name="data_saved_error">Ho sentim, el formulari no s\'ha desat be!</string>
-  <string name="data_saved_ok">Formulari desat correctament!</string>
-  <string name="save_point_error">Error al guardar el punt de recuperació: %s</string>
-  <string name="default_completed">Considera finalitzat per defecte</string>
-  <string name="default_completed_summary">Marca formulari com finalitzat per defecte.</string>
-  <string name="delete_confirm">Eliminar %s formulari(s)?</string>
-  <string name="delete_file">Eliminar seleccionats</string>
-  <string name="delete_no">No eliminar</string>
-  <string name="delete_repeat">Esborrar grup</string>
-  <string name="delete_repeat_ask">Esborrar aquest grup?</string>
-  <string name="delete_repeat_confirm">Esborrar grup \"%s\" i tots els seus subgrups?</string>
-  <string name="delete_repeat_no">Cancel·lar</string>
-  <string name="delete_yes">Esborrar formularis</string>
-  <string name="discard_answer">Descartar resposta</string>
-  <string name="discard_group">Esborrar grup</string>
-  <string name="download">Descarregar seleccionats</string>
-  <string name="downloading_data">Connectant a servidor</string>
-  <string name="do_not_change">Cancel·lar</string>
-  <string name="do_not_exit">Cancel·lar</string>
-  <string name="do_not_save">Ignorar canvis</string>
+  <!--Text for an action button on the main screen.-->
   <string name="enter_data">Omplir nou formulari</string>
+  <!--Text for an action button on the main screen.-->
   <string name="enter_data_button">Omplir nou formulari</string>
-  <string name="error_occured">S\'ha produït un error</string>
-  <string name="error_attaching_binary_file">Error detectat al connectar medi: %s</string>
-  <string name="fetching_file">Obtenint %1$s.\n\nForm %2$s de %3$s formulari(s).</string>
-  <string name="file_deleted_error">Ho sentim, %1$s de %2$s formulari(s) seleccionat(s) no s\'han pogut eliminar!</string>
-  <string name="file_deleted_ok">%s formularis(s) eliminats correctament!</string>
-  <string name="file_delete_in_progress">Ho sentim, s\'está eliminant el formulari!</string>
-  <string name="file_invalid">Arxiu: %s és invàlid.</string>
-  <string name="file_missing">Arxiu: %s no s\'ha trobat.</string>
-  <string name="finished_disk_scan">Exploració finalitzada. Formularis carregats.</string>
-  <string name="forms">F.buits</string>
-  <string name="getting_location">Carregant Localització</string>
-  <string name="get_barcode">Llegir Codi de Barres</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="review_data">Editar formulari desat</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="review_data_button">Editar formulari desat (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="send_data">Enviar formulari finalitzat</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="send_data_button">Enviar formulari finalitzat (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="view_sent_forms">Veure formulari enviat.</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="view_sent_forms_button">Veure formulari enviat  (%s)</string>
+  <!--Text for an action button on the main screen.-->
   <string name="get_forms">Descarregar formulari buit</string>
-  <string name="get_location">Enregistrar Localització</string>
-  <string name="provider_disabled_error">Atenció, la Locatització està desactivada!</string>
-  <string name="invalid_answer_error">Atenció, resposta invàlida!</string>
-  <string name="jump_to_beginning">Anar a l\'inici</string>
-  <string name="jump_to_end">Anar al final</string>
-  <string name="jump_to_previous">Ves enrera</string>
-  <string name="loading_form">Carregant formulari</string>
+  <!--Text for an action button on the main screen.-->
   <string name="manage_files">Eliminar formulari desat</string>
-  <string name="mark_finished">Marcar formulari com completat</string>
-  <string name="noselect_error">Atenció, no hi ha cap formulari seleccionat!</string>
-  <string name="no_connection">No hi ha connexió a xarxa disponible</string>
+  <string name="version_number">Versió: %s</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="added_on_date_at_time">\'Afegit el\' EEE dd MMM yyyy, HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="saved_on_date_at_time">\'Desat el\' EEE dd MMM yyyy, HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="finalized_on_date_at_time">\'Finalitzat el\' EEE dd MMM yyyy, HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sent_on_date_at_time">\'Enviat el\' EEE dd MMM yyyy, HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sending_failed_on_date_at_time">\'Enviament fallat el\' EEE dd MMM yyyy, HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="deleted_on_date_at_time">\'Esborrat el\' EEE, dd MMM, yyyy \'a\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="modified_on_date_at_time">\'Modificat el\' EEE, dd-MMM-yyyy \'a les\' HH:mm</string>
+  <string name="encrypted_form">Formulari encriptat</string>
+  <string name="deleted_form">Formulari esborrat</string>
+  <string name="filter_the_list">Filtra la llista</string>
+  <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="no_items_display">Res disponible per visualitzar.</string>
   <string name="no_items_display_forms">Res disponible per visualitzar.\n\nProva de seleccionar i omplir un formulari en blanc.</string>
   <string name="no_items_display_sent_forms">Res disponible per veure.\n\nProva enviant formularis finalitzats abans de visualitzar.</string>
   <string name="no_items_display_instances">Res disponible per visualitzar.\n\nProva finalitzant formularis desats abans d\'enviar.</string>
-  <string name="ok">D\'acord</string>
+  <!--##############################################
+    # FILL BLANK FORM
+    ##############################################-->
+  <string name="finished_disk_scan">Exploració finalitzada. Formularis carregats.</string>
+  <string name="loading_form">Carregant formulari</string>
+  <string name="survey_loading_reading_form_message">Llegint definició de formulari…</string>
+  <string name="survey_loading_reading_data_message">LLegint dades de enquesta…</string>
+  <string name="survey_loading_reading_csv_message">LLegint arxius CSV…</string>
   <string name="parse_error">Ho sentim, incapaç d\'interpretar el formulari.</string>
-  <string name="password">Clau d\'accés</string>
-  <string name="play_video">Reprodueix Vídeo</string>
-  <string name="please_wait">Un moment si us plau.</string>
-  <string name="please_wait_long">Un moment si us plau. Això pot trigar uns minuts.</string>
-  <string name="quit_application">Sortida %s</string>
-  <string name="quit_entry">Desa formulari i surt.</string>
-  <string name="refresh">Refrescar</string>
-  <string name="replace_barcode">Reemplaça Codi de Barres</string>
-  <string name="required_answer_error">Aquesta dada és d\'entrada obligada!</string>
-  <string name="review_data">Editar formulari desat</string>
-  <string name="review_data_button">Editar formulari desat (%s)</string>
-  <string name="save_all_answers">Desar formulari </string>
-  <string name="save_enter_data_description">Formulari \"%s\" finalitzat.</string>
-  <string name="saving_form">Desant formulari</string>
-  <string name="sending_items">Enviant %1$s de %2$s formulari(s)</string>
-  <string name="send_data">Enviar formulari finalitzat</string>
-  <string name="send_data_button">Enviar formulari finalitzat (%s)</string>
-  <string name="send_selected_data">Enviar seleccionats</string>
-  <string name="view_sent_forms">Veure formulari enviat.</string>
-  <string name="view_sent_forms_button">Veure formulari enviat  (%s)</string>
-  <string name="server_requires_auth">El servidor necessita Autenticació</string>
-  <string name="server_url">URL</string>
-  <string name="server_preferences">Servidor</string>
-  <string name="trigger">D\'acord. Si us plau, continuar.</string>
-  <string name="uploading_data">Enviant formulari</string>
-  <string name="url_error">La URL és invàlida!</string>
-  <string name="username">Nom d\'usuari</string>
+  <string name="parent_form_not_present">No es pot editar  aquest formulari desat perquè el formulari plantilla no hi és o s\'ha esborrat.\n\nForm ID: %1$s</string>
+  <string name="cannot_edit_completed_form">No es pot editar un formulari un cop finalitzat.  Pot estar encriptat.</string>
+  <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
+  <string name="savepoint_used">Canvis no desats llegits del punt de recuperació!</string>
+  <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
+  <string name="change_language">Canvia idioma</string>
+  <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">Ves a entrada de dades</string>
-  <string name="general_preferences">Configuració general</string>
-  <string name="show_splash_summary">Mostrar quan inicia l\'aplicació</string>
-  <string name="splash_path">Imatge de benvinguda seleccionada</string>
-  <string name="default_splash_path">ODK per defecte</string>
-  <string name="select_another_image">Seleccionar una altre imatge</string>
-  <string name="use_odk_default">Usar imatge per defecte</string>
-  <string name="change_splash_path">Canviar imatge</string>
-  <string name="keep_changes">Desar els canvis</string>
-  <string name="change_formlist_url">Camí a carpeta de formularis (afegit a URL servidor)</string>
-  <string name="change_submission_url">Carpeta presentacions (afegit URL servidor)</string>
-  <string name="formlist_url">Carpeta de formularis</string>
-  <string name="submission_url">Carpeta de presentacions</string>
-  <string name="font_size">Mida del text</string>
-  <string name="change_font_size">Mida del text</string>
-  <string name="form_download_progress">%1$s. Obtenint arxius multimèdia: %2$s de %3$s</string>
-  <string name="success">Correcte</string>
-  <string name="no_forms_uploaded">No s\'ha carregat cap formulari.</string>
-  <string name="upload_results">Resultats de la càrrega</string>
-  <string name="choose_sound">Escollir so</string>
-  <string name="choose_video">Escollir vídeo</string>
-  <string name="choose_image">Escollir imatge</string>
-  <string name="selected">Seleccionat:</string>
-  <string name="select_answer">Seleccionar resposta:</string>
+  <!--Text for button displayed in the form filling menu to save the form-->
+  <string name="save_all_answers">Desar formulari </string>
+  <!--Text of button from the form's table of contents to jump to the beginning of the form-->
+  <string name="jump_to_beginning">Anar a l\'inici</string>
+  <!--Text of button from the form's table of contents to jump to the end of the form-->
+  <string name="jump_to_end">Anar al final</string>
+  <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
+  <string name="jump_to_previous">Ves enrera</string>
+  <!--Displayed below group names in a form's table of contents-->
+  <!--Displayed below repeat names in a form's table of contents-->
+  <string name="exit">Sortir</string>
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <!--Title of overlay menu displayed when long pressing on a question in a form-->
+  <string name="edit_prompt">Editar entrada:</string>
+  <string name="clearanswer_confirm">Eliminar la resposta a \"%s\"?</string>
+  <string name="clear_answer">Eliminar resposta</string>
+  <string name="clear_answer_ask">Eliminar aquesta resposta?</string>
+  <string name="clear_answer_no">Cancel·lar</string>
+  <string name="discard_answer">Descartar resposta</string>
+  <string name="discard_group">Esborrar grup</string>
+  <string name="delete_repeat">Esborrar grup</string>
+  <string name="delete_repeat_ask">Esborrar aquest grup?</string>
+  <string name="delete_repeat_confirm">Esborrar grup \"%s\" i tots els seus subgrups?</string>
+  <string name="delete_repeat_no">Cancel·lar</string>
+  <string name="invalid_answer_error">Atenció, resposta invàlida!</string>
+  <string name="required_answer_error">Aquesta dada és d\'entrada obligada!</string>
+  <string name="survey_internal_error">Error intern al demanar la següent dada.</string>
+  <string name="save_enter_data_description">Formulari \"%s\" finalitzat.</string>
   <string name="save_form_as">Anomena aquest formulari:</string>
   <string name="save_as_error">El nom no pot deixar-se en blanc</string>
-  <string name="edit_prompt">Editar entrada:</string>
-  <string name="selected_google_account_text">Compte Google</string>
-  <string name="font_size_extra_large">Extra gran</string>
-  <string name="font_size_large">Gran</string>
-  <string name="font_size_medium">Mitjana</string>
-  <string name="font_size_small">Petita</string>
-  <string name="font_size_extra_small">Extra petita</string>
-  <string name="change_view">Canviar vista</string>
-  <string name="show_sent_and_unsent_forms">Formularis enviats i pendents</string>
-  <string name="show_unsent_forms">Nomes Formularis pendents d\'enviar</string>
-  <string name="added_on_date_at_time">\'Afegit el\' EEE dd MMM yyyy, HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="saved_on_date_at_time">\'Desat el\' EEE dd MMM yyyy, HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="finalized_on_date_at_time">\'Finalitzat el\' EEE dd MMM yyyy, HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sent_on_date_at_time">\'Enviat el\' EEE dd MMM yyyy, HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sending_failed_on_date_at_time">\'Enviament fallat el\' EEE dd MMM yyyy, HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="deleted_on_date_at_time">\'Esborrat el\' EEE, dd MMM, yyyy \'a\' HH:mm</string>
-  <string name="version">Versió:</string>
-  <string name="parent_form_not_present">No es pot editar  aquest formulari desat perquè el formulari plantilla no hi és o s\'ha esborrat.\n\nForm ID: %1$s</string>
+  <string name="mark_finished">Marcar formulari com completat</string>
+  <string name="quit_entry">Desa formulari i surt.</string>
+  <string name="data_saved_error">Ho sentim, el formulari no s\'ha desat be!</string>
+  <string name="data_saved_ok">Formulari desat correctament!</string>
+  <string name="save_point_error">Error al guardar el punt de recuperació: %s</string>
+  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <string name="quit_application">Sortida %s</string>
+  <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="no_form_loaded">&lt;cap formulari carregat&gt;</string>
+  <string name="do_not_save">Ignorar canvis</string>
+  <string name="keep_changes">Desar els canvis</string>
+  <string name="saving_form">Desant formulari</string>
+  <string name="survey_saving_validating_message">Validant respostes…</string>
+  <string name="survey_saving_collecting_message">Recollint dades…</string>
+  <string name="survey_saving_saving_message">Salvant a tarja SD …</string>
+  <string name="survey_saving_finalizing_message">Acabant a tarja SD…</string>
+  <string name="survey_saving_encrypting_message">Encriptant dades…</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <string name="bad_uri">URI dolenta: %s</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <string name="unrecognized_uri">URI no reconeguda: %s</string>
+  <!--Text displayed when audio recording fails to start-->
+  <!--Error message displayed when copying media from a temporary directory fails-->
+  <!--##############################################
+    # FORM FEATURES
+    ##############################################-->
+  <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
   <string name="launch_app">Llançament</string>
+  <string name="activity_not_found">Cap activitat pendent trobada: %s</string>
   <string name="no_app">L\'aplicació sol·licitada no s\'ha trobat.</string>
-  <string name="savepoint_used">Canvis no desats llegits del punt de recuperació!</string>
+  <string name="launch_printer">Inicia la impressió</string>
+  <string name="no_printer">Impressora no trobada. Si us plau, instal·li la impressora.</string>
+  <string name="open_url">Obrir Url</string>
+  <string name="capture_osm">Executa OpenMapKit</string>
+  <string name="recapture_osm">Refer signatura OSM</string>
+  <string name="edited_osm_file">Arxiu OSM XML editat:</string>
+  <string name="invalid_osm_data">Alguna cosa ha fallat. No s\'han llegit dades OSM vàlides.</string>
+  <string name="alert">Alerta</string>
+  <string name="install_openmapkit">Si us plau, instal·la OpenMapKit!</string>
+  <string name="get_barcode">Llegir Codi de Barres</string>
+  <string name="replace_barcode">Reemplaça Codi de Barres</string>
+  <string name="capture_image">Pren foto</string>
+  <string name="choose_image">Escollir imatge</string>
+  <string name="selected_invalid_image">L\'arxiu seleccionat no és una imatge vàlida</string>
+  <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">Salva i Tanca</string>
   <string name="sign_button">Afegir Signatura</string>
   <string name="markup_image">Anotacions Imatge</string>
   <string name="draw_image">Esbós</string>
   <string name="reset_image">Reset</string>
   <string name="set_color">Definir Color</string>
-  <string name="admin_preferences">Opcions d\'Administrador</string>
-  <string name="admin_access_settings">Polsa per entrar a Configuració</string>
-  <string name="save_mid">Desar mig formulari</string>
-  <string name="enter_new_password">Entrar nova clau d\'accés</string>
-  <string name="admin_password">Clau d\'administrador</string>
-  <string name="admin_password_changed">Clau d\'accés d\'Administrador canviat</string>
-  <string name="admin_password_disabled">Clau d\'accés d\'Administrador desactivat</string>
-  <string name="admin_password_incorrect">La clau d\'accés és incorrecte!</string>
-  <string name="enter_admin_password">Entrar clau d\'accés Administrador</string>
-  <string name="change_admin_password">Canviar clau d\'administrador</string>
-  <string name="found_in_main">Desmarcar per amagar en el Menú Principal</string>
-  <string name="found_in_settings">Desmarcar per amagar en Configuració General</string>
-  <string name="form_forward">Següent</string>
-  <string name="navigation">Navegació</string>
-  <string name="swipe_navigation">Usar desplaçament horizontal</string>
-  <string name="buttons_navigation">Usar botons avança/enrere</string>
-  <string name="swipe_buttons_navigation">Usar desplaçaments i botons</string>
-  <string name="launch_printer">Inicia la impressió</string>
-  <string name="no_printer">Impressora no trobada. Si us plau, instal·li la impressora.</string>
-  <string name="constraint_behavior">Comportament del processament de restriccions</string>
-  <string name="constraint_behavior_on_swipe">Validar al moure endavant</string>
-  <string name="constraint_behavior_on_finalize">Ajornar validació fins al final</string>
-  <string name="view_change_location">Veure o modificar posició</string>
-  <string name="open_url">Obrir Url</string>
-  <string name="get_bearing">Gravar rumb</string>
-  <string name="replace_bearing">Reemplaçar rumb</string>
-  <string name="getting_bearing">Carregant rumb</string>
-  <string name="accept_bearing">Gravar rumb</string>
-  <string name="sdcard_unmounted">Collect no pot accedir tarja SD. Esta connectada via USB? (Estat actual: %s)</string>
+  <string name="capture_video">Enregistrar Vídeo</string>
+  <string name="choose_video">Escollir vídeo</string>
+  <string name="play_video">Reprodueix Vídeo</string>
+  <!--Text for button that deletes a file that is the answer to a question-->
+  <!--Text for button that starts recording sound-->
+  <string name="capture_audio">Enregistrar so</string>
+  <!--Text for button that lets the user choose a sound file on their device-->
+  <string name="choose_sound">Escollir so</string>
+  <!--Description text for button that that pauses recording sound-->
+  <!--Description text for button that that resumes recording sound-->
+  <!--Title for dialog asking the user if they want to delete a file-->
+  <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="error_attaching_binary_file">Error detectat al connectar medi: %s</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="select_answer">Seleccionar resposta:</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="selected">Seleccionat:</string>
+  <string name="trigger">D\'acord. Si us plau, continuar.</string>
   <string name="ext_file_no_data_error">L\'arxiu no conté dades!</string>
   <string name="ext_conflicting_columns_error">Columnes %s coincideixen!</string>
   <string name="ext_sortBy_numeric_error">La columna de classificació ha de tenir només valors numèrics. Valor conflictiu: \'%s\'.</string>
@@ -201,52 +181,57 @@
   <string name="ext_import_csv_missing_error">Dades externes per %1$s no s\'han importat. Pot ser heu oblidat incloure l\'arxiu %2$s.csv amb el formulari?</string>
   <string name="ext_search_generic_error">Error sintàctic a la funció cerca(): %s</string>
   <string name="ext_assign_value_error">No pot assignar el valor a \'%s\'</string>
-  <string name="fs_delete_media_path_if_file_error">No pot esborrar \'%s\': Si us plau, esborrar l\'arxiu manualment i recarregar el formulari.</string>
-  <string name="fs_create_media_folder_error">No pot crear la carpeta de medis \'%s\'</string>
-  <string name="fs_file_copy_error">No pot copiar \'%1$s\' sobre \'%2$s\'. Raó: %3$s</string>
-  <string name="survey_internal_error">Error intern al demanar la següent dada.</string>
-  <string name="survey_multiple_forms_error">Heu descarregat dos formularis diferents amb el mateix ID i versió. Potser son formularis repetits o procedents de dos servidors diferents. Cal esborrar-ne un.</string>
-  <string name="survey_loading_reading_form_message">Llegint definició de formulari…</string>
-  <string name="survey_loading_reading_data_message">LLegint dades de enquesta…</string>
-  <string name="survey_loading_reading_csv_message">LLegint arxius CSV…</string>
-  <string name="survey_saving_validating_message">Validant respostes…</string>
-  <string name="survey_saving_collecting_message">Recollint dades…</string>
-  <string name="survey_saving_saving_message">Salvant a tarja SD …</string>
-  <string name="survey_saving_finalizing_message">Acabant a tarja SD…</string>
-  <string name="survey_saving_encrypting_message">Encriptant dades…</string>
-  <string name="high_resolution_summary">Activant enregistrament de  vídeos HD</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-    <string name="go_drive">El meu disc</string>
-  <string name="go_shared">Comparteix amb mi</string>
-  <string name="modified_on_date_at_time">\'Modificat el\' EEE, dd-MMM-yyyy \'a les\' HH:mm</string>
-  <string name="drive_get_file">Capturant %1$s i arxius multimedia.</string>
-  <string name="no_google_account">Compte Google no seleccionada!</string>
-  <string name="google_set_account">Heu seleccionat Google Sheets com a servidor, si us plau, seleccioneu el compte Google abans de seguir</string>
-  <string name="notification_error">Error mostrant notificació</string>
-  <string name="delete_after_send">Esborra despres d\'enviar</string>
-  <string name="delete_after_send_summary">Esborra formularis tancats i arxius multimedia després d\'enviar a servidor</string>
-  <string name="change_server_url">URL Servidor</string>
-  <string name="google_search_browse">Cerca de formularis. O selecciona \'Meu Drive\' a sota per visualitzar.</string>
-  <string name="send_in_progress">Enviament funcionant, si us plau, re-intenteu en un moment.</string>
-  <string name="invalid_sheet_id">id de fulla invàlid: %1$s</string>
-  <string name="google_sheets_missing_columns">Falten de la fulla de càlcul les columnes: %1$s</string>
-  <string name="password_error_whitespace">No es permeten espais davant o darrera una clau d\'accés</string>
-  <string name="username_error_whitespace">No es permeten espais davant o darrera un nom d\'usuari</string>
-  <string name="google_play_services_error_occured">No pot accedir a Google Maps. Teniu el servei instal·lat ?</string>
-  <string name="about_preferences">Sobre</string>
-  <!--Geo string added in feature-geofeatures branch-->
+  <string name="parser_exception">Exceptio XPathParser: \"%s\"</string>
+  <string name="get_bearing">Gravar rumb</string>
+  <string name="replace_bearing">Reemplaçar rumb</string>
+  <string name="getting_bearing">Carregant rumb</string>
+  <string name="accept_bearing">Gravar rumb</string>
+  <string name="bearing">Rumb: %.3f</string>
+  <string name="direction">Direcció: %s</string>
+  <string name="select_date">Selecciona data</string>
+  <string name="select_time">Selecciona hora</string>
+  <string name="no_date_selected">Data no seleccionada</string>
+  <string name="no_time_selected">Hora no seleccionada</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
+  <string name="file_invalid">Arxiu: %s és invàlid.</string>
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
+  <string name="file_missing">Arxiu: %s no s\'ha trobat.</string>
+  <!--Heading for a dialog which prompts the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Explanation for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Action to close a full screen dialog-->
+  <!--Heading for a dialog which prompts the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Action to save the contents of a full screen dialog-->
+  <!--##############################################
+    # GEO
+    ##############################################-->
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-      These strings are only being used to preserve compatibility with pre-existing
-       tile caches, and are not shown in the UI.-->
+   These strings are only being used to preserve compatibility with pre-existing
+    tile caches, and are not shown in the UI.-->
   <string name="streets">Carrers</string>
   <string name="terrain">Terreny</string>
   <string name="hybrid">Híbrid</string>
   <string name="satellite">Satel·lit</string>
+  <string name="google_play_services_error_occured">No pot accedir a Google Maps. Teniu el servei instal·lat ?</string>
+  <string name="view_change_location">Veure o modificar posició</string>
+  <string name="getting_location">Carregant Localització</string>
+  <string name="get_location">Enregistrar Localització</string>
+  <string name="provider_disabled_error">Atenció, la Locatització està desactivada!</string>
+  <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nPrecisió: %4$sm</string>
+  <!--Action to go to Android settings. Displayed when location providers are disabled.-->
+  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
   <string name="save_point">Desar posició gps</string>
   <string name="get_point">Comença localització gps</string>
   <string name="geopoint_view_read_only">Veure localització gps</string>
   <string name="get_shape">Comença GeoForma</string>
   <string name="get_trace">Comença GeoTraça</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="geoshape_title">GeoForma</string>
   <string name="start">Comença</string>
   <string name="enable_gps">Activa GPS</string>
@@ -260,30 +245,142 @@
   <string name="discard">Descarta</string>
   <string name="geoshape_view_change_location">Visualitza o modifica GeoShape</string>
   <string name="geotrace_view_change_location">Visualitza o modifica GeoShape</string>
-  <string name="bearing">Rumb: %.3f</string>
-  <string name="direction">Direcció: %s</string>
-  <string name="select_odk_shortcut">Selecciona drecera ODK</string>
-  <string name="bad_uri">URI dolenta: %s</string>
-  <string name="unrecognized_uri">URI no reconeguda: %s</string>
-  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-  <string name="no_form_loaded">&lt;cap formulari carregat&gt;</string>
-  <string name="corrupt_settings_file_notification">Arxiu de configuració corrupte. Cal se esborrat o reemplaçat</string>
-  <string name="selected_invalid_image">L\'arxiu seleccionat no és una imatge vàlida</string>
-  <string name="edited_osm_file">Arxiu OSM XML editat:</string>
-  <string name="invalid_osm_data">Alguna cosa ha fallat. No s\'han llegit dades OSM vàlides.</string>
-  <string name="alert">Alerta</string>
-  <string name="install_openmapkit">Si us plau, instal·la OpenMapKit!</string>
-  <string name="go_back">Enrera</string>
-  <string name="download_selected">Descarrega seleccionat</string>
-  <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nPrecisió: %4$sm</string>
-  <string name="parser_exception">Exceptio XPathParser: \"%s\"</string>
-  <string name="version_number">Versió: %s</string>
-  <string name="odk_website">Visita la web d\'ODK</string>
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--Name of an action button-->
+  <!--##############################################
+    # SEND FINALIZED FORM
+    ##############################################-->
+  <string name="uploading_data">Enviant formulari</string>
+  <string name="noselect_error">Atenció, no hi ha cap formulari seleccionat!</string>
+  <string name="no_connection">No hi ha connexió a xarxa disponible</string>
+  <string name="sending_items">Enviant %1$s de %2$s formulari(s)</string>
+  <string name="send_selected_data">Enviar seleccionats</string>
+  <string name="server_requires_auth">El servidor necessita Autenticació</string>
+  <string name="no_forms_uploaded">No s\'ha carregat cap formulari.</string>
+  <string name="upload_results">Resultats de la càrrega</string>
+  <!--Name of option in Send Finalized Form menu to show only unsent forms (default) or show sent and unsent forms-->
+  <string name="change_view">Canviar vista</string>
+  <string name="show_sent_and_unsent_forms">Formularis enviats i pendents</string>
+  <string name="show_unsent_forms">Nomes Formularis pendents d\'enviar</string>
+  <string name="send_in_progress">Enviament funcionant, si us plau, re-intenteu en un moment.</string>
+  <string name="notification_error">Error mostrant notificació</string>
+  <!--##############################################
+    # GET BLANK FORM
+    ##############################################-->
+  <string name="refresh">Refrescar</string>
+  <string name="download">Descarregar seleccionats</string>
+  <string name="downloading_data">Connectant a servidor</string>
+  <string name="fetching_file">Obtenint %1$s.\n\nForm %2$s de %3$s formulari(s).</string>
+  <string name="form_download_progress">%1$s. Obtenint arxius multimèdia: %2$s de %3$s</string>
+  <string name="version">Versió:</string>
+  <!--##############################################
+    # DELETE SAVED FORM
+    ##############################################-->
+  <!--Title of a section in "Delete Saved Forms" for deleting filled/saved forms (as opposed to blank forms)-->
+  <string name="data">F.desats</string>
+  <!--Title of a section in "Delete Saved Forms" for deleting blank forms (as opposed to filled/saved forms)-->
+  <string name="forms">F.buits</string>
+  <string name="delete_confirm">Eliminar %s formulari(s)?</string>
+  <string name="delete_file">Eliminar seleccionats</string>
+  <string name="delete_no">No eliminar</string>
+  <string name="delete_yes">Esborrar formularis</string>
+  <string name="file_deleted_error">Ho sentim, %1$s de %2$s formulari(s) seleccionat(s) no s\'han pogut eliminar!</string>
+  <string name="file_deleted_ok">%s formularis(s) eliminats correctament!</string>
+  <string name="file_delete_in_progress">Ho sentim, s\'está eliminant el formulari!</string>
+  <!--##############################################
+    # GENERAL SETTINGS
+    ##############################################-->
+  <string name="general_preferences">Configuració general</string>
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section only available in beta or development builds.-->
+  <string name="server_preferences">Servidor</string>
+  <!--Label for server type setting-->
+  <string name="server_url">URL</string>
+  <!--Title of dialog for configuring server URL-->
+  <string name="change_server_url">URL Servidor</string>
+  <string name="url_error">La URL és invàlida!</string>
+  <string name="username">Nom d\'usuari</string>
+  <string name="change_username">nom d\'usuari ODK</string>
+  <string name="password">Clau d\'accés</string>
+  <string name="change_password">Clau d\'accés ODK</string>
+  <string name="password_error_whitespace">No es permeten espais davant o darrera una clau d\'accés</string>
+  <string name="username_error_whitespace">No es permeten espais davant o darrera un nom d\'usuari</string>
+  <string name="change_formlist_url">Camí a carpeta de formularis (afegit a URL servidor)</string>
+  <string name="change_submission_url">Carpeta presentacions (afegit URL servidor)</string>
+  <string name="formlist_url">Carpeta de formularis</string>
+  <string name="submission_url">Carpeta de presentacions</string>
+  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
+  <string name="selected_google_account_text">Compte Google</string>
+  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
+  <!--Description for Fallback submission URL setting-->
+  <string name="language">Idioma</string>
+  <string name="font_size">Mida del text</string>
+  <string name="change_font_size">Mida del text</string>
+  <string name="font_size_extra_large">Extra gran</string>
+  <string name="font_size_large">Gran</string>
+  <string name="font_size_medium">Mitjana</string>
+  <string name="font_size_small">Petita</string>
+  <string name="font_size_extra_small">Extra petita</string>
+  <string name="navigation">Navegació</string>
+  <string name="swipe_navigation">Usar desplaçament horizontal</string>
+  <string name="buttons_navigation">Usar botons avança/enrere</string>
+  <string name="swipe_buttons_navigation">Usar desplaçaments i botons</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="form_forward">Següent</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="show_splash_summary">Mostrar quan inicia l\'aplicació</string>
+  <string name="splash_path">Imatge de benvinguda seleccionada</string>
+  <string name="default_splash_path">ODK per defecte</string>
+  <string name="select_another_image">Seleccionar una altre imatge</string>
+  <string name="use_odk_default">Usar imatge per defecte</string>
+  <string name="change_splash_path">Canviar imatge</string>
+  <!--Heading for the settings category about updating blank forms-->
+  <!--Name of the setting that defines how blank forms are updated from the server.-->
+  <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
+  <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
+  <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
+  <!--Name of the setting that defines how often blank forms are updated from the server.-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
+  <string name="delete_after_send">Esborra despres d\'enviar</string>
+  <string name="delete_after_send_summary">Esborra formularis tancats i arxius multimedia després d\'enviar a servidor</string>
+  <string name="default_completed">Considera finalitzat per defecte</string>
+  <string name="default_completed_summary">Marca formulari com finalitzat per defecte.</string>
+  <string name="constraint_behavior">Comportament del processament de restriccions</string>
+  <string name="constraint_behavior_on_swipe">Validar al moure endavant</string>
+  <string name="constraint_behavior_on_finalize">Ajornar validació fins al final</string>
+  <string name="high_resolution_summary">Activant enregistrament de  vídeos HD</string>
+  <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
+  <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
   <string name="analytics_preferences">Us de dades</string>
+  <string name="user_defined">definit per l\'usuari</string>
+  <string name="phone_number">Telèfon</string>
+  <string name="email">Direcció email</string>
+  <string name="device_defined">definit pel dispositiu</string>
+  <string name="device_id">ID dispositiu</string>
+  <!--Displayed when a device property such as the phone number is not available-->
+  <!--##############################################
+     # ADMIN SETTINGS
+     ##############################################-->
+  <string name="admin_preferences">Opcions d\'Administrador</string>
+  <string name="admin_access_settings">Polsa per entrar a Configuració</string>
+  <string name="enter_new_password">Entrar nova clau d\'accés</string>
+  <string name="admin_password">Clau d\'administrador</string>
+  <string name="admin_password_changed">Clau d\'accés d\'Administrador canviat</string>
+  <string name="admin_password_disabled">Clau d\'accés d\'Administrador desactivat</string>
+  <string name="admin_password_incorrect">La clau d\'accés és incorrecte!</string>
+  <string name="enter_admin_password">Entrar clau d\'accés Administrador</string>
+  <string name="change_admin_password">Canviar clau d\'administrador</string>
+  <string name="show_password">Mostra clau d\'accés</string>
+  <string name="found_in_main">Desmarcar per amagar en el Menú Principal</string>
+  <string name="found_in_settings">Desmarcar per amagar en Configuració General</string>
   <string name="select_all">Selecciona tot</string>
   <string name="clear_all">Neteja-ho tot</string>
   <string name="reset_settings_button_reset">Reinicialitza</string>
@@ -291,35 +388,65 @@
   <string name="reset_app_state_result">Reinicialitzar resultats</string>
   <string name="reset_settings_result">Totes les característiques:: %s</string>
   <string name="reset_saved_forms_result">Formularis desats :: %s</string>
-  <string name="encrypted_form">Formulari encriptat</string>
-  <string name="deleted_form">Formulari esborrat</string>
-  <string name="exit">Sortir</string>
-    <string name="filter_the_list">Filtra la llista</string>
-  <string name="language">Idioma</string>
-  <string name="phone_number">Telèfon</string>
-  <string name="email">Direcció email</string>
-  <string name="user_defined">definit per l\'usuari</string>
-  <string name="device_defined">definit pel dispositiu</string>
-  <string name="device_id">ID dispositiu</string>
-  <string name="select_date">Selecciona data</string>
-  <string name="select_time">Selecciona hora</string>
-  <string name="no_date_selected">Data no seleccionada</string>
-  <string name="no_time_selected">Hora no seleccionada</string>
+  <string name="main_menu_settings">Menú principal de configuració</string>
+  <string name="user_settings">Configuració d\'usuari</string>
+  <string name="form_entry_setting">Característiques d\'omplir formulari</string>
+  <!--Name of a setting that determines whether users can navigate backwards in a form-->
+  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <string name="save_mid">Desar mig formulari</string>
+  <!--##############################################
+     # GOOGLE DRIVE, GOOGLE SHEETS
+     ##############################################-->
+  <!--Title of the screen that lists forms in user's Google Drive-->
+  <string name="go_drive">El meu disc</string>
+  <!--Title of the screen that lists forms shared with Google Drive user-->
+  <string name="go_shared">Comparteix amb mi</string>
+  <!--Button for navigating across Google Drive folders-->
+  <string name="download_selected">Descarrega seleccionat</string>
+  <string name="go_back">Enrera</string>
+  <string name="drive_get_file">Capturant %1$s i arxius multimedia.</string>
+  <string name="no_google_account">Compte Google no seleccionada!</string>
+  <string name="google_set_account">Heu seleccionat Google Sheets com a servidor, si us plau, seleccioneu el compte Google abans de seguir</string>
+  <string name="google_search_browse">Cerca de formularis. O selecciona \'Meu Drive\' a sota per visualitzar.</string>
+  <string name="invalid_sheet_id">id de fulla invàlid: %1$s</string>
+  <string name="google_sheets_missing_columns">Falten de la fulla de càlcul les columnes: %1$s</string>
+  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
+  <!--##############################################
+     # ABOUT
+     ##############################################-->
+  <string name="about_preferences">Sobre</string>
+  <string name="odk_website">Visita la web d\'ODK</string>
+  <!--##############################################
+     # SETTINGS IMPORT
+     ##############################################-->
   <string name="successfully_imported_settings">Configuració importada correctament</string>
   <string name="share">Comparteix</string>
   <string name="server_password">Clau d\'accés servidor</string>
   <string name="include_password_dialog">Claus d\'accés incloses al codi</string>
   <string name="generate">Genera</string>
-  <string name="form_entry_setting">Característiques d\'omplir formulari</string>
-  <string name="user_settings">Configuració d\'usuari</string>
-  <string name="main_menu_settings">Menú principal de configuració</string>
-  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
-  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
-  <!--Text for button that stops audio recording-->
-  <!--Text to let the user know a recording is in progress-->
-  <!--Title of Android Notification Channel for audio recording notifications-->
-  <!--Text for button that plays audio clip-->
-  <!--Text to let the user know a file is being saved-->
-  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="corrupt_settings_file_notification">Arxiu de configuració corrupte. Cal se esborrat o reemplaçat</string>
+  <!--##############################################
+     # SCOPED STORAGE MIGRATION
+     ##############################################-->
+  <!--Action to begin a storage migration-->
+  <!--##############################################
+     # MISC
+     ##############################################-->
+  <string name="ok">D\'acord</string>
+  <!--Used in many dialogs to dismiss the dialog without taking any action-->
+  <string name="cancel">Cancel·lar</string>
+  <string name="cancel_loading_form">Cancel·lar</string>
+  <string name="cancel_location">Cancel·lar</string>
+  <string name="do_not_change">Cancel·lar</string>
+  <string name="do_not_exit">Cancel·lar</string>
+  <string name="success">Correcte</string>
+  <string name="error_occured">S\'ha produït un error</string>
+  <string name="please_wait">Un moment si us plau.</string>
+  <string name="please_wait_long">Un moment si us plau. Això pot trigar uns minuts.</string>
+  <string name="sdcard_unmounted">Collect no pot accedir tarja SD. Esta connectada via USB? (Estat actual: %s)</string>
+  <string name="fs_delete_media_path_if_file_error">No pot esborrar \'%s\': Si us plau, esborrar l\'arxiu manualment i recarregar el formulari.</string>
+  <string name="fs_create_media_folder_error">No pot crear la carpeta de medis \'%s\'</string>
+  <string name="fs_file_copy_error">No pot copiar \'%1$s\' sobre \'%2$s\'. Raó: %3$s</string>
+  <string name="survey_multiple_forms_error">Heu descarregat dos formularis diferents amb el mateix ID i versió. Potser son formularis repetits o procedents de dos servidors diferents. Cal esborrar-ne un.</string>
+  <string name="select_odk_shortcut">Selecciona drecera ODK</string>
 </resources>
