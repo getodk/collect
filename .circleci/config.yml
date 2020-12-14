@@ -102,6 +102,23 @@ jobs:
       - store_test_results:
           path: collect_app/build/test-results
 
+  build_instrumented:
+    <<: *android_config
+    environment:
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+      - run:
+          name: Download dependencies
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+
       - run:
           name: Assemble connected test build
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleDebugAndroidTest
@@ -157,6 +174,10 @@ workflows:
       - check_quality
       - test_modules
       - test_app
+      - build_instrumented:
+          filters:
+            branches:
+              ignore: master
       - test_instrumented:
           requires:
             - check_quality
