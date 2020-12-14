@@ -21,6 +21,7 @@ import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
+import org.odk.collect.audiorecorder.recording.MicInUseException;
 import org.odk.collect.strings.format.LengthFormatterKt;
 
 import javax.inject.Inject;
@@ -64,10 +65,17 @@ public class AudioRecordingControllerFragment extends Fragment {
                 binding.getRoot().setVisibility(GONE);
             } else if (session.getFailedToStart() != null) {
                 binding.getRoot().setVisibility(GONE);
-                new MaterialAlertDialogBuilder(requireContext())
-                        .setMessage(R.string.start_recording_failed)
-                        .setPositiveButton(R.string.ok, (dialog, which) -> audioRecorderViewModel.cleanUp())
-                        .show();
+
+                MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(requireContext())
+                        .setPositiveButton(R.string.ok, (dialog, which) -> audioRecorderViewModel.cleanUp());
+
+                if (session.getFailedToStart() instanceof MicInUseException) {
+                    dialogBuilder.setMessage(R.string.mic_in_use);
+                } else {
+                    dialogBuilder.setMessage(R.string.start_recording_failed);
+                }
+
+                dialogBuilder.show();
             } else if (session.getFile() == null) {
                 binding.getRoot().setVisibility(VISIBLE);
 
