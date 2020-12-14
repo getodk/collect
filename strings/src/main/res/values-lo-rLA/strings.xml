@@ -1,182 +1,151 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="activity_not_found">ບໍ່ມີກິດຈະກຳໃຫ້ດຳເນີນການ: %s</string>
-  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
-  <string name="cancel">ຍົກເລິກ</string>
-  <string name="cancel_loading_form">ຍົກເລີກ</string>
-  <string name="cancel_location">ຍົກເລີກ</string>
-  <string name="capture_audio">ບັນທຶກສຽງ</string>
-  <string name="capture_image">ຖ່າຍຮູບ</string>
-  <string name="capture_video">ບັນທຶກວີດີໂອ</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data">ຕື່ມຂໍ້ມູນໃສ່ແບບຟອມໃໝ່</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data_button">ຕື່ມຂໍ້ມູນໃສ່ແບບຟອມ​ໃໝ່</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="review_data">​ດັດ​ແກ້ແບບຟອມທີ່​ບັນທຶກໄວ້</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="review_data_button">​ດັດ​ແກ້ແບບຟອມທີ່​ບັນທຶກໄວ້(%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="send_data">ສົ່ງແບບຟອມທີ່ສຳເລັດແລ້ວ</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="send_data_button">ສົ່ງແບບຟອມທີ່ສຳເລັດແລ້ວ(%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <!--Text for an action button on the main screen.-->
+  <string name="get_forms">ດາວໂຫຼດແບບຟອມປ້ອນຂໍ້ມູນໃໝ່</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="manage_files">ລຶບແບບຟອມທີ່ບັນທຶກໄວ້</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="added_on_date_at_time">\'ເພີ່ມ​ເມື່ອ​\' EEE, MMM dd, yyyy \'ເວ​ລາ\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="saved_on_date_at_time">\'​ບັນ​ທຶກ​ເມື່ອ​\' EEE, MMM dd, yyyy \'ເວລາ\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="finalized_on_date_at_time">\'ສຳ​ເລັດ​ເມື່ອ​\' EEE, MMM dd, yyyy \'ເວ​ລາ\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sent_on_date_at_time">\'ສົ່ງເມື່ອ​\' EEE, MMM dd, yyyy \'ເວລາ\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sending_failed_on_date_at_time">\'ການສົ່ງຂໍ້ມູນລົ້ມເຫຼວເມື່ອ\' EEE, MMM dd, yyyy \'ເວລາ\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="modified_on_date_at_time">\'ດັດແກ້ວັນທີ\' EEE, MMM dd, yyyy \'ເວລາ\' HH:mm</string>
+  <!--Displayed in search boxes for form lists or question types that involve search-->
+  <string name="no_items_display">ບໍ່ມີຂໍ້ມູນໃຫ້ສະແດງເທື່ອ</string>
+  <string name="no_items_display_forms">ບໍ່ມີຫຍັງສະແດງ.\n\nລອງດາວໂຫຼດ ແລະ ຕື່ມຂໍ້ມູນໃສ່ແບບຟອມໃໝ່</string>
+  <string name="no_items_display_instances">ບໍ່ມີຫຍັງທີ່ຈະສະແດງ. \n\nລອງເຮັດເຄື່ອງໜາຍແບບຟອມວ່າສຳເລັດແລ້ວກ່ອນສົ່ງ</string>
+  <!--##############################################
+    # FILL BLANK FORM
+    ##############################################-->
+  <string name="finished_disk_scan">ສີ້ນສຸດການຄົ້ນຫາ. ແບບຟອມທັງໝົດໄດ້​ຖືກຕິດຕັ້ງແລ້ວ</string>
+  <string name="loading_form">ກຳລັງເປີດແບບຟອມ</string>
+  <string name="survey_loading_reading_form_message">​ກຳ​ລັງ​ອ່ານ​​ຄຳ​ນິ​ຍາມແບບ​ຟອມ…</string>
+  <string name="survey_loading_reading_data_message">ກຳ​ລັງ​ອ່ານ​ຂໍ້​ມູນ​ການ​ສຳ​ຫຼວດ…</string>
+  <string name="survey_loading_reading_csv_message">ກຳ​ລັງ​ອ່ານ​ເອ​ກະ​ສານ CSV…</string>
+  <string name="parse_error">ບໍ່ສາມາດເປີດແບບຟອມໄດ້</string>
+  <string name="parent_form_not_present">ບໍ່ສາມາດແກ້ໄຂແບບຟອມທີ່ບັນທຶກໄວ້ເນື່ອງຈາກວ່າບໍ່ມີແບບຟອມເປົ່າຫວ່າງດັ່ງກ່າວ ຫຼື ຖືກລົບໄປແລ້ວ.\n\nລະຫັດຟອມ: %1$s</string>
+  <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
+  <string name="savepoint_used">ກູ້ຂໍ້ມູນຄືນຈາກຈຸດທີ່ບັນທຶກໄວ້!</string>
+  <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
   <string name="change_language">ເລືອກພາສາ</string>
-  <string name="change_password">ລະຫັດຜ່ານ ODK</string>
-  <string name="change_username">ບັນຊີຜູ້ໃຊ້ ODK</string>
+  <!--Text for button displayed in the form filling menu to see the form's table of contents-->
+  <string name="view_hierarchy">ຂ້າມໄປທີ່</string>
+  <!--Text for button displayed in the form filling menu to save the form-->
+  <string name="save_all_answers">ບັນທຶກແບບຟອມ</string>
+  <!--Text of button from the form's table of contents to jump to the beginning of the form-->
+  <string name="jump_to_beginning">ໄປຫາໜ້າທຳອິດຕົ້ນ</string>
+  <!--Text of button from the form's table of contents to jump to the end of the form-->
+  <string name="jump_to_end">ໄປຫາໜ້າສຸດທ້າຍ</string>
+  <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
+  <string name="jump_to_previous">ເລື່ອນຂື້ນ</string>
+  <!--Displayed below group names in a form's table of contents-->
+  <!--Displayed below repeat names in a form's table of contents-->
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <!--Title of overlay menu displayed when long pressing on a question in a form-->
+  <string name="edit_prompt">ແກ້ໄຂຈຸດທີ່ເລືອກ</string>
   <string name="clearanswer_confirm">ຕ້ອງການລຶບຄຳຕອບໄປທີ່ \"%s\" ບໍ່?</string>
   <string name="clear_answer">ລຶບຄຳຕອບ</string>
   <string name="clear_answer_ask">ຕ້ອງການຍ້າຍຄຳຕອບນີ້ບໍ່?</string>
   <string name="clear_answer_no">ຍົກເລີກ</string>
-  <string name="data">ແບບຟອມທີ່ບັນທຶກໄວ້</string>
-  <string name="data_saved_error">ການບັກທຶກແບບຟອມລົ້ມເຫຼວ</string>
-  <string name="data_saved_ok">ແບບຟອມໄດ້ຖືກບັນທຶກສຳເລັດແລ້ວ</string>
-  <string name="save_point_error">ພໍ້​ບັນ​ຫາ​ໃນ​ລະ​ຫວ່າງບັນ​ທຶກຈຸດ​​ການ​ກູ້​ຄືນ: %s</string>
-  <string name="default_completed">​ຄ່າ​ເລີ່ມ​ຕົ້ນແເມ່ນ ສຳ​ເລັດ​ແລ້ວ</string>
-  <string name="default_completed_summary">ກຳນົດແບບຟອມວ່າສຳ​ເລັດ​ແລ້ວ ໂດຍອັດຕະໂນມັດ</string>
-  <string name="delete_confirm">ຕ້ອງການລຶບແບບຟອມ %s ບໍ່?</string>
-  <string name="delete_file">ລຶບສະເພາະແບບຟອມທີ່ໄດ້ເລືອກ</string>
-  <string name="delete_no">ບໍ່ຕ້ອງການລຶບ</string>
+  <string name="discard_answer">ລຶບຄຳຕອບ​</string>
+  <string name="discard_group">​ລຶບກຸ່ມ</string>
   <string name="delete_repeat">ລຶບກຸ່ມ</string>
   <string name="delete_repeat_ask">ຕ້ອງການລຶບກຸ່ມນີ້ບໍ່?</string>
   <string name="delete_repeat_confirm">ຕ້ອງການລຶບກຸ່ມ\"%s\" ແລະ ກຸ່ມຍ່ອຍ​ທັງ​ໝົດ​ຂອງ​ມັນບໍ່?</string>
   <string name="delete_repeat_no">ຍົກເລີກ</string>
-  <string name="delete_yes">ລຶບແບບຟອມ</string>
-  <string name="discard_answer">ລຶບຄຳຕອບ​</string>
-  <string name="discard_group">​ລຶບກຸ່ມ</string>
-  <string name="download">​ດາວໂລດເອົາຟາຍທີ່ເລືອກ</string>
-  <string name="downloading_data">ກຳລັງເຊື່ອມຕໍ່ກັບເຊີເວີ</string>
-  <string name="do_not_change">ຍົກເລີກ</string>
-  <string name="do_not_exit">ຍົກເລີກ</string>
-  <string name="do_not_save">ຍົກເລີກການປ່ຽນແປງ</string>
-  <string name="enter_data">ຕື່ມຂໍ້ມູນໃສ່ແບບຟອມໃໝ່</string>
-  <string name="enter_data_button">ຕື່ມຂໍ້ມູນໃສ່ແບບຟອມ​ໃໝ່</string>
-  <string name="error_occured">ມີຄວາມຜິດພາດເກີດຂຶ້ນ</string>
-  <string name="error_attaching_binary_file">​ມີ​ບັນ​ຫາ​ເກີດ​ຂື້ນ​ໃນ​ລະ​ຫວ່າງ​ການ​ຄັດຕິດ​​ເອ​ກະ​ສານ​ມີ​ເດຍ: %s</string>
-  <string name="fetching_file">ໄປຮັບ %1$s.\n\nຟອມ %2$s ຂອງ %3$s ຟອມ(s).</string>
-  <string name="file_deleted_error">ຄຳສັ່ງລຶບແບບຟອມ %1$s %2$s ກຳລັງດຳເນີນງານ!</string>
-  <string name="file_deleted_ok">ລຶບແບບຟອມ%s ສຳເລັດແລ້ວ!</string>
-  <string name="file_delete_in_progress">ຄຳສັ່ງລຶບແບບຟອມກຳລັງດຳເນີນງານ</string>
-  <string name="file_invalid">ຟາຍເອ​ກະ​ສານ: %s ບໍ່ຖືກຕ້ອງ</string>
-  <string name="file_missing">ບໍ່​ພົບຟາຍ​ເອ​ກະ​ສານ %s </string>
-  <string name="finished_disk_scan">ສີ້ນສຸດການຄົ້ນຫາ. ແບບຟອມທັງໝົດໄດ້​ຖືກຕິດຕັ້ງແລ້ວ</string>
-  <string name="forms">ແບບຟອມປ້ອນຂໍ້ມູນໃໝ່</string>
-  <string name="getting_location">ກຳລັງຊອກຫາຈຸດທີ່ຕັ້ງ</string>
-  <string name="get_barcode">ສະແກນຫາບາໂຄດ</string>
-  <string name="get_forms">ດາວໂຫຼດແບບຟອມປ້ອນຂໍ້ມູນໃໝ່</string>
-  <string name="get_location">ບັນທືກຈຸດ GPS ຂອງທີ່ຕັ້ງ</string>
-  <string name="provider_disabled_error">ຄຳສັ່ງບັນທຶກຈຸດທີ່ຕັ້ງ GPS ຖືກປິດໃຫ້ໃຊ້ງານ</string>
   <string name="invalid_answer_error">ຄຳຕອບນີ້ບໍ່ຖືກຕ້ອງ</string>
-  <string name="jump_to_beginning">ໄປຫາໜ້າທຳອິດຕົ້ນ</string>
-  <string name="jump_to_end">ໄປຫາໜ້າສຸດທ້າຍ</string>
-  <string name="jump_to_previous">ເລື່ອນຂື້ນ</string>
-  <string name="loading_form">ກຳລັງເປີດແບບຟອມ</string>
-  <string name="manage_files">ລຶບແບບຟອມທີ່ບັນທຶກໄວ້</string>
-  <string name="mark_finished">ໝາຍແບບຟອມວ່າໄດ້ສຳເລັດແລ້ວ</string>
-  <string name="noselect_error">ທ່ານບໍ່ທັນ​ໄດ້ເລືອກແບບຟອມ!</string>
-  <string name="no_connection">ບໍ່ມີເຄືອຂ່າຍໃຫ້ເຊື່ອມຕໍ່</string>
-  <string name="no_items_display">ບໍ່ມີຂໍ້ມູນໃຫ້ສະແດງເທື່ອ</string>
-  <string name="no_items_display_forms">ບໍ່ມີຫຍັງສະແດງ.\n\nລອງດາວໂຫຼດ ແລະ ຕື່ມຂໍ້ມູນໃສ່ແບບຟອມໃໝ່</string>
-  <string name="no_items_display_instances">ບໍ່ມີຫຍັງທີ່ຈະສະແດງ. \n\nລອງເຮັດເຄື່ອງໜາຍແບບຟອມວ່າສຳເລັດແລ້ວກ່ອນສົ່ງ</string>
-  <string name="ok">ຕົກລົງ</string>
-  <string name="parse_error">ບໍ່ສາມາດເປີດແບບຟອມໄດ້</string>
-  <string name="password">ລະຫັດຜ່ານ</string>
-  <string name="play_video">ເປີດວີດີໂອ</string>
-  <string name="please_wait">ກະລຸນາລໍຖ້າຈັກໜ້ອຍ</string>
-  <string name="please_wait_long">ກະລຸນາລໍຖ້າ. ມັນອາດຕ້ອງໃຊ້ເວລາໜ້ອຍໜື່ງ</string>
-  <string name="quit_application">ອອກຈາກລະບົບ%s</string>
-  <string name="quit_entry">ບັນທຶກແບບຟອມ ແລະ ອອກຈາກລະບົບ</string>
-  <string name="refresh">ຣີເຟຼສ (Refresh)</string>
-  <string name="replace_barcode">ປ່ຽນບາໂຄດໃໝ່</string>
   <string name="required_answer_error">ກະລຸນາຕື່ມຄຳຕອບໃສ່ຄຳຖາມນີ້ກ່ອນ</string>
-  <string name="review_data">​ດັດ​ແກ້ແບບຟອມທີ່​ບັນທຶກໄວ້</string>
-  <string name="review_data_button">​ດັດ​ແກ້ແບບຟອມທີ່​ບັນທຶກໄວ້(%s)</string>
-  <string name="save_all_answers">ບັນທຶກແບບຟອມ</string>
+  <string name="survey_internal_error">​ຜິດ​ພາດ​ພາຍ​ໃນ: ຂັ້ນ​ຕອນ​ການ​ເຕືອນ​ລົ້ມ​ເຫຼວ.</string>
   <string name="save_enter_data_description">​ທ່ານຢູ່ຈຸດສີ້ນສຸດຂອງ %s.</string>
-  <string name="saving_form">ກຳລັງບັນທຶກແບບຟອມ</string>
-  <string name="sending_items">ກຳລັງສົ່ງ %1$s ຈາກແບບຟອມທັງໝົດ %2$s </string>
-  <string name="send_data">ສົ່ງແບບຟອມທີ່ສຳເລັດແລ້ວ</string>
-  <string name="send_data_button">ສົ່ງແບບຟອມທີ່ສຳເລັດແລ້ວ(%s)</string>
-  <string name="send_selected_data">ສົ່ງແບບຟອມທີ່ເລືອກ</string>
-  <string name="server_requires_auth">ເຊີເວີຕ້ອງການກວດ​ສອບ​ຊື່ຜູ້ໃຊ້ງານ ແລະ ລະ​ຫັດ​ຜ່ານ</string>
-  <string name="server_url">URL ທີ່​ຢູ່​ເວັບ​ໄຊ</string>
-  <string name="server_preferences">​ການ​ຕັ້ງ​ຄ່າ​ເຊີ​ເວີ</string>
-  <string name="trigger">ຕົກລົງ. ກະລຸນາດຳເນີນຕໍ່</string>
-  <string name="uploading_data">ກຳລັງສົ່ງແບບຟອມ</string>
-  <string name="url_error">ທີ່​ຢູ່​ເວັບ​ໄຊ ຫຼື URL ບໍ່ຖືກຕ້ອງ</string>
-  <string name="username">ບັນຊີຜູ້ໃຊ້ງານ</string>
-  <string name="view_hierarchy">ຂ້າມໄປທີ່</string>
-  <string name="general_preferences">ການ​ຕັ້ງ​ຄ່າ​ທົ່ວ​ໄປ</string>
-  <string name="show_splash_summary">ສະແ​ດງເມື່ອໂປແກຼມ ເລີ່ມຕົ້ນໃຊ້ງານ</string>
-  <string name="splash_path">ເລືອກພາບເລີ່ມຕົ້ນ</string>
-  <string name="default_splash_path">ຄ່າເລີ່ມຕົ້ນ ODK</string>
-  <string name="select_another_image">ເລືອກພາບອື່ນ</string>
-  <string name="use_odk_default">ເລືອກພາບທີ່ກຳນົດໄວ້</string>
-  <string name="change_splash_path">ປ່ຽນຮູບພາບ</string>
-  <string name="keep_changes">ບັນທຶກການປ່ຽນແປງ</string>
-  <string name="change_formlist_url">​ບ່ອນ​ເກັບ​ລາຍ​ການແບບຟອມ (ເພີ່ມເຕີມໃສ່ URL)</string>
-  <string name="change_submission_url">​ບ່ອນ​ສົ່ງ​ຂໍ້​ມູນ (ເພີ່ມເຕີມໃສ່ URL)</string>
-  <string name="formlist_url">ບ່ອນ​ເກັບ​ລາຍ​ການແບບຟອມ</string>
-  <string name="submission_url">ບ່ອນ​ສົ່ງ​ຂໍ້​ມູນ </string>
-  <string name="font_size">ຂະໜາດຕົວອັກສອນ</string>
-  <string name="change_font_size">ຂະໜາດຕົວອັກສອນ</string>
-  <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
-  <string name="success">ສຳເລັດແລ້ວ</string>
-  <string name="no_forms_uploaded">ບໍ່ສາມາດ ອັບໂລດ ແບບຟອມໄດ້</string>
-  <string name="upload_results">ຜົນໄດ້ຮັບ​ຂອງ​ການ​ ອັບໂລດ</string>
-  <string name="choose_sound">ເລືອກຮູບແບບສຽງ</string>
-  <string name="choose_video">ເລືອກວີດີໂອ</string>
-  <string name="choose_image">ເລືອກຮູບພາບ</string>
-  <string name="selected">ໄດ້ເລືອກແລ້ວ:</string>
-  <string name="select_answer">ເລືອກຄຳຕອບ</string>
   <string name="save_form_as">ໃສ່ຊື່ແບບຟອມນີ້</string>
   <string name="save_as_error">ການໃສ່ຊື່ເອກະສານທີ່ຈະບັນທຶກບໍ່​ຕ້ອງຍະຫວ່າງ!</string>
-  <string name="edit_prompt">ແກ້ໄຂຈຸດທີ່ເລືອກ</string>
-  <string name="selected_google_account_text">ບັນຊີໃຊ້ງານໃນ Google </string>
-  <string name="font_size_extra_large">ຂະໜາດໃຫຍ່ທີ່ສຸດ</string>
-  <string name="font_size_large">ຂະໜາດໃຫຍ່</string>
-  <string name="font_size_medium">ຂະໜາດປານກາງ</string>
-  <string name="font_size_small">ຂະໜາດນ້ອຍ</string>
-  <string name="font_size_extra_small">ຂະໜາດນ້ອຍທີ່ສຸດ</string>
-  <string name="change_view">ປ່ຽນຮູບ​ແບບ​ການ​​ເບິ່ງ</string>
-  <string name="show_sent_and_unsent_forms">ສະແດງແບບຟອມທີ່ສົ່ງແລ້ວ ແລະ ຍັງບໍ່ໄດ້ສົ່ງ
-</string>
-  <string name="show_unsent_forms">ສະແດງແບບຟອມທີ່ຍັງບໍ່ທັນໄດ້ສົ່ງ</string>
-  <string name="added_on_date_at_time">\'ເພີ່ມ​ເມື່ອ​\' EEE, MMM dd, yyyy \'ເວ​ລາ\' HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="saved_on_date_at_time">\'​ບັນ​ທຶກ​ເມື່ອ​\' EEE, MMM dd, yyyy \'ເວລາ\' HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="finalized_on_date_at_time">\'ສຳ​ເລັດ​ເມື່ອ​\' EEE, MMM dd, yyyy \'ເວ​ລາ\' HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sent_on_date_at_time">\'ສົ່ງເມື່ອ​\' EEE, MMM dd, yyyy \'ເວລາ\' HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sending_failed_on_date_at_time">\'ການສົ່ງຂໍ້ມູນລົ້ມເຫຼວເມື່ອ\' EEE, MMM dd, yyyy \'ເວລາ\' HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="version">​ລຸ້ນ​ທີ:</string>
-  <string name="parent_form_not_present">ບໍ່ສາມາດແກ້ໄຂແບບຟອມທີ່ບັນທຶກໄວ້ເນື່ອງຈາກວ່າບໍ່ມີແບບຟອມເປົ່າຫວ່າງດັ່ງກ່າວ ຫຼື ຖືກລົບໄປແລ້ວ.\n\nລະຫັດຟອມ: %1$s</string>
+  <string name="mark_finished">ໝາຍແບບຟອມວ່າໄດ້ສຳເລັດແລ້ວ</string>
+  <string name="quit_entry">ບັນທຶກແບບຟອມ ແລະ ອອກຈາກລະບົບ</string>
+  <string name="data_saved_error">ການບັກທຶກແບບຟອມລົ້ມເຫຼວ</string>
+  <string name="data_saved_ok">ແບບຟອມໄດ້ຖືກບັນທຶກສຳເລັດແລ້ວ</string>
+  <string name="save_point_error">ພໍ້​ບັນ​ຫາ​ໃນ​ລະ​ຫວ່າງບັນ​ທຶກຈຸດ​​ການ​ກູ້​ຄືນ: %s</string>
+  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <string name="quit_application">ອອກຈາກລະບົບ%s</string>
+  <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="do_not_save">ຍົກເລີກການປ່ຽນແປງ</string>
+  <string name="keep_changes">ບັນທຶກການປ່ຽນແປງ</string>
+  <string name="saving_form">ກຳລັງບັນທຶກແບບຟອມ</string>
+  <string name="survey_saving_validating_message">ກຳ​ລັງ​ກວດ​ກາ​ຄວາມ​ຖືກ​ຕ້ອງ​ຂອງ​ຄຳ​ຕອບ….</string>
+  <string name="survey_saving_collecting_message">ກຳ​ລັງ​ຮວບ​ຮວມຂໍ້​ມູນ…</string>
+  <string name="survey_saving_saving_message">​ກຳ​ລັງ​ບັນ​ທຶກ​ໃສ່ ກາດ​ຄວມຈຳ​ພາຍນອກ…</string>
+  <string name="survey_saving_finalizing_message">ກຳ​ລັງ​ເຮັດ​ໃຫ້ ກາດ​ຄວາມ​ຈຳ​ພາຍນອກ ສຳ​ເລັດ​ສົມ​ບູນ…</string>
+  <string name="survey_saving_encrypting_message">​ກຳ​ລັງ​ເຂົ້າ​ລະ​ຫັດ​ຂໍ້​ມູນ…</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <!--Text displayed when audio recording fails to start-->
+  <!--Error message displayed when copying media from a temporary directory fails-->
+  <!--##############################################
+    # FORM FEATURES
+    ##############################################-->
+  <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
   <string name="launch_app">ເລີ້ມຕົ້ນການນຳໃຊ້</string>
+  <string name="activity_not_found">ບໍ່ມີກິດຈະກຳໃຫ້ດຳເນີນການ: %s</string>
   <string name="no_app">ບໍ່ພົບ​ໂປ​ແກມ​ທີ່​ຕ້ອງ​ການ ກະລຸນາປ້ອນຂໍ້ມູນໃໝ່ດ້ວຍຕົນເອງ</string>
-  <string name="savepoint_used">ກູ້ຂໍ້ມູນຄືນຈາກຈຸດທີ່ບັນທຶກໄວ້!</string>
+  <string name="launch_printer">ເລີ່ມຕົ້ນການພີມ</string>
+  <string name="no_printer">ເຄື່ອງພີມທີ່ເລືອກຍັງບໍ່ໄດ້ຕິດຕັ້ງ. ກະລຸນາຕິດຕັ້ງເຄື່ອງພີມ.</string>
+  <string name="open_url">ເປີດ​ທີ່​ຢູ່​ເວັ​ບ​ໄຊ Url</string>
+  <string name="get_barcode">ສະແກນຫາບາໂຄດ</string>
+  <string name="replace_barcode">ປ່ຽນບາໂຄດໃໝ່</string>
+  <string name="capture_image">ຖ່າຍຮູບ</string>
+  <string name="choose_image">ເລືອກຮູບພາບ</string>
+  <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">ບັນທຶກ ແລະ ປິດການໃຊ້ງານ</string>
   <string name="sign_button">ບັນທຶກລາຍເຊັນ</string>
   <string name="markup_image">Markup Image</string>
   <string name="draw_image">ແຕ້ມຮູບພາບແບບຄ້າວໆ</string>
   <string name="reset_image">ຕັ້ງຄ່າຄືນໃໝ່</string>
   <string name="set_color">ເລືອກສີ</string>
-  <string name="admin_preferences">​ການຕັ້ງຄ່າສຳລັບຜູ້​ບໍ​ລິ​ຫານລະບົບ</string>
-  <string name="admin_access_settings">​​ແຕະ​ເພື່ອ​ໃຫ້​ຜູ້​ບໍ​ລິ​ຫານລະ​ບົບເຂົ້າ​ຫາ​ການ​ຕັ້ງ​ຄ່າ</string>
-  <string name="save_mid">ບັນທຶກແບບຟອມ</string>
-  <string name="enter_new_password">​ປ້ອນລະຫັດຜ່ານໃໝ່</string>
-  <string name="admin_password_changed">ລະຫັດຜ່ານຂອງຜູ້ຄວບຄຸມລະບົບ​ໄດ້​ປ່ຽນສຳເລັດແລ້ວ</string>
-  <string name="admin_password_disabled">ລະ​ຫັດ​ຜ່ານ​ຂອງ​ຜູ້​ຄວບ​ຄຸມ​ລະ​ບົບ​ບໍ່​ໄດ້​ເປີດ​ນຳ​ໃຊ້</string>
-  <string name="admin_password_incorrect">ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ!</string>
-  <string name="enter_admin_password">ປ້ອນລະຫັດຜ່ານຜູ້ຄວບຄຸມລະບົບ</string>
-  <string name="found_in_main">ຍົກເລີກການ​ເລືອກ​ ເພື່ອເຊື່ອງຈາກເມນູຫລັກ</string>
-  <string name="found_in_settings">ຍົກເລີກການ​ເລືອກ​ ເພື່ອເຊື່ອງຈາກການຕັ້ງຄ່າທົ່ວໄປ</string>
-  <string name="form_forward">ເລື່ອນຕໍ່ໄປ</string>
-  <string name="navigation">ຄົ້ນຫາ</string>
-  <string name="swipe_navigation">ໃຊ້ການເລື່ອນໜ້າຈໍໄປທາງຂ້າງ</string>
-  <string name="buttons_navigation">ກົດປູ່ມເລື່ອນໄປທາງໜ້າ/ກັບຫຼັງ</string>
-  <string name="swipe_buttons_navigation">​ໃຊ້ເລື່ອນໜ້າຈໍ ແລະ ປຸ່ມ</string>
-  <string name="launch_printer">ເລີ່ມຕົ້ນການພີມ</string>
-  <string name="no_printer">ເຄື່ອງພີມທີ່ເລືອກຍັງບໍ່ໄດ້ຕິດຕັ້ງ. ກະລຸນາຕິດຕັ້ງເຄື່ອງພີມ.</string>
-  <string name="constraint_behavior">ລັກສະນະການປະເມີນຜົນແບບມີເງື່ອນໄຂ</string>
-  <string name="constraint_behavior_on_swipe">ການກວດ​ສອບ​ເມື່ອປັດເລື່ອນໄປທາງໜ້າ</string>
-  <string name="constraint_behavior_on_finalize">ເລື່ອນການກວດສອບໄປຈົນກວ່າການສຳຫຼວດສຳເລັດ</string>
-  <string name="view_change_location">ເບີ່ງ ຫຼື ປ່ຽນຈຸດ​ທີ່​ຕັ້ງ</string>
-  <string name="open_url">ເປີດ​ທີ່​ຢູ່​ເວັ​ບ​ໄຊ Url</string>
-  <string name="get_bearing">ບັກທືກທິດທາງ</string>
-  <string name="replace_bearing">ປ່ຽນທິດທາງ</string>
-  <string name="getting_bearing">ກຳລັງສະແດງທິດທາງ</string>
-  <string name="accept_bearing">ບັກທືກທິດທາງ</string>
-  <string name="sdcard_unmounted">​ໂປ​ແກມບໍ່​ສາ​ມາດ​ເຂົ້າ​ເຖິງ​ກາດ​ຄວາມ​ຈຳ. ບາງ​ເທື່ອ​ມັນ​ຖືກ​ເຊື່ອມ​ຜ່ານ USB? (ສະ​ຖາ​ນະ​ປະຈຸ​ບັນ:%s)</string>
+  <string name="capture_video">ບັນທຶກວີດີໂອ</string>
+  <string name="choose_video">ເລືອກວີດີໂອ</string>
+  <string name="play_video">ເປີດວີດີໂອ</string>
+  <!--Text for button that deletes a file that is the answer to a question-->
+  <!--Text for button that starts recording sound-->
+  <string name="capture_audio">ບັນທຶກສຽງ</string>
+  <!--Text for button that lets the user choose a sound file on their device-->
+  <string name="choose_sound">ເລືອກຮູບແບບສຽງ</string>
+  <!--Description text for button that that pauses recording sound-->
+  <!--Description text for button that that resumes recording sound-->
+  <!--Title for dialog asking the user if they want to delete a file-->
+  <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="error_attaching_binary_file">​ມີ​ບັນ​ຫາ​ເກີດ​ຂື້ນ​ໃນ​ລະ​ຫວ່າງ​ການ​ຄັດຕິດ​​ເອ​ກະ​ສານ​ມີ​ເດຍ: %s</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="select_answer">ເລືອກຄຳຕອບ</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="selected">ໄດ້ເລືອກແລ້ວ:</string>
+  <string name="trigger">ຕົກລົງ. ກະລຸນາດຳເນີນຕໍ່</string>
   <string name="ext_file_no_data_error">​ບໍ່​ມີ​ຂໍ້​ມູນ​ໃນ​ເອ​ກະ​ສານ!</string>
   <string name="ext_conflicting_columns_error">ຈຳ​ນວນ %s ຖັນ​ທີ່​ກົງ​ກັນ!</string>
   <string name="ext_sortBy_numeric_error">ຖັນ​ທີ່​ທ່ານ​ຕ້ອງ​ການ​ຈັດ​ລຽງ ຄວ​ນ​ແມີ​ແຕ່​ໂຕ​ເລກ. ຄ່າ​ທີ່​ຂັດ​ແຍ່ງກັນ​ແມ່ນ \'%s\'.</string>
@@ -192,45 +161,203 @@
   <string name="ext_import_csv_missing_error">ຂໍ້​ມູນ​ພາຍນອກສຳ​ລັບ %1$s ຍັງ​ບໍ່​ທັນ​ຖືກ​ນຳ​ເຂົ້າ. ບັງ​ເທື່ອທ່ານ​ລືມ​ເອົາ​ເອ​ກະ​ສານ  %2$s.csv ປະ​ກອບກັບ​ແບບ​ຟອມ​ຂອງ​ທ່ານ?</string>
   <string name="ext_search_generic_error">ໄວ​ຍະ​ກອນ​ຜິດ​ພາດ​ໃນສູດ​ search():  \'%s\' </string>
   <string name="ext_assign_value_error">ບໍ່​ສາ​ມາດກຳ​ນົດ​ຄ່າ​ທີ່ \'%s\'.</string>
-  <string name="fs_delete_media_path_if_file_error">ບໍ່​ສາ​ມາດ​ລຶບ \'%s\'. ກະ​ລຸ​ນາ​ລຶບ​ເອ​ກະ​ສານດ້ວຍ​ມື ແລະ ດາວ​ໂຫຼດ​ຟອມ​ມາ​ໃໝ່.</string>
-  <string name="fs_create_media_folder_error">ບໍ່​ສາ​ມາດ​ສ້າງ​ໂຟນ​ເດີ \'%s\'.</string>
-  <string name="fs_file_copy_error">ບໍ່​ສາ​ມາດ​ກ໋ອບ​ປີ້ \'%1$s\' ຈາກ​ທັງ​ໝົດ \'%2$s\'. ​ເຫດຜົນ: %3$s</string>
-  <string name="survey_internal_error">​ຜິດ​ພາດ​ພາຍ​ໃນ: ຂັ້ນ​ຕອນ​ການ​ເຕືອນ​ລົ້ມ​ເຫຼວ.</string>
-  <string name="survey_multiple_forms_error">ທ່ານ​ໄດ້​ດາວ​ໂຫຼດ​ສອງ​ແບບ​ຟອມ ທີ່​ມີ ID ແລະ ເວີ​ຊັນ ຄື​ກັນ. ບາງ​ເທື່ອ​ຟອ​ມ​ດັ່ງ​ກ່າວ​ເປັນ​ຟອມ​ດຽວ​ກັນ ແຕ່​ອັບ​ໂຫຼດ​ເວ​ລາ​ຕ່າງ​ກັນ ຫຼື ຫາເສີບ​ເວີ​ຕ່າງ​ກັນ. ຢ່າງ​ໃດ​ກໍ່​ຕາມ ທ່ານ​ຄວນ​ລຶບ​ຟອມ​ໜຶ່ງ​ຖີ້ມ.</string>
-  <string name="survey_loading_reading_form_message">​ກຳ​ລັງ​ອ່ານ​​ຄຳ​ນິ​ຍາມແບບ​ຟອມ…</string>
-  <string name="survey_loading_reading_data_message">ກຳ​ລັງ​ອ່ານ​ຂໍ້​ມູນ​ການ​ສຳ​ຫຼວດ…</string>
-  <string name="survey_loading_reading_csv_message">ກຳ​ລັງ​ອ່ານ​ເອ​ກະ​ສານ CSV…</string>
-  <string name="survey_saving_validating_message">ກຳ​ລັງ​ກວດ​ກາ​ຄວາມ​ຖືກ​ຕ້ອງ​ຂອງ​ຄຳ​ຕອບ….</string>
-  <string name="survey_saving_collecting_message">ກຳ​ລັງ​ຮວບ​ຮວມຂໍ້​ມູນ…</string>
-  <string name="survey_saving_saving_message">​ກຳ​ລັງ​ບັນ​ທຶກ​ໃສ່ ກາດ​ຄວມຈຳ​ພາຍນອກ…</string>
-  <string name="survey_saving_finalizing_message">ກຳ​ລັງ​ເຮັດ​ໃຫ້ ກາດ​ຄວາມ​ຈຳ​ພາຍນອກ ສຳ​ເລັດ​ສົມ​ບູນ…</string>
-  <string name="survey_saving_encrypting_message">​ກຳ​ລັງ​ເຂົ້າ​ລະ​ຫັດ​ຂໍ້​ມູນ…</string>
-  <string name="high_resolution_summary">ເປີດ​ການ​ນຳ​ໃຊ້ ການ​ບັນ​ທຶກວີ​ດີ​ໂອ​ແບບ​ຄວາມ​ລະ​ອຽດ​ສູງ</string>
-    <string name="go_drive">ຊ້ອງຂອງຂ້ອຍ</string>
-  <string name="go_shared">ແບ່ງກັບຂ້ອຍ</string>
-  <string name="modified_on_date_at_time">\'ດັດແກ້ວັນທີ\' EEE, MMM dd, yyyy \'ເວລາ\' HH:mm</string>
-  <string name="drive_get_file">ໄດ້ %1$s ຂອງເອກະສານ.</string>
-  <string name="no_google_account">ບໍ່ໄດ້ເລືອກບັນຊີຂອງ Google</string>
-  <string name="notification_error">ຂໍ້ຜິດພາດສະແດງຂໍ້ຄວາມແຈ້ງເຕືອນ</string>
-  <string name="delete_after_send">ລຶບພາຍຫຼັງສົ່ງແລ້ວ</string>
-  <string name="delete_after_send_summary">ລຶບຟອມທີ່ສຳເລັດແລ້ວ ແລະ ສື່ ຫຼັງຈາກສົ່ງຫາເສີບເວີ</string>
-  <string name="change_server_url">URL ຂອງເສີບເວີ</string>
-  <!--Geo string added in feature-geofeatures branch-->
+  <string name="get_bearing">ບັກທືກທິດທາງ</string>
+  <string name="replace_bearing">ປ່ຽນທິດທາງ</string>
+  <string name="getting_bearing">ກຳລັງສະແດງທິດທາງ</string>
+  <string name="accept_bearing">ບັກທືກທິດທາງ</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
+  <string name="file_invalid">ຟາຍເອ​ກະ​ສານ: %s ບໍ່ຖືກຕ້ອງ</string>
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
+  <string name="file_missing">ບໍ່​ພົບຟາຍ​ເອ​ກະ​ສານ %s </string>
+  <!--Heading for a dialog which prompts the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Explanation for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Action to close a full screen dialog-->
+  <!--Heading for a dialog which prompts the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Action to save the contents of a full screen dialog-->
+  <!--##############################################
+    # GEO
+    ##############################################-->
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-      These strings are only being used to preserve compatibility with pre-existing
-       tile caches, and are not shown in the UI.-->
-  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+   These strings are only being used to preserve compatibility with pre-existing
+    tile caches, and are not shown in the UI.-->
+  <string name="view_change_location">ເບີ່ງ ຫຼື ປ່ຽນຈຸດ​ທີ່​ຕັ້ງ</string>
+  <string name="getting_location">ກຳລັງຊອກຫາຈຸດທີ່ຕັ້ງ</string>
+  <string name="get_location">ບັນທືກຈຸດ GPS ຂອງທີ່ຕັ້ງ</string>
+  <string name="provider_disabled_error">ຄຳສັ່ງບັນທຶກຈຸດທີ່ຕັ້ງ GPS ຖືກປິດໃຫ້ໃຊ້ງານ</string>
+  <!--Action to go to Android settings. Displayed when location providers are disabled.-->
+  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
-  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
-  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Name of an action button-->
+  <!--##############################################
+    # SEND FINALIZED FORM
+    ##############################################-->
+  <string name="uploading_data">ກຳລັງສົ່ງແບບຟອມ</string>
+  <string name="noselect_error">ທ່ານບໍ່ທັນ​ໄດ້ເລືອກແບບຟອມ!</string>
+  <string name="no_connection">ບໍ່ມີເຄືອຂ່າຍໃຫ້ເຊື່ອມຕໍ່</string>
+  <string name="sending_items">ກຳລັງສົ່ງ %1$s ຈາກແບບຟອມທັງໝົດ %2$s </string>
+  <string name="send_selected_data">ສົ່ງແບບຟອມທີ່ເລືອກ</string>
+  <string name="server_requires_auth">ເຊີເວີຕ້ອງການກວດ​ສອບ​ຊື່ຜູ້ໃຊ້ງານ ແລະ ລະ​ຫັດ​ຜ່ານ</string>
+  <string name="no_forms_uploaded">ບໍ່ສາມາດ ອັບໂລດ ແບບຟອມໄດ້</string>
+  <string name="upload_results">ຜົນໄດ້ຮັບ​ຂອງ​ການ​ ອັບໂລດ</string>
+  <!--Name of option in Send Finalized Form menu to show only unsent forms (default) or show sent and unsent forms-->
+  <string name="change_view">ປ່ຽນຮູບ​ແບບ​ການ​​ເບິ່ງ</string>
+  <string name="show_sent_and_unsent_forms">ສະແດງແບບຟອມທີ່ສົ່ງແລ້ວ ແລະ ຍັງບໍ່ໄດ້ສົ່ງ
+</string>
+  <string name="show_unsent_forms">ສະແດງແບບຟອມທີ່ຍັງບໍ່ທັນໄດ້ສົ່ງ</string>
+  <string name="notification_error">ຂໍ້ຜິດພາດສະແດງຂໍ້ຄວາມແຈ້ງເຕືອນ</string>
+  <!--##############################################
+    # GET BLANK FORM
+    ##############################################-->
+  <string name="refresh">ຣີເຟຼສ (Refresh)</string>
+  <string name="download">​ດາວໂລດເອົາຟາຍທີ່ເລືອກ</string>
+  <string name="downloading_data">ກຳລັງເຊື່ອມຕໍ່ກັບເຊີເວີ</string>
+  <string name="fetching_file">ໄປຮັບ %1$s.\n\nຟອມ %2$s ຂອງ %3$s ຟອມ(s).</string>
+  <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
+  <string name="version">​ລຸ້ນ​ທີ:</string>
+  <!--##############################################
+    # DELETE SAVED FORM
+    ##############################################-->
+  <!--Title of a section in "Delete Saved Forms" for deleting filled/saved forms (as opposed to blank forms)-->
+  <string name="data">ແບບຟອມທີ່ບັນທຶກໄວ້</string>
+  <!--Title of a section in "Delete Saved Forms" for deleting blank forms (as opposed to filled/saved forms)-->
+  <string name="forms">ແບບຟອມປ້ອນຂໍ້ມູນໃໝ່</string>
+  <string name="delete_confirm">ຕ້ອງການລຶບແບບຟອມ %s ບໍ່?</string>
+  <string name="delete_file">ລຶບສະເພາະແບບຟອມທີ່ໄດ້ເລືອກ</string>
+  <string name="delete_no">ບໍ່ຕ້ອງການລຶບ</string>
+  <string name="delete_yes">ລຶບແບບຟອມ</string>
+  <string name="file_deleted_error">ຄຳສັ່ງລຶບແບບຟອມ %1$s %2$s ກຳລັງດຳເນີນງານ!</string>
+  <string name="file_deleted_ok">ລຶບແບບຟອມ%s ສຳເລັດແລ້ວ!</string>
+  <string name="file_delete_in_progress">ຄຳສັ່ງລຶບແບບຟອມກຳລັງດຳເນີນງານ</string>
+  <!--##############################################
+    # GENERAL SETTINGS
+    ##############################################-->
+  <string name="general_preferences">ການ​ຕັ້ງ​ຄ່າ​ທົ່ວ​ໄປ</string>
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section only available in beta or development builds.-->
+  <string name="server_preferences">​ການ​ຕັ້ງ​ຄ່າ​ເຊີ​ເວີ</string>
+  <!--Label for server type setting-->
+  <string name="server_url">URL ທີ່​ຢູ່​ເວັບ​ໄຊ</string>
+  <!--Title of dialog for configuring server URL-->
+  <string name="change_server_url">URL ຂອງເສີບເວີ</string>
+  <string name="url_error">ທີ່​ຢູ່​ເວັບ​ໄຊ ຫຼື URL ບໍ່ຖືກຕ້ອງ</string>
+  <string name="username">ບັນຊີຜູ້ໃຊ້ງານ</string>
+  <string name="change_username">ບັນຊີຜູ້ໃຊ້ ODK</string>
+  <string name="password">ລະຫັດຜ່ານ</string>
+  <string name="change_password">ລະຫັດຜ່ານ ODK</string>
+  <string name="change_formlist_url">​ບ່ອນ​ເກັບ​ລາຍ​ການແບບຟອມ (ເພີ່ມເຕີມໃສ່ URL)</string>
+  <string name="change_submission_url">​ບ່ອນ​ສົ່ງ​ຂໍ້​ມູນ (ເພີ່ມເຕີມໃສ່ URL)</string>
+  <string name="formlist_url">ບ່ອນ​ເກັບ​ລາຍ​ການແບບຟອມ</string>
+  <string name="submission_url">ບ່ອນ​ສົ່ງ​ຂໍ້​ມູນ </string>
+  <string name="selected_google_account_text">ບັນຊີໃຊ້ງານໃນ Google </string>
+  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
+  <!--Description for Fallback submission URL setting-->
+  <string name="font_size">ຂະໜາດຕົວອັກສອນ</string>
+  <string name="change_font_size">ຂະໜາດຕົວອັກສອນ</string>
+  <string name="font_size_extra_large">ຂະໜາດໃຫຍ່ທີ່ສຸດ</string>
+  <string name="font_size_large">ຂະໜາດໃຫຍ່</string>
+  <string name="font_size_medium">ຂະໜາດປານກາງ</string>
+  <string name="font_size_small">ຂະໜາດນ້ອຍ</string>
+  <string name="font_size_extra_small">ຂະໜາດນ້ອຍທີ່ສຸດ</string>
+  <string name="navigation">ຄົ້ນຫາ</string>
+  <string name="swipe_navigation">ໃຊ້ການເລື່ອນໜ້າຈໍໄປທາງຂ້າງ</string>
+  <string name="buttons_navigation">ກົດປູ່ມເລື່ອນໄປທາງໜ້າ/ກັບຫຼັງ</string>
+  <string name="swipe_buttons_navigation">​ໃຊ້ເລື່ອນໜ້າຈໍ ແລະ ປຸ່ມ</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="form_forward">ເລື່ອນຕໍ່ໄປ</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="show_splash_summary">ສະແ​ດງເມື່ອໂປແກຼມ ເລີ່ມຕົ້ນໃຊ້ງານ</string>
+  <string name="splash_path">ເລືອກພາບເລີ່ມຕົ້ນ</string>
+  <string name="default_splash_path">ຄ່າເລີ່ມຕົ້ນ ODK</string>
+  <string name="select_another_image">ເລືອກພາບອື່ນ</string>
+  <string name="use_odk_default">ເລືອກພາບທີ່ກຳນົດໄວ້</string>
+  <string name="change_splash_path">ປ່ຽນຮູບພາບ</string>
+  <!--Heading for the settings category about updating blank forms-->
+  <!--Name of the setting that defines how blank forms are updated from the server.-->
+  <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
+  <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
+  <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
+  <!--Name of the setting that defines how often blank forms are updated from the server.-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
+  <string name="delete_after_send">ລຶບພາຍຫຼັງສົ່ງແລ້ວ</string>
+  <string name="delete_after_send_summary">ລຶບຟອມທີ່ສຳເລັດແລ້ວ ແລະ ສື່ ຫຼັງຈາກສົ່ງຫາເສີບເວີ</string>
+  <string name="default_completed">​ຄ່າ​ເລີ່ມ​ຕົ້ນແເມ່ນ ສຳ​ເລັດ​ແລ້ວ</string>
+  <string name="default_completed_summary">ກຳນົດແບບຟອມວ່າສຳ​ເລັດ​ແລ້ວ ໂດຍອັດຕະໂນມັດ</string>
+  <string name="constraint_behavior">ລັກສະນະການປະເມີນຜົນແບບມີເງື່ອນໄຂ</string>
+  <string name="constraint_behavior_on_swipe">ການກວດ​ສອບ​ເມື່ອປັດເລື່ອນໄປທາງໜ້າ</string>
+  <string name="constraint_behavior_on_finalize">ເລື່ອນການກວດສອບໄປຈົນກວ່າການສຳຫຼວດສຳເລັດ</string>
+  <string name="high_resolution_summary">ເປີດ​ການ​ນຳ​ໃຊ້ ການ​ບັນ​ທຶກວີ​ດີ​ໂອ​ແບບ​ຄວາມ​ລະ​ອຽດ​ສູງ</string>
+  <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
+  <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
   <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
-  <!--Text for button that stops audio recording-->
-  <!--Text to let the user know a recording is in progress-->
-  <!--Title of Android Notification Channel for audio recording notifications-->
-  <!--Text for button that plays audio clip-->
-  <!--Text to let the user know a file is being saved-->
-  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <!--Displayed when a device property such as the phone number is not available-->
+  <!--##############################################
+     # ADMIN SETTINGS
+     ##############################################-->
+  <string name="admin_preferences">​ການຕັ້ງຄ່າສຳລັບຜູ້​ບໍ​ລິ​ຫານລະບົບ</string>
+  <string name="admin_access_settings">​​ແຕະ​ເພື່ອ​ໃຫ້​ຜູ້​ບໍ​ລິ​ຫານລະ​ບົບເຂົ້າ​ຫາ​ການ​ຕັ້ງ​ຄ່າ</string>
+  <string name="enter_new_password">​ປ້ອນລະຫັດຜ່ານໃໝ່</string>
+  <string name="admin_password_changed">ລະຫັດຜ່ານຂອງຜູ້ຄວບຄຸມລະບົບ​ໄດ້​ປ່ຽນສຳເລັດແລ້ວ</string>
+  <string name="admin_password_disabled">ລະ​ຫັດ​ຜ່ານ​ຂອງ​ຜູ້​ຄວບ​ຄຸມ​ລະ​ບົບ​ບໍ່​ໄດ້​ເປີດ​ນຳ​ໃຊ້</string>
+  <string name="admin_password_incorrect">ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ!</string>
+  <string name="enter_admin_password">ປ້ອນລະຫັດຜ່ານຜູ້ຄວບຄຸມລະບົບ</string>
+  <string name="found_in_main">ຍົກເລີກການ​ເລືອກ​ ເພື່ອເຊື່ອງຈາກເມນູຫລັກ</string>
+  <string name="found_in_settings">ຍົກເລີກການ​ເລືອກ​ ເພື່ອເຊື່ອງຈາກການຕັ້ງຄ່າທົ່ວໄປ</string>
+  <!--Name of a setting that determines whether users can navigate backwards in a form-->
+  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <string name="save_mid">ບັນທຶກແບບຟອມ</string>
+  <!--##############################################
+     # GOOGLE DRIVE, GOOGLE SHEETS
+     ##############################################-->
+  <!--Title of the screen that lists forms in user's Google Drive-->
+  <string name="go_drive">ຊ້ອງຂອງຂ້ອຍ</string>
+  <!--Title of the screen that lists forms shared with Google Drive user-->
+  <string name="go_shared">ແບ່ງກັບຂ້ອຍ</string>
+  <!--Button for navigating across Google Drive folders-->
+  <string name="drive_get_file">ໄດ້ %1$s ຂອງເອກະສານ.</string>
+  <string name="no_google_account">ບໍ່ໄດ້ເລືອກບັນຊີຂອງ Google</string>
+  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
+  <!--##############################################
+     # ABOUT
+     ##############################################-->
+  <!--##############################################
+     # SETTINGS IMPORT
+     ##############################################-->
+  <!--##############################################
+     # SCOPED STORAGE MIGRATION
+     ##############################################-->
+  <!--Action to begin a storage migration-->
+  <!--##############################################
+     # MISC
+     ##############################################-->
+  <string name="ok">ຕົກລົງ</string>
+  <!--Used in many dialogs to dismiss the dialog without taking any action-->
+  <string name="cancel">ຍົກເລິກ</string>
+  <string name="cancel_loading_form">ຍົກເລີກ</string>
+  <string name="cancel_location">ຍົກເລີກ</string>
+  <string name="do_not_change">ຍົກເລີກ</string>
+  <string name="do_not_exit">ຍົກເລີກ</string>
+  <string name="success">ສຳເລັດແລ້ວ</string>
+  <string name="error_occured">ມີຄວາມຜິດພາດເກີດຂຶ້ນ</string>
+  <string name="please_wait">ກະລຸນາລໍຖ້າຈັກໜ້ອຍ</string>
+  <string name="please_wait_long">ກະລຸນາລໍຖ້າ. ມັນອາດຕ້ອງໃຊ້ເວລາໜ້ອຍໜື່ງ</string>
+  <string name="sdcard_unmounted">​ໂປ​ແກມບໍ່​ສາ​ມາດ​ເຂົ້າ​ເຖິງ​ກາດ​ຄວາມ​ຈຳ. ບາງ​ເທື່ອ​ມັນ​ຖືກ​ເຊື່ອມ​ຜ່ານ USB? (ສະ​ຖາ​ນະ​ປະຈຸ​ບັນ:%s)</string>
+  <string name="fs_delete_media_path_if_file_error">ບໍ່​ສາ​ມາດ​ລຶບ \'%s\'. ກະ​ລຸ​ນາ​ລຶບ​ເອ​ກະ​ສານດ້ວຍ​ມື ແລະ ດາວ​ໂຫຼດ​ຟອມ​ມາ​ໃໝ່.</string>
+  <string name="fs_create_media_folder_error">ບໍ່​ສາ​ມາດ​ສ້າງ​ໂຟນ​ເດີ \'%s\'.</string>
+  <string name="fs_file_copy_error">ບໍ່​ສາ​ມາດ​ກ໋ອບ​ປີ້ \'%1$s\' ຈາກ​ທັງ​ໝົດ \'%2$s\'. ​ເຫດຜົນ: %3$s</string>
+  <string name="survey_multiple_forms_error">ທ່ານ​ໄດ້​ດາວ​ໂຫຼດ​ສອງ​ແບບ​ຟອມ ທີ່​ມີ ID ແລະ ເວີ​ຊັນ ຄື​ກັນ. ບາງ​ເທື່ອ​ຟອ​ມ​ດັ່ງ​ກ່າວ​ເປັນ​ຟອມ​ດຽວ​ກັນ ແຕ່​ອັບ​ໂຫຼດ​ເວ​ລາ​ຕ່າງ​ກັນ ຫຼື ຫາເສີບ​ເວີ​ຕ່າງ​ກັນ. ຢ່າງ​ໃດ​ກໍ່​ຕາມ ທ່ານ​ຄວນ​ລຶບ​ຟອມ​ໜຶ່ງ​ຖີ້ມ.</string>
 </resources>

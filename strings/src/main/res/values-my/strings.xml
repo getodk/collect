@@ -1,192 +1,319 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="show_password">စကားဝှက်ပြပါ</string>
-  <string name="activity_not_found">လုပ်ဆောင်ရန် အလုပ်မတွေ့ပါ%s</string>
-  <string name="view_image">ပုံကြည့်ရန်</string>
-  <string name="annotate_image">ပုံတွင်မှတ်ချက်ရေးပါ</string>
-  <string name="signature_capture">လက်မှတ်ရယူခြင်း</string>
-  <string name="view_video">ဗီဒီယိုကြည့်ပါ</string>
-    <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
-  <string name="add_another_menu">နောက်တစ်ခုထည့်ရန်</string>
-  <string name="cancel">ပယ်ဖျက်ပါ</string>
-  <string name="cancel_loading_form">ပယ်ဖျက်ပါ</string>
-  <string name="cancel_location">ပယ်ဖျက်ပါ</string>
-  <string name="canceling">ပယ်ဖျက်နေသည်</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data">ပုံစံအလွတ်အား ဖြည့်သွင်းရန်</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data_button">ပုံစံအလွတ်အား ဖြည့်သွင်းရန်</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="review_data">သိမ္းထားေသာပံုစံအား ျပင္ဆင္ရန္</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="review_data_button">သိမ္းထားေသာပံုစံအား ျပင္ဆင္ရန္ (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="send_data">အၿပီးသတ္ပံုစံအားေပးပို႔ရန္</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="send_data_button">အၿပီးသတ္ပံုစံအားေပးပို႔ရန္ (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <!--Text for an action button on the main screen.-->
+  <string name="get_forms">ပံုစံအလြတ္ရယူရန္</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="manage_files">သိမ္းထားေသာပံုစံအားဖ်က္ရန္</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="added_on_date_at_time">\'Added on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="saved_on_date_at_time">\'Saved on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="finalized_on_date_at_time">\'Finalized on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sent_on_date_at_time">\'Sent on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sending_failed_on_date_at_time">\'Sending failed on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Displayed in search boxes for form lists or question types that involve search-->
+  <string name="no_items_display">ပံုစံအားေဖာ္ျပျခင္းမျပဳနိုင္ပါ</string>
+  <!--##############################################
+    # FILL BLANK FORM
+    ##############################################-->
+  <string name="finished_disk_scan">ပံုစံမ်ားစစ္ေဆးၿပီး ရရိွပါၿပီ</string>
+  <string name="loading_form">ပံုစံရယူေနပါသည္</string>
+  <string name="parse_error">ပံုစံကို မခြဲျခားႏိုင္ပါ</string>
   <string name="cannot_edit_completed_form">ဤပုံစံကို အပြီးသတ်ပြီးသည့်အချိန်မှစ၍ ပြုပြင်၍မရတော့ပါ။ ဤပုံစံသည် encrypted တင်ထားပြီးဖြစ်နိုင်သည်။</string>
-  <string name="capture_audio">အသံသွင်းပါ</string>
-  <string name="capture_image">ပုံရိုက်ပါ</string>
-  <string name="capture_osm">OpenMapKit ကိုဖွင့်ပါ</string>
-  <string name="recapture_osm">OSM စာကပ်ခြင်း ပြန်လုပ်ပါ</string>
-  <string name="capture_video">ဗီဒီယိုရိုက်ပါ</string>
+  <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
+  <string name="savepoint_used">သိမ္းဆည္းေနရာမွ မသိမ္းဆည္းရေသးသည္မ်ား ျပန္လည္ရယူရန္</string>
+  <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
   <string name="change_language">ဘာသာစကားပြောင်းပါ</string>
-  <string name="change_password">ODK စကားဝှက်</string>
-  <string name="change_username">ODK အသုံးပြုသူအမည်</string>
+  <!--Text for button displayed in the form filling menu to see the form's table of contents-->
+  <string name="view_hierarchy">ခ်က္ျခင္းသြားရန္</string>
+  <!--Text for button displayed in the form filling menu to save the form-->
+  <string name="save_all_answers">ပံုစံသိမ္းဆည္းရန္</string>
+  <!--Text of button from the form's table of contents to jump to the beginning of the form-->
+  <string name="jump_to_beginning">ျပန္လည္စတင္ရန္</string>
+  <!--Text of button from the form's table of contents to jump to the end of the form-->
+  <string name="jump_to_end">အဆံုးသတ္ရန္</string>
+  <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
+  <string name="jump_to_previous">အေပၚသို႔တက္ရန္</string>
+  <!--Displayed below group names in a form's table of contents-->
+  <!--Displayed below repeat names in a form's table of contents-->
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <string name="add_another_menu">နောက်တစ်ခုထည့်ရန်</string>
+  <!--Title of overlay menu displayed when long pressing on a question in a form-->
+  <string name="edit_prompt">ခ်က္ျခင္းျပင္ဆင္ရန္</string>
   <string name="clearanswer_confirm">\"%s\" ၏အဖြေကို ဖယ်မည်လား?</string>
   <string name="clear_answer">ဖြေကြားမှုကို ဖယ်ထုတ်ရန်</string>
   <string name="clear_answer_ask">ဤဖြေကြားမှုကို ဖယ်ထုတ်လိုပါသလား</string>
   <string name="clear_answer_no">မဖယ်ထုတ်ပါ</string>
-  <string name="data">ပုံစံသိမ်းရန်</string>
-  <string name="data_saved_error">ပုံစံအား မသိမ်းဆည်းနိုင်ပါ</string>
-  <string name="data_saved_ok">ပုံစံအားအောင်မြင်စွာ သိမ်းဆည်းနိုင်ပါသည်</string>
-  <string name="save_point_error">ပြန်လည်ရယူသည့် နေရာ အမှားဖြစ်ပေါ်%s</string>
-  <string name="default_completed">အချောသတ် အဖြစ် အမြဲထားပါ</string>
-  <string name="delete_confirm">ဖ်က္ရန္ %s ပံုစံ</string>
-  <string name="delete_file">ေရြးခ်ယ္ထားသည္မ်ားကို ဖ်က္ရန္</string>
-  <string name="delete_no">မဖ်က္ရန္</string>
+  <string name="discard_answer">အဖြေကို ဖယ်ရှားရန်</string>
+  <string name="discard_group">အုပ်စုကို ဖယ်ရှားရန်</string>
   <string name="delete_repeat">အုပ်စုကို ဖယ်ရှားရန်</string>
   <string name="delete_repeat_ask">ဒီအုပ်စုကို ဖယ်ရှားမည်လား</string>
   <string name="delete_repeat_confirm"> \"%s\" အုပ်စုနှင့် သူ၏ အုပ်စုခွဲများကို ဖယ်ရှားမည်လား</string>
   <string name="delete_repeat_no">မလုပ်တော့ပါ</string>
-  <string name="delete_yes">ပုံစံကို ဖယ်ရှားရန်</string>
-  <string name="discard_answer">အဖြေကို ဖယ်ရှားရန်</string>
-  <string name="discard_group">အုပ်စုကို ဖယ်ရှားရန်</string>
-  <string name="download">ရွေးချယ်ရန်</string>
-  <string name="download_forms_result">ရလဒ်ကို ဒေါင်းလုတ်လုပ်ရန်</string>
-  <string name="downloading_data">ဆာဗာကို ချိတ်ဆက်နေစဉ်</string>
-  <string name="do_not_change">မလုပ်တော့ပါ</string>
-  <string name="do_not_exit">မလုပ်တော့ပါ</string>
-  <string name="do_not_save">ပြင်ဆင်မှုများကို လက်မခံပါ</string>
-  <string name="enter_data">ပုံစံအလွတ်အား ဖြည့်သွင်းရန်</string>
-  <string name="enter_data_button">ပုံစံအလွတ်အား ဖြည့်သွင်းရန်</string>
-  <string name="error_occured">မွားယြင္းေနပါသည္</string>
-  <string name="file_deleted_error">%1$s ၊ %2$s ေရြးခ်ယ္ထားေသာပံုစံမ်ားအားဖ်က္၍ မရပါ</string>
-  <string name="file_deleted_ok">%s ပံုစံမ်ားဖ်က္ၿပီးျဖစ္ပါသည္</string>
-  <string name="file_delete_in_progress">ပုံစံမ်ား ဖ်က္ေနဆဲ ျဖစ္ပါသည္</string>
-  <string name="file_invalid">ဖိုင္: %s မေကာင္းမြန္ပါ</string>
-  <string name="file_missing">ဖိုင္: %s ေပ်ာက္ဆံုးေနပါသည္</string>
-  <string name="finished_disk_scan">ပံုစံမ်ားစစ္ေဆးၿပီး ရရိွပါၿပီ</string>
-  <string name="forms">ပံုစံအလြတ္မ်ား</string>
-  <string name="getting_location">တည္ေနရာကို ရယူေနပါသည္</string>
-  <string name="get_barcode">ဘာကုတ္(ဒ္) ရယူပါ</string>
-  <string name="get_forms">ပံုစံအလြတ္ရယူရန္</string>
-  <string name="get_location">တည္ေနရာအားမွတ္သားရန္</string>
-  <string name="provider_disabled_error">တည္ေနရာဖမ္းယူမွု ခ်ိဳ႔ယြင္းေနပါသည္</string>
   <string name="invalid_answer_error">ဖမ္းယူမွု မေကာင္းပါ</string>
-  <string name="jump_to_beginning">ျပန္လည္စတင္ရန္</string>
-  <string name="jump_to_end">အဆံုးသတ္ရန္</string>
-  <string name="jump_to_previous">အေပၚသို႔တက္ရန္</string>
-  <string name="loading_form">ပံုစံရယူေနပါသည္</string>
-  <string name="manage_files">သိမ္းထားေသာပံုစံအားဖ်က္ရန္</string>
-  <string name="mark_finished">အၿပီးသတ္ထားေသာပံုစံအားမွတ္သားရန္</string>
-  <string name="noselect_error">ပံုစံေရြးခ်ယ္ထားျခင္းမရိွပါ</string>
-  <string name="no_connection">ကြန္ယက္ခ်ိတ္ဆက္၍ မရပါ</string>
-  <string name="no_items_display">ပံုစံအားေဖာ္ျပျခင္းမျပဳနိုင္ပါ</string>
-  <string name="ok">OK</string>
-  <string name="parse_error">ပံုစံကို မခြဲျခားႏိုင္ပါ</string>
-  <string name="password">လ်ိဳ႔၀ွက္နံပါတ္</string>
-  <string name="play_video">ဗြီဒီယိုဖြင့္ရန္</string>
-  <string name="please_wait">ေခတၱေစာင့္ပါ</string>
-  <string name="please_wait_long">ေခတၱေစာင့္ပါ၊ အခ်ိန္အနည္းငယ္ယူပါသည္</string>
-  <string name="quit_application">ထြက္ရန္ %s</string>
-  <string name="quit_entry">ပံုစံအားသိမ္း၍ ထြက္ရန္</string>
-  <string name="refresh">ပိုမီုေကာင္းမြန္လာရန္ လုပ္ေဆာင္ျခင္း</string>
-  <string name="replace_barcode">ဘားကုတ္(ဒ္) အစားထိုးရန္</string>
   <string name="required_answer_error">အေျဖမ်ား မျပည့္စံုေသးပါ</string>
-  <string name="review_data">သိမ္းထားေသာပံုစံအား ျပင္ဆင္ရန္</string>
-  <string name="review_data_button">သိမ္းထားေသာပံုစံအား ျပင္ဆင္ရန္ (%s)</string>
-  <string name="save_all_answers">ပံုစံသိမ္းဆည္းရန္</string>
   <string name="save_enter_data_description">သင္သည္ \"%s\"၏ ေနာက္ဆံုးအပိုင္းသို႔ ေရာက္ရိွေနပါသည္။</string>
-  <string name="saving_form">ပံုစံသိမ္းဆည္းေနပါသည္</string>
-  <string name="sending_items"> %1$s ၊ %2$s ပံုစံမ်ား ေပးပို႔ေနပါသည္</string>
-  <string name="send_data">အၿပီးသတ္ပံုစံအားေပးပို႔ရန္</string>
-  <string name="send_data_button">အၿပီးသတ္ပံုစံအားေပးပို႔ရန္ (%s)</string>
-  <string name="send_selected_data">ေရြးခ်ယ္ထားေသာပံုစံမ်ားေပးပို႔ရန္</string>
-  <string name="server_requires_auth">ဆာဗာမွ မွန္ကန္ေၾကာင္း ေထာက္ခံရန္လိုအပ္ပါသည္</string>
-  <string name="server_url">ရင္းျမစ္ေနရာ</string>
-  <string name="server_preferences">ဆာဗာ</string>
-  <string name="trigger">ဆက္လက္လုပ္ေဆာင္ရန္</string>
-  <string name="uploading_data">ပံုစံေပးပို႔ျခင္း</string>
-  <string name="url_error">ရင္းျမစ္ေနရာမွားယြင္းေနပါသည္</string>
-  <string name="username">သံုးစြဲသူအမည္</string>
-  <string name="view_hierarchy">ခ်က္ျခင္းသြားရန္</string>
-  <string name="general_preferences">မူလပံုစံအားေျပာင္းရန္</string>
-  <string name="show_splash_summary">အသံုးျပဳမွုစတင္ခ်ိန္တြင္ျပရန္</string>
-  <string name="splash_path">Splash Image ေရြးခ်ယ္ထားသည္</string>
-  <string name="default_splash_path">အျခားပံုကိုေရြးခ်ယ္ရန္</string>
-  <string name="select_another_image">အျခားပံုကိုေရြးခ်ယ္ရန္</string>
-  <string name="use_odk_default">ရိွရင္းစြဲပံုကိုသံုးရန္</string>
-  <string name="change_splash_path">ပံုေျပာင္းရန္</string>
-  <string name="keep_changes">ေျပာင္းလဲမွုမ်ားကို သိမ္းဆည္းရန္</string>
-  <string name="change_formlist_url">ပံုစံစာရင္းရိွသည့္ေနရာ (appended to Server URL)</string>
-  <string name="change_submission_url">ထည့္သြင္းရမည့္ေနရာ(appended to Server URL)</string>
-  <string name="formlist_url">ပံုစံစာရင္းရိွသည့္ေနရာ</string>
-  <string name="submission_url">ထည့္သြင္းရမည့္ေနရာ</string>
-  <string name="font_size">စာလံုးအရြယ္အစား</string>
-  <string name="change_font_size">စာလံုးအရြယ္အစား</string>
-  <string name="form_download_progress">%1$s. မီဒီယာဖိုင္ရယူေနပါသည္: %2$s of %3$s</string>
-  <string name="success">ေအာင္ျမင္ပါၿပီ</string>
-  <string name="no_forms_uploaded">ပံုစံမရယူႏိုင္ေသးပါ</string>
-  <string name="upload_results">ရယူမွုရလဒ္မ်ား</string>
-  <string name="choose_sound">အသံေရြးခ်ယ္ရန္</string>
-  <string name="choose_video">ဗြီဒီယို ေရြးခ်ယ္ရန္</string>
-  <string name="choose_image">ပံုေရြးခ်ယ္ရန္</string>
-  <string name="selected">ေရြးခ်ယ္ၿပီး:</string>
-  <string name="select_answer">အေျဖေရြးခ်ယ္ရန္</string>
   <string name="save_form_as">ပံုစံအမည္ေပးရန္:</string>
   <string name="save_as_error">အမည္ေနရာတြင္ ကြပ္လပ္ထား၍ မရပါ</string>
-  <string name="edit_prompt">ခ်က္ျခင္းျပင္ဆင္ရန္</string>
-  <string name="selected_google_account_text">ဂူးဂယ္ (လ္) အေကာင့္</string>
-  <string name="font_size_extra_large">အလြန္ႀကီး</string>
-  <string name="font_size_large">အႀကီး</string>
-  <string name="font_size_medium">အလယ္အလတ္</string>
-  <string name="font_size_small">ေသး</string>
-  <string name="font_size_extra_small">အလြန္ေသး</string>
-  <string name="change_view">ျမင္ကြင္းေျပာင္းရန္</string>
-  <string name="show_sent_and_unsent_forms">ေပးပို့ၿပီးႏွင့္ မေပးပို႔ရေသးေသာ ပံုစံမ်ား</string>
-  <string name="show_unsent_forms">မေပးပို႔ရေသးေသာ ပံုစံမ်ား</string>
-  <string name="added_on_date_at_time">\'Added on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="saved_on_date_at_time">\'Saved on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="finalized_on_date_at_time">\'Finalized on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sent_on_date_at_time">\'Sent on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sending_failed_on_date_at_time">\'Sending failed on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="version">လုပ္ေဆာင္မွုအဆင့္:</string>
+  <string name="mark_finished">အၿပီးသတ္ထားေသာပံုစံအားမွတ္သားရန္</string>
+  <string name="quit_entry">ပံုစံအားသိမ္း၍ ထြက္ရန္</string>
+  <string name="data_saved_error">ပုံစံအား မသိမ်းဆည်းနိုင်ပါ</string>
+  <string name="data_saved_ok">ပုံစံအားအောင်မြင်စွာ သိမ်းဆည်းနိုင်ပါသည်</string>
+  <string name="save_point_error">ပြန်လည်ရယူသည့် နေရာ အမှားဖြစ်ပေါ်%s</string>
+  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <string name="quit_application">ထြက္ရန္ %s</string>
+  <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="do_not_save">ပြင်ဆင်မှုများကို လက်မခံပါ</string>
+  <string name="keep_changes">ေျပာင္းလဲမွုမ်ားကို သိမ္းဆည္းရန္</string>
+  <string name="saving_form">ပံုစံသိမ္းဆည္းေနပါသည္</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <!--Text displayed when audio recording fails to start-->
+  <!--Error message displayed when copying media from a temporary directory fails-->
+  <!--##############################################
+    # FORM FEATURES
+    ##############################################-->
+  <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
   <string name="launch_app">စတင္ေဆာင္ရြက္ရန္</string>
+  <string name="activity_not_found">လုပ်ဆောင်ရန် အလုပ်မတွေ့ပါ%s</string>
   <string name="no_app">လုပ္ေဆာင္မွုလြဲေခ်ာ္ေနပါသည္၊ ေသခ်ာစြာဖတ္ရွု၍ ၿဖည့္သြင္းပါ</string>
-  <string name="savepoint_used">သိမ္းဆည္းေနရာမွ မသိမ္းဆည္းရေသးသည္မ်ား ျပန္လည္ရယူရန္</string>
+  <string name="launch_printer">Initiate Printing</string>
+  <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
+  <string name="capture_osm">OpenMapKit ကိုဖွင့်ပါ</string>
+  <string name="recapture_osm">OSM စာကပ်ခြင်း ပြန်လုပ်ပါ</string>
+  <string name="get_barcode">ဘာကုတ္(ဒ္) ရယူပါ</string>
+  <string name="replace_barcode">ဘားကုတ္(ဒ္) အစားထိုးရန္</string>
+  <string name="capture_image">ပုံရိုက်ပါ</string>
+  <string name="choose_image">ပံုေရြးခ်ယ္ရန္</string>
+  <string name="view_image">ပုံကြည့်ရန်</string>
+  <string name="annotate_image">ပုံတွင်မှတ်ချက်ရေးပါ</string>
+  <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">သိမ္းဆည္း ၿပီးပိတ္ရန္</string>
+  <string name="signature_capture">လက်မှတ်ရယူခြင်း</string>
   <string name="sign_button">အမွန္အသားအား ရွာရန္</string>
   <string name="markup_image">ပံုမွတ္ရန္</string>
   <string name="draw_image">ပံုၾကမ္းဆြဲရန္</string>
   <string name="reset_image">မူလအတုိင္းျပန္ထားရန္</string>
   <string name="set_color">အေရာင္ေရြးရန္</string>
-  <string name="admin_preferences">စီမံခန့္ခြဲမွု ပံုစံမ်ား</string>
-  <string name="admin_access_settings">စီမံခန့္ခြဲမွုပံုစံအား ေဆာင္ရြက္ႏိုင္ရန္ ႏွိပ္ပါ</string>
-  <string name="save_mid">ပံုစံသိမ္းဆည္းျခင္း</string>
-  <string name="enter_new_password">လ်ိဳ့၀ွက္နံပါတ္ အသစ္ထည့္သြင္းရန္</string>
-  <string name="admin_password_changed">စီမံခန့္ခြဲမွုလ်ိဳ့၀ွက္နံပါတ္(Admin Password) အား ေျပာင္းလဲၿပီးပါၿပီ</string>
-  <string name="admin_password_disabled">စီမံခန့္ခြဲမွုလ်ိဳ့၀ွက္နံပါတ္(Admin Password) မေဆာင္ရြက္ႏိုင္ပါ</string>
-  <string name="admin_password_incorrect">လ်ိဳ့၀ွက္နံပါတ္ မမွန္ကန္ပါ!</string>
-  <string name="enter_admin_password">စီမံခန့္ခြဲမွုလ်ိဳ့၀ွက္နံပါတ္အား ထည့္သြင္းရန္</string>
-  <string name="found_in_main">Uncheck to hide from Main Menu</string>
-  <string name="found_in_settings">Uncheck to hide from General Settings</string>
-  <string name="form_forward">Next</string>
-  <string name="navigation">Navigation</string>
-  <string name="swipe_navigation">Use horizontal swipes</string>
-  <string name="buttons_navigation">Use forward/backward buttons</string>
-  <string name="swipe_buttons_navigation">Use swipes and buttons</string>
-  <string name="launch_printer">Initiate Printing</string>
-  <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
-  <!--Geo string added in feature-geofeatures branch-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-      These strings are only being used to preserve compatibility with pre-existing
-       tile caches, and are not shown in the UI.-->
-  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
-  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
-  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <string name="capture_video">ဗီဒီယိုရိုက်ပါ</string>
+  <string name="choose_video">ဗြီဒီယို ေရြးခ်ယ္ရန္</string>
+  <string name="view_video">ဗီဒီယိုကြည့်ပါ</string>
+  <string name="play_video">ဗြီဒီယိုဖြင့္ရန္</string>
+  <!--Text for button that deletes a file that is the answer to a question-->
+  <!--Text for button that starts recording sound-->
+  <string name="capture_audio">အသံသွင်းပါ</string>
+  <!--Text for button that lets the user choose a sound file on their device-->
+  <string name="choose_sound">အသံေရြးခ်ယ္ရန္</string>
+  <!--Description text for button that that pauses recording sound-->
+  <!--Description text for button that that resumes recording sound-->
+  <!--Title for dialog asking the user if they want to delete a file-->
+  <!--Dialog text warning the user they won't be able to recover a file once deleted-->
   <!--Text for button that stops audio recording-->
   <!--Text to let the user know a recording is in progress-->
   <!--Title of Android Notification Channel for audio recording notifications-->
   <!--Text for button that plays audio clip-->
   <!--Text to let the user know a file is being saved-->
   <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="select_answer">အေျဖေရြးခ်ယ္ရန္</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="selected">ေရြးခ်ယ္ၿပီး:</string>
+  <string name="trigger">ဆက္လက္လုပ္ေဆာင္ရန္</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
+  <string name="file_invalid">ဖိုင္: %s မေကာင္းမြန္ပါ</string>
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
+  <string name="file_missing">ဖိုင္: %s ေပ်ာက္ဆံုးေနပါသည္</string>
+  <!--Heading for a dialog which prompts the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Explanation for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Action to close a full screen dialog-->
+  <!--Heading for a dialog which prompts the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Action to save the contents of a full screen dialog-->
+  <!--##############################################
+    # GEO
+    ##############################################-->
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+   These strings are only being used to preserve compatibility with pre-existing
+    tile caches, and are not shown in the UI.-->
+  <string name="getting_location">တည္ေနရာကို ရယူေနပါသည္</string>
+  <string name="get_location">တည္ေနရာအားမွတ္သားရန္</string>
+  <string name="provider_disabled_error">တည္ေနရာဖမ္းယူမွု ခ်ိဳ႔ယြင္းေနပါသည္</string>
+  <!--Action to go to Android settings. Displayed when location providers are disabled.-->
+  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--Name of an action button-->
+  <!--##############################################
+    # SEND FINALIZED FORM
+    ##############################################-->
+  <string name="uploading_data">ပံုစံေပးပို႔ျခင္း</string>
+  <string name="noselect_error">ပံုစံေရြးခ်ယ္ထားျခင္းမရိွပါ</string>
+  <string name="no_connection">ကြန္ယက္ခ်ိတ္ဆက္၍ မရပါ</string>
+  <string name="sending_items"> %1$s ၊ %2$s ပံုစံမ်ား ေပးပို႔ေနပါသည္</string>
+  <string name="send_selected_data">ေရြးခ်ယ္ထားေသာပံုစံမ်ားေပးပို႔ရန္</string>
+  <string name="server_requires_auth">ဆာဗာမွ မွန္ကန္ေၾကာင္း ေထာက္ခံရန္လိုအပ္ပါသည္</string>
+  <string name="no_forms_uploaded">ပံုစံမရယူႏိုင္ေသးပါ</string>
+  <string name="upload_results">ရယူမွုရလဒ္မ်ား</string>
+  <!--Name of option in Send Finalized Form menu to show only unsent forms (default) or show sent and unsent forms-->
+  <string name="change_view">ျမင္ကြင္းေျပာင္းရန္</string>
+  <string name="show_sent_and_unsent_forms">ေပးပို့ၿပီးႏွင့္ မေပးပို႔ရေသးေသာ ပံုစံမ်ား</string>
+  <string name="show_unsent_forms">မေပးပို႔ရေသးေသာ ပံုစံမ်ား</string>
+  <!--##############################################
+    # GET BLANK FORM
+    ##############################################-->
+  <string name="refresh">ပိုမီုေကာင္းမြန္လာရန္ လုပ္ေဆာင္ျခင္း</string>
+  <string name="download">ရွေးချယ်ရန်</string>
+  <string name="download_forms_result">ရလဒ်ကို ဒေါင်းလုတ်လုပ်ရန်</string>
+  <string name="downloading_data">ဆာဗာကို ချိတ်ဆက်နေစဉ်</string>
+  <string name="form_download_progress">%1$s. မီဒီယာဖိုင္ရယူေနပါသည္: %2$s of %3$s</string>
+  <string name="version">လုပ္ေဆာင္မွုအဆင့္:</string>
+  <!--##############################################
+    # DELETE SAVED FORM
+    ##############################################-->
+  <!--Title of a section in "Delete Saved Forms" for deleting filled/saved forms (as opposed to blank forms)-->
+  <string name="data">ပုံစံသိမ်းရန်</string>
+  <!--Title of a section in "Delete Saved Forms" for deleting blank forms (as opposed to filled/saved forms)-->
+  <string name="forms">ပံုစံအလြတ္မ်ား</string>
+  <string name="delete_confirm">ဖ်က္ရန္ %s ပံုစံ</string>
+  <string name="delete_file">ေရြးခ်ယ္ထားသည္မ်ားကို ဖ်က္ရန္</string>
+  <string name="delete_no">မဖ်က္ရန္</string>
+  <string name="delete_yes">ပုံစံကို ဖယ်ရှားရန်</string>
+  <string name="file_deleted_error">%1$s ၊ %2$s ေရြးခ်ယ္ထားေသာပံုစံမ်ားအားဖ်က္၍ မရပါ</string>
+  <string name="file_deleted_ok">%s ပံုစံမ်ားဖ်က္ၿပီးျဖစ္ပါသည္</string>
+  <string name="file_delete_in_progress">ပုံစံမ်ား ဖ်က္ေနဆဲ ျဖစ္ပါသည္</string>
+  <!--##############################################
+    # GENERAL SETTINGS
+    ##############################################-->
+  <string name="general_preferences">မူလပံုစံအားေျပာင္းရန္</string>
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section only available in beta or development builds.-->
+  <string name="server_preferences">ဆာဗာ</string>
+  <!--Label for server type setting-->
+  <string name="server_url">ရင္းျမစ္ေနရာ</string>
+  <!--Title of dialog for configuring server URL-->
+  <string name="url_error">ရင္းျမစ္ေနရာမွားယြင္းေနပါသည္</string>
+  <string name="username">သံုးစြဲသူအမည္</string>
+  <string name="change_username">ODK အသုံးပြုသူအမည်</string>
+  <string name="password">လ်ိဳ႔၀ွက္နံပါတ္</string>
+  <string name="change_password">ODK စကားဝှက်</string>
+  <string name="change_formlist_url">ပံုစံစာရင္းရိွသည့္ေနရာ (appended to Server URL)</string>
+  <string name="change_submission_url">ထည့္သြင္းရမည့္ေနရာ(appended to Server URL)</string>
+  <string name="formlist_url">ပံုစံစာရင္းရိွသည့္ေနရာ</string>
+  <string name="submission_url">ထည့္သြင္းရမည့္ေနရာ</string>
+  <string name="selected_google_account_text">ဂူးဂယ္ (လ္) အေကာင့္</string>
+  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
+  <!--Description for Fallback submission URL setting-->
+  <string name="font_size">စာလံုးအရြယ္အစား</string>
+  <string name="change_font_size">စာလံုးအရြယ္အစား</string>
+  <string name="font_size_extra_large">အလြန္ႀကီး</string>
+  <string name="font_size_large">အႀကီး</string>
+  <string name="font_size_medium">အလယ္အလတ္</string>
+  <string name="font_size_small">ေသး</string>
+  <string name="font_size_extra_small">အလြန္ေသး</string>
+  <string name="navigation">Navigation</string>
+  <string name="swipe_navigation">Use horizontal swipes</string>
+  <string name="buttons_navigation">Use forward/backward buttons</string>
+  <string name="swipe_buttons_navigation">Use swipes and buttons</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="form_forward">Next</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="show_splash_summary">အသံုးျပဳမွုစတင္ခ်ိန္တြင္ျပရန္</string>
+  <string name="splash_path">Splash Image ေရြးခ်ယ္ထားသည္</string>
+  <string name="default_splash_path">အျခားပံုကိုေရြးခ်ယ္ရန္</string>
+  <string name="select_another_image">အျခားပံုကိုေရြးခ်ယ္ရန္</string>
+  <string name="use_odk_default">ရိွရင္းစြဲပံုကိုသံုးရန္</string>
+  <string name="change_splash_path">ပံုေျပာင္းရန္</string>
+  <!--Heading for the settings category about updating blank forms-->
+  <!--Name of the setting that defines how blank forms are updated from the server.-->
+  <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
+  <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
+  <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
+  <!--Name of the setting that defines how often blank forms are updated from the server.-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
+  <string name="default_completed">အချောသတ် အဖြစ် အမြဲထားပါ</string>
+  <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
+  <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Displayed when a device property such as the phone number is not available-->
+  <!--##############################################
+     # ADMIN SETTINGS
+     ##############################################-->
+  <string name="admin_preferences">စီမံခန့္ခြဲမွု ပံုစံမ်ား</string>
+  <string name="admin_access_settings">စီမံခန့္ခြဲမွုပံုစံအား ေဆာင္ရြက္ႏိုင္ရန္ ႏွိပ္ပါ</string>
+  <string name="enter_new_password">လ်ိဳ့၀ွက္နံပါတ္ အသစ္ထည့္သြင္းရန္</string>
+  <string name="admin_password_changed">စီမံခန့္ခြဲမွုလ်ိဳ့၀ွက္နံပါတ္(Admin Password) အား ေျပာင္းလဲၿပီးပါၿပီ</string>
+  <string name="admin_password_disabled">စီမံခန့္ခြဲမွုလ်ိဳ့၀ွက္နံပါတ္(Admin Password) မေဆာင္ရြက္ႏိုင္ပါ</string>
+  <string name="admin_password_incorrect">လ်ိဳ့၀ွက္နံပါတ္ မမွန္ကန္ပါ!</string>
+  <string name="enter_admin_password">စီမံခန့္ခြဲမွုလ်ိဳ့၀ွက္နံပါတ္အား ထည့္သြင္းရန္</string>
+  <string name="show_password">စကားဝှက်ပြပါ</string>
+  <string name="found_in_main">Uncheck to hide from Main Menu</string>
+  <string name="found_in_settings">Uncheck to hide from General Settings</string>
+  <!--Name of a setting that determines whether users can navigate backwards in a form-->
+  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <string name="save_mid">ပံုစံသိမ္းဆည္းျခင္း</string>
+  <!--##############################################
+     # GOOGLE DRIVE, GOOGLE SHEETS
+     ##############################################-->
+  <!--Title of the screen that lists forms in user's Google Drive-->
+  <!--Title of the screen that lists forms shared with Google Drive user-->
+  <!--Button for navigating across Google Drive folders-->
+  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
+  <!--##############################################
+     # ABOUT
+     ##############################################-->
+  <!--##############################################
+     # SETTINGS IMPORT
+     ##############################################-->
+  <!--##############################################
+     # SCOPED STORAGE MIGRATION
+     ##############################################-->
+  <!--Action to begin a storage migration-->
+  <!--##############################################
+     # MISC
+     ##############################################-->
+  <string name="ok">OK</string>
+  <!--Used in many dialogs to dismiss the dialog without taking any action-->
+  <string name="cancel">ပယ်ဖျက်ပါ</string>
+  <string name="cancel_loading_form">ပယ်ဖျက်ပါ</string>
+  <string name="cancel_location">ပယ်ဖျက်ပါ</string>
+  <string name="do_not_change">မလုပ်တော့ပါ</string>
+  <string name="do_not_exit">မလုပ်တော့ပါ</string>
+  <string name="canceling">ပယ်ဖျက်နေသည်</string>
+  <string name="success">ေအာင္ျမင္ပါၿပီ</string>
+  <string name="error_occured">မွားယြင္းေနပါသည္</string>
+  <string name="please_wait">ေခတၱေစာင့္ပါ</string>
+  <string name="please_wait_long">ေခတၱေစာင့္ပါ၊ အခ်ိန္အနည္းငယ္ယူပါသည္</string>
 </resources>

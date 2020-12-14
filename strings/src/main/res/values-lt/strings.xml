@@ -1,151 +1,270 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="activity_not_found">Nerasta, kas galėtų valdyti: %s</string>
-  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
-  <string name="cancel">Atšaukti</string>
-  <string name="cancel_loading_form">Atšaukti</string>
-  <string name="cancel_location">Atšaukti</string>
-  <string name="capture_audio">Įrašyti garsą</string>
-  <string name="capture_image">Užfiksuoti kadrą</string>
-  <string name="capture_video">Įrašyti video</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data">Pildyti tuščią formą</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data_button">Pildyti tuščią formą</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="review_data">Taisyti užpildytą formą</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="review_data_button">Taisyti užpildytą formą (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="send_data">Išsiųsti užbaigtą formą</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="send_data_button">Išsiųsti užbaigtą formą (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <!--Text for an action button on the main screen.-->
+  <string name="get_forms">Atsisiųsti tuščią formą</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="manage_files">Ištrinti užpildytą formą</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="added_on_date_at_time">\'Sukurta\' EEE, MMM dd, yyyy HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="saved_on_date_at_time">\'Išsaugota\' EEE, MMM dd, yyyy HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="finalized_on_date_at_time">\'Užbaigta\' EEE, MMM dd, yyyy HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sent_on_date_at_time">\'Išsiųsta\' EEE, MMM dd, yyyy HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sending_failed_on_date_at_time">\'Išsiųsti nepavyko\' EEE, MMM dd, yyyy HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Displayed in search boxes for form lists or question types that involve search-->
+  <string name="no_items_display">Nėra ką rodyti</string>
+  <!--##############################################
+    # FILL BLANK FORM
+    ##############################################-->
+  <string name="finished_disk_scan">Skenavimas baigtas. Visos formos įkeltos.</string>
+  <string name="loading_form">Įkeliama forma</string>
+  <string name="parse_error">Deja, nepavyko apdoroti formos.</string>
+  <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
+  <string name="savepoint_used">Neišsaugoti pakeitimai atkurti pagal išsaugojimo tašką!</string>
+  <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
   <string name="change_language">Pakeisti kalbą</string>
-  <string name="change_password">Slaptažodis</string>
-  <string name="change_username">ODK naudotojo vardas</string>
+  <!--Text for button displayed in the form filling menu to see the form's table of contents-->
+  <string name="view_hierarchy">Atsakymų sąrašas</string>
+  <!--Text for button displayed in the form filling menu to save the form-->
+  <string name="save_all_answers">Išsaugoti formą</string>
+  <!--Text of button from the form's table of contents to jump to the beginning of the form-->
+  <string name="jump_to_beginning">Eiti į pradžią</string>
+  <!--Text of button from the form's table of contents to jump to the end of the form-->
+  <string name="jump_to_end">Eiti į pabaigą</string>
+  <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
+  <string name="jump_to_previous">Eiti į viršų</string>
+  <!--Displayed below group names in a form's table of contents-->
+  <!--Displayed below repeat names in a form's table of contents-->
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <!--Title of overlay menu displayed when long pressing on a question in a form-->
+  <string name="edit_prompt">Keisti atsakymą</string>
   <string name="clearanswer_confirm">Pašalinti atsakymą į \"%s\"?</string>
   <string name="clear_answer">Pašalinti atsakymą</string>
   <string name="clear_answer_ask">Pašalinti šį atsakymą?</string>
   <string name="clear_answer_no">Atšaukti</string>
-  <string name="data">Išsaugotos formos</string>
-  <string name="data_saved_error">Deja, formos išsaugoti nepavyko!</string>
-  <string name="data_saved_ok">Forma sėkmingai išsaugota!</string>
-  <string name="default_completed">Numatyta kaip užbaigta</string>
-  <string name="default_completed_summary">Numatytuoju atveju pažymėti formą kaip užbaigtą</string>
-  <string name="delete_confirm">Ištrinti %s formą(-as)?</string>
-  <string name="delete_file">Ištrinti pažymėtas</string>
-  <string name="delete_no">Neištrinti</string>
+  <string name="discard_answer">Pašalinti atsakymą</string>
+  <string name="discard_group">Pašalinti grupę</string>
   <string name="delete_repeat">Pašalinti grupę</string>
   <string name="delete_repeat_ask">Pašalinti šią grupę?</string>
   <string name="delete_repeat_confirm">Pašalinti grupę \"%s\" ir visus jos pogrupius?</string>
   <string name="delete_repeat_no">Atšaukti</string>
-  <string name="delete_yes">Ištrinti formas</string>
-  <string name="discard_answer">Pašalinti atsakymą</string>
-  <string name="discard_group">Pašalinti grupę</string>
-  <string name="download">Atsiųsti parinktas</string>
-  <string name="downloading_data">Jungiamasi prie serverio</string>
-  <string name="do_not_change">Atšaukti</string>
-  <string name="do_not_exit">Atšaukti</string>
-  <string name="do_not_save">Ignoruoti pakeitimus</string>
-  <string name="enter_data">Pildyti tuščią formą</string>
-  <string name="enter_data_button">Pildyti tuščią formą</string>
-  <string name="error_occured">Įvyko klaida</string>
-  <string name="file_deleted_error">Deja, nepavyko ištrinti %1$s iš %2$s parinktų formų!</string>
-  <string name="file_deleted_ok">%s forma(-os) sėkmingai ištrintos!</string>
-  <string name="file_delete_in_progress">Deja, šiuo metu vyksta formos trynimo procesas!</string>
-  <string name="file_invalid">Failas: %s yra netinkamas.</string>
-  <string name="file_missing">Failas: %s nėra.</string>
-  <string name="finished_disk_scan">Skenavimas baigtas. Visos formos įkeltos.</string>
-  <string name="forms">Tuščios formos</string>
-  <string name="getting_location">Įkeliama vietovė</string>
-  <string name="get_barcode">Nuskaityti brūkšninį kodą</string>
-  <string name="get_forms">Atsisiųsti tuščią formą</string>
-  <string name="get_location">Įrašyti vietovę</string>
-  <string name="provider_disabled_error">Deja, padėties valdikliai yra išjungti!</string>
   <string name="invalid_answer_error">Deja, šis atsakymas yra netinkamas!</string>
-  <string name="jump_to_beginning">Eiti į pradžią</string>
-  <string name="jump_to_end">Eiti į pabaigą</string>
-  <string name="jump_to_previous">Eiti į viršų</string>
-  <string name="loading_form">Įkeliama forma</string>
-  <string name="manage_files">Ištrinti užpildytą formą</string>
-  <string name="mark_finished">Pažymėti formą kaip užbaigtą</string>
-  <string name="noselect_error">Deja, Jūs nepažymėjote jokių formų!</string>
-  <string name="no_connection">Nėra interneto ryšio</string>
-  <string name="no_items_display">Nėra ką rodyti</string>
-  <string name="ok">Gerai</string>
-  <string name="parse_error">Deja, nepavyko apdoroti formos.</string>
-  <string name="password">Slaptažodis</string>
-  <string name="play_video">Groti video</string>
-  <string name="please_wait">Prašome šiek tiek palaukti.</string>
-  <string name="please_wait_long">Prašome palaukti. Tai gali užtrukti kelias minutes.</string>
-  <string name="quit_application">Išeiti %s</string>
-  <string name="quit_entry">Išsaugoti formą ir išeiti</string>
-  <string name="refresh">Atnaujinti</string>
-  <string name="replace_barcode">Pakeisti brūkšninį kodą</string>
   <string name="required_answer_error">Atsakymas į šį klausimą yra privalomas!</string>
-  <string name="review_data">Taisyti užpildytą formą</string>
-  <string name="review_data_button">Taisyti užpildytą formą (%s)</string>
-  <string name="save_all_answers">Išsaugoti formą</string>
   <string name="save_enter_data_description">Jūs esate \"%s\" pabaigoje.</string>
-  <string name="saving_form">Forma išsaugoma</string>
-  <string name="sending_items">Siunčiama %1$s iš %2$s formų</string>
-  <string name="send_data">Išsiųsti užbaigtą formą</string>
-  <string name="send_data_button">Išsiųsti užbaigtą formą (%s)</string>
-  <string name="send_selected_data">Išsiųsti pažymėtas</string>
-  <string name="server_requires_auth">Serveris reikalauja autentifikavimo</string>
-  <string name="server_url">URL</string>
-  <string name="server_preferences">Serveris</string>
-  <string name="trigger">Gerai. Prašome tęsti.</string>
-  <string name="uploading_data">Siunčiama forma</string>
-  <string name="url_error">Netinkamas URL!</string>
-  <string name="username">Naudotojo vardas</string>
-  <string name="view_hierarchy">Atsakymų sąrašas</string>
-  <string name="general_preferences">Keisti nuostatas</string>
-  <string name="show_splash_summary">Rodyti užsklandą paleidžiant programą</string>
-  <string name="splash_path">Parinkta užsklanda</string>
-  <string name="default_splash_path">ODK numatytoji</string>
-  <string name="select_another_image">Parinkti kitą paveikslėlį</string>
-  <string name="use_odk_default">Naudoti numatytąjį paveikslėlį</string>
-  <string name="change_splash_path">Pakeisti paveikslėlį</string>
-  <string name="keep_changes">Išsaugoti pakeitimus</string>
-  <string name="change_formlist_url">Formų sąrašo kelias (pridėtas prie serverio URL)</string>
-  <string name="change_submission_url">Pateikimo kelias (pridėtas prie serverio URL)</string>
-  <string name="formlist_url">Formų sąrašo kelias</string>
-  <string name="submission_url">Pateikimo kelias</string>
-  <string name="font_size">Teksto šrifto dydis</string>
-  <string name="change_font_size">Teksto šrifto dydis</string>
-  <string name="form_download_progress">%1$s. Siunčiami medijos failai: %2$s iš %3$s</string>
-  <string name="success">Sėkmingai</string>
-  <string name="no_forms_uploaded">Deja, formos nepavyko išsiųsti.</string>
-  <string name="upload_results">Išsiuntimo rezultatai</string>
-  <string name="choose_sound">Pasirinkite garsą</string>
-  <string name="choose_video">Pasirinkite video</string>
-  <string name="choose_image">Pasirinkite paveikslėlį</string>
-  <string name="selected">Parinkta:</string>
-  <string name="select_answer">Pažymėkite atsakymą</string>
   <string name="save_form_as">Pavadinkite šią formą:</string>
   <string name="save_as_error">Pavadinimas negali būti tuščias!</string>
-  <string name="edit_prompt">Keisti atsakymą</string>
-  <string name="selected_google_account_text">Google sąskaita</string>
-  <string name="font_size_extra_large">Labai didelis</string>
-  <string name="font_size_large">Didelis</string>
-  <string name="font_size_medium">Vidutinis</string>
-  <string name="font_size_small">Mažas</string>
-  <string name="font_size_extra_small">Labai mažas</string>
-  <string name="change_view">Keisti vaizdą</string>
-  <string name="show_sent_and_unsent_forms">Išsiųstos ir neišsiųstos formos</string>
-  <string name="show_unsent_forms">Tik neišsiųstos formos</string>
-  <string name="added_on_date_at_time">\'Sukurta\' EEE, MMM dd, yyyy HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="saved_on_date_at_time">\'Išsaugota\' EEE, MMM dd, yyyy HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="finalized_on_date_at_time">\'Užbaigta\' EEE, MMM dd, yyyy HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sent_on_date_at_time">\'Išsiųsta\' EEE, MMM dd, yyyy HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sending_failed_on_date_at_time">\'Išsiųsti nepavyko\' EEE, MMM dd, yyyy HH:mm</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="version">Versija:</string>
+  <string name="mark_finished">Pažymėti formą kaip užbaigtą</string>
+  <string name="quit_entry">Išsaugoti formą ir išeiti</string>
+  <string name="data_saved_error">Deja, formos išsaugoti nepavyko!</string>
+  <string name="data_saved_ok">Forma sėkmingai išsaugota!</string>
+  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <string name="quit_application">Išeiti %s</string>
+  <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="do_not_save">Ignoruoti pakeitimus</string>
+  <string name="keep_changes">Išsaugoti pakeitimus</string>
+  <string name="saving_form">Forma išsaugoma</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <!--Text displayed when audio recording fails to start-->
+  <!--Error message displayed when copying media from a temporary directory fails-->
+  <!--##############################################
+    # FORM FEATURES
+    ##############################################-->
+  <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
   <string name="launch_app">Paleisti</string>
+  <string name="activity_not_found">Nerasta, kas galėtų valdyti: %s</string>
   <string name="no_app">Nerasta nurodyta programa. Atskaitą įveskite rankiniu būdu.</string>
-  <string name="savepoint_used">Neišsaugoti pakeitimai atkurti pagal išsaugojimo tašką!</string>
+  <string name="launch_printer">Initiate Printing</string>
+  <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
+  <string name="get_barcode">Nuskaityti brūkšninį kodą</string>
+  <string name="replace_barcode">Pakeisti brūkšninį kodą</string>
+  <string name="capture_image">Užfiksuoti kadrą</string>
+  <string name="choose_image">Pasirinkite paveikslėlį</string>
+  <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">Išsaugoti ir uždaryti</string>
   <string name="sign_button">Paimti parašą</string>
   <string name="markup_image">Anotuoti paveikslėlį</string>
   <string name="draw_image">Braižyti</string>
   <string name="reset_image">Atstatyti</string>
   <string name="set_color">Nustatyti spalvą</string>
+  <string name="capture_video">Įrašyti video</string>
+  <string name="choose_video">Pasirinkite video</string>
+  <string name="play_video">Groti video</string>
+  <!--Text for button that deletes a file that is the answer to a question-->
+  <!--Text for button that starts recording sound-->
+  <string name="capture_audio">Įrašyti garsą</string>
+  <!--Text for button that lets the user choose a sound file on their device-->
+  <string name="choose_sound">Pasirinkite garsą</string>
+  <!--Description text for button that that pauses recording sound-->
+  <!--Description text for button that that resumes recording sound-->
+  <!--Title for dialog asking the user if they want to delete a file-->
+  <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="select_answer">Pažymėkite atsakymą</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="selected">Parinkta:</string>
+  <string name="trigger">Gerai. Prašome tęsti.</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
+  <string name="file_invalid">Failas: %s yra netinkamas.</string>
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
+  <string name="file_missing">Failas: %s nėra.</string>
+  <!--Heading for a dialog which prompts the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Explanation for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Action to close a full screen dialog-->
+  <!--Heading for a dialog which prompts the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Action to save the contents of a full screen dialog-->
+  <!--##############################################
+    # GEO
+    ##############################################-->
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+   These strings are only being used to preserve compatibility with pre-existing
+    tile caches, and are not shown in the UI.-->
+  <string name="getting_location">Įkeliama vietovė</string>
+  <string name="get_location">Įrašyti vietovę</string>
+  <string name="provider_disabled_error">Deja, padėties valdikliai yra išjungti!</string>
+  <!--Action to go to Android settings. Displayed when location providers are disabled.-->
+  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--Name of an action button-->
+  <!--##############################################
+    # SEND FINALIZED FORM
+    ##############################################-->
+  <string name="uploading_data">Siunčiama forma</string>
+  <string name="noselect_error">Deja, Jūs nepažymėjote jokių formų!</string>
+  <string name="no_connection">Nėra interneto ryšio</string>
+  <string name="sending_items">Siunčiama %1$s iš %2$s formų</string>
+  <string name="send_selected_data">Išsiųsti pažymėtas</string>
+  <string name="server_requires_auth">Serveris reikalauja autentifikavimo</string>
+  <string name="no_forms_uploaded">Deja, formos nepavyko išsiųsti.</string>
+  <string name="upload_results">Išsiuntimo rezultatai</string>
+  <!--Name of option in Send Finalized Form menu to show only unsent forms (default) or show sent and unsent forms-->
+  <string name="change_view">Keisti vaizdą</string>
+  <string name="show_sent_and_unsent_forms">Išsiųstos ir neišsiųstos formos</string>
+  <string name="show_unsent_forms">Tik neišsiųstos formos</string>
+  <!--##############################################
+    # GET BLANK FORM
+    ##############################################-->
+  <string name="refresh">Atnaujinti</string>
+  <string name="download">Atsiųsti parinktas</string>
+  <string name="downloading_data">Jungiamasi prie serverio</string>
+  <string name="form_download_progress">%1$s. Siunčiami medijos failai: %2$s iš %3$s</string>
+  <string name="version">Versija:</string>
+  <!--##############################################
+    # DELETE SAVED FORM
+    ##############################################-->
+  <!--Title of a section in "Delete Saved Forms" for deleting filled/saved forms (as opposed to blank forms)-->
+  <string name="data">Išsaugotos formos</string>
+  <!--Title of a section in "Delete Saved Forms" for deleting blank forms (as opposed to filled/saved forms)-->
+  <string name="forms">Tuščios formos</string>
+  <string name="delete_confirm">Ištrinti %s formą(-as)?</string>
+  <string name="delete_file">Ištrinti pažymėtas</string>
+  <string name="delete_no">Neištrinti</string>
+  <string name="delete_yes">Ištrinti formas</string>
+  <string name="file_deleted_error">Deja, nepavyko ištrinti %1$s iš %2$s parinktų formų!</string>
+  <string name="file_deleted_ok">%s forma(-os) sėkmingai ištrintos!</string>
+  <string name="file_delete_in_progress">Deja, šiuo metu vyksta formos trynimo procesas!</string>
+  <!--##############################################
+    # GENERAL SETTINGS
+    ##############################################-->
+  <string name="general_preferences">Keisti nuostatas</string>
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section only available in beta or development builds.-->
+  <string name="server_preferences">Serveris</string>
+  <!--Label for server type setting-->
+  <string name="server_url">URL</string>
+  <!--Title of dialog for configuring server URL-->
+  <string name="change_server_url">Serverio URL</string>
+  <string name="url_error">Netinkamas URL!</string>
+  <string name="username">Naudotojo vardas</string>
+  <string name="change_username">ODK naudotojo vardas</string>
+  <string name="password">Slaptažodis</string>
+  <string name="change_password">Slaptažodis</string>
+  <string name="change_formlist_url">Formų sąrašo kelias (pridėtas prie serverio URL)</string>
+  <string name="change_submission_url">Pateikimo kelias (pridėtas prie serverio URL)</string>
+  <string name="formlist_url">Formų sąrašo kelias</string>
+  <string name="submission_url">Pateikimo kelias</string>
+  <string name="selected_google_account_text">Google sąskaita</string>
+  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
+  <!--Description for Fallback submission URL setting-->
+  <string name="font_size">Teksto šrifto dydis</string>
+  <string name="change_font_size">Teksto šrifto dydis</string>
+  <string name="font_size_extra_large">Labai didelis</string>
+  <string name="font_size_large">Didelis</string>
+  <string name="font_size_medium">Vidutinis</string>
+  <string name="font_size_small">Mažas</string>
+  <string name="font_size_extra_small">Labai mažas</string>
+  <string name="navigation">Navigation</string>
+  <string name="swipe_navigation">Use horizontal swipes</string>
+  <string name="buttons_navigation">Use forward/backward buttons</string>
+  <string name="swipe_buttons_navigation">Use swipes and buttons</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="form_forward">Next</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="show_splash_summary">Rodyti užsklandą paleidžiant programą</string>
+  <string name="splash_path">Parinkta užsklanda</string>
+  <string name="default_splash_path">ODK numatytoji</string>
+  <string name="select_another_image">Parinkti kitą paveikslėlį</string>
+  <string name="use_odk_default">Naudoti numatytąjį paveikslėlį</string>
+  <string name="change_splash_path">Pakeisti paveikslėlį</string>
+  <!--Heading for the settings category about updating blank forms-->
+  <!--Name of the setting that defines how blank forms are updated from the server.-->
+  <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
+  <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
+  <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
+  <!--Name of the setting that defines how often blank forms are updated from the server.-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
+  <string name="default_completed">Numatyta kaip užbaigta</string>
+  <string name="default_completed_summary">Numatytuoju atveju pažymėti formą kaip užbaigtą</string>
+  <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
+  <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Displayed when a device property such as the phone number is not available-->
+  <!--##############################################
+     # ADMIN SETTINGS
+     ##############################################-->
   <string name="admin_preferences">Administratoriaus nuostatos</string>
   <string name="admin_access_settings">Spustelėkite norėdami keisti administratoriaus nuostatas</string>
-  <string name="save_mid">Nebaigtos formos išsaugojimas</string>
   <string name="enter_new_password">Įveskite naują slaptažodį</string>
   <string name="admin_password_changed">Administratoriaus slaptažodis sėkmingai pakeistas</string>
   <string name="admin_password_disabled">Administratoriaus slaptažodis išjungtas</string>
@@ -153,30 +272,38 @@
   <string name="enter_admin_password">Įveskite administratoriaus slaptažodį</string>
   <string name="found_in_main">Uncheck to hide from Main Menu</string>
   <string name="found_in_settings">Uncheck to hide from General Settings</string>
-  <string name="form_forward">Next</string>
-  <string name="navigation">Navigation</string>
-  <string name="swipe_navigation">Use horizontal swipes</string>
-  <string name="buttons_navigation">Use forward/backward buttons</string>
-  <string name="swipe_buttons_navigation">Use swipes and buttons</string>
-  <string name="launch_printer">Initiate Printing</string>
-  <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
-  <string name="change_server_url">Serverio URL</string>
-  <!--Geo string added in feature-geofeatures branch-->
-  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
-      These strings are only being used to preserve compatibility with pre-existing
-       tile caches, and are not shown in the UI.-->
-  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
-  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
-  <!--<string name="submission_transport_admin_setting">Submission transport</string>-->
-  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
-  <!--Text for button that stops audio recording-->
-  <!--Text to let the user know a recording is in progress-->
-  <!--Title of Android Notification Channel for audio recording notifications-->
-  <!--Text for button that plays audio clip-->
-  <!--Text to let the user know a file is being saved-->
-  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <!--Name of a setting that determines whether users can navigate backwards in a form-->
+  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <string name="save_mid">Nebaigtos formos išsaugojimas</string>
+  <!--##############################################
+     # GOOGLE DRIVE, GOOGLE SHEETS
+     ##############################################-->
+  <!--Title of the screen that lists forms in user's Google Drive-->
+  <!--Title of the screen that lists forms shared with Google Drive user-->
+  <!--Button for navigating across Google Drive folders-->
+  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
+  <!--##############################################
+     # ABOUT
+     ##############################################-->
+  <!--##############################################
+     # SETTINGS IMPORT
+     ##############################################-->
+  <!--##############################################
+     # SCOPED STORAGE MIGRATION
+     ##############################################-->
+  <!--Action to begin a storage migration-->
+  <!--##############################################
+     # MISC
+     ##############################################-->
+  <string name="ok">Gerai</string>
+  <!--Used in many dialogs to dismiss the dialog without taking any action-->
+  <string name="cancel">Atšaukti</string>
+  <string name="cancel_loading_form">Atšaukti</string>
+  <string name="cancel_location">Atšaukti</string>
+  <string name="do_not_change">Atšaukti</string>
+  <string name="do_not_exit">Atšaukti</string>
+  <string name="success">Sėkmingai</string>
+  <string name="error_occured">Įvyko klaida</string>
+  <string name="please_wait">Prašome šiek tiek palaukti.</string>
+  <string name="please_wait_long">Prašome palaukti. Tai gali užtrukti kelias minutes.</string>
 </resources>
