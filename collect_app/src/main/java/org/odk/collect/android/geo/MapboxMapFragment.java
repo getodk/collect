@@ -783,11 +783,10 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         }
 
         class ClickListener implements OnSymbolClickListener {
-            @Override public boolean onAnnotationClick(Symbol clickedSymbol) {
+            @Override public void onAnnotationClick(Symbol clickedSymbol) {
                 if (clickedSymbol.getId() == symbol.getId() && featureClickListener != null) {
                     featureClickListener.onFeature(featureId);
                 }
-                return true;
             }
         }
 
@@ -902,23 +901,21 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         }
 
         class SymbolClickListener implements OnSymbolClickListener {
-            @Override public boolean onAnnotationClick(Symbol clickedSymbol) {
+            @Override public void onAnnotationClick(Symbol clickedSymbol) {
                 for (Symbol symbol : symbols) {
                     if (clickedSymbol.getId() == symbol.getId() && featureClickListener != null) {
                         featureClickListener.onFeature(featureId);
                         break;
                     }
                 }
-                return true;
             }
         }
 
         class LineClickListener implements OnLineClickListener {
-            @Override public boolean onAnnotationClick(Line clickedLine) {
+            @Override public void onAnnotationClick(Line clickedLine) {
                 if (clickedLine.getId() == line.getId() && featureClickListener != null) {
                     featureClickListener.onFeature(featureId);
                 }
-                return true;
             }
         }
 
