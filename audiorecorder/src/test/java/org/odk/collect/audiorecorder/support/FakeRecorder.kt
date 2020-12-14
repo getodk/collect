@@ -1,5 +1,6 @@
 package org.odk.collect.audiorecorder.support
 
+import org.odk.collect.audiorecorder.recorder.MicInUseException
 import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recorder.Recorder
 import org.odk.collect.audiorecorder.recorder.RecordingException
@@ -35,7 +36,7 @@ class FakeRecorder : Recorder {
         return cancelled
     }
 
-    @Throws(RecordingException::class)
+    @Throws(RecordingException::class, MicInUseException::class)
     override fun start(output: Output) {
         if (!failOnStart) {
             recording = true
@@ -46,7 +47,7 @@ class FakeRecorder : Recorder {
             val newFile = File.createTempFile("recording", ".mp3")
             file = newFile
         } else {
-            throw RecordingException()
+            throw Exception()
         }
     }
 

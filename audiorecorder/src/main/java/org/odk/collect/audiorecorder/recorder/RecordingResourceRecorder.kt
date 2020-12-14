@@ -12,6 +12,7 @@ internal class RecordingResourceRecorder(private val cacheDir: File, private val
     private var recordingResource: RecordingResource? = null
     private var file: File? = null
 
+    @Throws(RecordingException::class, MicInUseException::class)
     override fun start(output: Output) {
         recordingResource = recordingResourceFactory(output).also {
             val suffix = when (output) {
@@ -36,7 +37,11 @@ internal class RecordingResourceRecorder(private val cacheDir: File, private val
                 throw RecordingException()
             }
 
-            it.start()
+            try {
+                it.start()
+            } catch (e: IllegalStateException) {
+                throw MicInUseException()
+            }
         }
     }
 

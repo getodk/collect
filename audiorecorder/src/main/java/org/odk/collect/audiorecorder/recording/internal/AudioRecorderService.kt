@@ -8,7 +8,6 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.getComponent
 import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recorder.Recorder
-import org.odk.collect.audiorecorder.recorder.RecordingException
 import javax.inject.Inject
 
 internal class AudioRecorderService : Service() {
@@ -79,7 +78,7 @@ internal class AudioRecorderService : Service() {
             recorder.start(output)
             recordingRepository.start(sessionId)
             startUpdates()
-        } catch (e: RecordingException) {
+        } catch (e: Exception) {
             notification.dismiss()
             recordingRepository.failToStart(sessionId)
         }

@@ -5,7 +5,7 @@ import java.lang.Exception
 
 internal interface Recorder {
 
-    @Throws(RecordingException::class)
+    @Throws(RecordingException::class, MicInUseException::class)
     fun start(output: Output)
     fun pause()
     fun resume()
@@ -23,3 +23,4 @@ enum class Output {
 }
 
 internal class RecordingException : Exception()
+internal class MicInUseException : Exception()

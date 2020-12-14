@@ -65,6 +65,12 @@ class RecordingResourceRecorderTest {
         assertThat(recorder.isRecording(), equalTo(true))
     }
 
+    @Test(expected = MicInUseException::class)
+    fun start_whenMicIsInUse_throwsMicInUseException() {
+        recordingResource.micInUse()
+        recorder.start(Output.AAC)
+    }
+
     @Test
     fun recordingTwice_doesntUseSameOutputFile() {
         var mediaRecorder = FakeRecordingResource()
@@ -159,11 +165,12 @@ private class FakeRecordingResource : RecordingResource {
 
     private var file: File? = null
 
-    private var started: Boolean = false
-    private var prepared: Boolean = false
-    private var released: Boolean = false
-    private var paused: Boolean = false
-    private var failOnPrepare: Boolean = false
+    private var started = false
+    private var prepared = false
+    private var released = false
+    private var paused = false
+    private var failOnPrepare = false
+    private var micInUse = false
 
     override fun setOutputFile(path: String) {
         if (prepared) {
@@ -189,6 +196,10 @@ private class FakeRecordingResource : RecordingResource {
     override fun start() {
         if (!prepared) {
             throw IllegalStateException("MediaRecorder not prepared!")
+        }
+
+        if (micInUse) {
+            throw IllegalStateException()
         }
 
         started = true
@@ -244,5 +255,9 @@ private class FakeRecordingResource : RecordingResource {
 
     fun failOnPrepare() {
         failOnPrepare = true
+    }
+
+    fun micInUse() {
+        micInUse = true
     }
 }

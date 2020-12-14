@@ -16,6 +16,7 @@ internal abstract class MediaRecorderRecordingResource(private val mediaRecorder
         mediaRecorder.prepare()
     }
 
+    @Throws(IllegalStateException::class)
     override fun start() {
         mediaRecorder.start()
     }
