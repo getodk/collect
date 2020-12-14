@@ -62,7 +62,7 @@ public class AudioRecordingControllerFragment extends Fragment {
         audioRecorderViewModel.getCurrentSession().observe(getViewLifecycleOwner(), session -> {
             if (session == null) {
                 binding.getRoot().setVisibility(GONE);
-            } else if (session.getFailedToStart()) {
+            } else if (session.getFailedToStart() != null) {
                 binding.getRoot().setVisibility(GONE);
                 new MaterialAlertDialogBuilder(requireContext())
                         .setMessage(R.string.start_recording_failed)

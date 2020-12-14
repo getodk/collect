@@ -6,6 +6,8 @@ import org.hamcrest.Matchers.endsWith
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
 import org.junit.Test
+import org.odk.collect.audiorecorder.recording.MicInUseException
+import org.odk.collect.audiorecorder.recording.SetupException
 import java.io.File
 import java.io.IOException
 

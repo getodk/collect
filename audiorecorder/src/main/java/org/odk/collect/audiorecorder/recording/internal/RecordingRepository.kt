@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import org.odk.collect.audiorecorder.recording.RecordingSession
 import java.io.File
+import java.lang.Exception
 
 internal class RecordingRepository {
 
@@ -42,7 +43,7 @@ internal class RecordingRepository {
         _currentSession.value = null
     }
 
-    fun failToStart(sessionId: String) {
-        _currentSession.value = RecordingSession(sessionId, null, 0, 0, paused = false, failedToStart = true)
+    fun failToStart(sessionId: String, exception: Exception) {
+        _currentSession.value = RecordingSession(sessionId, null, 0, 0, paused = false, failedToStart = exception)
     }
 }

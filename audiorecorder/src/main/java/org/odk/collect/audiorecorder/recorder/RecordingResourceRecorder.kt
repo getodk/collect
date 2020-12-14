@@ -1,5 +1,7 @@
 package org.odk.collect.audiorecorder.recorder
 
+import org.odk.collect.audiorecorder.recording.MicInUseException
+import org.odk.collect.audiorecorder.recording.SetupException
 import timber.log.Timber
 import java.io.File
 import java.io.IOException

@@ -26,6 +26,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.android.controller.ServiceController
 import java.io.File
+import java.lang.Exception
 
 @RunWith(RobolectricTestRunner::class)
 class AudioRecorderServiceTest {
@@ -105,7 +106,7 @@ class AudioRecorderServiceTest {
 
     @Test
     fun startAction_whenRecorderStartThrowsException_stopsSelf() {
-        recorder.failOnStart()
+        recorder.failOnStart(Exception())
 
         val service = startService(createStartIntent("123"))
         assertThat(shadowOf(service.get()).isStoppedBySelf, equalTo(true))

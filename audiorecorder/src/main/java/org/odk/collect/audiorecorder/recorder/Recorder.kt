@@ -1,7 +1,8 @@
 package org.odk.collect.audiorecorder.recorder
 
+import org.odk.collect.audiorecorder.recording.MicInUseException
+import org.odk.collect.audiorecorder.recording.SetupException
 import java.io.File
-import java.lang.Exception
 
 internal interface Recorder {
 
@@ -21,6 +22,3 @@ enum class Output {
     AAC,
     AAC_LOW
 }
-
-internal class SetupException : Exception()
-internal class MicInUseException : Exception()

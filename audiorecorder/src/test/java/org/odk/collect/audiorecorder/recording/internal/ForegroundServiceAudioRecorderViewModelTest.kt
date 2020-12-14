@@ -18,6 +18,7 @@ import org.odk.collect.audiorecorder.recorder.Recorder
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelTest
+import org.odk.collect.audiorecorder.recording.MicInUseException
 import org.odk.collect.audiorecorder.setupDependencies
 import org.odk.collect.audiorecorder.support.FakeRecorder
 import org.odk.collect.testshared.FakeScheduler
@@ -111,11 +112,12 @@ class ForegroundServiceAudioRecorderViewModelTest : AudioRecorderViewModelTest()
     }
 
     @Test
-    fun start_whenRecorderStartThrowsException_setsFailedToStartToTrue() {
-        fakeRecorder.failOnStart()
+    fun start_whenRecorderStartThrowsException_setsFailedToStartToException() {
+        val exception = MicInUseException()
+        fakeRecorder.failOnStart(exception)
 
         viewModel.start("blah", Output.AAC)
         runBackground()
-        assertThat(viewModel.getCurrentSession().value?.failedToStart, equalTo(true))
+        assertThat(viewModel.getCurrentSession().value?.failedToStart, equalTo(exception))
     }
 }

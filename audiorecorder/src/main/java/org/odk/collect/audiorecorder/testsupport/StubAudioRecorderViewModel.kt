@@ -6,6 +6,7 @@ import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel
 import org.odk.collect.audiorecorder.recording.RecordingSession
 import java.io.File
+import java.lang.Exception
 
 /**
  * An implementation of audio recorder that always returns the same recording
@@ -38,7 +39,7 @@ class StubAudioRecorderViewModel(private val stubRecordingPath: String) : AudioR
 
     override fun start(sessionId: String, output: Output) {
         if (failOnStart) {
-            currentSession.value = RecordingSession(sessionId, null, 0, 0, paused = false, failedToStart = true)
+            currentSession.value = RecordingSession(sessionId, null, 0, 0, paused = false, failedToStart = Exception())
         } else {
             wasCleanedUp = false
             lastSession = sessionId
