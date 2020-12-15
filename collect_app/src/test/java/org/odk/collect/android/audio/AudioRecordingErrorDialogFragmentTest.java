@@ -1,8 +1,11 @@
 package org.odk.collect.android.audio;
 
 import android.app.Application;
+import android.content.DialogInterface;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.lifecycle.ViewModel;
@@ -11,6 +14,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
@@ -41,6 +45,20 @@ public class AudioRecordingErrorDialogFragmentTest {
                     }
                 };
             }
+        });
+    }
+
+    @Test
+    public void clickingOK_dismissesDialog() {
+        FragmentScenario<AudioRecordingErrorDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(AudioRecordingErrorDialogFragment.class);
+        scenario.onFragment(f -> {
+            AlertDialog dialog = (AlertDialog) f.getDialog();
+
+            Button button = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            assertThat(button.getText(), is(f.getString(R.string.ok)));
+
+            button.performClick();
+            assertThat(dialog.isShowing(), is(false));
         });
     }
 

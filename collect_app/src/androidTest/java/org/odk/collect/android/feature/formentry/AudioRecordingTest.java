@@ -77,24 +77,6 @@ public class AudioRecordingTest {
     }
 
     @Test
-    public void whenRecordingFailsToStart_showsError() {
-        FormEntryPage formEntryPage = new MainMenuPage(rule).assertOnPage()
-                .copyForm("internal-audio-question.xml")
-                .startBlankForm("Audio Question")
-                .assertContentDescriptionNotDisplayed(R.string.stop_recording);
-
-        stubAudioRecorderViewModel.failOnStart();
-
-        formEntryPage
-                .clickOnString(R.string.capture_audio)
-                .assertOnPage(new OkDialog(rule))
-                .assertText(R.string.start_recording_failed)
-                .clickOK(new FormEntryPage("Audio Question", rule))
-                .assertContentDescriptionNotDisplayed(R.string.stop_recording)
-                .assertEnabled(R.string.capture_audio);
-    }
-
-    @Test
     public void whileRecording_swipingToADifferentScreen_showsWarning_andStaysOnSameScreen() {
         new MainMenuPage(rule).assertOnPage()
                 .copyForm("internal-audio-question.xml")
