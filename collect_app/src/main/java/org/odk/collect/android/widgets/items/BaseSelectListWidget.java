@@ -45,7 +45,7 @@ public abstract class BaseSelectListWidget extends ItemsWidget implements MultiC
 
     @Override
     public void setFocus(Context context) {
-        if (WidgetAppearanceUtils.isAutocomplete(getQuestionDetails().getPrompt())) {
+        if (WidgetAppearanceUtils.isAutocomplete(getQuestionDetails().getPrompt()) && !questionDetails.isReadOnly()) {
             softKeyboardUtils.showSoftKeyboard(binding.choicesSearchBox);
         }
     }
