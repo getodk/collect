@@ -16,7 +16,6 @@ import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.databinding.SelectListWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.SelectItemClickListener;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 import org.odk.collect.android.widgets.utilities.SearchQueryViewModel;
@@ -47,7 +46,7 @@ public abstract class BaseSelectListWidget extends ItemsWidget implements MultiC
     @Override
     public void setFocus(Context context) {
         if (WidgetAppearanceUtils.isAutocomplete(getQuestionDetails().getPrompt())) {
-            SoftKeyboardUtils.showSoftKeyboard(binding.choicesSearchBox);
+            softKeyboardUtils.showSoftKeyboard(binding.choicesSearchBox);
         }
     }
 

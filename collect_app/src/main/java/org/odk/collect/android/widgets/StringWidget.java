@@ -36,7 +36,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 
 import timber.log.Timber;
 
@@ -79,7 +78,7 @@ public class StringWidget extends QuestionWidget {
     @Override
     public void setFocus(Context context) {
         if (!questionDetails.isReadOnly()) {
-            SoftKeyboardUtils.showSoftKeyboard(answerText);
+            softKeyboardUtils.showSoftKeyboard(answerText);
             /*
              * If you do a multi-question screen after a "add another group" dialog, this won't
              * automatically pop up. It's an Android issue.
@@ -90,7 +89,7 @@ public class StringWidget extends QuestionWidget {
              * is focused before the dialog pops up, everything works fine. great.
              */
         } else {
-            SoftKeyboardUtils.hideSoftKeyboard(answerText);
+            softKeyboardUtils.hideSoftKeyboard(answerText);
         }
     }
 

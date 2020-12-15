@@ -100,6 +100,7 @@ import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
+import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.android.views.BarcodeViewDecoder;
@@ -486,5 +487,10 @@ public class AppDependencyModule {
     @Provides
     public Clock providesClock() {
         return System::currentTimeMillis;
+    }
+
+    @Provides
+    public SoftKeyboardUtils provideSoftKeyboardUtils() {
+        return new SoftKeyboardUtils();
     }
 }

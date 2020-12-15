@@ -99,6 +99,10 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     @Inject
     public ScreenUtils screenUtils;
 
+    @Inject
+    public
+    SoftKeyboardUtils softKeyboardUtils;
+
     public QuestionWidget(Context context, QuestionDetails questionDetails) {
         super(context);
         getComponent(context).inject(this);
@@ -275,7 +279,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     }
 
     public void setFocus(Context context) {
-        SoftKeyboardUtils.hideSoftKeyboard(this);
+        softKeyboardUtils.hideSoftKeyboard(this);
     }
 
     /**

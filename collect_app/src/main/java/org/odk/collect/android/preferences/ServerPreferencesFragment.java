@@ -88,6 +88,9 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     @Inject
     ServerRepository serverRepository;
 
+    @Inject
+    SoftKeyboardUtils softKeyboardUtils;
+
     private ListPopupWindow listPopupWindow;
     private Preference selectedGoogleAccountPreference;
     private boolean allowClickSelectedGoogleAccountPreference = true;
@@ -259,7 +262,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         if (event.getAction() == MotionEvent.ACTION_UP) {
             if (event.getX() >= (v.getWidth() - ((EditText) v)
                     .getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                SoftKeyboardUtils.hideSoftKeyboard(v);
+                softKeyboardUtils.hideSoftKeyboard(v);
                 listPopupWindow.show();
                 return true;
             }

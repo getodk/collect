@@ -349,6 +349,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Inject
     FormEntryViewModel.Factory formEntryViewModelFactory;
 
+    @Inject
+    SoftKeyboardUtils softKeyboardUtils;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -1632,7 +1635,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         // drop keyboard before transition...
         if (currentView != null) {
-            SoftKeyboardUtils.hideSoftKeyboard(currentView);
+            softKeyboardUtils.hideSoftKeyboard(currentView);
         }
 
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
