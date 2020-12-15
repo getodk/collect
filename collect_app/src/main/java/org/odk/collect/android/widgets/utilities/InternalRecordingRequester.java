@@ -36,6 +36,13 @@ public class InternalRecordingRequester implements RecordingRequester {
     }
 
     @Override
+    public void onIsRecordingBlocked(Consumer<Boolean> isRecordingBlockedListener) {
+        viewModel.getCurrentSession().observe(lifecycleOwner, session -> {
+            isRecordingBlockedListener.accept(session != null && session.getFile() == null);
+        });
+    }
+
+    @Override
     public void requestRecording(FormEntryPrompt prompt) {
         permissionUtils.requestRecordAudioPermission(activity, new PermissionListener() {
             @Override
@@ -57,13 +64,6 @@ public class InternalRecordingRequester implements RecordingRequester {
         });
 
         formEntryViewModel.logFormEvent(AnalyticsEvents.AUDIO_RECORDING_INTERNAL);
-    }
-
-    @Override
-    public void onIsRecordingBlocked(Consumer<Boolean> isRecordingBlockedListener) {
-        viewModel.getCurrentSession().observe(lifecycleOwner, session -> {
-            isRecordingBlockedListener.accept(session != null && session.getFile() == null);
-        });
     }
 
     @Override
