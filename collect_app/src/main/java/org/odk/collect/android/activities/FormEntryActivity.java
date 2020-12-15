@@ -153,7 +153,7 @@ import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SnackbarUtils;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
+import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
@@ -350,7 +350,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     FormEntryViewModel.Factory formEntryViewModelFactory;
 
     @Inject
-    SoftKeyboardUtils softKeyboardUtils;
+    SoftKeyboardController softKeyboardController;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -1635,7 +1635,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         // drop keyboard before transition...
         if (currentView != null) {
-            softKeyboardUtils.hideSoftKeyboard(currentView);
+            softKeyboardController.hideSoftKeyboard(currentView);
         }
 
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(

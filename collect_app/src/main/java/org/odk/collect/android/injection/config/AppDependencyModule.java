@@ -100,7 +100,7 @@ import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
+import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.android.views.BarcodeViewDecoder;
@@ -490,7 +490,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SoftKeyboardUtils provideSoftKeyboardUtils() {
-        return new SoftKeyboardUtils();
+    public SoftKeyboardController provideSoftKeyboardController() {
+        return new SoftKeyboardController();
     }
 }

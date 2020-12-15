@@ -49,7 +49,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesChecker;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
+import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Validator;
 
@@ -89,7 +89,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     ServerRepository serverRepository;
 
     @Inject
-    SoftKeyboardUtils softKeyboardUtils;
+    SoftKeyboardController softKeyboardController;
 
     private ListPopupWindow listPopupWindow;
     private Preference selectedGoogleAccountPreference;
@@ -262,7 +262,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         if (event.getAction() == MotionEvent.ACTION_UP) {
             if (event.getX() >= (v.getWidth() - ((EditText) v)
                     .getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                softKeyboardUtils.hideSoftKeyboard(v);
+                softKeyboardController.hideSoftKeyboard(v);
                 listPopupWindow.show();
                 return true;
             }

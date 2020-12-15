@@ -148,12 +148,12 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     @Override
     public void setFocus(Context context) {
         if (hasExApp) {
-            softKeyboardUtils.hideSoftKeyboard(answerText);
+            softKeyboardController.hideSoftKeyboard(answerText);
             // focus on launch button
             launchIntentButton.requestFocus();
         } else {
             if (!getFormEntryPrompt().isReadOnly()) {
-                softKeyboardUtils.showSoftKeyboard(answerText);
+                softKeyboardController.showSoftKeyboard(answerText);
             /*
              * If you do a multi-question screen after a "add another group" dialog, this won't
              * automatically pop up. It's an Android issue.
@@ -165,7 +165,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
              * is focused before the dialog pops up, everything works fine. great.
              */
             } else {
-                softKeyboardUtils.hideSoftKeyboard(answerText);
+                softKeyboardController.hideSoftKeyboard(answerText);
             }
         }
     }
@@ -240,7 +240,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     }
 
     private void focusAnswer() {
-        softKeyboardUtils.showSoftKeyboard(answerText);
+        softKeyboardController.showSoftKeyboard(answerText);
     }
 
     private void onException(String toastText) {

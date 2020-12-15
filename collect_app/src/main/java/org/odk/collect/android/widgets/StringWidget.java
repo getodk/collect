@@ -78,7 +78,7 @@ public class StringWidget extends QuestionWidget {
     @Override
     public void setFocus(Context context) {
         if (!questionDetails.isReadOnly()) {
-            softKeyboardUtils.showSoftKeyboard(answerText);
+            softKeyboardController.showSoftKeyboard(answerText);
             /*
              * If you do a multi-question screen after a "add another group" dialog, this won't
              * automatically pop up. It's an Android issue.
@@ -89,7 +89,7 @@ public class StringWidget extends QuestionWidget {
              * is focused before the dialog pops up, everything works fine. great.
              */
         } else {
-            softKeyboardUtils.hideSoftKeyboard(answerText);
+            softKeyboardController.hideSoftKeyboard(answerText);
         }
     }
 

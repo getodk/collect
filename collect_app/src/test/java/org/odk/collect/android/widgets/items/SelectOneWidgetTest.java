@@ -34,7 +34,7 @@ import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
+import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
 import org.odk.collect.async.Scheduler;
@@ -134,14 +134,14 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
     @Test
     public void whenAutocompleteAppearanceDoesNotExist_shouldNotKeyboardBeDisplayed() {
         SelectOneWidget widget = getSpyWidget();
-        verify(widget.softKeyboardUtils, never()).showSoftKeyboard(widget.binding.choicesSearchBox);
+        verify(widget.softKeyboardController, never()).showSoftKeyboard(widget.binding.choicesSearchBox);
     }
 
     @Test
     public void whenAutocompleteAppearanceExist_shouldKeyboardBeDisplayed() {
         when(formEntryPrompt.getAppearanceHint()).thenReturn("autocomplete");
         SelectOneWidget widget = getSpyWidget();
-        verify(widget.softKeyboardUtils).showSoftKeyboard(widget.binding.choicesSearchBox);
+        verify(widget.softKeyboardController).showSoftKeyboard(widget.binding.choicesSearchBox);
     }
 
     @Test
@@ -149,7 +149,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
         when(formEntryPrompt.getAppearanceHint()).thenReturn("autocomplete");
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
         SelectOneWidget widget = getSpyWidget();
-        verify(widget.softKeyboardUtils, never()).showSoftKeyboard(widget.binding.choicesSearchBox);
+        verify(widget.softKeyboardController, never()).showSoftKeyboard(widget.binding.choicesSearchBox);
     }
 
     @Test
@@ -330,8 +330,8 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
             }
 
             @Override
-            public SoftKeyboardUtils provideSoftKeyboardUtils() {
-                return mock(SoftKeyboardUtils.class);
+            public SoftKeyboardController provideSoftKeyboardController() {
+                return mock(SoftKeyboardController.class);
             }
         });
     }

@@ -23,7 +23,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import org.odk.collect.android.application.Collect;
 
-public class SoftKeyboardUtils {
+public class SoftKeyboardController {
     public void showSoftKeyboard(@NonNull View view) {
         if (view.requestFocus()) {
             getInputMethodManager().showSoftInput(view, 0);
