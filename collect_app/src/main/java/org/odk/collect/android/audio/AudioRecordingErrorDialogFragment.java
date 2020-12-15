@@ -2,6 +2,7 @@ package org.odk.collect.android.audio;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -37,7 +38,7 @@ public class AudioRecordingErrorDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(requireContext())
-                .setPositiveButton(R.string.ok, (dialog, which) -> viewModel.cleanUp());
+                .setPositiveButton(R.string.ok, null);
 
         RecordingSession session = viewModel.getCurrentSession().getValue();
         if (session != null && session.getFailedToStart() instanceof MicInUseException) {
@@ -47,5 +48,11 @@ public class AudioRecordingErrorDialogFragment extends DialogFragment {
         }
 
         return dialogBuilder.create();
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        viewModel.cleanUp();
     }
 }

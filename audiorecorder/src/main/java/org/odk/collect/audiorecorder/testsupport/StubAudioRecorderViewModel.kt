@@ -6,7 +6,6 @@ import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel
 import org.odk.collect.audiorecorder.recording.RecordingSession
 import java.io.File
-import java.lang.Exception
 
 /**
  * An implementation of audio recorder that always returns the same recording
