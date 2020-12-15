@@ -12,8 +12,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.databinding.AudioRecordingControllerFragmentBinding;
@@ -21,13 +19,13 @@ import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
-import org.odk.collect.audiorecorder.recording.MicInUseException;
 import org.odk.collect.strings.format.LengthFormatterKt;
 
 import javax.inject.Inject;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
 
 public class AudioRecordingControllerFragment extends Fragment {
 
@@ -65,17 +63,7 @@ public class AudioRecordingControllerFragment extends Fragment {
                 binding.getRoot().setVisibility(GONE);
             } else if (session.getFailedToStart() != null) {
                 binding.getRoot().setVisibility(GONE);
-
-                MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(requireContext())
-                        .setPositiveButton(R.string.ok, (dialog, which) -> audioRecorderViewModel.cleanUp());
-
-                if (session.getFailedToStart() instanceof MicInUseException) {
-                    dialogBuilder.setMessage(R.string.mic_in_use);
-                } else {
-                    dialogBuilder.setMessage(R.string.start_recording_failed);
-                }
-
-                dialogBuilder.show();
+                showIfNotShowing(AudioRecordingErrorDialogFragment.class, getParentFragmentManager());
             } else if (session.getFile() == null) {
                 binding.getRoot().setVisibility(VISIBLE);
 
