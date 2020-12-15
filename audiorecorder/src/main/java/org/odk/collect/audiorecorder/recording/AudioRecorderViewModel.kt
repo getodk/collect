@@ -25,7 +25,10 @@ abstract class AudioRecorderViewModel : ViewModel() {
     abstract fun cleanUp()
 }
 
-data class RecordingSession(val id: String, val file: File?, val duration: Long, val amplitude: Int, val paused: Boolean, val failedToStart: Boolean) {
+data class RecordingSession(val id: String, val file: File?, val duration: Long, val amplitude: Int, val paused: Boolean, val failedToStart: Exception?) {
 
-    constructor(id: String, file: File?, duration: Long, amplitude: Int, paused: Boolean) : this(id, file, duration, amplitude, paused, false)
+    constructor(id: String, file: File?, duration: Long, amplitude: Int, paused: Boolean) : this(id, file, duration, amplitude, paused, null)
 }
+
+class SetupException : java.lang.Exception()
+class MicInUseException : java.lang.Exception()
