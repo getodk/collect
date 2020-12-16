@@ -408,7 +408,7 @@ public class ServerFormDownloader implements FormDownloader {
                         try {
                             is.close();
                         } catch (Exception e) {
-                            Timber.e(e);
+                            Timber.w(e);
                         }
                     }
                 }

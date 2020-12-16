@@ -94,7 +94,7 @@ public class PropertyManager implements IPropertyManager {
             putProperty(PROPMGR_DEVICE_ID,     "",         deviceDetailsProvider.getDeviceId());
             putProperty(PROPMGR_PHONE_NUMBER,  SCHEME_TEL,          deviceDetailsProvider.getLine1Number());
         } catch (SecurityException e) {
-            Timber.e(e);
+            Timber.i(e);
         }
 
         // User-defined properties. Will replace any above with the same PROPMGR_ name.
