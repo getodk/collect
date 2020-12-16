@@ -183,8 +183,7 @@ public class SaveFormToDisk {
         FormInstance formInstance = formController.getFormDef().getInstance();
 
         // If FormEntryActivity was started with an instance, update that instance
-        if (Collect.getInstance().getContentResolver().getType(uri).equals(
-                InstanceColumns.CONTENT_ITEM_TYPE)) {
+        if (Collect.getInstance().getContentResolver().getType(uri).equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
             // TODO: reduce geometry duplication across three branches with different database queries
             String geometryXpath = getGeometryXpathForInstance(uri);
             ContentValues geometryContentValues = extractGeometryContentValues(formInstance, geometryXpath);
@@ -200,8 +199,7 @@ public class SaveFormToDisk {
             } else {
                 Timber.w("Instance doesn't exist but we have its Uri!! %s", uri.toString());
             }
-        } else if (Collect.getInstance().getContentResolver().getType(uri).equals(
-                FormsColumns.CONTENT_ITEM_TYPE)) {
+        } else if (Collect.getInstance().getContentResolver().getType(uri).equals(FormsColumns.CONTENT_ITEM_TYPE)) {
             // If FormEntryActivity was started with a form, then either:
             // - it's the first time we're saving so we should create a new database row
             // - the user has used the manual 'save data' option so the database row already exists
@@ -231,7 +229,11 @@ public class SaveFormToDisk {
             } else {
                 Timber.i("No instance found, creating");
                 try (Cursor c = Collect.getInstance().getContentResolver().query(uri, null, null, null, null)) {
-                    // retrieve the form definition...
+                    // retrieve the form definition
+                    if (c.getCount() != 1) {
+                        Timber.w("No matching form found for %s", uri);
+                        Timber.w("Instance null: %s", instance == null);
+                    }
                     c.moveToFirst();
                     String formname = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
                     String submissionUri = null;
@@ -276,7 +278,6 @@ public class SaveFormToDisk {
         ContentValues values = new ContentValues();
 
         if (xpath == null) {
-            Timber.w("Geometry XPath is missing for instance %s!", instance);
             return null;
         }
 
