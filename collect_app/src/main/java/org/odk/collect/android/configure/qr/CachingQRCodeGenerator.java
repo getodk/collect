@@ -24,8 +24,8 @@ public class CachingQRCodeGenerator implements QRCodeGenerator {
     private static final String SETTINGS_MD5_FILE = ".collect-settings-hash";
 
     @Override
-    public String generateQRCode(Collection<String> selectedPasswordKeys) throws JSONException, NoSuchAlgorithmException, IOException, WriterException {
-        String preferencesString = SharedPreferencesUtils.getJSONFromPreferences(selectedPasswordKeys);
+    public String generateQRCode(Collection<String> includedPasswordKeys) throws JSONException, NoSuchAlgorithmException, IOException, WriterException {
+        String preferencesString = SharedPreferencesUtils.getJSONFromPreferences(includedPasswordKeys);
 
         MessageDigest md = MessageDigest.getInstance("MD5");
         md.update(preferencesString.getBytes());

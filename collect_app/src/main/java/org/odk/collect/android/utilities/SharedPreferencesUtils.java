@@ -38,8 +38,8 @@ public final class SharedPreferencesUtils {
 
     }
 
-    public static String getJSONFromPreferences(Collection<String> passwordKeys) throws JSONException {
-        Collection<String> keys = new ArrayList<>(passwordKeys);
+    public static String getJSONFromPreferences(Collection<String> includedPasswordKeys) throws JSONException {
+        Collection<String> keys = new ArrayList<>(includedPasswordKeys);
         keys.addAll(DEFAULTS.keySet());
         JSONObject sharedPrefJson = getModifiedPrefs(keys);
         Timber.i(sharedPrefJson.toString());
