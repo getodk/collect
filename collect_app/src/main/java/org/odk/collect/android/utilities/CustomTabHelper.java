@@ -60,6 +60,7 @@ public class CustomTabHelper {
     }
 
     public void openUri(Context context, Uri uri) {
+        uri = uri.normalizeScheme();
         try {
             openUriInChromeTabs(context, uri);
         } catch (Exception | Error e1) {
