@@ -21,7 +21,6 @@ import org.json.JSONObject;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -39,37 +38,21 @@ public final class SharedPreferencesUtils {
     }
 
     public static String getJSONFromPreferences(Collection<String> includedPasswordKeys) throws JSONException {
-        Collection<String> keys = new ArrayList<>(includedPasswordKeys);
-        keys.addAll(DEFAULTS.keySet());
-        JSONObject sharedPrefJson = getModifiedPrefs(keys);
+        JSONObject sharedPrefJson = getModifiedPrefs(includedPasswordKeys);
         Timber.i(sharedPrefJson.toString());
         return sharedPrefJson.toString();
     }
 
-    private static JSONObject getModifiedPrefs(Collection<String> keys) throws JSONException {
+    private static JSONObject getModifiedPrefs(Collection<String> includedPasswordKeys) throws JSONException {
         JSONObject prefs = new JSONObject();
         JSONObject adminPrefs = new JSONObject();
         JSONObject generalPrefs = new JSONObject();
 
-        // checking for admin password
-        if (keys.contains(KEY_ADMIN_PW)) {
-            String password = (String) AdminSharedPreferences.getInstance().get(KEY_ADMIN_PW);
-            if (!password.equals("")) {
-                adminPrefs.put(KEY_ADMIN_PW, password);
+        for (String key : DEFAULTS.keySet()) {
+            if (key.equals(KEY_PASSWORD) && !includedPasswordKeys.contains(KEY_PASSWORD)) {
+                continue;
             }
-            keys.remove(KEY_ADMIN_PW);
-        }
 
-        // checking for server password
-        if (keys.contains(KEY_PASSWORD)) {
-            String password = (String) GeneralSharedPreferences.getInstance().get(KEY_PASSWORD);
-            if (!password.equals("")) {
-                adminPrefs.put(KEY_PASSWORD, password);
-            }
-            keys.remove(KEY_PASSWORD);
-        }
-
-        for (String key : keys) {
             Object defaultValue = DEFAULTS.get(key);
             Object value = GeneralSharedPreferences.getInstance().get(key);
 
@@ -87,6 +70,9 @@ public final class SharedPreferencesUtils {
         prefs.put("general", generalPrefs);
 
         for (String key : ALL_KEYS) {
+            if (key.equals(KEY_ADMIN_PW) && !includedPasswordKeys.contains(KEY_ADMIN_PW)) {
+                continue;
+            }
 
             Object defaultValue = AdminSharedPreferences.getInstance().getDefault(key);
             Object value = AdminSharedPreferences.getInstance().get(key);
