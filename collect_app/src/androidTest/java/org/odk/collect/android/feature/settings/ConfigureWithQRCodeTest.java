@@ -14,11 +14,9 @@ import androidx.work.WorkManager;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
-import com.google.zxing.WriterException;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
-import org.json.JSONException;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,6 +25,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.preferences.JsonPreferencesGenerator;
 import org.odk.collect.android.support.CallbackCountingTaskExecutorRule;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CountingTaskExecutorIdlingResource;
@@ -45,7 +44,6 @@ import org.odk.collect.async.Scheduler;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
@@ -170,7 +168,7 @@ public class ConfigureWithQRCodeTest {
         private static final int CHECKER_BACKGROUND_DRAWABLE_ID = R.drawable.checker_background;
 
         @Override
-        public String generateQRCode(Collection<String> selectedPasswordKeys) throws JSONException, NoSuchAlgorithmException, IOException, WriterException {
+        public String generateQRCode(Collection<String> selectedPasswordKeys, JsonPreferencesGenerator jsonPreferencesGenerator) {
             return getQRCodeFilePath();
         }
 
