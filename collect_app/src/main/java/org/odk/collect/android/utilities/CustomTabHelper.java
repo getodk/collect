@@ -72,15 +72,15 @@ public class CustomTabHelper {
         }
     }
 
-    private void openUriInChromeTabs(Context context, Uri uri) {
+    void openUriInChromeTabs(Context context, Uri uri) {
         new CustomTabsIntent.Builder().build().launchUrl(context, uri);
     }
 
-    private void openUriInExternalBrowser(Context context, Uri uri) {
+    void openUriInExternalBrowser(Context context, Uri uri) {
         context.startActivity(new Intent(Intent.ACTION_VIEW, uri));
     }
 
-    private void openUriInWebView(Context context, Uri uri) {
+    void openUriInWebView(Context context, Uri uri) {
         Intent intent = new Intent(context, WebViewActivity.class);
         intent.putExtra(OPEN_URL, uri.toString());
         context.startActivity(intent);    }
