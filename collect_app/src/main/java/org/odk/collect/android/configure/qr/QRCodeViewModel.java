@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.preferences.JsonPreferencesGenerator;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.async.Scheduler;
@@ -25,6 +26,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 class QRCodeViewModel extends ViewModel {
 
     private final QRCodeGenerator qrCodeGenerator;
+    private final JsonPreferencesGenerator jsonPreferencesGenerator;
     private final SharedPreferences generalSharedPreferences;
     private final SharedPreferences adminSharedPreferences;
     private final Scheduler scheduler;
@@ -33,8 +35,10 @@ class QRCodeViewModel extends ViewModel {
     private final MutableLiveData<Integer> warning = new MutableLiveData<>();
     private Collection<String> includedKeys = asList(KEY_ADMIN_PW, KEY_PASSWORD);
 
-    QRCodeViewModel(QRCodeGenerator qrCodeGenerator, SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences, Scheduler scheduler) {
+    QRCodeViewModel(QRCodeGenerator qrCodeGenerator, JsonPreferencesGenerator jsonPreferencesGenerator,
+                    SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences, Scheduler scheduler) {
         this.qrCodeGenerator = qrCodeGenerator;
+        this.jsonPreferencesGenerator = jsonPreferencesGenerator;
         this.generalSharedPreferences = generalSharedPreferences;
         this.adminSharedPreferences = adminSharedPreferences;
         this.scheduler = scheduler;
@@ -63,7 +67,7 @@ class QRCodeViewModel extends ViewModel {
         scheduler.immediate(
                 () -> {
                     try {
-                        String filePath = qrCodeGenerator.generateQRCode(includedKeys);
+                        String filePath = qrCodeGenerator.generateQRCode(includedKeys, jsonPreferencesGenerator);
 
                         BitmapFactory.Options options = new BitmapFactory.Options();
                         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
@@ -103,11 +107,14 @@ class QRCodeViewModel extends ViewModel {
     public static class Factory implements ViewModelProvider.Factory {
 
         private final QRCodeGenerator qrCodeGenerator;
+        private final JsonPreferencesGenerator jsonPreferencesGenerator;
         private final PreferencesProvider preferencesProvider;
         private final Scheduler scheduler;
 
-        Factory(QRCodeGenerator qrCodeGenerator, PreferencesProvider preferencesProvider, Scheduler scheduler) {
+        Factory(QRCodeGenerator qrCodeGenerator, JsonPreferencesGenerator jsonPreferencesGenerator,
+                PreferencesProvider preferencesProvider, Scheduler scheduler) {
             this.qrCodeGenerator = qrCodeGenerator;
+            this.jsonPreferencesGenerator = jsonPreferencesGenerator;
             this.preferencesProvider = preferencesProvider;
             this.scheduler = scheduler;
         }
@@ -117,6 +124,7 @@ class QRCodeViewModel extends ViewModel {
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             return (T) new QRCodeViewModel(
                     qrCodeGenerator,
+                    jsonPreferencesGenerator,
                     preferencesProvider.getGeneralSharedPreferences(),
                     preferencesProvider.getAdminSharedPreferences(),
                     scheduler
