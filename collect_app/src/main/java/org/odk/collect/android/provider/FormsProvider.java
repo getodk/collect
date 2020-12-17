@@ -65,11 +65,7 @@ public class FormsProvider extends ContentProvider {
             return null;
         }
 
-        boolean databaseNeedsUpgrade = FormsDatabaseHelper.databaseNeedsUpgrade();
-        if (dbHelper == null || (databaseNeedsUpgrade && !FormsDatabaseHelper.isDatabaseBeingMigrated())) {
-            if (databaseNeedsUpgrade) {
-                FormsDatabaseHelper.databaseMigrationStarted();
-            }
+        if (dbHelper == null) {
             recreateDatabaseHelper();
         }
 

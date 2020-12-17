@@ -23,8 +23,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 
-import java.io.File;
-
 import timber.log.Timber;
 
 import static org.odk.collect.android.database.DatabaseConstants.FORMS_DATABASE_VERSION;
@@ -36,17 +34,11 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "forms.db";
 
-    private static boolean isDatabaseBeingMigrated;
-
     private final FormDatabaseMigrator formDatabaseMigrator;
 
     public FormsDatabaseHelper() {
         super(new DatabaseContext(new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA)), DATABASE_NAME, null, FORMS_DATABASE_VERSION);
         formDatabaseMigrator = new FormDatabaseMigrator();
-    }
-
-    public static String getDatabasePath() {
-        return new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA) + File.separator + DATABASE_NAME;
     }
 
     @Override
@@ -63,9 +55,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
             formDatabaseMigrator.onUpgrade(db, oldVersion);
 
             Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
-            isDatabaseBeingMigrated = false;
         } catch (SQLException e) {
-            isDatabaseBeingMigrated = false;
             throw e;
         }
     }
@@ -76,30 +66,8 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
             formDatabaseMigrator.onDowngrade(db);
 
             Timber.i("Downgrading database from %d to %d completed with success.", oldVersion, newVersion);
-            isDatabaseBeingMigrated = false;
         } catch (SQLException e) {
-            isDatabaseBeingMigrated = false;
             throw e;
         }
-    }
-
-    public static void databaseMigrationStarted() {
-        isDatabaseBeingMigrated = true;
-    }
-
-    public static boolean isDatabaseBeingMigrated() {
-        return isDatabaseBeingMigrated;
-    }
-
-    public static boolean databaseNeedsUpgrade() {
-        boolean isDatabaseHelperOutOfDate = false;
-        try {
-            SQLiteDatabase db = SQLiteDatabase.openDatabase(FormsDatabaseHelper.getDatabasePath(), null, SQLiteDatabase.OPEN_READONLY);
-            isDatabaseHelperOutOfDate = FORMS_DATABASE_VERSION != db.getVersion();
-            db.close();
-        } catch (SQLException e) {
-            Timber.i(e);
-        }
-        return isDatabaseHelperOutOfDate;
     }
 }
