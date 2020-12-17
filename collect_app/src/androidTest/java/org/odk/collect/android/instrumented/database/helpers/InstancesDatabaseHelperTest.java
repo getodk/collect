@@ -75,7 +75,7 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
     @Test
     public void testMigration() throws IOException {
         copyFileFromAssets("database" + File.separator + dbFilename, databasePath);
-        InstancesDatabaseHelper databaseHelper = new InstancesDatabaseHelper(new InstanceDatabaseMigrator());
+        InstancesDatabaseHelper databaseHelper = new InstancesDatabaseHelper(new InstanceDatabaseMigrator(), new StoragePathProvider());
         ensureMigrationAppliesFully(databaseHelper);
 
         SQLiteDatabase db = databaseHelper.getReadableDatabase();

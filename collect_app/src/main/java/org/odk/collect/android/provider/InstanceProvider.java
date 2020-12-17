@@ -74,7 +74,7 @@ public class InstanceProvider extends ContentProvider {
     }
 
     public static void recreateDatabaseHelper() {
-        dbHelper = new InstancesDatabaseHelper(new InstanceDatabaseMigrator());
+        dbHelper = new InstancesDatabaseHelper(new InstanceDatabaseMigrator(), new StoragePathProvider());
     }
 
     @SuppressWarnings("PMD.NonThreadSafeSingleton") // PMD thinks the `= null` is setting a singleton here

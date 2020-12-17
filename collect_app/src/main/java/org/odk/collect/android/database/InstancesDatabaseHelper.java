@@ -33,8 +33,8 @@ import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_DATAB
 public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     private final DatabaseMigrator databaseMigrator;
 
-    public InstancesDatabaseHelper(DatabaseMigrator databaseMigrator) {
-        super(new DatabaseContext(new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA)), INSTANCES_DATABASE_NAME, null, INSTANCES_DATABASE_VERSION);
+    public InstancesDatabaseHelper(DatabaseMigrator databaseMigrator, StoragePathProvider storagePathProvider) {
+        super(new DatabaseContext(storagePathProvider.getDirPath(StorageSubdirectory.METADATA)), INSTANCES_DATABASE_NAME, null, INSTANCES_DATABASE_VERSION);
         this.databaseMigrator = databaseMigrator;
     }
 
