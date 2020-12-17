@@ -23,6 +23,7 @@ import org.javarosa.core.model.SelectChoice;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
+import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.fastexternalitemset.ItemsetDao;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.external.ExternalDataUtil;
@@ -80,6 +81,8 @@ public abstract class ItemsWidget extends QuestionWidget {
             items = ExternalDataUtil.populateExternalChoices(getFormEntryPrompt(), xpathFuncExpr);
         } catch (FileNotFoundException e) {
             showWarning(getContext().getString(R.string.file_missing, e.getMessage()));
+        } catch (ExternalDataException e) {
+            showWarning(e.getMessage());
         }
     }
 
