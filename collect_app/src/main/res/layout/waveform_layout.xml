@@ -5,10 +5,9 @@
     android:layout_height="match_parent"
     app:chunkAlignTo="bottom"
     app:chunkColor="?colorSecondary"
-    app:chunkMaxHeight="80dp"
     app:chunkMinHeight="2dp"
     app:chunkRoundedCorners="true"
     app:chunkSoftTransition="true"
     app:chunkSpace="1dp"
-    app:chunkWidth="2dp" />
+    app:chunkWidth="5dp" />
 

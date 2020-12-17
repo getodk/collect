@@ -42,6 +42,12 @@ public class Waveform extends FrameLayout {
         audioRecordView = WaveformLayoutBinding.inflate(LayoutInflater.from(context), this, true).getRoot();
     }
 
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        audioRecordView.setChunkMaxHeight(getLayoutParams().height);
+    }
+
     public void addAmplitude(int amplitude) {
         if (SIMULATED) {
             amplitude = new Random().nextInt(22760);
