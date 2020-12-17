@@ -26,6 +26,8 @@ import java.io.IOException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.odk.collect.android.support.RobolectricHelpers.getFragmentByClass;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(AndroidJUnit4.class)
@@ -52,8 +54,8 @@ public class AudioRecordingControllerFragmentTest {
             }
         });
 
-        // Needed to inflate views with theme attributes
-        ApplicationProvider.getApplicationContext().setTheme(R.style.Theme_MaterialComponents);
+        // Needed to inflate views with theme attributes - needs to be a "real theme" because of DialogFragment
+        ApplicationProvider.getApplicationContext().setTheme(R.style.Theme_Collect_Light);
 
         // View only shows when recording in progress
         audioRecorderViewModel.start("session", Output.AAC);
@@ -149,6 +151,18 @@ public class AudioRecordingControllerFragmentTest {
         FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
             assertThat(fragment.binding.pauseRecording.getVisibility(), is(View.VISIBLE));
+        });
+    }
+
+    @Test
+    public void whenThereIsAnErrorStartingRecording_showsErrorDialog() {
+        FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
+
+        audioRecorderViewModel.failOnStart();
+        audioRecorderViewModel.start("blah", Output.AAC);
+        scenario.onFragment(fragment -> {
+            AudioRecordingErrorDialogFragment dialog = getFragmentByClass(fragment.getParentFragmentManager(), AudioRecordingErrorDialogFragment.class);
+            assertThat(dialog, notNullValue());
         });
     }
 }

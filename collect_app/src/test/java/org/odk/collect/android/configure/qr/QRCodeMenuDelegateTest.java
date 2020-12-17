@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.preferences.JsonPreferencesGenerator;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileProvider;
@@ -35,6 +36,7 @@ public class QRCodeMenuDelegateTest {
 
     private final ActivityAvailability activityAvailability = mock(ActivityAvailability.class);
     private final QRCodeGenerator qrCodeGenerator = mock(QRCodeGenerator.class);
+    private final JsonPreferencesGenerator jsonPreferencesGenerator = mock(JsonPreferencesGenerator.class);
     private final FileProvider fileProvider = mock(FileProvider.class);
     private final FakeScheduler fakeScheduler = new FakeScheduler();
 
@@ -44,7 +46,8 @@ public class QRCodeMenuDelegateTest {
     @Before
     public void setup() {
         activity = Robolectric.setupActivity(FragmentActivity.class);
-        menuDelegate = new QRCodeMenuDelegate(activity, activityAvailability, qrCodeGenerator, fileProvider, new PreferencesProvider(getApplicationContext()), fakeScheduler);
+        menuDelegate = new QRCodeMenuDelegate(activity, activityAvailability, qrCodeGenerator,
+                jsonPreferencesGenerator, fileProvider, new PreferencesProvider(getApplicationContext()), fakeScheduler);
     }
 
     @Test
@@ -70,7 +73,7 @@ public class QRCodeMenuDelegateTest {
 
     @Test
     public void clickingOnShare_beforeQRCodeIsGenerated_doesNothing() throws Exception {
-        when(qrCodeGenerator.generateQRCode(any())).thenReturn("qr.png");
+        when(qrCodeGenerator.generateQRCode(any(), any())).thenReturn("qr.png");
         when(fileProvider.getURIForFile("qr.png")).thenReturn(Uri.parse("uri"));
 
         menuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_item_share));
@@ -80,7 +83,7 @@ public class QRCodeMenuDelegateTest {
 
     @Test
     public void clickingOnShare_whenQRCodeIsGenerated_startsShareIntent() throws Exception {
-        when(qrCodeGenerator.generateQRCode(any())).thenReturn("qr.png");
+        when(qrCodeGenerator.generateQRCode(any(), any())).thenReturn("qr.png");
         when(fileProvider.getURIForFile("qr.png")).thenReturn(Uri.parse("uri"));
         fakeScheduler.runBackground();
 

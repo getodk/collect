@@ -39,9 +39,9 @@ public class RecordingRequesterFactory {
         if (audioQuality != null && (audioQuality.equals("normal") || audioQuality.equals("voice-only") || audioQuality.equals("low"))) {
             return new InternalRecordingRequester(activity, audioRecorderViewModel, permissionUtils, lifecycle, questionMediaManager, formEntryViewModel);
         } else if (audioQuality != null && audioQuality.equals("external")) {
-            return new ExternalAppRecordingRequester(activity, activityAvailability, waitingForDataRegistry, permissionUtils, formEntryViewModel);
+            return new ExternalAppRecordingRequester(activity, activityAvailability, waitingForDataRegistry, permissionUtils, formEntryViewModel, audioRecorderViewModel, lifecycle);
         } else if (externalRecorderPreferred) {
-            return new ExternalAppRecordingRequester(activity, activityAvailability, waitingForDataRegistry, permissionUtils, formEntryViewModel);
+            return new ExternalAppRecordingRequester(activity, activityAvailability, waitingForDataRegistry, permissionUtils, formEntryViewModel, audioRecorderViewModel, lifecycle);
         } else {
             return new InternalRecordingRequester(activity, audioRecorderViewModel, permissionUtils, lifecycle, questionMediaManager, formEntryViewModel);
         }

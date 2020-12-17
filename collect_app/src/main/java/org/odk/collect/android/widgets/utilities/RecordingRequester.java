@@ -7,9 +7,9 @@ import org.javarosa.form.api.FormEntryPrompt;
 import java.util.function.Consumer;
 
 public interface RecordingRequester {
-    void requestRecording(FormEntryPrompt prompt);
-
     void onIsRecordingBlocked(Consumer<Boolean> isRecordingListener);
+
+    void requestRecording(FormEntryPrompt prompt);
 
     void onRecordingInProgress(FormEntryPrompt prompt, Consumer<Pair<Long, Integer>> durationListener);
 

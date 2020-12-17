@@ -145,7 +145,11 @@ public final class DialogUtils {
             // We need to execute this transaction. Otherwise a follow up call to this method
             // could happen before the Fragment exists in the Fragment Manager and so the
             // call to findFragmentByTag would return null and result in second dialog being show.
-            fragmentManager.executePendingTransactions();
+            try {
+                fragmentManager.executePendingTransactions();
+            } catch (IllegalStateException e) {
+                Timber.w(e);
+            }
         }
     }
 
@@ -158,7 +162,11 @@ public final class DialogUtils {
             // could happen before the Fragment is dismissed in Fragment Manager and so the
             // call to findFragmentByTag would return something (not null) and as a result the
             // next dialog won't be displayed.
-            fragmentManager.executePendingTransactions();
+            try {
+                fragmentManager.executePendingTransactions();
+            } catch (IllegalStateException e) {
+                Timber.w(e);
+            }
         }
     }
 

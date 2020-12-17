@@ -82,6 +82,7 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.JsonPreferencesGenerator;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -492,5 +493,10 @@ public class AppDependencyModule {
     @Provides
     public SoftKeyboardController provideSoftKeyboardController() {
         return new SoftKeyboardController();
+    }
+  
+    @Provides
+    public JsonPreferencesGenerator providesJsonPreferencesGenerator() {
+        return new JsonPreferencesGenerator();
     }
 }

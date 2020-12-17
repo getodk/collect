@@ -20,6 +20,7 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.audio.AudioRecordingControllerFragment;
+import org.odk.collect.android.audio.AudioRecordingErrorDialogFragment;
 import org.odk.collect.android.backgroundwork.AutoSendTaskSpec;
 import org.odk.collect.android.backgroundwork.AutoUpdateTaskSpec;
 import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec;
@@ -219,6 +220,8 @@ public interface AppDependencyComponent {
     void inject(AudioRecordingControllerFragment audioRecordingControllerFragment);
 
     void inject(SaveAnswerFileErrorDialogFragment saveAnswerFileErrorDialogFragment);
+
+    void inject(AudioRecordingErrorDialogFragment audioRecordingErrorDialogFragment);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 

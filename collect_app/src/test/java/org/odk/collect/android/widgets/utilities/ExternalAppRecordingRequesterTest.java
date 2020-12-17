@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.provider.MediaStore;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.form.api.FormEntryPrompt;
@@ -16,6 +17,9 @@ import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
+import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
+import org.odk.collect.audiorecorder.recording.RecordingSession;
+import org.odk.collect.testshared.FakeLifecycleOwner;
 import org.robolectric.Robolectric;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowToast;
@@ -39,6 +43,7 @@ public class ExternalAppRecordingRequesterTest {
     private final ActivityAvailability activityAvailability = mock(ActivityAvailability.class);
     private final FakePermissionUtils permissionUtils = new FakePermissionUtils();
     private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
+    private final AudioRecorderViewModel audioRecorderViewModel = mock(AudioRecorderViewModel.class);
 
     private Activity activity;
     private ExternalAppRecordingRequester requester;
@@ -46,7 +51,7 @@ public class ExternalAppRecordingRequesterTest {
     @Before
     public void setup() {
         activity = Robolectric.buildActivity(Activity.class).get();
-        requester = new ExternalAppRecordingRequester(activity, activityAvailability, waitingForDataRegistry, permissionUtils, mock(FormEntryViewModel.class));
+        requester = new ExternalAppRecordingRequester(activity, activityAvailability, waitingForDataRegistry, permissionUtils, mock(FormEntryViewModel.class), audioRecorderViewModel, new FakeLifecycleOwner());
     }
 
     @Test
@@ -95,9 +100,15 @@ public class ExternalAppRecordingRequesterTest {
     }
 
     @Test
-    public void onIsRecordingChanged_alwaysCallsBackWithFalse() {
+    public void onIsRecordingChangedBlocked_listensToCurrentSessionOnAudioRecorderViewModel() {
+        MutableLiveData<RecordingSession> liveData = new MutableLiveData<>(null);
+        when(audioRecorderViewModel.getCurrentSession()).thenReturn(liveData);
+
         Consumer<Boolean> listener = mock(Consumer.class);
         requester.onIsRecordingBlocked(listener);
         verify(listener).accept(false);
+
+        liveData.setValue(new RecordingSession("blah", null, 0, 0, false));
+        verify(listener).accept(true);
     }
 }

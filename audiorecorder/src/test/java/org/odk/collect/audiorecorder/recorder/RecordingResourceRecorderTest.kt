@@ -6,6 +6,8 @@ import org.hamcrest.Matchers.endsWith
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
 import org.junit.Test
+import org.odk.collect.audiorecorder.recording.MicInUseException
+import org.odk.collect.audiorecorder.recording.SetupException
 import java.io.File
 import java.io.IOException
 
@@ -80,15 +82,21 @@ class RecordingResourceRecorderTest {
         assertThat(outputFile1!!.absolutePath, not(equalTo(outputFile2!!.absolutePath)))
     }
 
-    @Test(expected = RecordingException::class)
-    fun start_whenFileCantBeCreated_throwsRecordingException() {
+    @Test(expected = SetupException::class)
+    fun start_whenFileCantBeCreated_throwsSetupException() {
         cacheDir.deleteRecursively()
         recorder.start(Output.AAC)
     }
 
-    @Test(expected = RecordingException::class)
-    fun start_whenPrepareFails_throwsRecordingException() {
+    @Test(expected = SetupException::class)
+    fun start_whenPrepareFails_throwsSetupException() {
         recordingResource.failOnPrepare()
+        recorder.start(Output.AAC)
+    }
+
+    @Test(expected = MicInUseException::class)
+    fun start_whenMicIsInUse_throwsMicInUseException() {
+        recordingResource.micInUse()
         recorder.start(Output.AAC)
     }
 
@@ -159,11 +167,12 @@ private class FakeRecordingResource : RecordingResource {
 
     private var file: File? = null
 
-    private var started: Boolean = false
-    private var prepared: Boolean = false
-    private var released: Boolean = false
-    private var paused: Boolean = false
-    private var failOnPrepare: Boolean = false
+    private var started = false
+    private var prepared = false
+    private var released = false
+    private var paused = false
+    private var failOnPrepare = false
+    private var micInUse = false
 
     override fun setOutputFile(path: String) {
         if (prepared) {
@@ -189,6 +198,10 @@ private class FakeRecordingResource : RecordingResource {
     override fun start() {
         if (!prepared) {
             throw IllegalStateException("MediaRecorder not prepared!")
+        }
+
+        if (micInUse) {
+            throw IllegalStateException()
         }
 
         started = true
@@ -244,5 +257,9 @@ private class FakeRecordingResource : RecordingResource {
 
     fun failOnPrepare() {
         failOnPrepare = true
+    }
+
+    fun micInUse() {
+        micInUse = true
     }
 }

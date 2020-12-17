@@ -30,6 +30,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.preferences.JsonPreferencesGenerator;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.async.Scheduler;
 
@@ -73,6 +74,9 @@ public class ShowQRCodeFragment extends Fragment {
     @Inject
     public Scheduler scheduler;
 
+    @Inject
+    JsonPreferencesGenerator jsonPreferencesGenerator;
+
     private QRCodeViewModel qrCodeViewModel;
 
     @Nullable
@@ -113,7 +117,7 @@ public class ShowQRCodeFragment extends Fragment {
         DaggerUtils.getComponent(context).inject(this);
         qrCodeViewModel = new ViewModelProvider(
                 requireActivity(),
-                new QRCodeViewModel.Factory(qrCodeGenerator, preferencesProvider, scheduler)
+                new QRCodeViewModel.Factory(qrCodeGenerator, jsonPreferencesGenerator, preferencesProvider, scheduler)
         ).get(QRCodeViewModel.class);
     }
 

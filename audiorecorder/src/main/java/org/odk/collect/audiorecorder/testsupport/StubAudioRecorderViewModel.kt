@@ -38,7 +38,7 @@ class StubAudioRecorderViewModel(private val stubRecordingPath: String) : AudioR
 
     override fun start(sessionId: String, output: Output) {
         if (failOnStart) {
-            currentSession.value = RecordingSession(sessionId, null, 0, 0, paused = false, failedToStart = true)
+            currentSession.value = RecordingSession(sessionId, null, 0, 0, paused = false, failedToStart = Exception())
         } else {
             wasCleanedUp = false
             lastSession = sessionId
