@@ -25,7 +25,8 @@ import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
-import static org.odk.collect.android.database.InstancesDatabaseHelper.INSTANCES_TABLE_NAME;
+import static org.odk.collect.android.database.InstanceDatabaseMigrator.CURRENT_VERSION_COLUMN_NAMES;
+import static org.odk.collect.android.database.InstanceDatabaseMigrator.INSTANCES_TABLE_NAME;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
 @RunWith(Parameterized.class)
@@ -79,7 +80,7 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
         assertThat(db.getVersion(), is(InstancesDatabaseHelper.DATABASE_VERSION));
 
         List<String> newColumnNames = SQLiteUtils.getColumnNames(db, INSTANCES_TABLE_NAME);
-        assertThat(newColumnNames, contains(InstancesDatabaseHelper.CURRENT_VERSION_COLUMN_NAMES));
+        assertThat(newColumnNames, contains(CURRENT_VERSION_COLUMN_NAMES));
         assertThatInstancesAreKeptAfterMigrating();
     }
 
