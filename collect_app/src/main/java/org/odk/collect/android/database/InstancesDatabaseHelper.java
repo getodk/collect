@@ -16,7 +16,6 @@
 
 package org.odk.collect.android.database;
 
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -25,7 +24,6 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.SQLiteUtils;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -66,10 +64,6 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
         super(new DatabaseContext(new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA)), DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public static String getDatabasePath() {
-        return new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA) + File.separator + DATABASE_NAME;
-    }
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         createInstancesTableV5(db, INSTANCES_TABLE_NAME);
@@ -85,45 +79,37 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     @SuppressWarnings({"checkstyle:FallThrough"})
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        try {
-            Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
+        Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
 
-            switch (oldVersion) {
-                case 1:
-                    upgradeToVersion2(db);
-                case 2:
-                    upgradeToVersion3(db);
-                case 3:
-                    upgradeToVersion4(db);
-                case 4:
-                    upgradeToVersion5(db);
-                case 5:
-                    upgradeToVersion6(db, INSTANCES_TABLE_NAME);
-                    break;
-                default:
-                    Timber.i("Unknown version %d", oldVersion);
-            }
-
-            Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
-        } catch (SQLException e) {
-            throw e;
+        switch (oldVersion) {
+            case 1:
+                upgradeToVersion2(db);
+            case 2:
+                upgradeToVersion3(db);
+            case 3:
+                upgradeToVersion4(db);
+            case 4:
+                upgradeToVersion5(db);
+            case 5:
+                upgradeToVersion6(db, INSTANCES_TABLE_NAME);
+                break;
+            default:
+                Timber.i("Unknown version %d", oldVersion);
         }
+
+        Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
     }
 
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        try {
-            Timber.i("Downgrading database from version %d to %d", oldVersion, newVersion);
+        Timber.i("Downgrading database from version %d to %d", oldVersion, newVersion);
 
-            String temporaryTableName = INSTANCES_TABLE_NAME + "_tmp";
-            createInstancesTableV5(db, temporaryTableName);
-            upgradeToVersion6(db, temporaryTableName);
+        String temporaryTableName = INSTANCES_TABLE_NAME + "_tmp";
+        createInstancesTableV5(db, temporaryTableName);
+        upgradeToVersion6(db, temporaryTableName);
 
-            dropObsoleteColumns(db, CURRENT_VERSION_COLUMN_NAMES, temporaryTableName);
-            Timber.i("Downgrading database from version %d to %d completed with success.", oldVersion, newVersion);
-        } catch (SQLException e) {
-            throw e;
-        }
+        dropObsoleteColumns(db, CURRENT_VERSION_COLUMN_NAMES, temporaryTableName);
+        Timber.i("Downgrading database from version %d to %d completed with success.", oldVersion, newVersion);
     }
 
     private void upgradeToVersion2(SQLiteDatabase db) {

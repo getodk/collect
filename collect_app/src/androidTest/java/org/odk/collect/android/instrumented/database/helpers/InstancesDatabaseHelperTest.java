@@ -11,6 +11,8 @@ import org.junit.runners.Parameterized;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.InstancesDatabaseHelper;
 import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.SQLiteUtils;
 
@@ -29,7 +31,7 @@ import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 @RunWith(Parameterized.class)
 @Ignore("`Parameterized` causes problems for Firebase sharding. Probably need to replace this at JUnit level")
 public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
-    private static final String DATABASE_PATH = InstancesDatabaseHelper.getDatabasePath();
+    private String databasePath;
 
     @Parameterized.Parameter
     public String description;
@@ -44,13 +46,14 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
 
     @Before
     public void saveRealDb() {
-        FileUtils.copyFile(new File(DATABASE_PATH), new File(DATABASE_PATH + TEMPORARY_EXTENSION));
+        databasePath = new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA) + File.separator + "instances.db";
+        FileUtils.copyFile(new File(databasePath), new File(databasePath + TEMPORARY_EXTENSION));
     }
 
     @After
     public void restoreRealDb() {
-        FileUtils.copyFile(new File(DATABASE_PATH + TEMPORARY_EXTENSION), new File(DATABASE_PATH));
-        FileUtils.deleteAndReport(new File(DATABASE_PATH + TEMPORARY_EXTENSION));
+        FileUtils.copyFile(new File(databasePath + TEMPORARY_EXTENSION), new File(databasePath));
+        FileUtils.deleteAndReport(new File(databasePath + TEMPORARY_EXTENSION));
     }
 
     @Parameterized.Parameters(name = "{0}")
@@ -68,7 +71,7 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
 
     @Test
     public void testMigration() throws IOException {
-        copyFileFromAssets("database" + File.separator + dbFilename, DATABASE_PATH);
+        copyFileFromAssets("database" + File.separator + dbFilename, databasePath);
         InstancesDatabaseHelper databaseHelper = new InstancesDatabaseHelper();
         ensureMigrationAppliesFully(databaseHelper);
 

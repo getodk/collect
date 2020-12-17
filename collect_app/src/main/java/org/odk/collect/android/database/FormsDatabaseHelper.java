@@ -16,7 +16,6 @@
 
 package org.odk.collect.android.database;
 
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -46,28 +45,16 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         formDatabaseMigrator.onCreate(db);
     }
 
-    @SuppressWarnings({"checkstyle:FallThrough"})
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        try {
-            Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
-
-            formDatabaseMigrator.onUpgrade(db, oldVersion);
-
-            Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
-        } catch (SQLException e) {
-            throw e;
-        }
+        Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
+        formDatabaseMigrator.onUpgrade(db, oldVersion);
+        Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
     }
 
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        try {
-            formDatabaseMigrator.onDowngrade(db);
-
-            Timber.i("Downgrading database from %d to %d completed with success.", oldVersion, newVersion);
-        } catch (SQLException e) {
-            throw e;
-        }
+        formDatabaseMigrator.onDowngrade(db);
+        Timber.i("Downgrading database from %d to %d completed with success.", oldVersion, newVersion);
     }
 }
