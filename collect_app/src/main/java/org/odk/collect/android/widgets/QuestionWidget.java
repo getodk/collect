@@ -47,7 +47,7 @@ import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
+import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ViewUtils;
@@ -98,6 +98,10 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
 
     @Inject
     public ScreenUtils screenUtils;
+
+    @Inject
+    public
+    SoftKeyboardController softKeyboardController;
 
     public QuestionWidget(Context context, QuestionDetails questionDetails) {
         super(context);
@@ -275,7 +279,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     }
 
     public void setFocus(Context context) {
-        SoftKeyboardUtils.hideSoftKeyboard(this);
+        softKeyboardController.hideSoftKeyboard(this);
     }
 
     /**

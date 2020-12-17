@@ -37,7 +37,6 @@ import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.ActivityAvailability;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
@@ -149,12 +148,12 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     @Override
     public void setFocus(Context context) {
         if (hasExApp) {
-            SoftKeyboardUtils.hideSoftKeyboard(answerText);
+            softKeyboardController.hideSoftKeyboard(answerText);
             // focus on launch button
             launchIntentButton.requestFocus();
         } else {
             if (!getFormEntryPrompt().isReadOnly()) {
-                SoftKeyboardUtils.showSoftKeyboard(answerText);
+                softKeyboardController.showSoftKeyboard(answerText);
             /*
              * If you do a multi-question screen after a "add another group" dialog, this won't
              * automatically pop up. It's an Android issue.
@@ -166,7 +165,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
              * is focused before the dialog pops up, everything works fine. great.
              */
             } else {
-                SoftKeyboardUtils.hideSoftKeyboard(answerText);
+                softKeyboardController.hideSoftKeyboard(answerText);
             }
         }
     }
@@ -241,7 +240,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     }
 
     private void focusAnswer() {
-        SoftKeyboardUtils.showSoftKeyboard(answerText);
+        softKeyboardController.showSoftKeyboard(answerText);
     }
 
     private void onException(String toastText) {

@@ -35,6 +35,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.base.GeneralSelectMultiWidgetTest;
 import org.odk.collect.async.Scheduler;
@@ -47,6 +48,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.CollectHelpers.setupFakeReferenceManager;
@@ -60,7 +63,9 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
     @NonNull
     @Override
     public SelectMultiWidget createWidget() {
-        return new SelectMultiWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
+        SelectMultiWidget selectMultiWidget = new SelectMultiWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
+        selectMultiWidget.setFocus(activity);
+        return selectMultiWidget;
     }
 
     @Rule
@@ -121,6 +126,27 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
     }
 
     @Test
+    public void whenAutocompleteAppearanceDoesNotExist_shouldNotKeyboardBeDisplayed() {
+        SelectMultiWidget widget = getSpyWidget();
+        verify(widget.softKeyboardController, never()).showSoftKeyboard(widget.binding.choicesSearchBox);
+    }
+
+    @Test
+    public void whenAutocompleteAppearanceExist_shouldKeyboardBeDisplayed() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("autocomplete");
+        SelectMultiWidget widget = getSpyWidget();
+        verify(widget.softKeyboardController).showSoftKeyboard(widget.binding.choicesSearchBox);
+    }
+
+    @Test
+    public void whenAutocompleteAppearanceExistAndWidgetIsReadOnly_shouldNotKeyboardBeDisplayed() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("autocomplete");
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+        SelectMultiWidget widget = getSpyWidget();
+        verify(widget.softKeyboardController, never()).showSoftKeyboard(widget.binding.choicesSearchBox);
+    }
+
+    @Test
     public void whenChoicesHaveAudio_audioButtonUsesIndexAsClipID() throws Exception {
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
@@ -174,6 +200,11 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
             @Override
             public Analytics providesAnalytics(Application application, GeneralSharedPreferences generalSharedPreferences) {
                 return analytics;
+            }
+
+            @Override
+            public SoftKeyboardController provideSoftKeyboardController() {
+                return mock(SoftKeyboardController.class);
             }
         });
     }

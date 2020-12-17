@@ -23,22 +23,18 @@ import android.view.inputmethod.InputMethodManager;
 
 import org.odk.collect.android.application.Collect;
 
-public class SoftKeyboardUtils {
-
-    private SoftKeyboardUtils() {
-    }
-
-    public static void showSoftKeyboard(@NonNull View view) {
+public class SoftKeyboardController {
+    public void showSoftKeyboard(@NonNull View view) {
         if (view.requestFocus()) {
             getInputMethodManager().showSoftInput(view, 0);
         }
     }
 
-    public static void hideSoftKeyboard(@NonNull View view) {
+    public void hideSoftKeyboard(@NonNull View view) {
         getInputMethodManager().hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    private static InputMethodManager getInputMethodManager() {
+    private InputMethodManager getInputMethodManager() {
         return (InputMethodManager) Collect.getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 }
