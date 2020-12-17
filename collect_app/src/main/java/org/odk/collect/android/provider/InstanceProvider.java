@@ -65,11 +65,7 @@ public class InstanceProvider extends ContentProvider {
             return null;
         }
 
-        boolean databaseNeedsUpgrade = InstancesDatabaseHelper.databaseNeedsUpgrade();
-        if (dbHelper == null || (databaseNeedsUpgrade && !InstancesDatabaseHelper.isDatabaseBeingMigrated())) {
-            if (databaseNeedsUpgrade) {
-                InstancesDatabaseHelper.databaseMigrationStarted();
-            }
+        if (dbHelper == null) {
             recreateDatabaseHelper();
         }
 

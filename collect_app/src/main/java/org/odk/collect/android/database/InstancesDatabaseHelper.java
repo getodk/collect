@@ -62,8 +62,6 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
 
     public static final String[] CURRENT_VERSION_COLUMN_NAMES = COLUMN_NAMES_V6;
 
-    private static boolean isDatabaseBeingMigrated;
-
     public InstancesDatabaseHelper() {
         super(new DatabaseContext(new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA)), DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -107,9 +105,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
             }
 
             Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
-            isDatabaseBeingMigrated = false;
         } catch (SQLException e) {
-            isDatabaseBeingMigrated = false;
             throw e;
         }
     }
@@ -125,9 +121,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
 
             dropObsoleteColumns(db, CURRENT_VERSION_COLUMN_NAMES, temporaryTableName);
             Timber.i("Downgrading database from version %d to %d completed with success.", oldVersion, newVersion);
-            isDatabaseBeingMigrated = false;
         } catch (SQLException e) {
-            isDatabaseBeingMigrated = false;
             throw e;
         }
     }
@@ -210,25 +204,5 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
                 + STATUS + " text not null, "
                 + LAST_STATUS_CHANGE_DATE + " date not null, "
                 + DELETED_DATE + " date );");
-    }
-
-    public static void databaseMigrationStarted() {
-        isDatabaseBeingMigrated = true;
-    }
-
-    public static boolean isDatabaseBeingMigrated() {
-        return isDatabaseBeingMigrated;
-    }
-
-    public static boolean databaseNeedsUpgrade() {
-        boolean isDatabaseHelperOutOfDate = false;
-        try {
-            SQLiteDatabase db = SQLiteDatabase.openDatabase(InstancesDatabaseHelper.getDatabasePath(), null, SQLiteDatabase.OPEN_READONLY);
-            isDatabaseHelperOutOfDate = InstancesDatabaseHelper.DATABASE_VERSION != db.getVersion();
-            db.close();
-        } catch (SQLException e) {
-            Timber.i(e);
-        }
-        return isDatabaseHelperOutOfDate;
     }
 }
