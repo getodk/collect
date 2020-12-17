@@ -154,7 +154,11 @@
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
   <string name="unrecognized_uri">URI non reconnu: %s</string>
   <!--Text displayed when audio recording fails to start-->
+  <string name="start_recording_failed">Impossible de commencer l\'enregistrement.</string>
+  <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <string name="mic_in_use">Le microphone est déjà en utilisation.</string>
   <!--Error message displayed when copying media from a temporary directory fails-->
+  <string name="answer_file_copy_failed_message">Le fichier n\'a pas pu être attaché au formulaire mais est disponible à %1$s</string>
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -205,15 +209,21 @@
   <string name="play_video">Jouer la vidéo</string>
   <string name="choose_file">Choisir un fichier</string>
   <!--Text for button that deletes a file that is the answer to a question-->
+  <string name="delete_answer_file">Supprimer</string>
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">Enregistrer de l\'audio</string>
   <!--Text for button that lets the user choose a sound file on their device-->
   <string name="choose_sound">Choisir un fichier audio</string>
   <!--Description text for button that that pauses recording sound-->
+  <string name="pause_recording">Pause</string>
   <!--Description text for button that that resumes recording sound-->
+  <string name="resume_recording">Reprendre</string>
   <!--Title for dialog asking the user if they want to delete a file-->
+  <string name="delete_answer_file_question">Supprimer fichier?</string>
   <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <string name="answer_file_delete_warning">Vous ne pourrez pas récupérer ce fichier une fois qu\'il sera supprimé. Êtes-vous sûr de vouloir continuer?</string>
   <!--Text for button that stops audio recording-->
+  <string name="stop_recording">Arrêt</string>
   <!--Text to let the user know a recording is in progress-->
   <string name="recording">Enregistrement en cours…</string>
   <!--Title of Android Notification Channel for audio recording notifications-->
@@ -413,16 +423,19 @@
   <string name="manual_mode">Enregistrement manuel de la localisation</string>
   <string name="automatic_mode">Enregistrement automatique de la localisation</string>
   <string name="recording_interval">Intervalle d\'enregistrement:</string>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <plurals name="number_of_seconds">
     <item quantity="one">%d seconde</item>
     <item quantity="other">%d secondes</item>
   </plurals>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <plurals name="number_of_minutes">
     <item quantity="one">%d minute</item>
     <item quantity="other">%d minutes</item>
   </plurals>
   <string name="accuracy_requirement">Exigence de précision:</string>
   <string name="none">Aucun</string>
+  <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
   <plurals name="number_of_meters">
     <item quantity="one">%d mètre</item>
     <item quantity="other">%d mètres</item>
@@ -581,7 +594,7 @@
   <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
   <string name="previously_downloaded_only">Formulaires antérieurement téléchargés uniquement</string>
   <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
-  <string name="match_exactly">Serveur correspondant parfaitement</string>
+  <string name="match_exactly">Copie exacte du serveur</string>
   <!--Name of the setting that defines how often blank forms are updated from the server.-->
   <string name="form_update_frequency_title">Fréquence de Mise à jour automatique</string>
   <!--Frequency for requesting blank form updates from the server-->

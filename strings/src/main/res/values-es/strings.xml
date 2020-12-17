@@ -155,6 +155,8 @@
   <string name="unrecognized_uri">URI no reconocido: %s</string>
   <!--Text displayed when audio recording fails to start-->
   <string name="start_recording_failed">No se pudo iniciar la grabación.</string>
+  <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <string name="mic_in_use">El micrófono ya está en uso.</string>
   <!--Error message displayed when copying media from a temporary directory fails-->
   <string name="answer_file_copy_failed_message">Los archivos multimedia no se pudieron adjuntar al formulario, pero están disponibles en %1$s</string>
   <!--##############################################
@@ -421,16 +423,19 @@
   <string name="manual_mode">Registro de localización manual</string>
   <string name="automatic_mode">Registro de localización automática</string>
   <string name="recording_interval">Intervalo de registro:</string>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <plurals name="number_of_seconds">
     <item quantity="one">%d segundo</item>
     <item quantity="other">%d segundos</item>
   </plurals>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <plurals name="number_of_minutes">
     <item quantity="one">%d minuto</item>
     <item quantity="other">%d minutos</item>
   </plurals>
   <string name="accuracy_requirement">Requisito de precisión</string>
   <string name="none">Ninguno</string>
+  <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
   <plurals name="number_of_meters">
     <item quantity="one">%d metro</item>
     <item quantity="other">%d metros</item>

@@ -119,6 +119,7 @@
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
   <!--Text displayed when audio recording fails to start-->
+  <!--Text displayed when user tries to start recording while the mic is already in use-->
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--##############################################
     # FORM FEATURES
@@ -276,16 +277,19 @@
   <string name="manual_mode">Manuel optagelse af lokation</string>
   <string name="automatic_mode">Automatisk optagelse af lokation</string>
   <string name="recording_interval">Optagelsesinterval:</string>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <plurals name="number_of_seconds">
     <item quantity="one">%d sekunder</item>
     <item quantity="other">%d sekunder</item>
   </plurals>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <plurals name="number_of_minutes">
     <item quantity="one">%d minutter</item>
     <item quantity="other">%d minutter</item>
   </plurals>
   <string name="accuracy_requirement">Nødvendig præcision:</string>
   <string name="none">Ingen</string>
+  <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
   <plurals name="number_of_meters">
     <item quantity="one">%d meter</item>
     <item quantity="other">%d meter</item>

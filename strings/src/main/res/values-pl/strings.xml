@@ -154,6 +154,7 @@
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
   <string name="unrecognized_uri">Nierozpoznany URI: %s</string>
   <!--Text displayed when audio recording fails to start-->
+  <!--Text displayed when user tries to start recording while the mic is already in use-->
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--##############################################
     # FORM FEATURES
@@ -404,12 +405,14 @@
   <string name="manual_mode">Manualny zapis lokalizacji</string>
   <string name="automatic_mode">Automatyczny zapis lokalizacji</string>
   <string name="recording_interval">Interwały zapisu:</string>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <plurals name="number_of_seconds">
     <item quantity="one">%d sekunda</item>
     <item quantity="few">%d sekund</item>
     <item quantity="many">%d sekund</item>
     <item quantity="other">%d sekundy</item>
   </plurals>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <plurals name="number_of_minutes">
     <item quantity="one">%d minuta</item>
     <item quantity="few">%d minut</item>
@@ -418,6 +421,7 @@
   </plurals>
   <string name="accuracy_requirement">Wymagana dokładność:</string>
   <string name="none">Żaden</string>
+  <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
   <plurals name="number_of_meters">
     <item quantity="one">%d metr</item>
     <item quantity="few">%d metrów</item>
