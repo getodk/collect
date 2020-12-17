@@ -152,6 +152,7 @@
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
   <string name="unrecognized_uri">URI  Isiyotambulika: %s</string>
   <!--Text displayed when audio recording fails to start-->
+  <!--Text displayed when user tries to start recording while the mic is already in use-->
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--##############################################
     # FORM FEATURES
@@ -374,8 +375,11 @@
   <string name="manual_mode">Rekodi sauti kawaida</string>
   <string name="automatic_mode">Rekodi sauti automatiki</string>
   <string name="recording_interval">Muda wa kurekodi</string>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <string name="accuracy_requirement">Sharti sahihi</string>
   <string name="none">Hakuna</string>
+  <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
   <string name="collection_status_paused">Vidokezo vilivyoingizwa: %d</string>
   <string name="geopoint_instruction">Bonyeza kwa mda kuweka alama au bofya kitufe ongeza alama.</string>
   <string name="geopoint_no_draggable_instruction">Bofya kitufe cha kuongeza alama.</string>

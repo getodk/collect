@@ -107,6 +107,7 @@
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
   <!--Text displayed when audio recording fails to start-->
+  <!--Text displayed when user tries to start recording while the mic is already in use-->
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--##############################################
     # FORM FEATURES
@@ -214,6 +215,9 @@
   <string name="start">ይጀምሩ</string>
   <string name="enable_gps">GPSን አንቃ</string>
   <string name="clear">አጽዳ</string>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
   <string name="discard">አስወግድ</string>
   <string name="geoshape_view_change_location">GeoShapeን ይመልከቱ ወይም ይቀይሩ</string>
   <string name="geotrace_view_change_location">GeoTraceን ይመልከቱ ወይም ይቀይሩ</string>

@@ -154,6 +154,7 @@
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
   <string name="unrecognized_uri">URL não reconhecida: %s</string>
   <!--Text displayed when audio recording fails to start-->
+  <!--Text displayed when user tries to start recording while the mic is already in use-->
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--##############################################
     # FORM FEATURES
@@ -407,16 +408,19 @@ Escolher Imagem</string>
   <string name="manual_mode">Registro manual da localização</string>
   <string name="automatic_mode">Registro automático da localização</string>
   <string name="recording_interval">Intervalo de registro:</string>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <plurals name="number_of_seconds">
     <item quantity="one">%d segundo</item>
     <item quantity="other">%d segundos</item>
   </plurals>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <plurals name="number_of_minutes">
     <item quantity="one">%d minuto</item>
     <item quantity="other">%d minutos</item>
   </plurals>
   <string name="accuracy_requirement">Exigência de precisão:</string>
   <string name="none">Nenhuma</string>
+  <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
   <plurals name="number_of_meters">
     <item quantity="one">%d metro</item>
     <item quantity="other">%d metros</item>

@@ -154,6 +154,7 @@
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
   <string name="unrecognized_uri">URI tidak dikenal: %s</string>
   <!--Text displayed when audio recording fails to start-->
+  <!--Text displayed when user tries to start recording while the mic is already in use-->
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--##############################################
     # FORM FEATURES
@@ -406,14 +407,17 @@
   <string name="manual_mode">Rekam lokasi secara manual</string>
   <string name="automatic_mode">Rekam lokasi secara otomatis</string>
   <string name="recording_interval">Interval rekaman:</string>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <plurals name="number_of_seconds">
     <item quantity="other">%d detik</item>
   </plurals>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <plurals name="number_of_minutes">
     <item quantity="other">%d menit</item>
   </plurals>
   <string name="accuracy_requirement">Persyaratan akurasi:</string>
   <string name="none">Tidak ada</string>
+  <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
   <plurals name="number_of_meters">
     <item quantity="other">%d meter</item>
   </plurals>

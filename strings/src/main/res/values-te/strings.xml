@@ -154,6 +154,7 @@
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
   <string name="unrecognized_uri">గుర్తించని URI: %s</string>
   <!--Text displayed when audio recording fails to start-->
+  <!--Text displayed when user tries to start recording while the mic is already in use-->
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--##############################################
     # FORM FEATURES
@@ -406,16 +407,19 @@
   <string name="manual_mode">మాన్యువల్ లొకేషన్ రికార్డింగ్</string>
   <string name="automatic_mode">ఆటోమేటిక్ లొకేషన్ రికార్డింగ్</string>
   <string name="recording_interval">రికార్డింగ్ చెయ్యాల్సిన వ్యవధి:</string>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <plurals name="number_of_seconds">
     <item quantity="one">%d రెండవలు </item>
     <item quantity="other">%dసెకన్లు   </item>
   </plurals>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <plurals name="number_of_minutes">
     <item quantity="one">%dనిమిషాలు</item>
     <item quantity="other">%d నిమిషాలు </item>
   </plurals>
   <string name="accuracy_requirement">ఖచ్చితత్వ అవసరం:</string>
   <string name="none">ఏమీ కాదు</string>
+  <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
   <plurals name="number_of_meters">
     <item quantity="one">%d మీటర్ల</item>
     <item quantity="other">%d మీటర్ల</item>

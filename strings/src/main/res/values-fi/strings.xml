@@ -155,6 +155,8 @@
   <string name="unrecognized_uri">Tunnistamaton URI: %s</string>
   <!--Text displayed when audio recording fails to start-->
   <string name="start_recording_failed">Äänityksen aloittaminen ei onnistunut.</string>
+  <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <string name="mic_in_use">Mikrofoni on jo käytössä.</string>
   <!--Error message displayed when copying media from a temporary directory fails-->
   <string name="answer_file_copy_failed_message">Mediatiedostoa ei voitu liittää lomakkeeseen, mutta se on saatavilla sijainnissa %1$s</string>
   <!--##############################################
@@ -421,16 +423,19 @@
   <string name="manual_mode">Manuaalinen sijainnin tallennus</string>
   <string name="automatic_mode">Automaattinen sijainnin tallennus</string>
   <string name="recording_interval">Tallennusväli:</string>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <plurals name="number_of_seconds">
     <item quantity="one">%d sekunti</item>
     <item quantity="other">%d sekuntia</item>
   </plurals>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <plurals name="number_of_minutes">
     <item quantity="one">%d minuutti</item>
     <item quantity="other">%d minuuttia</item>
   </plurals>
   <string name="accuracy_requirement">Tarkkuusvaatimus:</string>
   <string name="none">Ei mitään</string>
+  <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
   <plurals name="number_of_meters">
     <item quantity="one">%d metri</item>
     <item quantity="other">%d metriä</item>
