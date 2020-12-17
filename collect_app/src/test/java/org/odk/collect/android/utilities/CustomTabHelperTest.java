@@ -4,8 +4,6 @@ import android.net.Uri;
 
 import androidx.test.core.app.ApplicationProvider;
 
-import junit.framework.TestCase;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -17,7 +15,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class)
-public class CustomTabHelperTest extends TestCase {
+public class CustomTabHelperTest {
 
     @Test
     public void uriShouldBeNormalized() {
