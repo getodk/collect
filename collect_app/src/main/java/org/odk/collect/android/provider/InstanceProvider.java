@@ -30,6 +30,7 @@ import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.InstanceDatabaseMigrator;
 import org.odk.collect.android.database.InstancesDatabaseHelper;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -73,7 +74,7 @@ public class InstanceProvider extends ContentProvider {
     }
 
     public static void recreateDatabaseHelper() {
-        dbHelper = new InstancesDatabaseHelper();
+        dbHelper = new InstancesDatabaseHelper(new InstanceDatabaseMigrator());
     }
 
     @SuppressWarnings("PMD.NonThreadSafeSingleton") // PMD thinks the `= null` is setting a singleton here

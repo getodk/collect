@@ -23,7 +23,7 @@ import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColum
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.STATUS;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.SUBMISSION_URI;
 
-public class InstanceDatabaseMigrator {
+public class InstanceDatabaseMigrator implements DatabaseMigrator {
     public static final String INSTANCES_TABLE_NAME = "instances";
 
     private static final String[] COLUMN_NAMES_V5 = {_ID, DISPLAY_NAME, SUBMISSION_URI, CAN_EDIT_WHEN_COMPLETE,
@@ -41,7 +41,7 @@ public class InstanceDatabaseMigrator {
     }
 
     @SuppressWarnings({"checkstyle:FallThrough"})
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion) {
         switch (oldVersion) {
             case 1:
                 upgradeToVersion2(db);
@@ -59,7 +59,7 @@ public class InstanceDatabaseMigrator {
         }
     }
 
-    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void onDowngrade(SQLiteDatabase db) {
         String temporaryTableName = INSTANCES_TABLE_NAME + "_tmp";
         createInstancesTableV5(db, temporaryTableName);
         upgradeToVersion6(db, temporaryTableName);

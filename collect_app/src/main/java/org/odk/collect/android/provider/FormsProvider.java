@@ -27,6 +27,7 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
+import org.odk.collect.android.database.FormDatabaseMigrator;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.database.FormsDatabaseHelper;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -73,7 +74,7 @@ public class FormsProvider extends ContentProvider {
     }
 
     public static void recreateDatabaseHelper() {
-        dbHelper = new FormsDatabaseHelper();
+        dbHelper = new FormsDatabaseHelper(new FormDatabaseMigrator());
     }
 
     @SuppressWarnings("PMD.NonThreadSafeSingleton") // PMD thinks the `= null` is setting a singleton here

@@ -25,7 +25,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LAN
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.MD5_HASH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SUBMISSION_URI;
 
-public class FormDatabaseMigrator {
+public class FormDatabaseMigrator implements DatabaseMigrator {
 
     private static final String[] COLUMN_NAMES_V7 = {_ID, DISPLAY_NAME, DESCRIPTION,
             JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,

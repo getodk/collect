@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.database.InstanceDatabaseMigrator;
 import org.odk.collect.android.database.InstancesDatabaseHelper;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -73,7 +74,7 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
     @Test
     public void testMigration() throws IOException {
         copyFileFromAssets("database" + File.separator + dbFilename, databasePath);
-        InstancesDatabaseHelper databaseHelper = new InstancesDatabaseHelper();
+        InstancesDatabaseHelper databaseHelper = new InstancesDatabaseHelper(new InstanceDatabaseMigrator());
         ensureMigrationAppliesFully(databaseHelper);
 
         SQLiteDatabase db = databaseHelper.getReadableDatabase();

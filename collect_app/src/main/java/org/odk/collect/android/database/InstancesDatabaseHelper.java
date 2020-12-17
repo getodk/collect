@@ -31,29 +31,29 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "instances.db";
     public static final int DATABASE_VERSION = 6;
 
-    private final InstanceDatabaseMigrator instanceDatabaseMigrator;
+    private final DatabaseMigrator databaseMigrator;
 
-    public InstancesDatabaseHelper() {
+    public InstancesDatabaseHelper(DatabaseMigrator databaseMigrator) {
         super(new DatabaseContext(new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA)), DATABASE_NAME, null, DATABASE_VERSION);
-        instanceDatabaseMigrator = new InstanceDatabaseMigrator();
+        this.databaseMigrator = databaseMigrator;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        instanceDatabaseMigrator.onCreate(db);
+        databaseMigrator.onCreate(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
-        instanceDatabaseMigrator.onUpgrade(db, oldVersion, newVersion);
+        databaseMigrator.onUpgrade(db, oldVersion);
         Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
     }
 
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Timber.i("Downgrading database from version %d to %d", oldVersion, newVersion);
-        instanceDatabaseMigrator.onDowngrade(db, oldVersion, newVersion);
+        databaseMigrator.onDowngrade(db);
         Timber.i("Downgrading database from version %d to %d completed with success.", oldVersion, newVersion);
     }
 }

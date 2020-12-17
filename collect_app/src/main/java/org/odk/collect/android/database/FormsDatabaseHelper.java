@@ -33,28 +33,28 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "forms.db";
 
-    private final FormDatabaseMigrator formDatabaseMigrator;
+    private final DatabaseMigrator databaseMigrator;
 
-    public FormsDatabaseHelper() {
+    public FormsDatabaseHelper(DatabaseMigrator databaseMigrator) {
         super(new DatabaseContext(new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA)), DATABASE_NAME, null, FORMS_DATABASE_VERSION);
-        formDatabaseMigrator = new FormDatabaseMigrator();
+        this.databaseMigrator = databaseMigrator;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        formDatabaseMigrator.onCreate(db);
+        databaseMigrator.onCreate(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
-        formDatabaseMigrator.onUpgrade(db, oldVersion);
+        databaseMigrator.onUpgrade(db, oldVersion);
         Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
     }
 
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        formDatabaseMigrator.onDowngrade(db);
+        databaseMigrator.onDowngrade(db);
         Timber.i("Downgrading database from %d to %d completed with success.", oldVersion, newVersion);
     }
 }
