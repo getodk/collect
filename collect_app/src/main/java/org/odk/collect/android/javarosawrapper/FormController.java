@@ -516,6 +516,11 @@ public class FormController {
         try {
             return formEntryController.saveAnswer(index, data, true);
         } catch (Exception e) {
+            String dataType = data != null ? data.getClass().toString() : null;
+            String ref = index != null ? index.getReference().toString() : null;
+            Timber.w("Error saving answer of type %s with ref %s for index %s",
+                    dataType, ref, index);
+
             throw new JavaRosaException(e);
         }
     }

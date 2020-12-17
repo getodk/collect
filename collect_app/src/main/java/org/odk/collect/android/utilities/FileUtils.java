@@ -124,7 +124,7 @@ public class FileUtils {
                 pfd.close();
             }
         } catch (IOException e) {
-            Timber.w(e);
+            Timber.e(e);
         }
     }
 
@@ -261,7 +261,7 @@ public class FileUtils {
                             sourceFile.getAbsolutePath());
                     errorMessage = actualCopy(sourceFile, destFile);
                 } catch (InterruptedException e) {
-                    Timber.e(e);
+                    Timber.i(e);
                 }
             }
             return errorMessage;
@@ -427,10 +427,10 @@ public class FileUtils {
         if (file != null && file.exists()) {
             // remove garbage
             if (!file.delete()) {
-                Timber.w("%s will be deleted upon exit.", file.getAbsolutePath());
+                Timber.d("%s will be deleted upon exit.", file.getAbsolutePath());
                 file.deleteOnExit();
             } else {
-                Timber.w("%s has been deleted.", file.getAbsolutePath());
+                Timber.d("%s has been deleted.", file.getAbsolutePath());
             }
         }
     }
