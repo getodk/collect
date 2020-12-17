@@ -24,19 +24,17 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.database.DatabaseConstants.FORMS_DATABASE_NAME;
 import static org.odk.collect.android.database.DatabaseConstants.FORMS_DATABASE_VERSION;
 
 /**
  * This class helps open, create, and upgrade the database file.
  */
 public class FormsDatabaseHelper extends SQLiteOpenHelper {
-
-    private static final String DATABASE_NAME = "forms.db";
-
     private final DatabaseMigrator databaseMigrator;
 
     public FormsDatabaseHelper(DatabaseMigrator databaseMigrator) {
-        super(new DatabaseContext(new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA)), DATABASE_NAME, null, FORMS_DATABASE_VERSION);
+        super(new DatabaseContext(new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA)), FORMS_DATABASE_NAME, null, FORMS_DATABASE_VERSION);
         this.databaseMigrator = databaseMigrator;
     }
 

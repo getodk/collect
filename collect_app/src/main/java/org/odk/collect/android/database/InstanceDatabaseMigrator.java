@@ -11,6 +11,7 @@ import java.util.List;
 import timber.log.Timber;
 
 import static android.provider.BaseColumns._ID;
+import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_TABLE_NAME;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DELETED_DATE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DISPLAY_NAME;
@@ -24,8 +25,6 @@ import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColum
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.SUBMISSION_URI;
 
 public class InstanceDatabaseMigrator implements DatabaseMigrator {
-    public static final String INSTANCES_TABLE_NAME = "instances";
-
     private static final String[] COLUMN_NAMES_V5 = {_ID, DISPLAY_NAME, SUBMISSION_URI, CAN_EDIT_WHEN_COMPLETE,
             INSTANCE_FILE_PATH, JR_FORM_ID, JR_VERSION, STATUS, LAST_STATUS_CHANGE_DATE, DELETED_DATE};
 

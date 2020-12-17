@@ -24,17 +24,17 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_DATABASE_NAME;
+import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_DATABASE_VERSION;
+
 /**
  * This class helps open, create, and upgrade the database file.
  */
 public class InstancesDatabaseHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "instances.db";
-    public static final int DATABASE_VERSION = 6;
-
     private final DatabaseMigrator databaseMigrator;
 
     public InstancesDatabaseHelper(DatabaseMigrator databaseMigrator) {
-        super(new DatabaseContext(new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA)), DATABASE_NAME, null, DATABASE_VERSION);
+        super(new DatabaseContext(new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA)), INSTANCES_DATABASE_NAME, null, INSTANCES_DATABASE_VERSION);
         this.databaseMigrator = databaseMigrator;
     }
 
