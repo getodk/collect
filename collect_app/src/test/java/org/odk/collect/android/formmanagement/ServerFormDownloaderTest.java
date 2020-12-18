@@ -241,8 +241,8 @@ public class ServerFormDownloaderTest {
                 true,
                 false,
                 new ManifestFile("", asList(
-                    new MediaFile("file1", "hash-1", "http://file1"),
-                    new MediaFile("file2", "hash-2", "http://file2")
+                        new MediaFile("file1", "hash-1", "http://file1"),
+                        new MediaFile("file2", "hash-2", "http://file2")
                 )));
 
         FormSource formSource = mock(FormSource.class);

@@ -100,7 +100,7 @@ public class OpenRosaFormSource implements FormSource {
     }
 
     @Override
-    public InputStream fetchForm(String formURL) throws FormSourceException {
+    public @NotNull InputStream fetchForm(String formURL) throws FormSourceException {
         return fetchFile(formURL);
     }
 

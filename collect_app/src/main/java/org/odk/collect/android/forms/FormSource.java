@@ -1,5 +1,6 @@
 package org.odk.collect.android.forms;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.InputStream;
@@ -15,6 +16,7 @@ public interface FormSource {
 
     ManifestFile fetchManifest(String manifestURL) throws FormSourceException;
 
+    @NotNull
     InputStream fetchForm(String formURL) throws FormSourceException;
 
     InputStream fetchMediaFile(String mediaFileURL) throws FormSourceException;
