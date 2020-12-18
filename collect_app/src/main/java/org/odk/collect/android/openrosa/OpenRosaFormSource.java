@@ -100,13 +100,27 @@ public class OpenRosaFormSource implements FormSource {
     }
 
     @Override
-    public @NotNull InputStream fetchForm(String formURL) throws FormSourceException {
-        return fetchFile(formURL);
+    @NotNull
+    public InputStream fetchForm(String formURL) throws FormSourceException {
+        InputStream formFile = mapException(() -> openRosaXMLFetcher.getFile(formURL, null));
+
+        if (formFile != null) {
+            return formFile;
+        } else {
+            throw new FormSourceException(FETCH_ERROR);
+        }
     }
 
     @Override
+    @NotNull
     public InputStream fetchMediaFile(String mediaFileURL) throws FormSourceException {
-        return mapException(() -> openRosaXMLFetcher.getFile(mediaFileURL, null));
+        InputStream mediaFile = mapException(() -> openRosaXMLFetcher.getFile(mediaFileURL, null));
+
+        if (mediaFile != null) {
+            return mediaFile;
+        } else {
+            throw new FormSourceException(FETCH_ERROR);
+        }
     }
 
     @Override
@@ -117,17 +131,6 @@ public class OpenRosaFormSource implements FormSource {
     @Override
     public void updateWebCredentialsUtils(WebCredentialsUtils webCredentialsUtils) {
         this.openRosaXMLFetcher.updateWebCredentialsUtils(webCredentialsUtils);
-    }
-
-    @NotNull
-    private InputStream fetchFile(String formURL) throws FormSourceException {
-        InputStream formFile = mapException(() -> openRosaXMLFetcher.getFile(formURL, null));
-
-        if (formFile != null) {
-            return formFile;
-        } else {
-            throw new FormSourceException(FETCH_ERROR);
-        }
     }
 
     private List<FormListItem> parseFormList(DocumentFetchResult result) throws FormSourceException {

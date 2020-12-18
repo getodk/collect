@@ -19,6 +19,7 @@ public interface FormSource {
     @NotNull
     InputStream fetchForm(String formURL) throws FormSourceException;
 
+    @NotNull
     InputStream fetchMediaFile(String mediaFileURL) throws FormSourceException;
 
     /**
