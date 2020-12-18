@@ -4,7 +4,6 @@ apply from: '../config/quality.gradle'
 
 android {
     compileSdkVersion rootProject.androidCompileSdk
-    buildToolsVersion "29.0.2"
 
     defaultConfig {
         minSdkVersion rootProject.androidMinSdk
