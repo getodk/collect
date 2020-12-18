@@ -2300,7 +2300,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         formController.setLanguage(newLanguage);
                     } catch (Exception e) {
                         // if somehow we end up with a bad language, set it to the default
-                        Timber.e(e, "Ended up with a bad language. %s", newLanguage);
+                        Timber.i("Ended up with a bad language. %s", newLanguage);
                         formController.setLanguage(defaultLanguage);
                     }
                     Timber.i("Done in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
