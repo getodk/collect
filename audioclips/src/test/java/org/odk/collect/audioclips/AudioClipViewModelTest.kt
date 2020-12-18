@@ -3,7 +3,7 @@ package org.odk.collect.audioclips
 import android.media.MediaPlayer
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.core.IsEqual.equalTo
+import org.hamcrest.Matchers.equalTo
 import org.junit.After
 import org.junit.Rule
 import org.junit.Test
