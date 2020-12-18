@@ -146,6 +146,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
 
         if (errorMsg != null || formDef == null) {
+            Timber.w("No exception loading form but errorMsg set");
             return null;
         }
 
@@ -229,6 +230,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         String lastSavedSrc = FileUtils.getOrCreateLastSavedSrc(formXml);
         FormDef formDefFromXml = XFormUtils.getFormFromFormXml(formPath, lastSavedSrc);
         if (formDefFromXml == null) {
+            Timber.w("Error reading XForm file");
             errorMsg = "Error reading XForm file";
         } else {
             Timber.i("Loaded in %.3f seconds.",

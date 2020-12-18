@@ -92,7 +92,7 @@ public class FormDefCache {
             } catch (Exception e) {
                 // New .formdef will be created from XML
                 Timber.w("Deserialization FAILED! Deleting cache file: %s", cachedForm.getAbsolutePath());
-                Timber.e(e);
+                Timber.w(e);
                 cachedForm.delete();
             }
         }
