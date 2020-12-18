@@ -570,7 +570,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     formControllerAvailable(formController);
                     onScreenRefresh();
                 } else {
-                    Timber.d("Reloading form and restoring state.");
+                    Timber.w("Reloading form and restoring state.");
                     formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath);
                     showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
                     formLoaderTask.execute(formPath);
@@ -581,6 +581,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             // Not a restart from a screen orientation change (or other).
             Collect.getInstance().setFormController(null);
+
             Intent intent = getIntent();
             if (intent != null) {
                 loadFromIntent(intent);
@@ -2282,6 +2283,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 t.destroy();
 
                 Collect.getInstance().setFormController(formController);
+                formControllerAvailable(formController);
+
                 backgroundLocationViewModel.formFinishedLoading();
                 Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
 
@@ -2297,7 +2300,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         formController.setLanguage(newLanguage);
                     } catch (Exception e) {
                         // if somehow we end up with a bad language, set it to the default
-                        Timber.e("Ended up with a bad language. %s", newLanguage);
+                        Timber.e(e, "Ended up with a bad language. %s", newLanguage);
                         formController.setLanguage(defaultLanguage);
                     }
                     Timber.i("Done in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
@@ -2337,8 +2340,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         showFormLoadErrorAndExit(getString(R.string.loading_form_failed));
                     }
 
-                    formControllerAvailable(formController);
-
                     identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                         if (!requiresIdentity) {
                             formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_START, true, System.currentTimeMillis());
@@ -2353,8 +2354,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         // we've just loaded a saved form, so start in the hierarchy view
                         String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
                         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
-                            formControllerAvailable(formController);
-
                             identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                                 if (!requiresIdentity) {
                                     if (!allowMovingBackwards) {
@@ -2385,8 +2384,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             finish();
                         }
                     } else {
-                        formControllerAvailable(formController);
-
                         identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                             if (!requiresIdentity) {
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
