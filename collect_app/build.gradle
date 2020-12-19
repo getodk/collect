@@ -350,7 +350,7 @@ dependencies {
     testImplementation "org.mockito:mockito-core:3.6.28"
 
     testImplementation project(path: ':testshared')
-    testImplementation "org.robolectric:robolectric:4.4"
+    testImplementation "org.robolectric:robolectric:4.3.1"
     testImplementation 'androidx.test.ext:junit:1.1.2'
     debugImplementation("androidx.fragment:fragment-testing:${rootProject.fragmentVersion}") {
         exclude group: 'androidx.test', module: 'monitor' //fixes issue https://github.com/android/android-test/issues/731
