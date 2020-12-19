@@ -1473,7 +1473,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
 
             if (!saveBeforeNextView(formController)) {
-                formEntryViewModel.moveForward();
+                formEntryViewModel.moveForward(formController);
                 formIndexAnimationHandler.handle(formController.getFormIndex());
                 return true;
             } else {
@@ -1489,7 +1489,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
             }
 
-            formEntryViewModel.moveBackward();
+            formEntryViewModel.moveBackward(formController);
             formIndexAnimationHandler.handle(formController.getFormIndex());
             return true;
         }

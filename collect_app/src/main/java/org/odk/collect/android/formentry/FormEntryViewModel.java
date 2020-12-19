@@ -20,6 +20,8 @@ import org.odk.collect.utilities.Clock;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
 
 public class FormEntryViewModel extends ViewModel implements RequiresFormController {
@@ -125,7 +127,12 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         }
     }
 
-    public void moveForward() {
+    public void moveForward(FormController formController) {
+        if (this.formController == null) {
+            Timber.w("Null formController");
+            this.formController = formController;
+        }
+
         try {
             formController.stepToNextScreenEvent();
         } catch (JavaRosaException e) {
@@ -136,7 +143,12 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         formController.getAuditEventLogger().flush(); // Close events waiting for an end time
     }
 
-    public void moveBackward() {
+    public void moveBackward(FormController formController) {
+        if (this.formController == null) {
+            Timber.w("Null formController");
+            this.formController = formController;
+        }
+
         try {
             int event = formController.stepToPreviousScreenEvent();
 
@@ -152,7 +164,12 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         formController.getAuditEventLogger().flush(); // Close events waiting for an end time
     }
 
-    public void openHierarchy() {
+    public void openHierarchy(FormController formController) {
+        if (this.formController == null) {
+            Timber.w("Null formController");
+            this.formController = formController;
+        }
+
         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, clock.getCurrentTime());
     }
 

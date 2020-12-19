@@ -125,7 +125,7 @@ public class FormEntryViewModelTest {
     @Test
     public void openHierarchy_logsHierarchyAuditEvent() {
         when(clock.getCurrentTime()).thenReturn(12345L);
-        viewModel.openHierarchy();
+        viewModel.openHierarchy(formController);
         verify(auditEventLogger).logEvent(AuditEvent.AuditEventType.HIERARCHY, true, 12345L);
     }
 }
