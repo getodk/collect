@@ -100,11 +100,13 @@ public class OpenRosaFormSource implements FormSource {
     }
 
     @Override
+    @NotNull
     public InputStream fetchForm(String formURL) throws FormSourceException {
-        return fetchFile(formURL);
+        return mapException(() -> openRosaXMLFetcher.getFile(formURL, null));
     }
 
     @Override
+    @NotNull
     public InputStream fetchMediaFile(String mediaFileURL) throws FormSourceException {
         return mapException(() -> openRosaXMLFetcher.getFile(mediaFileURL, null));
     }
@@ -117,17 +119,6 @@ public class OpenRosaFormSource implements FormSource {
     @Override
     public void updateWebCredentialsUtils(WebCredentialsUtils webCredentialsUtils) {
         this.openRosaXMLFetcher.updateWebCredentialsUtils(webCredentialsUtils);
-    }
-
-    @NotNull
-    private InputStream fetchFile(String formURL) throws FormSourceException {
-        InputStream formFile = mapException(() -> openRosaXMLFetcher.getFile(formURL, null));
-
-        if (formFile != null) {
-            return formFile;
-        } else {
-            throw new FormSourceException(FETCH_ERROR);
-        }
     }
 
     private List<FormListItem> parseFormList(DocumentFetchResult result) throws FormSourceException {
@@ -365,9 +356,16 @@ public class OpenRosaFormSource implements FormSource {
         return new ManifestFile(result.getHash(), files);
     }
 
+    @NotNull
     private <T> T mapException(Callable<T> callable) throws FormSourceException {
         try {
-            return callable.call();
+            T result = callable.call();
+
+            if (result != null) {
+                return result;
+            } else {
+                throw new FormSourceException(FETCH_ERROR, serverURL);
+            }
         } catch (UnknownHostException e) {
             throw new FormSourceException(UNREACHABLE, serverURL);
         } catch (SSLException e) {

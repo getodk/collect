@@ -33,6 +33,7 @@ import static org.odk.collect.android.forms.FormSourceException.Type.UNREACHABLE
 
 @RunWith(MockitoJUnitRunner.class)
 public class OpenRosaFormSourceTest {
+
     @Mock
     Analytics analytics;
 
@@ -127,6 +128,22 @@ public class OpenRosaFormSourceTest {
         try {
             when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(null, new HashMap<>(), "hash", 500));
             formListApi.fetchForm("http://blah.com/form");
+            fail("No exception thrown!");
+        } catch (FormSourceException e) {
+            assertThat(e.getType(), is(FETCH_ERROR));
+        }
+    }
+
+    @Test
+    public void fetchMediaFile_whenThereIsAServerError_throwsFetchError() throws Exception {
+        OpenRosaHttpInterface httpInterface = mock(OpenRosaHttpInterface.class);
+        WebCredentialsUtils webCredentialsUtils = mock(WebCredentialsUtils.class);
+
+        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, analytics);
+
+        try {
+            when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(null, new HashMap<>(), "hash", 500));
+            formListApi.fetchMediaFile("http://blah.com/mediaFile");
             fail("No exception thrown!");
         } catch (FormSourceException e) {
             assertThat(e.getType(), is(FETCH_ERROR));
