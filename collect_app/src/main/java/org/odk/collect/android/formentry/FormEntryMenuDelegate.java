@@ -127,7 +127,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
             } else {
                 formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
 
-                formEntryViewModel.openHierarchy(formController);
+                formEntryViewModel.openHierarchy();
                 Intent i = new Intent(activity, FormHierarchyActivity.class);
                 activity.startActivityForResult(i, ApplicationConstants.RequestCodes.HIERARCHY_ACTIVITY);
             }

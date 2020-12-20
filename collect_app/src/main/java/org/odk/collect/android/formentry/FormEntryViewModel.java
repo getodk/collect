@@ -13,6 +13,7 @@ import org.javarosa.core.model.GroupDef;
 import org.javarosa.form.api.FormEntryController;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -127,11 +128,8 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         }
     }
 
-    public void moveForward(FormController formController) {
-        if (this.formController == null) {
-            Timber.w("Null formController");
-            this.formController = formController;
-        }
+    public void moveForward() {
+        ensureFormController();
 
         try {
             formController.stepToNextScreenEvent();
@@ -143,11 +141,8 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         formController.getAuditEventLogger().flush(); // Close events waiting for an end time
     }
 
-    public void moveBackward(FormController formController) {
-        if (this.formController == null) {
-            Timber.w("Null formController");
-            this.formController = formController;
-        }
+    public void moveBackward() {
+        ensureFormController();
 
         try {
             int event = formController.stepToPreviousScreenEvent();
@@ -164,12 +159,8 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         formController.getAuditEventLogger().flush(); // Close events waiting for an end time
     }
 
-    public void openHierarchy(FormController formController) {
-        if (this.formController == null) {
-            Timber.w("Null formController");
-            this.formController = formController;
-        }
-
+    public void openHierarchy() {
+        ensureFormController();
         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, clock.getCurrentTime());
     }
 
@@ -182,6 +173,13 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
             return formController.getCurrentFormIdentifierHash();
         } else {
             return "";
+        }
+    }
+
+    private void ensureFormController() {
+        if (this.formController == null) {
+            Timber.w("Null formController");
+            this.formController = Collect.getInstance().getFormController();
         }
     }
 
