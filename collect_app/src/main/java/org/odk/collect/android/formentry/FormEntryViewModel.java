@@ -178,7 +178,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
     private void ensureFormController() {
         if (this.formController == null) {
-            Timber.w("Null formController");
+            Timber.e(new IllegalStateException("ensureFormController called before formLoaded"));
             this.formController = Collect.getInstance().getFormController();
         }
     }
