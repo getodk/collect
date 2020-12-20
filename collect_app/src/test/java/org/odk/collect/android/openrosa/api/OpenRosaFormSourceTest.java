@@ -33,6 +33,7 @@ import static org.odk.collect.android.forms.FormSourceException.Type.UNREACHABLE
 
 @RunWith(MockitoJUnitRunner.class)
 public class OpenRosaFormSourceTest {
+
     @Mock
     Analytics analytics;
 
