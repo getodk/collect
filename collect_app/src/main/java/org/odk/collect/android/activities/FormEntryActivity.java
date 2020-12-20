@@ -2100,6 +2100,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         FormController formController = getFormController();
 
+        if (formController != null && !formEntryViewModel.isFormControllerSet()) {
+            Timber.e("FormController set in App but not ViewModel");
+        }
+
         if (formLoaderTask != null) {
             formLoaderTask.setFormLoaderListener(this);
             if (formController == null
@@ -2309,6 +2313,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 boolean pendingActivityResult = task.hasPendingActivityResult();
 
                 if (pendingActivityResult) {
+                    Timber.w("Calling onActivityResult from loadingComplete");
+
                     // set the current view to whatever group we were at...
                     onScreenRefresh();
                     // process the pending activity request...

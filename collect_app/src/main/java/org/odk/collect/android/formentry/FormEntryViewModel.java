@@ -13,12 +13,15 @@ import org.javarosa.core.model.GroupDef;
 import org.javarosa.form.api.FormEntryController;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.utilities.Clock;
 
 import javax.inject.Inject;
+
+import timber.log.Timber;
 
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
 
@@ -43,6 +46,10 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     @Override
     public void formLoaded(@NotNull FormController formController) {
         this.formController = formController;
+    }
+
+    public boolean isFormControllerSet() {
+        return formController != null;
     }
 
     @Nullable
@@ -126,6 +133,8 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     }
 
     public void moveForward() {
+        ensureFormController();
+
         try {
             formController.stepToNextScreenEvent();
         } catch (JavaRosaException e) {
@@ -137,6 +146,8 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     }
 
     public void moveBackward() {
+        ensureFormController();
+
         try {
             int event = formController.stepToPreviousScreenEvent();
 
@@ -153,6 +164,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     }
 
     public void openHierarchy() {
+        ensureFormController();
         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, clock.getCurrentTime());
     }
 
@@ -165,6 +177,13 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
             return formController.getCurrentFormIdentifierHash();
         } else {
             return "";
+        }
+    }
+
+    private void ensureFormController() {
+        if (this.formController == null) {
+            Timber.e(new IllegalStateException("ensureFormController called before formLoaded"));
+            this.formController = Collect.getInstance().getFormController();
         }
     }
 
