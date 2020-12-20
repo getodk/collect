@@ -48,6 +48,10 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         this.formController = formController;
     }
 
+    public boolean isFormControllerSet() {
+        return formController != null;
+    }
+
     @Nullable
     public FormIndex getCurrentIndex() {
         if (formController != null) {
