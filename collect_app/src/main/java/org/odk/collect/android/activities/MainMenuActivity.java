@@ -270,7 +270,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     protected void onResume() {
         super.onResume();
 
-        countSavedForms();
         updateButtons();
         if (!storageMigrationRepository.isMigrationBeingPerformed()) {
             getContentResolver().registerContentObserver(InstanceColumns.CONTENT_URI, true, contentObserver);
@@ -423,6 +422,8 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     private void updateButtons() {
+        countSavedForms();
+
         try {
             if (finalizedCursor != null && !finalizedCursor.isClosed()) {
                 finalizedCursor.requery();
