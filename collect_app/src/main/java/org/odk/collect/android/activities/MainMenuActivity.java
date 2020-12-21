@@ -19,7 +19,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDiskIOException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -97,12 +96,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     private Button getFormsButton;
     private AlertDialog alertDialog;
     private MenuItem qrcodeScannerMenuItem;
-    private int completedCount;
     private int savedCount;
-    private int viewSentCount;
-    private Cursor finalizedCursor;
-    private Cursor savedCursor;
-    private Cursor viewSentCursor;
     private final IncomingHandler handler = new IncomingHandler(this);
     private final MyContentObserver contentObserver = new MyContentObserver();
 
@@ -358,48 +352,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         setSupportActionBar(toolbar);
     }
 
-    private void countSavedForms() {
-        InstancesDao instancesDao = new InstancesDao();
-
-        // count for finalized instances
-        try {
-            finalizedCursor = instancesDao.getFinalizedInstancesCursor();
-        } catch (Exception e) {
-            createErrorDialog(e.getMessage(), EXIT);
-            return;
-        }
-
-        if (finalizedCursor != null) {
-            startManagingCursor(finalizedCursor);
-        }
-        completedCount = finalizedCursor != null ? finalizedCursor.getCount() : 0;
-
-        // count for saved instances
-        try {
-            savedCursor = instancesDao.getUnsentInstancesCursor();
-        } catch (Exception e) {
-            createErrorDialog(e.getMessage(), EXIT);
-            return;
-        }
-
-        if (savedCursor != null) {
-            startManagingCursor(savedCursor);
-        }
-        savedCount = savedCursor != null ? savedCursor.getCount() : 0;
-
-        //count for view sent form
-        try {
-            viewSentCursor = instancesDao.getSentInstancesCursor();
-        } catch (Exception e) {
-            createErrorDialog(e.getMessage(), EXIT);
-            return;
-        }
-        if (viewSentCursor != null) {
-            startManagingCursor(viewSentCursor);
-        }
-        viewSentCount = viewSentCursor != null ? viewSentCursor.getCount() : 0;
-    }
-
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
         alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setIcon(android.R.drawable.ic_dialog_info);
@@ -422,53 +374,50 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     private void updateButtons() {
-        countSavedForms();
+        InstancesDao instancesDao = new InstancesDao();
 
-        try {
-            if (finalizedCursor != null && !finalizedCursor.isClosed()) {
-                finalizedCursor.requery();
-                completedCount = finalizedCursor.getCount();
-                if (completedCount > 0) {
-                    sendDataButton.setText(
-                            getString(R.string.send_data_button, String.valueOf(completedCount)));
-                } else {
-                    sendDataButton.setText(getString(R.string.send_data));
-                }
-            } else {
-                sendDataButton.setText(getString(R.string.send_data));
-                Timber.w("Cannot update \"Send Finalized\" button label since the database is closed. Perhaps the app is running in the background?");
-            }
+        int completedCount;
+        try (Cursor finalizedCursor = instancesDao.getFinalizedInstancesCursor()) {
+            completedCount = finalizedCursor != null ? finalizedCursor.getCount() : 0;
+        } catch (Exception e1) {
+            createErrorDialog(e1.getMessage(), EXIT);
+            return;
+        }
 
-            if (savedCursor != null && !savedCursor.isClosed()) {
-                savedCursor.requery();
-                savedCount = savedCursor.getCount();
-                if (savedCount > 0) {
-                    reviewDataButton.setText(getString(R.string.review_data_button,
-                            String.valueOf(savedCount)));
-                } else {
-                    reviewDataButton.setText(getString(R.string.review_data));
-                }
-            } else {
-                reviewDataButton.setText(getString(R.string.review_data));
-                Timber.w("Cannot update \"Edit Form\" button label since the database is closed. Perhaps the app is running in the background?");
-            }
+        try (Cursor savedCursor = instancesDao.getUnsentInstancesCursor()) {
+            savedCount = savedCursor != null ? savedCursor.getCount() : 0;
+        } catch (Exception e1) {
+            createErrorDialog(e1.getMessage(), EXIT);
+            return;
+        }
 
-            if (viewSentCursor != null && !viewSentCursor.isClosed()) {
-                viewSentCursor.requery();
-                viewSentCount = viewSentCursor.getCount();
-                if (viewSentCount > 0) {
-                    viewSentFormsButton.setText(
-                            getString(R.string.view_sent_forms_button, String.valueOf(viewSentCount)));
-                } else {
-                    viewSentFormsButton.setText(getString(R.string.view_sent_forms));
-                }
-            } else {
-                viewSentFormsButton.setText(getString(R.string.view_sent_forms));
-                Timber.w("Cannot update \"View Sent\" button label since the database is closed. Perhaps the app is running in the background?");
-            }
-        } catch (SQLiteDiskIOException e) {
-            boolean migrationBeingPerformed = storageMigrationRepository.isMigrationBeingPerformed();
-            Timber.e(e, "Storage migration being peformed: %s", migrationBeingPerformed);
+        int viewSentCount;
+        try (Cursor viewSentCursor = instancesDao.getSentInstancesCursor()) {
+            viewSentCount = viewSentCursor != null ? viewSentCursor.getCount() : 0;
+        } catch (Exception e1) {
+            createErrorDialog(e1.getMessage(), EXIT);
+            return;
+        }
+
+        if (completedCount > 0) {
+            sendDataButton.setText(
+                    getString(R.string.send_data_button, String.valueOf(completedCount)));
+        } else {
+            sendDataButton.setText(getString(R.string.send_data));
+        }
+
+        if (savedCount > 0) {
+            reviewDataButton.setText(getString(R.string.review_data_button,
+                    String.valueOf(savedCount)));
+        } else {
+            reviewDataButton.setText(getString(R.string.review_data));
+        }
+
+        if (viewSentCount > 0) {
+            viewSentFormsButton.setText(
+                    getString(R.string.view_sent_forms_button, String.valueOf(viewSentCount)));
+        } else {
+            viewSentFormsButton.setText(getString(R.string.view_sent_forms));
         }
     }
 
