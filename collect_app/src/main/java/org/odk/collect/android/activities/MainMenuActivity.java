@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDiskIOException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -422,46 +423,50 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     private void updateButtons() {
-        if (finalizedCursor != null && !finalizedCursor.isClosed()) {
-            finalizedCursor.requery();
-            completedCount = finalizedCursor.getCount();
-            if (completedCount > 0) {
-                sendDataButton.setText(
-                        getString(R.string.send_data_button, String.valueOf(completedCount)));
+        try {
+            if (finalizedCursor != null && !finalizedCursor.isClosed()) {
+                finalizedCursor.requery();
+                completedCount = finalizedCursor.getCount();
+                if (completedCount > 0) {
+                    sendDataButton.setText(
+                            getString(R.string.send_data_button, String.valueOf(completedCount)));
+                } else {
+                    sendDataButton.setText(getString(R.string.send_data));
+                }
             } else {
                 sendDataButton.setText(getString(R.string.send_data));
+                Timber.w("Cannot update \"Send Finalized\" button label since the database is closed. Perhaps the app is running in the background?");
             }
-        } else {
-            sendDataButton.setText(getString(R.string.send_data));
-            Timber.w("Cannot update \"Send Finalized\" button label since the database is closed. Perhaps the app is running in the background?");
-        }
 
-        if (savedCursor != null && !savedCursor.isClosed()) {
-            savedCursor.requery();
-            savedCount = savedCursor.getCount();
-            if (savedCount > 0) {
-                reviewDataButton.setText(getString(R.string.review_data_button,
-                        String.valueOf(savedCount)));
+            if (savedCursor != null && !savedCursor.isClosed()) {
+                savedCursor.requery();
+                savedCount = savedCursor.getCount();
+                if (savedCount > 0) {
+                    reviewDataButton.setText(getString(R.string.review_data_button,
+                            String.valueOf(savedCount)));
+                } else {
+                    reviewDataButton.setText(getString(R.string.review_data));
+                }
             } else {
                 reviewDataButton.setText(getString(R.string.review_data));
+                Timber.w("Cannot update \"Edit Form\" button label since the database is closed. Perhaps the app is running in the background?");
             }
-        } else {
-            reviewDataButton.setText(getString(R.string.review_data));
-            Timber.w("Cannot update \"Edit Form\" button label since the database is closed. Perhaps the app is running in the background?");
-        }
 
-        if (viewSentCursor != null && !viewSentCursor.isClosed()) {
-            viewSentCursor.requery();
-            viewSentCount = viewSentCursor.getCount();
-            if (viewSentCount > 0) {
-                viewSentFormsButton.setText(
-                        getString(R.string.view_sent_forms_button, String.valueOf(viewSentCount)));
+            if (viewSentCursor != null && !viewSentCursor.isClosed()) {
+                viewSentCursor.requery();
+                viewSentCount = viewSentCursor.getCount();
+                if (viewSentCount > 0) {
+                    viewSentFormsButton.setText(
+                            getString(R.string.view_sent_forms_button, String.valueOf(viewSentCount)));
+                } else {
+                    viewSentFormsButton.setText(getString(R.string.view_sent_forms));
+                }
             } else {
                 viewSentFormsButton.setText(getString(R.string.view_sent_forms));
+                Timber.w("Cannot update \"View Sent\" button label since the database is closed. Perhaps the app is running in the background?");
             }
-        } else {
-            viewSentFormsButton.setText(getString(R.string.view_sent_forms));
-            Timber.w("Cannot update \"View Sent\" button label since the database is closed. Perhaps the app is running in the background?");
+        } catch (SQLiteDiskIOException e) {
+            Timber.e(e);
         }
     }
 
