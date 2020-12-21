@@ -466,7 +466,8 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                 Timber.w("Cannot update \"View Sent\" button label since the database is closed. Perhaps the app is running in the background?");
             }
         } catch (SQLiteDiskIOException e) {
-            Timber.e(e);
+            boolean migrationBeingPerformed = storageMigrationRepository.isMigrationBeingPerformed();
+            Timber.e(e, "Storage migration being peformed: %s", migrationBeingPerformed);
         }
     }
 
