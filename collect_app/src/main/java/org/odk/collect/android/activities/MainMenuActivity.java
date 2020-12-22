@@ -374,50 +374,49 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     private void updateButtons() {
-        InstancesDao instancesDao = new InstancesDao();
+        if (!storageMigrationRepository.isMigrationBeingPerformed()) {
+            InstancesDao instancesDao = new InstancesDao();
 
-        int completedCount;
-        try (Cursor finalizedCursor = instancesDao.getFinalizedInstancesCursor()) {
-            completedCount = finalizedCursor != null ? finalizedCursor.getCount() : 0;
-        } catch (Exception e1) {
-            createErrorDialog(e1.getMessage(), EXIT);
-            return;
-        }
+            int completedCount;
+            try (Cursor finalizedCursor = instancesDao.getFinalizedInstancesCursor()) {
+                completedCount = finalizedCursor != null ? finalizedCursor.getCount() : 0;
+            } catch (Exception ignored) {
+                completedCount = 0;
+            }
 
-        try (Cursor savedCursor = instancesDao.getUnsentInstancesCursor()) {
-            savedCount = savedCursor != null ? savedCursor.getCount() : 0;
-        } catch (Exception e1) {
-            createErrorDialog(e1.getMessage(), EXIT);
-            return;
-        }
+            try (Cursor savedCursor = instancesDao.getUnsentInstancesCursor()) {
+                savedCount = savedCursor != null ? savedCursor.getCount() : 0;
+            } catch (Exception ignored) {
+                savedCount = 0;
+            }
 
-        int viewSentCount;
-        try (Cursor viewSentCursor = instancesDao.getSentInstancesCursor()) {
-            viewSentCount = viewSentCursor != null ? viewSentCursor.getCount() : 0;
-        } catch (Exception e1) {
-            createErrorDialog(e1.getMessage(), EXIT);
-            return;
-        }
+            int viewSentCount;
+            try (Cursor viewSentCursor = instancesDao.getSentInstancesCursor()) {
+                viewSentCount = viewSentCursor != null ? viewSentCursor.getCount() : 0;
+            } catch (Exception ignored) {
+                viewSentCount = 0;
+            }
 
-        if (completedCount > 0) {
-            sendDataButton.setText(
-                    getString(R.string.send_data_button, String.valueOf(completedCount)));
-        } else {
-            sendDataButton.setText(getString(R.string.send_data));
-        }
+            if (completedCount > 0) {
+                sendDataButton.setText(
+                        getString(R.string.send_data_button, String.valueOf(completedCount)));
+            } else {
+                sendDataButton.setText(getString(R.string.send_data));
+            }
 
-        if (savedCount > 0) {
-            reviewDataButton.setText(getString(R.string.review_data_button,
-                    String.valueOf(savedCount)));
-        } else {
-            reviewDataButton.setText(getString(R.string.review_data));
-        }
+            if (savedCount > 0) {
+                reviewDataButton.setText(getString(R.string.review_data_button,
+                        String.valueOf(savedCount)));
+            } else {
+                reviewDataButton.setText(getString(R.string.review_data));
+            }
 
-        if (viewSentCount > 0) {
-            viewSentFormsButton.setText(
-                    getString(R.string.view_sent_forms_button, String.valueOf(viewSentCount)));
-        } else {
-            viewSentFormsButton.setText(getString(R.string.view_sent_forms));
+            if (viewSentCount > 0) {
+                viewSentFormsButton.setText(
+                        getString(R.string.view_sent_forms_button, String.valueOf(viewSentCount)));
+            } else {
+                viewSentFormsButton.setText(getString(R.string.view_sent_forms));
+            }
         }
     }
 
