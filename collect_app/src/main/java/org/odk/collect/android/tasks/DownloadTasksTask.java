@@ -875,17 +875,18 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         		formMap.put(entryHash, entryHash);
         	}
 
+            // Delete any forms no longer required
+            Timber.i("=================================  delete forms");
+            mf.deleteForms(formMap, results);
+
+            Timber.i("Downloading " + toDownload.size() + " forms");
             if(toDownload.size() > 0) {
                 DownloadFormsTask downloadFormsTask = new DownloadFormsTask(multiFormDownloader);
                 publishProgress(Collect.getInstance().getString(R.string.smap_downloading, toDownload.size()));
 
-                Timber.i("Downloading " + toDownload.size() + " forms");
                 downloadFormsTask.setDownloaderListener((DownloadFormsTaskListener) mStateListener);
                 dfResults = downloadFormsTask.doInBackground(toDownload);   // Not in background as called directly
             }
-
-          	// Delete any forms no longer required
-        	mf.deleteForms(formMap, results);
 
         	processSharedFiles();   // Remove shared files no longer used, load shared sql files
     	}
