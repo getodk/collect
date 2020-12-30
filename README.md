@@ -51,12 +51,12 @@ Most dependencies are managed using gradle, however some Field Task functionalit
 
 1. [Create a Mapbox account](https://www.mapbox.com/signup/).  Select the "Pay-As-You-Go" plan.  Like Google, Mapbox provides free API usage up to the monthly thresholds documented at [https://www.mapbox.com/pricing](https://www.mapbox.com/pricing).  You can find your access token on your [account page](https://account.mapbox.com/).
  
- 1. Edit or create `collect_app/secrets.properties` and set the `GOOGLE_MAPS_API_KEY` and the `MAPBOX_ACCESS_TOKEN` property to your access keys.  You should end up with two    lines that looks like this:
+1. Edit or create `collect_app/secrets.properties` and set the `GOOGLE_MAPS_API_KEY` and the `MAPBOX_ACCESS_TOKEN` property to your access keys.  You should end up with two    lines that looks like this:
    ```
     GOOGLE_MAPS_API_KEY=AIzaSyA9C_...
     MAPBOX_ACCESS_TOKEN=pk.eyJ1IjoibmFwMjAwMCIsImEiOiJja...
    ```
-1. Select run
+1. Select run to view fieldTask in an emulator
 
 ## Branches
 * production - The latest Field Task code
