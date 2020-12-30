@@ -47,7 +47,16 @@ Most dependencies are managed using gradle, however some Field Task functionalit
         Register the app 
         Download the google-services.json file and place it in the fieldTas4/collect_app folder
 
-1. Select run
+1. [Get a Google Maps API key](https://developers.google.com/maps/documentation/android-api/signup).  A credit card number is required however there a fairly significant number of requests available at no charge each month.  Check how many map calls you expect to be using and the expected cost before signing up.
+
+1. [Create a Mapbox account](https://www.mapbox.com/signup/).  Select the "Pay-As-You-Go" plan.  Like Google, Mapbox provides free API usage up to the monthly thresholds documented at [https://www.mapbox.com/pricing](https://www.mapbox.com/pricing).  You can find your access token on your [account page](https://account.mapbox.com/).
+ 
+1. Edit or create `collect_app/secrets.properties` and set the `GOOGLE_MAPS_API_KEY` and the `MAPBOX_ACCESS_TOKEN` property to your access keys.  You should end up with two    lines that looks like this:
+   ```
+    GOOGLE_MAPS_API_KEY=AIzaSyA9C_...
+    MAPBOX_ACCESS_TOKEN=pk.eyJ1IjoibmFwMjAwMCIsImEiOiJja...
+   ```
+1. Select run to view fieldTask in an emulator
 
 ## Branches
 * production - The latest Field Task code
@@ -77,7 +86,7 @@ Most dependencies are managed using gradle, however some Field Task functionalit
     
 1. Fix merge issues.  
 
-    There are likely to be many of these.  Smap changes from ODK are either in their own files or marked with the comment "smap".  If there is a difference and no "smap" commentt then you can generally accept the version from ODK.  Otherwise a manual merge is required to preserve the smap functionality.
+    There are likely to be many of these.  Smap changes from ODK are either in their own files or marked with the comment "smap".  If there is a difference and no "smap" comment then you can generally accept the version from ODK.  Otherwise a manual merge is required to preserve the smap functionality.
  
 ## Changes in the Field Task fork
 
