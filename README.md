@@ -55,7 +55,7 @@ Most dependencies are managed using gradle, however some Field Task functionalit
     ```
    GOOGLE_MAPS_API_KEY=AIzaSyA9C_......
    MAPBOX_ACCESS_TOKEN=pk.eyJ1IjoibmFwMjAwMCIsImEiOiJja.....
-    
+   ```
 1. Select run
 
 ## Branches
