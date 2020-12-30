@@ -47,6 +47,15 @@ Most dependencies are managed using gradle, however some Field Task functionalit
         Register the app 
         Download the google-services.json file and place it in the fieldTas4/collect_app folder
 
+1. [Get a Google Maps API key](https://developers.google.com/maps/documentation/android-api/signup).  A credit card number is required however there a fairly significant number of requests available at no charge each month.  Check how many map calls you expect to be using and the expected cost before signing up.
+
+1. [Create a Mapbox account](https://www.mapbox.com/signup/).  Select the "Pay-As-You-Go" plan.  Like Google, Mapbox provides free API usage up to the monthly thresholds documented at [https://www.mapbox.com/pricing](https://www.mapbox.com/pricing).  You can find your access token on your [account page](https://account.mapbox.com/).
+ 
+ 1. Edit or create `collect_app/secrets.properties` and set the `GOOGLE_MAPS_API_KEY` and the `MAPBOX_ACCESS_TOKEN` property to your access keys.  You should end up with two lines that looks like this:
+    ```
+   GOOGLE_MAPS_API_KEY=AIzaSyA9C_......
+   MAPBOX_ACCESS_TOKEN=pk.eyJ1IjoibmFwMjAwMCIsImEiOiJja.....
+    
 1. Select run
 
 ## Branches
