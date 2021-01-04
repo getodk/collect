@@ -20,7 +20,6 @@ Preferred style using Hamcrest:
 ```
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.core.IsNull.nullValue;
 ...
 assertThat(ClassToTest.methodToTest("input"), is("expected"));
 assertThat(ClassToTest.methodReturnsNull(), is(nullValue()));

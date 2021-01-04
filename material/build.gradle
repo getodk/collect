@@ -4,7 +4,6 @@ apply from: '../config/quality.gradle'
 
 android {
     compileSdkVersion rootProject.androidCompileSdk
-    buildToolsVersion "29.0.2"
 
     defaultConfig {
         minSdkVersion rootProject.androidMinSdk
@@ -38,8 +37,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
 
-    testImplementation 'junit:junit:4.13'
+    testImplementation 'junit:junit:4.13.1'
     testImplementation "org.robolectric:robolectric:4.4"
-    testImplementation "org.mockito:mockito-core:3.5.11"
+    testImplementation "org.mockito:mockito-core:3.6.28"
     testImplementation 'androidx.test.ext:junit:1.1.2'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
 }

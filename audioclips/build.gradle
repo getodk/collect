@@ -6,7 +6,6 @@ apply from: '../config/quality.gradle'
 
 android {
     compileSdkVersion rootProject.androidCompileSdk
-    buildToolsVersion "30.0.0"
 
     defaultConfig {
         minSdkVersion rootProject.androidMinSdk
@@ -32,7 +31,7 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.10'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -43,8 +42,9 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata:2.2.0'
 
     testImplementation project(path: ':testshared')
-    testImplementation 'junit:junit:4.13'
-    testImplementation 'org.mockito:mockito-core:3.5.11'
+    testImplementation 'junit:junit:4.13.1'
+    testImplementation 'org.mockito:mockito-core:3.6.28'
     testImplementation 'androidx.test.ext:junit:1.1.2'
     testImplementation "androidx.arch.core:core-testing:2.1.0"
+    testImplementation 'org.hamcrest:hamcrest:2.2'
 }

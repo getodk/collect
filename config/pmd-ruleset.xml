@@ -22,11 +22,13 @@
         <exclude name="JUnitAssertionsShouldIncludeMessage" />
         <exclude name="JUnitTestContainsTooManyAsserts" />
         <exclude name="JUnitTestsShouldIncludeAssert" />
+        <exclude name="LiteralsFirstInComparisons" />
         <exclude name="LooseCoupling" />
         <exclude name="PositionLiteralsFirstInCaseInsensitiveComparisons" />
         <exclude name="PositionLiteralsFirstInComparisons" />
         <exclude name="PreserveStackTrace" />
         <exclude name="SwitchStmtsShouldHaveDefault" />
+        <exclude name="UnusedAssignment" />
         <exclude name="UseVarargs" />
         <exclude name="UseTryWithResources" />
         <exclude name="ForLoopVariableCount" />
@@ -64,6 +66,7 @@
     </rule>
 
     <rule ref="category/java/design.xml">
+        <exclude name="AbstractClassWithoutAnyMethod" />
         <exclude name="AvoidCatchingGenericException" />
         <exclude name="AvoidDeeplyNestedIfStmts" />
         <exclude name="AvoidThrowingRawExceptionTypes" />
