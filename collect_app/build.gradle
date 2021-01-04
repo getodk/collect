@@ -322,7 +322,7 @@ dependencies {
     // Better "Subjects" for Rx:
     implementation "com.jakewharton.rxrelay2:rxrelay:2.1.1"
 
-    implementation 'com.github.Armen101:AudioRecordView:1.0.4'
+    implementation 'com.github.Armen101:AudioRecordView:1.0.5'
 
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.11.0'
