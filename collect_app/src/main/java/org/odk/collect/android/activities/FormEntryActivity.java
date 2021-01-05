@@ -2645,7 +2645,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     public void widgetValueChanged(QuestionWidget changedWidget) {
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = getFormController();
         if (formController == null) {
             // TODO: As usual, no idea if/how this is possible.
             return;
@@ -2688,7 +2688,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     private void updateFieldListQuestions(FormIndex lastChangedIndex) throws FormDesignException {
         // Save the user-visible state for all questions in this field-list
-        FormEntryPrompt[] questionsBeforeSave = Collect.getInstance().getFormController().getQuestionPrompts();
+        FormEntryPrompt[] questionsBeforeSave = getFormController().getQuestionPrompts();
         List<ImmutableDisplayableQuestion> immutableQuestionsBeforeSave = new ArrayList<>();
         for (FormEntryPrompt questionBeforeSave : questionsBeforeSave) {
             immutableQuestionsBeforeSave.add(new ImmutableDisplayableQuestion(questionBeforeSave));
@@ -2696,7 +2696,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         saveAnswersForCurrentScreen(questionsBeforeSave, immutableQuestionsBeforeSave);
 
-        FormEntryPrompt[] questionsAfterSave = Collect.getInstance().getFormController().getQuestionPrompts();
+        FormEntryPrompt[] questionsAfterSave = getFormController().getQuestionPrompts();
 
         Map<FormIndex, FormEntryPrompt> questionsAfterSaveByIndex = new HashMap<>();
         for (FormEntryPrompt question : questionsAfterSave) {
