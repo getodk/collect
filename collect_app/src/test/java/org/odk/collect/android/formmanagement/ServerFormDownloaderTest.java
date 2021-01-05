@@ -36,6 +36,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.forms.FormSourceException.Type.FETCH_ERROR;
 import static org.odk.collect.android.support.FormUtils.buildForm;
 import static org.odk.collect.android.support.FormUtils.createXForm;
 import static org.odk.collect.android.utilities.FileUtils.read;
@@ -168,6 +169,41 @@ public class ServerFormDownloaderTest {
         ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), formMetadataParser, mock(Analytics.class));
         downloader.downloadForm(serverFormDetails, null, null);
     }
+
+    @Test
+    public void whenFormHasMediaFiles_andDownloadingMediaFileFails_throwsFormDownloadExceptionAndDoesNotSaveAnything() throws Exception {
+        String xform = createXForm("id", "version");
+        ServerFormDetails serverFormDetails = new ServerFormDetails(
+                "Form",
+                "http://downloadUrl",
+                "http://manifestUrl",
+                "id",
+                "version",
+                "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
+                true,
+                false,
+                new ManifestFile("", asList(
+                        new MediaFile("file1", "hash-1", "http://file1")
+                )));
+
+        FormSource formSource = mock(FormSource.class);
+        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
+        when(formSource.fetchMediaFile("http://file1")).thenThrow(new FormSourceException(FETCH_ERROR));
+
+        ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()), mock(Analytics.class));
+
+        try {
+            downloader.downloadForm(serverFormDetails, null, null);
+            fail("Expected exception");
+        } catch (FormDownloadException e) {
+            assertThat(formsRepository.getAll(), is(empty()));
+            assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));
+
+            // The media directory is created early for some reason
+            assertThat(asList(new File(getFormFilesPath()).listFiles()), contains(new File(getFormFilesPath() + "/Form-media")));
+        }
+    }
+
 
     @Test
     public void afterDownloadingXForm_cancelling_throwsInterruptedExceptionAndDoesNotSaveAnything() throws Exception {
