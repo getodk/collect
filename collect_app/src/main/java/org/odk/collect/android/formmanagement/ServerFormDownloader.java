@@ -158,6 +158,7 @@ public class ServerFormDownloader implements FormDownloader {
                 // do not download additional forms.
                 throw e;
             } catch (FormSourceException | IOException e) {
+                cleanUp(fileResult, tempMediaPath);
                 return false;
             }
 
