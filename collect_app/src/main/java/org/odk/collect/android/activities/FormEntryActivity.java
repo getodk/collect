@@ -716,6 +716,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
+    // This method may return null if called before form loading is finished
     @Nullable
     private FormController getFormController() {
         return Collect.getInstance().getFormController();
