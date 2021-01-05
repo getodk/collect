@@ -183,7 +183,7 @@ public class FormController {
      */
     public String getXPath(FormIndex index) {
         String value;
-        switch (getEvent()) {
+        switch (getEvent(index)) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
                 value = "beginningOfForm";
                 break;
