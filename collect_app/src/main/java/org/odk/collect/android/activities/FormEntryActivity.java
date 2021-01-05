@@ -2315,6 +2315,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (pendingActivityResult) {
                     Timber.w("Calling onActivityResult from loadingComplete");
 
+                    formControllerAvailable(formController);
                     // set the current view to whatever group we were at...
                     onScreenRefresh();
                     // process the pending activity request...
