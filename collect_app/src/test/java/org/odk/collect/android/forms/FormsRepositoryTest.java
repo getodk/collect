@@ -1,7 +1,9 @@
 package org.odk.collect.android.forms;
 
 import org.junit.Test;
+import org.odk.collect.android.utilities.FileUtils;
 
+import java.io.File;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -109,5 +111,17 @@ public abstract class FormsRepositoryTest {
 
         formsRepository.restore(1L);
         assertThat(formsRepository.get(1L).isDeleted(), is(false));
+    }
+
+    @Test
+    public void save_addsHashBasedOnFormFile() {
+        FormsRepository formsRepository = buildSubject();
+        Form form = buildForm(1L, "id", "version", getFormFilesPath()).build();
+        assertThat(form.getMD5Hash(), equalTo(null));
+
+        formsRepository.save(form);
+
+        String expectedHash = FileUtils.getMd5Hash(new File(form.getFormFilePath()));
+        assertThat(formsRepository.get(1L).getMD5Hash(), equalTo(expectedHash));
     }
 }
