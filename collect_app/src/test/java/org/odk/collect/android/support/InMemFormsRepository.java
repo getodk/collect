@@ -4,7 +4,9 @@ import android.net.Uri;
 
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.utilities.FileUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -62,7 +64,12 @@ public class InMemFormsRepository implements FormsRepository {
 
     @Override
     public Uri save(Form form) {
-        forms.add(form);
+        String hash = FileUtils.getMd5Hash(new File(form.getFormFilePath()));
+        forms.add(new Form.Builder(form)
+                .md5Hash(hash)
+                .build()
+        );
+
         return null;
     }
 

@@ -44,7 +44,6 @@ public class FormUtils {
                 .formFilePath(formFile.getAbsolutePath())
                 .formMediaPath(mediaPath)
                 .jrFormId(formId)
-                .jrVersion(version)
-                .md5Hash(FileUtils.getMd5Hash(formFile));
+                .jrVersion(version);
     }
 }

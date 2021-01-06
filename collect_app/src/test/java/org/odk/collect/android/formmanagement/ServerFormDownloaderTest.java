@@ -87,6 +87,49 @@ public class ServerFormDownloaderTest {
     }
 
     @Test
+    public void whenFormToDownloadIsUpdate_savesNewVersionAlongsideOldVersion() throws Exception {
+        String xform = createXForm("id", "version");
+        ServerFormDetails serverFormDetails = new ServerFormDetails(
+                "Form",
+                "http://downloadUrl",
+                "http://manifestUrl",
+                "id",
+                "version",
+                "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
+                true,
+                false,
+                null);
+
+        FormSource formSource = mock(FormSource.class);
+        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
+
+        ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()), mock(Analytics.class));
+        downloader.downloadForm(serverFormDetails, null, null);
+
+        String xformUpdate = createXForm("id", "updated");
+        ServerFormDetails serverFormDetailsUpdated = new ServerFormDetails(
+                "Form",
+                "http://downloadUpdatedUrl",
+                "http://manifestUrl",
+                "id",
+                "updated",
+                "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xformUpdate.getBytes())),
+                true,
+                false,
+                null);
+
+        when(formSource.fetchForm("http://downloadUpdatedUrl")).thenReturn(new ByteArrayInputStream(xformUpdate.getBytes()));
+        downloader.downloadForm(serverFormDetailsUpdated, null, null);
+
+        List<Form> allForms = formsRepository.getAll();
+        assertThat(allForms.size(), is(2));
+        allForms.forEach(f -> {
+            File formFile = new File(getAbsoluteFilePath(formsDir.getAbsolutePath(), f.getFormFilePath()));
+            assertThat(formFile.exists(), is(true));
+        });
+    }
+
+    @Test
     public void whenFormHasMediaFiles_downloadsAndSavesFormAndMediaFiles() throws Exception {
         String xform = createXForm("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
