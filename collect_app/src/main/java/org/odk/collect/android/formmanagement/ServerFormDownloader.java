@@ -176,8 +176,7 @@ public class ServerFormDownloader implements FormDownloader {
                     final long start = System.currentTimeMillis();
                     Timber.i("Parsing document %s", fileResult.file.getAbsolutePath());
 
-                    parsedFields = formMetadataParser
-                            .parse(fileResult.file, new File(tempMediaPath));
+                    parsedFields = formMetadataParser.parse(fileResult.file, new File(tempMediaPath));
 
                     Timber.i("Parse finished in %.3f seconds.",
                             (System.currentTimeMillis() - start) / 1000F);
