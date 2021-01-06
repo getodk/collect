@@ -114,6 +114,15 @@ public abstract class FormsRepositoryTest {
     }
 
     @Test
+    public void save_addsId() {
+        FormsRepository formsRepository = buildSubject();
+        Form form = buildForm(null, "id", "version", getFormFilesPath()).build();
+
+        formsRepository.save(form);
+        assertThat(formsRepository.getAll().get(0).getId(), notNullValue());
+    }
+
+    @Test
     public void save_addsHashBasedOnFormFile() {
         FormsRepository formsRepository = buildSubject();
         Form form = buildForm(1L, "id", "version", getFormFilesPath()).build();

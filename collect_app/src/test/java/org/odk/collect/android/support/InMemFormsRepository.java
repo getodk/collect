@@ -18,6 +18,7 @@ import static java.util.stream.Collectors.toList;
 public class InMemFormsRepository implements FormsRepository {
 
     private final List<Form> forms = new ArrayList<>();
+    private long idCounter = 1L;
 
     @Nullable
     @Override
@@ -64,6 +65,12 @@ public class InMemFormsRepository implements FormsRepository {
 
     @Override
     public Uri save(Form form) {
+        if (form.getId() == null) {
+            form = new Form.Builder(form)
+                    .id(idCounter++)
+                    .build();
+        }
+
         String formFilePath = form.getFormFilePath();
 
         if (formFilePath != null) {

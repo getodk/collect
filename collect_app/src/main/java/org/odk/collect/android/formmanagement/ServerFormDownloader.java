@@ -511,8 +511,7 @@ public class ServerFormDownloader implements FormDownloader {
                         } else {
                             // exists, and the hash is the same
                             // no need to download it again
-                            Timber.i("Skipping media file fetch -- file hashes identical: %s",
-                                    finalMediaFile.getAbsolutePath());
+                            Timber.i("Skipping media file fetch -- file hashes identical: %s", finalMediaFile.getAbsolutePath());
                         }
                     }
                     //  } catch (Exception e) {
