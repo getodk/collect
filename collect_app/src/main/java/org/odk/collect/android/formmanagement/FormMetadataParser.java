@@ -10,6 +10,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import timber.log.Timber;
+
 import static org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME;
 import static org.odk.collect.android.utilities.FileUtils.STUB_XML;
 import static org.odk.collect.android.utilities.FileUtils.write;
@@ -31,7 +33,16 @@ public class FormMetadataParser {
         referenceManager.addReferenceFactory(new FileReferenceFactory(mediaDir.getAbsolutePath()));
         referenceManager.addSessionRootTranslator(new RootTranslator("jr://file-csv/", "jr://file/"));
 
-        HashMap<String, String> metadata = FileUtils.getMetadataFromFormDefinition(file);
+        HashMap<String, String> metadata;
+        try {
+            metadata = FileUtils.getMetadataFromFormDefinition(file);
+        } catch (Exception e) {
+            referenceManager.reset();
+            tmpLastSaved.delete();
+            Timber.e(e);
+
+            throw e;
+        }
         referenceManager.reset();
         tmpLastSaved.delete();
 
