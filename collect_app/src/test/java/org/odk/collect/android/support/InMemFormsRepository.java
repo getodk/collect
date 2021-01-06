@@ -64,11 +64,17 @@ public class InMemFormsRepository implements FormsRepository {
 
     @Override
     public Uri save(Form form) {
-        String hash = FileUtils.getMd5Hash(new File(form.getFormFilePath()));
-        forms.add(new Form.Builder(form)
-                .md5Hash(hash)
-                .build()
-        );
+        String formFilePath = form.getFormFilePath();
+
+        if (formFilePath != null) {
+            String hash = FileUtils.getMd5Hash(new File(formFilePath));
+            forms.add(new Form.Builder(form)
+                    .md5Hash(hash)
+                    .build()
+            );
+        } else {
+            forms.add(form);
+        }
 
         return null;
     }
