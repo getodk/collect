@@ -93,7 +93,6 @@ public class ServerFormDownloader implements FormDownloader {
 
         // use a temporary media path until everything is ok.
         String tempMediaPath = new File(tempDir, "media").getAbsolutePath();
-        final String finalMediaPath;
         FileResult fileResult = null;
 
         try {
@@ -101,21 +100,9 @@ public class ServerFormDownloader implements FormDownloader {
             // if we've downloaded a duplicate, this gives us the file
             fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl(), stateListener, tempDir, formsDirPath);
 
-            if (fd.getManifest() != null) {
-                finalMediaPath = FileUtils.constructMediaPath(formsDirPath + File.separator + fileResult.file.getName());
-                String error = downloadMediaFiles(
-                        tempMediaPath,
-                        finalMediaPath,
-                        stateListener,
-                        fd.getManifest().getMediaFiles(),
-                        tempDir
-                );
-
-                if (error != null && !error.isEmpty()) {
-                    success = false;
-                }
-            } else {
-                Timber.i("No Manifest for: %s", fd.getFormName());
+            // download media files if there are any
+            if (fd.getManifest() != null && !fd.getManifest().getMediaFiles().isEmpty()) {
+                downloadMediaFiles(tempMediaPath, stateListener, fd.getManifest().getMediaFiles(), tempDir, fileResult.file.getName());
             }
         } catch (InterruptedException e) {
             Timber.i(e);
@@ -388,6 +375,59 @@ public class ServerFormDownloader implements FormDownloader {
         }
     }
 
+    private void downloadMediaFiles(String tempMediaPath, FormDownloaderListener stateListener, List<MediaFile> files, File tempDir, String formFileName) throws FormSourceException, IOException, InterruptedException {
+        File tempMediaDir = new File(tempMediaPath);
+        FileUtils.checkMediaPath(tempMediaDir);
+
+        for (int i = 0; i < files.size(); i++) {
+            if (stateListener != null) {
+                stateListener.progressUpdate("", String.valueOf(i + 1), "");
+            }
+
+            MediaFile toDownload = files.get(i);
+
+            File tempMediaFile = new File(tempMediaDir, toDownload.getFilename());
+            String finalMediaPath = FileUtils.constructMediaPath(formsDirPath + File.separator + formFileName);
+            File finalMediaFile = new File(finalMediaPath, toDownload.getFilename());
+
+            if (!finalMediaFile.exists()) {
+                InputStream mediaFile = formSource.fetchMediaFile(toDownload.getDownloadUrl());
+                writeFile(mediaFile, tempMediaFile, tempDir, stateListener);
+            } else {
+                String currentFileHash = FileUtils.getMd5Hash(finalMediaFile);
+                String downloadFileHash = getMd5HashWithoutPrefix(toDownload.getHash());
+
+                if (currentFileHash != null && downloadFileHash != null && !currentFileHash.contentEquals(downloadFileHash)) {
+                    // if the hashes match, it's the same file
+                    // otherwise delete our current one and replace it with the new one
+                    FileUtils.deleteAndReport(finalMediaFile);
+                    InputStream mediaFile = formSource.fetchMediaFile(toDownload.getDownloadUrl());
+                    writeFile(mediaFile, tempMediaFile, tempDir, stateListener);
+                } else {
+                    // exists, and the hash is the same
+                    // no need to download it again
+                    Timber.i("Skipping media file fetch -- file hashes identical: %s", finalMediaFile.getAbsolutePath());
+                }
+            }
+        }
+    }
+
+    @NotNull
+    private static String getFormFileName(String formName, String formsDirPath) {
+        String formattedFormName = FormNameUtils.formatFilenameFromFormName(formName);
+        String fileName = formattedFormName + ".xml";
+        int i = 2;
+        while (new File(formsDirPath + File.separator + fileName).exists()) {
+            fileName = formattedFormName + "_" + i + ".xml";
+            i++;
+        }
+        return fileName;
+    }
+
+    public static String getMd5HashWithoutPrefix(String hash) {
+        return hash == null || hash.isEmpty() ? null : hash.substring("md5:".length());
+    }
+
     private static class UriResult {
 
         private final Uri uri;
@@ -430,67 +470,6 @@ public class ServerFormDownloader implements FormDownloader {
         private boolean isNew() {
             return isNew;
         }
-    }
-
-    private String downloadMediaFiles(String tempMediaPath, String finalMediaPath, FormDownloaderListener stateListener, List<MediaFile> files, File tempDir) throws FormSourceException, IOException, InterruptedException {
-        int mediaCount = 0;
-        if (!files.isEmpty()) {
-            File tempMediaDir = new File(tempMediaPath);
-            File finalMediaDir = new File(finalMediaPath);
-
-            FileUtils.checkMediaPath(tempMediaDir);
-
-            for (MediaFile toDownload : files) {
-                ++mediaCount;
-                if (stateListener != null) {
-                    stateListener.progressUpdate(
-                            "",
-                            String.valueOf(mediaCount),
-                            "");
-                }
-
-                //try {
-                File finalMediaFile = new File(finalMediaDir, toDownload.getFilename());
-                File tempMediaFile = new File(tempMediaDir, toDownload.getFilename());
-
-                if (!finalMediaFile.exists()) {
-                    InputStream mediaFile = formSource.fetchMediaFile(toDownload.getDownloadUrl());
-                    writeFile(mediaFile, tempMediaFile, tempDir, stateListener);
-                } else {
-                    String currentFileHash = FileUtils.getMd5Hash(finalMediaFile);
-                    String downloadFileHash = getMd5HashWithoutPrefix(toDownload.getHash());
-
-                    if (currentFileHash != null && downloadFileHash != null && !currentFileHash.contentEquals(downloadFileHash)) {
-                        // if the hashes match, it's the same file
-                        // otherwise delete our current one and replace it with the new one
-                        FileUtils.deleteAndReport(finalMediaFile);
-                        InputStream mediaFile = formSource.fetchMediaFile(toDownload.getDownloadUrl());
-                        writeFile(mediaFile, tempMediaFile, tempDir, stateListener);
-                    } else {
-                        // exists, and the hash is the same
-                        // no need to download it again
-                        Timber.i("Skipping media file fetch -- file hashes identical: %s", finalMediaFile.getAbsolutePath());
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    @NotNull
-    private static String getFormFileName(String formName, String formsDirPath) {
-        String formattedFormName = FormNameUtils.formatFilenameFromFormName(formName);
-        String fileName = formattedFormName + ".xml";
-        int i = 2;
-        while (new File(formsDirPath + File.separator + fileName).exists()) {
-            fileName = formattedFormName + "_" + i + ".xml";
-            i++;
-        }
-        return fileName;
-    }
-
-    public static String getMd5HashWithoutPrefix(String hash) {
-        return hash == null || hash.isEmpty() ? null : hash.substring("md5:".length());
     }
 
     private static class ProgressReporterAndSupplierStateListener implements FormDownloaderListener {
