@@ -3,7 +3,6 @@ package org.odk.collect.android.formmanagement;
 import com.google.common.io.Files;
 
 import org.javarosa.core.reference.ReferenceManager;
-import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.forms.Form;
@@ -46,15 +45,8 @@ import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 public class ServerFormDownloaderTest {
 
     private final FormsRepository formsRepository = new InMemFormsRepository();
-
-    private File cacheDir;
-    private File formsDir;
-
-    @Before
-    public void setup() {
-        cacheDir = Files.createTempDir();
-        formsDir = Files.createTempDir();
-    }
+    private final File cacheDir = Files.createTempDir();
+    private final File formsDir = Files.createTempDir();
 
     @Test
     public void downloadsAndSavesForm() throws Exception {
@@ -235,9 +227,7 @@ public class ServerFormDownloaderTest {
         } catch (FormDownloadException e) {
             assertThat(formsRepository.getAll(), is(empty()));
             assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));
-
-            // The media directory is created early for some reason
-            assertThat(asList(new File(getFormFilesPath()).listFiles()), contains(new File(getFormFilesPath() + "/Form-media")));
+            assertThat(asList(new File(getFormFilesPath()).listFiles()), is(empty()));
         }
     }
 
@@ -398,9 +388,7 @@ public class ServerFormDownloaderTest {
         } catch (InterruptedException e) {
             assertThat(formsRepository.getAll(), is(empty()));
             assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));
-
-            // The media directory is created early for some reason
-            assertThat(asList(new File(getFormFilesPath()).listFiles()), contains(new File(getFormFilesPath() + "/Form-media")));
+            assertThat(asList(new File(getFormFilesPath()).listFiles()), is(empty()));
         }
     }
 

@@ -439,7 +439,6 @@ public class ServerFormDownloader implements FormDownloader {
             File finalMediaDir = new File(finalMediaPath);
 
             FileUtils.checkMediaPath(tempMediaDir);
-            FileUtils.checkMediaPath(finalMediaDir);
 
             for (MediaFile toDownload : files) {
                 ++mediaCount;
