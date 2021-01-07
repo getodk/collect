@@ -16,6 +16,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.support.AlwaysDenyStoragePermissionPermissionUtils;
 import org.odk.collect.android.activities.support.AlwaysGrantStoragePermissionsPermissionUtils;
 import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.application.AppStateProvider;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
 import org.odk.collect.android.injection.config.AppDependencyModule;
@@ -55,7 +56,7 @@ public class SplashScreenActivityTest {
             }
 
             @Override
-            public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager, Analytics analytics) {
+            public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager, Analytics analytics, AppStateProvider appStateProvider, StorageStateProvider storageStateProvider) {
                 return applicationInitializer;
             }
         });
