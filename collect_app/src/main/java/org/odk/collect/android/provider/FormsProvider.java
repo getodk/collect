@@ -43,7 +43,6 @@ import java.util.Map;
 import timber.log.Timber;
 
 import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
-import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
 public class FormsProvider extends ContentProvider {
@@ -87,12 +86,6 @@ public class FormsProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-
-        if (!areStoragePermissionsGranted(getContext())) {
-            Timber.i("Read and write permissions are required for this content provider to function.");
-            return false;
-        }
-
         // must be at the beginning of any activity that can be called from an external intent
         FormsDatabaseHelper h = getDbHelper();
         return h != null;
@@ -101,11 +94,6 @@ public class FormsProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-
-        if (!areStoragePermissionsGranted(getContext())) {
-            return null;
-        }
-
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(FORMS_TABLE_NAME);
         qb.setProjectionMap(sFormsProjectionMap);
@@ -165,10 +153,6 @@ public class FormsProvider extends ContentProvider {
         // Validate the requested uri
         if (URI_MATCHER.match(uri) != FORMS) {
             throw new IllegalArgumentException("Unknown URI " + uri);
-        }
-
-        if (!areStoragePermissionsGranted(getContext())) {
-            return null;
         }
 
         FormsDatabaseHelper formsDatabaseHelper = getDbHelper();
@@ -280,9 +264,6 @@ public class FormsProvider extends ContentProvider {
      */
     @Override
     public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
-        if (!areStoragePermissionsGranted(getContext())) {
-            return 0;
-        }
         StoragePathProvider storagePathProvider = new StoragePathProvider();
         int count = 0;
         FormsDatabaseHelper formsDatabaseHelper = getDbHelper();
@@ -374,12 +355,7 @@ public class FormsProvider extends ContentProvider {
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String where,
-                      String[] whereArgs) {
-
-        if (!areStoragePermissionsGranted(getContext())) {
-            return 0;
-        }
+    public int update(Uri uri, ContentValues values, String where, String[] whereArgs) {
         StoragePathProvider storagePathProvider = new StoragePathProvider();
 
         int count = 0;
