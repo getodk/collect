@@ -43,9 +43,8 @@ public class PermissionUtils {
     }
 
     public boolean areStoragePermissionsGranted(Context context) {
-        return isPermissionGranted(context,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        return storageStateProvider.isScopedStorageUsed()
+                || isPermissionGranted(context, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
     public static boolean isCameraPermissionGranted(Context context) {
