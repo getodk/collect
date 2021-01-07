@@ -35,7 +35,7 @@ public class ServerFormsSynchronizerTest {
     @Test
     public void downloadsNewForms() throws Exception {
         when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(asList(
-                new ServerFormDetails("form-1", "http://example.com/form-1", null, "form-1", "server", "md5:form-1-hash", true, false, null)
+                new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "md5:form-1-hash", true, false, null)
         ));
 
         synchronizer.synchronize();
@@ -45,7 +45,7 @@ public class ServerFormsSynchronizerTest {
     @Test
     public void downloadsUpdatedForms() throws Exception {
         when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(asList(
-                new ServerFormDetails("form-1", "http://example.com/form-1", null, "form-1", "server", "md5:form-1-hash", false, true, null)
+                new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "md5:form-1-hash", false, true, null)
         ));
 
         synchronizer.synchronize();
@@ -61,7 +61,7 @@ public class ServerFormsSynchronizerTest {
                 .build());
 
         when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(asList(
-                new ServerFormDetails("form-1", "http://example.com/form-1", null, "form-1", "server", "md5:form-1-hash", false, false, null)
+                new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "md5:form-1-hash", false, false, null)
         ));
 
         synchronizer.synchronize();
@@ -71,7 +71,7 @@ public class ServerFormsSynchronizerTest {
     @Test
     public void doesNotDownloadExistingForms() throws Exception {
         when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(asList(
-                new ServerFormDetails("form-1", "http://example.com/form-1", null, "form-1", "server", "md5:form-1-hash", false, false, null)
+                new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "md5:form-1-hash", false, false, null)
         ));
 
         synchronizer.synchronize();
@@ -93,8 +93,8 @@ public class ServerFormsSynchronizerTest {
     @Test
     public void whenDownloadingFormThrowsAnError_throwsErrorAndDownloadsOtherForms() throws Exception {
         List<ServerFormDetails> serverForms = asList(
-                new ServerFormDetails("form-1", "http://example.com/form-1", null, "form-1", "server", "md5:form-1-hash", true, false, null),
-                new ServerFormDetails("form-2", "http://example.com/form-2", null, "form-2", "server", "md5:form-2-hash", true, false, null)
+                new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "md5:form-1-hash", true, false, null),
+                new ServerFormDetails("form-2", "http://example.com/form-2", "form-2", "server", "md5:form-2-hash", true, false, null)
         );
 
         when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(serverForms);

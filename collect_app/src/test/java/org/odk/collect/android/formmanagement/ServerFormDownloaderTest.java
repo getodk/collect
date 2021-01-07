@@ -62,7 +62,6 @@ public class ServerFormDownloaderTest {
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
                 "http://downloadUrl",
-                "http://manifestUrl",
                 "id",
                 "version",
                 "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
@@ -92,7 +91,6 @@ public class ServerFormDownloaderTest {
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
                 "http://downloadUrl",
-                "http://manifestUrl",
                 "id",
                 "version",
                 "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
@@ -110,7 +108,6 @@ public class ServerFormDownloaderTest {
         ServerFormDetails serverFormDetailsUpdated = new ServerFormDetails(
                 "Form",
                 "http://downloadUpdatedUrl",
-                "http://manifestUrl",
                 "id",
                 "updated",
                 "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xformUpdate.getBytes())),
@@ -135,7 +132,6 @@ public class ServerFormDownloaderTest {
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
                 "http://downloadUrl",
-                "http://manifestUrl",
                 "id",
                 "version",
                 "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
@@ -182,7 +178,6 @@ public class ServerFormDownloaderTest {
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
                 "http://downloadUrl",
-                "http://manifestUrl",
                 "id",
                 "version",
                 "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
@@ -219,7 +214,6 @@ public class ServerFormDownloaderTest {
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
                 "http://downloadUrl",
-                "http://manifestUrl",
                 "id",
                 "version",
                 "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
@@ -254,7 +248,6 @@ public class ServerFormDownloaderTest {
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
                 "http://downloadUrl",
-                "http://manifestUrl",
                 "id",
                 "version",
                 "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
@@ -281,7 +274,6 @@ public class ServerFormDownloaderTest {
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
                 "http://downloadUrl",
-                "http://manifestUrl",
                 "id",
                 "version",
                 "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
@@ -313,7 +305,6 @@ public class ServerFormDownloaderTest {
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
                 "http://downloadUrl",
-                "http://manifestUrl",
                 "id",
                 "version",
                 "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
@@ -347,7 +338,6 @@ public class ServerFormDownloaderTest {
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 form.getDisplayName(),
                 "http://downloadUrl",
-                null,
                 form.getJrFormId(),
                 form.getJrVersion(),
                 "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
@@ -369,7 +359,6 @@ public class ServerFormDownloaderTest {
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
                 "http://downloadUrl",
-                "http://manifestUrl",
                 "id",
                 "version",
                 "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
@@ -390,7 +379,6 @@ public class ServerFormDownloaderTest {
             ServerFormDetails serverFormDetailsUpdatedMediaFile = new ServerFormDetails(
                     "Form",
                     "http://downloadUrl",
-                    "http://manifestUrl",
                     "id",
                     "version",
                     "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),

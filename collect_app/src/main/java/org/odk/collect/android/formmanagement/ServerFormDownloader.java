@@ -102,10 +102,9 @@ public class ServerFormDownloader implements FormDownloader {
 
             if (fd.getManifest() != null) {
                 finalMediaPath = FileUtils.constructMediaPath(formsDirPath + File.separator + fileResult.file.getName());
-                String error = downloadManifestAndMediaFiles(
+                String error = downloadMediaFiles(
                         tempMediaPath,
                         finalMediaPath,
-                        fd,
                         stateListener,
                         fd.getManifest().getMediaFiles(),
                         tempDir
@@ -432,15 +431,7 @@ public class ServerFormDownloader implements FormDownloader {
         }
     }
 
-    private String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
-                                                 ServerFormDetails fd,
-                                                 FormDownloaderListener stateListener, List<MediaFile> files, File tempDir) throws FormSourceException, IOException, InterruptedException {
-        if (fd.getManifestUrl() == null) {
-            return null;
-        }
-
-        // OK we now have the full set of files to download...
-        Timber.i("Downloading %d media files.", files.size());
+    private String downloadMediaFiles(String tempMediaPath, String finalMediaPath, FormDownloaderListener stateListener, List<MediaFile> files, File tempDir) throws FormSourceException, IOException, InterruptedException {
         int mediaCount = 0;
         if (!files.isEmpty()) {
             File tempMediaDir = new File(tempMediaPath);
@@ -481,9 +472,6 @@ public class ServerFormDownloader implements FormDownloader {
                         Timber.i("Skipping media file fetch -- file hashes identical: %s", finalMediaFile.getAbsolutePath());
                     }
                 }
-                //  } catch (Exception e) {
-                //  return e.getLocalizedMessage();
-                //}
             }
         }
         return null;
