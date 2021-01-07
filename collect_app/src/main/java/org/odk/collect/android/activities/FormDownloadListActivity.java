@@ -342,7 +342,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     @Override
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
-        if (PermissionUtils.areStoragePermissionsGranted(this)) {
+        if (permissionUtils.areStoragePermissionsGranted(this)) {
             updateAdapter();
         }
     }

@@ -42,7 +42,7 @@ public class PermissionUtils {
         this.storageStateProvider = storageStateProvider;
     }
 
-    public static boolean areStoragePermissionsGranted(Context context) {
+    public boolean areStoragePermissionsGranted(Context context) {
         return isPermissionGranted(context,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);

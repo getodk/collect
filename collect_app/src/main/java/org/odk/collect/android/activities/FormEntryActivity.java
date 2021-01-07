@@ -199,7 +199,6 @@ import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnab
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.DialogUtils.getDialog;
 import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
-import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 import static org.odk.collect.android.utilities.ToastUtils.showLongToast;
 import static org.odk.collect.android.utilities.ToastUtils.showShortToast;
@@ -2079,7 +2078,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     protected void onResume() {
         super.onResume();
 
-        if (!areStoragePermissionsGranted(this)) {
+        if (!permissionUtils.areStoragePermissionsGranted(this)) {
             onResumeWasCalledWithoutPermissions = true;
             return;
         }
