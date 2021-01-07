@@ -142,10 +142,16 @@ public class ServerFormDownloader implements FormDownloader {
                 fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl(), stateListener, tempDir, formsDirPath);
 
                 if (fd.getManifest() != null) {
-                    finalMediaPath = FileUtils.constructMediaPath(
-                            fileResult.getFile().getAbsolutePath());
-                    String error = downloadManifestAndMediaFiles(tempMediaPath, finalMediaPath, fd,
-                            stateListener, fd.getManifest().getMediaFiles(), tempDir);
+                    finalMediaPath = FileUtils.constructMediaPath(formsDirPath + File.separator + fileResult.file.getName());
+                    String error = downloadManifestAndMediaFiles(
+                            tempMediaPath,
+                            finalMediaPath,
+                            fd,
+                            stateListener,
+                            fd.getManifest().getMediaFiles(),
+                            tempDir
+                    );
+
                     if (error != null && !error.isEmpty()) {
                         success = false;
                     }
@@ -155,11 +161,8 @@ public class ServerFormDownloader implements FormDownloader {
             } catch (InterruptedException e) {
                 Timber.i(e);
                 cleanUp(fileResult, tempMediaPath);
-
-                // do not download additional forms.
                 throw e;
             } catch (FormSourceException | IOException e) {
-                cleanUp(fileResult, tempMediaPath);
                 return false;
             }
 
@@ -212,18 +215,22 @@ public class ServerFormDownloader implements FormDownloader {
 
         boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields, String formsDirPath) {
             UriResult uriResult = null;
+
             try {
-                uriResult = findExistingOrCreateNewUri(fileResult.file, parsedFields, formsDirPath);
-                if (uriResult != null) {
-                    // move the media files in the media folder
-                    if (tempMediaPath != null) {
-                        File formMediaPath = new File(uriResult.getMediaPath());
-                        FileUtils.moveMediaFiles(tempMediaPath, formMediaPath);
-                    }
-                    return true;
-                } else {
-                    Timber.w("Form uri = null");
+                // Copy form to forms dir
+                File formFile = new File(formsDirPath, fileResult.file.getName());
+                FileUtils.copyFile(fileResult.file, formFile);
+
+                // Save form in database
+                uriResult = findExistingOrCreateNewUri(formFile, parsedFields, formsDirPath);
+
+                // move the media files in the media folder
+                if (tempMediaPath != null) {
+                    File formMediaPath = new File(uriResult.getMediaPath());
+                    FileUtils.moveMediaFiles(tempMediaPath, formMediaPath);
                 }
+
+                return true;
             } catch (IOException e) {
                 Timber.e(e);
 
@@ -235,8 +242,9 @@ public class ServerFormDownloader implements FormDownloader {
                             null, null);
                     Timber.d("Deleted %d rows using uri %s", deletedCount, uri.toString());
                 }
+
+                return false;
             }
-            return false;
         }
 
         private void cleanUp(FileResult fileResult, String tempMediaPath) {
@@ -306,7 +314,7 @@ public class ServerFormDownloader implements FormDownloader {
             InputStream xform = formSource.fetchForm(url);
 
             String fileName = getFormFileName(formName, formsDirPath);
-            File tempFormFile = new File(formsDirPath + File.separator + fileName);
+            File tempFormFile = new File(tempDir + File.separator + fileName);
             writeFile(xform, tempFormFile, tempDir, stateListener);
 
             // we've downloaded the file, and we may have renamed it
@@ -466,8 +474,8 @@ public class ServerFormDownloader implements FormDownloader {
         }
 
         private String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
-                                             ServerFormDetails fd,
-                                             FormDownloaderListener stateListener, List<MediaFile> files, File tempDir) throws FormSourceException, IOException, InterruptedException {
+                                                     ServerFormDetails fd,
+                                                     FormDownloaderListener stateListener, List<MediaFile> files, File tempDir) throws FormSourceException, IOException, InterruptedException {
             if (fd.getManifestUrl() == null) {
                 return null;
             }
