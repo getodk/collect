@@ -241,64 +241,6 @@ public class ServerFormDownloaderTest {
         }
     }
 
-
-    @Test
-    public void afterDownloadingXForm_cancelling_throwsInterruptedExceptionAndDoesNotSaveAnything() throws Exception {
-        String xform = createXForm("id", "version");
-        ServerFormDetails serverFormDetails = new ServerFormDetails(
-                "Form",
-                "http://downloadUrl",
-                "id",
-                "version",
-                "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
-                true,
-                false,
-                null);
-
-        CancelAfterFormDownloadFormSource formListApi = new CancelAfterFormDownloadFormSource(xform);
-        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()), mock(Analytics.class));
-
-        try {
-            downloader.downloadForm(serverFormDetails, null, formListApi);
-            fail("Expected exception");
-        } catch (InterruptedException e) {
-            assertThat(formsRepository.getAll(), is(empty()));
-            assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));
-            assertThat(asList(new File(getFormFilesPath()).listFiles()), is(empty()));
-        }
-    }
-
-    @Test
-    public void afterDownloadingMediaFile_cancelling_throwsInterruptedExceptionAndDoesNotSaveAnything() throws Exception {
-        String xform = createXForm("id", "version");
-        ServerFormDetails serverFormDetails = new ServerFormDetails(
-                "Form",
-                "http://downloadUrl",
-                "id",
-                "version",
-                "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
-                true,
-                false,
-                new ManifestFile("", asList(
-                        new MediaFile("file1", "hash-1", "http://file1"),
-                        new MediaFile("file2", "hash-2", "http://file2")
-                )));
-
-        CancelAfterMediaFileDownloadFormSource formListApi = new CancelAfterMediaFileDownloadFormSource(xform);
-        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()), mock(Analytics.class));
-
-        try {
-            downloader.downloadForm(serverFormDetails, null, formListApi);
-            fail("Excepted exception");
-        } catch (InterruptedException e) {
-            assertThat(formsRepository.getAll(), is(empty()));
-            assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));
-
-            // The media directory is created early for some reason
-            assertThat(asList(new File(getFormFilesPath()).listFiles()), contains(new File(getFormFilesPath() + "/Form-media")));
-        }
-    }
-
     @Test
     public void beforeDownloadingEachMediaFile_reportsProgress() throws Exception {
         String xform = createXForm("id", "version");
@@ -402,6 +344,63 @@ public class ServerFormDownloaderTest {
             File formFile = new File(getAbsoluteFilePath(formsDir.getAbsolutePath(), form.getFormFilePath()));
             assertThat(formFile.exists(), is(true));
             assertThat(new String(read(formFile)), is(xform));
+        }
+    }
+
+    @Test
+    public void afterDownloadingXForm_cancelling_throwsInterruptedExceptionAndDoesNotSaveAnything() throws Exception {
+        String xform = createXForm("id", "version");
+        ServerFormDetails serverFormDetails = new ServerFormDetails(
+                "Form",
+                "http://downloadUrl",
+                "id",
+                "version",
+                "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
+                true,
+                false,
+                null);
+
+        CancelAfterFormDownloadFormSource formListApi = new CancelAfterFormDownloadFormSource(xform);
+        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()), mock(Analytics.class));
+
+        try {
+            downloader.downloadForm(serverFormDetails, null, formListApi);
+            fail("Expected exception");
+        } catch (InterruptedException e) {
+            assertThat(formsRepository.getAll(), is(empty()));
+            assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));
+            assertThat(asList(new File(getFormFilesPath()).listFiles()), is(empty()));
+        }
+    }
+
+    @Test
+    public void afterDownloadingMediaFile_cancelling_throwsInterruptedExceptionAndDoesNotSaveAnything() throws Exception {
+        String xform = createXForm("id", "version");
+        ServerFormDetails serverFormDetails = new ServerFormDetails(
+                "Form",
+                "http://downloadUrl",
+                "id",
+                "version",
+                "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
+                true,
+                false,
+                new ManifestFile("", asList(
+                        new MediaFile("file1", "hash-1", "http://file1"),
+                        new MediaFile("file2", "hash-2", "http://file2")
+                )));
+
+        CancelAfterMediaFileDownloadFormSource formListApi = new CancelAfterMediaFileDownloadFormSource(xform);
+        ServerFormDownloader downloader = new ServerFormDownloader(formListApi, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()), mock(Analytics.class));
+
+        try {
+            downloader.downloadForm(serverFormDetails, null, formListApi);
+            fail("Excepted exception");
+        } catch (InterruptedException e) {
+            assertThat(formsRepository.getAll(), is(empty()));
+            assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));
+
+            // The media directory is created early for some reason
+            assertThat(asList(new File(getFormFilesPath()).listFiles()), contains(new File(getFormFilesPath() + "/Form-media")));
         }
     }
 

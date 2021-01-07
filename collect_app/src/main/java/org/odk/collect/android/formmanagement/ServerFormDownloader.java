@@ -95,6 +95,7 @@ public class ServerFormDownloader implements FormDownloader {
         String tempMediaPath = new File(tempDir, "media").getAbsolutePath();
         final String finalMediaPath;
         FileResult fileResult = null;
+
         try {
             // get the xml file
             // if we've downloaded a duplicate, this gives us the file
@@ -142,8 +143,7 @@ public class ServerFormDownloader implements FormDownloader {
                 parsedFields = formMetadataParser
                         .parse(fileResult.file, new File(tempMediaPath));
 
-                Timber.i("Parse finished in %.3f seconds.",
-                        (System.currentTimeMillis() - start) / 1000F);
+                Timber.i("Parse finished in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
             } catch (RuntimeException e) {
                 return false;
             }
@@ -158,6 +158,7 @@ public class ServerFormDownloader implements FormDownloader {
                 success = false;
             }
         }
+
         if (!installed) {
             success = false;
             cleanUp(fileResult, tempMediaPath);
