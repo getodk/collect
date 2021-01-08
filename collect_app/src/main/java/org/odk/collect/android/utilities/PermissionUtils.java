@@ -223,7 +223,7 @@ public class PermissionUtils {
     }
 
     private DexterBuilder createSinglePermissionRequest(Activity activity, String permission, PermissionListener listener) {
-        return Dexter.withActivity(activity)
+        return Dexter.withContext(activity)
                 .withPermission(permission)
                 .withListener(new com.karumi.dexter.listener.single.PermissionListener() {
                     @Override
@@ -244,7 +244,7 @@ public class PermissionUtils {
     }
 
     private DexterBuilder createMultiplePermissionsRequest(Activity activity, PermissionListener listener, String[] permissions) {
-        return Dexter.withActivity(activity)
+        return Dexter.withContext(activity)
                 .withPermissions(permissions)
                 .withListener(new MultiplePermissionsListener() {
                     @Override
