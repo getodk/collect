@@ -103,7 +103,6 @@ public class FormMetadataParserTest {
     }
 
     @Test
-    @SuppressWarnings("PMD.JUnitUseExpected")
     public void cleansUpReferenceManager() throws Exception {
         File formXml = File.createTempFile("form", ".xml");
         FileUtils.write(formXml, EXTERNAL_SECONDARY_INSTANCE.getBytes());
@@ -113,6 +112,27 @@ public class FormMetadataParserTest {
 
         FormMetadataParser formMetadataParser = new FormMetadataParser(referenceManager);
         formMetadataParser.parse(formXml, mediaDir);
+
+        try {
+            referenceManager.deriveReference("jr://file/external-data.xml");
+            fail("ReferenceManager still able to derive reference so hasn't been cleaned up!");
+        } catch (InvalidReferenceException ignored) {
+            // Pass
+        }
+    }
+
+    @Test
+    public void cleansUpReferenceManagerAfterFail() throws Exception {
+        File formXml = File.createTempFile("form", ".xml");
+
+        FormMetadataParser formMetadataParser = new FormMetadataParser(referenceManager);
+
+        try {
+            formMetadataParser.parse(formXml, mediaDir);
+            fail("Parse should have failed because file doesn't exist");
+        } catch (Exception e) {
+            // Expected
+        }
 
         try {
             referenceManager.deriveReference("jr://file/external-data.xml");

@@ -22,6 +22,7 @@
         <exclude name="JUnitAssertionsShouldIncludeMessage" />
         <exclude name="JUnitTestContainsTooManyAsserts" />
         <exclude name="JUnitTestsShouldIncludeAssert" />
+        <exclude name="JUnitUseExpected" /> <!-- Favor using fail explicitly to test correct exception -->
         <exclude name="LiteralsFirstInComparisons" />
         <exclude name="LooseCoupling" />
         <exclude name="PositionLiteralsFirstInCaseInsensitiveComparisons" />
