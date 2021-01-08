@@ -43,7 +43,14 @@ public class OpenRosaFormSourceTest {
     public void fetchFormList_removesTrailingSlashesFromUrl() throws Exception {
         OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com///", "/formList", httpInterface, webCredentialsUtils, analytics, responseParser);
 
-        when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(new ByteArrayInputStream(RESPONSE.getBytes()), Collections.emptyMap(), "", 200));
+        when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(
+                new ByteArrayInputStream(RESPONSE.getBytes()),
+                new HashMap<String, String>() {{
+                    put(OpenRosaConstants.VERSION_HEADER, "1.0");
+                }},
+                "", 200
+        ));
+
         formListApi.fetchFormList();
         verify(httpInterface).executeGetRequest(eq(new URI("http://blah.com/formList")), any(), any());
     }
@@ -167,6 +174,25 @@ public class OpenRosaFormSourceTest {
             ));
 
             when(responseParser.parseManifest(any())).thenReturn(null);
+            formListApi.fetchManifest("http://blah.com/manifest");
+            fail("No exception thrown!");
+        } catch (FormSourceException e) {
+            assertThat(e.getType(), is(PARSE_ERROR));
+        }
+    }
+
+    @Test
+    public void fetchManifest_whenNotOpenRosaResponse_throwsParseError() throws Exception {
+        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, analytics, responseParser);
+
+        try {
+            when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(
+                    new ByteArrayInputStream("<xml></xml>".getBytes()),
+                    new HashMap<>(),
+                    "hash",
+                    200
+            ));
+
             formListApi.fetchManifest("http://blah.com/manifest");
             fail("No exception thrown!");
         } catch (FormSourceException e) {

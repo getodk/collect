@@ -66,7 +66,13 @@ public class OpenRosaFormSource implements FormSource {
         }
 
         if (result.isOpenRosaResponse) {
-            return parseFormList(result);
+            List<FormListItem> formList = openRosaResponseParser.parseFormList(result.doc);
+
+            if (formList != null) {
+                return formList;
+            } else {
+                throw new FormSourceException(PARSE_ERROR);
+            }
         } else {
             String serverHash = FileUtils.getMd5Hash(new ByteArrayInputStream(serverURL.getBytes()));
             analytics.logServerEvent(LEGACY_FORM_LIST, serverHash);
@@ -91,7 +97,7 @@ public class OpenRosaFormSource implements FormSource {
         }
 
         if (!result.isOpenRosaResponse) {
-            throw new FormSourceException(FETCH_ERROR);
+            throw new FormSourceException(PARSE_ERROR);
         }
 
         List<MediaFile> mediaFiles = openRosaResponseParser.parseManifest(result.doc);
@@ -134,16 +140,6 @@ public class OpenRosaFormSource implements FormSource {
     @Override
     public void updateWebCredentialsUtils(WebCredentialsUtils webCredentialsUtils) {
         this.openRosaXMLFetcher.updateWebCredentialsUtils(webCredentialsUtils);
-    }
-
-    private List<FormListItem> parseFormList(DocumentFetchResult result) throws FormSourceException {
-        List<FormListItem> formList = openRosaResponseParser.parseFormList(result.doc);
-
-        if (formList != null) {
-            return formList;
-        } else {
-            throw new FormSourceException(PARSE_ERROR);
-        }
     }
 
     private List<FormListItem> parseLegacyFormList(DocumentFetchResult result) throws FormSourceException {
