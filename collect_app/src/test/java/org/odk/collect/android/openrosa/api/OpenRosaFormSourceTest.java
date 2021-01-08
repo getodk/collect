@@ -13,7 +13,6 @@ import org.odk.collect.android.utilities.WebCredentialsUtils;
 import java.io.ByteArrayInputStream;
 import java.net.URI;
 import java.net.UnknownHostException;
-import java.util.Collections;
 import java.util.HashMap;
 
 import javax.net.ssl.SSLException;
@@ -107,6 +106,7 @@ public class OpenRosaFormSourceTest {
             fail("No exception thrown!");
         } catch (FormSourceException e) {
             assertThat(e.getType(), is(SERVER_ERROR));
+            assertThat(e.getStatusCode(), is(500));
         }
     }
 
@@ -151,11 +151,12 @@ public class OpenRosaFormSourceTest {
         OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, analytics, responseParser);
 
         try {
-            when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(null, new HashMap<>(), "hash", 500));
+            when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(null, new HashMap<>(), "hash", 503));
             formListApi.fetchManifest("http://blah.com/manifest");
             fail("No exception thrown!");
         } catch (FormSourceException e) {
             assertThat(e.getType(), is(SERVER_ERROR));
+            assertThat(e.getStatusCode(), is(503));
         }
     }
 
@@ -210,6 +211,7 @@ public class OpenRosaFormSourceTest {
             fail("No exception thrown!");
         } catch (FormSourceException e) {
             assertThat(e.getType(), is(SERVER_ERROR));
+            assertThat(e.getStatusCode(), is(500));
         }
     }
 
@@ -223,6 +225,7 @@ public class OpenRosaFormSourceTest {
             fail("No exception thrown!");
         } catch (FormSourceException e) {
             assertThat(e.getType(), is(SERVER_ERROR));
+            assertThat(e.getStatusCode(), is(500));
         }
     }
 

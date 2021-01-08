@@ -13,15 +13,23 @@ public class FormSourceException extends Exception {
 
     private final Type type;
     private final String serverUrl;
+    private final Integer responseCode;
 
     public FormSourceException(Type type) {
         this.type = type;
         this.serverUrl = null;
+        this.responseCode = null;
     }
 
     public FormSourceException(Type type, String serverUrl) {
         this.type = type;
         this.serverUrl = serverUrl;
+        this.responseCode = null;
+    }
+    public FormSourceException(Type type, Integer responseCode) {
+        this.type = type;
+        this.serverUrl = null;
+        this.responseCode = responseCode;
     }
 
     public Type getType() {
@@ -30,6 +38,10 @@ public class FormSourceException extends Exception {
 
     public String getServerUrl() {
         return serverUrl;
+    }
+
+    public Integer getStatusCode() {
+        return responseCode;
     }
 
     @Override

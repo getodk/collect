@@ -61,7 +61,7 @@ public class OpenRosaFormSource implements FormSource {
             } else if (result.responseCode == HTTP_NOT_FOUND) {
                 throw new FormSourceException(UNREACHABLE, serverURL);
             } else {
-                throw new FormSourceException(SERVER_ERROR);
+                throw new FormSourceException(SERVER_ERROR, result.responseCode);
             }
         }
 
@@ -90,7 +90,7 @@ public class OpenRosaFormSource implements FormSource {
 
         if (result.errorMessage != null) {
             if (result.responseCode != HttpURLConnection.HTTP_OK) {
-                throw new FormSourceException(SERVER_ERROR);
+                throw new FormSourceException(SERVER_ERROR, result.responseCode);
             } else {
                 throw new FormSourceException(FETCH_ERROR);
             }
@@ -114,7 +114,7 @@ public class OpenRosaFormSource implements FormSource {
         HttpGetResult result = mapException(() -> openRosaXMLFetcher.fetch(formURL, null));
 
         if (result.getInputStream() == null) {
-            throw new FormSourceException(SERVER_ERROR);
+            throw new FormSourceException(SERVER_ERROR, result.getStatusCode());
         } else {
             return result.getInputStream();
         }
@@ -126,7 +126,7 @@ public class OpenRosaFormSource implements FormSource {
         HttpGetResult result = mapException(() -> openRosaXMLFetcher.fetch(mediaFileURL, null));
 
         if (result.getInputStream() == null) {
-            throw new FormSourceException(SERVER_ERROR);
+            throw new FormSourceException(SERVER_ERROR, result.getStatusCode());
         } else {
             return result.getInputStream();
         }
