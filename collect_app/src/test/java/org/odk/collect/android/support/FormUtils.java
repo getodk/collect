@@ -28,11 +28,11 @@ public class FormUtils {
                 "</h:html>";
     }
 
-    public static Form.Builder buildForm(long id, String formId, String version, String formFilesPath) {
+    public static Form.Builder buildForm(Long id, String formId, String version, String formFilesPath) {
         return buildForm(id, formId, version, formFilesPath, "blah");
     }
 
-    public static Form.Builder buildForm(long id, String formId, String version, String formFilesPath, String xform) {
+    public static Form.Builder buildForm(Long id, String formId, String version, String formFilesPath, String xform) {
         String fileName = formId + "-" + version + "-" + Math.random();
         File formFile = new File(formFilesPath + "/" + fileName + ".xml");
         FileUtils.write(formFile, xform.getBytes());
@@ -44,7 +44,6 @@ public class FormUtils {
                 .formFilePath(formFile.getAbsolutePath())
                 .formMediaPath(mediaPath)
                 .jrFormId(formId)
-                .jrVersion(version)
-                .md5Hash(FileUtils.getMd5Hash(formFile));
+                .jrVersion(version);
     }
 }

@@ -4,7 +4,9 @@ import android.net.Uri;
 
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.utilities.FileUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -16,6 +18,7 @@ import static java.util.stream.Collectors.toList;
 public class InMemFormsRepository implements FormsRepository {
 
     private final List<Form> forms = new ArrayList<>();
+    private long idCounter = 1L;
 
     @Nullable
     @Override
@@ -62,7 +65,24 @@ public class InMemFormsRepository implements FormsRepository {
 
     @Override
     public Uri save(Form form) {
-        forms.add(form);
+        if (form.getId() == null) {
+            form = new Form.Builder(form)
+                    .id(idCounter++)
+                    .build();
+        }
+
+        String formFilePath = form.getFormFilePath();
+
+        if (formFilePath != null) {
+            String hash = FileUtils.getMd5Hash(new File(formFilePath));
+            forms.add(new Form.Builder(form)
+                    .md5Hash(hash)
+                    .build()
+            );
+        } else {
+            forms.add(form);
+        }
+
         return null;
     }
 
