@@ -9,15 +9,16 @@ import org.odk.collect.android.forms.FormListItem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FormListParser {
+public class OpenRosaFormListParserImpl implements OpenRosaFormListParser {
 
-    private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST =
-            "http://openrosa.org/xforms/xformsList";
+    private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST = "http://openrosa.org/xforms/xformsList";
 
+    @Override
     @Nullable
     public List<FormListItem> parse(Document document) {
         // Attempt OpenRosa 1.0 parsing
         Element xformsElement = document.getRootElement();
+
         if (!xformsElement.getName().equals("xforms")) {
             return null;
         }
@@ -26,8 +27,8 @@ public class FormListParser {
         }
 
         List<FormListItem> formList = new ArrayList<>();
-
         int elements = xformsElement.getChildCount();
+
         for (int i = 0; i < elements; ++i) {
             if (xformsElement.getType(i) != Element.ELEMENT) {
                 // e.g., whitespace (text)

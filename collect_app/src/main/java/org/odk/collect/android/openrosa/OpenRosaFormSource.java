@@ -38,12 +38,14 @@ public class OpenRosaFormSource implements FormSource {
             "http://openrosa.org/xforms/xformsManifest";
 
     private final OpenRosaXmlFetcher openRosaXMLFetcher;
+    private final OpenRosaFormListParser openRosaFormListParser;
     private String serverURL;
     private final String formListPath;
 
     private final Analytics analytics;
 
-    public OpenRosaFormSource(String serverURL, String formListPath, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils, Analytics analytics) {
+    public OpenRosaFormSource(String serverURL, String formListPath, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils, Analytics analytics, OpenRosaFormListParser openRosaFormListParser) {
+        this.openRosaFormListParser = openRosaFormListParser;
         this.openRosaXMLFetcher = new OpenRosaXmlFetcher(openRosaHttpInterface, webCredentialsUtils);
         this.serverURL = serverURL;
         this.formListPath = formListPath;
@@ -132,7 +134,7 @@ public class OpenRosaFormSource implements FormSource {
     }
 
     private List<FormListItem> parseFormList(DocumentFetchResult result) throws FormSourceException {
-        List<FormListItem> formList = new FormListParser().parse(result.doc);
+        List<FormListItem> formList = openRosaFormListParser.parse(result.doc);
 
         if (formList != null) {
             return formList;
