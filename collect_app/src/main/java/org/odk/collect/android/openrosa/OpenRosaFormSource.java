@@ -35,18 +35,15 @@ import static org.odk.collect.android.forms.FormSourceException.Type.UNREACHABLE
 
 public class OpenRosaFormSource implements FormSource {
 
-    private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST =
-            "http://openrosa.org/xforms/xformsManifest";
-
     private final OpenRosaXmlFetcher openRosaXMLFetcher;
-    private final OpenRosaFormListParser openRosaFormListParser;
+    private final OpenRosaResponseParser openRosaResponseParser;
     private String serverURL;
     private final String formListPath;
 
     private final Analytics analytics;
 
-    public OpenRosaFormSource(String serverURL, String formListPath, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils, Analytics analytics, OpenRosaFormListParser openRosaFormListParser) {
-        this.openRosaFormListParser = openRosaFormListParser;
+    public OpenRosaFormSource(String serverURL, String formListPath, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils, Analytics analytics, OpenRosaResponseParser openRosaResponseParser) {
+        this.openRosaResponseParser = openRosaResponseParser;
         this.openRosaXMLFetcher = new OpenRosaXmlFetcher(openRosaHttpInterface, webCredentialsUtils);
         this.serverURL = serverURL;
         this.formListPath = formListPath;
@@ -97,7 +94,12 @@ public class OpenRosaFormSource implements FormSource {
             throw new FormSourceException(FETCH_ERROR);
         }
 
-        return parseManifest(result);
+        List<MediaFile> mediaFiles = openRosaResponseParser.parseManifest(result.doc);
+        if (mediaFiles != null) {
+            return new ManifestFile(result.getHash(), mediaFiles);
+        } else {
+            throw new FormSourceException(PARSE_ERROR);
+        }
     }
 
     @Override
@@ -135,7 +137,7 @@ public class OpenRosaFormSource implements FormSource {
     }
 
     private List<FormListItem> parseFormList(DocumentFetchResult result) throws FormSourceException {
-        List<FormListItem> formList = openRosaFormListParser.parse(result.doc);
+        List<FormListItem> formList = openRosaResponseParser.parseFormList(result.doc);
 
         if (formList != null) {
             return formList;
@@ -189,81 +191,6 @@ public class OpenRosaFormSource implements FormSource {
         return formList;
     }
 
-    private ManifestFile parseManifest(DocumentFetchResult result) throws FormSourceException {
-        // Attempt OpenRosa 1.0 parsing
-        Element manifestElement = result.doc.getRootElement();
-
-        if (!manifestElement.getName().equals("manifest")) {
-            throw new FormSourceException(FETCH_ERROR);
-        }
-
-        if (!isXformsManifestNamespacedElement(manifestElement)) {
-            throw new FormSourceException(FETCH_ERROR);
-        }
-
-        int elements = manifestElement.getChildCount();
-        List<MediaFile> files = new ArrayList<>();
-        for (int i = 0; i < elements; ++i) {
-            if (manifestElement.getType(i) != Element.ELEMENT) {
-                // e.g., whitespace (text)
-                continue;
-            }
-            Element mediaFileElement = manifestElement.getElement(i);
-            if (!isXformsManifestNamespacedElement(mediaFileElement)) {
-                // someone else's extension?
-                continue;
-            }
-            String name = mediaFileElement.getName();
-            if (name.equalsIgnoreCase("mediaFile")) {
-                String filename = null;
-                String hash = null;
-                String downloadUrl = null;
-                // don't process descriptionUrl
-                int childCount = mediaFileElement.getChildCount();
-                for (int j = 0; j < childCount; ++j) {
-                    if (mediaFileElement.getType(j) != Element.ELEMENT) {
-                        // e.g., whitespace (text)
-                        continue;
-                    }
-                    Element child = mediaFileElement.getElement(j);
-                    if (!isXformsManifestNamespacedElement(child)) {
-                        // someone else's extension?
-                        continue;
-                    }
-                    String tag = child.getName();
-                    switch (tag) {
-                        case "filename":
-                            filename = XFormParser.getXMLText(child, true);
-                            if (filename != null && filename.length() == 0) {
-                                filename = null;
-                            }
-                            break;
-                        case "hash":
-                            hash = XFormParser.getXMLText(child, true);
-                            if (hash != null && hash.length() == 0) {
-                                hash = null;
-                            }
-                            break;
-                        case "downloadUrl":
-                            downloadUrl = XFormParser.getXMLText(child, true);
-                            if (downloadUrl != null && downloadUrl.length() == 0) {
-                                downloadUrl = null;
-                            }
-                            break;
-                    }
-                }
-
-                if (filename == null || downloadUrl == null || hash == null) {
-                    throw new FormSourceException(FETCH_ERROR);
-                }
-
-                files.add(new MediaFile(filename, hash, downloadUrl));
-            }
-        }
-
-        return new ManifestFile(result.getHash(), files);
-    }
-
     @NotNull
     private <T> T mapException(Callable<T> callable) throws FormSourceException {
         try {
@@ -293,9 +220,5 @@ public class OpenRosaFormSource implements FormSource {
 
         downloadListUrl += formListPath;
         return downloadListUrl;
-    }
-
-    private static boolean isXformsManifestNamespacedElement(Element e) {
-        return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST);
     }
 }

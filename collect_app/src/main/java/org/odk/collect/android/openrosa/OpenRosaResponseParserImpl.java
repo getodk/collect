@@ -5,17 +5,19 @@ import org.jetbrains.annotations.Nullable;
 import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Element;
 import org.odk.collect.android.forms.FormListItem;
+import org.odk.collect.android.forms.MediaFile;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class OpenRosaFormListParserImpl implements OpenRosaFormListParser {
+public class OpenRosaResponseParserImpl implements OpenRosaResponseParser {
 
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST = "http://openrosa.org/xforms/xformsList";
+    private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST = "http://openrosa.org/xforms/xformsManifest";
 
     @Override
     @Nullable
-    public List<FormListItem> parse(Document document) {
+    public List<FormListItem> parseFormList(Document document) {
         // Attempt OpenRosa 1.0 parsing
         Element xformsElement = document.getRootElement();
 
@@ -131,7 +133,87 @@ public class OpenRosaFormListParserImpl implements OpenRosaFormListParser {
         return formList;
     }
 
+    @Nullable
+    public List<MediaFile> parseManifest(Document document) {
+        // Attempt OpenRosa 1.0 parsing
+        Element manifestElement = document.getRootElement();
+
+        if (!manifestElement.getName().equals("manifest")) {
+            return null;
+        }
+
+        if (!isXformsManifestNamespacedElement(manifestElement)) {
+            return null;
+        }
+
+        int elements = manifestElement.getChildCount();
+        List<MediaFile> files = new ArrayList<>();
+        for (int i = 0; i < elements; ++i) {
+            if (manifestElement.getType(i) != Element.ELEMENT) {
+                // e.g., whitespace (text)
+                continue;
+            }
+            Element mediaFileElement = manifestElement.getElement(i);
+            if (!isXformsManifestNamespacedElement(mediaFileElement)) {
+                // someone else's extension?
+                continue;
+            }
+            String name = mediaFileElement.getName();
+            if (name.equalsIgnoreCase("mediaFile")) {
+                String filename = null;
+                String hash = null;
+                String downloadUrl = null;
+                // don't process descriptionUrl
+                int childCount = mediaFileElement.getChildCount();
+                for (int j = 0; j < childCount; ++j) {
+                    if (mediaFileElement.getType(j) != Element.ELEMENT) {
+                        // e.g., whitespace (text)
+                        continue;
+                    }
+                    Element child = mediaFileElement.getElement(j);
+                    if (!isXformsManifestNamespacedElement(child)) {
+                        // someone else's extension?
+                        continue;
+                    }
+                    String tag = child.getName();
+                    switch (tag) {
+                        case "filename":
+                            filename = XFormParser.getXMLText(child, true);
+                            if (filename != null && filename.length() == 0) {
+                                filename = null;
+                            }
+                            break;
+                        case "hash":
+                            hash = XFormParser.getXMLText(child, true);
+                            if (hash != null && hash.length() == 0) {
+                                hash = null;
+                            }
+                            break;
+                        case "downloadUrl":
+                            downloadUrl = XFormParser.getXMLText(child, true);
+                            if (downloadUrl != null && downloadUrl.length() == 0) {
+                                downloadUrl = null;
+                            }
+                            break;
+                    }
+                }
+
+                if (filename == null || downloadUrl == null || hash == null) {
+                    return null;
+                }
+
+                files.add(new MediaFile(filename, hash, downloadUrl));
+            }
+        }
+
+        return files;
+    }
+
     private static boolean isXformsListNamespacedElement(Element e) {
         return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST);
+    }
+
+    private static boolean isXformsManifestNamespacedElement(Element e) {
+        return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST);
     }
 }
