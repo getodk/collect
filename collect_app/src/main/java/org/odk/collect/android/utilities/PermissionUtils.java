@@ -47,23 +47,23 @@ public class PermissionUtils {
                 || isPermissionGranted(context, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
-    public static boolean isCameraPermissionGranted(Context context) {
+    public boolean isCameraPermissionGranted(Context context) {
         return isPermissionGranted(context, Manifest.permission.CAMERA);
     }
 
-    public static boolean areLocationPermissionsGranted(Context context) {
+    public boolean areLocationPermissionsGranted(Context context) {
         return isPermissionGranted(context,
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
     }
 
-    public static boolean areCameraAndRecordAudioPermissionsGranted(Context context) {
+    public boolean areCameraAndRecordAudioPermissionsGranted(Context context) {
         return isPermissionGranted(context,
                 Manifest.permission.CAMERA,
                 Manifest.permission.RECORD_AUDIO);
     }
 
-    public static boolean isGetAccountsPermissionGranted(Context context) {
+    public boolean isGetAccountsPermissionGranted(Context context) {
         return isPermissionGranted(context, Manifest.permission.GET_ACCOUNTS);
     }
 
@@ -74,7 +74,7 @@ public class PermissionUtils {
     /**
      * Returns true only if all of the requested permissions are granted to Collect, otherwise false
      */
-    private static boolean isPermissionGranted(Context context, String... permissions) {
+    private boolean isPermissionGranted(Context context, String... permissions) {
         for (String permission : permissions) {
             if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
                 return false;

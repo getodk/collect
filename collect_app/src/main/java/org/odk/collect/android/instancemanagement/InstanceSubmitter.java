@@ -49,13 +49,16 @@ public class InstanceSubmitter {
     private final InstancesRepository instancesRepository;
     private final GoogleAccountsManager googleAccountsManager;
     private final GoogleApiProvider googleApiProvider;
+    private final PermissionUtils permissionUtils;
 
-    public InstanceSubmitter(Analytics analytics, FormsRepository formsRepository, InstancesRepository instancesRepository, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider) {
+    public InstanceSubmitter(Analytics analytics, FormsRepository formsRepository, InstancesRepository instancesRepository,
+                             GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionUtils permissionUtils) {
         this.analytics = analytics;
         this.formsRepository = formsRepository;
         this.instancesRepository = instancesRepository;
         this.googleAccountsManager = googleAccountsManager;
         this.googleApiProvider = googleApiProvider;
+        this.permissionUtils = permissionUtils;
     }
 
     public Pair<Boolean, String> submitUnsubmittedInstances() throws SubmitException {
@@ -77,7 +80,7 @@ public class InstanceSubmitter {
         boolean anyFailure = false;
 
         if (protocol.equals(TranslationHandler.getString(Collect.getInstance(), R.string.protocol_google_sheets))) {
-            if (PermissionUtils.isGetAccountsPermissionGranted(Collect.getInstance())) {
+            if (permissionUtils.isGetAccountsPermissionGranted(Collect.getInstance())) {
                 String googleUsername = googleAccountsManager.getLastSelectedAccountIfValid();
                 if (googleUsername.isEmpty()) {
                     throw new SubmitException(Type.GOOGLE_ACCOUNT_NOT_SET);

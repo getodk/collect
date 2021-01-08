@@ -23,8 +23,14 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOC
  * {@link org.odk.collect.android.activities.FormEntryActivity}'s onCreate.
  */
 public class BackgroundLocationHelper {
+    private final PermissionUtils permissionUtils;
+
+    public BackgroundLocationHelper(PermissionUtils permissionUtils) {
+        this.permissionUtils = permissionUtils;
+    }
+
     boolean isAndroidLocationPermissionGranted() {
-        return PermissionUtils.areLocationPermissionsGranted(Collect.getInstance().getApplicationContext());
+        return permissionUtils.areLocationPermissionsGranted(Collect.getInstance().getApplicationContext());
     }
 
     boolean isBackgroundLocationPreferenceEnabled() {

@@ -459,7 +459,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private void setupViewModels() {
         backgroundLocationViewModel = ViewModelProviders
-                .of(this, new BackgroundLocationViewModel.Factory())
+                .of(this, new BackgroundLocationViewModel.Factory(permissionUtils))
                 .get(BackgroundLocationViewModel.class);
 
         identityPromptViewModel = ViewModelProviders.of(this).get(IdentityPromptViewModel.class);
@@ -2043,7 +2043,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         // User may have changed location permissions in Android settings
-        if (PermissionUtils.areLocationPermissionsGranted(this) != locationPermissionsPreviouslyGranted) {
+        if (permissionUtils.areLocationPermissionsGranted(this) != locationPermissionsPreviouslyGranted) {
             backgroundLocationViewModel.locationPermissionChanged();
             locationPermissionsPreviouslyGranted = !locationPermissionsPreviouslyGranted;
         }
