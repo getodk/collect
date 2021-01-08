@@ -1,9 +1,6 @@
 package org.odk.collect.android.openrosa.api;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.android.openrosa.HttpGetResult;
@@ -31,11 +28,9 @@ import static org.odk.collect.android.forms.FormSourceException.Type.SECURITY_ER
 import static org.odk.collect.android.forms.FormSourceException.Type.SERVER_ERROR;
 import static org.odk.collect.android.forms.FormSourceException.Type.UNREACHABLE;
 
-@RunWith(MockitoJUnitRunner.class)
 public class OpenRosaFormSourceTest {
 
-    @Mock
-    Analytics analytics;
+    private final Analytics analytics = mock(Analytics.class);
 
     @Test
     public void fetchFormList_removesTrailingSlashesFromUrl() throws Exception {
@@ -102,6 +97,22 @@ public class OpenRosaFormSourceTest {
     }
 
     @Test
+    public void fetchFormList_whenThereIsAServerError_throwsServerError() throws Exception {
+        OpenRosaHttpInterface httpInterface = mock(OpenRosaHttpInterface.class);
+        WebCredentialsUtils webCredentialsUtils = mock(WebCredentialsUtils.class);
+
+        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, analytics);
+
+        try {
+            when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(null, new HashMap<>(), "hash", 500));
+            formListApi.fetchFormList();
+            fail("No exception thrown!");
+        } catch (FormSourceException e) {
+            assertThat(e.getType(), is(SERVER_ERROR));
+        }
+    }
+
+    @Test
     public void fetchManifest_whenThereIsAnUnknownHostException_throwsUnreachableFormApiException() throws Exception {
         OpenRosaHttpInterface httpInterface = mock(OpenRosaHttpInterface.class);
         WebCredentialsUtils webCredentialsUtils = mock(WebCredentialsUtils.class);
@@ -115,6 +126,22 @@ public class OpenRosaFormSourceTest {
         } catch (FormSourceException e) {
             assertThat(e.getType(), is(UNREACHABLE));
             assertThat(e.getServerUrl(), is("http://blah.com"));
+        }
+    }
+
+    @Test
+    public void fetchManifest_whenThereIsAServerError_throwsServerError() throws Exception {
+        OpenRosaHttpInterface httpInterface = mock(OpenRosaHttpInterface.class);
+        WebCredentialsUtils webCredentialsUtils = mock(WebCredentialsUtils.class);
+
+        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, analytics);
+
+        try {
+            when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(null, new HashMap<>(), "hash", 500));
+            formListApi.fetchManifest("http://blah.com/manifest");
+            fail("No exception thrown!");
+        } catch (FormSourceException e) {
+            assertThat(e.getType(), is(SERVER_ERROR));
         }
     }
 

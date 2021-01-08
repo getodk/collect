@@ -15,6 +15,7 @@ import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,20 +56,15 @@ public class OpenRosaFormSource implements FormSource {
 
     @Override
     public List<FormListItem> fetchFormList() throws FormSourceException {
-        if (serverURL == null) {
-            throw new UnsupportedOperationException("Using deprecated constructor!");
-        }
-
         DocumentFetchResult result = mapException(() -> openRosaXMLFetcher.getXML(getFormListURL()));
 
-        // If we can't get the document, return the error, cancel the task
         if (result.errorMessage != null) {
             if (result.responseCode == HTTP_UNAUTHORIZED) {
                 throw new FormSourceException(AUTH_REQUIRED);
             } else if (result.responseCode == HTTP_NOT_FOUND) {
                 throw new FormSourceException(UNREACHABLE, serverURL);
             } else {
-                throw new FormSourceException(FETCH_ERROR);
+                throw new FormSourceException(SERVER_ERROR);
             }
         }
 
@@ -90,7 +86,11 @@ public class OpenRosaFormSource implements FormSource {
         DocumentFetchResult result = mapException(() -> openRosaXMLFetcher.getXML(manifestURL));
 
         if (result.errorMessage != null) {
-            throw new FormSourceException(FETCH_ERROR);
+            if (result.responseCode != HttpURLConnection.HTTP_OK) {
+                throw new FormSourceException(SERVER_ERROR);
+            } else {
+                throw new FormSourceException(FETCH_ERROR);
+            }
         }
 
         if (!result.isOpenRosaResponse) {
