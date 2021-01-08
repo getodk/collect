@@ -27,8 +27,8 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.forms.FormSourceException.Type.FETCH_ERROR;
 import static org.odk.collect.android.forms.FormSourceException.Type.SECURITY_ERROR;
+import static org.odk.collect.android.forms.FormSourceException.Type.SERVER_ERROR;
 import static org.odk.collect.android.forms.FormSourceException.Type.UNREACHABLE;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -119,7 +119,7 @@ public class OpenRosaFormSourceTest {
     }
 
     @Test
-    public void fetchForm_whenThereIsAServerError_throwsFetchErrorFormApiException() throws Exception {
+    public void fetchForm_whenThereIsAServerError_throwsServerError() throws Exception {
         OpenRosaHttpInterface httpInterface = mock(OpenRosaHttpInterface.class);
         WebCredentialsUtils webCredentialsUtils = mock(WebCredentialsUtils.class);
 
@@ -130,12 +130,12 @@ public class OpenRosaFormSourceTest {
             formListApi.fetchForm("http://blah.com/form");
             fail("No exception thrown!");
         } catch (FormSourceException e) {
-            assertThat(e.getType(), is(FETCH_ERROR));
+            assertThat(e.getType(), is(SERVER_ERROR));
         }
     }
 
     @Test
-    public void fetchMediaFile_whenThereIsAServerError_throwsFetchError() throws Exception {
+    public void fetchMediaFile_whenThereIsAServerError_throwsServerError() throws Exception {
         OpenRosaHttpInterface httpInterface = mock(OpenRosaHttpInterface.class);
         WebCredentialsUtils webCredentialsUtils = mock(WebCredentialsUtils.class);
 
@@ -146,7 +146,7 @@ public class OpenRosaFormSourceTest {
             formListApi.fetchMediaFile("http://blah.com/mediaFile");
             fail("No exception thrown!");
         } catch (FormSourceException e) {
-            assertThat(e.getType(), is(FETCH_ERROR));
+            assertThat(e.getType(), is(SERVER_ERROR));
         }
     }
 

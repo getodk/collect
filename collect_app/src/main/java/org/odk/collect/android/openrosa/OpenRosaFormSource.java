@@ -28,6 +28,7 @@ import static org.odk.collect.android.analytics.AnalyticsEvents.LEGACY_FORM_LIST
 import static org.odk.collect.android.forms.FormSourceException.Type.AUTH_REQUIRED;
 import static org.odk.collect.android.forms.FormSourceException.Type.FETCH_ERROR;
 import static org.odk.collect.android.forms.FormSourceException.Type.SECURITY_ERROR;
+import static org.odk.collect.android.forms.FormSourceException.Type.SERVER_ERROR;
 import static org.odk.collect.android.forms.FormSourceException.Type.UNREACHABLE;
 
 public class OpenRosaFormSource implements FormSource {
@@ -102,13 +103,25 @@ public class OpenRosaFormSource implements FormSource {
     @Override
     @NotNull
     public InputStream fetchForm(String formURL) throws FormSourceException {
-        return mapException(() -> openRosaXMLFetcher.getFile(formURL, null));
+        HttpGetResult result = mapException(() -> openRosaXMLFetcher.fetch(formURL, null));
+
+        if (result.getInputStream() == null) {
+            throw new FormSourceException(SERVER_ERROR);
+        } else {
+            return result.getInputStream();
+        }
     }
 
     @Override
     @NotNull
     public InputStream fetchMediaFile(String mediaFileURL) throws FormSourceException {
-        return mapException(() -> openRosaXMLFetcher.getFile(mediaFileURL, null));
+        HttpGetResult result = mapException(() -> openRosaXMLFetcher.fetch(mediaFileURL, null));
+
+        if (result.getInputStream() == null) {
+            throw new FormSourceException(SERVER_ERROR);
+        } else {
+            return result.getInputStream();
+        }
     }
 
     @Override

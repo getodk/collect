@@ -78,11 +78,6 @@ public class OpenRosaXmlFetcher {
         return new DocumentFetchResult(doc, inputStreamResult.isOpenRosaResponse(), inputStreamResult.getHash());
     }
 
-    @Nullable
-    public InputStream getFile(@NonNull String downloadUrl, @Nullable final String contentType) throws Exception {
-        return fetch(downloadUrl, contentType).getInputStream();
-    }
-
     /**
      * Creates a Http connection and input stream
      *
@@ -93,7 +88,7 @@ public class OpenRosaXmlFetcher {
      */
 
     @NonNull
-    private HttpGetResult fetch(@NonNull String downloadUrl, @Nullable final String contentType) throws Exception {
+    public HttpGetResult fetch(@NonNull String downloadUrl, @Nullable final String contentType) throws Exception {
         URI uri;
         try {
             // assume the downloadUrl is escaped properly

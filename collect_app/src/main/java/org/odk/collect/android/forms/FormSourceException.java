@@ -6,7 +6,8 @@ public class FormSourceException extends Exception {
         UNREACHABLE,
         AUTH_REQUIRED,
         FETCH_ERROR,
-        SECURITY_ERROR
+        SECURITY_ERROR,
+        SERVER_ERROR
     }
 
     private final Type type;
