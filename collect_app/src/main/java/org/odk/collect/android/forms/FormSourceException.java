@@ -7,7 +7,8 @@ public class FormSourceException extends Exception {
         AUTH_REQUIRED,
         FETCH_ERROR,
         SECURITY_ERROR,
-        SERVER_ERROR
+        SERVER_ERROR,
+        PARSE_ERROR
     }
 
     private final Type type;

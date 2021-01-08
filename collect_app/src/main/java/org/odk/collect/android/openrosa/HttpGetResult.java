@@ -52,7 +52,6 @@ public class HttpGetResult {
         boolean openRosaResponse = false;
 
         if (!headers.isEmpty()) {
-
             boolean versionMatch = false;
             boolean first = true;
 

@@ -28,6 +28,7 @@ import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 import static org.odk.collect.android.analytics.AnalyticsEvents.LEGACY_FORM_LIST;
 import static org.odk.collect.android.forms.FormSourceException.Type.AUTH_REQUIRED;
 import static org.odk.collect.android.forms.FormSourceException.Type.FETCH_ERROR;
+import static org.odk.collect.android.forms.FormSourceException.Type.PARSE_ERROR;
 import static org.odk.collect.android.forms.FormSourceException.Type.SECURITY_ERROR;
 import static org.odk.collect.android.forms.FormSourceException.Type.SERVER_ERROR;
 import static org.odk.collect.android.forms.FormSourceException.Type.UNREACHABLE;
@@ -139,7 +140,7 @@ public class OpenRosaFormSource implements FormSource {
         if (formList != null) {
             return formList;
         } else {
-            throw new FormSourceException(FETCH_ERROR);
+            throw new FormSourceException(PARSE_ERROR);
         }
     }
 

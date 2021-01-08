@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.android.openrosa.HttpGetResult;
+import org.odk.collect.android.openrosa.OpenRosaConstants;
 import org.odk.collect.android.openrosa.OpenRosaFormListParser;
 import org.odk.collect.android.openrosa.OpenRosaFormSource;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
@@ -25,10 +26,12 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.forms.FormSourceException.Type.PARSE_ERROR;
 import static org.odk.collect.android.forms.FormSourceException.Type.SECURITY_ERROR;
 import static org.odk.collect.android.forms.FormSourceException.Type.SERVER_ERROR;
 import static org.odk.collect.android.forms.FormSourceException.Type.UNREACHABLE;
 
+@SuppressWarnings("PMD.DoubleBraceInitialization")
 public class OpenRosaFormSourceTest {
 
     private final Analytics analytics = mock(Analytics.class);
@@ -97,6 +100,28 @@ public class OpenRosaFormSourceTest {
             fail("No exception thrown!");
         } catch (FormSourceException e) {
             assertThat(e.getType(), is(SERVER_ERROR));
+        }
+    }
+
+    @Test
+    public void fetchFormList_whenOpenRosaResponse_whenParserFails_throwsParseError() throws Exception {
+        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, analytics, formListParser);
+
+        try {
+            when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(
+                    new ByteArrayInputStream("<xml></xml>".getBytes()),
+                    new HashMap<String, String>() {{
+                        put(OpenRosaConstants.VERSION_HEADER, "1.0");
+                    }},
+                    "hash",
+                    200
+            ));
+
+            when(formListParser.parse(any())).thenReturn(null);
+            formListApi.fetchFormList();
+            fail("No exception thrown!");
+        } catch (FormSourceException e) {
+            assertThat(e.getType(), is(PARSE_ERROR));
         }
     }
 
