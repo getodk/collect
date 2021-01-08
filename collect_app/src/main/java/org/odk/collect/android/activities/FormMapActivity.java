@@ -108,6 +108,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
             // This shouldn't be possible because the instance URI had to be used in the calling
             // activity but it has been logged to Crashlytics.
             finish();
+            return;
         }
 
         if (viewModelFactory == null) { // tests set their factories directly
