@@ -83,10 +83,6 @@ public class PermissionUtils {
         return true;
     }
 
-    public static void finishAllActivities(Activity activity) {
-        activity.finishAndRemoveTask();
-    }
-
     /**
      * Checks to see if the user granted Collect the permissions necessary for reading
      * and writing to storage and if not utilizes the permissions API to request them.

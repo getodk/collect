@@ -48,8 +48,6 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
-
 /**
  * Responsible for displaying all the valid instances in the instance directory.
  *
@@ -113,7 +111,7 @@ public class InstanceChooserList extends InstanceListActivity implements
             @Override
             public void denied() {
                 // The activity has to finish because ODK Collect cannot function without these permissions.
-                finishAllActivities(InstanceChooserList.this);
+                finishAndRemoveTask();
             }
         });
     }

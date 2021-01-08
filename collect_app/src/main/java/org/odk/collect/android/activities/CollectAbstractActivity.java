@@ -38,8 +38,6 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
-
 public abstract class CollectAbstractActivity extends AppCompatActivity {
 
     private boolean isInstanceStateSaved;
@@ -69,7 +67,7 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
             builder.setTitle(R.string.storage_runtime_permission_denied_title)
                     .setMessage(R.string.storage_runtime_permission_denied_desc)
                     .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
-                        finishAllActivities(this);
+                        finishAndRemoveTask();
                     })
                     .setIcon(R.drawable.sd)
                     .setCancelable(false)

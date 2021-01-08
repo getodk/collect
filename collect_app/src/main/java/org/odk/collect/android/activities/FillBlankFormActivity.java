@@ -57,8 +57,6 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
-
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores the path to
  * selected form for use by {@link MainMenuActivity}.
@@ -130,7 +128,7 @@ public class FillBlankFormActivity extends FormListActivity implements
             @Override
             public void denied() {
                 // The activity has to finish because ODK Collect cannot function without these permissions.
-                finishAllActivities(FillBlankFormActivity.this);
+                finishAndRemoveTask();
             }
         });
     }

@@ -62,7 +62,6 @@ import butterknife.OnClick;
 import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
-import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -130,7 +129,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
             @Override
             public void denied() {
                 // The activity has to finish because ODK Collect cannot function without these permissions.
-                finishAllActivities(InstanceUploaderListActivity.this);
+                finishAndRemoveTask();
             }
         });
     }
