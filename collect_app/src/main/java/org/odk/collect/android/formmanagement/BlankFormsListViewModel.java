@@ -29,7 +29,7 @@ import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import static java.lang.String.format;
+import static org.odk.collect.android.analytics.AnalyticsUtils.logMatchExactlyCompleted;
 import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
 
 public class BlankFormsListViewModel extends ViewModel {
@@ -99,21 +99,14 @@ public class BlankFormsListViewModel extends ViewModel {
                     if (exception == null) {
                         syncRepository.finishSync(null);
                         notifier.onSync(null);
-                        analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, "Success");
-
                         result.setValue(true);
                     } else {
                         syncRepository.finishSync(exception);
                         notifier.onSync(exception);
-
-                        if (exception.getType().equals(FormSourceException.Type.SERVER_ERROR)) {
-                            analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, format("SERVER_ERROR_%s", exception.getStatusCode()));
-                        } else {
-                            analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, exception.getType().toString());
-                        }
-
                         result.setValue(false);
                     }
+
+                    logMatchExactlyCompleted(analytics, exception);
                 });
             }
 
