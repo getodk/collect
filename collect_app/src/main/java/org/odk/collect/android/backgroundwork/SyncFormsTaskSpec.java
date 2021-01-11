@@ -21,6 +21,8 @@ import java.util.function.Supplier;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import static java.lang.String.format;
+
 public class SyncFormsTaskSpec implements TaskSpec {
 
     @Inject
@@ -59,7 +61,11 @@ public class SyncFormsTaskSpec implements TaskSpec {
                         syncStatusRepository.finishSync(e);
                         notifier.onSync(e);
 
-                        analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, e.getType().toString());
+                        if (e.getType().equals(FormSourceException.Type.SERVER_ERROR)) {
+                            analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, format("SERVER_ERROR_%s", e.getStatusCode()));
+                        } else {
+                            analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, e.getType().toString());
+                        }
                     }
                 }
 
