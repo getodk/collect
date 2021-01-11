@@ -1,10 +1,8 @@
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.app.Application;
 import android.database.Cursor;
 
-import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -16,10 +14,10 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.support.AlwaysGrantStoragePermissionsPermissionsProvider;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StorageInitializer;
@@ -92,17 +90,6 @@ public class FormDownloadListActivityTest {
         @Override
         public StorageInitializer providesStorageInitializer() {
             return new AlwaysSuccessfullyCreateOdkDirsStorageInitializer();
-        }
-    }
-
-    private static class AlwaysGrantStoragePermissionsPermissionsProvider extends PermissionsProvider {
-        private AlwaysGrantStoragePermissionsPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
-            super(permissionsChecker, storageStateProvider);
-        }
-
-        @Override
-        public void requestStoragePermissions(Activity activity, @NonNull PermissionListener action) {
-            action.granted();
         }
     }
 
