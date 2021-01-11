@@ -41,7 +41,6 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
-import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.ServerAuthDialogFragment;
@@ -77,9 +76,6 @@ public class FillBlankFormActivity extends FormListActivity implements
 
     @Inject
     BlankFormsListViewModel.Factory blankFormsListViewModelFactory;
-
-    @Inject
-    PermissionsProvider permissionsProvider;
 
     BlankFormListMenuDelegate menuDelegate;
 

@@ -37,14 +37,11 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
-
-import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -65,9 +62,6 @@ public class InstanceChooserList extends InstanceListActivity implements
     private InstanceSyncTask instanceSyncTask;
 
     private boolean editMode;
-
-    @Inject
-    PermissionsProvider permissionsProvider;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

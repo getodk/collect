@@ -49,7 +49,6 @@ import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
-import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.IOException;
@@ -93,9 +92,6 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
 
     @Inject
     PreferencesProvider preferencesProvider;
-
-    @Inject
-    PermissionsProvider permissionsProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

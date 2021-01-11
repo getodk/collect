@@ -50,7 +50,6 @@ import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
-import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
@@ -137,9 +136,6 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
     @Inject
     FormsDao formsDao;
-
-    @Inject
-    PermissionsProvider permissionsProvider;
 
     @Inject
     StorageInitializer storageInitializer;

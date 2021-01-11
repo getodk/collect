@@ -62,7 +62,6 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.permissions.PermissionsProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -129,9 +128,6 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
     @Inject
     FormsRepository formsRepository;
-
-    @Inject
-    PermissionsProvider permissionsProvider;
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);

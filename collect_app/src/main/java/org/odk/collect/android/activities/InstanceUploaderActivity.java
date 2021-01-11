@@ -27,7 +27,6 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -83,9 +82,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
     @Inject
     FormsRepository formsRepository;
-
-    @Inject
-    PermissionsProvider permissionsProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

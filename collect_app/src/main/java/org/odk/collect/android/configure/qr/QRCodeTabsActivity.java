@@ -16,7 +16,6 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.JsonPreferencesGenerator;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
@@ -56,9 +55,6 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
 
     @Inject
     JsonPreferencesGenerator jsonPreferencesGenerator;
-
-    @Inject
-    PermissionsProvider permissionsProvider;
 
     private QRCodeMenuDelegate menuDelegate;
     private QRCodeActivityResultDelegate activityResultDelegate;

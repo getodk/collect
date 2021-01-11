@@ -44,7 +44,7 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
     protected ThemeUtils themeUtils;
 
     @Inject
-    PermissionsProvider permissionsProvider;
+    protected PermissionsProvider permissionsProvider;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
