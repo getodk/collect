@@ -24,7 +24,7 @@ import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StorageStateProvider;
-import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.permissions.PermissionUtils;
 import org.robolectric.shadows.ShadowEnvironment;
 
 import static android.os.Environment.MEDIA_MOUNTED;

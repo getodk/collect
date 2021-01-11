@@ -1,4 +1,4 @@
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.permissions;
 
 import android.Manifest;
 import android.app.Activity;
@@ -17,8 +17,8 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.storage.StorageStateProvider;
+import org.odk.collect.android.utilities.DialogUtils;
 
 import java.util.List;
 

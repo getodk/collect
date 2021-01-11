@@ -19,7 +19,7 @@ import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
-import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.permissions.PermissionUtils;
 import org.robolectric.annotation.LooperMode;
 
 import static org.hamcrest.MatcherAssert.assertThat;
