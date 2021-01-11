@@ -109,7 +109,7 @@ public class FormMetadataFragmentTest {
         private boolean granted;
 
         private FakePhoneStatePermissionUtils() {
-            super(new PermissionsChecker(InstrumentationRegistry.getInstrumentation().getTargetContext()), R.style.Theme_Collect_Dialog_PermissionAlert, new StorageStateProvider());
+            super(new PermissionsChecker(InstrumentationRegistry.getInstrumentation().getTargetContext()), new StorageStateProvider());
         }
 
         @Override

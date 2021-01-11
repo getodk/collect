@@ -33,12 +33,10 @@ import timber.log.Timber;
 public class PermissionUtils {
 
     private final PermissionsChecker permissionsChecker;
-    private final int dialogTheme;
     private final StorageStateProvider storageStateProvider;
 
-    public PermissionUtils(PermissionsChecker permissionsChecker, int dialogTheme, StorageStateProvider storageStateProvider) {
+    public PermissionUtils(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
         this.permissionsChecker = permissionsChecker;
-        this.dialogTheme = dialogTheme;
         this.storageStateProvider = storageStateProvider;
     }
 
@@ -244,7 +242,7 @@ public class PermissionUtils {
     }
 
     protected void showAdditionalExplanation(Activity activity, int title, int message, int drawable, @NonNull PermissionListener action) {
-        AlertDialog alertDialog = new AlertDialog.Builder(activity, dialogTheme)
+        AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.Theme_Collect_Dialog_PermissionAlert)
                 .setTitle(title)
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())

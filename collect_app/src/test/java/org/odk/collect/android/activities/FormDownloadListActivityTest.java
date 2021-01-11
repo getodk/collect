@@ -97,7 +97,7 @@ public class FormDownloadListActivityTest {
 
     private static class AlwaysGrantStoragePermissionsPermissionUtils extends PermissionUtils {
         private AlwaysGrantStoragePermissionsPermissionUtils(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
-            super(permissionsChecker, R.style.Theme_Collect_Dialog_PermissionAlert, storageStateProvider);
+            super(permissionsChecker, storageStateProvider);
         }
 
         @Override
