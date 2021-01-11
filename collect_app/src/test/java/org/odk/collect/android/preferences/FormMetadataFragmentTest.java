@@ -6,6 +6,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +15,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.metadata.InstallIDProvider;
+import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
@@ -41,7 +43,7 @@ public class FormMetadataFragmentTest {
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
 
             @Override
-            public PermissionUtils providesPermissionUtils() {
+            public PermissionUtils providesPermissionUtils(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
                 return permissionUtils;
             }
 
@@ -107,7 +109,7 @@ public class FormMetadataFragmentTest {
         private boolean granted;
 
         private FakePhoneStatePermissionUtils() {
-            super(R.style.Theme_Collect_Dialog_PermissionAlert, new StorageStateProvider());
+            super(new PermissionsChecker(InstrumentationRegistry.getInstrumentation().getTargetContext()), R.style.Theme_Collect_Dialog_PermissionAlert, new StorageStateProvider());
         }
 
         @Override
@@ -117,7 +119,7 @@ public class FormMetadataFragmentTest {
         }
 
         @Override
-        public boolean isReadPhoneStatePermissionGranted(Context context) {
+        public boolean isReadPhoneStatePermissionGranted() {
             return granted;
         }
 

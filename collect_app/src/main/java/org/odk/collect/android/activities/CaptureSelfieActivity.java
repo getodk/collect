@@ -30,7 +30,7 @@ public class CaptureSelfieActivity extends CollectAbstractActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!permissionUtils.isCameraPermissionGranted(this)) {
+        if (!permissionUtils.isCameraPermissionGranted()) {
             finish();
             return;
         }

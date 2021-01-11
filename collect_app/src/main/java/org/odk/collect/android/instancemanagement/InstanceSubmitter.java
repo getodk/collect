@@ -80,7 +80,7 @@ public class InstanceSubmitter {
         boolean anyFailure = false;
 
         if (protocol.equals(TranslationHandler.getString(Collect.getInstance(), R.string.protocol_google_sheets))) {
-            if (permissionUtils.isGetAccountsPermissionGranted(Collect.getInstance())) {
+            if (permissionUtils.isGetAccountsPermissionGranted()) {
                 String googleUsername = googleAccountsManager.getLastSelectedAccountIfValid();
                 if (googleUsername.isEmpty()) {
                     throw new SubmitException(Type.GOOGLE_ACCOUNT_NOT_SET);

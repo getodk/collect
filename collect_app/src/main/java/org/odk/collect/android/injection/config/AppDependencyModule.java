@@ -79,6 +79,7 @@ import org.odk.collect.android.openrosa.OpenRosaFormSource;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
+import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -195,8 +196,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public PermissionUtils providesPermissionUtils() {
-        return new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert, providesStorageStateProvider());
+    public PermissionUtils providesPermissionUtils(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+        return new PermissionUtils(permissionsChecker, R.style.Theme_Collect_Dialog_PermissionAlert, storageStateProvider);
     }
 
     @Provides
@@ -505,5 +506,11 @@ public class AppDependencyModule {
     @Singleton
     public AppStateProvider providesAppStateProvider() {
         return new AppStateProvider();
+    }
+
+    @Provides
+    @Singleton
+    public PermissionsChecker providesPermissionsChecker(Context context) {
+        return new PermissionsChecker(context);
     }
 }

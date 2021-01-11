@@ -29,7 +29,7 @@ public class CaptureSelfieVideoActivity extends CollectAbstractActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!permissionUtils.areCameraAndRecordAudioPermissionsGranted(this)) {
+        if (!permissionUtils.areCameraAndRecordAudioPermissionsGranted()) {
             finish();
             return;
         }

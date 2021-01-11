@@ -20,6 +20,7 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StorageStateProvider;
@@ -84,8 +85,8 @@ public class FormDownloadListActivityTest {
         }
 
         @Override
-        public PermissionUtils providesPermissionUtils() {
-            return new AlwaysGrantStoragePermissionsPermissionUtils();
+        public PermissionUtils providesPermissionUtils(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+            return new AlwaysGrantStoragePermissionsPermissionUtils(permissionsChecker, storageStateProvider);
         }
 
         @Override
@@ -95,8 +96,8 @@ public class FormDownloadListActivityTest {
     }
 
     private static class AlwaysGrantStoragePermissionsPermissionUtils extends PermissionUtils {
-        private AlwaysGrantStoragePermissionsPermissionUtils() {
-            super(R.style.Theme_Collect_Dialog_PermissionAlert, new StorageStateProvider());
+        private AlwaysGrantStoragePermissionsPermissionUtils(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+            super(permissionsChecker, R.style.Theme_Collect_Dialog_PermissionAlert, storageStateProvider);
         }
 
         @Override

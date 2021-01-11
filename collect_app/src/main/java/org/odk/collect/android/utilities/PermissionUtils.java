@@ -2,12 +2,9 @@ package org.odk.collect.android.utilities;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
-import android.content.pm.PackageManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
 
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.DexterBuilder;
@@ -20,6 +17,7 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.storage.StorageStateProvider;
 
 import java.util.List;
@@ -34,53 +32,39 @@ import timber.log.Timber;
 
 public class PermissionUtils {
 
+    private final PermissionsChecker permissionsChecker;
     private final int dialogTheme;
     private final StorageStateProvider storageStateProvider;
 
-    public PermissionUtils(int dialogTheme, StorageStateProvider storageStateProvider) {
+    public PermissionUtils(PermissionsChecker permissionsChecker, int dialogTheme, StorageStateProvider storageStateProvider) {
+        this.permissionsChecker = permissionsChecker;
         this.dialogTheme = dialogTheme;
         this.storageStateProvider = storageStateProvider;
     }
 
-    public boolean areStoragePermissionsGranted(Context context) {
+    public boolean areStoragePermissionsGranted() {
         return storageStateProvider.isScopedStorageUsed()
-                || isPermissionGranted(context, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                || permissionsChecker.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
-    public boolean isCameraPermissionGranted(Context context) {
-        return isPermissionGranted(context, Manifest.permission.CAMERA);
+    public boolean isCameraPermissionGranted() {
+        return permissionsChecker.isPermissionGranted(Manifest.permission.CAMERA);
     }
 
-    public boolean areLocationPermissionsGranted(Context context) {
-        return isPermissionGranted(context,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION);
+    public boolean areLocationPermissionsGranted() {
+        return permissionsChecker.isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION);
     }
 
-    public boolean areCameraAndRecordAudioPermissionsGranted(Context context) {
-        return isPermissionGranted(context,
-                Manifest.permission.CAMERA,
-                Manifest.permission.RECORD_AUDIO);
+    public boolean areCameraAndRecordAudioPermissionsGranted() {
+        return permissionsChecker.isPermissionGranted(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO);
     }
 
-    public boolean isGetAccountsPermissionGranted(Context context) {
-        return isPermissionGranted(context, Manifest.permission.GET_ACCOUNTS);
+    public boolean isGetAccountsPermissionGranted() {
+        return permissionsChecker.isPermissionGranted(Manifest.permission.GET_ACCOUNTS);
     }
 
-    public boolean isReadPhoneStatePermissionGranted(Context context) {
-        return isPermissionGranted(context, Manifest.permission.READ_PHONE_STATE);
-    }
-
-    /**
-     * Returns true only if all of the requested permissions are granted to Collect, otherwise false
-     */
-    private boolean isPermissionGranted(Context context, String... permissions) {
-        for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                return false;
-            }
-        }
-        return true;
+    public boolean isReadPhoneStatePermissionGranted() {
+        return permissionsChecker.isPermissionGranted(Manifest.permission.READ_PHONE_STATE);
     }
 
     /**

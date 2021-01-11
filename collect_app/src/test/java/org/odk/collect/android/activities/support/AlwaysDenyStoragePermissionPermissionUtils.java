@@ -6,13 +6,14 @@ import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.utilities.PermissionUtils;
 
 public class AlwaysDenyStoragePermissionPermissionUtils extends PermissionUtils {
 
-    public AlwaysDenyStoragePermissionPermissionUtils() {
-        super(R.style.Theme_Collect_Dialog_PermissionAlert, new StorageStateProvider());
+    public AlwaysDenyStoragePermissionPermissionUtils(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+        super(permissionsChecker, R.style.Theme_Collect_Dialog_PermissionAlert, storageStateProvider);
     }
 
     @Override

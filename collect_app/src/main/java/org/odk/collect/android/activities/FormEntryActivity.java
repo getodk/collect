@@ -2043,7 +2043,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         // User may have changed location permissions in Android settings
-        if (permissionUtils.areLocationPermissionsGranted(this) != locationPermissionsPreviouslyGranted) {
+        if (permissionUtils.areLocationPermissionsGranted() != locationPermissionsPreviouslyGranted) {
             backgroundLocationViewModel.locationPermissionChanged();
             locationPermissionsPreviouslyGranted = !locationPermissionsPreviouslyGranted;
         }
@@ -2077,7 +2077,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     protected void onResume() {
         super.onResume();
 
-        if (!permissionUtils.areStoragePermissionsGranted(this)) {
+        if (!permissionUtils.areStoragePermissionsGranted()) {
             onResumeWasCalledWithoutPermissions = true;
             return;
         }

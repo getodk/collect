@@ -30,7 +30,7 @@ public class BackgroundLocationHelper {
     }
 
     boolean isAndroidLocationPermissionGranted() {
-        return permissionUtils.areLocationPermissionsGranted(Collect.getInstance().getApplicationContext());
+        return permissionUtils.areLocationPermissionsGranted();
     }
 
     boolean isBackgroundLocationPreferenceEnabled() {
