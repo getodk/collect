@@ -16,12 +16,12 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.JsonPreferencesGenerator;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.android.permissions.PermissionUtils;
 import org.odk.collect.async.Scheduler;
 
 import javax.inject.Inject;
@@ -58,7 +58,7 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
     JsonPreferencesGenerator jsonPreferencesGenerator;
 
     @Inject
-    PermissionUtils permissionUtils;
+    PermissionsProvider permissionsProvider;
 
     private QRCodeMenuDelegate menuDelegate;
     private QRCodeActivityResultDelegate activityResultDelegate;
@@ -75,7 +75,7 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         initToolbar(getString(R.string.configure_via_qr_code));
         menuDelegate = new QRCodeMenuDelegate(this, activityAvailability, qrCodeGenerator, jsonPreferencesGenerator, fileProvider, preferencesProvider, scheduler);
 
-        permissionUtils.requestCameraPermission(this, new PermissionListener() {
+        permissionsProvider.requestCameraPermission(this, new PermissionListener() {
             @Override
             public void granted() {
                 setupViewPager();

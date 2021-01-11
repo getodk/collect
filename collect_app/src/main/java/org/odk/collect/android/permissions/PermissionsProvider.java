@@ -25,17 +25,15 @@ import java.util.List;
 import timber.log.Timber;
 
 /**
- * PermissionUtils allows all permission related messages and checks to be encapsulated in one
+ * PermissionsProvider allows all permission related messages and checks to be encapsulated in one
  * area so that classes don't have to deal with this responsibility; they just receive a callback
  * that tells them if they have been granted the permission they requested.
  */
-
-public class PermissionUtils {
-
+public class PermissionsProvider {
     private final PermissionsChecker permissionsChecker;
     private final StorageStateProvider storageStateProvider;
 
-    public PermissionUtils(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+    public PermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
         this.permissionsChecker = permissionsChecker;
         this.storageStateProvider = storageStateProvider;
     }

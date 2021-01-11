@@ -10,7 +10,7 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
-import org.odk.collect.android.permissions.PermissionUtils;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
@@ -21,15 +21,15 @@ public class InternalRecordingRequester implements RecordingRequester {
 
     private final Activity activity;
     private final AudioRecorderViewModel viewModel;
-    private final PermissionUtils permissionUtils;
+    private final PermissionsProvider permissionsProvider;
     private final LifecycleOwner lifecycleOwner;
     private final QuestionMediaManager questionMediaManager;
     private final FormEntryViewModel formEntryViewModel;
 
-    public InternalRecordingRequester(Activity activity, AudioRecorderViewModel viewModel, PermissionUtils permissionUtils, LifecycleOwner lifecycleOwner, QuestionMediaManager questionMediaManager, FormEntryViewModel formEntryViewModel) {
+    public InternalRecordingRequester(Activity activity, AudioRecorderViewModel viewModel, PermissionsProvider permissionsProvider, LifecycleOwner lifecycleOwner, QuestionMediaManager questionMediaManager, FormEntryViewModel formEntryViewModel) {
         this.activity = activity;
         this.viewModel = viewModel;
-        this.permissionUtils = permissionUtils;
+        this.permissionsProvider = permissionsProvider;
         this.lifecycleOwner = lifecycleOwner;
         this.questionMediaManager = questionMediaManager;
         this.formEntryViewModel = formEntryViewModel;
@@ -44,7 +44,7 @@ public class InternalRecordingRequester implements RecordingRequester {
 
     @Override
     public void requestRecording(FormEntryPrompt prompt) {
-        permissionUtils.requestRecordAudioPermission(activity, new PermissionListener() {
+        permissionsProvider.requestRecordAudioPermission(activity, new PermissionListener() {
             @Override
             public void granted() {
                 String quality = FormEntryPromptUtils.getAttributeValue(prompt, "quality");

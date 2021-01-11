@@ -13,8 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.support.AlwaysDenyStoragePermissionPermissionUtils;
-import org.odk.collect.android.activities.support.AlwaysGrantStoragePermissionsPermissionUtils;
+import org.odk.collect.android.activities.support.AlwaysDenyStoragePermissionPermissionsProvider;
+import org.odk.collect.android.activities.support.AlwaysGrantStoragePermissionsPermissionsProvider;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.AppStateProvider;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
@@ -27,7 +27,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
-import org.odk.collect.android.permissions.PermissionUtils;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.utilities.UserAgentProvider;
 import org.robolectric.annotation.LooperMode;
 
@@ -52,8 +52,8 @@ public class SplashScreenActivityTest {
         RobolectricHelpers.mountExternalStorage();
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
-            public PermissionUtils providesPermissionUtils(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
-                return new AlwaysGrantStoragePermissionsPermissionUtils(permissionsChecker, storageStateProvider);
+            public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+                return new AlwaysGrantStoragePermissionsPermissionsProvider(permissionsChecker, storageStateProvider);
             }
 
             @Override
@@ -80,8 +80,8 @@ public class SplashScreenActivityTest {
     public void whenStoragePermissionIsNotGranted_finishes() {
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
-            public PermissionUtils providesPermissionUtils(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
-                return new AlwaysDenyStoragePermissionPermissionUtils(permissionsChecker, storageStateProvider);
+            public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+                return new AlwaysDenyStoragePermissionPermissionsProvider(permissionsChecker, storageStateProvider);
             }
         });
 

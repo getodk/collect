@@ -8,7 +8,7 @@ import com.karumi.dexter.DexterActivity;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.junit.Test;
-import org.odk.collect.android.fakes.FakePermissionUtils;
+import org.odk.collect.android.fakes.FakePermissionsProvider;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.Widget;
@@ -26,15 +26,15 @@ import static org.robolectric.Shadows.shadowOf;
 public abstract class BinaryWidgetTest<W extends Widget, A extends IAnswerData>
         extends QuestionWidgetTest<W, A> {
 
-    private final FakePermissionUtils permissionUtils;
+    private final FakePermissionsProvider permissionsProvider;
 
     public BinaryWidgetTest() {
-        permissionUtils = new FakePermissionUtils();
+        permissionsProvider = new FakePermissionsProvider();
     }
 
     protected void stubAllRuntimePermissionsGranted(boolean isGranted) {
-        permissionUtils.setPermissionGranted(isGranted);
-        ((QuestionWidget) getWidget()).setPermissionUtils(permissionUtils);
+        permissionsProvider.setPermissionGranted(isGranted);
+        ((QuestionWidget) getWidget()).setPermissionsProvider(permissionsProvider);
     }
 
     protected Intent getIntentLaunchedByClick(int buttonId) {

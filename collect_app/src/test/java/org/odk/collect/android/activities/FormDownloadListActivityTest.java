@@ -24,7 +24,7 @@ import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StorageStateProvider;
-import org.odk.collect.android.permissions.PermissionUtils;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.robolectric.shadows.ShadowEnvironment;
 
 import static android.os.Environment.MEDIA_MOUNTED;
@@ -85,8 +85,8 @@ public class FormDownloadListActivityTest {
         }
 
         @Override
-        public PermissionUtils providesPermissionUtils(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
-            return new AlwaysGrantStoragePermissionsPermissionUtils(permissionsChecker, storageStateProvider);
+        public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+            return new AlwaysGrantStoragePermissionsPermissionsProvider(permissionsChecker, storageStateProvider);
         }
 
         @Override
@@ -95,8 +95,8 @@ public class FormDownloadListActivityTest {
         }
     }
 
-    private static class AlwaysGrantStoragePermissionsPermissionUtils extends PermissionUtils {
-        private AlwaysGrantStoragePermissionsPermissionUtils(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+    private static class AlwaysGrantStoragePermissionsPermissionsProvider extends PermissionsProvider {
+        private AlwaysGrantStoragePermissionsPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
             super(permissionsChecker, storageStateProvider);
         }
 

@@ -101,7 +101,7 @@ import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.permissions.PermissionUtils;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -196,8 +196,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public PermissionUtils providesPermissionUtils(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
-        return new PermissionUtils(permissionsChecker, storageStateProvider);
+    public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+        return new PermissionsProvider(permissionsChecker, storageStateProvider);
     }
 
     @Provides
@@ -350,8 +350,8 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public PropertyManager providesPropertyManager(Application application, RxEventBus eventBus, PermissionUtils permissionUtils, DeviceDetailsProvider deviceDetailsProvider) {
-        return new PropertyManager(application, eventBus, permissionUtils, deviceDetailsProvider);
+    public PropertyManager providesPropertyManager(Application application, RxEventBus eventBus, PermissionsProvider permissionsProvider, DeviceDetailsProvider deviceDetailsProvider) {
+        return new PropertyManager(application, eventBus, permissionsProvider, deviceDetailsProvider);
     }
 
     @Provides

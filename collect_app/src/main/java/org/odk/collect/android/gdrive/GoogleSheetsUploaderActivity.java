@@ -49,7 +49,7 @@ import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
-import org.odk.collect.android.permissions.PermissionUtils;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.IOException;
@@ -95,7 +95,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     PreferencesProvider preferencesProvider;
 
     @Inject
-    PermissionUtils permissionUtils;
+    PermissionsProvider permissionsProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,7 +175,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     }
 
     private void selectAccount() {
-        permissionUtils.requestGetAccountsPermission(this, new PermissionListener() {
+        permissionsProvider.requestGetAccountsPermission(this, new PermissionListener() {
             @Override
             public void granted() {
                 String account = accountsManager.getLastSelectedAccountIfValid();

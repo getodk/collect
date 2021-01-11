@@ -15,7 +15,7 @@ import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.permissions.PermissionUtils;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 
 import java.util.function.Consumer;
@@ -23,16 +23,16 @@ import java.util.function.Consumer;
 public class ExternalAppRecordingRequester implements RecordingRequester {
 
     private final Activity activity;
-    private final PermissionUtils permissionUtils;
+    private final PermissionsProvider permissionsProvider;
     private final ActivityAvailability activityAvailability;
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final FormEntryViewModel formEntryViewModel;
     private final AudioRecorderViewModel audioRecorderViewModel;
     private final LifecycleOwner lifecycleOwner;
 
-    public ExternalAppRecordingRequester(Activity activity, ActivityAvailability activityAvailability, WaitingForDataRegistry waitingForDataRegistry, PermissionUtils permissionUtils, FormEntryViewModel formEntryViewModel, AudioRecorderViewModel audioRecorderViewModel, LifecycleOwner lifecycleOwner) {
+    public ExternalAppRecordingRequester(Activity activity, ActivityAvailability activityAvailability, WaitingForDataRegistry waitingForDataRegistry, PermissionsProvider permissionsProvider, FormEntryViewModel formEntryViewModel, AudioRecorderViewModel audioRecorderViewModel, LifecycleOwner lifecycleOwner) {
         this.activity = activity;
-        this.permissionUtils = permissionUtils;
+        this.permissionsProvider = permissionsProvider;
         this.activityAvailability = activityAvailability;
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.formEntryViewModel = formEntryViewModel;
@@ -49,7 +49,7 @@ public class ExternalAppRecordingRequester implements RecordingRequester {
 
     @Override
     public void requestRecording(FormEntryPrompt prompt) {
-        permissionUtils.requestRecordAudioPermission(activity, new PermissionListener() {
+        permissionsProvider.requestRecordAudioPermission(activity, new PermissionListener() {
             @Override
             public void granted() {
                 Intent intent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);

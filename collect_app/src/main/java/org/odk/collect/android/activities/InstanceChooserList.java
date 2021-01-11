@@ -37,12 +37,12 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.android.permissions.PermissionUtils;
 
 import javax.inject.Inject;
 
@@ -67,7 +67,7 @@ public class InstanceChooserList extends InstanceListActivity implements
     private boolean editMode;
 
     @Inject
-    PermissionUtils permissionUtils;
+    PermissionsProvider permissionsProvider;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,7 +95,7 @@ public class InstanceChooserList extends InstanceListActivity implements
             ((TextView) findViewById(android.R.id.empty)).setText(R.string.no_items_display_sent_forms);
         }
 
-        permissionUtils.requestStoragePermissions(this, new PermissionListener() {
+        permissionsProvider.requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent

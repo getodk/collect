@@ -35,7 +35,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.permissions.PermissionUtils;
+import org.odk.collect.android.permissions.PermissionsProvider;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -61,7 +61,7 @@ public class SplashScreenActivity extends Activity {
     Analytics analytics;
 
     @Inject
-    PermissionUtils permissionUtils;
+    PermissionsProvider permissionsProvider;
 
     @Inject
     GeneralSharedPreferences generalSharedPreferences;
@@ -73,7 +73,7 @@ public class SplashScreenActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         DaggerUtils.getComponent(this).inject(this);
 
-        permissionUtils.requestStoragePermissions(this, new PermissionListener() {
+        permissionsProvider.requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent

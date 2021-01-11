@@ -48,7 +48,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.android.permissions.PermissionUtils;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -98,7 +98,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     Analytics analytics;
 
     @Inject
-    PermissionUtils permissionUtils;
+    PermissionsProvider permissionsProvider;
 
     @Inject
     NetworkStateProvider connectivityProvider;
@@ -120,7 +120,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
             showAllMode = savedInstanceState.getBoolean(SHOW_ALL_MODE);
         }
 
-        permissionUtils.requestStoragePermissions(this, new PermissionListener() {
+        permissionsProvider.requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 init();

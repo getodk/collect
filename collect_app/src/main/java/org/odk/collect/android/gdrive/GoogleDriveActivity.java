@@ -62,7 +62,7 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.permissions.PermissionUtils;
+import org.odk.collect.android.permissions.PermissionsProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -131,7 +131,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     FormsRepository formsRepository;
 
     @Inject
-    PermissionUtils permissionUtils;
+    PermissionsProvider permissionsProvider;
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -267,7 +267,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     }
 
     private void selectAccount() {
-        permissionUtils.requestGetAccountsPermission(this, new PermissionListener() {
+        permissionsProvider.requestGetAccountsPermission(this, new PermissionListener() {
             @Override
             public void granted() {
                 String account = accountsManager.getLastSelectedAccountIfValid();

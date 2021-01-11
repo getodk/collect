@@ -50,13 +50,13 @@ import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.android.permissions.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -139,7 +139,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     FormsDao formsDao;
 
     @Inject
-    PermissionUtils permissionUtils;
+    PermissionsProvider permissionsProvider;
 
     @Inject
     StorageInitializer storageInitializer;
@@ -160,7 +160,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
                 .get(FormDownloadListViewModel.class);
 
         // This activity is accessed directly externally
-        permissionUtils.requestStoragePermissions(this, new PermissionListener() {
+        permissionsProvider.requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
@@ -342,7 +342,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     @Override
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
-        if (permissionUtils.areStoragePermissionsGranted()) {
+        if (permissionsProvider.areStoragePermissionsGranted()) {
             updateAdapter();
         }
     }

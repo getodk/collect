@@ -40,12 +40,12 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
-import org.odk.collect.android.permissions.PermissionUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.StringUtils;
@@ -102,7 +102,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     public SoftKeyboardController softKeyboardController;
 
     @Inject
-    PermissionUtils permissionUtils;
+    PermissionsProvider permissionsProvider;
 
     public QuestionWidget(Context context, QuestionDetails questionDetails) {
         super(context);
@@ -430,12 +430,12 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         return referenceManager;
     }
 
-    public PermissionUtils getPermissionUtils() {
-        return permissionUtils;
+    public PermissionsProvider getPermissionsProvider() {
+        return permissionsProvider;
     }
 
-    public void setPermissionUtils(PermissionUtils permissionUtils) {
-        this.permissionUtils = permissionUtils;
+    public void setPermissionsProvider(PermissionsProvider permissionsProvider) {
+        this.permissionsProvider = permissionsProvider;
     }
 
     public void setValueChangedListener(WidgetValueChangedListener valueChangedListener) {

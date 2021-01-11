@@ -41,6 +41,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.ServerAuthDialogFragment;
@@ -50,7 +51,6 @@ import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.android.permissions.PermissionUtils;
 import org.odk.collect.android.views.ObviousProgressBar;
 
 import javax.inject.Inject;
@@ -79,7 +79,7 @@ public class FillBlankFormActivity extends FormListActivity implements
     BlankFormsListViewModel.Factory blankFormsListViewModelFactory;
 
     @Inject
-    PermissionUtils permissionUtils;
+    PermissionsProvider permissionsProvider;
 
     BlankFormListMenuDelegate menuDelegate;
 
@@ -112,7 +112,7 @@ public class FillBlankFormActivity extends FormListActivity implements
 
         menuDelegate = new BlankFormListMenuDelegate(this, blankFormsListViewModel, networkStateProvider);
 
-        permissionUtils.requestStoragePermissions(this, new PermissionListener() {
+        permissionsProvider.requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
@@ -215,7 +215,7 @@ public class FillBlankFormActivity extends FormListActivity implements
     public void onMapButtonClick(AdapterView<?> parent, View view, int position, long id) {
         final Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, id);
         final Intent intent = new Intent(Intent.ACTION_EDIT, formUri, this, FormMapActivity.class);
-        permissionUtils.requestLocationPermissions(this, new PermissionListener() {
+        permissionsProvider.requestLocationPermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 startActivity(intent);

@@ -6,17 +6,17 @@ import androidx.annotation.NonNull;
 
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.permissions.PermissionsChecker;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
-import org.odk.collect.android.permissions.PermissionUtils;
 
-public class AlwaysGrantStoragePermissionsPermissionUtils extends PermissionUtils {
+public class AlwaysDenyStoragePermissionPermissionsProvider extends PermissionsProvider {
 
-    public AlwaysGrantStoragePermissionsPermissionUtils(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+    public AlwaysDenyStoragePermissionPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
         super(permissionsChecker, storageStateProvider);
     }
 
     @Override
     public void requestStoragePermissions(Activity activity, @NonNull PermissionListener action) {
-        action.granted();
+        action.denied();
     }
 }

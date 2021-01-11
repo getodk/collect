@@ -7,19 +7,19 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.storage.StorageStateProvider;
-import org.odk.collect.android.permissions.PermissionUtils;
+import org.odk.collect.android.permissions.PermissionsProvider;
 
 /**
- * Mocked implementation of {@link PermissionUtils}.
+ * Mocked implementation of {@link PermissionsProvider}.
  * The runtime permissions can be stubbed for unit testing
  *
  * @author Shobhit Agarwal
  */
-public class FakePermissionUtils extends PermissionUtils {
+public class FakePermissionsProvider extends PermissionsProvider {
 
     private boolean isPermissionGranted;
 
-    public FakePermissionUtils() {
+    public FakePermissionsProvider() {
         super(new PermissionsChecker(InstrumentationRegistry.getInstrumentation().getTargetContext()), new StorageStateProvider());
     }
 

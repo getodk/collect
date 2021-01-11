@@ -232,7 +232,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         switch (id) {
             case R.id.capture_video:
                 if (selfie) {
-                    getPermissionUtils().requestCameraAndRecordAudioPermissions((Activity) getContext(), new PermissionListener() {
+                    getPermissionsProvider().requestCameraAndRecordAudioPermissions((Activity) getContext(), new PermissionListener() {
                         @Override
                         public void granted() {
                             captureVideo();
@@ -243,7 +243,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
                         }
                     });
                 } else {
-                    getPermissionUtils().requestCameraPermission((Activity) getContext(), new PermissionListener() {
+                    getPermissionsProvider().requestCameraPermission((Activity) getContext(), new PermissionListener() {
                         @Override
                         public void granted() {
                             captureVideo();

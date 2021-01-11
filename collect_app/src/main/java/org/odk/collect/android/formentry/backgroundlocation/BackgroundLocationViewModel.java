@@ -8,7 +8,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.client.GoogleFusedLocationClient;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.permissions.PermissionUtils;
+import org.odk.collect.android.permissions.PermissionsProvider;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
 
@@ -66,10 +66,10 @@ public class BackgroundLocationViewModel extends ViewModel {
     }
 
     public static class Factory implements ViewModelProvider.Factory {
-        private final PermissionUtils permissionUtils;
+        private final PermissionsProvider permissionsProvider;
 
-        public Factory(PermissionUtils permissionUtils) {
-            this.permissionUtils = permissionUtils;
+        public Factory(PermissionsProvider permissionsProvider) {
+            this.permissionsProvider = permissionsProvider;
         }
 
         @Override
@@ -78,7 +78,7 @@ public class BackgroundLocationViewModel extends ViewModel {
                 GoogleFusedLocationClient googleLocationClient = new GoogleFusedLocationClient(Collect.getInstance());
 
                 BackgroundLocationManager locationManager =
-                        new BackgroundLocationManager(googleLocationClient, new BackgroundLocationHelper(permissionUtils));
+                        new BackgroundLocationManager(googleLocationClient, new BackgroundLocationHelper(permissionsProvider));
                 return (T) new BackgroundLocationViewModel(locationManager);
             }
             return null;

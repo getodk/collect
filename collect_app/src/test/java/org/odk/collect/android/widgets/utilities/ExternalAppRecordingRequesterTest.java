@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.fakes.FakePermissionUtils;
+import org.odk.collect.android.fakes.FakePermissionsProvider;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -41,7 +41,7 @@ import static org.robolectric.Shadows.shadowOf;
 public class ExternalAppRecordingRequesterTest {
 
     private final ActivityAvailability activityAvailability = mock(ActivityAvailability.class);
-    private final FakePermissionUtils permissionUtils = new FakePermissionUtils();
+    private final FakePermissionsProvider permissionsProvider = new FakePermissionsProvider();
     private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
     private final AudioRecorderViewModel audioRecorderViewModel = mock(AudioRecorderViewModel.class);
 
@@ -51,13 +51,13 @@ public class ExternalAppRecordingRequesterTest {
     @Before
     public void setup() {
         activity = Robolectric.buildActivity(Activity.class).get();
-        requester = new ExternalAppRecordingRequester(activity, activityAvailability, waitingForDataRegistry, permissionUtils, mock(FormEntryViewModel.class), audioRecorderViewModel, new FakeLifecycleOwner());
+        requester = new ExternalAppRecordingRequester(activity, activityAvailability, waitingForDataRegistry, permissionsProvider, mock(FormEntryViewModel.class), audioRecorderViewModel, new FakeLifecycleOwner());
     }
 
     @Test
     public void requestRecording_whenIntentIsNotAvailable_doesNotStartAnyIntentAndCancelsWaitingForData() {
         when(activityAvailability.isActivityAvailable(any())).thenReturn(false);
-        permissionUtils.setPermissionGranted(true);
+        permissionsProvider.setPermissionGranted(true);
 
         requester.requestRecording(promptWithAnswer(null));
 
@@ -71,7 +71,7 @@ public class ExternalAppRecordingRequesterTest {
     @Test
     public void requestRecording_whenPermissionIsNotGranted_doesNotStartAnyIntentAndCancelsWaitingForData() {
         when(activityAvailability.isActivityAvailable(any())).thenReturn(true);
-        permissionUtils.setPermissionGranted(false);
+        permissionsProvider.setPermissionGranted(false);
 
         requester.requestRecording(promptWithAnswer(null));
 
@@ -83,7 +83,7 @@ public class ExternalAppRecordingRequesterTest {
     @Test
     public void requestRecording_whenPermissionIsGranted_startsRecordSoundIntentAndSetsWidgetWaitingForData() {
         when(activityAvailability.isActivityAvailable(any())).thenReturn(true);
-        permissionUtils.setPermissionGranted(true);
+        permissionsProvider.setPermissionGranted(true);
 
         FormEntryPrompt prompt = promptWithAnswer(null);
         requester.requestRecording(prompt);
