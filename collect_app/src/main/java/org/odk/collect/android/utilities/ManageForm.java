@@ -84,8 +84,12 @@ public class ManageForm {
         	}
 		 } catch (Throwable e) {
        		 Timber.e("ManageForm: " + e.getMessage());
-    	 }
-		c.close();
+    	 } finally {
+		    if(c != null) {
+                c.close();
+            }
+        }
+
 		
 		return fd;
 	}
