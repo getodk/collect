@@ -455,10 +455,11 @@ public class FillBlankFormTest {
                 .clickSaveAndExit();
     }
 
+    @Test
     public void questionValidation_ShouldShowToastOnlyWhenConditionsAreNotMet() {
-
         //TestCase43
-        new MainMenuPage(rule)
+        rule.mainMenu()
+                .copyForm("t21257.xml")
                 .startBlankForm("t21257")
                 .clickOnText("mytext1")
                 .inputText("test")
@@ -490,10 +491,11 @@ public class FillBlankFormTest {
                 .swipeToNextQuestion();
     }
 
+    @Test
     public void noDataLost_ShouldRememberAnswersForMultiSelectWidget() {
-
         //TestCase44
-        new MainMenuPage(rule)
+        rule.mainMenu()
+                .copyForm("test_multiselect_cleared.xml")
                 .startBlankForm("test_multiselect_cleared")
                 .clickOnText("a")
                 .clickOnText("c")
