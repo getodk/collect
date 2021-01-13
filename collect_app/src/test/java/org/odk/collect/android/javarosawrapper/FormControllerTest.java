@@ -89,6 +89,29 @@ public class FormControllerTest {
         assertThat(formController.getAuditEventLogger(), notNullValue());
     }
 
+
+    //region indexIsInFieldList
+    @Test
+    public void questionInGroupWithoutFieldListAppearance_isNotInFieldList() throws IOException {
+        FormController formController = createFormController(GROUP);
+
+        formController.stepToNextEvent(true);
+        formController.stepToNextEvent(true);
+        assertThat(formController.getEvent(), equalTo(FormEntryController.EVENT_QUESTION));
+        assertThat(formController.indexIsInFieldList(), is(false));
+    }
+
+    @Test
+    public void questionInGroupWithoutFieldListAppearance_isInFieldList() throws IOException {
+        FormController formController = createFormController(FIELD_LIST);
+
+        formController.stepToNextEvent(true);
+        formController.stepToNextEvent(true);
+        assertThat(formController.getEvent(), equalTo(FormEntryController.EVENT_QUESTION));
+        assertThat(formController.indexIsInFieldList(), is(true));
+    }
+    //endregion
+
     @NotNull
     private FormController createFormController(String xform) throws IOException {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(xform.getBytes());
@@ -187,6 +210,54 @@ public class FormControllerTest {
             "                    </input>\n" +
             "                </repeat>\n" +
             "            </repeat>\n" +
+            "        </group>\n" +
+            "    </h:body>\n" +
+            "</h:html>\n";
+
+    private static final String GROUP = "<?xml version=\"1.0\"?>\n" +
+            "<h:html xmlns=\"http://www.w3.org/2002/xforms\" xmlns:h=\"http://www.w3.org/1999/xhtml\">\n" +
+            "    <h:head>\n" +
+            "        <h:title>Group</h:title>\n" +
+            "        <model>\n" +
+            "            <instance>\n" +
+            "                <data id=\"group\">\n" +
+            "                    <group>\n" +
+            "                        <question/>\n" +
+            "                    </group>\n" +
+            "                </data>\n" +
+            "            </instance>\n" +
+            "            <bind nodeset=\"/data/group/question\" type=\"int\"/>\n" +
+            "        </model>\n" +
+            "    </h:head>\n" +
+            "    <h:body>\n" +
+            "        <group ref=\"/data/group\">\n" +
+            "          <input ref=\"/data/group/question\">\n" +
+            "            <label>Question</label>\n" +
+            "          </input>\n" +
+            "        </group>\n" +
+            "    </h:body>\n" +
+            "</h:html>\n";
+
+    private static final String FIELD_LIST = "<?xml version=\"1.0\"?>\n" +
+            "<h:html xmlns=\"http://www.w3.org/2002/xforms\" xmlns:h=\"http://www.w3.org/1999/xhtml\">\n" +
+            "    <h:head>\n" +
+            "        <h:title>Field list</h:title>\n" +
+            "        <model>\n" +
+            "            <instance>\n" +
+            "                <data id=\"field-list\">\n" +
+            "                    <group>\n" +
+            "                        <question/>\n" +
+            "                    </group>\n" +
+            "                </data>\n" +
+            "            </instance>\n" +
+            "            <bind nodeset=\"/data/group/question\" type=\"int\"/>\n" +
+            "        </model>\n" +
+            "    </h:head>\n" +
+            "    <h:body>\n" +
+            "        <group ref=\"/data/group\" appearance=\"fake fieLd-list fake\">\n" +
+            "          <input ref=\"/data/group/question\">\n" +
+            "            <label>Question</label>\n" +
+            "          </input>\n" +
             "        </group>\n" +
             "    </h:body>\n" +
             "</h:html>\n";

@@ -58,6 +58,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -371,11 +372,11 @@ public class FormController {
     private boolean groupIsFieldList(FormIndex index) {
         // if this isn't a group, return right away
         IFormElement element = formEntryController.getModel().getForm().getChild(index);
-        if (!(element instanceof GroupDef)) {
+        if (!(element instanceof GroupDef) || element.getAppearanceAttr() == null) {
             return false;
         }
 
-        return ODKView.FIELD_LIST.equalsIgnoreCase(element.getAppearanceAttr());
+        return element.getAppearanceAttr().toLowerCase(Locale.ENGLISH).contains(ODKView.FIELD_LIST);
     }
 
     private boolean repeatIsFieldList(FormIndex index) {
@@ -437,8 +438,6 @@ public class FormController {
         } else if (event == FormEntryController.EVENT_REPEAT) {
             return repeatIsFieldList(index);
         } else {
-            // right now we only test Questions and Groups. Should we also handle
-            // repeats?
             return false;
         }
 
@@ -578,18 +577,14 @@ public class FormController {
                 // Handle nested field-list group
                 if (getEvent() == FormEntryController.EVENT_GROUP) {
                     FormIndex currentIndex = getFormIndex();
-                    IFormElement element = formEntryController.getModel().getForm().getChild(
-                            currentIndex);
-                    if (element instanceof GroupDef) {
-                        GroupDef gd = (GroupDef) element;
-                        if (ODKView.FIELD_LIST.equalsIgnoreCase(gd.getAppearanceAttr())) {
-                            // jump to outermost containing field-list
-                            FormEntryCaption[] fclist = this.getCaptionHierarchy(currentIndex);
-                            for (FormEntryCaption caption : fclist) {
-                                if (groupIsFieldList(caption.getIndex())) {
-                                    formEntryController.jumpToIndex(caption.getIndex());
-                                    break;
-                                }
+
+                    if (groupIsFieldList(currentIndex)) {
+                        // jump to outermost containing field-list
+                        FormEntryCaption[] fclist = this.getCaptionHierarchy(currentIndex);
+                        for (FormEntryCaption caption : fclist) {
+                            if (groupIsFieldList(caption.getIndex())) {
+                                formEntryController.jumpToIndex(caption.getIndex());
+                                break;
                             }
                         }
                     }
