@@ -85,11 +85,10 @@
 					</item>
 				</select1>
 				<input ref="/formulaire_adherent/observation/recherche_espece">
-					<label>Nom latin de l'espece :</label>
-					<hint>au moins 3 lettres</hint>
+					<label>Nom latin de l'espece - au moins 3 lettres</label>
 				</input>
 				<select1 appearance="autocompletion search('espece', 'startswith', 'lb_nom_key',  ../recherche_espece ,'regne', ../regne )" ref="/formulaire_adherent/observation/nom_espece">
-					<label>Nom latin de l'espece :</label>
+					<label>Nom latin de l'espece</label>
 					<item>
 						<label>lb_nom_key</label>
 						<value>cd_nom</value>
