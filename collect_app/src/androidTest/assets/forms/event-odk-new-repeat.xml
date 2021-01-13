@@ -59,7 +59,7 @@
             <!-- setvalue with relative reference. Context should be the contextualized ref (https://www.w3.org/TR/xforms11/#action-setvalue) -->
             <setvalue event="odk-new-repeat" ref="/data/my-repeat/defaults-to-toplevel" value="../../my-toplevel-value + 2" />
             <input ref="/data/my-repeat/defaults-to-toplevel">
-                <label>A value</label>
+                <label>B value</label>
             </input>
         </repeat>
 
@@ -78,7 +78,7 @@
         <repeat nodeset="/data/my-repeat-without-template">
             <setvalue event="odk-new-repeat" ref="/data/my-repeat-without-template/my-value">2</setvalue>
             <input ref="/data/my-repeat-without-template/my-value">
-                <label>A value</label>
+                <label>C value</label>
             </input>
         </repeat>
     </h:body>

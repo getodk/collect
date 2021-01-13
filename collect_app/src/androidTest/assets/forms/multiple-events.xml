@@ -23,16 +23,19 @@
     </h:head>
     <h:body>
         <input ref="/data/nested-first-load">
+            <label>First load</label>
             <setvalue event="odk-instance-first-load" ref="/data/nested-first-load">cheese</setvalue>
         </input>
 
         <group ref="/data/my-group">
             <input ref="nested-first-load-in-group">
+                <label>First load group</label>
                 <setvalue event="odk-instance-first-load" ref="/data/my-group/nested-first-load-in-group">more cheese</setvalue>
             </input>
         </group>
 
         <input ref="/data/my-value">
+            <label>My value</label>
             <setvalue event="odk-instance-first-load xforms-value-changed" ref="/data/my-calculated-value" value="../my-value * 2" />
         </input>
     </h:body>

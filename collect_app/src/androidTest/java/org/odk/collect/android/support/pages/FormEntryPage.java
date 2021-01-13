@@ -95,6 +95,13 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return new ErrorDialog(rule).assertOnPage();
     }
 
+    public FormEntryPage swipeToNextQuestionWithConstraintViolation(String constraintText) {
+        flingLeft();
+        checkIsToastWithMessageDisplayed(constraintText);
+
+        return this;
+    }
+
     public FormEntryPage clickOptionsIcon() {
         Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
         return this;
@@ -122,6 +129,18 @@ public class FormEntryPage extends Page<FormEntryPage> {
     public FormEntryPage swipeToPreviousQuestion(String questionText) {
         onView(withId(R.id.questionholder)).perform(swipeRight());
         assertText(questionText);
+        return this;
+    }
+
+    public FormEntryPage swipeToPreviousQuestion(String questionText, boolean isRequired) {
+        onView(withId(R.id.questionholder)).perform(swipeRight());
+
+        if (isRequired) {
+            assertText("* " + questionText);
+        } else {
+            assertText(questionText);
+        }
+
         return this;
     }
 
