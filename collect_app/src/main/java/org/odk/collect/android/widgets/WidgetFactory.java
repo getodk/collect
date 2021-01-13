@@ -202,7 +202,6 @@ public class WidgetFactory {
             case Constants.CONTROL_SELECT_MULTI:
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
                 // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
-                // This means normal appearances should be put before search().
                 if (appearance.contains(WidgetAppearanceUtils.MINIMAL)) {
                     questionWidget = new SelectMultiMinimalWidget(context, questionDetails, waitingForDataRegistry);
                 } else if (appearance.contains(WidgetAppearanceUtils.LIST_NO_LABEL)) {
@@ -261,7 +260,6 @@ public class WidgetFactory {
         boolean isQuick = appearance.contains(WidgetAppearanceUtils.QUICK);
         // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
         // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
-        // This means normal appearances should be put before search().
         if (appearance.contains(WidgetAppearanceUtils.MINIMAL)) {
             questionWidget = new SelectOneMinimalWidget(context, questionDetails, isQuick, waitingForDataRegistry);
         } else if (appearance.contains(WidgetAppearanceUtils.LIKERT)) {
