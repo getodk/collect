@@ -124,7 +124,10 @@ public abstract class SelectImageMapWidget extends ItemsWidget {
 
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     private void setUpWebView() {
-        String svgMap = getParsedSVGFile();
+        String svgMap = null;
+        if (imageMapFilePath != null && !imageMapFilePath.isEmpty()) {
+            svgMap = getParsedSVGFile();
+        }
         if (svgMap != null) {
             binding.imageMap.getSettings().setJavaScriptEnabled(true);
             binding.imageMap.getSettings().setBuiltInZoomControls(true);

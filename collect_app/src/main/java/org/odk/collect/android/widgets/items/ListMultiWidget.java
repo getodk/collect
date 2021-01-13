@@ -65,12 +65,14 @@ import timber.log.Timber;
 public class ListMultiWidget extends ItemsWidget implements MultiChoiceWidget {
 
     final ArrayList<CheckBox> checkBoxes;
+    private final boolean displayLabel;
 
     @SuppressWarnings("unchecked")
     public ListMultiWidget(Context context, QuestionDetails questionDetails, boolean displayLabel) {
         super(context, questionDetails);
 
         checkBoxes = new ArrayList<>();
+        this.displayLabel = displayLabel;
 
         // Layout holds the horizontal list of buttons
         LinearLayout buttonLayout = findViewById(R.id.list_items);
@@ -298,5 +300,9 @@ public class ListMultiWidget extends ItemsWidget implements MultiChoiceWidget {
     @Override
     protected int getLayout() {
         return R.layout.label_widget;
+    }
+
+    public boolean shouldDisplayLabel() {
+        return displayLabel;
     }
 }

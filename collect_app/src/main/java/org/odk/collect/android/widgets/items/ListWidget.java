@@ -71,11 +71,14 @@ public class ListWidget extends ItemsWidget implements MultiChoiceWidget, OnChec
     private final boolean autoAdvance;
 
     ArrayList<RadioButton> buttons;
+    private final boolean displayLabel;
 
     public ListWidget(Context context, QuestionDetails questionDetails, boolean displayLabel, boolean autoAdvance) {
         super(context, questionDetails);
 
         this.autoAdvance = autoAdvance;
+        this.displayLabel = displayLabel;
+
         if (context instanceof AdvanceToNextListener) {
             listener = (AdvanceToNextListener) context;
         }
@@ -306,5 +309,9 @@ public class ListWidget extends ItemsWidget implements MultiChoiceWidget, OnChec
     @Override
     protected int getLayout() {
         return R.layout.label_widget;
+    }
+
+    public boolean shouldDisplayLabel() {
+        return displayLabel;
     }
 }
