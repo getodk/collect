@@ -9,8 +9,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.database.InstanceDatabaseMigrator;
 import org.odk.collect.android.database.InstancesDatabaseHelper;
 import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.SQLiteUtils;
 
@@ -23,13 +26,15 @@ import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
-import static org.odk.collect.android.database.InstancesDatabaseHelper.INSTANCES_TABLE_NAME;
+import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_DATABASE_VERSION;
+import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_TABLE_NAME;
+import static org.odk.collect.android.database.InstanceDatabaseMigrator.CURRENT_VERSION_COLUMN_NAMES;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
 @RunWith(Parameterized.class)
 @Ignore("`Parameterized` causes problems for Firebase sharding. Probably need to replace this at JUnit level")
 public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
-    private static final String DATABASE_PATH = InstancesDatabaseHelper.getDatabasePath();
+    private String databasePath;
 
     @Parameterized.Parameter
     public String description;
@@ -44,13 +49,14 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
 
     @Before
     public void saveRealDb() {
-        FileUtils.copyFile(new File(DATABASE_PATH), new File(DATABASE_PATH + TEMPORARY_EXTENSION));
+        databasePath = new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA) + File.separator + "instances.db";
+        FileUtils.copyFile(new File(databasePath), new File(databasePath + TEMPORARY_EXTENSION));
     }
 
     @After
     public void restoreRealDb() {
-        FileUtils.copyFile(new File(DATABASE_PATH + TEMPORARY_EXTENSION), new File(DATABASE_PATH));
-        FileUtils.deleteAndReport(new File(DATABASE_PATH + TEMPORARY_EXTENSION));
+        FileUtils.copyFile(new File(databasePath + TEMPORARY_EXTENSION), new File(databasePath));
+        FileUtils.deleteAndReport(new File(databasePath + TEMPORARY_EXTENSION));
     }
 
     @Parameterized.Parameters(name = "{0}")
@@ -68,15 +74,15 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
 
     @Test
     public void testMigration() throws IOException {
-        copyFileFromAssets("database" + File.separator + dbFilename, DATABASE_PATH);
-        InstancesDatabaseHelper databaseHelper = new InstancesDatabaseHelper();
+        copyFileFromAssets("database" + File.separator + dbFilename, databasePath);
+        InstancesDatabaseHelper databaseHelper = new InstancesDatabaseHelper(new InstanceDatabaseMigrator(), new StoragePathProvider());
         ensureMigrationAppliesFully(databaseHelper);
 
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
-        assertThat(db.getVersion(), is(InstancesDatabaseHelper.DATABASE_VERSION));
+        assertThat(db.getVersion(), is(INSTANCES_DATABASE_VERSION));
 
         List<String> newColumnNames = SQLiteUtils.getColumnNames(db, INSTANCES_TABLE_NAME);
-        assertThat(newColumnNames, contains(InstancesDatabaseHelper.CURRENT_VERSION_COLUMN_NAMES));
+        assertThat(newColumnNames, contains(CURRENT_VERSION_COLUMN_NAMES));
         assertThatInstancesAreKeptAfterMigrating();
     }
 

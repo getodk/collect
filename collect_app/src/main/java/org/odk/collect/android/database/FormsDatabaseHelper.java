@@ -16,90 +16,44 @@
 
 package org.odk.collect.android.database;
 
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 
-import java.io.File;
-
 import timber.log.Timber;
 
+import static org.odk.collect.android.database.DatabaseConstants.FORMS_DATABASE_NAME;
 import static org.odk.collect.android.database.DatabaseConstants.FORMS_DATABASE_VERSION;
 
 /**
  * This class helps open, create, and upgrade the database file.
  */
 public class FormsDatabaseHelper extends SQLiteOpenHelper {
+    private final DatabaseMigrator databaseMigrator;
 
-    private static final String DATABASE_NAME = "forms.db";
-
-    private static boolean isDatabaseBeingMigrated;
-
-    private final FormDatabaseMigrator formDatabaseMigrator;
-
-    public FormsDatabaseHelper() {
-        super(new DatabaseContext(new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA)), DATABASE_NAME, null, FORMS_DATABASE_VERSION);
-        formDatabaseMigrator = new FormDatabaseMigrator();
-    }
-
-    public static String getDatabasePath() {
-        return new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA) + File.separator + DATABASE_NAME;
+    public FormsDatabaseHelper(DatabaseMigrator databaseMigrator, StoragePathProvider storagePathProvider) {
+        super(new DatabaseContext(storagePathProvider.getDirPath(StorageSubdirectory.METADATA)), FORMS_DATABASE_NAME, null, FORMS_DATABASE_VERSION);
+        this.databaseMigrator = databaseMigrator;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        formDatabaseMigrator.onCreate(db);
+        databaseMigrator.onCreate(db);
     }
 
-    @SuppressWarnings({"checkstyle:FallThrough"})
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        try {
-            Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
-
-            formDatabaseMigrator.onUpgrade(db, oldVersion);
-
-            Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
-            isDatabaseBeingMigrated = false;
-        } catch (SQLException e) {
-            isDatabaseBeingMigrated = false;
-            throw e;
-        }
+        Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
+        databaseMigrator.onUpgrade(db, oldVersion);
+        Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
     }
 
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        try {
-            formDatabaseMigrator.onDowngrade(db);
-
-            Timber.i("Downgrading database from %d to %d completed with success.", oldVersion, newVersion);
-            isDatabaseBeingMigrated = false;
-        } catch (SQLException e) {
-            isDatabaseBeingMigrated = false;
-            throw e;
-        }
-    }
-
-    public static void databaseMigrationStarted() {
-        isDatabaseBeingMigrated = true;
-    }
-
-    public static boolean isDatabaseBeingMigrated() {
-        return isDatabaseBeingMigrated;
-    }
-
-    public static boolean databaseNeedsUpgrade() {
-        boolean isDatabaseHelperOutOfDate = false;
-        try {
-            SQLiteDatabase db = SQLiteDatabase.openDatabase(FormsDatabaseHelper.getDatabasePath(), null, SQLiteDatabase.OPEN_READONLY);
-            isDatabaseHelperOutOfDate = FORMS_DATABASE_VERSION != db.getVersion();
-            db.close();
-        } catch (SQLException e) {
-            Timber.i(e);
-        }
-        return isDatabaseHelperOutOfDate;
+        Timber.i("Downgrading database from version %d to %d", oldVersion, newVersion);
+        databaseMigrator.onDowngrade(db);
+        Timber.i("Downgrading database from %d to %d completed with success.", oldVersion, newVersion);
     }
 }

@@ -30,6 +30,7 @@ import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.InstanceDatabaseMigrator;
 import org.odk.collect.android.database.InstancesDatabaseHelper;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -44,7 +45,7 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.database.InstancesDatabaseHelper.INSTANCES_TABLE_NAME;
+import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_TABLE_NAME;
 import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 
 public class InstanceProvider extends ContentProvider {
@@ -65,11 +66,7 @@ public class InstanceProvider extends ContentProvider {
             return null;
         }
 
-        boolean databaseNeedsUpgrade = InstancesDatabaseHelper.databaseNeedsUpgrade();
-        if (dbHelper == null || (databaseNeedsUpgrade && !InstancesDatabaseHelper.isDatabaseBeingMigrated())) {
-            if (databaseNeedsUpgrade) {
-                InstancesDatabaseHelper.databaseMigrationStarted();
-            }
+        if (dbHelper == null) {
             recreateDatabaseHelper();
         }
 
@@ -77,7 +74,7 @@ public class InstanceProvider extends ContentProvider {
     }
 
     public static void recreateDatabaseHelper() {
-        dbHelper = new InstancesDatabaseHelper();
+        dbHelper = new InstancesDatabaseHelper(new InstanceDatabaseMigrator(), new StoragePathProvider());
     }
 
     @SuppressWarnings("PMD.NonThreadSafeSingleton") // PMD thinks the `= null` is setting a singleton here
