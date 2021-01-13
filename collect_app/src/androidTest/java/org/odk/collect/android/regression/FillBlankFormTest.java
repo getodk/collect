@@ -532,11 +532,7 @@ public class FillBlankFormTest {
                 .startBlankForm("validate")
                 .clearTheText("2019")
                 .swipeToNextQuestionWithError()
-                .checkIsTextDisplayedOnDialog("The value \"-01-01\" can't be converted to a date.")
-                .clickOK(new FormEntryPage("validate", rule))
-                .swipeToNextQuestion("result = 17897")
-                .swipeToEndScreen()
-                .clickSaveAndExit();
+                .checkIsTextDisplayedOnDialog("The value \"-01-01\" can't be converted to a date.");
     }
 
     @Test

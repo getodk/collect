@@ -1,1 +1,35 @@
-<?xml version="1.0"?><h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><h:head><h:title>validate</h:title><model><instance><validate id="validate"><year>2019</year><result/><showresult/><meta><instanceID/></meta></validate></instance><bind nodeset="/validate/year" type="int"/><bind calculate="decimal-date-time(concat( /validate/year ,&quot;-01-01&quot;))" nodeset="/validate/result" type="string"/><bind nodeset="/validate/showresult" readonly="true()" type="string"/><bind jr:preload="uid" nodeset="/validate/meta/instanceID" readonly="true()" type="string"/></model></h:head><h:body><input ref="/validate/year"><label>year</label></input><input ref="/validate/showresult"><label>result = <output value=" /validate/result "/></label></input></h:body></h:html>
+<?xml version="1.0"?>
+<h:html xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://www.w3.org/2002/xforms">
+    <h:head>
+        <h:title>validate</h:title>
+        <model>
+            <instance>
+                <validate id="validate">
+                    <year>2019</year>
+                    <result />
+                    <showresult />
+                    <meta>
+                        <instanceID />
+                    </meta>
+                </validate>
+            </instance>
+            <bind nodeset="/validate/year" type="int" />
+            <bind calculate="decimal-date-time(concat( /validate/year ,&quot;-01-01&quot;))"
+                nodeset="/validate/result" type="string" />
+            <bind nodeset="/validate/showresult" readonly="true()" type="string" />
+            <bind nodeset="/validate/meta/instanceID" readonly="true()" type="string"
+                jr:preload="uid" />
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/validate/year">
+            <label>year</label>
+        </input>
+        <input ref="/validate/showresult">
+            <label>result = <output value=" /validate/result " /></label>
+        </input>
+    </h:body>
+</h:html>
