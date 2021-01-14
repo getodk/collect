@@ -121,7 +121,7 @@ public class OpenRosaFormSourceTest {
             formListApi.fetchFormList();
             fail("No exception thrown!");
         } catch (FormSourceException.ParseError e) {
-            // pass
+            assertThat(e.getServerUrl(), is("http://blah.com"));
         }
     }
 
@@ -170,7 +170,7 @@ public class OpenRosaFormSourceTest {
             formListApi.fetchManifest("http://blah.com/manifest");
             fail("No exception thrown!");
         } catch (FormSourceException.ParseError e) {
-            // pass
+            assertThat(e.getServerUrl(), is("http://blah.com"));
         }
     }
 
@@ -189,7 +189,7 @@ public class OpenRosaFormSourceTest {
             formListApi.fetchManifest("http://blah.com/manifest");
             fail("No exception thrown!");
         } catch (FormSourceException.ParseError e) {
-            // pass
+            assertThat(e.getServerUrl(), is("http://blah.com"));
         }
     }
 

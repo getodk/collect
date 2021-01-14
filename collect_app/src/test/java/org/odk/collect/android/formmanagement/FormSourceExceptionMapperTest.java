@@ -27,20 +27,32 @@ public class FormSourceExceptionMapperTest {
     }
 
     @Test
-    public void fetchErrorType_returnsGenericMessage() {
+    public void fetchError_returnsGenericMessage() {
         String expectedString = context.getString(R.string.report_to_project_lead);
         assertThat(mapper.getMessage(new FormSourceException.FetchError()), is(expectedString));
     }
 
     @Test
-    public void unreachableType_returnsUnknownHostMessage() {
+    public void unreachable_returnsUnknownHostMessage() {
         String expectedString = context.getString(R.string.unreachable_error, "http://unknown.com") + " " + context.getString(R.string.report_to_project_lead);
         assertThat(mapper.getMessage(new FormSourceException.Unreachable("http://unknown.com")), is(expectedString));
     }
 
     @Test
-    public void securityErrorType_returnsSecurityMessage() {
+    public void securityError_returnsSecurityMessage() {
         String expectedString = context.getString(R.string.security_error, "http://unknown.com") + " " + context.getString(R.string.report_to_project_lead);
         assertThat(mapper.getMessage(new FormSourceException.SecurityError("http://unknown.com")), is(expectedString));
+    }
+
+    @Test
+    public void serverError_returnsServerErrorMessage() {
+        String expectedString = context.getString(R.string.server_error, "http://unknown.com", 500) + " " + context.getString(R.string.report_to_project_lead);
+        assertThat(mapper.getMessage(new FormSourceException.ServerError(500, "http://unknown.com")), is(expectedString));
+    }
+
+    @Test
+    public void parseError_returnsParserErrorMessage() {
+        String expectedString = context.getString(R.string.invalid_response, "http://unknown.com") + " " + context.getString(R.string.report_to_project_lead);
+        assertThat(mapper.getMessage(new FormSourceException.ParseError("http://unknown.com")), is(expectedString));
     }
 }

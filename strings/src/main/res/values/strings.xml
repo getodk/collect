@@ -601,6 +601,8 @@
     <string name="report_to_project_lead">If you keep having this problem, report it to the person who asked you to collect data.</string>
     <string name="unreachable_error">Collect can\'t reach the server at %s. Did you enter the URL correctly?</string>
     <string name="security_error">Collect can\'t connect securely to the server at %s. Did you enter the URL correctly?</string>
+    <string name="server_error">The server %s returned status code %s.</string>
+    <string name="invalid_response">The server %s provided an invalid response.</string>
     <string name="failure">Failure</string>
 
     <string name="load_remote_form_error">Form list download failed</string>

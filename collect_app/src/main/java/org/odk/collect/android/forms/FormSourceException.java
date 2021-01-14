@@ -56,5 +56,14 @@ public class FormSourceException extends Exception {
 
     public static class ParseError extends FormSourceException {
 
+        private final String serverUrl;
+
+        public ParseError(String serverUrl) {
+            this.serverUrl = serverUrl;
+        }
+
+        public String getServerUrl() {
+            return serverUrl;
+        }
     }
 }

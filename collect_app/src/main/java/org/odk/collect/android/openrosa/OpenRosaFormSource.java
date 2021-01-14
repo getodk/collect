@@ -65,7 +65,7 @@ public class OpenRosaFormSource implements FormSource {
             if (formList != null) {
                 return formList;
             } else {
-                throw new FormSourceException.ParseError();
+                throw new FormSourceException.ParseError(serverURL);
             }
         } else {
             String serverHash = FileUtils.getMd5Hash(new ByteArrayInputStream(serverURL.getBytes()));
@@ -91,14 +91,14 @@ public class OpenRosaFormSource implements FormSource {
         }
 
         if (!result.isOpenRosaResponse) {
-            throw new FormSourceException.ParseError();
+            throw new FormSourceException.ParseError(serverURL);
         }
 
         List<MediaFile> mediaFiles = openRosaResponseParser.parseManifest(result.doc);
         if (mediaFiles != null) {
             return new ManifestFile(result.getHash(), mediaFiles);
         } else {
-            throw new FormSourceException.ParseError();
+            throw new FormSourceException.ParseError(serverURL);
         }
     }
 
