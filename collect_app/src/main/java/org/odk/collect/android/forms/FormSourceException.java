@@ -26,9 +26,9 @@ public class FormSourceException extends Exception {
         this.serverUrl = serverUrl;
         this.responseCode = null;
     }
-    public FormSourceException(Type type, Integer responseCode) {
+    public FormSourceException(Type type, Integer responseCode, String serverUrl) {
         this.type = type;
-        this.serverUrl = null;
+        this.serverUrl = serverUrl;
         this.responseCode = responseCode;
     }
 

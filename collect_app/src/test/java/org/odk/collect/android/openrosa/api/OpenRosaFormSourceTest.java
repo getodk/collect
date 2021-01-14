@@ -107,6 +107,7 @@ public class OpenRosaFormSourceTest {
         } catch (FormSourceException e) {
             assertThat(e.getType(), is(SERVER_ERROR));
             assertThat(e.getStatusCode(), is(500));
+            assertThat(e.getServerUrl(), is("http://blah.com"));
         }
     }
 
@@ -157,6 +158,7 @@ public class OpenRosaFormSourceTest {
         } catch (FormSourceException e) {
             assertThat(e.getType(), is(SERVER_ERROR));
             assertThat(e.getStatusCode(), is(503));
+            assertThat(e.getServerUrl(), is("http://blah.com"));
         }
     }
 
@@ -212,6 +214,7 @@ public class OpenRosaFormSourceTest {
         } catch (FormSourceException e) {
             assertThat(e.getType(), is(SERVER_ERROR));
             assertThat(e.getStatusCode(), is(500));
+            assertThat(e.getServerUrl(), is("http://blah.com"));
         }
     }
 
@@ -226,6 +229,7 @@ public class OpenRosaFormSourceTest {
         } catch (FormSourceException e) {
             assertThat(e.getType(), is(SERVER_ERROR));
             assertThat(e.getStatusCode(), is(500));
+            assertThat(e.getServerUrl(), is("http://blah.com"));
         }
     }
 
