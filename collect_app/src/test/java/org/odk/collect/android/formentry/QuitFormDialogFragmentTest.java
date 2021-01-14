@@ -5,8 +5,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.testing.FragmentScenario;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -28,26 +27,16 @@ import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 public class QuitFormDialogFragmentTest {
 
     private final FormSaveViewModel formSaveViewModel = mock(FormSaveViewModel.class);
 
-    private FragmentActivity activity;
-    private FragmentManager fragmentManager;
-    private QuitFormDialogFragment dialogFragment;
-
     @Before
     public void setup() {
-        activity = RobolectricHelpers.createThemedActivity(FragmentActivity.class);
-        fragmentManager = activity.getSupportFragmentManager();
-        dialogFragment = new QuitFormDialogFragment();
-
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
             public FormSaveViewModel.FactoryFactory providesFormSaveViewModelFactoryFactory(Analytics analytics, Scheduler scheduler) {
@@ -65,51 +54,54 @@ public class QuitFormDialogFragmentTest {
 
     @Test
     public void shouldShowCorrectButtons() {
-        dialogFragment.show(fragmentManager, "TAG");
-        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
-
-        assertNotNull(dialog);
-        assertThat(dialog.getButton(DialogInterface.BUTTON_POSITIVE).getVisibility(), equalTo(GONE));
-        assertThat(dialog.getButton(DialogInterface.BUTTON_NEGATIVE).getVisibility(), equalTo(VISIBLE));
-        assertThat(dialog.getButton(DialogInterface.BUTTON_NEGATIVE).getText(),
-                equalTo(activity.getString(R.string.do_not_exit)));
+        FragmentScenario<QuitFormDialogFragment> fragmentScenario = RobolectricHelpers.launchDialogFragment(QuitFormDialogFragment.class);
+        fragmentScenario.onFragment(fragment -> {
+            AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
+            assertThat(dialog.getButton(DialogInterface.BUTTON_POSITIVE).getVisibility(), equalTo(GONE));
+            assertThat(dialog.getButton(DialogInterface.BUTTON_NEGATIVE).getVisibility(), equalTo(VISIBLE));
+            assertThat(dialog.getButton(DialogInterface.BUTTON_NEGATIVE).getText(), equalTo(fragment.getString(R.string.do_not_exit)));
+        });
     }
 
     @Test
     public void shouldShowCorrectTitle_whenNoFormIsLoaded() {
-        dialogFragment.show(fragmentManager, "TAG");
-        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
-        TextView dialogTitle = dialog.findViewById(R.id.alertTitle);
-
-        assertThat(dialogTitle.getText().toString(), equalTo(activity.getString(R.string.quit_application, activity.getString(R.string.no_form_loaded))));
+        FragmentScenario<QuitFormDialogFragment> fragmentScenario = RobolectricHelpers.launchDialogFragment(QuitFormDialogFragment.class);
+        fragmentScenario.onFragment(fragment -> {
+            AlertDialog dialog = (AlertDialog) fragment.getDialog();
+            TextView dialogTitle = dialog.findViewById(R.id.alertTitle);
+            assertThat(dialogTitle.getText().toString(), equalTo(fragment.getString(R.string.quit_application, fragment.getString(R.string.no_form_loaded))));
+        });
     }
-
 
     @Test
     public void shouldShowCorrectTitle_whenFormIsLoaded() {
         when(formSaveViewModel.getFormName()).thenReturn("blah");
 
-        dialogFragment.show(fragmentManager, "TAG");
-        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
-        TextView dialogTitle = dialog.findViewById(R.id.alertTitle);
-
-        assertThat(dialogTitle.getText().toString(), equalTo(activity.getString(R.string.quit_application, "blah")));
+        FragmentScenario<QuitFormDialogFragment> fragmentScenario = RobolectricHelpers.launchDialogFragment(QuitFormDialogFragment.class);
+        fragmentScenario.onFragment(fragment -> {
+            AlertDialog dialog = (AlertDialog) fragment.getDialog();
+            TextView dialogTitle = dialog.findViewById(R.id.alertTitle);
+            assertThat(dialogTitle.getText().toString(), equalTo(fragment.getString(R.string.quit_application, "blah")));
+        });
     }
 
     @Test
     public void dialogIsCancellable() {
-        dialogFragment.show(fragmentManager, "tag");
-        assertThat(shadowOf(dialogFragment.getDialog()).isCancelable(), equalTo(true));
+        FragmentScenario<QuitFormDialogFragment> fragmentScenario = RobolectricHelpers.launchDialogFragment(QuitFormDialogFragment.class);
+        fragmentScenario.onFragment(fragment -> {
+            assertThat(fragment.isCancelable(), equalTo(true));
+        });
     }
 
     @Test
     public void clickingCancel_shouldDismissTheDialog() {
-        dialogFragment.show(fragmentManager, "tag");
-        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
-        assertTrue(dialog.isShowing());
+        FragmentScenario<QuitFormDialogFragment> fragmentScenario = RobolectricHelpers.launchDialogFragment(QuitFormDialogFragment.class);
+        fragmentScenario.onFragment(fragment -> {
+            AlertDialog dialog = (AlertDialog) fragment.getDialog();
+            assertTrue(dialog.isShowing());
 
-        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).performClick();
-        assertFalse(dialog.isShowing());
-        assertTrue(shadowOf(dialog).hasBeenDismissed());
+            dialog.getButton(DialogInterface.BUTTON_NEGATIVE).performClick();
+            assertFalse(dialog.isShowing());
+        });
     }
 }
