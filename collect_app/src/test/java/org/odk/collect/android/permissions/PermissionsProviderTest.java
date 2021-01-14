@@ -53,10 +53,10 @@ public class PermissionsProviderTest {
     @Test
     public void whenStoragePermissionsNotGrantedAndScopedStorageUsed_shouldAreStoragePermissionsGrantedReturnTrue() {
         when(permissionsChecker.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)).thenReturn(false);
-        when(storageStateProvider.isScopedStorageUsed()).thenReturn(false);
+        when(storageStateProvider.isScopedStorageUsed()).thenReturn(true);
         permissionsProvider = new PermissionsProvider(permissionsChecker, storageStateProvider);
 
-        assertThat(permissionsProvider.areStoragePermissionsGranted(), is(false));
+        assertThat(permissionsProvider.areStoragePermissionsGranted(), is(true));
     }
 
     @Test
