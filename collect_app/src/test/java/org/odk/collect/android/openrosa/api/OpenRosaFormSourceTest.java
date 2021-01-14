@@ -25,10 +25,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.forms.FormSourceException.Type.PARSE_ERROR;
-import static org.odk.collect.android.forms.FormSourceException.Type.SECURITY_ERROR;
-import static org.odk.collect.android.forms.FormSourceException.Type.SERVER_ERROR;
-import static org.odk.collect.android.forms.FormSourceException.Type.UNREACHABLE;
 
 @SuppressWarnings("PMD.DoubleBraceInitialization")
 public class OpenRosaFormSourceTest {
@@ -62,8 +58,7 @@ public class OpenRosaFormSourceTest {
             when(httpInterface.executeGetRequest(any(), any(), any())).thenThrow(UnknownHostException.class);
             formListApi.fetchFormList();
             fail("No exception thrown!");
-        } catch (FormSourceException e) {
-            assertThat(e.getType(), is(UNREACHABLE));
+        } catch (FormSourceException.Unreachable e) {
             assertThat(e.getServerUrl(), is("http://blah.com"));
         }
     }
@@ -76,8 +71,7 @@ public class OpenRosaFormSourceTest {
             when(httpInterface.executeGetRequest(any(), any(), any())).thenThrow(SSLException.class);
             formListApi.fetchFormList();
             fail("No exception thrown!");
-        } catch (FormSourceException e) {
-            assertThat(e.getType(), is(SECURITY_ERROR));
+        } catch (FormSourceException.SecurityError e) {
             assertThat(e.getServerUrl(), is("http://blah.com"));
         }
     }
@@ -90,8 +84,7 @@ public class OpenRosaFormSourceTest {
             when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(null, new HashMap<>(), "hash", 404));
             formListApi.fetchFormList();
             fail("No exception thrown!");
-        } catch (FormSourceException e) {
-            assertThat(e.getType(), is(UNREACHABLE));
+        } catch (FormSourceException.Unreachable e) {
             assertThat(e.getServerUrl(), is("http://blah.com"));
         }
     }
@@ -104,8 +97,7 @@ public class OpenRosaFormSourceTest {
             when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(null, new HashMap<>(), "hash", 500));
             formListApi.fetchFormList();
             fail("No exception thrown!");
-        } catch (FormSourceException e) {
-            assertThat(e.getType(), is(SERVER_ERROR));
+        } catch (FormSourceException.ServerError e) {
             assertThat(e.getStatusCode(), is(500));
             assertThat(e.getServerUrl(), is("http://blah.com"));
         }
@@ -128,8 +120,8 @@ public class OpenRosaFormSourceTest {
             when(responseParser.parseFormList(any())).thenReturn(null);
             formListApi.fetchFormList();
             fail("No exception thrown!");
-        } catch (FormSourceException e) {
-            assertThat(e.getType(), is(PARSE_ERROR));
+        } catch (FormSourceException.ParseError e) {
+            // pass
         }
     }
 
@@ -141,8 +133,7 @@ public class OpenRosaFormSourceTest {
             when(httpInterface.executeGetRequest(any(), any(), any())).thenThrow(UnknownHostException.class);
             formListApi.fetchManifest("http://blah.com/manifest");
             fail("No exception thrown!");
-        } catch (FormSourceException e) {
-            assertThat(e.getType(), is(UNREACHABLE));
+        } catch (FormSourceException.Unreachable e) {
             assertThat(e.getServerUrl(), is("http://blah.com"));
         }
     }
@@ -155,8 +146,7 @@ public class OpenRosaFormSourceTest {
             when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(null, new HashMap<>(), "hash", 503));
             formListApi.fetchManifest("http://blah.com/manifest");
             fail("No exception thrown!");
-        } catch (FormSourceException e) {
-            assertThat(e.getType(), is(SERVER_ERROR));
+        } catch (FormSourceException.ServerError e) {
             assertThat(e.getStatusCode(), is(503));
             assertThat(e.getServerUrl(), is("http://blah.com"));
         }
@@ -179,8 +169,8 @@ public class OpenRosaFormSourceTest {
             when(responseParser.parseManifest(any())).thenReturn(null);
             formListApi.fetchManifest("http://blah.com/manifest");
             fail("No exception thrown!");
-        } catch (FormSourceException e) {
-            assertThat(e.getType(), is(PARSE_ERROR));
+        } catch (FormSourceException.ParseError e) {
+            // pass
         }
     }
 
@@ -198,8 +188,8 @@ public class OpenRosaFormSourceTest {
 
             formListApi.fetchManifest("http://blah.com/manifest");
             fail("No exception thrown!");
-        } catch (FormSourceException e) {
-            assertThat(e.getType(), is(PARSE_ERROR));
+        } catch (FormSourceException.ParseError e) {
+            // pass
         }
     }
 
@@ -211,8 +201,7 @@ public class OpenRosaFormSourceTest {
             when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(null, new HashMap<>(), "hash", 500));
             formListApi.fetchForm("http://blah.com/form");
             fail("No exception thrown!");
-        } catch (FormSourceException e) {
-            assertThat(e.getType(), is(SERVER_ERROR));
+        } catch (FormSourceException.ServerError e) {
             assertThat(e.getStatusCode(), is(500));
             assertThat(e.getServerUrl(), is("http://blah.com"));
         }
@@ -226,8 +215,7 @@ public class OpenRosaFormSourceTest {
             when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(null, new HashMap<>(), "hash", 500));
             formListApi.fetchMediaFile("http://blah.com/mediaFile");
             fail("No exception thrown!");
-        } catch (FormSourceException e) {
-            assertThat(e.getType(), is(SERVER_ERROR));
+        } catch (FormSourceException.ServerError e) {
             assertThat(e.getStatusCode(), is(500));
             assertThat(e.getServerUrl(), is("http://blah.com"));
         }

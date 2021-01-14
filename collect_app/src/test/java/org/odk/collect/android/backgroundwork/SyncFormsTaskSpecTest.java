@@ -99,7 +99,7 @@ public class SyncFormsTaskSpecTest {
 
     @Test
     public void whenSynchronizingFails_setsRepositoryToNotSyncingAndNotifiesWithError() throws Exception {
-        FormSourceException exception = new FormSourceException(FormSourceException.Type.FETCH_ERROR);
+        FormSourceException exception = new FormSourceException.FetchError();
         doThrow(exception).when(serverFormsSynchronizer).synchronize();
         InOrder inOrder = inOrder(syncStatusRepository, serverFormsSynchronizer);
 
@@ -116,7 +116,7 @@ public class SyncFormsTaskSpecTest {
 
     @Test
     public void whenSynchronizingFails_logsAnalytics() throws Exception {
-        FormSourceException exception = new FormSourceException(FormSourceException.Type.FETCH_ERROR);
+        FormSourceException exception = new FormSourceException.FetchError();
         doThrow(exception).when(serverFormsSynchronizer).synchronize();
 
         SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();

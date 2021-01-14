@@ -80,7 +80,7 @@ public class ServerFormsSynchronizerTest {
 
     @Test
     public void whenFetchingFormDetailsThrowsAnError_throwsError() throws Exception {
-        FormSourceException exception = new FormSourceException(FormSourceException.Type.AUTH_REQUIRED);
+        FormSourceException exception = new FormSourceException.AuthRequired();
         when(serverFormDetailsFetcher.fetchFormDetails()).thenThrow(exception);
 
         try {
@@ -106,8 +106,7 @@ public class ServerFormsSynchronizerTest {
 
         try {
             synchronizer.synchronize();
-        } catch (FormSourceException e) {
-            assertThat(e.getType(), is(FormSourceException.Type.FETCH_ERROR));
+        } catch (FormSourceException.FetchError e) {
             verify(formDownloader).downloadForm(serverForms.get(1), null, null);
         }
     }

@@ -26,12 +26,6 @@ import javax.net.ssl.SSLException;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 import static org.odk.collect.android.analytics.AnalyticsEvents.LEGACY_FORM_LIST;
-import static org.odk.collect.android.forms.FormSourceException.Type.AUTH_REQUIRED;
-import static org.odk.collect.android.forms.FormSourceException.Type.FETCH_ERROR;
-import static org.odk.collect.android.forms.FormSourceException.Type.PARSE_ERROR;
-import static org.odk.collect.android.forms.FormSourceException.Type.SECURITY_ERROR;
-import static org.odk.collect.android.forms.FormSourceException.Type.SERVER_ERROR;
-import static org.odk.collect.android.forms.FormSourceException.Type.UNREACHABLE;
 
 public class OpenRosaFormSource implements FormSource {
 
@@ -57,11 +51,11 @@ public class OpenRosaFormSource implements FormSource {
 
         if (result.errorMessage != null) {
             if (result.responseCode == HTTP_UNAUTHORIZED) {
-                throw new FormSourceException(AUTH_REQUIRED);
+                throw new FormSourceException.AuthRequired();
             } else if (result.responseCode == HTTP_NOT_FOUND) {
-                throw new FormSourceException(UNREACHABLE, serverURL);
+                throw new FormSourceException.Unreachable(serverURL);
             } else {
-                throw new FormSourceException(SERVER_ERROR, result.responseCode, serverURL);
+                throw new FormSourceException.ServerError(result.responseCode, serverURL);
             }
         }
 
@@ -71,7 +65,7 @@ public class OpenRosaFormSource implements FormSource {
             if (formList != null) {
                 return formList;
             } else {
-                throw new FormSourceException(PARSE_ERROR);
+                throw new FormSourceException.ParseError();
             }
         } else {
             String serverHash = FileUtils.getMd5Hash(new ByteArrayInputStream(serverURL.getBytes()));
@@ -90,21 +84,21 @@ public class OpenRosaFormSource implements FormSource {
 
         if (result.errorMessage != null) {
             if (result.responseCode != HttpURLConnection.HTTP_OK) {
-                throw new FormSourceException(SERVER_ERROR, result.responseCode, serverURL);
+                throw new FormSourceException.ServerError(result.responseCode, serverURL);
             } else {
-                throw new FormSourceException(FETCH_ERROR);
+                throw new FormSourceException.FetchError();
             }
         }
 
         if (!result.isOpenRosaResponse) {
-            throw new FormSourceException(PARSE_ERROR);
+            throw new FormSourceException.ParseError();
         }
 
         List<MediaFile> mediaFiles = openRosaResponseParser.parseManifest(result.doc);
         if (mediaFiles != null) {
             return new ManifestFile(result.getHash(), mediaFiles);
         } else {
-            throw new FormSourceException(PARSE_ERROR);
+            throw new FormSourceException.ParseError();
         }
     }
 
@@ -114,7 +108,7 @@ public class OpenRosaFormSource implements FormSource {
         HttpGetResult result = mapException(() -> openRosaXMLFetcher.fetch(formURL, null));
 
         if (result.getInputStream() == null) {
-            throw new FormSourceException(SERVER_ERROR, result.getStatusCode(), serverURL);
+            throw new FormSourceException.ServerError(result.getStatusCode(), serverURL);
         } else {
             return result.getInputStream();
         }
@@ -126,7 +120,7 @@ public class OpenRosaFormSource implements FormSource {
         HttpGetResult result = mapException(() -> openRosaXMLFetcher.fetch(mediaFileURL, null));
 
         if (result.getInputStream() == null) {
-            throw new FormSourceException(SERVER_ERROR, result.getStatusCode(), serverURL);
+            throw new FormSourceException.ServerError(result.getStatusCode(), serverURL);
         } else {
             return result.getInputStream();
         }
@@ -176,7 +170,7 @@ public class OpenRosaFormSource implements FormSource {
                 }
                 if (formName == null) {
                     formList.clear();
-                    throw new FormSourceException(FETCH_ERROR);
+                    throw new FormSourceException.FetchError();
                 }
 
                 formList.add(new FormListItem(downloadUrl, formId, null, null, formName, null));
@@ -195,14 +189,14 @@ public class OpenRosaFormSource implements FormSource {
             if (result != null) {
                 return result;
             } else {
-                throw new FormSourceException(FETCH_ERROR, serverURL);
+                throw new FormSourceException.FetchError();
             }
         } catch (UnknownHostException e) {
-            throw new FormSourceException(UNREACHABLE, serverURL);
+            throw new FormSourceException.Unreachable(serverURL);
         } catch (SSLException e) {
-            throw new FormSourceException(SECURITY_ERROR, serverURL);
+            throw new FormSourceException.SecurityError(serverURL);
         } catch (Exception e) {
-            throw new FormSourceException(FETCH_ERROR, serverURL);
+            throw new FormSourceException.FetchError();
         }
     }
 

@@ -81,7 +81,7 @@ public class BlankFormsListViewModelTest {
 
     @Test
     public void isOutOfSync_followsRepositorySyncError() {
-        MutableLiveData<FormSourceException> liveData = new MutableLiveData<>(new FormSourceException(FormSourceException.Type.FETCH_ERROR));
+        MutableLiveData<FormSourceException> liveData = new MutableLiveData<>(new FormSourceException.FetchError());
         when(syncRepository.getSyncError()).thenReturn(liveData);
 
         BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), mock(Scheduler.class), syncRepository, mock(ServerFormsSynchronizer.class), preferencesProvider, mock(Notifier.class), changeLock, analytics);
@@ -146,7 +146,7 @@ public class BlankFormsListViewModelTest {
 
         BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, synchronizer, preferencesProvider, notifier, changeLock, analytics);
 
-        FormSourceException exception = new FormSourceException(FormSourceException.Type.FETCH_ERROR);
+        FormSourceException exception = new FormSourceException.FetchError();
         doThrow(exception).when(synchronizer).synchronize();
         viewModel.syncWithServer();
         fakeScheduler.runBackground();
@@ -163,7 +163,7 @@ public class BlankFormsListViewModelTest {
 
         BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, synchronizer, preferencesProvider, notifier, changeLock, analytics);
 
-        FormSourceException exception = new FormSourceException(FormSourceException.Type.FETCH_ERROR);
+        FormSourceException exception = new FormSourceException.FetchError();
         doThrow(exception).when(synchronizer).synchronize();
         viewModel.syncWithServer();
         fakeScheduler.runBackground();
@@ -178,7 +178,7 @@ public class BlankFormsListViewModelTest {
 
         BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, synchronizer, preferencesProvider, mock(Notifier.class), changeLock, analytics);
 
-        FormSourceException exception = new FormSourceException(FormSourceException.Type.FETCH_ERROR);
+        FormSourceException exception = new FormSourceException.FetchError();
         doThrow(exception).when(synchronizer).synchronize();
 
         LiveData<Boolean> result = viewModel.syncWithServer();

@@ -38,7 +38,7 @@ public class NotificationManagerNotifierTest {
 
     @Test
     public void onSync_whenExceptionNull_clearsNotification() {
-        notifier.onSync(new FormSourceException(FormSourceException.Type.FETCH_ERROR));
+        notifier.onSync(new FormSourceException.FetchError());
         assertThat(shadowOf(notificationManager).getAllNotifications().size(), is(1));
 
         notifier.onSync(null);

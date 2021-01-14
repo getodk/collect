@@ -69,7 +69,7 @@ public class BlankFormsListViewModel extends ViewModel {
     public LiveData<Boolean> isAuthenticationRequired() {
         return Transformations.map(syncRepository.getSyncError(), error -> {
             if (error != null) {
-                return error.getType() == FormSourceException.Type.AUTH_REQUIRED;
+                return error instanceof FormSourceException.AuthRequired;
             } else {
                 return false;
             }

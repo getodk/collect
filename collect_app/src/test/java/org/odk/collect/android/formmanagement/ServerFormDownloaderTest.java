@@ -35,7 +35,6 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.forms.FormSourceException.Type.FETCH_ERROR;
 import static org.odk.collect.android.support.FormUtils.buildForm;
 import static org.odk.collect.android.support.FormUtils.createXForm;
 import static org.odk.collect.android.utilities.FileUtils.read;
@@ -217,7 +216,7 @@ public class ServerFormDownloaderTest {
 
         FormSource formSource = mock(FormSource.class);
         when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
-        when(formSource.fetchMediaFile("http://file1")).thenThrow(new FormSourceException(FETCH_ERROR));
+        when(formSource.fetchMediaFile("http://file1")).thenThrow(new FormSourceException.FetchError());
 
         ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()), mock(Analytics.class));
 
@@ -321,7 +320,7 @@ public class ServerFormDownloaderTest {
                     )));
 
             when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
-            when(formSource.fetchMediaFile("http://file1")).thenThrow(new FormSourceException(FETCH_ERROR));
+            when(formSource.fetchMediaFile("http://file1")).thenThrow(new FormSourceException.FetchError());
             downloader.downloadForm(serverFormDetailsUpdatedMediaFile, null, null);
             fail("Expected exception");
         } catch (FormDownloadException e) {

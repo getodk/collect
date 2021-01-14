@@ -3,6 +3,12 @@ package org.odk.collect.android.analytics;
 import org.odk.collect.android.forms.FormSourceException;
 
 import static java.lang.String.format;
+import static org.odk.collect.android.forms.FormSourceException.AuthRequired;
+import static org.odk.collect.android.forms.FormSourceException.FetchError;
+import static org.odk.collect.android.forms.FormSourceException.ParseError;
+import static org.odk.collect.android.forms.FormSourceException.SecurityError;
+import static org.odk.collect.android.forms.FormSourceException.ServerError;
+import static org.odk.collect.android.forms.FormSourceException.Unreachable;
 
 public class AnalyticsUtils {
 
@@ -13,10 +19,28 @@ public class AnalyticsUtils {
     public static void logMatchExactlyCompleted(Analytics analytics, FormSourceException formSourceException) {
         if (formSourceException == null) {
             analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, "Success");
-        } else if (formSourceException.getType().equals(FormSourceException.Type.SERVER_ERROR)) {
-            analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, format("SERVER_ERROR_%s", formSourceException.getStatusCode()));
+        } else if (formSourceException instanceof ServerError) {
+            analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, format("SERVER_ERROR_%s", ((ServerError) formSourceException).getStatusCode()));
         } else {
-            analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, formSourceException.getType().toString());
+            analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, getFormSourceExceptionAnalyticsName(formSourceException));
+        }
+    }
+
+    private static String getFormSourceExceptionAnalyticsName(FormSourceException exception) {
+        if (exception instanceof Unreachable) {
+            return "UNREACHABLE";
+        } else if (exception instanceof AuthRequired) {
+            return "AUTH_REQUIRED";
+        } else if (exception instanceof SecurityError) {
+            return "SECURITY_ERROR";
+        } else if (exception instanceof ServerError) {
+            return "SERVER_ERROR";
+        } else if (exception instanceof ParseError) {
+            return "PARSE_ERROR";
+        } else if (exception instanceof FetchError) {
+            return "FETCH_ERROR";
+        } else {
+            throw new IllegalArgumentException();
         }
     }
 }

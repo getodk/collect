@@ -15,13 +15,12 @@ public class FormSourceExceptionMapper {
     }
 
     public String getMessage(FormSourceException exception) {
-        switch (exception.getType()) {
-            case UNREACHABLE:
-                return TranslationHandler.getString(context, R.string.unreachable_error, exception.getServerUrl()) + " " + TranslationHandler.getString(context, R.string.report_to_project_lead);
-            case SECURITY_ERROR:
-                return TranslationHandler.getString(context, R.string.security_error, exception.getServerUrl()) + " " + TranslationHandler.getString(context, R.string.report_to_project_lead);
-            default:
-                return TranslationHandler.getString(context, R.string.report_to_project_lead);
+        if (exception instanceof FormSourceException.Unreachable) {
+            return TranslationHandler.getString(context, R.string.unreachable_error, ((FormSourceException.Unreachable) exception).getServerUrl()) + " " + TranslationHandler.getString(context, R.string.report_to_project_lead);
+        } else if (exception instanceof FormSourceException.SecurityError) {
+            return TranslationHandler.getString(context, R.string.security_error, ((FormSourceException.SecurityError) exception).getServerUrl()) + " " + TranslationHandler.getString(context, R.string.report_to_project_lead);
+        } else {
+            return TranslationHandler.getString(context, R.string.report_to_project_lead);
         }
     }
 }
