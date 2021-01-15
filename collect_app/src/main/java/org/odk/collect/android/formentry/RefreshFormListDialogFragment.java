@@ -11,7 +11,7 @@ import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 
 public class RefreshFormListDialogFragment extends ProgressDialogFragment {
 
-    protected RefreshFormListDialogFragmentListener listener;
+    RefreshFormListDialogFragmentListener listener;
 
     @Override
     public void onAttach(@NonNull Context context) {
