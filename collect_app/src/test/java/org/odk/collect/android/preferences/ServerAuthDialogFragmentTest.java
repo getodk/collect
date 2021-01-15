@@ -52,12 +52,7 @@ public class ServerAuthDialogFragmentTest {
                 .putString(GeneralKeys.KEY_PASSWORD, "swiss")
                 .apply();
 
-        FragmentScenario<ServerAuthDialogFragment> scenario = FragmentScenario.launch(
-                ServerAuthDialogFragment.class,
-                null,
-                R.style.Theme_AppCompat,
-                null
-        );
+        FragmentScenario<ServerAuthDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(ServerAuthDialogFragment.class);
 
         scenario.onFragment(fragment -> {
             EditText username = fragment.getDialogView().findViewById(R.id.username_edit);
@@ -70,12 +65,7 @@ public class ServerAuthDialogFragmentTest {
 
     @Test
     public void clickingOK_savesUsernameAndPasswordToGeneralPrefs() {
-        FragmentScenario<ServerAuthDialogFragment> scenario = FragmentScenario.launch(
-                ServerAuthDialogFragment.class,
-                null,
-                R.style.Theme_AppCompat,
-                null
-        );
+        FragmentScenario<ServerAuthDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(ServerAuthDialogFragment.class);
 
         scenario.onFragment(fragment -> {
             EditText username = fragment.getDialogView().findViewById(R.id.username_edit);
