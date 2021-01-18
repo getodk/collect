@@ -9,7 +9,6 @@ import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -20,7 +19,6 @@ public class RecordingRequesterFactoryTest {
 
     private final RecordingRequesterFactory factory = new RecordingRequesterFactory(
             mock(WaitingForDataRegistry.class),
-            mock(QuestionMediaManager.class),
             mock(ActivityAvailability.class),
             mock(AudioRecorderViewModel.class),
             mock(PermissionsProvider.class),

@@ -166,6 +166,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         for (String filePath : recentFiles.values()) {
             mediaUtils.deleteMediaFile(filePath);
         }
+
         clearMediaFiles();
     }
 

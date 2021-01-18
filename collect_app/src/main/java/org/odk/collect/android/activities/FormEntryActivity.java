@@ -64,6 +64,7 @@ import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryCaption;
@@ -157,6 +158,7 @@ import org.odk.collect.android.widgets.RangePickerDecimalWidget;
 import org.odk.collect.android.widgets.RangePickerIntegerWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.FormControllerWaitingForDataRegistry;
+import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
 import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.async.Scheduler;
@@ -493,6 +495,30 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
         audioRecorderViewModel = new ViewModelProvider(this, audioRecorderViewModelFactory).get(AudioRecorderViewModel.class);
+        audioRecorderViewModel.getCurrentSession().observe(this, session -> {
+            if (session != null && session.getFile() != null) {
+                formSaveViewModel.createAnswerFile(session.getFile()).observe(this, result -> {
+                    if (result != null) {
+                        if (result.isSuccess()) {
+                            session.getFile().delete();
+                        }
+
+                        audioRecorderViewModel.cleanUp();
+
+                        try {
+                            FormIndex formIndex = InternalRecordingRequester.formIndex;
+                            if (formIndex != null) {
+                                formSaveViewModel.replaceAnswerFile(formIndex.toString(), result.getOrNull().getAbsolutePath());
+                                Collect.getInstance().getFormController().answerQuestion(formIndex, new StringData(result.getOrNull().getName()));
+                                onScreenRefresh();
+                            }
+                        } catch (JavaRosaException e) {
+                            // ?
+                        }
+                    }
+                });
+            }
+        });
 
         if (preferencesProvider.getGeneralSharedPreferences().getBoolean("background_audio_recording", false)) {
             audioRecorderViewModel.start("background", Output.AAC);

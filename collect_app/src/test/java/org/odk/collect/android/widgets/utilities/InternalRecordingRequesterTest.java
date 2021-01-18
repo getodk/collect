@@ -13,19 +13,14 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.fakes.FakePermissionsProvider;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
-import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
 import org.odk.collect.testshared.FakeLifecycleOwner;
-import org.odk.collect.utilities.Result;
 import org.robolectric.Robolectric;
 
-import java.io.File;
 import java.util.function.Consumer;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -38,7 +33,6 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.prom
 public class InternalRecordingRequesterTest {
 
     private final FakePermissionsProvider permissionsProvider = new FakePermissionsProvider();
-    private final QuestionMediaManager questionMediaManager = mock(QuestionMediaManager.class);
     private final AudioRecorderViewModel viewModel = mock(AudioRecorderViewModel.class);
 
     private InternalRecordingRequester requester;
@@ -46,7 +40,7 @@ public class InternalRecordingRequesterTest {
     @Before
     public void setup() {
         Activity activity = Robolectric.buildActivity(Activity.class).get();
-        requester = new InternalRecordingRequester(activity, viewModel, permissionsProvider, new FakeLifecycleOwner(), questionMediaManager, mock(FormEntryViewModel.class));
+        requester = new InternalRecordingRequester(activity, viewModel, permissionsProvider, new FakeLifecycleOwner(), mock(FormEntryViewModel.class));
         permissionsProvider.setPermissionGranted(true);
     }
 
@@ -101,63 +95,6 @@ public class InternalRecordingRequesterTest {
 
         liveData.setValue(new RecordingSession("blah", null, 0, 0, false));
         verify(listener).accept(true);
-    }
-
-    @Test
-    public void whenViewModelRecordingAvailable_movesFileToInstanceFolder_andCallsListenerForSessionWithFilename_andCleansUpViewModel() throws Exception {
-        FormEntryPrompt prompt = promptWithAnswer(null);
-        MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
-        when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
-
-        MutableLiveData<Result<File>> answerLiveData = new MutableLiveData<>(null);
-        File file = File.createTempFile("blah", ".mp3");
-        when(questionMediaManager.createAnswerFile(file)).thenReturn(answerLiveData);
-
-        Consumer<File> listener = mock(Consumer.class);
-        requester.onRecordingFinished(prompt, listener);
-        sessionLiveData.setValue(new RecordingSession(prompt.getIndex().toString(), file, 0, 0, false));
-        File copiedFile = File.createTempFile("copiedFile", ".mp3");
-        answerLiveData.setValue(new Result<>(copiedFile));
-
-        verify(listener).accept(copiedFile);
-        verify(viewModel).cleanUp();
-        assertThat(file.exists(), is(false));
-    }
-
-    @Test
-    public void whenViewModelRecordingAvailable_andCopyingFails_callsListenerWithNull_andCallsCleanUp_andDoesNotDeleteFile() throws Exception {
-        FormEntryPrompt prompt = promptWithAnswer(null);
-        MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
-        when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
-
-        MutableLiveData<Result<File>> answerLiveData = new MutableLiveData<>(null);
-        File file = File.createTempFile("blah", ".mp3");
-        when(questionMediaManager.createAnswerFile(file)).thenReturn(answerLiveData);
-
-        Consumer<File> listener = mock(Consumer.class);
-        requester.onRecordingFinished(prompt, listener);
-        sessionLiveData.setValue(new RecordingSession(prompt.getIndex().toString(), file, 0, 0, false));
-        answerLiveData.setValue(new Result<>(null));
-
-        verify(listener).accept(null);
-        verify(viewModel).cleanUp();
-        assertThat(file.exists(), is(true));
-    }
-
-    @Test
-    public void whenViewModelRecordingAvailable_forDifferentSession_doesNothing() throws Exception {
-        FormEntryPrompt prompt = promptWithAnswer(null);
-        MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
-        when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
-
-        Consumer<File> listener = mock(Consumer.class);
-        requester.onRecordingFinished(prompt, listener);
-
-        File file = File.createTempFile("blah", ".mp3");
-        sessionLiveData.setValue(new RecordingSession("something else", file, 0, 0, false));
-
-        verifyNoInteractions(listener);
-        verifyNoInteractions(questionMediaManager);
     }
 
     @Test

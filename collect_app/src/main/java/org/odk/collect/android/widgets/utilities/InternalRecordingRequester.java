@@ -5,34 +5,33 @@ import android.util.Pair;
 
 import androidx.lifecycle.LifecycleOwner;
 
+import org.javarosa.core.model.FormIndex;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.utilities.QuestionMediaManager;
+import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 
-import java.io.File;
 import java.util.function.Consumer;
 
 public class InternalRecordingRequester implements RecordingRequester {
+
+    public static FormIndex formIndex;
 
     private final Activity activity;
     private final AudioRecorderViewModel viewModel;
     private final PermissionsProvider permissionsProvider;
     private final LifecycleOwner lifecycleOwner;
-    private final QuestionMediaManager questionMediaManager;
     private final FormEntryViewModel formEntryViewModel;
 
-    public InternalRecordingRequester(Activity activity, AudioRecorderViewModel viewModel, PermissionsProvider permissionsProvider, LifecycleOwner lifecycleOwner, QuestionMediaManager questionMediaManager, FormEntryViewModel formEntryViewModel) {
+    public InternalRecordingRequester(Activity activity, AudioRecorderViewModel viewModel, PermissionsProvider permissionsProvider, LifecycleOwner lifecycleOwner, FormEntryViewModel formEntryViewModel) {
         this.activity = activity;
         this.viewModel = viewModel;
         this.permissionsProvider = permissionsProvider;
         this.lifecycleOwner = lifecycleOwner;
-        this.questionMediaManager = questionMediaManager;
         this.formEntryViewModel = formEntryViewModel;
     }
 
@@ -56,6 +55,8 @@ public class InternalRecordingRequester implements RecordingRequester {
                 } else {
                     viewModel.start(prompt.getIndex().toString(), Output.AAC);
                 }
+
+                formIndex = prompt.getIndex();
             }
 
             @Override
@@ -72,24 +73,6 @@ public class InternalRecordingRequester implements RecordingRequester {
         viewModel.getCurrentSession().observe(lifecycleOwner, session -> {
             if (session != null && session.getId().equals(prompt.getIndex().toString()) && session.getFailedToStart() == null) {
                 durationListener.accept(new Pair<>(session.getDuration(), session.getAmplitude()));
-            }
-        });
-    }
-
-    @Override
-    public void onRecordingFinished(FormEntryPrompt prompt, Consumer<File> recordingAvailableListener) {
-        viewModel.getCurrentSession().observe(lifecycleOwner, session -> {
-            if (session != null && session.getId().equals(prompt.getIndex().toString()) && session.getFile() != null) {
-                questionMediaManager.createAnswerFile(session.getFile()).observe(lifecycleOwner, result -> {
-                    if (result != null) {
-                        if (result.isSuccess()) {
-                            session.getFile().delete();
-                        }
-
-                        viewModel.cleanUp();
-                        recordingAvailableListener.accept(result.getOrNull());
-                    }
-                });
             }
         });
     }

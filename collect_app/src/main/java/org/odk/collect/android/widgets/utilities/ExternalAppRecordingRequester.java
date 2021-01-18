@@ -13,12 +13,11 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 
-import java.io.File;
 import java.util.function.Consumer;
 
 public class ExternalAppRecordingRequester implements RecordingRequester {
@@ -73,11 +72,6 @@ public class ExternalAppRecordingRequester implements RecordingRequester {
         });
 
         formEntryViewModel.logFormEvent(AnalyticsEvents.AUDIO_RECORDING_EXTERNAL);
-    }
-
-    @Override
-    public void onRecordingFinished(FormEntryPrompt prompt, Consumer<File> recordingAvailableListener) {
-        // This could be implemented using the new Activity Result API  once it's stable
     }
 
     @Override
