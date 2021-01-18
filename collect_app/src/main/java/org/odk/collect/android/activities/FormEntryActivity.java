@@ -132,6 +132,7 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
@@ -160,6 +161,7 @@ import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.AudioClipViewModel;
+import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
 
@@ -338,6 +340,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Inject
     SoftKeyboardController softKeyboardController;
 
+    @Inject
+    PreferencesProvider preferencesProvider;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -488,6 +493,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
         audioRecorderViewModel = new ViewModelProvider(this, audioRecorderViewModelFactory).get(AudioRecorderViewModel.class);
+
+        if (preferencesProvider.getGeneralSharedPreferences().getBoolean("background_audio_recording", false)) {
+            audioRecorderViewModel.start("background", Output.AAC);
+        }
     }
 
     // Precondition: the instance directory must be ready so that the audit file can be created
@@ -1366,7 +1375,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             return false;
         }
 
-        if (audioRecorderViewModel.isRecording()) {
+        if (audioRecorderViewModel.isRecording() && !preferencesProvider.getGeneralSharedPreferences().getBoolean("background_audio_recording", false)) {
             // We want the user to stop recording before changing screens
             DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
             return false;
@@ -2382,6 +2391,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 setResult(RESULT_OK, new Intent().setData(uri));
             }
         }
+
+        audioRecorderViewModel.stop();
         finish();
     }
 

@@ -990,4 +990,6 @@
     <string name="not_a_directory">%s exists, but is not a directory</string>
 
     <string name="select_odk_shortcut">Select ODK Shortcut</string>
+
+    <string name="background_audio_recording">Background audio recording</string>
 </resources>
