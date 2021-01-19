@@ -2,6 +2,7 @@ package org.odk.collect.android.formentry;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.MutableLiveData;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
@@ -16,6 +17,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
+import org.odk.collect.audiorecorder.recording.RecordingSession;
 import org.robolectric.Robolectric;
 import org.robolectric.annotation.LooperMode;
 import org.robolectric.fakes.RoboMenu;
@@ -31,7 +33,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.RobolectricHelpers.createThemedActivity;
@@ -127,22 +128,6 @@ public class FormEntryMenuDelegateTest {
     }
 
     @Test
-    public void onItemSelected_whenAddRepeat_whenRecording_showsWarning() {
-        RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
-
-        when(audioRecorderViewModel.isRecording()).thenReturn(true);
-
-        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_add_repeat));
-        verify(formEntryViewModel, never()).promptForNewRepeat();
-
-        RecordingWarningDialogFragment dialog = getFragmentByClass(activity.getSupportFragmentManager(), RecordingWarningDialogFragment.class);
-        assertThat(dialog, is(notNullValue()));
-        assertThat(dialog.getDialog().isShowing(), is(true));
-    }
-
-    @Test
     public void onItemSelected_whenPreferences_startsPreferencesActivityWithChangeSettingsRequest() {
         RoboMenu menu = new RoboMenu();
         formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
@@ -162,6 +147,7 @@ public class FormEntryMenuDelegateTest {
         formEntryMenuDelegate.onPrepareOptionsMenu(menu);
 
         when(audioRecorderViewModel.isRecording()).thenReturn(true);
+        when(audioRecorderViewModel.getCurrentSession()).thenReturn(new MutableLiveData<>(new RecordingSession("blah", null, 0, 0, false, null)));
 
         formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_preferences));
         assertThat(shadowOf(activity).getNextStartedActivityForResult(), is(nullValue()));
@@ -169,6 +155,22 @@ public class FormEntryMenuDelegateTest {
         RecordingWarningDialogFragment dialog = getFragmentByClass(activity.getSupportFragmentManager(), RecordingWarningDialogFragment.class);
         assertThat(dialog, is(notNullValue()));
         assertThat(dialog.getDialog().isShowing(), is(true));
+    }
+
+    @Test
+    public void onItemSelected_whenPreferences_whenRecordingInBackground_startsPreferencesActivityWithChangeSettingsRequest() {
+        RoboMenu menu = new RoboMenu();
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+
+        when(audioRecorderViewModel.isRecording()).thenReturn(true);
+        when(audioRecorderViewModel.getCurrentSession()).thenReturn(new MutableLiveData<>(new RecordingSession("background", null, 0, 0, false, null)));
+
+        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_preferences));
+        ShadowActivity.IntentForResult nextStartedActivity = shadowOf(activity).getNextStartedActivityForResult();
+        assertThat(nextStartedActivity, not(nullValue()));
+        assertThat(nextStartedActivity.intent.getComponent().getClassName(), is(PreferencesActivity.class.getName()));
+        assertThat(nextStartedActivity.requestCode, is(ApplicationConstants.RequestCodes.CHANGE_SETTINGS));
     }
 
     @Test
