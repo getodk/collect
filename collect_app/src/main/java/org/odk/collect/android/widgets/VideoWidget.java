@@ -162,47 +162,25 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         }
     }
 
-    /**
-     * Set this widget with the actual file returned by OnActivityResult.
-     * Both of Uri and File are supported.
-     * If the file is local, a Uri is enough for the copy task below.
-     * If the chose file is from cloud(such as Google Drive),
-     * The retrieve and copy task is already executed in the previous step,
-     * so a File object would be presented.
-     *
-     * @param object Uri or File of the chosen file.
-     * @see org.odk.collect.android.activities.FormEntryActivity#onActivityResult(int, int, Intent)
-     */
     @Override
     public void setData(Object object) {
-        File newVideo = null;
-        // get the file path and create a copy in the instance folder
-        if (object instanceof Uri) {
-            String sourcePath = mediaUtils.getPath(getContext(), (Uri) object);
-            String destinationPath = mediaUtils.getDestinationPathFromSourcePath(sourcePath, getInstanceFolder());
-            File source = fileUtil.getFileAtPath(sourcePath);
-            newVideo = fileUtil.getFileAtPath(destinationPath);
-            fileUtil.copyFile(source, newVideo);
-        } else if (object instanceof File) {
-            newVideo = (File) object;
-        } else {
-            Timber.w("VideoWidget's setBinaryData must receive a File or Uri object.");
-            return;
-        }
-
-        if (newVideo.exists()) {
-           questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newVideo.getAbsolutePath());
-        } else {
-            Timber.e("Inserting Video file FAILED");
-        }
-        // you are replacing an answer. remove the media.
-        if (binaryName != null && !binaryName.equals(newVideo.getName())) {
+        if (binaryName != null) {
             deleteFile();
         }
 
-        binaryName = newVideo.getName();
-        widgetValueChanged();
-        playButton.setEnabled(binaryName != null);
+        if (object instanceof File) {
+            File newVideo = (File) object;
+            if (newVideo.exists()) {
+                questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newVideo.getAbsolutePath());
+                binaryName = newVideo.getName();
+                widgetValueChanged();
+                playButton.setEnabled(binaryName != null);
+            } else {
+                Timber.e("Inserting Video file FAILED");
+            }
+        } else {
+            Timber.e("VideoWidget's setBinaryData must receive a File or Uri object.");
+        }
     }
 
     private void hideButtonsIfNeeded() {

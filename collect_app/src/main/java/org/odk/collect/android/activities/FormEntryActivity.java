@@ -60,7 +60,6 @@ import androidx.lifecycle.ViewModelProviders;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.SelectChoice;
@@ -146,8 +145,6 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
-import org.odk.collect.android.utilities.ImageConverter;
-import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ScreenContext;
@@ -168,10 +165,6 @@ import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -835,116 +828,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case RequestCodes.ANNOTATE_IMAGE:
             case RequestCodes.SIGNATURE_CAPTURE:
             case RequestCodes.IMAGE_CAPTURE:
-                /*
-                 * We saved the image to the tempfile_path, but we really want it to
-                 * be in: /sdcard/odk/instances/[current instnace]/something.jpg so
-                 * we move it there before inserting it into the content provider.
-                 * Once the android image capture bug gets fixed, (read, we move on
-                 * from Android 1.6) we want to handle images the audio and video
-                 */
-                // The intent is empty, but we know we saved the image to the temp
-                // file
-                ImageConverter.execute(storagePathProvider.getTmpImageFilePath(), getWidgetWaitingForBinaryData(), this);
-                File fi = new File(storagePathProvider.getTmpImageFilePath());
-
-                String instanceFolder = formController.getInstanceFile()
-                        .getParent();
-                String s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
-
-                File nf = new File(s);
-                if (!fi.renameTo(nf)) {
-                    Timber.d("Failed to rename %s", fi.getAbsolutePath());
-                } else {
-                    Timber.i("Renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
-                }
-
-                if (getCurrentViewIfODKView() != null) {
-                    setWidgetData(nf);
-                }
+                loadFile(Uri.fromFile(new File(storagePathProvider.getTmpImageFilePath())));
                 break;
             case RequestCodes.ALIGNED_IMAGE:
-                /*
-                 * We saved the image to the tempfile_path; the app returns the full
-                 * path to the saved file in the EXTRA_OUTPUT extra. Take that file
-                 * and move it into the instance folder.
-                 */
-                String path = intent
-                        .getStringExtra(android.provider.MediaStore.EXTRA_OUTPUT);
-                fi = new File(path);
-                instanceFolder = formController.getInstanceFile().getParent();
-                s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
-
-                nf = new File(s);
-                if (!fi.renameTo(nf)) {
-                    Timber.d("Failed to rename %s", fi.getAbsolutePath());
-                } else {
-                    Timber.i("Renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
-                }
-
-                if (getCurrentViewIfODKView() != null) {
-                    setWidgetData(nf);
-                }
-                break;
             case RequestCodes.ARBITRARY_FILE_CHOOSER:
+            case RequestCodes.AUDIO_CAPTURE:
             case RequestCodes.AUDIO_CHOOSER:
+            case RequestCodes.VIDEO_CAPTURE:
             case RequestCodes.VIDEO_CHOOSER:
             case RequestCodes.IMAGE_CHOOSER:
-                ProgressDialogFragment progressDialog = new ProgressDialogFragment();
-                progressDialog.setMessage(getString(R.string.please_wait));
-                progressDialog.show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
-
-                mediaLoadingFragment.beginMediaLoadingTask(intent.getData(), connectivityProvider);
-                break;
-            case RequestCodes.AUDIO_CAPTURE:
-                /*
-                  Probably this approach should be used in all cases to get a file from an uri.
-                  The approach which was used before and which is still used in other places
-                  might be faulty because sometimes _data column might be not provided in an uri.
-                  e.g. https://github.com/getodk/collect/issues/705
-                  Let's test it here and then we can use the same code in other places if it works well.
-                 */
-                Uri mediaUri = intent.getData();
-                if (mediaUri != null) {
-                    String filePath =
-                            formController.getInstanceFile().getParent()
-                                    + File.separator
-                                    + System.currentTimeMillis()
-                                    + "."
-                                    + ContentResolverHelper.getFileExtensionFromUri(this, mediaUri);
-                    try {
-                        InputStream inputStream = getContentResolver().openInputStream(mediaUri);
-                        if (inputStream != null) {
-                            File newFile = new File(filePath);
-                            OutputStream outputStream = new FileOutputStream(newFile);
-                            IOUtils.copy(inputStream, outputStream);
-                            inputStream.close();
-                            outputStream.close();
-
-                            if (getCurrentViewIfODKView() != null) {
-                                setWidgetData(newFile.getName());
-                            }
-                            saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                        }
-                    } catch (IOException e) {
-                        Timber.e(e);
-                    }
-                }
-                break;
-            case RequestCodes.VIDEO_CAPTURE:
-                mediaUri = intent.getData();
-                if (getCurrentViewIfODKView() != null) {
-                    setWidgetData(mediaUri);
-                }
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                String filePath = new MediaUtils().getDataColumn(this, mediaUri, null, null);
-                if (filePath != null) {
-                    new File(filePath).delete();
-                }
-                try {
-                    getContentResolver().delete(mediaUri, null, null);
-                } catch (Exception e) {
-                    Timber.e(e);
-                }
+                loadFile(intent.getData());
                 break;
             case RequestCodes.LOCATION_CAPTURE:
                 String sl = intent.getStringExtra(LOCATION_RESULT);
@@ -966,6 +859,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
                 break;
         }
+    }
+
+    private void loadFile(Uri uri) {
+        ProgressDialogFragment progressDialog = new ProgressDialogFragment();
+        progressDialog.setMessage(getString(R.string.please_wait));
+        progressDialog.show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+
+        mediaLoadingFragment.beginMediaLoadingTask(uri, connectivityProvider);
     }
 
     public QuestionWidget getWidgetWaitingForBinaryData() {

@@ -20,7 +20,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import androidx.annotation.NonNull;
 import android.view.Gravity;
 import android.widget.Button;
@@ -116,32 +115,19 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
             deleteFile();
         }
 
-        File newFile;
-        // get the file path and create a copy in the instance folder
-        if (object instanceof Uri) {
-            String sourcePath = mediaUtils.getPath(getContext(), (Uri) object);
-            String destinationPath = mediaUtils.getDestinationPathFromSourcePath(sourcePath, getInstanceFolder());
-            File source = fileUtil.getFileAtPath(sourcePath);
-            newFile = fileUtil.getFileAtPath(destinationPath);
-            fileUtil.copyFile(source, newFile);
-        } else if (object instanceof File) {
-            // Getting a file indicates we've done the copy in the before step
-            newFile = (File) object;
+        if (object instanceof File) {
+            File newFile = (File) object;
+            if (newFile.exists()) {
+                questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newFile.getAbsolutePath());
+                binaryName = newFile.getName();
+                chosenFileNameTextView.setText(binaryName);
+                answerLayout.setVisibility(VISIBLE);
+                widgetValueChanged();
+            } else {
+                Timber.e("Inserting Arbitrary file FAILED");
+            }
         } else {
-            Timber.w("FileWidget's setBinaryData must receive a File or Uri object.");
-            return;
-        }
-
-        if (newFile.exists()) {
-            questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newFile.getAbsolutePath());
-            binaryName = newFile.getName();
-            chosenFileNameTextView.setText(binaryName);
-            answerLayout.setVisibility(VISIBLE);
-            Timber.i("Setting current answer to %s", newFile.getName());
-
-            widgetValueChanged();
-        } else {
-            Timber.e("Inserting Arbitrary file FAILED");
+            Timber.e("FileWidget's setBinaryData must receive a File or Uri object.");
         }
     }
 
