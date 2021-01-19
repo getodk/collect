@@ -128,7 +128,6 @@ import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -311,9 +310,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     Analytics analytics;
-
-    @Inject
-    NetworkStateProvider connectivityProvider;
 
     @Inject
     StoragePathProvider storagePathProvider;
@@ -866,7 +862,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         progressDialog.setMessage(getString(R.string.please_wait));
         progressDialog.show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
 
-        mediaLoadingFragment.beginMediaLoadingTask(uri, connectivityProvider);
+        mediaLoadingFragment.beginMediaLoadingTask(uri);
     }
 
     public QuestionWidget getWidgetWaitingForBinaryData() {

@@ -28,8 +28,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.BuildConfig;
@@ -42,9 +40,7 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.ContentUriProvider;
-import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
@@ -75,32 +71,23 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
 
     public static final boolean DEFAULT_HIGH_RESOLUTION = true;
 
-    @NonNull
-    private MediaUtils mediaUtils;
-
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
-
-    @NonNull
-    private FileUtil fileUtil;
 
     Button captureButton;
     Button playButton;
     Button chooseButton;
     private String binaryName;
 
-    private boolean selfie;
+    private final boolean selfie;
 
     public VideoWidget(Context context, QuestionDetails prompt,  QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
-        this(context, prompt, new FileUtil(), new MediaUtils(), waitingForDataRegistry, questionMediaManager, new CameraUtils());
+        this(context, prompt, waitingForDataRegistry, questionMediaManager, new CameraUtils());
     }
 
-    public VideoWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtils mediaUtils,
-                       WaitingForDataRegistry waitingForDataRegistry, QuestionMediaManager questionMediaManager, CameraUtils cameraUtils) {
+    public VideoWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, QuestionMediaManager questionMediaManager, CameraUtils cameraUtils) {
         super(context, questionDetails);
 
-        this.fileUtil = fileUtil;
-        this.mediaUtils = mediaUtils;
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
 

@@ -10,7 +10,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.widgets.BaseImageWidget;
@@ -22,11 +21,9 @@ import java.lang.ref.WeakReference;
 public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
 
     private WeakReference<FormEntryActivity> formEntryActivity;
-    private WeakReference<NetworkStateProvider> connectivityProvider;
 
-    public MediaLoadingTask(FormEntryActivity formEntryActivity, NetworkStateProvider connectivityProvider) {
+    public MediaLoadingTask(FormEntryActivity formEntryActivity) {
         onAttach(formEntryActivity);
-        this.connectivityProvider = new WeakReference<>(connectivityProvider);
     }
 
     public void onAttach(FormEntryActivity formEntryActivity) {
@@ -35,7 +32,6 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
 
     public void onDetach() {
         formEntryActivity = null;
-        connectivityProvider = null;
     }
 
     @Override

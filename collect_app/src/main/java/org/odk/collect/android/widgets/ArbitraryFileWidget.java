@@ -33,7 +33,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
@@ -50,12 +49,8 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.create
 
 @SuppressLint("ViewConstructor")
 public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, ButtonClickListener, WidgetDataReceiver {
-
     @NonNull
-    private FileUtil fileUtil;
-
-    @NonNull
-    private MediaUtils mediaUtils;
+    private final MediaUtils mediaUtils;
 
     private final QuestionMediaManager questionMediaManager;
     private final WaitingForDataRegistry waitingForDataRegistry;
@@ -67,13 +62,12 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
     private LinearLayout answerLayout;
 
     public ArbitraryFileWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
-        this(context, prompt, new FileUtil(), new MediaUtils(), questionMediaManager, waitingForDataRegistry);
+        this(context, prompt, new MediaUtils(), questionMediaManager, waitingForDataRegistry);
     }
 
-    ArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtils mediaUtils,
+    ArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull MediaUtils mediaUtils,
                         QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails);
-        this.fileUtil = fileUtil;
         this.mediaUtils = mediaUtils;
         this.questionMediaManager = questionMediaManager;
         this.waitingForDataRegistry = waitingForDataRegistry;
