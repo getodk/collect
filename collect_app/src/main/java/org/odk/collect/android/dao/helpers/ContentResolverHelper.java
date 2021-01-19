@@ -15,10 +15,8 @@
 package org.odk.collect.android.dao.helpers;
 
 import android.content.ContentResolver;
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.webkit.MimeTypeMap;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormInfo;
@@ -26,7 +24,6 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.android.utilities.MediaUtils;
 
 import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
@@ -76,20 +73,8 @@ public final class ContentResolverHelper {
         return formPath;
     }
 
-    /**
-     * Using contentResolver to get a file's extension by the uri
-     *
-     * @param fileUri Whose name we want to get
-     * @return The file's extension without a dot eg. "mp3" not ".mp3"
-     */
-    public static String getFileExtensionFromUri(Context context, Uri fileUri) {
-        String fileName = new MediaUtils().getFileNameFromUri(context, fileUri);
-        if (fileName != null && fileName.contains(".")) {
-            return fileName.substring(fileName.lastIndexOf('.') + 1);
-        } else {
-            return fileUri.getScheme() != null && fileUri.getScheme().equals(ContentResolver.SCHEME_CONTENT)
-                    ? MimeTypeMap.getSingleton().getExtensionFromMimeType(context.getContentResolver().getType(fileUri))
-                    : MimeTypeMap.getFileExtensionFromUrl(fileUri.toString());
-        }
+    public static String getFileExtensionFromUri(Uri fileUri) {
+        String mimeType = getContentResolver().getType(fileUri);
+        return mimeType.substring(mimeType.lastIndexOf("/") + 1);
     }
 }

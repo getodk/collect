@@ -41,7 +41,7 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
         if (formController != null) {
             File instanceFile = formController.getInstanceFile();
             if (instanceFile != null) {
-                String extension = ContentResolverHelper.getFileExtensionFromUri(formEntryActivity.get(), uris[0]);
+                String extension = ContentResolverHelper.getFileExtensionFromUri(uris[0]);
 
                 File newFile = FileUtils.createDestinationMediaFile(instanceFile.getParent(), extension);
                 FileUtils.saveAnswerFileFromUri(uris[0], newFile, Collect.getInstance());

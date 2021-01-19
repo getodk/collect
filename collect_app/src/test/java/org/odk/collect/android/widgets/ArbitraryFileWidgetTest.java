@@ -54,7 +54,7 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
     @Override
     public ArbitraryFileWidget createWidget() {
         return new ArbitraryFileWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride),
-                fileUtil, mediaUtils, new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry());
+                mediaUtils, new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry());
     }
 
     @NonNull
@@ -105,10 +105,6 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
 
     public void prepareForSetAnswer() {
         when(formEntryPrompt.isReadOnly()).thenReturn(false);
-
-        String sourcePath = String.format("%s.pdf", RandomString.make());
-        when(mediaUtils.getPath(activity, uri)).thenReturn(sourcePath);
-        when(mediaUtils.getDestinationPathFromSourcePath(sourcePath, "")).thenReturn(File.separator + destinationName + ".pdf");
 
         File firstFile = mock(File.class);
 

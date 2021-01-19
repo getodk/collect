@@ -37,9 +37,6 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
     Uri uri;
 
     @Mock
-    MediaUtils mediaUtils;
-
-    @Mock
     FileUtil fileUtil;
 
     @Mock
@@ -90,10 +87,6 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
 
     public void prepareForSetAnswer() {
         when(formEntryPrompt.isReadOnly()).thenReturn(false);
-
-        String sourcePath = String.format("%s.mp4", RandomString.make());
-        when(mediaUtils.getPath(activity, uri)).thenReturn(sourcePath);
-        when(mediaUtils.getDestinationPathFromSourcePath(sourcePath, "")).thenReturn(File.separator + destinationName + ".mp4");
 
         when(fileUtil.getFileAtPath(File.separator + destinationName + ".mp4")).thenReturn(file);
 
