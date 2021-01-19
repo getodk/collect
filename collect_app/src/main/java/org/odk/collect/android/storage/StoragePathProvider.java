@@ -79,6 +79,10 @@ public class StoragePathProvider {
                 : getUnscopedStorageRootDirPath();
     }
 
+    public String getCustomSplashScreenImagePath() {
+        return getStorageRootDirPath() + File.separator + "customSplashScreenImage.jpg";
+    }
+
     public String getTmpImageFilePath() {
         return getDirPath(StorageSubdirectory.CACHE) + File.separator + "tmp.jpg";
     }
