@@ -73,6 +73,8 @@ public class InternalRecordingRequester implements RecordingRequester {
         viewModel.getCurrentSession().observe(lifecycleOwner, session -> {
             if (session != null && session.getId().equals(prompt.getIndex().toString()) && session.getFailedToStart() == null) {
                 durationListener.accept(new Pair<>(session.getDuration(), session.getAmplitude()));
+            } else {
+                durationListener.accept(null);
             }
         });
     }

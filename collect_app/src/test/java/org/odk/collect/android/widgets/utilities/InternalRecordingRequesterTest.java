@@ -24,8 +24,8 @@ import java.util.function.Consumer;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 
@@ -105,21 +105,23 @@ public class InternalRecordingRequesterTest {
 
         Consumer<Pair<Long, Integer>> listener = mock(Consumer.class);
         requester.onRecordingInProgress(prompt, listener);
+        verify(listener).accept(null);
 
         sessionLiveData.setValue(new RecordingSession(prompt.getIndex().toString(), null, 1200L, 25, false));
         verify(listener).accept(new Pair<>(1200L, 25));
     }
 
     @Test
-    public void whenViewModelSessionUpdates_forDifferentSession_doesNothing() {
+    public void whenViewModelSessionUpdates_forDifferentSession_callsInProgressListenerWithNull() {
         FormEntryPrompt prompt = promptWithAnswer(null);
         MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
         when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
 
         Consumer<Pair<Long, Integer>> listener = mock(Consumer.class);
         requester.onRecordingInProgress(prompt, listener);
+        verify(listener).accept(null);
 
         sessionLiveData.setValue(new RecordingSession("something else", null, 1200L, 0, false));
-        verifyNoInteractions(listener);
+        verify(listener, times(2)).accept(null);
     }
 }

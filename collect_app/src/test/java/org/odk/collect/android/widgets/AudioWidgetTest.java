@@ -278,15 +278,15 @@ public class AudioWidgetTest {
         verify(audioFileRequester).requestFile(prompt);
     }
 
-//    @Test
-//    public void clickingCaptureButton_clearsWaveform() {
-//        FormEntryPrompt prompt = promptWithAnswer(null);
-//        AudioWidget widget = createWidget(prompt);
-//
-//        recordingRequester.setAmplitude(prompt.getIndex().toString(), 11);
-//        widget.binding.captureButton.performClick();
-//        assertThat(widget.binding.waveform.getLatestAmplitude(), nullValue());
-//    }
+    @Test
+    public void clickingCaptureButton_clearsWaveform() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        AudioWidget widget = createWidget(prompt);
+
+        recordingRequester.setAmplitude(prompt.getIndex().toString(), 11);
+        widget.binding.captureButton.performClick();
+        assertThat(widget.binding.waveform.getLatestAmplitude(), nullValue());
+    }
 
     @Test
     public void whenRecordingRequesterStopsRecording_enablesButtons() {
@@ -301,57 +301,57 @@ public class AudioWidgetTest {
         assertThat(widget.binding.chooseButton.isEnabled(), is(true));
     }
 
-//    @Test
-//    public void whenRecordingInProgress_showsDurationAndWaveform() {
-//        FormEntryPrompt prompt = promptWithAnswer(null);
-//        AudioWidget widget = createWidget(prompt);
-//
-//        recordingRequester.setDuration(prompt.getIndex().toString(), 0);
-//        assertThat(widget.binding.captureButton.getVisibility(), is(GONE));
-//        assertThat(widget.binding.chooseButton.getVisibility(), is(GONE));
-//        assertThat(widget.binding.audioController.getVisibility(), is(GONE));
-//        assertThat(widget.binding.recordingDuration.getVisibility(), is(VISIBLE));
-//        assertThat(widget.binding.waveform.getVisibility(), is(VISIBLE));
-//    }
+    @Test
+    public void whenRecordingInProgress_showsDurationAndWaveform() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        AudioWidget widget = createWidget(prompt);
 
-//    @Test
-//    public void whenRecordingInProgress_updatesDuration() {
-//        FormEntryPrompt prompt = promptWithAnswer(null);
-//        AudioWidget widget = createWidget(prompt);
-//
-//        recordingRequester.setDuration(prompt.getIndex().toString(), 0);
-//        assertThat(widget.binding.recordingDuration.getText(), is("00:00"));
-//
-//        recordingRequester.setDuration(prompt.getIndex().toString(), 42000);
-//        assertThat(widget.binding.recordingDuration.getText(), is("00:42"));
-//    }
-//
-//    @Test
-//    public void whenRecordingInProgress_updatesWaveform() {
-//        FormEntryPrompt prompt = promptWithAnswer(null);
-//        AudioWidget widget = createWidget(prompt);
-//
-//        recordingRequester.setAmplitude(prompt.getIndex().toString(), 5);
-//        assertThat(widget.binding.waveform.getLatestAmplitude(), is(5));
-//
-//        recordingRequester.setAmplitude(prompt.getIndex().toString(), 67);
-//        assertThat(widget.binding.waveform.getLatestAmplitude(), is(67));
-//    }
+        recordingRequester.setDuration(prompt.getIndex().toString(), 0);
+        assertThat(widget.binding.captureButton.getVisibility(), is(GONE));
+        assertThat(widget.binding.chooseButton.getVisibility(), is(GONE));
+        assertThat(widget.binding.audioController.getVisibility(), is(GONE));
+        assertThat(widget.binding.recordingDuration.getVisibility(), is(VISIBLE));
+        assertThat(widget.binding.waveform.getVisibility(), is(VISIBLE));
+    }
 
-//    @Test
-//    public void whenRecordingFinished_afterRecordingInProgress_whenFileIsNull_showsButtons() {
-//        FormEntryPrompt prompt = promptWithAnswer(null);
-//        AudioWidget widget = createWidget(prompt);
-//
-//        recordingRequester.setDuration(prompt.getIndex().toString(), 5);
-//        recordingRequester.setRecording(prompt.getIndex().toString(), null);
-//
-//        assertThat(widget.binding.audioController.getVisibility(), is(GONE));
-//        assertThat(widget.binding.recordingDuration.getVisibility(), is(GONE));
-//        assertThat(widget.binding.waveform.getVisibility(), is(GONE));
-//        assertThat(widget.binding.captureButton.getVisibility(), is(VISIBLE));
-//        assertThat(widget.binding.chooseButton.getVisibility(), is(VISIBLE));
-//    }
+    @Test
+    public void whenRecordingInProgress_updatesDuration() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        AudioWidget widget = createWidget(prompt);
+
+        recordingRequester.setDuration(prompt.getIndex().toString(), 0);
+        assertThat(widget.binding.recordingDuration.getText(), is("00:00"));
+
+        recordingRequester.setDuration(prompt.getIndex().toString(), 42000);
+        assertThat(widget.binding.recordingDuration.getText(), is("00:42"));
+    }
+
+    @Test
+    public void whenRecordingInProgress_updatesWaveform() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        AudioWidget widget = createWidget(prompt);
+
+        recordingRequester.setAmplitude(prompt.getIndex().toString(), 5);
+        assertThat(widget.binding.waveform.getLatestAmplitude(), is(5));
+
+        recordingRequester.setAmplitude(prompt.getIndex().toString(), 67);
+        assertThat(widget.binding.waveform.getLatestAmplitude(), is(67));
+    }
+
+    @Test
+    public void whenRecordingFinished_showsButtons() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        AudioWidget widget = createWidget(prompt);
+
+        recordingRequester.setDuration(prompt.getIndex().toString(), 5);
+        recordingRequester.reset();
+
+        assertThat(widget.binding.audioController.getVisibility(), is(GONE));
+        assertThat(widget.binding.recordingDuration.getVisibility(), is(GONE));
+        assertThat(widget.binding.waveform.getVisibility(), is(GONE));
+        assertThat(widget.binding.captureButton.getVisibility(), is(VISIBLE));
+        assertThat(widget.binding.chooseButton.getVisibility(), is(VISIBLE));
+    }
 
     @Test
     public void afterSetBinaryData_clickingPlayAndPause_playsAndPausesAudio() throws Exception {
@@ -553,7 +553,6 @@ public class AudioWidgetTest {
 
         FormEntryPrompt requestedRecordingFor;
         private Consumer<Boolean> isRecordingListener;
-        private final Map<String, Consumer<File>> recordingAvailableListeners = new HashMap<>();
         private final Map<String, Consumer<Pair<Long, Integer>>> inProgressListeners = new HashMap<>();
 
         @Override
@@ -579,16 +578,18 @@ public class AudioWidgetTest {
             isRecordingListener.accept(false);
         }
 
-        public void setRecording(String sessionId, File file) {
-            recordingAvailableListeners.get(sessionId).accept(file);
-        }
-
         public void setDuration(String sessionId, long duration) {
             inProgressListeners.get(sessionId).accept(new Pair<>(duration, 0));
         }
 
         public void setAmplitude(String sessionId, int amplitude) {
             inProgressListeners.get(sessionId).accept(new Pair<>(0L, amplitude));
+        }
+
+        public void reset() {
+            inProgressListeners.forEach((sessionId, listener) -> {
+                listener.accept(null);
+            });
         }
     }
 }

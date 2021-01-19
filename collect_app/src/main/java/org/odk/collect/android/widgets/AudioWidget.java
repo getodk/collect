@@ -45,6 +45,8 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
+import static org.odk.collect.strings.format.LengthFormatterKt.formatLength;
+
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
  * form.
@@ -83,21 +85,18 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
             binding.chooseButton.setEnabled(!isRecordingBlocked);
         });
 
-//        recordingRequester.onRecordingInProgress(getFormEntryPrompt(), session -> {
-//            recordingInProgress = true;
-//            updateVisibilities();
-//
-//            binding.recordingDuration.setText(formatLength(session.first));
-//            binding.waveform.addAmplitude(session.second);
-//        });
-//
-//        recordingRequester.onRecordingFinished(getFormEntryPrompt(), recording -> {
-//            recordingInProgress = false;
-//
-//            binaryName = questionDetails.getPrompt().getAnswerText();
-//            updateVisibilities();
-//            updatePlayerMedia();
-//        });
+        recordingRequester.onRecordingInProgress(getFormEntryPrompt(), session -> {
+            if (session != null) {
+                recordingInProgress = true;
+                updateVisibilities();
+
+                binding.recordingDuration.setText(formatLength(session.first));
+                binding.waveform.addAmplitude(session.second);
+            } else {
+                recordingInProgress = false;
+                updateVisibilities();
+            }
+        });
     }
 
     @Override
