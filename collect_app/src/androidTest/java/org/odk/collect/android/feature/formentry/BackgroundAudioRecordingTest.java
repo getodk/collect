@@ -73,12 +73,14 @@ public class BackgroundAudioRecordingTest {
         assertThat(stubAudioRecorderViewModel.isRecording(), is(true));
 
         FormEndPage formEndPage = formEntryPage
-                .inputText("Aaliyah")
+                .inputText("123")
                 .swipeToEndScreen();
         assertThat(stubAudioRecorderViewModel.isRecording(), is(true));
 
         formEndPage.clickSaveAndExit();
         assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
+
         assertThat(stubAudioRecorderViewModel.getLastRecording(), notNullValue());
+        assertThat(stubAudioRecorderViewModel.getLastRecording().exists(), is(true));
     }
 }

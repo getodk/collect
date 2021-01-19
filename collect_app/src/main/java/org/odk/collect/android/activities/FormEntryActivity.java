@@ -499,7 +499,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             if (session != null && session.getFile() != null) {
                 formSaveViewModel.createAnswerFile(session.getFile()).observe(this, result -> {
                     if (result != null) {
-                        if (result.isSuccess()) {
+                        if (result.isSuccess() && !session.getId().equals("background")) {
                             session.getFile().delete();
                         }
 
@@ -508,7 +508,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         try {
                             FormIndex formIndex = InternalRecordingRequester.formIndex;
                             if (formIndex != null) {
-                                formSaveViewModel.replaceAnswerFile(formIndex.toString(), result.getOrNull().getAbsolutePath());
                                 Collect.getInstance().getFormController().answerQuestion(formIndex, new StringData(result.getOrNull().getName()));
                                 onScreenRefresh();
                             }
@@ -1356,9 +1355,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         if (saveAs.getText().length() < 1) {
                             showShortToast(R.string.save_as_error);
                         } else {
-                            saveForm(EXIT, instanceComplete
-                                    .isChecked(), saveAs.getText()
-                                    .toString(), true);
+                            if (audioRecorderViewModel.isRecording() && !audioRecorderViewModel.getCurrentSession().getValue().getId().equals("background")) {
+                                DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
+                            } else {
+                                saveForm(EXIT, instanceComplete
+                                        .isChecked(), saveAs.getText()
+                                        .toString(), true);
+                            }
                         }
                     }
                 });
@@ -1398,12 +1401,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         FormController formController = getFormController();
         if (formController == null) {
             Timber.d("FormController has a null value");
-            return false;
-        }
-
-        if (audioRecorderViewModel.isRecording() && !preferencesProvider.getGeneralSharedPreferences().getBoolean("background_audio_recording", false)) {
-            // We want the user to stop recording before changing screens
-            DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
             return false;
         }
 

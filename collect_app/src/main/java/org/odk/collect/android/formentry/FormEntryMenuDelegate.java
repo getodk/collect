@@ -122,15 +122,11 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
             backgroundLocationViewModel.backgroundLocationPreferenceToggled();
             return true;
         } else if (item.getItemId() == R.id.menu_goto) {
-            if (audioRecorderViewModel.isRecording()) {
-                DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
-            } else {
-                formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
+            formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
 
-                formEntryViewModel.openHierarchy();
-                Intent i = new Intent(activity, FormHierarchyActivity.class);
-                activity.startActivityForResult(i, ApplicationConstants.RequestCodes.HIERARCHY_ACTIVITY);
-            }
+            formEntryViewModel.openHierarchy();
+            Intent i = new Intent(activity, FormHierarchyActivity.class);
+            activity.startActivityForResult(i, ApplicationConstants.RequestCodes.HIERARCHY_ACTIVITY);
 
             return true;
         } else {

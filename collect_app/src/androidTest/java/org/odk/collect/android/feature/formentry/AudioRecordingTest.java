@@ -16,8 +16,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
+import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.OkDialog;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorderViewModel;
@@ -65,27 +65,11 @@ public class AudioRecordingTest {
 
     @Test
     public void onAudioQuestion_withQualitySpecified_canRecordAudioInApp() {
-        new MainMenuPage(rule).assertOnPage()
+        rule.mainMenu()
                 .copyForm("internal-audio-question.xml")
                 .startBlankForm("Audio Question")
                 .assertContentDescriptionNotDisplayed(R.string.stop_recording)
                 .clickOnString(R.string.capture_audio)
-                .clickOnContentDescription(R.string.stop_recording)
-                .assertContentDescriptionNotDisplayed(R.string.stop_recording)
-                .assertTextNotDisplayed(R.string.capture_audio)
-                .assertContentDescriptionDisplayed(R.string.play_audio);
-    }
-
-    @Test
-    public void whileRecording_swipingToADifferentScreen_showsWarning_andStaysOnSameScreen() {
-        new MainMenuPage(rule).assertOnPage()
-                .copyForm("internal-audio-question.xml")
-                .startBlankForm("Audio Question")
-                .clickOnString(R.string.capture_audio)
-                .swipeToEndScreenWhileRecording()
-                .clickOK(new FormEntryPage("Audio Question", rule))
-
-                .assertQuestion("What does it sound like?")
                 .clickOnContentDescription(R.string.stop_recording)
                 .assertContentDescriptionNotDisplayed(R.string.stop_recording)
                 .assertTextNotDisplayed(R.string.capture_audio)
@@ -94,17 +78,23 @@ public class AudioRecordingTest {
 
     @Test
     public void whileRecording_quittingForm_showsWarning_andStaysOnSameScreen() {
-        new MainMenuPage(rule).assertOnPage()
+        rule.mainMenu()
                 .copyForm("internal-audio-question.xml")
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
                 .pressBack(new OkDialog(rule))
                 .clickOK(new FormEntryPage("Audio Question", rule))
+                .assertQuestion("What does it sound like?");
+    }
 
-                .assertQuestion("What does it sound like?")
-                .clickOnContentDescription(R.string.stop_recording)
-                .assertContentDescriptionNotDisplayed(R.string.stop_recording)
-                .assertTextNotDisplayed(R.string.capture_audio)
-                .assertContentDescriptionDisplayed(R.string.play_audio);
+    @Test
+    public void whileRecording_swipingToEndScreen_andClickingSaveAndExit_showsWarning_andStaysOnSameScreen() {
+        rule.mainMenu()
+                .copyForm("internal-audio-question.xml")
+                .startBlankForm("Audio Question")
+                .clickOnString(R.string.capture_audio)
+                .swipeToEndScreen()
+                .clickSaveAndExitWithErrorDialog()
+                .clickOK(new FormEndPage("Audio Question", rule));
     }
 }

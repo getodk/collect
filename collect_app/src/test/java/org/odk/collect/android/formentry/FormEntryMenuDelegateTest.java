@@ -205,20 +205,4 @@ public class FormEntryMenuDelegateTest {
         formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_goto));
         verify(formEntryViewModel).openHierarchy();
     }
-
-    @Test
-    public void onItemSelected_whenHierarchy_whenRecording_showsWarning() {
-        RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
-
-        when(audioRecorderViewModel.isRecording()).thenReturn(true);
-
-        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_goto));
-        assertThat(shadowOf(activity).getNextStartedActivity(), is(nullValue()));
-
-        RecordingWarningDialogFragment dialog = getFragmentByClass(activity.getSupportFragmentManager(), RecordingWarningDialogFragment.class);
-        assertThat(dialog, is(notNullValue()));
-        assertThat(dialog.getDialog().isShowing(), is(true));
-    }
 }
