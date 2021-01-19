@@ -10,8 +10,6 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
-import org.odk.collect.android.utilities.ActivityAvailability;
-import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.items.LabelWidget;
 import org.odk.collect.android.widgets.items.LikertWidget;
 import org.odk.collect.android.widgets.items.ListMultiWidget;
@@ -22,15 +20,11 @@ import org.odk.collect.android.widgets.items.SelectMultiWidget;
 import org.odk.collect.android.widgets.items.SelectOneImageMapWidget;
 import org.odk.collect.android.widgets.items.SelectOneMinimalWidget;
 import org.odk.collect.android.widgets.items.SelectOneWidget;
-import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
-import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
-import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.mock;
 
 @RunWith(RobolectricTestRunner.class)
 public class WidgetFactoryTest {
@@ -39,19 +33,8 @@ public class WidgetFactoryTest {
     @Before
     public void setup() {
         Activity activity = RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
-        WaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
-        QuestionMediaManager questionMediaManager = new FakeQuestionMediaManager();
-        ActivityAvailability activityAvailability = mock(ActivityAvailability.class);
 
-        widgetFactory = new WidgetFactory(activity,
-                false,
-                false,
-                waitingForDataRegistry,
-                questionMediaManager,
-                null,
-                null,
-                activityAvailability,
-                null);
+        widgetFactory = new WidgetFactory(activity, false, false, null, null, null, null, null, null);
     }
 
     @Test
