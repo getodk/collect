@@ -508,6 +508,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         try {
                             FormIndex formIndex = InternalRecordingRequester.formIndex;
                             if (formIndex != null) {
+                                formSaveViewModel.replaceAnswerFile(formIndex.toString(), result.getOrNull().getAbsolutePath());
                                 Collect.getInstance().getFormController().answerQuestion(formIndex, new StringData(result.getOrNull().getName()));
                                 onScreenRefresh();
                             }
