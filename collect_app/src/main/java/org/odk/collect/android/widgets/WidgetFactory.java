@@ -198,16 +198,15 @@ public class WidgetFactory {
             case Constants.CONTROL_SELECT_MULTI:
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
                 // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
-                // This means normal appearances should be put before search().
                 if (appearance.contains(WidgetAppearanceUtils.MINIMAL)) {
                     questionWidget = new SelectMultiMinimalWidget(context, questionDetails, waitingForDataRegistry);
-                } else if (appearance.startsWith(WidgetAppearanceUtils.LIST_NO_LABEL)) {
+                } else if (appearance.contains(WidgetAppearanceUtils.LIST_NO_LABEL)) {
                     questionWidget = new ListMultiWidget(context, questionDetails, false);
-                } else if (appearance.startsWith(WidgetAppearanceUtils.LIST)) {
+                } else if (appearance.contains(WidgetAppearanceUtils.LIST)) {
                     questionWidget = new ListMultiWidget(context, questionDetails, true);
-                } else if (appearance.startsWith(WidgetAppearanceUtils.LABEL)) {
+                } else if (appearance.contains(WidgetAppearanceUtils.LABEL)) {
                     questionWidget = new LabelWidget(context, questionDetails);
-                } else if (appearance.startsWith(WidgetAppearanceUtils.IMAGE_MAP)) {
+                } else if (appearance.contains(WidgetAppearanceUtils.IMAGE_MAP)) {
                     questionWidget = new SelectMultiImageMapWidget(context, questionDetails);
                 } else {
                     questionWidget = new SelectMultiWidget(context, questionDetails);
@@ -257,7 +256,6 @@ public class WidgetFactory {
         boolean isQuick = appearance.contains(WidgetAppearanceUtils.QUICK);
         // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
         // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
-        // This means normal appearances should be put before search().
         if (appearance.contains(WidgetAppearanceUtils.MINIMAL)) {
             questionWidget = new SelectOneMinimalWidget(context, questionDetails, isQuick, waitingForDataRegistry);
         } else if (appearance.contains(WidgetAppearanceUtils.LIKERT)) {
@@ -266,7 +264,7 @@ public class WidgetFactory {
             questionWidget = new ListWidget(context, questionDetails, false, isQuick);
         } else if (appearance.contains(WidgetAppearanceUtils.LIST)) {
             questionWidget = new ListWidget(context, questionDetails, true, isQuick);
-        } else if (appearance.equals(WidgetAppearanceUtils.LABEL)) {
+        } else if (appearance.contains(WidgetAppearanceUtils.LABEL)) {
             questionWidget = new LabelWidget(context, questionDetails);
         } else if (appearance.contains(WidgetAppearanceUtils.IMAGE_MAP)) {
             questionWidget = new SelectOneImageMapWidget(context, questionDetails, isQuick);
