@@ -17,6 +17,8 @@ package org.odk.collect.android.dao.helpers;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.MediaStore;
+import android.webkit.MimeTypeMap;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormInfo;
@@ -77,7 +79,26 @@ public final class ContentResolverHelper {
 
     public static String getFileExtensionFromUri(Uri fileUri) {
         String mimeType = getContentResolver().getType(fileUri);
-        return mimeType.substring(mimeType.lastIndexOf('/') + 1);
+        String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType);
+
+        if (extension == null || extension.isEmpty()) {
+            Cursor cursor = getContentResolver().query(fileUri, null, null, null, null);
+            String name = null;
+            if (cursor != null && cursor.moveToFirst()) {
+                name = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME));
+            }
+            extension = name != null ? name.substring(name.lastIndexOf(".") + 1) : "";
+        }
+
+        if (extension.isEmpty() && mimeType != null && mimeType.contains("/")) {
+            extension = mimeType.substring(mimeType.lastIndexOf('/') + 1);
+        }
+
+        if (extension.isEmpty()) {
+            extension = MimeTypeMap.getFileExtensionFromUrl(fileUri.toString());
+        }
+
+        return extension;
     }
 
     public static String getMimeType(File file) {
