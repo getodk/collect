@@ -49,7 +49,7 @@ public class MediaUtils {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         if (mimeType == null || mimeType.isEmpty()) {
-            ContentResolverHelper.getMimeType(file);
+            mimeType = ContentResolverHelper.getMimeType(file);
         }
         intent.setDataAndType(contentUri, mimeType);
         FileUtils.grantFileReadPermissions(intent, contentUri, context);
