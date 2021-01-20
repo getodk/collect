@@ -34,7 +34,7 @@ import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -75,7 +75,7 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
         super.setUpLayout();
 
         String appearance = getFormEntryPrompt().getAppearanceHint();
-        selfie = WidgetAppearanceUtils.isFrontCameraAppearance(getFormEntryPrompt());
+        selfie = Appearances.isFrontCameraAppearance(getFormEntryPrompt());
 
         captureButton = createSimpleButton(getContext(), R.id.capture_image, questionDetails.isReadOnly(), getContext().getString(R.string.capture_image), getAnswerFontSize(), this);
 
@@ -151,7 +151,7 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
 
     private void hideButtonsIfNeeded(String appearance) {
         if (selfie || ((appearance != null
-                && appearance.toLowerCase(Locale.ENGLISH).contains(WidgetAppearanceUtils.NEW)))) {
+                && appearance.toLowerCase(Locale.ENGLISH).contains(Appearances.NEW)))) {
             chooseButton.setVisibility(View.GONE);
         }
     }

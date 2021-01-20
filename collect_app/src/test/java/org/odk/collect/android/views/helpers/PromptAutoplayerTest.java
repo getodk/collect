@@ -25,9 +25,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.odk.collect.android.support.CollectHelpers.setupFakeReferenceManager;
-import static org.odk.collect.android.utilities.WidgetAppearanceUtils.COMPACT;
-import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MINIMAL;
-import static org.odk.collect.android.utilities.WidgetAppearanceUtils.NO_BUTTONS;
+import static org.odk.collect.android.utilities.Appearances.COMPACT;
+import static org.odk.collect.android.utilities.Appearances.MINIMAL;
+import static org.odk.collect.android.utilities.Appearances.NO_BUTTONS;
 
 public class PromptAutoplayerTest {
 

@@ -23,7 +23,7 @@ import org.javarosa.core.model.data.helper.Selection;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.adapters.SelectMultipleListAdapter;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.ArrayList;
@@ -48,8 +48,8 @@ public class SelectMultiWidget extends BaseSelectListWidget {
 
     @Override
     protected AbstractSelectListAdapter setUpAdapter() {
-        int numColumns = WidgetAppearanceUtils.getNumberOfColumns(getFormEntryPrompt(), screenUtils);
-        boolean noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(getFormEntryPrompt()) || WidgetAppearanceUtils.isNoButtonsAppearance(getFormEntryPrompt());
+        int numColumns = Appearances.getNumberOfColumns(getFormEntryPrompt(), screenUtils);
+        boolean noButtonsMode = Appearances.isCompactAppearance(getFormEntryPrompt()) || Appearances.isNoButtonsAppearance(getFormEntryPrompt());
 
         recyclerViewAdapter = new SelectMultipleListAdapter(getSelectedItems(), this, getContext(),
                 items, getFormEntryPrompt(), getReferenceManager(), getAudioHelper(),

@@ -32,11 +32,11 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
-import static org.odk.collect.android.utilities.WidgetAppearanceUtils.FRONT;
+import static org.odk.collect.android.utilities.Appearances.FRONT;
 
 /**
  * Widget that allows user to scan barcodes and add them to the form.
@@ -136,7 +136,7 @@ public class BarcodeWidget extends QuestionWidget implements WidgetDataReceiver 
     }
 
     private void setCameraIdIfNeeded(FormEntryPrompt prompt, IntentIntegrator intent) {
-        if (WidgetAppearanceUtils.isFrontCameraAppearance(prompt)) {
+        if (Appearances.isFrontCameraAppearance(prompt)) {
             if (cameraUtils.isFrontCameraAvailable()) {
                 intent.addExtra(FRONT, true);
             } else {

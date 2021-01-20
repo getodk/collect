@@ -44,11 +44,11 @@ import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataUtil;
-import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.audit.AsyncTaskAuditEventWriter;
 import org.odk.collect.android.formentry.audit.AuditConfig;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.forms.FormDesignException;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
 
@@ -376,7 +376,7 @@ public class FormController {
             return false;
         }
 
-        return element.getAppearanceAttr().toLowerCase(Locale.ENGLISH).contains(ODKView.FIELD_LIST);
+        return element.getAppearanceAttr().toLowerCase(Locale.ENGLISH).contains(Appearances.FIELD_LIST);
     }
 
     private boolean repeatIsFieldList(FormIndex index) {

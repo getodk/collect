@@ -6,7 +6,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.audio.AudioHelper;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.audioclips.Clip;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import static java.util.Collections.emptyList;
 import static org.odk.collect.android.analytics.AnalyticsEvents.PROMPT;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getClipID;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
-import static org.odk.collect.android.utilities.WidgetAppearanceUtils.NO_BUTTONS;
+import static org.odk.collect.android.utilities.Appearances.NO_BUTTONS;
 
 public class PromptAutoplayer {
 
@@ -69,7 +69,7 @@ public class PromptAutoplayer {
     }
 
     private List<Clip> getSelectClips(FormEntryPrompt prompt) {
-        if (appearanceDoesNotShowControls(WidgetAppearanceUtils.getSanitizedAppearanceHint(prompt))) {
+        if (appearanceDoesNotShowControls(Appearances.getSanitizedAppearanceHint(prompt))) {
             return emptyList();
         }
 
@@ -94,8 +94,8 @@ public class PromptAutoplayer {
     }
 
     private boolean appearanceDoesNotShowControls(String appearance) {
-        return appearance.startsWith(WidgetAppearanceUtils.MINIMAL) ||
-                appearance.startsWith(WidgetAppearanceUtils.COMPACT) ||
+        return appearance.startsWith(Appearances.MINIMAL) ||
+                appearance.startsWith(Appearances.COMPACT) ||
                 appearance.contains(NO_BUTTONS);
     }
 

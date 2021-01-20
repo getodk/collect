@@ -10,9 +10,9 @@ import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.utilities.Appearances;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 
 public class ActivityGeoDataRequester implements GeoDataRequester {
@@ -103,10 +103,10 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
     }
 
     private boolean hasMapsAppearance(FormEntryPrompt prompt) {
-        return WidgetAppearanceUtils.hasAppearance(prompt, WidgetAppearanceUtils.MAPS);
+        return Appearances.hasAppearance(prompt, Appearances.MAPS);
     }
 
     private boolean hasPlacementMapAppearance(FormEntryPrompt prompt) {
-        return WidgetAppearanceUtils.hasAppearance(prompt, WidgetAppearanceUtils.PLACEMENT_MAP);
+        return Appearances.hasAppearance(prompt, Appearances.PLACEMENT_MAP);
     }
 }

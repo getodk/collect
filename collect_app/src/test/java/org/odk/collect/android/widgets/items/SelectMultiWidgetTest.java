@@ -36,7 +36,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.SoftKeyboardController;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.base.GeneralSelectMultiWidgetTest;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.Clip;
@@ -231,7 +231,7 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
 
         // No-buttons appearance
         formEntryPrompt = new MockFormEntryPromptBuilder(formEntryPrompt)
-                .withAppearance(WidgetAppearanceUtils.NO_BUTTONS)
+                .withAppearance(Appearances.NO_BUTTONS)
                 .build();
 
         populateRecyclerView(getWidget());

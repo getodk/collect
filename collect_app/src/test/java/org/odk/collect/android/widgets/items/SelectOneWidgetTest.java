@@ -35,7 +35,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.SoftKeyboardController;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.Clip;
@@ -301,7 +301,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
 
         // No-buttons appearance
         formEntryPrompt = new MockFormEntryPromptBuilder(formEntryPrompt)
-                .withAppearance(WidgetAppearanceUtils.NO_BUTTONS)
+                .withAppearance(Appearances.NO_BUTTONS)
                 .build();
 
         populateRecyclerView(getWidget());
@@ -337,7 +337,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
     }
 
     private void clickChoice(SelectOneWidget widget, int index) {
-        if (WidgetAppearanceUtils.isNoButtonsAppearance(formEntryPrompt)) {
+        if (Appearances.isNoButtonsAppearance(formEntryPrompt)) {
             clickNoButtonChoice(widget, index);
         } else {
             clickButtonChoice(widget, index);
@@ -362,6 +362,6 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
     );
 
     private boolean isQuick() {
-        return WidgetAppearanceUtils.getSanitizedAppearanceHint(formEntryPrompt).contains("quick");
+        return Appearances.getSanitizedAppearanceHint(formEntryPrompt).contains("quick");
     }
 }

@@ -18,16 +18,16 @@ package org.odk.collect.android.utilities;
 
 import android.content.res.Configuration;
 
+import androidx.annotation.NonNull;
+
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.external.ExternalDataUtil;
 
 import java.util.Locale;
 
-import androidx.annotation.NonNull;
-
 import timber.log.Timber;
 
-public class WidgetAppearanceUtils {
+public class Appearances {
     private static final String EXCEPTION_PARSING_COLUMNS = "Exception parsing columns";
 
     // Date appearances
@@ -72,6 +72,9 @@ public class WidgetAppearanceUtils {
     public static final String PLACEMENT_MAP            = "placement-map";
     public static final String MAPS                     = "maps";
 
+    // Groups and repeats
+    public static final String FIELD_LIST = "field-list";
+
     // Other appearances
     public static final String NO_APPEARANCE            = "";
     public static final String BEARING                  = "bearing";
@@ -82,7 +85,7 @@ public class WidgetAppearanceUtils {
     public static final String URL                      = "url";
     public static final String RATING                   = "rating";
 
-    private WidgetAppearanceUtils() {
+    private Appearances() {
     }
 
     // Get appearance hint and clean it up so it is lower case, without the search function and never null.
@@ -186,6 +189,6 @@ public class WidgetAppearanceUtils {
 
     public static boolean isAutocomplete(FormEntryPrompt prompt) {
         String appearance = getSanitizedAppearanceHint(prompt);
-        return appearance.contains(WidgetAppearanceUtils.SEARCH) || appearance.contains(WidgetAppearanceUtils.AUTOCOMPLETE);
+        return appearance.contains(Appearances.SEARCH) || appearance.contains(Appearances.AUTOCOMPLETE);
     }
 }

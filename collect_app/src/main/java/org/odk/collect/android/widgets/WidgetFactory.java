@@ -29,7 +29,7 @@ import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.QuestionMediaManager;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.items.LabelWidget;
 import org.odk.collect.android.widgets.items.LikertWidget;
 import org.odk.collect.android.widgets.items.ListMultiWidget;
@@ -49,9 +49,9 @@ import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterFactory;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
-import static org.odk.collect.android.utilities.WidgetAppearanceUtils.MAPS;
-import static org.odk.collect.android.utilities.WidgetAppearanceUtils.PLACEMENT_MAP;
-import static org.odk.collect.android.utilities.WidgetAppearanceUtils.hasAppearance;
+import static org.odk.collect.android.utilities.Appearances.MAPS;
+import static org.odk.collect.android.utilities.Appearances.PLACEMENT_MAP;
+import static org.odk.collect.android.utilities.Appearances.hasAppearance;
 
 /**
  * Convenience class that handles creation of widgets.
@@ -92,7 +92,7 @@ public class WidgetFactory {
     }
 
     public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, PermissionsProvider permissionsProvider) {
-        String appearance = WidgetAppearanceUtils.getSanitizedAppearanceHint(prompt);
+        String appearance = Appearances.getSanitizedAppearanceHint(prompt);
         QuestionDetails questionDetails = new QuestionDetails(prompt, Collect.getCurrentFormIdentifierHash(), readOnlyOverride);
 
         final QuestionWidget questionWidget;
@@ -109,9 +109,9 @@ public class WidgetFactory {
                         questionWidget = new TimeWidget(context, questionDetails, new DateTimeWidgetUtils());
                         break;
                     case Constants.DATATYPE_DECIMAL:
-                        if (appearance.startsWith(WidgetAppearanceUtils.EX)) {
+                        if (appearance.startsWith(Appearances.EX)) {
                             questionWidget = new ExDecimalWidget(context, questionDetails, waitingForDataRegistry);
-                        } else if (appearance.equals(WidgetAppearanceUtils.BEARING)) {
+                        } else if (appearance.equals(Appearances.BEARING)) {
                             questionWidget = new BearingWidget(context, questionDetails, waitingForDataRegistry,
                                     (SensorManager) context.getSystemService(Context.SENSOR_SERVICE));
                         } else {
@@ -119,7 +119,7 @@ public class WidgetFactory {
                         }
                         break;
                     case Constants.DATATYPE_INTEGER:
-                        if (appearance.startsWith(WidgetAppearanceUtils.EX)) {
+                        if (appearance.startsWith(Appearances.EX)) {
                             questionWidget = new ExIntegerWidget(context, questionDetails, waitingForDataRegistry);
                         } else {
                             questionWidget = new IntegerWidget(context, questionDetails);
@@ -149,13 +149,13 @@ public class WidgetFactory {
                         String query = prompt.getQuestion().getAdditionalAttribute(null, "query");
                         if (query != null) {
                             questionWidget = getSelectOneWidget(appearance, questionDetails);
-                        } else if (appearance.startsWith(WidgetAppearanceUtils.PRINTER)) {
+                        } else if (appearance.startsWith(Appearances.PRINTER)) {
                             questionWidget = new ExPrinterWidget(context, questionDetails, waitingForDataRegistry);
-                        } else if (appearance.startsWith(WidgetAppearanceUtils.EX)) {
+                        } else if (appearance.startsWith(Appearances.EX)) {
                             questionWidget = new ExStringWidget(context, questionDetails, waitingForDataRegistry);
-                        } else if (appearance.contains(WidgetAppearanceUtils.NUMBERS)) {
+                        } else if (appearance.contains(Appearances.NUMBERS)) {
                             questionWidget = new StringNumberWidget(context, questionDetails);
-                        } else if (appearance.equals(WidgetAppearanceUtils.URL)) {
+                        } else if (appearance.equals(Appearances.URL)) {
                             questionWidget = new UrlWidget(context, questionDetails, new CustomTabHelper());
                         } else {
                             questionWidget = new StringWidget(context, questionDetails);
@@ -170,11 +170,11 @@ public class WidgetFactory {
                 questionWidget = new ArbitraryFileWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
-                if (appearance.equals(WidgetAppearanceUtils.SIGNATURE)) {
+                if (appearance.equals(Appearances.SIGNATURE)) {
                     questionWidget = new SignatureWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
-                } else if (appearance.contains(WidgetAppearanceUtils.ANNOTATE)) {
+                } else if (appearance.contains(Appearances.ANNOTATE)) {
                     questionWidget = new AnnotateWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
-                } else if (appearance.equals(WidgetAppearanceUtils.DRAW)) {
+                } else if (appearance.equals(Appearances.DRAW)) {
                     questionWidget = new DrawWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 } else {
                     questionWidget = new ImageWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
@@ -196,15 +196,15 @@ public class WidgetFactory {
             case Constants.CONTROL_SELECT_MULTI:
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
                 // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
-                if (appearance.contains(WidgetAppearanceUtils.MINIMAL)) {
+                if (appearance.contains(Appearances.MINIMAL)) {
                     questionWidget = new SelectMultiMinimalWidget(context, questionDetails, waitingForDataRegistry);
-                } else if (appearance.contains(WidgetAppearanceUtils.LIST_NO_LABEL)) {
+                } else if (appearance.contains(Appearances.LIST_NO_LABEL)) {
                     questionWidget = new ListMultiWidget(context, questionDetails, false);
-                } else if (appearance.contains(WidgetAppearanceUtils.LIST)) {
+                } else if (appearance.contains(Appearances.LIST)) {
                     questionWidget = new ListMultiWidget(context, questionDetails, true);
-                } else if (appearance.contains(WidgetAppearanceUtils.LABEL)) {
+                } else if (appearance.contains(Appearances.LABEL)) {
                     questionWidget = new LabelWidget(context, questionDetails);
-                } else if (appearance.contains(WidgetAppearanceUtils.IMAGE_MAP)) {
+                } else if (appearance.contains(Appearances.IMAGE_MAP)) {
                     questionWidget = new SelectMultiImageMapWidget(context, questionDetails);
                 } else {
                     questionWidget = new SelectMultiWidget(context, questionDetails);
@@ -217,7 +217,7 @@ public class WidgetFactory {
                 questionWidget = new TriggerWidget(context, questionDetails);
                 break;
             case Constants.CONTROL_RANGE:
-                if (appearance.startsWith(WidgetAppearanceUtils.RATING)) {
+                if (appearance.startsWith(Appearances.RATING)) {
                     questionWidget = new RatingWidget(context, questionDetails);
                 } else {
                     switch (prompt.getDataType()) {
@@ -251,20 +251,20 @@ public class WidgetFactory {
 
     private QuestionWidget getSelectOneWidget(String appearance, QuestionDetails questionDetails) {
         final QuestionWidget questionWidget;
-        boolean isQuick = appearance.contains(WidgetAppearanceUtils.QUICK);
+        boolean isQuick = appearance.contains(Appearances.QUICK);
         // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
         // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
-        if (appearance.contains(WidgetAppearanceUtils.MINIMAL)) {
+        if (appearance.contains(Appearances.MINIMAL)) {
             questionWidget = new SelectOneMinimalWidget(context, questionDetails, isQuick, waitingForDataRegistry);
-        } else if (appearance.contains(WidgetAppearanceUtils.LIKERT)) {
+        } else if (appearance.contains(Appearances.LIKERT)) {
             questionWidget = new LikertWidget(context, questionDetails);
-        } else if (appearance.contains(WidgetAppearanceUtils.LIST_NO_LABEL)) {
+        } else if (appearance.contains(Appearances.LIST_NO_LABEL)) {
             questionWidget = new ListWidget(context, questionDetails, false, isQuick);
-        } else if (appearance.contains(WidgetAppearanceUtils.LIST)) {
+        } else if (appearance.contains(Appearances.LIST)) {
             questionWidget = new ListWidget(context, questionDetails, true, isQuick);
-        } else if (appearance.contains(WidgetAppearanceUtils.LABEL)) {
+        } else if (appearance.contains(Appearances.LABEL)) {
             questionWidget = new LabelWidget(context, questionDetails);
-        } else if (appearance.contains(WidgetAppearanceUtils.IMAGE_MAP)) {
+        } else if (appearance.contains(Appearances.IMAGE_MAP)) {
             questionWidget = new SelectOneImageMapWidget(context, questionDetails, isQuick);
         } else {
             questionWidget = new SelectOneWidget(context, questionDetails, isQuick);

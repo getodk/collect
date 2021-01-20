@@ -15,7 +15,7 @@ import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.fakes.FakePermissionsProvider;
 import org.odk.collect.android.support.TestScreenContextActivity;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowActivity;
@@ -137,7 +137,7 @@ public class ActivityGeoDataRequesterTest {
 
     @Test
     public void whenWidgetHasMapsAppearance_requestGeoPoint_launchesCorrectIntent() {
-        when(prompt.getAppearanceHint()).thenReturn(WidgetAppearanceUtils.MAPS);
+        when(prompt.getAppearanceHint()).thenReturn(Appearances.MAPS);
 
         activityGeoDataRequester.requestGeoPoint(testActivity, prompt, "", waitingForDataRegistry);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
@@ -151,7 +151,7 @@ public class ActivityGeoDataRequesterTest {
 
     @Test
     public void whenWidgetHasPlacementMapAppearance_requestGeoPoint_launchesCorrectIntent() {
-        when(prompt.getAppearanceHint()).thenReturn(WidgetAppearanceUtils.PLACEMENT_MAP);
+        when(prompt.getAppearanceHint()).thenReturn(Appearances.PLACEMENT_MAP);
 
         activityGeoDataRequester.requestGeoPoint(testActivity, prompt, "", waitingForDataRegistry);
         Intent startedIntent = shadowActivity.getNextStartedActivity();

@@ -12,7 +12,7 @@ import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.utilities.Appearances;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -47,7 +47,7 @@ public class StringWidgetUtils {
     }
 
     public static IntegerData getIntegerData(String answer, FormEntryPrompt prompt) {
-        if (WidgetAppearanceUtils.useThousandSeparator(prompt)) {
+        if (Appearances.useThousandSeparator(prompt)) {
             answer = ThousandsSeparatorTextWatcher.getOriginalString(answer);
         }
 
@@ -63,7 +63,7 @@ public class StringWidgetUtils {
     }
 
     public static DecimalData getDecimalData(String answer, FormEntryPrompt prompt) {
-        if (WidgetAppearanceUtils.useThousandSeparator(prompt)) {
+        if (Appearances.useThousandSeparator(prompt)) {
             answer = ThousandsSeparatorTextWatcher.getOriginalString(answer);
         }
 
@@ -80,7 +80,7 @@ public class StringWidgetUtils {
     }
 
     public static StringData getStringNumberData(String answer, FormEntryPrompt prompt) {
-        if (WidgetAppearanceUtils.useThousandSeparator(prompt)) {
+        if (Appearances.useThousandSeparator(prompt)) {
             answer = ThousandsSeparatorTextWatcher.getOriginalString(answer);
         }
 
@@ -96,8 +96,8 @@ public class StringWidgetUtils {
     }
 
     public static void adjustEditTextAnswerToIntegerWidget(EditText answerText, FormEntryPrompt prompt) {
-        boolean useThousandSeparator = WidgetAppearanceUtils.useThousandSeparator(prompt);
-        if (WidgetAppearanceUtils.useThousandSeparator(prompt)) {
+        boolean useThousandSeparator = Appearances.useThousandSeparator(prompt);
+        if (Appearances.useThousandSeparator(prompt)) {
             answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
         }
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
@@ -121,7 +121,7 @@ public class StringWidgetUtils {
     }
 
     public static void adjustEditTextAnswerToDecimalWidget(EditText answerText, FormEntryPrompt prompt) {
-        boolean useThousandSeparator = WidgetAppearanceUtils.useThousandSeparator(prompt);
+        boolean useThousandSeparator = Appearances.useThousandSeparator(prompt);
         if (useThousandSeparator) {
             answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
         }
@@ -157,7 +157,7 @@ public class StringWidgetUtils {
 
     public static void adjustEditTextAnswerToStringNumberWidget(EditText answerText, FormEntryPrompt prompt) {
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
-        boolean useThousandSeparator = WidgetAppearanceUtils.useThousandSeparator(prompt);
+        boolean useThousandSeparator = Appearances.useThousandSeparator(prompt);
         if (useThousandSeparator) {
             answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
         }

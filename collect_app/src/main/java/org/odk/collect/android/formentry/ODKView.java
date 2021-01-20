@@ -115,8 +115,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     private final ArrayList<QuestionWidget> widgets;
     private final AudioHelper audioHelper;
 
-    public static final String FIELD_LIST = "field-list";
-
     private WidgetValueChangedListener widgetValueChangedListener;
 
     @Inject

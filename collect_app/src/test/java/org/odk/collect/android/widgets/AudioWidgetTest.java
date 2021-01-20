@@ -18,7 +18,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.utilities.AudioFileRequester;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
@@ -113,7 +113,7 @@ public class AudioWidgetTest {
     @Test
     public void whenWidgetIsNew_chooseSoundButtonIsNotShown() {
         FormEntryPrompt prompt = promptWithReadOnly();
-        when(prompt.getAppearanceHint()).thenReturn(WidgetAppearanceUtils.NEW);
+        when(prompt.getAppearanceHint()).thenReturn(Appearances.NEW);
         AudioWidget widget = createWidget(prompt);
 
         assertThat(widget.binding.chooseButton.getVisibility(), equalTo(GONE));
