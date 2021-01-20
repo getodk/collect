@@ -1,7 +1,7 @@
 package org.odk.collect.android.widgets.utilities;
 
-import android.app.Activity;
-
+import androidx.activity.ComponentActivity;
+import androidx.lifecycle.MutableLiveData;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.form.api.FormEntryPrompt;
@@ -10,6 +10,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.fakes.FakePermissionsProvider;
 import org.odk.collect.android.formentry.FormEntryViewModel;
+import org.odk.collect.android.formentry.FormIndexAnimationHandler;
+import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
@@ -19,6 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 
 @RunWith(AndroidJUnit4.class)
@@ -31,8 +34,10 @@ public class InternalRecordingRequesterTest {
 
     @Before
     public void setup() {
-        Activity activity = Robolectric.buildActivity(Activity.class).get();
-        requester = new InternalRecordingRequester(activity, viewModel, permissionsProvider, mock(FormEntryViewModel.class));
+        ComponentActivity activity = Robolectric.buildActivity(ComponentActivity.class).get();
+        when(viewModel.getCurrentSession()).thenReturn(new MutableLiveData<>(null));
+
+        requester = new InternalRecordingRequester(activity, viewModel, permissionsProvider, mock(FormEntryViewModel.class), mock(FormSaveViewModel.class), mock(FormIndexAnimationHandler.Listener.class));
         permissionsProvider.setPermissionGranted(true);
     }
 

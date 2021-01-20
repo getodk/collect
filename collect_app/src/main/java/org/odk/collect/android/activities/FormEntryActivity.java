@@ -64,7 +64,6 @@ import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryCaption;
@@ -403,8 +402,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 backgroundLocationViewModel
         );
 
-        waitingForDataRegistry = new FormControllerWaitingForDataRegistry();
-
         nextButton = findViewById(R.id.form_forward_button);
         nextButton.setOnClickListener(v -> {
             swipeHandler.setBeenSwiped(true);
@@ -502,33 +499,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
         audioRecorderViewModel = new ViewModelProvider(this, audioRecorderViewModelFactory).get(AudioRecorderViewModel.class);
-        internalRecordingRequester = new InternalRecordingRequester(this, audioRecorderViewModel, permissionsProvider, formEntryViewModel);
+        internalRecordingRequester = new InternalRecordingRequester(this, audioRecorderViewModel, permissionsProvider, formEntryViewModel, formSaveViewModel, this);
+
+        waitingForDataRegistry = new FormControllerWaitingForDataRegistry();
         externalAppRecordingRequester = new ExternalAppRecordingRequester(this, activityAvailability, waitingForDataRegistry, permissionsProvider, formEntryViewModel);
-
-        audioRecorderViewModel.getCurrentSession().observe(this, session -> {
-            if (session != null && session.getFile() != null) {
-                formSaveViewModel.createAnswerFile(session.getFile()).observe(this, result -> {
-                    if (result != null) {
-                        if (result.isSuccess() && !session.getId().equals("background")) {
-                            session.getFile().delete();
-                        }
-
-                        audioRecorderViewModel.cleanUp();
-
-                        try {
-                            FormIndex formIndex = InternalRecordingRequester.formIndex;
-                            if (formIndex != null) {
-                                formSaveViewModel.replaceAnswerFile(formIndex.toString(), result.getOrNull().getAbsolutePath());
-                                Collect.getInstance().getFormController().answerQuestion(formIndex, new StringData(result.getOrNull().getName()));
-                                onScreenRefresh();
-                            }
-                        } catch (JavaRosaException e) {
-                            // ?
-                        }
-                    }
-                });
-            }
-        });
 
         if (preferencesProvider.getGeneralSharedPreferences().getBoolean("background_audio_recording", false)) {
             audioRecorderViewModel.start("background", Output.AAC);
