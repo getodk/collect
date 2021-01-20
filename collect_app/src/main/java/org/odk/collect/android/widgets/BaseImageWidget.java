@@ -197,7 +197,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
         @Override
         public void clickImage(String context) {
-            mediaUtils.openFile(getContext(), new File(getInstanceFolder() + File.separator + binaryName));
+            mediaUtils.openFile(getContext(), new File(getInstanceFolder() + File.separator + binaryName), "image/*");
         }
     }
 

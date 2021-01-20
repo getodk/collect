@@ -44,11 +44,14 @@ public class MediaUtils {
         deleteAndReport(new File(imageFile));
     }
 
-    public void openFile(Context context, File file) {
+    public void openFile(Context context, File file, String mimeType) {
         Uri contentUri = ContentUriProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", file);
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(contentUri, ContentResolverHelper.getMimeType(file));
+        if (mimeType == null || mimeType.isEmpty()) {
+            ContentResolverHelper.getMimeType(file);
+        }
+        intent.setDataAndType(contentUri, mimeType);
         FileUtils.grantFileReadPermissions(intent, contentUri, context);
 
         if (new ActivityAvailability(context).isActivityAvailable(intent)) {

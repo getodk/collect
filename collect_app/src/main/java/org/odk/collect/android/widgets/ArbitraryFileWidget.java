@@ -151,7 +151,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, B
         answerLayout.addView(attachmentImg);
         answerLayout.addView(chosenFileNameTextView);
         answerLayout.setVisibility(binaryName == null ? GONE : VISIBLE);
-        answerLayout.setOnClickListener(view -> mediaUtils.openFile(getContext(), new File(getInstanceFolder() + File.separator + binaryName)));
+        answerLayout.setOnClickListener(view -> mediaUtils.openFile(getContext(), new File(getInstanceFolder() + File.separator + binaryName), null));
 
         widgetLayout.addView(chooseFileButton);
         widgetLayout.addView(answerLayout);

@@ -20,9 +20,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore.Video;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -30,7 +29,6 @@ import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CaptureSelfieVideoActivity;
 import org.odk.collect.android.application.Collect;
@@ -39,8 +37,7 @@ import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.CameraUtils;
-import org.odk.collect.android.utilities.ContentUriProvider;
-import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
@@ -234,9 +231,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         if (selfie) {
             i = new Intent(getContext(), CaptureSelfieVideoActivity.class);
         } else {
-            i = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
-            i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                    Video.Media.EXTERNAL_CONTENT_URI.toString());
+            i = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         }
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
@@ -247,7 +242,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
                 GeneralKeys.KEY_HIGH_RESOLUTION,
                 VideoWidget.DEFAULT_HIGH_RESOLUTION);
         if (highResolution) {
-            i.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY, 1);
+            i.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
             analytics.logEvent(REQUEST_HIGH_RES_VIDEO, getQuestionDetails().getFormAnalyticsID(), "");
         } else {
             analytics.logEvent(REQUEST_VIDEO_NOT_HIGH_RES, getQuestionDetails().getFormAnalyticsID(), "");
@@ -269,9 +264,6 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
     private void chooseVideo() {
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("video/*");
-        // Intent i =
-        // new Intent(Intent.ACTION_PICK,
-        // android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
         try {
             waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
             ((Activity) getContext()).startActivityForResult(i,
@@ -288,25 +280,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
     }
 
     private void playVideoFile() {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
         File file = new File(getInstanceFolder() + File.separator + binaryName);
-
-        Uri uri = null;
-        try {
-            uri = ContentUriProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", file);
-            FileUtils.grantFileReadPermissions(intent, uri, getContext());
-        } catch (IllegalArgumentException e) {
-            Timber.e(e);
-        }
-
-        intent.setDataAndType(uri, "video/*");
-        try {
-            getContext().startActivity(intent);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(
-                    getContext(),
-                    getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.view_video)), Toast.LENGTH_SHORT).show();
-        }
+        new MediaUtils().openFile(getContext(), file, "video/*");
     }
 }
