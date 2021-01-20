@@ -11,6 +11,7 @@ import org.odk.collect.android.openrosa.OpenRosaResponseParser;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.ByteArrayInputStream;
+import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.UnknownHostException;
 import java.util.HashMap;
@@ -73,6 +74,19 @@ public class OpenRosaFormSourceTest {
             fail("No exception thrown!");
         } catch (FormSourceException.SecurityError e) {
             assertThat(e.getServerUrl(), is("http://blah.com"));
+        }
+    }
+
+    @Test
+    public void fetchFormList_whenThereIsATimeout_throwsFetchError() throws Exception {
+        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, analytics, responseParser);
+
+        try {
+            when(httpInterface.executeGetRequest(any(), any(), any())).thenThrow(SocketTimeoutException.class);
+            formListApi.fetchFormList();
+            fail("No exception thrown!");
+        } catch (FormSourceException.FetchError e) {
+            // pass
         }
     }
 
