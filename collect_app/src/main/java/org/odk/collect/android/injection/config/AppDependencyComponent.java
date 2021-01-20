@@ -60,6 +60,8 @@ import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.preferences.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.preferences.UserInterfacePreferencesFragment;
+import org.odk.collect.android.provider.FormsProvider;
+import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.migration.StorageMigrationDialog;
 import org.odk.collect.android.storage.migration.StorageMigrationService;
@@ -225,6 +227,10 @@ public interface AppDependencyComponent {
     void inject(AudioRecordingErrorDialogFragment audioRecordingErrorDialogFragment);
 
     void inject(CollectAbstractActivity collectAbstractActivity);
+
+    void inject(FormsProvider formsProvider);
+
+    void inject(InstanceProvider instanceProvider);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 
