@@ -77,7 +77,7 @@ public final class ContentResolverHelper {
 
     public static String getFileExtensionFromUri(Uri fileUri) {
         String mimeType = getContentResolver().getType(fileUri);
-        return mimeType.substring(mimeType.lastIndexOf("/") + 1);
+        return mimeType.substring(mimeType.lastIndexOf('/') + 1);
     }
 
     public static String getMimeType(File file) {

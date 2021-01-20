@@ -92,7 +92,7 @@ public class InstanceProvider extends ContentProvider {
     }
 
     // Do not call it in onCreate() https://stackoverflow.com/questions/23521083/inject-database-in-a-contentprovider-with-dagger
-    private void deferDaggerInit(){
+    private void deferDaggerInit() {
         DaggerUtils.getComponent(getContext()).inject(this);
     }
 
