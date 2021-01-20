@@ -81,7 +81,9 @@ import org.odk.collect.android.widgets.UrlWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
-import org.odk.collect.android.widgets.utilities.RecordingRequesterFactory;
+import org.odk.collect.android.widgets.utilities.ExternalAppRecordingRequester;
+import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
+import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.audioclips.PlaybackFailedException;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
@@ -146,7 +148,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      * @param groups          the group hierarchy that this question or field list is in
      * @param advancingPage   whether this view is being created after a forward swipe through the
      */
-    public ODKView(ComponentActivity context, final FormEntryPrompt[] questionPrompts, FormEntryCaption[] groups, boolean advancingPage, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, AudioPlayer audioPlayer, AudioRecorderViewModel audioRecorderViewModel, FormEntryViewModel formEntryViewModel) {
+    @SuppressWarnings("PMD.ExcessiveParameterList")
+    public ODKView(ComponentActivity context, final FormEntryPrompt[] questionPrompts, FormEntryCaption[] groups, boolean advancingPage, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, AudioPlayer audioPlayer, AudioRecorderViewModel audioRecorderViewModel, FormEntryViewModel formEntryViewModel, InternalRecordingRequester internalRecordingRequester, ExternalAppRecordingRequester externalAppRecordingRequester) {
         super(context);
         viewLifecycle = ((ScreenContext) context).getViewLifecycle();
         this.audioRecorderViewModel = audioRecorderViewModel;
@@ -178,10 +181,14 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 questionMediaManager,
                 audioPlayer,
                 activityAvailability,
-                new RecordingRequesterFactory(waitingForDataRegistry, activityAvailability, audioRecorderViewModel, permissionsProvider, context, formEntryViewModel),
+                new RecordingRequesterProvider(
+                        internalRecordingRequester,
+                        externalAppRecordingRequester
+                ),
                 formEntryViewModel,
                 audioRecorderViewModel,
-                viewLifecycle);
+                viewLifecycle
+        );
 
         widgets = new ArrayList<>();
         widgetsList = findViewById(R.id.widgets);

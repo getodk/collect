@@ -48,7 +48,7 @@ import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.odk.collect.android.widgets.utilities.GetContentAudioFileRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
-import org.odk.collect.android.widgets.utilities.RecordingRequesterFactory;
+import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
 import org.odk.collect.android.widgets.utilities.ViewModelRecordingStatusProvider;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
@@ -73,7 +73,7 @@ public class WidgetFactory {
     private final QuestionMediaManager questionMediaManager;
     private final AudioPlayer audioPlayer;
     private final ActivityAvailability activityAvailability;
-    private final RecordingRequesterFactory recordingRequesterFactory;
+    private final RecordingRequesterProvider recordingRequesterProvider;
     private final FormEntryViewModel formEntryViewModel;
     private final AudioRecorderViewModel audioRecorderViewModel;
     private final LifecycleOwner viewLifecycle;
@@ -86,7 +86,7 @@ public class WidgetFactory {
                          QuestionMediaManager questionMediaManager,
                          AudioPlayer audioPlayer,
                          ActivityAvailability activityAvailability,
-                         RecordingRequesterFactory recordingRequesterFactory,
+                         RecordingRequesterProvider recordingRequesterProvider,
                          FormEntryViewModel formEntryViewModel,
                          AudioRecorderViewModel audioRecorderViewModel,
                          LifecycleOwner viewLifecycle) {
@@ -97,7 +97,7 @@ public class WidgetFactory {
         this.questionMediaManager = questionMediaManager;
         this.audioPlayer = audioPlayer;
         this.activityAvailability = activityAvailability;
-        this.recordingRequesterFactory = recordingRequesterFactory;
+        this.recordingRequesterProvider = recordingRequesterProvider;
         this.formEntryViewModel = formEntryViewModel;
         this.audioRecorderViewModel = audioRecorderViewModel;
         this.viewLifecycle = viewLifecycle;
@@ -196,7 +196,7 @@ public class WidgetFactory {
                 questionWidget = new OSMWidget(context, questionDetails, waitingForDataRegistry);
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
-                RecordingRequester recordingRequester = recordingRequesterFactory.create(prompt, useExternalRecorder);
+                RecordingRequester recordingRequester = recordingRequesterProvider.create(prompt, useExternalRecorder);
                 GetContentAudioFileRequester audioFileRequester = new GetContentAudioFileRequester(context, activityAvailability, waitingForDataRegistry, formEntryViewModel);
                 questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, recordingRequester, audioFileRequester, new ViewModelRecordingStatusProvider(audioRecorderViewModel, viewLifecycle));
                 break;

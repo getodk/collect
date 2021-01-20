@@ -142,6 +142,7 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveFormIndexTask;
 import org.odk.collect.android.tasks.SavePointTask;
+import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -157,6 +158,7 @@ import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangePickerDecimalWidget;
 import org.odk.collect.android.widgets.RangePickerIntegerWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+import org.odk.collect.android.widgets.utilities.ExternalAppRecordingRequester;
 import org.odk.collect.android.widgets.utilities.FormControllerWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
 import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
@@ -297,6 +299,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private FormIndexAnimationHandler formIndexAnimationHandler;
     private WaitingForDataRegistry waitingForDataRegistry;
     private AudioRecorderViewModel audioRecorderViewModel;
+    private InternalRecordingRequester internalRecordingRequester;
+    private ExternalAppRecordingRequester externalAppRecordingRequester;
 
     @Override
     public void allowSwiping(boolean doSwipe) {
@@ -344,6 +348,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     PreferencesProvider preferencesProvider;
+
+    @Inject
+    ActivityAvailability activityAvailability;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -495,6 +502,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
         audioRecorderViewModel = new ViewModelProvider(this, audioRecorderViewModelFactory).get(AudioRecorderViewModel.class);
+        internalRecordingRequester = new InternalRecordingRequester(this, audioRecorderViewModel, permissionsProvider, formEntryViewModel);
+        externalAppRecordingRequester = new ExternalAppRecordingRequester(this, activityAvailability, waitingForDataRegistry, permissionsProvider, formEntryViewModel);
+
         audioRecorderViewModel.getCurrentSession().observe(this, session -> {
             if (session != null && session.getFile() != null) {
                 formSaveViewModel.createAnswerFile(session.getFile()).observe(this, result -> {
@@ -1207,7 +1217,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .of(this, factory)
                 .get(AudioClipViewModel.class), odkViewLifecycle);
 
-        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorderViewModel, formEntryViewModel);
+        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorderViewModel, formEntryViewModel, internalRecordingRequester, externalAppRecordingRequester);
     }
 
     @Override
