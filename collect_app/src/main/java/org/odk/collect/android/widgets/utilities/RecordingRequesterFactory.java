@@ -1,7 +1,6 @@
 package org.odk.collect.android.widgets.utilities;
 
 import androidx.activity.ComponentActivity;
-import androidx.lifecycle.LifecycleOwner;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.formentry.FormEntryViewModel;
@@ -16,17 +15,15 @@ public class RecordingRequesterFactory {
     private final ActivityAvailability activityAvailability;
     private final PermissionsProvider permissionsProvider;
     private final ComponentActivity activity;
-    private final LifecycleOwner lifecycle;
     private final AudioRecorderViewModel audioRecorderViewModel;
     private final FormEntryViewModel formEntryViewModel;
 
-    public RecordingRequesterFactory(WaitingForDataRegistry waitingForDataRegistry, ActivityAvailability activityAvailability, AudioRecorderViewModel audioRecorderViewModel, PermissionsProvider permissionsProvider, ComponentActivity activity, LifecycleOwner lifecycle, FormEntryViewModel formEntryViewModel) {
+    public RecordingRequesterFactory(WaitingForDataRegistry waitingForDataRegistry, ActivityAvailability activityAvailability, AudioRecorderViewModel audioRecorderViewModel, PermissionsProvider permissionsProvider, ComponentActivity activity, FormEntryViewModel formEntryViewModel) {
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.activityAvailability = activityAvailability;
         this.audioRecorderViewModel = audioRecorderViewModel;
         this.permissionsProvider = permissionsProvider;
         this.activity = activity;
-        this.lifecycle = lifecycle;
         this.formEntryViewModel = formEntryViewModel;
     }
 
@@ -34,13 +31,13 @@ public class RecordingRequesterFactory {
         String audioQuality = FormEntryPromptUtils.getAttributeValue(prompt, "quality");
 
         if (audioQuality != null && (audioQuality.equals("normal") || audioQuality.equals("voice-only") || audioQuality.equals("low"))) {
-            return new InternalRecordingRequester(activity, audioRecorderViewModel, permissionsProvider, lifecycle, formEntryViewModel);
+            return new InternalRecordingRequester(activity, audioRecorderViewModel, permissionsProvider, formEntryViewModel);
         } else if (audioQuality != null && audioQuality.equals("external")) {
-            return new ExternalAppRecordingRequester(activity, activityAvailability, waitingForDataRegistry, permissionsProvider, formEntryViewModel, audioRecorderViewModel, lifecycle);
+            return new ExternalAppRecordingRequester(activity, activityAvailability, waitingForDataRegistry, permissionsProvider, formEntryViewModel);
         } else if (externalRecorderPreferred) {
-            return new ExternalAppRecordingRequester(activity, activityAvailability, waitingForDataRegistry, permissionsProvider, formEntryViewModel, audioRecorderViewModel, lifecycle);
+            return new ExternalAppRecordingRequester(activity, activityAvailability, waitingForDataRegistry, permissionsProvider, formEntryViewModel);
         } else {
-            return new InternalRecordingRequester(activity, audioRecorderViewModel, permissionsProvider, lifecycle, formEntryViewModel);
+            return new InternalRecordingRequester(activity, audioRecorderViewModel, permissionsProvider, formEntryViewModel);
         }
     }
 }

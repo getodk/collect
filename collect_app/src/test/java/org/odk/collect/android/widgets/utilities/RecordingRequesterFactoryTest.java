@@ -1,7 +1,6 @@
 package org.odk.collect.android.widgets.utilities;
 
 import androidx.activity.ComponentActivity;
-import androidx.lifecycle.LifecycleOwner;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Test;
@@ -23,7 +22,6 @@ public class RecordingRequesterFactoryTest {
             mock(AudioRecorderViewModel.class),
             mock(PermissionsProvider.class),
             mock(ComponentActivity.class),
-            mock(LifecycleOwner.class),
             mock(FormEntryViewModel.class));
 
     @Test

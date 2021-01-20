@@ -140,7 +140,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
     /**
      * Builds the view for a specified question or field-list of questions.
-     *  @param context         the activity creating this view
+     *
+     * @param context         the activity creating this view
      * @param questionPrompts the questions to be included in this view
      * @param groups          the group hierarchy that this question or field list is in
      * @param advancingPage   whether this view is being created after a forward swipe through the
@@ -177,8 +178,10 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 questionMediaManager,
                 audioPlayer,
                 activityAvailability,
-                new RecordingRequesterFactory(waitingForDataRegistry, activityAvailability, audioRecorderViewModel, permissionsProvider, context, viewLifecycle, formEntryViewModel),
-                formEntryViewModel);
+                new RecordingRequesterFactory(waitingForDataRegistry, activityAvailability, audioRecorderViewModel, permissionsProvider, context, formEntryViewModel),
+                formEntryViewModel,
+                audioRecorderViewModel,
+                viewLifecycle);
 
         widgets = new ArrayList<>();
         widgetsList = findViewById(R.id.widgets);
@@ -529,6 +532,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                                     } else {
                                         throw new RuntimeException("The value for " + key + " must be a URI but it is " + answer);
                                     }
+
                                     permissionsProvider.requestReadUriPermission((Activity) getContext(), uri, getContext().getContentResolver(), new PermissionListener() {
                                         @Override
                                         public void granted() {

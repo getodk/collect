@@ -23,6 +23,7 @@ import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.utilities.AudioFileRequester;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
+import org.odk.collect.android.widgets.utilities.RecordingStatusProvider;
 import org.odk.collect.audioclips.Clip;
 import org.robolectric.RobolectricTestRunner;
 
@@ -469,7 +470,8 @@ public class AudioWidgetTest {
                 questionMediaManager,
                 audioPlayer,
                 recordingRequester,
-                audioFileRequester
+                audioFileRequester,
+                recordingRequester
         );
     }
 
@@ -480,7 +482,8 @@ public class AudioWidgetTest {
                 questionMediaManager,
                 audioPlayer,
                 recordingRequester,
-                audioFileRequester
+                audioFileRequester,
+                recordingRequester
         );
     }
 
@@ -549,7 +552,7 @@ public class AudioWidgetTest {
         }
     }
 
-    private static class FakeRecordingRequester implements RecordingRequester {
+    private static class FakeRecordingRequester implements RecordingRequester, RecordingStatusProvider {
 
         FormEntryPrompt requestedRecordingFor;
         private Consumer<Boolean> isRecordingListener;

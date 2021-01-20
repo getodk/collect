@@ -34,7 +34,7 @@ public class WidgetFactoryTest {
     public void setup() {
         Activity activity = RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
 
-        widgetFactory = new WidgetFactory(activity, false, false, null, null, null, null, null, null);
+        widgetFactory = new WidgetFactory(activity, false, false, null, null, null, null, null, null, null, null);
     }
 
     @Test
