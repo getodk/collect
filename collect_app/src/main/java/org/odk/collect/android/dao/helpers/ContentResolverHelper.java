@@ -79,7 +79,10 @@ public final class ContentResolverHelper {
 
     public static String getFileExtensionFromUri(Uri fileUri) {
         String mimeType = getContentResolver().getType(fileUri);
-        String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType);
+
+        String extension = fileUri.getScheme() != null && fileUri.getScheme().equals(ContentResolver.SCHEME_CONTENT)
+                ? MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
+                : MimeTypeMap.getFileExtensionFromUrl(fileUri.toString());
 
         if (extension == null || extension.isEmpty()) {
             Cursor cursor = getContentResolver().query(fileUri, null, null, null, null);
@@ -92,10 +95,6 @@ public final class ContentResolverHelper {
 
         if (extension.isEmpty() && mimeType != null && mimeType.contains("/")) {
             extension = mimeType.substring(mimeType.lastIndexOf('/') + 1);
-        }
-
-        if (extension.isEmpty()) {
-            extension = MimeTypeMap.getFileExtensionFromUrl(fileUri.toString());
         }
 
         return extension;
