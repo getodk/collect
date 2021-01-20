@@ -25,6 +25,8 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 
+import java.io.File;
+
 import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
 public final class ContentResolverHelper {
@@ -76,5 +78,9 @@ public final class ContentResolverHelper {
     public static String getFileExtensionFromUri(Uri fileUri) {
         String mimeType = getContentResolver().getType(fileUri);
         return mimeType.substring(mimeType.lastIndexOf("/") + 1);
+    }
+
+    public static String getMimeType(File file) {
+        return getContentResolver().getType(Uri.fromFile(file));
     }
 }

@@ -17,10 +17,10 @@ package org.odk.collect.android.utilities;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.webkit.MimeTypeMap;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
+import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 
 import java.io.File;
 
@@ -48,7 +48,7 @@ public class MediaUtils {
         Uri contentUri = ContentUriProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", file);
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(contentUri, getMimeType(file.getAbsolutePath()));
+        intent.setDataAndType(contentUri, ContentResolverHelper.getMimeType(file));
         FileUtils.grantFileReadPermissions(intent, contentUri, context);
 
         if (new ActivityAvailability(context).isActivityAvailable(intent)) {
@@ -58,10 +58,5 @@ public class MediaUtils {
             ToastUtils.showLongToast(message);
             Timber.w(message);
         }
-    }
-
-    private String getMimeType(String url) {
-        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
-        return extension != null ? MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension) : null;
     }
 }
