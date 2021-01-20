@@ -16,25 +16,21 @@ public class AnalyticsUtils {
 
     }
 
-    public static void logMatchExactlyCompleted(Analytics analytics, FormSourceException formSourceException) {
-        if (formSourceException == null) {
-            analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, "Success");
-        } else if (formSourceException instanceof ServerError) {
-            analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, format("SERVER_ERROR_%s", ((ServerError) formSourceException).getStatusCode()));
-        } else {
-            analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, getFormSourceExceptionAnalyticsName(formSourceException));
-        }
+    public static void logMatchExactlyCompleted(Analytics analytics, FormSourceException exception) {
+        analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, getFormSourceExceptionAction(exception));
     }
 
-    private static String getFormSourceExceptionAnalyticsName(FormSourceException exception) {
-        if (exception instanceof Unreachable) {
+    private static String getFormSourceExceptionAction(FormSourceException exception) {
+        if (exception == null) {
+            return "Success";
+        } else if (exception instanceof Unreachable) {
             return "UNREACHABLE";
         } else if (exception instanceof AuthRequired) {
             return "AUTH_REQUIRED";
+        } else if (exception instanceof ServerError) {
+            return format("SERVER_ERROR_%s", ((ServerError) exception).getStatusCode());
         } else if (exception instanceof SecurityError) {
             return "SECURITY_ERROR";
-        } else if (exception instanceof ServerError) {
-            return "SERVER_ERROR";
         } else if (exception instanceof ParseError) {
             return "PARSE_ERROR";
         } else if (exception instanceof FetchError) {
