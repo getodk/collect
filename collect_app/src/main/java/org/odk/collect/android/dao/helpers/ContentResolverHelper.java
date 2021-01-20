@@ -28,6 +28,8 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 
 import java.io.File;
+import java.net.FileNameMap;
+import java.net.URLConnection;
 
 import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
@@ -101,6 +103,18 @@ public final class ContentResolverHelper {
     }
 
     public static String getMimeType(File file) {
-        return getContentResolver().getType(Uri.fromFile(file));
+        String extension = MimeTypeMap.getFileExtensionFromUrl(file.getAbsolutePath());
+        String mimeType = extension != null ? MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension) : null;
+
+        if (mimeType == null || mimeType.isEmpty()) {
+            FileNameMap fileNameMap = URLConnection.getFileNameMap();
+            mimeType = fileNameMap.getContentTypeFor(file.getAbsolutePath());
+        }
+
+        if (mimeType == null || mimeType.isEmpty()) {
+            mimeType = URLConnection.guessContentTypeFromName(file.getName());
+        }
+
+        return mimeType;
     }
 }

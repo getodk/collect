@@ -46,8 +46,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
-import java.net.FileNameMap;
-import java.net.URLConnection;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
@@ -134,11 +132,6 @@ public class FileUtils {
                 + System.currentTimeMillis()
                 + "."
                 + fileExtension);
-    }
-
-    public static String getMimeType(String fileUrl) throws IOException {
-        FileNameMap fileNameMap = URLConnection.getFileNameMap();
-        return fileNameMap.getContentTypeFor(fileUrl);
     }
 
     public static boolean createFolder(String path) {
@@ -693,10 +686,6 @@ public class FileUtils {
     /** Iterates over all directories and files under a root path. */
     public static Iterable<File> walk(File root) {
         return () -> new Walker(root, true);
-    }
-
-    public static Iterable<File> walkBreadthFirst(File root) {
-        return () -> new Walker(root, false);
     }
 
     /** An iterator that walks over all the directories and files under a given path. */
