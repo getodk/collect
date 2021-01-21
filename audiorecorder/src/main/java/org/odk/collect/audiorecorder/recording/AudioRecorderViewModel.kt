@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import org.odk.collect.audiorecorder.recorder.Output
 import java.io.File
+import java.io.Serializable
 
 /**
  * Interface for a ViewModel that records audio. Can only record once session
@@ -13,7 +14,7 @@ abstract class AudioRecorderViewModel : ViewModel() {
     abstract fun isRecording(): Boolean
     abstract fun getCurrentSession(): LiveData<RecordingSession?>
 
-    abstract fun start(sessionId: String, output: Output)
+    abstract fun start(sessionId: Serializable, output: Output)
     abstract fun pause()
     abstract fun resume()
     abstract fun stop()
@@ -25,9 +26,9 @@ abstract class AudioRecorderViewModel : ViewModel() {
     abstract fun cleanUp()
 }
 
-data class RecordingSession(val id: String, val file: File?, val duration: Long, val amplitude: Int, val paused: Boolean, val failedToStart: Exception?) {
+data class RecordingSession(val id: Serializable, val file: File?, val duration: Long, val amplitude: Int, val paused: Boolean, val failedToStart: Exception?) {
 
-    constructor(id: String, file: File?, duration: Long, amplitude: Int, paused: Boolean) : this(id, file, duration, amplitude, paused, null)
+    constructor(id: Serializable, file: File?, duration: Long, amplitude: Int, paused: Boolean) : this(id, file, duration, amplitude, paused, null)
 }
 
 class SetupException : java.lang.Exception()

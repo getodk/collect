@@ -6,6 +6,7 @@ import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel
 import org.odk.collect.audiorecorder.recording.RecordingSession
 import java.io.File
+import java.io.Serializable
 
 /**
  * An implementation of audio recorder that always returns the same recording
@@ -13,7 +14,7 @@ import java.io.File
 class StubAudioRecorderViewModel(private val stubRecordingPath: String) : AudioRecorderViewModel() {
 
     var lastRecording: File? = null
-    var lastSession: String? = null
+    var lastSession: Serializable? = null
     var duration: Int = 0
         set(value) {
             field = value
@@ -36,7 +37,7 @@ class StubAudioRecorderViewModel(private val stubRecordingPath: String) : AudioR
         return currentSession
     }
 
-    override fun start(sessionId: String, output: Output) {
+    override fun start(sessionId: Serializable, output: Output) {
         if (failOnStart) {
             currentSession.value = RecordingSession(sessionId, null, 0, 0, paused = false, failedToStart = Exception())
         } else {

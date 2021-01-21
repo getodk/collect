@@ -44,29 +44,6 @@ public class InternalRecordingRequester implements RecordingRequester {
         });
     }
 
-    private void handleRecording(RecordingSession session) {
-        formSaveViewModel.createAnswerFile(session.getFile()).observe(activity, result -> {
-            if (result != null) {
-                if (result.isSuccess() && !session.getId().equals("background")) {
-                    session.getFile().delete();
-                }
-
-                audioRecorderViewModel.cleanUp();
-
-                try {
-                    FormIndex formIndex = InternalRecordingRequester.formIndex;
-                    if (formIndex != null) {
-                        formSaveViewModel.replaceAnswerFile(formIndex.toString(), result.getOrNull().getAbsolutePath());
-                        Collect.getInstance().getFormController().answerQuestion(formIndex, new StringData(result.getOrNull().getName()));
-                        refreshListener.onScreenRefresh();
-                    }
-                } catch (JavaRosaException e) {
-                    // ?
-                }
-            }
-        });
-    }
-
     @Override
     public void requestRecording(FormEntryPrompt prompt) {
         permissionsProvider.requestRecordAudioPermission(activity, new PermissionListener() {
@@ -91,5 +68,28 @@ public class InternalRecordingRequester implements RecordingRequester {
         });
 
         formEntryViewModel.logFormEvent(AnalyticsEvents.AUDIO_RECORDING_INTERNAL);
+    }
+
+    private void handleRecording(RecordingSession session) {
+        formSaveViewModel.createAnswerFile(session.getFile()).observe(activity, result -> {
+            if (result != null) {
+                if (result.isSuccess() && !session.getId().equals("background")) {
+                    session.getFile().delete();
+                }
+
+                audioRecorderViewModel.cleanUp();
+
+                try {
+                    FormIndex formIndex = InternalRecordingRequester.formIndex;
+                    if (formIndex != null) {
+                        formSaveViewModel.replaceAnswerFile(formIndex.toString(), result.getOrNull().getAbsolutePath());
+                        Collect.getInstance().getFormController().answerQuestion(formIndex, new StringData(result.getOrNull().getName()));
+                        refreshListener.onScreenRefresh();
+                    }
+                } catch (JavaRosaException e) {
+                    // ?
+                }
+            }
+        });
     }
 }
