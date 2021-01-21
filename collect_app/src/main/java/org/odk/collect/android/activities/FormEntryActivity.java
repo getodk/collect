@@ -505,7 +505,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         externalAppRecordingRequester = new ExternalAppRecordingRequester(this, activityAvailability, waitingForDataRegistry, permissionsProvider, formEntryViewModel);
 
         if (preferencesProvider.getGeneralSharedPreferences().getBoolean("background_audio_recording", false)) {
-            audioRecorderViewModel.start("background", Output.AAC);
+            audioRecorderViewModel.start("background", Output.AMR);
         }
     }
 
