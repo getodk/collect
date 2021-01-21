@@ -21,6 +21,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.FormUpdateMode;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.utilities.UserAgentProvider;
@@ -81,6 +82,9 @@ public class ApplicationInitializer {
     }
 
     private void initializeAnalytics() {
+        boolean isAnalyticsEnabled = generalSharedPreferences.getBoolean(GeneralKeys.KEY_ANALYTICS, true);
+        analytics.setAnalyticsCollectionEnabled(isAnalyticsEnabled);
+
         FormUpdateMode formUpdateMode = getFormUpdateMode(context, generalSharedPreferences.getSharedPreferences());
         analytics.setUserProperty("FormUpdateMode", formUpdateMode.getValue(context));
     }

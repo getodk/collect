@@ -17,6 +17,7 @@ import androidx.work.WorkManager;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.BuildConfig;
@@ -190,9 +191,10 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public Analytics providesAnalytics(Application application, GeneralSharedPreferences generalSharedPreferences) {
+    public Analytics providesAnalytics(Application application) {
         com.google.firebase.analytics.FirebaseAnalytics firebaseAnalyticsInstance = com.google.firebase.analytics.FirebaseAnalytics.getInstance(application);
-        return new FirebaseAnalytics(firebaseAnalyticsInstance, generalSharedPreferences);
+        FirebaseCrashlytics crashlyticsInstance = FirebaseCrashlytics.getInstance();
+        return new FirebaseAnalytics(firebaseAnalyticsInstance, crashlyticsInstance);
     }
 
     @Provides

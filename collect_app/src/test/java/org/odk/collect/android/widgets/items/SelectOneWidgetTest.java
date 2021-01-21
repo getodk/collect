@@ -31,11 +31,10 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
-import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.Appearances;
+import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.Clip;
@@ -325,7 +324,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
             }
 
             @Override
-            public Analytics providesAnalytics(Application application, GeneralSharedPreferences generalSharedPreferences) {
+            public Analytics providesAnalytics(Application application) {
                 return analytics;
             }
 

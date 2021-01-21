@@ -23,7 +23,6 @@ import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
@@ -97,7 +96,7 @@ public class QuestionWidgetTest {
             }
 
             @Override
-            public Analytics providesAnalytics(Application application, GeneralSharedPreferences generalSharedPreferences) {
+            public Analytics providesAnalytics(Application application) {
                 return analytics;
             }
         });

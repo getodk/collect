@@ -14,12 +14,11 @@ import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
+import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.android.forms.FormSourceException;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.support.BooleanChangeLock;
 import org.odk.collect.android.support.RobolectricHelpers;
@@ -67,7 +66,7 @@ public class SyncFormsTaskSpecTest {
             }
 
             @Override
-            public Analytics providesAnalytics(Application application, GeneralSharedPreferences generalSharedPreferences) {
+            public Analytics providesAnalytics(Application application) {
                 return analytics;
             }
         });
