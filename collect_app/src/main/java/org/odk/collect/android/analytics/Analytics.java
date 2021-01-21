@@ -1,6 +1,7 @@
 package org.odk.collect.android.analytics;
 
 public interface Analytics {
+
     @Deprecated
     void logEvent(String category, String action);
 
@@ -8,6 +9,10 @@ public interface Analytics {
     void logEvent(String category, String action, String label);
 
     void logFormEvent(String event, String formIdHash);
+
+    void logFatal(Throwable throwable);
+
+    void logNonFatal(String message);
 
     void logServerEvent(String event, String serverHash);
 

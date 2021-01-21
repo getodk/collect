@@ -2,6 +2,8 @@ package org.odk.collect.android.analytics;
 
 import android.os.Bundle;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 
@@ -9,11 +11,14 @@ public class FirebaseAnalytics implements Analytics {
 
     private final com.google.firebase.analytics.FirebaseAnalytics firebaseAnalytics;
     private final GeneralSharedPreferences generalSharedPreferences;
+    private final FirebaseCrashlytics crashlytics;
 
     public FirebaseAnalytics(com.google.firebase.analytics.FirebaseAnalytics firebaseAnalytics, GeneralSharedPreferences generalSharedPreferences) {
         this.firebaseAnalytics = firebaseAnalytics;
         this.generalSharedPreferences = generalSharedPreferences;
         setupRemoteAnalytics();
+
+        crashlytics = FirebaseCrashlytics.getInstance();
     }
 
     @Deprecated
@@ -38,6 +43,16 @@ public class FirebaseAnalytics implements Analytics {
         Bundle bundle = new Bundle();
         bundle.putString("form", formId);
         firebaseAnalytics.logEvent(event, bundle);
+    }
+
+    @Override
+    public void logFatal(Throwable throwable) {
+        crashlytics.recordException(throwable);
+    }
+
+    @Override
+    public void logNonFatal(String message) {
+        crashlytics.log(message);
     }
 
     @Override

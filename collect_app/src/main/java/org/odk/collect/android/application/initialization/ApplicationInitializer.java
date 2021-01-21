@@ -2,12 +2,9 @@ package org.odk.collect.android.application.initialization;
 
 import android.app.Application;
 import android.os.Handler;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.startup.AppInitializer;
-
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import net.danlew.android.joda.JodaTimeInitializer;
 
@@ -19,11 +16,11 @@ import org.javarosa.xform.parse.XFormParser;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.geo.MapboxUtils;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.utilities.UserAgentProvider;
@@ -109,7 +106,7 @@ public class ApplicationInitializer {
 
     private void initializeLogging() {
         if (BuildConfig.BUILD_TYPE.equals("odkCollectRelease")) {
-            Timber.plant(new CrashReportingTree());
+            Timber.plant(new CrashReportingTree(analytics));
         } else {
             Timber.plant(new Timber.DebugTree());
         }
@@ -135,22 +132,6 @@ public class ApplicationInitializer {
             MapboxUtils.initMapbox();
         } catch (Exception | Error ignore) {
             // ignored
-        }
-    }
-
-    private static class CrashReportingTree extends Timber.Tree {
-        @Override
-        protected void log(int priority, String tag, String message, Throwable t) {
-            if (priority == Log.VERBOSE || priority == Log.DEBUG || priority == Log.INFO) {
-                return;
-            }
-
-            FirebaseCrashlytics crashlytics = FirebaseCrashlytics.getInstance();
-            crashlytics.log((priority == Log.ERROR ? "E/" : "W/") + tag + ": " + message);
-
-            if (t != null && priority == Log.ERROR) {
-                crashlytics.recordException(t);
-            }
         }
     }
 }
