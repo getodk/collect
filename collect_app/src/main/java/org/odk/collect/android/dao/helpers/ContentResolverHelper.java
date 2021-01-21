@@ -87,12 +87,13 @@ public final class ContentResolverHelper {
                 : MimeTypeMap.getFileExtensionFromUrl(fileUri.toString());
 
         if (extension == null || extension.isEmpty()) {
-            Cursor cursor = getContentResolver().query(fileUri, null, null, null, null);
-            String name = null;
-            if (cursor != null && cursor.moveToFirst()) {
-                name = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME));
+            try (Cursor cursor = getContentResolver().query(fileUri, null, null, null, null)) {
+                String name = null;
+                if (cursor != null && cursor.moveToFirst()) {
+                    name = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME));
+                }
+                extension = name != null ? name.substring(name.lastIndexOf('.') + 1) : "";
             }
-            extension = name != null ? name.substring(name.lastIndexOf('.') + 1) : "";
         }
 
         if (extension.isEmpty() && mimeType != null && mimeType.contains("/")) {
