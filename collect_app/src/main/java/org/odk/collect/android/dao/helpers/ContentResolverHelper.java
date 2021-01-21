@@ -92,7 +92,7 @@ public final class ContentResolverHelper {
             if (cursor != null && cursor.moveToFirst()) {
                 name = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME));
             }
-            extension = name != null ? name.substring(name.lastIndexOf(".") + 1) : "";
+            extension = name != null ? name.substring(name.lastIndexOf('.') + 1) : "";
         }
 
         if (extension.isEmpty() && mimeType != null && mimeType.contains("/")) {
