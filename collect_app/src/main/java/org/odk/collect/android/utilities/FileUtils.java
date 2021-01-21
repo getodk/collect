@@ -38,7 +38,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.storage.StorageStateProvider;
 
 import java.io.File;
-import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -102,25 +101,9 @@ public class FileUtils {
     }
 
     public static void saveAnswerFileFromUri(Uri uri, File destFile, Context context) {
-        try {
-            ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(uri, "r");
-            if (pfd != null) {
-                FileDescriptor fd = pfd.getFileDescriptor();
-                InputStream fileInputStream = new FileInputStream(fd);
-                OutputStream fileOutputStream = new FileOutputStream(destFile);
-
-                byte[] buffer = new byte[1024];
-                int length;
-
-                while ((length = fileInputStream.read(buffer)) > 0) {
-                    fileOutputStream.write(buffer, 0, length);
-                }
-
-                fileOutputStream.flush();
-                fileInputStream.close();
-                fileOutputStream.close();
-                pfd.close();
-            }
+        try (InputStream fileInputStream = context.getContentResolver().openInputStream(uri);
+             OutputStream fileOutputStream = new FileOutputStream(destFile)) {
+            IOUtils.copy(fileInputStream, fileOutputStream);
         } catch (IOException e) {
             Timber.e(e);
         }
