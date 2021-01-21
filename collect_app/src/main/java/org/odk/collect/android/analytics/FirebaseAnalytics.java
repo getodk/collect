@@ -57,6 +57,7 @@ public class FirebaseAnalytics implements Analytics {
 
     public void setAnalyticsCollectionEnabled(boolean isAnalyticsEnabled) {
         firebaseAnalytics.setAnalyticsCollectionEnabled(isAnalyticsEnabled);
+        crashlytics.setCrashlyticsCollectionEnabled(isAnalyticsEnabled);
     }
 
     @Override
