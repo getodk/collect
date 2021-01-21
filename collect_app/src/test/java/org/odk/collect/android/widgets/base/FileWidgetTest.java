@@ -35,7 +35,7 @@ public abstract class FileWidgetTest<W extends FileWidget> extends BinaryWidgetT
 
     @Test
     public void settingANewAnswerShouldCallDeleteMediaToRemoveTheOldFile() {
-        prepareForSetAnswer();
+        prepareAnswerFile();
 
         super.settingANewAnswerShouldRemoveTheOldAnswer();
 
@@ -53,13 +53,13 @@ public abstract class FileWidgetTest<W extends FileWidget> extends BinaryWidgetT
 
     @Override
     public void getAnswerShouldReturnCorrectAnswerAfterBeingSet() {
-        prepareForSetAnswer();
+        prepareAnswerFile();
         super.getAnswerShouldReturnCorrectAnswerAfterBeingSet();
     }
 
     @Override
     public void settingANewAnswerShouldRemoveTheOldAnswer() {
-        prepareForSetAnswer();
+        prepareAnswerFile();
         super.settingANewAnswerShouldRemoveTheOldAnswer();
     }
 
@@ -67,7 +67,7 @@ public abstract class FileWidgetTest<W extends FileWidget> extends BinaryWidgetT
      * Override this to provide additional set-up prior to testing any set answer methods.
      */
     @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
-    protected void prepareForSetAnswer() {
+    protected void prepareAnswerFile() {
         // Default implementation does nothing.
     }
 }

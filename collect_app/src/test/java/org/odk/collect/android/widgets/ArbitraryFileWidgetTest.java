@@ -1,7 +1,6 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -14,7 +13,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
@@ -24,18 +22,14 @@ import java.io.File;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget> {
     @Mock
-    Uri uri;
+    File file;
 
     @Mock
     MediaUtils mediaUtils;
-
-    @Mock
-    FileUtil fileUtil;
 
     private String destinationName;
 
@@ -47,7 +41,7 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
 
     @Override
     public Object createBinaryData(StringData answerData) {
-        return uri;
+        return file;
     }
 
     @NonNull
@@ -61,24 +55,6 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
     @Override
     public StringData getNextAnswer() {
         return new StringData(destinationName);
-    }
-
-    @Override
-    public void settingANewAnswerShouldCallDeleteMediaToRemoveTheOldFile() {
-        prepareForSetAnswer();
-        super.settingANewAnswerShouldCallDeleteMediaToRemoveTheOldFile();
-    }
-
-    @Override
-    public void getAnswerShouldReturnCorrectAnswerAfterBeingSet() {
-        prepareForSetAnswer();
-        super.getAnswerShouldReturnCorrectAnswerAfterBeingSet();
-    }
-
-    @Override
-    public void settingANewAnswerShouldRemoveTheOldAnswer() {
-        prepareForSetAnswer();
-        super.settingANewAnswerShouldRemoveTheOldAnswer();
     }
 
     @Test
@@ -103,14 +79,8 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
         assertThat(getSpyWidget().chooseFileButton.getVisibility(), is(View.GONE));
     }
 
-    public void prepareForSetAnswer() {
-        when(formEntryPrompt.isReadOnly()).thenReturn(false);
-
-        File firstFile = mock(File.class);
-
-        when(fileUtil.getFileAtPath(File.separator + destinationName + ".pdf")).thenReturn(firstFile);
-
-        when(firstFile.exists()).thenReturn(true);
-        when(firstFile.getName()).thenReturn(destinationName);
+    public void prepareAnswerFile() {
+        when(file.exists()).thenReturn(true);
+        when(file.getName()).thenReturn(destinationName);
     }
 }

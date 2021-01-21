@@ -68,23 +68,23 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
 
     @Override
     public void settingANewAnswerShouldCallDeleteMediaToRemoveTheOldFile() {
-        prepareForSetAnswer();
+        prepareAnswerFile();
         super.settingANewAnswerShouldCallDeleteMediaToRemoveTheOldFile();
     }
 
     @Override
     public void getAnswerShouldReturnCorrectAnswerAfterBeingSet() {
-        prepareForSetAnswer();
+        prepareAnswerFile();
         super.getAnswerShouldReturnCorrectAnswerAfterBeingSet();
     }
 
     @Override
     public void settingANewAnswerShouldRemoveTheOldAnswer() {
-        prepareForSetAnswer();
+        prepareAnswerFile();
         super.settingANewAnswerShouldRemoveTheOldAnswer();
     }
 
-    public void prepareForSetAnswer() {
+    public void prepareAnswerFile() {
         when(formEntryPrompt.isReadOnly()).thenReturn(false);
 
         when(fileUtil.getFileAtPath(File.separator + destinationName + ".mp4")).thenReturn(file);

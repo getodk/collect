@@ -66,7 +66,7 @@ public class ImageWidgetTest extends FileWidgetTest<ImageWidget> {
     }
 
     @Override
-    protected void prepareForSetAnswer() {
+    protected void prepareAnswerFile() {
 
         when(file.exists()).thenReturn(true);
         when(file.getName()).thenReturn(fileName);
