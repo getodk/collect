@@ -70,6 +70,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
 
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
+    private final MediaUtils mediaUtils;
 
     Button captureButton;
     Button playButton;
@@ -79,14 +80,15 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
     private final boolean selfie;
 
     public VideoWidget(Context context, QuestionDetails prompt,  QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
-        this(context, prompt, waitingForDataRegistry, questionMediaManager, new CameraUtils());
+        this(context, prompt, waitingForDataRegistry, questionMediaManager, new CameraUtils(), new MediaUtils());
     }
 
-    public VideoWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, QuestionMediaManager questionMediaManager, CameraUtils cameraUtils) {
+    public VideoWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, QuestionMediaManager questionMediaManager, CameraUtils cameraUtils, MediaUtils mediaUtils) {
         super(context, questionDetails);
 
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
+        this.mediaUtils = mediaUtils;
 
         selfie = WidgetAppearanceUtils.isFrontCameraAppearance(getFormEntryPrompt());
 
@@ -281,6 +283,6 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
 
     private void playVideoFile() {
         File file = new File(getInstanceFolder() + File.separator + binaryName);
-        new MediaUtils().openFile(getContext(), file, "video/*");
+        mediaUtils.openFile(getContext(), file, "video/*");
     }
 }
