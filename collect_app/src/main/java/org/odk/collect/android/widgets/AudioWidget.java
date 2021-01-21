@@ -146,13 +146,13 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
 
     @Override
     public void setData(Object object) {
-        if (binaryName != null) {
-            deleteFile();
-        }
-
         if (object instanceof File) {
             File newAudio = (File) object;
             if (newAudio.exists()) {
+                if (binaryName != null) {
+                    deleteFile();
+                }
+
                 questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
                 binaryName = newAudio.getName();
                 updateVisibilities();

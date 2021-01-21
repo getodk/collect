@@ -15,6 +15,7 @@ import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 
+import java.io.File;
 import java.util.function.Consumer;
 
 public class InternalRecordingRequester implements RecordingRequester {
@@ -76,7 +77,7 @@ public class InternalRecordingRequester implements RecordingRequester {
     }
 
     @Override
-    public void onRecordingFinished(FormEntryPrompt prompt, Consumer<String> recordingAvailableListener) {
+    public void onRecordingFinished(FormEntryPrompt prompt, Consumer<File> recordingAvailableListener) {
         viewModel.getCurrentSession().observe(lifecycleOwner, session -> {
             if (session != null && session.getId().equals(prompt.getIndex().toString()) && session.getFile() != null) {
                 questionMediaManager.createAnswerFile(session.getFile()).observe(lifecycleOwner, result -> {

@@ -109,16 +109,17 @@ public class InternalRecordingRequesterTest {
         MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
         when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
 
-        MutableLiveData<Result<String>> answerLiveData = new MutableLiveData<>(null);
+        MutableLiveData<Result<File>> answerLiveData = new MutableLiveData<>(null);
         File file = File.createTempFile("blah", ".mp3");
         when(questionMediaManager.createAnswerFile(file)).thenReturn(answerLiveData);
 
-        Consumer<String> listener = mock(Consumer.class);
+        Consumer<File> listener = mock(Consumer.class);
         requester.onRecordingFinished(prompt, listener);
         sessionLiveData.setValue(new RecordingSession(prompt.getIndex().toString(), file, 0, 0, false));
-        answerLiveData.setValue(new Result<String>("copiedFile"));
+        File copiedFile = File.createTempFile("copiedFile", ".mp3");
+        answerLiveData.setValue(new Result<>(copiedFile));
 
-        verify(listener).accept("copiedFile");
+        verify(listener).accept(copiedFile);
         verify(viewModel).cleanUp();
         assertThat(file.exists(), is(false));
     }
@@ -129,14 +130,14 @@ public class InternalRecordingRequesterTest {
         MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
         when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
 
-        MutableLiveData<Result<String>> answerLiveData = new MutableLiveData<>(null);
+        MutableLiveData<Result<File>> answerLiveData = new MutableLiveData<>(null);
         File file = File.createTempFile("blah", ".mp3");
         when(questionMediaManager.createAnswerFile(file)).thenReturn(answerLiveData);
 
-        Consumer<String> listener = mock(Consumer.class);
+        Consumer<File> listener = mock(Consumer.class);
         requester.onRecordingFinished(prompt, listener);
         sessionLiveData.setValue(new RecordingSession(prompt.getIndex().toString(), file, 0, 0, false));
-        answerLiveData.setValue(new Result<String>(null));
+        answerLiveData.setValue(new Result<>(null));
 
         verify(listener).accept(null);
         verify(viewModel).cleanUp();
@@ -149,7 +150,7 @@ public class InternalRecordingRequesterTest {
         MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
         when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
 
-        Consumer<String> listener = mock(Consumer.class);
+        Consumer<File> listener = mock(Consumer.class);
         requester.onRecordingFinished(prompt, listener);
 
         File file = File.createTempFile("blah", ".mp3");

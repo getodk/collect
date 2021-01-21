@@ -323,8 +323,8 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     @Override
-    public LiveData<Result<String>> createAnswerFile(File file) {
-        MutableLiveData<Result<String>> liveData = new MutableLiveData<>(null);
+    public LiveData<Result<File>> createAnswerFile(File file) {
+        MutableLiveData<Result<File>> liveData = new MutableLiveData<>(null);
 
         isSavingAnswerFile.setValue(true);
         scheduler.immediate(() -> {
@@ -334,7 +334,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             File[] answerFiles = new File(instanceDir).listFiles();
             for (File answerFile : answerFiles) {
                 if (FileUtils.getMd5Hash(answerFile).equals(newFileHash)) {
-                    return answerFile.getName();
+                    return answerFile;
                 }
             }
 
@@ -352,13 +352,12 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
                 return null;
             }
 
-            return newFileName;
-        }, fileName -> {
-            String fileName1 = fileName;
-            liveData.setValue(new Result<String>(fileName1));
+            return new File(newFilePath);
+        }, answerFile -> {
+            liveData.setValue(new Result<>(answerFile));
             isSavingAnswerFile.setValue(false);
 
-            if (fileName == null) {
+            if (answerFile == null) {
                 answerFileError.setValue(file.getAbsolutePath());
             }
         });
