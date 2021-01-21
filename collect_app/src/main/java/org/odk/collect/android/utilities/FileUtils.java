@@ -20,7 +20,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
-import android.os.ParcelFileDescriptor;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.Constants;
