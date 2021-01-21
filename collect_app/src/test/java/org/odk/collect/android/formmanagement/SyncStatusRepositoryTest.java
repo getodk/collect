@@ -6,7 +6,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.android.forms.FormSourceException;
-import org.odk.collect.android.forms.FormSourceException.Type;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -27,7 +26,7 @@ public class SyncStatusRepositoryTest {
     public void getSyncError_whenFinishSyncWithException_isException() {
         SyncStatusRepository syncStatusRepository = new SyncStatusRepository();
         syncStatusRepository.startSync();
-        FormSourceException exception = new FormSourceException(Type.FETCH_ERROR);
+        FormSourceException exception = new FormSourceException.FetchError();
         syncStatusRepository.finishSync(exception);
 
         assertThat(syncStatusRepository.getSyncError().getValue(), is(exception));

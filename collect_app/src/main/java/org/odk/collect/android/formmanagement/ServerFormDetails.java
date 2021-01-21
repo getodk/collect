@@ -24,7 +24,6 @@ public class ServerFormDetails implements Serializable {
 
     private final String formName;
     private final String downloadUrl;
-    private final String manifestUrl;
     private final String formID;
     private final String formVersion;
     private final String hash;
@@ -32,12 +31,9 @@ public class ServerFormDetails implements Serializable {
     private final boolean isUpdated;
     private final ManifestFile manifest;
 
-    public ServerFormDetails(String formName, String downloadUrl, String manifestUrl, String formID,
-                             String formVersion, String hash,
-                             boolean isNotOnDevice, boolean isUpdated, ManifestFile manifest) {
+    public ServerFormDetails(String formName, String downloadUrl, String formID, String formVersion, String hash, boolean isNotOnDevice, boolean isUpdated, ManifestFile manifest) {
         this.formName = formName;
         this.downloadUrl = downloadUrl;
-        this.manifestUrl = manifestUrl;
         this.formID = formID;
         this.formVersion = formVersion;
         this.hash = hash;
@@ -52,10 +48,6 @@ public class ServerFormDetails implements Serializable {
 
     public String getDownloadUrl() {
         return downloadUrl;
-    }
-
-    public String getManifestUrl() {
-        return manifestUrl;
     }
 
     public String getFormId() {

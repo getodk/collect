@@ -74,8 +74,6 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.forms.FormSourceException.Type.AUTH_REQUIRED;
-
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the forms directory. One
  * caveat. If the server requires authentication, a dialog will pop up asking when you request the
@@ -575,7 +573,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
                 performDownloadModeDownload();
             }
         } else {
-            if (exception.getType() == AUTH_REQUIRED) {
+            if (exception instanceof FormSourceException.AuthRequired) {
                 createAuthDialog();
             } else {
                 String dialogMessage = new FormSourceExceptionMapper(this).getMessage(exception);

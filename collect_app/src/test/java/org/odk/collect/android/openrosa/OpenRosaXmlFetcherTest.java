@@ -54,15 +54,6 @@ public class OpenRosaXmlFetcherTest {
         assertThat(result.responseCode, equalTo(500));
         assertThat(result.errorMessage, equalTo("getXML failed while accessing http://testurl with status code: 500"));
     }
-
-    @Test
-    public void getXML_whenHttpInterfaceThrowsAnException_returnsResultWith0StatusAndErrorMessage() throws Exception {
-        when(httpInterface.executeGetRequest(any(), any(), any())).thenThrow(new Exception());
-
-        DocumentFetchResult result = openRosaXMLFetcher.getXML("http://testurl");
-        assertThat(result.responseCode, equalTo(0));
-        assertThat(result.errorMessage, equalTo("Parsing failed with null while accessing http://testurl"));
-    }
 }
 
 
