@@ -56,7 +56,7 @@ public class ViewModelRecordingStatusProviderTest {
         provider.onRecordingInProgress(prompt, listener);
         verify(listener).accept(null);
 
-        sessionLiveData.setValue(new RecordingSession(prompt.getIndex().toString(), null, 1200L, 25, false));
+        sessionLiveData.setValue(new RecordingSession(prompt.getIndex(), null, 1200L, 25, false));
         verify(listener).accept(new Pair<>(1200L, 25));
     }
 

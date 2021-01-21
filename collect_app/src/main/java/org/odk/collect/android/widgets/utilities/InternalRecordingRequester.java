@@ -20,8 +20,6 @@ import org.odk.collect.audiorecorder.recording.RecordingSession;
 
 public class InternalRecordingRequester implements RecordingRequester {
 
-    private static FormIndex formIndex;
-
     private final ComponentActivity activity;
     private final AudioRecorderViewModel audioRecorderViewModel;
     private final PermissionsProvider permissionsProvider;
@@ -51,14 +49,12 @@ public class InternalRecordingRequester implements RecordingRequester {
             public void granted() {
                 String quality = FormEntryPromptUtils.getAttributeValue(prompt, "quality");
                 if (quality != null && quality.equals("voice-only")) {
-                    audioRecorderViewModel.start(prompt.getIndex().toString(), Output.AMR);
+                    audioRecorderViewModel.start(prompt.getIndex(), Output.AMR);
                 } else if (quality != null && quality.equals("low")) {
-                    audioRecorderViewModel.start(prompt.getIndex().toString(), Output.AAC_LOW);
+                    audioRecorderViewModel.start(prompt.getIndex(), Output.AAC_LOW);
                 } else {
-                    audioRecorderViewModel.start(prompt.getIndex().toString(), Output.AAC);
+                    audioRecorderViewModel.start(prompt.getIndex(), Output.AAC);
                 }
-
-                formIndex = prompt.getIndex();
             }
 
             @Override
@@ -72,22 +68,22 @@ public class InternalRecordingRequester implements RecordingRequester {
 
     private void handleRecording(RecordingSession session) {
         formSaveViewModel.createAnswerFile(session.getFile()).observe(activity, result -> {
-            if (result != null) {
-                if (result.isSuccess() && !session.getId().equals("background")) {
-                    session.getFile().delete();
-                }
-
+            if (result != null && result.isSuccess()) {
                 audioRecorderViewModel.cleanUp();
 
                 try {
-                    FormIndex formIndex = InternalRecordingRequester.formIndex;
-                    if (formIndex != null) {
+                    if (session.getId() instanceof FormIndex) {
+                        FormIndex formIndex = (FormIndex) session.getId();
                         formSaveViewModel.replaceAnswerFile(formIndex.toString(), result.getOrNull().getAbsolutePath());
                         Collect.getInstance().getFormController().answerQuestion(formIndex, new StringData(result.getOrNull().getName()));
                         refreshListener.onScreenRefresh();
                     }
                 } catch (JavaRosaException e) {
                     // ?
+                }
+
+                if (!session.getId().equals("background")) {
+                    session.getFile().delete();
                 }
             }
         });

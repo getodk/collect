@@ -46,7 +46,7 @@ public class InternalRecordingRequesterTest {
         FormEntryPrompt prompt = promptWithAnswer(null);
         requester.requestRecording(prompt);
 
-        verify(viewModel).start(prompt.getIndex().toString(), Output.AAC);
+        verify(viewModel).start(prompt.getIndex(), Output.AAC);
     }
 
     @Test
@@ -57,7 +57,7 @@ public class InternalRecordingRequesterTest {
 
         requester.requestRecording(prompt);
 
-        verify(viewModel).start(prompt.getIndex().toString(), Output.AMR);
+        verify(viewModel).start(prompt.getIndex(), Output.AMR);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class InternalRecordingRequesterTest {
 
         requester.requestRecording(prompt);
 
-        verify(viewModel).start(prompt.getIndex().toString(), Output.AAC_LOW);
+        verify(viewModel).start(prompt.getIndex(), Output.AAC_LOW);
     }
 
     @Test
