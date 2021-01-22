@@ -166,9 +166,14 @@ public class ServerFormDownloader implements FormDownloader {
         UriResult uriResult = null;
 
         try {
-            // Copy form to forms dir
-            File formFile = new File(formsDirPath, fileResult.file.getName());
-            FileUtils.copyFile(fileResult.file, formFile);
+            File formFile;
+
+            if (fileResult.isNew()) {// Copy form to forms dir
+                formFile = new File(formsDirPath, fileResult.file.getName());
+                FileUtils.copyFile(fileResult.file, formFile);
+            } else {
+                formFile = fileResult.file;
+            }
 
             // Save form in database
             uriResult = findExistingOrCreateNewUri(formFile, parsedFields, formsDirPath);
