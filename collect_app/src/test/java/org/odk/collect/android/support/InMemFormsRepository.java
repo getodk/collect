@@ -8,6 +8,7 @@ import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,8 +29,14 @@ public class InMemFormsRepository implements FormsRepository {
 
     @Nullable
     @Override
-    public Form getOneByFormIdAndVersion(String formId, @Nullable String version) {
-        return forms.stream().filter(f -> f.getJrFormId().equals(formId) && Objects.equals(f.getJrVersion(), version)).findFirst().orElse(null);
+    public Form getLatestByFormIdAndVersion(String formId, @Nullable String version) {
+        List<Form> candidates = getAllByFormIdAndVersion(formId, version);
+
+        if (!candidates.isEmpty()) {
+            return candidates.stream().max(Comparator.comparingLong(Form::getDate)).get();
+        } else {
+            return null;
+        }
     }
 
     @Nullable
@@ -70,6 +77,10 @@ public class InMemFormsRepository implements FormsRepository {
                     .id(idCounter++)
                     .build();
         }
+
+        form = new Form.Builder(form)
+                .date(System.currentTimeMillis())
+                .build();
 
         String formFilePath = form.getFormFilePath();
 

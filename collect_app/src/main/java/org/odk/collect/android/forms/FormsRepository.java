@@ -11,7 +11,7 @@ public interface FormsRepository {
     Form get(Long id);
 
     @Nullable
-    Form getOneByFormIdAndVersion(String formId, @Nullable String version);
+    Form getLatestByFormIdAndVersion(String formId, @Nullable String version);
 
     @Nullable
     Form getOneByPath(String path);

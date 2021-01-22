@@ -58,7 +58,7 @@ public class ServerFormDownloader implements FormDownloader {
 
     @Override
     public void downloadForm(ServerFormDetails form, @Nullable ProgressReporter progressReporter, @Nullable Supplier<Boolean> isCancelled) throws FormDownloadException, InterruptedException {
-        Form formOnDevice = formsRepository.getOneByFormIdAndVersion(form.getFormId(), form.getFormVersion());
+        Form formOnDevice = formsRepository.getLatestByFormIdAndVersion(form.getFormId(), form.getFormVersion());
         if (formOnDevice != null) {
             if (formOnDevice.isDeleted()) {
                 formsRepository.restore(formOnDevice.getId());

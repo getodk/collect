@@ -20,14 +20,29 @@ public abstract class FormsRepositoryTest {
     public abstract String getFormFilesPath();
 
     @Test
-    public void getOneByFormIdAndVersion_whenFormHasNullVersion_returnsForm() {
+    public void getLatestByFormIdAndVersion_whenFormHasNullVersion_returnsForm() {
         FormsRepository formsRepository = buildSubject();
         formsRepository.save(buildForm(1L, "1", null, getFormFilesPath())
                 .build());
 
-        Form form = formsRepository.getOneByFormIdAndVersion("1", null);
+        Form form = formsRepository.getLatestByFormIdAndVersion("1", null);
         assertThat(form, notNullValue());
         assertThat(form.getId(), is(1L));
+    }
+
+    @Test
+    public void getLatestByFormIdAndVersion_whenMultipleExist_returnsLatest() {
+        FormsRepository formsRepository = buildSubject();
+        formsRepository.save(buildForm(1L, "1", "1", getFormFilesPath())
+                .build());
+        formsRepository.save(buildForm(2L, "1", "1", getFormFilesPath())
+                .build());
+        formsRepository.save(buildForm(3L, "1", "1", getFormFilesPath())
+                .build());
+
+        Form form = formsRepository.getLatestByFormIdAndVersion("1", "1");
+        assertThat(form, notNullValue());
+        assertThat(form.getId(), is(3L));
     }
 
     @Test
