@@ -145,7 +145,7 @@ class AndroidLocationClient
         Timber.i("Location changed: %s", location.toString());
 
         if (locationListener != null) {
-            if (location.getAccuracy() < 0) {
+            if (location.isFromMockProvider() || location.getAccuracy() < 0) {
                 location.setAccuracy(0);
             }
             locationListener.onLocationChanged(location);
