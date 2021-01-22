@@ -382,6 +382,21 @@ public class AndroidLocationClientTest {
         assertThat(firstListener.getLastLocation().getAccuracy(), is(0.0f));
     }
 
+    @Test
+    public void whenLocationIsFaked_shouldAccuracyBeSetToZero() {
+        when(locationManager.getProviders(true)).thenReturn(Collections.singletonList(GPS_PROVIDER));
+
+        androidLocationClient.start();
+
+        TestLocationListener firstListener = new TestLocationListener();
+        androidLocationClient.requestLocationUpdates(firstListener);
+
+        Location location = LocationTestUtils.createLocation(GPS_PROVIDER, 7d, 2d, 3d, 5.0f, true);
+        androidLocationClient.onLocationChanged(location);
+
+        assertThat(firstListener.getLastLocation().getAccuracy(), is(0.0f));
+    }
+
     private static Location newMockLocation() {
         return mock(Location.class);
     }

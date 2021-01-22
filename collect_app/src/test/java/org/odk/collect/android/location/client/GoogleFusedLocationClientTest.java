@@ -197,6 +197,19 @@ public class GoogleFusedLocationClientTest {
         assertThat(listener.getLastLocation().getAccuracy(), is(0.0f));
     }
 
+    @Test
+    public void whenLocationIsFaked_shouldAccuracyBeSetToZero() {
+        client.start();
+
+        TestLocationListener listener = new TestLocationListener();
+        client.requestLocationUpdates(listener);
+
+        Location location = LocationTestUtils.createLocation("GPS", 7, 2, 3, 5.0f, true);
+        client.onLocationChanged(location);
+
+        assertThat(listener.getLastLocation().getAccuracy(), is(0.0f));
+    }
+
     private static Location newMockLocation() {
         return mock(Location.class);
     }
