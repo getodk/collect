@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 import timber.log.Timber;
 
 import static org.apache.commons.io.FileUtils.deleteDirectory;
-import static org.odk.collect.android.analytics.AnalyticsEvents.DOWNLOAD_SAME_FORMID_VERSION;
+import static org.odk.collect.android.analytics.AnalyticsEvents.DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH;
 import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
 public class ServerFormDownloader implements FormDownloader {
@@ -63,9 +63,11 @@ public class ServerFormDownloader implements FormDownloader {
             if (formOnDevice.isDeleted()) {
                 formsRepository.restore(formOnDevice.getId());
             } else {
-                String formIdentifier = formOnDevice.getDisplayName() + " " + formOnDevice.getId();
-                String formIdHash = FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
-                analytics.logFormEvent(DOWNLOAD_SAME_FORMID_VERSION, formIdHash);
+                if (!getMd5HashWithoutPrefix(form.getHash()).equals(formOnDevice.getMD5Hash())) {
+                    String formIdentifier = formOnDevice.getDisplayName() + " " + formOnDevice.getId();
+                    String formIdHash = FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
+                    analytics.logFormEvent(DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH, formIdHash);
+                }
             }
         }
 
