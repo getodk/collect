@@ -173,7 +173,7 @@ public class ServerFormDownloader implements FormDownloader {
         }
 
         // Save form in database
-        formResult = findOrCreateForm(formFile, parsedFields, formsDirPath);
+        formResult = findOrCreateForm(formFile, parsedFields);
 
         // move the media files in the media folder
         if (tempMediaPath != null) {
@@ -212,7 +212,7 @@ public class ServerFormDownloader implements FormDownloader {
         }
     }
 
-    private FormResult findOrCreateForm(File formFile, Map<String, String> formInfo, String formsDirPath) {
+    private FormResult findOrCreateForm(File formFile, Map<String, String> formInfo) {
         final String formFilePath = formFile.getAbsolutePath();
         String mediaPath = FileUtils.constructMediaPath(formFilePath);
 
@@ -220,10 +220,9 @@ public class ServerFormDownloader implements FormDownloader {
 
         if (existingForm == null) {
             Form newForm = saveNewForm(formInfo, formFile, mediaPath);
-            return new FormResult(newForm, mediaPath, true);
+            return new FormResult(newForm, true);
         } else {
-            mediaPath = getAbsoluteFilePath(formsDirPath, existingForm.getFormMediaPath());
-            return new FormResult(existingForm, mediaPath, false);
+            return new FormResult(existingForm, false);
         }
     }
 
@@ -434,12 +433,10 @@ public class ServerFormDownloader implements FormDownloader {
     private static class FormResult {
 
         private final Form form;
-        private final String mediaPath;
         private final boolean isNew;
 
-        private FormResult(Form form, String mediaPath, boolean isNew) {
+        private FormResult(Form form, boolean isNew) {
             this.form = form;
-            this.mediaPath = mediaPath;
             this.isNew = isNew;
         }
 
