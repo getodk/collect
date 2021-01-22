@@ -72,13 +72,8 @@ public class InMemFormsRepository implements FormsRepository {
 
     @Override
     public Uri save(Form form) {
-        if (form.getId() == null) {
-            form = new Form.Builder(form)
-                    .id(idCounter++)
-                    .build();
-        }
-
         form = new Form.Builder(form)
+                .id(idCounter++)
                 .date(System.currentTimeMillis())
                 .build();
 

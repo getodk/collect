@@ -28,18 +28,17 @@ public class FormUtils {
                 "</h:html>";
     }
 
-    public static Form.Builder buildForm(Long id, String formId, String version, String formFilesPath) {
-        return buildForm(id, formId, version, formFilesPath, "blah");
+    public static Form.Builder buildForm(String formId, String version, String formFilesPath) {
+        return buildForm(formId, version, formFilesPath, "blah");
     }
 
-    public static Form.Builder buildForm(Long id, String formId, String version, String formFilesPath, String xform) {
+    public static Form.Builder buildForm(String formId, String version, String formFilesPath, String xform) {
         String fileName = formId + "-" + version + "-" + Math.random();
         File formFile = new File(formFilesPath + "/" + fileName + ".xml");
         FileUtils.write(formFile, xform.getBytes());
         String mediaPath = new File(formFilesPath + "/" + fileName + "-media").getAbsolutePath();
 
         return new Form.Builder()
-                .id(id)
                 .displayName("Test Form")
                 .formFilePath(formFile.getAbsolutePath())
                 .formMediaPath(mediaPath)

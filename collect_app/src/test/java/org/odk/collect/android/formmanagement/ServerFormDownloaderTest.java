@@ -260,7 +260,7 @@ public class ServerFormDownloaderTest {
 
     @Test
     public void whenFormIsSoftDeleted_unDeletesForm() throws Exception {
-        Form form = buildForm(1L, "deleted-form", "version", getFormFilesPath())
+        Form form = buildForm("deleted-form", "version", getFormFilesPath())
                 .deleted(true)
                 .build();
         formsRepository.save(form);
