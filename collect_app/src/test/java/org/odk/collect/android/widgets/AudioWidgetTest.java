@@ -23,7 +23,7 @@ import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.utilities.AudioFileRequester;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
-import org.odk.collect.android.widgets.utilities.RecordingStatusProvider;
+import org.odk.collect.android.widgets.utilities.RecordingStatusHandler;
 import org.odk.collect.audioclips.Clip;
 import org.robolectric.RobolectricTestRunner;
 
@@ -552,7 +552,7 @@ public class AudioWidgetTest {
         }
     }
 
-    private static class FakeRecordingRequester implements RecordingRequester, RecordingStatusProvider {
+    private static class FakeRecordingRequester implements RecordingRequester, RecordingStatusHandler {
 
         FormEntryPrompt requestedRecordingFor;
         private Consumer<Boolean> isRecordingListener;
@@ -564,13 +564,13 @@ public class AudioWidgetTest {
         }
 
         @Override
-        public void onIsRecordingBlocked(Consumer<Boolean> isRecordingListener) {
-            this.isRecordingListener = isRecordingListener;
+        public void onBlockedStatusChange(Consumer<Boolean> blockedStatusListener) {
+            this.isRecordingListener = blockedStatusListener;
         }
 
         @Override
-        public void onRecordingInProgress(FormEntryPrompt prompt, Consumer<Pair<Long, Integer>> durationListener) {
-            inProgressListeners.put(prompt.getIndex().toString(), durationListener);
+        public void onRecordingStatusChange(FormEntryPrompt prompt, Consumer<Pair<Long, Integer>> statusListener) {
+            inProgressListeners.put(prompt.getIndex().toString(), statusListener);
         }
 
         public void startRecording() {

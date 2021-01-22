@@ -38,7 +38,7 @@ import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.AudioFileRequester;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
-import org.odk.collect.android.widgets.utilities.RecordingStatusProvider;
+import org.odk.collect.android.widgets.utilities.RecordingStatusHandler;
 import org.odk.collect.audioclips.Clip;
 
 import java.io.File;
@@ -69,7 +69,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
     private boolean recordingInProgress;
     private String binaryName;
 
-    public AudioWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager, AudioPlayer audioPlayer, RecordingRequester recordingRequester, AudioFileRequester audioFileRequester, RecordingStatusProvider recordingStatusProvider) {
+    public AudioWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager, AudioPlayer audioPlayer, RecordingRequester recordingRequester, AudioFileRequester audioFileRequester, RecordingStatusHandler recordingStatusHandler) {
         super(context, questionDetails);
         this.audioPlayer = audioPlayer;
 
@@ -81,12 +81,12 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
         updateVisibilities();
         updatePlayerMedia();
 
-        recordingStatusProvider.onIsRecordingBlocked(isRecordingBlocked -> {
+        recordingStatusHandler.onBlockedStatusChange(isRecordingBlocked -> {
             binding.captureButton.setEnabled(!isRecordingBlocked);
             binding.chooseButton.setEnabled(!isRecordingBlocked);
         });
 
-        recordingStatusProvider.onRecordingInProgress(getFormEntryPrompt(), session -> {
+        recordingStatusHandler.onRecordingStatusChange(getFormEntryPrompt(), session -> {
             if (session != null) {
                 recordingInProgress = true;
                 updateVisibilities();

@@ -9,30 +9,30 @@ import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 
 import java.util.function.Consumer;
 
-public class ViewModelRecordingStatusProvider implements RecordingStatusProvider {
+public class ViewModelRecordingStatusHandler implements RecordingStatusHandler {
 
     private final AudioRecorderViewModel viewModel;
     private final LifecycleOwner lifecycleOwner;
 
-    public ViewModelRecordingStatusProvider(AudioRecorderViewModel viewModel, LifecycleOwner lifecycleOwner) {
+    public ViewModelRecordingStatusHandler(AudioRecorderViewModel viewModel, LifecycleOwner lifecycleOwner) {
         this.viewModel = viewModel;
         this.lifecycleOwner = lifecycleOwner;
     }
 
     @Override
-    public void onIsRecordingBlocked(Consumer<Boolean> isRecordingBlockedListener) {
+    public void onBlockedStatusChange(Consumer<Boolean> blockedStatusListener) {
         viewModel.getCurrentSession().observe(lifecycleOwner, session -> {
-            isRecordingBlockedListener.accept(session != null && session.getFile() == null);
+            blockedStatusListener.accept(session != null && session.getFile() == null);
         });
     }
 
     @Override
-    public void onRecordingInProgress(FormEntryPrompt prompt, Consumer<Pair<Long, Integer>> durationListener) {
+    public void onRecordingStatusChange(FormEntryPrompt prompt, Consumer<Pair<Long, Integer>> statusListener) {
         viewModel.getCurrentSession().observe(lifecycleOwner, session -> {
             if (session != null && session.getId().equals(prompt.getIndex()) && session.getFailedToStart() == null) {
-                durationListener.accept(new Pair<>(session.getDuration(), session.getAmplitude()));
+                statusListener.accept(new Pair<>(session.getDuration(), session.getAmplitude()));
             } else {
-                durationListener.accept(null);
+                statusListener.accept(null);
             }
         });
     }

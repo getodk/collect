@@ -22,15 +22,15 @@ import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 
 @RunWith(AndroidJUnit4.class)
-public class ViewModelRecordingStatusProviderTest {
+public class ViewModelRecordingStatusHandlerTest {
 
     private final AudioRecorderViewModel viewModel = mock(AudioRecorderViewModel.class);
 
-    ViewModelRecordingStatusProvider provider;
+    ViewModelRecordingStatusHandler provider;
 
     @Before
     public void setup() {
-        provider = new ViewModelRecordingStatusProvider(viewModel, new FakeLifecycleOwner());
+        provider = new ViewModelRecordingStatusHandler(viewModel, new FakeLifecycleOwner());
     }
 
     @Test
@@ -39,7 +39,7 @@ public class ViewModelRecordingStatusProviderTest {
         when(viewModel.getCurrentSession()).thenReturn(liveData);
 
         Consumer<Boolean> listener = mock(Consumer.class);
-        provider.onIsRecordingBlocked(listener);
+        provider.onBlockedStatusChange(listener);
         verify(listener).accept(false);
 
         liveData.setValue(new RecordingSession("blah", null, 0, 0, false));
@@ -53,7 +53,7 @@ public class ViewModelRecordingStatusProviderTest {
         when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
 
         Consumer<Pair<Long, Integer>> listener = mock(Consumer.class);
-        provider.onRecordingInProgress(prompt, listener);
+        provider.onRecordingStatusChange(prompt, listener);
         verify(listener).accept(null);
 
         sessionLiveData.setValue(new RecordingSession(prompt.getIndex(), null, 1200L, 25, false));
@@ -67,7 +67,7 @@ public class ViewModelRecordingStatusProviderTest {
         when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
 
         Consumer<Pair<Long, Integer>> listener = mock(Consumer.class);
-        provider.onRecordingInProgress(prompt, listener);
+        provider.onRecordingStatusChange(prompt, listener);
         verify(listener).accept(null);
 
         sessionLiveData.setValue(new RecordingSession("something else", null, 1200L, 0, false));
