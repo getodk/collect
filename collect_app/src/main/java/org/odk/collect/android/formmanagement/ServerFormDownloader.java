@@ -173,7 +173,7 @@ public class ServerFormDownloader implements FormDownloader {
         }
 
         // Save form in database
-        formResult = findExistingOrCreateNewUri(formFile, parsedFields, formsDirPath);
+        formResult = findOrCreateForm(formFile, parsedFields, formsDirPath);
 
         // move the media files in the media folder
         if (tempMediaPath != null) {
@@ -212,15 +212,7 @@ public class ServerFormDownloader implements FormDownloader {
         }
     }
 
-    /**
-     * Creates a new form in the database, if none exists with the same absolute path. Returns
-     * information with the URI, media path, and whether the form is new.
-     *
-     * @param formFile the form definition file
-     * @param formInfo certain fields extracted from the parsed XML form, such as title and form ID
-     * @return a {@link FormResult} object
-     */
-    private FormResult findExistingOrCreateNewUri(File formFile, Map<String, String> formInfo, String formsDirPath) {
+    private FormResult findOrCreateForm(File formFile, Map<String, String> formInfo, String formsDirPath) {
         final String formFilePath = formFile.getAbsolutePath();
         String mediaPath = FileUtils.constructMediaPath(formFilePath);
 
