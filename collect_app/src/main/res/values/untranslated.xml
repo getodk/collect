@@ -35,4 +35,6 @@ the specific language governing permissions and limitations under the License. -
     <string name="basemap_source_carto" translatable="false">Carto</string>
 
     <string name="google_drive" translatable="false">Google Drive</string>
+
+    <string name="background_audio_recording">Background audio recording</string>
 </resources>
