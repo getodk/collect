@@ -1,7 +1,5 @@
 package org.odk.collect.android.forms;
 
-import android.net.Uri;
-
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -27,7 +25,7 @@ public interface FormsRepository {
 
     List<Form> getAllNotDeletedByFormIdAndVersion(String formId, @Nullable String version);
 
-    Uri save(Form form);
+    Form save(Form form);
 
     void delete(Long id);
 

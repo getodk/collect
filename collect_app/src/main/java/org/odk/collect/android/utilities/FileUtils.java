@@ -496,19 +496,6 @@ public class FileUtils {
         deleteAndReport(tempMediaFolder);
     }
 
-    public static void moveMediaFiles(String tempMediaPath, File formMediaPath) throws IOException {
-        File tempMediaFolder = new File(tempMediaPath);
-        File[] mediaFiles = tempMediaFolder.listFiles();
-        if (mediaFiles == null || mediaFiles.length == 0) {
-            deleteAndReport(tempMediaFolder);
-        } else {
-            for (File mediaFile : mediaFiles) {
-                org.apache.commons.io.FileUtils.moveFileToDirectory(mediaFile, formMediaPath, true);
-            }
-            deleteAndReport(tempMediaFolder);
-        }
-    }
-
     public static void saveBitmapToFile(Bitmap bitmap, String path) {
         final Bitmap.CompressFormat compressFormat = path.toLowerCase(Locale.getDefault()).endsWith(".png") ?
                 Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG;
