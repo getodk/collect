@@ -2,6 +2,8 @@ package org.odk.collect.android.permissions;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -249,5 +251,14 @@ public class PermissionsProvider {
                 .create();
 
         DialogUtils.showDialog(alertDialog, activity);
+    }
+
+    public boolean isReadUriPermissionGranted(Uri uri, ContentResolver contentResolver) {
+        try {
+            contentResolver.query(uri, null, null, null, null);
+            return true;
+        } catch (SecurityException e) {
+            return false;
+        }
     }
 }
