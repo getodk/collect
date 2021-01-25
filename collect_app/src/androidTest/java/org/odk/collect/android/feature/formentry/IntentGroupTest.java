@@ -206,7 +206,7 @@ public class IntentGroupTest {
         intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent));
 
         onView(withText("This is buttonText")).perform(click());
-        onView(withText("Read permission to the file not granted.")).inRoot(withDecorView(not(is(activityTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+        onView(withText(R.string.read_file_permission_not_granted)).inRoot(withDecorView(not(is(activityTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
 
         assertImageWidgetWithoutAnswer();
     }

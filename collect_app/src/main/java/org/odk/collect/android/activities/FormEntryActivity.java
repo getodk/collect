@@ -865,7 +865,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             mediaLoadingFragment.beginMediaLoadingTask(uri);
         } else {
-            ToastUtils.showLongToast("Read permission to the file not granted.");
+            ToastUtils.showLongToast(R.string.read_file_permission_not_granted);
         }
     }
 

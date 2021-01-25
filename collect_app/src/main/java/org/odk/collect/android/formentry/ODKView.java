@@ -538,7 +538,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
                                         questionWidget.showAnswerContainer();
                                     } else {
-                                        ToastUtils.showLongToast("Read permission to the file not granted.");
+                                        ToastUtils.showLongToast(R.string.read_file_permission_not_granted);
                                     }
                                 } catch (Exception | Error e) {
                                     Timber.w(e);
