@@ -530,14 +530,16 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                                     } else {
                                         throw new RuntimeException("The value for " + key + " must be a URI but it is " + answer);
                                     }
-                                    
-                                    if (uri != null) {
+                                    if (permissionsProvider.isReadUriPermissionGranted(uri, getContext().getContentResolver())) {
                                         File destFile = FileUtils.createDestinationMediaFile(formController.getInstanceFile().getParent(), ContentResolverHelper.getFileExtensionFromUri(uri));
                                         //TODO might be better to use QuestionMediaManager in the future
                                         FileUtils.saveAnswerFileFromUri(uri, destFile, getContext());
                                         ((WidgetDataReceiver) questionWidget).setData(destFile);
+
+                                        questionWidget.showAnswerContainer();
+                                    } else {
+                                        ToastUtils.showLongToast("Read permission to the file not granted.");
                                     }
-                                    questionWidget.showAnswerContainer();
                                 } catch (Exception | Error e) {
                                     Timber.w(e);
                                 }
