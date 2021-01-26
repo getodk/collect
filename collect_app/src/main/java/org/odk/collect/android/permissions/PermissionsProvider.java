@@ -3,6 +3,7 @@ package org.odk.collect.android.permissions;
 import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.database.Cursor;
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
@@ -254,10 +255,9 @@ public class PermissionsProvider {
     }
 
     public boolean isReadUriPermissionGranted(Uri uri, ContentResolver contentResolver) {
-        try {
-            contentResolver.query(uri, null, null, null, null);
+        try (Cursor cursor = contentResolver.query(uri, null, null, null, null)) {
             return true;
-        } catch (SecurityException e) {
+        } catch (SecurityException | NullPointerException e) {
             return false;
         }
     }
