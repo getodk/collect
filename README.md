@@ -49,6 +49,15 @@ Most dependencies are managed using gradle, however some Field Task functionalit
 
 1. [Get a Google Maps API key](https://developers.google.com/maps/documentation/android-api/signup).  A credit card number is required however there a fairly significant number of requests available at no charge each month.  Check how many map calls you expect to be using and the expected cost before signing up.
 
+1. Enable Google Maps for your application.  Your apk needs to be given acces to the google maps API key that you have created.
+
+       Goto the google developers console
+       Click enable APIs and services
+       Select Maps SDK for Android
+       Select Manage
+       Select Credentials
+       Add the package name and sha-1 signing certificate for your app to the google maps API key that you created in the previous step
+
 1. [Create a Mapbox account](https://www.mapbox.com/signup/).  Select the "Pay-As-You-Go" plan.  Like Google, Mapbox provides free API usage up to the monthly thresholds documented at [https://www.mapbox.com/pricing](https://www.mapbox.com/pricing).  You can find your access token on your [account page](https://account.mapbox.com/).
  
 1. Edit or create `collect_app/secrets.properties` and set the `GOOGLE_MAPS_API_KEY` and the `MAPBOX_ACCESS_TOKEN` property to your access keys.  You should end up with two    lines that looks like this:
