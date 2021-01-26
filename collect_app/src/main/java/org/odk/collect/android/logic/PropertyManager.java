@@ -24,9 +24,9 @@ import org.javarosa.core.services.properties.IPropertyRules;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
-import org.odk.collect.android.utilities.PermissionUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -67,7 +67,7 @@ public class PropertyManager implements IPropertyManager {
     DeviceDetailsProvider deviceDetailsProvider;
 
     @Inject
-    PermissionUtils permissionUtils;
+    PermissionsProvider permissionsProvider;
 
     private final Context context;
 
@@ -82,9 +82,9 @@ public class PropertyManager implements IPropertyManager {
         reload();
     }
 
-    public PropertyManager(Application application, RxEventBus rxEventBus, PermissionUtils permissionUtils, DeviceDetailsProvider deviceDetailsProvider) {
+    public PropertyManager(Application application, RxEventBus rxEventBus, PermissionsProvider permissionsProvider, DeviceDetailsProvider deviceDetailsProvider) {
         this.eventBus = rxEventBus;
-        this.permissionUtils = permissionUtils;
+        this.permissionsProvider = permissionsProvider;
         this.deviceDetailsProvider = deviceDetailsProvider;
         this.context = application;
     }
@@ -137,7 +137,7 @@ public class PropertyManager implements IPropertyManager {
 
     @Override
     public String getSingularProperty(String propertyName) {
-        if (!permissionUtils.isReadPhoneStatePermissionGranted(Collect.getInstance()) && isPropertyDangerous(propertyName)) {
+        if (!permissionsProvider.isReadPhoneStatePermissionGranted() && isPropertyDangerous(propertyName)) {
             eventBus.post(new ReadPhoneStatePermissionRxEvent());
         }
 

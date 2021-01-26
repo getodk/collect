@@ -469,11 +469,11 @@ public class FormSaveViewModelTest {
         when(formController.getInstanceFile()).thenReturn(new File(tempDir + File.separator + "instance.xml"));
 
         File externalFile = File.createTempFile("external", ".file");
-        LiveData<Result<String>> answerFile = viewModel.createAnswerFile(externalFile);
+        LiveData<Result<File>> answerFile = viewModel.createAnswerFile(externalFile);
         scheduler.runBackground();
 
         assertThat(tempDir.listFiles().length, is(1));
-        assertThat(answerFile.getValue().getOrNull(), is(tempDir.listFiles()[0].getName()));
+        assertThat(answerFile.getValue().getOrNull().getName(), is(tempDir.listFiles()[0].getName()));
     }
 
     @Test
@@ -483,7 +483,7 @@ public class FormSaveViewModelTest {
         when(formController.getInstanceFile()).thenReturn(new File(tempDir + File.separator + "instance.xml"));
 
         File externalFile = File.createTempFile("external", ".file");
-        LiveData<Result<String>> answerFile = viewModel.createAnswerFile(externalFile);
+        LiveData<Result<File>> answerFile = viewModel.createAnswerFile(externalFile);
         scheduler.runBackground();
 
         assertThat(answerFile.getValue().getOrNull(), nullValue());
@@ -496,9 +496,9 @@ public class FormSaveViewModelTest {
         when(formController.getInstanceFile()).thenReturn(new File(tempDir + File.separator + "instance.xml"));
 
         File externalFile = File.createTempFile("external", ".file");
-        LiveData<Result<String>> fileName1 = viewModel.createAnswerFile(externalFile);
+        LiveData<Result<File>> fileName1 = viewModel.createAnswerFile(externalFile);
         scheduler.runBackground();
-        LiveData<Result<String>> fileName2 = viewModel.createAnswerFile(externalFile);
+        LiveData<Result<File>> fileName2 = viewModel.createAnswerFile(externalFile);
         scheduler.runBackground();
 
         assertThat(fileName1.getValue().getOrNull(), is(fileName2.getValue().getOrNull()));

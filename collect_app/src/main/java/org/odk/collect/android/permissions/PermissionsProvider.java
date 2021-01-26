@@ -1,13 +1,13 @@
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.permissions;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
-import android.content.pm.PackageManager;
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
 
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.DexterBuilder;
@@ -20,69 +20,50 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.storage.StorageStateProvider;
+import org.odk.collect.android.utilities.DialogUtils;
 
 import java.util.List;
 
 import timber.log.Timber;
 
 /**
- * PermissionUtils allows all permission related messages and checks to be encapsulated in one
+ * PermissionsProvider allows all permission related messages and checks to be encapsulated in one
  * area so that classes don't have to deal with this responsibility; they just receive a callback
  * that tells them if they have been granted the permission they requested.
  */
+public class PermissionsProvider {
+    private final PermissionsChecker permissionsChecker;
+    private final StorageStateProvider storageStateProvider;
 
-public class PermissionUtils {
-
-    private final int dialogTheme;
-
-    public PermissionUtils(int dialogTheme) {
-        this.dialogTheme = dialogTheme;
+    public PermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+        this.permissionsChecker = permissionsChecker;
+        this.storageStateProvider = storageStateProvider;
     }
 
-    public static boolean areStoragePermissionsGranted(Context context) {
-        return isPermissionGranted(context,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    public boolean areStoragePermissionsGranted() {
+        return storageStateProvider.isScopedStorageUsed()
+                || permissionsChecker.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
-    public static boolean isCameraPermissionGranted(Context context) {
-        return isPermissionGranted(context, Manifest.permission.CAMERA);
+    public boolean isCameraPermissionGranted() {
+        return permissionsChecker.isPermissionGranted(Manifest.permission.CAMERA);
     }
 
-    public static boolean areLocationPermissionsGranted(Context context) {
-        return isPermissionGranted(context,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION);
+    public boolean areLocationPermissionsGranted() {
+        return permissionsChecker.isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION);
     }
 
-    public static boolean areCameraAndRecordAudioPermissionsGranted(Context context) {
-        return isPermissionGranted(context,
-                Manifest.permission.CAMERA,
-                Manifest.permission.RECORD_AUDIO);
+    public boolean areCameraAndRecordAudioPermissionsGranted() {
+        return permissionsChecker.isPermissionGranted(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO);
     }
 
-    public static boolean isGetAccountsPermissionGranted(Context context) {
-        return isPermissionGranted(context, Manifest.permission.GET_ACCOUNTS);
+    public boolean isGetAccountsPermissionGranted() {
+        return permissionsChecker.isPermissionGranted(Manifest.permission.GET_ACCOUNTS);
     }
 
-    public boolean isReadPhoneStatePermissionGranted(Context context) {
-        return isPermissionGranted(context, Manifest.permission.READ_PHONE_STATE);
-    }
-
-    /**
-     * Returns true only if all of the requested permissions are granted to Collect, otherwise false
-     */
-    private static boolean isPermissionGranted(Context context, String... permissions) {
-        for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public static void finishAllActivities(Activity activity) {
-        activity.finishAndRemoveTask();
+    public boolean isReadPhoneStatePermissionGranted() {
+        return permissionsChecker.isPermissionGranted(Manifest.permission.READ_PHONE_STATE);
     }
 
     /**
@@ -93,6 +74,11 @@ public class PermissionUtils {
      * @param action is a listener that provides the calling component with the permission result.
      */
     public void requestStoragePermissions(Activity activity, @NonNull PermissionListener action) {
+        if (storageStateProvider.isScopedStorageUsed()) {
+            action.granted();
+            return;
+        }
+
         requestPermissions(activity, new PermissionListener() {
             @Override
             public void granted() {
@@ -216,7 +202,7 @@ public class PermissionUtils {
     }
 
     private DexterBuilder createSinglePermissionRequest(Activity activity, String permission, PermissionListener listener) {
-        return Dexter.withActivity(activity)
+        return Dexter.withContext(activity)
                 .withPermission(permission)
                 .withListener(new com.karumi.dexter.listener.single.PermissionListener() {
                     @Override
@@ -237,7 +223,7 @@ public class PermissionUtils {
     }
 
     private DexterBuilder createMultiplePermissionsRequest(Activity activity, PermissionListener listener, String[] permissions) {
-        return Dexter.withActivity(activity)
+        return Dexter.withContext(activity)
                 .withPermissions(permissions)
                 .withListener(new MultiplePermissionsListener() {
                     @Override
@@ -257,7 +243,7 @@ public class PermissionUtils {
     }
 
     protected void showAdditionalExplanation(Activity activity, int title, int message, int drawable, @NonNull PermissionListener action) {
-        AlertDialog alertDialog = new AlertDialog.Builder(activity, dialogTheme)
+        AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.Theme_Collect_Dialog_PermissionAlert)
                 .setTitle(title)
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())
@@ -266,5 +252,13 @@ public class PermissionUtils {
                 .create();
 
         DialogUtils.showDialog(alertDialog, activity);
+    }
+
+    public boolean isReadUriPermissionGranted(Uri uri, ContentResolver contentResolver) {
+        try (Cursor cursor = contentResolver.query(uri, null, null, null, null)) {
+            return true;
+        } catch (SecurityException | NullPointerException e) {
+            return false;
+        }
     }
 }

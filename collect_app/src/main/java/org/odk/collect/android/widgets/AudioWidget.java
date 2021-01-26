@@ -144,40 +144,25 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
         }
     }
 
-    /**
-     * @param object file name of media file that will be available in the {@link QuestionMediaManager}
-     * @see org.odk.collect.android.activities.FormEntryActivity
-     */
     @Override
     public void setData(Object object) {
-        // Support being handed a File as well
         if (object instanceof File) {
-            object = (String) ((File) object).getName();
-        }
-        if (object instanceof String) {
-            String fileName = (String) object;
-            File newAudio = questionMediaManager.getAnswerFile(fileName);
-
-            if (newAudio != null && newAudio.exists()) {
-                questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
-
-                // when replacing an answer. remove the current media.
-                if (binaryName != null && !binaryName.equals(newAudio.getName())) {
+            File newAudio = (File) object;
+            if (newAudio.exists()) {
+                if (binaryName != null) {
                     deleteFile();
                 }
 
+                questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
                 binaryName = newAudio.getName();
-                Timber.i("Setting current answer to %s", newAudio.getName());
-
                 updateVisibilities();
                 updatePlayerMedia();
                 widgetValueChanged();
             } else {
-                Timber.e("Inserting Audio file FAILED");
+                Timber.e("NO AUDIO EXISTS at: %s", newAudio.getAbsolutePath());
             }
         } else {
-            Timber.w("AudioWidget's setBinaryData must receive a File object.");
-            return;
+            Timber.e("AudioWidget's setBinaryData must receive a File object.");
         }
     }
 

@@ -10,7 +10,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.fakes.FakePermissionUtils;
+import org.odk.collect.android.fakes.FakePermissionsProvider;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.utilities.QuestionMediaManager;
@@ -37,7 +37,7 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.prom
 @RunWith(AndroidJUnit4.class)
 public class InternalRecordingRequesterTest {
 
-    private final FakePermissionUtils permissionUtils = new FakePermissionUtils();
+    private final FakePermissionsProvider permissionsProvider = new FakePermissionsProvider();
     private final QuestionMediaManager questionMediaManager = mock(QuestionMediaManager.class);
     private final AudioRecorderViewModel viewModel = mock(AudioRecorderViewModel.class);
 
@@ -46,8 +46,8 @@ public class InternalRecordingRequesterTest {
     @Before
     public void setup() {
         Activity activity = Robolectric.buildActivity(Activity.class).get();
-        requester = new InternalRecordingRequester(activity, viewModel, permissionUtils, new FakeLifecycleOwner(), questionMediaManager, mock(FormEntryViewModel.class));
-        permissionUtils.setPermissionGranted(true);
+        requester = new InternalRecordingRequester(activity, viewModel, permissionsProvider, new FakeLifecycleOwner(), questionMediaManager, mock(FormEntryViewModel.class));
+        permissionsProvider.setPermissionGranted(true);
     }
 
     @Test
@@ -82,7 +82,7 @@ public class InternalRecordingRequesterTest {
 
     @Test
     public void requestRecording_whenPermissionDenied_doesNothing() {
-        permissionUtils.setPermissionGranted(false);
+        permissionsProvider.setPermissionGranted(false);
 
         FormEntryPrompt prompt = promptWithAnswer(null);
         requester.requestRecording(prompt);
@@ -109,16 +109,17 @@ public class InternalRecordingRequesterTest {
         MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
         when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
 
-        MutableLiveData<Result<String>> answerLiveData = new MutableLiveData<>(null);
+        MutableLiveData<Result<File>> answerLiveData = new MutableLiveData<>(null);
         File file = File.createTempFile("blah", ".mp3");
         when(questionMediaManager.createAnswerFile(file)).thenReturn(answerLiveData);
 
-        Consumer<String> listener = mock(Consumer.class);
+        Consumer<File> listener = mock(Consumer.class);
         requester.onRecordingFinished(prompt, listener);
         sessionLiveData.setValue(new RecordingSession(prompt.getIndex().toString(), file, 0, 0, false));
-        answerLiveData.setValue(new Result<String>("copiedFile"));
+        File copiedFile = File.createTempFile("copiedFile", ".mp3");
+        answerLiveData.setValue(new Result<>(copiedFile));
 
-        verify(listener).accept("copiedFile");
+        verify(listener).accept(copiedFile);
         verify(viewModel).cleanUp();
         assertThat(file.exists(), is(false));
     }
@@ -129,14 +130,14 @@ public class InternalRecordingRequesterTest {
         MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
         when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
 
-        MutableLiveData<Result<String>> answerLiveData = new MutableLiveData<>(null);
+        MutableLiveData<Result<File>> answerLiveData = new MutableLiveData<>(null);
         File file = File.createTempFile("blah", ".mp3");
         when(questionMediaManager.createAnswerFile(file)).thenReturn(answerLiveData);
 
-        Consumer<String> listener = mock(Consumer.class);
+        Consumer<File> listener = mock(Consumer.class);
         requester.onRecordingFinished(prompt, listener);
         sessionLiveData.setValue(new RecordingSession(prompt.getIndex().toString(), file, 0, 0, false));
-        answerLiveData.setValue(new Result<String>(null));
+        answerLiveData.setValue(new Result<>(null));
 
         verify(listener).accept(null);
         verify(viewModel).cleanUp();
@@ -149,7 +150,7 @@ public class InternalRecordingRequesterTest {
         MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
         when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
 
-        Consumer<String> listener = mock(Consumer.class);
+        Consumer<File> listener = mock(Consumer.class);
         requester.onRecordingFinished(prompt, listener);
 
         File file = File.createTempFile("blah", ".mp3");

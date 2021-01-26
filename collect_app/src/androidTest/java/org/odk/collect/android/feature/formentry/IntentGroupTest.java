@@ -181,6 +181,24 @@ public class IntentGroupTest {
         Intent resultIntent = new Intent();
 
         Uri uri = mock(Uri.class);
+        when(uri.getScheme()).thenThrow(new RuntimeException());
+
+        resultIntent.putExtra("questionImage", uri);
+
+        intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent));
+
+        onView(withText("This is buttonText")).perform(click());
+
+        assertImageWidgetWithoutAnswer();
+    }
+
+    @Test
+    public void collect_shouldDisplayToastWhenPermissionNotGranted() {
+        assertImageWidgetWithoutAnswer();
+
+        Intent resultIntent = new Intent();
+
+        Uri uri = mock(Uri.class);
         when(uri.getScheme()).thenThrow(new SecurityException());
 
         resultIntent.putExtra("questionImage", uri);
@@ -188,6 +206,7 @@ public class IntentGroupTest {
         intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent));
 
         onView(withText("This is buttonText")).perform(click());
+        onView(withText(R.string.read_file_permission_not_granted)).inRoot(withDecorView(not(is(activityTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
 
         assertImageWidgetWithoutAnswer();
     }

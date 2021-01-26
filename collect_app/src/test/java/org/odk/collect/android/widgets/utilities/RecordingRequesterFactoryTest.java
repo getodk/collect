@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.utilities.ActivityAvailability;
-import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 
@@ -23,7 +23,7 @@ public class RecordingRequesterFactoryTest {
             mock(QuestionMediaManager.class),
             mock(ActivityAvailability.class),
             mock(AudioRecorderViewModel.class),
-            mock(PermissionUtils.class),
+            mock(PermissionsProvider.class),
             mock(ComponentActivity.class),
             mock(LifecycleOwner.class),
             mock(FormEntryViewModel.class));

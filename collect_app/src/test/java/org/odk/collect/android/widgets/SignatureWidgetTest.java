@@ -70,7 +70,7 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
     }
 
     @Override
-    protected void prepareForSetAnswer() {
+    protected void prepareAnswerFile() {
         when(file.exists()).thenReturn(true);
         when(file.getName()).thenReturn(fileName);
     }

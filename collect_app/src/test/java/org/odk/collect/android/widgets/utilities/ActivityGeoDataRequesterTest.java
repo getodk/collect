@@ -13,7 +13,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPolyActivity;
-import org.odk.collect.android.fakes.FakePermissionUtils;
+import org.odk.collect.android.fakes.FakePermissionsProvider;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
@@ -38,8 +38,8 @@ import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 public class ActivityGeoDataRequesterTest {
-    private final FakePermissionUtils permissionUtils = new FakePermissionUtils();
-    private final ActivityGeoDataRequester activityGeoDataRequester = new ActivityGeoDataRequester(permissionUtils);
+    private final FakePermissionsProvider permissionsProvider = new FakePermissionsProvider();
+    private final ActivityGeoDataRequester activityGeoDataRequester = new ActivityGeoDataRequester(permissionsProvider);
     private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
     private final GeoPointData answer = new GeoPointData(getRandomDoubleArray());
 
@@ -58,14 +58,14 @@ public class ActivityGeoDataRequesterTest {
         formIndex = mock(FormIndex.class);
         questionDef = mock(QuestionDef.class);
 
-        permissionUtils.setPermissionGranted(true);
+        permissionsProvider.setPermissionGranted(true);
         when(prompt.getQuestion()).thenReturn(questionDef);
         when(prompt.getIndex()).thenReturn(formIndex);
     }
 
     @Test
     public void whenPermissionIsNotGranted_requestGeoPoint_doesNotLaunchAnyIntent() {
-        permissionUtils.setPermissionGranted(false);
+        permissionsProvider.setPermissionGranted(false);
         activityGeoDataRequester.requestGeoPoint(testActivity, prompt, "", waitingForDataRegistry);
 
         assertNull(shadowActivity.getNextStartedActivity());
@@ -74,7 +74,7 @@ public class ActivityGeoDataRequesterTest {
 
     @Test
     public void whenPermissionIsNotGranted_requestGeoShape_doesNotLaunchAnyIntent() {
-        permissionUtils.setPermissionGranted(false);
+        permissionsProvider.setPermissionGranted(false);
         activityGeoDataRequester.requestGeoShape(testActivity, prompt, "", waitingForDataRegistry);
 
         assertNull(shadowActivity.getNextStartedActivity());
@@ -83,7 +83,7 @@ public class ActivityGeoDataRequesterTest {
 
     @Test
     public void whenPermissionIsNotGranted_requestGeoTrace_doesNotLaunchAnyIntent() {
-        permissionUtils.setPermissionGranted(false);
+        permissionsProvider.setPermissionGranted(false);
         activityGeoDataRequester.requestGeoTrace(testActivity, prompt, "", waitingForDataRegistry);
 
         assertNull(shadowActivity.getNextStartedActivity());

@@ -32,7 +32,9 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.InstanceDatabaseMigrator;
 import org.odk.collect.android.database.InstancesDatabaseHelper;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -43,10 +45,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_TABLE_NAME;
-import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 
 public class InstanceProvider extends ContentProvider {
     private static HashMap<String, String> sInstancesProjectionMap;
@@ -57,6 +60,9 @@ public class InstanceProvider extends ContentProvider {
     private static final UriMatcher URI_MATCHER;
 
     private static InstancesDatabaseHelper dbHelper;
+
+    @Inject
+    PermissionsProvider permissionsProvider;
 
     private synchronized InstancesDatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
@@ -85,13 +91,13 @@ public class InstanceProvider extends ContentProvider {
         }
     }
 
+    // Do not call it in onCreate() https://stackoverflow.com/questions/23521083/inject-database-in-a-contentprovider-with-dagger
+    private void deferDaggerInit() {
+        DaggerUtils.getComponent(getContext()).inject(this);
+    }
+
     @Override
     public boolean onCreate() {
-        if (!areStoragePermissionsGranted(getContext())) {
-            Timber.i("Read and write permissions are required for this content provider to function.");
-            return false;
-        }
-
         // must be at the beginning of any activity that can be called from an external intent
         InstancesDatabaseHelper h = getDbHelper();
         return h != null;
@@ -100,8 +106,8 @@ public class InstanceProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
-
-        if (!areStoragePermissionsGranted(getContext())) {
+        deferDaggerInit();
+        if (!permissionsProvider.areStoragePermissionsGranted()) {
             return null;
         }
 
@@ -150,13 +156,14 @@ public class InstanceProvider extends ContentProvider {
 
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues initialValues) {
+        deferDaggerInit();
+        if (!permissionsProvider.areStoragePermissionsGranted()) {
+            return null;
+        }
+
         // Validate the requested uri
         if (URI_MATCHER.match(uri) != INSTANCES) {
             throw new IllegalArgumentException("Unknown URI " + uri);
-        }
-
-        if (!areStoragePermissionsGranted(getContext())) {
-            return null;
         }
 
         InstancesDatabaseHelper instancesDatabaseHelper = getDbHelper();
@@ -246,9 +253,11 @@ public class InstanceProvider extends ContentProvider {
      */
     @Override
     public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
-        if (!areStoragePermissionsGranted(getContext())) {
+        deferDaggerInit();
+        if (!permissionsProvider.areStoragePermissionsGranted()) {
             return 0;
         }
+
         int count = 0;
         InstancesDatabaseHelper instancesDatabaseHelper = getDbHelper();
         if (instancesDatabaseHelper != null) {
@@ -341,9 +350,11 @@ public class InstanceProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String where, String[] whereArgs) {
-        if (!areStoragePermissionsGranted(getContext())) {
+        deferDaggerInit();
+        if (!permissionsProvider.areStoragePermissionsGranted()) {
             return 0;
         }
+
         int count = 0;
         InstancesDatabaseHelper instancesDatabaseHelper = getDbHelper();
         if (instancesDatabaseHelper != null) {

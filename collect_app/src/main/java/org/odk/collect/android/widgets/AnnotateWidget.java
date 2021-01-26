@@ -133,7 +133,7 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
     public void onButtonClick(int buttonId) {
         switch (buttonId) {
             case R.id.capture_image:
-                getPermissionUtils().requestCameraPermission((Activity) getContext(), new PermissionListener() {
+                getPermissionsProvider().requestCameraPermission((Activity) getContext(), new PermissionListener() {
                     @Override
                     public void granted() {
                         captureImage();

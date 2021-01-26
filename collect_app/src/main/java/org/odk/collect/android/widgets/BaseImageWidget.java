@@ -102,23 +102,23 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     }
 
     @Override
-    public void setData(Object newImageObj) {
-        // you are replacing an answer. delete the previous image using the
-        // content provider.
+    public void setData(Object object) {
         if (binaryName != null) {
             deleteFile();
         }
 
-        File newImage = (File) newImageObj;
-        if (newImage.exists()) {
-            questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
-            binaryName = newImage.getName();
-            Timber.i("Setting current answer to %s", newImage.getName());
-
-            addCurrentImageToLayout();
-            widgetValueChanged();
+        if (object instanceof File) {
+            File newImage = (File) object;
+            if (newImage.exists()) {
+                questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
+                binaryName = newImage.getName();
+                addCurrentImageToLayout();
+                widgetValueChanged();
+            } else {
+                Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
+            }
         } else {
-            Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
+            Timber.e("ImageWidget's setBinaryData must receive a File object.");
         }
     }
 
@@ -197,7 +197,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
         @Override
         public void clickImage(String context) {
-            mediaUtils.openFile(getContext(), new File(getInstanceFolder() + File.separator + binaryName));
+            mediaUtils.openFile(getContext(), new File(getInstanceFolder() + File.separator + binaryName), "image/*");
         }
     }
 

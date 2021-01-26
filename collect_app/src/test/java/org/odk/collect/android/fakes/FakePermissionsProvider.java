@@ -2,23 +2,25 @@ package org.odk.collect.android.fakes;
 
 import android.app.Activity;
 import androidx.annotation.NonNull;
+import androidx.test.platform.app.InstrumentationRegistry;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.permissions.PermissionsChecker;
+import org.odk.collect.android.storage.StorageStateProvider;
+import org.odk.collect.android.permissions.PermissionsProvider;
 
 /**
- * Mocked implementation of {@link PermissionUtils}.
+ * Mocked implementation of {@link PermissionsProvider}.
  * The runtime permissions can be stubbed for unit testing
  *
  * @author Shobhit Agarwal
  */
-public class FakePermissionUtils extends PermissionUtils {
+public class FakePermissionsProvider extends PermissionsProvider {
 
     private boolean isPermissionGranted;
 
-    public FakePermissionUtils() {
-        super(R.style.Theme_Collect_Dialog_PermissionAlert);
+    public FakePermissionsProvider() {
+        super(new PermissionsChecker(InstrumentationRegistry.getInstrumentation().getTargetContext()), new StorageStateProvider());
     }
 
     @Override

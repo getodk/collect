@@ -65,10 +65,10 @@ import org.odk.collect.android.formentry.media.PromptAutoplayer;
 import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ScreenContext;
@@ -131,6 +131,9 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     @Inject
     ActivityAvailability activityAvailability;
 
+    @Inject
+    PermissionsProvider permissionsProvider;
+
     private final WidgetFactory widgetFactory;
     private final LifecycleOwner viewLifecycle;
     private final AudioRecorderViewModel audioRecorderViewModel;
@@ -167,8 +170,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             }
         }
 
-        PermissionUtils permissionUtils = new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert);
-
         this.widgetFactory = new WidgetFactory(
                 context,
                 readOnlyOverride,
@@ -177,7 +178,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 questionMediaManager,
                 audioPlayer,
                 activityAvailability,
-                new RecordingRequesterFactory(waitingForDataRegistry, questionMediaManager, activityAvailability, audioRecorderViewModel, permissionUtils, context, viewLifecycle, formEntryViewModel),
+                new RecordingRequesterFactory(waitingForDataRegistry, questionMediaManager, activityAvailability, audioRecorderViewModel, permissionsProvider, context, viewLifecycle, formEntryViewModel),
                 formEntryViewModel);
 
         widgets = new ArrayList<>();
@@ -297,7 +298,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      * Note: if the given question is of an unsupported type, a text widget will be created.
      */
     private QuestionWidget configureWidgetForQuestion(FormEntryPrompt question) {
-        QuestionWidget qw = widgetFactory.createWidgetFromPrompt(question);
+        QuestionWidget qw = widgetFactory.createWidgetFromPrompt(question, permissionsProvider);
         qw.setOnLongClickListener(this);
         qw.setValueChangedListener(this);
 
@@ -529,14 +530,16 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                                     } else {
                                         throw new RuntimeException("The value for " + key + " must be a URI but it is " + answer);
                                     }
-                                    
-                                    if (uri != null) {
-                                        File destFile = FileUtils.createDestinationMediaFile(formController.getInstanceFile().getParent(), ContentResolverHelper.getFileExtensionFromUri(getContext(), uri));
+                                    if (permissionsProvider.isReadUriPermissionGranted(uri, getContext().getContentResolver())) {
+                                        File destFile = FileUtils.createDestinationMediaFile(formController.getInstanceFile().getParent(), ContentResolverHelper.getFileExtensionFromUri(uri));
                                         //TODO might be better to use QuestionMediaManager in the future
                                         FileUtils.saveAnswerFileFromUri(uri, destFile, getContext());
                                         ((WidgetDataReceiver) questionWidget).setData(destFile);
+
+                                        questionWidget.showAnswerContainer();
+                                    } else {
+                                        ToastUtils.showLongToast(R.string.read_file_permission_not_granted);
                                     }
-                                    questionWidget.showAnswerContainer();
                                 } catch (Exception | Error e) {
                                     Timber.w(e);
                                 }

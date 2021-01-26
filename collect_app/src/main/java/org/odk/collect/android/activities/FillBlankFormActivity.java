@@ -50,14 +50,11 @@ import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.views.ObviousProgressBar;
 
 import javax.inject.Inject;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores the path to
@@ -111,7 +108,7 @@ public class FillBlankFormActivity extends FormListActivity implements
 
         menuDelegate = new BlankFormListMenuDelegate(this, blankFormsListViewModel, networkStateProvider);
 
-        new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestStoragePermissions(this, new PermissionListener() {
+        permissionsProvider.requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
@@ -127,7 +124,7 @@ public class FillBlankFormActivity extends FormListActivity implements
             @Override
             public void denied() {
                 // The activity has to finish because ODK Collect cannot function without these permissions.
-                finishAllActivities(FillBlankFormActivity.this);
+                finishAndRemoveTask();
             }
         });
     }
@@ -214,7 +211,7 @@ public class FillBlankFormActivity extends FormListActivity implements
     public void onMapButtonClick(AdapterView<?> parent, View view, int position, long id) {
         final Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, id);
         final Intent intent = new Intent(Intent.ACTION_EDIT, formUri, this, FormMapActivity.class);
-        new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestLocationPermissions(this, new PermissionListener() {
+        permissionsProvider.requestLocationPermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 startActivity(intent);

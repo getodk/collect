@@ -18,6 +18,7 @@ import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -26,7 +27,6 @@ import org.odk.collect.android.upload.InstanceUploader;
 import org.odk.collect.android.upload.UploadException;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
-import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
@@ -49,13 +49,16 @@ public class InstanceSubmitter {
     private final InstancesRepository instancesRepository;
     private final GoogleAccountsManager googleAccountsManager;
     private final GoogleApiProvider googleApiProvider;
+    private final PermissionsProvider permissionsProvider;
 
-    public InstanceSubmitter(Analytics analytics, FormsRepository formsRepository, InstancesRepository instancesRepository, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider) {
+    public InstanceSubmitter(Analytics analytics, FormsRepository formsRepository, InstancesRepository instancesRepository,
+                             GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider) {
         this.analytics = analytics;
         this.formsRepository = formsRepository;
         this.instancesRepository = instancesRepository;
         this.googleAccountsManager = googleAccountsManager;
         this.googleApiProvider = googleApiProvider;
+        this.permissionsProvider = permissionsProvider;
     }
 
     public Pair<Boolean, String> submitUnsubmittedInstances() throws SubmitException {
@@ -77,7 +80,7 @@ public class InstanceSubmitter {
         boolean anyFailure = false;
 
         if (protocol.equals(TranslationHandler.getString(Collect.getInstance(), R.string.protocol_google_sheets))) {
-            if (PermissionUtils.isGetAccountsPermissionGranted(Collect.getInstance())) {
+            if (permissionsProvider.isGetAccountsPermissionGranted()) {
                 String googleUsername = googleAccountsManager.getLastSelectedAccountIfValid();
                 if (googleUsername.isEmpty()) {
                     throw new SubmitException(Type.GOOGLE_ACCOUNT_NOT_SET);

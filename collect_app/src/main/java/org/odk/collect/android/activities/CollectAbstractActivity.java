@@ -22,7 +22,9 @@ import android.os.Build;
 import android.os.Bundle;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 import androidx.annotation.Nullable;
@@ -34,19 +36,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
-import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
+import javax.inject.Inject;
 
 public abstract class CollectAbstractActivity extends AppCompatActivity {
 
     private boolean isInstanceStateSaved;
     protected ThemeUtils themeUtils;
 
+    @Inject
+    protected PermissionsProvider permissionsProvider;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         themeUtils = new ThemeUtils(this);
         setTheme(this instanceof FormEntryActivity ? themeUtils.getFormEntryActivityTheme() : themeUtils.getAppTheme());
         super.onCreate(savedInstanceState);
+        DaggerUtils.getComponent(this).inject(this);
 
         /**
          * If a user has revoked the storage permission then this check ensures the app doesn't quit unexpectedly and
@@ -56,13 +61,13 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
          * This code won't run on activities that are entry points to the app because those activities
          * are able to handle permission checks and requests by themselves.
          */
-        if (!areStoragePermissionsGranted(this) && !isEntryPointActivity(this)) {
+        if (!permissionsProvider.areStoragePermissionsGranted() && !isEntryPointActivity(this)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog);
 
             builder.setTitle(R.string.storage_runtime_permission_denied_title)
                     .setMessage(R.string.storage_runtime_permission_denied_desc)
                     .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
-                        finishAllActivities(this);
+                        finishAndRemoveTask();
                     })
                     .setIcon(R.drawable.sd)
                     .setCancelable(false)

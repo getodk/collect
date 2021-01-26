@@ -6,6 +6,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,9 +15,11 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.metadata.InstallIDProvider;
+import org.odk.collect.android.permissions.PermissionsChecker;
+import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
-import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.robolectric.annotation.LooperMode;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -32,7 +35,7 @@ import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 @LooperMode(PAUSED)
 public class FormMetadataFragmentTest {
 
-    private final FakePhoneStatePermissionUtils permissionUtils = new FakePhoneStatePermissionUtils();
+    private final FakePhoneStatePermissionsProvider permissionsProvider = new FakePhoneStatePermissionsProvider();
     private final DeviceDetailsProvider deviceDetailsProvider = mock(DeviceDetailsProvider.class);
 
     @Before
@@ -40,8 +43,8 @@ public class FormMetadataFragmentTest {
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
 
             @Override
-            public PermissionUtils providesPermissionUtils() {
-                return permissionUtils;
+            public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+                return permissionsProvider;
             }
 
             @Override
@@ -54,10 +57,10 @@ public class FormMetadataFragmentTest {
     @Test
     public void recreating_doesntRequestPermissionsAgain() {
         FragmentScenario<FormMetadataFragment> scenario = FragmentScenario.launch(FormMetadataFragment.class);
-        assertThat(permissionUtils.timesRequested, equalTo(1));
+        assertThat(permissionsProvider.timesRequested, equalTo(1));
 
         scenario.recreate();
-        assertThat(permissionUtils.timesRequested, equalTo(1));
+        assertThat(permissionsProvider.timesRequested, equalTo(1));
     }
 
     @Test
@@ -65,7 +68,7 @@ public class FormMetadataFragmentTest {
         when(deviceDetailsProvider.getDeviceId()).thenReturn("123456789");
 
         FragmentScenario<FormMetadataFragment> scenario = FragmentScenario.launch(FormMetadataFragment.class);
-        permissionUtils.grant();
+        permissionsProvider.grant();
         scenario.onFragment(fragment -> {
             assertThat(fragment.findPreference(PROPMGR_DEVICE_ID).getSummary(), equalTo("123456789"));
         });
@@ -79,7 +82,7 @@ public class FormMetadataFragmentTest {
     @Test
     public void recreating_whenPermissionsGrantedPreviously_doesNotShowPermissionDependantPreferences() {
         FragmentScenario<FormMetadataFragment> scenario = FragmentScenario.launch(FormMetadataFragment.class);
-        permissionUtils.deny();
+        permissionsProvider.deny();
         scenario.recreate();
         verifyNoInteractions(deviceDetailsProvider);
     }
@@ -90,7 +93,7 @@ public class FormMetadataFragmentTest {
         when(deviceDetailsProvider.getDeviceId()).thenReturn(null);
 
         FragmentScenario<FormMetadataFragment> scenario = FragmentScenario.launch(FormMetadataFragment.class);
-        permissionUtils.grant();
+        permissionsProvider.grant();
         scenario.onFragment(fragment -> {
             String notSetMessage = fragment.getContext().getString(R.string.preference_not_available);
 
@@ -99,14 +102,14 @@ public class FormMetadataFragmentTest {
         });
     }
 
-    private static class FakePhoneStatePermissionUtils extends PermissionUtils {
+    private static class FakePhoneStatePermissionsProvider extends PermissionsProvider {
 
         int timesRequested;
         private PermissionListener lastAction;
         private boolean granted;
 
-        private FakePhoneStatePermissionUtils() {
-            super(R.style.Theme_Collect_Dialog_PermissionAlert);
+        private FakePhoneStatePermissionsProvider() {
+            super(new PermissionsChecker(InstrumentationRegistry.getInstrumentation().getTargetContext()), new StorageStateProvider());
         }
 
         @Override
@@ -116,7 +119,7 @@ public class FormMetadataFragmentTest {
         }
 
         @Override
-        public boolean isReadPhoneStatePermissionGranted(Context context) {
+        public boolean isReadPhoneStatePermissionGranted() {
             return granted;
         }
 

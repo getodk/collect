@@ -11,7 +11,7 @@ import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 
@@ -21,16 +21,16 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
     public static final String READ_ONLY = "readOnly";
     public static final String DRAGGABLE_ONLY = "draggable";
 
-    private final PermissionUtils permissionUtils;
+    private final PermissionsProvider permissionsProvider;
 
-    public ActivityGeoDataRequester(PermissionUtils permissionUtils) {
-        this.permissionUtils = permissionUtils;
+    public ActivityGeoDataRequester(PermissionsProvider permissionsProvider) {
+        this.permissionsProvider = permissionsProvider;
     }
 
     @Override
     public void requestGeoPoint(Context context, FormEntryPrompt prompt, String answerText, WaitingForDataRegistry waitingForDataRegistry) {
 
-        permissionUtils.requestLocationPermissions((Activity) context, new PermissionListener() {
+        permissionsProvider.requestLocationPermissions((Activity) context, new PermissionListener() {
             @Override
             public void granted() {
                 waitingForDataRegistry.waitForData(prompt.getIndex());
@@ -58,7 +58,7 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
 
     @Override
     public void requestGeoShape(Context context, FormEntryPrompt prompt, String answerText, WaitingForDataRegistry waitingForDataRegistry) {
-        permissionUtils.requestLocationPermissions((Activity) context, new PermissionListener() {
+        permissionsProvider.requestLocationPermissions((Activity) context, new PermissionListener() {
             @Override
             public void granted() {
                 waitingForDataRegistry.waitForData(prompt.getIndex());
@@ -79,7 +79,7 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
 
     @Override
     public void requestGeoTrace(Context context, FormEntryPrompt prompt, String answerText, WaitingForDataRegistry waitingForDataRegistry) {
-        permissionUtils.requestLocationPermissions((Activity) context, new PermissionListener() {
+        permissionsProvider.requestLocationPermissions((Activity) context, new PermissionListener() {
             @Override
             public void granted() {
                 waitingForDataRegistry.waitForData(prompt.getIndex());

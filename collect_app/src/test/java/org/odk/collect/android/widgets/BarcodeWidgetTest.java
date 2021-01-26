@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.fakes.FakePermissionUtils;
+import org.odk.collect.android.fakes.FakePermissionsProvider;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.TestScreenContextActivity;
@@ -40,7 +40,7 @@ import static org.robolectric.Shadows.shadowOf;
 @RunWith(RobolectricTestRunner.class)
 public class BarcodeWidgetTest {
     private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
-    private final FakePermissionUtils permissionUtils = new FakePermissionUtils();
+    private final FakePermissionsProvider permissionsProvider = new FakePermissionsProvider();
 
     private TestScreenContextActivity widgetTestActivity;
     private ShadowActivity shadowActivity;
@@ -56,7 +56,7 @@ public class BarcodeWidgetTest {
         cameraUtils = mock(CameraUtils.class);
         listener = mock(View.OnLongClickListener.class);
         formIndex = mock(FormIndex.class);
-        permissionUtils.setPermissionGranted(true);
+        permissionsProvider.setPermissionGranted(true);
     }
 
     @Test
@@ -143,8 +143,8 @@ public class BarcodeWidgetTest {
     @Test
     public void clickingBarcodeButton_whenPermissionIsNotGranted_doesNotLaunchAnyIntent() {
         BarcodeWidget widget = createWidget(promptWithAnswer(null));
-        permissionUtils.setPermissionGranted(false);
-        widget.setPermissionUtils(permissionUtils);
+        permissionsProvider.setPermissionGranted(false);
+        widget.setPermissionsProvider(permissionsProvider);
         widget.binding.barcodeButton.performClick();
 
         assertThat(shadowActivity.getNextStartedActivity(), nullValue());
@@ -157,7 +157,7 @@ public class BarcodeWidgetTest {
         when(prompt.getIndex()).thenReturn(formIndex);
 
         BarcodeWidget widget = createWidget(prompt);
-        widget.setPermissionUtils(permissionUtils);
+        widget.setPermissionsProvider(permissionsProvider);
         widget.binding.barcodeButton.performClick();
 
         assertThat(waitingForDataRegistry.waiting.contains(formIndex), is(true));
@@ -167,7 +167,7 @@ public class BarcodeWidgetTest {
     public void clickingBarcodeButton_whenFrontCameraIsNotAvailable_showsFrontCameraNotAvailableToast() {
         when(cameraUtils.isFrontCameraAvailable()).thenReturn(false);
         BarcodeWidget widget = createWidget(promptWithAppearance(WidgetAppearanceUtils.FRONT));
-        widget.setPermissionUtils(permissionUtils);
+        widget.setPermissionsProvider(permissionsProvider);
         widget.binding.barcodeButton.performClick();
 
         assertThat(ShadowToast.getTextOfLatestToast(), is(widgetTestActivity.getString(R.string.error_front_camera_unavailable)));
@@ -177,7 +177,7 @@ public class BarcodeWidgetTest {
     public void clickingBarcodeButton_whenFrontCameraIsAvailable_launchesCorrectIntent() {
         when(cameraUtils.isFrontCameraAvailable()).thenReturn(true);
         BarcodeWidget widget = createWidget(promptWithAppearance(WidgetAppearanceUtils.FRONT));
-        widget.setPermissionUtils(permissionUtils);
+        widget.setPermissionsProvider(permissionsProvider);
         widget.binding.barcodeButton.performClick();
 
         assertThat(shadowActivity.getNextStartedActivity().getBooleanExtra(WidgetAppearanceUtils.FRONT, false), is(true));

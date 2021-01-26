@@ -9,9 +9,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -35,7 +35,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
  */
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({GoogleAccountCredential.class, ThemeUtils.class, PermissionUtils.class})
+@PrepareForTest({GoogleAccountCredential.class, ThemeUtils.class, PermissionsProvider.class})
 public class GoogleAccountsManagerTest {
 
     private static final String EXPECTED_ACCOUNT = "abcd@xyz.com";
@@ -62,7 +62,7 @@ public class GoogleAccountsManagerTest {
 
         stubCredential();
         stubPreferences();
-        mockPermissionUtils();
+        mockPermissionsProvider();
     }
 
     /**
@@ -90,8 +90,8 @@ public class GoogleAccountsManagerTest {
         doReturn(null).when(mockedCredential).getAllAccounts();
     }
 
-    private void mockPermissionUtils() {
-        mockStatic(PermissionUtils.class, invocation -> {
+    private void mockPermissionsProvider() {
+        mockStatic(PermissionsProvider.class, invocation -> {
             Whitebox.invokeMethod(googleAccountsManager, "chooseAccount");
             return null;
         });

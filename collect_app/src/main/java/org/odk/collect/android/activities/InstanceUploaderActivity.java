@@ -34,7 +34,6 @@ import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
-import org.odk.collect.android.utilities.PermissionUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -90,7 +89,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         DaggerUtils.getComponent(this).inject(this);
 
         // This activity is accessed directly externally
-        new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestStoragePermissions(this, new PermissionListener() {
+        permissionsProvider.requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
