@@ -61,7 +61,7 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
     public void buttonsShouldLaunchCorrectIntents() {
         stubAllRuntimePermissionsGranted(true);
 
-        Intent intent = getIntentLaunchedByClick(R.id.simple_button);
+        Intent intent = getIntentLaunchedByClick(R.id.arbitrary_file_button);
         assertActionEquals(Intent.ACTION_OPEN_DOCUMENT, intent);
     }
 
@@ -69,14 +69,14 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertThat(getSpyWidget().chooseFileButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().binding.arbitraryFileButton.getVisibility(), is(View.GONE));
     }
 
     @Test
     public void whenReadOnlyOverrideOptionIsUsed_shouldAllClickableElementsBeDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertThat(getSpyWidget().chooseFileButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().binding.arbitraryFileButton.getVisibility(), is(View.GONE));
     }
 
     public void prepareAnswerFile() {
