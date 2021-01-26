@@ -24,8 +24,6 @@ import androidx.annotation.NonNull;
 import android.util.TypedValue;
 import android.view.View;
 
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.databinding.ArbitraryFileWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -38,16 +36,13 @@ import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.io.File;
 
-import timber.log.Timber;
-
 @SuppressLint("ViewConstructor")
-public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, WidgetDataReceiver {
+public class ArbitraryFileWidget extends BaseArbitraryFileWidget implements FileWidget, WidgetDataReceiver {
     ArbitraryFileWidgetAnswerBinding binding;
 
     @NonNull
     private final MediaUtils mediaUtils;
 
-    private final QuestionMediaManager questionMediaManager;
     private final WaitingForDataRegistry waitingForDataRegistry;
 
     private String binaryName;
@@ -58,9 +53,8 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, W
 
     ArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull MediaUtils mediaUtils,
                         QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
-        super(context, questionDetails);
+        super(context, questionDetails, mediaUtils, questionMediaManager, waitingForDataRegistry);
         this.mediaUtils = mediaUtils;
-        this.questionMediaManager = questionMediaManager;
         this.waitingForDataRegistry = waitingForDataRegistry;
     }
 
@@ -87,18 +81,6 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, W
     }
 
     @Override
-    public void deleteFile() {
-        questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
-                getInstanceFolder() + File.separator + binaryName);
-        binaryName = null;
-    }
-
-    @Override
-    public IAnswerData getAnswer() {
-        return binaryName != null ? new StringData(binaryName) : null;
-    }
-
-    @Override
     public void clearAnswer() {
         binding.arbitraryFileAnswerText.setVisibility(GONE);
         deleteFile();
@@ -112,30 +94,14 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, W
     }
 
     @Override
-    public void setData(Object object) {
-        if (binaryName != null) {
-            deleteFile();
-        }
-
-        if (object instanceof File) {
-            File newFile = (File) object;
-            if (newFile.exists()) {
-                questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newFile.getAbsolutePath());
-                binaryName = newFile.getName();
-                binding.arbitraryFileAnswerText.setText(binaryName);
-                binding.arbitraryFileAnswerText.setVisibility(VISIBLE);
-                widgetValueChanged();
-            } else {
-                Timber.e("Inserting Arbitrary file FAILED");
-            }
-        } else {
-            Timber.e("FileWidget's setBinaryData must receive a File or Uri object.");
-        }
-    }
-
-    @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         binding.arbitraryFileButton.setOnLongClickListener(l);
         binding.arbitraryFileAnswerText.setOnLongClickListener(l);
+    }
+
+    @Override
+    protected void showAnswerText() {
+        binding.arbitraryFileAnswerText.setText(binaryName);
+        binding.arbitraryFileAnswerText.setVisibility(VISIBLE);
     }
 }
