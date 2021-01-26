@@ -41,7 +41,9 @@ import org.odk.collect.android.database.Assignment;
 import org.odk.collect.android.database.TaskAssignment;
 import org.odk.collect.android.database.TraceUtilities;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.PropertyManager;
@@ -113,7 +115,12 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
     @Inject
     Notifier notifier;
-    
+
+    @Inject
+    InstancesRepository instancesRepository;
+
+    @Inject
+    FormsRepository formsRepository;
     private FormsDao formsDao;
 	
 	/*
@@ -629,7 +636,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 InstanceUploaderTask instanceUploaderTask = new InstanceServerUploaderTask();
                 publishProgress(Collect.getInstance().getString(R.string.smap_submitting, toUpload.size()));
                 instanceUploaderTask.setUploaderListener((InstanceUploaderListener) mStateListener);
-
+                instanceUploaderTask.setRepositories(instancesRepository, formsRepository);
                 Long[] toSendArray = new Long[toUpload.size()];
                 toUpload.toArray(toSendArray);
                 Timber.i("Submitting " + toUpload.size() + " finalised surveys");
