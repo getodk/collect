@@ -819,6 +819,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case RequestCodes.EX_STRING_CAPTURE:
             case RequestCodes.EX_INT_CAPTURE:
             case RequestCodes.EX_DECIMAL_CAPTURE:
+            case RequestCodes.EX_ARBITRARY_FILE_CHOOSER:
                 String key = "value";
                 boolean exists = intent.getExtras().containsKey(key);
                 if (exists) {

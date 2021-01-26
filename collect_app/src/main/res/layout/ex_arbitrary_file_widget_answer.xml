@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/margin_standard">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/ex_arbitrary_file_button"
+        style="@style/Widget.Collect.Button.WidgetAnswer"
+        android:text="@string/launch_app" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:id="@+id/ex_arbitrary_file_answer_text"
+        style="@style/Widget.Collect.TextView.WidgetAnswer"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:drawableStart="@drawable/ic_attachment" />
+</LinearLayout>
