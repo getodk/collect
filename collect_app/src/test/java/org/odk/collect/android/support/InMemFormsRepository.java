@@ -97,6 +97,10 @@ public class InMemFormsRepository implements FormsRepository {
                     .md5Hash(hash)
                     .build();
 
+        } else if (form.getMD5Hash() == null) {
+            form = new Form.Builder(form)
+                    .md5Hash(form.getId().toString())
+                    .build();
         }
 
         forms.add(form);
@@ -109,18 +113,20 @@ public class InMemFormsRepository implements FormsRepository {
         if (formToRemove.isPresent()) {
             Form form = formToRemove.get();
 
-            new File(form.getFormFilePath()).delete();
+            if (form.getFormFilePath() != null) {
+                new File(form.getFormFilePath()).delete();
 
-            try {
-                File mediaDir = new File(form.getFormMediaPath());
+                try {
+                    File mediaDir = new File(form.getFormMediaPath());
 
-                if (mediaDir.isDirectory()) {
-                    deleteDirectory(mediaDir);
-                } else {
-                    mediaDir.delete();
+                    if (mediaDir.isDirectory()) {
+                        deleteDirectory(mediaDir);
+                    } else {
+                        mediaDir.delete();
+                    }
+                } catch (IOException ignored) {
+                    // Ignored
                 }
-            } catch (IOException ignored) {
-                // Ignored
             }
 
             forms.remove(form);
