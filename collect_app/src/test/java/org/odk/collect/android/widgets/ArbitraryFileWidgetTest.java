@@ -1,6 +1,5 @@
 package org.odk.collect.android.widgets;
 
-import android.content.Intent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -11,8 +10,8 @@ import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
@@ -22,6 +21,7 @@ import java.io.File;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget> {
@@ -61,8 +61,8 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
     public void buttonsShouldLaunchCorrectIntents() {
         stubAllRuntimePermissionsGranted(true);
 
-        Intent intent = getIntentLaunchedByClick(R.id.arbitrary_file_button);
-        assertActionEquals(Intent.ACTION_OPEN_DOCUMENT, intent);
+        getSpyWidget().binding.arbitraryFileButton.performClick();
+        verify(mediaUtils).pickFile(activity, "*/*", ApplicationConstants.RequestCodes.ARBITRARY_FILE_CHOOSER);
     }
 
     @Test

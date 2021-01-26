@@ -19,7 +19,6 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import androidx.annotation.NonNull;
 
 import android.util.TypedValue;
@@ -109,11 +108,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget, W
 
     private void onButtonClick() {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("*/*"); // all file types
-        ((Activity) getContext()).startActivityForResult(intent, ApplicationConstants.RequestCodes.ARBITRARY_FILE_CHOOSER);
+        mediaUtils.pickFile((Activity) getContext(), "*/*", ApplicationConstants.RequestCodes.ARBITRARY_FILE_CHOOSER);
     }
 
     @Override
