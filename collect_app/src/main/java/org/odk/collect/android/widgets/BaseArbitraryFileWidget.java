@@ -24,7 +24,7 @@ public abstract class BaseArbitraryFileWidget extends QuestionWidget implements 
     private final QuestionMediaManager questionMediaManager;
     protected final WaitingForDataRegistry waitingForDataRegistry;
 
-    protected String binaryName;
+    protected String fileName;
 
     public BaseArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull MediaUtils mediaUtils,
                                    QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
@@ -36,19 +36,19 @@ public abstract class BaseArbitraryFileWidget extends QuestionWidget implements 
 
     @Override
     public IAnswerData getAnswer() {
-        return binaryName != null ? new StringData(binaryName) : null;
+        return fileName != null ? new StringData(fileName) : null;
     }
 
     @Override
     public void deleteFile() {
         questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
-                getInstanceFolder() + File.separator + binaryName);
-        binaryName = null;
+                getInstanceFolder() + File.separator + fileName);
+        fileName = null;
     }
 
     @Override
     public void setData(Object object) {
-        if (binaryName != null) {
+        if (fileName != null) {
             deleteFile();
         }
 
@@ -56,7 +56,7 @@ public abstract class BaseArbitraryFileWidget extends QuestionWidget implements 
             File newFile = (File) object;
             if (newFile.exists()) {
                 questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newFile.getAbsolutePath());
-                binaryName = newFile.getName();
+                fileName = newFile.getName();
                 showAnswerText();
                 widgetValueChanged();
             } else {

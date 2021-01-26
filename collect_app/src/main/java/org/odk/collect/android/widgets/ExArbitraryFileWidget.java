@@ -45,19 +45,19 @@ public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = ExArbitraryFileWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
-        binaryName = prompt.getAnswerText();
+        fileName = prompt.getAnswerText();
 
         if (prompt.isReadOnly()) {
             binding.exArbitraryFileButton.setVisibility(GONE);
         } else {
             binding.exArbitraryFileButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
             binding.exArbitraryFileButton.setOnClickListener(v -> onButtonClick());
-            binding.exArbitraryFileAnswerText.setOnClickListener(v -> mediaUtils.openFile(getContext(), new File(getInstanceFolder() + File.separator + binaryName), null));
+            binding.exArbitraryFileAnswerText.setOnClickListener(v -> mediaUtils.openFile(getContext(), new File(getInstanceFolder() + File.separator + fileName), null));
         }
 
-        if (binaryName != null && !binaryName.isEmpty()) {
+        if (fileName != null && !fileName.isEmpty()) {
             binding.exArbitraryFileAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-            binding.exArbitraryFileAnswerText.setText(binaryName);
+            binding.exArbitraryFileAnswerText.setText(fileName);
             binding.exArbitraryFileAnswerText.setVisibility(VISIBLE);
         }
 
@@ -72,14 +72,14 @@ public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
     }
 
     @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-        binding.exArbitraryFileButton.setOnLongClickListener(l);
-        binding.exArbitraryFileAnswerText.setOnLongClickListener(l);
+    public void setOnLongClickListener(OnLongClickListener listener) {
+        binding.exArbitraryFileButton.setOnLongClickListener(listener);
+        binding.exArbitraryFileAnswerText.setOnLongClickListener(listener);
     }
 
     @Override
     protected void showAnswerText() {
-        binding.exArbitraryFileAnswerText.setText(binaryName);
+        binding.exArbitraryFileAnswerText.setText(fileName);
         binding.exArbitraryFileAnswerText.setVisibility(VISIBLE);
     }
 

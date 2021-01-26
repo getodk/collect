@@ -45,8 +45,6 @@ public class ArbitraryFileWidget extends BaseArbitraryFileWidget implements File
 
     private final WaitingForDataRegistry waitingForDataRegistry;
 
-    private String binaryName;
-
     public ArbitraryFileWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
         this(context, prompt, new MediaUtils(), questionMediaManager, waitingForDataRegistry);
     }
@@ -61,19 +59,19 @@ public class ArbitraryFileWidget extends BaseArbitraryFileWidget implements File
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = ArbitraryFileWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
-        binaryName = prompt.getAnswerText();
+        fileName = prompt.getAnswerText();
 
         if (prompt.isReadOnly()) {
             binding.arbitraryFileButton.setVisibility(GONE);
         } else {
             binding.arbitraryFileButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
             binding.arbitraryFileButton.setOnClickListener(v -> onButtonClick());
-            binding.arbitraryFileAnswerText.setOnClickListener(v -> mediaUtils.openFile(getContext(), new File(getInstanceFolder() + File.separator + binaryName), null));
+            binding.arbitraryFileAnswerText.setOnClickListener(v -> mediaUtils.openFile(getContext(), new File(getInstanceFolder() + File.separator + fileName), null));
         }
 
-        if (binaryName != null && !binaryName.isEmpty()) {
+        if (fileName != null && !fileName.isEmpty()) {
             binding.arbitraryFileAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-            binding.arbitraryFileAnswerText.setText(binaryName);
+            binding.arbitraryFileAnswerText.setText(fileName);
             binding.arbitraryFileAnswerText.setVisibility(VISIBLE);
         }
 
@@ -84,7 +82,6 @@ public class ArbitraryFileWidget extends BaseArbitraryFileWidget implements File
     public void clearAnswer() {
         binding.arbitraryFileAnswerText.setVisibility(GONE);
         deleteFile();
-
         widgetValueChanged();
     }
 
@@ -94,14 +91,14 @@ public class ArbitraryFileWidget extends BaseArbitraryFileWidget implements File
     }
 
     @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-        binding.arbitraryFileButton.setOnLongClickListener(l);
-        binding.arbitraryFileAnswerText.setOnLongClickListener(l);
+    public void setOnLongClickListener(OnLongClickListener listener) {
+        binding.arbitraryFileButton.setOnLongClickListener(listener);
+        binding.arbitraryFileAnswerText.setOnLongClickListener(listener);
     }
 
     @Override
     protected void showAnswerText() {
-        binding.arbitraryFileAnswerText.setText(binaryName);
+        binding.arbitraryFileAnswerText.setText(fileName);
         binding.arbitraryFileAnswerText.setVisibility(VISIBLE);
     }
 }
