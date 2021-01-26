@@ -295,7 +295,7 @@ public class ServerFormDownloaderTest {
         when(formSource.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents1".getBytes()));
 
         // Create file where media dir would go
-        assertThat(new File(formsDir, "form-media").createNewFile(), is(true));
+        assertThat(new File(formsDir, "Form-media").createNewFile(), is(true));
 
         ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()), mock(Analytics.class));
 
