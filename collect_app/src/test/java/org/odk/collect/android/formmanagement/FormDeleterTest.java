@@ -3,6 +3,7 @@ package org.odk.collect.android.formmanagement;
 import org.junit.Test;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.support.FormUtils;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.android.support.InMemInstancesRepository;
 
@@ -25,6 +26,7 @@ public class FormDeleterTest {
                 .id(1L)
                 .jrFormId("id")
                 .jrVersion("version")
+                .formFilePath(FormUtils.createXFormFile("id", "version").getAbsolutePath())
                 .build());
 
         instancesRepository.save(new Instance.Builder()
@@ -43,12 +45,14 @@ public class FormDeleterTest {
                 .id(1L)
                 .jrFormId("1")
                 .jrVersion("old")
+                .formFilePath(FormUtils.createXFormFile("1", "old").getAbsolutePath())
                 .build());
 
         formsRepository.save(new Form.Builder()
                 .id(2L)
                 .jrFormId("1")
                 .jrVersion("new")
+                .formFilePath(FormUtils.createXFormFile("1", "new").getAbsolutePath())
                 .build());
 
         instancesRepository.save(new Instance.Builder()
@@ -68,12 +72,14 @@ public class FormDeleterTest {
                 .id(1L)
                 .jrFormId("1")
                 .jrVersion("version")
+                .formFilePath(FormUtils.createXFormFile("1", "version").getAbsolutePath())
                 .build());
 
         formsRepository.save(new Form.Builder()
                 .id(2L)
                 .jrFormId("1")
                 .jrVersion(null)
+                .formFilePath(FormUtils.createXFormFile("1", null).getAbsolutePath())
                 .build());
 
         instancesRepository.save(new Instance.Builder()
@@ -93,6 +99,7 @@ public class FormDeleterTest {
                 .id(1L)
                 .jrFormId("1")
                 .jrVersion(null)
+                .formFilePath(FormUtils.createXFormFile("1", null).getAbsolutePath())
                 .build());
 
         instancesRepository.save(buildInstance(1L, "1", null).build());
@@ -109,6 +116,7 @@ public class FormDeleterTest {
                 .id(1L)
                 .jrFormId("id")
                 .jrVersion("version")
+                .formFilePath(FormUtils.createXFormFile("id", "version").getAbsolutePath())
                 .build());
 
         instancesRepository.save(new Instance.Builder()
@@ -120,6 +128,7 @@ public class FormDeleterTest {
                 .id(2L)
                 .jrFormId("id")
                 .jrVersion("version")
+                .formFilePath(FormUtils.createXFormFile("id", "version").getAbsolutePath())
                 .build());
 
         formDeleter.delete(1L);

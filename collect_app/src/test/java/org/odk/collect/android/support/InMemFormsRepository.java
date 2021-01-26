@@ -89,17 +89,12 @@ public class InMemFormsRepository implements FormsRepository {
                 .date(clock.getCurrentTime())
                 .build();
 
-        String formFilePath = form.getFormFilePath();
-
-        if (formFilePath != null) {
+        // Allows tests to override hash
+        if (form.getMD5Hash() == null) {
+            String formFilePath = form.getFormFilePath();
             String hash = FileUtils.getMd5Hash(new File(formFilePath));
             form = new Form.Builder(form)
                     .md5Hash(hash)
-                    .build();
-
-        } else if (form.getMD5Hash() == null) {
-            form = new Form.Builder(form)
-                    .md5Hash(form.getId().toString())
                     .build();
         }
 
@@ -115,7 +110,9 @@ public class InMemFormsRepository implements FormsRepository {
 
             if (form.getFormFilePath() != null) {
                 new File(form.getFormFilePath()).delete();
+            }
 
+            if (form.getFormMediaPath() != null) {
                 try {
                     File mediaDir = new File(form.getFormMediaPath());
 
@@ -128,6 +125,7 @@ public class InMemFormsRepository implements FormsRepository {
                     // Ignored
                 }
             }
+
 
             forms.remove(form);
         }

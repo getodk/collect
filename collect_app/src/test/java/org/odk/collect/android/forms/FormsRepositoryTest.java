@@ -158,10 +158,21 @@ public abstract class FormsRepositoryTest {
         assertThat(formsRepository.get(1L).getMD5Hash(), equalTo(expectedHash));
     }
 
+    @Test(expected = Exception.class)
+    public void save_whenNoFormFilePath_explodes() {
+        FormsRepository formsRepository = buildSubject();
+        Form form = buildForm("id", "version", getFormFilesPath()).build();
+        form = new Form.Builder(form)
+                .formFilePath(null)
+                .build();
+
+        formsRepository.save(form);
+    }
+
     @Test
     public void delete_deletesFiles() {
         FormsRepository formsRepository = buildSubject();
-        Form form = buildForm(1L, "id", "version", getFormFilesPath()).build();
+        Form form = buildForm("id", "version", getFormFilesPath()).build();
         formsRepository.save(form);
 
         // FormRepository currently doesn't manage media file path other than deleting it
@@ -177,7 +188,7 @@ public abstract class FormsRepositoryTest {
     @Test
     public void delete_whenMediaPathIsFile_deletesFiles() throws Exception {
         FormsRepository formsRepository = buildSubject();
-        Form form = buildForm(1L, "id", "version", getFormFilesPath()).build();
+        Form form = buildForm("id", "version", getFormFilesPath()).build();
         formsRepository.save(form);
 
         // FormRepository currently doesn't manage media file path other than deleting it

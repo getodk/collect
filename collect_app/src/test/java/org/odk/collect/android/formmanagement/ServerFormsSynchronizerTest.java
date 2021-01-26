@@ -6,6 +6,7 @@ import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.android.support.FormUtils;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.android.support.InMemInstancesRepository;
 
@@ -58,6 +59,7 @@ public class ServerFormsSynchronizerTest {
                 .id(3L)
                 .jrFormId("form-3")
                 .md5Hash("form-3-hash")
+                .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
                 .build());
 
         when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(asList(

@@ -12,6 +12,7 @@ import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.forms.ManifestFile;
 import org.odk.collect.android.forms.MediaFile;
+import org.odk.collect.android.support.FormUtils;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -39,7 +40,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.analytics.AnalyticsEvents.DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH;
 import static org.odk.collect.android.support.FormUtils.buildForm;
-import static org.odk.collect.android.support.FormUtils.createXForm;
+import static org.odk.collect.android.support.FormUtils.createXFormBody;
 import static org.odk.collect.android.utilities.FileUtils.read;
 import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
@@ -52,7 +53,7 @@ public class ServerFormDownloaderTest {
 
     @Test
     public void downloadsAndSavesForm() throws Exception {
-        String xform = createXForm("id", "version");
+        String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
                 "http://downloadUrl",
@@ -81,7 +82,7 @@ public class ServerFormDownloaderTest {
 
     @Test
     public void whenFormToDownloadIsUpdate_savesNewVersionAlongsideOldVersion() throws Exception {
-        String xform = createXForm("id", "version");
+        String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
                 "http://downloadUrl",
@@ -98,7 +99,7 @@ public class ServerFormDownloaderTest {
         ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()), mock(Analytics.class));
         downloader.downloadForm(serverFormDetails, null, null);
 
-        String xformUpdate = createXForm("id", "updated");
+        String xformUpdate = createXFormBody("id", "updated");
         ServerFormDetails serverFormDetailsUpdated = new ServerFormDetails(
                 "Form",
                 "http://downloadUpdatedUrl",
@@ -122,7 +123,7 @@ public class ServerFormDownloaderTest {
 
     @Test
     public void whenFormToDownloadIsUpdate_withSameFormIdAndVersion_savesNewVersionAlongsideOldVersion() throws Exception {
-        String xform = createXForm("id", "version");
+        String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
                 "http://downloadUrl",
@@ -139,7 +140,7 @@ public class ServerFormDownloaderTest {
         ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()), mock(Analytics.class));
         downloader.downloadForm(serverFormDetails, null, null);
 
-        String xformUpdate = createXForm("id", "version", "A different title");
+        String xformUpdate = FormUtils.createXFormBody("id", "version", "A different title");
         ServerFormDetails serverFormDetailsUpdated = new ServerFormDetails(
                 "Form",
                 "http://downloadUrl",
@@ -163,7 +164,7 @@ public class ServerFormDownloaderTest {
 
     @Test
     public void whenFormHasMediaFiles_downloadsAndSavesFormAndMediaFiles() throws Exception {
-        String xform = createXForm("id", "version");
+        String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
                 "http://downloadUrl",
@@ -209,7 +210,7 @@ public class ServerFormDownloaderTest {
      */
     @Test
     public void whenFormHasMediaFiles_downloadsAndSavesFormAndMediaFiles_beforeParsingForm() throws Exception {
-        String xform = createXForm("id", "version");
+        String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
                 "http://downloadUrl",
@@ -245,7 +246,7 @@ public class ServerFormDownloaderTest {
 
     @Test
     public void whenFormHasMediaFiles_andFetchingMediaFileFails_throwsFormDownloadExceptionAndDoesNotSaveAnything() throws Exception {
-        String xform = createXForm("id", "version");
+        String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
                 "http://downloadUrl",
@@ -276,7 +277,7 @@ public class ServerFormDownloaderTest {
 
     @Test
     public void whenFormHasMediaFiles_andWritingMediaFilesFails_throwsFormDownloadExceptionAndDoesNotSaveAnything() throws Exception {
-        String xform = createXForm("id", "version");
+        String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
                 "http://downloadUrl",
@@ -310,7 +311,7 @@ public class ServerFormDownloaderTest {
 
     @Test
     public void beforeDownloadingEachMediaFile_reportsProgress() throws Exception {
-        String xform = createXForm("id", "version");
+        String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
                 "http://downloadUrl",
@@ -339,8 +340,7 @@ public class ServerFormDownloaderTest {
     //region Undelete on re-download
     @Test
     public void whenFormIsSoftDeleted_unDeletesForm() throws Exception {
-        String xform = createXForm("deleted-form", "version");
-
+        String xform = createXFormBody("deleted-form", "version");
         Form form = buildForm("deleted-form", "version", getFormFilesPath(), xform)
                 .deleted(true)
                 .build();
@@ -366,13 +366,13 @@ public class ServerFormDownloaderTest {
 
     @Test
     public void whenMultipleFormsWithSameFormIdVersionDeleted_reDownloadUnDeletesFormWithSameHash() throws Exception {
-        String xform = createXForm("deleted-form", "version", "A title");
+        String xform = FormUtils.createXFormBody("deleted-form", "version", "A title");
         Form form = buildForm("deleted-form", "version", getFormFilesPath(), xform)
                 .deleted(true)
                 .build();
         formsRepository.save(form);
 
-        String xform2 = createXForm("deleted-form", "version", "A different title");
+        String xform2 = FormUtils.createXFormBody("deleted-form", "version", "A different title");
         Form form2 = buildForm("deleted-form", "version", getFormFilesPath(), xform2)
                 .deleted(true)
                 .build();
@@ -401,11 +401,11 @@ public class ServerFormDownloaderTest {
     //region Form update analytics
     @Test
     public void whenDownloadingFormWithVersion_andId_butNotHashOnDevice_logsAnalytics() throws Exception {
-        String xform = createXForm("form", "version", "A title");
+        String xform = FormUtils.createXFormBody("form", "version", "A title");
         Form form = buildForm("form", "version", getFormFilesPath(), xform).build();
         formsRepository.save(form);
 
-        String xform2 = createXForm("form2", "version", "A different title");
+        String xform2 = FormUtils.createXFormBody("form2", "version", "A different title");
         Form form2 = buildForm("form", "version", getFormFilesPath(), xform2).build();
 
         ServerFormDetails serverFormDetails = new ServerFormDetails(
@@ -433,11 +433,11 @@ public class ServerFormDownloaderTest {
 
     @Test
     public void whenDownloadingFormWithVersion_andId_andHashOnDevice_doesNotLogAnalytics() throws Exception {
-        String xform = createXForm("form", "version", "A title");
+        String xform = FormUtils.createXFormBody("form", "version", "A title");
         Form form = buildForm("form", "version", getFormFilesPath(), xform).build();
         formsRepository.save(form);
 
-        String xform2 = createXForm("form2", "version", "A different title");
+        String xform2 = FormUtils.createXFormBody("form2", "version", "A different title");
         Form form2 = buildForm("form", "version", getFormFilesPath(), xform2).build();
         formsRepository.save(form2);
 
@@ -462,11 +462,11 @@ public class ServerFormDownloaderTest {
 
     @Test
     public void whenDownloadingCentralDraftWithVersion_andId_butNotHashOnDevice_doesNotLogAnalytics() throws Exception {
-        String xform = createXForm("form", "version", "A title");
+        String xform = FormUtils.createXFormBody("form", "version", "A title");
         Form form = buildForm("form", "version", getFormFilesPath(), xform).build();
         formsRepository.save(form);
 
-        String xform2 = createXForm("form2", "version", "A different title");
+        String xform2 = FormUtils.createXFormBody("form2", "version", "A different title");
         Form form2 = buildForm("form", "version", getFormFilesPath(), xform2).build();
 
         ServerFormDetails serverFormDetails = new ServerFormDetails(
@@ -492,7 +492,7 @@ public class ServerFormDownloaderTest {
 
     @Test
     public void whenFormAlreadyDownloaded_formRemainsOnDevice() throws Exception {
-        String xform = createXForm("id", "version");
+        String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
                 "http://downloadUrl",
@@ -534,7 +534,7 @@ public class ServerFormDownloaderTest {
 
     @Test
     public void whenFormAlreadyDownloaded_andFormHasNewMediaFiles_andMediaFetchFails_throwsFormDownloadException() throws Exception {
-        String xform = createXForm("id", "version");
+        String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
                 "http://downloadUrl",
@@ -588,7 +588,7 @@ public class ServerFormDownloaderTest {
 
     @Test
     public void afterDownloadingXForm_cancelling_throwsInterruptedExceptionAndDoesNotSaveAnything() throws Exception {
-        String xform = createXForm("id", "version");
+        String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
                 "http://downloadUrl",
@@ -614,7 +614,7 @@ public class ServerFormDownloaderTest {
 
     @Test
     public void afterDownloadingMediaFile_cancelling_throwsInterruptedExceptionAndDoesNotSaveAnything() throws Exception {
-        String xform = createXForm("id", "version");
+        String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
                 "http://downloadUrl",
