@@ -19,7 +19,6 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
@@ -29,20 +28,16 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.javarosa.core.model.data.StringData;
-import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.ActivityAvailability;
+import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
-
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -94,8 +89,6 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  */
 @SuppressLint("ViewConstructor")
 public class ExStringWidget extends StringWidget implements WidgetDataReceiver, ButtonClickListener {
-    // If an extra with this key is specified, it will be parsed as a URI and used as intent data
-    private static final String URI_KEY = "uri_data";
     protected static final String DATA_NAME = "value";
     private final WaitingForDataRegistry waitingForDataRegistry;
 
@@ -185,57 +178,17 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
 
     @Override
     public void onButtonClick(int buttonId) {
-        String exSpec = getFormEntryPrompt().getAppearanceHint().replaceFirst("^ex[:]", "");
-        final String intentName = ExternalAppsUtils.extractIntentName(exSpec);
-        final Map<String, String> exParams = ExternalAppsUtils.extractParameters(exSpec);
-        final String errorString;
-        String v = getFormEntryPrompt().getSpecialFormQuestionText("noAppErrorString");
-        errorString = (v != null) ? v : getContext().getString(R.string.no_app);
-
-        Intent i = new Intent(intentName);
-
-        // Use special "uri_data" key to set intent data. This must be done before checking if an
-        // activity is available to handle implicit intents.
-        if (exParams.containsKey(URI_KEY)) {
-            try {
-                String uriValue = (String) ExternalAppsUtils.getValueRepresentedBy(exParams.get(URI_KEY),
-                            getFormEntryPrompt().getIndex().getReference());
-                i.setData(Uri.parse(uriValue));
-                exParams.remove(URI_KEY);
-            } catch (XPathSyntaxException e) {
-                Timber.d(e);
-                onException(e.getMessage());
+        waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
+        try {
+            Intent intent = new ExternalAppIntentProvider().provideIntentToRunExternalApp(getContext(), getFormEntryPrompt(), activityAvailability);
+            // ACTION_SENDTO used for sending text messages or emails doesn't require any results
+            if (ACTION_SENDTO.equals(intent.getAction())) {
+                getContext().startActivity(intent);
+            } else {
+                fireActivity(intent);
             }
-        }
-
-        if (!activityAvailability.isActivityAvailable(i)) {
-            Intent launchIntent = Collect.getInstance().getPackageManager().getLaunchIntentForPackage(intentName);
-
-            if (launchIntent != null) {
-                // Make sure FLAG_ACTIVITY_NEW_TASK is not set because it doesn't work with startActivityForResult
-                launchIntent.setFlags(0);
-                i = launchIntent;
-            }
-        }
-
-        if (activityAvailability.isActivityAvailable(i)) {
-            try {
-                ExternalAppsUtils.populateParameters(i, exParams,
-                        getFormEntryPrompt().getIndex().getReference());
-
-                waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-                // ACTION_SENDTO used for sending text messages or emails doesn't require any results
-                if (ACTION_SENDTO.equals(i.getAction())) {
-                    getContext().startActivity(i);
-                } else {
-                    fireActivity(i);
-                }
-            } catch (ExternalParamsException | ActivityNotFoundException e) {
-                Timber.d(e);
-                onException(e.getMessage());
-            }
-        } else {
-            onException(errorString);
+        } catch (Exception | Error e) {
+            onException(e.getMessage());
         }
     }
 
