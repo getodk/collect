@@ -44,7 +44,7 @@ public class WidgetFactoryTest {
                 .withAppearance("something miNimal something")
                 .build();
 
-        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt);
+        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt, null);
         assertThat(widget, instanceOf(SelectOneMinimalWidget.class));
     }
 
@@ -55,7 +55,7 @@ public class WidgetFactoryTest {
                 .withAppearance("something lIkErt something")
                 .build();
 
-        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt);
+        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt, null);
         assertThat(widget, instanceOf(LikertWidget.class));
     }
 
@@ -66,7 +66,7 @@ public class WidgetFactoryTest {
                 .withAppearance("something LisT-nOLabeL something")
                 .build();
 
-        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt);
+        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt, null);
         assertThat(widget, instanceOf(ListWidget.class));
         assertThat(((ListWidget) widget).shouldDisplayLabel(), is(false));
     }
@@ -78,7 +78,7 @@ public class WidgetFactoryTest {
                 .withAppearance("something LisT something")
                 .build();
 
-        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt);
+        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt, null);
         assertThat(widget, instanceOf(ListWidget.class));
         assertThat(((ListWidget) widget).shouldDisplayLabel(), is(true));
     }
@@ -90,7 +90,7 @@ public class WidgetFactoryTest {
                 .withAppearance("something lAbeL something")
                 .build();
 
-        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt);
+        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt, null);
         assertThat(widget, instanceOf(LabelWidget.class));
     }
 
@@ -101,7 +101,7 @@ public class WidgetFactoryTest {
                 .withAppearance("something imaGe-Map something")
                 .build();
 
-        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt);
+        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt, null);
         assertThat(widget, instanceOf(SelectOneImageMapWidget.class));
     }
 
@@ -112,7 +112,7 @@ public class WidgetFactoryTest {
                 .withAppearance("")
                 .build();
 
-        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt);
+        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt, null);
         assertThat(widget, instanceOf(SelectOneWidget.class));
 
         prompt = new MockFormEntryPromptBuilder()
@@ -120,7 +120,7 @@ public class WidgetFactoryTest {
                 .withAppearance("lorem ipsum")
                 .build();
 
-        widget = widgetFactory.createWidgetFromPrompt(prompt);
+        widget = widgetFactory.createWidgetFromPrompt(prompt, null);
         assertThat(widget, instanceOf(SelectOneWidget.class));
     }
 
@@ -131,7 +131,7 @@ public class WidgetFactoryTest {
                 .withAppearance("something miNimal something")
                 .build();
 
-        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt);
+        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt, null);
         assertThat(widget, instanceOf(SelectMultiMinimalWidget.class));
     }
 
@@ -142,7 +142,7 @@ public class WidgetFactoryTest {
                 .withAppearance("something LisT-nOLabeL something")
                 .build();
 
-        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt);
+        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt, null);
         assertThat(widget, instanceOf(ListMultiWidget.class));
         assertThat(((ListMultiWidget) widget).shouldDisplayLabel(), is(false));
     }
@@ -154,7 +154,7 @@ public class WidgetFactoryTest {
                 .withAppearance("something LisT something")
                 .build();
 
-        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt);
+        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt, null);
         assertThat(widget, instanceOf(ListMultiWidget.class));
         assertThat(((ListMultiWidget) widget).shouldDisplayLabel(), is(true));
     }
@@ -166,7 +166,7 @@ public class WidgetFactoryTest {
                 .withAppearance("something lAbeL something")
                 .build();
 
-        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt);
+        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt, null);
         assertThat(widget, instanceOf(LabelWidget.class));
     }
 
@@ -177,7 +177,7 @@ public class WidgetFactoryTest {
                 .withAppearance("something imaGe-Map something")
                 .build();
 
-        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt);
+        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt, null);
         assertThat(widget, instanceOf(SelectMultiImageMapWidget.class));
     }
 
@@ -188,7 +188,7 @@ public class WidgetFactoryTest {
                 .withAppearance("")
                 .build();
 
-        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt);
+        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt, null);
         assertThat(widget, instanceOf(SelectMultiWidget.class));
 
         prompt = new MockFormEntryPromptBuilder()
@@ -196,7 +196,7 @@ public class WidgetFactoryTest {
                 .withAppearance("lorem ipsum")
                 .build();
 
-        widget = widgetFactory.createWidgetFromPrompt(prompt);
+        widget = widgetFactory.createWidgetFromPrompt(prompt, null);
         assertThat(widget, instanceOf(SelectMultiWidget.class));
     }
 }
