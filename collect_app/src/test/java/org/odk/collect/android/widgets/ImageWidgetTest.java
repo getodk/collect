@@ -13,7 +13,6 @@ import net.bytebuddy.utility.RandomString;
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
@@ -35,10 +34,6 @@ import static org.odk.collect.android.support.CollectHelpers.setupFakeReferenceM
  * @author James Knight
  */
 public class ImageWidgetTest extends FileWidgetTest<ImageWidget> {
-
-    @Mock
-    File file;
-
     private String fileName;
 
     @NonNull
@@ -54,22 +49,10 @@ public class ImageWidgetTest extends FileWidgetTest<ImageWidget> {
         return new StringData(fileName);
     }
 
-    @Override
-    public Object createBinaryData(StringData answerData) {
-        return file;
-    }
-
     @Before
     public void setUp() throws Exception {
         super.setUp();
         fileName = RandomString.make();
-    }
-
-    @Override
-    protected void prepareAnswerFile() {
-
-        when(file.exists()).thenReturn(true);
-        when(file.getName()).thenReturn(fileName);
     }
 
     @Test

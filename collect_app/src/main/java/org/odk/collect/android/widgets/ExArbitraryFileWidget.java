@@ -21,8 +21,6 @@ import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
-import java.io.File;
-
 import timber.log.Timber;
 
 @SuppressLint("ViewConstructor")
@@ -43,19 +41,19 @@ public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = ExArbitraryFileWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
-        fileName = prompt.getAnswerText();
+        setupAnswerFile(prompt.getAnswerText());
 
         if (prompt.isReadOnly()) {
             binding.exArbitraryFileButton.setVisibility(GONE);
         } else {
             binding.exArbitraryFileButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
             binding.exArbitraryFileButton.setOnClickListener(v -> onButtonClick());
-            binding.exArbitraryFileAnswerText.setOnClickListener(v -> mediaUtils.openFile(getContext(), new File(getInstanceFolder() + File.separator + fileName), null));
+            binding.exArbitraryFileAnswerText.setOnClickListener(v -> mediaUtils.openFile(getContext(), answerFile, null));
         }
 
-        if (fileName != null && !fileName.isEmpty()) {
+        if (answerFile != null) {
             binding.exArbitraryFileAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-            binding.exArbitraryFileAnswerText.setText(fileName);
+            binding.exArbitraryFileAnswerText.setText(answerFile.getName());
             binding.exArbitraryFileAnswerText.setVisibility(VISIBLE);
         }
 
@@ -77,7 +75,7 @@ public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
 
     @Override
     protected void showAnswerText() {
-        binding.exArbitraryFileAnswerText.setText(fileName);
+        binding.exArbitraryFileAnswerText.setText(answerFile.getName());
         binding.exArbitraryFileAnswerText.setVisibility(VISIBLE);
     }
 

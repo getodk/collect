@@ -34,8 +34,6 @@ import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
-import java.io.File;
-
 @SuppressLint("ViewConstructor")
 public class ArbitraryFileWidget extends BaseArbitraryFileWidget implements FileWidget, WidgetDataReceiver {
     ArbitraryFileWidgetAnswerBinding binding;
@@ -44,10 +42,6 @@ public class ArbitraryFileWidget extends BaseArbitraryFileWidget implements File
     private final MediaUtils mediaUtils;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
-
-    public ArbitraryFileWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
-        this(context, prompt, new MediaUtils(), questionMediaManager, waitingForDataRegistry);
-    }
 
     ArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull MediaUtils mediaUtils,
                         QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
@@ -59,19 +53,19 @@ public class ArbitraryFileWidget extends BaseArbitraryFileWidget implements File
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = ArbitraryFileWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
-        fileName = prompt.getAnswerText();
+        setupAnswerFile(prompt.getAnswerText());
 
         if (prompt.isReadOnly()) {
             binding.arbitraryFileButton.setVisibility(GONE);
         } else {
             binding.arbitraryFileButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
             binding.arbitraryFileButton.setOnClickListener(v -> onButtonClick());
-            binding.arbitraryFileAnswerText.setOnClickListener(v -> mediaUtils.openFile(getContext(), new File(getInstanceFolder() + File.separator + fileName), null));
+            binding.arbitraryFileAnswerText.setOnClickListener(v -> mediaUtils.openFile(getContext(), answerFile, null));
         }
 
-        if (fileName != null && !fileName.isEmpty()) {
+        if (answerFile != null) {
             binding.arbitraryFileAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-            binding.arbitraryFileAnswerText.setText(fileName);
+            binding.arbitraryFileAnswerText.setText(answerFile.getName());
             binding.arbitraryFileAnswerText.setVisibility(VISIBLE);
         }
 
@@ -98,7 +92,7 @@ public class ArbitraryFileWidget extends BaseArbitraryFileWidget implements File
 
     @Override
     protected void showAnswerText() {
-        binding.arbitraryFileAnswerText.setText(fileName);
+        binding.arbitraryFileAnswerText.setText(answerFile.getName());
         binding.arbitraryFileAnswerText.setVisibility(VISIBLE);
     }
 }

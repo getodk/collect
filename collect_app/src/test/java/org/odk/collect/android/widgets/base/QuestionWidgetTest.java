@@ -130,6 +130,8 @@ public abstract class QuestionWidgetTest<W extends Widget, A extends IAnswerData
 
     @Test
     public void callingClearShouldCallValueChangeListeners() {
+        when(formEntryPrompt.getAnswerText()).thenReturn(getInitialAnswer().getDisplayText());
+
         QuestionWidget widget = (QuestionWidget) getSpyWidget();
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.clearAnswer();

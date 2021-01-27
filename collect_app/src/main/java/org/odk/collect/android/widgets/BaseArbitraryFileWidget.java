@@ -24,7 +24,7 @@ public abstract class BaseArbitraryFileWidget extends QuestionWidget implements 
     private final QuestionMediaManager questionMediaManager;
     protected final WaitingForDataRegistry waitingForDataRegistry;
 
-    protected String fileName;
+    protected File answerFile;
 
     public BaseArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull MediaUtils mediaUtils,
                                    QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
@@ -36,34 +36,39 @@ public abstract class BaseArbitraryFileWidget extends QuestionWidget implements 
 
     @Override
     public IAnswerData getAnswer() {
-        return fileName != null ? new StringData(fileName) : null;
+        return answerFile != null ? new StringData(answerFile.getName()) : null;
     }
 
     @Override
     public void deleteFile() {
-        questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
-                getInstanceFolder() + File.separator + fileName);
-        fileName = null;
+        questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(), answerFile.getAbsolutePath());
+        answerFile = null;
     }
 
     @Override
     public void setData(Object object) {
-        if (fileName != null) {
+        if (answerFile != null) {
             deleteFile();
         }
 
         if (object instanceof File) {
-            File newFile = (File) object;
-            if (newFile.exists()) {
-                questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newFile.getAbsolutePath());
-                fileName = newFile.getName();
+            answerFile = (File) object;
+            if (answerFile.exists()) {
+                questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), answerFile.getAbsolutePath());
                 showAnswerText();
                 widgetValueChanged();
             } else {
+                answerFile = null;
                 Timber.e("Inserting Arbitrary file FAILED");
             }
         } else {
             Timber.e("FileWidget's setBinaryData must receive a File or Uri object.");
+        }
+    }
+
+    protected void setupAnswerFile(String fileName) {
+        if (fileName != null && !fileName.isEmpty()) {
+            answerFile = new File(getInstanceFolder() + File.separator + fileName);
         }
     }
 

@@ -184,7 +184,7 @@ public class WidgetFactory {
                 if (appearance.startsWith(WidgetAppearanceUtils.EX)) {
                     questionWidget = new ExArbitraryFileWidget(context, questionDetails, new MediaUtils(), questionMediaManager, waitingForDataRegistry, new ExternalAppIntentProvider(), activityAvailability);
                 } else {
-                    questionWidget = new ArbitraryFileWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
+                    questionWidget = new ArbitraryFileWidget(context, questionDetails, new MediaUtils(), questionMediaManager, waitingForDataRegistry);
                 }
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:

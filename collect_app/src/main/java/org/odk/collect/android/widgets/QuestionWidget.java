@@ -127,7 +127,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view), formEntryPrompt);
         setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), formEntryPrompt);
 
-        View answerView = onCreateAnswerView(context, getFormEntryPrompt(), getAnswerFontSize());
+        View answerView = onCreateAnswerView(context, questionDetails.getPrompt(), getAnswerFontSize());
         if (answerView != null) {
             addAnswerView(answerView);
         }
