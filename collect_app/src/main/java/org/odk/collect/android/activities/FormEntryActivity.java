@@ -819,15 +819,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case RequestCodes.EX_STRING_CAPTURE:
             case RequestCodes.EX_INT_CAPTURE:
             case RequestCodes.EX_DECIMAL_CAPTURE:
-            case RequestCodes.EX_ARBITRARY_FILE_CHOOSER:
-                String key = "value";
-                boolean exists = intent.getExtras().containsKey(key);
-                if (exists) {
-                    Object externalValue = intent.getExtras().get(key);
-                    if (getCurrentViewIfODKView() != null) {
-                        setWidgetData(externalValue);
-                    }
+                Object externalValue = getValueFromExternalApp(intent);
+                if (getCurrentViewIfODKView() != null) {
+                    setWidgetData(externalValue);
                 }
+                break;
+            case RequestCodes.EX_ARBITRARY_FILE_CHOOSER:
+                loadFile((Uri) getValueFromExternalApp(intent));
                 break;
             case RequestCodes.EX_GROUP_CAPTURE:
                 try {
@@ -893,6 +891,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             }
         });
+    }
+
+    @Nullable
+    private Object getValueFromExternalApp(Intent intent) {
+        return intent.getExtras().containsKey("value")
+                ? intent.getExtras().get("value")
+                : null;
     }
 
     public QuestionWidget getWidgetWaitingForBinaryData() {
