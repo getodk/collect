@@ -43,16 +43,17 @@ public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
         binding = ExArbitraryFileWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         setupAnswerFile(prompt.getAnswerText());
 
+        binding.exArbitraryFileButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.exArbitraryFileAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+
         if (prompt.isReadOnly()) {
             binding.exArbitraryFileButton.setVisibility(GONE);
         } else {
-            binding.exArbitraryFileButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
             binding.exArbitraryFileButton.setOnClickListener(v -> onButtonClick());
             binding.exArbitraryFileAnswerText.setOnClickListener(v -> mediaUtils.openFile(getContext(), answerFile, null));
         }
 
         if (answerFile != null) {
-            binding.exArbitraryFileAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
             binding.exArbitraryFileAnswerText.setText(answerFile.getName());
             binding.exArbitraryFileAnswerText.setVisibility(VISIBLE);
         }

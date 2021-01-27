@@ -55,16 +55,17 @@ public class ArbitraryFileWidget extends BaseArbitraryFileWidget implements File
         binding = ArbitraryFileWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         setupAnswerFile(prompt.getAnswerText());
 
+        binding.arbitraryFileButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.arbitraryFileAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+
         if (prompt.isReadOnly()) {
             binding.arbitraryFileButton.setVisibility(GONE);
         } else {
-            binding.arbitraryFileButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
             binding.arbitraryFileButton.setOnClickListener(v -> onButtonClick());
             binding.arbitraryFileAnswerText.setOnClickListener(v -> mediaUtils.openFile(getContext(), answerFile, null));
         }
 
         if (answerFile != null) {
-            binding.arbitraryFileAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
             binding.arbitraryFileAnswerText.setText(answerFile.getName());
             binding.arbitraryFileAnswerText.setVisibility(VISIBLE);
         }
