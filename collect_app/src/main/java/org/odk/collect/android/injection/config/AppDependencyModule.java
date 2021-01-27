@@ -17,14 +17,13 @@ import androidx.work.WorkManager;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.javarosa.core.reference.ReferenceManager;
+import org.odk.collect.analytics.Analytics;
+import org.odk.collect.analytics.BlockableFirebaseAnalytics;
+import org.odk.collect.analytics.NoopAnalytics;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.analytics.Analytics;
-import org.odk.collect.android.analytics.BlockableFirebaseAnalytics;
-import org.odk.collect.android.analytics.NoopAnalytics;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CollectSettingsPreferenceMigrator;
@@ -194,9 +193,7 @@ public class AppDependencyModule {
     @Singleton
     public Analytics providesAnalytics(Application application) {
         try {
-            com.google.firebase.analytics.FirebaseAnalytics firebaseAnalyticsInstance = com.google.firebase.analytics.FirebaseAnalytics.getInstance(application);
-            FirebaseCrashlytics crashlyticsInstance = FirebaseCrashlytics.getInstance();
-            return new BlockableFirebaseAnalytics(firebaseAnalyticsInstance, crashlyticsInstance, BuildConfig.ANALYTICS_ENABLED);
+            return new BlockableFirebaseAnalytics(application, BuildConfig.ANALYTICS_ENABLED);
         } catch (IllegalStateException e) {
             // Couldn't setup Firebase so use no-op instance
             return new NoopAnalytics();

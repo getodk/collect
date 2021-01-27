@@ -1,4 +1,4 @@
-package org.odk.collect.android.analytics;
+package org.odk.collect.analytics;
 
 public class NoopAnalytics implements Analytics {
 

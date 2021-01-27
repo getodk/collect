@@ -1,3 +1,4 @@
+include ':analytics'
 include ':shared'
 include ':audiorecorder'
 include ':testshared'

@@ -2,7 +2,7 @@ package org.odk.collect.android.activities.viewmodels;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 
 import java.util.HashMap;

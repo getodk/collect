@@ -1,7 +1,7 @@
 package org.odk.collect.android.application;
 
 import org.junit.Test;
-import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.backgroundwork.FormUpdateManager;
 import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.logic.PropertyManager;

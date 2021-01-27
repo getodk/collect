@@ -331,6 +331,7 @@ dependencies {
     implementation project(':strings')
     implementation project(':material')
     implementation project(':async')
+    implementation project(':analytics')
     implementation project(':audioclips')
     implementation project(path: ':audiorecorder')
 

@@ -2,7 +2,7 @@ package org.odk.collect.android.application.initialization;
 
 import android.util.Log;
 
-import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.analytics.Analytics;
 
 import timber.log.Timber;
 

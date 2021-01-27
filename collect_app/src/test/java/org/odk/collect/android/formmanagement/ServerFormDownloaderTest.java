@@ -4,7 +4,7 @@ import com.google.common.io.Files;
 
 import org.javarosa.core.reference.ReferenceManager;
 import org.junit.Test;
-import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormListItem;
 import org.odk.collect.android.forms.FormSource;

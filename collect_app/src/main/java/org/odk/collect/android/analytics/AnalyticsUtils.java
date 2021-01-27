@@ -1,5 +1,6 @@
 package org.odk.collect.android.analytics;
 
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.forms.FormSourceException;
 
 import static java.lang.String.format;

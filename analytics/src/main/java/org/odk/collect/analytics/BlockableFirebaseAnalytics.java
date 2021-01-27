@@ -1,5 +1,6 @@
-package org.odk.collect.android.analytics;
+package org.odk.collect.analytics;
 
+import android.app.Application;
 import android.os.Bundle;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -10,9 +11,9 @@ public class BlockableFirebaseAnalytics implements Analytics {
     private final FirebaseCrashlytics crashlytics;
     private final boolean analyticsAllowed;
 
-    public BlockableFirebaseAnalytics(com.google.firebase.analytics.FirebaseAnalytics firebaseAnalytics, FirebaseCrashlytics crashlytics, boolean analyticsAllowed) {
-        this.firebaseAnalytics = firebaseAnalytics;
-        this.crashlytics = crashlytics;
+    public BlockableFirebaseAnalytics(Application application, boolean analyticsAllowed) {
+        this.firebaseAnalytics = com.google.firebase.analytics.FirebaseAnalytics.getInstance(application);
+        this.crashlytics = FirebaseCrashlytics.getInstance();
         this.analyticsAllowed = analyticsAllowed;
 
         if (!analyticsAllowed) {
