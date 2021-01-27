@@ -118,6 +118,47 @@ public class ServerFormDownloaderTest {
     }
 
     @Test
+    public void whenFormToDownloadIsUpdate_withSameFormIdAndVersion_savesNewVersionAlongsideOldVersion() throws Exception {
+        String xform = createXForm("id", "version");
+        ServerFormDetails serverFormDetails = new ServerFormDetails(
+                "Form",
+                "http://downloadUrl",
+                "id",
+                "version",
+                "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
+                true,
+                false,
+                null);
+
+        FormSource formSource = mock(FormSource.class);
+        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
+
+        ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()), mock(Analytics.class));
+        downloader.downloadForm(serverFormDetails, null, null);
+
+        String xformUpdate = createXForm("id", "version", "A different title");
+        ServerFormDetails serverFormDetailsUpdated = new ServerFormDetails(
+                "Form",
+                "http://downloadUrl",
+                "id",
+                "version",
+                "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xformUpdate.getBytes())),
+                true,
+                false,
+                null);
+
+        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xformUpdate.getBytes()));
+        downloader.downloadForm(serverFormDetailsUpdated, null, null);
+
+        List<Form> allForms = formsRepository.getAllByFormIdAndVersion("id", "version");
+        assertThat(allForms.size(), is(2));
+        allForms.forEach(f -> {
+            File formFile = new File(getAbsoluteFilePath(formsDir.getAbsolutePath(), f.getFormFilePath()));
+            assertThat(formFile.exists(), is(true));
+        });
+    }
+
+    @Test
     public void whenFormHasMediaFiles_downloadsAndSavesFormAndMediaFiles() throws Exception {
         String xform = createXForm("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
@@ -282,6 +323,39 @@ public class ServerFormDownloaderTest {
         ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()), mock(Analytics.class));
         downloader.downloadForm(serverFormDetails, null, null);
         assertThat(formsRepository.get(1L).isDeleted(), is(false));
+    }
+
+    @Test
+    public void whenMultipleFormsWithSameFormIdVersionDeleted_unDeletesFormWithSameHash() throws Exception {
+        String xform = createXForm("deleted-form", "version", "A title");
+        Form form = buildForm("deleted-form", "version", getFormFilesPath(), xform)
+                .deleted(true)
+                .build();
+        formsRepository.save(form);
+
+        String xform2 = createXForm("deleted-form", "version", "A different title");
+        Form form2 = buildForm("deleted-form", "version", getFormFilesPath(), xform2)
+                .deleted(true)
+                .build();
+        formsRepository.save(form2);
+
+        ServerFormDetails serverFormDetails = new ServerFormDetails(
+                form.getDisplayName(),
+                "http://downloadUrl",
+                form2.getJrFormId(),
+                form2.getJrVersion(),
+                "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform2.getBytes())),
+                true,
+                false,
+                null);
+
+        FormSource formSource = mock(FormSource.class);
+        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform2.getBytes()));
+
+        ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()), mock(Analytics.class));
+        downloader.downloadForm(serverFormDetails, null, null);
+        assertThat(formsRepository.get(1L).isDeleted(), is(true));
+        assertThat(formsRepository.get(2L).isDeleted(), is(false));
     }
 
     @Test
