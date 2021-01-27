@@ -24,6 +24,7 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.BlockableFirebaseAnalytics;
+import org.odk.collect.android.analytics.NoopAnalytics;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CollectSettingsPreferenceMigrator;
@@ -198,47 +199,7 @@ public class AppDependencyModule {
             return new BlockableFirebaseAnalytics(firebaseAnalyticsInstance, crashlyticsInstance, BuildConfig.ANALYTICS_ENABLED);
         } catch (IllegalStateException e) {
             // Couldn't setup Firebase so use no-op instance
-            return new Analytics() {
-                @Override
-                public void logEvent(String category, String action) {
-
-                }
-
-                @Override
-                public void logEvent(String category, String action, String label) {
-
-                }
-
-                @Override
-                public void logFormEvent(String event, String formIdHash) {
-
-                }
-
-                @Override
-                public void logFatal(Throwable throwable) {
-
-                }
-
-                @Override
-                public void logNonFatal(String message) {
-
-                }
-
-                @Override
-                public void logServerEvent(String event, String serverHash) {
-
-                }
-
-                @Override
-                public void setAnalyticsCollectionEnabled(boolean isAnalyticsEnabled) {
-
-                }
-
-                @Override
-                public void setUserProperty(String name, String value) {
-
-                }
-            };
+            return new NoopAnalytics();
         }
 
     }
