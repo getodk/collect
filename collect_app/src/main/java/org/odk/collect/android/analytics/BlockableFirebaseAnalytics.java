@@ -4,16 +4,16 @@ import android.os.Bundle;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
-import org.odk.collect.android.BuildConfig;
-
-public class ReleaseOnlyFirebaseAnalytics implements Analytics {
+public class BlockableFirebaseAnalytics implements Analytics {
 
     private final com.google.firebase.analytics.FirebaseAnalytics firebaseAnalytics;
     private final FirebaseCrashlytics crashlytics;
+    private final boolean analyticsAllowed;
 
-    public ReleaseOnlyFirebaseAnalytics(com.google.firebase.analytics.FirebaseAnalytics firebaseAnalytics, FirebaseCrashlytics crashlytics) {
+    public BlockableFirebaseAnalytics(com.google.firebase.analytics.FirebaseAnalytics firebaseAnalytics, FirebaseCrashlytics crashlytics, boolean analyticsAllowed) {
         this.firebaseAnalytics = firebaseAnalytics;
         this.crashlytics = crashlytics;
+        this.analyticsAllowed = analyticsAllowed;
     }
 
     @Deprecated
@@ -58,7 +58,7 @@ public class ReleaseOnlyFirebaseAnalytics implements Analytics {
     }
 
     public void setAnalyticsCollectionEnabled(boolean isAnalyticsEnabled) {
-        if (BuildConfig.BUILD_TYPE.equals("odkCollectRelease")) {
+        if (analyticsAllowed) {
             firebaseAnalytics.setAnalyticsCollectionEnabled(isAnalyticsEnabled);
             crashlytics.setCrashlyticsCollectionEnabled(isAnalyticsEnabled);
         } else {
