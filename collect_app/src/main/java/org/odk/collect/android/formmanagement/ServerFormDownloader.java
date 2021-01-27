@@ -62,12 +62,13 @@ public class ServerFormDownloader implements FormDownloader {
         if (formOnDevice != null) {
             if (formOnDevice.isDeleted()) {
                 formsRepository.restore(formOnDevice.getId());
-            } else {
-                if (!getMd5HashWithoutPrefix(form.getHash()).equals(formOnDevice.getMD5Hash()) && !form.getDownloadUrl().contains("/draft.xml")) {
-                    String formIdentifier = formOnDevice.getDisplayName() + " " + formOnDevice.getId();
-                    String formIdHash = FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
-                    analytics.logFormEvent(DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH, formIdHash);
-                }
+            }
+        } else {
+            List<Form> allSameFormIdVersion = formsRepository.getAllByFormIdAndVersion(form.getFormId(), form.getFormVersion());
+            if (!allSameFormIdVersion.isEmpty() && !form.getDownloadUrl().contains("/draft.xml")) {
+                String formIdentifier = form.getFormName() + " " + form.getFormId();
+                String formIdHash = FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
+                analytics.logFormEvent(DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH, formIdHash);
             }
         }
 

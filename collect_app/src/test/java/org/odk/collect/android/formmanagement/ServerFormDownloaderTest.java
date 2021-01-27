@@ -34,7 +34,10 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.analytics.AnalyticsEvents.DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH;
 import static org.odk.collect.android.support.FormUtils.buildForm;
 import static org.odk.collect.android.support.FormUtils.createXForm;
 import static org.odk.collect.android.utilities.FileUtils.read;
@@ -299,6 +302,7 @@ public class ServerFormDownloaderTest {
         assertThat(progressReporter.reports, contains(1, 2));
     }
 
+    //region Undelete on re-download
     @Test
     public void whenFormIsSoftDeleted_unDeletesForm() throws Exception {
         String xform = createXForm("deleted-form", "version");
@@ -341,7 +345,7 @@ public class ServerFormDownloaderTest {
         formsRepository.save(form2);
 
         ServerFormDetails serverFormDetails = new ServerFormDetails(
-                form.getDisplayName(),
+                form2.getDisplayName(),
                 "http://downloadUrl",
                 form2.getJrFormId(),
                 form2.getJrVersion(),
@@ -358,6 +362,99 @@ public class ServerFormDownloaderTest {
         assertThat(formsRepository.get(1L).isDeleted(), is(true));
         assertThat(formsRepository.get(2L).isDeleted(), is(false));
     }
+    //endregion
+
+    //region Form update analytics
+    @Test
+    public void whenDownloadingFormWithVersion_andId_butNotHashOnDevice_logsAnalytics() throws Exception {
+        String xform = createXForm("form", "version", "A title");
+        Form form = buildForm("form", "version", getFormFilesPath(), xform).build();
+        formsRepository.save(form);
+
+        String xform2 = createXForm("form2", "version", "A different title");
+        Form form2 = buildForm("form", "version", getFormFilesPath(), xform2).build();
+
+        ServerFormDetails serverFormDetails = new ServerFormDetails(
+                form2.getDisplayName(),
+                "http://downloadUrl",
+                form2.getJrFormId(),
+                form2.getJrVersion(),
+                "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform2.getBytes())),
+                true,
+                false,
+                null);
+
+        FormSource formSource = mock(FormSource.class);
+        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform2.getBytes()));
+
+        Analytics mockAnalytics = mock(Analytics.class);
+        ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()), mockAnalytics);
+        downloader.downloadForm(serverFormDetails, null, null);
+
+        String formIdentifier = form.getDisplayName() + " " + form.getJrFormId();
+        String formIdHash = FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
+
+        verify(mockAnalytics).logFormEvent(DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH, formIdHash);
+    }
+
+    @Test
+    public void whenDownloadingFormWithVersion_andId_andHashOnDevice_doesNotLogAnalytics() throws Exception {
+        String xform = createXForm("form", "version", "A title");
+        Form form = buildForm("form", "version", getFormFilesPath(), xform).build();
+        formsRepository.save(form);
+
+        String xform2 = createXForm("form2", "version", "A different title");
+        Form form2 = buildForm("form", "version", getFormFilesPath(), xform2).build();
+        formsRepository.save(form2);
+
+        ServerFormDetails serverFormDetails = new ServerFormDetails(
+                form.getDisplayName(),
+                "http://downloadUrl",
+                form.getJrFormId(),
+                form.getJrVersion(),
+                "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
+                true,
+                false,
+                null);
+
+        FormSource formSource = mock(FormSource.class);
+        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
+
+        Analytics mockAnalytics = mock(Analytics.class);
+        ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()), mockAnalytics);
+        downloader.downloadForm(serverFormDetails, null, null);
+        verifyNoInteractions(mockAnalytics);
+    }
+
+    @Test
+    public void whenDownloadingCentralDraftWithVersion_andId_butNotHashOnDevice_doesNotLogAnalytics() throws Exception {
+        String xform = createXForm("form", "version", "A title");
+        Form form = buildForm("form", "version", getFormFilesPath(), xform).build();
+        formsRepository.save(form);
+
+        String xform2 = createXForm("form2", "version", "A different title");
+        Form form2 = buildForm("form", "version", getFormFilesPath(), xform2).build();
+
+        ServerFormDetails serverFormDetails = new ServerFormDetails(
+                form2.getDisplayName(),
+                "http://downloadUrl/draft.xml",
+                form2.getJrFormId(),
+                form2.getJrVersion(),
+                "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform2.getBytes())),
+                true,
+                false,
+                null);
+
+        FormSource formSource = mock(FormSource.class);
+        when(formSource.fetchForm("http://downloadUrl/draft.xml")).thenReturn(new ByteArrayInputStream(xform2.getBytes()));
+
+        Analytics mockAnalytics = mock(Analytics.class);
+        ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()), mockAnalytics);
+        downloader.downloadForm(serverFormDetails, null, null);
+
+        verifyNoInteractions(mockAnalytics);
+    }
+    // endregion
 
     @Test
     public void whenFormAlreadyDownloaded_andFormHasNewMediaFiles_andMediaFetchFails_throwsFormDownloadException() throws Exception {
