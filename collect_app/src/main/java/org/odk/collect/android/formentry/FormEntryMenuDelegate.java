@@ -106,7 +106,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
 
             return true;
         } else if (item.getItemId() == R.id.menu_preferences) {
-            if (audioRecorderViewModel.isRecording() && !audioRecorderViewModel.getCurrentSession().getValue().getId().equals("background")) {
+            if (audioRecorderViewModel.isRecording()) {
                 DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
             } else {
                 Intent pref = new Intent(activity, PreferencesActivity.class);

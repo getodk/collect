@@ -158,22 +158,6 @@ public class FormEntryMenuDelegateTest {
     }
 
     @Test
-    public void onItemSelected_whenPreferences_whenRecordingInBackground_startsPreferencesActivityWithChangeSettingsRequest() {
-        RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
-
-        when(audioRecorderViewModel.isRecording()).thenReturn(true);
-        when(audioRecorderViewModel.getCurrentSession()).thenReturn(new MutableLiveData<>(new RecordingSession("background", null, 0, 0, false, null)));
-
-        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_preferences));
-        ShadowActivity.IntentForResult nextStartedActivity = shadowOf(activity).getNextStartedActivityForResult();
-        assertThat(nextStartedActivity, not(nullValue()));
-        assertThat(nextStartedActivity.intent.getComponent().getClassName(), is(PreferencesActivity.class.getName()));
-        assertThat(nextStartedActivity.requestCode, is(ApplicationConstants.RequestCodes.CHANGE_SETTINGS));
-    }
-
-    @Test
     public void onItemSelected_whenHierarchy_startsHierarchyActivity() {
         RoboMenu menu = new RoboMenu();
         formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
