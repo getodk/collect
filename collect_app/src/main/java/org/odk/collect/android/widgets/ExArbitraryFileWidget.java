@@ -25,8 +25,6 @@ import java.io.File;
 
 import timber.log.Timber;
 
-import static android.content.Intent.ACTION_SENDTO;
-
 @SuppressLint("ViewConstructor")
 public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
     ExArbitraryFileWidgetAnswerBinding binding;
@@ -87,12 +85,7 @@ public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
         try {
             Intent intent = externalAppIntentProvider.provideIntentToRunExternalApp(getContext(), getFormEntryPrompt(), activityAvailability);
-            // ACTION_SENDTO used for sending text messages or emails doesn't require any results
-            if (ACTION_SENDTO.equals(intent.getAction())) {
-                getContext().startActivity(intent);
-            } else {
-                fireActivityForResult(intent);
-            }
+            fireActivityForResult(intent);
         } catch (Exception | Error e) {
             ToastUtils.showLongToast(e.getMessage());
         }
