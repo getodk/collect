@@ -192,9 +192,55 @@ public class AppDependencyModule {
     @Provides
     @Singleton
     public Analytics providesAnalytics(Application application) {
-        com.google.firebase.analytics.FirebaseAnalytics firebaseAnalyticsInstance = com.google.firebase.analytics.FirebaseAnalytics.getInstance(application);
-        FirebaseCrashlytics crashlyticsInstance = FirebaseCrashlytics.getInstance();
-        return new BlockableFirebaseAnalytics(firebaseAnalyticsInstance, crashlyticsInstance, BuildConfig.ANALYTICS_ENABLED);
+        try {
+            com.google.firebase.analytics.FirebaseAnalytics firebaseAnalyticsInstance = com.google.firebase.analytics.FirebaseAnalytics.getInstance(application);
+            FirebaseCrashlytics crashlyticsInstance = FirebaseCrashlytics.getInstance();
+            return new BlockableFirebaseAnalytics(firebaseAnalyticsInstance, crashlyticsInstance, BuildConfig.ANALYTICS_ENABLED);
+        } catch (IllegalStateException e) {
+            // Couldn't setup Firebase so use no-op instance
+            return new Analytics() {
+                @Override
+                public void logEvent(String category, String action) {
+
+                }
+
+                @Override
+                public void logEvent(String category, String action, String label) {
+
+                }
+
+                @Override
+                public void logFormEvent(String event, String formIdHash) {
+
+                }
+
+                @Override
+                public void logFatal(Throwable throwable) {
+
+                }
+
+                @Override
+                public void logNonFatal(String message) {
+
+                }
+
+                @Override
+                public void logServerEvent(String event, String serverHash) {
+
+                }
+
+                @Override
+                public void setAnalyticsCollectionEnabled(boolean isAnalyticsEnabled) {
+
+                }
+
+                @Override
+                public void setUserProperty(String name, String value) {
+
+                }
+            };
+        }
+
     }
 
     @Provides
