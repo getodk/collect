@@ -301,12 +301,13 @@ public class ServerFormDownloaderTest {
 
     @Test
     public void whenFormIsSoftDeleted_unDeletesForm() throws Exception {
-        Form form = buildForm("deleted-form", "version", getFormFilesPath())
+        String xform = createXForm("deleted-form", "version");
+
+        Form form = buildForm("deleted-form", "version", getFormFilesPath(), xform)
                 .deleted(true)
                 .build();
         formsRepository.save(form);
 
-        String xform = createXForm(form.getJrFormId(), form.getJrVersion());
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 form.getDisplayName(),
                 "http://downloadUrl",
@@ -326,7 +327,7 @@ public class ServerFormDownloaderTest {
     }
 
     @Test
-    public void whenMultipleFormsWithSameFormIdVersionDeleted_unDeletesFormWithSameHash() throws Exception {
+    public void whenMultipleFormsWithSameFormIdVersionDeleted_reDownloadUnDeletesFormWithSameHash() throws Exception {
         String xform = createXForm("deleted-form", "version", "A title");
         Form form = buildForm("deleted-form", "version", getFormFilesPath(), xform)
                 .deleted(true)
