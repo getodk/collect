@@ -73,8 +73,8 @@ public class ApplicationInitializer {
     }
 
     private void initializeFrameworks() {
-        AppInitializer.getInstance(context).initializeComponent(JodaTimeInitializer.class);
         initializeLogging();
+        AppInitializer.getInstance(context).initializeComponent(JodaTimeInitializer.class);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         initializeMapFrameworks();
         initializeJavaRosa();

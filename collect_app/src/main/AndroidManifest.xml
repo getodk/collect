@@ -157,7 +157,7 @@ the specific language governing permissions and limitations under the License.
 
         <meta-data
             android:name="firebase_crashlytics_collection_enabled"
-            android:value="@bool/CRASHLYTICS_ENABLED" />
+            android:value="false" />
 
         <uses-library
             android:name="com.google.android.maps"

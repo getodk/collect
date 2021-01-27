@@ -4,12 +4,14 @@ import android.os.Bundle;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
-public class FirebaseAnalytics implements Analytics {
+import org.odk.collect.android.BuildConfig;
+
+public class ReleaseOnlyFirebaseAnalytics implements Analytics {
 
     private final com.google.firebase.analytics.FirebaseAnalytics firebaseAnalytics;
     private final FirebaseCrashlytics crashlytics;
 
-    public FirebaseAnalytics(com.google.firebase.analytics.FirebaseAnalytics firebaseAnalytics, FirebaseCrashlytics crashlytics) {
+    public ReleaseOnlyFirebaseAnalytics(com.google.firebase.analytics.FirebaseAnalytics firebaseAnalytics, FirebaseCrashlytics crashlytics) {
         this.firebaseAnalytics = firebaseAnalytics;
         this.crashlytics = crashlytics;
     }
@@ -56,8 +58,13 @@ public class FirebaseAnalytics implements Analytics {
     }
 
     public void setAnalyticsCollectionEnabled(boolean isAnalyticsEnabled) {
-        firebaseAnalytics.setAnalyticsCollectionEnabled(isAnalyticsEnabled);
-        crashlytics.setCrashlyticsCollectionEnabled(isAnalyticsEnabled);
+        if (BuildConfig.BUILD_TYPE.equals("odkCollectRelease")) {
+            firebaseAnalytics.setAnalyticsCollectionEnabled(isAnalyticsEnabled);
+            crashlytics.setCrashlyticsCollectionEnabled(isAnalyticsEnabled);
+        } else {
+            firebaseAnalytics.setAnalyticsCollectionEnabled(false);
+            crashlytics.setCrashlyticsCollectionEnabled(false);
+        }
     }
 
     @Override

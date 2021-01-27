@@ -23,7 +23,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
-import org.odk.collect.android.analytics.FirebaseAnalytics;
+import org.odk.collect.android.analytics.ReleaseOnlyFirebaseAnalytics;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CollectSettingsPreferenceMigrator;
@@ -194,7 +194,7 @@ public class AppDependencyModule {
     public Analytics providesAnalytics(Application application) {
         com.google.firebase.analytics.FirebaseAnalytics firebaseAnalyticsInstance = com.google.firebase.analytics.FirebaseAnalytics.getInstance(application);
         FirebaseCrashlytics crashlyticsInstance = FirebaseCrashlytics.getInstance();
-        return new FirebaseAnalytics(firebaseAnalyticsInstance, crashlyticsInstance);
+        return new ReleaseOnlyFirebaseAnalytics(firebaseAnalyticsInstance, crashlyticsInstance);
     }
 
     @Provides
