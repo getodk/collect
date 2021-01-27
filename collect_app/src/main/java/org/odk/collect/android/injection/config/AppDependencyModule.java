@@ -194,7 +194,7 @@ public class AppDependencyModule {
     public Analytics providesAnalytics(Application application) {
         com.google.firebase.analytics.FirebaseAnalytics firebaseAnalyticsInstance = com.google.firebase.analytics.FirebaseAnalytics.getInstance(application);
         FirebaseCrashlytics crashlyticsInstance = FirebaseCrashlytics.getInstance();
-        return new BlockableFirebaseAnalytics(firebaseAnalyticsInstance, crashlyticsInstance, BuildConfig.BUILD_TYPE.equals("odkCollectRelease"));
+        return new BlockableFirebaseAnalytics(firebaseAnalyticsInstance, crashlyticsInstance, BuildConfig.ANALYTICS_ENABLED);
     }
 
     @Provides
