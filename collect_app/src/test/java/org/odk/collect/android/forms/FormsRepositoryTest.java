@@ -2,6 +2,7 @@ package org.odk.collect.android.forms;
 
 import org.junit.Test;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.utilities.Clock;
 
 import java.io.File;
 import java.util.List;
@@ -11,11 +12,15 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.FormUtils.buildForm;
 
 public abstract class FormsRepositoryTest {
 
     public abstract FormsRepository buildSubject();
+
+    public abstract FormsRepository buildSubject(Clock clock);
 
     public abstract String getFormFilesPath();
 
@@ -31,20 +36,18 @@ public abstract class FormsRepositoryTest {
     }
 
     @Test
-    public void getLatestByFormIdAndVersion_whenMultipleExist_returnsLatest() throws InterruptedException {
-        FormsRepository formsRepository = buildSubject();
+    public void getLatestByFormIdAndVersion_whenMultipleExist_returnsLatest() {
+        FormsRepository formsRepository = buildSubject(getMockClock());
         formsRepository.save(buildForm("1", "1", getFormFilesPath())
                 .build());
-        Thread.sleep(2); // ensure that the in-memory inserts don't all get the same timestamp
         formsRepository.save(buildForm("1", "1", getFormFilesPath())
                 .build());
-        Thread.sleep(2); // ensure that the in-memory inserts don't all get the same timestamp
         formsRepository.save(buildForm("1", "1", getFormFilesPath())
                 .build());
 
         Form form = formsRepository.getLatestByFormIdAndVersion("1", "1");
         assertThat(form, notNullValue());
-        assertThat(form.getId(), is(3L));
+        assertThat(form.getId(), is(2L));
     }
 
     @Test
@@ -149,5 +152,11 @@ public abstract class FormsRepositoryTest {
 
         String expectedHash = FileUtils.getMd5Hash(new File(form.getFormFilePath()));
         assertThat(formsRepository.get(1L).getMD5Hash(), equalTo(expectedHash));
+    }
+
+    public Clock getMockClock() {
+        Clock mockClock = mock(Clock.class);
+        when(mockClock.getCurrentTime()).thenReturn(2L, 3L, 1L);
+        return mockClock;
     }
 }

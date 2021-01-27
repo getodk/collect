@@ -5,6 +5,7 @@ import android.net.Uri;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.utilities.Clock;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -20,6 +21,16 @@ public class InMemFormsRepository implements FormsRepository {
 
     private final List<Form> forms = new ArrayList<>();
     private long idCounter = 1L;
+
+    private final Clock clock;
+
+    public InMemFormsRepository() {
+        this.clock = System::currentTimeMillis;
+    }
+
+    public InMemFormsRepository(Clock clock) {
+        this.clock = clock;
+    }
 
     @Nullable
     @Override
@@ -74,7 +85,7 @@ public class InMemFormsRepository implements FormsRepository {
     public Uri save(Form form) {
         form = new Form.Builder(form)
                 .id(idCounter++)
-                .date(System.currentTimeMillis())
+                .date(clock.getCurrentTime())
                 .build();
 
         String formFilePath = form.getFormFilePath();

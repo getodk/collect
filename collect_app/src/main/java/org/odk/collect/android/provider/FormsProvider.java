@@ -28,8 +28,8 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 
 import org.odk.collect.android.database.FormDatabaseMigrator;
-import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.database.FormsDatabaseHelper;
+import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -37,6 +37,7 @@ import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.utilities.Clock;
 
 import java.io.File;
 import java.util.HashMap;
@@ -63,6 +64,9 @@ public class FormsProvider extends ContentProvider {
 
     @Inject
     PermissionsProvider permissionsProvider;
+
+    @Inject
+    Clock clock;
 
     private synchronized FormsDatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
@@ -199,7 +203,7 @@ public class FormsProvider extends ContentProvider {
             filePath = form.getAbsolutePath(); // normalized
             values.put(FormsColumns.FORM_FILE_PATH, storagePathProvider.getFormDbPath(filePath));
 
-            Long now = System.currentTimeMillis();
+            Long now = clock.getCurrentTime();
 
             // Make sure that the necessary fields are all set
             if (!values.containsKey(FormsColumns.DATE)) {
