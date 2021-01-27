@@ -37,7 +37,10 @@ public abstract class FormsRepositoryTest {
 
     @Test
     public void getLatestByFormIdAndVersion_whenMultipleExist_returnsLatest() {
-        FormsRepository formsRepository = buildSubject(getMockClock());
+        Clock mockClock = mock(Clock.class);
+        when(mockClock.getCurrentTime()).thenReturn(2L, 3L, 1L);
+
+        FormsRepository formsRepository = buildSubject(mockClock);
         formsRepository.save(buildForm("1", "1", getFormFilesPath())
                 .build());
         formsRepository.save(buildForm("1", "1", getFormFilesPath())
@@ -152,11 +155,5 @@ public abstract class FormsRepositoryTest {
 
         String expectedHash = FileUtils.getMd5Hash(new File(form.getFormFilePath()));
         assertThat(formsRepository.get(1L).getMD5Hash(), equalTo(expectedHash));
-    }
-
-    public Clock getMockClock() {
-        Clock mockClock = mock(Clock.class);
-        when(mockClock.getCurrentTime()).thenReturn(2L, 3L, 1L);
-        return mockClock;
     }
 }
