@@ -14,6 +14,11 @@ public class BlockableFirebaseAnalytics implements Analytics {
         this.firebaseAnalytics = firebaseAnalytics;
         this.crashlytics = crashlytics;
         this.analyticsAllowed = analyticsAllowed;
+
+        if (!analyticsAllowed) {
+            firebaseAnalytics.setAnalyticsCollectionEnabled(false);
+            crashlytics.setCrashlyticsCollectionEnabled(false);
+        }
     }
 
     @Deprecated
@@ -61,9 +66,6 @@ public class BlockableFirebaseAnalytics implements Analytics {
         if (analyticsAllowed) {
             firebaseAnalytics.setAnalyticsCollectionEnabled(isAnalyticsEnabled);
             crashlytics.setCrashlyticsCollectionEnabled(isAnalyticsEnabled);
-        } else {
-            firebaseAnalytics.setAnalyticsCollectionEnabled(false);
-            crashlytics.setCrashlyticsCollectionEnabled(false);
         }
     }
 
