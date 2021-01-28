@@ -24,9 +24,6 @@ import org.junit.Test;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -234,20 +231,5 @@ public class AuditEventLoggerTest {
 
         auditEventLogger.flush(); // Triggers event writing
         assertEquals(21, testWriter.auditEvents.size());
-    }
-
-    private static class TestWriter implements AuditEventLogger.AuditEventWriter {
-
-        List<AuditEvent> auditEvents = new ArrayList<>();
-
-        @Override
-        public void writeEvents(List<AuditEvent> auditEvents) {
-            this.auditEvents.addAll(auditEvents);
-        }
-
-        @Override
-        public boolean isWriting() {
-            return false;
-        }
     }
 }

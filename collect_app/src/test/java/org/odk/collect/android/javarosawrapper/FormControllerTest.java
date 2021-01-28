@@ -5,11 +5,9 @@ import com.google.common.io.Files;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.xform.util.XFormUtils;
-import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,6 +15,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
+import static org.odk.collect.android.javarosawrapper.FormControllerUtils.createFormController;
 
 public class FormControllerTest {
 
@@ -89,7 +88,6 @@ public class FormControllerTest {
         assertThat(formController.getAuditEventLogger(), notNullValue());
     }
 
-
     //region indexIsInFieldList
     @Test
     public void questionInGroupWithoutFieldListAppearance_isNotInFieldList() throws IOException {
@@ -111,14 +109,6 @@ public class FormControllerTest {
         assertThat(formController.indexIsInFieldList(), is(true));
     }
     //endregion
-
-    @NotNull
-    private FormController createFormController(String xform) throws IOException {
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(xform.getBytes());
-        final FormEntryModel fem = new FormEntryModel(XFormUtils.getFormFromInputStream(inputStream));
-        final FormEntryController formEntryController = new FormEntryController(fem);
-        return new FormController(Files.createTempDir(), formEntryController, File.createTempFile("instance", ""));
-    }
 
     private static final String ONE_QUESTION_REPEAT = "<?xml version=\"1.0\"?>\n" +
             "<h:html xmlns=\"http://www.w3.org/2002/xforms\" xmlns:ev=\"http://www.w3.org/2001/xml-events\" xmlns:h=\"http://www.w3.org/1999/xhtml\" xmlns:jr=\"http://openrosa.org/javarosa\" xmlns:orx=\"http://openrosa.org/xforms\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n" +

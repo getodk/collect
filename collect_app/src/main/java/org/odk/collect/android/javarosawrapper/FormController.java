@@ -525,6 +525,21 @@ public class FormController {
     }
 
     /**
+     * Return the raw model value at the given {@link FormIndex}. In particular, in the case of a
+     * select, this returns the selected choice(s)' value(s), NOT the label(s). This is exactly
+     * what gets written to XML on serialization.
+     *
+     * See FormEntryPrompt.getAnswerText for what appears to be the same behavior but possibly much
+     * slower because it may filter a choice list. The filtered list is unused.
+     */
+    @Nullable
+    public String getAnswerUnderlyingValue(FormIndex index) {
+        FormInstance instance = getInstance();
+        IAnswerData answerData = instance.resolveReference(index.getReference()).getValue();
+        return answerData == null ? null : answerData.getDisplayText();
+    }
+
+    /**
      * Navigates forward in the form.
      *
      * @return the next event that should be handled by a view.

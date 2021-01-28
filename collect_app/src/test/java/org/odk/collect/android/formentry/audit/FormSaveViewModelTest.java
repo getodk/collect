@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle;
 
 import com.google.common.io.Files;
 
+import org.javarosa.core.model.FormIndex;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
@@ -137,6 +138,7 @@ public class FormSaveViewModelTest {
                 .withAnswerDisplayText("answer")
                 .build();
         when(formController.getQuestionPrompts()).thenReturn(Arrays.asList(prompt).toArray(new FormEntryPrompt[]{}));
+        when(formController.getAnswerUnderlyingValue(any(FormIndex.class))).thenReturn("answer");
 
         viewModel.saveForm(Uri.parse("file://form"), true, "", false);
         whenFormSaverFinishes(SaveFormToDisk.SAVED);
@@ -166,6 +168,7 @@ public class FormSaveViewModelTest {
                 .withAnswerDisplayText("answer")
                 .build();
         when(formController.getQuestionPrompts()).thenReturn(Arrays.asList(prompt).toArray(new FormEntryPrompt[]{}));
+        when(formController.getAnswerUnderlyingValue(any(FormIndex.class))).thenReturn("answer");
 
         viewModel.saveForm(Uri.parse("file://form"), true, "", false);
         whenFormSaverFinishes(SaveFormToDisk.SAVED);
@@ -195,6 +198,7 @@ public class FormSaveViewModelTest {
                 .withAnswerDisplayText("answer")
                 .build();
         when(formController.getQuestionPrompts()).thenReturn(Arrays.asList(prompt).toArray(new FormEntryPrompt[]{}));
+        when(formController.getAnswerUnderlyingValue(any(FormIndex.class))).thenReturn("answer");
 
         viewModel.saveForm(Uri.parse("file://form"), true, "", false);
         whenFormSaverFinishes(SaveFormToDisk.SAVED);

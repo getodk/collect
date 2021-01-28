@@ -21,8 +21,8 @@ public class AuditUtils {
             try {
                 FormEntryPrompt[] prompts = formController.getQuestionPrompts();
                 for (FormEntryPrompt question : prompts) {
-                    String answer = question.getAnswerValue() != null ? question.getAnswerValue().getDisplayText() : null;
-                    auditEventLogger.logEvent(AuditEvent.AuditEventType.QUESTION, question.getIndex(), true, answer, currentTime, null);
+                    auditEventLogger.logEvent(AuditEvent.AuditEventType.QUESTION, question.getIndex(), true,
+                            formController.getAnswerUnderlyingValue(question.getIndex()), currentTime, null);
                 }
             } catch (FormDesignException e) {
                 throw new RuntimeException(e.getMessage(), e);

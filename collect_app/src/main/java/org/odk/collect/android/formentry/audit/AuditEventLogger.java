@@ -56,7 +56,7 @@ public class AuditEventLogger {
      * Log a new event
      */
     public void logEvent(AuditEvent.AuditEventType eventType, FormIndex formIndex,
-                         boolean writeImmediatelyToDisk, String questionAnswer, long currentTime, String changeReason) {
+                         boolean writeImmediatelyToDisk, @Nullable String questionAnswer, long currentTime, String changeReason) {
         if (!isAuditEnabled() || shouldBeIgnored(eventType)) {
             return;
         }
