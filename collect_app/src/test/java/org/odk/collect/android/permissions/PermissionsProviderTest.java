@@ -1,15 +1,22 @@
 package org.odk.collect.android.permissions;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.ContentResolver;
+import android.net.Uri;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.storage.StorageStateProvider;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class PermissionsProviderTest {
@@ -137,5 +144,46 @@ public class PermissionsProviderTest {
         permissionsProvider = new PermissionsProvider(permissionsChecker, storageStateProvider);
 
         assertThat(permissionsProvider.isReadPhoneStatePermissionGranted(), is(false));
+    }
+
+    @Test
+    public void whenRequestReadUriPermissionGranted_shouldGrantedBeCalled() {
+        permissionsProvider = new PermissionsProvider(permissionsChecker, storageStateProvider);
+
+        Activity activity = mock(Activity.class);
+        Uri uri = mock(Uri.class);
+        ContentResolver contentResolver = mock(ContentResolver.class);
+
+        PermissionListener permissionListener = mock(PermissionListener.class);
+        permissionsProvider.requestReadUriPermission(activity, uri, contentResolver, permissionListener);
+        verify(permissionListener).granted();
+    }
+
+    @Test
+    public void whenRequestReadUriPermissionNotGranted_shouldUserBeAskedToGrantReadStoragePermission() {
+        permissionsProvider = spy(new PermissionsProvider(permissionsChecker, storageStateProvider));
+
+        Activity activity = mock(Activity.class);
+        Uri uri = mock(Uri.class);
+        ContentResolver contentResolver = mock(ContentResolver.class);
+        when(contentResolver.query(uri, null, null, null, null)).thenThrow(SecurityException.class);
+
+        PermissionListener permissionListener = mock(PermissionListener.class);
+        permissionsProvider.requestReadUriPermission(activity, uri, contentResolver, permissionListener);
+        verify(permissionsProvider).requestReadStoragePermission(any(), any());
+    }
+
+    @Test
+    public void whenRequestReadUriPermissionThrowsAnyException_shouldDeniedBeCalled() {
+        permissionsProvider = new PermissionsProvider(permissionsChecker, storageStateProvider);
+
+        Activity activity = mock(Activity.class);
+        Uri uri = mock(Uri.class);
+        ContentResolver contentResolver = mock(ContentResolver.class);
+        when(contentResolver.query(uri, null, null, null, null)).thenThrow(RuntimeException.class);
+
+        PermissionListener permissionListener = mock(PermissionListener.class);
+        permissionsProvider.requestReadUriPermission(activity, uri, contentResolver, permissionListener);
+        verify(permissionListener).denied();
     }
 }
