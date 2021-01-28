@@ -1,8 +1,6 @@
 package org.odk.collect.android.permissions;
 
 import android.Manifest;
-import android.content.ContentResolver;
-import android.net.Uri;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -139,24 +137,5 @@ public class PermissionsProviderTest {
         permissionsProvider = new PermissionsProvider(permissionsChecker, storageStateProvider);
 
         assertThat(permissionsProvider.isReadPhoneStatePermissionGranted(), is(false));
-    }
-
-    @Test
-    public void whenReadPermissionToFileGranted_shouldIsReadUriPermissionGrantedReturnTrue() {
-        permissionsProvider = new PermissionsProvider(permissionsChecker, storageStateProvider);
-        Uri uri = mock(Uri.class);
-        ContentResolver contentResolver = mock(ContentResolver.class);
-
-        assertThat(permissionsProvider.isReadUriPermissionGranted(uri, contentResolver), is(true));
-    }
-
-    @Test
-    public void whenReadPermissionToFileNotGranted_shouldIsReadUriPermissionGrantedReturnFalse() {
-        permissionsProvider = new PermissionsProvider(permissionsChecker, storageStateProvider);
-        Uri uri = mock(Uri.class);
-        ContentResolver contentResolver = mock(ContentResolver.class);
-        when(contentResolver.query(uri, null, null, null, null)).thenThrow(SecurityException.class);
-
-        assertThat(permissionsProvider.isReadUriPermissionGranted(uri, contentResolver), is(false));
     }
 }

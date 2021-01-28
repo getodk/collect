@@ -269,14 +269,6 @@ public class PermissionsProvider {
         DialogUtils.showDialog(alertDialog, activity);
     }
 
-    public boolean isReadUriPermissionGranted(Uri uri, ContentResolver contentResolver) {
-        try (Cursor cursor = contentResolver.query(uri, null, null, null, null)) {
-            return true;
-        } catch (SecurityException | NullPointerException e) {
-            return false;
-        }
-    }
-
     public void requestReadUriPermission(Activity activity, Uri uri, ContentResolver contentResolver, PermissionListener listener) {
         try (Cursor ignored = contentResolver.query(uri, null, null, null, null)) {
             listener.granted();
