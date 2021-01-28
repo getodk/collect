@@ -93,6 +93,21 @@ public class PermissionsProvider {
         }, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
+    public void requestReadStoragePermission(Activity activity, @NonNull PermissionListener action) {
+        requestPermissions(activity, new PermissionListener() {
+            @Override
+            public void granted() {
+                action.granted();
+            }
+
+            @Override
+            public void denied() {
+                showAdditionalExplanation(activity, R.string.storage_runtime_permission_denied_title,
+                        R.string.storage_runtime_permission_denied_desc, R.drawable.sd, action);
+            }
+        }, Manifest.permission.READ_EXTERNAL_STORAGE);
+    }
+
     public void requestCameraPermission(Activity activity, @NonNull PermissionListener action) {
         requestPermissions(activity, new PermissionListener() {
             @Override
@@ -259,6 +274,26 @@ public class PermissionsProvider {
             return true;
         } catch (SecurityException | NullPointerException e) {
             return false;
+        }
+    }
+
+    public void requestReadUriPermission(Activity activity, Uri uri, ContentResolver contentResolver, PermissionListener listener) {
+        try (Cursor ignored = contentResolver.query(uri, null, null, null, null)) {
+            listener.granted();
+        } catch (SecurityException e) {
+            requestReadStoragePermission(activity, new PermissionListener() {
+                @Override
+                public void granted() {
+                    listener.granted();
+                }
+
+                @Override
+                public void denied() {
+                    listener.denied();
+                }
+            });
+        } catch (Exception | Error e) {
+            listener.denied();
         }
     }
 }
