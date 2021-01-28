@@ -8,6 +8,7 @@ import org.javarosa.core.model.data.StringData;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
@@ -18,6 +19,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
+import static org.odk.collect.android.utilities.QuestionFontSizeUtils.DEFAULT_FONT_SIZE;
 
 public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget> {
     @Mock
@@ -39,6 +42,20 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
     public ArbitraryFileWidget createWidget() {
         return new ArbitraryFileWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride),
                 mediaUtils, new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry());
+    }
+
+    @Test
+    public void whenFontSizeNotChanged_defaultFontSizeShouldBeUsed() {
+        assertThat((int) getWidget().binding.arbitraryFileButton.getTextSize(), is(DEFAULT_FONT_SIZE - 1));
+        assertThat((int) getWidget().binding.arbitraryFileAnswerText.getTextSize(), is(DEFAULT_FONT_SIZE - 1));
+    }
+
+    @Test
+    public void whenFontSizeChanged_CustomFontSizeShouldBeUsed() {
+        GeneralSharedPreferences.getInstance().save(KEY_FONT_SIZE, "30");
+
+        assertThat((int) getWidget().binding.arbitraryFileButton.getTextSize(), is(29));
+        assertThat((int) getWidget().binding.arbitraryFileAnswerText.getTextSize(), is(29));
     }
 
     @Test

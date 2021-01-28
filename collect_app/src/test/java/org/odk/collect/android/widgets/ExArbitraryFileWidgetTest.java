@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -24,6 +25,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
+import static org.odk.collect.android.utilities.QuestionFontSizeUtils.DEFAULT_FONT_SIZE;
 import static org.robolectric.Shadows.shadowOf;
 
 public class ExArbitraryFileWidgetTest extends FileWidgetTest<ExArbitraryFileWidget> {
@@ -49,6 +52,20 @@ public class ExArbitraryFileWidgetTest extends FileWidgetTest<ExArbitraryFileWid
     public ExArbitraryFileWidget createWidget() {
         return new ExArbitraryFileWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride),
                 mediaUtils, new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry(), externalAppIntentProvider, new ActivityAvailability(activity));
+    }
+
+    @Test
+    public void whenFontSizeNotChanged_defaultFontSizeShouldBeUsed() {
+        assertThat((int) getWidget().binding.exArbitraryFileButton.getTextSize(), is(DEFAULT_FONT_SIZE - 1));
+        assertThat((int) getWidget().binding.exArbitraryFileAnswerText.getTextSize(), is(DEFAULT_FONT_SIZE - 1));
+    }
+
+    @Test
+    public void whenFontSizeChanged_CustomFontSizeShouldBeUsed() {
+        GeneralSharedPreferences.getInstance().save(KEY_FONT_SIZE, "30");
+
+        assertThat((int) getWidget().binding.exArbitraryFileButton.getTextSize(), is(29));
+        assertThat((int) getWidget().binding.exArbitraryFileAnswerText.getTextSize(), is(29));
     }
 
     @Test
