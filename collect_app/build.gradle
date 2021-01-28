@@ -115,7 +115,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
-            buildConfigField 'boolean', "ANALYTICS_ENABLED", 'true'
         }
 
         // Release build for the official ODK Collect app
@@ -127,7 +126,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
-            buildConfigField 'boolean', "ANALYTICS_ENABLED", 'true'
 
             matchingFallbacks = ['release'] // So other modules use release build type for this
         }
@@ -139,7 +137,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
-            buildConfigField 'boolean', "ANALYTICS_ENABLED", 'true'
 
             matchingFallbacks = ['release'] // So other modules use release build type for this
         }
@@ -149,7 +146,6 @@ android {
             testCoverageEnabled((findProperty("enableJacoco") ?: "false").toBoolean())
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
-            buildConfigField 'boolean', "ANALYTICS_ENABLED", 'true'
         }
     }
 

@@ -5,17 +5,10 @@ import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
-class BlockableFirebaseAnalytics(application: Application, private val analyticsAllowed: Boolean) : Analytics {
+class BlockableFirebaseAnalytics(application: Application) : Analytics {
 
     private val firebaseAnalytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(application)
     private val crashlytics: FirebaseCrashlytics = FirebaseCrashlytics.getInstance()
-
-    init {
-        if (!analyticsAllowed) {
-            firebaseAnalytics.setAnalyticsCollectionEnabled(false)
-            crashlytics.setCrashlyticsCollectionEnabled(false)
-        }
-    }
 
     @Deprecated("")
     override fun logEvent(category: String, action: String) {
@@ -53,10 +46,8 @@ class BlockableFirebaseAnalytics(application: Application, private val analytics
     }
 
     override fun setAnalyticsCollectionEnabled(isAnalyticsEnabled: Boolean) {
-        if (analyticsAllowed) {
-            firebaseAnalytics.setAnalyticsCollectionEnabled(isAnalyticsEnabled)
-            crashlytics.setCrashlyticsCollectionEnabled(isAnalyticsEnabled)
-        }
+        firebaseAnalytics.setAnalyticsCollectionEnabled(isAnalyticsEnabled)
+        crashlytics.setCrashlyticsCollectionEnabled(isAnalyticsEnabled)
     }
 
     override fun setUserProperty(name: String, value: String) {

@@ -193,7 +193,7 @@ public class AppDependencyModule {
     @Singleton
     public Analytics providesAnalytics(Application application) {
         try {
-            return new BlockableFirebaseAnalytics(application, BuildConfig.ANALYTICS_ENABLED);
+            return new BlockableFirebaseAnalytics(application);
         } catch (IllegalStateException e) {
             // Couldn't setup Firebase so use no-op instance
             return new NoopAnalytics();
