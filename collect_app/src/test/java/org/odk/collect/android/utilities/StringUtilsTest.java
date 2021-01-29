@@ -20,6 +20,12 @@ public class StringUtilsTest {
     }
 
     @Test
+    public void textToHtml_shouldBeTrimmed() {
+        CharSequence observed = StringUtils.textToHtml("<p style=\"text-align:center\">Text</p>");
+        assertThat(observed.toString(), equalTo("Text"));
+    }
+
+    @Test
     public void markDownToHtmlEscapesBackslash() {
         String[][] tests = {
                 {"A\\_B\\_C", "A_B_C"},
