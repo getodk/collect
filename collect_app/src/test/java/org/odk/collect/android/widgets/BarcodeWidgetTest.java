@@ -13,9 +13,8 @@ import org.odk.collect.android.fakes.FakePermissionsProvider;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.CameraUtils;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowActivity;
@@ -166,7 +165,7 @@ public class BarcodeWidgetTest {
     @Test
     public void clickingBarcodeButton_whenFrontCameraIsNotAvailable_showsFrontCameraNotAvailableToast() {
         when(cameraUtils.isFrontCameraAvailable()).thenReturn(false);
-        BarcodeWidget widget = createWidget(promptWithAppearance(WidgetAppearanceUtils.FRONT));
+        BarcodeWidget widget = createWidget(promptWithAppearance(Appearances.FRONT));
         widget.setPermissionsProvider(permissionsProvider);
         widget.binding.barcodeButton.performClick();
 
@@ -176,11 +175,11 @@ public class BarcodeWidgetTest {
     @Test
     public void clickingBarcodeButton_whenFrontCameraIsAvailable_launchesCorrectIntent() {
         when(cameraUtils.isFrontCameraAvailable()).thenReturn(true);
-        BarcodeWidget widget = createWidget(promptWithAppearance(WidgetAppearanceUtils.FRONT));
+        BarcodeWidget widget = createWidget(promptWithAppearance(Appearances.FRONT));
         widget.setPermissionsProvider(permissionsProvider);
         widget.binding.barcodeButton.performClick();
 
-        assertThat(shadowActivity.getNextStartedActivity().getBooleanExtra(WidgetAppearanceUtils.FRONT, false), is(true));
+        assertThat(shadowActivity.getNextStartedActivity().getBooleanExtra(Appearances.FRONT, false), is(true));
     }
 
     public BarcodeWidget createWidget(FormEntryPrompt prompt) {

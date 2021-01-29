@@ -80,7 +80,7 @@ public class FormEntryPromptUtils {
                     DateTimeWidgetUtils.getDatePickerDetails(appearance), false, context);
         }
 
-        if (data != null && appearance != null && appearance.contains(WidgetAppearanceUtils.THOUSANDS_SEP)) {
+        if (data != null && appearance != null && appearance.contains(Appearances.THOUSANDS_SEP)) {
             try {
                 final BigDecimal answerAsDecimal = new BigDecimal(fep.getAnswerText());
 

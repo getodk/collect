@@ -32,7 +32,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.SelectOneWidgetUtils;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.utilities.Appearances;
 
 import timber.log.Timber;
 
@@ -62,8 +62,8 @@ public class SelectOneWidget extends BaseSelectListWidget {
 
     @Override
     protected AbstractSelectListAdapter setUpAdapter() {
-        int numColumns = WidgetAppearanceUtils.getNumberOfColumns(getFormEntryPrompt(), screenUtils);
-        boolean noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(getFormEntryPrompt()) || WidgetAppearanceUtils.isNoButtonsAppearance(getFormEntryPrompt());
+        int numColumns = Appearances.getNumberOfColumns(getFormEntryPrompt(), screenUtils);
+        boolean noButtonsMode = Appearances.isCompactAppearance(getFormEntryPrompt()) || Appearances.isNoButtonsAppearance(getFormEntryPrompt());
 
         recyclerViewAdapter = new SelectOneListAdapter(getSelectedValue(), this, getContext(), items,
                 getFormEntryPrompt(), getReferenceManager(), getAudioHelper(),

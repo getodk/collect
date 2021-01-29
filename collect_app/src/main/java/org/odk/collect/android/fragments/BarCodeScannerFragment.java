@@ -39,7 +39,7 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.views.BarcodeViewDecoder;
 
 import java.io.IOException;
@@ -159,7 +159,7 @@ public abstract class BarCodeScannerFragment extends Fragment implements Decorat
 
     private boolean frontCameraUsed() {
         Bundle bundle = getActivity().getIntent().getExtras();
-        return bundle != null && bundle.getBoolean(WidgetAppearanceUtils.FRONT);
+        return bundle != null && bundle.getBoolean(Appearances.FRONT);
     }
 
     private void switchFlashlight() {
