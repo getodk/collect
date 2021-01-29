@@ -36,6 +36,7 @@ public class SaveFormProgressDialogFragment extends ProgressDialogFragment {
         ViewModelProvider.Factory factory = formSaveViewModelFactoryFactory.create(requireActivity(), null);
         viewModel = new ViewModelProvider(requireActivity(), factory).get(FormSaveViewModel.class);
 
+        setCancelable(false);
         setTitle(getString(R.string.saving_form));
 
         viewModel.getSaveResult().observe(this, result -> {
