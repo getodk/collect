@@ -1,9 +1,10 @@
 package org.odk.collect.audiorecorder.mediarecorder
 
+import android.annotation.SuppressLint
 import android.media.MediaRecorder
 import org.odk.collect.audiorecorder.recorder.RecordingResource
 
-internal abstract class MediaRecorderRecordingResource(private val mediaRecorder: MediaRecorder) : RecordingResource {
+internal abstract class MediaRecorderRecordingResource(private val mediaRecorder: MediaRecorder, private val sdk: Int) : RecordingResource {
 
     protected abstract fun beforePrepare(mediaRecorder: MediaRecorder)
 
@@ -22,13 +23,15 @@ internal abstract class MediaRecorderRecordingResource(private val mediaRecorder
     }
 
     override fun pause() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+        @SuppressLint("NewApi")
+        if (sdk >= android.os.Build.VERSION_CODES.N) {
             mediaRecorder.pause()
         }
     }
 
     override fun resume() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+        @SuppressLint("NewApi")
+        if (sdk >= android.os.Build.VERSION_CODES.N) {
             mediaRecorder.resume()
         }
     }
@@ -46,7 +49,7 @@ internal abstract class MediaRecorderRecordingResource(private val mediaRecorder
     }
 }
 
-internal class AACRecordingResource(mediaRecorder: MediaRecorder, private val kbitRate: Int) : MediaRecorderRecordingResource(mediaRecorder) {
+internal class AACRecordingResource(mediaRecorder: MediaRecorder, sdk: Int, private val kbitRate: Int) : MediaRecorderRecordingResource(mediaRecorder, sdk) {
 
     override fun beforePrepare(mediaRecorder: MediaRecorder) {
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
@@ -57,7 +60,7 @@ internal class AACRecordingResource(mediaRecorder: MediaRecorder, private val kb
     }
 }
 
-internal class AMRRecordingResource(mediaRecorder: MediaRecorder) : MediaRecorderRecordingResource(mediaRecorder) {
+internal class AMRRecordingResource(mediaRecorder: MediaRecorder, sdk: Int) : MediaRecorderRecordingResource(mediaRecorder, sdk) {
 
     override fun beforePrepare(mediaRecorder: MediaRecorder) {
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
@@ -65,5 +68,10 @@ internal class AMRRecordingResource(mediaRecorder: MediaRecorder) : MediaRecorde
         mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
         mediaRecorder.setAudioSamplingRate(8000)
         mediaRecorder.setAudioEncodingBitRate(12200)
+    }
+
+    override fun stop() {
+        resume()
+        super.stop()
     }
 }

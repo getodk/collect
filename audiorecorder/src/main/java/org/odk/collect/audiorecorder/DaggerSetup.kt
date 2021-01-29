@@ -77,15 +77,15 @@ internal open class AudioRecorderDependencyModule {
         return RecordingResourceRecorder(cacheDir) { output ->
             when (output) {
                 Output.AMR -> {
-                    AMRRecordingResource(MediaRecorder())
+                    AMRRecordingResource(MediaRecorder(), android.os.Build.VERSION.SDK_INT)
                 }
 
                 Output.AAC -> {
-                    AACRecordingResource(MediaRecorder(), 64)
+                    AACRecordingResource(MediaRecorder(), android.os.Build.VERSION.SDK_INT, 64)
                 }
 
                 Output.AAC_LOW -> {
-                    AACRecordingResource(MediaRecorder(), 24)
+                    AACRecordingResource(MediaRecorder(), android.os.Build.VERSION.SDK_INT, 24)
                 }
             }
         }
