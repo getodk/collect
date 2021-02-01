@@ -43,6 +43,7 @@ public abstract class BaseArbitraryFileWidget extends QuestionWidget implements 
     public void deleteFile() {
         questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(), answerFile.getAbsolutePath());
         answerFile = null;
+        hideAnswerText();
     }
 
     @Override
@@ -73,4 +74,6 @@ public abstract class BaseArbitraryFileWidget extends QuestionWidget implements 
     }
 
     protected abstract void showAnswerText();
+
+    protected abstract void hideAnswerText();
 }

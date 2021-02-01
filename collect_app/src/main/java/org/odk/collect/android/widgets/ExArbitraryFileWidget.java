@@ -80,6 +80,11 @@ public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
         binding.exArbitraryFileAnswerText.setVisibility(VISIBLE);
     }
 
+    @Override
+    protected void hideAnswerText() {
+        binding.exArbitraryFileAnswerText.setVisibility(GONE);
+    }
+
     private void onButtonClick() {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
         try {

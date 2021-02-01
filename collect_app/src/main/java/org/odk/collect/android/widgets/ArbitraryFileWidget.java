@@ -96,4 +96,9 @@ public class ArbitraryFileWidget extends BaseArbitraryFileWidget implements File
         binding.arbitraryFileAnswerText.setText(answerFile.getName());
         binding.arbitraryFileAnswerText.setVisibility(VISIBLE);
     }
+
+    @Override
+    protected void hideAnswerText() {
+        binding.arbitraryFileAnswerText.setVisibility(GONE);
+    }
 }
