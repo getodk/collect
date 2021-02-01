@@ -9,11 +9,11 @@ import com.google.android.gms.location.LocationListener;
 import com.mapbox.android.core.location.LocationEngineCallback;
 import com.mapbox.android.core.location.LocationEngineResult;
 
-public class MapboxLocationClient implements LocationEngineCallback<LocationEngineResult> {
+public class MapboxLocationCallback implements LocationEngineCallback<LocationEngineResult> {
     @Nullable
     private final LocationListener locationListener;
 
-    public MapboxLocationClient(@Nullable LocationListener locationListener) {
+    public MapboxLocationCallback(@Nullable LocationListener locationListener) {
         this.locationListener = locationListener;
     }
 

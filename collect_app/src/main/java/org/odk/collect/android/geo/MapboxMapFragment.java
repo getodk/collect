@@ -56,7 +56,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MbtilesFile.LayerType;
 import org.odk.collect.android.geo.MbtilesFile.MbtilesException;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.location.client.MapboxLocationClient;
+import org.odk.collect.android.location.client.MapboxLocationCallback;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.GeoUtils;
 
@@ -115,7 +115,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     private String styleUrl = Style.MAPBOX_STREETS;
     private File referenceLayerFile;
     private final List<Source> overlaySources = new ArrayList<>();
-    private final MapboxLocationClient locationCallback = new MapboxLocationClient(this);
+    private final MapboxLocationCallback locationCallback = new MapboxLocationCallback(this);
     private static String lastLocationProvider;
 
     private TileHttpServer tileServer;

@@ -18,21 +18,21 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class MapboxLocationClientTest {
-    private MapboxLocationClient mapboxLocationClient;
+public class MapboxLocationCallbackTest {
+    private MapboxLocationCallback mapboxLocationCallback;
     private TestLocationListener locationListener;
     private final LocationEngineResult result = mock(LocationEngineResult.class);
 
     @Before
     public void setup() {
         locationListener = spy(new TestLocationListener());
-        mapboxLocationClient = new MapboxLocationClient(locationListener);
+        mapboxLocationCallback = new MapboxLocationCallback(locationListener);
     }
 
     @Test
     public void whenLocationIsNull_shouldNotBePassedToListener() {
         when(result.getLastLocation()).thenReturn(null);
-        mapboxLocationClient.onSuccess(result);
+        mapboxLocationCallback.onSuccess(result);
 
         verify(locationListener, never()).onLocationChanged(null);
         assertThat(locationListener.getLastLocation(), is(nullValue()));
@@ -42,7 +42,7 @@ public class MapboxLocationClientTest {
     public void whenLocationIsNotNull_shouldBePassedToListener() {
         Location location = LocationTestUtils.createLocation(GPS_PROVIDER, 7d, 2d, 3d, 5.0f);
         when(result.getLastLocation()).thenReturn(location);
-        mapboxLocationClient.onSuccess(result);
+        mapboxLocationCallback.onSuccess(result);
 
         Location receivedLocation = locationListener.getLastLocation();
         assertThat(location, is(receivedLocation));
@@ -52,7 +52,7 @@ public class MapboxLocationClientTest {
     public void whenAccuracyIsNegative_shouldBeSanitized() {
         Location location = LocationTestUtils.createLocation(GPS_PROVIDER, 7d, 2d, 3d, -1.0f);
         when(result.getLastLocation()).thenReturn(location);
-        mapboxLocationClient.onSuccess(result);
+        mapboxLocationCallback.onSuccess(result);
 
         assertThat(locationListener.getLastLocation().getAccuracy(), is(0.0f));
     }
@@ -61,7 +61,7 @@ public class MapboxLocationClientTest {
     public void whenLocationIsFaked_shouldAccuracyBeSetToZero() {
         Location location = LocationTestUtils.createLocation(GPS_PROVIDER, 7d, 2d, 3d, 5.0f, true);
         when(result.getLastLocation()).thenReturn(location);
-        mapboxLocationClient.onSuccess(result);
+        mapboxLocationCallback.onSuccess(result);
 
         assertThat(locationListener.getLastLocation().getAccuracy(), is(0.0f));
     }
