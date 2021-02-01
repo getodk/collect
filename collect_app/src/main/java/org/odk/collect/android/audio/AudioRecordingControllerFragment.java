@@ -90,6 +90,11 @@ public class AudioRecordingControllerFragment extends Fragment {
                 if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N) {
                     binding.pauseRecording.setVisibility(GONE);
                 }
+
+                if (session.getId().equals("background")) {
+                    binding.pauseRecording.setVisibility(GONE);
+                    binding.stopRecording.setVisibility(GONE);
+                }
             } else {
                 binding.getRoot().setVisibility(GONE);
             }

@@ -12,6 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
@@ -82,5 +83,19 @@ public class BackgroundAudioRecordingTest {
 
         assertThat(stubAudioRecorderViewModel.getLastRecording(), notNullValue());
         assertThat(stubAudioRecorderViewModel.getLastRecording().exists(), is(true));
+    }
+
+    /**
+     * This could probably be tested at a lower level when the background recording implementation
+     * stabilizes.
+     */
+    @Test
+    public void whenBackgroundAudioRecordingEnabled_fillingOutForm_doesntShowStopOrPauseButtons() {
+        rule.mainMenu()
+                .enableBackgroundAudioRecording()
+                .copyForm("one-question.xml")
+                .startBlankForm("One Question")
+                .assertContentDescriptionNotDisplayed(R.string.stop_recording)
+                .assertContentDescriptionNotDisplayed(R.string.pause_recording);
     }
 }
