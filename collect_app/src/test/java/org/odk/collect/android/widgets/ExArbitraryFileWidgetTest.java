@@ -83,7 +83,7 @@ public class ExArbitraryFileWidgetTest extends FileWidgetTest<ExArbitraryFileWid
     }
 
     @Test
-    public void whenClickingOnButton_shouldFilePickerByCalled() throws ExternalParamsException, XPathSyntaxException {
+    public void whenClickingOnButton_externalAppShouldBeLaunchedByIntent() throws ExternalParamsException, XPathSyntaxException {
         Intent intent = mock(Intent.class);
         when(externalAppIntentProvider.getIntentToRunExternalApp(any(), any(), any())).thenReturn(intent);
         getWidget().binding.exArbitraryFileButton.performClick();

@@ -73,7 +73,7 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
     }
 
     @Test
-    public void whenClickingOnButton_shouldFilePickerByCalled() {
+    public void whenClickingOnButton_shouldFilePickerBeCalled() {
         getWidget().binding.arbitraryFileButton.performClick();
         verify(mediaUtils).pickFile(activity, "*/*", ApplicationConstants.RequestCodes.ARBITRARY_FILE_CHOOSER);
     }
