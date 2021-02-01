@@ -58,12 +58,9 @@ public class ArbitraryFileWidget extends BaseArbitraryFileWidget implements File
         binding.arbitraryFileButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.arbitraryFileAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        if (questionDetails.isReadOnly()) {
-            binding.arbitraryFileButton.setVisibility(GONE);
-        } else {
-            binding.arbitraryFileButton.setOnClickListener(v -> onButtonClick());
-            binding.arbitraryFileAnswerText.setOnClickListener(v -> mediaUtils.openFile(getContext(), answerFile, null));
-        }
+        binding.arbitraryFileButton.setVisibility(questionDetails.isReadOnly() ? GONE : VISIBLE);
+        binding.arbitraryFileButton.setOnClickListener(v -> onButtonClick());
+        binding.arbitraryFileAnswerText.setOnClickListener(v -> mediaUtils.openFile(getContext(), answerFile, null));
 
         if (answerFile != null) {
             binding.arbitraryFileAnswerText.setText(answerFile.getName());

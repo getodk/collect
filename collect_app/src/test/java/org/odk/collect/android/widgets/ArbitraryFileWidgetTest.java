@@ -116,6 +116,7 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
         assertThat(widget.binding.arbitraryFileButton.getVisibility(), is(View.GONE));
         assertThat(widget.binding.arbitraryFileAnswerText.getVisibility(), is(View.VISIBLE));
         assertThat(widget.binding.arbitraryFileAnswerText.getText(), is(getInitialAnswer().getDisplayText()));
+        assertThat(widget.binding.arbitraryFileAnswerText.hasOnClickListeners(), is(true));
     }
 
     @Test
@@ -128,5 +129,6 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
         assertThat(widget.binding.arbitraryFileButton.getVisibility(), is(View.GONE));
         assertThat(widget.binding.arbitraryFileAnswerText.getVisibility(), is(View.VISIBLE));
         assertThat(widget.binding.arbitraryFileAnswerText.getText(), is(getInitialAnswer().getDisplayText()));
+        assertThat(widget.binding.arbitraryFileAnswerText.hasOnClickListeners(), is(true));
     }
 }
