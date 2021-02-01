@@ -44,17 +44,21 @@ internal class AudioRecorderService : Service() {
             }
 
             ACTION_PAUSE -> {
-                recorder.pause()
-                recordingRepository.setPaused(true)
+                if (recorder.isRecording()) {
+                    recorder.pause()
+                    recordingRepository.setPaused(true)
 
-                stopUpdates()
+                    stopUpdates()
+                }
             }
 
             ACTION_RESUME -> {
-                recorder.resume()
-                recordingRepository.setPaused(false)
+                if (recorder.isRecording()) {
+                    recorder.resume()
+                    recordingRepository.setPaused(false)
 
-                startUpdates()
+                    startUpdates()
+                }
             }
 
             ACTION_STOP -> {
