@@ -58,7 +58,7 @@ public class ArbitraryFileWidget extends BaseArbitraryFileWidget implements File
         binding.arbitraryFileButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.arbitraryFileAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        if (prompt.isReadOnly()) {
+        if (questionDetails.isReadOnly()) {
             binding.arbitraryFileButton.setVisibility(GONE);
         } else {
             binding.arbitraryFileButton.setOnClickListener(v -> onButtonClick());

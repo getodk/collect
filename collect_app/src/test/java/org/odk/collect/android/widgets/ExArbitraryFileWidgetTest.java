@@ -118,4 +118,16 @@ public class ExArbitraryFileWidgetTest extends FileWidgetTest<ExArbitraryFileWid
         assertThat(widget.binding.exArbitraryFileAnswerText.getVisibility(), is(View.VISIBLE));
         assertThat(widget.binding.exArbitraryFileAnswerText.getText(), is(getInitialAnswer().getDisplayText()));
     }
+
+    @Test
+    public void whenReadOnlyOverrideOptionIsUsed_shouldAllClickableElementsBeDisabled() {
+        readOnlyOverride = true;
+        when(formEntryPrompt.isReadOnly()).thenReturn(false);
+        when(formEntryPrompt.getAnswerText()).thenReturn(getInitialAnswer().getDisplayText());
+
+        ExArbitraryFileWidget widget = getWidget();
+        assertThat(widget.binding.exArbitraryFileButton.getVisibility(), is(View.GONE));
+        assertThat(widget.binding.exArbitraryFileAnswerText.getVisibility(), is(View.VISIBLE));
+        assertThat(widget.binding.exArbitraryFileAnswerText.getText(), is(getInitialAnswer().getDisplayText()));
+    }
 }

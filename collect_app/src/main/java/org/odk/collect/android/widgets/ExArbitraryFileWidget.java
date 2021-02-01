@@ -46,7 +46,7 @@ public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
         binding.exArbitraryFileButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.exArbitraryFileAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        if (prompt.isReadOnly()) {
+        if (questionDetails.isReadOnly()) {
             binding.exArbitraryFileButton.setVisibility(GONE);
         } else {
             binding.exArbitraryFileButton.setOnClickListener(v -> onButtonClick());

@@ -109,8 +109,13 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
 
     @Test
     public void whenReadOnlyOverrideOptionIsUsed_shouldAllClickableElementsBeDisabled() {
-        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+        readOnlyOverride = true;
+        when(formEntryPrompt.isReadOnly()).thenReturn(false);
+        when(formEntryPrompt.getAnswerText()).thenReturn(getInitialAnswer().getDisplayText());
 
-        assertThat(getSpyWidget().binding.arbitraryFileButton.getVisibility(), is(View.GONE));
+        ArbitraryFileWidget widget = getWidget();
+        assertThat(widget.binding.arbitraryFileButton.getVisibility(), is(View.GONE));
+        assertThat(widget.binding.arbitraryFileAnswerText.getVisibility(), is(View.VISIBLE));
+        assertThat(widget.binding.arbitraryFileAnswerText.getText(), is(getInitialAnswer().getDisplayText()));
     }
 }
