@@ -14,7 +14,7 @@ import org.odk.collect.android.formentry.FormIndexAnimationHandler;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.audiorecorder.recorder.Output;
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
+import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.robolectric.Robolectric;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -28,16 +28,16 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.prom
 public class InternalRecordingRequesterTest {
 
     private final FakePermissionsProvider permissionsProvider = new FakePermissionsProvider();
-    private final AudioRecorderViewModel viewModel = mock(AudioRecorderViewModel.class);
+    private final AudioRecorder audioRecorder = mock(AudioRecorder.class);
 
     private InternalRecordingRequester requester;
 
     @Before
     public void setup() {
         ComponentActivity activity = Robolectric.buildActivity(ComponentActivity.class).get();
-        when(viewModel.getCurrentSession()).thenReturn(new MutableLiveData<>(null));
+        when(audioRecorder.getCurrentSession()).thenReturn(new MutableLiveData<>(null));
 
-        requester = new InternalRecordingRequester(activity, viewModel, permissionsProvider, mock(FormEntryViewModel.class), mock(FormSaveViewModel.class), mock(FormIndexAnimationHandler.Listener.class));
+        requester = new InternalRecordingRequester(activity, audioRecorder, permissionsProvider, mock(FormEntryViewModel.class), mock(FormSaveViewModel.class), mock(FormIndexAnimationHandler.Listener.class));
         permissionsProvider.setPermissionGranted(true);
     }
 
@@ -46,7 +46,7 @@ public class InternalRecordingRequesterTest {
         FormEntryPrompt prompt = promptWithAnswer(null);
         requester.requestRecording(prompt);
 
-        verify(viewModel).start(prompt.getIndex(), Output.AAC);
+        verify(audioRecorder).start(prompt.getIndex(), Output.AAC);
     }
 
     @Test
@@ -57,7 +57,7 @@ public class InternalRecordingRequesterTest {
 
         requester.requestRecording(prompt);
 
-        verify(viewModel).start(prompt.getIndex(), Output.AMR);
+        verify(audioRecorder).start(prompt.getIndex(), Output.AMR);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class InternalRecordingRequesterTest {
 
         requester.requestRecording(prompt);
 
-        verify(viewModel).start(prompt.getIndex(), Output.AAC_LOW);
+        verify(audioRecorder).start(prompt.getIndex(), Output.AAC_LOW);
     }
 
     @Test
@@ -78,6 +78,6 @@ public class InternalRecordingRequesterTest {
         FormEntryPrompt prompt = promptWithAnswer(null);
         requester.requestRecording(prompt);
 
-        verify(viewModel, never()).start(any(), any());
+        verify(audioRecorder, never()).start(any(), any());
     }
 }

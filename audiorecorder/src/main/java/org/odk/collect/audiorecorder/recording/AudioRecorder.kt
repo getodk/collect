@@ -1,16 +1,15 @@
 package org.odk.collect.audiorecorder.recording
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import org.odk.collect.audiorecorder.recorder.Output
 import java.io.File
 import java.io.Serializable
 
 /**
- * Interface for a ViewModel that records audio. Can only record once session
+ * Interface for a component that records audio. Can only record once session
  * at a time.
  */
-abstract class AudioRecorderViewModel : ViewModel() {
+abstract class AudioRecorder {
     abstract fun isRecording(): Boolean
     abstract fun getCurrentSession(): LiveData<RecordingSession?>
 

@@ -9,11 +9,11 @@ import org.odk.collect.testshared.LiveDataTester
 import java.io.File
 import java.io.Serializable
 
-abstract class AudioRecorderViewModelTest {
+abstract class AudioRecorderTest {
 
     private val liveDataTester = LiveDataTester()
 
-    abstract val viewModel: AudioRecorderViewModel
+    abstract val viewModel: AudioRecorder
     abstract fun runBackground()
     abstract fun getLastRecordedFile(): File?
 

@@ -49,9 +49,9 @@ import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.odk.collect.android.widgets.utilities.GetContentAudioFileRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
-import org.odk.collect.android.widgets.utilities.ViewModelRecordingStatusHandler;
+import org.odk.collect.android.widgets.utilities.AudioRecorderRecordingStatusHandler;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
+import org.odk.collect.audiorecorder.recording.AudioRecorder;
 
 import static org.odk.collect.android.utilities.Appearances.MAPS;
 import static org.odk.collect.android.utilities.Appearances.PLACEMENT_MAP;
@@ -75,7 +75,7 @@ public class WidgetFactory {
     private final ActivityAvailability activityAvailability;
     private final RecordingRequesterProvider recordingRequesterProvider;
     private final FormEntryViewModel formEntryViewModel;
-    private final AudioRecorderViewModel audioRecorderViewModel;
+    private final AudioRecorder audioRecorder;
     private final LifecycleOwner viewLifecycle;
 
     @SuppressWarnings("PMD.ExcessiveParameterList")
@@ -88,7 +88,7 @@ public class WidgetFactory {
                          ActivityAvailability activityAvailability,
                          RecordingRequesterProvider recordingRequesterProvider,
                          FormEntryViewModel formEntryViewModel,
-                         AudioRecorderViewModel audioRecorderViewModel,
+                         AudioRecorder audioRecorder,
                          LifecycleOwner viewLifecycle) {
         this.context = activity;
         this.readOnlyOverride = readOnlyOverride;
@@ -99,7 +99,7 @@ public class WidgetFactory {
         this.activityAvailability = activityAvailability;
         this.recordingRequesterProvider = recordingRequesterProvider;
         this.formEntryViewModel = formEntryViewModel;
-        this.audioRecorderViewModel = audioRecorderViewModel;
+        this.audioRecorder = audioRecorder;
         this.viewLifecycle = viewLifecycle;
     }
 
@@ -198,7 +198,7 @@ public class WidgetFactory {
             case Constants.CONTROL_AUDIO_CAPTURE:
                 RecordingRequester recordingRequester = recordingRequesterProvider.create(prompt, useExternalRecorder);
                 GetContentAudioFileRequester audioFileRequester = new GetContentAudioFileRequester(context, activityAvailability, waitingForDataRegistry, formEntryViewModel);
-                questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, recordingRequester, audioFileRequester, new ViewModelRecordingStatusHandler(audioRecorderViewModel, viewLifecycle));
+                questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, recordingRequester, audioFileRequester, new AudioRecorderRecordingStatusHandler(audioRecorder, viewLifecycle));
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
                 questionWidget = new VideoWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);

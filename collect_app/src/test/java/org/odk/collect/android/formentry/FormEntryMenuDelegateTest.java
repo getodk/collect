@@ -16,7 +16,7 @@ import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
+import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
 import org.robolectric.Robolectric;
 import org.robolectric.annotation.LooperMode;
@@ -48,7 +48,7 @@ public class FormEntryMenuDelegateTest {
     private FormEntryViewModel formEntryViewModel;
     private AnswersProvider answersProvider;
     private FormSaveViewModel formSaveViewModel;
-    private AudioRecorderViewModel audioRecorderViewModel;
+    private AudioRecorder audioRecorder;
 
     @Before
     public void setup() {
@@ -58,8 +58,8 @@ public class FormEntryMenuDelegateTest {
         formEntryViewModel = mock(FormEntryViewModel.class);
         formSaveViewModel = mock(FormSaveViewModel.class);
 
-        audioRecorderViewModel = mock(AudioRecorderViewModel.class);
-        when(audioRecorderViewModel.isRecording()).thenReturn(false);
+        audioRecorder = mock(AudioRecorder.class);
+        when(audioRecorder.isRecording()).thenReturn(false);
 
         BackgroundLocationViewModel backgroundLocationViewModel = mock(BackgroundLocationViewModel.class);
 
@@ -67,7 +67,7 @@ public class FormEntryMenuDelegateTest {
                 activity,
                 answersProvider,
                 mock(FormIndexAnimationHandler.class),
-                formSaveViewModel, formEntryViewModel, audioRecorderViewModel,
+                formSaveViewModel, formEntryViewModel, audioRecorder,
                 backgroundLocationViewModel);
         formEntryMenuDelegate.formLoaded(formController);
     }
@@ -146,8 +146,8 @@ public class FormEntryMenuDelegateTest {
         formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
         formEntryMenuDelegate.onPrepareOptionsMenu(menu);
 
-        when(audioRecorderViewModel.isRecording()).thenReturn(true);
-        when(audioRecorderViewModel.getCurrentSession()).thenReturn(new MutableLiveData<>(new RecordingSession("blah", null, 0, 0, false, null)));
+        when(audioRecorder.isRecording()).thenReturn(true);
+        when(audioRecorder.getCurrentSession()).thenReturn(new MutableLiveData<>(new RecordingSession("blah", null, 0, 0, false, null)));
 
         formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_preferences));
         assertThat(shadowOf(activity).getNextStartedActivityForResult(), is(nullValue()));

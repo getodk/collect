@@ -17,8 +17,7 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.databinding.AudioRecordingControllerFragmentBinding;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
+import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
 import org.odk.collect.strings.format.LengthFormatterKt;
 
@@ -31,13 +30,12 @@ import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
 public class AudioRecordingControllerFragment extends Fragment {
 
     @Inject
-    AudioRecorderViewModelFactory audioRecorderViewModelFactory;
+    AudioRecorder audioRecorder;
 
     @Inject
     FormEntryViewModel.Factory formEntryViewModelFactory;
 
     public AudioRecordingControllerFragmentBinding binding;
-    private AudioRecorderViewModel audioRecorderViewModel;
     private FormEntryViewModel formEntryViewModel;
 
     @Override
@@ -45,7 +43,6 @@ public class AudioRecordingControllerFragment extends Fragment {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
 
-        audioRecorderViewModel = new ViewModelProvider(requireActivity(), audioRecorderViewModelFactory).get(AudioRecorderViewModel.class);
         formEntryViewModel = new ViewModelProvider(requireActivity(), formEntryViewModelFactory).get(FormEntryViewModel.class);
     }
 
@@ -59,7 +56,7 @@ public class AudioRecordingControllerFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        audioRecorderViewModel.getCurrentSession().observe(getViewLifecycleOwner(), session -> {
+        audioRecorder.getCurrentSession().observe(getViewLifecycleOwner(), session -> {
             if (session == null) {
                 binding.getRoot().setVisibility(GONE);
             } else if (session.getFailedToStart() != null) {
@@ -74,14 +71,14 @@ public class AudioRecordingControllerFragment extends Fragment {
                 if (session.getPaused()) {
                     binding.pauseRecording.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_mic_24));
                     binding.pauseRecording.setContentDescription(getString(R.string.resume_recording));
-                    binding.pauseRecording.setOnClickListener(v -> audioRecorderViewModel.resume());
+                    binding.pauseRecording.setOnClickListener(v -> audioRecorder.resume());
 
                     binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_pause_24dp));
                 } else {
                     binding.pauseRecording.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_pause_24dp));
                     binding.pauseRecording.setContentDescription(getString(R.string.pause_recording));
                     binding.pauseRecording.setOnClickListener(v -> {
-                        audioRecorderViewModel.pause();
+                        audioRecorder.pause();
                         formEntryViewModel.logFormEvent(AnalyticsEvents.AUDIO_RECORDING_PAUSE);
                     });
 
@@ -102,7 +99,7 @@ public class AudioRecordingControllerFragment extends Fragment {
             }
         });
 
-        binding.stopRecording.setOnClickListener(v -> audioRecorderViewModel.stop());
+        binding.stopRecording.setOnClickListener(v -> audioRecorder.stop());
     }
 
     private boolean isBackgroundRecording(RecordingSession session) {

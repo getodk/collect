@@ -165,8 +165,7 @@ import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.AudioClipViewModel;
 import org.odk.collect.audiorecorder.recorder.Output;
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
+import org.odk.collect.audiorecorder.recording.AudioRecorder;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -297,7 +296,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private FormEntryMenuDelegate menuDelegate;
     private FormIndexAnimationHandler formIndexAnimationHandler;
     private WaitingForDataRegistry waitingForDataRegistry;
-    private AudioRecorderViewModel audioRecorderViewModel;
     private InternalRecordingRequester internalRecordingRequester;
     private ExternalAppRecordingRequester externalAppRecordingRequester;
 
@@ -334,7 +332,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     Scheduler scheduler;
 
     @Inject
-    AudioRecorderViewModelFactory audioRecorderViewModelFactory;
+    AudioRecorder audioRecorder;
 
     @Inject
     FormSaveViewModel.FactoryFactory formSaveViewModelFactoryFactory;
@@ -398,7 +396,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 formIndexAnimationHandler,
                 formSaveViewModel,
                 formEntryViewModel,
-                audioRecorderViewModel,
+                audioRecorder,
                 backgroundLocationViewModel
         );
 
@@ -498,14 +496,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
-        audioRecorderViewModel = new ViewModelProvider(this, audioRecorderViewModelFactory).get(AudioRecorderViewModel.class);
-        internalRecordingRequester = new InternalRecordingRequester(this, audioRecorderViewModel, permissionsProvider, formEntryViewModel, formSaveViewModel, this);
+        internalRecordingRequester = new InternalRecordingRequester(this, audioRecorder, permissionsProvider, formEntryViewModel, formSaveViewModel, this);
 
         waitingForDataRegistry = new FormControllerWaitingForDataRegistry();
         externalAppRecordingRequester = new ExternalAppRecordingRequester(this, activityAvailability, waitingForDataRegistry, permissionsProvider, formEntryViewModel);
 
         if (preferencesProvider.getGeneralSharedPreferences().getBoolean("background_audio_recording", false)) {
-            audioRecorderViewModel.start("background", Output.AMR);
+            audioRecorder.start("background", Output.AMR);
         }
     }
 
@@ -1191,7 +1188,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .of(this, factory)
                 .get(AudioClipViewModel.class), odkViewLifecycle);
 
-        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorderViewModel, formEntryViewModel, internalRecordingRequester, externalAppRecordingRequester);
+        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorder, formEntryViewModel, internalRecordingRequester, externalAppRecordingRequester);
     }
 
     @Override
@@ -1340,7 +1337,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         if (saveAs.getText().length() < 1) {
                             showShortToast(R.string.save_as_error);
                         } else {
-                            if (audioRecorderViewModel.isRecording() && !audioRecorderViewModel.getCurrentSession().getValue().getId().equals("background")) {
+                            if (audioRecorder.isRecording() && !audioRecorder.getCurrentSession().getValue().getId().equals("background")) {
                                 DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
                             } else {
                                 saveForm(EXIT, instanceComplete
@@ -2079,7 +2076,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
-                if (audioRecorderViewModel.isRecording()) {
+                if (audioRecorder.isRecording()) {
                     // We want the user to stop recording before changing screens
                     DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
                     return true;
@@ -2400,7 +2397,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
-        audioRecorderViewModel.stop();
+        audioRecorder.stop();
         finish();
     }
 

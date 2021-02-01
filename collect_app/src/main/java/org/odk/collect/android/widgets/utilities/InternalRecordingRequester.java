@@ -15,27 +15,27 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.audiorecorder.recorder.Output;
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
+import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
 
 public class InternalRecordingRequester implements RecordingRequester {
 
     private final ComponentActivity activity;
-    private final AudioRecorderViewModel audioRecorderViewModel;
+    private final AudioRecorder audioRecorder;
     private final PermissionsProvider permissionsProvider;
     private final FormEntryViewModel formEntryViewModel;
     private final FormSaveViewModel formSaveViewModel;
     private final FormIndexAnimationHandler.Listener refreshListener;
 
-    public InternalRecordingRequester(ComponentActivity activity, AudioRecorderViewModel audioRecorderViewModel, PermissionsProvider permissionsProvider, FormEntryViewModel formEntryViewModel, FormSaveViewModel formSaveViewModel, FormIndexAnimationHandler.Listener refreshListener) {
+    public InternalRecordingRequester(ComponentActivity activity, AudioRecorder audioRecorder, PermissionsProvider permissionsProvider, FormEntryViewModel formEntryViewModel, FormSaveViewModel formSaveViewModel, FormIndexAnimationHandler.Listener refreshListener) {
         this.activity = activity;
-        this.audioRecorderViewModel = audioRecorderViewModel;
+        this.audioRecorder = audioRecorder;
         this.permissionsProvider = permissionsProvider;
         this.formEntryViewModel = formEntryViewModel;
         this.formSaveViewModel = formSaveViewModel;
         this.refreshListener = refreshListener;
 
-        audioRecorderViewModel.getCurrentSession().observe(activity, session -> {
+        audioRecorder.getCurrentSession().observe(activity, session -> {
             if (session != null && session.getFile() != null) {
                 handleRecording(session);
             }
@@ -49,11 +49,11 @@ public class InternalRecordingRequester implements RecordingRequester {
             public void granted() {
                 String quality = FormEntryPromptUtils.getAttributeValue(prompt, "quality");
                 if (quality != null && quality.equals("voice-only")) {
-                    audioRecorderViewModel.start(prompt.getIndex(), Output.AMR);
+                    audioRecorder.start(prompt.getIndex(), Output.AMR);
                 } else if (quality != null && quality.equals("low")) {
-                    audioRecorderViewModel.start(prompt.getIndex(), Output.AAC_LOW);
+                    audioRecorder.start(prompt.getIndex(), Output.AAC_LOW);
                 } else {
-                    audioRecorderViewModel.start(prompt.getIndex(), Output.AAC);
+                    audioRecorder.start(prompt.getIndex(), Output.AAC);
                 }
             }
 
@@ -69,7 +69,7 @@ public class InternalRecordingRequester implements RecordingRequester {
     private void handleRecording(RecordingSession session) {
         formSaveViewModel.createAnswerFile(session.getFile()).observe(activity, result -> {
             if (result != null && result.isSuccess()) {
-                audioRecorderViewModel.cleanUp();
+                audioRecorder.cleanUp();
 
                 try {
                     if (session.getId() instanceof FormIndex) {
