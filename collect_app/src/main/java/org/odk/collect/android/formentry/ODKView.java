@@ -64,6 +64,7 @@ import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.PromptAutoplayer;
 import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.PreferencesProvider;
@@ -528,16 +529,22 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                                     } else {
                                         throw new RuntimeException("The value for " + key + " must be a URI but it is " + answer);
                                     }
-                                    if (permissionsProvider.isReadUriPermissionGranted(uri, getContext().getContentResolver())) {
-                                        File destFile = FileUtils.createDestinationMediaFile(formController.getInstanceFile().getParent(), ContentResolverHelper.getFileExtensionFromUri(uri));
-                                        //TODO might be better to use QuestionMediaManager in the future
-                                        FileUtils.saveAnswerFileFromUri(uri, destFile, getContext());
-                                        ((WidgetDataReceiver) questionWidget).setData(destFile);
+                                    permissionsProvider.requestReadUriPermission((Activity) getContext(), uri, getContext().getContentResolver(), new PermissionListener() {
+                                        @Override
+                                        public void granted() {
+                                            File destFile = FileUtils.createDestinationMediaFile(formController.getInstanceFile().getParent(), ContentResolverHelper.getFileExtensionFromUri(uri));
+                                            //TODO might be better to use QuestionMediaManager in the future
+                                            FileUtils.saveAnswerFileFromUri(uri, destFile, getContext());
+                                            ((WidgetDataReceiver) questionWidget).setData(destFile);
 
-                                        questionWidget.showAnswerContainer();
-                                    } else {
-                                        ToastUtils.showLongToast(R.string.read_file_permission_not_granted);
-                                    }
+                                            questionWidget.showAnswerContainer();
+                                        }
+
+                                        @Override
+                                        public void denied() {
+
+                                        }
+                                    });
                                 } catch (Exception | Error e) {
                                     Timber.w(e);
                                 }

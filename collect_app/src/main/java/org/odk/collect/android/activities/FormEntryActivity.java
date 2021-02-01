@@ -858,15 +858,21 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void loadFile(Uri uri) {
-        if (permissionsProvider.isReadUriPermissionGranted(uri, getContentResolver())) {
-            ProgressDialogFragment progressDialog = new ProgressDialogFragment();
-            progressDialog.setMessage(getString(R.string.please_wait));
-            progressDialog.show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+        permissionsProvider.requestReadUriPermission(this, uri, getContentResolver(), new PermissionListener() {
+            @Override
+            public void granted() {
+                ProgressDialogFragment progressDialog = new ProgressDialogFragment();
+                progressDialog.setMessage(getString(R.string.please_wait));
+                progressDialog.show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
 
-            mediaLoadingFragment.beginMediaLoadingTask(uri);
-        } else {
-            ToastUtils.showLongToast(R.string.read_file_permission_not_granted);
-        }
+                mediaLoadingFragment.beginMediaLoadingTask(uri);
+            }
+
+            @Override
+            public void denied() {
+
+            }
+        });
     }
 
     public QuestionWidget getWidgetWaitingForBinaryData() {
