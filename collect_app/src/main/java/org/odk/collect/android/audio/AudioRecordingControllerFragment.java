@@ -19,6 +19,7 @@ import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
+import org.odk.collect.audiorecorder.recording.RecordingSession;
 import org.odk.collect.strings.format.LengthFormatterKt;
 
 import javax.inject.Inject;
@@ -91,7 +92,7 @@ public class AudioRecordingControllerFragment extends Fragment {
                     binding.pauseRecording.setVisibility(GONE);
                 }
 
-                if (session.getId().equals("background")) {
+                if (isBackgroundRecording(session)) {
                     binding.pauseRecording.setVisibility(GONE);
                     binding.stopRecording.setVisibility(GONE);
                 }
@@ -101,5 +102,9 @@ public class AudioRecordingControllerFragment extends Fragment {
         });
 
         binding.stopRecording.setOnClickListener(v -> audioRecorderViewModel.stop());
+    }
+
+    private boolean isBackgroundRecording(RecordingSession session) {
+        return session.getId().equals("background");
     }
 }
