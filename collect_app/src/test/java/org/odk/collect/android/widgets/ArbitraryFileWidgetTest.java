@@ -17,6 +17,7 @@ import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
@@ -93,6 +94,16 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
 
         ArbitraryFileWidget widget = getWidget();
         widget.clearAnswer();
+        assertThat(widget.binding.arbitraryFileAnswerText.getVisibility(), is(View.GONE));
+    }
+
+    @Test
+    public void whenSetDataCalledWithUnsupportedType_shouldAnswerBeRemoved() {
+        when(formEntryPrompt.getAnswerText()).thenReturn(getInitialAnswer().getDisplayText());
+
+        ArbitraryFileWidget widget = getWidget();
+        widget.setData(null);
+        assertThat(widget.getAnswer(), is(nullValue()));
         assertThat(widget.binding.arbitraryFileAnswerText.getVisibility(), is(View.GONE));
     }
 
