@@ -829,9 +829,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
                 break;
             case RequestCodes.EX_ARBITRARY_FILE_CHOOSER:
-                externalValue = externalAppIntentProvider.getValueFromIntent(intent);
-                if (externalValue instanceof Uri) {
-                    loadFile((Uri) externalValue);
+                if (intent.getClipData().getItemCount() > 0 && intent.getClipData().getItemAt(0) != null) {
+                    loadFile(intent.getClipData().getItemAt(0).getUri());
+                } else {
+                    setWidgetData(null);
                 }
                 break;
             case RequestCodes.EX_GROUP_CAPTURE:
