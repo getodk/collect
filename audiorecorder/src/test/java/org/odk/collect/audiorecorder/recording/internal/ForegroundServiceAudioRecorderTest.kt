@@ -37,7 +37,7 @@ class ForegroundServiceAudioRecorderTest : AudioRecorderTest() {
     private val scheduler = FakeScheduler()
 
     override val viewModel: AudioRecorder by lazy {
-        AudioRecorderFactory(application).create(AudioRecorder::class.java)
+        AudioRecorderFactory(application).create()
     }
 
     override fun runBackground() {
