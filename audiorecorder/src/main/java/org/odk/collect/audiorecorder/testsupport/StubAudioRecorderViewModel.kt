@@ -15,11 +15,19 @@ class StubAudioRecorderViewModel(private val stubRecordingPath: String) : AudioR
 
     var lastRecording: File? = null
     var lastSession: Serializable? = null
+
     var duration: Int = 0
         set(value) {
             field = value
             currentSession.value?.let {
                 currentSession.value = it.copy(duration = value.toLong())
+            }
+        }
+    var amplitude: Int = 0
+        set(value) {
+            field = value
+            currentSession.value?.let {
+                currentSession.value = it.copy(amplitude = value)
             }
         }
 

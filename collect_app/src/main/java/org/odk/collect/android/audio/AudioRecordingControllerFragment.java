@@ -69,13 +69,14 @@ public class AudioRecordingControllerFragment extends Fragment {
                 binding.getRoot().setVisibility(VISIBLE);
 
                 binding.timeCode.setText(LengthFormatterKt.formatLength(session.getDuration()));
+                binding.waveform.addAmplitude(session.getAmplitude());
 
                 if (session.getPaused()) {
                     binding.pauseRecording.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_mic_24));
                     binding.pauseRecording.setContentDescription(getString(R.string.resume_recording));
                     binding.pauseRecording.setOnClickListener(v -> audioRecorderViewModel.resume());
 
-                    binding.recordingStatus.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_pause_24dp));
+                    binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_pause_24dp));
                 } else {
                     binding.pauseRecording.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_pause_24dp));
                     binding.pauseRecording.setContentDescription(getString(R.string.pause_recording));
@@ -84,7 +85,7 @@ public class AudioRecordingControllerFragment extends Fragment {
                         formEntryViewModel.logFormEvent(AnalyticsEvents.AUDIO_RECORDING_PAUSE);
                     });
 
-                    binding.recordingStatus.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_mic_24));
+                    binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_mic_24));
                 }
 
                 // Pause not available before API 24

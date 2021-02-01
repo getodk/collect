@@ -73,6 +73,17 @@ public class AudioRecordingControllerFragmentTest {
     }
 
     @Test
+    public void updatesWaveform() {
+        FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
+        scenario.onFragment(fragment -> {
+            assertThat(fragment.binding.waveform.getLatestAmplitude(), equalTo(0));
+
+            audioRecorderViewModel.setAmplitude(156);
+            assertThat(fragment.binding.waveform.getLatestAmplitude(), equalTo(156));
+        });
+    }
+
+    @Test
     public void clickingPause_pausesRecording() {
         FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
@@ -109,7 +120,7 @@ public class AudioRecordingControllerFragmentTest {
 
         FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
-            assertThat(shadowOf(fragment.binding.recordingStatus.getDrawable()).getCreatedFromResId(), is(R.drawable.ic_pause_24dp));
+            assertThat(shadowOf(fragment.binding.recordingIcon.getDrawable()).getCreatedFromResId(), is(R.drawable.ic_pause_24dp));
         });
     }
 
@@ -132,7 +143,7 @@ public class AudioRecordingControllerFragmentTest {
 
         FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
-            assertThat(shadowOf(fragment.binding.recordingStatus.getDrawable()).getCreatedFromResId(), is(R.drawable.ic_baseline_mic_24));
+            assertThat(shadowOf(fragment.binding.recordingIcon.getDrawable()).getCreatedFromResId(), is(R.drawable.ic_baseline_mic_24));
         });
     }
 
