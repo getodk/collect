@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.xpath.parser.XPathSyntaxException;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.exception.ExternalParamsException;
@@ -18,6 +19,8 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
+
+import java.io.File;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -36,6 +39,11 @@ public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
 
     @Mock
     ExternalAppIntentProvider externalAppIntentProvider;
+
+    @Before
+    public void setup() {
+        when(mediaUtils.isVideoFile(any())).thenReturn(true);
+    }
 
     @Override
     public StringData getInitialAnswer() {
@@ -120,11 +128,22 @@ public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
     }
 
     @Test
-    public void whenSetDataCalledWithUnsupportedType_shouldAnswerBeRemoved() {
+    public void whenSetDataCalledWithNull_shouldAnswerBeRemoved() {
         when(formEntryPrompt.getAnswerText()).thenReturn(getInitialAnswer().getDisplayText());
 
         ExVideoWidget widget = getWidget();
         widget.setData(null);
+        assertThat(widget.getAnswer(), is(nullValue()));
+        assertThat(widget.binding.playVideoButton.isEnabled(), is(false));
+    }
+
+    @Test
+    public void whenSetDataCalledWithUnsupportedType_shouldNotAnswerBeAdded() {
+        ExVideoWidget widget = getWidget();
+        File answer = mock(File.class);
+        when(answer.exists()).thenReturn(true);
+        when(mediaUtils.isVideoFile(answer)).thenReturn(false);
+        widget.setData(answer);
         assertThat(widget.getAnswer(), is(nullValue()));
         assertThat(widget.binding.playVideoButton.isEnabled(), is(false));
     }

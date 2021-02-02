@@ -91,7 +91,7 @@ public class ExVideoWidget extends QuestionWidget implements FileWidget, WidgetD
             clearAnswer();
         }
 
-        if (object instanceof File) {
+        if (object instanceof File && mediaUtils.isVideoFile((File) object)) {
             answerFile = (File) object;
             if (answerFile.exists()) {
                 questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), answerFile.getAbsolutePath());
