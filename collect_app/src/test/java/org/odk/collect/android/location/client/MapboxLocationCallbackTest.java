@@ -6,27 +6,27 @@ import com.mapbox.android.core.location.LocationEngineResult;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.android.location.LocationTestUtils;
 
 import static android.location.LocationManager.GPS_PROVIDER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class MapboxLocationCallbackTest {
     private MapboxLocationCallback mapboxLocationCallback;
-    private TestLocationListener locationListener;
+    private MapboxMapFragment mapFragment;
     private final LocationEngineResult result = mock(LocationEngineResult.class);
 
     @Before
     public void setup() {
-        locationListener = spy(new TestLocationListener());
-        mapboxLocationCallback = new MapboxLocationCallback(locationListener);
+        mapFragment = mock(MapboxMapFragment.class);
+        mapboxLocationCallback = new MapboxLocationCallback(mapFragment);
     }
 
     @Test
@@ -34,8 +34,7 @@ public class MapboxLocationCallbackTest {
         when(result.getLastLocation()).thenReturn(null);
         mapboxLocationCallback.onSuccess(result);
 
-        verify(locationListener, never()).onLocationChanged(null);
-        assertThat(locationListener.getLastLocation(), is(nullValue()));
+        verify(mapFragment, never()).onLocationChanged(null);
     }
 
     @Test
@@ -44,8 +43,7 @@ public class MapboxLocationCallbackTest {
         when(result.getLastLocation()).thenReturn(location);
         mapboxLocationCallback.onSuccess(result);
 
-        Location receivedLocation = locationListener.getLastLocation();
-        assertThat(location, is(receivedLocation));
+        verify(mapFragment).onLocationChanged(location);
     }
 
     @Test
@@ -54,7 +52,10 @@ public class MapboxLocationCallbackTest {
         when(result.getLastLocation()).thenReturn(location);
         mapboxLocationCallback.onSuccess(result);
 
-        assertThat(locationListener.getLastLocation().getAccuracy(), is(0.0f));
+        ArgumentCaptor<Location> acLocation = ArgumentCaptor.forClass(Location.class);
+        verify(mapFragment).onLocationChanged(acLocation.capture());
+        assertThat(acLocation.getValue().getAccuracy(), is(0.0f));
+
     }
 
     @Test
@@ -63,6 +64,8 @@ public class MapboxLocationCallbackTest {
         when(result.getLastLocation()).thenReturn(location);
         mapboxLocationCallback.onSuccess(result);
 
-        assertThat(locationListener.getLastLocation().getAccuracy(), is(0.0f));
+        ArgumentCaptor<Location> acLocation = ArgumentCaptor.forClass(Location.class);
+        verify(mapFragment).onLocationChanged(acLocation.capture());
+        assertThat(acLocation.getValue().getAccuracy(), is(0.0f));
     }
 }
