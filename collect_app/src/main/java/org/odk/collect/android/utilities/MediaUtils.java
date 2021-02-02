@@ -15,6 +15,7 @@
 package org.odk.collect.android.utilities;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -69,5 +70,9 @@ public class MediaUtils {
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType(mimeType);
         activity.startActivityForResult(intent, requestCode);
+    }
+
+    public boolean isVideoFile(File file) {
+        return ContentResolverHelper.getMimeType(file).startsWith("video");
     }
 }
