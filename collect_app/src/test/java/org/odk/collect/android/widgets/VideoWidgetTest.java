@@ -20,8 +20,6 @@ import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 
-import java.io.File;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -32,9 +30,6 @@ import static org.mockito.Mockito.when;
  * @author James Knight
  */
 public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
-    @Mock
-    File file;
-
     @Mock
     MediaUtils mediaUtils;
 
@@ -50,11 +45,6 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
     @Override
     public StringData getNextAnswer() {
         return new StringData(destinationName);
-    }
-
-    @Override
-    public Object createBinaryData(StringData answerData) {
-        return file;
     }
 
     @Before
@@ -106,10 +96,5 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
         assertThat(getSpyWidget().playButton.getVisibility(), is(View.VISIBLE));
         assertThat(getSpyWidget().playButton.isEnabled(), is(Boolean.FALSE));
         assertThat(getSpyWidget().playButton.getText(), is("Play Video"));
-    }
-
-    public void prepareAnswerFile() {
-        when(file.exists()).thenReturn(true);
-        when(file.getName()).thenReturn(destinationName);
     }
 }

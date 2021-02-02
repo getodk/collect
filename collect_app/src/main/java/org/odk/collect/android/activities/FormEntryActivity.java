@@ -145,6 +145,7 @@ import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
 import org.odk.collect.android.utilities.DialogUtils;
+import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
@@ -350,6 +351,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     ActivityAvailability activityAvailability;
+
+    @Inject
+    ExternalAppIntentProvider externalAppIntentProvider;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -819,13 +823,18 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case RequestCodes.EX_STRING_CAPTURE:
             case RequestCodes.EX_INT_CAPTURE:
             case RequestCodes.EX_DECIMAL_CAPTURE:
-                String key = "value";
-                boolean exists = intent.getExtras().containsKey(key);
-                if (exists) {
-                    Object externalValue = intent.getExtras().get(key);
-                    if (getCurrentViewIfODKView() != null) {
-                        setWidgetData(externalValue);
-                    }
+                Object externalValue = externalAppIntentProvider.getValueFromIntent(intent);
+                if (getCurrentViewIfODKView() != null) {
+                    setWidgetData(externalValue);
+                }
+                break;
+            case RequestCodes.EX_ARBITRARY_FILE_CHOOSER:
+                if (intent.getClipData() != null
+                        && intent.getClipData().getItemCount() > 0
+                        && intent.getClipData().getItemAt(0) != null) {
+                    loadFile(intent.getClipData().getItemAt(0).getUri());
+                } else {
+                    setWidgetData(null);
                 }
                 break;
             case RequestCodes.EX_GROUP_CAPTURE:

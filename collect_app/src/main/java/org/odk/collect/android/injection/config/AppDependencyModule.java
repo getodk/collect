@@ -98,6 +98,7 @@ import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
+import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
@@ -513,5 +514,11 @@ public class AppDependencyModule {
     @Singleton
     public PermissionsChecker providesPermissionsChecker(Context context) {
         return new PermissionsChecker(context);
+    }
+
+    @Provides
+    @Singleton
+    public ExternalAppIntentProvider providesExternalAppIntentProvider() {
+        return new ExternalAppIntentProvider();
     }
 }

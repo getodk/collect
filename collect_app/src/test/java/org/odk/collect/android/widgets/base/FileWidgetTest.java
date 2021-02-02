@@ -11,6 +11,7 @@ import org.odk.collect.android.widgets.interfaces.FileWidget;
 
 import java.io.File;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -26,6 +27,14 @@ public abstract class FileWidgetTest<W extends FileWidget> extends BinaryWidgetT
     }
 
     @Override
+    public Object createBinaryData(StringData answerData) {
+        File file = mock(File.class);
+        when(file.exists()).thenReturn(true);
+        when(file.getName()).thenReturn(answerData.getDisplayText());
+        return file;
+    }
+
+    @Override
     public void setUp() throws Exception {
         super.setUp();
 
@@ -35,8 +44,6 @@ public abstract class FileWidgetTest<W extends FileWidget> extends BinaryWidgetT
 
     @Test
     public void settingANewAnswerShouldCallDeleteMediaToRemoveTheOldFile() {
-        prepareAnswerFile();
-
         super.settingANewAnswerShouldRemoveTheOldAnswer();
 
         W widget = getSpyWidget();
@@ -49,25 +56,5 @@ public abstract class FileWidgetTest<W extends FileWidget> extends BinaryWidgetT
 
         W widget = getSpyWidget();
         verify(widget).deleteFile();
-    }
-
-    @Override
-    public void getAnswerShouldReturnCorrectAnswerAfterBeingSet() {
-        prepareAnswerFile();
-        super.getAnswerShouldReturnCorrectAnswerAfterBeingSet();
-    }
-
-    @Override
-    public void settingANewAnswerShouldRemoveTheOldAnswer() {
-        prepareAnswerFile();
-        super.settingANewAnswerShouldRemoveTheOldAnswer();
-    }
-
-    /**
-     * Override this to provide additional set-up prior to testing any set answer methods.
-     */
-    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
-    protected void prepareAnswerFile() {
-        // Default implementation does nothing.
     }
 }

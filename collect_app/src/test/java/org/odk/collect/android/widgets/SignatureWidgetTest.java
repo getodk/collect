@@ -14,7 +14,6 @@ import net.bytebuddy.utility.RandomString;
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -39,10 +38,6 @@ import static org.robolectric.Shadows.shadowOf;
  * @author James Knight
  */
 public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
-
-    @Mock
-    File file;
-
     private String fileName;
 
     @NonNull
@@ -58,21 +53,10 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
         return new StringData(fileName);
     }
 
-    @Override
-    public Object createBinaryData(StringData answerData) {
-        return file;
-    }
-
     @Before
     public void setUp() throws Exception {
         super.setUp();
         fileName = RandomString.make();
-    }
-
-    @Override
-    protected void prepareAnswerFile() {
-        when(file.exists()).thenReturn(true);
-        when(file.getName()).thenReturn(fileName);
     }
 
     @Test
