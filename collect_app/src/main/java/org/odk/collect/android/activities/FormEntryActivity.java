@@ -132,6 +132,7 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
@@ -140,6 +141,7 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveFormIndexTask;
 import org.odk.collect.android.tasks.SavePointTask;
+import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -155,11 +157,14 @@ import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangePickerDecimalWidget;
 import org.odk.collect.android.widgets.RangePickerIntegerWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+import org.odk.collect.android.widgets.utilities.ExternalAppRecordingRequester;
 import org.odk.collect.android.widgets.utilities.FormControllerWaitingForDataRegistry;
+import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
 import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.AudioClipViewModel;
+import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
 
@@ -293,6 +298,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private FormIndexAnimationHandler formIndexAnimationHandler;
     private WaitingForDataRegistry waitingForDataRegistry;
     private AudioRecorderViewModel audioRecorderViewModel;
+    private InternalRecordingRequester internalRecordingRequester;
+    private ExternalAppRecordingRequester externalAppRecordingRequester;
 
     @Override
     public void allowSwiping(boolean doSwipe) {
@@ -337,6 +344,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     SoftKeyboardController softKeyboardController;
+
+    @Inject
+    PreferencesProvider preferencesProvider;
+
+    @Inject
+    ActivityAvailability activityAvailability;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -388,8 +401,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 audioRecorderViewModel,
                 backgroundLocationViewModel
         );
-
-        waitingForDataRegistry = new FormControllerWaitingForDataRegistry();
 
         nextButton = findViewById(R.id.form_forward_button);
         nextButton.setOnClickListener(v -> {
@@ -488,6 +499,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
         audioRecorderViewModel = new ViewModelProvider(this, audioRecorderViewModelFactory).get(AudioRecorderViewModel.class);
+        internalRecordingRequester = new InternalRecordingRequester(this, audioRecorderViewModel, permissionsProvider, formEntryViewModel, formSaveViewModel, this);
+
+        waitingForDataRegistry = new FormControllerWaitingForDataRegistry();
+        externalAppRecordingRequester = new ExternalAppRecordingRequester(this, activityAvailability, waitingForDataRegistry, permissionsProvider, formEntryViewModel);
+
+        if (preferencesProvider.getGeneralSharedPreferences().getBoolean("background_audio_recording", false)) {
+            audioRecorderViewModel.start("background", Output.AMR);
+        }
     }
 
     // Precondition: the instance directory must be ready so that the audit file can be created
@@ -1172,7 +1191,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .of(this, factory)
                 .get(AudioClipViewModel.class), odkViewLifecycle);
 
-        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorderViewModel, formEntryViewModel);
+        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorderViewModel, formEntryViewModel, internalRecordingRequester, externalAppRecordingRequester);
     }
 
     @Override
@@ -1321,9 +1340,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         if (saveAs.getText().length() < 1) {
                             showShortToast(R.string.save_as_error);
                         } else {
-                            saveForm(EXIT, instanceComplete
-                                    .isChecked(), saveAs.getText()
-                                    .toString(), true);
+                            if (audioRecorderViewModel.isRecording() && !audioRecorderViewModel.getCurrentSession().getValue().getId().equals("background")) {
+                                DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
+                            } else {
+                                saveForm(EXIT, instanceComplete
+                                        .isChecked(), saveAs.getText()
+                                        .toString(), true);
+                            }
                         }
                     }
                 });
@@ -1363,12 +1386,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         FormController formController = getFormController();
         if (formController == null) {
             Timber.d("FormController has a null value");
-            return false;
-        }
-
-        if (audioRecorderViewModel.isRecording()) {
-            // We want the user to stop recording before changing screens
-            DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
             return false;
         }
 
@@ -2382,6 +2399,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 setResult(RESULT_OK, new Intent().setData(uri));
             }
         }
+
+        audioRecorderViewModel.stop();
         finish();
     }
 

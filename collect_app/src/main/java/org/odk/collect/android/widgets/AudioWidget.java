@@ -38,6 +38,7 @@ import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.AudioFileRequester;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
+import org.odk.collect.android.widgets.utilities.RecordingStatusHandler;
 import org.odk.collect.audioclips.Clip;
 
 import java.io.File;
@@ -68,7 +69,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
     private boolean recordingInProgress;
     private String binaryName;
 
-    public AudioWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager, AudioPlayer audioPlayer, RecordingRequester recordingRequester, AudioFileRequester audioFileRequester) {
+    public AudioWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager, AudioPlayer audioPlayer, RecordingRequester recordingRequester, AudioFileRequester audioFileRequester, RecordingStatusHandler recordingStatusHandler) {
         super(context, questionDetails);
         this.audioPlayer = audioPlayer;
 
@@ -77,29 +78,23 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
         this.audioFileRequester = audioFileRequester;
 
         binaryName = questionDetails.getPrompt().getAnswerText();
-
         updateVisibilities();
         updatePlayerMedia();
 
-        recordingRequester.onIsRecordingBlocked(isRecordingBlocked -> {
+        recordingStatusHandler.onBlockedStatusChange(isRecordingBlocked -> {
             binding.captureButton.setEnabled(!isRecordingBlocked);
             binding.chooseButton.setEnabled(!isRecordingBlocked);
         });
 
-        recordingRequester.onRecordingInProgress(getFormEntryPrompt(), session -> {
-            recordingInProgress = true;
-            updateVisibilities();
+        recordingStatusHandler.onRecordingStatusChange(getFormEntryPrompt(), session -> {
+            if (session != null) {
+                recordingInProgress = true;
+                updateVisibilities();
 
-            binding.recordingDuration.setText(formatLength(session.first));
-            binding.waveform.addAmplitude(session.second);
-        });
-
-        recordingRequester.onRecordingFinished(getFormEntryPrompt(), recording -> {
-            recordingInProgress = false;
-
-            if (recording != null) {
-                setData(recording);
+                binding.recordingDuration.setText(formatLength(session.first));
+                binding.waveform.addAmplitude(session.second);
             } else {
+                recordingInProgress = false;
                 updateVisibilities();
             }
         });

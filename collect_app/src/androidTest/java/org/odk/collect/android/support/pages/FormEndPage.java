@@ -43,6 +43,11 @@ public class FormEndPage extends Page<FormEndPage> {
         return new FormEntryPage(formName, rule).assertOnPage();
     }
 
+    public OkDialog clickSaveAndExitWithErrorDialog() {
+        onView(withId(R.id.save_exit_button)).perform(click());
+        return new OkDialog(rule).assertOnPage();
+    }
+
     public FormEndPage assertMarkFinishedIsSelected() {
         onView(withId(R.id.mark_finished)).check(matches(isChecked()));
         return this;

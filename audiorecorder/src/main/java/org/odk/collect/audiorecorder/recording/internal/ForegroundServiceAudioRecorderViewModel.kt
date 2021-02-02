@@ -13,6 +13,7 @@ import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Com
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_STOP
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.EXTRA_OUTPUT
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.EXTRA_SESSION_ID
+import java.io.Serializable
 
 internal class ForegroundServiceAudioRecorderViewModel internal constructor(private val application: Application, private val recordingRepository: RecordingRepository) : AudioRecorderViewModel() {
 
@@ -25,7 +26,7 @@ internal class ForegroundServiceAudioRecorderViewModel internal constructor(priv
         return recordingRepository.currentSession
     }
 
-    override fun start(sessionId: String, output: Output) {
+    override fun start(sessionId: Serializable, output: Output) {
         application.startService(
             Intent(application, AudioRecorderService::class.java).apply {
                 action = ACTION_START

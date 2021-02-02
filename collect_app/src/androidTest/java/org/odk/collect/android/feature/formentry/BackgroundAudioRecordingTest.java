@@ -12,23 +12,24 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.android.support.pages.OkDialog;
 import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorderViewModel;
 
 import java.io.File;
 import java.io.IOException;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
 @RunWith(AndroidJUnit4.class)
-public class AudioRecordingTest {
+public class BackgroundAudioRecordingTest {
 
     private StubAudioRecorderViewModel stubAudioRecorderViewModel;
 
@@ -64,37 +65,22 @@ public class AudioRecordingTest {
             .around(rule);
 
     @Test
-    public void onAudioQuestion_withQualitySpecified_canRecordAudioInApp() {
-        rule.mainMenu()
-                .copyForm("internal-audio-question.xml")
-                .startBlankForm("Audio Question")
-                .assertContentDescriptionNotDisplayed(R.string.stop_recording)
-                .clickOnString(R.string.capture_audio)
-                .clickOnContentDescription(R.string.stop_recording)
-                .assertContentDescriptionNotDisplayed(R.string.stop_recording)
-                .assertTextNotDisplayed(R.string.capture_audio)
-                .assertContentDescriptionDisplayed(R.string.play_audio);
-    }
+    public void whenBackgroundAudioRecordingEnabled_fillingOutForm_recordsAudio() {
+        FormEntryPage formEntryPage = rule.mainMenu()
+                .enableBackgroundAudioRecording()
+                .copyForm("one-question.xml")
+                .startBlankForm("One Question");
+        assertThat(stubAudioRecorderViewModel.isRecording(), is(true));
 
-    @Test
-    public void whileRecording_quittingForm_showsWarning_andStaysOnSameScreen() {
-        rule.mainMenu()
-                .copyForm("internal-audio-question.xml")
-                .startBlankForm("Audio Question")
-                .clickOnString(R.string.capture_audio)
-                .pressBack(new OkDialog(rule))
-                .clickOK(new FormEntryPage("Audio Question", rule))
-                .assertQuestion("What does it sound like?");
-    }
+        FormEndPage formEndPage = formEntryPage
+                .inputText("123")
+                .swipeToEndScreen();
+        assertThat(stubAudioRecorderViewModel.isRecording(), is(true));
 
-    @Test
-    public void whileRecording_swipingToEndScreen_andClickingSaveAndExit_showsWarning_andStaysOnSameScreen() {
-        rule.mainMenu()
-                .copyForm("internal-audio-question.xml")
-                .startBlankForm("Audio Question")
-                .clickOnString(R.string.capture_audio)
-                .swipeToEndScreen()
-                .clickSaveAndExitWithErrorDialog()
-                .clickOK(new FormEndPage("Audio Question", rule));
+        formEndPage.clickSaveAndExit();
+        assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
+
+        assertThat(stubAudioRecorderViewModel.getLastRecording(), notNullValue());
+        assertThat(stubAudioRecorderViewModel.getLastRecording().exists(), is(true));
     }
 }

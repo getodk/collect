@@ -23,6 +23,7 @@ import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.utilities.AudioFileRequester;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
+import org.odk.collect.android.widgets.utilities.RecordingStatusHandler;
 import org.odk.collect.audioclips.Clip;
 import org.robolectric.RobolectricTestRunner;
 
@@ -339,22 +340,12 @@ public class AudioWidgetTest {
     }
 
     @Test
-    public void whenRecordingFinished_updatesWidgetAnswer() throws Exception {
-        FormEntryPrompt prompt = promptWithAnswer(null);
-        AudioWidget widget = createWidget(prompt);
-
-        File newFile = File.createTempFile("newFile", ".mp3", questionMediaManager.getDir());
-        recordingRequester.setRecording(prompt.getIndex().toString(), newFile);
-        assertThat(widget.getAnswer().getDisplayText(), equalTo(newFile.getName()));
-    }
-
-    @Test
-    public void whenRecordingFinished_afterRecordingInProgress_whenFileIsNull_showsButtons() {
+    public void whenRecordingFinished_showsButtons() {
         FormEntryPrompt prompt = promptWithAnswer(null);
         AudioWidget widget = createWidget(prompt);
 
         recordingRequester.setDuration(prompt.getIndex().toString(), 5);
-        recordingRequester.setRecording(prompt.getIndex().toString(), null);
+        recordingRequester.reset();
 
         assertThat(widget.binding.audioController.getVisibility(), is(GONE));
         assertThat(widget.binding.recordingDuration.getVisibility(), is(GONE));
@@ -479,7 +470,8 @@ public class AudioWidgetTest {
                 questionMediaManager,
                 audioPlayer,
                 recordingRequester,
-                audioFileRequester
+                audioFileRequester,
+                recordingRequester
         );
     }
 
@@ -490,7 +482,8 @@ public class AudioWidgetTest {
                 questionMediaManager,
                 audioPlayer,
                 recordingRequester,
-                audioFileRequester
+                audioFileRequester,
+                recordingRequester
         );
     }
 
@@ -559,11 +552,10 @@ public class AudioWidgetTest {
         }
     }
 
-    private static class FakeRecordingRequester implements RecordingRequester {
+    private static class FakeRecordingRequester implements RecordingRequester, RecordingStatusHandler {
 
         FormEntryPrompt requestedRecordingFor;
         private Consumer<Boolean> isRecordingListener;
-        private final Map<String, Consumer<File>> recordingAvailableListeners = new HashMap<>();
         private final Map<String, Consumer<Pair<Long, Integer>>> inProgressListeners = new HashMap<>();
 
         @Override
@@ -572,18 +564,13 @@ public class AudioWidgetTest {
         }
 
         @Override
-        public void onIsRecordingBlocked(Consumer<Boolean> isRecordingListener) {
-            this.isRecordingListener = isRecordingListener;
+        public void onBlockedStatusChange(Consumer<Boolean> blockedStatusListener) {
+            this.isRecordingListener = blockedStatusListener;
         }
 
         @Override
-        public void onRecordingFinished(FormEntryPrompt prompt, Consumer<File> recordingAvailableListener) {
-            recordingAvailableListeners.put(prompt.getIndex().toString(), recordingAvailableListener);
-        }
-
-        @Override
-        public void onRecordingInProgress(FormEntryPrompt prompt, Consumer<Pair<Long, Integer>> durationListener) {
-            inProgressListeners.put(prompt.getIndex().toString(), durationListener);
+        public void onRecordingStatusChange(FormEntryPrompt prompt, Consumer<Pair<Long, Integer>> statusListener) {
+            inProgressListeners.put(prompt.getIndex().toString(), statusListener);
         }
 
         public void startRecording() {
@@ -594,16 +581,18 @@ public class AudioWidgetTest {
             isRecordingListener.accept(false);
         }
 
-        public void setRecording(String sessionId, File file) {
-            recordingAvailableListeners.get(sessionId).accept(file);
-        }
-
         public void setDuration(String sessionId, long duration) {
             inProgressListeners.get(sessionId).accept(new Pair<>(duration, 0));
         }
 
         public void setAmplitude(String sessionId, int amplitude) {
             inProgressListeners.get(sessionId).accept(new Pair<>(0L, amplitude));
+        }
+
+        public void reset() {
+            inProgressListeners.forEach((sessionId, listener) -> {
+                listener.accept(null);
+            });
         }
     }
 }
