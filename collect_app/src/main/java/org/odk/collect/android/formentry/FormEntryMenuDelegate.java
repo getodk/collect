@@ -100,9 +100,13 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_add_repeat) {
-            formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
-            formEntryViewModel.promptForNewRepeat();
-            formIndexAnimationHandler.handle(formEntryViewModel.getCurrentIndex());
+            if (audioRecorder.isRecording()) {
+                DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
+            } else {
+                formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
+                formEntryViewModel.promptForNewRepeat();
+                formIndexAnimationHandler.handle(formEntryViewModel.getCurrentIndex());
+            }
 
             return true;
         } else if (item.getItemId() == R.id.menu_preferences) {
@@ -118,11 +122,15 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
             backgroundLocationViewModel.backgroundLocationPreferenceToggled();
             return true;
         } else if (item.getItemId() == R.id.menu_goto) {
-            formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
+            if (audioRecorder.isRecording()) {
+                DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
+            } else {
+                formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
 
-            formEntryViewModel.openHierarchy();
-            Intent i = new Intent(activity, FormHierarchyActivity.class);
-            activity.startActivityForResult(i, ApplicationConstants.RequestCodes.HIERARCHY_ACTIVITY);
+                formEntryViewModel.openHierarchy();
+                Intent i = new Intent(activity, FormHierarchyActivity.class);
+                activity.startActivityForResult(i, ApplicationConstants.RequestCodes.HIERARCHY_ACTIVITY);
+            }
 
             return true;
         } else {
