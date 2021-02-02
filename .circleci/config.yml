@@ -29,7 +29,7 @@ jobs:
 
       - run:
           name: Compile code
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 compileDebugSources
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleDebug
       - persist_to_workspace:
           root: ~/work
           paths:
