@@ -3,28 +3,31 @@ package org.odk.collect.android.location.client;
 import android.location.Location;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
-import com.google.android.gms.location.LocationListener;
 import com.mapbox.android.core.location.LocationEngineCallback;
 import com.mapbox.android.core.location.LocationEngineResult;
 
-public class MapboxLocationCallback implements LocationEngineCallback<LocationEngineResult> {
-    @Nullable
-    private final LocationListener locationListener;
+import org.odk.collect.android.geo.MapboxMapFragment;
 
-    public MapboxLocationCallback(@Nullable LocationListener locationListener) {
-        this.locationListener = locationListener;
+import java.lang.ref.WeakReference;
+
+public class MapboxLocationCallback implements LocationEngineCallback<LocationEngineResult> {
+
+    private final WeakReference<MapboxMapFragment> mapRef;
+
+    public MapboxLocationCallback(MapboxMapFragment map) {
+        mapRef = new WeakReference<>(map);
     }
 
     @Override
     public void onSuccess(LocationEngineResult result) {
+        MapboxMapFragment map = mapRef.get();
         Location location = result.getLastLocation();
-        if (locationListener != null && location != null) {
+        if (map != null && location != null) {
             if (location.isFromMockProvider() || location.getAccuracy() < 0) {
                 location.setAccuracy(0);
             }
-            locationListener.onLocationChanged(location);
+            map.onLocationChanged(location);
         }
     }
 
