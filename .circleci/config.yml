@@ -33,20 +33,13 @@ jobs:
       - persist_to_workspace:
           root: ~/work
           paths:
-            - async/build
-            - audioclips/build
-            - audiorecorder/build
-            - collect_app/build
-            - material/build
-            - nbistubs/build
-            - strings/build
+            - .
 
   check_quality:
     <<: *android_config
     environment:
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
-      - checkout
       - attach_workspace:
           at: ~/work
 
@@ -72,7 +65,6 @@ jobs:
     environment:
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
-      - checkout
       - attach_workspace:
           at: ~/work
 
@@ -113,7 +105,6 @@ jobs:
     environment:
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
-      - checkout
       - attach_workspace:
           at: ~/work
 
@@ -143,7 +134,6 @@ jobs:
     environment:
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
-      - checkout
       - attach_workspace:
           at: ~/work
 
@@ -166,7 +156,6 @@ jobs:
     environment:
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
-      - checkout
       - attach_workspace:
           at: ~/work
 
