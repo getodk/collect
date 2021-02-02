@@ -1386,6 +1386,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             return false;
         }
 
+        if (audioRecorder.isRecording() && !preferencesProvider.getGeneralSharedPreferences().getBoolean("background_audio_recording", false)) {
+            // We want the user to stop recording before changing screens
+            DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
+            return false;
+        }
+
         if (direction == FORWARDS) {
             if (formController.getEvent() == FormEntryController.EVENT_END_OF_FORM) {
                 return false;

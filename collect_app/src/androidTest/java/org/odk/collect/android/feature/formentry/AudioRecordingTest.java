@@ -14,7 +14,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
-import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.OkDialog;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -70,7 +69,7 @@ public class AudioRecordingTest {
     }
 
     @Test
-    public void whileRecording_quittingForm_showsWarning_andStaysOnSameScreen() {
+    public void whileRecording_pressingBack_showsWarning_andStaysOnSameScreen() {
         rule.mainMenu()
                 .copyForm("internal-audio-question.xml")
                 .startBlankForm("Audio Question")
@@ -81,13 +80,13 @@ public class AudioRecordingTest {
     }
 
     @Test
-    public void whileRecording_swipingToEndScreen_andClickingSaveAndExit_showsWarning_andStaysOnSameScreen() {
+    public void whileRecording_swipingToADifferentScreen_showsWarning_andStaysOnSameScreen() {
         rule.mainMenu()
                 .copyForm("internal-audio-question.xml")
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
-                .swipeToEndScreen()
-                .clickSaveAndExitWithErrorDialog()
-                .clickOK(new FormEndPage("Audio Question", rule));
+                .swipeToEndScreenWhileRecording()
+                .clickOK(new FormEntryPage("Audio Question", rule))
+                .assertQuestion("What does it sound like?");
     }
 }
