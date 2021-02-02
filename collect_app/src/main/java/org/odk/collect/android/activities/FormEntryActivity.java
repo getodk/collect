@@ -397,8 +397,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 formSaveViewModel,
                 formEntryViewModel,
                 audioRecorder,
-                backgroundLocationViewModel
-        );
+                backgroundLocationViewModel,
+                preferencesProvider);
 
         nextButton = findViewById(R.id.form_forward_button);
         nextButton.setOnClickListener(v -> {

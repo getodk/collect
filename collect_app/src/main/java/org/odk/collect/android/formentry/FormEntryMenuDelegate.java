@@ -19,6 +19,7 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MenuDelegate;
@@ -35,12 +36,13 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
     private final FormEntryViewModel formEntryViewModel;
     private final FormSaveViewModel formSaveViewModel;
     private final BackgroundLocationViewModel backgroundLocationViewModel;
+    private final PreferencesProvider preferencesProvider;
 
     @Nullable
     private FormController formController;
     private final AudioRecorder audioRecorder;
 
-    public FormEntryMenuDelegate(AppCompatActivity activity, AnswersProvider answersProvider, FormIndexAnimationHandler formIndexAnimationHandler, FormSaveViewModel formSaveViewModel, FormEntryViewModel formEntryViewModel, AudioRecorder audioRecorder, BackgroundLocationViewModel backgroundLocationViewModel) {
+    public FormEntryMenuDelegate(AppCompatActivity activity, AnswersProvider answersProvider, FormIndexAnimationHandler formIndexAnimationHandler, FormSaveViewModel formSaveViewModel, FormEntryViewModel formEntryViewModel, AudioRecorder audioRecorder, BackgroundLocationViewModel backgroundLocationViewModel, PreferencesProvider preferencesProvider) {
         this.activity = activity;
         this.answersProvider = answersProvider;
         this.formIndexAnimationHandler = formIndexAnimationHandler;
@@ -49,6 +51,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
         this.formEntryViewModel = formEntryViewModel;
         this.formSaveViewModel = formSaveViewModel;
         this.backgroundLocationViewModel = backgroundLocationViewModel;
+        this.preferencesProvider = preferencesProvider;
     }
 
     @Override
@@ -100,7 +103,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_add_repeat) {
-            if (audioRecorder.isRecording()) {
+            if (audioRecorder.isRecording() && !preferencesProvider.getGeneralSharedPreferences().getBoolean("background_audio_recording", false)) {
                 DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
             } else {
                 formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
@@ -122,7 +125,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
             backgroundLocationViewModel.backgroundLocationPreferenceToggled();
             return true;
         } else if (item.getItemId() == R.id.menu_goto) {
-            if (audioRecorder.isRecording()) {
+            if (audioRecorder.isRecording() && !preferencesProvider.getGeneralSharedPreferences().getBoolean("background_audio_recording", false)) {
                 DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
             } else {
                 formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
@@ -136,6 +139,5 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
         } else {
             return false;
         }
-
     }
 }
