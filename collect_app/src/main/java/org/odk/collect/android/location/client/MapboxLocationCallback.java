@@ -11,6 +11,8 @@ import org.odk.collect.android.geo.MapboxMapFragment;
 
 import java.lang.ref.WeakReference;
 
+// https://docs.mapbox.com/android/core/guides/#requesting-location-updates
+// Replace mock location accuracy with 0 as in LocationClient implementations since Mapbox uses its own location engine.
 public class MapboxLocationCallback implements LocationEngineCallback<LocationEngineResult> {
 
     private final WeakReference<MapboxMapFragment> mapRef;
