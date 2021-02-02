@@ -37,7 +37,7 @@ public class ExVideoWidget extends QuestionWidget implements FileWidget, WidgetD
     private final ExternalAppIntentProvider externalAppIntentProvider;
     private final ActivityAvailability activityAvailability;
 
-    private File answerFile;
+    File answerFile;
 
     public ExVideoWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager,
                          WaitingForDataRegistry waitingForDataRegistry, MediaUtils mediaUtils,
