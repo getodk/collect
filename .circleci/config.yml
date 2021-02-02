@@ -4,21 +4,51 @@
 version: 2
 
 references:
-  workspace: &workspace
-               ~/work
-
   android_config: &android_config
-    working_directory: *workspace
+    working_directory: ~/work
     docker:
       - image: circleci/android:api-30
 
 jobs:
+  compile:
+    <<: *android_config
+    environment:
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+      - run:
+          name: Download dependencies
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+
+      - run:
+          name: Compile code
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 compileDebugSources
+      - persist_to_workspace:
+          root: ~/work
+          paths:
+            - async/build
+            - audioclips/build
+            - audiorecorder/build
+            - collect_app/build
+            - material/build
+            - nbistubs/build
+            - strings/build
+
   check_quality:
     <<: *android_config
     environment:
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/work
 
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
@@ -43,6 +73,8 @@ jobs:
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/work
 
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
@@ -82,6 +114,8 @@ jobs:
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/work
 
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
@@ -97,7 +131,7 @@ jobs:
           name: Run app unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 collect_app:testDebug
           no_output_timeout: 15m
-          
+
       - store_artifacts:
           path: collect_app/build/reports
           destination: reports
@@ -110,6 +144,8 @@ jobs:
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/work
 
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
@@ -131,6 +167,8 @@ jobs:
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/work
 
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
@@ -173,10 +211,19 @@ workflows:
   version: 2
   workflow:
     jobs:
-      - check_quality
-      - test_modules
-      - test_app
+      - compile
+      - check_quality:
+          requires:
+            - compile
+      - test_modules:
+          requires:
+            - compile
+      - test_app:
+          requires:
+            - compile
       - build_instrumented:
+          requires:
+            - compile
           filters:
             branches:
               ignore: master
