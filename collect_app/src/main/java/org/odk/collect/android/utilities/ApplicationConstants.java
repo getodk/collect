@@ -97,7 +97,8 @@ public class ApplicationConstants {
         public static final int GEOTRACE_CAPTURE = 21;
         public static final int ARBITRARY_FILE_CHOOSER = 22;
         public static final int EX_ARBITRARY_FILE_CHOOSER  = 23;
-        public static final int CHANGE_SETTINGS = 24;
+        public static final int EX_VIDEO_CHOOSER  = 24;
+        public static final int CHANGE_SETTINGS = 25;
 
         public static final int FORMS_UPLOADED_NOTIFICATION = 97;
         public static final int FORMS_DOWNLOADED_NOTIFICATION = 98;
