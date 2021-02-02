@@ -383,7 +383,8 @@ public class MultiFormDownloader {
 
         // we've downloaded the file, and we may have renamed it
         // make sure it's not the same as a file we already have
-        Form form = formsRepository.getByMd5Hash(FileUtils.getMd5Hash(f));
+        //Form form = formsRepository.getByMd5Hash(FileUtils.getMd5Hash(f));   // smap - if we have downloaded the file already then use it
+        Form form = null;       // smap
         if (form != null) {
             isNew = false;
 

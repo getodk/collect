@@ -55,7 +55,7 @@ r	deleted by them: collect_app/src/main/java/org/odk/collect/android/preferences
 	both modified:   collect_app/src/main/java/org/odk/collect/android/upload/InstanceUploader.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/utilities/ApplicationResetter.java
 	deleted by them: collect_app/src/main/java/org/odk/collect/android/utilities/FormListDownloader.java
-	both modified:   collect_app/src/main/java/org/odk/collect/android/utilities/MultiFormDownloader.java
+	replaces FormDownloader:   collect_app/src/main/java/org/odk/collect/android/utilities/MultiFormDownloader.java
 r	deleted by them: collect_app/src/main/java/org/odk/collect/android/utilities/NotificationUtils.java (and by us)
 	both modified:   collect_app/src/main/java/org/odk/collect/android/widgets/AudioWidget.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/widgets/BarcodeWidget.java
