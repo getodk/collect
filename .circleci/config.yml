@@ -43,16 +43,6 @@ jobs:
       - attach_workspace:
           at: ~/work
 
-      - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
-      - run:
-          name: Download dependencies
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 androidDependencies
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
-
       - run:
           name: Run code quality checks
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 checkCode
@@ -67,16 +57,6 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/work
-
-      - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
-      - run:
-          name: Download dependencies
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 androidDependencies
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
 
       - run:
           name: Run async unit tests
@@ -108,16 +88,6 @@ jobs:
       - attach_workspace:
           at: ~/work
 
-      - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
-      - run:
-          name: Download dependencies
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 androidDependencies
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
-
       - run:
           name: Run app unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 collect_app:testDebug
@@ -137,16 +107,6 @@ jobs:
       - attach_workspace:
           at: ~/work
 
-      - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
-      - run:
-          name: Download dependencies
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 androidDependencies
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
-
       - run:
           name: Assemble connected test build
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleDebugAndroidTest
@@ -158,16 +118,6 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/work
-
-      - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
-      - run:
-          name: Download dependencies
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 androidDependencies
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
 
       - run:
           name: Assemble test build
