@@ -97,7 +97,6 @@ jobs:
       - run:
           name: Run app unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 collect_app:testDebug
-          no_output_timeout: 15m
 
       - store_artifacts:
           path: collect_app/build/reports
