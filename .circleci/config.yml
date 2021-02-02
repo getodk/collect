@@ -42,6 +42,8 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/work
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
 
       - run:
           name: Run code quality checks
@@ -57,6 +59,8 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/work
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
 
       - run:
           name: Run async unit tests
@@ -87,6 +91,8 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/work
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
 
       - run:
           name: Run app unit tests
@@ -106,6 +112,8 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/work
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
 
       - run:
           name: Assemble connected test build
@@ -118,6 +126,8 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/work
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
 
       - run:
           name: Assemble test build
