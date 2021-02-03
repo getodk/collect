@@ -21,6 +21,7 @@ import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 
 import java.io.File;
+import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -131,7 +132,7 @@ public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
     }
 
     @Test
-    public void whenSetDataCalledWithNull_shouldAnswerBeRemoved() {
+    public void whenSetDataCalledWithNull_shouldExistedAnswerBeRemoved() {
         when(formEntryPrompt.getAnswerText()).thenReturn(getInitialAnswer().getDisplayText());
 
         ExVideoWidget widget = getWidget();
@@ -141,16 +142,14 @@ public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
     }
 
     @Test
-    public void whenSetDataCalledWithUnsupportedType_shouldNotAnswerBeAddedAndTheFileShouldBeRemoved() {
+    public void whenUnsupportedFileTypeAttached_shouldNotAnswerBeAddedAndTheFileShouldBeRemoved() throws IOException {
         ExVideoWidget widget = getWidget();
-        File answer = mock(File.class);
-        when(answer.getAbsolutePath()).thenReturn("/instances/instance1/doc.pdf");
-        when(answer.exists()).thenReturn(true);
+        File answer = File.createTempFile("doc", ".pdf");
         when(mediaUtils.isVideoFile(answer)).thenReturn(false);
         widget.setData(answer);
         assertThat(widget.getAnswer(), is(nullValue()));
         assertThat(widget.binding.playVideoButton.isEnabled(), is(false));
-        verify(mediaUtils).deleteMediaFile("/instances/instance1/doc.pdf");
+        verify(mediaUtils).deleteMediaFile(answer.getAbsolutePath());
     }
 
     @Test
