@@ -17,6 +17,8 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.audiorecorder.recorder.Output;
+import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.utilities.Clock;
 
 import javax.inject.Inject;
@@ -28,6 +30,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     private final Clock clock;
     private final Analytics analytics;
     private final PreferencesProvider preferencesProvider;
+    private final AudioRecorder audioRecorder;
     private final MutableLiveData<String> error = new MutableLiveData<>(null);
 
     @Nullable
@@ -37,15 +40,20 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     private FormIndex jumpBackIndex;
 
     @SuppressWarnings("WeakerAccess")
-    public FormEntryViewModel(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider) {
+    public FormEntryViewModel(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider, AudioRecorder audioRecorder) {
         this.clock = clock;
         this.analytics = analytics;
         this.preferencesProvider = preferencesProvider;
+        this.audioRecorder = audioRecorder;
     }
 
     @Override
     public void formLoaded(@NotNull FormController formController) {
         this.formController = formController;
+
+        if (hasBackgroundRecording()) {
+            startBackgroundRecording();
+        }
     }
 
     public boolean isFormControllerSet() {
@@ -167,8 +175,20 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         analytics.logFormEvent(event, getFormIdentifierHash());
     }
 
-    public boolean isBackgroundRecording() {
+    public boolean hasBackgroundRecording() {
         return preferencesProvider.getGeneralSharedPreferences().getBoolean("background_audio_recording", false);
+    }
+
+    public boolean isBackgroundRecording() {
+        return audioRecorder.isRecording() && audioRecorder.getCurrentSession().getValue().getId().equals("background");
+    }
+
+    public void startBackgroundRecording() {
+        audioRecorder.start("background", Output.AMR);
+    }
+
+    public void cancelBackgroundRecording() {
+        audioRecorder.cleanUp();
     }
 
     private String getFormIdentifierHash() {
@@ -184,19 +204,21 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         private final Clock clock;
         private final Analytics analytics;
         private final PreferencesProvider preferencesProvider;
+        private final AudioRecorder audioRecorder;
 
         @Inject
-        public Factory(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider) {
+        public Factory(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider, AudioRecorder audioRecorder) {
             this.clock = clock;
             this.analytics = analytics;
             this.preferencesProvider = preferencesProvider;
+            this.audioRecorder = audioRecorder;
         }
 
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormEntryViewModel(clock, analytics, preferencesProvider);
+            return (T) new FormEntryViewModel(clock, analytics, preferencesProvider, audioRecorder);
         }
     }
 }

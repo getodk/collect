@@ -13,6 +13,7 @@ import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.utilities.Clock;
 import org.robolectric.RobolectricTestRunner;
 
@@ -35,6 +36,7 @@ public class FormEntryViewModelTest {
     private FormIndex startingIndex;
     private AuditEventLogger auditEventLogger;
     private Clock clock;
+    private AudioRecorder audioRecorder;
 
     @Before
     public void setup() {
@@ -48,7 +50,8 @@ public class FormEntryViewModelTest {
 
         clock = mock(Clock.class);
 
-        viewModel = new FormEntryViewModel(clock, mock(Analytics.class), new PreferencesProvider(ApplicationProvider.getApplicationContext()));
+        audioRecorder = mock(AudioRecorder.class);
+        viewModel = new FormEntryViewModel(clock, mock(Analytics.class), new PreferencesProvider(ApplicationProvider.getApplicationContext()), audioRecorder);
         viewModel.formLoaded(formController);
     }
 
@@ -130,5 +133,11 @@ public class FormEntryViewModelTest {
         when(clock.getCurrentTime()).thenReturn(12345L);
         viewModel.openHierarchy();
         verify(auditEventLogger).logEvent(AuditEvent.AuditEventType.HIERARCHY, true, 12345L);
+    }
+
+    @Test
+    public void cancelBackgroundRecording_callsCleanUpOnAudioRecorder() {
+        viewModel.cancelBackgroundRecording();
+        verify(audioRecorder).cleanUp();
     }
 }

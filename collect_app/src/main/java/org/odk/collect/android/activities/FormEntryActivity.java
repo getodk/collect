@@ -159,7 +159,6 @@ import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.AudioClipViewModel;
-import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 
 import java.io.File;
@@ -495,10 +494,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         waitingForDataRegistry = new FormControllerWaitingForDataRegistry();
         externalAppRecordingRequester = new ExternalAppRecordingRequester(this, activityAvailability, waitingForDataRegistry, permissionsProvider, formEntryViewModel);
-
-        if (preferencesProvider.getGeneralSharedPreferences().getBoolean("background_audio_recording", false)) {
-            audioRecorder.start("background", Output.AMR);
-        }
     }
 
     // Precondition: the instance directory must be ready so that the audit file can be created

@@ -95,6 +95,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
         }
 
         menu.findItem(R.id.menu_add_repeat).setVisible(formEntryViewModel.canAddRepeat());
+        menu.findItem(R.id.menu_record_audio).setVisible(formEntryViewModel.hasBackgroundRecording());
     }
 
     @Override
@@ -130,6 +131,14 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
                 formEntryViewModel.openHierarchy();
                 Intent i = new Intent(activity, FormHierarchyActivity.class);
                 activity.startActivityForResult(i, ApplicationConstants.RequestCodes.HIERARCHY_ACTIVITY);
+            }
+
+            return true;
+        } else if (item.getItemId() == R.id.menu_record_audio) {
+            if (formEntryViewModel.isBackgroundRecording()) {
+                formEntryViewModel.cancelBackgroundRecording();
+            } else {
+                formEntryViewModel.startBackgroundRecording();
             }
 
             return true;
