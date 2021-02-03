@@ -358,37 +358,40 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void whenReasonRequiredToSave_saveReason_setsSaveResultState_toSaving() {
+    public void whenReasonRequiredToSave_resumeSave_setsSaveResultState_toSaving() {
         whenReasonRequiredToSave();
         viewModel.saveForm(Uri.parse("file://form"), false, "", false);
         LiveData<FormSaveViewModel.SaveResult> saveResult = viewModel.getSaveResult();
 
         viewModel.setReason("blah");
-        viewModel.saveReason();
+        viewModel.resumeSave();
         assertThat(saveResult.getValue().getState(), equalTo(SAVING));
     }
 
     @Test
-    public void saveReason_logsChangeReasonAuditEvent() {
+    public void whenReasonRequiredToSave_resumeSave_logsChangeReasonAuditEvent() {
+        whenReasonRequiredToSave();
+        viewModel.saveForm(Uri.parse("file://form"), false, "", false);
+
         viewModel.setReason("Blah");
-        viewModel.saveReason();
+        viewModel.resumeSave();
 
         verify(logger).logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, CURRENT_TIME, "Blah");
     }
 
     @Test
-    public void saveReason_whenReasonIsValid_returnsTrue() {
-        viewModel.setReason("Blah");
-        assertThat(viewModel.saveReason(), equalTo(true));
-    }
+    public void whenReasonRequiredToSave_resumeSave_whenReasonIsNotValid_doesNotSave() {
+        whenReasonRequiredToSave();
+        viewModel.saveForm(Uri.parse("file://form"), false, "", false);
+        LiveData<FormSaveViewModel.SaveResult> saveResult = viewModel.getSaveResult();
 
-    @Test
-    public void saveReason_whenReasonIsNotValid_returnsFalse() {
         viewModel.setReason("");
-        assertThat(viewModel.saveReason(), equalTo(false));
+        viewModel.resumeSave();
+        assertThat(saveResult.getValue().getState(), equalTo(CHANGE_REASON_REQUIRED));
 
         viewModel.setReason("  ");
-        assertThat(viewModel.saveReason(), equalTo(false));
+        viewModel.resumeSave();
+        assertThat(saveResult.getValue().getState(), equalTo(CHANGE_REASON_REQUIRED));
     }
 
     @Test

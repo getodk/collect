@@ -56,10 +56,7 @@ public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogF
         });
 
         toolbar.setOnMenuItemClickListener(item -> {
-            if (viewModel.saveReason()) {
-                dismiss();
-            }
-
+            viewModel.resumeSave();
             return true;
         });
 

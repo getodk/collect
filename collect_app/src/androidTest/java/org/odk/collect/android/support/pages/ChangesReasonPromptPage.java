@@ -39,6 +39,11 @@ public class ChangesReasonPromptPage extends Page<ChangesReasonPromptPage> {
         return new MainMenuPage(rule).assertOnPage();
     }
 
+    public <D extends Page<D>> D clickSave(D destination) {
+        clickOnString(R.string.save);
+        return destination.assertOnPage();
+    }
+
     public <D extends Page<D>> D pressClose(D destination) {
         onView(withContentDescription(getTranslatedString(R.string.close))).perform(click());
         return destination.assertOnPage();
