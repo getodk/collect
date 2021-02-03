@@ -75,4 +75,9 @@ public class FormEndPage extends Page<FormEndPage> {
     public FormEntryPage swipeToPreviousQuestion(String questionText, boolean isRequired) {
         return new FormEntryPage(formName, rule).swipeToPreviousQuestion(questionText, isRequired);
     }
+
+    public FormEndPage fillInFormName(String formName) {
+        inputText(formName);
+        return this;
+    }
 }
