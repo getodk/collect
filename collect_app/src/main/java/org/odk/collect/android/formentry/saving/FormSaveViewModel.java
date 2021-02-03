@@ -34,6 +34,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.utilities.Clock;
 import org.odk.collect.utilities.Result;
 
@@ -81,14 +82,16 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
     private final Analytics analytics;
     private final Scheduler scheduler;
+    private final AudioRecorder audioRecorder;
 
-    public FormSaveViewModel(SavedStateHandle stateHandle, Clock clock, FormSaver formSaver, MediaUtils mediaUtils, Analytics analytics, Scheduler scheduler) {
+    public FormSaveViewModel(SavedStateHandle stateHandle, Clock clock, FormSaver formSaver, MediaUtils mediaUtils, Analytics analytics, Scheduler scheduler, AudioRecorder audioRecorder) {
         this.stateHandle = stateHandle;
         this.clock = clock;
         this.formSaver = formSaver;
         this.mediaUtils = mediaUtils;
         this.analytics = analytics;
         this.scheduler = scheduler;
+        this.audioRecorder = audioRecorder;
 
         if (stateHandle.get(ORIGINAL_FILES) != null) {
             originalFiles = stateHandle.get(ORIGINAL_FILES);
@@ -130,15 +133,17 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             return;
         }
 
+        SaveRequest saveRequest = new SaveRequest(instanceContentURI, viewExiting, updatedSaveName, shouldFinalize);
         formController.getAuditEventLogger().flush();
 
-        SaveRequest saveRequest = new SaveRequest(instanceContentURI, viewExiting, updatedSaveName, shouldFinalize);
-
-        if (!requiresReasonToSave()) {
+        if (audioRecorder.isRecording()) {
+            this.saveResult.setValue(new SaveResult(SaveResult.State.WAITING_TO_SAVE, saveRequest));
+            audioRecorder.stop();
+        } else if (requiresReasonToSave()) {
+            this.saveResult.setValue(new SaveResult(SaveResult.State.CHANGE_REASON_REQUIRED, saveRequest));
+        } else {
             this.saveResult.setValue(new SaveResult(SaveResult.State.SAVING, saveRequest));
             saveToDisk(saveRequest);
-        } else {
-            this.saveResult.setValue(new SaveResult(SaveResult.State.CHANGE_REASON_REQUIRED, saveRequest));
         }
     }
 
@@ -168,6 +173,13 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         }
 
         clearMediaFiles();
+    }
+
+    public void resumeSave() {
+        if (saveResult.getValue() != null && saveResult.getValue().getState() == SaveResult.State.WAITING_TO_SAVE) {
+            SaveRequest request = saveResult.getValue().request;
+            saveForm(request.uri, request.shouldFinalize, request.updatedSaveName, request.viewExiting);
+        }
     }
 
     @Nullable
@@ -212,7 +224,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         return reason;
     }
 
-    private void saveToDisk(SaveRequest saveRequest) {
+    private void  saveToDisk(SaveRequest saveRequest) {
 
         saveTask = new SaveTask(saveRequest, formSaver, formController, mediaUtils, new SaveTask.Listener() {
             @Override
@@ -422,7 +434,8 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             SAVED,
             SAVE_ERROR,
             FINALIZE_ERROR,
-            CONSTRAINT_ERROR
+            CONSTRAINT_ERROR,
+            WAITING_TO_SAVE
         }
 
         public SaveRequest getRequest() {
