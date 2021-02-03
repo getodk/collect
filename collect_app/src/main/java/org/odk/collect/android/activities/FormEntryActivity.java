@@ -1268,6 +1268,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         FormEndView endView = new FormEndView(this, formSaveViewModel.getFormName(), saveName, InstancesDaoHelper.isInstanceComplete(true), new FormEndView.Listener() {
             @Override
             public void onSaveAsChanged(String saveAs) {
+                // Seems like this is needed for rotation?
                 saveName = saveAs;
             }
 
