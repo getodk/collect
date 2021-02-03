@@ -2,19 +2,19 @@ package org.odk.collect.audiorecorder.testsupport
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.runner.RunWith
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelTest
+import org.odk.collect.audiorecorder.recording.AudioRecorder
+import org.odk.collect.audiorecorder.recording.AudioRecorderTest
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
-class StubAudioRecorderViewModelTest : AudioRecorderViewModelTest() {
+class StubAudioRecorderTest : AudioRecorderTest() {
 
-    private val stubViewAudioRecorderViewModel: StubAudioRecorderViewModel by lazy {
+    private val stubViewAudioRecorderViewModel: StubAudioRecorder by lazy {
         val tempFile = File.createTempFile("blah", ".whatever")
-        StubAudioRecorderViewModel(tempFile.absolutePath)
+        StubAudioRecorder(tempFile.absolutePath)
     }
 
-    override val viewModel: AudioRecorderViewModel by lazy {
+    override val viewModel: AudioRecorder by lazy {
         stubViewAudioRecorderViewModel
     }
 

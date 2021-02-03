@@ -19,11 +19,12 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MenuDelegate;
 import org.odk.collect.android.utilities.PlayServicesChecker;
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
+import org.odk.collect.audiorecorder.recording.AudioRecorder;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
 
@@ -35,20 +36,22 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
     private final FormEntryViewModel formEntryViewModel;
     private final FormSaveViewModel formSaveViewModel;
     private final BackgroundLocationViewModel backgroundLocationViewModel;
+    private final PreferencesProvider preferencesProvider;
 
     @Nullable
     private FormController formController;
-    private final AudioRecorderViewModel audioRecorderViewModel;
+    private final AudioRecorder audioRecorder;
 
-    public FormEntryMenuDelegate(AppCompatActivity activity, AnswersProvider answersProvider, FormIndexAnimationHandler formIndexAnimationHandler, FormSaveViewModel formSaveViewModel, FormEntryViewModel formEntryViewModel, AudioRecorderViewModel audioRecorderViewModel, BackgroundLocationViewModel backgroundLocationViewModel) {
+    public FormEntryMenuDelegate(AppCompatActivity activity, AnswersProvider answersProvider, FormIndexAnimationHandler formIndexAnimationHandler, FormSaveViewModel formSaveViewModel, FormEntryViewModel formEntryViewModel, AudioRecorder audioRecorder, BackgroundLocationViewModel backgroundLocationViewModel, PreferencesProvider preferencesProvider) {
         this.activity = activity;
         this.answersProvider = answersProvider;
         this.formIndexAnimationHandler = formIndexAnimationHandler;
 
-        this.audioRecorderViewModel = audioRecorderViewModel;
+        this.audioRecorder = audioRecorder;
         this.formEntryViewModel = formEntryViewModel;
         this.formSaveViewModel = formSaveViewModel;
         this.backgroundLocationViewModel = backgroundLocationViewModel;
+        this.preferencesProvider = preferencesProvider;
     }
 
     @Override
@@ -100,13 +103,17 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_add_repeat) {
-            formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
-            formEntryViewModel.promptForNewRepeat();
-            formIndexAnimationHandler.handle(formEntryViewModel.getCurrentIndex());
+            if (audioRecorder.isRecording() && !preferencesProvider.getGeneralSharedPreferences().getBoolean("background_audio_recording", false)) {
+                DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
+            } else {
+                formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
+                formEntryViewModel.promptForNewRepeat();
+                formIndexAnimationHandler.handle(formEntryViewModel.getCurrentIndex());
+            }
 
             return true;
         } else if (item.getItemId() == R.id.menu_preferences) {
-            if (audioRecorderViewModel.isRecording()) {
+            if (audioRecorder.isRecording()) {
                 DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
             } else {
                 Intent pref = new Intent(activity, PreferencesActivity.class);
@@ -118,16 +125,19 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
             backgroundLocationViewModel.backgroundLocationPreferenceToggled();
             return true;
         } else if (item.getItemId() == R.id.menu_goto) {
-            formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
+            if (audioRecorder.isRecording() && !preferencesProvider.getGeneralSharedPreferences().getBoolean("background_audio_recording", false)) {
+                DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
+            } else {
+                formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
 
-            formEntryViewModel.openHierarchy();
-            Intent i = new Intent(activity, FormHierarchyActivity.class);
-            activity.startActivityForResult(i, ApplicationConstants.RequestCodes.HIERARCHY_ACTIVITY);
+                formEntryViewModel.openHierarchy();
+                Intent i = new Intent(activity, FormHierarchyActivity.class);
+                activity.startActivityForResult(i, ApplicationConstants.RequestCodes.HIERARCHY_ACTIVITY);
+            }
 
             return true;
         } else {
             return false;
         }
-
     }
 }

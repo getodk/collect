@@ -4,11 +4,9 @@ import android.app.Application;
 import android.content.DialogInterface;
 import android.widget.Button;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.testing.FragmentScenario;
-import androidx.lifecycle.ViewModel;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
@@ -17,8 +15,8 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.RobolectricHelpers;
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
-import org.odk.collect.audiorecorder.testsupport.StubAudioRecorderViewModel;
+import org.odk.collect.audiorecorder.recording.AudioRecorder;
+import org.odk.collect.audiorecorder.testsupport.StubAudioRecorder;
 
 import java.io.File;
 
@@ -28,22 +26,17 @@ import static org.hamcrest.Matchers.is;
 @RunWith(AndroidJUnit4.class)
 public class AudioRecordingErrorDialogFragmentTest {
 
-    private StubAudioRecorderViewModel viewModel;
+    private StubAudioRecorder audioRecorder;
 
     @Before
     public void setup() throws Exception {
         File stubRecording = File.createTempFile("test", ".m4a");
         stubRecording.deleteOnExit();
-        viewModel = new StubAudioRecorderViewModel(stubRecording.getAbsolutePath());
+        audioRecorder = new StubAudioRecorder(stubRecording.getAbsolutePath());
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
-            public AudioRecorderViewModelFactory providesAudioRecorderViewModelFactory(Application application) {
-                return new AudioRecorderViewModelFactory(application) {
-                    @Override
-                    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                        return (T) viewModel;
-                    }
-                };
+            public AudioRecorder providesAudioRecorder(Application application) {
+                return audioRecorder;
             }
         });
     }
@@ -66,6 +59,6 @@ public class AudioRecordingErrorDialogFragmentTest {
     public void onDismiss_callsCleanUpOnViewModel() {
         FragmentScenario<AudioRecordingErrorDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(AudioRecordingErrorDialogFragment.class);
         scenario.onFragment(DialogFragment::dismiss);
-        assertThat(viewModel.getWasCleanedUp(), is(true));
+        assertThat(audioRecorder.getWasCleanedUp(), is(true));
     }
 }

@@ -15,9 +15,9 @@ import org.odk.collect.audiorecorder.AudioRecorderDependencyModule
 import org.odk.collect.audiorecorder.RobolectricApplication
 import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recorder.Recorder
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelTest
+import org.odk.collect.audiorecorder.recording.AudioRecorder
+import org.odk.collect.audiorecorder.recording.AudioRecorderFactory
+import org.odk.collect.audiorecorder.recording.AudioRecorderTest
 import org.odk.collect.audiorecorder.recording.MicInUseException
 import org.odk.collect.audiorecorder.setupDependencies
 import org.odk.collect.audiorecorder.support.FakeRecorder
@@ -27,7 +27,7 @@ import org.robolectric.Shadows.shadowOf
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
-class ForegroundServiceAudioRecorderViewModelTest : AudioRecorderViewModelTest() {
+class ForegroundServiceAudioRecorderTest : AudioRecorderTest() {
 
     @get:Rule
     val instantTaskExecutor = InstantTaskExecutorRule()
@@ -36,8 +36,8 @@ class ForegroundServiceAudioRecorderViewModelTest : AudioRecorderViewModelTest()
     private val fakeRecorder = FakeRecorder()
     private val scheduler = FakeScheduler()
 
-    override val viewModel: AudioRecorderViewModel by lazy {
-        AudioRecorderViewModelFactory(application).create(AudioRecorderViewModel::class.java)
+    override val viewModel: AudioRecorder by lazy {
+        AudioRecorderFactory(application).create()
     }
 
     override fun runBackground() {

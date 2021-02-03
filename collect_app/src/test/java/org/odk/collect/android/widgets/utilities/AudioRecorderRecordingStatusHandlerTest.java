@@ -9,7 +9,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
+import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
 import org.odk.collect.testshared.FakeLifecycleOwner;
 
@@ -22,15 +22,15 @@ import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 
 @RunWith(AndroidJUnit4.class)
-public class ViewModelRecordingStatusHandlerTest {
+public class AudioRecorderRecordingStatusHandlerTest {
 
-    private final AudioRecorderViewModel viewModel = mock(AudioRecorderViewModel.class);
+    private final AudioRecorder viewModel = mock(AudioRecorder.class);
 
-    ViewModelRecordingStatusHandler provider;
+    AudioRecorderRecordingStatusHandler provider;
 
     @Before
     public void setup() {
-        provider = new ViewModelRecordingStatusHandler(viewModel, new FakeLifecycleOwner());
+        provider = new AudioRecorderRecordingStatusHandler(viewModel, new FakeLifecycleOwner());
     }
 
     @Test

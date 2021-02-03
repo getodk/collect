@@ -3,7 +3,7 @@ package org.odk.collect.audiorecorder.testsupport
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import org.odk.collect.audiorecorder.recorder.Output
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel
+import org.odk.collect.audiorecorder.recording.AudioRecorder
 import org.odk.collect.audiorecorder.recording.RecordingSession
 import java.io.File
 import java.io.Serializable
@@ -11,15 +11,23 @@ import java.io.Serializable
 /**
  * An implementation of audio recorder that always returns the same recording
  */
-class StubAudioRecorderViewModel(private val stubRecordingPath: String) : AudioRecorderViewModel() {
+class StubAudioRecorder(private val stubRecordingPath: String) : AudioRecorder() {
 
     var lastRecording: File? = null
     var lastSession: Serializable? = null
+
     var duration: Int = 0
         set(value) {
             field = value
             currentSession.value?.let {
                 currentSession.value = it.copy(duration = value.toLong())
+            }
+        }
+    var amplitude: Int = 0
+        set(value) {
+            field = value
+            currentSession.value?.let {
+                currentSession.value = it.copy(amplitude = value)
             }
         }
 

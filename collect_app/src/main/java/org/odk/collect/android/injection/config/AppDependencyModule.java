@@ -111,7 +111,8 @@ import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.android.views.BarcodeViewDecoder;
 import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
+import org.odk.collect.audiorecorder.recording.AudioRecorder;
+import org.odk.collect.audiorecorder.recording.AudioRecorderFactory;
 import org.odk.collect.utilities.Clock;
 import org.odk.collect.utilities.UserAgentProvider;
 
@@ -474,8 +475,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public AudioRecorderViewModelFactory providesAudioRecorderViewModelFactory(Application application) {
-        return new AudioRecorderViewModelFactory(application);
+    public AudioRecorder providesAudioRecorder(Application application) {
+        return new AudioRecorderFactory(application).create();
     }
 
     @Provides

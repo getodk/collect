@@ -86,7 +86,7 @@ import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.audioclips.PlaybackFailedException;
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
+import org.odk.collect.audiorecorder.recording.AudioRecorder;
 
 import java.io.File;
 import java.io.Serializable;
@@ -137,7 +137,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
     private final WidgetFactory widgetFactory;
     private final LifecycleOwner viewLifecycle;
-    private final AudioRecorderViewModel audioRecorderViewModel;
+    private final AudioRecorder audioRecorder;
     private final FormEntryViewModel formEntryViewModel;
 
     /**
@@ -149,10 +149,10 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      * @param advancingPage   whether this view is being created after a forward swipe through the
      */
     @SuppressWarnings("PMD.ExcessiveParameterList")
-    public ODKView(ComponentActivity context, final FormEntryPrompt[] questionPrompts, FormEntryCaption[] groups, boolean advancingPage, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, AudioPlayer audioPlayer, AudioRecorderViewModel audioRecorderViewModel, FormEntryViewModel formEntryViewModel, InternalRecordingRequester internalRecordingRequester, ExternalAppRecordingRequester externalAppRecordingRequester) {
+    public ODKView(ComponentActivity context, final FormEntryPrompt[] questionPrompts, FormEntryCaption[] groups, boolean advancingPage, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, AudioPlayer audioPlayer, AudioRecorder audioRecorder, FormEntryViewModel formEntryViewModel, InternalRecordingRequester internalRecordingRequester, ExternalAppRecordingRequester externalAppRecordingRequester) {
         super(context);
         viewLifecycle = ((ScreenContext) context).getViewLifecycle();
-        this.audioRecorderViewModel = audioRecorderViewModel;
+        this.audioRecorder = audioRecorder;
         this.formEntryViewModel = formEntryViewModel;
 
         getComponent(context).inject(this);
@@ -186,7 +186,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                         externalAppRecordingRequester
                 ),
                 formEntryViewModel,
-                audioRecorderViewModel,
+                audioRecorder,
                 viewLifecycle
         );
 
@@ -678,7 +678,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     }
 
     public void widgetValueChanged(QuestionWidget changedWidget) {
-        if (audioRecorderViewModel.isRecording()) {
+        if (audioRecorder.isRecording()) {
             formEntryViewModel.logFormEvent(AnalyticsEvents.ANSWER_WHILE_RECORDING);
         }
 

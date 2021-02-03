@@ -15,7 +15,7 @@ import org.odk.collect.audiorecorder.mediarecorder.AMRRecordingResource
 import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recorder.Recorder
 import org.odk.collect.audiorecorder.recorder.RecordingResourceRecorder
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory
+import org.odk.collect.audiorecorder.recording.AudioRecorderFactory
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService
 import org.odk.collect.audiorecorder.recording.internal.RecordingRepository
 import java.io.File
@@ -58,7 +58,7 @@ internal interface AudioRecorderDependencyComponent {
     }
 
     fun inject(activity: AudioRecorderService)
-    fun inject(activity: AudioRecorderViewModelFactory)
+    fun inject(activity: AudioRecorderFactory)
 
     fun recordingRepository(): RecordingRepository
 }
