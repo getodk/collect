@@ -101,7 +101,7 @@ public class ExVideoWidget extends QuestionWidget implements FileWidget, WidgetD
                 Timber.e("Inserting Video file FAILED");
             }
         } else if (object != null) {
-            Timber.e("ExVideoWidget's setBinaryData must receive a File but received: %s", object.getClass());
+            Timber.e("ExVideoWidget's setBinaryData must receive a video file but received: %s", object.getClass());
             if (object instanceof File) {
                 mediaUtils.deleteMediaFile(((File) object).getAbsolutePath());
             }
