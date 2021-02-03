@@ -52,6 +52,7 @@ import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveRes
 import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVED;
 import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVE_ERROR;
 import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVING;
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.WAITING_TO_SAVE;
 
 @RunWith(RobolectricTestRunner.class)
 public class FormSaveViewModelTest {
@@ -65,6 +66,7 @@ public class FormSaveViewModelTest {
     private FormSaveViewModel viewModel;
     private MediaUtils mediaUtils;
     private FormController formController;
+    private AudioRecorder audioRecorder;
 
     @Before
     public void setup() {
@@ -79,7 +81,8 @@ public class FormSaveViewModelTest {
         when(formController.getAuditEventLogger()).thenReturn(logger);
         when(logger.isChangeReasonRequired()).thenReturn(false);
 
-        viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, analytics, scheduler, mock(AudioRecorder.class));
+        audioRecorder = mock(AudioRecorder.class);
+        viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, analytics, scheduler, audioRecorder);
         viewModel.formLoaded(formController);
     }
 
@@ -115,6 +118,16 @@ public class FormSaveViewModelTest {
     @Test
     public void saveForm_whenReasonRequiredToSave_returnsSaveResult_inChangeReasonRequiredState() {
         whenReasonRequiredToSave();
+
+        LiveData<FormSaveViewModel.SaveResult> saveResult = viewModel.getSaveResult();
+        viewModel.saveForm(Uri.parse("file://form"), true, "", false);
+        assertThat(saveResult.getValue().getState(), equalTo(CHANGE_REASON_REQUIRED));
+    }
+
+    @Test
+    public void saveForm_whenReasonRequiredToSave_andAudioIsRecording_andExiting_returnsSaveResult_inChangeReasonRequiredState() {
+        whenReasonRequiredToSave();
+        when(audioRecorder.isRecording()).thenReturn(true);
 
         LiveData<FormSaveViewModel.SaveResult> saveResult = viewModel.getSaveResult();
         viewModel.saveForm(Uri.parse("file://form"), true, "", false);
@@ -392,6 +405,19 @@ public class FormSaveViewModelTest {
         viewModel.setReason("  ");
         viewModel.resumeSave();
         assertThat(saveResult.getValue().getState(), equalTo(CHANGE_REASON_REQUIRED));
+    }
+
+    @Test
+    public void whenReasonRequiredToSave_andRecordingAudio_andExiting_resumeSave_savesRecording() {
+        whenReasonRequiredToSave();
+        when(audioRecorder.isRecording()).thenReturn(true);
+
+        viewModel.saveForm(Uri.parse("file://form"), false, "", true);
+        LiveData<FormSaveViewModel.SaveResult> saveResult = viewModel.getSaveResult();
+
+        viewModel.setReason("blah");
+        viewModel.resumeSave();
+        assertThat(saveResult.getValue().getState(), equalTo(WAITING_TO_SAVE));
     }
 
     @Test

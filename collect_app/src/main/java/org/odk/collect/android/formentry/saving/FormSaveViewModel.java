@@ -136,11 +136,11 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         SaveRequest saveRequest = new SaveRequest(instanceContentURI, viewExiting, updatedSaveName, shouldFinalize);
         formController.getAuditEventLogger().flush();
 
-        if (audioRecorder.isRecording()) {
+        if (requiresReasonToSave()) {
+            this.saveResult.setValue(new SaveResult(SaveResult.State.CHANGE_REASON_REQUIRED, saveRequest));
+        } else if (viewExiting && audioRecorder.isRecording()) {
             this.saveResult.setValue(new SaveResult(SaveResult.State.WAITING_TO_SAVE, saveRequest));
             audioRecorder.stop();
-        } else if (requiresReasonToSave()) {
-            this.saveResult.setValue(new SaveResult(SaveResult.State.CHANGE_REASON_REQUIRED, saveRequest));
         } else {
             this.saveResult.setValue(new SaveResult(SaveResult.State.SAVING, saveRequest));
             saveToDisk(saveRequest);
@@ -177,13 +177,17 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
     public void resumeSave() {
         if (saveResult.getValue() != null) {
+            SaveRequest saveRequest = saveResult.getValue().request;
+
             if (saveResult.getValue().getState() == SaveResult.State.CHANGE_REASON_REQUIRED) {
                 if (!saveReason()) {
                     return;
+                } else if (saveRequest.viewExiting && audioRecorder.isRecording()) {
+                    this.saveResult.setValue(new SaveResult(SaveResult.State.WAITING_TO_SAVE, saveRequest));
+                    audioRecorder.stop();
+                    return;
                 }
             }
-
-            SaveRequest saveRequest = saveResult.getValue().request;
 
             this.saveResult.setValue(new SaveResult(SaveResult.State.SAVING, saveRequest));
             saveToDisk(saveRequest);

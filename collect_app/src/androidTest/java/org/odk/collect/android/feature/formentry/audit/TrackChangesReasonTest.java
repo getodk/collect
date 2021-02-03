@@ -175,6 +175,7 @@ public class TrackChangesReasonTest {
                 .inputText("Nothing much!")
                 .clickSaveWithChangesReasonPrompt()
                 .enterReason("Bah")
-                .clickSave(new FormEntryPage("Track Changes Reason", rule));
+                .clickSave(new FormEntryPage("Track Changes Reason", rule))
+                .assertQuestion("What up?");
     }
 }

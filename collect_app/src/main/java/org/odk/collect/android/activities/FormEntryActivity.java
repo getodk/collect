@@ -1731,6 +1731,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             case SAVED:
                 DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
+                DialogUtils.dismissDialog(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
+
                 showShortToast(R.string.data_saved_ok);
 
                 if (result.getRequest().viewExiting()) {
@@ -1745,6 +1747,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             case SAVE_ERROR:
                 DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
+                DialogUtils.dismissDialog(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
+
                 String message;
 
                 if (result.getMessage() != null) {
@@ -1760,6 +1764,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             case FINALIZE_ERROR:
                 DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
+                DialogUtils.dismissDialog(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
+
                 showLongToast(String.format(getString(R.string.encryption_error_message),
                         result.getMessage()));
                 finishAndReturnInstance();
@@ -1768,6 +1774,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             case CONSTRAINT_ERROR: {
                 DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
+                DialogUtils.dismissDialog(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
+
                 onScreenRefresh();
 
                 // get constraint behavior preference value with appropriate default
