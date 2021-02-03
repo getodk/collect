@@ -2360,7 +2360,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
-        audioRecorder.stop();
         finish();
     }
 

@@ -22,6 +22,7 @@ import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.testshared.FakeScheduler;
 import org.odk.collect.utilities.Result;
 import org.robolectric.Robolectric;
@@ -78,7 +79,7 @@ public class FormSaveViewModelTest {
         when(formController.getAuditEventLogger()).thenReturn(logger);
         when(logger.isChangeReasonRequired()).thenReturn(false);
 
-        viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, analytics, scheduler);
+        viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, analytics, scheduler, mock(AudioRecorder.class));
         viewModel.formLoaded(formController);
     }
 
@@ -416,7 +417,7 @@ public class FormSaveViewModelTest {
     public void deleteAnswerFile_whenAnswerFileHasAlreadyBeenDeleted_onRecreatingViewModel_actuallyDeletesNewFile() {
         viewModel.deleteAnswerFile("index", "blah1");
 
-        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler);
+        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler, mock(AudioRecorder.class));
         restoredViewModel.formLoaded(formController);
         restoredViewModel.deleteAnswerFile("index", "blah2");
 
@@ -447,7 +448,7 @@ public class FormSaveViewModelTest {
     public void replaceAnswerFile_whenAnswerFileHasAlreadyBeenReplaced_afterRecreatingViewModel_deletesPreviousReplacement() {
         viewModel.replaceAnswerFile("index", "blah1");
 
-        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler);
+        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler, mock(AudioRecorder.class));
         restoredViewModel.formLoaded(formController);
         restoredViewModel.replaceAnswerFile("index", "blah2");
 
@@ -522,7 +523,7 @@ public class FormSaveViewModelTest {
 
     @Test
     public void ignoreChanges_whenFormControllerNotSet_doesNothing() {
-        FormSaveViewModel viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler);
+        FormSaveViewModel viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler, mock(AudioRecorder.class));
         viewModel.ignoreChanges(); // Checks nothing explodes
     }
 

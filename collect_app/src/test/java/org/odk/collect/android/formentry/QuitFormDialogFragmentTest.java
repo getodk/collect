@@ -18,6 +18,7 @@ import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowDialog;
 
@@ -39,7 +40,7 @@ public class QuitFormDialogFragmentTest {
     public void setup() {
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
-            public FormSaveViewModel.FactoryFactory providesFormSaveViewModelFactoryFactory(Analytics analytics, Scheduler scheduler) {
+            public FormSaveViewModel.FactoryFactory providesFormSaveViewModelFactoryFactory(Analytics analytics, Scheduler scheduler, AudioRecorder audioRecorder) {
                 return (owner, defaultArgs) -> new ViewModelProvider.Factory() {
 
                     @NonNull
