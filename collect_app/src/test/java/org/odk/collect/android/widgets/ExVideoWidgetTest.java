@@ -141,14 +141,16 @@ public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
     }
 
     @Test
-    public void whenSetDataCalledWithUnsupportedType_shouldNotAnswerBeAdded() {
+    public void whenSetDataCalledWithUnsupportedType_shouldNotAnswerBeAddedAndTheFileShouldBeRemoved() {
         ExVideoWidget widget = getWidget();
         File answer = mock(File.class);
+        when(answer.getAbsolutePath()).thenReturn("/instances/instance1/doc.pdf");
         when(answer.exists()).thenReturn(true);
         when(mediaUtils.isVideoFile(answer)).thenReturn(false);
         widget.setData(answer);
         assertThat(widget.getAnswer(), is(nullValue()));
         assertThat(widget.binding.playVideoButton.isEnabled(), is(false));
+        verify(mediaUtils).deleteMediaFile("/instances/instance1/doc.pdf");
     }
 
     @Test

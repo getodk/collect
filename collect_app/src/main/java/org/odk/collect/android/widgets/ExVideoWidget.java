@@ -102,6 +102,9 @@ public class ExVideoWidget extends QuestionWidget implements FileWidget, WidgetD
             }
         } else if (object != null) {
             Timber.e("ExVideoWidget's setBinaryData must receive a File but received: %s", object.getClass());
+            if (object instanceof File) {
+                mediaUtils.deleteMediaFile(((File) object).getAbsolutePath());
+            }
         }
     }
 
