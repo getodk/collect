@@ -176,9 +176,17 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     }
 
     public void resumeSave() {
-        if (saveResult.getValue() != null && saveResult.getValue().getState() == SaveResult.State.WAITING_TO_SAVE) {
-            SaveRequest request = saveResult.getValue().request;
-            saveForm(request.uri, request.shouldFinalize, request.updatedSaveName, request.viewExiting);
+        if (saveResult.getValue() != null) {
+            if (saveResult.getValue().getState() == SaveResult.State.CHANGE_REASON_REQUIRED) {
+                if (!saveReason()) {
+                    return;
+                }
+            }
+
+            SaveRequest saveRequest = saveResult.getValue().request;
+
+            this.saveResult.setValue(new SaveResult(SaveResult.State.SAVING, saveRequest));
+            saveToDisk(saveRequest);
         }
     }
 
@@ -204,28 +212,20 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         this.reason = reason;
     }
 
-    public boolean saveReason() {
+    public String getReason() {
+        return reason;
+    }
+
+    private boolean saveReason() {
         if (reason == null || isBlank(reason) || formController == null) {
             return false;
         }
 
         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, clock.getCurrentTime(), reason);
-
-        if (saveResult.getValue() != null) {
-            SaveRequest request = saveResult.getValue().request;
-            saveResult.setValue(new SaveResult(SaveResult.State.SAVING, request));
-            saveToDisk(request);
-        }
-
         return true;
     }
 
-    public String getReason() {
-        return reason;
-    }
-
-    private void  saveToDisk(SaveRequest saveRequest) {
-
+    private void saveToDisk(SaveRequest saveRequest) {
         saveTask = new SaveTask(saveRequest, formSaver, formController, mediaUtils, new SaveTask.Listener() {
             @Override
             public void onProgressPublished(String progress) {
@@ -517,7 +517,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     /**
      * The ViewModel factory here needs a reference to the Activity (the SavedStateRegistry) so
      * we need factory to be able to create it in Dagger (as we won't have access to the Activity).
-     *
+     * <p>
      * Could potentially be solved using Dagger's per Activity scopes.
      */
 
