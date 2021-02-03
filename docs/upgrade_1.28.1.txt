@@ -516,7 +516,7 @@ r    	deleted:    collect_app/src/main/java/org/odk/collect/android/preferences/
     	modified:   collect_app/src/main/java/org/odk/collect/android/tasks/DiskSyncTask.java
     	modified:   collect_app/src/main/java/org/odk/collect/android/tasks/DownloadFormListTask.java
     	modified:   collect_app/src/main/java/org/odk/collect/android/tasks/DownloadFormsTask.java
-    	modified:   collect_app/src/main/java/org/odk/collect/android/tasks/InstanceServerUploaderTask.java
+r    	modified:   collect_app/src/main/java/org/odk/collect/android/tasks/InstanceServerUploaderTask.java
     	modified:   collect_app/src/main/java/org/odk/collect/android/tasks/InstanceSyncTask.java
     	modified:   collect_app/src/main/java/org/odk/collect/android/tasks/InstanceUploaderTask.java
     	modified:   collect_app/src/main/java/org/odk/collect/android/tasks/MediaLoadingTask.java
@@ -532,7 +532,7 @@ r    	deleted:    collect_app/src/main/java/org/odk/collect/android/preferences/
     	deleted:    collect_app/src/main/java/org/odk/collect/android/tasks/sms/models/SmsProgress.java
     	deleted:    collect_app/src/main/java/org/odk/collect/android/tasks/sms/models/SmsSubmission.java
     	deleted:    collect_app/src/main/java/org/odk/collect/android/upload/AutoSendWorker.java
-    	modified:   collect_app/src/main/java/org/odk/collect/android/upload/InstanceServerUploader.java
+r    	modified:   collect_app/src/main/java/org/odk/collect/android/upload/InstanceServerUploader.java
     	modified:   collect_app/src/main/java/org/odk/collect/android/upload/InstanceUploader.java
     	new file:   collect_app/src/main/java/org/odk/collect/android/utilities/ActivityResultDelegate.java
     	modified:   collect_app/src/main/java/org/odk/collect/android/utilities/ApplicationConstants.java
