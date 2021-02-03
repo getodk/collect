@@ -15,7 +15,6 @@
 package org.odk.collect.android.utilities;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
