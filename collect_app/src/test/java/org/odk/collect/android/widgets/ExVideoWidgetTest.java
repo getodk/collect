@@ -90,15 +90,27 @@ public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
     }
 
     @Test
-    public void whenThereIsNoAnswer_shouldPlayButtonBeDisabled() {
+    public void whenThereIsNoAnswer_shouldOnlyLaunchButtonBeEnabled() {
+        assertThat(getWidget().binding.captureVideoButton.isEnabled(), is(true));
         assertThat(getWidget().binding.playVideoButton.isEnabled(), is(false));
     }
 
     @Test
-    public void whenThereIsAnswer_shouldPlayButtonBeEnabled() {
+    public void whenThereIsAnswer_shouldBothButtonsBeEnabled() {
         when(formEntryPrompt.getAnswerText()).thenReturn(getInitialAnswer().getDisplayText());
 
+        assertThat(getWidget().binding.captureVideoButton.isEnabled(), is(true));
         assertThat(getWidget().binding.playVideoButton.isEnabled(), is(true));
+    }
+
+    @Test
+    public void whenClearAnswerCall_shouldPlayButtonBecomeDisabled() {
+        when(formEntryPrompt.getAnswerText()).thenReturn(getInitialAnswer().getDisplayText());
+
+        ExVideoWidget widget = getWidget();
+        widget.clearAnswer();
+        assertThat(widget.binding.captureVideoButton.isEnabled(), is(true));
+        assertThat(widget.binding.playVideoButton.isEnabled(), is(false));
     }
 
     @Test
@@ -116,15 +128,6 @@ public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
         ExVideoWidget widget = getWidget();
         widget.binding.playVideoButton.performClick();
         verify(mediaUtils).openFile(activity, widget.answerFile, "video/*");
-    }
-
-    @Test
-    public void whenClearAnswerCall_shouldPlayButtonBecomeDisabled() {
-        when(formEntryPrompt.getAnswerText()).thenReturn(getInitialAnswer().getDisplayText());
-
-        ExVideoWidget widget = getWidget();
-        widget.clearAnswer();
-        assertThat(widget.binding.playVideoButton.isEnabled(), is(false));
     }
 
     @Test
@@ -156,16 +159,17 @@ public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
         ExVideoWidget widget = getWidget();
         assertThat(widget.binding.captureVideoButton.getVisibility(), is(View.GONE));
         assertThat(widget.binding.playVideoButton.getVisibility(), is(View.VISIBLE));
+        assertThat(widget.binding.playVideoButton.isEnabled(), is(true));
     }
 
     @Test
     public void whenReadOnlyOverrideOptionIsUsed_shouldAllClickableElementsBeDisabled() {
         readOnlyOverride = true;
-        when(formEntryPrompt.isReadOnly()).thenReturn(false);
         when(formEntryPrompt.getAnswerText()).thenReturn(getInitialAnswer().getDisplayText());
 
         ExVideoWidget widget = getWidget();
         assertThat(widget.binding.captureVideoButton.getVisibility(), is(View.GONE));
         assertThat(widget.binding.playVideoButton.getVisibility(), is(View.VISIBLE));
+        assertThat(widget.binding.playVideoButton.isEnabled(), is(true));
     }
 }
