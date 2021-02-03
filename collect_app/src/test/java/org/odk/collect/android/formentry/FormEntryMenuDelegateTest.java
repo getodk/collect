@@ -14,7 +14,6 @@ import org.odk.collect.android.formentry.questions.AnswersProvider;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.robolectric.Robolectric;
@@ -49,7 +48,6 @@ public class FormEntryMenuDelegateTest {
     private AnswersProvider answersProvider;
     private FormSaveViewModel formSaveViewModel;
     private AudioRecorder audioRecorder;
-    private PreferencesProvider preferencesProvider;
 
     @Before
     public void setup() {
@@ -64,8 +62,6 @@ public class FormEntryMenuDelegateTest {
 
         BackgroundLocationViewModel backgroundLocationViewModel = mock(BackgroundLocationViewModel.class);
 
-        preferencesProvider = new PreferencesProvider(activity);
-
         formEntryMenuDelegate = new FormEntryMenuDelegate(
                 activity,
                 answersProvider,
@@ -73,8 +69,7 @@ public class FormEntryMenuDelegateTest {
                 formSaveViewModel,
                 formEntryViewModel,
                 audioRecorder,
-                backgroundLocationViewModel,
-                preferencesProvider
+                backgroundLocationViewModel
         );
         formEntryMenuDelegate.formLoaded(formController);
     }
@@ -157,7 +152,7 @@ public class FormEntryMenuDelegateTest {
         formEntryMenuDelegate.onPrepareOptionsMenu(menu);
 
         when(audioRecorder.isRecording()).thenReturn(true);
-        preferencesProvider.getGeneralSharedPreferences().edit().putBoolean("background_audio_recording", true).apply();
+        when(formEntryViewModel.isBackgroundRecording()).thenReturn(true);
 
         formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_add_repeat));
         verify(formEntryViewModel).promptForNewRepeat();
@@ -253,7 +248,7 @@ public class FormEntryMenuDelegateTest {
         formEntryMenuDelegate.onPrepareOptionsMenu(menu);
 
         when(audioRecorder.isRecording()).thenReturn(true);
-        preferencesProvider.getGeneralSharedPreferences().edit().putBoolean("background_audio_recording", true).apply();
+        when(formEntryViewModel.isBackgroundRecording()).thenReturn(true);
 
         formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_goto));
         assertThat(shadowOf(activity).getNextStartedActivity(), is(notNullValue()));

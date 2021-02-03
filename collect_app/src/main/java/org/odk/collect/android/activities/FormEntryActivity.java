@@ -392,8 +392,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 formSaveViewModel,
                 formEntryViewModel,
                 audioRecorder,
-                backgroundLocationViewModel,
-                preferencesProvider);
+                backgroundLocationViewModel
+        );
 
         nextButton = findViewById(R.id.form_forward_button);
         nextButton.setOnClickListener(v -> {
@@ -1343,7 +1343,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             return false;
         }
 
-        if (audioRecorder.isRecording() && !preferencesProvider.getGeneralSharedPreferences().getBoolean("background_audio_recording", false)) {
+        if (audioRecorder.isRecording() && !formEntryViewModel.isBackgroundRecording()) {
             // We want the user to stop recording before changing screens
             DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
             return false;

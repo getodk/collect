@@ -1,5 +1,7 @@
 package org.odk.collect.android.formentry;
 
+import androidx.test.core.app.ApplicationProvider;
+
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.instance.TreeReference;
 import org.junit.Before;
@@ -10,6 +12,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.utilities.Clock;
 import org.robolectric.RobolectricTestRunner;
 
@@ -45,7 +48,7 @@ public class FormEntryViewModelTest {
 
         clock = mock(Clock.class);
 
-        viewModel = new FormEntryViewModel(clock, mock(Analytics.class));
+        viewModel = new FormEntryViewModel(clock, mock(Analytics.class), new PreferencesProvider(ApplicationProvider.getApplicationContext()));
         viewModel.formLoaded(formController);
     }
 
