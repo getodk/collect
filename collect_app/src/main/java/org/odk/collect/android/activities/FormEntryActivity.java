@@ -26,9 +26,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.TextWatcher;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
@@ -36,12 +33,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -84,6 +78,7 @@ import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.formentry.FormEndView;
 import org.odk.collect.android.formentry.FormEntryMenuDelegate;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.FormIndexAnimationHandler;
@@ -146,7 +141,6 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
-import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ScreenContext;
@@ -218,9 +212,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         SelectMinimalDialog.SelectMinimalDialogListener, CustomDatePickerDialog.DateChangeListener,
         CustomTimePickerDialog.TimeChangeListener {
 
-    // Defines for FormEntryActivity
-    private static final boolean EXIT = true;
-    private static final boolean DO_NOT_EXIT = false;
     private static final boolean EVALUATE_CONSTRAINTS = true;
     public static final boolean DO_NOT_EVALUATE_CONSTRAINTS = false;
 
@@ -442,7 +433,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         onResume();
                     }
                 } catch (RuntimeException e) {
-                    createErrorDialog(e.getMessage(), EXIT);
+                    createErrorDialog(e.getMessage(), true);
                     return;
                 }
             }
@@ -479,7 +470,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         formEntryViewModel.getError().observe(this, error -> {
             if (error != null) {
-                createErrorDialog(error, DO_NOT_EXIT);
+                createErrorDialog(error, false);
                 formEntryViewModel.errorDisplayed();
             }
         });
@@ -561,7 +552,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // If a parse error message is showing then nothing else is loaded
         // Dialogs mid form just disappear on rotation.
         if (errorMessage != null) {
-            createErrorDialog(errorMessage, EXIT);
+            createErrorDialog(errorMessage, true);
             return;
         }
 
@@ -611,7 +602,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             FormInfo formInfo = ContentResolverHelper.getFormDetails(uri);
 
             if (formInfo == null) {
-                createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
+                createErrorDialog(getString(R.string.bad_uri, uri), true);
                 return;
             }
 
@@ -624,10 +615,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         formInfo.getFormId())
                                 + ((formInfo.getFormVersion() == null) ? ""
                                 : "\n" + getString(R.string.version) + " " + formInfo.getFormVersion()),
-                        EXIT);
+                        true);
                 return;
             } else if (candidateForms.stream().filter(f -> !f.isDeleted()).count() > 1) {
-                createErrorDialog(getString(R.string.survey_multiple_forms_error), EXIT);
+                createErrorDialog(getString(R.string.survey_multiple_forms_error), true);
                 return;
             }
 
@@ -636,7 +627,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 && uriMimeType.equals(FormsColumns.CONTENT_ITEM_TYPE)) {
             formPath = ContentResolverHelper.getFormPath(uri);
             if (formPath == null) {
-                createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
+                createErrorDialog(getString(R.string.bad_uri, uri), true);
                 return;
             } else {
                 /**
@@ -684,7 +675,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         } else {
             Timber.i("Unrecognized URI: %s", uri);
-            createErrorDialog(getString(R.string.unrecognized_uri, uri), EXIT);
+            createErrorDialog(getString(R.string.unrecognized_uri, uri), true);
             return;
         }
 
@@ -842,7 +833,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                 } catch (JavaRosaException e) {
                     Timber.e(e);
-                    createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
+                    createErrorDialog(e.getCause().getMessage(), false);
                 }
                 break;
             case RequestCodes.DRAW_IMAGE:
@@ -974,7 +965,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             case R.id.menu_save:
                 // don't exit
-                saveForm(DO_NOT_EXIT, InstancesDaoHelper.isInstanceComplete(false), null, true);
+                saveForm(false, InstancesDaoHelper.isInstanceComplete(false), null, true);
                 return true;
         }
 
@@ -1008,7 +999,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
             } catch (JavaRosaException | FormDesignException e) {
                 Timber.e(e);
-                createErrorDialog(e.getMessage(), DO_NOT_EXIT);
+                createErrorDialog(e.getMessage(), false);
                 return false;
             }
         }
@@ -1156,11 +1147,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     // this is badness to avoid a crash.
                     try {
                         event = formController.stepToNextScreenEvent();
-                        createErrorDialog(e.getMessage(), DO_NOT_EXIT);
+                        createErrorDialog(e.getMessage(), false);
                     } catch (JavaRosaException e1) {
                         Timber.d(e1);
                         createErrorDialog(e.getMessage() + "\n\n" + e1.getCause().getMessage(),
-                                DO_NOT_EXIT);
+                                false);
                     }
                     return createView(event, advancingPage);
                 }
@@ -1179,10 +1170,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // this is badness to avoid a crash.
                 try {
                     event = formController.stepToNextScreenEvent();
-                    createErrorDialog(getString(R.string.survey_internal_error), EXIT);
+                    createErrorDialog(getString(R.string.survey_internal_error), true);
                 } catch (JavaRosaException e) {
                     Timber.d(e);
-                    createErrorDialog(e.getCause().getMessage(), EXIT);
+                    createErrorDialog(e.getCause().getMessage(), true);
                 }
                 return createView(event, advancingPage);
         }
@@ -1229,9 +1220,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         } catch (JavaRosaException e) {
             Timber.d(e);
             if (e.getMessage().equals(e.getCause().getMessage())) {
-                createErrorDialog(e.getMessage(), DO_NOT_EXIT);
+                createErrorDialog(e.getMessage(), false);
             } else {
-                createErrorDialog(e.getMessage() + "\n\n" + e.getCause().getMessage(), DO_NOT_EXIT);
+                createErrorDialog(e.getMessage() + "\n\n" + e.getCause().getMessage(), false);
             }
         }
 
@@ -1244,29 +1235,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * a button for saving and exiting.
      */
     private View createViewForFormEnd(FormController formController) {
-        View endView = View.inflate(this, R.layout.form_entry_end, null);
-        ((TextView) endView.findViewById(R.id.description))
-                .setText(getString(R.string.save_enter_data_description,
-                        formController.getFormTitle()));
-
-        // checkbox for if finished or ready to send
-        final CheckBox instanceComplete = endView
-                .findViewById(R.id.mark_finished);
-        instanceComplete.setChecked(InstancesDaoHelper.isInstanceComplete(true));
-
-        if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_MARK_AS_FINALIZED)) {
-            instanceComplete.setVisibility(View.GONE);
-        }
-
-        // edittext to change the displayed name of the instance
-        final EditText saveAs = endView.findViewById(R.id.save_name);
-
-        // disallow carriage returns in the name
-        InputFilter returnFilter = (source, start, end, dest, dstart, dend)
-                -> FormNameUtils.normalizeFormName(source.toString().substring(start, end), true);
-        saveAs.setFilters(new InputFilter[]{returnFilter});
-
-        if (formController.getSubmissionMetadata().instanceName == null) {
+        if (formController.getSubmissionMetadata().instanceName != null) {
+            saveName = formController.getSubmissionMetadata().instanceName;
+        } else {
             // no meta/instanceName field in the form -- see if we have a
             // name for this instance from a previous save attempt...
             String uriMimeType = null;
@@ -1293,69 +1264,46 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                 }
             }
+
             if (saveName == null) {
-                // last resort, default to the form title
-                saveName = formController.getFormTitle();
+                saveName = formSaveViewModel.getFormName();
             }
-            // present the prompt to allow user to name the form
-            TextView sa = endView.findViewById(R.id.save_form_as);
-            sa.setVisibility(View.VISIBLE);
-            saveAs.setText(saveName);
-            saveAs.setEnabled(true);
-            saveAs.setVisibility(View.VISIBLE);
-            saveAs.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {
-                    saveName = String.valueOf(s);
-                }
+        }
 
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
+        FormEndView endView = new FormEndView(this, formSaveViewModel.getFormName(), saveName, InstancesDaoHelper.isInstanceComplete(true), new FormEndView.Listener() {
+            @Override
+            public void onSaveAsChanged(String saveAs) {
+                saveName = saveAs;
+            }
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override
+            public void onSaveClicked(boolean markAsFinalized) {
+                if (saveName.length() < 1) {
+                    showShortToast(R.string.save_as_error);
+                } else {
+                    formSaveViewModel.saveForm(getIntent().getData(), markAsFinalized, saveName, true);
                 }
-            });
-        } else {
+            }
+        });
+
+        if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_MARK_AS_FINALIZED)) {
+            endView.findViewById(R.id.mark_finished).setVisibility(View.GONE);
+        }
+
+        if (formController.getSubmissionMetadata().instanceName != null) {
             // if instanceName is defined in form, this is the name -- no
             // revisions
             // display only the name, not the prompt, and disable edits
-            saveName = formController.getSubmissionMetadata().instanceName;
-            TextView sa = endView.findViewById(R.id.save_form_as);
-            sa.setVisibility(View.GONE);
-            saveAs.setText(saveName);
-            saveAs.setEnabled(false);
-            saveAs.setVisibility(View.VISIBLE);
+            endView.findViewById(R.id.save_form_as).setVisibility(View.GONE);
+            endView.findViewById(R.id.save_name).setEnabled(false);
+            endView.findViewById(R.id.save_name).setVisibility(View.VISIBLE);
         }
 
         // override the visibility settings based upon admin preferences
         if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_AS)) {
-            saveAs.setVisibility(View.GONE);
-            TextView sa = endView
-                    .findViewById(R.id.save_form_as);
-            sa.setVisibility(View.GONE);
+            endView.findViewById(R.id.save_form_as).setVisibility(View.GONE);
+            endView.findViewById(R.id.save_name).setVisibility(View.GONE);
         }
-
-        // Create 'save' button
-        endView.findViewById(R.id.save_exit_button)
-                .setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // Form is marked as 'saved' here.
-                        if (saveAs.getText().length() < 1) {
-                            showShortToast(R.string.save_as_error);
-                        } else {
-                            if (audioRecorder.isRecording() && !audioRecorder.getCurrentSession().getValue().getId().equals("background")) {
-                                DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
-                            } else {
-                                saveForm(EXIT, instanceComplete
-                                        .isChecked(), saveAs.getText()
-                                        .toString(), true);
-                            }
-                        }
-                    }
-                });
 
         if (showNavigationButtons) {
             updateNavigationButtonVisibility();
@@ -1615,7 +1563,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
             } catch (FormDesignException e) {
                 Timber.e(e);
-                createErrorDialog(e.getMessage(), DO_NOT_EXIT);
+                createErrorDialog(e.getMessage(), false);
             }
         }
     }
@@ -1848,7 +1796,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     public void onSaveChangesClicked() {
-        saveForm(EXIT, InstancesDaoHelper.isInstanceComplete(false), null, true);
+        saveForm(true, InstancesDaoHelper.isInstanceComplete(false), null, true);
     }
 
     @Nullable
@@ -2026,7 +1974,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         if (errorMessage != null) {
             if (alertDialog != null && !alertDialog.isShowing()) {
-                createErrorDialog(errorMessage, EXIT);
+                createErrorDialog(errorMessage, true);
             } else {
                 return;
             }
@@ -2376,9 +2324,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         DialogUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
 
         if (errorMsg != null) {
-            createErrorDialog(errorMsg, EXIT);
+            createErrorDialog(errorMsg, true);
         } else {
-            createErrorDialog(getString(R.string.parse_error), EXIT);
+            createErrorDialog(getString(R.string.parse_error), true);
         }
     }
 
@@ -2604,7 +2552,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         });
                     } catch (FormDesignException e) {
                         Timber.e(e);
-                        createErrorDialog(e.getMessage(), DO_NOT_EXIT);
+                        createErrorDialog(e.getMessage(), false);
                     }
                 }
             });
