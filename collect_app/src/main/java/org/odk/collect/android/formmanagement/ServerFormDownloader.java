@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 import timber.log.Timber;
 
 import static org.apache.commons.io.FileUtils.deleteDirectory;
-import static org.odk.collect.android.analytics.AnalyticsEvents.DOWNLOAD_SAME_FORMID_VERSION;
+import static org.odk.collect.android.analytics.AnalyticsEvents.DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH;
 import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
 public class ServerFormDownloader implements FormDownloader {
@@ -58,14 +58,17 @@ public class ServerFormDownloader implements FormDownloader {
 
     @Override
     public void downloadForm(ServerFormDetails form, @Nullable ProgressReporter progressReporter, @Nullable Supplier<Boolean> isCancelled) throws FormDownloadException, InterruptedException {
-        Form formOnDevice = formsRepository.getOneByFormIdAndVersion(form.getFormId(), form.getFormVersion());
+        Form formOnDevice = formsRepository.getOneByMd5Hash(getMd5HashWithoutPrefix(form.getHash()));
         if (formOnDevice != null) {
             if (formOnDevice.isDeleted()) {
                 formsRepository.restore(formOnDevice.getId());
-            } else {
-                String formIdentifier = formOnDevice.getDisplayName() + " " + formOnDevice.getId();
+            }
+        } else {
+            List<Form> allSameFormIdVersion = formsRepository.getAllByFormIdAndVersion(form.getFormId(), form.getFormVersion());
+            if (!allSameFormIdVersion.isEmpty() && !form.getDownloadUrl().contains("/draft.xml")) {
+                String formIdentifier = form.getFormName() + " " + form.getFormId();
                 String formIdHash = FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
-                analytics.logFormEvent(DOWNLOAD_SAME_FORMID_VERSION, formIdHash);
+                analytics.logFormEvent(DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH, formIdHash);
             }
         }
 

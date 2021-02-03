@@ -170,7 +170,7 @@ public class InstanceSubmitter {
      */
     @Deprecated
     public static boolean shouldFormBeSent(FormsRepository formsRepository, String jrFormId, String jrFormVersion, boolean isAutoSendAppSettingEnabled) {
-        Form form = formsRepository.getOneByFormIdAndVersion(jrFormId, jrFormVersion);
+        Form form = formsRepository.getLatestByFormIdAndVersion(jrFormId, jrFormVersion);
         if (form == null) {
             return false;
         }

@@ -72,9 +72,11 @@ public class AnalyticsEvents {
     public static final String SCOPED_STORAGE_MIGRATION = "ScopedStorageMigration";
 
     /**
-     * Track attempts to download a form with the same formid/version as one already on the device.
+     * Track attempts to download a form with the same formid/version but different contents as one
+     * already on the device. We know this happens in the case of Central drafts but it should
+     * otherwise be rare.
      */
-    public static final String DOWNLOAD_SAME_FORMID_VERSION = "DownloadSameFormidVersion";
+    public static final String DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH = "DownloadSameFormidVersionDifferentHash";
 
     /**
      * Track downloads initiated when there are no downloaded forms on the device. The action should

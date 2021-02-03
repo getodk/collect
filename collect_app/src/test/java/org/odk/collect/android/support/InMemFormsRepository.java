@@ -5,9 +5,11 @@ import android.net.Uri;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.utilities.Clock;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,6 +22,16 @@ public class InMemFormsRepository implements FormsRepository {
     private final List<Form> forms = new ArrayList<>();
     private long idCounter = 1L;
 
+    private final Clock clock;
+
+    public InMemFormsRepository() {
+        this.clock = System::currentTimeMillis;
+    }
+
+    public InMemFormsRepository(Clock clock) {
+        this.clock = clock;
+    }
+
     @Nullable
     @Override
     public Form get(Long id) {
@@ -28,8 +40,14 @@ public class InMemFormsRepository implements FormsRepository {
 
     @Nullable
     @Override
-    public Form getOneByFormIdAndVersion(String formId, @Nullable String version) {
-        return forms.stream().filter(f -> f.getJrFormId().equals(formId) && Objects.equals(f.getJrVersion(), version)).findFirst().orElse(null);
+    public Form getLatestByFormIdAndVersion(String formId, @Nullable String version) {
+        List<Form> candidates = getAllByFormIdAndVersion(formId, version);
+
+        if (!candidates.isEmpty()) {
+            return candidates.stream().max(Comparator.comparingLong(Form::getDate)).get();
+        } else {
+            return null;
+        }
     }
 
     @Nullable
@@ -65,11 +83,10 @@ public class InMemFormsRepository implements FormsRepository {
 
     @Override
     public Uri save(Form form) {
-        if (form.getId() == null) {
-            form = new Form.Builder(form)
-                    .id(idCounter++)
-                    .build();
-        }
+        form = new Form.Builder(form)
+                .id(idCounter++)
+                .date(clock.getCurrentTime())
+                .build();
 
         String formFilePath = form.getFormFilePath();
 
