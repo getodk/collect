@@ -119,6 +119,28 @@ public class FormEntryMenuDelegateTest {
     }
 
     @Test
+    public void onPrepare_whenRecordingInBackground_checksRecordAudio() {
+        when(formEntryViewModel.isBackgroundRecording()).thenReturn(true);
+
+        RoboMenu menu = new RoboMenu();
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+
+        assertThat(menu.findItem(R.id.menu_record_audio).isChecked(), equalTo(true));
+    }
+
+    @Test
+    public void onPrepare_whenNotRecordingInBackground_unchecksRecordAudio() {
+        when(formEntryViewModel.isBackgroundRecording()).thenReturn(false);
+
+        RoboMenu menu = new RoboMenu();
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+
+        assertThat(menu.findItem(R.id.menu_record_audio).isChecked(), equalTo(false));
+    }
+
+    @Test
     public void onPrepare_whenFormDoesNotHaveBackgroundRecording_hidesRecordAudio() {
         when(formEntryViewModel.hasBackgroundRecording()).thenReturn(false);
 
@@ -277,18 +299,6 @@ public class FormEntryMenuDelegateTest {
 
         RecordingWarningDialogFragment dialog = getFragmentByClass(activity.getSupportFragmentManager(), RecordingWarningDialogFragment.class);
         assertThat(dialog, is(nullValue()));
-    }
-
-    @Test
-    public void onItemSelected_whenRecordAudio_whenRecordingInBackground_cancelBackgroundRecording() {
-        RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
-
-        when(formEntryViewModel.isBackgroundRecording()).thenReturn(true);
-
-        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_record_audio));
-        verify(formEntryViewModel).cancelBackgroundRecording();
     }
 
     @Test

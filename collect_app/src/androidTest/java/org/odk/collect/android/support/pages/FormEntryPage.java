@@ -315,4 +315,9 @@ public class FormEntryPage extends Page<FormEntryPage> {
         assertText(R.string.recording_warning);
         return okDialog;
     }
+
+    public CancelRecordingDialog clickRecordAudio() {
+        clickOnString(R.string.record_audio);
+        return new CancelRecordingDialog(formName, rule);
+    }
 }

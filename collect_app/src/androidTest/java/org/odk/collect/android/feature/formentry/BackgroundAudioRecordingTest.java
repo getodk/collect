@@ -24,6 +24,7 @@ import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
@@ -90,5 +91,19 @@ public class BackgroundAudioRecordingTest {
                 .startBlankForm("One Question")
                 .assertContentDescriptionNotDisplayed(R.string.stop_recording)
                 .assertContentDescriptionNotDisplayed(R.string.pause_recording);
+    }
+
+    @Test
+    public void whenBackgroundAudioRecordingEnabled_uncheckingRecordAudio_andConfirming_endsAndDeletesRecording() {
+        rule.mainMenu()
+                .enableBackgroundAudioRecording()
+                .copyForm("one-question.xml")
+                .startBlankForm("One Question")
+                .clickOptionsIcon()
+                .clickRecordAudio()
+                .clickOk();
+
+        assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
+        assertThat(stubAudioRecorderViewModel.getLastRecording(), is(nullValue()));
     }
 }

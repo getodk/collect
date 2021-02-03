@@ -991,4 +991,5 @@
 
     <string name="select_odk_shortcut">Select ODK Shortcut</string>
     <string name="record_audio">Record audio</string>
+    <string name="stop_recording_confirmation">Do you really want to stop recording?</string>
 </resources>

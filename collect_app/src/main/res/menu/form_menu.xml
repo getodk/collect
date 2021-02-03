@@ -42,9 +42,9 @@
 
     <item
         android:id="@+id/menu_record_audio"
+        android:checkable="true"
         android:title="@string/record_audio"
         android:visible="false"
-        app:actionViewClass="android.widget.CheckBox"
         app:showAsAction="never" />
 
     <item
