@@ -113,7 +113,7 @@ class AndroidLocationClient
     public Location getLastLocation() {
         String provider = getProvider();
         if (provider != null) {
-            return getLocationManager().getLastKnownLocation(provider);
+            return GeoUtils.sanitizeAccuracy(getLocationManager().getLastKnownLocation(provider));
         }
 
         return null;

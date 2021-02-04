@@ -148,7 +148,7 @@ public class GoogleFusedLocationClient
             googleApiClient.blockingConnect();
         }
 
-        return fusedLocationProviderApi.getLastLocation(googleApiClient);
+        return GeoUtils.sanitizeAccuracy(fusedLocationProviderApi.getLastLocation(googleApiClient));
     }
 
     @Override
