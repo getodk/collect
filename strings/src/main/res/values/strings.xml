@@ -275,6 +275,12 @@
     <!-- Description text for button that that resumes recording sound -->
     <string name="resume_recording">Resume</string>
 
+    <!-- Text next to checkbox to allow the user to toggle audio recording on and off -->
+    <string name="record_audio">Record audio</string>
+
+    <!-- Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file) -->
+    <string name="stop_recording_confirmation">This form requests background audio recording. Disabling it will stop recording and discard existing audio. Are you sure you want to proceed?</string>
+
     <!-- Title for dialog asking the user if they want to delete a file -->
     <string name="delete_answer_file_question">Delete file?</string>
 
@@ -990,6 +996,4 @@
     <string name="not_a_directory">%s exists, but is not a directory</string>
 
     <string name="select_odk_shortcut">Select ODK Shortcut</string>
-    <string name="record_audio">Record audio</string>
-    <string name="stop_recording_confirmation">Do you really want to stop recording?</string>
 </resources>
