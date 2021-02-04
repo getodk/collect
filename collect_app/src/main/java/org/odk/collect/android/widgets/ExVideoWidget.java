@@ -11,6 +11,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.databinding.ExVideoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ActivityAvailability;
@@ -101,9 +102,12 @@ public class ExVideoWidget extends QuestionWidget implements FileWidget, WidgetD
                 Timber.e("Inserting Video file FAILED");
             }
         } else if (object != null) {
-            Timber.e("ExVideoWidget's setBinaryData must receive a video file but received: %s", object.getClass());
             if (object instanceof File) {
+                ToastUtils.showLongToast(R.string.invalid_file_type);
                 mediaUtils.deleteMediaFile(((File) object).getAbsolutePath());
+                Timber.e("ExVideoWidget's setBinaryData must receive a video file but received: %s", ContentResolverHelper.getMimeType((File) object));
+            } else {
+                Timber.e("ExVideoWidget's setBinaryData must receive a video file but received: %s", object.getClass());
             }
         }
     }

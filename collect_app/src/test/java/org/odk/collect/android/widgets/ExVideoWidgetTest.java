@@ -19,6 +19,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
+import org.robolectric.shadows.ShadowToast;
 
 import java.io.File;
 import java.io.IOException;
@@ -142,14 +143,31 @@ public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
     }
 
     @Test
-    public void whenUnsupportedFileTypeAttached_shouldNotAnswerBeAddedAndTheFileShouldBeRemoved() throws IOException {
+    public void whenUnsupportedFileTypeAttached_shouldNotThatFileBeAdded() throws IOException {
         ExVideoWidget widget = getWidget();
         File answer = File.createTempFile("doc", ".pdf");
         when(mediaUtils.isVideoFile(answer)).thenReturn(false);
         widget.setData(answer);
         assertThat(widget.getAnswer(), is(nullValue()));
         assertThat(widget.binding.playVideoButton.isEnabled(), is(false));
+    }
+
+    @Test
+    public void whenUnsupportedFileTypeAttached_shouldTheFileBeRemoved() throws IOException {
+        ExVideoWidget widget = getWidget();
+        File answer = File.createTempFile("doc", ".pdf");
+        when(mediaUtils.isVideoFile(answer)).thenReturn(false);
+        widget.setData(answer);
         verify(mediaUtils).deleteMediaFile(answer.getAbsolutePath());
+    }
+
+    @Test
+    public void whenUnsupportedFileTypeAttached_shouldToastBeDisplayed() throws IOException {
+        ExVideoWidget widget = getWidget();
+        File answer = File.createTempFile("doc", ".pdf");
+        when(mediaUtils.isVideoFile(answer)).thenReturn(false);
+        widget.setData(answer);
+        assertThat(ShadowToast.getTextOfLatestToast(), is("Application returned an invalid file type"));
     }
 
     @Test
