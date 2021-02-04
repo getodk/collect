@@ -1,10 +1,13 @@
 package org.odk.collect.android.feature.formentry;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
@@ -12,7 +15,10 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.permissions.PermissionsChecker;
+import org.odk.collect.android.permissions.PermissionsProvider;
+import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
@@ -38,6 +44,7 @@ public class BackgroundAudioRecordingTest {
     private StubAudioRecorder stubAudioRecorderViewModel;
 
     private RevokeableRecordAudioPermissionsChecker permissionsChecker;
+    private ControllableRecordAudioPermissionsProvider permissionsProvider;
     public final TestDependencies testDependencies = new TestDependencies() {
 
         @Override
@@ -59,8 +66,20 @@ public class BackgroundAudioRecordingTest {
 
         @Override
         public PermissionsChecker providesPermissionsChecker(Context context) {
-            permissionsChecker = new RevokeableRecordAudioPermissionsChecker(context);
+            if (permissionsChecker == null) {
+                permissionsChecker = new RevokeableRecordAudioPermissionsChecker(context);
+            }
+
             return permissionsChecker;
+        }
+
+        @Override
+        public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+            if (permissionsProvider == null) {
+                permissionsProvider = new ControllableRecordAudioPermissionsProvider(permissionsChecker, storageStateProvider);
+            }
+
+            return permissionsProvider;
         }
     };
 
@@ -127,8 +146,9 @@ public class BackgroundAudioRecordingTest {
     }
 
     @Test
-    public void whenRecordAudioPermissionNotGranted_openingForm_showsDialogExplainingPermissions() {
+    public void whenRecordAudioPermissionNotGranted_openingForm_showsDialogExplainingPermissions_andStartsRecordingOnGrant() {
         permissionsChecker.revoke();
+        permissionsProvider.makeControllable();
 
         rule.mainMenu()
                 .enableBackgroundAudioRecording()
@@ -137,7 +157,26 @@ public class BackgroundAudioRecordingTest {
                 .assertText(R.string.background_audio_permission_explanation)
                 .clickOK(new FormEntryPage("One Question", rule));
 
+        assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
+
+        permissionsProvider.grant();
         assertThat(stubAudioRecorderViewModel.isRecording(), is(true));
+    }
+
+    @Test
+    public void whenRecordAudioPermissionNotGranted_openingForm_andDenyingPermissions_closesForm() {
+        permissionsChecker.revoke();
+        permissionsProvider.makeControllable();
+
+        rule.mainMenu()
+                .enableBackgroundAudioRecording()
+                .copyForm("one-question.xml")
+                .startBlankFormWithDialog("One Question")
+                .assertText(R.string.background_audio_permission_explanation)
+                .clickOK(new FormEntryPage("One Question", rule));
+
+        permissionsProvider.deny();
+        new MainMenuPage(rule).assertOnPage();
     }
 
     private static class RevokeableRecordAudioPermissionsChecker extends PermissionsChecker {
@@ -159,6 +198,37 @@ public class BackgroundAudioRecordingTest {
 
         public void revoke() {
             revoked = true;
+        }
+    }
+
+    private static class ControllableRecordAudioPermissionsProvider extends PermissionsProvider {
+
+        private PermissionListener action;
+        private boolean controllable;
+
+        ControllableRecordAudioPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+            super(permissionsChecker, storageStateProvider);
+        }
+
+        @Override
+        public void requestRecordAudioPermission(Activity activity, @NonNull PermissionListener action) {
+            if (controllable) {
+                this.action = action;
+            } else {
+                super.requestRecordAudioPermission(activity, action);
+            }
+        }
+
+        public void makeControllable() {
+            controllable = true;
+        }
+
+        public void grant() {
+            InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> action.granted());
+        }
+
+        public void deny() {
+            InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> action.denied());
         }
     }
 }

@@ -480,14 +480,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
-        if (formEntryViewModel.hasBackgroundRecording() && !permissionsChecker.isPermissionGranted(Manifest.permission.RECORD_AUDIO)) {
-            new MaterialAlertDialogBuilder(this)
-                    .setMessage(R.string.background_audio_permission_explanation)
-                    .setPositiveButton(R.string.ok, null)
-                    .create()
-                    .show();
-        }
-
         formSaveViewModel = new ViewModelProvider(this, formSaveViewModelFactoryFactory.create(this, null)).get(FormSaveViewModel.class);
         formSaveViewModel.getSaveResult().observe(this, this::handleSaveResult);
         formSaveViewModel.isSavingAnswerFile().observe(this, isSavingAnswerFile -> {
@@ -517,6 +509,26 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         identityPromptViewModel.formLoaded(formController);
         formEntryViewModel.formLoaded(formController);
         formSaveViewModel.formLoaded(formController);
+
+        if (formEntryViewModel.hasBackgroundRecording() && !permissionsChecker.isPermissionGranted(Manifest.permission.RECORD_AUDIO)) {
+            new MaterialAlertDialogBuilder(this)
+                    .setMessage(R.string.background_audio_permission_explanation)
+                    .setPositiveButton(R.string.ok, (dialog, which) -> permissionsProvider.requestRecordAudioPermission(this, new PermissionListener() {
+                        @Override
+                        public void granted() {
+                            formEntryViewModel.startBackgroundRecording();
+                        }
+
+                        @Override
+                        public void denied() {
+                            finish();
+                        }
+                    }))
+                    .create()
+                    .show();
+        } else if (formEntryViewModel.hasBackgroundRecording()) {
+            formEntryViewModel.startBackgroundRecording();
+        }
     }
 
     private void setupFields(Bundle savedInstanceState) {

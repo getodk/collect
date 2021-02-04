@@ -51,10 +51,6 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     @Override
     public void formLoaded(@NotNull FormController formController) {
         this.formController = formController;
-
-        if (hasBackgroundRecording() && isBackgroundRecordingEnabled()) {
-            startBackgroundRecording();
-        }
     }
 
     public boolean isFormControllerSet() {
@@ -185,7 +181,9 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     }
 
     public void startBackgroundRecording() {
-        audioRecorder.start("background", Output.AMR);
+        if (isBackgroundRecordingEnabled()) {
+            audioRecorder.start("background", Output.AMR);
+        }
     }
 
     private String getFormIdentifierHash() {
