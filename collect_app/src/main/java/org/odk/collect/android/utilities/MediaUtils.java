@@ -74,4 +74,8 @@ public class MediaUtils {
     public boolean isVideoFile(File file) {
         return ContentResolverHelper.getMimeType(file).startsWith("video");
     }
+
+    public boolean isImageFile(File file) {
+        return ContentResolverHelper.getMimeType(file).startsWith("image");
+    }
 }

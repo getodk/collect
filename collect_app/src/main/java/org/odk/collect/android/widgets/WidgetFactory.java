@@ -194,6 +194,8 @@ public class WidgetFactory {
                     questionWidget = new AnnotateWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 } else if (appearance.equals(Appearances.DRAW)) {
                     questionWidget = new DrawWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
+                } else if (appearance.startsWith(Appearances.EX)) {
+                    questionWidget = new ExImageWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new MediaUtils(), new ExternalAppIntentProvider(), activityAvailability);
                 } else {
                     questionWidget = new ImageWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 }
