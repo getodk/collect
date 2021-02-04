@@ -299,8 +299,17 @@ public class Utilities {
                             }
                             String mediaPath = file.getParent() + "/" + mediaName;
                             try {
+                                // assume the downloadUrl is escaped properly
+                                URL url = new URL(mediaUrl);
+                                uri = url.toURI();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                throw e;
+                            }
+                            InputStream isMedia = httpInterface.executeGetRequest(uri, null, webCredentialsUtils.getCredentials(uri)).getInputStream();
+                            try {
                                 File f = new File(mediaPath);
-                                fd.downloadFile(f, is, mediaUrl,false);    // Smap add flag not to use credentials
+                                fd.downloadFile(f, isMedia, mediaUrl,false);    // Smap add flag not to use credentials
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
