@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.activities;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -51,6 +52,7 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -123,6 +125,7 @@ import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -338,6 +341,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     PreferencesProvider preferencesProvider;
 
     @Inject
+    PermissionsChecker permissionsChecker;
+
+    @Inject
     ActivityAvailability activityAvailability;
 
     @Inject
@@ -473,6 +479,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 formEntryViewModel.errorDisplayed();
             }
         });
+
+        if (formEntryViewModel.hasBackgroundRecording() && !permissionsChecker.isPermissionGranted(Manifest.permission.RECORD_AUDIO)) {
+            new MaterialAlertDialogBuilder(this)
+                    .setMessage(R.string.background_audio_permission_explanation)
+                    .setPositiveButton(R.string.ok, null)
+                    .create()
+                    .show();
+        }
 
         formSaveViewModel = new ViewModelProvider(this, formSaveViewModelFactoryFactory.create(this, null)).get(FormSaveViewModel.class);
         formSaveViewModel.getSaveResult().observe(this, this::handleSaveResult);

@@ -62,6 +62,11 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return new ErrorDialog(rule).assertOnPage();
     }
 
+    public OkDialog startBlankFormWithDialog(String formName) {
+        goToBlankForm(formName);
+        return new OkDialog(rule).assertOnPage();
+    }
+
     public GeneralSettingsPage clickGeneralSettings() {
         clickOnString(R.string.general_preferences);
         return new GeneralSettingsPage(rule).assertOnPage();

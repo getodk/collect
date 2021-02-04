@@ -2,6 +2,7 @@ package org.odk.collect.android.feature.formentry;
 
 import android.Manifest;
 import android.app.Application;
+import android.content.Context;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
@@ -11,6 +12,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
@@ -35,7 +37,9 @@ public class BackgroundAudioRecordingTest {
 
     private StubAudioRecorder stubAudioRecorderViewModel;
 
+    private RevokeableRecordAudioPermissionsChecker permissionsChecker;
     public final TestDependencies testDependencies = new TestDependencies() {
+
         @Override
         public AudioRecorder providesAudioRecorder(Application application) {
             if (stubAudioRecorderViewModel == null) {
@@ -52,6 +56,12 @@ public class BackgroundAudioRecordingTest {
 
             return stubAudioRecorderViewModel;
         }
+
+        @Override
+        public PermissionsChecker providesPermissionsChecker(Context context) {
+            permissionsChecker = new RevokeableRecordAudioPermissionsChecker(context);
+            return permissionsChecker;
+        }
     };
 
     public final CollectTestRule rule = new CollectTestRule();
@@ -62,7 +72,7 @@ public class BackgroundAudioRecordingTest {
             .around(rule);
 
     @Test
-    public void whenBackgroundAudioRecordingEnabled_fillingOutForm_recordsAudio() {
+    public void fillingOutForm_recordsAudio() {
         FormEntryPage formEntryPage = rule.mainMenu()
                 .enableBackgroundAudioRecording()
                 .copyForm("one-question.xml")
@@ -86,7 +96,7 @@ public class BackgroundAudioRecordingTest {
      * stabilizes.
      */
     @Test
-    public void whenBackgroundAudioRecordingEnabled_fillingOutForm_doesntShowStopOrPauseButtons() {
+    public void fillingOutForm_doesntShowStopOrPauseButtons() {
         rule.mainMenu()
                 .enableBackgroundAudioRecording()
                 .copyForm("one-question.xml")
@@ -96,7 +106,7 @@ public class BackgroundAudioRecordingTest {
     }
 
     @Test
-    public void whenBackgroundAudioRecordingEnabled_uncheckingRecordAudio_endsAndDeletesRecording_andDisablesItForNextFormFill() {
+    public void uncheckingRecordAudio_andConfirming_endsAndDeletesRecording() {
         FormEntryPage formEntryPage = rule.mainMenu()
                 .enableBackgroundAudioRecording()
                 .copyForm("one-question.xml")
@@ -114,5 +124,41 @@ public class BackgroundAudioRecordingTest {
                 .startBlankForm("One Question");
 
         assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
+    }
+
+    @Test
+    public void whenRecordAudioPermissionNotGranted_openingForm_showsDialogExplainingPermissions() {
+        permissionsChecker.revoke();
+
+        rule.mainMenu()
+                .enableBackgroundAudioRecording()
+                .copyForm("one-question.xml")
+                .startBlankFormWithDialog("One Question")
+                .assertText(R.string.background_audio_permission_explanation)
+                .clickOK(new FormEntryPage("One Question", rule));
+
+        assertThat(stubAudioRecorderViewModel.isRecording(), is(true));
+    }
+
+    private static class RevokeableRecordAudioPermissionsChecker extends PermissionsChecker {
+
+        private boolean revoked;
+
+        RevokeableRecordAudioPermissionsChecker(Context context) {
+            super(context);
+        }
+
+        @Override
+        public boolean isPermissionGranted(String... permissions) {
+            if (permissions[0].equals(Manifest.permission.RECORD_AUDIO) && revoked) {
+                return false;
+            } else {
+                return super.isPermissionGranted(permissions);
+            }
+        }
+
+        public void revoke() {
+            revoked = true;
+        }
     }
 }
