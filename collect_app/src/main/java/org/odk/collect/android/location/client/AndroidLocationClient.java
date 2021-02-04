@@ -10,6 +10,9 @@ import com.google.android.gms.location.LocationListener;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import org.odk.collect.android.utilities.GeoUtils;
+
 import timber.log.Timber;
 
 /**
@@ -145,10 +148,7 @@ class AndroidLocationClient
         Timber.i("Location changed: %s", location.toString());
 
         if (locationListener != null) {
-            if (location.isFromMockProvider() || location.getAccuracy() < 0) {
-                location.setAccuracy(0);
-            }
-            locationListener.onLocationChanged(location);
+            locationListener.onLocationChanged(GeoUtils.sanitizeAccuracy(location));
         }
     }
 
