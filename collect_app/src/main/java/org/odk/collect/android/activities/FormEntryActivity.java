@@ -512,6 +512,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         if (formEntryViewModel.hasBackgroundRecording() && !permissionsChecker.isPermissionGranted(Manifest.permission.RECORD_AUDIO)) {
             new MaterialAlertDialogBuilder(this)
+                    .setCancelable(false)
                     .setMessage(R.string.background_audio_permission_explanation)
                     .setPositiveButton(R.string.ok, (dialog, which) -> permissionsProvider.requestRecordAudioPermission(this, new PermissionListener() {
                         @Override

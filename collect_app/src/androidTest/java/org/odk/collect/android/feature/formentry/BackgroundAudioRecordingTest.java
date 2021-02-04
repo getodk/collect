@@ -25,6 +25,7 @@ import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.OkDialog;
 import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorder;
@@ -161,6 +162,18 @@ public class BackgroundAudioRecordingTest {
 
         permissionsProvider.grant();
         assertThat(stubAudioRecorderViewModel.isRecording(), is(true));
+    }
+
+    @Test
+    public void whenRecordAudioPermissionNotGranted_openingForm_andPressingBack_staysOnDialog() {
+        permissionsChecker.revoke();
+        permissionsProvider.makeControllable();
+
+        rule.mainMenu()
+                .enableBackgroundAudioRecording()
+                .copyForm("one-question.xml")
+                .startBlankFormWithDialog("One Question")
+                .pressBack(new OkDialog(rule));
     }
 
     @Test
