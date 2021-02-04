@@ -25,7 +25,6 @@ import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.android.support.pages.OkDialog;
 import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorder;
@@ -144,36 +143,6 @@ public class BackgroundAudioRecordingTest {
                 .startBlankForm("One Question");
 
         assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
-    }
-
-    @Test
-    public void whenRecordAudioPermissionNotGranted_openingForm_showsDialogExplainingPermissions_andStartsRecordingOnGrant() {
-        permissionsChecker.revoke();
-        permissionsProvider.makeControllable();
-
-        rule.mainMenu()
-                .enableBackgroundAudioRecording()
-                .copyForm("one-question.xml")
-                .startBlankFormWithDialog("One Question")
-                .assertText(R.string.background_audio_permission_explanation)
-                .clickOK(new FormEntryPage("One Question", rule));
-
-        assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
-
-        permissionsProvider.grant();
-        assertThat(stubAudioRecorderViewModel.isRecording(), is(true));
-    }
-
-    @Test
-    public void whenRecordAudioPermissionNotGranted_openingForm_andPressingBack_staysOnDialog() {
-        permissionsChecker.revoke();
-        permissionsProvider.makeControllable();
-
-        rule.mainMenu()
-                .enableBackgroundAudioRecording()
-                .copyForm("one-question.xml")
-                .startBlankFormWithDialog("One Question")
-                .pressBack(new OkDialog(rule));
     }
 
     @Test

@@ -29,6 +29,7 @@ import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.qr.QRCodeScannerFragment;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.configure.qr.ShowQRCodeFragment;
+import org.odk.collect.android.formentry.BackgroundAudioPermissionDialogFragment;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveAnswerFileErrorDialogFragment;
@@ -231,6 +232,8 @@ public interface AppDependencyComponent {
     void inject(FormsProvider formsProvider);
 
     void inject(InstanceProvider instanceProvider);
+
+    void inject(BackgroundAudioPermissionDialogFragment backgroundAudioPermissionDialogFragment);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 

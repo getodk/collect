@@ -21,8 +21,6 @@ import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.utilities.Clock;
 
-import javax.inject.Inject;
-
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_RECORDING;
 
@@ -213,7 +211,6 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         private final PreferencesProvider preferencesProvider;
         private final AudioRecorder audioRecorder;
 
-        @Inject
         public Factory(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider, AudioRecorder audioRecorder) {
             this.clock = clock;
             this.analytics = analytics;

@@ -52,7 +52,6 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -80,6 +79,7 @@ import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.formentry.BackgroundAudioPermissionDialogFragment;
 import org.odk.collect.android.formentry.FormEndView;
 import org.odk.collect.android.formentry.FormEntryMenuDelegate;
 import org.odk.collect.android.formentry.FormEntryViewModel;
@@ -511,22 +511,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formSaveViewModel.formLoaded(formController);
 
         if (formEntryViewModel.hasBackgroundRecording() && !permissionsChecker.isPermissionGranted(Manifest.permission.RECORD_AUDIO)) {
-            new MaterialAlertDialogBuilder(this)
-                    .setCancelable(false)
-                    .setMessage(R.string.background_audio_permission_explanation)
-                    .setPositiveButton(R.string.ok, (dialog, which) -> permissionsProvider.requestRecordAudioPermission(this, new PermissionListener() {
-                        @Override
-                        public void granted() {
-                            formEntryViewModel.startBackgroundRecording();
-                        }
-
-                        @Override
-                        public void denied() {
-                            finish();
-                        }
-                    }))
-                    .create()
-                    .show();
+            showIfNotShowing(BackgroundAudioPermissionDialogFragment.class, getSupportFragmentManager());
         } else if (formEntryViewModel.hasBackgroundRecording()) {
             formEntryViewModel.startBackgroundRecording();
         }
