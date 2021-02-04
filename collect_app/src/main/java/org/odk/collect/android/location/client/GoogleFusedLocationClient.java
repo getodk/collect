@@ -19,6 +19,8 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import org.odk.collect.android.utilities.GeoUtils;
+
 import timber.log.Timber;
 
 /**
@@ -146,7 +148,7 @@ public class GoogleFusedLocationClient
             googleApiClient.blockingConnect();
         }
 
-        return fusedLocationProviderApi.getLastLocation(googleApiClient);
+        return GeoUtils.sanitizeAccuracy(fusedLocationProviderApi.getLastLocation(googleApiClient));
     }
 
     @Override
@@ -216,10 +218,7 @@ public class GoogleFusedLocationClient
         Timber.i("Location changed: %s", location.toString());
 
         if (locationListener != null) {
-            if (location.getAccuracy() < 0) {
-                location.setAccuracy(0);
-            }
-            locationListener.onLocationChanged(location);
+            locationListener.onLocationChanged(GeoUtils.sanitizeAccuracy(location));
         }
     }
 

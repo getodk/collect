@@ -368,18 +368,53 @@ public class AndroidLocationClientTest {
     }
 
     @Test
-    public void whenAccuracyIsNegative_shouldBeSanitized() {
+    public void whenNewlyReceivedLocationAccuracyIsNegative_shouldBeSetToZero() {
         when(locationManager.getProviders(true)).thenReturn(Collections.singletonList(GPS_PROVIDER));
 
         androidLocationClient.start();
 
-        TestLocationListener firstListener = new TestLocationListener();
-        androidLocationClient.requestLocationUpdates(firstListener);
+        TestLocationListener listener = new TestLocationListener();
+        androidLocationClient.requestLocationUpdates(listener);
 
-        Location location = LocationTestUtils.createLocation(GPS_PROVIDER, 7d, 2d, 3d, -1.0f);
+        Location location = LocationTestUtils.createLocation(GPS_PROVIDER, 7, 2, 3, -1.0f);
         androidLocationClient.onLocationChanged(location);
 
-        assertThat(firstListener.getLastLocation().getAccuracy(), is(0.0f));
+        assertThat(listener.getLastLocation().getAccuracy(), is(0.0f));
+    }
+
+    @Test
+    public void whenNewlyReceivedLocationIsMocked_shouldAccuracyBeSetToZero() {
+        when(locationManager.getProviders(true)).thenReturn(Collections.singletonList(GPS_PROVIDER));
+
+        androidLocationClient.start();
+
+        TestLocationListener listener = new TestLocationListener();
+        androidLocationClient.requestLocationUpdates(listener);
+
+        Location location = LocationTestUtils.createLocation(GPS_PROVIDER, 7, 2, 3, 5.0f, true);
+        androidLocationClient.onLocationChanged(location);
+
+        assertThat(listener.getLastLocation().getAccuracy(), is(0.0f));
+    }
+
+    @Test
+    public void whenLastKnownLocationAccuracyIsNegative_shouldBeSetToZero() {
+        when(locationManager.getProviders(true)).thenReturn(Collections.singletonList(GPS_PROVIDER));
+
+        Location location = LocationTestUtils.createLocation(GPS_PROVIDER, 7, 2, 3, -1.0f);
+        when(locationManager.getLastKnownLocation(GPS_PROVIDER)).thenReturn(location);
+
+        assertThat(androidLocationClient.getLastLocation().getAccuracy(), is(0.0f));
+    }
+
+    @Test
+    public void whenLastKnownLocationIsMocked_shouldAccuracyBeSetToZero() {
+        when(locationManager.getProviders(true)).thenReturn(Collections.singletonList(GPS_PROVIDER));
+
+        Location location = LocationTestUtils.createLocation(GPS_PROVIDER, 7, 2, 3, 5.0f, true);
+        when(locationManager.getLastKnownLocation(GPS_PROVIDER)).thenReturn(location);
+
+        assertThat(androidLocationClient.getLastLocation().getAccuracy(), is(0.0f));
     }
 
     private static Location newMockLocation() {

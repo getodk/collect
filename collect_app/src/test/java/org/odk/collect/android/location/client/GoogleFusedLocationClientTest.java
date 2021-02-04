@@ -16,6 +16,7 @@ import org.mockito.stubbing.Answer;
 import org.odk.collect.android.location.LocationTestUtils;
 import org.robolectric.RobolectricTestRunner;
 
+import static android.location.LocationManager.GPS_PROVIDER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertSame;
@@ -185,9 +186,7 @@ public class GoogleFusedLocationClientTest {
     }
 
     @Test
-    public void whenAccuracyIsNegative_shouldBeSanitized() {
-        client.start();
-
+    public void whenNewlyReceivedLocationAccuracyIsNegative_shouldBeSetToZero() {
         TestLocationListener listener = new TestLocationListener();
         client.requestLocationUpdates(listener);
 
@@ -195,6 +194,33 @@ public class GoogleFusedLocationClientTest {
         client.onLocationChanged(location);
 
         assertThat(listener.getLastLocation().getAccuracy(), is(0.0f));
+    }
+
+    @Test
+    public void whenNewlyReceivedLocationIsMocked_shouldAccuracyBeSetToZero() {
+        TestLocationListener listener = new TestLocationListener();
+        client.requestLocationUpdates(listener);
+
+        Location location = LocationTestUtils.createLocation("GPS", 7, 2, 3, 5.0f, true);
+        client.onLocationChanged(location);
+
+        assertThat(listener.getLastLocation().getAccuracy(), is(0.0f));
+    }
+
+    @Test
+    public void whenLastKnownLocationAccuracyIsNegative_shouldBeSetToZero() {
+        Location location = LocationTestUtils.createLocation(GPS_PROVIDER, 7, 2, 3, -1.0f);
+        when(fusedLocationProviderApi.getLastLocation(googleApiClient)).thenReturn(location);
+
+        assertThat(client.getLastLocation().getAccuracy(), is(0.0f));
+    }
+
+    @Test
+    public void whenLastKnownLocationIsMocked_shouldAccuracyBeSetToZero() {
+        Location location = LocationTestUtils.createLocation(GPS_PROVIDER, 7, 2, 3, 5.0f, true);
+        when(fusedLocationProviderApi.getLastLocation(googleApiClient)).thenReturn(location);
+
+        assertThat(client.getLastLocation().getAccuracy(), is(0.0f));
     }
 
     private static Location newMockLocation() {
