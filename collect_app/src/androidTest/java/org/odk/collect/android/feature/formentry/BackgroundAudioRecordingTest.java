@@ -10,15 +10,18 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.GrantPermissionRule;
 
+import org.javarosa.xform.parse.XFormParser;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
+import org.kxml2.kdom.Document;
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
@@ -30,8 +33,13 @@ import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorder;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.Optional;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -91,7 +99,7 @@ public class BackgroundAudioRecordingTest {
             .around(rule);
 
     @Test
-    public void fillingOutForm_recordsAudio() {
+    public void fillingOutForm_recordsAudio() throws Exception {
         FormEntryPage formEntryPage = rule.mainMenu()
                 .enableBackgroundAudioRecording()
                 .copyForm("one-question-background-audio.xml")
@@ -105,6 +113,12 @@ public class BackgroundAudioRecordingTest {
 
         formEndPage.clickSaveAndExit();
         assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
+
+        File instancesDir = new File(testDependencies.storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES));
+        File recording = Arrays.stream(instancesDir.listFiles()[0].listFiles()).filter(f -> f.getName().contains(".fake")).findAny().get();
+        File instanceFile = Arrays.stream(instancesDir.listFiles()[0].listFiles()).filter(f -> f.getName().contains(".xml")).findAny().get();
+        String instanceXml = new String(Files.readAllBytes(instanceFile.toPath()));
+        assertThat(instanceXml, containsString("<recording>" + recording.getName() + "</recording>"));
     }
 
     /**
