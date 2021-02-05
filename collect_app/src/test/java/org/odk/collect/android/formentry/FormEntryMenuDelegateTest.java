@@ -302,7 +302,7 @@ public class FormEntryMenuDelegateTest {
     }
 
     @Test
-    public void onItemSelected_whenRecordAudio_whenBackgroundRecordingDisabled_enablesBackgroundRecording() {
+    public void onItemSelected_whenRecordAudio_whenBackgroundRecordingDisabled_enablesBackgroundRecording_andShowsDialog() {
         RoboMenu menu = new RoboMenu();
         formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
         formEntryMenuDelegate.onPrepareOptionsMenu(menu);

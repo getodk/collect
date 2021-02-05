@@ -203,8 +203,6 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     public void setBackgroundRecordingEnabled(boolean enabled) {
         if (!enabled) {
             audioRecorder.cleanUp();
-        } else {
-            startBackgroundRecording();
         }
 
         preferencesProvider.getGeneralSharedPreferences().edit().putBoolean(KEY_BACKGROUND_RECORDING, enabled).apply();

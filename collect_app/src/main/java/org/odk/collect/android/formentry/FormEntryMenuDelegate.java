@@ -147,6 +147,12 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
                         .create()
                         .show();
             } else {
+                new MaterialAlertDialogBuilder(activity)
+                        .setMessage(R.string.background_audio_recording_enabled_explanation)
+                        .setPositiveButton(R.string.ok, null)
+                        .create()
+                        .show();
+
                 formEntryViewModel.setBackgroundRecordingEnabled(true);
             }
 

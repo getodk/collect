@@ -996,4 +996,5 @@
     <string name="not_a_directory">%s exists, but is not a directory</string>
 
     <string name="select_odk_shortcut">Select ODK Shortcut</string>
+    <string name="background_audio_recording_enabled_explanation">Recording will not begin immediately. You must re-open the form to record.</string>
 </resources>
