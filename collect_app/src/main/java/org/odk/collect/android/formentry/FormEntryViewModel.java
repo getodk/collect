@@ -24,6 +24,7 @@ import org.odk.collect.utilities.Clock;
 import javax.inject.Inject;
 
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_RECORDING;
 
 public class FormEntryViewModel extends ViewModel implements RequiresFormController {
 
@@ -39,8 +40,6 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     @Nullable
     private FormIndex jumpBackIndex;
 
-    private boolean backgroundRecordingEnabled = true;
-
     @SuppressWarnings("WeakerAccess")
     public FormEntryViewModel(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider, AudioRecorder audioRecorder) {
         this.clock = clock;
@@ -53,7 +52,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     public void formLoaded(@NotNull FormController formController) {
         this.formController = formController;
 
-        if (hasBackgroundRecording() && backgroundRecordingEnabled) {
+        if (hasBackgroundRecording() && isBackgroundRecordingEnabled()) {
             startBackgroundRecording();
         }
     }
@@ -189,10 +188,6 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         audioRecorder.start("background", Output.AMR);
     }
 
-    public void cancelBackgroundRecording() {
-        audioRecorder.cleanUp();
-    }
-
     private String getFormIdentifierHash() {
         if (formController != null) {
             return formController.getCurrentFormIdentifierHash();
@@ -202,17 +197,17 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     }
 
     public boolean isBackgroundRecordingEnabled() {
-        return backgroundRecordingEnabled;
+        return preferencesProvider.getGeneralSharedPreferences().getBoolean(KEY_BACKGROUND_RECORDING, true);
     }
 
     public void setBackgroundRecordingEnabled(boolean enabled) {
-        backgroundRecordingEnabled = enabled;
-
-        if (!backgroundRecordingEnabled) {
+        if (!enabled) {
             audioRecorder.cleanUp();
         } else {
             startBackgroundRecording();
         }
+
+        preferencesProvider.getGeneralSharedPreferences().edit().putBoolean(KEY_BACKGROUND_RECORDING, enabled).apply();
     }
 
     public static class Factory implements ViewModelProvider.Factory {

@@ -16,6 +16,8 @@ import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
+import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorder;
 
@@ -94,8 +96,8 @@ public class BackgroundAudioRecordingTest {
     }
 
     @Test
-    public void whenBackgroundAudioRecordingEnabled_uncheckingRecordAudio_andConfirming_endsAndDeletesRecording() {
-        rule.mainMenu()
+    public void whenBackgroundAudioRecordingEnabled_uncheckingRecordAudio_endsAndDeletesRecording_andDisablesItForNextFormFill() {
+        FormEntryPage formEntryPage = rule.mainMenu()
                 .enableBackgroundAudioRecording()
                 .copyForm("one-question.xml")
                 .startBlankForm("One Question")
@@ -105,5 +107,12 @@ public class BackgroundAudioRecordingTest {
 
         assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
         assertThat(stubAudioRecorderViewModel.getLastRecording(), is(nullValue()));
+
+        formEntryPage.closeSoftKeyboard()
+                .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage(rule), rule))
+                .clickIgnoreChanges()
+                .startBlankForm("One Question");
+
+        assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
     }
 }
