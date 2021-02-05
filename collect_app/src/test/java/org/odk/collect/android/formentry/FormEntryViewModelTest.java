@@ -13,6 +13,7 @@ import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.utilities.Clock;
 import org.robolectric.RobolectricTestRunner;
@@ -136,8 +137,8 @@ public class FormEntryViewModelTest {
     }
 
     @Test
-    public void cancelBackgroundRecording_callsCleanUpOnAudioRecorder() {
-        viewModel.cancelBackgroundRecording();
-        verify(audioRecorder).cleanUp();
+    public void setBackgroundRecordingEnabled_whenTrue_startsBackgroundRecording() {
+        viewModel.setBackgroundRecordingEnabled(true);
+        verify(audioRecorder).start("background", Output.AMR);
     }
 }

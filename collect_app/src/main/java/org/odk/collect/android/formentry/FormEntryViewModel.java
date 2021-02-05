@@ -39,6 +39,8 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     @Nullable
     private FormIndex jumpBackIndex;
 
+    private boolean backgroundRecordingEnabled = true;
+
     @SuppressWarnings("WeakerAccess")
     public FormEntryViewModel(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider, AudioRecorder audioRecorder) {
         this.clock = clock;
@@ -196,6 +198,20 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
             return formController.getCurrentFormIdentifierHash();
         } else {
             return "";
+        }
+    }
+
+    public boolean isBackgroundRecordingEnabled() {
+        return backgroundRecordingEnabled;
+    }
+
+    public void setBackgroundRecordingEnabled(boolean enabled) {
+        backgroundRecordingEnabled = enabled;
+
+        if (!backgroundRecordingEnabled) {
+            audioRecorder.cleanUp();
+        } else {
+            startBackgroundRecording();
         }
     }
 
