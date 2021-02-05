@@ -90,7 +90,7 @@ public class AudioRecordingControllerFragment extends Fragment {
                     binding.pauseRecording.setVisibility(GONE);
                 }
 
-                if (isBackgroundRecording(session)) {
+                if (formEntryViewModel.isBackgroundRecording()) {
                     binding.pauseRecording.setVisibility(GONE);
                     binding.stopRecording.setVisibility(GONE);
                 }
@@ -100,9 +100,5 @@ public class AudioRecordingControllerFragment extends Fragment {
         });
 
         binding.stopRecording.setOnClickListener(v -> audioRecorder.stop());
-    }
-
-    private boolean isBackgroundRecording(RecordingSession session) {
-        return session.getId().equals("background");
     }
 }

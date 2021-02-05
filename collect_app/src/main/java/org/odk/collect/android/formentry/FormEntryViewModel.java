@@ -15,6 +15,7 @@ import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.actions.recordaudio.RecordAudioActions;
+import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryController;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.analytics.Analytics;
@@ -56,7 +57,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         this.permissionsChecker = permissionsChecker;
 
         RecordAudioActions.setRecordAudioListener((treeReference, quality) -> {
-            new Handler(Looper.getMainLooper()).post(this::startBackgroundRecording);
+            new Handler(Looper.getMainLooper()).post(() -> startBackgroundRecording(treeReference));
         });
     }
 
@@ -194,13 +195,13 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     }
 
     public boolean isBackgroundRecording() {
-        return audioRecorder.isRecording() && audioRecorder.getCurrentSession().getValue().getId().equals("background");
+        return audioRecorder.isRecording() && audioRecorder.getCurrentSession().getValue().getId() instanceof TreeReference;
     }
 
-    public void startBackgroundRecording() {
+    public void startBackgroundRecording(TreeReference treeReference) {
         if (isBackgroundRecordingEnabled()) {
             if (permissionsChecker.isPermissionGranted(Manifest.permission.RECORD_AUDIO)) {
-                audioRecorder.start("background", Output.AMR);
+                audioRecorder.start(treeReference, Output.AMR);
             } else {
                 error.setValue(new AudioPermissionRequired());
             }

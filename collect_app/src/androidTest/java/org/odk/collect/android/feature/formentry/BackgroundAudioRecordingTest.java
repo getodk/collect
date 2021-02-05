@@ -105,9 +105,6 @@ public class BackgroundAudioRecordingTest {
 
         formEndPage.clickSaveAndExit();
         assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
-
-        assertThat(stubAudioRecorderViewModel.getLastRecording(), notNullValue());
-        assertThat(stubAudioRecorderViewModel.getLastRecording().exists(), is(true));
     }
 
     /**

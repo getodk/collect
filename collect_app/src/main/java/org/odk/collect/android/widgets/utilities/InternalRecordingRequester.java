@@ -4,6 +4,7 @@ import androidx.activity.ComponentActivity;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.StringData;
+import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
@@ -77,13 +78,12 @@ public class InternalRecordingRequester implements RecordingRequester {
                         formSaveViewModel.replaceAnswerFile(formIndex.toString(), result.getOrNull().getAbsolutePath());
                         Collect.getInstance().getFormController().answerQuestion(formIndex, new StringData(result.getOrNull().getName()));
                         refreshListener.onScreenRefresh();
+                    } else if (session.getId() instanceof TreeReference) {
+                        TreeReference treeReference = (TreeReference) session.getId();
+                        Collect.getInstance().getFormController().getFormDef().setValue(new StringData(result.getOrNull().getName()), treeReference, false);
                     }
                 } catch (JavaRosaException e) {
                     // ?
-                }
-
-                if (!session.getId().equals("background")) {
-                    session.getFile().delete();
                 }
 
                 formSaveViewModel.resumeSave();

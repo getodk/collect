@@ -81,7 +81,7 @@ public class BackgroundAudioPermissionDialogFragmentTest {
             fakePermissionsProvider.setPermissionGranted(true);
             button.performClick();
 
-            verify(formEntryViewModel).startBackgroundRecording();
+            verify(formEntryViewModel).startBackgroundRecording(null);
         });
     }
 
