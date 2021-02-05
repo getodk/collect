@@ -84,4 +84,20 @@ public class BackgroundAudioPermissionDialogFragmentTest {
             verify(formEntryViewModel).startBackgroundRecording();
         });
     }
+
+    @Test
+    public void clickingOk_clearsError() {
+        FragmentScenario<BackgroundAudioPermissionDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(BackgroundAudioPermissionDialogFragment.class);
+        scenario.onFragment(f -> {
+            AlertDialog dialog = (AlertDialog) f.getDialog();
+
+            Button button = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            assertThat(button.getText(), is(f.getString(R.string.ok)));
+
+            fakePermissionsProvider.setPermissionGranted(true);
+            button.performClick();
+
+            verify(formEntryViewModel).errorDisplayed();
+        });
+    }
 }
