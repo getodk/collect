@@ -525,7 +525,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider, AudioRecorder audioRecorder) {
-        return new FormEntryViewModel.Factory(clock, analytics, preferencesProvider, audioRecorder);
+    public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider, AudioRecorder audioRecorder, PermissionsChecker permissionsChecker) {
+        return new FormEntryViewModel.Factory(clock, analytics, preferencesProvider, audioRecorder, permissionsChecker);
     }
 }

@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -475,8 +474,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         formEntryViewModel.getError().observe(this, error -> {
             if (error != null) {
-                createErrorDialog(error, false);
-                formEntryViewModel.errorDisplayed();
+                if (error.equals("AUDIO_PERMISSION_REQUIRED")) {
+                    showIfNotShowing(BackgroundAudioPermissionDialogFragment.class, getSupportFragmentManager());
+                } else {
+                    createErrorDialog(error, false);
+                    formEntryViewModel.errorDisplayed();
+                }
             }
         });
 
@@ -509,12 +512,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         identityPromptViewModel.formLoaded(formController);
         formEntryViewModel.formLoaded(formController);
         formSaveViewModel.formLoaded(formController);
-
-        if (formEntryViewModel.hasBackgroundRecording() && !permissionsChecker.isPermissionGranted(Manifest.permission.RECORD_AUDIO)) {
-            showIfNotShowing(BackgroundAudioPermissionDialogFragment.class, getSupportFragmentManager());
-        } else if (formEntryViewModel.hasBackgroundRecording()) {
-            formEntryViewModel.startBackgroundRecording();
-        }
     }
 
     private void setupFields(Bundle savedInstanceState) {

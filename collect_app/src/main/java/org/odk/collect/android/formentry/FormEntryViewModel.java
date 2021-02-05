@@ -1,5 +1,7 @@
 package org.odk.collect.android.formentry;
 
+import android.Manifest;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -16,6 +18,7 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -30,6 +33,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     private final Analytics analytics;
     private final PreferencesProvider preferencesProvider;
     private final AudioRecorder audioRecorder;
+    private final PermissionsChecker permissionsChecker;
     private final MutableLiveData<String> error = new MutableLiveData<>(null);
 
     @Nullable
@@ -39,16 +43,21 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     private FormIndex jumpBackIndex;
 
     @SuppressWarnings("WeakerAccess")
-    public FormEntryViewModel(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider, AudioRecorder audioRecorder) {
+    public FormEntryViewModel(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider, AudioRecorder audioRecorder, PermissionsChecker permissionsChecker) {
         this.clock = clock;
         this.analytics = analytics;
         this.preferencesProvider = preferencesProvider;
         this.audioRecorder = audioRecorder;
+        this.permissionsChecker = permissionsChecker;
     }
 
     @Override
     public void formLoaded(@NotNull FormController formController) {
         this.formController = formController;
+
+        if (hasBackgroundRecording()) {
+            startBackgroundRecording();
+        }
     }
 
     public boolean isFormControllerSet() {
@@ -180,7 +189,11 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
     public void startBackgroundRecording() {
         if (isBackgroundRecordingEnabled()) {
-            audioRecorder.start("background", Output.AMR);
+            if (permissionsChecker.isPermissionGranted(Manifest.permission.RECORD_AUDIO)) {
+                audioRecorder.start("background", Output.AMR);
+            } else {
+                error.setValue("AUDIO_PERMISSION_REQUIRED");
+            }
         }
     }
 
@@ -210,19 +223,21 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         private final Analytics analytics;
         private final PreferencesProvider preferencesProvider;
         private final AudioRecorder audioRecorder;
+        private final PermissionsChecker permissionsChecker;
 
-        public Factory(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider, AudioRecorder audioRecorder) {
+        public Factory(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider, AudioRecorder audioRecorder, PermissionsChecker permissionsChecker) {
             this.clock = clock;
             this.analytics = analytics;
             this.preferencesProvider = preferencesProvider;
             this.audioRecorder = audioRecorder;
+            this.permissionsChecker = permissionsChecker;
         }
 
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormEntryViewModel(clock, analytics, preferencesProvider, audioRecorder);
+            return (T) new FormEntryViewModel(clock, analytics, preferencesProvider, audioRecorder, permissionsChecker);
         }
     }
 }

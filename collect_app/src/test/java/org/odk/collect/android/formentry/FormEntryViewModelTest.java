@@ -12,6 +12,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.utilities.Clock;
@@ -50,7 +51,7 @@ public class FormEntryViewModelTest {
         clock = mock(Clock.class);
 
         AudioRecorder audioRecorder = mock(AudioRecorder.class);
-        viewModel = new FormEntryViewModel(clock, mock(Analytics.class), new PreferencesProvider(ApplicationProvider.getApplicationContext()), audioRecorder);
+        viewModel = new FormEntryViewModel(clock, mock(Analytics.class), new PreferencesProvider(ApplicationProvider.getApplicationContext()), audioRecorder, mock(PermissionsChecker.class));
         viewModel.formLoaded(formController);
     }
 
