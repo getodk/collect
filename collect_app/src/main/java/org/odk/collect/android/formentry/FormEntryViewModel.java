@@ -53,7 +53,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     public void formLoaded(@NotNull FormController formController) {
         this.formController = formController;
 
-        if (hasBackgroundRecording()) {
+        if (hasBackgroundRecording() && backgroundRecordingEnabled) {
             startBackgroundRecording();
         }
     }
