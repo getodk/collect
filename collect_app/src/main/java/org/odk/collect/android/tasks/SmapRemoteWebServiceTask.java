@@ -46,6 +46,7 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
         String choices = params[2];
         String imagePath = params[3];
         String imageName = params[4];
+        String creds = params[5];
 
         int timeout = 0;
         try {
@@ -63,13 +64,17 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
         if(choices != null && choices.equals("true")) {
             item.choices = true;
         }
+        boolean useCredentials = false;
+        if(creds != null && creds.equals("true")) {
+            useCredentials = true;
+        }
 
         try {
 
             URL url = new URL(lookupUrl);
             URI uri = url.toURI();
 
-            InputStream is = httpInterface.executeGetRequest(uri, null, webCredentialsUtils.getCredentials(uri)).getInputStream();
+            InputStream is = httpInterface.executeGetRequest(uri, null, useCredentials ? webCredentialsUtils.getCredentials(uri) : null).getInputStream();
 
             HashMap<String, String> headers = new HashMap<String, String> ();
 

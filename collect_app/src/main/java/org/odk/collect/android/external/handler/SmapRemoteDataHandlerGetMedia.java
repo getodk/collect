@@ -101,7 +101,7 @@ public class SmapRemoteDataHandlerGetMedia implements IFunctionHandler {
                 app.startRemoteCall(url);
                 SmapRemoteWebServiceTask task = new SmapRemoteWebServiceTask();
                 task.setSmapRemoteListener(app.getFormEntryActivity());
-                task.execute(url, timeoutValue, "false", f.getAbsolutePath(), mediaName);
+                task.execute(url, timeoutValue, "false", f.getAbsolutePath(), mediaName, "false");
             } else {
                 return mediaName;
             }

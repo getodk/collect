@@ -231,7 +231,7 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
                 app.startRemoteCall(urlString);
                 SmapRemoteWebServiceTask task = new SmapRemoteWebServiceTask();
                 task.setSmapRemoteListener(app.getFormEntryActivity());
-                task.execute(urlString, timeoutValue, "true", null, null);
+                task.execute(urlString, timeoutValue, "true", null, null, "true");
             }
         } catch (Exception e) {
             Timber.e(e);
