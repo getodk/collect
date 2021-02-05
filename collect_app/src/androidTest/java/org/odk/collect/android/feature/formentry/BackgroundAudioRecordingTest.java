@@ -94,7 +94,7 @@ public class BackgroundAudioRecordingTest {
     public void fillingOutForm_recordsAudio() {
         FormEntryPage formEntryPage = rule.mainMenu()
                 .enableBackgroundAudioRecording()
-                .copyForm("one-question.xml")
+                .copyForm("one-question-background-audio.xml")
                 .startBlankForm("One Question");
         assertThat(stubAudioRecorderViewModel.isRecording(), is(true));
 
@@ -118,7 +118,7 @@ public class BackgroundAudioRecordingTest {
     public void fillingOutForm_doesntShowStopOrPauseButtons() {
         rule.mainMenu()
                 .enableBackgroundAudioRecording()
-                .copyForm("one-question.xml")
+                .copyForm("one-question-background-audio.xml")
                 .startBlankForm("One Question")
                 .assertContentDescriptionNotDisplayed(R.string.stop_recording)
                 .assertContentDescriptionNotDisplayed(R.string.pause_recording);
@@ -128,7 +128,7 @@ public class BackgroundAudioRecordingTest {
     public void uncheckingRecordAudio_andConfirming_endsAndDeletesRecording() {
         FormEntryPage formEntryPage = rule.mainMenu()
                 .enableBackgroundAudioRecording()
-                .copyForm("one-question.xml")
+                .copyForm("one-question-background-audio.xml")
                 .startBlankForm("One Question")
                 .clickOptionsIcon()
                 .clickRecordAudio()
@@ -152,7 +152,7 @@ public class BackgroundAudioRecordingTest {
 
         rule.mainMenu()
                 .enableBackgroundAudioRecording()
-                .copyForm("one-question.xml")
+                .copyForm("one-question-background-audio.xml")
                 .startBlankFormWithDialog("One Question")
                 .assertText(R.string.background_audio_permission_explanation)
                 .clickOK(new FormEntryPage("One Question", rule));

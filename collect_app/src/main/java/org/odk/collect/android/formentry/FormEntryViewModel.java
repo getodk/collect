@@ -1,6 +1,8 @@
 package org.odk.collect.android.formentry;
 
 import android.Manifest;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
+import org.javarosa.core.model.actions.recordaudio.RecordAudioActions;
 import org.javarosa.form.api.FormEntryController;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.analytics.Analytics;
@@ -51,15 +54,20 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         this.preferencesProvider = preferencesProvider;
         this.audioRecorder = audioRecorder;
         this.permissionsChecker = permissionsChecker;
+
+        RecordAudioActions.setRecordAudioListener((treeReference, quality) -> {
+            new Handler(Looper.getMainLooper()).post(this::startBackgroundRecording);
+        });
+    }
+
+    @Override
+    protected void onCleared() {
+        RecordAudioActions.setRecordAudioListener(null);
     }
 
     @Override
     public void formLoaded(@NotNull FormController formController) {
         this.formController = formController;
-
-        if (hasBackgroundRecording()) {
-            startBackgroundRecording();
-        }
     }
 
     public boolean isFormControllerSet() {
