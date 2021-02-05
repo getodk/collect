@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.javarosa.core.model.instance.TreeReference;
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -44,11 +45,14 @@ public class BackgroundAudioPermissionDialogFragment extends DialogFragment {
         return new MaterialAlertDialogBuilder(requireContext())
                 .setMessage(R.string.background_audio_permission_explanation)
                 .setPositiveButton(R.string.ok, (dialog, which) -> {
+                    FormEntryViewModel.Error error = formEntryViewModel.getError().getValue();
+                    TreeReference treeReference = ((FormEntryViewModel.AudioPermissionRequired) error).getTreeReference();
                     formEntryViewModel.errorDisplayed();
+
                     permissionsProvider.requestRecordAudioPermission(activity, new PermissionListener() {
                         @Override
                         public void granted() {
-                            formEntryViewModel.startBackgroundRecording(null);
+                            formEntryViewModel.startBackgroundRecording(treeReference);
                         }
 
                         @Override

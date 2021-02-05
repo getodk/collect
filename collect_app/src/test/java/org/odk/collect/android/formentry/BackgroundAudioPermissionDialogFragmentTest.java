@@ -6,9 +6,11 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.testing.FragmentScenario;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.javarosa.core.model.instance.TreeReference;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +30,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class BackgroundAudioPermissionDialogFragmentTest {
@@ -44,7 +47,7 @@ public class BackgroundAudioPermissionDialogFragmentTest {
 
             @Override
             public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider, AudioRecorder audioRecorder, PermissionsChecker permissionsChecker) {
-                return new FormEntryViewModel.Factory(clock, analytics, preferencesProvider, audioRecorder, permissionsChecker) {
+                return new FormEntryViewModel.Factory(clock, analytics, preferencesProvider, audioRecorder, permissionsChecker, mock(FormEntryViewModel.RecordAudioActionRegistry.class)) {
 
                     @NonNull
                     @Override
@@ -78,10 +81,12 @@ public class BackgroundAudioPermissionDialogFragmentTest {
             Button button = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
             assertThat(button.getText(), is(f.getString(R.string.ok)));
 
+            TreeReference treeReference = new TreeReference();
+            when(formEntryViewModel.getError()).thenReturn(new MutableLiveData<>(new FormEntryViewModel.AudioPermissionRequired(treeReference)));
             fakePermissionsProvider.setPermissionGranted(true);
-            button.performClick();
 
-            verify(formEntryViewModel).startBackgroundRecording(null);
+            button.performClick();
+            verify(formEntryViewModel).startBackgroundRecording(treeReference);
         });
     }
 
@@ -94,9 +99,10 @@ public class BackgroundAudioPermissionDialogFragmentTest {
             Button button = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
             assertThat(button.getText(), is(f.getString(R.string.ok)));
 
+            when(formEntryViewModel.getError()).thenReturn(new MutableLiveData<>(new FormEntryViewModel.AudioPermissionRequired(new TreeReference())));
             fakePermissionsProvider.setPermissionGranted(true);
-            button.performClick();
 
+            button.performClick();
             verify(formEntryViewModel).errorDisplayed();
         });
     }

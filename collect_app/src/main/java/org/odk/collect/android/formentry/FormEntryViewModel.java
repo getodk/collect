@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProvider;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
-import org.javarosa.core.model.actions.recordaudio.RecordAudioActions;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryController;
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +28,7 @@ import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.utilities.Clock;
 
 import java.util.Objects;
+import java.util.function.BiConsumer;
 
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_RECORDING;
@@ -40,6 +40,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     private final PreferencesProvider preferencesProvider;
     private final AudioRecorder audioRecorder;
     private final PermissionsChecker permissionsChecker;
+    private final RecordAudioActionRegistry recordAudioActionRegistry;
     private final MutableLiveData<Error> error = new MutableLiveData<>(null);
 
     @Nullable
@@ -49,21 +50,22 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     private FormIndex jumpBackIndex;
 
     @SuppressWarnings("WeakerAccess")
-    public FormEntryViewModel(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider, AudioRecorder audioRecorder, PermissionsChecker permissionsChecker) {
+    public FormEntryViewModel(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider, AudioRecorder audioRecorder, PermissionsChecker permissionsChecker, RecordAudioActionRegistry recordAudioActionRegistry) {
         this.clock = clock;
         this.analytics = analytics;
         this.preferencesProvider = preferencesProvider;
         this.audioRecorder = audioRecorder;
         this.permissionsChecker = permissionsChecker;
+        this.recordAudioActionRegistry = recordAudioActionRegistry;
 
-        RecordAudioActions.setRecordAudioListener((treeReference, quality) -> {
+        recordAudioActionRegistry.register((treeReference, quality) -> {
             new Handler(Looper.getMainLooper()).post(() -> startBackgroundRecording(treeReference));
         });
     }
 
     @Override
     protected void onCleared() {
-        RecordAudioActions.setRecordAudioListener(null);
+        recordAudioActionRegistry.unregister();
     }
 
     @Override
@@ -203,7 +205,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
             if (permissionsChecker.isPermissionGranted(Manifest.permission.RECORD_AUDIO)) {
                 audioRecorder.start(treeReference, Output.AMR);
             } else {
-                error.setValue(new AudioPermissionRequired());
+                error.setValue(new AudioPermissionRequired(treeReference));
             }
         }
     }
@@ -235,20 +237,22 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         private final PreferencesProvider preferencesProvider;
         private final AudioRecorder audioRecorder;
         private final PermissionsChecker permissionsChecker;
+        private final RecordAudioActionRegistry recordAudioActionRegistry;
 
-        public Factory(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider, AudioRecorder audioRecorder, PermissionsChecker permissionsChecker) {
+        public Factory(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider, AudioRecorder audioRecorder, PermissionsChecker permissionsChecker, RecordAudioActionRegistry recordAudioActionRegistry) {
             this.clock = clock;
             this.analytics = analytics;
             this.preferencesProvider = preferencesProvider;
             this.audioRecorder = audioRecorder;
             this.permissionsChecker = permissionsChecker;
+            this.recordAudioActionRegistry = recordAudioActionRegistry;
         }
 
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormEntryViewModel(clock, analytics, preferencesProvider, audioRecorder, permissionsChecker);
+            return (T) new FormEntryViewModel(clock, analytics, preferencesProvider, audioRecorder, permissionsChecker, recordAudioActionRegistry);
         }
     }
 
@@ -292,5 +296,40 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     @SuppressWarnings("PMD.DoNotExtendJavaLangError")
     public static class AudioPermissionRequired extends Error {
 
+        private final TreeReference treeReference;
+
+        public AudioPermissionRequired(TreeReference treeReference) {
+            this.treeReference = treeReference;
+        }
+
+        public TreeReference getTreeReference() {
+            return treeReference;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+
+            AudioPermissionRequired that = (AudioPermissionRequired) o;
+            return Objects.equals(treeReference, that.treeReference);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(treeReference);
+        }
+    }
+
+    public interface RecordAudioActionRegistry {
+
+        void register(BiConsumer<TreeReference, String> listener);
+
+        void unregister();
     }
 }
