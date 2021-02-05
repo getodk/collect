@@ -473,13 +473,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .get(FormEntryViewModel.class);
 
         formEntryViewModel.getError().observe(this, error -> {
-            if (error != null) {
-                if (error.equals("AUDIO_PERMISSION_REQUIRED")) {
-                    showIfNotShowing(BackgroundAudioPermissionDialogFragment.class, getSupportFragmentManager());
-                } else {
-                    createErrorDialog(error, false);
-                    formEntryViewModel.errorDisplayed();
-                }
+            if (error instanceof FormEntryViewModel.NonFatal) {
+                createErrorDialog(((FormEntryViewModel.NonFatal) error).getMessage(), false);
+                formEntryViewModel.errorDisplayed();
+            } else if (error instanceof FormEntryViewModel.AudioPermissionRequired) {
+                showIfNotShowing(BackgroundAudioPermissionDialogFragment.class, getSupportFragmentManager());
             }
         });
 
