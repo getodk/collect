@@ -177,10 +177,10 @@ public class ServerFormDownloader implements FormDownloader {
 
         // move the media files in the media folder
         if (tempMediaPath != null) {
-            File formMediaPath = new File(formResult.form.getFormMediaPath());
+            File formMediaDir = new File(getAbsoluteFilePath(formsDirPath, formResult.form.getFormMediaPath()));
 
             try {
-                moveMediaFiles(tempMediaPath, formMediaPath);
+                moveMediaFiles(tempMediaPath, formMediaDir);
             } catch (IOException e) {
                 Timber.e(e);
 
