@@ -19,6 +19,8 @@ import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
 
+import java.util.Set;
+
 public class InternalRecordingRequester implements RecordingRequester {
 
     private final ComponentActivity activity;
@@ -78,9 +80,11 @@ public class InternalRecordingRequester implements RecordingRequester {
                         formSaveViewModel.replaceAnswerFile(formIndex.toString(), result.getOrNull().getAbsolutePath());
                         Collect.getInstance().getFormController().answerQuestion(formIndex, new StringData(result.getOrNull().getName()));
                         refreshListener.onScreenRefresh();
-                    } else if (session.getId() instanceof TreeReference) {
-                        TreeReference treeReference = (TreeReference) session.getId();
-                        Collect.getInstance().getFormController().getFormDef().setValue(new StringData(result.getOrNull().getName()), treeReference, false);
+                    } else if (session.getId() instanceof Set) {
+                        Set<TreeReference> treeReferences = (Set<TreeReference>) session.getId();
+                        for (TreeReference treeReference : treeReferences) {
+                            Collect.getInstance().getFormController().getFormDef().setValue(new StringData(result.getOrNull().getName()), treeReference, false);
+                        }
                     }
                 } catch (JavaRosaException e) {
                     // ?

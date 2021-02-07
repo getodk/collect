@@ -25,9 +25,12 @@ import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
+import org.odk.collect.audiorecorder.recording.RecordingSession;
 import org.odk.collect.utilities.Clock;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.BiConsumer;
 
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
@@ -197,13 +200,21 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     }
 
     public boolean isBackgroundRecording() {
-        return audioRecorder.isRecording() && audioRecorder.getCurrentSession().getValue().getId() instanceof TreeReference;
+        return audioRecorder.isRecording() && audioRecorder.getCurrentSession().getValue().getId() instanceof Set;
     }
 
     public void startBackgroundRecording(TreeReference treeReference) {
         if (isBackgroundRecordingEnabled()) {
             if (permissionsChecker.isPermissionGranted(Manifest.permission.RECORD_AUDIO)) {
-                audioRecorder.start(treeReference, Output.AMR);
+                if (isBackgroundRecording()) {
+                    RecordingSession session = audioRecorder.getCurrentSession().getValue();
+                    Set<TreeReference> treeReferences = (Set<TreeReference>) session.getId();
+                    treeReferences.add(treeReference);
+                } else {
+                    HashSet<TreeReference> treeReferences = new HashSet<>();
+                    treeReferences.add(treeReference);
+                    audioRecorder.start(treeReferences, Output.AMR);
+                }
             } else {
                 error.setValue(new AudioPermissionRequired(treeReference));
             }

@@ -116,6 +116,30 @@ public class BackgroundAudioRecordingTest {
         assertThat(instanceXml, containsString("<recording>" + recording.getName() + "</recording>"));
     }
 
+    @Test
+    public void fillingOutForm_withMultipleRecordActions_recordsAudioOnceForAllOfThem() throws Exception {
+        FormEntryPage formEntryPage = rule.mainMenu()
+                .enableBackgroundAudioRecording()
+                .copyForm("one-question-background-audio-multiple.xml")
+                .startBlankForm("One Question");
+        assertThat(stubAudioRecorderViewModel.isRecording(), is(true));
+
+        FormEndPage formEndPage = formEntryPage
+                .inputText("123")
+                .swipeToEndScreen();
+        assertThat(stubAudioRecorderViewModel.isRecording(), is(true));
+
+        formEndPage.clickSaveAndExit();
+        assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
+
+        File instancesDir = new File(testDependencies.storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES));
+        File recording = Arrays.stream(instancesDir.listFiles()[0].listFiles()).filter(f -> f.getName().contains(".fake")).findAny().get();
+        File instanceFile = Arrays.stream(instancesDir.listFiles()[0].listFiles()).filter(f -> f.getName().contains(".xml")).findAny().get();
+        String instanceXml = new String(Files.readAllBytes(instanceFile.toPath()));
+        assertThat(instanceXml, containsString("<recording1>" + recording.getName() + "</recording1>"));
+        assertThat(instanceXml, containsString("<recording2>" + recording.getName() + "</recording2>"));
+    }
+
     /**
      * This could probably be tested at a lower level when the background recording implementation
      * stabilizes.
