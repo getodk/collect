@@ -52,7 +52,7 @@ public class BackgroundAudioPermissionDialogFragment extends DialogFragment {
                     permissionsProvider.requestRecordAudioPermission(activity, new PermissionListener() {
                         @Override
                         public void granted() {
-                            formEntryViewModel.startBackgroundRecording(treeReference);
+                            formEntryViewModel.startBackgroundRecording(treeReference, "blah");
                         }
 
                         @Override

@@ -62,7 +62,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         this.recordAudioActionRegistry = recordAudioActionRegistry;
 
         recordAudioActionRegistry.register((treeReference, quality) -> {
-            new Handler(Looper.getMainLooper()).post(() -> startBackgroundRecording(treeReference));
+            new Handler(Looper.getMainLooper()).post(() -> startBackgroundRecording(treeReference, quality));
         });
     }
 
@@ -203,7 +203,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         return audioRecorder.isRecording() && audioRecorder.getCurrentSession().getValue().getId() instanceof Set;
     }
 
-    public void startBackgroundRecording(TreeReference treeReference) {
+    public void startBackgroundRecording(TreeReference treeReference, String quality) {
         if (isBackgroundRecordingEnabled()) {
             if (permissionsChecker.isPermissionGranted(Manifest.permission.RECORD_AUDIO)) {
                 if (isBackgroundRecording()) {
@@ -213,7 +213,15 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
                 } else {
                     HashSet<TreeReference> treeReferences = new HashSet<>();
                     treeReferences.add(treeReference);
-                    audioRecorder.start(treeReferences, Output.AMR);
+
+                    Output output = Output.AMR;
+                    if ("low".equals(quality)) {
+                        output = Output.AAC_LOW;
+                    } else if ("normal".equals(quality)) {
+                        output = Output.AAC;
+                    }
+
+                    audioRecorder.start(treeReferences, output);
                 }
             } else {
                 error.setValue(new AudioPermissionRequired(treeReference));

@@ -23,6 +23,7 @@ import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.utilities.Clock;
 
@@ -86,7 +87,7 @@ public class BackgroundAudioPermissionDialogFragmentTest {
             fakePermissionsProvider.setPermissionGranted(true);
 
             button.performClick();
-            verify(formEntryViewModel).startBackgroundRecording(treeReference);
+            verify(formEntryViewModel).startBackgroundRecording(treeReference, "blah");
         });
     }
 
