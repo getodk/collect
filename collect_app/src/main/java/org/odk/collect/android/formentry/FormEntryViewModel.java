@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
+import org.javarosa.core.model.actions.recordaudio.RecordAudioActionHandler;
 import org.javarosa.form.api.FormEntryController;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.analytics.Analytics;
@@ -166,7 +167,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
     public boolean hasBackgroundRecording() {
         if (formController != null) {
-            return formController.getFormDef().hasAction("recordaudio");
+            return formController.getFormDef().hasAction(RecordAudioActionHandler.ELEMENT_NAME);
         } else {
             return false;
         }
