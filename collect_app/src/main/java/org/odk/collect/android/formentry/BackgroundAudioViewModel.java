@@ -36,8 +36,8 @@ public class BackgroundAudioViewModel extends ViewModel {
     private final MutableLiveData<Boolean> isPermissionRequired = new MutableLiveData<>(false);
 
     // These fields handle storing record action details while we're granting permissions
-    private final HashSet<TreeReference> treeReferences = new HashSet<>();
-    private String quality;
+    private final HashSet<TreeReference> tempTreeReferences = new HashSet<>();
+    private String tempQuality;
 
     public BackgroundAudioViewModel(AudioRecorder audioRecorder, PreferencesProvider preferencesProvider, RecordAudioActionRegistry recordAudioActionRegistry, PermissionsChecker permissionsChecker) {
         this.audioRecorder = audioRecorder;
@@ -77,7 +77,10 @@ public class BackgroundAudioViewModel extends ViewModel {
 
     public void grantAudioPermission() {
         isPermissionRequired.setValue(false);
-        startBackgroundRecording(quality, treeReferences);
+        startBackgroundRecording(tempQuality, new HashSet<>(tempTreeReferences));
+        
+        tempTreeReferences.clear();
+        tempQuality = null;
     }
 
     private void handleRecordAction(TreeReference treeReference, String quality) {
@@ -85,7 +88,7 @@ public class BackgroundAudioViewModel extends ViewModel {
             if (permissionsChecker.isPermissionGranted(Manifest.permission.RECORD_AUDIO)) {
                 if (isBackgroundRecording()) {
                     RecordingSession session = audioRecorder.getCurrentSession().getValue();
-                    Set<TreeReference> treeReferences = (Set<TreeReference>) session.getId();
+                    HashSet<TreeReference> treeReferences = (HashSet<TreeReference>) session.getId();
                     treeReferences.add(treeReference);
                 } else {
                     HashSet<TreeReference> treeReferences = new HashSet<>();
@@ -95,8 +98,8 @@ public class BackgroundAudioViewModel extends ViewModel {
                 }
             } else {
                 isPermissionRequired.setValue(true);
-                treeReferences.add(treeReference);
-                this.quality = quality;
+                tempTreeReferences.add(treeReference);
+                this.tempQuality = quality;
             }
         }
     }
