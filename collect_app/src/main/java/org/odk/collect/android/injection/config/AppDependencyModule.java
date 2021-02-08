@@ -526,8 +526,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider) {
-        return new FormEntryViewModel.Factory(clock, analytics, preferencesProvider);
+    public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Clock clock, Analytics analytics) {
+        return new FormEntryViewModel.Factory(clock, analytics);
     }
 
     @Provides

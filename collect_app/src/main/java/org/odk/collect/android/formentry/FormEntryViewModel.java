@@ -16,7 +16,6 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.utilities.Clock;
 
 import java.util.Objects;
@@ -27,7 +26,6 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
     private final Clock clock;
     private final Analytics analytics;
-    private final PreferencesProvider preferencesProvider;
     private final MutableLiveData<Error> error = new MutableLiveData<>(null);
 
     @Nullable
@@ -37,10 +35,9 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     private FormIndex jumpBackIndex;
 
     @SuppressWarnings("WeakerAccess")
-    public FormEntryViewModel(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider) {
+    public FormEntryViewModel(Clock clock, Analytics analytics) {
         this.clock = clock;
         this.analytics = analytics;
-        this.preferencesProvider = preferencesProvider;
     }
 
     @Override
@@ -168,7 +165,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     }
 
     public boolean hasBackgroundRecording() {
-        return preferencesProvider.getGeneralSharedPreferences().getBoolean("background_audio_recording", false);
+        return formController.getFormDef().hasAction("recordaudio");
     }
 
     private String getFormIdentifierHash() {
@@ -183,19 +180,17 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
         private final Clock clock;
         private final Analytics analytics;
-        private final PreferencesProvider preferencesProvider;
 
-        public Factory(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider) {
+        public Factory(Clock clock, Analytics analytics) {
             this.clock = clock;
             this.analytics = analytics;
-            this.preferencesProvider = preferencesProvider;
         }
 
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormEntryViewModel(clock, analytics, preferencesProvider);
+            return (T) new FormEntryViewModel(clock, analytics);
         }
     }
 
