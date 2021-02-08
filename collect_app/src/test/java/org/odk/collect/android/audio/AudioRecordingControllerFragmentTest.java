@@ -160,6 +160,8 @@ public class AudioRecordingControllerFragmentTest {
 
     @Test
     public void whenThereIsAnErrorStartingRecording_showsErrorDialog() {
+        audioRecorder.cleanUp(); // Reset recorder
+
         FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
 
         audioRecorder.failOnStart();
