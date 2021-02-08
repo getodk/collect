@@ -1,7 +1,5 @@
 package org.odk.collect.android.formmanagement;
 
-import android.net.Uri;
-
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
@@ -12,7 +10,6 @@ import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.forms.MediaFile;
 import org.odk.collect.android.listeners.FormDownloaderListener;
-import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.Validator;
@@ -163,37 +160,40 @@ public class ServerFormDownloader implements FormDownloader {
     }
 
     boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields, String formsDirPath) {
-        UriResult uriResult = null;
+        FormResult formResult;
 
-        try {
+        File formFile;
+
+        if (fileResult.isNew()) {
             // Copy form to forms dir
-            File formFile = new File(formsDirPath, fileResult.file.getName());
+            formFile = new File(formsDirPath, fileResult.file.getName());
             FileUtils.copyFile(fileResult.file, formFile);
-
-            // Save form in database
-            uriResult = findExistingOrCreateNewUri(formFile, parsedFields, formsDirPath);
-
-            // move the media files in the media folder
-            if (tempMediaPath != null) {
-                File formMediaPath = new File(uriResult.getMediaPath());
-                FileUtils.moveMediaFiles(tempMediaPath, formMediaPath);
-            }
-
-            return true;
-        } catch (IOException e) {
-            Timber.e(e);
-
-            if (uriResult.isNew() && fileResult.isNew()) {
-                // this means we should delete the entire form together with the metadata
-                Uri uri = uriResult.getUri();
-                Timber.d("The form is new. We should delete the entire form.");
-                int deletedCount = Collect.getInstance().getContentResolver().delete(uri,
-                        null, null);
-                Timber.d("Deleted %d rows using uri %s", deletedCount, uri.toString());
-            }
-
-            return false;
+        } else {
+            formFile = fileResult.file;
         }
+
+        // Save form in database
+        formResult = findOrCreateForm(formFile, parsedFields);
+
+        // move the media files in the media folder
+        if (tempMediaPath != null) {
+            File formMediaDir = new File(getAbsoluteFilePath(formsDirPath, formResult.form.getFormMediaPath()));
+
+            try {
+                moveMediaFiles(tempMediaPath, formMediaDir);
+            } catch (IOException e) {
+                Timber.e(e);
+
+                if (formResult.isNew() && fileResult.isNew()) {
+                    // this means we should delete the entire form together with the metadata
+                    formsRepository.delete(formResult.form.getId());
+                }
+
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private void cleanUp(FileResult fileResult, String tempMediaPath) {
@@ -212,33 +212,21 @@ public class ServerFormDownloader implements FormDownloader {
         }
     }
 
-    /**
-     * Creates a new form in the database, if none exists with the same absolute path. Returns
-     * information with the URI, media path, and whether the form is new.
-     *
-     * @param formFile the form definition file
-     * @param formInfo certain fields extracted from the parsed XML form, such as title and form ID
-     * @return a {@link UriResult} object
-     */
-    private UriResult findExistingOrCreateNewUri(File formFile, Map<String, String> formInfo, String formsDirPath) {
-        final Uri uri;
+    private FormResult findOrCreateForm(File formFile, Map<String, String> formInfo) {
         final String formFilePath = formFile.getAbsolutePath();
         String mediaPath = FileUtils.constructMediaPath(formFilePath);
 
-        FileUtils.checkMediaPath(new File(mediaPath));
-        Form form = formsRepository.getOneByPath(formFile.getAbsolutePath());
+        Form existingForm = formsRepository.getOneByPath(formFile.getAbsolutePath());
 
-        if (form == null) {
-            uri = saveNewForm(formInfo, formFile, mediaPath);
-            return new UriResult(uri, mediaPath, true);
+        if (existingForm == null) {
+            Form newForm = saveNewForm(formInfo, formFile, mediaPath);
+            return new FormResult(newForm, true);
         } else {
-            uri = Uri.withAppendedPath(FormsProviderAPI.FormsColumns.CONTENT_URI, form.getId().toString());
-            mediaPath = getAbsoluteFilePath(formsDirPath, form.getFormMediaPath());
-            return new UriResult(uri, mediaPath, false);
+            return new FormResult(existingForm, false);
         }
     }
 
-    private Uri saveNewForm(Map<String, String> formInfo, File formFile, String mediaPath) {
+    private Form saveNewForm(Map<String, String> formInfo, File formFile, String mediaPath) {
         Form form = new Form.Builder()
                 .formFilePath(formFile.getAbsolutePath())
                 .formMediaPath(mediaPath)
@@ -380,7 +368,7 @@ public class ServerFormDownloader implements FormDownloader {
 
     private void downloadMediaFiles(String tempMediaPath, FormDownloaderListener stateListener, List<MediaFile> files, File tempDir, String formFileName) throws FormSourceException, IOException, InterruptedException {
         File tempMediaDir = new File(tempMediaPath);
-        FileUtils.checkMediaPath(tempMediaDir);
+        tempMediaDir.mkdir();
 
         for (int i = 0; i < files.size(); i++) {
             if (stateListener != null) {
@@ -431,32 +419,37 @@ public class ServerFormDownloader implements FormDownloader {
         return hash == null || hash.isEmpty() ? null : hash.substring("md5:".length());
     }
 
-    private static class UriResult {
+    public static void moveMediaFiles(String tempMediaPath, File formMediaPath) throws IOException {
+        File tempMediaFolder = new File(tempMediaPath);
+        File[] mediaFiles = tempMediaFolder.listFiles();
 
-        private final Uri uri;
-        private final String mediaPath;
+        if (mediaFiles != null && mediaFiles.length != 0) {
+            for (File mediaFile : mediaFiles) {
+                org.apache.commons.io.FileUtils.moveFileToDirectory(mediaFile, formMediaPath, true);
+            }
+        }
+    }
+
+    private static class FormResult {
+
+        private final Form form;
         private final boolean isNew;
 
-        private UriResult(Uri uri, String mediaPath, boolean isNew) {
-            this.uri = uri;
-            this.mediaPath = mediaPath;
+        private FormResult(Form form, boolean isNew) {
+            this.form = form;
             this.isNew = isNew;
-        }
-
-        private Uri getUri() {
-            return uri;
-        }
-
-        private String getMediaPath() {
-            return mediaPath;
         }
 
         private boolean isNew() {
             return isNew;
         }
+
+        public Form getForm() {
+            return form;
+        }
     }
 
-    static class FileResult {
+    private static class FileResult {
 
         private final File file;
         private final boolean isNew;

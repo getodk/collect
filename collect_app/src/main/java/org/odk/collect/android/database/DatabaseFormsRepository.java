@@ -104,7 +104,7 @@ public class DatabaseFormsRepository implements FormsRepository {
     }
 
     @Override
-    public Uri save(Form form) {
+    public Form save(Form form) {
         final ContentValues v = new ContentValues();
         v.put(FORM_FILE_PATH, storagePathProvider.getFormDbPath(form.getFormFilePath()));
         v.put(FORM_MEDIA_PATH, storagePathProvider.getFormDbPath(form.getFormMediaPath()));
@@ -123,7 +123,11 @@ public class DatabaseFormsRepository implements FormsRepository {
             v.putNull(DELETED_DATE);
         }
 
-        return new FormsDao().saveForm(v);
+        FormsDao formsDao = new FormsDao();
+        Uri uri = formsDao.saveForm(v);
+        try (Cursor cursor = formsDao.getFormsCursor(uri)) {
+            return getFormOrNull(cursor);
+        }
     }
 
     @Override

@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.support.FormUtils;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.android.support.InMemInstancesRepository;
 
@@ -24,6 +25,7 @@ public class InstanceDeleterTest {
                 .jrFormId("1")
                 .jrVersion("version")
                 .deleted(true)
+                .formFilePath(FormUtils.createXFormFile("1", "version").getAbsolutePath())
                 .build()
         );
 
@@ -41,6 +43,7 @@ public class InstanceDeleterTest {
                 .jrFormId("1")
                 .jrVersion("version")
                 .deleted(true)
+                .formFilePath(FormUtils.createXFormFile("1", "version").getAbsolutePath())
                 .build()
         );
 
@@ -70,6 +73,7 @@ public class InstanceDeleterTest {
                 .jrFormId("1")
                 .jrVersion("version")
                 .deleted(true)
+                .formFilePath(FormUtils.createXFormFile("1", "version").getAbsolutePath())
                 .build()
         );
 
@@ -91,6 +95,7 @@ public class InstanceDeleterTest {
                 .jrFormId("1")
                 .jrVersion("1")
                 .deleted(true)
+                .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
                 .build()
         );
 
@@ -98,6 +103,7 @@ public class InstanceDeleterTest {
                 .id(2L)
                 .jrFormId("1")
                 .jrVersion("2")
+                .formFilePath(FormUtils.createXFormFile("1", "2").getAbsolutePath())
                 .deleted(true)
                 .build()
         );
@@ -128,6 +134,7 @@ public class InstanceDeleterTest {
                 .jrFormId("1")
                 .jrVersion("version")
                 .deleted(false)
+                .formFilePath(FormUtils.createXFormFile("1", "version").getAbsolutePath())
                 .build()
         );
 
@@ -149,6 +156,7 @@ public class InstanceDeleterTest {
                 .jrFormId("1")
                 .jrVersion("1")
                 .deleted(true)
+                .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
                 .build()
         );
 
@@ -157,6 +165,7 @@ public class InstanceDeleterTest {
                 .jrFormId("1")
                 .jrVersion("2")
                 .deleted(false)
+                .formFilePath(FormUtils.createXFormFile("1", "2").getAbsolutePath())
                 .build()
         );
 

@@ -1,21 +1,22 @@
 package org.odk.collect.android.support;
 
-import android.net.Uri;
-
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.utilities.Clock;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.io.FileUtils.deleteDirectory;
 
 public class InMemFormsRepository implements FormsRepository {
 
@@ -82,30 +83,52 @@ public class InMemFormsRepository implements FormsRepository {
     }
 
     @Override
-    public Uri save(Form form) {
+    public Form save(Form form) {
         form = new Form.Builder(form)
                 .id(idCounter++)
                 .date(clock.getCurrentTime())
                 .build();
 
-        String formFilePath = form.getFormFilePath();
-
-        if (formFilePath != null) {
+        // Allows tests to override hash
+        if (form.getMD5Hash() == null) {
+            String formFilePath = form.getFormFilePath();
             String hash = FileUtils.getMd5Hash(new File(formFilePath));
-            forms.add(new Form.Builder(form)
+            form = new Form.Builder(form)
                     .md5Hash(hash)
-                    .build()
-            );
-        } else {
-            forms.add(form);
+                    .build();
         }
 
-        return null;
+        forms.add(form);
+        return form;
     }
 
     @Override
     public void delete(Long id) {
-        forms.removeIf(form -> form.getId().equals(id));
+        Optional<Form> formToRemove = forms.stream().filter(f -> f.getId().equals(id)).findFirst();
+        if (formToRemove.isPresent()) {
+            Form form = formToRemove.get();
+
+            if (form.getFormFilePath() != null) {
+                new File(form.getFormFilePath()).delete();
+            }
+
+            if (form.getFormMediaPath() != null) {
+                try {
+                    File mediaDir = new File(form.getFormMediaPath());
+
+                    if (mediaDir.isDirectory()) {
+                        deleteDirectory(mediaDir);
+                    } else {
+                        mediaDir.delete();
+                    }
+                } catch (IOException ignored) {
+                    // Ignored
+                }
+            }
+
+
+            forms.remove(form);
+        }
     }
 
     @Override
