@@ -165,7 +165,11 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     }
 
     public boolean hasBackgroundRecording() {
-        return formController.getFormDef().hasAction("recordaudio");
+        if (formController != null) {
+            return formController.getFormDef().hasAction("recordaudio");
+        } else {
+            return false;
+        }
     }
 
     private String getFormIdentifierHash() {
