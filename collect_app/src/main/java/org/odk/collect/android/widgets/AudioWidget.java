@@ -91,8 +91,8 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
                 recordingInProgress = true;
                 updateVisibilities();
 
-                binding.recordingDuration.setText(formatLength(session.first));
-                binding.waveform.addAmplitude(session.second);
+                binding.audioPlayer.recordingDuration.setText(formatLength(session.first));
+                binding.audioPlayer.waveform.addAmplitude(session.second);
             } else {
                 recordingInProgress = false;
                 updateVisibilities();
@@ -108,7 +108,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
         binding.chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         binding.captureButton.setOnClickListener(v -> {
-            binding.waveform.clear();
+            binding.audioPlayer.waveform.clear();
             recordingRequester.requestRecording(getFormEntryPrompt());
         });
         binding.chooseButton.setOnClickListener(v -> audioFileRequester.requestFile(getFormEntryPrompt()));
@@ -165,21 +165,21 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
         if (recordingInProgress) {
             binding.captureButton.setVisibility(GONE);
             binding.chooseButton.setVisibility(GONE);
-            binding.recordingDuration.setVisibility(VISIBLE);
-            binding.waveform.setVisibility(VISIBLE);
-            binding.audioController.setVisibility(GONE);
+            binding.audioPlayer.recordingDuration.setVisibility(VISIBLE);
+            binding.audioPlayer.waveform.setVisibility(VISIBLE);
+            binding.audioPlayer.audioController.setVisibility(GONE);
         } else if (getAnswer() == null) {
             binding.captureButton.setVisibility(VISIBLE);
             binding.chooseButton.setVisibility(VISIBLE);
-            binding.recordingDuration.setVisibility(GONE);
-            binding.waveform.setVisibility(GONE);
-            binding.audioController.setVisibility(GONE);
+            binding.audioPlayer.recordingDuration.setVisibility(GONE);
+            binding.audioPlayer.waveform.setVisibility(GONE);
+            binding.audioPlayer.audioController.setVisibility(GONE);
         } else {
             binding.captureButton.setVisibility(GONE);
             binding.chooseButton.setVisibility(GONE);
-            binding.recordingDuration.setVisibility(GONE);
-            binding.waveform.setVisibility(GONE);
-            binding.audioController.setVisibility(VISIBLE);
+            binding.audioPlayer.recordingDuration.setVisibility(GONE);
+            binding.audioPlayer.waveform.setVisibility(GONE);
+            binding.audioPlayer.audioController.setVisibility(VISIBLE);
         }
 
         if (questionDetails.isReadOnly()) {
@@ -196,10 +196,10 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
         if (binaryName != null) {
             Clip clip = new Clip("audio:" + getFormEntryPrompt().getIndex().toString(), getAudioFile().getAbsolutePath());
 
-            audioPlayer.onPlayingChanged(clip.getClipID(), binding.audioController::setPlaying);
-            audioPlayer.onPositionChanged(clip.getClipID(), binding.audioController::setPosition);
-            binding.audioController.setDuration(getDurationOfFile(clip.getURI()));
-            binding.audioController.setListener(new AudioControllerView.Listener() {
+            audioPlayer.onPlayingChanged(clip.getClipID(), binding.audioPlayer.audioController::setPlaying);
+            audioPlayer.onPositionChanged(clip.getClipID(), binding.audioPlayer.audioController::setPosition);
+            binding.audioPlayer.audioController.setDuration(getDurationOfFile(clip.getURI()));
+            binding.audioPlayer.audioController.setListener(new AudioControllerView.Listener() {
                 @Override
                 public void onPlayClicked() {
                     audioPlayer.play(clip);
