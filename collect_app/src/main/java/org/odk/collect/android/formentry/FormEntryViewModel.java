@@ -26,7 +26,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
     private final Clock clock;
     private final Analytics analytics;
-    private final MutableLiveData<Error> error = new MutableLiveData<>(null);
+    private final MutableLiveData<FormError> error = new MutableLiveData<>(null);
 
     @Nullable
     private FormController formController;
@@ -58,7 +58,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         }
     }
 
-    public LiveData<Error> getError() {
+    public LiveData<FormError> getError() {
         return error;
     }
 
@@ -194,12 +194,11 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         }
     }
 
-    public abstract static class Error {
+    public abstract static class FormError {
 
     }
 
-    @SuppressWarnings("PMD.DoNotExtendJavaLangError")
-    public static class NonFatal extends Error {
+    public static class NonFatal extends FormError {
 
         private final String message;
 
