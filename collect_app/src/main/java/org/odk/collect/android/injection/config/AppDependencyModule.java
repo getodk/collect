@@ -48,6 +48,7 @@ import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.database.DatabaseMediaFileRepository;
 import org.odk.collect.android.events.RxEventBus;
+import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
 import org.odk.collect.android.formentry.saving.DiskFormSaver;
@@ -521,5 +522,10 @@ public class AppDependencyModule {
     @Singleton
     public ExternalAppIntentProvider providesExternalAppIntentProvider() {
         return new ExternalAppIntentProvider();
+    }
+
+    @Provides
+    public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider, AudioRecorder audioRecorder, PermissionsChecker permissionsChecker) {
+        return new FormEntryViewModel.Factory(clock, analytics, preferencesProvider, audioRecorder, permissionsChecker);
     }
 }

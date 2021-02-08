@@ -1,9 +1,13 @@
 package org.odk.collect.android.feature.formentry;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
@@ -11,6 +15,10 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.permissions.PermissionsChecker;
+import org.odk.collect.android.permissions.PermissionsProvider;
+import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
@@ -35,7 +43,10 @@ public class BackgroundAudioRecordingTest {
 
     private StubAudioRecorder stubAudioRecorderViewModel;
 
+    private RevokeableRecordAudioPermissionsChecker permissionsChecker;
+    private ControllableRecordAudioPermissionsProvider permissionsProvider;
     public final TestDependencies testDependencies = new TestDependencies() {
+
         @Override
         public AudioRecorder providesAudioRecorder(Application application) {
             if (stubAudioRecorderViewModel == null) {
@@ -52,6 +63,24 @@ public class BackgroundAudioRecordingTest {
 
             return stubAudioRecorderViewModel;
         }
+
+        @Override
+        public PermissionsChecker providesPermissionsChecker(Context context) {
+            if (permissionsChecker == null) {
+                permissionsChecker = new RevokeableRecordAudioPermissionsChecker(context);
+            }
+
+            return permissionsChecker;
+        }
+
+        @Override
+        public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+            if (permissionsProvider == null) {
+                permissionsProvider = new ControllableRecordAudioPermissionsProvider(permissionsChecker, storageStateProvider);
+            }
+
+            return permissionsProvider;
+        }
     };
 
     public final CollectTestRule rule = new CollectTestRule();
@@ -62,7 +91,7 @@ public class BackgroundAudioRecordingTest {
             .around(rule);
 
     @Test
-    public void whenBackgroundAudioRecordingEnabled_fillingOutForm_recordsAudio() {
+    public void fillingOutForm_recordsAudio() {
         FormEntryPage formEntryPage = rule.mainMenu()
                 .enableBackgroundAudioRecording()
                 .copyForm("one-question.xml")
@@ -86,7 +115,7 @@ public class BackgroundAudioRecordingTest {
      * stabilizes.
      */
     @Test
-    public void whenBackgroundAudioRecordingEnabled_fillingOutForm_doesntShowStopOrPauseButtons() {
+    public void fillingOutForm_doesntShowStopOrPauseButtons() {
         rule.mainMenu()
                 .enableBackgroundAudioRecording()
                 .copyForm("one-question.xml")
@@ -96,7 +125,7 @@ public class BackgroundAudioRecordingTest {
     }
 
     @Test
-    public void whenBackgroundAudioRecordingEnabled_uncheckingRecordAudio_endsAndDeletesRecording_andDisablesItForNextFormFill() {
+    public void uncheckingRecordAudio_andConfirming_endsAndDeletesRecording() {
         FormEntryPage formEntryPage = rule.mainMenu()
                 .enableBackgroundAudioRecording()
                 .copyForm("one-question.xml")
@@ -114,5 +143,74 @@ public class BackgroundAudioRecordingTest {
                 .startBlankForm("One Question");
 
         assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
+    }
+
+    @Test
+    public void whenRecordAudioPermissionNotGranted_openingForm_andDenyingPermissions_closesForm() {
+        permissionsChecker.revoke();
+        permissionsProvider.makeControllable();
+
+        rule.mainMenu()
+                .enableBackgroundAudioRecording()
+                .copyForm("one-question.xml")
+                .startBlankFormWithDialog("One Question")
+                .assertText(R.string.background_audio_permission_explanation)
+                .clickOK(new FormEntryPage("One Question", rule));
+
+        permissionsProvider.deny();
+        new MainMenuPage(rule).assertOnPage();
+    }
+
+    private static class RevokeableRecordAudioPermissionsChecker extends PermissionsChecker {
+
+        private boolean revoked;
+
+        RevokeableRecordAudioPermissionsChecker(Context context) {
+            super(context);
+        }
+
+        @Override
+        public boolean isPermissionGranted(String... permissions) {
+            if (permissions[0].equals(Manifest.permission.RECORD_AUDIO) && revoked) {
+                return false;
+            } else {
+                return super.isPermissionGranted(permissions);
+            }
+        }
+
+        public void revoke() {
+            revoked = true;
+        }
+    }
+
+    private static class ControllableRecordAudioPermissionsProvider extends PermissionsProvider {
+
+        private PermissionListener action;
+        private boolean controllable;
+
+        ControllableRecordAudioPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+            super(permissionsChecker, storageStateProvider);
+        }
+
+        @Override
+        public void requestRecordAudioPermission(Activity activity, @NonNull PermissionListener action) {
+            if (controllable) {
+                this.action = action;
+            } else {
+                super.requestRecordAudioPermission(activity, action);
+            }
+        }
+
+        public void makeControllable() {
+            controllable = true;
+        }
+
+        public void grant() {
+            InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> action.granted());
+        }
+
+        public void deny() {
+            InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> action.denied());
+        }
     }
 }

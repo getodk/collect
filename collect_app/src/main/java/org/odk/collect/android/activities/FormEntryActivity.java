@@ -78,6 +78,7 @@ import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.formentry.BackgroundAudioPermissionDialogFragment;
 import org.odk.collect.android.formentry.FormEndView;
 import org.odk.collect.android.formentry.FormEntryMenuDelegate;
 import org.odk.collect.android.formentry.FormEntryViewModel;
@@ -123,6 +124,7 @@ import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -338,6 +340,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     PreferencesProvider preferencesProvider;
 
     @Inject
+    PermissionsChecker permissionsChecker;
+
+    @Inject
     ActivityAvailability activityAvailability;
 
     @Inject
@@ -468,9 +473,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .get(FormEntryViewModel.class);
 
         formEntryViewModel.getError().observe(this, error -> {
-            if (error != null) {
-                createErrorDialog(error, false);
+            if (error instanceof FormEntryViewModel.NonFatal) {
+                createErrorDialog(((FormEntryViewModel.NonFatal) error).getMessage(), false);
                 formEntryViewModel.errorDisplayed();
+            } else if (error instanceof FormEntryViewModel.AudioPermissionRequired) {
+                showIfNotShowing(BackgroundAudioPermissionDialogFragment.class, getSupportFragmentManager());
             }
         });
 
