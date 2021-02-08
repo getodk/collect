@@ -6,7 +6,7 @@ import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.dialogs.BikramSambatDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.CopticDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog;
@@ -17,6 +17,7 @@ import org.odk.collect.android.fragments.dialogs.MyanmarDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.PersianDatePickerDialog;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.support.TestScreenContextActivity;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.assertEquals;
@@ -35,7 +36,7 @@ import static org.odk.collect.android.logic.DatePickerDetails.DatePickerType.PER
 public class DateTimeWidgetUtilsTest {
     private DateTimeWidgetUtils dateTimeWidgetUtils;
 
-    private FormEntryActivity activity;
+    private TestScreenContextActivity activity;
     private DatePickerDetails datePickerDetails;
     private LocalDateTime date;
 
@@ -72,7 +73,7 @@ public class DateTimeWidgetUtilsTest {
     public void setUp() {
         dateTimeWidgetUtils = new DateTimeWidgetUtils();
 
-        activity = RobolectricHelpers.createThemedActivity(FormEntryActivity.class, 0);
+        activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class, R.style.Theme_Collect_Light);
         datePickerDetails = mock(DatePickerDetails.class);
 
         when(datePickerDetails.getDatePickerType()).thenReturn(GREGORIAN);

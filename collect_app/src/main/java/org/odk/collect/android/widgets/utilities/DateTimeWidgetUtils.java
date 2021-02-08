@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import org.javarosa.core.model.FormIndex;
 import org.joda.time.DateTime;
@@ -25,10 +25,10 @@ import org.odk.collect.android.fragments.dialogs.MyanmarDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.PersianDatePickerDialog;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.logic.DatePickerDetails;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MyanmarDateUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
-import org.odk.collect.android.utilities.Appearances;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -196,7 +196,7 @@ public class DateTimeWidgetUtils {
         bundle.putInt(DIALOG_THEME, themeUtils.getHoloDialogTheme());
         bundle.putSerializable(TIME, dateTime);
 
-        DialogUtils.showIfNotShowing(CustomTimePickerDialog.class, bundle, ((AppCompatActivity) context).getSupportFragmentManager());
+        DialogUtils.showIfNotShowing(CustomTimePickerDialog.class, bundle, ((FragmentActivity) context).getSupportFragmentManager());
     }
 
     public void showDatePickerDialog(Context context, DatePickerDetails datePickerDetails, LocalDateTime date) {
@@ -207,7 +207,7 @@ public class DateTimeWidgetUtils {
         bundle.putSerializable(DATE, date);
         bundle.putSerializable(DATE_PICKER_DETAILS, datePickerDetails);
 
-        DialogUtils.showIfNotShowing(getClass(datePickerDetails.getDatePickerType()), bundle, ((AppCompatActivity) context).getSupportFragmentManager());
+        DialogUtils.showIfNotShowing(getClass(datePickerDetails.getDatePickerType()), bundle, ((FragmentActivity) context).getSupportFragmentManager());
     }
 
     private static Class getClass(DatePickerDetails.DatePickerType datePickerType) {
