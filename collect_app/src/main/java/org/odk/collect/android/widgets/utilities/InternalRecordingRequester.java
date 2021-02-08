@@ -86,6 +86,8 @@ public class InternalRecordingRequester implements RecordingRequester {
                             Collect.getInstance().getFormController().getFormDef().setValue(new StringData(result.getOrNull().getName()), treeReference, false);
                         }
                     }
+
+                    session.getFile().delete();
                 } catch (JavaRosaException e) {
                     // ?
                 }
