@@ -4,7 +4,9 @@ import androidx.activity.ComponentActivity;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.StringData;
+import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
@@ -14,9 +16,14 @@ import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
+
+import java.util.Set;
+
+import timber.log.Timber;
 
 public class InternalRecordingRequester implements RecordingRequester {
 
@@ -77,13 +84,17 @@ public class InternalRecordingRequester implements RecordingRequester {
                         formSaveViewModel.replaceAnswerFile(formIndex.toString(), result.getOrNull().getAbsolutePath());
                         Collect.getInstance().getFormController().answerQuestion(formIndex, new StringData(result.getOrNull().getName()));
                         refreshListener.onScreenRefresh();
+                    } else if (session.getId() instanceof Set) {
+                        Set<TreeReference> treeReferences = (Set<TreeReference>) session.getId();
+                        for (TreeReference treeReference : treeReferences) {
+                            Collect.getInstance().getFormController().getFormDef().setValue(new StringData(result.getOrNull().getName()), treeReference, false);
+                        }
                     }
-                } catch (JavaRosaException e) {
-                    // ?
-                }
 
-                if (!session.getId().equals("background")) {
                     session.getFile().delete();
+                } catch (JavaRosaException e) {
+                    Timber.e(e);
+                    ToastUtils.showLongToast(R.string.saving_audio_recording_failed);
                 }
 
                 formSaveViewModel.resumeSave();

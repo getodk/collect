@@ -19,6 +19,7 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
@@ -31,9 +32,11 @@ import org.odk.collect.audiorecorder.testsupport.StubAudioRecorder;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Arrays;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
@@ -91,10 +94,10 @@ public class BackgroundAudioRecordingTest {
             .around(rule);
 
     @Test
-    public void fillingOutForm_recordsAudio() {
+    public void fillingOutForm_recordsAudio() throws Exception {
         FormEntryPage formEntryPage = rule.mainMenu()
                 .enableBackgroundAudioRecording()
-                .copyForm("one-question.xml")
+                .copyForm("one-question-background-audio.xml")
                 .startBlankForm("One Question");
         assertThat(stubAudioRecorderViewModel.isRecording(), is(true));
 
@@ -106,8 +109,35 @@ public class BackgroundAudioRecordingTest {
         formEndPage.clickSaveAndExit();
         assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
 
-        assertThat(stubAudioRecorderViewModel.getLastRecording(), notNullValue());
-        assertThat(stubAudioRecorderViewModel.getLastRecording().exists(), is(true));
+        File instancesDir = new File(testDependencies.storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES));
+        File recording = Arrays.stream(instancesDir.listFiles()[0].listFiles()).filter(f -> f.getName().contains(".fake")).findAny().get();
+        File instanceFile = Arrays.stream(instancesDir.listFiles()[0].listFiles()).filter(f -> f.getName().contains(".xml")).findAny().get();
+        String instanceXml = new String(Files.readAllBytes(instanceFile.toPath()));
+        assertThat(instanceXml, containsString("<recording>" + recording.getName() + "</recording>"));
+    }
+
+    @Test
+    public void fillingOutForm_withMultipleRecordActions_recordsAudioOnceForAllOfThem() throws Exception {
+        FormEntryPage formEntryPage = rule.mainMenu()
+                .enableBackgroundAudioRecording()
+                .copyForm("one-question-background-audio-multiple.xml")
+                .startBlankForm("One Question");
+        assertThat(stubAudioRecorderViewModel.isRecording(), is(true));
+
+        FormEndPage formEndPage = formEntryPage
+                .inputText("123")
+                .swipeToEndScreen();
+        assertThat(stubAudioRecorderViewModel.isRecording(), is(true));
+
+        formEndPage.clickSaveAndExit();
+        assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
+
+        File instancesDir = new File(testDependencies.storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES));
+        File recording = Arrays.stream(instancesDir.listFiles()[0].listFiles()).filter(f -> f.getName().contains(".fake")).findAny().get();
+        File instanceFile = Arrays.stream(instancesDir.listFiles()[0].listFiles()).filter(f -> f.getName().contains(".xml")).findAny().get();
+        String instanceXml = new String(Files.readAllBytes(instanceFile.toPath()));
+        assertThat(instanceXml, containsString("<recording1>" + recording.getName() + "</recording1>"));
+        assertThat(instanceXml, containsString("<recording2>" + recording.getName() + "</recording2>"));
     }
 
     /**
@@ -118,7 +148,7 @@ public class BackgroundAudioRecordingTest {
     public void fillingOutForm_doesntShowStopOrPauseButtons() {
         rule.mainMenu()
                 .enableBackgroundAudioRecording()
-                .copyForm("one-question.xml")
+                .copyForm("one-question-background-audio.xml")
                 .startBlankForm("One Question")
                 .assertContentDescriptionNotDisplayed(R.string.stop_recording)
                 .assertContentDescriptionNotDisplayed(R.string.pause_recording);
@@ -128,7 +158,7 @@ public class BackgroundAudioRecordingTest {
     public void uncheckingRecordAudio_andConfirming_endsAndDeletesRecording() {
         FormEntryPage formEntryPage = rule.mainMenu()
                 .enableBackgroundAudioRecording()
-                .copyForm("one-question.xml")
+                .copyForm("one-question-background-audio.xml")
                 .startBlankForm("One Question")
                 .clickOptionsIcon()
                 .clickRecordAudio()
@@ -152,7 +182,7 @@ public class BackgroundAudioRecordingTest {
 
         rule.mainMenu()
                 .enableBackgroundAudioRecording()
-                .copyForm("one-question.xml")
+                .copyForm("one-question-background-audio.xml")
                 .startBlankFormWithDialog("One Question")
                 .assertText(R.string.background_audio_permission_explanation)
                 .clickOK(new FormEntryPage("One Question", rule));

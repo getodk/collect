@@ -1,7 +1,5 @@
 package org.odk.collect.android.formentry;
 
-import android.Manifest;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -12,31 +10,24 @@ import androidx.lifecycle.ViewModelProvider;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
+import org.javarosa.core.model.actions.recordaudio.RecordAudioActionHandler;
 import org.javarosa.form.api.FormEntryController;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.permissions.PermissionsChecker;
-import org.odk.collect.android.preferences.PreferencesProvider;
-import org.odk.collect.audiorecorder.recorder.Output;
-import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.utilities.Clock;
 
 import java.util.Objects;
 
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_RECORDING;
 
 public class FormEntryViewModel extends ViewModel implements RequiresFormController {
 
     private final Clock clock;
     private final Analytics analytics;
-    private final PreferencesProvider preferencesProvider;
-    private final AudioRecorder audioRecorder;
-    private final PermissionsChecker permissionsChecker;
-    private final MutableLiveData<Error> error = new MutableLiveData<>(null);
+    private final MutableLiveData<FormError> error = new MutableLiveData<>(null);
 
     @Nullable
     private FormController formController;
@@ -45,21 +36,14 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     private FormIndex jumpBackIndex;
 
     @SuppressWarnings("WeakerAccess")
-    public FormEntryViewModel(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider, AudioRecorder audioRecorder, PermissionsChecker permissionsChecker) {
+    public FormEntryViewModel(Clock clock, Analytics analytics) {
         this.clock = clock;
         this.analytics = analytics;
-        this.preferencesProvider = preferencesProvider;
-        this.audioRecorder = audioRecorder;
-        this.permissionsChecker = permissionsChecker;
     }
 
     @Override
     public void formLoaded(@NotNull FormController formController) {
         this.formController = formController;
-
-        if (hasBackgroundRecording()) {
-            startBackgroundRecording();
-        }
     }
 
     public boolean isFormControllerSet() {
@@ -75,7 +59,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         }
     }
 
-    public LiveData<Error> getError() {
+    public LiveData<FormError> getError() {
         return error;
     }
 
@@ -182,20 +166,10 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     }
 
     public boolean hasBackgroundRecording() {
-        return preferencesProvider.getGeneralSharedPreferences().getBoolean("background_audio_recording", false);
-    }
-
-    public boolean isBackgroundRecording() {
-        return audioRecorder.isRecording() && audioRecorder.getCurrentSession().getValue().getId().equals("background");
-    }
-
-    public void startBackgroundRecording() {
-        if (isBackgroundRecordingEnabled()) {
-            if (permissionsChecker.isPermissionGranted(Manifest.permission.RECORD_AUDIO)) {
-                audioRecorder.start("background", Output.AMR);
-            } else {
-                error.setValue(new AudioPermissionRequired());
-            }
+        if (formController != null) {
+            return formController.getFormDef().hasAction(RecordAudioActionHandler.ELEMENT_NAME);
+        } else {
+            return false;
         }
     }
 
@@ -207,48 +181,29 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         }
     }
 
-    public boolean isBackgroundRecordingEnabled() {
-        return preferencesProvider.getGeneralSharedPreferences().getBoolean(KEY_BACKGROUND_RECORDING, true);
-    }
-
-    public void setBackgroundRecordingEnabled(boolean enabled) {
-        if (!enabled) {
-            audioRecorder.cleanUp();
-        }
-
-        preferencesProvider.getGeneralSharedPreferences().edit().putBoolean(KEY_BACKGROUND_RECORDING, enabled).apply();
-    }
-
     public static class Factory implements ViewModelProvider.Factory {
 
         private final Clock clock;
         private final Analytics analytics;
-        private final PreferencesProvider preferencesProvider;
-        private final AudioRecorder audioRecorder;
-        private final PermissionsChecker permissionsChecker;
 
-        public Factory(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider, AudioRecorder audioRecorder, PermissionsChecker permissionsChecker) {
+        public Factory(Clock clock, Analytics analytics) {
             this.clock = clock;
             this.analytics = analytics;
-            this.preferencesProvider = preferencesProvider;
-            this.audioRecorder = audioRecorder;
-            this.permissionsChecker = permissionsChecker;
         }
 
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormEntryViewModel(clock, analytics, preferencesProvider, audioRecorder, permissionsChecker);
+            return (T) new FormEntryViewModel(clock, analytics);
         }
     }
 
-    public abstract static class Error {
+    public abstract static class FormError {
 
     }
 
-    @SuppressWarnings("PMD.DoNotExtendJavaLangError")
-    public static class NonFatal extends Error {
+    public static class NonFatal extends FormError {
 
         private final String message;
 
@@ -278,10 +233,5 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         public int hashCode() {
             return Objects.hash(message);
         }
-    }
-
-    @SuppressWarnings("PMD.DoNotExtendJavaLangError")
-    public static class AudioPermissionRequired extends Error {
-
     }
 }

@@ -164,6 +164,16 @@ abstract class AudioRecorderTest {
         runBackground()
         assertThat(session.value!!.id, equalTo(sessionId))
     }
+
+    @Test
+    fun start_whenAlreadyRecording_doesNothing() {
+        val session = liveDataTester.activate(viewModel.getCurrentSession())
+        viewModel.start("session1", Output.AAC)
+        viewModel.start("session2", Output.AAC)
+
+        runBackground()
+        assertThat(session.value?.id, equalTo("session1"))
+    }
 }
 
 private class SerializableId : Serializable

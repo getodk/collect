@@ -37,12 +37,13 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
     private final FormEntryViewModel formEntryViewModel;
     private final FormSaveViewModel formSaveViewModel;
     private final BackgroundLocationViewModel backgroundLocationViewModel;
+    private final BackgroundAudioViewModel backgroundAudioViewModel;
 
     @Nullable
     private FormController formController;
     private final AudioRecorder audioRecorder;
 
-    public FormEntryMenuDelegate(AppCompatActivity activity, AnswersProvider answersProvider, FormIndexAnimationHandler formIndexAnimationHandler, FormSaveViewModel formSaveViewModel, FormEntryViewModel formEntryViewModel, AudioRecorder audioRecorder, BackgroundLocationViewModel backgroundLocationViewModel) {
+    public FormEntryMenuDelegate(AppCompatActivity activity, AnswersProvider answersProvider, FormIndexAnimationHandler formIndexAnimationHandler, FormSaveViewModel formSaveViewModel, FormEntryViewModel formEntryViewModel, AudioRecorder audioRecorder, BackgroundLocationViewModel backgroundLocationViewModel, BackgroundAudioViewModel backgroundAudioViewModel) {
         this.activity = activity;
         this.answersProvider = answersProvider;
         this.formIndexAnimationHandler = formIndexAnimationHandler;
@@ -51,6 +52,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
         this.formEntryViewModel = formEntryViewModel;
         this.formSaveViewModel = formSaveViewModel;
         this.backgroundLocationViewModel = backgroundLocationViewModel;
+        this.backgroundAudioViewModel = backgroundAudioViewModel;
     }
 
     @Override
@@ -98,13 +100,13 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
 
         menu.findItem(R.id.menu_add_repeat).setVisible(formEntryViewModel.canAddRepeat());
         menu.findItem(R.id.menu_record_audio).setVisible(formEntryViewModel.hasBackgroundRecording());
-        menu.findItem(R.id.menu_record_audio).setChecked(formEntryViewModel.isBackgroundRecordingEnabled());
+        menu.findItem(R.id.menu_record_audio).setChecked(backgroundAudioViewModel.isBackgroundRecordingEnabled());
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_add_repeat) {
-            if (audioRecorder.isRecording() && !formEntryViewModel.isBackgroundRecording()) {
+            if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {
                 DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
             } else {
                 formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
@@ -126,7 +128,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
             backgroundLocationViewModel.backgroundLocationPreferenceToggled();
             return true;
         } else if (item.getItemId() == R.id.menu_goto) {
-            if (audioRecorder.isRecording() && !formEntryViewModel.isBackgroundRecording()) {
+            if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {
                 DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
             } else {
                 formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
@@ -143,7 +145,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
             if (!enabled) {
                 new MaterialAlertDialogBuilder(activity)
                         .setMessage(R.string.stop_recording_confirmation)
-                        .setPositiveButton(R.string.ok, (dialog, which) -> formEntryViewModel.setBackgroundRecordingEnabled(false))
+                        .setPositiveButton(R.string.ok, (dialog, which) -> backgroundAudioViewModel.setBackgroundRecordingEnabled(false))
                         .create()
                         .show();
             } else {
@@ -153,7 +155,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
                         .create()
                         .show();
 
-                formEntryViewModel.setBackgroundRecordingEnabled(true);
+                backgroundAudioViewModel.setBackgroundRecordingEnabled(true);
             }
 
             return true;

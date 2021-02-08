@@ -25,14 +25,14 @@ public class BackgroundAudioPermissionDialogFragment extends DialogFragment {
     PermissionsProvider permissionsProvider;
 
     @Inject
-    FormEntryViewModel.Factory formEntryViewModelFactory;
-    FormEntryViewModel formEntryViewModel;
+    BackgroundAudioViewModel.Factory viewModelFactory;
+    BackgroundAudioViewModel viewModel;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
-        formEntryViewModel = new ViewModelProvider(requireActivity(), formEntryViewModelFactory).get(FormEntryViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(BackgroundAudioViewModel.class);
     }
 
     @NonNull
@@ -44,11 +44,10 @@ public class BackgroundAudioPermissionDialogFragment extends DialogFragment {
         return new MaterialAlertDialogBuilder(requireContext())
                 .setMessage(R.string.background_audio_permission_explanation)
                 .setPositiveButton(R.string.ok, (dialog, which) -> {
-                    formEntryViewModel.errorDisplayed();
                     permissionsProvider.requestRecordAudioPermission(activity, new PermissionListener() {
                         @Override
                         public void granted() {
-                            formEntryViewModel.startBackgroundRecording();
+                            viewModel.grantAudioPermission();
                         }
 
                         @Override

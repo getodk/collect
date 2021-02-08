@@ -3,7 +3,9 @@ package org.odk.collect.android.audio;
 import android.app.Application;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.testing.FragmentScenario;
+import androidx.lifecycle.ViewModel;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -11,7 +13,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.permissions.PermissionsChecker;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -25,6 +30,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.Mockito.mock;
 import static org.odk.collect.android.support.RobolectricHelpers.getFragmentByClass;
 import static org.robolectric.Shadows.shadowOf;
 
@@ -32,6 +38,7 @@ import static org.robolectric.Shadows.shadowOf;
 public class AudioRecordingControllerFragmentTest {
 
     public StubAudioRecorder audioRecorder;
+    private BackgroundAudioViewModel backgroundAudioViewModel;
 
     @Before
     public void setup() throws IOException {
@@ -39,8 +46,21 @@ public class AudioRecordingControllerFragmentTest {
         stubRecording.deleteOnExit();
 
         audioRecorder = new StubAudioRecorder(stubRecording.getAbsolutePath());
+        backgroundAudioViewModel = mock(BackgroundAudioViewModel.class);
 
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+
+            @Override
+            public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, PreferencesProvider preferencesProvider, PermissionsChecker permissionsChecker) {
+                return new BackgroundAudioViewModel.Factory(audioRecorder, preferencesProvider, permissionsChecker) {
+                    @NonNull
+                    @Override
+                    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                        return (T) backgroundAudioViewModel;
+                    }
+                };
+            }
+
             @Override
             public AudioRecorder providesAudioRecorder(Application application) {
                 return audioRecorder;
@@ -160,6 +180,8 @@ public class AudioRecordingControllerFragmentTest {
 
     @Test
     public void whenThereIsAnErrorStartingRecording_showsErrorDialog() {
+        audioRecorder.cleanUp(); // Reset recorder
+
         FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
 
         audioRecorder.failOnStart();
