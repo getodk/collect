@@ -107,6 +107,24 @@ public class BackgroundAudioViewModelTest {
     }
 
     @Test
+    public void grantAudioPermission_whenActionsHaveDifferentQualities_usesFirstQuality() {
+        when(permissionsChecker.isPermissionGranted(Manifest.permission.RECORD_AUDIO)).thenReturn(false);
+
+        TreeReference treeReference1 = new TreeReference();
+        TreeReference treeReference2 = new TreeReference();
+        recordAudioActionRegistry.listener.accept(treeReference1, "voice-only");
+        recordAudioActionRegistry.listener.accept(treeReference2, "low");
+
+        viewModel.grantAudioPermission();
+        verify(audioRecorder).start(new HashSet<TreeReference>() {
+            {
+                add(treeReference1);
+                add(treeReference2);
+            }
+        }, Output.AMR);
+    }
+
+    @Test
     public void grantAudioPermission_setsPermissionRequiredToFalse() {
         when(permissionsChecker.isPermissionGranted(Manifest.permission.RECORD_AUDIO)).thenReturn(false);
 
