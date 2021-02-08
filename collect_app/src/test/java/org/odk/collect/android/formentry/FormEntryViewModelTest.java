@@ -39,6 +39,7 @@ import static org.mockito.Mockito.when;
 import static org.odk.collect.android.formentry.FormEntryViewModel.NonFatal;
 
 @RunWith(RobolectricTestRunner.class)
+@SuppressWarnings("PMD.DoubleBraceInitialization")
 public class FormEntryViewModelTest {
 
     private FormEntryViewModel viewModel;
