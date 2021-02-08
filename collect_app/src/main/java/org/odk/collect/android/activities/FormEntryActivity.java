@@ -79,6 +79,7 @@ import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.BackgroundAudioPermissionDialogFragment;
+import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEndView;
 import org.odk.collect.android.formentry.FormEntryMenuDelegate;
 import org.odk.collect.android.formentry.FormEntryViewModel;
@@ -348,6 +349,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Inject
     ExternalAppIntentProvider externalAppIntentProvider;
 
+    @Inject
+    BackgroundAudioViewModel.Factory backgroundAudioViewModelFactory;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -362,6 +366,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private IdentityPromptViewModel identityPromptViewModel;
     private FormSaveViewModel formSaveViewModel;
     private FormEntryViewModel formEntryViewModel;
+    private BackgroundAudioViewModel backgroundAudioViewModel;
 
     /**
      * Called when the activity is first created.
@@ -396,7 +401,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 formSaveViewModel,
                 formEntryViewModel,
                 audioRecorder,
-                backgroundLocationViewModel
+                backgroundLocationViewModel,
+                backgroundAudioViewModel
         );
 
         nextButton = findViewById(R.id.form_forward_button);
@@ -455,6 +461,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .of(this, new BackgroundLocationViewModel.Factory(permissionsProvider))
                 .get(BackgroundLocationViewModel.class);
 
+        backgroundAudioViewModel = new ViewModelProvider(this, backgroundAudioViewModelFactory).get(BackgroundAudioViewModel.class);
+        backgroundAudioViewModel.isPermissionRequired().observe(this, isPermissionRequired -> {
+            if (isPermissionRequired) {
+                showIfNotShowing(BackgroundAudioPermissionDialogFragment.class, getSupportFragmentManager());
+            }
+        });
+
         identityPromptViewModel = ViewModelProviders.of(this).get(IdentityPromptViewModel.class);
         identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
             if (requiresIdentity) {
@@ -476,8 +489,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             if (error instanceof FormEntryViewModel.NonFatal) {
                 createErrorDialog(((FormEntryViewModel.NonFatal) error).getMessage(), false);
                 formEntryViewModel.errorDisplayed();
-            } else if (error instanceof FormEntryViewModel.AudioPermissionRequired) {
-                showIfNotShowing(BackgroundAudioPermissionDialogFragment.class, getSupportFragmentManager());
             }
         });
 
@@ -1346,7 +1357,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             return false;
         }
 
-        if (audioRecorder.isRecording() && !formEntryViewModel.isBackgroundRecording()) {
+        if (!backgroundAudioViewModel.isBackgroundRecording()) {
             // We want the user to stop recording before changing screens
             DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
             return false;

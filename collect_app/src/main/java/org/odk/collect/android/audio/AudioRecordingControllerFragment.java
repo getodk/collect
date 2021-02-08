@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.databinding.AudioRecordingControllerFragmentBinding;
+import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -34,8 +35,12 @@ public class AudioRecordingControllerFragment extends Fragment {
     @Inject
     FormEntryViewModel.Factory formEntryViewModelFactory;
 
+    @Inject
+    BackgroundAudioViewModel.Factory backgroundAudioViewModelFactory;
+
     public AudioRecordingControllerFragmentBinding binding;
     private FormEntryViewModel formEntryViewModel;
+    private BackgroundAudioViewModel backgroundAudioViewModel;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -43,6 +48,7 @@ public class AudioRecordingControllerFragment extends Fragment {
         DaggerUtils.getComponent(context).inject(this);
 
         formEntryViewModel = new ViewModelProvider(requireActivity(), formEntryViewModelFactory).get(FormEntryViewModel.class);
+        backgroundAudioViewModel = new ViewModelProvider(requireActivity(), backgroundAudioViewModelFactory).get(BackgroundAudioViewModel.class);
     }
 
     @Nullable
@@ -89,7 +95,7 @@ public class AudioRecordingControllerFragment extends Fragment {
                     binding.pauseRecording.setVisibility(GONE);
                 }
 
-                if (formEntryViewModel.isBackgroundRecording()) {
+                if (backgroundAudioViewModel.isBackgroundRecording()) {
                     binding.pauseRecording.setVisibility(GONE);
                     binding.stopRecording.setVisibility(GONE);
                 }

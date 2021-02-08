@@ -18,8 +18,6 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
 
-import org.javarosa.core.model.actions.recordaudio.RecordAudioActions;
-import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
@@ -50,6 +48,7 @@ import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.database.DatabaseMediaFileRepository;
 import org.odk.collect.android.events.RxEventBus;
+import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
@@ -123,7 +122,6 @@ import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -503,7 +501,7 @@ public class AppDependencyModule {
     public SoftKeyboardController provideSoftKeyboardController() {
         return new SoftKeyboardController();
     }
-  
+
     @Provides
     public JsonPreferencesGenerator providesJsonPreferencesGenerator() {
         return new JsonPreferencesGenerator();
@@ -528,17 +526,12 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider, AudioRecorder audioRecorder, PermissionsChecker permissionsChecker) {
-        return new FormEntryViewModel.Factory(clock, analytics, preferencesProvider, audioRecorder, permissionsChecker, new FormEntryViewModel.RecordAudioActionRegistry() {
-            @Override
-            public void register(BiConsumer<TreeReference, String> listener) {
-                RecordAudioActions.setRecordAudioListener(listener::accept);
-            }
+    public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider) {
+        return new FormEntryViewModel.Factory(clock, analytics, preferencesProvider);
+    }
 
-            @Override
-            public void unregister() {
-                RecordAudioActions.setRecordAudioListener(null);
-            }
-        });
+    @Provides
+    public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, PreferencesProvider preferencesProvider, PermissionsChecker permissionsChecker) {
+        return new BackgroundAudioViewModel.Factory(audioRecorder, preferencesProvider, permissionsChecker);
     }
 }

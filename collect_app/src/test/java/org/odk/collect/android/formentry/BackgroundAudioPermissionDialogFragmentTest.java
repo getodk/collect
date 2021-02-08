@@ -6,7 +6,6 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.testing.FragmentScenario;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -14,7 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.fakes.FakePermissionsProvider;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.permissions.PermissionsChecker;
@@ -23,35 +21,32 @@ import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
-import org.odk.collect.utilities.Clock;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class BackgroundAudioPermissionDialogFragmentTest {
 
-    private FormEntryViewModel formEntryViewModel;
+    private BackgroundAudioViewModel backgroundAudioViewModel;
     private FakePermissionsProvider fakePermissionsProvider;
 
     @Before
     public void setup() {
-        formEntryViewModel = mock(FormEntryViewModel.class);
+        backgroundAudioViewModel = mock(BackgroundAudioViewModel.class);
         fakePermissionsProvider = new FakePermissionsProvider();
 
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
 
             @Override
-            public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider, AudioRecorder audioRecorder, PermissionsChecker permissionsChecker) {
-                return new FormEntryViewModel.Factory(clock, analytics, preferencesProvider, audioRecorder, permissionsChecker, mock(FormEntryViewModel.RecordAudioActionRegistry.class)) {
-
+            public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, PreferencesProvider preferencesProvider, PermissionsChecker permissionsChecker) {
+                return new BackgroundAudioViewModel.Factory(audioRecorder, preferencesProvider, permissionsChecker) {
                     @NonNull
                     @Override
                     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                        return (T) formEntryViewModel;
+                        return (T) backgroundAudioViewModel;
                     }
                 };
             }
@@ -80,11 +75,10 @@ public class BackgroundAudioPermissionDialogFragmentTest {
             Button button = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
             assertThat(button.getText(), is(f.getString(R.string.ok)));
 
-            when(formEntryViewModel.getError()).thenReturn(new MutableLiveData<>(new FormEntryViewModel.AudioPermissionRequired()));
             fakePermissionsProvider.setPermissionGranted(true);
 
             button.performClick();
-            verify(formEntryViewModel).grantAudioPermission();
+            verify(backgroundAudioViewModel).grantAudioPermission();
         });
     }
 }
