@@ -157,9 +157,11 @@ public class FormEntryViewModelTest {
         TreeReference treeReference = new TreeReference();
         recordAudioActionRegistry.listener.accept(treeReference, "voice-only");
 
-        verify(audioRecorder).start(new HashSet<TreeReference>() {{
-            add(treeReference);
-        }}, Output.AMR);
+        verify(audioRecorder).start(new HashSet<TreeReference>() {
+            {
+                add(treeReference);
+            }
+        }, Output.AMR);
     }
 
     @Test
@@ -169,9 +171,11 @@ public class FormEntryViewModelTest {
         TreeReference treeReference = new TreeReference();
         recordAudioActionRegistry.listener.accept(treeReference, "low");
 
-        verify(audioRecorder).start(new HashSet<TreeReference>() {{
-            add(treeReference);
-        }}, Output.AAC_LOW);
+        verify(audioRecorder).start(new HashSet<TreeReference>() {
+            {
+                add(treeReference);
+            }
+        }, Output.AAC_LOW);
     }
 
     @Test
@@ -181,9 +185,11 @@ public class FormEntryViewModelTest {
         TreeReference treeReference = new TreeReference();
         recordAudioActionRegistry.listener.accept(treeReference, null);
 
-        verify(audioRecorder).start(new HashSet<TreeReference>() {{
-            add(treeReference);
-        }}, Output.AMR);
+        verify(audioRecorder).start(new HashSet<TreeReference>() {
+            {
+                add(treeReference);
+            }
+        }, Output.AMR);
     }
 
     @Test
@@ -196,10 +202,12 @@ public class FormEntryViewModelTest {
         recordAudioActionRegistry.listener.accept(treeReference2, "low");
 
         viewModel.grantAudioPermission();
-        verify(audioRecorder).start(new HashSet<TreeReference>() {{
-            add(treeReference1);
-            add(treeReference2);
-        }}, Output.AAC_LOW);
+        verify(audioRecorder).start(new HashSet<TreeReference>() {
+            {
+                add(treeReference1);
+                add(treeReference2);
+            }
+        }, Output.AAC_LOW);
     }
 
     @Test
