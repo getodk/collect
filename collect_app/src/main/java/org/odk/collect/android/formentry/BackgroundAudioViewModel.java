@@ -98,7 +98,7 @@ public class BackgroundAudioViewModel extends ViewModel {
                 }
             } else {
                 isPermissionRequired.setValue(true);
-                
+
                 tempTreeReferences.add(treeReference);
                 if (tempQuality == null) {
                     tempQuality = quality;
