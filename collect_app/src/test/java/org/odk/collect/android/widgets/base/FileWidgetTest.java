@@ -31,6 +31,7 @@ public abstract class FileWidgetTest<W extends FileWidget> extends BinaryWidgetT
         File file = mock(File.class);
         when(file.exists()).thenReturn(true);
         when(file.getName()).thenReturn(answerData.getDisplayText());
+        when(file.getAbsolutePath()).thenReturn(answerData.getDisplayText());
         return file;
     }
 
