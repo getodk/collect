@@ -16,6 +16,8 @@ import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
+import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorder;
 
@@ -24,6 +26,7 @@ import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
@@ -90,5 +93,26 @@ public class BackgroundAudioRecordingTest {
                 .startBlankForm("One Question")
                 .assertContentDescriptionNotDisplayed(R.string.stop_recording)
                 .assertContentDescriptionNotDisplayed(R.string.pause_recording);
+    }
+
+    @Test
+    public void whenBackgroundAudioRecordingEnabled_uncheckingRecordAudio_endsAndDeletesRecording_andDisablesItForNextFormFill() {
+        FormEntryPage formEntryPage = rule.mainMenu()
+                .enableBackgroundAudioRecording()
+                .copyForm("one-question.xml")
+                .startBlankForm("One Question")
+                .clickOptionsIcon()
+                .clickRecordAudio()
+                .clickOk();
+
+        assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
+        assertThat(stubAudioRecorderViewModel.getLastRecording(), is(nullValue()));
+
+        formEntryPage.closeSoftKeyboard()
+                .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage(rule), rule))
+                .clickIgnoreChanges()
+                .startBlankForm("One Question");
+
+        assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
     }
 }

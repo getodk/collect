@@ -48,6 +48,11 @@ public class FormEndPage extends Page<FormEndPage> {
         return new OkDialog(rule).assertOnPage();
     }
 
+    public ChangesReasonPromptPage clickSaveAndExitWithChangesReasonPrompt() {
+        onView(withId(R.id.save_exit_button)).perform(click());
+        return new ChangesReasonPromptPage(formName, rule).assertOnPage();
+    }
+
     public FormEndPage assertMarkFinishedIsSelected() {
         onView(withId(R.id.mark_finished)).check(matches(isChecked()));
         return this;
@@ -74,5 +79,10 @@ public class FormEndPage extends Page<FormEndPage> {
 
     public FormEntryPage swipeToPreviousQuestion(String questionText, boolean isRequired) {
         return new FormEntryPage(formName, rule).swipeToPreviousQuestion(questionText, isRequired);
+    }
+
+    public FormEndPage fillInFormName(String formName) {
+        inputText(formName);
+        return this;
     }
 }

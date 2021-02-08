@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormHierarchyActivity;
@@ -19,7 +21,6 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MenuDelegate;
@@ -36,13 +37,12 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
     private final FormEntryViewModel formEntryViewModel;
     private final FormSaveViewModel formSaveViewModel;
     private final BackgroundLocationViewModel backgroundLocationViewModel;
-    private final PreferencesProvider preferencesProvider;
 
     @Nullable
     private FormController formController;
     private final AudioRecorder audioRecorder;
 
-    public FormEntryMenuDelegate(AppCompatActivity activity, AnswersProvider answersProvider, FormIndexAnimationHandler formIndexAnimationHandler, FormSaveViewModel formSaveViewModel, FormEntryViewModel formEntryViewModel, AudioRecorder audioRecorder, BackgroundLocationViewModel backgroundLocationViewModel, PreferencesProvider preferencesProvider) {
+    public FormEntryMenuDelegate(AppCompatActivity activity, AnswersProvider answersProvider, FormIndexAnimationHandler formIndexAnimationHandler, FormSaveViewModel formSaveViewModel, FormEntryViewModel formEntryViewModel, AudioRecorder audioRecorder, BackgroundLocationViewModel backgroundLocationViewModel) {
         this.activity = activity;
         this.answersProvider = answersProvider;
         this.formIndexAnimationHandler = formIndexAnimationHandler;
@@ -51,7 +51,6 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
         this.formEntryViewModel = formEntryViewModel;
         this.formSaveViewModel = formSaveViewModel;
         this.backgroundLocationViewModel = backgroundLocationViewModel;
-        this.preferencesProvider = preferencesProvider;
     }
 
     @Override
@@ -98,12 +97,14 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
         }
 
         menu.findItem(R.id.menu_add_repeat).setVisible(formEntryViewModel.canAddRepeat());
+        menu.findItem(R.id.menu_record_audio).setVisible(formEntryViewModel.hasBackgroundRecording());
+        menu.findItem(R.id.menu_record_audio).setChecked(formEntryViewModel.isBackgroundRecordingEnabled());
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_add_repeat) {
-            if (audioRecorder.isRecording() && !preferencesProvider.getGeneralSharedPreferences().getBoolean("background_audio_recording", false)) {
+            if (audioRecorder.isRecording() && !formEntryViewModel.isBackgroundRecording()) {
                 DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
             } else {
                 formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
@@ -125,7 +126,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
             backgroundLocationViewModel.backgroundLocationPreferenceToggled();
             return true;
         } else if (item.getItemId() == R.id.menu_goto) {
-            if (audioRecorder.isRecording() && !preferencesProvider.getGeneralSharedPreferences().getBoolean("background_audio_recording", false)) {
+            if (audioRecorder.isRecording() && !formEntryViewModel.isBackgroundRecording()) {
                 DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
             } else {
                 formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
@@ -133,6 +134,26 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
                 formEntryViewModel.openHierarchy();
                 Intent i = new Intent(activity, FormHierarchyActivity.class);
                 activity.startActivityForResult(i, ApplicationConstants.RequestCodes.HIERARCHY_ACTIVITY);
+            }
+
+            return true;
+        } else if (item.getItemId() == R.id.menu_record_audio) {
+            boolean enabled = !item.isChecked();
+
+            if (!enabled) {
+                new MaterialAlertDialogBuilder(activity)
+                        .setMessage(R.string.stop_recording_confirmation)
+                        .setPositiveButton(R.string.ok, (dialog, which) -> formEntryViewModel.setBackgroundRecordingEnabled(false))
+                        .create()
+                        .show();
+            } else {
+                new MaterialAlertDialogBuilder(activity)
+                        .setMessage(R.string.background_audio_recording_enabled_explanation)
+                        .setPositiveButton(R.string.ok, null)
+                        .create()
+                        .show();
+
+                formEntryViewModel.setBackgroundRecordingEnabled(true);
             }
 
             return true;

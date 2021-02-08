@@ -14,7 +14,6 @@ import org.odk.collect.android.formentry.questions.AnswersProvider;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.robolectric.Robolectric;
@@ -49,7 +48,6 @@ public class FormEntryMenuDelegateTest {
     private AnswersProvider answersProvider;
     private FormSaveViewModel formSaveViewModel;
     private AudioRecorder audioRecorder;
-    private PreferencesProvider preferencesProvider;
 
     @Before
     public void setup() {
@@ -64,8 +62,6 @@ public class FormEntryMenuDelegateTest {
 
         BackgroundLocationViewModel backgroundLocationViewModel = mock(BackgroundLocationViewModel.class);
 
-        preferencesProvider = new PreferencesProvider(activity);
-
         formEntryMenuDelegate = new FormEntryMenuDelegate(
                 activity,
                 answersProvider,
@@ -73,8 +69,7 @@ public class FormEntryMenuDelegateTest {
                 formSaveViewModel,
                 formEntryViewModel,
                 audioRecorder,
-                backgroundLocationViewModel,
-                preferencesProvider
+                backgroundLocationViewModel
         );
         formEntryMenuDelegate.formLoaded(formController);
     }
@@ -110,6 +105,50 @@ public class FormEntryMenuDelegateTest {
         formEntryMenuDelegate.onPrepareOptionsMenu(menu);
 
         assertThat(menu.findItem(R.id.menu_add_repeat).isVisible(), equalTo(false));
+    }
+
+    @Test
+    public void onPrepare_whenFormHasBackgroundRecording_showsRecordAudio() {
+        when(formEntryViewModel.hasBackgroundRecording()).thenReturn(true);
+
+        RoboMenu menu = new RoboMenu();
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+
+        assertThat(menu.findItem(R.id.menu_record_audio).isVisible(), equalTo(true));
+    }
+
+    @Test
+    public void onPrepare_whenbackgroundRecodingEnabled_checksRecordAudio() {
+        when(formEntryViewModel.isBackgroundRecordingEnabled()).thenReturn(true);
+
+        RoboMenu menu = new RoboMenu();
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+
+        assertThat(menu.findItem(R.id.menu_record_audio).isChecked(), equalTo(true));
+    }
+
+    @Test
+    public void onPrepare_whenNotRecordingInBackground_unchecksRecordAudio() {
+        when(formEntryViewModel.isBackgroundRecordingEnabled()).thenReturn(false);
+
+        RoboMenu menu = new RoboMenu();
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+
+        assertThat(menu.findItem(R.id.menu_record_audio).isChecked(), equalTo(false));
+    }
+
+    @Test
+    public void onPrepare_whenFormDoesNotHaveBackgroundRecording_hidesRecordAudio() {
+        when(formEntryViewModel.hasBackgroundRecording()).thenReturn(false);
+
+        RoboMenu menu = new RoboMenu();
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+
+        assertThat(menu.findItem(R.id.menu_record_audio).isVisible(), equalTo(false));
     }
 
     @Test
@@ -157,7 +196,7 @@ public class FormEntryMenuDelegateTest {
         formEntryMenuDelegate.onPrepareOptionsMenu(menu);
 
         when(audioRecorder.isRecording()).thenReturn(true);
-        preferencesProvider.getGeneralSharedPreferences().edit().putBoolean("background_audio_recording", true).apply();
+        when(formEntryViewModel.isBackgroundRecording()).thenReturn(true);
 
         formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_add_repeat));
         verify(formEntryViewModel).promptForNewRepeat();
@@ -253,12 +292,24 @@ public class FormEntryMenuDelegateTest {
         formEntryMenuDelegate.onPrepareOptionsMenu(menu);
 
         when(audioRecorder.isRecording()).thenReturn(true);
-        preferencesProvider.getGeneralSharedPreferences().edit().putBoolean("background_audio_recording", true).apply();
+        when(formEntryViewModel.isBackgroundRecording()).thenReturn(true);
 
         formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_goto));
         assertThat(shadowOf(activity).getNextStartedActivity(), is(notNullValue()));
 
         RecordingWarningDialogFragment dialog = getFragmentByClass(activity.getSupportFragmentManager(), RecordingWarningDialogFragment.class);
         assertThat(dialog, is(nullValue()));
+    }
+
+    @Test
+    public void onItemSelected_whenRecordAudio_whenBackgroundRecordingDisabled_enablesBackgroundRecording_andShowsDialog() {
+        RoboMenu menu = new RoboMenu();
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+
+        when(formEntryViewModel.isBackgroundRecordingEnabled()).thenReturn(false);
+
+        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_record_audio));
+        verify(formEntryViewModel).setBackgroundRecordingEnabled(true);
     }
 }

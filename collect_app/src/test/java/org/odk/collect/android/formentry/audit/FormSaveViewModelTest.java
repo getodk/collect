@@ -22,6 +22,7 @@ import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.testshared.FakeScheduler;
 import org.odk.collect.utilities.Result;
 import org.robolectric.Robolectric;
@@ -51,6 +52,7 @@ import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveRes
 import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVED;
 import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVE_ERROR;
 import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVING;
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.WAITING_TO_SAVE;
 
 @RunWith(RobolectricTestRunner.class)
 public class FormSaveViewModelTest {
@@ -64,6 +66,7 @@ public class FormSaveViewModelTest {
     private FormSaveViewModel viewModel;
     private MediaUtils mediaUtils;
     private FormController formController;
+    private AudioRecorder audioRecorder;
 
     @Before
     public void setup() {
@@ -78,7 +81,8 @@ public class FormSaveViewModelTest {
         when(formController.getAuditEventLogger()).thenReturn(logger);
         when(logger.isChangeReasonRequired()).thenReturn(false);
 
-        viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, analytics, scheduler);
+        audioRecorder = mock(AudioRecorder.class);
+        viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, analytics, scheduler, audioRecorder);
         viewModel.formLoaded(formController);
     }
 
@@ -114,6 +118,16 @@ public class FormSaveViewModelTest {
     @Test
     public void saveForm_whenReasonRequiredToSave_returnsSaveResult_inChangeReasonRequiredState() {
         whenReasonRequiredToSave();
+
+        LiveData<FormSaveViewModel.SaveResult> saveResult = viewModel.getSaveResult();
+        viewModel.saveForm(Uri.parse("file://form"), true, "", false);
+        assertThat(saveResult.getValue().getState(), equalTo(CHANGE_REASON_REQUIRED));
+    }
+
+    @Test
+    public void saveForm_whenReasonRequiredToSave_andAudioIsRecording_andExiting_returnsSaveResult_inChangeReasonRequiredState() {
+        whenReasonRequiredToSave();
+        when(audioRecorder.isRecording()).thenReturn(true);
 
         LiveData<FormSaveViewModel.SaveResult> saveResult = viewModel.getSaveResult();
         viewModel.saveForm(Uri.parse("file://form"), true, "", false);
@@ -357,37 +371,53 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void whenReasonRequiredToSave_saveReason_setsSaveResultState_toSaving() {
+    public void whenReasonRequiredToSave_resumeSave_setsSaveResultState_toSaving() {
         whenReasonRequiredToSave();
         viewModel.saveForm(Uri.parse("file://form"), false, "", false);
         LiveData<FormSaveViewModel.SaveResult> saveResult = viewModel.getSaveResult();
 
         viewModel.setReason("blah");
-        viewModel.saveReason();
+        viewModel.resumeSave();
         assertThat(saveResult.getValue().getState(), equalTo(SAVING));
     }
 
     @Test
-    public void saveReason_logsChangeReasonAuditEvent() {
+    public void whenReasonRequiredToSave_resumeSave_logsChangeReasonAuditEvent() {
+        whenReasonRequiredToSave();
+        viewModel.saveForm(Uri.parse("file://form"), false, "", false);
+
         viewModel.setReason("Blah");
-        viewModel.saveReason();
+        viewModel.resumeSave();
 
         verify(logger).logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, CURRENT_TIME, "Blah");
     }
 
     @Test
-    public void saveReason_whenReasonIsValid_returnsTrue() {
-        viewModel.setReason("Blah");
-        assertThat(viewModel.saveReason(), equalTo(true));
+    public void whenReasonRequiredToSave_resumeSave_whenReasonIsNotValid_doesNotSave() {
+        whenReasonRequiredToSave();
+        viewModel.saveForm(Uri.parse("file://form"), false, "", false);
+        LiveData<FormSaveViewModel.SaveResult> saveResult = viewModel.getSaveResult();
+
+        viewModel.setReason("");
+        viewModel.resumeSave();
+        assertThat(saveResult.getValue().getState(), equalTo(CHANGE_REASON_REQUIRED));
+
+        viewModel.setReason("  ");
+        viewModel.resumeSave();
+        assertThat(saveResult.getValue().getState(), equalTo(CHANGE_REASON_REQUIRED));
     }
 
     @Test
-    public void saveReason_whenReasonIsNotValid_returnsFalse() {
-        viewModel.setReason("");
-        assertThat(viewModel.saveReason(), equalTo(false));
+    public void whenReasonRequiredToSave_andRecordingAudio_andExiting_resumeSave_savesRecording() {
+        whenReasonRequiredToSave();
+        when(audioRecorder.isRecording()).thenReturn(true);
 
-        viewModel.setReason("  ");
-        assertThat(viewModel.saveReason(), equalTo(false));
+        viewModel.saveForm(Uri.parse("file://form"), false, "", true);
+        LiveData<FormSaveViewModel.SaveResult> saveResult = viewModel.getSaveResult();
+
+        viewModel.setReason("blah");
+        viewModel.resumeSave();
+        assertThat(saveResult.getValue().getState(), equalTo(WAITING_TO_SAVE));
     }
 
     @Test
@@ -416,7 +446,7 @@ public class FormSaveViewModelTest {
     public void deleteAnswerFile_whenAnswerFileHasAlreadyBeenDeleted_onRecreatingViewModel_actuallyDeletesNewFile() {
         viewModel.deleteAnswerFile("index", "blah1");
 
-        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler);
+        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler, mock(AudioRecorder.class));
         restoredViewModel.formLoaded(formController);
         restoredViewModel.deleteAnswerFile("index", "blah2");
 
@@ -447,7 +477,7 @@ public class FormSaveViewModelTest {
     public void replaceAnswerFile_whenAnswerFileHasAlreadyBeenReplaced_afterRecreatingViewModel_deletesPreviousReplacement() {
         viewModel.replaceAnswerFile("index", "blah1");
 
-        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler);
+        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler, mock(AudioRecorder.class));
         restoredViewModel.formLoaded(formController);
         restoredViewModel.replaceAnswerFile("index", "blah2");
 
@@ -522,7 +552,7 @@ public class FormSaveViewModelTest {
 
     @Test
     public void ignoreChanges_whenFormControllerNotSet_doesNothing() {
-        FormSaveViewModel viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler);
+        FormSaveViewModel viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler, mock(AudioRecorder.class));
         viewModel.ignoreChanges(); // Checks nothing explodes
     }
 

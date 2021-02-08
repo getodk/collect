@@ -201,11 +201,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public ChangesReasonPromptPage clickSaveAndExitWithChangesReasonPrompt() {
-        onView(withId(R.id.save_exit_button)).perform(click());
-        return new ChangesReasonPromptPage(formName, rule).assertOnPage();
-    }
-
     public ChangesReasonPromptPage clickSaveWithChangesReasonPrompt() {
         onView(withId(R.id.menu_save)).perform(click());
         return new ChangesReasonPromptPage(formName, rule).assertOnPage();
@@ -319,5 +314,10 @@ public class FormEntryPage extends Page<FormEntryPage> {
         OkDialog okDialog = new OkDialog(rule).assertOnPage();
         assertText(R.string.recording_warning);
         return okDialog;
+    }
+
+    public CancelRecordingDialog clickRecordAudio() {
+        clickOnString(R.string.record_audio);
+        return new CancelRecordingDialog(formName, rule);
     }
 }

@@ -85,6 +85,8 @@ public class InternalRecordingRequester implements RecordingRequester {
                 if (!session.getId().equals("background")) {
                     session.getFile().delete();
                 }
+
+                formSaveViewModel.resumeSave();
             }
         });
     }

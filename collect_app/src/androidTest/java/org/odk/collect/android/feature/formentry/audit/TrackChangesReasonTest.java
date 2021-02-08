@@ -53,27 +53,10 @@ public class TrackChangesReasonTest {
                 .clickOnForm("Track Changes Reason")
                 .clickGoToStart()
                 .inputText("Nothing much!")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExitWithChangesReasonPrompt()
                 .enterReason("Needed to be more exciting and less mysterious")
                 .clickSave();
-    }
-
-    @Test
-    public void openingAFormToEdit_andChangingAValue_andClickingSaveAndExit_andEnteringBlankReason_andClickingSave_remainsOnPrompt() {
-        new MainMenuPage(rule)
-                .startBlankForm("Track Changes Reason")
-                .inputText("Nothing much...")
-                .swipeToEndScreen()
-                .clickSaveAndExit()
-                .clickEditSavedForm()
-                .clickOnForm("Track Changes Reason")
-                .clickGoToStart()
-                .inputText("Nothing much!")
-                .swipeToNextQuestion()
-                .clickSaveAndExitWithChangesReasonPrompt()
-                .enterReason(" ")
-                .clickSaveWithValidationError();
     }
 
     @Test
@@ -87,7 +70,7 @@ public class TrackChangesReasonTest {
                 .clickOnForm("Track Changes Reason")
                 .clickGoToStart()
                 .inputText("Nothing much!")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExitWithChangesReasonPrompt()
                 .closeSoftKeyboard()
                 .pressBack(new FormEntryPage("Track Changes Reason", rule))
@@ -105,7 +88,7 @@ public class TrackChangesReasonTest {
                 .clickOnForm("Track Changes Reason")
                 .clickGoToStart()
                 .inputText("Nothing much!")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExitWithChangesReasonPrompt()
                 .closeSoftKeyboard()
                 .pressClose(new FormEntryPage("Track Changes Reason", rule))
@@ -123,7 +106,7 @@ public class TrackChangesReasonTest {
                 .clickOnForm("Track Changes Reason")
                 .clickGoToStart()
                 .inputText("Nothing much!")
-                .swipeToNextQuestion()
+                .swipeToEndScreen()
                 .clickSaveAndExitWithChangesReasonPrompt()
                 .enterReason("Something")
                 .rotateToLandscape(new ChangesReasonPromptPage("Track Changes Reason", rule))
@@ -190,21 +173,9 @@ public class TrackChangesReasonTest {
                 .clickOnForm("Track Changes Reason")
                 .clickGoToStart()
                 .inputText("Nothing much!")
-                .clickSaveWithChangesReasonPrompt();
-    }
-
-    @Test
-    public void whenFormDoesNotHaveTrackChangesReason_openingToEdit_andChangingAValue_andClickingSaveAndExit_returnsToMainMenu() {
-        new MainMenuPage(rule)
-                .startBlankForm("Normal Form")
-                .inputText("Nothing much...")
-                .swipeToEndScreen()
-                .clickSaveAndExit()
-                .clickEditSavedForm()
-                .clickOnForm("Normal Form")
-                .clickGoToStart()
-                .inputText("Nothing much!")
-                .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickSaveWithChangesReasonPrompt()
+                .enterReason("Bah")
+                .clickSave(new FormEntryPage("Track Changes Reason", rule))
+                .assertQuestion("What up?");
     }
 }
