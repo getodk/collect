@@ -10,7 +10,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import org.javarosa.core.model.instance.TreeReference;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -73,7 +72,7 @@ public class BackgroundAudioPermissionDialogFragmentTest {
     }
 
     @Test
-    public void clickingOk_andGrantingPermissions_startsBackgroundRecording() {
+    public void clickingOk_andGrantingPermissions_callsGrantPermission() {
         FragmentScenario<BackgroundAudioPermissionDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(BackgroundAudioPermissionDialogFragment.class);
         scenario.onFragment(f -> {
             AlertDialog dialog = (AlertDialog) f.getDialog();
@@ -81,29 +80,11 @@ public class BackgroundAudioPermissionDialogFragmentTest {
             Button button = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
             assertThat(button.getText(), is(f.getString(R.string.ok)));
 
-            TreeReference treeReference = new TreeReference();
-            when(formEntryViewModel.getError()).thenReturn(new MutableLiveData<>(new FormEntryViewModel.AudioPermissionRequired(treeReference)));
+            when(formEntryViewModel.getError()).thenReturn(new MutableLiveData<>(new FormEntryViewModel.AudioPermissionRequired()));
             fakePermissionsProvider.setPermissionGranted(true);
 
             button.performClick();
-            verify(formEntryViewModel).startBackgroundRecording(treeReference, "blah");
-        });
-    }
-
-    @Test
-    public void clickingOk_clearsError() {
-        FragmentScenario<BackgroundAudioPermissionDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(BackgroundAudioPermissionDialogFragment.class);
-        scenario.onFragment(f -> {
-            AlertDialog dialog = (AlertDialog) f.getDialog();
-
-            Button button = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-            assertThat(button.getText(), is(f.getString(R.string.ok)));
-
-            when(formEntryViewModel.getError()).thenReturn(new MutableLiveData<>(new FormEntryViewModel.AudioPermissionRequired(new TreeReference())));
-            fakePermissionsProvider.setPermissionGranted(true);
-
-            button.performClick();
-            verify(formEntryViewModel).errorDisplayed();
+            verify(formEntryViewModel).grantAudioPermission();
         });
     }
 }

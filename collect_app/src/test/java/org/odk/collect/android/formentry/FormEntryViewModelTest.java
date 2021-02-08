@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.exception.JavaRosaException;
-import org.odk.collect.android.formentry.FormEntryViewModel.AudioPermissionRequired;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -158,7 +157,9 @@ public class FormEntryViewModelTest {
         TreeReference treeReference = new TreeReference();
         recordAudioActionRegistry.listener.accept(treeReference, "voice-only");
 
-        verify(audioRecorder).start(new HashSet<TreeReference>() {{ add(treeReference); }}, Output.AMR);
+        verify(audioRecorder).start(new HashSet<TreeReference>() {{
+            add(treeReference);
+        }}, Output.AMR);
     }
 
     @Test
@@ -168,7 +169,9 @@ public class FormEntryViewModelTest {
         TreeReference treeReference = new TreeReference();
         recordAudioActionRegistry.listener.accept(treeReference, "low");
 
-        verify(audioRecorder).start(new HashSet<TreeReference>() {{ add(treeReference); }}, Output.AAC_LOW);
+        verify(audioRecorder).start(new HashSet<TreeReference>() {{
+            add(treeReference);
+        }}, Output.AAC_LOW);
     }
 
     @Test
@@ -178,17 +181,36 @@ public class FormEntryViewModelTest {
         TreeReference treeReference = new TreeReference();
         recordAudioActionRegistry.listener.accept(treeReference, null);
 
-        verify(audioRecorder).start(new HashSet<TreeReference>() {{ add(treeReference); }}, Output.AMR);
+        verify(audioRecorder).start(new HashSet<TreeReference>() {{
+            add(treeReference);
+        }}, Output.AMR);
     }
 
     @Test
-    public void whenRecordAudioActionIsTriggered_andRecordAudioIsNotGranted_setsError() {
+    public void grantAudioPermission_startsBackgroundRecording() {
         when(permissionsChecker.isPermissionGranted(Manifest.permission.RECORD_AUDIO)).thenReturn(false);
 
-        TreeReference treeReference = new TreeReference();
-        recordAudioActionRegistry.listener.accept(treeReference, null);
+        TreeReference treeReference1 = new TreeReference();
+        TreeReference treeReference2 = new TreeReference();
+        recordAudioActionRegistry.listener.accept(treeReference1, "low");
+        recordAudioActionRegistry.listener.accept(treeReference2, "low");
 
-        assertThat(viewModel.getError().getValue(), equalTo(new AudioPermissionRequired(treeReference)));
+        viewModel.grantAudioPermission();
+        verify(audioRecorder).start(new HashSet<TreeReference>() {{
+            add(treeReference1);
+            add(treeReference2);
+        }}, Output.AAC_LOW);
+    }
+
+    @Test
+    public void grantAudioPermission_clearsErrror() {
+        when(permissionsChecker.isPermissionGranted(Manifest.permission.RECORD_AUDIO)).thenReturn(false);
+
+        TreeReference treeReference1 = new TreeReference();
+        recordAudioActionRegistry.listener.accept(treeReference1, "low");
+
+        viewModel.grantAudioPermission();
+        assertThat(viewModel.getError().getValue(), is(nullValue()));
     }
 
     @Test

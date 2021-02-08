@@ -52,6 +52,10 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     @Nullable
     private FormIndex jumpBackIndex;
 
+    // These fields handle storing record action details while we're granting permissions
+    private final HashSet<TreeReference> treeReferences = new HashSet<>();
+    private String quality;
+
     @SuppressWarnings("WeakerAccess")
     public FormEntryViewModel(Clock clock, Analytics analytics, PreferencesProvider preferencesProvider, AudioRecorder audioRecorder, PermissionsChecker permissionsChecker, RecordAudioActionRegistry recordAudioActionRegistry) {
         this.clock = clock;
@@ -62,7 +66,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         this.recordAudioActionRegistry = recordAudioActionRegistry;
 
         recordAudioActionRegistry.register((treeReference, quality) -> {
-            new Handler(Looper.getMainLooper()).post(() -> startBackgroundRecording(treeReference, quality));
+            new Handler(Looper.getMainLooper()).post(() -> handleRecordAction(treeReference, quality));
         });
     }
 
@@ -203,7 +207,12 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         return audioRecorder.isRecording() && audioRecorder.getCurrentSession().getValue().getId() instanceof Set;
     }
 
-    public void startBackgroundRecording(TreeReference treeReference, String quality) {
+    public void grantAudioPermission() {
+        error.setValue(null);
+        startBackgroundRecording(quality, treeReferences);
+    }
+
+    private void handleRecordAction(TreeReference treeReference, String quality) {
         if (isBackgroundRecordingEnabled()) {
             if (permissionsChecker.isPermissionGranted(Manifest.permission.RECORD_AUDIO)) {
                 if (isBackgroundRecording()) {
@@ -214,19 +223,25 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
                     HashSet<TreeReference> treeReferences = new HashSet<>();
                     treeReferences.add(treeReference);
 
-                    Output output = Output.AMR;
-                    if ("low".equals(quality)) {
-                        output = Output.AAC_LOW;
-                    } else if ("normal".equals(quality)) {
-                        output = Output.AAC;
-                    }
-
-                    audioRecorder.start(treeReferences, output);
+                    startBackgroundRecording(quality, treeReferences);
                 }
             } else {
-                error.setValue(new AudioPermissionRequired(treeReference));
+                error.setValue(new AudioPermissionRequired());
+                treeReferences.add(treeReference);
+                this.quality = quality;
             }
         }
+    }
+
+    private void startBackgroundRecording(String quality, HashSet<TreeReference> treeReferences) {
+        Output output = Output.AMR;
+        if ("low".equals(quality)) {
+            output = Output.AAC_LOW;
+        } else if ("normal".equals(quality)) {
+            output = Output.AAC;
+        }
+
+        audioRecorder.start(treeReferences, output);
     }
 
     private String getFormIdentifierHash() {
@@ -315,34 +330,6 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     @SuppressWarnings("PMD.DoNotExtendJavaLangError")
     public static class AudioPermissionRequired extends Error {
 
-        private final TreeReference treeReference;
-
-        public AudioPermissionRequired(TreeReference treeReference) {
-            this.treeReference = treeReference;
-        }
-
-        public TreeReference getTreeReference() {
-            return treeReference;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-
-            AudioPermissionRequired that = (AudioPermissionRequired) o;
-            return Objects.equals(treeReference, that.treeReference);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(treeReference);
-        }
     }
 
     public interface RecordAudioActionRegistry {
