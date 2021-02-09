@@ -37,7 +37,7 @@ public class InternalRecordingRequesterTest {
         ComponentActivity activity = Robolectric.buildActivity(ComponentActivity.class).get();
         when(audioRecorder.getCurrentSession()).thenReturn(new MutableLiveData<>(null));
 
-        requester = new InternalRecordingRequester(activity, audioRecorder, permissionsProvider, mock(FormEntryViewModel.class), mock(FormSaveViewModel.class), mock(FormIndexAnimationHandler.Listener.class));
+        requester = new InternalRecordingRequester(activity, audioRecorder, permissionsProvider, mock(FormEntryViewModel.class));
         permissionsProvider.setPermissionGranted(true);
     }
 

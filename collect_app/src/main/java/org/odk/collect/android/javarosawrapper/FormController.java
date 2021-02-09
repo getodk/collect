@@ -1316,4 +1316,8 @@ public class FormController {
     public boolean currentFormCollectsBackgroundLocation() {
         return currentFormAuditsLocation() || getFormDef().hasAction(SetGeopointActionHandler.ELEMENT_NAME);
     }
+
+    public IAnswerData getAnswer(TreeReference treeReference) {
+        return getFormDef().getMainInstance().resolveReference(treeReference).getValue();
+    }
 }
