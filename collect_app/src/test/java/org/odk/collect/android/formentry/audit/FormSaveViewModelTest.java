@@ -428,6 +428,22 @@ public class FormSaveViewModelTest {
         assertThat(saveResult.getValue(), equalTo(null));
     }
 
+    @Test
+    public void ignoreChanges_whenThereAreUnsavedFiles_shouldDeleteThoseFiles() {
+        viewModel.replaceAnswerFile("index", "blah1");
+        viewModel.ignoreChanges();
+
+        verify(mediaUtils).deleteMediaFile("blah1");
+    }
+
+    @Test
+    public void ignoreChanges_whenAudioIsRecording_cleansUpAudioRecorder() {
+        when(audioRecorder.isRecording()).thenReturn(true);
+        viewModel.ignoreChanges();
+
+        verify(audioRecorder).cleanUp();
+    }
+
     //region QuestionMediaManager implementation
 
     /**
@@ -461,14 +477,6 @@ public class FormSaveViewModelTest {
     public void replaceAnswerFile_whenAnswerFileHasAlreadyBeenReplaced_deletesPreviousReplacement() {
         viewModel.replaceAnswerFile("index", "blah1");
         viewModel.replaceAnswerFile("index", "blah2");
-
-        verify(mediaUtils).deleteMediaFile("blah1");
-    }
-
-    @Test
-    public void ignoreChanges_whenThereAreUnsavedFiles_shouldDeleteThoseFiles() {
-        viewModel.replaceAnswerFile("index", "blah1");
-        viewModel.ignoreChanges();
 
         verify(mediaUtils).deleteMediaFile("blah1");
     }

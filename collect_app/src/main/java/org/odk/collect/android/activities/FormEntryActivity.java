@@ -2061,7 +2061,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
-                if (audioRecorder.isRecording()) {
+                if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {
                     // We want the user to stop recording before changing screens
                     DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
                     return true;

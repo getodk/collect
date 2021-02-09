@@ -149,6 +149,10 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
     // Cleanup when user exits a form without saving
     public void ignoreChanges() {
+        if (audioRecorder.isRecording()) {
+            audioRecorder.cleanUp();
+        }
+
         ExternalDataManager manager = Collect.getInstance().getExternalDataManager();
         if (manager != null) {
             manager.close();
