@@ -118,7 +118,7 @@ public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
     @Test
     public void whenClickingOnChooseButton_externalAppShouldBeLaunchedByIntent() throws ExternalParamsException, XPathSyntaxException {
         Intent intent = mock(Intent.class);
-        when(externalAppIntentProvider.getIntentToRunExternalApp(any(), any(), any())).thenReturn(intent);
+        when(externalAppIntentProvider.getIntentToRunExternalApp(any(), any(), any(), any())).thenReturn(intent);
         getWidget().binding.captureVideoButton.performClick();
         assertThat(shadowOf(activity).getNextStartedActivity(), is(intent));
     }

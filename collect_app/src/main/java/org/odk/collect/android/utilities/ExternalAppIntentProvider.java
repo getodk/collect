@@ -2,6 +2,7 @@ package org.odk.collect.android.utilities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 
 import androidx.annotation.Nullable;
@@ -9,7 +10,6 @@ import androidx.annotation.Nullable;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.external.ExternalAppsUtils;
 
@@ -20,7 +20,7 @@ public class ExternalAppIntentProvider {
     private static final String URI_KEY = "uri_data";
     private static final String RETURNED_DATA_NAME = "value";
 
-    public Intent getIntentToRunExternalApp(Context context, FormEntryPrompt formEntryPrompt, ActivityAvailability activityAvailability) throws ExternalParamsException, XPathSyntaxException {
+    public Intent getIntentToRunExternalApp(Context context, FormEntryPrompt formEntryPrompt, ActivityAvailability activityAvailability, PackageManager packageManager) throws ExternalParamsException, XPathSyntaxException {
         String exSpec = formEntryPrompt.getAppearanceHint().replaceFirst("^ex[:]", "");
         final String intentName = ExternalAppsUtils.extractIntentName(exSpec);
         final Map<String, String> exParams = ExternalAppsUtils.extractParameters(exSpec);
@@ -40,7 +40,7 @@ public class ExternalAppIntentProvider {
         }
 
         if (!activityAvailability.isActivityAvailable(intent)) {
-            Intent launchIntent = Collect.getInstance().getPackageManager().getLaunchIntentForPackage(intentName);
+            Intent launchIntent = packageManager.getLaunchIntentForPackage(intentName);
 
             if (launchIntent != null) {
                 // Make sure FLAG_ACTIVITY_NEW_TASK is not set because it doesn't work with startActivityForResult

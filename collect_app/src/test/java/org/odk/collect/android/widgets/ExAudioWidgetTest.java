@@ -124,7 +124,7 @@ public class ExAudioWidgetTest extends FileWidgetTest<ExAudioWidget> {
     @Test
     public void whenLaunchButtonClicked_externalAppShouldBeLaunchedByIntent() throws ExternalParamsException, XPathSyntaxException {
         Intent intent = mock(Intent.class);
-        when(externalAppIntentProvider.getIntentToRunExternalApp(any(), any(), any())).thenReturn(intent);
+        when(externalAppIntentProvider.getIntentToRunExternalApp(any(), any(), any(), any())).thenReturn(intent);
         getWidget().binding.launchExternalAppButton.performClick();
         assertThat(shadowOf(activity).getNextStartedActivity(), is(intent));
     }

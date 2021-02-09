@@ -132,17 +132,16 @@ public class ExternalAppsUtils {
         }
     }
 
-    public static Object getValueRepresentedBy(String text, TreeReference reference)
-            throws XPathSyntaxException {
-        FormDef formDef = Collect.getInstance().getFormController().getFormDef();
-        FormInstance formInstance = formDef.getInstance();
-        EvaluationContext evaluationContext = new EvaluationContext(formDef.getEvaluationContext(),
-                reference);
-
+    public static Object getValueRepresentedBy(String text, TreeReference reference) throws XPathSyntaxException {
         if (text.startsWith("'")) {
             // treat this as a constant parameter but not require an ending quote
             return text.endsWith("'") ? text.substring(1, text.length() - 1) : text.substring(1);
-        } else if (text.startsWith("/")) {
+        }
+
+        FormDef formDef = Collect.getInstance().getFormController().getFormDef();
+        FormInstance formInstance = formDef.getInstance();
+        EvaluationContext evaluationContext = new EvaluationContext(formDef.getEvaluationContext(), reference);
+        if (text.startsWith("/")) {
             // treat this is an xpath
             XPathPathExpr pathExpr = XPathReference.getPathExpr(text);
             XPathNodeset xpathNodeset = pathExpr.eval(formInstance, evaluationContext);
