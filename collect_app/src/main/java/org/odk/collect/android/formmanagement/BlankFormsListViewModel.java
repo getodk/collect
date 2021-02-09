@@ -97,13 +97,13 @@ public class BlankFormsListViewModel extends ViewModel {
                         if (exception == null) {
                         syncRepository.finishSync(null);
                         notifier.onSync(null);
-                        analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, "Success");
+                        //analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, "Success");  // smap
 
                         result.setValue(true);
                     } else {
                         syncRepository.finishSync(exception);
                         notifier.onSync(exception);
-                        analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, exception.getType().toString());
+                        //analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, exception.getType().toString()); // smap
 
                         result.setValue(false);
                     }
@@ -120,7 +120,7 @@ public class BlankFormsListViewModel extends ViewModel {
         Uri uri = Uri.parse(preferencesProvider.getGeneralSharedPreferences().getString(GeneralKeys.KEY_SERVER_URL, ""));
         String host = uri.getHost() != null ? uri.getHost() : "";
         String urlHash = FileUtils.getMd5Hash(new ByteArrayInputStream(host.getBytes()));
-        analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC, "Manual", urlHash);
+        //analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC, "Manual", urlHash);  // smap
     }
 
     public static class Factory implements ViewModelProvider.Factory {

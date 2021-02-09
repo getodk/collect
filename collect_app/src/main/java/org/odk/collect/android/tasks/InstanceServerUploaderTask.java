@@ -81,7 +81,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
                 outcome.messagesByInstanceId.put(instance.getId().toString(),
                         customMessage != null ? customMessage : Collect.getInstance().getString(R.string.success));
 
-                analytics.logEvent(SUBMISSION, "HTTP", Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
+                // analytics.logEvent(SUBMISSION, "HTTP", Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));  // smap
             } catch (UploadAuthRequestedException e) {
                 outcome.authRequestingServer = e.getAuthRequestingServer();
                 // Don't add the instance that caused an auth request to the map because we want to

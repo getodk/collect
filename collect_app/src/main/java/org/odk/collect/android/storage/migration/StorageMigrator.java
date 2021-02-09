@@ -61,7 +61,7 @@ public class StorageMigrator {
         storageMigrationRepository.setResult(result);
         storageMigrationRepository.markMigrationEnd();
 
-        analytics.logEvent(SCOPED_STORAGE_MIGRATION, result.toString());
+        //analytics.logEvent(SCOPED_STORAGE_MIGRATION, result.toString());  // smap
     }
 
     public StorageMigrationResult migrate() {

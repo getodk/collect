@@ -120,17 +120,17 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
         audioController.setAnalytics(new AudioControllerView.AnalyticsListener() {
             @Override
             public void onPlay() {
-                analytics.logFormEvent(AnalyticsEvents.AUDIO_PLAY, getQuestionDetails().getFormAnalyticsID());
+                // analytics.logFormEvent(AnalyticsEvents.AUDIO_PLAY, getQuestionDetails().getFormAnalyticsID());  // smap
             }
 
             @Override
             public void onFastFwdOrFastRwd() {
-                analytics.logFormEvent(AnalyticsEvents.AUDIO_FAST_FWD_RWD, getQuestionDetails().getFormAnalyticsID());
+                // analytics.logFormEvent(AnalyticsEvents.AUDIO_FAST_FWD_RWD, getQuestionDetails().getFormAnalyticsID());  // smap
             }
 
             @Override
             public void onSeek() {
-                analytics.logFormEvent(AnalyticsEvents.AUDIO_SEEK, getQuestionDetails().getFormAnalyticsID());
+                // analytics.logFormEvent(AnalyticsEvents.AUDIO_SEEK, getQuestionDetails().getFormAnalyticsID());   // smap
             }
         });
 
@@ -272,7 +272,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
     }
 
     private void onCaptureAudioButtonClicked() {
-        analytics.logFormEvent(AnalyticsEvents.AUDIO_RECORD, getQuestionDetails().getFormAnalyticsID());
+        //analytics.logFormEvent(AnalyticsEvents.AUDIO_RECORD, getQuestionDetails().getFormAnalyticsID());  // smap
 
         getPermissionUtils().requestRecordAudioPermission((Activity) getContext(), new PermissionListener() {
             @Override
