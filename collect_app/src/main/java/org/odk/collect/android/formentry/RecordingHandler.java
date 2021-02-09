@@ -49,11 +49,9 @@ public class RecordingHandler {
                     }
 
                     onRecordingHandled.run();
-                } catch (JavaRosaException e) {
+                } catch (JavaRosaException | IOException e) {
                     Timber.e(e);
                     ToastUtils.showLongToast(R.string.saving_audio_recording_failed);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
                 }
             }
         });
