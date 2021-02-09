@@ -33,12 +33,13 @@ public class RecordingHandlerTest {
 
     private final FakeQuestionMediaManager questionMediaManager = new FakeQuestionMediaManager();
     private final FormController formController = mock(FormController.class);
-    private final AudioFileAppender audioFileAppender = mock(AudioFileAppender.class);
+    private final AudioFileAppender amrAppender = mock(AudioFileAppender.class);
+    private final AudioFileAppender m4aAppender = mock(AudioFileAppender.class);
 
-    RecordingHandler recordingHandler = new RecordingHandler(questionMediaManager, new FakeLifecycleOwner(), mock(AudioRecorder.class), audioFileAppender);
+    RecordingHandler recordingHandler = new RecordingHandler(questionMediaManager, new FakeLifecycleOwner(), mock(AudioRecorder.class), amrAppender, m4aAppender);
 
     @Test
-    public void whenBackgroundRecording_andRecordingAlreadySavedForReference_appendsAudioFiles() throws Exception {
+    public void whenBackgroundRecordingM4A_andRecordingAlreadySavedForReference_appendsAudioFiles() throws Exception {
         File recording = File.createTempFile("existing", ".m4a");
         File existingRecording = questionMediaManager.createAnswerFile(recording).getValue().getOrNull();
         assertThat(existingRecording, not(nullValue()));
@@ -53,10 +54,32 @@ public class RecordingHandlerTest {
             }
         }, newRecording, 0, 0, false);
 
-        recordingHandler.handle(formController, recordingSession, () -> {
+        recordingHandler.handle(formController, recordingSession, success -> {
         });
 
-        verify(audioFileAppender).append(existingRecording, questionMediaManager.getAnswerFile(newRecording.getName()));
+        verify(m4aAppender).append(existingRecording, questionMediaManager.getAnswerFile(newRecording.getName()));
+    }
+
+    @Test
+    public void whenBackgroundRecordinAMR_andRecordingAlreadySavedForReference_appendsAudioFiles() throws Exception {
+        File recording = File.createTempFile("existing", ".amr");
+        File existingRecording = questionMediaManager.createAnswerFile(recording).getValue().getOrNull();
+        assertThat(existingRecording, not(nullValue()));
+
+        TreeReference treeReference = new TreeReference();
+        when(formController.getAnswer(treeReference)).thenReturn(new StringData(existingRecording.getName()));
+
+        File newRecording = File.createTempFile("new", ".amr");
+        RecordingSession recordingSession = new RecordingSession(new HashSet<TreeReference>() {
+            {
+                add(treeReference);
+            }
+        }, newRecording, 0, 0, false);
+
+        recordingHandler.handle(formController, recordingSession, success -> {
+        });
+
+        verify(amrAppender).append(existingRecording, questionMediaManager.getAnswerFile(newRecording.getName()));
     }
 
     @Test
@@ -75,7 +98,7 @@ public class RecordingHandlerTest {
             }
         }, newRecording, 0, 0, false);
 
-        recordingHandler.handle(formController, recordingSession, () -> {
+        recordingHandler.handle(formController, recordingSession, success -> {
         });
 
         assertThat(questionMediaManager.getAnswerFile(newRecording.getName()).exists(), is(false));

@@ -70,8 +70,9 @@ import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.audio.AMRAppender;
 import org.odk.collect.android.audio.AudioControllerView;
-import org.odk.collect.android.audio.M4AAndAMRAppender;
+import org.odk.collect.android.audio.M4AAppender;
 import org.odk.collect.android.backgroundwork.FormSubmitManager;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
@@ -517,7 +518,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         waitingForDataRegistry = new FormControllerWaitingForDataRegistry();
         externalAppRecordingRequester = new ExternalAppRecordingRequester(this, activityAvailability, waitingForDataRegistry, permissionsProvider, formEntryViewModel);
 
-        RecordingHandler recordingHandler = new RecordingHandler(formSaveViewModel, this, audioRecorder, new M4AAndAMRAppender());
+        RecordingHandler recordingHandler = new RecordingHandler(formSaveViewModel, this, audioRecorder, new AMRAppender(), new M4AAppender());
         audioRecorder.getCurrentSession().observe(this, session -> {
             if (session != null && session.getFile() != null) {
                 recordingHandler.handle(getFormController(), session, success -> {

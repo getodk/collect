@@ -25,13 +25,15 @@ public class RecordingHandler {
     private final QuestionMediaManager questionMediaManager;
     private final LifecycleOwner lifecycleOwner;
     private final AudioRecorder audioRecorder;
-    private final AudioFileAppender audioFileAppender;
+    private final AudioFileAppender amrAppender;
+    private final AudioFileAppender m4aAppender;
 
-    public RecordingHandler(QuestionMediaManager questionMediaManager, LifecycleOwner lifecycleOwner, AudioRecorder audioRecorder, AudioFileAppender audioFileAppender) {
+    public RecordingHandler(QuestionMediaManager questionMediaManager, LifecycleOwner lifecycleOwner, AudioRecorder audioRecorder, AudioFileAppender amrAppender, AudioFileAppender m4aAppender) {
         this.questionMediaManager = questionMediaManager;
         this.lifecycleOwner = lifecycleOwner;
         this.audioRecorder = audioRecorder;
-        this.audioFileAppender = audioFileAppender;
+        this.amrAppender = amrAppender;
+        this.m4aAppender = m4aAppender;
     }
 
     public void handle(FormController formController, RecordingSession session, Consumer<Boolean> onRecordingHandled) {
@@ -69,8 +71,16 @@ public class RecordingHandler {
         StringData answer = (StringData) formController.getAnswer(firstReference);
 
         if (answer != null) {
-            audioFileAppender.append(questionMediaManager.getAnswerFile((String) answer.getValue()), result.getOrNull());
-            result.getOrNull().delete();
+            File existingAnswerFile = questionMediaManager.getAnswerFile((String) answer.getValue());
+            File newAnswerFile = result.getOrNull();
+
+            if (newAnswerFile.getName().endsWith(".m4a")) {
+                m4aAppender.append(existingAnswerFile, newAnswerFile);
+            } else {
+                amrAppender.append(existingAnswerFile, newAnswerFile);
+            }
+
+            newAnswerFile.delete();
         } else {
             for (TreeReference treeReference : treeReferences) {
                 formController.getFormDef().setValue(new StringData(result.getOrNull().getName()), treeReference, false);
