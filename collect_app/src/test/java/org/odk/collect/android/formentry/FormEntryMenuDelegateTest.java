@@ -2,6 +2,7 @@ package org.odk.collect.android.formentry;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.MutableLiveData;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
@@ -63,6 +64,7 @@ public class FormEntryMenuDelegateTest {
 
         BackgroundLocationViewModel backgroundLocationViewModel = mock(BackgroundLocationViewModel.class);
         backgroundAudioViewModel = mock(BackgroundAudioViewModel.class);
+        when(backgroundAudioViewModel.isBackgroundRecordingEnabled()).thenReturn(new MutableLiveData<>(true));
 
         formEntryMenuDelegate = new FormEntryMenuDelegate(
                 activity,
@@ -123,7 +125,7 @@ public class FormEntryMenuDelegateTest {
 
     @Test
     public void onPrepare_whenBackgroundRecodingEnabled_checksRecordAudio() {
-        when(backgroundAudioViewModel.isBackgroundRecordingEnabled()).thenReturn(true);
+        when(backgroundAudioViewModel.isBackgroundRecordingEnabled()).thenReturn(new MutableLiveData<>(true));
 
         RoboMenu menu = new RoboMenu();
         formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
@@ -134,7 +136,7 @@ public class FormEntryMenuDelegateTest {
 
     @Test
     public void onPrepare_whenNotRecordingInBackground_unchecksRecordAudio() {
-        when(backgroundAudioViewModel.isBackgroundRecordingEnabled()).thenReturn(false);
+        when(backgroundAudioViewModel.isBackgroundRecordingEnabled()).thenReturn(new MutableLiveData<>(false));
 
         RoboMenu menu = new RoboMenu();
         formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
@@ -310,7 +312,7 @@ public class FormEntryMenuDelegateTest {
         formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
         formEntryMenuDelegate.onPrepareOptionsMenu(menu);
 
-        when(backgroundAudioViewModel.isBackgroundRecordingEnabled()).thenReturn(false);
+        when(backgroundAudioViewModel.isBackgroundRecordingEnabled()).thenReturn(new MutableLiveData<>(false));
 
         formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_record_audio));
         verify(backgroundAudioViewModel).setBackgroundRecordingEnabled(true);

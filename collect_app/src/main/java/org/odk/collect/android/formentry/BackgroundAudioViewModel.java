@@ -34,6 +34,7 @@ public class BackgroundAudioViewModel extends ViewModel {
     private final PermissionsChecker permissionsChecker;
 
     private final MutableLiveData<Boolean> isPermissionRequired = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> isBackgroundRecordingEnabled;
 
     // These fields handle storing record action details while we're granting permissions
     private final HashSet<TreeReference> tempTreeReferences = new HashSet<>();
@@ -48,6 +49,8 @@ public class BackgroundAudioViewModel extends ViewModel {
         this.recordAudioActionRegistry.register((treeReference, quality) -> {
             new Handler(Looper.getMainLooper()).post(() -> handleRecordAction(treeReference, quality));
         });
+
+        isBackgroundRecordingEnabled = new MutableLiveData<>(preferencesProvider.getGeneralSharedPreferences().getBoolean(KEY_BACKGROUND_RECORDING, true));
     }
 
     @Override
@@ -59,8 +62,8 @@ public class BackgroundAudioViewModel extends ViewModel {
         return isPermissionRequired;
     }
 
-    public boolean isBackgroundRecordingEnabled() {
-        return preferencesProvider.getGeneralSharedPreferences().getBoolean(KEY_BACKGROUND_RECORDING, true);
+    public LiveData<Boolean> isBackgroundRecordingEnabled() {
+        return isBackgroundRecordingEnabled;
     }
 
     public void setBackgroundRecordingEnabled(boolean enabled) {
@@ -69,6 +72,7 @@ public class BackgroundAudioViewModel extends ViewModel {
         }
 
         preferencesProvider.getGeneralSharedPreferences().edit().putBoolean(KEY_BACKGROUND_RECORDING, enabled).apply();
+        isBackgroundRecordingEnabled.postValue(enabled);
     }
 
     public boolean isBackgroundRecording() {
@@ -84,7 +88,7 @@ public class BackgroundAudioViewModel extends ViewModel {
     }
 
     private void handleRecordAction(TreeReference treeReference, String quality) {
-        if (isBackgroundRecordingEnabled()) {
+        if (isBackgroundRecordingEnabled.getValue() != null && isBackgroundRecordingEnabled.getValue()) {
             if (permissionsChecker.isPermissionGranted(Manifest.permission.RECORD_AUDIO)) {
                 if (isBackgroundRecording()) {
                     RecordingSession session = audioRecorder.getCurrentSession().getValue();
