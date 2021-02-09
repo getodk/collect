@@ -7,9 +7,4 @@
         app:iconSpaceReserved="false"
         app:title="@string/theme_magenta" />
 
-    <SwitchPreference
-        android:key="background_audio_recording"
-        app:iconSpaceReserved="false"
-        app:title="@string/background_audio_recording" />
-
 </PreferenceScreen>
