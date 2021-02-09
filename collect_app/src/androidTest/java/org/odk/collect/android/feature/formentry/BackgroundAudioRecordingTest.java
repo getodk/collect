@@ -155,16 +155,14 @@ public class BackgroundAudioRecordingTest {
     }
 
     @Test
-    public void pressingBackWhileRecording_andClickingIgnore_exitsForm() {
+    public void pressingBackWhileRecording_andClickingSave_exitsForm() {
         rule.mainMenu()
                 .enableBackgroundAudioRecording()
                 .copyForm("one-question-background-audio.xml")
                 .startBlankForm("One Question")
                 .closeSoftKeyboard()
                 .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage(rule), rule))
-                .clickIgnoreChanges();
-
-        assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
+                .clickSaveChanges();
     }
 
     @Test
