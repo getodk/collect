@@ -196,9 +196,7 @@
 
     <!-- Error message displayed when copying media from a temporary directory fails -->
     <string name="answer_file_copy_failed_message">Media could not be attached to form but is available at %1$s</string>
-
-    <string name="saving_audio_recording_failed">Saving audio recording failed</string>
-
+    
     <!--
     ##############################################
     # FORM FEATURES

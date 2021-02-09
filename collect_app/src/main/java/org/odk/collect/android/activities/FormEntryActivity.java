@@ -39,6 +39,7 @@ import android.view.animation.Animation.AnimationListener;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -519,9 +520,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         RecordingHandler recordingHandler = new RecordingHandler(formSaveViewModel, this, audioRecorder, new M4AAndAMRAppender());
         audioRecorder.getCurrentSession().observe(this, session -> {
             if (session != null && session.getFile() != null) {
-                recordingHandler.handle(getFormController(), session, () -> {
-                    onScreenRefresh();
-                    formSaveViewModel.resumeSave();
+                recordingHandler.handle(getFormController(), session, success -> {
+                    if (success) {
+                        onScreenRefresh();
+                        formSaveViewModel.resumeSave();
+                    } else {
+                        String path = session.getFile().getAbsolutePath();
+                        String message = getString(R.string.answer_file_copy_failed_message, path);
+                        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+                    }
                 });
             }
         });
