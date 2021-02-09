@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/margin_standard">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/capture_video_button"
+        style="@style/Widget.Collect.Button.WidgetAnswer"
+        android:text="@string/launch_app" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/play_video_button"
+        style="@style/Widget.Collect.Button.WidgetAnswer"
+        android:text="@string/play_video" />
+</LinearLayout>

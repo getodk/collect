@@ -194,6 +194,8 @@ public class WidgetFactory {
                     questionWidget = new AnnotateWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 } else if (appearance.equals(Appearances.DRAW)) {
                     questionWidget = new DrawWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
+                } else if (appearance.startsWith(Appearances.EX)) {
+                    questionWidget = new ExImageWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new MediaUtils(), new ExternalAppIntentProvider(), activityAvailability);
                 } else {
                     questionWidget = new ImageWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 }
@@ -207,7 +209,11 @@ public class WidgetFactory {
                 questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, recordingRequester, audioFileRequester, new AudioRecorderRecordingStatusHandler(audioRecorder, viewLifecycle));
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
-                questionWidget = new VideoWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
+                if (appearance.startsWith(Appearances.EX)) {
+                    questionWidget = new ExVideoWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new MediaUtils(), new ExternalAppIntentProvider(), activityAvailability);
+                } else {
+                    questionWidget = new VideoWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
+                }
                 break;
             case Constants.CONTROL_SELECT_ONE:
                 questionWidget = getSelectOneWidget(appearance, questionDetails);

@@ -244,6 +244,7 @@
     <string name="error_front_camera_unavailable">Front camera not available on this device</string>
     <string name="camera_error">This device doesn\'t support the Camera2 API.</string>
     <string name="annotate_image">Annotate Image</string>
+    <string name="invalid_file_type">Application returned an invalid file type</string>
     <!-- Dialog heading for saving annotated image -->
     <string name="save_and_close">Save and Close</string>
     <string name="signature_capture">Signature Capture</string>

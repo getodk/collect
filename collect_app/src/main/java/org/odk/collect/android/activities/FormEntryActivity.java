@@ -830,6 +830,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
                 break;
             case RequestCodes.EX_ARBITRARY_FILE_CHOOSER:
+            case RequestCodes.EX_VIDEO_CHOOSER:
+            case RequestCodes.EX_IMAGE_CHOOSER:
                 if (intent.getClipData() != null
                         && intent.getClipData().getItemCount() > 0
                         && intent.getClipData().getItemAt(0) != null) {
