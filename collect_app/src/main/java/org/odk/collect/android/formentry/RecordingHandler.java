@@ -18,7 +18,6 @@ import org.odk.collect.utilities.Result;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Set;
 
 import timber.log.Timber;
 
@@ -44,7 +43,7 @@ public class RecordingHandler {
                 try {
                     if (session.getId() instanceof FormIndex) {
                         handleForegroundRecording(formController, session, result);
-                    } else if (session.getId() instanceof Set) {
+                    } else if (session.getId() instanceof HashSet) {
                         handleBackgroundRecording(formController, session, result);
                     }
 
@@ -65,7 +64,7 @@ public class RecordingHandler {
     }
 
     private void handleBackgroundRecording(FormController formController, RecordingSession session, Result<File> result) throws IOException {
-        Set<TreeReference> treeReferences = (HashSet<TreeReference>) session.getId();
+        HashSet<TreeReference> treeReferences = (HashSet<TreeReference>) session.getId();
 
         TreeReference firstReference = treeReferences.iterator().next();
         StringData answer = (StringData) formController.getAnswer(firstReference);
