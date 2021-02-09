@@ -327,6 +327,10 @@ dependencies {
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.11.0'
 
+    implementation('org.mp4parser:muxer:1.9.41') {
+        exclude group: 'org.hamcrest'
+    }
+
     implementation project(':nbistubs')
     implementation project(':strings')
     implementation project(':material')
