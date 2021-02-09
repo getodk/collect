@@ -19,8 +19,7 @@
         android:layout_marginTop="@dimen/margin_small"
         android:id="@+id/waveform"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginHorizontal="@dimen/margin_standard" />
+        android:layout_height="80dp" />
 
     <org.odk.collect.android.audio.AudioControllerView
         android:id="@+id/audio_controller"
