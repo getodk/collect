@@ -24,14 +24,7 @@ public class FakeQuestionMediaManager implements QuestionMediaManager {
 
     @Override
     public LiveData<Result<File>> createAnswerFile(File file) {
-        File answerFile = new File(tempDir, file.getName());
-        try {
-            Files.copy(file, answerFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        answerFiles.add(answerFile);
+        File answerFile = addAnswerFile(file);
         return new MutableLiveData<>(new Result<>(answerFile));
     }
 
@@ -48,6 +41,18 @@ public class FakeQuestionMediaManager implements QuestionMediaManager {
     @Override
     public void replaceAnswerFile(String questionIndex, String fileName) {
         recentFiles.put(questionIndex, fileName);
+    }
+
+    public File addAnswerFile(File file) {
+        File answerFile = new File(tempDir, file.getName());
+        try {
+            Files.copy(file, answerFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        answerFiles.add(answerFile);
+        return answerFile;
     }
 
     public File getDir() {

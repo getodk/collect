@@ -154,7 +154,6 @@ public class BackgroundAudioRecordingTest {
     @Test
     public void pressingBackWhileRecording_andClickingSave_exitsForm() {
         rule.mainMenu()
-                .enableBackgroundAudioRecording()
                 .copyForm("one-question-background-audio.xml")
                 .startBlankForm("One Question")
                 .closeSoftKeyboard()
