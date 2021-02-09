@@ -10,8 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.fakes.FakePermissionsProvider;
 import org.odk.collect.android.formentry.FormEntryViewModel;
-import org.odk.collect.android.formentry.FormIndexAnimationHandler;
-import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
