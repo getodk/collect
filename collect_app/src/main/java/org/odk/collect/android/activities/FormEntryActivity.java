@@ -88,6 +88,7 @@ import org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction;
 import org.odk.collect.android.formentry.FormLoadingDialogFragment;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
+import org.odk.collect.android.formentry.RecordingHandler;
 import org.odk.collect.android.formentry.RecordingWarningDialogFragment;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditUtils;
@@ -468,6 +469,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
+
         identityPromptViewModel = ViewModelProviders.of(this).get(IdentityPromptViewModel.class);
         identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
             if (requiresIdentity) {
@@ -508,10 +510,20 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
-        internalRecordingRequester = new InternalRecordingRequester(this, audioRecorder, permissionsProvider, formEntryViewModel, formSaveViewModel, this);
+        internalRecordingRequester = new InternalRecordingRequester(this, audioRecorder, permissionsProvider, formEntryViewModel);
 
         waitingForDataRegistry = new FormControllerWaitingForDataRegistry();
         externalAppRecordingRequester = new ExternalAppRecordingRequester(this, activityAvailability, waitingForDataRegistry, permissionsProvider, formEntryViewModel);
+
+        RecordingHandler recordingHandler = new RecordingHandler(formSaveViewModel, this, audioRecorder);
+        audioRecorder.getCurrentSession().observe(this, session -> {
+            if (session != null && session.getFile() != null) {
+                recordingHandler.handle(session, () -> {
+                    onScreenRefresh();
+                    formSaveViewModel.resumeSave();
+                });
+            }
+        });
     }
 
     // Precondition: the instance directory must be ready so that the audit file can be created
