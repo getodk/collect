@@ -108,6 +108,8 @@
   <string name="smap_csv_column_nf">La columna %1$s no fué encontrada en el archivo csv %2$s</string>
   <string name="smap_self_select">Esta es una tarea que puede autoasignarse. Para hacerlo haga click sostenido en la tarea antes de ser realizada.</string>
   <string name="smap_android_version">Versión Android %1s</string>
+  <string name="smap_eval_required">%1$s no es un tipo válido para la función lookup_choices que tiene 3 parámetros. Sólo eval se puede usar.</string>
+  <string name="smap_other">Otros</string>
   <string-array name="smap_kontrolid_servers">
     <item>Servidor Kontrolid ORG</item>
     <item>Servidor Kontrolid COM</item>
