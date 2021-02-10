@@ -9,10 +9,14 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.formentry.audit.AuditEvent;
+import org.odk.collect.android.formentry.audit.AuditEventLogger;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
+import org.odk.collect.utilities.Clock;
 
 import java.util.HashSet;
 import java.util.function.BiConsumer;
@@ -33,11 +37,14 @@ public class BackgroundAudioViewModelTest {
     private final AudioRecorder audioRecorder = mock(AudioRecorder.class);
 
     private BackgroundAudioViewModel viewModel;
+    private Clock clock;
 
     @Before
     public void setup() {
         PreferencesProvider preferencesProvider = new PreferencesProvider(ApplicationProvider.getApplicationContext());
-        viewModel = new BackgroundAudioViewModel(audioRecorder, preferencesProvider, recordAudioActionRegistry, permissionsChecker);
+        clock = mock(Clock.class);
+
+        viewModel = new BackgroundAudioViewModel(audioRecorder, preferencesProvider, recordAudioActionRegistry, permissionsChecker, clock);
     }
 
     @Test
@@ -133,6 +140,30 @@ public class BackgroundAudioViewModelTest {
 
         viewModel.grantAudioPermission();
         assertThat(viewModel.isPermissionRequired().getValue(), is(false));
+    }
+
+    @Test
+    public void setBackgroundRecordingEnabled_whenFalse_logsEventToAuditLog() {
+        FormController formController = mock(FormController.class);
+        AuditEventLogger auditEventLogger = mock(AuditEventLogger.class);
+        when(formController.getAuditEventLogger()).thenReturn(auditEventLogger);
+        viewModel.formLoaded(formController);
+
+        when(clock.getCurrentTime()).thenReturn(1234L);
+        viewModel.setBackgroundRecordingEnabled(false);
+        verify(auditEventLogger).logEvent(AuditEvent.AuditEventType.BACKGROUND_AUDIO_DISABLED, true, 1234L);
+    }
+
+    @Test
+    public void setBackgroundRecordingEnabled_whenTrue_logsEventToAuditLog() {
+        FormController formController = mock(FormController.class);
+        AuditEventLogger auditEventLogger = mock(AuditEventLogger.class);
+        when(formController.getAuditEventLogger()).thenReturn(auditEventLogger);
+        viewModel.formLoaded(formController);
+
+        when(clock.getCurrentTime()).thenReturn(1234L);
+        viewModel.setBackgroundRecordingEnabled(true);
+        verify(auditEventLogger).logEvent(AuditEvent.AuditEventType.BACKGROUND_AUDIO_ENABLED, true, 1234L);
     }
 
     private static class FakeRecordAudioActionRegistry implements BackgroundAudioViewModel.RecordAudioActionRegistry {
