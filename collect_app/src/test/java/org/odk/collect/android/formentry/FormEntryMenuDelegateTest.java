@@ -56,11 +56,13 @@ public class FormEntryMenuDelegateTest {
         activity = createThemedActivity(AppCompatActivity.class, R.style.Theme_MaterialComponents);
         FormController formController = mock(FormController.class);
         answersProvider = mock(AnswersProvider.class);
-        formEntryViewModel = mock(FormEntryViewModel.class);
         formSaveViewModel = mock(FormSaveViewModel.class);
 
         audioRecorder = mock(AudioRecorder.class);
         when(audioRecorder.isRecording()).thenReturn(false);
+
+        formEntryViewModel = mock(FormEntryViewModel.class);
+        when(formEntryViewModel.hasBackgroundRecording()).thenReturn(new MutableLiveData<>(false));
 
         BackgroundLocationViewModel backgroundLocationViewModel = mock(BackgroundLocationViewModel.class);
         backgroundAudioViewModel = mock(BackgroundAudioViewModel.class);
@@ -114,7 +116,7 @@ public class FormEntryMenuDelegateTest {
 
     @Test
     public void onPrepare_whenFormHasBackgroundRecording_showsRecordAudio() {
-        when(formEntryViewModel.hasBackgroundRecording()).thenReturn(true);
+        when(formEntryViewModel.hasBackgroundRecording()).thenReturn(new MutableLiveData<>(true));
 
         RoboMenu menu = new RoboMenu();
         formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
@@ -147,7 +149,7 @@ public class FormEntryMenuDelegateTest {
 
     @Test
     public void onPrepare_whenFormDoesNotHaveBackgroundRecording_hidesRecordAudio() {
-        when(formEntryViewModel.hasBackgroundRecording()).thenReturn(false);
+        when(formEntryViewModel.hasBackgroundRecording()).thenReturn(new MutableLiveData<>(false));
 
         RoboMenu menu = new RoboMenu();
         formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
