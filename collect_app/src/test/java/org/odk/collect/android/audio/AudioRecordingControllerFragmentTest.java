@@ -243,7 +243,7 @@ public class AudioRecordingControllerFragmentTest {
     }
 
     @Test
-    public void whenFormDoesNotHaveBackgroundRecording_andBackgroundRecordingIsDisabled_showsThatRecordingIsDisabled() {
+    public void whenFormDoesNotHaveBackgroundRecording_andBackgroundRecordingIsDisabled_doesNotShowRecordingIsDisabled() {
         hasBackgroundRecording.setValue(false);
         isBackgroundRecordingEnabled.setValue(false);
 
