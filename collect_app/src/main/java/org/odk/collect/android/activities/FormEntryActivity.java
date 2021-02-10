@@ -542,6 +542,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         identityPromptViewModel.formLoaded(formController);
         formEntryViewModel.formLoaded(formController);
         formSaveViewModel.formLoaded(formController);
+        backgroundAudioViewModel.formLoaded(formController);
     }
 
     private void setupFields(Bundle savedInstanceState) {

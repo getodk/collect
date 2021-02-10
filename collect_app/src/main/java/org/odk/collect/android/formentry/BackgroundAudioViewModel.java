@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -12,11 +13,15 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.javarosa.core.model.actions.recordaudio.RecordAudioActions;
 import org.javarosa.core.model.instance.TreeReference;
+import org.odk.collect.android.formentry.audit.AuditEvent;
+import org.odk.collect.android.formentry.audit.AuditEventLogger;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
+import org.odk.collect.utilities.Clock;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,12 +31,13 @@ import javax.inject.Inject;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_RECORDING;
 
-public class BackgroundAudioViewModel extends ViewModel {
+public class BackgroundAudioViewModel extends ViewModel implements RequiresFormController {
 
     private final AudioRecorder audioRecorder;
     private final PreferencesProvider preferencesProvider;
     private final RecordAudioActionRegistry recordAudioActionRegistry;
     private final PermissionsChecker permissionsChecker;
+    private final Clock clock;
 
     private final MutableLiveData<Boolean> isPermissionRequired = new MutableLiveData<>(false);
 
@@ -39,15 +45,24 @@ public class BackgroundAudioViewModel extends ViewModel {
     private final HashSet<TreeReference> tempTreeReferences = new HashSet<>();
     private String tempQuality;
 
-    public BackgroundAudioViewModel(AudioRecorder audioRecorder, PreferencesProvider preferencesProvider, RecordAudioActionRegistry recordAudioActionRegistry, PermissionsChecker permissionsChecker) {
+    @Nullable
+    private AuditEventLogger auditEventLogger;
+
+    public BackgroundAudioViewModel(AudioRecorder audioRecorder, PreferencesProvider preferencesProvider, RecordAudioActionRegistry recordAudioActionRegistry, PermissionsChecker permissionsChecker, Clock clock) {
         this.audioRecorder = audioRecorder;
         this.preferencesProvider = preferencesProvider;
         this.recordAudioActionRegistry = recordAudioActionRegistry;
         this.permissionsChecker = permissionsChecker;
+        this.clock = clock;
 
         this.recordAudioActionRegistry.register((treeReference, quality) -> {
             new Handler(Looper.getMainLooper()).post(() -> handleRecordAction(treeReference, quality));
         });
+    }
+
+    @Override
+    public void formLoaded(@NonNull FormController formController) {
+        this.auditEventLogger = formController.getAuditEventLogger();
     }
 
     @Override
@@ -64,8 +79,16 @@ public class BackgroundAudioViewModel extends ViewModel {
     }
 
     public void setBackgroundRecordingEnabled(boolean enabled) {
-        if (!enabled) {
+        if (enabled) {
+            if (auditEventLogger != null) {
+                auditEventLogger.logEvent(AuditEvent.AuditEventType.BACKGROUND_AUDIO_ENABLED, true, clock.getCurrentTime());
+            }
+        } else {
             audioRecorder.cleanUp();
+
+            if (auditEventLogger != null) {
+                auditEventLogger.logEvent(AuditEvent.AuditEventType.BACKGROUND_AUDIO_DISABLED, true, clock.getCurrentTime());
+            }
         }
 
         preferencesProvider.getGeneralSharedPreferences().edit().putBoolean(KEY_BACKGROUND_RECORDING, enabled).apply();
@@ -130,18 +153,20 @@ public class BackgroundAudioViewModel extends ViewModel {
         private final AudioRecorder audioRecorder;
         private final PreferencesProvider preferencesProvider;
         private final PermissionsChecker permissionsChecker;
+        private final Clock clock;
 
         @Inject
-        public Factory(AudioRecorder audioRecorder, PreferencesProvider preferencesProvider, PermissionsChecker permissionsChecker) {
+        public Factory(AudioRecorder audioRecorder, PreferencesProvider preferencesProvider, PermissionsChecker permissionsChecker, Clock clock) {
             this.audioRecorder = audioRecorder;
             this.preferencesProvider = preferencesProvider;
             this.permissionsChecker = permissionsChecker;
+            this.clock = clock;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new BackgroundAudioViewModel(audioRecorder, preferencesProvider, new BackgroundAudioViewModel.RecordAudioActionRegistry() {
+            RecordAudioActionRegistry recordAudioActionRegistry = new RecordAudioActionRegistry() {
                 @Override
                 public void register(BiConsumer<TreeReference, String> listener) {
                     RecordAudioActions.setRecordAudioListener(listener::accept);
@@ -151,7 +176,9 @@ public class BackgroundAudioViewModel extends ViewModel {
                 public void unregister() {
                     RecordAudioActions.setRecordAudioListener(null);
                 }
-            }, permissionsChecker);
+            };
+
+            return (T) new BackgroundAudioViewModel(audioRecorder, preferencesProvider, recordAudioActionRegistry, permissionsChecker, clock);
         }
     }
 }
