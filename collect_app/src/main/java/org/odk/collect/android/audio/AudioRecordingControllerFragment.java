@@ -79,6 +79,7 @@ public class AudioRecordingControllerFragment extends Fragment {
         if (session == null && hasBackgroundRecording && !isBackgroundRecordingEnabled) {
             binding.getRoot().setVisibility(VISIBLE);
             binding.timeCode.setText(TranslationHandler.getString(requireContext(), R.string.recording_disabled, "⋮"));
+            binding.waveform.setVisibility(GONE);
             binding.pauseRecording.setVisibility(GONE);
             binding.stopRecording.setVisibility(GONE);
         } else if (session == null) {
