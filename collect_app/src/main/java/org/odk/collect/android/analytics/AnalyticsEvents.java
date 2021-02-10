@@ -187,4 +187,14 @@ public class AnalyticsEvents {
      * Track how many forms record background audio
      */
     public static final String REQUESTS_BACKGROUND_AUDIO = "RequestsBackgroundAudio";
+
+    /**
+     * Track how often background audio is disabled for a form
+     */
+    public static final String BACKGROUND_AUDIO_ENABLED = "DisableBackgroundAudio";
+
+    /**
+     * Track how often background audio is enabled for a form
+     */
+    public static final String BACKGROUND_AUDIO_DISABLED = "EnableBackgroundAudio";
 }
