@@ -120,4 +120,28 @@ class ForegroundServiceAudioRecorderTest : AudioRecorderTest() {
         runBackground()
         assertThat(viewModel.getCurrentSession().value?.failedToStart, equalTo(exception))
     }
+
+    @Test
+    fun start_whenRecorderStartThrowsException_setsFailedToStartToTrue() {
+        val exception = MicInUseException()
+        fakeRecorder.failOnStart(exception)
+
+        viewModel.start("blah", Output.AAC)
+        runBackground()
+        assertThat(viewModel.failedToStart().value, equalTo(true))
+    }
+
+    @Test
+    fun start_whenRecorderStartThrowsException_thenSucceeds_setsFailedToStartToFalse() {
+        val exception = MicInUseException()
+        fakeRecorder.failOnStart(exception)
+        viewModel.start("blah", Output.AAC)
+        runBackground()
+
+        fakeRecorder.failOnStart(null)
+        viewModel.start("blah", Output.AAC)
+        runBackground()
+
+        assertThat(viewModel.failedToStart().value, equalTo(false))
+    }
 }

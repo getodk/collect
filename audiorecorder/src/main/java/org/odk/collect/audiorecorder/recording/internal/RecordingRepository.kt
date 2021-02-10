@@ -9,11 +9,14 @@ import java.lang.Exception
 
 internal class RecordingRepository {
 
+    private val _failedToStart = MutableLiveData(false)
     private val _currentSession = MutableLiveData<RecordingSession?>(null)
     val currentSession: LiveData<RecordingSession?> = _currentSession
+    val failedToStart: LiveData<Boolean> = _failedToStart
 
     fun start(sessionId: Serializable) {
         _currentSession.value = RecordingSession(sessionId, null, 0, 0, false)
+        _failedToStart.value = false
     }
 
     fun setDuration(duration: Long) {
@@ -46,5 +49,6 @@ internal class RecordingRepository {
 
     fun failToStart(sessionId: Serializable, exception: Exception) {
         _currentSession.value = RecordingSession(sessionId, null, 0, 0, paused = false, failedToStart = exception)
+        _failedToStart.value = true
     }
 }

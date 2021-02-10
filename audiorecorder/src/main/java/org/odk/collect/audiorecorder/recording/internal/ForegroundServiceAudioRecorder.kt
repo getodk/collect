@@ -26,6 +26,10 @@ internal class ForegroundServiceAudioRecorder internal constructor(private val a
         return recordingRepository.currentSession
     }
 
+    override fun failedToStart(): LiveData<Boolean> {
+        return recordingRepository.failedToStart
+    }
+
     override fun start(sessionId: Serializable, output: Output) {
         application.startService(
             Intent(application, AudioRecorderService::class.java).apply {

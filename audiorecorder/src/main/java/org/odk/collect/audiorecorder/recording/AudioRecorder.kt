@@ -12,6 +12,7 @@ import java.io.Serializable
 abstract class AudioRecorder {
     abstract fun isRecording(): Boolean
     abstract fun getCurrentSession(): LiveData<RecordingSession?>
+    abstract fun failedToStart(): LiveData<Boolean>
 
     abstract fun start(sessionId: Serializable, output: Output)
     abstract fun pause()

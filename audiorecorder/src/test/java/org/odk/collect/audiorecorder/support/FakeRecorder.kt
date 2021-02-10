@@ -70,7 +70,7 @@ class FakeRecorder : Recorder {
         cancelled = true
     }
 
-    fun failOnStart(exception: Exception) {
+    fun failOnStart(exception: Exception?) {
         this.exception = exception
     }
 }

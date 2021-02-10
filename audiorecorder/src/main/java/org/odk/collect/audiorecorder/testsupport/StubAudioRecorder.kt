@@ -45,6 +45,10 @@ class StubAudioRecorder(private val stubRecordingPath: String) : AudioRecorder()
         return currentSession
     }
 
+    override fun failedToStart(): LiveData<Boolean> {
+        TODO("Not yet implemented")
+    }
+
     override fun start(sessionId: Serializable, output: Output) {
         if (!isRecording) {
             if (failOnStart) {
