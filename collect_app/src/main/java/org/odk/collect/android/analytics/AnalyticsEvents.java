@@ -182,4 +182,9 @@ public class AnalyticsEvents {
      * Tracks how often people see the URL question
      */
     public static final String URL_QUESTION = "UrlQuestion";
+
+    /**
+     * Track how many forms record background audio
+     */
+    public static final String REQUESTS_BACKGROUND_AUDIO = "RequestsBackgroundAudio";
 }

@@ -1,5 +1,6 @@
 package org.odk.collect.android.formentry;
 
+import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.instance.TreeReference;
 import org.junit.Before;
@@ -41,6 +42,7 @@ public class FormEntryViewModelTest {
         startingIndex = new FormIndex(null, 0, 0, new TreeReference());
         when(formController.getFormIndex()).thenReturn(startingIndex);
         when(formController.getCurrentFormIdentifierHash()).thenReturn("formIdentifierHash");
+        when(formController.getFormDef()).thenReturn(new FormDef());
 
         auditEventLogger = mock(AuditEventLogger.class);
         when(formController.getAuditEventLogger()).thenReturn(auditEventLogger);
