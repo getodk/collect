@@ -78,6 +78,7 @@ public class AudioRecordingControllerFragment extends Fragment {
     private void update(boolean hasBackgroundRecording, boolean isBackgroundRecordingEnabled, RecordingSession session) {
         if (session == null && hasBackgroundRecording && !isBackgroundRecordingEnabled) {
             binding.getRoot().setVisibility(VISIBLE);
+            binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_mic_off_24));
             binding.timeCode.setText(TranslationHandler.getString(requireContext(), R.string.recording_disabled, "⋮"));
             binding.waveform.setVisibility(GONE);
             binding.pauseRecording.setVisibility(GONE);
@@ -94,20 +95,20 @@ public class AudioRecordingControllerFragment extends Fragment {
             binding.waveform.addAmplitude(session.getAmplitude());
 
             if (session.getPaused()) {
-                binding.pauseRecording.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_mic_24));
+                binding.pauseRecording.setIcon(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_mic_24));
                 binding.pauseRecording.setContentDescription(getString(R.string.resume_recording));
                 binding.pauseRecording.setOnClickListener(v -> audioRecorder.resume());
 
-                binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_pause_24dp));
+                binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_pause_24dp));
             } else {
-                binding.pauseRecording.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_pause_24dp));
+                binding.pauseRecording.setIcon(ContextCompat.getDrawable(requireContext(), R.drawable.ic_pause_24dp));
                 binding.pauseRecording.setContentDescription(getString(R.string.pause_recording));
                 binding.pauseRecording.setOnClickListener(v -> {
                     audioRecorder.pause();
                     formEntryViewModel.logFormEvent(AnalyticsEvents.AUDIO_RECORDING_PAUSE);
                 });
 
-                binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_mic_24));
+                binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_mic_24));
             }
 
             // Pause not available before API 24
