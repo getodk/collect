@@ -39,6 +39,7 @@ import android.view.animation.Animation.AnimationListener;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -69,7 +70,9 @@ import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.audio.AMRAppender;
 import org.odk.collect.android.audio.AudioControllerView;
+import org.odk.collect.android.audio.M4AAppender;
 import org.odk.collect.android.backgroundwork.FormSubmitManager;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
@@ -88,6 +91,7 @@ import org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction;
 import org.odk.collect.android.formentry.FormLoadingDialogFragment;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
+import org.odk.collect.android.formentry.RecordingHandler;
 import org.odk.collect.android.formentry.RecordingWarningDialogFragment;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditUtils;
@@ -468,6 +472,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
+
         identityPromptViewModel = ViewModelProviders.of(this).get(IdentityPromptViewModel.class);
         identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
             if (requiresIdentity) {
@@ -508,10 +513,26 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
-        internalRecordingRequester = new InternalRecordingRequester(this, audioRecorder, permissionsProvider, formEntryViewModel, formSaveViewModel, this);
+        internalRecordingRequester = new InternalRecordingRequester(this, audioRecorder, permissionsProvider, formEntryViewModel);
 
         waitingForDataRegistry = new FormControllerWaitingForDataRegistry();
         externalAppRecordingRequester = new ExternalAppRecordingRequester(this, activityAvailability, waitingForDataRegistry, permissionsProvider, formEntryViewModel);
+
+        RecordingHandler recordingHandler = new RecordingHandler(formSaveViewModel, this, audioRecorder, new AMRAppender(), new M4AAppender());
+        audioRecorder.getCurrentSession().observe(this, session -> {
+            if (session != null && session.getFile() != null) {
+                recordingHandler.handle(getFormController(), session, success -> {
+                    if (success) {
+                        onScreenRefresh();
+                        formSaveViewModel.resumeSave();
+                    } else {
+                        String path = session.getFile().getAbsolutePath();
+                        String message = getString(R.string.answer_file_copy_failed_message, path);
+                        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
     }
 
     // Precondition: the instance directory must be ready so that the audit file can be created

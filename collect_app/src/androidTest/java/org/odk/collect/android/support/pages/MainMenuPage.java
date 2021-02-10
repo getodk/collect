@@ -257,14 +257,5 @@ public class MainMenuPage extends Page<MainMenuPage> {
         onView(withText(getTranslatedString(R.string.manage_files))).perform(scrollTo(), click());
         return new DeleteSavedFormPage(rule).assertOnPage();
     }
-
-    public MainMenuPage enableBackgroundAudioRecording() {
-        return clickOnMenu()
-                .clickGeneralSettings()
-                .clickExperimental()
-                .clickOnString(R.string.background_audio_recording)
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule));
-    }
 }
 
