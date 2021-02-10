@@ -155,6 +155,17 @@ public class BackgroundAudioRecordingTest {
     }
 
     @Test
+    public void pressingBackWhileRecording_andClickingSave_exitsForm() {
+        rule.mainMenu()
+                .enableBackgroundAudioRecording()
+                .copyForm("one-question-background-audio.xml")
+                .startBlankForm("One Question")
+                .closeSoftKeyboard()
+                .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage(rule), rule))
+                .clickSaveChanges();
+    }
+
+    @Test
     public void uncheckingRecordAudio_andConfirming_endsAndDeletesRecording() {
         FormEntryPage formEntryPage = rule.mainMenu()
                 .enableBackgroundAudioRecording()
