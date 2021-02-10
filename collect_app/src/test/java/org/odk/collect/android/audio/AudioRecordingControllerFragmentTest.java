@@ -342,4 +342,24 @@ public class AudioRecordingControllerFragmentTest {
         });
     }
     //endregion
+
+    @Test
+    public void whenThereIsAnErrorStartingRecording_andBackgroundRecordingRequested_displaysError() {
+        when(formEntryViewModel.hasBackgroundRecording()).thenReturn(false); // FormController is not set
+        MutableLiveData<Boolean> formControllerSet = new MutableLiveData<>(false);
+        when(formEntryViewModel.isFormControllerSet()).thenReturn(formControllerSet);
+
+        audioRecorder.cleanUp(); // Reset recorder
+
+        FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
+        when(formEntryViewModel.hasBackgroundRecording()).thenReturn(true); // FormController is set
+        formControllerSet.postValue(true);
+
+        audioRecorder.failOnStart();
+        audioRecorder.start("background", Output.AAC);
+        scenario.onFragment(fragment -> {
+            assertThat(fragment.binding.getRoot().getVisibility(), is(View.VISIBLE));
+            assertThat(fragment.binding.recordingStatusMessage.getText(), is("Could not start recording."));
+        });
+    }
 }

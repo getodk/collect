@@ -194,7 +194,7 @@
     <!-- Text displayed when user tries to start recording while the mic is already in use -->
     <string name="mic_in_use">Microphone is already in use.</string>
 
-    <!-- Error message displayed when copying media from a temporary directory fails -->
+    <!-- Error message displayed when copying media from a temporary directory fails. The inserted string is a directory name on the Android device. -->
     <string name="answer_file_copy_failed_message">Media could not be attached to form but is available at %1$s</string>
 
     <string name="saving_audio_recording_failed">Saving audio recording failed</string>

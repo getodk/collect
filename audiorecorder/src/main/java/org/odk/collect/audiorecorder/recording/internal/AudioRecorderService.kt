@@ -82,6 +82,7 @@ internal class AudioRecorderService : Service() {
         try {
             recorder.start(output)
             recordingRepository.start(sessionId)
+            throw Exception("whee")
             startUpdates()
         } catch (e: Exception) {
             notification.dismiss()

@@ -107,20 +107,24 @@ public class AudioRecordingControllerFragment extends Fragment {
 
         binding.stopRecording.setOnClickListener(v -> audioRecorder.stop());
 
-        formEntryViewModel.isFormControllerSet().observe(getViewLifecycleOwner(), (isSet) -> {
-            if (formEntryViewModel.hasBackgroundRecording() && !backgroundAudioViewModel.isBackgroundRecordingEnabled().getValue()) {
-                configureViewForRequestedButDisabledBackgroundRecording();
+        formEntryViewModel.isFormControllerSet().observe(getViewLifecycleOwner(), isSet -> {
+            if (formEntryViewModel.hasBackgroundRecording()) {
+                if (audioRecorder.getCurrentSession().getValue() != null && audioRecorder.getCurrentSession().getValue().getFailedToStart() != null) {
+                    configureViewForErrorState(TranslationHandler.getString(getContext(), R.string.start_recording_failed));
+                } else if (!backgroundAudioViewModel.isBackgroundRecordingEnabled().getValue()) {
+                    configureViewForErrorState(TranslationHandler.getString(getContext(), R.string.recording_disabled, "⋮"));
+                }
             }
         });
 
         backgroundAudioViewModel.isBackgroundRecordingEnabled().observe(getViewLifecycleOwner(), isEnabled -> {
             if (formEntryViewModel.hasBackgroundRecording() && !isEnabled) {
-                configureViewForRequestedButDisabledBackgroundRecording();
+                configureViewForErrorState(TranslationHandler.getString(getContext(), R.string.recording_disabled, "⋮"));
             }
         });
     }
 
-    private void configureViewForRequestedButDisabledBackgroundRecording() {
+    private void configureViewForErrorState(String errorMessage) {
         binding.getRoot().setVisibility(VISIBLE);
 
         binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_mic_off_24));
@@ -129,6 +133,6 @@ public class AudioRecordingControllerFragment extends Fragment {
         binding.pauseRecording.setVisibility(GONE);
         binding.stopRecording.setVisibility(GONE);
 
-        binding.recordingStatusMessage.setText(TranslationHandler.getString(getContext(), R.string.recording_disabled, "⋮"));
+        binding.recordingStatusMessage.setText(errorMessage);
     }
 }
