@@ -289,6 +289,9 @@
     <!-- Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form -->
     <string name="background_audio_recording_enabled_explanation">Recording will not begin immediately. You must re-open the form to record.</string>
 
+    <!-- Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu. -->
+    <string name="recording_disabled">Recording disabled. Enable in %s</string>
+
     <!-- Title for dialog asking the user if they want to delete a file -->
     <string name="delete_answer_file_question">Delete file?</string>
 

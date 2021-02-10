@@ -18,6 +18,7 @@ import org.odk.collect.android.databinding.AudioRecordingControllerFragmentBindi
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.strings.format.LengthFormatterKt;
 
@@ -70,7 +71,7 @@ public class AudioRecordingControllerFragment extends Fragment {
             } else if (session.getFile() == null) {
                 binding.getRoot().setVisibility(VISIBLE);
 
-                binding.timeCode.setText(LengthFormatterKt.formatLength(session.getDuration()));
+                binding.recordingStatusMessage.setText(LengthFormatterKt.formatLength(session.getDuration()));
                 binding.waveform.addAmplitude(session.getAmplitude());
 
                 if (session.getPaused()) {
@@ -105,5 +106,29 @@ public class AudioRecordingControllerFragment extends Fragment {
         });
 
         binding.stopRecording.setOnClickListener(v -> audioRecorder.stop());
+
+        formEntryViewModel.isFormControllerSet().observe(getViewLifecycleOwner(), (isSet) -> {
+            if (formEntryViewModel.hasBackgroundRecording() && !backgroundAudioViewModel.isBackgroundRecordingEnabled().getValue()) {
+                configureViewForRequestedButDisabledBackgroundRecording();
+            }
+        });
+
+        backgroundAudioViewModel.isBackgroundRecordingEnabled().observe(getViewLifecycleOwner(), isEnabled -> {
+            if (formEntryViewModel.hasBackgroundRecording() && !isEnabled) {
+                configureViewForRequestedButDisabledBackgroundRecording();
+            }
+        });
+    }
+
+    private void configureViewForRequestedButDisabledBackgroundRecording() {
+        binding.getRoot().setVisibility(VISIBLE);
+
+        binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_mic_off_24));
+
+        binding.waveform.setVisibility(GONE);
+        binding.pauseRecording.setVisibility(GONE);
+        binding.stopRecording.setVisibility(GONE);
+
+        binding.recordingStatusMessage.setText(TranslationHandler.getString(getContext(), R.string.recording_disabled, "⋮"));
     }
 }

@@ -28,7 +28,7 @@
             app:tint="?colorOnPrimary" />
 
         <TextView
-            android:id="@+id/time_code"
+            android:id="@+id/recording_status_message"
             style="@style/TextAppearance.Collect.Subtitle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

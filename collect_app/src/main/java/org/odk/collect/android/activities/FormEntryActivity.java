@@ -2006,7 +2006,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         FormController formController = getFormController();
 
-        if (formController != null && !formEntryViewModel.isFormControllerSet()) {
+        if (formController != null && !formEntryViewModel.isFormControllerSet().getValue()) {
             Timber.e("FormController set in App but not ViewModel");
         }
 

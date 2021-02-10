@@ -32,6 +32,8 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     @Nullable
     private FormController formController;
 
+    private final MutableLiveData<Boolean> isFormControllerSet = new MutableLiveData<>(false);
+
     @Nullable
     private FormIndex jumpBackIndex;
 
@@ -44,10 +46,11 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     @Override
     public void formLoaded(@NotNull FormController formController) {
         this.formController = formController;
+        isFormControllerSet.postValue(true);
     }
 
-    public boolean isFormControllerSet() {
-        return formController != null;
+    public LiveData<Boolean> isFormControllerSet() {
+        return isFormControllerSet;
     }
 
     @Nullable
