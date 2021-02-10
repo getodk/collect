@@ -60,47 +60,47 @@ android {
     productFlavors {
         standard {
             applicationId "org.smap.smapTask.android"
-            versionName "6.300"
+            versionName "6.302"
         }
         plan {
             applicationId "org.smap.smapTask.android.plan"
-            versionName "6.300-plan"
+            versionName "6.302-plan"
         }
         kontrolid {
             applicationId "org.smap.smapTask.android.kontrolid"
-            versionName "6.300-kontrolid"
+            versionName "6.302-kontrolid"
         }
         supply {
             applicationId "org.smap.smapTask.android.supply"
-            versionName "6.300-supply"
+            versionName "6.302-supply"
         }
         seracis {
             applicationId "org.smap.smapTask.android.seracis"
-            versionName "6.300-seracis"
+            versionName "6.302-seracis"
         }
         meqa {
             applicationId "org.smap.smapTask.android.meqa"
-            versionName "6.300-meqa"
+            versionName "6.302-meqa"
         }
         atempi {
             applicationId "org.smap.smapTask.android.atempi"
-            versionName "6.300-atempi"
+            versionName "6.302-atempi"
         }
         pop {
             applicationId "org.smap.smapTask.android.pop"
-            versionName "6.300-pop"
+            versionName "6.302-pop"
         }
         tdh {
             applicationId "org.smap.smapTask.android.tdh"
-            versionName "6.300-tdh"
+            versionName "6.302-tdh"
         }
         assignfield {
             applicationId "org.smap.smapTask.android.assignfield"
-            versionName "6.300-assignfield"
+            versionName "6.302-assignfield"
         }
         informEd {
             applicationId "org.smap.smapTask.android.informEd"
-            versionName "6.300-informEd"
+            versionName "6.302-informEd"
         }
     }
 

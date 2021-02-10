@@ -357,6 +357,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                     editor.putBoolean(GeneralKeys.KEY_SMAP_LOCATION_TRIGGER, tr.settings.ft_location_trigger);
                     editor.putBoolean(GeneralKeys.KEY_SMAP_ODK_STYLE_MENUS, tr.settings.ft_odk_style_menus);
                     editor.putBoolean(GeneralKeys.KEY_SMAP_ODK_INSTANCENAME, tr.settings.ft_specify_instancename);
+                    editor.putBoolean(GeneralKeys.KEY_SMAP_ODK_MARK_FINALIZED, tr.settings.ft_mark_finalized);
                     editor.putBoolean(GeneralKeys.KEY_SMAP_PREVENT_DISABLE_TRACK, tr.settings.ft_prevent_disable_track);
                     editor.putBoolean(GeneralKeys.KEY_SMAP_ENABLE_GEOFENCE, tr.settings.ft_enable_geofence == null || tr.settings.ft_enable_geofence.equals("on"));
                     editor.putBoolean(GeneralKeys.KEY_SMAP_ODK_ADMIN_MENU, tr.settings.ft_admin_menu);

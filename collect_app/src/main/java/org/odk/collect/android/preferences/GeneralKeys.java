@@ -100,6 +100,7 @@ public final class GeneralKeys {
     public static final String KEY_SMAP_LOCATION_TRIGGER = "location_trigger";  // Enable triggering of forms by location
     public static final String KEY_SMAP_ODK_STYLE_MENUS = "odk_style_menus";  // Show ODK style menus as well as refresh
     public static final String KEY_SMAP_ODK_INSTANCENAME = "odk_instancename";  // Allow user to change instance name
+    public static final String KEY_SMAP_ODK_MARK_FINALIZED = "odk_mark_finalized";  // Allow user to change instance name
     public static final String KEY_SMAP_PREVENT_DISABLE_TRACK = "disable_prevent_track";  // Prevent the user from disabling tracking
     public static final String KEY_SMAP_ENABLE_GEOFENCE = "enable_geofence";  // Monitor location for geofence
     public static final String KEY_SMAP_ODK_ADMIN_MENU = "odk_admin_menu";  // Show ODK admin menu
@@ -169,6 +170,7 @@ public final class GeneralKeys {
         hashMap.put(KEY_SMAP_LOCATION_TRIGGER, true);
         hashMap.put(KEY_SMAP_ODK_STYLE_MENUS, true);
         hashMap.put(KEY_SMAP_ODK_INSTANCENAME, false);
+        hashMap.put(KEY_SMAP_ODK_MARK_FINALIZED, false);
         hashMap.put(KEY_SMAP_PREVENT_DISABLE_TRACK, false);
         hashMap.put(KEY_SMAP_ENABLE_GEOFENCE, true);    // Default geofence on until notififid otherwise
         hashMap.put(KEY_SMAP_ODK_ADMIN_MENU, false);

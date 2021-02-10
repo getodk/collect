@@ -1437,10 +1437,25 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .setText(getString(R.string.save_enter_data_description,
                         formController.getFormTitle()));
 
+        boolean showInstanceName = PreferenceManager        // smap
+                .getDefaultSharedPreferences(this)
+                .getBoolean(GeneralKeys.KEY_SMAP_ODK_INSTANCENAME, false);
+
+        boolean showMarkFinalized = PreferenceManager        // smap
+                .getDefaultSharedPreferences(this)
+                .getBoolean(GeneralKeys.KEY_SMAP_ODK_MARK_FINALIZED, false);
+
         // checkbox for if finished or ready to send
         final CheckBox instanceComplete = endView
                 .findViewById(R.id.mark_finished);
+
+        // Default finalize instance to checked
         instanceComplete.setChecked(InstancesDaoHelper.isInstanceComplete(true));
+        if(showMarkFinalized) {     // smap
+            instanceComplete.setVisibility(View.VISIBLE);
+        } else {
+            instanceComplete.setVisibility(View.GONE);
+        }
 
         if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_MARK_AS_FINALIZED)) {
             instanceComplete.setVisibility(View.GONE);
@@ -1453,10 +1468,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         InputFilter returnFilter = (source, start, end, dest, dstart, dend)
                 -> FormNameUtils.normalizeFormName(source.toString().substring(start, end), true);
         saveAs.setFilters(new InputFilter[]{returnFilter});
-
-        boolean showInstanceName = PreferenceManager        // smap
-                .getDefaultSharedPreferences(this)
-                .getBoolean(GeneralKeys.KEY_SMAP_ODK_INSTANCENAME, false);
 
         if (formController.getSubmissionMetadata().instanceName == null) {
             // no meta/instanceName field in the form -- see if we have a

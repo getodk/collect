@@ -24,6 +24,7 @@ public class FieldTaskSettings {
     public boolean ft_location_trigger;
     public boolean ft_odk_style_menus;
     public boolean ft_specify_instancename;
+    public boolean ft_mark_finalized;
     public boolean ft_prevent_disable_track;
     public String ft_enable_geofence;   // Not boolean so it can be backward compatible with servers that do not set it
     public boolean ft_admin_menu;
