@@ -19,6 +19,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
+import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.robolectric.shadows.ShadowToast;
 
 import java.io.File;
@@ -35,34 +36,37 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
 import static org.odk.collect.android.utilities.QuestionFontSizeUtils.DEFAULT_FONT_SIZE;
 import static org.robolectric.Shadows.shadowOf;
 
-public class ExImageWidgetTest extends FileWidgetTest<ExImageWidget> {
+public class ExAudioWidgetTest extends FileWidgetTest<ExAudioWidget> {
     @Mock
     MediaUtils mediaUtils;
 
     @Mock
     ExternalAppIntentProvider externalAppIntentProvider;
 
+    @Mock
+    AudioPlayer audioPlayer;
+
     @Before
     public void setup() {
-        when(mediaUtils.isImageFile(any())).thenReturn(true);
+        when(mediaUtils.isAudioFile(any())).thenReturn(true);
     }
 
     @Override
     public StringData getInitialAnswer() {
-        return new StringData("image1.png");
+        return new StringData("audio1.mp3");
     }
 
     @NonNull
     @Override
     public StringData getNextAnswer() {
-        return new StringData("image2.png");
+        return new StringData("audio2.mp3");
     }
 
     @NonNull
     @Override
-    public ExImageWidget createWidget() {
-        return new ExImageWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride),
-                new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry(), mediaUtils, externalAppIntentProvider, new ActivityAvailability(activity));
+    public ExAudioWidget createWidget() {
+        return new ExAudioWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride),
+                new FakeQuestionMediaManager(), audioPlayer, new FakeWaitingForDataRegistry(), mediaUtils, externalAppIntentProvider, new ActivityAvailability(activity));
     }
 
     @Test
@@ -88,24 +92,33 @@ public class ExImageWidgetTest extends FileWidgetTest<ExImageWidget> {
     }
 
     @Test
-    public void whenThereIsNoAnswer_shouldImageViewBeHidden() {
-        assertThat(getWidget().binding.imageView.getVisibility(), is(View.GONE));
+    public void whenThereIsNoAnswer_shouldAudioPlayerBeHidden() {
+        assertThat(getWidget().binding.audioPlayer.recordingDuration.getVisibility(), is(View.GONE));
+        assertThat(getWidget().binding.audioPlayer.waveform.getVisibility(), is(View.GONE));
+        assertThat(getWidget().binding.audioPlayer.audioController.getVisibility(), is(View.GONE));
     }
 
     @Test
-    public void whenThereIsAnswer_shouldImageViewBeDisplayed() {
+    public void whenThereIsAnswer_shouldAudioPlayerBeDisplayed() {
         when(formEntryPrompt.getAnswerText()).thenReturn(getInitialAnswer().getDisplayText());
 
-        assertThat(getWidget().binding.imageView.getVisibility(), is(View.VISIBLE));
+        assertThat(getWidget().binding.audioPlayer.audioController.getVisibility(), is(View.VISIBLE));
     }
 
     @Test
-    public void whenAnswerCleared_shouldImageViewBeHidden() {
+    public void whenThereIsAnswer_shouldLaunchButtonBeHidden() {
         when(formEntryPrompt.getAnswerText()).thenReturn(getInitialAnswer().getDisplayText());
 
-        ExImageWidget widget = getWidget();
+        assertThat(getWidget().binding.launchExternalAppButton.getVisibility(), is(View.GONE));
+    }
+
+    @Test
+    public void whenAnswerCleared_shouldAudioPlayerBeHidden() {
+        when(formEntryPrompt.getAnswerText()).thenReturn(getInitialAnswer().getDisplayText());
+
+        ExAudioWidget widget = getWidget();
         widget.clearAnswer();
-        assertThat(getWidget().binding.imageView.getVisibility(), is(View.GONE));
+        assertThat(getWidget().binding.audioPlayer.audioController.getVisibility(), is(View.GONE));
     }
 
     @Test
@@ -117,48 +130,39 @@ public class ExImageWidgetTest extends FileWidgetTest<ExImageWidget> {
     }
 
     @Test
-    public void whenImageViewClicked_shouldFileViewerByCalled() {
-        when(formEntryPrompt.getAnswerText()).thenReturn(getInitialAnswer().getDisplayText());
-
-        ExImageWidget widget = getWidget();
-        widget.binding.imageView.performClick();
-        verify(mediaUtils).openFile(activity, widget.answerFile, "image/*");
-    }
-
-    @Test
     public void whenSetDataCalledWithNull_shouldExistedAnswerBeRemoved() {
         when(formEntryPrompt.getAnswerText()).thenReturn(getInitialAnswer().getDisplayText());
 
-        ExImageWidget widget = getWidget();
+        ExAudioWidget widget = getWidget();
         widget.setData(null);
         assertThat(widget.getAnswer(), is(nullValue()));
-        assertThat(widget.binding.imageView.getVisibility(), is(View.GONE));
+        assertThat(getWidget().binding.audioPlayer.audioController.getVisibility(), is(View.GONE));
     }
 
     @Test
     public void whenUnsupportedFileTypeAttached_shouldNotThatFileBeAdded() throws IOException {
-        ExImageWidget widget = getWidget();
+        ExAudioWidget widget = getWidget();
         File answer = File.createTempFile("doc", ".pdf");
-        when(mediaUtils.isImageFile(answer)).thenReturn(false);
+        when(mediaUtils.isAudioFile(answer)).thenReturn(false);
         widget.setData(answer);
         assertThat(widget.getAnswer(), is(nullValue()));
-        assertThat(widget.binding.imageView.getVisibility(), is(View.GONE));
+        assertThat(getWidget().binding.audioPlayer.audioController.getVisibility(), is(View.GONE));
     }
 
     @Test
     public void whenUnsupportedFileTypeAttached_shouldTheFileBeRemoved() throws IOException {
-        ExImageWidget widget = getWidget();
+        ExAudioWidget widget = getWidget();
         File answer = File.createTempFile("doc", ".pdf");
-        when(mediaUtils.isImageFile(answer)).thenReturn(false);
+        when(mediaUtils.isAudioFile(answer)).thenReturn(false);
         widget.setData(answer);
         verify(mediaUtils).deleteMediaFile(answer.getAbsolutePath());
     }
 
     @Test
     public void whenUnsupportedFileTypeAttached_shouldToastBeDisplayed() throws IOException {
-        ExImageWidget widget = getWidget();
+        ExAudioWidget widget = getWidget();
         File answer = File.createTempFile("doc", ".pdf");
-        when(mediaUtils.isImageFile(answer)).thenReturn(false);
+        when(mediaUtils.isAudioFile(answer)).thenReturn(false);
         widget.setData(answer);
         assertThat(ShadowToast.getTextOfLatestToast(), is("Application returned an invalid file type"));
     }
@@ -168,9 +172,9 @@ public class ExImageWidgetTest extends FileWidgetTest<ExImageWidget> {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
         when(formEntryPrompt.getAnswerText()).thenReturn(getInitialAnswer().getDisplayText());
 
-        ExImageWidget widget = getWidget();
+        ExAudioWidget widget = getWidget();
         assertThat(widget.binding.launchExternalAppButton.getVisibility(), is(View.GONE));
-        assertThat(widget.binding.imageView.getVisibility(), is(View.VISIBLE));
+        assertThat(getWidget().binding.audioPlayer.audioController.getVisibility(), is(View.VISIBLE));
     }
 
     @Test
@@ -178,8 +182,9 @@ public class ExImageWidgetTest extends FileWidgetTest<ExImageWidget> {
         readOnlyOverride = true;
         when(formEntryPrompt.getAnswerText()).thenReturn(getInitialAnswer().getDisplayText());
 
-        ExImageWidget widget = getWidget();
+        ExAudioWidget widget = getWidget();
         assertThat(widget.binding.launchExternalAppButton.getVisibility(), is(View.GONE));
-        assertThat(widget.binding.imageView.getVisibility(), is(View.VISIBLE));
+        assertThat(getWidget().binding.audioPlayer.audioController.getVisibility(), is(View.VISIBLE));
     }
 }
+

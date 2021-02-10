@@ -78,4 +78,8 @@ public class MediaUtils {
     public boolean isImageFile(File file) {
         return ContentResolverHelper.getMimeType(file).startsWith("image");
     }
+
+    public boolean isAudioFile(File file) {
+        return ContentResolverHelper.getMimeType(file).startsWith("audio");
+    }
 }

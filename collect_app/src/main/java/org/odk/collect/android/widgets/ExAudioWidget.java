@@ -4,18 +4,21 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaMetadataRetriever;
 import android.util.TypedValue;
 import android.view.View;
 
-import com.bumptech.glide.Glide;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
-import org.odk.collect.android.databinding.ExImageWidgetAnswerBinding;
+import org.odk.collect.android.databinding.ExAudioWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -25,16 +28,19 @@ import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
+import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.audioclips.Clip;
 
 import java.io.File;
 
 import timber.log.Timber;
 
 @SuppressLint("ViewConstructor")
-public class ExImageWidget extends QuestionWidget implements FileWidget, WidgetDataReceiver {
-    ExImageWidgetAnswerBinding binding;
+public class ExAudioWidget extends QuestionWidget implements FileWidget, WidgetDataReceiver {
+    ExAudioWidgetAnswerBinding binding;
 
+    private final AudioPlayer audioPlayer;
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
     private final MediaUtils mediaUtils;
@@ -43,39 +49,37 @@ public class ExImageWidget extends QuestionWidget implements FileWidget, WidgetD
 
     File answerFile;
 
-    public ExImageWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager,
-                         WaitingForDataRegistry waitingForDataRegistry, MediaUtils mediaUtils,
+    public ExAudioWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager,
+                         AudioPlayer audioPlayer, WaitingForDataRegistry waitingForDataRegistry, MediaUtils mediaUtils,
                          ExternalAppIntentProvider externalAppIntentProvider, ActivityAvailability activityAvailability) {
         super(context, questionDetails);
 
+        this.audioPlayer = audioPlayer;
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
         this.mediaUtils = mediaUtils;
         this.externalAppIntentProvider = externalAppIntentProvider;
         this.activityAvailability = activityAvailability;
+
+        updateVisibilities();
+        updatePlayerMedia();
     }
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         setupAnswerFile(prompt.getAnswerText());
 
-        binding = ExImageWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
+        binding = ExAudioWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
         binding.launchExternalAppButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-        binding.launchExternalAppButton.setVisibility(questionDetails.isReadOnly() ? GONE : VISIBLE);
         binding.launchExternalAppButton.setOnClickListener(view -> launchExternalApp());
-        binding.imageView.setOnClickListener(view -> mediaUtils.openFile(getContext(), answerFile, "image/*"));
-        if (answerFile != null) {
-            displayImage();
-        } else {
-            binding.imageView.setVisibility(GONE);
-        }
 
         return binding.getRoot();
     }
 
     @Override
     public void deleteFile() {
+        audioPlayer.stop();
         questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(), answerFile.getAbsolutePath());
         answerFile = null;
     }
@@ -83,7 +87,7 @@ public class ExImageWidget extends QuestionWidget implements FileWidget, WidgetD
     @Override
     public void clearAnswer() {
         deleteFile();
-        binding.imageView.setVisibility(GONE);
+        updateVisibilities();
         widgetValueChanged();
     }
 
@@ -98,22 +102,23 @@ public class ExImageWidget extends QuestionWidget implements FileWidget, WidgetD
             clearAnswer();
         }
 
-        if (object instanceof File && mediaUtils.isImageFile((File) object)) {
+        if (object instanceof File && mediaUtils.isAudioFile((File) object)) {
             answerFile = (File) object;
             if (answerFile.exists()) {
                 questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), answerFile.getAbsolutePath());
-                displayImage();
+                updateVisibilities();
+                updatePlayerMedia();
                 widgetValueChanged();
             } else {
-                Timber.e("Inserting Image file FAILED");
+                Timber.e("Inserting Audio file FAILED");
             }
         } else if (object != null) {
             if (object instanceof File) {
                 ToastUtils.showLongToast(R.string.invalid_file_type);
                 mediaUtils.deleteMediaFile(((File) object).getAbsolutePath());
-                Timber.e("ExImageWidget's setBinaryData must receive an image file but received: %s", ContentResolverHelper.getMimeType((File) object));
+                Timber.e("ExAudioWidget's setBinaryData must receive a audio file but received: %s", ContentResolverHelper.getMimeType((File) object));
             } else {
-                Timber.e("ExImageWidget's setBinaryData must receive an image file but received: %s", object.getClass());
+                Timber.e("ExAudioWidget's setBinaryData must receive a audio file but received: %s", object.getClass());
             }
         }
     }
@@ -121,14 +126,75 @@ public class ExImageWidget extends QuestionWidget implements FileWidget, WidgetD
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         binding.launchExternalAppButton.setOnLongClickListener(l);
-        binding.imageView.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
         binding.launchExternalAppButton.cancelLongPress();
-        binding.imageView.cancelLongPress();
+    }
+
+    private void updateVisibilities() {
+        if (answerFile == null) {
+            binding.launchExternalAppButton.setVisibility(VISIBLE);
+            binding.audioPlayer.recordingDuration.setVisibility(GONE);
+            binding.audioPlayer.waveform.setVisibility(GONE);
+            binding.audioPlayer.audioController.setVisibility(GONE);
+        } else {
+            binding.launchExternalAppButton.setVisibility(GONE);
+            binding.audioPlayer.recordingDuration.setVisibility(GONE);
+            binding.audioPlayer.waveform.setVisibility(GONE);
+            binding.audioPlayer.audioController.setVisibility(VISIBLE);
+        }
+
+        if (questionDetails.isReadOnly()) {
+            binding.launchExternalAppButton.setVisibility(GONE);
+        }
+    }
+
+    private void updatePlayerMedia() {
+        if (answerFile != null) {
+            Clip clip = new Clip("audio:" + getFormEntryPrompt().getIndex().toString(), answerFile.getAbsolutePath());
+
+            audioPlayer.onPlayingChanged(clip.getClipID(), binding.audioPlayer.audioController::setPlaying);
+            audioPlayer.onPositionChanged(clip.getClipID(), binding.audioPlayer.audioController::setPosition);
+            binding.audioPlayer.audioController.setDuration(getDurationOfFile(clip.getURI()));
+            binding.audioPlayer.audioController.setListener(new AudioControllerView.Listener() {
+                @Override
+                public void onPlayClicked() {
+                    audioPlayer.play(clip);
+                }
+
+                @Override
+                public void onPauseClicked() {
+                    audioPlayer.pause();
+                }
+
+                @Override
+                public void onPositionChanged(Integer newPosition) {
+                    analytics.logFormEvent(AnalyticsEvents.AUDIO_PLAYER_SEEK, questionDetails.getFormAnalyticsID());
+                    audioPlayer.setPosition(clip.getClipID(), newPosition);
+                }
+
+                @Override
+                public void onRemoveClicked() {
+                    new MaterialAlertDialogBuilder(getContext())
+                            .setTitle(R.string.delete_answer_file_question)
+                            .setMessage(R.string.answer_file_delete_warning)
+                            .setPositiveButton(R.string.delete_answer_file, (dialog, which) -> clearAnswer())
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
+                }
+            });
+
+        }
+    }
+
+    private Integer getDurationOfFile(String uri) {
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        retriever.setDataSource(uri);
+        String durationString = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+        return durationString != null ? Integer.parseInt(durationString) : 0;
     }
 
     private void launchExternalApp() {
@@ -143,7 +209,7 @@ public class ExImageWidget extends QuestionWidget implements FileWidget, WidgetD
 
     private void fireActivityForResult(Intent intent) {
         try {
-            ((Activity) getContext()).startActivityForResult(intent, ApplicationConstants.RequestCodes.EX_IMAGE_CHOOSER);
+            ((Activity) getContext()).startActivityForResult(intent, ApplicationConstants.RequestCodes.EX_AUDIO_CHOOSER);
         } catch (SecurityException e) {
             Timber.i(e);
             ToastUtils.showLongToast(R.string.not_granted_permission);
@@ -154,13 +220,5 @@ public class ExImageWidget extends QuestionWidget implements FileWidget, WidgetD
         if (fileName != null && !fileName.isEmpty()) {
             answerFile = new File(getInstanceFolder() + File.separator + fileName);
         }
-    }
-
-    private void displayImage() {
-        Glide.with(this)
-                .load(answerFile)
-                .fitCenter()
-                .into(binding.imageView);
-        binding.imageView.setVisibility(VISIBLE);
     }
 }

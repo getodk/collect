@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.databinding.ExArbitraryFileWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ActivityAvailability;
@@ -88,7 +89,7 @@ public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
     private void onButtonClick() {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
         try {
-            Intent intent = externalAppIntentProvider.getIntentToRunExternalApp(getContext(), getFormEntryPrompt(), activityAvailability);
+            Intent intent = externalAppIntentProvider.getIntentToRunExternalApp(getContext(), getFormEntryPrompt(), activityAvailability, Collect.getInstance().getPackageManager());
             fireActivityForResult(intent);
         } catch (Exception | Error e) {
             ToastUtils.showLongToast(e.getMessage());

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/margin_standard">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/launch_external_app_button"
+        style="@style/Widget.Collect.Button.WidgetAnswer"
+        android:text="@string/launch_app" />
+
+    <include
+        android:id="@+id/audio_player"
+        layout="@layout/audio_player_layout"/>
+</LinearLayout>
