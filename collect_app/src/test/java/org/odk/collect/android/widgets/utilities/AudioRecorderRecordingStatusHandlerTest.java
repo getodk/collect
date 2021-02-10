@@ -9,6 +9,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
 import org.odk.collect.testshared.FakeLifecycleOwner;
@@ -24,19 +25,21 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.prom
 @RunWith(AndroidJUnit4.class)
 public class AudioRecorderRecordingStatusHandlerTest {
 
-    private final AudioRecorder viewModel = mock(AudioRecorder.class);
+    private final AudioRecorder audioRecorder = mock(AudioRecorder.class);
+    private final FormEntryViewModel formEntryViewModel = mock(FormEntryViewModel.class);
 
     AudioRecorderRecordingStatusHandler provider;
 
     @Before
     public void setup() {
-        provider = new AudioRecorderRecordingStatusHandler(viewModel, new FakeLifecycleOwner());
+        when(formEntryViewModel.hasBackgroundRecording()).thenReturn(new MutableLiveData<>(false));
+        provider = new AudioRecorderRecordingStatusHandler(audioRecorder, formEntryViewModel, new FakeLifecycleOwner());
     }
 
     @Test
     public void onIsRecordingChangedBlocked_listensToCurrentSession() {
         MutableLiveData<RecordingSession> liveData = new MutableLiveData<>(null);
-        when(viewModel.getCurrentSession()).thenReturn(liveData);
+        when(audioRecorder.getCurrentSession()).thenReturn(liveData);
 
         Consumer<Boolean> listener = mock(Consumer.class);
         provider.onBlockedStatusChange(listener);
@@ -47,10 +50,22 @@ public class AudioRecorderRecordingStatusHandlerTest {
     }
 
     @Test
+    public void onIsRecordingChangedBlocked_whenFormHasBackgroundAudio_isAlwaysTrue() {
+        when(formEntryViewModel.hasBackgroundRecording()).thenReturn(new MutableLiveData<>(true));
+
+        MutableLiveData<RecordingSession> liveData = new MutableLiveData<>(null);
+        when(audioRecorder.getCurrentSession()).thenReturn(liveData);
+
+        Consumer<Boolean> listener = mock(Consumer.class);
+        provider.onBlockedStatusChange(listener);
+        verify(listener).accept(true);
+    }
+
+    @Test
     public void whenViewModelSessionUpdates_callsInProgressListener() {
         FormEntryPrompt prompt = promptWithAnswer(null);
         MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
-        when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
+        when(audioRecorder.getCurrentSession()).thenReturn(sessionLiveData);
 
         Consumer<Pair<Long, Integer>> listener = mock(Consumer.class);
         provider.onRecordingStatusChange(prompt, listener);
@@ -64,7 +79,7 @@ public class AudioRecorderRecordingStatusHandlerTest {
     public void whenViewModelSessionUpdates_forDifferentSession_callsInProgressListenerWithNull() {
         FormEntryPrompt prompt = promptWithAnswer(null);
         MutableLiveData<RecordingSession> sessionLiveData = new MutableLiveData<>(null);
-        when(viewModel.getCurrentSession()).thenReturn(sessionLiveData);
+        when(audioRecorder.getCurrentSession()).thenReturn(sessionLiveData);
 
         Consumer<Pair<Long, Integer>> listener = mock(Consumer.class);
         provider.onRecordingStatusChange(prompt, listener);
