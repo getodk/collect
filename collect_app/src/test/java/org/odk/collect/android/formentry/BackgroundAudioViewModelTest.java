@@ -9,6 +9,7 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -44,7 +45,7 @@ public class BackgroundAudioViewModelTest {
         PreferencesProvider preferencesProvider = new PreferencesProvider(ApplicationProvider.getApplicationContext());
         clock = mock(Clock.class);
 
-        viewModel = new BackgroundAudioViewModel(audioRecorder, preferencesProvider, recordAudioActionRegistry, permissionsChecker, clock);
+        viewModel = new BackgroundAudioViewModel(audioRecorder, preferencesProvider, recordAudioActionRegistry, permissionsChecker, clock, mock(Analytics.class));
     }
 
     @Test

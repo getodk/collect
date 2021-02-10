@@ -14,6 +14,7 @@ import org.javarosa.core.model.actions.recordaudio.RecordAudioActionHandler;
 import org.javarosa.form.api.FormEntryController;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -44,6 +45,10 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     @Override
     public void formLoaded(@NotNull FormController formController) {
         this.formController = formController;
+
+        if (hasBackgroundRecording()) {
+            analytics.logFormEvent(AnalyticsEvents.REQUESTS_BACKGROUND_AUDIO, getFormIdentifierHash());
+        }
     }
 
     public boolean isFormControllerSet() {
