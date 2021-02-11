@@ -44,7 +44,7 @@ public class FormMapTest {
         location.setAltitude(5);
 
         Intent intent = new Intent();
-        intent.putExtra(FormEntryActivity.LOCATION_RESULT, GeoUtils.formatLocationResultString(location));
+        intent.putExtra(FormEntryActivity.ANSWER_KEY, GeoUtils.formatLocationResultString(location));
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, intent);
 
         intending(hasComponent("org.odk.collect.android.activities.GeoPointActivity"))
