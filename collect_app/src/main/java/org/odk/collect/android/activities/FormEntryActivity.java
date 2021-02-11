@@ -215,7 +215,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private static final boolean EVALUATE_CONSTRAINTS = true;
     public static final boolean DO_NOT_EVALUATE_CONSTRAINTS = false;
 
-    public static final String ANSWER_KEY = "ANSWER_KEY";
+    public static final String ANSWER_KEY = "value"; // this value can not be changed because it is also used by external apps
 
     public static final String KEY_INSTANCES = "instances";
     public static final String KEY_SUCCESS = "success";
@@ -783,14 +783,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     setWidgetData(osmFileName);
                 }
                 break;
-            case RequestCodes.EX_STRING_CAPTURE:
-            case RequestCodes.EX_INT_CAPTURE:
-            case RequestCodes.EX_DECIMAL_CAPTURE:
-                Object externalValue = externalAppIntentProvider.getValueFromIntent(intent);
-                if (getCurrentViewIfODKView() != null) {
-                    setWidgetData(externalValue);
-                }
-                break;
             case RequestCodes.EX_ARBITRARY_FILE_CHOOSER:
             case RequestCodes.EX_VIDEO_CHOOSER:
             case RequestCodes.EX_IMAGE_CHOOSER:
@@ -834,9 +826,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case RequestCodes.GEOTRACE_CAPTURE:
             case RequestCodes.BEARING_CAPTURE:
             case RequestCodes.BARCODE_CAPTURE:
-                String sl = intent.getStringExtra(ANSWER_KEY);
+            case RequestCodes.EX_STRING_CAPTURE:
+            case RequestCodes.EX_INT_CAPTURE:
+            case RequestCodes.EX_DECIMAL_CAPTURE:
+                Object answer = intent.getExtras().get(ANSWER_KEY);
                 if (getCurrentViewIfODKView() != null) {
-                    setWidgetData(sl);
+                    setWidgetData(answer);
                 }
                 break;
         }
