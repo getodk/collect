@@ -28,7 +28,9 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
     private final Clock clock;
     private final Analytics analytics;
+
     private final MutableLiveData<FormError> error = new MutableLiveData<>(null);
+    private final MutableLiveData<Boolean> hasBackgroundRecording = new MutableLiveData<>(false);
 
     @Nullable
     private FormController formController;
@@ -46,7 +48,10 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     public void formLoaded(@NotNull FormController formController) {
         this.formController = formController;
 
-        if (hasBackgroundRecording()) {
+        boolean hasBackgroundRecording = formController.getFormDef().hasAction(RecordAudioActionHandler.ELEMENT_NAME);
+        this.hasBackgroundRecording.setValue(hasBackgroundRecording);
+
+        if (hasBackgroundRecording) {
             analytics.logFormEvent(AnalyticsEvents.REQUESTS_BACKGROUND_AUDIO, getFormIdentifierHash());
         }
     }
@@ -170,12 +175,8 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         analytics.logFormEvent(event, getFormIdentifierHash());
     }
 
-    public boolean hasBackgroundRecording() {
-        if (formController != null) {
-            return formController.getFormDef().hasAction(RecordAudioActionHandler.ELEMENT_NAME);
-        } else {
-            return false;
-        }
+    public LiveData<Boolean> hasBackgroundRecording() {
+        return hasBackgroundRecording;
     }
 
     private String getFormIdentifierHash() {
