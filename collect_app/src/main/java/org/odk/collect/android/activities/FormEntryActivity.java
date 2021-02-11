@@ -52,9 +52,6 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
-
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.SelectChoice;
@@ -185,7 +182,6 @@ import static org.javarosa.form.api.FormEntryController.EVENT_PROMPT_NEW_REPEAT;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SAVE_INCOMPLETE;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.BACKWARDS;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.FORWARDS;
-import static org.odk.collect.android.fragments.BarcodeWidgetScannerFragment.BARCODE_RESULT_KEY;
 import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_COMPLETED_DEFAULT;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_NAVIGATION;
@@ -780,25 +776,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             return;
         }
 
-        // Handling results returned by the Zxing Barcode scanning library is done outside the
-        // switch statement because IntentIntegrator.REQUEST_CODE is not final.
-        // TODO: see if we can update the ZXing Android Embedded dependency to 3.6.0.
-        // https://github.com/journeyapps/zxing-android-embedded#adding-aar-dependency-with-gradle
-        // makes it unclear
-        IntentResult barcodeScannerResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (barcodeScannerResult != null) {
-            if (barcodeScannerResult.getContents() == null) {
-                // request was canceled...
-                Timber.i("QR code scanning cancelled");
-            } else {
-                String sb = intent.getStringExtra(BARCODE_RESULT_KEY);
-                if (getCurrentViewIfODKView() != null) {
-                    setWidgetData(sb);
-                }
-                return;
-            }
-        }
-
         switch (requestCode) {
             case RequestCodes.OSM_CAPTURE:
                 String osmFileName = intent.getStringExtra("OSM_FILE_NAME");
@@ -856,6 +833,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case RequestCodes.GEOSHAPE_CAPTURE:
             case RequestCodes.GEOTRACE_CAPTURE:
             case RequestCodes.BEARING_CAPTURE:
+            case RequestCodes.BARCODE_CAPTURE:
                 String sl = intent.getStringExtra(ANSWER_KEY);
                 if (getCurrentViewIfODKView() != null) {
                     setWidgetData(sl);

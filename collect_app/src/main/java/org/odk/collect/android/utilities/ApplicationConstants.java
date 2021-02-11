@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.utilities;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+
 import org.odk.collect.android.R;
 
 import java.util.HashMap;
@@ -75,7 +77,7 @@ public class ApplicationConstants {
 
     public abstract static class RequestCodes {
         public static final int IMAGE_CAPTURE = 1;
-        // public static final int BARCODE_CAPTURE = 2;
+        public static final int BARCODE_CAPTURE = IntentIntegrator.REQUEST_CODE;
         public static final int AUDIO_CAPTURE = 3;
         public static final int VIDEO_CAPTURE = 4;
         public static final int LOCATION_CAPTURE = 5;
