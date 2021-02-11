@@ -61,7 +61,7 @@
   <string name="location_runtime_permissions_denied_desc">Ohne diese Berechtigungen kann Collect Ihren Standort nicht erfassen. Bitte versuchen Sie es erneut, wenn Sie bereit dazu sind die Berechtigungen zu erteilen.</string>
   <string name="camera_runtime_permission_denied_title">Kamera-Berechtigung</string>
   <string name="camera_runtime_permission_denied_desc">Ohne diese Berechtigung kann Collect nicht auf die Kamera zugreifen. Bitte versuchen Sie es erneut, wenn Sie dazu bereit sind die Berechtigung zu erteilen.</string>
-  <string name="record_audio_runtime_permission_denied_title">Audioaufzeichnungsberechtigung</string>
+  <string name="record_audio_runtime_permission_denied_title">Audioaufnahmeberechtigung</string>
   <string name="record_audio_runtime_permission_denied_desc">Ohne diese Berechtigungen kann Collect nicht auf das Mikrofon zugreifen. Bitte versuchen Sie es erneut, wenn Sie bereit dazu sind die Berechtigungen zu erteilen.</string>
   <string name="get_accounts_runtime_permission_denied_title">Kontoberechtigungen abfragen</string>
   <string name="get_accounts_runtime_permission_denied_desc">Ohne diese Berechtigung kann Collect nicht auf die Konten zugreifen. Bitte versuchen Sie es erneut, wenn Sie dazu bereit sind die Berechtigung zu erteilen.</string>
@@ -156,16 +156,19 @@
   <!--Text displayed when audio recording fails to start-->
   <string name="start_recording_failed">Aufnahme konnte nicht gestartet werden. </string>
   <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <string name="mic_in_use">Das Mikrofon wird bereits verwendet.</string>
   <!--Error message displayed when copying media from a temporary directory fails-->
   <string name="answer_file_copy_failed_message">Mediendatei konnte nicht an das Formular angehängt werden. Aber ist hier verfügbar: %1$s</string>
+  <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <string name="recording_disabled">Aufnahme deaktiviert. Aktivieren über %s</string>
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
   <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
   <string name="launch_app">Starten</string>
-  <string name="activity_not_found">Folgende Applikation wurde nicht gefunden: %s</string>
-  <string name="no_app">Die gewünschte Applikation steht nicht zur Verfügung. Bitte tragen sie den Wert manuell ein.</string>
-  <string name="null_intent_value">Die externe Applikation hat die erwartete Information nicht geliefert.</string>
+  <string name="activity_not_found">Folgende App wurde nicht gefunden: %s</string>
+  <string name="no_app">Die gewünschte App steht nicht zur Verfügung. Bitte tragen sie den Wert manuell ein.</string>
+  <string name="null_intent_value">Die externe App hat die erwartete Information nicht geliefert.</string>
   <string name="launch_printer">Drucken starten</string>
   <string name="no_printer">Der gewählte Drucker ist nicht installiert. Bitte installieren Sie den Drucker.</string>
   <string name="open_url">URL öffnen</string>
@@ -192,6 +195,7 @@
   <string name="error_front_camera_unavailable">Frontkamera bei diesem Gerät nicht verfügbar</string>
   <string name="camera_error">Dieses Gerät unterstützt die Camera2-API nicht.</string>
   <string name="annotate_image">Bild beschreiben</string>
+  <string name="invalid_file_type">App gab einen ungültigen Dateityp zurück</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">Speichern und schließen</string>
   <string name="signature_capture">Unterschrift erfassen</string>
@@ -210,13 +214,22 @@
   <!--Text for button that deletes a file that is the answer to a question-->
   <string name="delete_answer_file">Löschen</string>
   <!--Text for button that starts recording sound-->
-  <string name="capture_audio">Tonaufnahme starten</string>
+  <string name="capture_audio">Ton aufnehmen</string>
   <!--Text for button that lets the user choose a sound file on their device-->
   <string name="choose_sound">Tonaufnahme auswählen</string>
   <!--Description text for button that that pauses recording sound-->
   <string name="pause_recording">Pause</string>
   <!--Description text for button that that resumes recording sound-->
   <string name="resume_recording">Fortsetzen</string>
+  <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
+  <string name="record_audio">Audio aufnehmen</string>
+  <string name="background_audio_permission_explanation">Dieses Formular nimmt im Hintergrund Audio auf. Sie müssen die Berechtigung erteilen das Mikrofon zu benutzen. Wenn nicht, können Sie dieses Formular nicht öffnen.</string>
+  <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
+  <string name="stop_recording_confirmation">Dieses Formular verlangt Hintergrundaudioaufnahme. Deaktivieren beendet die Aufnahme und löscht existierende Audioaufnahmen. Sind Sie sicher, dass Sie fortfahren möchten?</string>
+  <!--Button text for the dialog confirming whether the user wants to disable background recording-->
+  <string name="disable_recording">Aufnahme deaktivieren</string>
+  <!--Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form-->
+  <string name="background_audio_recording_enabled_explanation">Die Aufnahme beginnt nicht sofort. Sie müssen das Formular erneut öffnen, um aufzunehmen.</string>
   <!--Title for dialog asking the user if they want to delete a file-->
   <string name="delete_answer_file_question">Datei löschen? </string>
   <!--Dialog text warning the user they won't be able to recover a file once deleted-->
@@ -224,15 +237,15 @@
   <!--Text for button that stops audio recording-->
   <string name="stop_recording">Stop</string>
   <!--Text to let the user know a recording is in progress-->
-  <string name="recording">Aufzeichnen…</string>
+  <string name="recording">Aufnehmen…</string>
   <!--Title of Android Notification Channel for audio recording notifications-->
-  <string name="recording_channel">Audio-Aufzeichnung</string>
+  <string name="recording_channel">Audio-Aufnahme</string>
   <!--Text for button that plays audio clip-->
   <string name="play_audio">Audio abspielen</string>
   <!--Text to let the user know a file is being saved-->
   <string name="saving_file">Datei wird gespeichert</string>
   <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
-  <string name="recording_warning">Sie müssen die Aufzeichnung stoppen bevor Sie diesen Bildschirm verlassen. </string>
+  <string name="recording_warning">Sie müssen die Aufnahme stoppen, bevor Sie diesen Bildschirm verlassen. </string>
   <string name="error_attaching_binary_file">Fehler beim Anhängen des Mediums: %s</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="select_value">Wert auswählen</string>
@@ -497,6 +510,8 @@
   <string name="report_to_project_lead">Wenn Sie weiterhin dieses Problem haben, berichten Sie es an die Person, die Sie zum Daten sammeln beauftragt hat.</string>
   <string name="unreachable_error">Collect kann den Server unter %s nicht erreichen. Haben Sie die URL korrekt eingegeben? </string>
   <string name="security_error">Collect kann sich nicht sicher mit dem Server unter %s verbinden. Haben Sie die URL korrekt eingegeben? </string>
+  <string name="server_error">Der Server %s antwortete mit Statuscode %s.</string>
+  <string name="invalid_response">Der Server %s gab eine ungültige Antwort.</string>
   <string name="failure">Fehler</string>
   <string name="load_remote_form_error">Formularlisten-Download fehlgeschlagen</string>
   <!--##############################################
@@ -641,7 +656,7 @@
   <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
   <string name="guidance_yes_collapsed">Ja - ausgeblendet</string>
   <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
-  <string name="external_app_recording">Externe App für Audioaufzeichnung verwenden</string>
+  <string name="external_app_recording">Externe App für Audioaufnahme verwenden</string>
   <string name="form_import_category">Formular-Import</string>
   <string name="instance_sync">Formulare beim Import abschließen</string>
   <string name="instance_sync_summary">Betrifft Formulare, die direkt dem instances-Ordner hinzugefügt werden.</string>
@@ -676,7 +691,7 @@
   <string name="found_in_settings">Deaktivieren, um aus dem Einstellungen-Menü auszublenden</string>
   <string name="form_entry">Deaktivieren, um in der Formular-Eingabe auszublenden</string>
   <string name="app_configuration">App-Konfiguration</string>
-  <string name="reset_settings_dialog">Anwendung (App) zurücksetzen…</string>
+  <string name="reset_settings_dialog">App zurücksetzen…</string>
   <string name="select_all">Alle auswählen</string>
   <string name="clear_all">Auswahl aufheben</string>
   <string name="reset_settings">Alle Einstellungen (interne Einstellungen, gespeicherte Einstellungen)</string>
@@ -790,7 +805,7 @@
   <string name="scoped_storage_dismiss">Verwerfen</string>
   <string name="storage_migration_dialog_message1">Android-Anforderungen haben sich geändert und Dateien von Collect müssen migriert werden. </string>
   <string name="storage_migration_dialog_message2">Sie haben %d nicht versandte Übermittlungen. Es wird empfohlen vor der Migration alle Daten zu übermitteln. </string>
-  <string name="storage_migration_dialog_message3">Wenn Sie eine externe Applikationsintegration, wie OpenMapKit, nutzen, bitte noch nicht migrieren. </string>
+  <string name="storage_migration_dialog_message3">Wenn Sie eine externe App-Integration, wie OpenMapKit, nutzen, bitte noch nicht migrieren. </string>
   <string name="storage_migration_more_details">Mehr Details</string>
   <string name="try_again">Erneut versuchen</string>
   <!--Action to begin a storage migration-->

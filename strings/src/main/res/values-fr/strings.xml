@@ -159,6 +159,8 @@
   <string name="mic_in_use">Le microphone est déjà en utilisation.</string>
   <!--Error message displayed when copying media from a temporary directory fails-->
   <string name="answer_file_copy_failed_message">Le fichier n\'a pas pu être attaché au formulaire mais est disponible à %1$s</string>
+  <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <string name="recording_disabled">Enregistrement désactivé. Activez depuis %s</string>
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -193,6 +195,7 @@
   <string name="error_front_camera_unavailable">Caméra frontale non disponible sur cet appareil</string>
   <string name="camera_error">Cet appareil ne prend pas en charge l\'API Camera2.</string>
   <string name="annotate_image">Annoter l\'image</string>
+  <string name="invalid_file_type">Le type de fichier fourni par l\'application n\'es pas valide</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">Enregistrer et fermer</string>
   <string name="signature_capture">Capture d\'une signature</string>
@@ -218,6 +221,15 @@
   <string name="pause_recording">Pause</string>
   <!--Description text for button that that resumes recording sound-->
   <string name="resume_recording">Reprendre</string>
+  <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
+  <string name="record_audio">Enregistrement audio</string>
+  <string name="background_audio_permission_explanation">Ce formulaire crée un enregistrement audio en tâche de fond. Vous devez accorder l\'accès à votre microphone. Si vous ne l\'accordez pas, vous ne pourrez pas ouvrir ce formulaire.</string>
+  <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
+  <string name="stop_recording_confirmation">Ce formulaire demande un enregistrement audio en tâche de fond. Si vous désactivez l\'enregistrement, l\'enregistrement en cours sera arrêté et l\'audio déjà enregistré sera supprimé. Êtes-vous sûr de vouloir procéder?</string>
+  <!--Button text for the dialog confirming whether the user wants to disable background recording-->
+  <string name="disable_recording">Désactiver enregistrement</string>
+  <!--Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form-->
+  <string name="background_audio_recording_enabled_explanation">L\'enregistrement ne recommencera pas tout de suite. Vous devez quitter et réouvrir le formulaire pour enregistrer.</string>
   <!--Title for dialog asking the user if they want to delete a file-->
   <string name="delete_answer_file_question">Supprimer fichier?</string>
   <!--Dialog text warning the user they won't be able to recover a file once deleted-->
@@ -498,6 +510,8 @@
   <string name="report_to_project_lead">Si vous continuez à avoir ce problème, avertissez la personne qui vous a demandé de collecter les données.</string>
   <string name="unreachable_error">Collect n\'arrive pas à joindre le serveur à %s. Avez-vous entré l\'URL correctement ?</string>
   <string name="security_error">Collect n\'arrive pas à établir une connexion sécurisée avec le serveur à %s. Avez-vous entré l\'URL correctement ?</string>
+  <string name="server_error">Le serveur %s a envoyé le code de réponse %s.</string>
+  <string name="invalid_response">Le serveur %s a fourni une réponse invalide.</string>
   <string name="failure">Échec</string>
   <string name="load_remote_form_error">Échec de téléchargement de la liste des formulaires</string>
   <!--##############################################
