@@ -47,8 +47,16 @@ public class StringWidgetUtils {
     public static Double getDoubleAnswerValueFromIAnswerData(IAnswerData dataHolder) {
         if (dataHolder != null) {
             Object dataValue = dataHolder.getValue();
-            if (dataValue != null) {
-                return dataValue instanceof Integer ? (double) (Integer) dataValue : (Double) dataValue;
+            if (dataValue instanceof Double) {
+                return (Double) dataValue;
+            } else if (dataValue instanceof Integer) {
+                return Double.valueOf((Integer) dataValue);
+            } else if (dataValue instanceof String) {
+                try {
+                    return Double.parseDouble((String) dataValue);
+                } catch (NumberFormatException ignored) {
+                    // ignored
+                }
             }
         }
         return null;
