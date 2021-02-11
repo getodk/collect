@@ -205,11 +205,15 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             // we are resuming after having terminated -- set index to this
             // position...
             FormIndex idx = fc.getIndexFromXPath(xpath);
-            fc.jumpToIndex(idx);
+            if (idx != null) {
+                fc.jumpToIndex(idx);
+            }
         }
         if (waitingXPath != null) {
             FormIndex idx = fc.getIndexFromXPath(waitingXPath);
-            fc.setIndexWaitingForData(idx);
+            if (idx != null) {
+                fc.setIndexWaitingForData(idx);
+            }
         }
         data = new FECWrapper(fc, usedSavepoint);
         return data;

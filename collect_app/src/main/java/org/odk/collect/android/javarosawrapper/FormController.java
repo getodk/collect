@@ -213,6 +213,7 @@ public class FormController {
         return value;
     }
 
+    @Nullable
     public FormIndex getIndexFromXPath(String xpath) {
         switch (xpath) {
             case "beginningOfForm":
