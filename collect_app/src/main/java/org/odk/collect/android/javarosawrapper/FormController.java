@@ -213,6 +213,7 @@ public class FormController {
         return value;
     }
 
+    @Nullable
     public FormIndex getIndexFromXPath(String xpath) {
         switch (xpath) {
             case "beginningOfForm":
@@ -221,7 +222,7 @@ public class FormController {
                 return FormIndex.createEndOfFormIndex();
             case "unexpected":
                 Timber.e("Unexpected string from XPath");
-                throw new IllegalArgumentException("unexpected string from XPath");
+                return null;
             default:
                 FormIndex returned = null;
                 FormIndex saved = getFormIndex();
@@ -232,7 +233,6 @@ public class FormController {
                     int event = stepToNextEvent(true);
                     while (event != FormEntryController.EVENT_END_OF_FORM) {
                         String candidateXPath = getXPath(getFormIndex());
-                        // Log.i(t, "xpath: " + candidateXPath);
                         if (candidateXPath.equals(xpath)) {
                             returned = getFormIndex();
                             break;
