@@ -92,7 +92,7 @@ public class AudioRecordingControllerFragment extends Fragment {
             binding.getRoot().setVisibility(VISIBLE);
 
             binding.timeCode.setText(LengthFormatterKt.formatLength(session.getDuration()));
-            binding.waveform.addAmplitude(session.getAmplitude());
+            binding.waveform.addAmplitude(6 * session.getAmplitude());
 
             if (session.getPaused()) {
                 binding.pauseRecording.setIcon(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_mic_24));
