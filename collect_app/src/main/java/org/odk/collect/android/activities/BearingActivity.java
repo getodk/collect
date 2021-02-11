@@ -112,7 +112,7 @@ public class BearingActivity extends CollectAbstractActivity implements SensorEv
         if (bearingDecimal != null) {
             Intent i = new Intent();
             i.putExtra(
-                    FormEntryActivity.BEARING_RESULT, bearingDecimal);
+                    FormEntryActivity.ANSWER_KEY, bearingDecimal);
             setResult(RESULT_OK, i);
         }
         finish();
