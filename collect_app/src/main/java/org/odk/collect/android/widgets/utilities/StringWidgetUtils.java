@@ -28,8 +28,16 @@ public class StringWidgetUtils {
     public static Integer getIntegerAnswerValueFromIAnswerData(IAnswerData dataHolder) {
         if (dataHolder != null) {
             Object dataValue = dataHolder.getValue();
-            if (dataValue != null) {
-                return dataValue instanceof Double ? ((Double) dataValue).intValue() : (Integer) dataValue;
+            if (dataValue instanceof Double) {
+                return ((Double) dataValue).intValue();
+            } else if (dataValue instanceof Integer) {
+                return (Integer) dataValue;
+            } else if (dataValue instanceof String) {
+                try {
+                    return Integer.parseInt((String) dataValue);
+                } catch (NumberFormatException ignored) {
+                    // ignored
+                }
             }
         }
         return null;
