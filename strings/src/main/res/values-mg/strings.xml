@@ -39,6 +39,7 @@
   <!--Text displayed when audio recording fails to start-->
   <!--Text displayed when user tries to start recording while the mic is already in use-->
   <!--Error message displayed when copying media from a temporary directory fails-->
+  <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -50,6 +51,10 @@
   <!--Text for button that lets the user choose a sound file on their device-->
   <!--Description text for button that that pauses recording sound-->
   <!--Description text for button that that resumes recording sound-->
+  <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
+  <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
+  <!--Button text for the dialog confirming whether the user wants to disable background recording-->
+  <!--Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form-->
   <!--Title for dialog asking the user if they want to delete a file-->
   <!--Dialog text warning the user they won't be able to recover a file once deleted-->
   <!--Text for button that stops audio recording-->

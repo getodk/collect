@@ -159,6 +159,7 @@
   <string name="mic_in_use">El micrófono ya está en uso.</string>
   <!--Error message displayed when copying media from a temporary directory fails-->
   <string name="answer_file_copy_failed_message">Los archivos multimedia no se pudieron adjuntar al formulario, pero están disponibles en %1$s</string>
+  <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -193,6 +194,7 @@
   <string name="error_front_camera_unavailable">Este dispositivo no tiene Cámara frontal disponible </string>
   <string name="camera_error">Este dispositivo no soporta el API Camera2</string>
   <string name="annotate_image">Anotar en Imagen</string>
+  <string name="invalid_file_type">La aplicación devolvió un tipo de archivo no válido</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">Guardar y Cerrar</string>
   <string name="signature_capture">Firma</string>
@@ -218,6 +220,14 @@
   <string name="pause_recording">Pausar</string>
   <!--Description text for button that that resumes recording sound-->
   <string name="resume_recording">Reanudar</string>
+  <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
+  <string name="record_audio">Grabar audio</string>
+  <string name="background_audio_permission_explanation">Este formulario graba audio en segundo plano. Debe otorgar permiso para usar su micrófono. Si no lo hace, no podrá abrir este formulario.</string>
+  <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
+  <string name="stop_recording_confirmation">Este formulario solicita una grabación de audio de fondo. Si lo desactiva, se detendrá la grabación y se descartará el audio existente. ¿Estas seguro que deseas continuar?</string>
+  <!--Button text for the dialog confirming whether the user wants to disable background recording-->
+  <!--Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form-->
+  <string name="background_audio_recording_enabled_explanation">La grabación no comenzará inmediatamente. Debe volver a abrir el formulario para grabar.</string>
   <!--Title for dialog asking the user if they want to delete a file-->
   <string name="delete_answer_file_question">Borrar archivo?</string>
   <!--Dialog text warning the user they won't be able to recover a file once deleted-->
@@ -498,6 +508,8 @@
   <string name="report_to_project_lead">Si sigue teniendo este problema, infórmelo a la persona que le pidió que recopile los datos.</string>
   <string name="unreachable_error">La aplicación no se ha podido conectar al servidor %s. ¿Ingresó la URL correctamente?</string>
   <string name="security_error">La aplicación no se puede conectar de forma segura al servidor en %s. ¿Ingresaste la URL correctamente?</string>
+  <string name="server_error">El servidor %s  devolvió el código de estado %s.</string>
+  <string name="invalid_response">El servidor %s proporcionó una respuesta no válida.</string>
   <string name="failure">Falla</string>
   <string name="load_remote_form_error">Error al descargar la lista de formularios</string>
   <!--##############################################

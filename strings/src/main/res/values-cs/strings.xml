@@ -154,8 +154,12 @@
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
   <string name="unrecognized_uri">Nerozpoznaný identifikátor URI: %s</string>
   <!--Text displayed when audio recording fails to start-->
+  <string name="start_recording_failed">Záznam se nepodařilo spustit.</string>
   <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <string name="mic_in_use">Mikrofon se již používá.</string>
   <!--Error message displayed when copying media from a temporary directory fails-->
+  <string name="answer_file_copy_failed_message">Médium nelze připojit k formuláři, ale je k dispozici na %1$s</string>
+  <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -206,14 +210,23 @@
   <string name="play_video">Přehrát video</string>
   <string name="choose_file">Vybrat soubor</string>
   <!--Text for button that deletes a file that is the answer to a question-->
+  <string name="delete_answer_file">Vymazat</string>
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">Nahrát zvuk</string>
   <!--Text for button that lets the user choose a sound file on their device-->
   <string name="choose_sound">Vyberte zvuk</string>
   <!--Description text for button that that pauses recording sound-->
+  <string name="pause_recording">Pauza</string>
   <!--Description text for button that that resumes recording sound-->
+  <string name="resume_recording">Pokračovat</string>
+  <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
+  <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
+  <!--Button text for the dialog confirming whether the user wants to disable background recording-->
+  <!--Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form-->
   <!--Title for dialog asking the user if they want to delete a file-->
+  <string name="delete_answer_file_question">Smazat soubor?</string>
   <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <string name="answer_file_delete_warning">Jakmile tento soubor odstraníte, nebudete jej moci obnovit. Opravdu chcete pokračovat?</string>
   <!--Text for button that stops audio recording-->
   <string name="stop_recording">Stop</string>
   <!--Text to let the user know a recording is in progress-->
@@ -496,6 +509,8 @@
   <string name="report_to_project_lead">Pokud problém přetrvává, nahlaste jej osobě, která vás požádala o sběr dat.</string>
   <string name="unreachable_error">Collect nemůže kontaktovat server na %s. Zadali jste adresu URL správně?</string>
   <string name="security_error">Collect se nemůže bezpečně připojit k serveru na %s. Zadali jste URL správně?</string>
+  <string name="server_error">Server %s vrátil stavový kód %s.</string>
+  <string name="invalid_response">Server %s poskytl neplatnou odpověď.</string>
   <string name="failure">Selhání</string>
   <string name="load_remote_form_error">Stažení seznamu formulářů se nezdařilo</string>
   <!--##############################################

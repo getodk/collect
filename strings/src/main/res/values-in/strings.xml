@@ -154,8 +154,12 @@
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
   <string name="unrecognized_uri">URI tidak dikenal: %s</string>
   <!--Text displayed when audio recording fails to start-->
+  <string name="start_recording_failed">Tidak dapat mulai merekam.</string>
   <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <string name="mic_in_use">Pengeras suara telah digunakan</string>
   <!--Error message displayed when copying media from a temporary directory fails-->
+  <string name="answer_file_copy_failed_message">Media tidak dapat dilampirkan ke formulir tetapi tetap tersedia di %1$s</string>
+  <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -206,20 +210,35 @@
   <string name="play_video">Mainkan video</string>
   <string name="choose_file">Pilih Berkas</string>
   <!--Text for button that deletes a file that is the answer to a question-->
+  <string name="delete_answer_file">Hapus</string>
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">Rekam Suara</string>
   <!--Text for button that lets the user choose a sound file on their device-->
   <string name="choose_sound">Pilih Suara</string>
   <!--Description text for button that that pauses recording sound-->
+  <string name="pause_recording">Jeda</string>
   <!--Description text for button that that resumes recording sound-->
+  <string name="resume_recording">Lanjut</string>
+  <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
+  <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
+  <!--Button text for the dialog confirming whether the user wants to disable background recording-->
+  <!--Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form-->
   <!--Title for dialog asking the user if they want to delete a file-->
+  <string name="delete_answer_file_question">Hapus berkas?</string>
   <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <string name="answer_file_delete_warning">Anda tidak akan dapat memulihkan berkas ini setelah dihapus. Anda yakin ingin melanjutkan?</string>
   <!--Text for button that stops audio recording-->
+  <string name="stop_recording">Berhenti</string>
   <!--Text to let the user know a recording is in progress-->
+  <string name="recording">Rekaman…</string>
   <!--Title of Android Notification Channel for audio recording notifications-->
+  <string name="recording_channel">Rekaman audio</string>
   <!--Text for button that plays audio clip-->
+  <string name="play_audio">Putar audio</string>
   <!--Text to let the user know a file is being saved-->
+  <string name="saving_file">Menyimpan file</string>
   <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="recording_warning">Anda harus berhenti merekam sebelum meninggalkan layar ini.</string>
   <string name="error_attaching_binary_file">Terjadi kesalahan saat memasukkan berkas media: %s</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="select_value">Pilih nilai</string>
@@ -382,6 +401,8 @@
   <string name="save_point">Simpan GeoPoint</string>
   <string name="get_point">Mulai GeoPoint</string>
   <string name="geopoint_view_read_only">Lihat GeoPoint</string>
+  <string name="geoshape_view_read_only">Lihat GeoShape</string>
+  <string name="geotrace_view_read_only">Lihat GeoTrace</string>
   <string name="get_shape">Mulai GeoShape</string>
   <string name="get_trace">Mulai GeoTrace</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
@@ -623,6 +644,7 @@
   <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
   <string name="guidance_yes_collapsed">Ya - sembunyikan</string>
   <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <string name="external_app_recording">Gunakan aplikasi eksternal untuk merekam audio</string>
   <string name="form_import_category">Impor Formulir</string>
   <string name="instance_sync">Selesaikan formulir saat impor</string>
   <string name="instance_sync_summary">Formulir yang rusak akan langsung ditambahkan ke berkas instance</string>
@@ -760,10 +782,12 @@
   <string name="corrupt_imported_preferences_error">Pengaturan yang sekarang bermasalah. Dari pengaturan admin, set ulang pengaturan atau impor pengaturan.</string>
   <string name="save_legacy_settings">Simpan barkas .settings lawas ke disk</string>
   <string name="save_legacy_settings_warning">Akan dihapus pada versi mendatang. Mohon gunakan kode QR di atas.</string>
+  <string name="settings_successfully_loaded_file_notification">Pengaturan berhasil diimpor dari berkas .settings. Fungsi ini akan dihapus di versi mendatang. Silakan gunakan konfigurasi kode QR sebagai gantinya.</string>
   <string name="corrupt_settings_file_notification">Maaf, berkas pengaturan rusak dan harus dihapus atau diganti</string>
   <!--##############################################
      # SCOPED STORAGE MIGRATION
      ##############################################-->
+  <string name="scoped_storage_banner_text">Anda harus memigrasi formulir Collect ke penyimpanan pribadi untuk mematuhi persyaratan Android. Upaya migrasi otomatis gagal. Harap bermigrasi secara manual.</string>
   <string name="scoped_storage_learn_more">Pelajari lebih lanjut dan lakukan migrasi</string>
   <string name="storage_migration_completed">Migrasi penyimpanan berhasil!</string>
   <string name="scoped_storage_dismiss">Singkirkan</string>
