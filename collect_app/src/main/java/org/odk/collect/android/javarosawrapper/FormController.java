@@ -222,7 +222,7 @@ public class FormController {
                 return FormIndex.createEndOfFormIndex();
             case "unexpected":
                 Timber.e("Unexpected string from XPath");
-                throw new IllegalArgumentException("unexpected string from XPath");
+                return null;
             default:
                 FormIndex returned = null;
                 FormIndex saved = getFormIndex();
