@@ -233,7 +233,6 @@ public class FormController {
                     int event = stepToNextEvent(true);
                     while (event != FormEntryController.EVENT_END_OF_FORM) {
                         String candidateXPath = getXPath(getFormIndex());
-                        // Log.i(t, "xpath: " + candidateXPath);
                         if (candidateXPath.equals(xpath)) {
                             returned = getFormIndex();
                             break;
