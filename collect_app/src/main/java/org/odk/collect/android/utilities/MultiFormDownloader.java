@@ -146,7 +146,7 @@ public class MultiFormDownloader {
             // get the xml file
             // if we've downloaded a duplicate, this gives us the file
             fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl() + "&deviceID=" + deviceId, stateListener,
-                    fd.isNewerFormVersionAvailable() || fd.isFormNotDownloaded(),       // smap add flag on newer form version available or never downloaded
+                    fd.isFormNotDownloaded() || fd.isFormNotDownloaded(),       // smap add flag on newer form version available or never downloaded
                     fd.getFormPath());                      // smap
 
             if (fd.getManifestUrl() != null) {
@@ -366,38 +366,40 @@ public class MultiFormDownloader {
      * Takes the formName and the URL and attempts to download the specified file. Returns a file
      * object representing the downloaded file.
      */
-    FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener, String formPath) throws Exception {
+    FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener, boolean download, String formPath) throws Exception {  // smap add download and formPath
         // clean up friendly form name...
         String rootName = FormNameUtils.formatFilenameFromFormName(formName);
 
         File f;
         boolean isNew = false;      // smap
-        StoragePathProvider storagePathProvider = new StoragePathProvider(); // smap
         // proposed name of xml file...
-        //StoragePathProvider storagePathProvider = new StoragePathProvider();  // smap commented out
-        String path = storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + rootName + ".xml";
-        int i = 2;
-        f = new File(path);
+        StoragePathProvider storagePathProvider = new StoragePathProvider();
+        if(download) {  // smap
+            String path = storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + rootName + ".xml";
+            int i = 2;
+            f = new File(path);
 
-        InputStream file = formListApi.fetchForm(url, true);    // smap add credentials flag
-        writeFile(f, stateListener, file);    // smap credentials flag
+            InputStream file = formListApi.fetchForm(url, true);    // smap add credentials flag
+            writeFile(f, stateListener, file);
 
-        // we've downloaded the file, and we may have renamed it
-        // make sure it's not the same as a file we already have
-        //Form form = formsRepository.getByMd5Hash(FileUtils.getMd5Hash(f));   // smap - if we have downloaded the file already then use it
-        Form form = null;       // smap
-        if (form != null) {
-            isNew = false;
+            isNew = true;       // smap now declared outside
 
-            // delete the file we just downloaded, because it's a duplicate
-            Timber.w("A duplicate file has been found, we need to remove the downloaded file "
-                    + "and return the other one.");
-            FileUtils.deleteAndReport(f);
+            // we've downloaded the file, and we may have renamed it
+            // make sure it's not the same as a file we already have
+            Form form = formsRepository.getByMd5Hash(FileUtils.getMd5Hash(f));
+            if (form != null) {
+                isNew = false;
 
-            // set the file returned to the file we already had
-            String existingPath = storagePathProvider.getAbsoluteFormFilePath(form.getFormFilePath());
-            f = new File(existingPath);
-            Timber.w("Will use %s", existingPath);
+                // delete the file we just downloaded, because it's a duplicate
+                Timber.w("A duplicate file has been found, we need to remove the downloaded file "
+                        + "and return the other one.");
+                FileUtils.deleteAndReport(f);
+
+                // set the file returned to the file we already had
+                String existingPath = storagePathProvider.getAbsoluteFormFilePath(form.getFormFilePath());
+                f = new File(existingPath);
+                Timber.w("Will use %s", existingPath);
+            }
         } else {
             if(formPath == null) {
                 f = new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + rootName + ".xml");   // smap
