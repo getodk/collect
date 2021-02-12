@@ -252,4 +252,39 @@ public class AudioRecordingControllerFragmentTest {
             assertThat(fragment.binding.getRoot().getVisibility(), is(View.GONE));
         });
     }
+
+    @Test
+    public void whenFormHasBackgroundRecording_andThereIsAnError_andSessionIsOver_showsThatThereIsAnError() {
+        hasBackgroundRecording.setValue(true);
+        isBackgroundRecordingEnabled.setValue(true);
+        audioRecorder.failOnStart();
+
+        FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
+
+        audioRecorder.start("blah", Output.AAC_LOW);
+        audioRecorder.cleanUp();
+
+        scenario.onFragment(fragment -> {
+            assertThat(fragment.binding.getRoot().getVisibility(), is(View.VISIBLE));
+            assertThat(fragment.binding.timeCode.getText(), is(fragment.getString(R.string.start_recording_failed)));
+            assertThat(fragment.binding.pauseRecording.getVisibility(), is(View.GONE));
+            assertThat(fragment.binding.stopRecording.getVisibility(), is(View.GONE));
+            assertThat(fragment.binding.waveform.getVisibility(), is(View.GONE));
+        });
+    }
+
+    @Test
+    public void whenFormDoesNotHaveBackgroundRecording_andThereIsAnError_andSessionIsOver_doesNotThatThereIsAnError() {
+        hasBackgroundRecording.setValue(false);
+        isBackgroundRecordingEnabled.setValue(true);
+        audioRecorder.failOnStart();
+
+        FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
+
+        audioRecorder.start("blah", Output.AAC_LOW);
+
+        scenario.onFragment(fragment -> {
+            assertThat(fragment.binding.getRoot().getVisibility(), is(View.GONE));
+        });
+    }
 }

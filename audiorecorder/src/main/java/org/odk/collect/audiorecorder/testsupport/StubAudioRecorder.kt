@@ -36,6 +36,7 @@ class StubAudioRecorder(private val stubRecordingPath: String) : AudioRecorder()
     private var isRecording = false
     private var failOnStart = false
     private val currentSession = MutableLiveData<RecordingSession>(null)
+    private val failedToStart = MutableLiveData(false)
 
     override fun isRecording(): Boolean {
         return isRecording
@@ -46,13 +47,14 @@ class StubAudioRecorder(private val stubRecordingPath: String) : AudioRecorder()
     }
 
     override fun failedToStart(): LiveData<Boolean> {
-        TODO("Not yet implemented")
+        return failedToStart
     }
 
     override fun start(sessionId: Serializable, output: Output) {
         if (!isRecording) {
             if (failOnStart) {
                 currentSession.value = RecordingSession(sessionId, null, 0, 0, paused = false, failedToStart = Exception())
+                failedToStart.value = true
             } else {
                 wasCleanedUp = false
                 lastSession = sessionId

@@ -28,7 +28,7 @@ import javax.inject.Inject;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
-import static org.odk.collect.android.utilities.LiveDataUtils.zip3;
+import static org.odk.collect.android.utilities.LiveDataUtils.zip4;
 
 public class AudioRecordingControllerFragment extends Fragment {
 
@@ -64,19 +64,32 @@ public class AudioRecordingControllerFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        zip3(formEntryViewModel.hasBackgroundRecording(), backgroundAudioViewModel.isBackgroundRecordingEnabled(), audioRecorder.getCurrentSession()).observe(getViewLifecycleOwner(), triple -> {
-            boolean hasBackgroundRecording = triple.getFirst();
-            boolean isBackgroundRecordingEnabled = triple.getSecond();
-            RecordingSession session = triple.getThird();
+        zip4(
+                formEntryViewModel.hasBackgroundRecording(),
+                backgroundAudioViewModel.isBackgroundRecordingEnabled(),
+                audioRecorder.getCurrentSession(),
+                audioRecorder.failedToStart()
+        ).observe(getViewLifecycleOwner(), quad -> {
+            boolean hasBackgroundRecording = quad.first;
+            boolean isBackgroundRecordingEnabled = quad.second;
+            RecordingSession session = quad.third;
+            boolean failedToStart = quad.fourth;
 
-            update(hasBackgroundRecording, isBackgroundRecordingEnabled, session);
+            update(hasBackgroundRecording, isBackgroundRecordingEnabled, session, failedToStart);
         });
 
         binding.stopRecording.setOnClickListener(v -> audioRecorder.stop());
     }
 
-    private void update(boolean hasBackgroundRecording, boolean isBackgroundRecordingEnabled, RecordingSession session) {
-        if (session == null && hasBackgroundRecording && !isBackgroundRecordingEnabled) {
+    private void update(boolean hasBackgroundRecording, boolean isBackgroundRecordingEnabled, RecordingSession session, boolean failedToStart) {
+        if (hasBackgroundRecording && failedToStart) {
+            binding.getRoot().setVisibility(VISIBLE);
+            binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_mic_off_24));
+            binding.timeCode.setText(TranslationHandler.getString(requireContext(), R.string.start_recording_failed));
+            binding.waveform.setVisibility(GONE);
+            binding.pauseRecording.setVisibility(GONE);
+            binding.stopRecording.setVisibility(GONE);
+        } else if (hasBackgroundRecording && !isBackgroundRecordingEnabled) {
             binding.getRoot().setVisibility(VISIBLE);
             binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_mic_off_24));
             binding.timeCode.setText(TranslationHandler.getString(requireContext(), R.string.recording_disabled, "⋮"));
@@ -86,7 +99,6 @@ public class AudioRecordingControllerFragment extends Fragment {
         } else if (session == null) {
             binding.getRoot().setVisibility(GONE);
         } else if (session.getFailedToStart() != null) {
-            binding.getRoot().setVisibility(GONE);
             showIfNotShowing(AudioRecordingErrorDialogFragment.class, getParentFragmentManager());
         } else if (session.getFile() == null) {
             binding.getRoot().setVisibility(VISIBLE);
