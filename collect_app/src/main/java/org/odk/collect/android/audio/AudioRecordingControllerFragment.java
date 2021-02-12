@@ -19,6 +19,7 @@ import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
+import org.odk.collect.audiorecorder.Consumable;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
 import org.odk.collect.strings.format.LengthFormatterKt;
@@ -73,7 +74,7 @@ public class AudioRecordingControllerFragment extends Fragment {
             boolean hasBackgroundRecording = quad.first;
             boolean isBackgroundRecordingEnabled = quad.second;
             RecordingSession session = quad.third;
-            boolean failedToStart = quad.fourth;
+            Consumable<Exception> failedToStart = quad.fourth;
 
             update(hasBackgroundRecording, isBackgroundRecordingEnabled, session, failedToStart);
         });
@@ -81,12 +82,12 @@ public class AudioRecordingControllerFragment extends Fragment {
         binding.stopRecording.setOnClickListener(v -> audioRecorder.stop());
     }
 
-    private void update(boolean hasBackgroundRecording, boolean isBackgroundRecordingEnabled, RecordingSession session, boolean failedToStart) {
-        if (session != null) {
-            if (session.getFailedToStart() != null) {
-                showIfNotShowing(AudioRecordingErrorDialogFragment.class, getParentFragmentManager());
-            }
+    private void update(boolean hasBackgroundRecording, boolean isBackgroundRecordingEnabled, RecordingSession session, Consumable<Exception> failedToStart) {
+        if (!failedToStart.isConsumed() && failedToStart.getValue() != null) {
+            showIfNotShowing(AudioRecordingErrorDialogFragment.class, getParentFragmentManager());
+        }
 
+        if (session != null) {
             if (session.getFile() == null) {
                 binding.getRoot().setVisibility(VISIBLE);
                 renderRecordingInProgress(session);
@@ -94,7 +95,7 @@ public class AudioRecordingControllerFragment extends Fragment {
                 binding.getRoot().setVisibility(GONE);
             }
         } else {
-            if (hasBackgroundRecording && failedToStart) {
+            if (hasBackgroundRecording && failedToStart.getValue() != null) {
                 binding.getRoot().setVisibility(VISIBLE);
                 renderRecordingProblem(TranslationHandler.getString(requireContext(), R.string.start_recording_failed));
             } else if (hasBackgroundRecording && !isBackgroundRecordingEnabled) {

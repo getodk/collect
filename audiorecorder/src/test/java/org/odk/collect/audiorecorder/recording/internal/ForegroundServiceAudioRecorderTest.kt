@@ -12,6 +12,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.AudioRecorderDependencyModule
+import org.odk.collect.audiorecorder.Consumable
 import org.odk.collect.audiorecorder.RobolectricApplication
 import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recorder.Recorder
@@ -122,17 +123,17 @@ class ForegroundServiceAudioRecorderTest : AudioRecorderTest() {
     }
 
     @Test
-    fun start_whenRecorderStartThrowsException_setsFailedToStartToTrue() {
+    fun start_whenRecorderStartThrowsException_setsFailedToStart() {
         val exception = MicInUseException()
         fakeRecorder.failOnStart(exception)
 
         viewModel.start("blah", Output.AAC)
         runBackground()
-        assertThat(viewModel.failedToStart().value, equalTo(true))
+        assertThat(viewModel.failedToStart().value, equalTo(Consumable(exception)))
     }
 
     @Test
-    fun start_whenRecorderStartThrowsException_thenSucceeds_setsFailedToStartToFalse() {
+    fun start_whenRecorderStartThrowsException_thenSucceeds_setsFailedToStartToNull() {
         val exception = MicInUseException()
         fakeRecorder.failOnStart(exception)
         viewModel.start("blah", Output.AAC)
@@ -142,6 +143,6 @@ class ForegroundServiceAudioRecorderTest : AudioRecorderTest() {
         viewModel.start("blah", Output.AAC)
         runBackground()
 
-        assertThat(viewModel.failedToStart().value, equalTo(false))
+        assertThat(viewModel.failedToStart().value, equalTo(Consumable(null)))
     }
 }

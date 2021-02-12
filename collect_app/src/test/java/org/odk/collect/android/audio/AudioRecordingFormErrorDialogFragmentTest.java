@@ -56,9 +56,9 @@ public class AudioRecordingFormErrorDialogFragmentTest {
     }
 
     @Test
-    public void onDismiss_callsCleanUpOnViewModel() {
+    public void onDismiss_consumesConsumable() {
         FragmentScenario<AudioRecordingErrorDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(AudioRecordingErrorDialogFragment.class);
         scenario.onFragment(DialogFragment::dismiss);
-        assertThat(audioRecorder.getWasCleanedUp(), is(true));
+        assertThat(audioRecorder.failedToStart().getValue().isConsumed(), is(true));
     }
 }

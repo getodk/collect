@@ -1,6 +1,7 @@
 package org.odk.collect.audiorecorder.recording
 
 import androidx.lifecycle.LiveData
+import org.odk.collect.audiorecorder.Consumable
 import org.odk.collect.audiorecorder.recorder.Output
 import java.io.File
 import java.io.Serializable
@@ -12,7 +13,7 @@ import java.io.Serializable
 abstract class AudioRecorder {
     abstract fun isRecording(): Boolean
     abstract fun getCurrentSession(): LiveData<RecordingSession?>
-    abstract fun failedToStart(): LiveData<Boolean>
+    abstract fun failedToStart(): LiveData<Consumable<java.lang.Exception?>>
 
     abstract fun start(sessionId: Serializable, output: Output)
     abstract fun pause()
