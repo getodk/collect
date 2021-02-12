@@ -282,6 +282,7 @@ public class AudioRecordingControllerFragmentTest {
         FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
 
         audioRecorder.start("blah", Output.AAC_LOW);
+        audioRecorder.cleanUp();
 
         scenario.onFragment(fragment -> {
             assertThat(fragment.binding.getRoot().getVisibility(), is(View.GONE));

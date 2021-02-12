@@ -82,58 +82,67 @@ public class AudioRecordingControllerFragment extends Fragment {
     }
 
     private void update(boolean hasBackgroundRecording, boolean isBackgroundRecordingEnabled, RecordingSession session, boolean failedToStart) {
-        if (hasBackgroundRecording && failedToStart) {
-            binding.getRoot().setVisibility(VISIBLE);
-            binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_mic_off_24));
-            binding.timeCode.setText(TranslationHandler.getString(requireContext(), R.string.start_recording_failed));
-            binding.waveform.setVisibility(GONE);
-            binding.pauseRecording.setVisibility(GONE);
-            binding.stopRecording.setVisibility(GONE);
-        } else if (hasBackgroundRecording && !isBackgroundRecordingEnabled) {
-            binding.getRoot().setVisibility(VISIBLE);
-            binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_mic_off_24));
-            binding.timeCode.setText(TranslationHandler.getString(requireContext(), R.string.recording_disabled, "⋮"));
-            binding.waveform.setVisibility(GONE);
-            binding.pauseRecording.setVisibility(GONE);
-            binding.stopRecording.setVisibility(GONE);
-        } else if (session == null) {
-            binding.getRoot().setVisibility(GONE);
-        } else if (session.getFailedToStart() != null) {
-            showIfNotShowing(AudioRecordingErrorDialogFragment.class, getParentFragmentManager());
-        } else if (session.getFile() == null) {
-            binding.getRoot().setVisibility(VISIBLE);
+        if (session != null) {
+            if (session.getFailedToStart() != null) {
+                showIfNotShowing(AudioRecordingErrorDialogFragment.class, getParentFragmentManager());
+            }
 
-            binding.timeCode.setText(LengthFormatterKt.formatLength(session.getDuration()));
-            binding.waveform.addAmplitude(session.getAmplitude());
-
-            if (session.getPaused()) {
-                binding.pauseRecording.setIcon(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_mic_24));
-                binding.pauseRecording.setContentDescription(getString(R.string.resume_recording));
-                binding.pauseRecording.setOnClickListener(v -> audioRecorder.resume());
-
-                binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_pause_24dp));
+            if (session.getFile() == null) {
+                binding.getRoot().setVisibility(VISIBLE);
+                renderRecordingInProgress(session);
             } else {
-                binding.pauseRecording.setIcon(ContextCompat.getDrawable(requireContext(), R.drawable.ic_pause_24dp));
-                binding.pauseRecording.setContentDescription(getString(R.string.pause_recording));
-                binding.pauseRecording.setOnClickListener(v -> {
-                    audioRecorder.pause();
-                    formEntryViewModel.logFormEvent(AnalyticsEvents.AUDIO_RECORDING_PAUSE);
-                });
-
-                binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_mic_24));
-            }
-
-            // Pause not available before API 24
-            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N) {
-                binding.pauseRecording.setVisibility(GONE);
-            }
-
-            if (backgroundAudioViewModel.isBackgroundRecording()) {
-                binding.pauseRecording.setVisibility(GONE);
-                binding.stopRecording.setVisibility(GONE);
+                binding.getRoot().setVisibility(GONE);
             }
         } else {
-            binding.getRoot().setVisibility(GONE);
+            if (hasBackgroundRecording && failedToStart) {
+                binding.getRoot().setVisibility(VISIBLE);
+                renderRecordingProblem(TranslationHandler.getString(requireContext(), R.string.start_recording_failed));
+            } else if (hasBackgroundRecording && !isBackgroundRecordingEnabled) {
+                binding.getRoot().setVisibility(VISIBLE);
+                renderRecordingProblem(TranslationHandler.getString(requireContext(), R.string.recording_disabled, "⋮"));
+            } else {
+                binding.getRoot().setVisibility(GONE);
+            }
+        }
+    }
+
+    private void renderRecordingProblem(String string) {
+        binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_mic_off_24));
+        binding.timeCode.setText(string);
+        binding.waveform.setVisibility(GONE);
+        binding.pauseRecording.setVisibility(GONE);
+        binding.stopRecording.setVisibility(GONE);
+    }
+
+    private void renderRecordingInProgress(RecordingSession session) {
+        binding.timeCode.setText(LengthFormatterKt.formatLength(session.getDuration()));
+        binding.waveform.addAmplitude(session.getAmplitude());
+
+        if (session.getPaused()) {
+            binding.pauseRecording.setIcon(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_mic_24));
+            binding.pauseRecording.setContentDescription(getString(R.string.resume_recording));
+            binding.pauseRecording.setOnClickListener(v -> audioRecorder.resume());
+
+            binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_pause_24dp));
+        } else {
+            binding.pauseRecording.setIcon(ContextCompat.getDrawable(requireContext(), R.drawable.ic_pause_24dp));
+            binding.pauseRecording.setContentDescription(getString(R.string.pause_recording));
+            binding.pauseRecording.setOnClickListener(v -> {
+                audioRecorder.pause();
+                formEntryViewModel.logFormEvent(AnalyticsEvents.AUDIO_RECORDING_PAUSE);
+            });
+
+            binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_mic_24));
+        }
+
+        // Pause not available before API 24
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N) {
+            binding.pauseRecording.setVisibility(GONE);
+        }
+
+        if (backgroundAudioViewModel.isBackgroundRecording()) {
+            binding.pauseRecording.setVisibility(GONE);
+            binding.stopRecording.setVisibility(GONE);
         }
     }
 }
