@@ -48,8 +48,8 @@ internal class RecordingRepository {
         _currentSession.value = null
     }
 
-    fun failToStart(sessionId: Serializable, exception: Exception) {
-        _currentSession.value = RecordingSession(sessionId, null, 0, 0, paused = false, failedToStart = exception)
+    fun failToStart(exception: Exception) {
+        _currentSession.value = null
         _failedToStart.value = Consumable(exception)
     }
 }

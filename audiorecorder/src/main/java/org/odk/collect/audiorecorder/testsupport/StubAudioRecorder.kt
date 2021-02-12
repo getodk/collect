@@ -54,7 +54,7 @@ class StubAudioRecorder(private val stubRecordingPath: String) : AudioRecorder()
     override fun start(sessionId: Serializable, output: Output) {
         if (!isRecording) {
             if (failOnStart) {
-                currentSession.value = RecordingSession(sessionId, null, 0, 0, paused = false, failedToStart = Exception())
+                currentSession.value = null
                 failedToStart.value = Consumable(Exception())
             } else {
                 wasCleanedUp = false

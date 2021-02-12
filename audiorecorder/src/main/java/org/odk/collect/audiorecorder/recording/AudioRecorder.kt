@@ -13,7 +13,7 @@ import java.io.Serializable
 abstract class AudioRecorder {
     abstract fun isRecording(): Boolean
     abstract fun getCurrentSession(): LiveData<RecordingSession?>
-    abstract fun failedToStart(): LiveData<Consumable<java.lang.Exception?>>
+    abstract fun failedToStart(): LiveData<Consumable<Exception?>>
 
     abstract fun start(sessionId: Serializable, output: Output)
     abstract fun pause()
@@ -27,10 +27,7 @@ abstract class AudioRecorder {
     abstract fun cleanUp()
 }
 
-data class RecordingSession(val id: Serializable, val file: File?, val duration: Long, val amplitude: Int, val paused: Boolean, val failedToStart: Exception?) {
-
-    constructor(id: Serializable, file: File?, duration: Long, amplitude: Int, paused: Boolean) : this(id, file, duration, amplitude, paused, null)
-}
+data class RecordingSession(val id: Serializable, val file: File?, val duration: Long, val amplitude: Int, val paused: Boolean)
 
 class SetupException : java.lang.Exception()
 class MicInUseException : java.lang.Exception()

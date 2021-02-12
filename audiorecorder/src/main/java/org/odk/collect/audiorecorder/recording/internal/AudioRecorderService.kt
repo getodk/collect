@@ -85,7 +85,7 @@ internal class AudioRecorderService : Service() {
             startUpdates()
         } catch (e: Exception) {
             notification.dismiss()
-            recordingRepository.failToStart(sessionId, e)
+            recordingRepository.failToStart(e)
         }
     }
 
