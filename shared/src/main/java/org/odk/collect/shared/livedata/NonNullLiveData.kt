@@ -2,6 +2,9 @@ package org.odk.collect.shared.livedata
 
 import androidx.lifecycle.LiveData
 
+/**
+ * Allows creating LiveData values that can be used without null checks
+ */
 abstract class NonNullLiveData<T : Any>(value: T) : LiveData<T>(value) {
 
     override fun getValue(): T {
