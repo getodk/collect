@@ -107,7 +107,7 @@ public class SheetsHelper {
         }
     }
 
-    private boolean isNewSpreadsheet(String spreadsheetId, String mainSheetTitle) throws IOException {
+    public boolean isNewSpreadsheet(String spreadsheetId, String mainSheetTitle) throws IOException {
         List<List<Object>> sheetCells = getSheetCells(spreadsheetId, StringUtils.ellipsizeBeginning(mainSheetTitle));
         return sheetCells == null || sheetCells.isEmpty();
     }

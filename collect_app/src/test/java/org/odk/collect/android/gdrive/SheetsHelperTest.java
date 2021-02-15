@@ -15,14 +15,19 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Shobhit Agarwal
@@ -97,6 +102,42 @@ public class SheetsHelperTest {
 
         assertEquals(mockedSpreadsheet, spreadsheet);
         assertBatchUpdateCalled(1);
+    }
+
+    @Test
+    public void whenNewSpreadsheetDetected_shouldBatchUpdateBeCalled() throws IOException {
+        doReturn(true).when(sheetsHelper).isNewSpreadsheet("spreadsheet_id", "Sheet1");
+        sheetsHelper.updateSpreadsheetLocaleForNewSpreadsheet("spreadsheet_id", "Sheet1");
+        assertBatchUpdateCalled(1);
+    }
+
+    @Test
+    public void whenExistingSpreadsheetDetected_shouldNotBatchUpdateBeCalled() throws IOException {
+        doReturn(false).when(sheetsHelper).isNewSpreadsheet("spreadsheet_id", "Sheet1");
+        sheetsHelper.updateSpreadsheetLocaleForNewSpreadsheet("spreadsheet_id", "Sheet1");
+        assertBatchUpdateCalled(0);
+    }
+
+    @Test
+    public void whenThereAreNoCellsInTheMainSheet_shouldIsNewSpreadsheetReturnTrue() throws IOException {
+        ValueRange valueRange = mock(ValueRange.class);
+        when(valueRange.getValues()).thenReturn(null);
+        when(googleSheetsAPI.getSpreadsheet("spreadsheet_id", "Sheet1")).thenReturn(valueRange);
+        assertThat(sheetsHelper.isNewSpreadsheet("spreadsheet_id", "Sheet1"), is(true));
+
+        when(valueRange.getValues()).thenReturn(new LinkedList<>());
+        when(googleSheetsAPI.getSpreadsheet("spreadsheet_id", "Sheet1")).thenReturn(valueRange);
+        assertThat(sheetsHelper.isNewSpreadsheet("spreadsheet_id", "Sheet1"), is(true));
+    }
+
+    @Test
+    public void whenThereAreCellsInTheMainSheet_shouldIsNewSpreadsheetReturnFalse() throws IOException {
+        ValueRange valueRange = mock(ValueRange.class);
+        List<List<Object>> cells = new LinkedList<>();
+        cells.add(new LinkedList<>());
+        when(valueRange.getValues()).thenReturn(cells);
+        when(googleSheetsAPI.getSpreadsheet("spreadsheet_id", "Sheet1")).thenReturn(valueRange);
+        assertThat(sheetsHelper.isNewSpreadsheet("spreadsheet_id", "Sheet1"), is(false));
     }
 
     private void assertBatchUpdateCalled(int timesInvocations) throws IOException {
