@@ -5,7 +5,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.testing.FragmentScenario;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -21,6 +20,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.audiorecorder.MutableNonNullLiveData;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorder;
@@ -45,8 +45,8 @@ public class AudioRecordingControllerFragmentTest {
     public StubAudioRecorder audioRecorder;
     private BackgroundAudioViewModel backgroundAudioViewModel;
     private FormEntryViewModel formEntryViewModel;
-    private MutableLiveData<Boolean> hasBackgroundRecording;
-    private MutableLiveData<Boolean> isBackgroundRecordingEnabled;
+    private MutableNonNullLiveData<Boolean> hasBackgroundRecording;
+    private MutableNonNullLiveData<Boolean> isBackgroundRecordingEnabled;
 
     @Before
     public void setup() throws IOException {
@@ -57,9 +57,9 @@ public class AudioRecordingControllerFragmentTest {
         backgroundAudioViewModel = mock(BackgroundAudioViewModel.class);
         formEntryViewModel = mock(FormEntryViewModel.class);
 
-        hasBackgroundRecording = new MutableLiveData<>(false);
+        hasBackgroundRecording = new MutableNonNullLiveData<>(false);
         when(formEntryViewModel.hasBackgroundRecording()).thenReturn(hasBackgroundRecording);
-        isBackgroundRecordingEnabled = new MutableLiveData<>(false);
+        isBackgroundRecordingEnabled = new MutableNonNullLiveData<>(false);
         when(backgroundAudioViewModel.isBackgroundRecordingEnabled()).thenReturn(isBackgroundRecordingEnabled);
 
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
