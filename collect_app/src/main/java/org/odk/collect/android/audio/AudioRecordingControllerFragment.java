@@ -19,9 +19,9 @@ import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
-import org.odk.collect.audiorecorder.Consumable;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
+import org.odk.collect.shared.data.Consumable;
 import org.odk.collect.strings.format.LengthFormatterKt;
 
 import javax.inject.Inject;
@@ -29,7 +29,7 @@ import javax.inject.Inject;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
-import static org.odk.collect.android.utilities.LiveDataUtils.zip4;
+import static org.odk.collect.shared.livedata.LiveDataUtils.zip4;
 
 public class AudioRecordingControllerFragment extends Fragment {
 

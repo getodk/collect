@@ -5,6 +5,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.TreeReference;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.android.audio.AudioFileAppender;
@@ -36,7 +37,12 @@ public class RecordingHandlerTest {
     private final AudioFileAppender amrAppender = mock(AudioFileAppender.class);
     private final AudioFileAppender m4aAppender = mock(AudioFileAppender.class);
 
-    RecordingHandler recordingHandler = new RecordingHandler(questionMediaManager, new FakeLifecycleOwner(), mock(AudioRecorder.class), amrAppender, m4aAppender);
+    RecordingHandler recordingHandler;
+
+    @Before
+    public void setup() {
+        recordingHandler = new RecordingHandler(questionMediaManager, new FakeLifecycleOwner(), mock(AudioRecorder.class), amrAppender, m4aAppender);
+    }
 
     @Test
     public void whenBackgroundRecordingM4A_andRecordingAlreadySavedForReference_appendsAudioFiles() throws Exception {

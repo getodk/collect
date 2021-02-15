@@ -19,11 +19,11 @@ import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.PreferencesProvider;
-import org.odk.collect.audiorecorder.MutableNonNullLiveData;
-import org.odk.collect.audiorecorder.NonNullLiveData;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
+import org.odk.collect.shared.livedata.MutableNonNullLiveData;
+import org.odk.collect.shared.livedata.NonNullLiveData;
 import org.odk.collect.utilities.Clock;
 
 import java.util.HashSet;
@@ -124,7 +124,7 @@ public class BackgroundAudioViewModel extends ViewModel implements RequiresFormC
 
         isPermissionRequired.setValue(false);
         startBackgroundRecording(tempQuality, new HashSet<>(tempTreeReferences));
-        
+
         tempTreeReferences.clear();
         tempQuality = null;
     }

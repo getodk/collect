@@ -10,9 +10,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.formentry.FormEntryViewModel;
-import org.odk.collect.audiorecorder.MutableNonNullLiveData;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
+import org.odk.collect.shared.livedata.MutableNonNullLiveData;
 import org.odk.collect.testshared.FakeLifecycleOwner;
 
 import java.util.function.Consumer;

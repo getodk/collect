@@ -1,4 +1,4 @@
-package org.odk.collect.audiorecorder
+package org.odk.collect.shared.data
 
 data class Consumable<T>(val value: T) {
 

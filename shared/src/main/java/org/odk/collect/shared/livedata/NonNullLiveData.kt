@@ -1,4 +1,4 @@
-package org.odk.collect.audiorecorder
+package org.odk.collect.shared.livedata
 
 import androidx.lifecycle.LiveData
 

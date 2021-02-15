@@ -1,4 +1,4 @@
-package org.odk.collect.android.utilities;
+package org.odk.collect.shared.livedata;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
