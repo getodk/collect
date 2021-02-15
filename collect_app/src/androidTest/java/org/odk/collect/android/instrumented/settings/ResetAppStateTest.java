@@ -22,6 +22,9 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.GrantPermissionRule;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -44,9 +47,6 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import androidx.test.rule.GrantPermissionRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -84,7 +84,7 @@ public class ResetAppStateTest {
     @Test
     public void resetSettingsTest() throws IOException {
         WebCredentialsUtils webCredentialsUtils = new WebCredentialsUtils();
-        webCredentialsUtils.saveCredentials("https://opendatakit.appspot.com/", "admin", "admin");
+        webCredentialsUtils.saveCredentials("https://demo.getodk.org", "admin", "admin");
 
         setupTestSettings();
         resetAppState(Collections.singletonList(ApplicationResetter.ResetAction.RESET_PREFERENCES));
@@ -96,8 +96,8 @@ public class ResetAppStateTest {
 
         assertEquals(0, getFormsCount());
         assertEquals(0, getInstancesCount());
-        assertEquals("", webCredentialsUtils.getCredentials(URI.create("https://opendatakit.appspot.com/")).getUsername());
-        assertEquals("", webCredentialsUtils.getCredentials(URI.create("https://opendatakit.appspot.com/")).getPassword());
+        assertEquals("", webCredentialsUtils.getCredentials(URI.create("https://demo.getodk.org")).getUsername());
+        assertEquals("", webCredentialsUtils.getCredentials(URI.create("https://demo.getodk.org")).getPassword());
     }
 
     @Test
