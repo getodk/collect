@@ -116,6 +116,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
             TreeElement instanceElement = getInstanceElement(formFilePath, instanceFile);
             setUpSpreadsheet(spreadsheetUrl);
+            sheetsHelper.updateSpreadsheetLocaleForNewSpreadsheet(spreadsheet.getSpreadsheetId(), spreadsheet.getSheets().get(0).getProperties().getTitle());
             if (hasRepeatableGroups(instanceElement)) {
                 createSheetsIfNeeded(instanceElement);
             }
