@@ -289,7 +289,8 @@ dependencies {
     //updating would require minSdkVersion >=24, it uses zxing:core 3.3.2 by default
     implementation "com.journeyapps:zxing-android-embedded:3.6.0"
 
-    implementation "net.danlew:android.joda:2.10.9.1"
+    // Do not upgrade until https://github.com/JodaOrg/joda-time/issues/555 is addressed
+    implementation "net.danlew:android.joda:2.10.7.2"
 
     // Real LeakCanary for debug builds only: notifications, analysis, etc
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.6'
