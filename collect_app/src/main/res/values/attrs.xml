@@ -5,4 +5,8 @@
         <attr name="dividerColor" format="color" />
         <attr name="dividerCompat" format="reference" />
     </declare-styleable>
+
+    <declare-styleable name="Waveform">
+        <attr name="mini" format="boolean" />
+    </declare-styleable>
 </resources>
