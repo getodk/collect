@@ -16,8 +16,6 @@ import java.security.NoSuchAlgorithmException;
 
 import timber.log.Timber;
 
-import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
-
 public class ItemsetDbAdapter {
 
     private DatabaseHelper dbHelper;
@@ -187,7 +185,7 @@ public class ItemsetDbAdapter {
         if (c != null) {
             if (c.getCount() == 1) {
                 c.moveToFirst();
-                String table = getMd5FromString(getAbsoluteFilePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS), c.getString(c.getColumnIndex(KEY_PATH))));
+                String table = getMd5FromString(storagePathProvider.getAbsoluteFormFilePath(c.getString(c.getColumnIndex(KEY_PATH))));
                 db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE + table);
             }
             c.close();

@@ -4,9 +4,6 @@ import org.odk.collect.android.application.Collect;
 
 import java.io.File;
 
-import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
-import static org.odk.collect.utilities.PathUtils.getRelativeFilePath;
-
 public class StoragePathProvider {
     public String[] getOdkDirPaths() {
         return new String[]{
@@ -71,5 +68,23 @@ public class StoragePathProvider {
 
     public String getAbsoluteOfflineMapLayerPath(String filePath) {
         return getAbsoluteFilePath(getOdkDirPath(StorageSubdirectory.LAYERS), filePath);
+    }
+
+    public static String getRelativeFilePath(String dirPath, String filePath) {
+        if (filePath == null) {
+            return null;
+        }
+        return filePath.startsWith(dirPath)
+                ? filePath.substring(dirPath.length() + 1)
+                : filePath;
+    }
+
+    public static String getAbsoluteFilePath(String dirPath, String filePath) {
+        if (filePath == null) {
+            return null;
+        }
+        return filePath.startsWith(dirPath)
+                ? filePath
+                : dirPath + File.separator + filePath;
     }
 }

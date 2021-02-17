@@ -10,7 +10,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
-import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
 public class StoragePathProviderTest {
 
@@ -96,14 +95,14 @@ public class StoragePathProviderTest {
 
     @Test
     public void getAbsoluteFormFilePathWithScopedStorageTest() {
-        assertThat(getAbsoluteFilePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS), "All widgets.xml"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets.xml"));
-        assertThat(getAbsoluteFilePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS), "/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets.xml"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets.xml"));
+        assertThat(storagePathProvider.getAbsoluteFormFilePath("All widgets.xml"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets.xml"));
+        assertThat(storagePathProvider.getAbsoluteFormFilePath("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets.xml"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets.xml"));
 
-        assertThat(getAbsoluteFilePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS), "All widgets-media"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets-media"));
-        assertThat(getAbsoluteFilePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS), "/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets-media"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets-media"));
+        assertThat(storagePathProvider.getAbsoluteFormFilePath("All widgets-media"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets-media"));
+        assertThat(storagePathProvider.getAbsoluteFormFilePath("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets-media"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets-media"));
 
-        assertThat(getAbsoluteFilePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS), "All widgets-media/itemsets.csv"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets-media/itemsets.csv"));
-        assertThat(getAbsoluteFilePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS), "/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets-media/itemsets.csv"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets-media/itemsets.csv"));
+        assertThat(storagePathProvider.getAbsoluteFormFilePath("All widgets-media/itemsets.csv"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets-media/itemsets.csv"));
+        assertThat(storagePathProvider.getAbsoluteFormFilePath("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets-media/itemsets.csv"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets-media/itemsets.csv"));
     }
 
     @Test
