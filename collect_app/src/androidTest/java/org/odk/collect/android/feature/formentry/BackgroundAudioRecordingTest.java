@@ -18,7 +18,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
@@ -77,9 +76,9 @@ public class BackgroundAudioRecordingTest {
         }
 
         @Override
-        public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+        public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker) {
             if (permissionsProvider == null) {
-                permissionsProvider = new ControllableRecordAudioPermissionsProvider(permissionsChecker, storageStateProvider);
+                permissionsProvider = new ControllableRecordAudioPermissionsProvider(permissionsChecker);
             }
 
             return permissionsProvider;
@@ -223,8 +222,8 @@ public class BackgroundAudioRecordingTest {
         private PermissionListener action;
         private boolean controllable;
 
-        ControllableRecordAudioPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
-            super(permissionsChecker, storageStateProvider);
+        ControllableRecordAudioPermissionsProvider(PermissionsChecker permissionsChecker) {
+            super(permissionsChecker);
         }
 
         @Override

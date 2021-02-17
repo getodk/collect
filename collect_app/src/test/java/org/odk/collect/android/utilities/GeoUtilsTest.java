@@ -49,7 +49,7 @@ public class GeoUtilsTest {
     public void whenOfflineLayerFileDoesNotExist_should_getReferenceLayerFileReturnNull() {
         Bundle config = mock(Bundle.class);
         StoragePathProvider storagePathProvider = mock(StoragePathProvider.class);
-        when(storagePathProvider.getAbsoluteOfflineMapLayerPath(any())).thenReturn("/storage/emulated/0/odk/layers/MapBox_Demo_Layer/demo_layers.mbtiles");
+        when(storagePathProvider.getAbsoluteOfflineMapLayerPath(any())).thenReturn("/storage/emulated/0/Android/data/org.odk.collect.android/files/layers/MapBox_Demo_Layer/demo_layers.mbtiles");
 
         assertNull(GeoUtils.getReferenceLayerFile(config, storagePathProvider));
     }

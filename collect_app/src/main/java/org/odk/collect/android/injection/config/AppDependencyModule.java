@@ -23,7 +23,6 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.FirebaseAnalytics;
-import org.odk.collect.android.application.AppStateProvider;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CollectSettingsPreferenceMigrator;
@@ -92,7 +91,6 @@ import org.odk.collect.android.preferences.JsonPreferencesGenerator;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
@@ -198,8 +196,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
-        return new PermissionsProvider(permissionsChecker, storageStateProvider);
+    public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker) {
+        return new PermissionsProvider(permissionsChecker);
     }
 
     @Provides
@@ -271,12 +269,6 @@ public class AppDependencyModule {
     }
 
     @Provides
-    @Singleton
-    public StorageStateProvider providesStorageStateProvider() {
-        return new StorageStateProvider();
-    }
-
-    @Provides
     public StoragePathProvider providesStoragePathProvider() {
         return new StoragePathProvider();
     }
@@ -328,8 +320,8 @@ public class AppDependencyModule {
 
     @Singleton
     @Provides
-    public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager, Analytics analytics, AppStateProvider appStateProvider, StorageStateProvider storageStateProvider) {
-        return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator, propertyManager, analytics, appStateProvider, storageStateProvider);
+    public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager, Analytics analytics) {
+        return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator, propertyManager, analytics);
     }
 
     @Provides
@@ -489,12 +481,6 @@ public class AppDependencyModule {
     @Provides
     public JsonPreferencesGenerator providesJsonPreferencesGenerator() {
         return new JsonPreferencesGenerator();
-    }
-
-    @Provides
-    @Singleton
-    public AppStateProvider providesAppStateProvider() {
-        return new AppStateProvider();
     }
 
     @Provides

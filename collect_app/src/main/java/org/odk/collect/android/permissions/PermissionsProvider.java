@@ -20,7 +20,6 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 
 import java.util.List;
@@ -34,16 +33,13 @@ import timber.log.Timber;
  */
 public class PermissionsProvider {
     private final PermissionsChecker permissionsChecker;
-    private final StorageStateProvider storageStateProvider;
 
-    public PermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+    public PermissionsProvider(PermissionsChecker permissionsChecker) {
         this.permissionsChecker = permissionsChecker;
-        this.storageStateProvider = storageStateProvider;
     }
 
     public boolean areStoragePermissionsGranted() {
-        return storageStateProvider.isScopedStorageUsed()
-                || permissionsChecker.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        return true;
     }
 
     public boolean isCameraPermissionGranted() {
@@ -74,7 +70,7 @@ public class PermissionsProvider {
      * @param action is a listener that provides the calling component with the permission result.
      */
     public void requestStoragePermissions(Activity activity, @NonNull PermissionListener action) {
-        if (storageStateProvider.isScopedStorageUsed()) {
+        if (true) {
             action.granted();
             return;
         }

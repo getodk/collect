@@ -21,7 +21,6 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StorageInitializer;
-import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.robolectric.shadows.ShadowEnvironment;
 
@@ -83,8 +82,8 @@ public class FormDownloadListActivityTest {
         }
 
         @Override
-        public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
-            return new AlwaysGrantStoragePermissionsPermissionsProvider(permissionsChecker, storageStateProvider);
+        public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker) {
+            return new AlwaysGrantStoragePermissionsPermissionsProvider(permissionsChecker);
         }
 
         @Override
