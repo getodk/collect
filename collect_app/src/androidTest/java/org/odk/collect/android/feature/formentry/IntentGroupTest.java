@@ -16,7 +16,6 @@
 
 package org.odk.collect.android.feature.formentry;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.ClipData;
@@ -26,7 +25,6 @@ import android.os.Bundle;
 
 import androidx.core.content.FileProvider;
 import androidx.test.rule.ActivityTestRule;
-import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -74,11 +72,7 @@ public class IntentGroupTest {
 
     @Rule
     public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ))
-            .around(new ResetStateRule())
+            .outerRule(new ResetStateRule())
             .around(new CopyFormRule(INTENT_GROUP_FORM, true))
             .around(activityTestRule);
 

@@ -29,7 +29,6 @@ import android.widget.LinearLayout;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StorageInitializer;
@@ -73,27 +72,13 @@ public class SplashScreenActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         DaggerUtils.getComponent(this).inject(this);
 
-        permissionsProvider.requestStoragePermissions(this, new PermissionListener() {
-            @Override
-            public void granted() {
-                // must be at the beginning of any activity that can be called from an external intent
-                try {
-                    new StorageInitializer().createOdkDirsOnStorage();
-                } catch (RuntimeException e) {
-                    DialogUtils.showDialog(DialogUtils.createErrorDialog(SplashScreenActivity.this,
-                            e.getMessage(), EXIT), SplashScreenActivity.this);
-                    return;
-                }
-
-                init();
-            }
-
-            @Override
-            public void denied() {
-                // The activity has to finish because ODK Collect cannot function without these permissions.
-                finish();
-            }
-        });
+        // must be at the beginning of any activity that can be called from an external intent
+        try {
+            new StorageInitializer().createOdkDirsOnStorage();
+            init();
+        } catch (RuntimeException e) {
+            DialogUtils.showDialog(DialogUtils.createErrorDialog(this, e.getMessage(), EXIT), this);
+        }
     }
 
     private void init() {

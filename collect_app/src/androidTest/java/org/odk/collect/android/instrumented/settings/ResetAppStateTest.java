@@ -16,18 +16,15 @@
 
 package org.odk.collect.android.instrumented.settings;
 
-import android.Manifest;
 import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
@@ -56,12 +53,6 @@ import static org.junit.Assert.assertTrue;
 public class ResetAppStateTest {
 
     private final StoragePathProvider storagePathProvider = new StoragePathProvider();
-
-    @Rule
-    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    );
 
     @Before
     public void setUp() throws IOException {

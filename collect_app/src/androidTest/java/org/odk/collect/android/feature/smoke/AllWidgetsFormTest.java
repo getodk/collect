@@ -1,9 +1,6 @@
 package org.odk.collect.android.feature.smoke;
 
-import android.Manifest;
 import android.content.Context;
-
-import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -49,11 +46,7 @@ public class AllWidgetsFormTest {
 
     @Rule
     public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            )
-            .around(new ResetStateRule(new AppDependencyModule() {
+            .outerRule(new ResetStateRule(new AppDependencyModule() {
                 @Override
                 public ActivityAvailability providesActivityAvailability(Context context) {
                     return activityAvailability;

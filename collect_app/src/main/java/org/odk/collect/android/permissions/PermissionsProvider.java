@@ -38,10 +38,6 @@ public class PermissionsProvider {
         this.permissionsChecker = permissionsChecker;
     }
 
-    public boolean areStoragePermissionsGranted() {
-        return true;
-    }
-
     public boolean isCameraPermissionGranted() {
         return permissionsChecker.isPermissionGranted(Manifest.permission.CAMERA);
     }
@@ -60,33 +56,6 @@ public class PermissionsProvider {
 
     public boolean isReadPhoneStatePermissionGranted() {
         return permissionsChecker.isPermissionGranted(Manifest.permission.READ_PHONE_STATE);
-    }
-
-    /**
-     * Checks to see if the user granted Collect the permissions necessary for reading
-     * and writing to storage and if not utilizes the permissions API to request them.
-     *
-     * @param activity needed for requesting permissions
-     * @param action is a listener that provides the calling component with the permission result.
-     */
-    public void requestStoragePermissions(Activity activity, @NonNull PermissionListener action) {
-        if (true) {
-            action.granted();
-            return;
-        }
-
-        requestPermissions(activity, new PermissionListener() {
-            @Override
-            public void granted() {
-                action.granted();
-            }
-
-            @Override
-            public void denied() {
-                showAdditionalExplanation(activity, R.string.storage_runtime_permission_denied_title,
-                        R.string.storage_runtime_permission_denied_desc, R.drawable.sd, action);
-            }
-        }, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
     public void requestReadStoragePermission(Activity activity, @NonNull PermissionListener action) {

@@ -42,7 +42,6 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
@@ -116,18 +115,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
             showAllMode = savedInstanceState.getBoolean(SHOW_ALL_MODE);
         }
 
-        permissionsProvider.requestStoragePermissions(this, new PermissionListener() {
-            @Override
-            public void granted() {
-                init();
-            }
-
-            @Override
-            public void denied() {
-                // The activity has to finish because ODK Collect cannot function without these permissions.
-                finishAndRemoveTask();
-            }
-        });
+        init();
     }
 
     @OnClick({R.id.upload_button})

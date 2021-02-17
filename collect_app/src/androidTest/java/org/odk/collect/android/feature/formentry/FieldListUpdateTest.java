@@ -88,11 +88,7 @@ public class FieldListUpdateTest {
 
     @Rule
     public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.CAMERA)
-            )
+            .outerRule(GrantPermissionRule.grant(Manifest.permission.CAMERA))
             .around(new ResetStateRule())
             .around(new CopyFormRule(FIELD_LIST_TEST_FORM, Collections.singletonList("fruits.csv"), true));
 

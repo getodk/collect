@@ -26,7 +26,6 @@ import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -88,29 +87,13 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
 
-        // This activity is accessed directly externally
-        permissionsProvider.requestStoragePermissions(this, new PermissionListener() {
-            @Override
-            public void granted() {
-                // must be at the beginning of any activity that can be called from an external intent
-                try {
-                    new StorageInitializer().createOdkDirsOnStorage();
-                } catch (RuntimeException e) {
-                    DialogUtils.showDialog(DialogUtils.createErrorDialog(InstanceUploaderActivity.this,
-                            e.getMessage(), EXIT), InstanceUploaderActivity.this);
-                    return;
-                }
-
-                init(savedInstanceState);
-            }
-
-            @Override
-            public void denied() {
-                // The activity has to finish because ODK Collect cannot function without these permissions.
-                finish();
-            }
-        });
-
+        // must be at the beginning of any activity that can be called from an external intent
+        try {
+            new StorageInitializer().createOdkDirsOnStorage();
+            init(savedInstanceState);
+        } catch (RuntimeException e) {
+            DialogUtils.showDialog(DialogUtils.createErrorDialog(this, e.getMessage(), EXIT), this);
+        }
     }
 
     private void init(Bundle savedInstanceState) {

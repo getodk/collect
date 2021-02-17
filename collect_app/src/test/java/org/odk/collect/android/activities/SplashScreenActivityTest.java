@@ -13,19 +13,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.support.AlwaysDenyStoragePermissionPermissionsProvider;
-import org.odk.collect.android.activities.support.AlwaysGrantStoragePermissionsPermissionsProvider;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
-import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.utilities.UserAgentProvider;
 import org.robolectric.annotation.LooperMode;
 
@@ -50,11 +46,6 @@ public class SplashScreenActivityTest {
         RobolectricHelpers.mountExternalStorage();
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
-            public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker) {
-                return new AlwaysGrantStoragePermissionsPermissionsProvider(permissionsChecker);
-            }
-
-            @Override
             public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager, Analytics analytics) {
                 return applicationInitializer;
             }
@@ -62,7 +53,7 @@ public class SplashScreenActivityTest {
     }
 
     @Test
-    public void whenStoragePermissionGranted_createsODKDirectories() {
+    public void whenAppStarts_createsODKDirectories() {
         ActivityScenario.launch(SplashScreenActivity.class);
 
         for (String dirName : new StoragePathProvider().getOdkDirPaths()) {
@@ -70,19 +61,6 @@ public class SplashScreenActivityTest {
             Assert.assertTrue("File " + dirName + "does not exist", dir.exists());
             Assert.assertTrue("File" + dirName + "does not exist", dir.isDirectory());
         }
-    }
-
-    @Test
-    public void whenStoragePermissionIsNotGranted_finishes() {
-        RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
-            @Override
-            public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker) {
-                return new AlwaysDenyStoragePermissionPermissionsProvider(permissionsChecker);
-            }
-        });
-
-        ActivityScenario<SplashScreenActivity> scenario = ActivityScenario.launch(SplashScreenActivity.class);
-        assertThat(scenario.getState(), is(Lifecycle.State.DESTROYED));
     }
 
     @Test

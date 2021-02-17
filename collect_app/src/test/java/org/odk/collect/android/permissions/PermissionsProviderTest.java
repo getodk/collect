@@ -28,30 +28,6 @@ public class PermissionsProviderTest {
     }
 
     @Test
-    public void whenStoragePermissionsGrantedAndScopedStorageNotUsed_shouldAreStoragePermissionsGrantedReturnTrue() {
-        when(permissionsChecker.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)).thenReturn(true);
-        permissionsProvider = new PermissionsProvider(permissionsChecker);
-    }
-
-    @Test
-    public void whenStoragePermissionsGrantedAndScopedStorageUsed_shouldAreStoragePermissionsGrantedReturnTrue() {
-        when(permissionsChecker.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)).thenReturn(true);
-        permissionsProvider = new PermissionsProvider(permissionsChecker);
-    }
-
-    @Test
-    public void whenStoragePermissionsNotGrantedAndScopedStorageNotUsed_shouldAreStoragePermissionsGrantedReturnFalse() {
-        when(permissionsChecker.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)).thenReturn(false);
-        permissionsProvider = new PermissionsProvider(permissionsChecker);
-    }
-
-    @Test
-    public void whenStoragePermissionsNotGrantedAndScopedStorageUsed_shouldAreStoragePermissionsGrantedReturnTrue() {
-        when(permissionsChecker.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)).thenReturn(false);
-        permissionsProvider = new PermissionsProvider(permissionsChecker);
-    }
-
-    @Test
     public void whenCameraPermissionGranted_shouldIsCameraPermissionGrantedReturnTrue() {
         when(permissionsChecker.isPermissionGranted(Manifest.permission.CAMERA)).thenReturn(true);
         permissionsProvider = new PermissionsProvider(permissionsChecker);

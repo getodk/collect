@@ -108,25 +108,13 @@ public class FillBlankFormActivity extends FormListActivity implements
 
         menuDelegate = new BlankFormListMenuDelegate(this, blankFormsListViewModel, networkStateProvider);
 
-        permissionsProvider.requestStoragePermissions(this, new PermissionListener() {
-            @Override
-            public void granted() {
-                // must be at the beginning of any activity that can be called from an external intent
-                try {
-                    new StorageInitializer().createOdkDirsOnStorage();
-                    init();
-                } catch (RuntimeException e) {
-                    createErrorDialog(e.getMessage(), EXIT);
-                    return;
-                }
-            }
-
-            @Override
-            public void denied() {
-                // The activity has to finish because ODK Collect cannot function without these permissions.
-                finishAndRemoveTask();
-            }
-        });
+        // must be at the beginning of any activity that can be called from an external intent
+        try {
+            new StorageInitializer().createOdkDirsOnStorage();
+            init();
+        } catch (RuntimeException e) {
+            createErrorDialog(e.getMessage(), EXIT);
+        }
     }
 
     @Override

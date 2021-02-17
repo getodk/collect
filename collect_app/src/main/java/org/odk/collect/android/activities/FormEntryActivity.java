@@ -285,7 +285,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private String startingXPath;
     private String waitingXPath;
     private boolean newForm = true;
-    private boolean onResumeWasCalledWithoutPermissions;
     private boolean readPhoneStatePermissionRequestNeeded;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -428,36 +427,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             mediaLoadingFragment = (MediaLoadingFragment) getFragmentManager().findFragmentByTag(TAG_MEDIA_LOADING_FRAGMENT);
         }
 
-        permissionsProvider.requestStoragePermissions(this, new PermissionListener() {
-            @Override
-            public void granted() {
-                // must be at the beginning of any activity that can be called from an external intent
-                try {
-                    new StorageInitializer().createOdkDirsOnStorage();
-                    setupFields(savedInstanceState);
-                    loadForm();
-
-                    /**
-                     * Since onResume is called after onCreate we check to see if
-                     * it was called without the permissions that are required. If so then
-                     * we call it.This is especially useful for cases where a user might revoke
-                     * permissions to storage and not know the implications it has on the form entry.
-                     */
-                    if (onResumeWasCalledWithoutPermissions) {
-                        onResume();
-                    }
-                } catch (RuntimeException e) {
-                    createErrorDialog(e.getMessage(), true);
-                    return;
-                }
-            }
-
-            @Override
-            public void denied() {
-                // The activity has to finish because ODK Collect cannot function without these permissions.
-                finishAndRemoveTask();
-            }
-        });
+        // must be at the beginning of any activity that can be called from an external intent
+        try {
+            new StorageInitializer().createOdkDirsOnStorage();
+            setupFields(savedInstanceState);
+            loadForm();
+        } catch (RuntimeException e) {
+            createErrorDialog(e.getMessage(), true);
+        }
     }
 
     private void setupViewModels() {
@@ -2003,11 +1980,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     protected void onResume() {
         super.onResume();
-
-        if (!permissionsProvider.areStoragePermissionsGranted()) {
-            onResumeWasCalledWithoutPermissions = true;
-            return;
-        }
 
         String navigation = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_NAVIGATION);
         showNavigationButtons = navigation.contains(GeneralKeys.NAVIGATION_BUTTONS);

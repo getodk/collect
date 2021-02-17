@@ -1,11 +1,9 @@
 package org.odk.collect.android.feature.formentry;
 
-import android.Manifest;
 import android.text.TextUtils;
 
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
-import androidx.test.rule.GrantPermissionRule;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.AfterClass;
@@ -49,11 +47,7 @@ public class GuidanceHintFormTest {
 
     @Rule
     public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ))
-            .around(new ResetStateRule())
+            .outerRule(new ResetStateRule())
             .around(new CopyFormRule(GUIDANCE_SAMPLE_FORM, true));
 
     @Before

@@ -28,7 +28,6 @@ public class PermissionsTest {
                 "android.permission.ACCESS_FINE_LOCATION",
                 "android.permission.ACCESS_COARSE_LOCATION",
                 "android.permission.READ_EXTERNAL_STORAGE",
-                "android.permission.WRITE_EXTERNAL_STORAGE",
                 "android.permission.GET_ACCOUNTS",
                 "android.permission.USE_CREDENTIALS",
                 "android.permission.ACCESS_NETWORK_STATE",

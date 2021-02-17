@@ -1,9 +1,5 @@
 package org.odk.collect.android.instrumented.forms;
 
-import android.Manifest;
-
-import androidx.test.rule.GrantPermissionRule;
-
 import org.javarosa.core.reference.RootTranslator;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -25,11 +21,7 @@ public class FormUtilsTest {
 
     @Rule
     public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ))
-            .around(new ResetStateRule())
+            .outerRule(new ResetStateRule())
             .around(new CopyFormRule(BASIC_FORM));
 
     /* Verify that each host string matches only a single root translator, allowing for them to

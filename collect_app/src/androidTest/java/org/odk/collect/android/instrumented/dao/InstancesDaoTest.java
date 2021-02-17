@@ -16,16 +16,13 @@
 
 package org.odk.collect.android.instrumented.dao;
 
-import android.Manifest;
 import android.database.Cursor;
 import android.net.Uri;
 
-import androidx.test.rule.GrantPermissionRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
@@ -59,12 +56,6 @@ public class InstancesDaoTest {
     private Instance widgetsInstance;
     private Instance sampleInstance;
     private Instance biggestNOfSet2Instance;
-
-    @Rule
-    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    );
 
     @Before
     public void setUp() {

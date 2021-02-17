@@ -31,7 +31,6 @@ import org.odk.collect.android.database.FormDatabaseMigrator;
 import org.odk.collect.android.database.FormsDatabaseHelper;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -61,9 +60,6 @@ public class FormsProvider extends ContentProvider {
     private static final UriMatcher URI_MATCHER;
 
     private static FormsDatabaseHelper dbHelper;
-
-    @Inject
-    PermissionsProvider permissionsProvider;
 
     @Inject
     Clock clock;
@@ -110,11 +106,6 @@ public class FormsProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-        deferDaggerInit();
-        if (!permissionsProvider.areStoragePermissionsGranted()) {
-            return null;
-        }
-
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(FORMS_TABLE_NAME);
         qb.setProjectionMap(sFormsProjectionMap);
@@ -172,9 +163,6 @@ public class FormsProvider extends ContentProvider {
     @Override
     public synchronized Uri insert(@NonNull Uri uri, ContentValues initialValues) {
         deferDaggerInit();
-        if (!permissionsProvider.areStoragePermissionsGranted()) {
-            return null;
-        }
 
         // Validate the requested uri
         if (URI_MATCHER.match(uri) != FORMS) {
@@ -290,11 +278,6 @@ public class FormsProvider extends ContentProvider {
      */
     @Override
     public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
-        deferDaggerInit();
-        if (!permissionsProvider.areStoragePermissionsGranted()) {
-            return 0;
-        }
-
         StoragePathProvider storagePathProvider = new StoragePathProvider();
         int count = 0;
         FormsDatabaseHelper formsDatabaseHelper = getDbHelper();
@@ -387,11 +370,6 @@ public class FormsProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String where, String[] whereArgs) {
-        deferDaggerInit();
-        if (!permissionsProvider.areStoragePermissionsGranted()) {
-            return 0;
-        }
-
         StoragePathProvider storagePathProvider = new StoragePathProvider();
 
         int count = 0;

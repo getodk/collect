@@ -33,11 +33,7 @@ public class SetGeopointActionTest {
 
     @Rule
     public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.ACCESS_FINE_LOCATION)
-            )
+            .outerRule(GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION))
             .around(new ResetStateRule())
             .around(new CopyFormRule(SETGEOPOINT_ACTION_FORM, true));
 

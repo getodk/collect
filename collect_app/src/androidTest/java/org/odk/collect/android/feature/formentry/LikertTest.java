@@ -38,11 +38,7 @@ public class LikertTest {
 
     @Rule
     public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.CAMERA)
-            )
+            .outerRule(GrantPermissionRule.grant(Manifest.permission.CAMERA))
             .around(new ResetStateRule())
             .around(new CopyFormRule(LIKERT_TEST_FORM, Collections.singletonList("famous.jpg"), true));
 

@@ -32,11 +32,7 @@ public class FormMapTest {
     @Rule public IntentsTestRule<MainMenuActivity> rule = new IntentsTestRule<>(MainMenuActivity.class);
 
     @Rule public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-            ))
+            .outerRule(GrantPermissionRule.grant(Manifest.permission.ACCESS_COARSE_LOCATION))
             .around(new ResetStateRule())
             .around(new CopyFormRule(SINGLE_GEOPOINT_FORM))
             .around(new CopyFormRule(NO_GEOPOINT_FORM));
