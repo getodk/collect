@@ -22,7 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
 import static org.odk.collect.android.preferences.AdminPasswordDialogFragment.ARG_ACTION;
-import static org.odk.collect.android.preferences.AdminPasswordDialogFragment.Action.STORAGE_MIGRATION;
+import static org.odk.collect.android.preferences.AdminPasswordDialogFragment.Action.ADMIN_SETTINGS;
 import static org.robolectric.Shadows.shadowOf;
 import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 
@@ -52,7 +52,7 @@ public class AdminPasswordDialogFragmentTest {
             ((AlertDialog) fragment.getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).performClick();
             shadowOf(getMainLooper()).idle();
 
-            assertThat(activity.onCorrectAdminPasswordCalledWith, equalTo(STORAGE_MIGRATION));
+            assertThat(activity.onCorrectAdminPasswordCalledWith, equalTo(ADMIN_SETTINGS));
             assertThat(activity.onIncorrectAdminPasswordCalled, equalTo(false));
         });
     }
@@ -91,7 +91,7 @@ public class AdminPasswordDialogFragmentTest {
             ((AlertDialog) fragment.getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).performClick();
             shadowOf(getMainLooper()).idle();
 
-            assertThat(activity.onCorrectAdminPasswordCalledWith, equalTo(STORAGE_MIGRATION));
+            assertThat(activity.onCorrectAdminPasswordCalledWith, equalTo(ADMIN_SETTINGS));
             assertThat(activity.onIncorrectAdminPasswordCalled, equalTo(false));
         });
     }
@@ -99,7 +99,7 @@ public class AdminPasswordDialogFragmentTest {
     private AdminPasswordDialogFragment createFragment() {
         AdminPasswordDialogFragment fragment = new AdminPasswordDialogFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_ACTION, STORAGE_MIGRATION);
+        args.putSerializable(ARG_ACTION, ADMIN_SETTINGS);
         fragment.setArguments(args);
         return fragment;
     }

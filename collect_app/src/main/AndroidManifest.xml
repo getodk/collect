@@ -279,9 +279,5 @@ the specific language governing permissions and limitations under the License.
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".storage.migration.StorageMigrationService"
-            android:exported="false" />
-
     </application>
 </manifest>

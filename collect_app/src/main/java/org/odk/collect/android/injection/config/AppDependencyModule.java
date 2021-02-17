@@ -94,9 +94,6 @@ import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.android.storage.migration.StorageEraser;
-import org.odk.collect.android.storage.migration.StorageMigrationRepository;
-import org.odk.collect.android.storage.migration.StorageMigrator;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
@@ -222,21 +219,8 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public StorageMigrationRepository providesStorageMigrationRepository() {
-        return new StorageMigrationRepository();
-    }
-
-    @Provides
-    @Singleton
     public StorageInitializer providesStorageInitializer() {
         return new StorageInitializer();
-    }
-
-    @Provides
-    public StorageMigrator providesStorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageMigrationRepository storageMigrationRepository, ReferenceManager referenceManager, FormUpdateManager formUpdateManager, FormSubmitManager formSubmitManager, Analytics analytics, @Named("FORMS") ChangeLock changeLock) {
-        StorageEraser storageEraser = new StorageEraser(storagePathProvider);
-
-        return new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository, GeneralSharedPreferences.getInstance(), referenceManager, analytics);
     }
 
     @Provides

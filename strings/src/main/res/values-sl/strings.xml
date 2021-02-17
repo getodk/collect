@@ -441,10 +441,6 @@
   <string name="turn_off_flashlight">Izklopi svetilko</string>
   <string name="server_password">Geslo strežnika</string>
   <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <!--Action to begin a storage migration-->
-  <!--##############################################
      # MISC
      ##############################################-->
   <string name="ok">OK</string>

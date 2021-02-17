@@ -30,7 +30,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
@@ -56,17 +55,11 @@ import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageStateProvider;
-import org.odk.collect.android.storage.migration.StorageMigrationDialog;
-import org.odk.collect.android.storage.migration.StorageMigrationRepository;
-import org.odk.collect.android.storage.migration.StorageMigrationResult;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.material.MaterialBanner;
 
 import java.lang.ref.WeakReference;
 
@@ -76,7 +69,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.DialogUtils.getDialog;
 import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
 
 /**
@@ -96,24 +88,14 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     private Button getFormsButton;
     private AlertDialog alertDialog;
     private MenuItem qrcodeScannerMenuItem;
-    private int savedCount;
     private final IncomingHandler handler = new IncomingHandler(this);
     private final MyContentObserver contentObserver = new MyContentObserver();
 
     @Inject
     public Analytics analytics;
 
-    @BindView(R.id.storageMigrationBanner)
-    MaterialBanner storageMigrationBanner;
-
     @BindView(R.id.version_sha)
     TextView versionSHAView;
-
-    @Inject
-    StorageMigrationRepository storageMigrationRepository;
-
-    @Inject
-    StorageStateProvider storageStateProvider;
 
     @Inject
     StoragePathProvider storagePathProvider;
@@ -138,8 +120,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
         initToolbar();
         DaggerUtils.getComponent(this).inject(this);
-
-        storageMigrationRepository.getResult().observe(this, this::onStorageMigrationFinish);
 
         // enter data button. expects a result.
         Button enterDataButton = findViewById(R.id.enter_data);
@@ -265,14 +245,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         super.onResume();
 
         updateButtons();
-        if (!storageMigrationRepository.isMigrationBeingPerformed()) {
-            getContentResolver().registerContentObserver(InstanceColumns.CONTENT_URI, true, contentObserver);
-        }
-
+        getContentResolver().registerContentObserver(InstanceColumns.CONTENT_URI, true, contentObserver);
         setButtonsVisibility();
         invalidateOptionsMenu();
-        setUpStorageMigrationBanner();
-        tryToPerformAutomaticMigration();
     }
 
     private void setButtonsVisibility() {
@@ -290,12 +265,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             alertDialog.dismiss();
         }
         getContentResolver().unregisterContentObserver(contentObserver);
-    }
-
-    @Override
-    public void onDestroy() {
-        storageMigrationRepository.clearResult();
-        super.onDestroy();
     }
 
     @Override
@@ -374,49 +343,48 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     private void updateButtons() {
-        if (!storageMigrationRepository.isMigrationBeingPerformed()) {
-            InstancesDao instancesDao = new InstancesDao();
+        InstancesDao instancesDao = new InstancesDao();
 
-            int completedCount;
-            try (Cursor finalizedCursor = instancesDao.getFinalizedInstancesCursor()) {
-                completedCount = finalizedCursor != null ? finalizedCursor.getCount() : 0;
-            } catch (Exception ignored) {
-                completedCount = 0;
-            }
+        int completedCount;
+        try (Cursor finalizedCursor = instancesDao.getFinalizedInstancesCursor()) {
+            completedCount = finalizedCursor != null ? finalizedCursor.getCount() : 0;
+        } catch (Exception ignored) {
+            completedCount = 0;
+        }
 
-            try (Cursor savedCursor = instancesDao.getUnsentInstancesCursor()) {
-                savedCount = savedCursor != null ? savedCursor.getCount() : 0;
-            } catch (Exception ignored) {
-                savedCount = 0;
-            }
+        int savedCount;
+        try (Cursor savedCursor = instancesDao.getUnsentInstancesCursor()) {
+            savedCount = savedCursor != null ? savedCursor.getCount() : 0;
+        } catch (Exception ignored) {
+            savedCount = 0;
+        }
 
-            int viewSentCount;
-            try (Cursor viewSentCursor = instancesDao.getSentInstancesCursor()) {
-                viewSentCount = viewSentCursor != null ? viewSentCursor.getCount() : 0;
-            } catch (Exception ignored) {
-                viewSentCount = 0;
-            }
+        int viewSentCount;
+        try (Cursor viewSentCursor = instancesDao.getSentInstancesCursor()) {
+            viewSentCount = viewSentCursor != null ? viewSentCursor.getCount() : 0;
+        } catch (Exception ignored) {
+            viewSentCount = 0;
+        }
 
-            if (completedCount > 0) {
-                sendDataButton.setText(
-                        getString(R.string.send_data_button, String.valueOf(completedCount)));
-            } else {
-                sendDataButton.setText(getString(R.string.send_data));
-            }
+        if (completedCount > 0) {
+            sendDataButton.setText(
+                    getString(R.string.send_data_button, String.valueOf(completedCount)));
+        } else {
+            sendDataButton.setText(getString(R.string.send_data));
+        }
 
-            if (savedCount > 0) {
-                reviewDataButton.setText(getString(R.string.review_data_button,
-                        String.valueOf(savedCount)));
-            } else {
-                reviewDataButton.setText(getString(R.string.review_data));
-            }
+        if (savedCount > 0) {
+            reviewDataButton.setText(getString(R.string.review_data_button,
+                    String.valueOf(savedCount)));
+        } else {
+            reviewDataButton.setText(getString(R.string.review_data));
+        }
 
-            if (viewSentCount > 0) {
-                viewSentFormsButton.setText(
-                        getString(R.string.view_sent_forms_button, String.valueOf(viewSentCount)));
-            } else {
-                viewSentFormsButton.setText(getString(R.string.view_sent_forms));
-            }
+        if (viewSentCount > 0) {
+            viewSentFormsButton.setText(
+                    getString(R.string.view_sent_forms_button, String.valueOf(viewSentCount)));
+        } else {
+            viewSentFormsButton.setText(getString(R.string.view_sent_forms));
         }
     }
 
@@ -425,13 +393,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         switch (action) {
             case ADMIN_SETTINGS:
                 startActivity(new Intent(this, AdminPreferencesActivity.class));
-                break;
-            case STORAGE_MIGRATION:
-                StorageMigrationDialog dialog = showStorageMigrationDialog();
-                if (dialog != null) {
-                    dialog.startStorageMigration();
-                }
-
                 break;
             case SCAN_QR_CODE:
                 startActivity(new Intent(this, QRCodeTabsActivity.class));
@@ -476,63 +437,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         public void onChange(boolean selfChange) {
             super.onChange(selfChange);
             handler.sendEmptyMessage(0);
-        }
-    }
-
-    private void onStorageMigrationFinish(StorageMigrationResult result) {
-        if (result == StorageMigrationResult.SUCCESS) {
-            DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
-            displayBannerWithSuccessStorageMigrationResult();
-        } else {
-            StorageMigrationDialog dialog = showStorageMigrationDialog();
-
-            if (dialog != null) {
-                dialog.handleMigrationError(result);
-            }
-        }
-    }
-
-    @Nullable
-    private StorageMigrationDialog showStorageMigrationDialog() {
-        Bundle args = new Bundle();
-        args.putInt(StorageMigrationDialog.ARG_UNSENT_INSTANCES, savedCount);
-
-        showIfNotShowing(StorageMigrationDialog.class, args, getSupportFragmentManager());
-        return getDialog(StorageMigrationDialog.class, getSupportFragmentManager());
-    }
-
-    private void setUpStorageMigrationBanner() {
-        if (!storageStateProvider.isScopedStorageUsed()) {
-            displayStorageMigrationBanner();
-        }
-    }
-
-    private void displayStorageMigrationBanner() {
-        storageMigrationBanner.setVisibility(View.VISIBLE);
-        storageMigrationBanner.setText(getText(R.string.scoped_storage_banner_text));
-        storageMigrationBanner.setActionText(getString(R.string.scoped_storage_learn_more));
-        storageMigrationBanner.setAction(() -> {
-            showStorageMigrationDialog();
-            getContentResolver().unregisterContentObserver(contentObserver);
-        });
-    }
-
-    private void displayBannerWithSuccessStorageMigrationResult() {
-        storageMigrationBanner.setVisibility(View.VISIBLE);
-        storageMigrationBanner.setText(getString(R.string.storage_migration_completed));
-        storageMigrationBanner.setActionText(getString(R.string.scoped_storage_dismiss));
-        storageMigrationBanner.setAction(() -> {
-            storageMigrationBanner.setVisibility(View.GONE);
-            storageMigrationRepository.clearResult();
-        });
-    }
-
-    private void tryToPerformAutomaticMigration() {
-        if (storageStateProvider.shouldPerformAutomaticMigration()) {
-            StorageMigrationDialog dialog = showStorageMigrationDialog();
-            if (dialog != null) {
-                dialog.startStorageMigration();
-            }
         }
     }
 }

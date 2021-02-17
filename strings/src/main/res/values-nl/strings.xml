@@ -457,10 +457,6 @@
   <string name="configure_via_qr_code">Configueer via QR code</string>
   <string name="share">Deel</string>
   <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <!--Action to begin a storage migration-->
-  <!--##############################################
      # MISC
      ##############################################-->
   <string name="ok">OK</string>

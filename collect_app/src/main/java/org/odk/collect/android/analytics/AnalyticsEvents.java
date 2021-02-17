@@ -67,11 +67,6 @@ public class AnalyticsEvents {
     public static final String PROMPT = "Prompt";
 
     /**
-     * Track scoped storage migration attempts. The action should be the result of the attempt.
-     */
-    public static final String SCOPED_STORAGE_MIGRATION = "ScopedStorageMigration";
-
-    /**
      * Track attempts to download a form with the same formid/version but different contents as one
      * already on the device. We know this happens in the case of Central drafts but it should
      * otherwise be rare.

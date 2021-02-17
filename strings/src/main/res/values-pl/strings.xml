@@ -740,11 +740,6 @@
   <string name="corrupt_imported_preferences_error">Bieżące ustawienia nie działają prawidłowo. Zresetuj je lub załaduj poprawne w ustawieniach administratora.</string>
   <string name="corrupt_settings_file_notification">Przepraszamy, plik ustawień jest uszkodzony i powinien zostać usunięty lub zamieniony</string>
   <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <string name="scoped_storage_learn_more">Dowiedz się więcej i przenieś</string>
-  <!--Action to begin a storage migration-->
-  <!--##############################################
      # MISC
      ##############################################-->
   <string name="ok">OK</string>

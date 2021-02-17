@@ -435,10 +435,6 @@
   <string name="generate">Genera</string>
   <string name="corrupt_settings_file_notification">Arxiu de configuració corrupte. Cal se esborrat o reemplaçat</string>
   <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <!--Action to begin a storage migration-->
-  <!--##############################################
      # MISC
      ##############################################-->
   <string name="ok">D\'acord</string>

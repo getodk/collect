@@ -558,10 +558,6 @@
   <string name="invalid_qrcode">Kodi QR nuk ka parametra të vlefshëm</string>
   <string name="corrupt_settings_file_notification">File i parametrave është i korruptuar dhe duhet fshirë ose zëvendësuar</string>
   <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <!--Action to begin a storage migration-->
-  <!--##############################################
      # MISC
      ##############################################-->
   <string name="ok">OK</string>
