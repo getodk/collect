@@ -32,7 +32,7 @@ public class LegacySettingsFileImporter {
             String settings = legacySettingsFileReader.toJSON();
 
             if (settings != null) {
-                String type = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json").exists()
+                String type = new File(storagePathProvider.getOdkRootDirPath() + "/collect.settings.json").exists()
                         ? SETTINGS_IMPORT_JSON : SETTINGS_IMPORT_SERIALIZED;
                 String settingsHash = FileUtils.getMd5Hash(new ByteArrayInputStream(settings.getBytes()));
 
@@ -50,7 +50,7 @@ public class LegacySettingsFileImporter {
         } catch (LegacySettingsFileReader.CorruptSettingsFileException e) {
             ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
 
-            String type = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json").exists()
+            String type = new File(storagePathProvider.getOdkRootDirPath() + "/collect.settings.json").exists()
                     ? SETTINGS_IMPORT_JSON : SETTINGS_IMPORT_SERIALIZED;
             analytics.logEvent(type, "Corrupt exception", "none");
             return false;

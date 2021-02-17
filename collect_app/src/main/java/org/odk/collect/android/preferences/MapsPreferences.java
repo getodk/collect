@@ -224,7 +224,7 @@ public class MapsPreferences extends BasePreferenceFragment {
 
         referenceLayerPref.setItems(items);
 
-        String layerDir = FileUtils.simplifyScopedStoragePath(storagePathProvider.getDirPath(StorageSubdirectory.LAYERS));
+        String layerDir = FileUtils.simplifyScopedStoragePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS));
         referenceLayerPref.setDialogCaption(context.getString(
             items.size() > 1 ? R.string.layer_data_caption : R.string.layer_data_caption_none,
             layerDir, context.getString(MapProvider.getSourceLabelId())
@@ -236,7 +236,7 @@ public class MapsPreferences extends BasePreferenceFragment {
     /** Gets the list of layer data files supported by the current MapConfigurator. */
     private static List<File> getSupportedLayerFiles(MapConfigurator cftor) {
         List<File> files = new ArrayList<>();
-        for (File file : FileUtils.walk(new File(new StoragePathProvider().getDirPath(StorageSubdirectory.LAYERS)))) {
+        for (File file : FileUtils.walk(new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.LAYERS)))) {
             if (cftor.supportsLayer(file)) {
                 files.add(file);
             }

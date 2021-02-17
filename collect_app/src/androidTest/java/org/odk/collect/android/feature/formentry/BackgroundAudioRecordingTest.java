@@ -107,7 +107,7 @@ public class BackgroundAudioRecordingTest {
         formEndPage.clickSaveAndExit();
         assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
 
-        File instancesDir = new File(testDependencies.storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES));
+        File instancesDir = new File(testDependencies.storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES));
         File recording = Arrays.stream(instancesDir.listFiles()[0].listFiles()).filter(f -> f.getName().contains(".fake")).findAny().get();
         File instanceFile = Arrays.stream(instancesDir.listFiles()[0].listFiles()).filter(f -> f.getName().contains(".xml")).findAny().get();
         String instanceXml = new String(Files.readAllBytes(instanceFile.toPath()));
@@ -129,7 +129,7 @@ public class BackgroundAudioRecordingTest {
         formEndPage.clickSaveAndExit();
         assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
 
-        File instancesDir = new File(testDependencies.storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES));
+        File instancesDir = new File(testDependencies.storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES));
         File recording = Arrays.stream(instancesDir.listFiles()[0].listFiles()).filter(f -> f.getName().contains(".fake")).findAny().get();
         File instanceFile = Arrays.stream(instancesDir.listFiles()[0].listFiles()).filter(f -> f.getName().contains(".xml")).findAny().get();
         String instanceXml = new String(Files.readAllBytes(instanceFile.toPath()));

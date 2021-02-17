@@ -9,6 +9,9 @@ public class PathUtils {
     }
 
     public static String getRelativeFilePath(String dirPath, String filePath) {
+        if (filePath == null) {
+            return null;
+        }
         return filePath.startsWith(dirPath)
                 ? filePath.substring(dirPath.length() + 1)
                 : filePath;

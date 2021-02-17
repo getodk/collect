@@ -44,6 +44,6 @@ public class DatabaseFormsRepositoryTest extends FormsRepositoryTest {
 
     @Override
     public String getFormFilesPath() {
-        return storagePathProvider.getDirPath(StorageSubdirectory.FORMS);
+        return storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS);
     }
 }

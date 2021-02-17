@@ -11,8 +11,8 @@ import timber.log.Timber;
 
 public class StorageInitializer {
 
-    private StoragePathProvider storagePathProvider;
-    private Context context;
+    private final StoragePathProvider storagePathProvider;
+    private final Context context;
 
     public StorageInitializer() {
         this(new StoragePathProvider(), Collect.getInstance());

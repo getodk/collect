@@ -45,7 +45,7 @@ public final class FormsDaoHelper {
         try (Cursor c = formsDao.getFormsCursor(selection, selectionArgs)) {
             if (c != null && c.getCount() > 0) {
                 c.moveToFirst();
-                formPath = getAbsoluteFilePath(new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS), c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
+                formPath = getAbsoluteFilePath(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS), c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
             }
         }
         return formPath;

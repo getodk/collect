@@ -26,7 +26,7 @@ public class FormInstanceFileCreatorTest {
     @Test
     public void createsDirectory_basedOnDefinitionPathAndCurrentTime_inInstancesDirectory() throws Exception {
         String instancesDir = Files.createTempDir().getAbsolutePath();
-        when(pathProvider.getDirPath(StorageSubdirectory.INSTANCES)).thenReturn(instancesDir);
+        when(pathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES)).thenReturn(instancesDir);
         when(clock.getCurrentTime()).thenReturn(simpleDateFormat.parse("1990-04-24_00-00-00").getTime());
 
         FormInstanceFileCreator instanceFileCreator = new FormInstanceFileCreator(pathProvider, clock);
@@ -40,7 +40,7 @@ public class FormInstanceFileCreatorTest {
     @Test
     public void returnsInstanceFile_inInstanceDirectory() throws Exception {
         String instancesDir = Files.createTempDir().getAbsolutePath();
-        when(pathProvider.getDirPath(StorageSubdirectory.INSTANCES)).thenReturn(instancesDir);
+        when(pathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES)).thenReturn(instancesDir);
         when(clock.getCurrentTime()).thenReturn(simpleDateFormat.parse("1990-04-24_00-00-00").getTime());
 
         FormInstanceFileCreator instanceFileCreator = new FormInstanceFileCreator(pathProvider, clock);
@@ -53,7 +53,7 @@ public class FormInstanceFileCreatorTest {
     @Test
     public void whenCreatingDirFails_returnsNull() throws Exception {
         File tempFile = File.createTempFile("not-a", "dir"); // Create a file where it needs a dir
-        when(pathProvider.getDirPath(StorageSubdirectory.INSTANCES)).thenReturn(tempFile.getAbsolutePath());
+        when(pathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES)).thenReturn(tempFile.getAbsolutePath());
         when(clock.getCurrentTime()).thenReturn(simpleDateFormat.parse("1990-04-24_00-00-00").getTime());
 
         FormInstanceFileCreator instanceFileCreator = new FormInstanceFileCreator(pathProvider, clock);

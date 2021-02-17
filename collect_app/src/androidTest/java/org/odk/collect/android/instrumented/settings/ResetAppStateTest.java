@@ -97,8 +97,8 @@ public class ResetAppStateTest {
         setupTestFormsDatabase();
         createTestItemsetsDatabaseFile();
         resetAppState(Collections.singletonList(ApplicationResetter.ResetAction.RESET_FORMS));
-        assertFolderEmpty(storagePathProvider.getDirPath(StorageSubdirectory.FORMS));
-        assertFalse(new File(storagePathProvider.getDirPath(StorageSubdirectory.METADATA) + "/itemsets.db").exists());
+        assertFolderEmpty(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS));
+        assertFalse(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA) + "/itemsets.db").exists());
     }
 
     @Test
@@ -106,21 +106,21 @@ public class ResetAppStateTest {
         saveTestInstanceFiles();
         setupTestInstancesDatabase();
         resetAppState(Collections.singletonList(ApplicationResetter.ResetAction.RESET_INSTANCES));
-        assertFolderEmpty(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES));
+        assertFolderEmpty(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES));
     }
 
     @Test
     public void resetLayersTest() throws IOException {
         saveTestLayerFiles();
         resetAppState(Collections.singletonList(ApplicationResetter.ResetAction.RESET_LAYERS));
-        assertFolderEmpty(storagePathProvider.getDirPath(StorageSubdirectory.LAYERS));
+        assertFolderEmpty(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS));
     }
 
     @Test
     public void resetCacheTest() throws IOException {
         saveTestCacheFiles();
         resetAppState(Collections.singletonList(ApplicationResetter.ResetAction.RESET_CACHE));
-        assertFolderEmpty(storagePathProvider.getDirPath(StorageSubdirectory.CACHE));
+        assertFolderEmpty(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE));
     }
 
     @Test
@@ -155,19 +155,19 @@ public class ResetAppStateTest {
 
         assertFalse(settings.getBoolean(AdminKeys.KEY_VIEW_SENT, false));
 
-        assertTrue(new File(storagePathProvider.getDirPath(StorageSubdirectory.SETTINGS)).exists() || new File(storagePathProvider.getDirPath(StorageSubdirectory.SETTINGS)).mkdir());
-        assertTrue(new File(storagePathProvider.getDirPath(StorageSubdirectory.SETTINGS) + "/collect.settings").createNewFile());
-        assertTrue(new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings").createNewFile());
+        assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS)).exists() || new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS)).mkdir());
+        assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS) + "/collect.settings").createNewFile());
+        assertTrue(new File(storagePathProvider.getOdkRootDirPath() + "/collect.settings").createNewFile());
     }
 
     private void setupTestFormsDatabase() {
         ContentValues values = new ContentValues();
-        values.put(FormsColumns.JRCACHE_FILE_PATH, storagePathProvider.getCacheDbPath("3a76a386464925b6f3e53422673dfe3c.formdef"));
+        values.put(FormsColumns.JRCACHE_FILE_PATH, storagePathProvider.getRelativeCachePath("3a76a386464925b6f3e53422673dfe3c.formdef"));
         values.put(FormsColumns.JR_FORM_ID, "jrFormId");
-        values.put(FormsColumns.FORM_MEDIA_PATH, storagePathProvider.getFormDbPath("testFile1-media"));
+        values.put(FormsColumns.FORM_MEDIA_PATH, storagePathProvider.getRelativeFormPath("testFile1-media"));
         values.put(FormsColumns.DATE, "1487077903756");
         values.put(FormsColumns.DISPLAY_NAME, "displayName");
-        values.put(FormsColumns.FORM_FILE_PATH, storagePathProvider.getFormDbPath("testFile1.xml"));
+        values.put(FormsColumns.FORM_FILE_PATH, storagePathProvider.getRelativeFormPath("testFile1.xml"));
         Collect.getInstance().getContentResolver()
                 .insert(FormsColumns.CONTENT_URI, values);
 
@@ -176,7 +176,7 @@ public class ResetAppStateTest {
 
     private void setupTestInstancesDatabase() {
         ContentValues values = new ContentValues();
-        values.put(InstanceColumns.INSTANCE_FILE_PATH, storagePathProvider.getInstanceDbPath("testDir1/testFile1"));
+        values.put(InstanceColumns.INSTANCE_FILE_PATH, storagePathProvider.getRelativeInstancePath("testDir1/testFile1"));
         values.put(InstanceColumns.SUBMISSION_URI, "submissionUri");
         values.put(InstanceColumns.DISPLAY_NAME, "displayName");
         values.put(InstanceColumns.DISPLAY_NAME, "formName");
@@ -189,36 +189,36 @@ public class ResetAppStateTest {
     }
 
     private void createTestItemsetsDatabaseFile() throws IOException {
-        assertTrue(new File(storagePathProvider.getDirPath(StorageSubdirectory.METADATA) + "/itemsets.db").createNewFile());
+        assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA) + "/itemsets.db").createNewFile());
     }
 
     private void saveTestFormFiles() throws IOException {
-        assertTrue(new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + "/testFile1.xml").createNewFile());
-        assertTrue(new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + "/testFile2.xml").createNewFile());
-        assertTrue(new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + "/testFile3.xml").createNewFile());
+        assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/testFile1.xml").createNewFile());
+        assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/testFile2.xml").createNewFile());
+        assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/testFile3.xml").createNewFile());
 
-        assertTrue(new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + "/testDir1/testFile1-media").mkdirs());
-        assertTrue(new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + "/testDir2/testFile2-media").mkdirs());
-        assertTrue(new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + "/testDir3/testFile3-media/testFile.csv").mkdirs());
+        assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/testDir1/testFile1-media").mkdirs());
+        assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/testDir2/testFile2-media").mkdirs());
+        assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/testDir3/testFile3-media/testFile.csv").mkdirs());
     }
 
     private void saveTestInstanceFiles() {
-        assertTrue(new File(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/testDir1/testFile1.xml").mkdirs());
-        assertTrue(new File(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/testDir2/testFile2.xml").mkdirs());
-        assertTrue(new File(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + "/testDir3").mkdirs());
+        assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES) + "/testDir1/testFile1.xml").mkdirs());
+        assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES) + "/testDir2/testFile2.xml").mkdirs());
+        assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES) + "/testDir3").mkdirs());
     }
 
     private void saveTestLayerFiles() throws IOException {
-        assertTrue(new File(storagePathProvider.getDirPath(StorageSubdirectory.LAYERS) + "/testFile1").createNewFile());
-        assertTrue(new File(storagePathProvider.getDirPath(StorageSubdirectory.LAYERS) + "/testFile2").createNewFile());
-        assertTrue(new File(storagePathProvider.getDirPath(StorageSubdirectory.LAYERS) + "/testFile3").createNewFile());
-        assertTrue(new File(storagePathProvider.getDirPath(StorageSubdirectory.LAYERS) + "/testFile4").createNewFile());
+        assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS) + "/testFile1").createNewFile());
+        assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS) + "/testFile2").createNewFile());
+        assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS) + "/testFile3").createNewFile());
+        assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS) + "/testFile4").createNewFile());
     }
 
     private void saveTestCacheFiles() throws IOException {
-        assertTrue(new File(storagePathProvider.getDirPath(StorageSubdirectory.CACHE) + "/testFile1").createNewFile());
-        assertTrue(new File(storagePathProvider.getDirPath(StorageSubdirectory.CACHE) + "/testFile2").createNewFile());
-        assertTrue(new File(storagePathProvider.getDirPath(StorageSubdirectory.CACHE) + "/testFile3").createNewFile());
+        assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE) + "/testFile1").createNewFile());
+        assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE) + "/testFile2").createNewFile());
+        assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE) + "/testFile3").createNewFile());
     }
 
     private void saveTestOSMDroidFiles() throws IOException {

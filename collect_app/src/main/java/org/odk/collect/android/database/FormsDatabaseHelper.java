@@ -34,7 +34,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     private final DatabaseMigrator databaseMigrator;
 
     public FormsDatabaseHelper(DatabaseMigrator databaseMigrator, StoragePathProvider storagePathProvider) {
-        super(new DatabaseContext(storagePathProvider.getDirPath(StorageSubdirectory.METADATA)), FORMS_DATABASE_NAME, null, FORMS_DATABASE_VERSION);
+        super(new DatabaseContext(storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA)), FORMS_DATABASE_NAME, null, FORMS_DATABASE_VERSION);
         this.databaseMigrator = databaseMigrator;
     }
 

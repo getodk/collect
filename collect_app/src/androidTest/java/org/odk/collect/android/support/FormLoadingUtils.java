@@ -76,8 +76,8 @@ public class FormLoadingUtils {
     private static void saveFormToDatabase(File outFile) {
         Map<String, String> formInfo = FileUtils.getMetadataFromFormDefinition(outFile);
         final ContentValues v = new ContentValues();
-        v.put(FormsColumns.FORM_FILE_PATH, new StoragePathProvider().getFormDbPath(outFile.getAbsolutePath()));
-        v.put(FormsColumns.FORM_MEDIA_PATH, new StoragePathProvider().getFormDbPath(FileUtils.constructMediaPath(outFile.getAbsolutePath())));
+        v.put(FormsColumns.FORM_FILE_PATH, new StoragePathProvider().getRelativeFormPath(outFile.getAbsolutePath()));
+        v.put(FormsColumns.FORM_MEDIA_PATH, new StoragePathProvider().getRelativeFormPath(FileUtils.constructMediaPath(outFile.getAbsolutePath())));
         v.put(FormsColumns.DISPLAY_NAME, formInfo.get(FileUtils.TITLE));
         v.put(FormsColumns.JR_VERSION, formInfo.get(FileUtils.VERSION));
         v.put(FormsColumns.JR_FORM_ID, formInfo.get(FileUtils.FORMID));
@@ -95,13 +95,13 @@ public class FormLoadingUtils {
     }
 
     private static String copyForm(String formFilename) throws IOException {
-        String pathname = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + "/" + formFilename;
+        String pathname = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + "/" + formFilename;
         copyFileFromAssets("forms/" + formFilename, pathname);
         return pathname;
     }
 
     private static void copyFormMediaFiles(String formFilename, List<String> mediaFilePaths) throws IOException {
-        String mediaPathName = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + "/" + formFilename.replace(".xml", "") + FileUtils.MEDIA_SUFFIX + "/";
+        String mediaPathName = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + "/" + formFilename.replace(".xml", "") + FileUtils.MEDIA_SUFFIX + "/";
         FileUtils.checkMediaPath(new File(mediaPathName));
 
         for (String mediaFilePath : mediaFilePaths) {

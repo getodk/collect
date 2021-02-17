@@ -71,7 +71,7 @@ public class ResetStateRule implements TestRule {
     private void clearDisk() {
         try {
             StoragePathProvider storagePathProvider = new StoragePathProvider();
-            deleteDirectory(new File(storagePathProvider.getScopedStorageRootDirPath()));
+            deleteDirectory(new File(storagePathProvider.getOdkRootDirPath()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

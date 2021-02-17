@@ -56,7 +56,7 @@ public class ExternalDataReaderTest {
         ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
         new StorageInitializer().createOdkDirsOnStorage();
 
-        File formFile = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + File.separator + SIMPLE_SEARCH_EXTERNAL_CSV_FORM_FILENAME);
+        File formFile = new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + SIMPLE_SEARCH_EXTERNAL_CSV_FORM_FILENAME);
         File mediaDir = FileUtils.getFormMediaDir(formFile);
         mediaDir.mkdir();
         csvFile = new File(mediaDir + File.separator + SIMPLE_SEARCH_EXTERNAL_CSV_FILENAME);

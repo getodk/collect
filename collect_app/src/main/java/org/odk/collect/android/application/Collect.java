@@ -75,8 +75,8 @@ public class Collect extends Application implements LocalizedApplication {
          */
         String dirPath = directory.getAbsolutePath();
         StoragePathProvider storagePathProvider = new StoragePathProvider();
-        if (dirPath.startsWith(storagePathProvider.getStorageRootDirPath())) {
-            dirPath = dirPath.substring(storagePathProvider.getStorageRootDirPath().length());
+        if (dirPath.startsWith(storagePathProvider.getOdkRootDirPath())) {
+            dirPath = dirPath.substring(storagePathProvider.getOdkRootDirPath().length());
             String[] parts = dirPath.split(File.separatorChar == '\\' ? "\\\\" : File.separator);
             // [appName, instances, tableId, instanceId ]
             if (parts.length == 4 && parts[1].equals("instances")) {

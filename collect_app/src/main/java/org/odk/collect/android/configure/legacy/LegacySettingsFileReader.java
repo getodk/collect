@@ -20,8 +20,8 @@ public class LegacySettingsFileReader {
     private final File jsonFile;
 
     public LegacySettingsFileReader(StoragePathProvider storagePathProvider) {
-        this.objectFile = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings");
-        this.jsonFile = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json");
+        this.objectFile = new File(storagePathProvider.getOdkRootDirPath() + "/collect.settings");
+        this.jsonFile = new File(storagePathProvider.getOdkRootDirPath() + "/collect.settings.json");
     }
 
     public String toJSON() throws CorruptSettingsFileException {

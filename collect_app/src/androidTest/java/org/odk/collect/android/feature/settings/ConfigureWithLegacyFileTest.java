@@ -31,7 +31,7 @@ public class ConfigureWithLegacyFileTest {
     public TestRule chain = TestRuleChain.chain()
             .around(new RunnableRule(() -> {
                 try {
-                    File settingsFile = new File(testDependencies.storagePathProvider.getStorageRootDirPath(), "collect.settings");
+                    File settingsFile = new File(testDependencies.storagePathProvider.getOdkRootDirPath(), "collect.settings");
                     Map<String, Object> generalSettings = new HashMap<>();
                     generalSettings.put("server_url", "http://fire.water");
                     ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(settingsFile));

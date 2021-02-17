@@ -108,7 +108,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
                     startActivity(pref);
                     break;
                 case "save_legacy_settings":
-                    File writeDir = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.SETTINGS));
+                    File writeDir = new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.SETTINGS));
                     if (!writeDir.exists()) {
                         if (!writeDir.mkdirs()) {
                             ToastUtils.showShortToast("Error creating directory "

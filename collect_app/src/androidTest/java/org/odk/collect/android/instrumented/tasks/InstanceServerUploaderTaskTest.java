@@ -90,7 +90,7 @@ public class InstanceServerUploaderTaskTest extends MockedServerTest {
 
         Instance i = new Instance.Builder()
                 .displayName("Test Form")
-                .instanceFilePath(new StoragePathProvider().getInstanceDbPath(xml.getPath()))
+                .instanceFilePath(new StoragePathProvider().getRelativeInstancePath(xml.getPath()))
                 .jrFormId("test_form")
                 .status(Instance.STATUS_COMPLETE)
                 .lastStatusChangeDate(123L)

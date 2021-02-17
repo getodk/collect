@@ -614,7 +614,7 @@ public class FillBlankFormTest {
 
     @Test
     public void missingFileMessage_shouldBeDisplayedIfExternalFIleIsMissing() {
-        String formsDirPath = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS);
+        String formsDirPath = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS);
 
         //TestCase55
         rule.mainMenu()

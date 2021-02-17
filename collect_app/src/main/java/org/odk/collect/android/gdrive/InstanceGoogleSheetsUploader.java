@@ -112,7 +112,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 throw new UploadException(TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_blank_form_for_this_form_id));
             }
             Form form = forms.get(0);
-            String formFilePath = getAbsoluteFilePath(new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS), form.getFormFilePath());
+            String formFilePath = getAbsoluteFilePath(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS), form.getFormFilePath());
 
             TreeElement instanceElement = getInstanceElement(formFilePath, instanceFile);
             setUpSpreadsheet(spreadsheetUrl);

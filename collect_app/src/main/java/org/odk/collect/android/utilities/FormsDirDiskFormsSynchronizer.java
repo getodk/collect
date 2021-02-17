@@ -49,7 +49,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
             StringBuilder errors = new StringBuilder();
 
             StoragePathProvider storagePathProvider = new StoragePathProvider();
-            File formDir = new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS));
+            File formDir = new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS));
             if (formDir.exists() && formDir.isDirectory()) {
                 // Get all the files in the /odk/foms directory
                 File[] formDefs = formDir.listFiles();
@@ -76,7 +76,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
                     while (cursor.moveToNext()) {
                         // For each element in the provider, see if the file already exists
                         String sqlFilename =
-                                getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), cursor.getString(
+                                getAbsoluteFilePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS), cursor.getString(
                                         cursor.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_FILE_PATH)));
                         String md5 = cursor.getString(
                                 cursor.getColumnIndex(FormsProviderAPI.FormsColumns.MD5_HASH));
@@ -304,7 +304,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
 
         // Note, the path doesn't change here, but it needs to be included so the
         // update will automatically update the .md5 and the cache path.
-        updateValues.put(FormsProviderAPI.FormsColumns.FORM_FILE_PATH, new StoragePathProvider().getFormDbPath(formDefFile.getAbsolutePath()));
+        updateValues.put(FormsProviderAPI.FormsColumns.FORM_FILE_PATH, new StoragePathProvider().getRelativeFormPath(formDefFile.getAbsolutePath()));
         updateValues.putNull(FormsProviderAPI.FormsColumns.DELETED_DATE);
 
         return updateValues;
