@@ -46,9 +46,10 @@ import com.google.api.services.drive.Drive;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormListActivity;
 import org.odk.collect.android.adapters.FileArrayAdapter;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
+import org.odk.collect.android.forms.Form;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.gdrive.sheets.DriveHelper;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -125,6 +126,9 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
     @Inject
     PreferencesProvider preferencesProvider;
+
+    @Inject
+    FormsRepository formsRepository;
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -260,7 +264,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     }
 
     private void selectAccount() {
-        new PermissionUtils().requestGetAccountsPermission(this, new PermissionListener() {
+        new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestGetAccountsPermission(this, new PermissionListener() {
             @Override
             public void granted() {
                 String account = accountsManager.getLastSelectedAccountIfValid();
@@ -873,7 +877,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
                 try {
                     downloadFile(fileItem.getDriveId(), fileItem.getName());
-                    results.put(fileItem.getName(), Collect.getInstance().getString(R.string.success));
+                    results.put(fileItem.getName(), getString(R.string.success));
 
                     String mediaDirName = FileUtils.constructMediaPath(fileItem.getName());
 
@@ -891,7 +895,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                         for (com.google.api.services.drive.model.File mediaFile : mediaFileList) {
                             String filePath = mediaDirName + File.separator + mediaFile.getName();
                             downloadFile(mediaFile.getId(), filePath);
-                            results.put(filePath, Collect.getInstance().getString(R.string.success));
+                            results.put(filePath, getString(R.string.success));
                         }
                     }
                 } catch (Exception e) {
@@ -906,6 +910,13 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         private void downloadFile(@NonNull String fileId, String fileName) throws IOException {
             File file = new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + fileName);
             driveHelper.downloadFile(fileId, file);
+
+            // If the form already exists in the DB and is soft deleted we need to restore it
+            String md5Hash = FileUtils.getMd5Hash(file);
+            Form form = formsRepository.getOneByMd5Hash(md5Hash);
+            if (form != null && form.isDeleted()) {
+                formsRepository.restore(form.getId());
+            }
         }
 
         @Override

@@ -4,15 +4,14 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.FragmentActivity;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.fragments.support.DialogFragmentHelpers;
 import org.odk.collect.android.support.TestActivityScenario;
 import org.robolectric.annotation.LooperMode;
 
@@ -30,11 +29,11 @@ import static org.robolectric.shadows.ShadowView.innerText;
 @LooperMode(PAUSED)
 public class ProgressDialogFragmentTest {
 
-    private TestActivityScenario<DialogFragmentTestActivity> activityScenario;
+    private TestActivityScenario<DialogFragmentHelpers.DialogFragmentTestActivity> activityScenario;
 
     @Before
     public void setup() {
-        activityScenario = TestActivityScenario.launch(DialogFragmentTestActivity.class);
+        activityScenario = TestActivityScenario.launch(DialogFragmentHelpers.DialogFragmentTestActivity.class);
     }
 
     @Test
@@ -176,7 +175,6 @@ public class ProgressDialogFragmentTest {
     }
 
     public static class TestProgressDialogFragment extends ProgressDialogFragment {
-
         private final Cancellable cancellable;
 
         TestProgressDialogFragment(Cancellable cancellable) {
@@ -191,15 +189,6 @@ public class ProgressDialogFragmentTest {
         @Override
         protected Cancellable getCancellable() {
             return cancellable;
-        }
-    }
-
-    private static class DialogFragmentTestActivity extends FragmentActivity {
-
-        @Override
-        protected void onCreate(@Nullable Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setTheme(R.style.Theme_AppCompat); // Needed for androidx.appcompat.app.AlertDialog
         }
     }
 }

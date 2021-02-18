@@ -45,11 +45,14 @@ import org.odk.collect.android.gdrive.sheets.SheetsHelper;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.upload.InstanceUploader;
 import org.odk.collect.android.upload.UploadException;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.StringUtils;
+import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.UrlUtils;
 
 import java.io.File;
@@ -66,6 +69,7 @@ import java.util.regex.Pattern;
 import timber.log.Timber;
 
 import static org.odk.collect.android.javarosawrapper.FormController.INSTANCE_ID;
+import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
 public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private static final String PARENT_KEY = "PARENT_KEY";
@@ -90,7 +94,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     public String uploadOneSubmission(Instance instance, String spreadsheetUrl) throws UploadException {
         if (new FormsDao().isFormEncrypted(instance.getJrFormId(), instance.getJrVersion())) {
             saveFailedStatusToDatabase(instance);
-            throw new UploadException(Collect.getInstance().getString(R.string.google_sheets_encrypted_message));
+            throw new UploadException(TranslationHandler.getString(Collect.getInstance(), R.string.google_sheets_encrypted_message));
         }
 
         File instanceFile = new File(instance.getAbsoluteInstanceFilePath());
@@ -105,10 +109,10 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         try {
             if (forms.size() != 1) {
-                throw new UploadException(Collect.getInstance().getString(R.string.not_exactly_one_blank_form_for_this_form_id));
+                throw new UploadException(TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_blank_form_for_this_form_id));
             }
             Form form = forms.get(0);
-            String formFilePath = form.getAbsoluteFormFilePath();
+            String formFilePath = getAbsoluteFilePath(new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS), form.getFormFilePath());
 
             TreeElement instanceElement = getInstanceElement(formFilePath, instanceFile);
             setUpSpreadsheet(spreadsheetUrl);
@@ -138,7 +142,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         if (e.getDetails() != null) {
             switch (e.getDetails().getCode()) {
                 case 403 :
-                    message = Collect.getInstance().getString(R.string.google_sheets_access_denied);
+                    message = TranslationHandler.getString(Collect.getInstance(), R.string.google_sheets_access_denied);
                     break;
                 case 429 :
                     message = FAIL + "Too many requests per 100 seconds";
@@ -462,7 +466,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private void disallowMissingColumns(List<Object> columnHeaders, List<Object> columnTitles) throws UploadException {
         for (Object columnTitle : columnTitles) {
             if (!columnHeaders.contains(columnTitle)) {
-                throw new UploadException(Collect.getInstance().getString(R.string.google_sheets_missing_columns, columnTitle));
+                throw new UploadException(TranslationHandler.getString(Collect.getInstance(), R.string.google_sheets_missing_columns, columnTitle));
             }
         }
     }
@@ -570,7 +574,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     private void ensureNumberOfColumnsIsValid(int numberOfColumns) throws UploadException {
         if (numberOfColumns == 0) {
-            throw new UploadException(Collect.getInstance().getString(R.string.no_columns_to_upload));
+            throw new UploadException(TranslationHandler.getString(Collect.getInstance(), R.string.no_columns_to_upload));
         }
     }
 

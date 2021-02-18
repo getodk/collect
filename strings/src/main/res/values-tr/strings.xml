@@ -1,0 +1,283 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data">Boş Form Doldur</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data_button">Boş Form Doldur</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="review_data">Saklanan Formu Güncelle</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="review_data_button">Saklanan Formu Güncelle (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="send_data">Dolu Formu gönder</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="send_data_button">Dolu Formu gönder (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <!--Text for an action button on the main screen.-->
+  <string name="get_forms">Boş Form Al</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="manage_files">Kayitli Formu Sil</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Displayed in search boxes for form lists or question types that involve search-->
+  <string name="no_items_display">Gösterecek bir şey yok</string>
+  <!--##############################################
+    # FILL BLANK FORM
+    ##############################################-->
+  <string name="finished_disk_scan">Tarama bitti. Bütün Formlar Yüklendi.</string>
+  <string name="loading_form">Form Yükleniyor</string>
+  <string name="parse_error">Form ayrıştırılamadi.</string>
+  <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
+  <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
+  <string name="change_language">Dil Değiştir</string>
+  <!--Text for button displayed in the form filling menu to see the form's table of contents-->
+  <!--Text for button displayed in the form filling menu to save the form-->
+  <string name="save_all_answers">Formu Sakla</string>
+  <!--Text of button from the form's table of contents to jump to the beginning of the form-->
+  <string name="jump_to_beginning">Başlangıca Git</string>
+  <!--Text of button from the form's table of contents to jump to the end of the form-->
+  <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
+  <!--Displayed below group names in a form's table of contents-->
+  <!--Displayed below repeat names in a form's table of contents-->
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <!--Title of overlay menu displayed when long pressing on a question in a form-->
+  <string name="clearanswer_confirm">Bu yanıt kaldırılsın mı \"%s\"?</string>
+  <string name="clear_answer">Yanıtları kaldır</string>
+  <string name="clear_answer_ask">Bu yanıt kaldırılsın mı ?</string>
+  <string name="clear_answer_no">Vazgeç</string>
+  <string name="discard_answer">Yanıtları kaldır</string>
+  <string name="discard_group">Grubu sil</string>
+  <string name="delete_repeat">Grubu Sil</string>
+  <string name="delete_repeat_ask">Bu grubu sil ?</string>
+  <string name="delete_repeat_confirm">Bu grupla beraber \"%s\" alt grubuda silinsin mi ?</string>
+  <string name="delete_repeat_no">Vazgeç</string>
+  <string name="save_form_as">Form ismi </string>
+  <string name="save_as_error">İsim alani boş bırakilamaz</string>
+  <string name="mark_finished">Bitirilen Formu işaretle</string>
+  <string name="quit_entry">Formu sakla ve Çık</string>
+  <string name="data_saved_error">Form kaydedilirken hata oluştu</string>
+  <string name="data_saved_ok">From başarılı bir şekilde saklandi</string>
+  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <string name="quit_application">Çıkış %s</string>
+  <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="do_not_save">Değişiklikleri boşver..</string>
+  <string name="keep_changes">Değişiklikleri Kaydet</string>
+  <string name="saving_form">Form Saklaniyor</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <!--Text displayed when audio recording fails to start-->
+  <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <!--Error message displayed when copying media from a temporary directory fails-->
+  <!--##############################################
+    # FORM FEATURES
+    ##############################################-->
+  <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
+  <string name="launch_app">Başla</string>
+  <string name="activity_not_found">%s işleme alacak activite bulunamadı.</string>
+  <string name="open_url">URL Aç</string>
+  <string name="get_barcode">Barkod Al</string>
+  <string name="replace_barcode">Barkod Değiştir</string>
+  <string name="capture_image">Resim Çek</string>
+  <string name="choose_image">Fotoğraf Seçimi</string>
+  <!--Dialog heading for saving annotated image-->
+  <string name="save_and_close">Sakla ve Kapat</string>
+  <string name="capture_video">Video Kayit</string>
+  <string name="choose_video">Video Seçimi</string>
+  <string name="play_video">Video Oynat</string>
+  <!--Text for button that deletes a file that is the answer to a question-->
+  <!--Text for button that starts recording sound-->
+  <string name="capture_audio">Ses Kaydi</string>
+  <!--Text for button that lets the user choose a sound file on their device-->
+  <string name="choose_sound">Seskaydi Seçimi</string>
+  <!--Description text for button that that pauses recording sound-->
+  <!--Description text for button that that resumes recording sound-->
+  <!--Title for dialog asking the user if they want to delete a file-->
+  <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="select_answer">Cevabiniz </string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="selected">Seçilen:</string>
+  <string name="trigger">Tamam. Devam edin. Bekleme yapmayin </string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
+  <string name="file_invalid">Dosya : %s geçersiz</string>
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
+  <string name="file_missing">Dosya : %s kayip</string>
+  <!--Heading for a dialog which prompts the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Explanation for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Action to close a full screen dialog-->
+  <!--Heading for a dialog which prompts the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Action to save the contents of a full screen dialog-->
+  <!--##############################################
+    # GEO
+    ##############################################-->
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+   These strings are only being used to preserve compatibility with pre-existing
+    tile caches, and are not shown in the UI.-->
+  <string name="view_change_location">Lokasyonu Göster yada Değiştir</string>
+  <string name="getting_location">Lokasyon Yükleniyor</string>
+  <string name="get_location">Yeri kaydet</string>
+  <!--Action to go to Android settings. Displayed when location providers are disabled.-->
+  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
+  <!--Name of an action button-->
+  <!--##############################################
+    # SEND FINALIZED FORM
+    ##############################################-->
+  <string name="uploading_data">Form Gönderiliyor</string>
+  <string name="noselect_error">Herhangi bir form seçilmedi !</string>
+  <string name="no_connection">Network bağlantisi yok</string>
+  <string name="sending_items">%1$s ile %2$s form(s) gönderiliyor</string>
+  <string name="send_selected_data">Seçili olanı gönder</string>
+  <string name="server_requires_auth">Server kimlik doğrulaması gerektirir</string>
+  <string name="no_forms_uploaded">Herhangi bir form gönderilmedi.</string>
+  <string name="upload_results">Gönderme Sonucu</string>
+  <!--Name of option in Send Finalized Form menu to show only unsent forms (default) or show sent and unsent forms-->
+  <string name="show_sent_and_unsent_forms">Gönderilen ve Gönderilmeyen Formlari Göster</string>
+  <string name="show_unsent_forms">Gönderilmeyen Formlari Gönder</string>
+  <!--##############################################
+    # GET BLANK FORM
+    ##############################################-->
+  <string name="refresh">Yenile</string>
+  <string name="download">Seçilenleri getir</string>
+  <string name="downloading_data">Server\'a bağlaniyor</string>
+  <string name="form_download_progress">%1$s. Alinan medya dosyasi : %2$s of %3$s</string>
+  <string name="version">Version:</string>
+  <!--##############################################
+    # DELETE SAVED FORM
+    ##############################################-->
+  <!--Title of a section in "Delete Saved Forms" for deleting filled/saved forms (as opposed to blank forms)-->
+  <string name="data">Saklanan Formlar</string>
+  <!--Title of a section in "Delete Saved Forms" for deleting blank forms (as opposed to filled/saved forms)-->
+  <string name="forms">Boş Formlar</string>
+  <string name="delete_confirm">silinecek %s form var. Silinsin mi ?</string>
+  <string name="delete_file">Seçileni Sil</string>
+  <string name="delete_no">Silme</string>
+  <string name="delete_yes">Formlari Sil</string>
+  <string name="file_deleted_ok">%s Form başarıyla silindi.</string>
+  <!--##############################################
+    # GENERAL SETTINGS
+    ##############################################-->
+  <string name="general_preferences">Genel Ayarlar</string>
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section only available in beta or development builds.-->
+  <string name="server_preferences">Sunucu Ayarlari</string>
+  <!--Label for server type setting-->
+  <string name="server_url">URL</string>
+  <!--Title of dialog for configuring server URL-->
+  <string name="url_error">Geçersiz URL</string>
+  <string name="username">Kullanici Adi</string>
+  <string name="change_username">ODK Kullanici Adi</string>
+  <string name="password">Şifre</string>
+  <string name="change_password">ODK Şifresi</string>
+  <string name="change_formlist_url">Form liste yolu(URL\'ye eklenmiş)</string>
+  <string name="change_submission_url">Gönderim yolu( URL ye eklenmiş)</string>
+  <string name="formlist_url">Form listesi yolu</string>
+  <string name="submission_url">Gönderim yolu</string>
+  <string name="selected_google_account_text">Google account</string>
+  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
+  <!--Description for Fallback submission URL setting-->
+  <string name="font_size">Text font büyüklüğü</string>
+  <string name="change_font_size">Text font büyüklüğü</string>
+  <string name="font_size_extra_large">Çok Büyük</string>
+  <string name="font_size_large">Büyük</string>
+  <string name="font_size_medium">Orta</string>
+  <string name="font_size_small">Küçük</string>
+  <string name="font_size_extra_small">Çok Küçük</string>
+  <string name="navigation">navigasyon</string>
+  <string name="buttons_navigation">ileri/geri butonlarini kullan </string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="form_forward">İleri</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="show_splash_summary">Uygulama çalıştığında göster</string>
+  <string name="default_splash_path">Geçerli ODK</string>
+  <string name="select_another_image">Başka bir görüntü seçin</string>
+  <string name="use_odk_default">Geçerli görüntüyü kullan</string>
+  <string name="change_splash_path">Görüntüyü Değiştir</string>
+  <!--Heading for the settings category about updating blank forms-->
+  <!--Name of the setting that defines how blank forms are updated from the server.-->
+  <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
+  <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
+  <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
+  <!--Name of the setting that defines how often blank forms are updated from the server.-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
+  <string name="default_completed_summary">Formu normalde tamamlanmış olarak işaretle</string>
+  <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
+  <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Displayed when a device property such as the phone number is not available-->
+  <!--##############################################
+     # ADMIN SETTINGS
+     ##############################################-->
+  <string name="admin_preferences">Yönetici Ayarlari</string>
+  <string name="admin_access_settings">Yöbetici Ayarlari için Tap</string>
+  <string name="enter_new_password">Yeni Şifreyi Giriniz</string>
+  <string name="admin_password_changed">Yönetici Şifresi Başarili şekilde Değiştirildi</string>
+  <string name="admin_password_disabled">Yönetici Şifresi Kapatılmış</string>
+  <string name="admin_password_incorrect">Yanliş Şifre</string>
+  <string name="enter_admin_password">Yönetici Şifresi Giriniz</string>
+  <!--Name of a setting that determines whether users can navigate backwards in a form-->
+  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <string name="save_mid">Formu Sakla</string>
+  <!--##############################################
+     # GOOGLE DRIVE, GOOGLE SHEETS
+     ##############################################-->
+  <!--Title of the screen that lists forms in user's Google Drive-->
+  <!--Title of the screen that lists forms shared with Google Drive user-->
+  <!--Button for navigating across Google Drive folders-->
+  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
+  <!--##############################################
+     # ABOUT
+     ##############################################-->
+  <!--##############################################
+     # SETTINGS IMPORT
+     ##############################################-->
+  <!--##############################################
+     # SCOPED STORAGE MIGRATION
+     ##############################################-->
+  <!--Action to begin a storage migration-->
+  <!--##############################################
+     # MISC
+     ##############################################-->
+  <string name="ok">Tamam</string>
+  <!--Used in many dialogs to dismiss the dialog without taking any action-->
+  <string name="cancel">Vazgeç</string>
+  <string name="cancel_loading_form">Vazgeç</string>
+  <string name="cancel_location">Vazgeç</string>
+  <string name="do_not_change">Vazgeç</string>
+  <string name="do_not_exit">Vazgeç</string>
+  <string name="success">Başarılı</string>
+  <string name="error_occured">Hata Oluştu</string>
+  <string name="please_wait">Biraz Bekleyin..</string>
+  <string name="please_wait_long">Biraz sürecek gibi.. Az kaldi</string>
+</resources>

@@ -27,8 +27,8 @@ import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
 @SuppressLint("ViewConstructor")
 public class StringNumberWidget extends StringWidget {
 
-    public StringNumberWidget(Context context, QuestionDetails questionDetails, boolean readOnlyOverride) {
-        super(context, questionDetails, readOnlyOverride);
+    public StringNumberWidget(Context context, QuestionDetails questionDetails) {
+        super(context, questionDetails);
         StringWidgetUtils.adjustEditTextAnswerToStringNumberWidget(answerText, questionDetails.getPrompt());
     }
 

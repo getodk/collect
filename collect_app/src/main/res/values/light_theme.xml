@@ -17,11 +17,12 @@
         <item name="colorSecondaryVariant">?colorSecondary</item>
         <item name="colorSurface">#FFFFFF</item>
         <item name="colorOnPrimary">#000000</item>
-        <item name="colorOnSecondary">#000000</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
         <item name="colorOnBackground">#000000</item>
         <item name="colorOnError">#000000</item>
         <item name="colorOnSurface">#000000</item>
         <item name="scrimBackground">@color/mtrl_scrim_color</item>
+
         <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1</item>
         <item name="textAppearanceHeadline2">@style/TextAppearance.MaterialComponents.Headline2</item>
         <item name="textAppearanceHeadline3">@style/TextAppearance.MaterialComponents.Headline3</item>
@@ -51,6 +52,8 @@
         <item name="android:panelBackground">@android:color/white</item>
         <item name="alertDialogTheme">@style/Theme.Collect.BaseLight.Dialog.Alert</item>
         <item name="searchViewStyle">@style/Widget.Collect.SearchView.Light</item>
+        <item name="iconColor">#000000</item>
+        <item name="dividerColor">#1e000000</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
         <item name="android:tintMode" tools:targetApi="21">src_in</item>
     </style>

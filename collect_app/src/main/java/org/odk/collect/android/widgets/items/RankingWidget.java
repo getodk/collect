@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.widgets.items;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -32,7 +33,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
@@ -42,7 +43,8 @@ import java.util.List;
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerTextView;
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 
-public class RankingWidget extends ItemsWidget implements BinaryDataReceiver, ButtonClickListener {
+@SuppressLint("ViewConstructor")
+public class RankingWidget extends ItemsWidget implements WidgetDataReceiver, ButtonClickListener {
 
     private List<SelectChoice> savedItems;
     Button showRankingDialogButton;
@@ -89,7 +91,7 @@ public class RankingWidget extends ItemsWidget implements BinaryDataReceiver, Bu
     }
 
     @Override
-    public void setBinaryData(Object values) {
+    public void setData(Object values) {
         savedItems = (List<SelectChoice>) values;
         answerTextView.setText(getAnswerText());
     }

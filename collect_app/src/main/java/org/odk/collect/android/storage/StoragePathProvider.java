@@ -6,6 +6,9 @@ import org.odk.collect.android.application.Collect;
 
 import java.io.File;
 
+import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
+import static org.odk.collect.utilities.PathUtils.getRelativeFilePath;
+
 public class StoragePathProvider {
 
     private StorageStateProvider storageStateProvider;
@@ -76,12 +79,12 @@ public class StoragePathProvider {
                 : getUnscopedStorageRootDirPath();
     }
 
-    public String getTmpFilePath() {
+    public String getTmpImageFilePath() {
         return getDirPath(StorageSubdirectory.CACHE) + File.separator + "tmp.jpg";
     }
 
-    public String getTmpDrawFilePath() {
-        return getDirPath(StorageSubdirectory.CACHE) + File.separator + "tmpDraw.jpg";
+    public String getTmpVideoFilePath() {
+        return getDirPath(StorageSubdirectory.CACHE) + File.separator + "tmp.mp4";
     }
 
     public String getInstanceDbPath(String filePath) {
@@ -92,12 +95,12 @@ public class StoragePathProvider {
         return getAbsoluteFilePath(getDirPath(StorageSubdirectory.INSTANCES), filePath);
     }
 
-    public String getFormDbPath(String filePath) {
-        return getDbPath(getDirPath(StorageSubdirectory.FORMS), filePath);
-    }
-
     public String getAbsoluteFormFilePath(String filePath) {
         return getAbsoluteFilePath(getDirPath(StorageSubdirectory.FORMS), filePath);
+    }
+
+    public String getFormDbPath(String filePath) {
+        return getDbPath(getDirPath(StorageSubdirectory.FORMS), filePath);
     }
 
     public String getCacheDbPath(String filePath) {
@@ -122,21 +125,6 @@ public class StoragePathProvider {
         return storageStateProvider.isScopedStorageUsed()
                 ? relativeFilePath
                 : absoluteFilePath;
-    }
-
-    private String getAbsoluteFilePath(String dirPath, String filePath) {
-        if (filePath == null) {
-            return null;
-        }
-        return filePath.startsWith(dirPath)
-                ? filePath
-                : dirPath + File.separator + filePath;
-    }
-
-    public String getRelativeFilePath(String dirPath, String filePath) {
-        return filePath.startsWith(dirPath)
-                ? filePath.substring(dirPath.length() + 1)
-                : filePath;
     }
 
     @SuppressWarnings("PMD.DoNotHardCodeSDCard")

@@ -1,7 +1,9 @@
 package org.odk.collect.android.widgets.support;
 
+import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
@@ -20,10 +22,15 @@ public class QuestionWidgetHelpers {
         return RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
     }
 
-    public static WidgetValueChangedListener mockValueChangedListener(QuestionWidget widget) {
+    public static <T extends QuestionWidget> WidgetValueChangedListener mockValueChangedListener(T widget) {
         WidgetValueChangedListener valueChangedListener = mock(WidgetValueChangedListener.class);
         widget.setValueChangedListener(valueChangedListener);
         return valueChangedListener;
+    }
+
+    public static void stubLocationPermissions(FakePermissionUtils permissionUtils, QuestionWidget widget, boolean isGranted) {
+        permissionUtils.setPermissionGranted(isGranted);
+        widget.setPermissionUtils(permissionUtils);
     }
 
     public static FormEntryPrompt promptWithAnswer(IAnswerData answer) {
@@ -42,6 +49,27 @@ public class QuestionWidgetHelpers {
         return new MockFormEntryPromptBuilder()
                 .withReadOnly(true)
                 .withAnswer(answer)
+                .build();
+    }
+
+    public static FormEntryPrompt promptWithQuestionAndAnswer(QuestionDef questionDef, IAnswerData answer) {
+        return new MockFormEntryPromptBuilder()
+                .withQuestion(questionDef)
+                .withAnswer(answer)
+                .build();
+    }
+
+    public static FormEntryPrompt promptWithQuestionDefAndAnswer(QuestionDef questionDef, IAnswerData answer) {
+        return new MockFormEntryPromptBuilder()
+                .withQuestion(questionDef)
+                .withAnswer(answer)
+                .build();
+    }
+
+    public static FormEntryPrompt promptWithReadOnlyAndQuestionDef(QuestionDef questionDef) {
+        return new MockFormEntryPromptBuilder()
+                .withReadOnly(true)
+                .withQuestion(questionDef)
                 .build();
     }
 

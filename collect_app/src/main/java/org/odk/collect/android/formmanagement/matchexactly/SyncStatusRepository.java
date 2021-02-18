@@ -4,12 +4,12 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import org.odk.collect.android.openrosa.api.FormApiException;
+import org.odk.collect.android.forms.FormSourceException;
 
 public class SyncStatusRepository {
 
     private final MutableLiveData<Boolean> syncing = new MutableLiveData<>(false);
-    private final MutableLiveData<FormApiException> lastSyncFailure = new MutableLiveData<>(null);
+    private final MutableLiveData<FormSourceException> lastSyncFailure = new MutableLiveData<>(null);
 
     public LiveData<Boolean> isSyncing() {
         return syncing;
@@ -19,12 +19,12 @@ public class SyncStatusRepository {
         syncing.postValue(true);
     }
 
-    public void finishSync(@Nullable FormApiException exception) {
+    public void finishSync(@Nullable FormSourceException exception) {
         lastSyncFailure.postValue(exception);
         syncing.postValue(false);
     }
 
-    public LiveData<FormApiException> getSyncError() {
+    public LiveData<FormSourceException> getSyncError() {
         return lastSyncFailure;
     }
 }

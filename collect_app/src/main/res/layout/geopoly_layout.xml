@@ -33,12 +33,13 @@
         <androidx.appcompat.widget.AppCompatButton
             android:text="@string/record_geopoint"
             android:id="@+id/record_button"
+            style="@style/Widget.Collect.ImageButton.MapButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:visibility="gone"
             android:textStyle="bold"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="5dp"
             android:layout_marginStart="5dp"
             android:paddingBottom="20dp"
             android:drawableEnd="@drawable/ic_distance_wrapped"
@@ -61,6 +62,7 @@
 
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/play"
+                    style="@style/Widget.Collect.ImageButton.MapButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="15dp"
@@ -69,6 +71,7 @@
 
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/pause"
+                    style="@style/Widget.Collect.ImageButton.MapButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="15dp"
@@ -78,6 +81,7 @@
 
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/backspace"
+                    style="@style/Widget.Collect.ImageButton.MapButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="15dp"
@@ -86,6 +90,7 @@
 
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/zoom"
+                    style="@style/Widget.Collect.ImageButton.MapButton"
                     app:srcCompat="@drawable/ic_my_location"
                     android:padding="15dp"
                     android:layout_margin="5dp"
@@ -94,6 +99,7 @@
 
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/layers"
+                    style="@style/Widget.Collect.ImageButton.MapButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="15dp"
@@ -102,6 +108,7 @@
 
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/clear"
+                    style="@style/Widget.Collect.ImageButton.MapButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="15dp"
@@ -110,6 +117,7 @@
 
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/save"
+                    style="@style/Widget.Collect.ImageButton.MapButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="15dp"

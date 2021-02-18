@@ -1,0 +1,350 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data">填写空表表格</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data_button">填写空表表格</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="review_data">修改已保存表格</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="review_data_button">修改已保存表格 (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="send_data">上传完成的表格</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="send_data_button">上传完成的表格 (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="view_sent_forms">查看已发送的表格</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="view_sent_forms_button">查看已发送的表格（%s）</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="get_forms">下载空表格</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="manage_files">删除已保存表格</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="added_on_date_at_time">\'添加于\' EEE, MMM dd, yyyy \'在\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="saved_on_date_at_time">\'保存于\' EEE, MMM dd, yyyy \'在\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="finalized_on_date_at_time">\'完成于\' EEE, MMM dd, yyyy \'在\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sent_on_date_at_time">\'发送于\' EEE, MMM dd, yyyy \'在\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sending_failed_on_date_at_time">\'发送失败于\' EEE, MMM dd, yyyy \'在\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Displayed in search boxes for form lists or question types that involve search-->
+  <string name="no_items_display">没有可显示内容.</string>
+  <string name="no_items_display_forms">无可显示内容。\n\n 请尝试获取并填写一个空白表格</string>
+  <!--##############################################
+    # FILL BLANK FORM
+    ##############################################-->
+  <string name="finished_disk_scan">文件扫描结束. 所有表格已经被加载.</string>
+  <string name="loading_form">正在加载表格</string>
+  <string name="survey_loading_reading_csv_message">正在读取CSV文件…</string>
+  <string name="parse_error">无法读取表格.</string>
+  <string name="cannot_edit_completed_form">一旦此表格被标记为“最终版”，它便不能再次编辑，因为它可能已被加密。</string>
+  <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
+  <string name="savepoint_used">已从自动保存点恢复未保存修改!</string>
+  <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
+  <string name="change_language">更改语言</string>
+  <!--Text for button displayed in the form filling menu to see the form's table of contents-->
+  <string name="view_hierarchy">跳到提示</string>
+  <!--Text for button displayed in the form filling menu to save the form-->
+  <string name="save_all_answers">保存表格</string>
+  <!--Text of button from the form's table of contents to jump to the beginning of the form-->
+  <string name="jump_to_beginning">开始</string>
+  <!--Text of button from the form's table of contents to jump to the end of the form-->
+  <string name="jump_to_end">结束</string>
+  <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
+  <string name="jump_to_previous">返回</string>
+  <!--Displayed below group names in a form's table of contents-->
+  <!--Displayed below repeat names in a form's table of contents-->
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <!--Title of overlay menu displayed when long pressing on a question in a form-->
+  <string name="edit_prompt">修改提示</string>
+  <string name="clearanswer_confirm">删除针对\"%s\"的回答?</string>
+  <string name="clear_answer">删除回答</string>
+  <string name="clear_answer_ask">删除这个回答?</string>
+  <string name="clear_answer_no">取消</string>
+  <string name="discard_answer">删除回答</string>
+  <string name="discard_group">删除组</string>
+  <string name="delete_repeat">删除组</string>
+  <string name="delete_repeat_ask">删除这个组?</string>
+  <string name="delete_repeat_confirm">删除组\"%s\"及其子组?</string>
+  <string name="delete_repeat_no">取消</string>
+  <string name="invalid_answer_error">回答无效!</string>
+  <string name="required_answer_error">此问题为必答题!</string>
+  <string name="save_enter_data_description">您已在 %s 的末尾.</string>
+  <string name="save_form_as">重命名表格:</string>
+  <string name="save_as_error">保存的名字不能为空!</string>
+  <string name="mark_finished">标记表格为完成</string>
+  <string name="quit_entry">保存表格并退出</string>
+  <string name="data_saved_error">表格保存失败!</string>
+  <string name="data_saved_ok">表格已成功保存!</string>
+  <string name="save_point_error">错误！保存还原点文件：%s</string>
+  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <string name="quit_application">退出 %s</string>
+  <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="do_not_save">忽略修改</string>
+  <string name="keep_changes">保存修改</string>
+  <string name="saving_form">正在保存表格</string>
+  <string name="survey_saving_saving_message">正在保存至SD卡…</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <!--Text displayed when audio recording fails to start-->
+  <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <!--Error message displayed when copying media from a temporary directory fails-->
+  <!--##############################################
+    # FORM FEATURES
+    ##############################################-->
+  <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
+  <string name="launch_app">运行</string>
+  <string name="activity_not_found">没找到与 %s 对应的活动</string>
+  <string name="no_app">请求的应用不可用. 请手动填入相应值.</string>
+  <string name="launch_printer">初始化打印</string>
+  <string name="no_printer">请求的打印机未被安装. 请安装打印机.</string>
+  <string name="open_url">打开Url</string>
+  <string name="capture_osm">启动 OpenMapKit</string>
+  <string name="get_barcode">获取条形码</string>
+  <string name="replace_barcode">替换条形码</string>
+  <string name="capture_image">照相</string>
+  <string name="choose_image">选择图片</string>
+  <string name="view_image">查看图片</string>
+  <string name="annotate_image">注释该图片</string>
+  <!--Dialog heading for saving annotated image-->
+  <string name="save_and_close">保存并关闭</string>
+  <string name="sign_button">收集签名</string>
+  <string name="markup_image">修改图像</string>
+  <string name="draw_image">生成图像</string>
+  <string name="reset_image">重置</string>
+  <string name="set_color">选择颜色</string>
+  <string name="capture_video">拍摄视频</string>
+  <string name="choose_video">选择视频</string>
+  <string name="view_video">查看视频</string>
+  <string name="play_video">播放视频</string>
+  <!--Text for button that deletes a file that is the answer to a question-->
+  <!--Text for button that starts recording sound-->
+  <string name="capture_audio">录音</string>
+  <!--Text for button that lets the user choose a sound file on their device-->
+  <string name="choose_sound">选择音频</string>
+  <!--Description text for button that that pauses recording sound-->
+  <!--Description text for button that that resumes recording sound-->
+  <!--Title for dialog asking the user if they want to delete a file-->
+  <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="error_attaching_binary_file">在访问媒体文件：%s时发生了错误</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="select_answer">选择回答</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="selected">选定: </string>
+  <string name="trigger">好的. 请继续.</string>
+  <string name="ext_file_no_data_error">此文件不包含数据！</string>
+  <string name="ext_import_generic_error">无法从%1$s中导入数据，原因：%2$s</string>
+  <string name="ext_import_completed_message">读取数据已完成！</string>
+  <string name="get_bearing">记录方位</string>
+  <string name="replace_bearing">替代方位</string>
+  <string name="getting_bearing">加载方位</string>
+  <string name="accept_bearing">记录方位</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
+  <string name="file_invalid">文件: %s 不是有效文件.</string>
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
+  <string name="file_missing">文件: %s 不能被找到.</string>
+  <!--Heading for a dialog which prompts the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Explanation for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Action to close a full screen dialog-->
+  <!--Heading for a dialog which prompts the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Action to save the contents of a full screen dialog-->
+  <!--##############################################
+    # GEO
+    ##############################################-->
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+   These strings are only being used to preserve compatibility with pre-existing
+    tile caches, and are not shown in the UI.-->
+  <string name="view_change_location">查看或修改位置</string>
+  <string name="change_location">更改地点</string>
+  <string name="getting_location">正在获取位置</string>
+  <string name="get_location">获取位置</string>
+  <string name="provider_disabled_error">位置服务被关闭!</string>
+  <!--Action to go to Android settings. Displayed when location providers are disabled.-->
+  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
+  <!--Name of an action button-->
+  <!--##############################################
+    # SEND FINALIZED FORM
+    ##############################################-->
+  <string name="uploading_data">正在发送表格</string>
+  <string name="noselect_error">没有选定表格!</string>
+  <string name="no_connection">没有可用网络</string>
+  <string name="sending_items">上传 %2$s 中的 %1$s 个表格</string>
+  <string name="send_selected_data">上传选定项</string>
+  <string name="server_auth_credentials">对服务器：%s无效的用户名或者密码</string>
+  <string name="server_requires_auth">服务器要求验证身份</string>
+  <string name="no_forms_uploaded">没有表格被上传.</string>
+  <string name="upload_results">上传结果</string>
+  <!--Name of option in Send Finalized Form menu to show only unsent forms (default) or show sent and unsent forms-->
+  <string name="change_view">修改视图</string>
+  <string name="show_sent_and_unsent_forms">显示已发送和未发送表格</string>
+  <string name="show_unsent_forms">只显示未发送表格</string>
+  <!--##############################################
+    # GET BLANK FORM
+    ##############################################-->
+  <string name="refresh">刷新</string>
+  <string name="download">下载选中项</string>
+  <string name="downloading_data">连接到服务器</string>
+  <string name="form_download_progress">%1$s. 加载媒体文件: %3$s 中的 %2$s</string>
+  <string name="version">版本:</string>
+  <!--##############################################
+    # DELETE SAVED FORM
+    ##############################################-->
+  <!--Title of a section in "Delete Saved Forms" for deleting filled/saved forms (as opposed to blank forms)-->
+  <string name="data">已保存的表格</string>
+  <!--Title of a section in "Delete Saved Forms" for deleting blank forms (as opposed to filled/saved forms)-->
+  <string name="forms">空表格</string>
+  <string name="delete_confirm">删除表格 %s ?</string>
+  <string name="delete_file">删除选中</string>
+  <string name="delete_no">不删除</string>
+  <string name="delete_yes">删除表格</string>
+  <string name="file_deleted_error">%2$s 中的 %1$s 个选定的表格不能被删除!</string>
+  <string name="file_deleted_ok">%s 表格被成功删除!</string>
+  <string name="file_delete_in_progress">正在删除表格!</string>
+  <!--##############################################
+    # GENERAL SETTINGS
+    ##############################################-->
+  <string name="general_preferences">设置</string>
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <string name="client">用户界面</string>
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section only available in beta or development builds.-->
+  <string name="server_preferences">服务器设置</string>
+  <!--Label for server type setting-->
+  <string name="server_url">URL</string>
+  <!--Title of dialog for configuring server URL-->
+  <string name="change_server_url">服務器 URL</string>
+  <string name="url_error">不正确的URL!</string>
+  <string name="username">用户名</string>
+  <string name="change_username">用户名</string>
+  <string name="password">密码</string>
+  <string name="change_password">密码</string>
+  <string name="change_formlist_url">表格列表路径 (附加到服务器URL之后)</string>
+  <string name="change_submission_url">提交路径 (附加到服务器URL之后)</string>
+  <string name="formlist_url">表格列表路径</string>
+  <string name="submission_url">提交路径</string>
+  <string name="selected_google_account_text">Google账号</string>
+  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
+  <!--Description for Fallback submission URL setting-->
+  <string name="font_size">字体大小</string>
+  <string name="change_font_size">字体大小</string>
+  <string name="font_size_extra_large">极大</string>
+  <string name="font_size_large">大</string>
+  <string name="font_size_medium">中</string>
+  <string name="font_size_small">小</string>
+  <string name="font_size_extra_small">极小</string>
+  <string name="navigation">导航</string>
+  <string name="swipe_navigation">使用水平滑动</string>
+  <string name="buttons_navigation">使用前进/后退按钮</string>
+  <string name="swipe_buttons_navigation">使用滑动和按钮</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="form_forward">下一个</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="show_splash_summary">当应用开始时显示</string>
+  <string name="splash_path">选定的开始图片</string>
+  <string name="default_splash_path">ODK默认图片</string>
+  <string name="select_another_image">选择其他图片</string>
+  <string name="use_odk_default">使用默认图片</string>
+  <string name="change_splash_path">修改图片</string>
+  <!--Heading for the settings category about updating blank forms-->
+  <!--Name of the setting that defines how blank forms are updated from the server.-->
+  <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
+  <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
+  <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
+  <!--Name of the setting that defines how often blank forms are updated from the server.-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
+  <string name="autosend_selector_title">自动发送</string>
+  <string name="autosend">自动发送</string>
+  <string name="delete_after_send">发送后自动删除</string>
+  <string name="default_completed">默认标记表格为完成</string>
+  <string name="default_completed_summary">表格会默认标记为完成</string>
+  <string name="constraint_behavior">约束检查</string>
+  <string name="constraint_behavior_on_swipe">向前滑动时验证</string>
+  <string name="constraint_behavior_on_finalize">推迟检验直到完成</string>
+  <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
+  <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Displayed when a device property such as the phone number is not available-->
+  <!--##############################################
+     # ADMIN SETTINGS
+     ##############################################-->
+  <string name="admin_preferences">管理员设置</string>
+  <string name="admin_access_settings">点击进入管理员设置</string>
+  <string name="enter_new_password">输入新密码</string>
+  <string name="admin_password">管理员密码</string>
+  <string name="admin_password_changed">管理员密码已成功修改</string>
+  <string name="admin_password_disabled">管理员密码已禁用</string>
+  <string name="admin_password_incorrect">对不起, 密码不正确!</string>
+  <string name="enter_admin_password">输入管理员密码</string>
+  <string name="change_admin_password">更改管理员密码</string>
+  <string name="show_password">显示密码</string>
+  <string name="found_in_main">不选中以从主菜单中隐藏</string>
+  <string name="found_in_settings">不选中以从设置中隐藏</string>
+  <!--Name of a setting that determines whether users can navigate backwards in a form-->
+  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <string name="save_mid">保存表格</string>
+  <!--##############################################
+     # GOOGLE DRIVE, GOOGLE SHEETS
+     ##############################################-->
+  <!--Title of the screen that lists forms in user's Google Drive-->
+  <!--Title of the screen that lists forms shared with Google Drive user-->
+  <!--Button for navigating across Google Drive folders-->
+  <string name="no_google_account">无选中的谷歌账号！</string>
+  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
+  <!--##############################################
+     # ABOUT
+     ##############################################-->
+  <string name="about_preferences">关于</string>
+  <string name="tell_your_friends">分享ODK Collect</string>
+  <!--##############################################
+     # SETTINGS IMPORT
+     ##############################################-->
+  <!--##############################################
+     # SCOPED STORAGE MIGRATION
+     ##############################################-->
+  <!--Action to begin a storage migration-->
+  <!--##############################################
+     # MISC
+     ##############################################-->
+  <string name="ok">好</string>
+  <!--Used in many dialogs to dismiss the dialog without taking any action-->
+  <string name="cancel">取消</string>
+  <string name="cancel_loading_form">取消</string>
+  <string name="cancel_location">取消</string>
+  <string name="do_not_change">取消</string>
+  <string name="do_not_exit">取消</string>
+  <string name="canceling">正在取消</string>
+  <string name="success">成功</string>
+  <string name="error_occured">错误</string>
+  <string name="please_wait">请稍候.</string>
+  <string name="please_wait_long">请稍候. 这可能需要几分钟.</string>
+</resources>

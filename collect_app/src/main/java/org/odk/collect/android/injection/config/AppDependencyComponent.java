@@ -20,6 +20,8 @@ import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
+import org.odk.collect.android.audio.AudioRecordingControllerFragment;
+import org.odk.collect.android.audio.AudioRecordingErrorDialogFragment;
 import org.odk.collect.android.backgroundwork.AutoSendTaskSpec;
 import org.odk.collect.android.backgroundwork.AutoUpdateTaskSpec;
 import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec;
@@ -29,6 +31,7 @@ import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.configure.qr.ShowQRCodeFragment;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
+import org.odk.collect.android.formentry.saving.SaveAnswerFileErrorDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.fragments.MapBoxInitializationFragment;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
@@ -127,8 +130,6 @@ public interface AppDependencyComponent {
     void inject(InstanceServerUploaderTask uploader);
 
     void inject(ServerPreferencesFragment serverPreferencesFragment);
-
-    void inject(MultiFormDownloader multiFormDownloader);
 
     void inject(AuthDialogUtility authDialogUtility);
 
@@ -235,6 +236,12 @@ public interface AppDependencyComponent {
     void inject(AdminPreferencesFragment.MainMenuAccessPreferences mainMenuAccessPreferences);
 
     void inject(SelectMinimalDialog selectMinimalDialog);
+
+    void inject(AudioRecordingControllerFragment audioRecordingControllerFragment);
+
+    void inject(SaveAnswerFileErrorDialogFragment saveAnswerFileErrorDialogFragment);
+
+    void inject(AudioRecordingErrorDialogFragment audioRecordingErrorDialogFragment);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 

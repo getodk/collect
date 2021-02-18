@@ -35,12 +35,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.configure.LegacySettingsFileReader;
 import org.odk.collect.android.configure.SettingsImporter;
+import org.odk.collect.android.configure.legacy.LegacySettingsFileImporter;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
@@ -61,14 +63,11 @@ import org.odk.collect.android.storage.migration.StorageMigrationResult;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.material.MaterialBanner;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
@@ -77,8 +76,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-import static org.odk.collect.android.analytics.AnalyticsEvents.SETTINGS_IMPORT_JSON;
-import static org.odk.collect.android.analytics.AnalyticsEvents.SETTINGS_IMPORT_SERIALIZED;
 import static org.odk.collect.android.utilities.DialogUtils.getDialog;
 import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
 
@@ -99,12 +96,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     private Button getFormsButton;
     private AlertDialog alertDialog;
     private MenuItem qrcodeScannerMenuItem;
-    private int completedCount;
     private int savedCount;
-    private int viewSentCount;
-    private Cursor finalizedCursor;
-    private Cursor savedCursor;
-    private Cursor viewSentCursor;
     private final IncomingHandler handler = new IncomingHandler(this);
     private final MyContentObserver contentObserver = new MyContentObserver();
 
@@ -155,11 +147,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         enterDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (MultiClickGuard.allowClick(getClass().getName())) {
-                    Intent i = new Intent(getApplicationContext(),
-                            FillBlankFormActivity.class);
-                    startActivity(i);
-                }
+                Intent i = new Intent(getApplicationContext(),
+                        FillBlankFormActivity.class);
+                startActivity(i);
             }
         });
 
@@ -169,12 +159,10 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         reviewDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (MultiClickGuard.allowClick(getClass().getName())) {
-                    Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
-                    i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
-                            ApplicationConstants.FormModes.EDIT_SAVED);
-                    startActivity(i);
-                }
+                Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
+                        ApplicationConstants.FormModes.EDIT_SAVED);
+                startActivity(i);
             }
         });
 
@@ -184,11 +172,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         sendDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (MultiClickGuard.allowClick(getClass().getName())) {
-                    Intent i = new Intent(getApplicationContext(),
-                            InstanceUploaderListActivity.class);
-                    startActivity(i);
-                }
+                Intent i = new Intent(getApplicationContext(),
+                        InstanceUploaderListActivity.class);
+                startActivity(i);
             }
         });
 
@@ -197,12 +183,10 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         viewSentFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (MultiClickGuard.allowClick(getClass().getName())) {
-                    Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
-                    i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
-                            ApplicationConstants.FormModes.VIEW_SENT);
-                    startActivity(i);
-                }
+                Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
+                        ApplicationConstants.FormModes.VIEW_SENT);
+                startActivity(i);
             }
         });
 
@@ -212,26 +196,24 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         getFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (MultiClickGuard.allowClick(getClass().getName())) {
-                    SharedPreferences sharedPreferences = PreferenceManager
-                            .getDefaultSharedPreferences(MainMenuActivity.this);
-                    String protocol = sharedPreferences.getString(
-                            GeneralKeys.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
-                    Intent i = null;
-                    if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
-                        if (new PlayServicesChecker().isGooglePlayServicesAvailable(MainMenuActivity.this)) {
-                            i = new Intent(getApplicationContext(),
-                                    GoogleDriveActivity.class);
-                        } else {
-                            new PlayServicesChecker().showGooglePlayServicesAvailabilityErrorDialog(MainMenuActivity.this);
-                            return;
-                        }
-                    } else {
+                SharedPreferences sharedPreferences = PreferenceManager
+                        .getDefaultSharedPreferences(MainMenuActivity.this);
+                String protocol = sharedPreferences.getString(
+                        GeneralKeys.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
+                Intent i = null;
+                if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
+                    if (new PlayServicesChecker().isGooglePlayServicesAvailable(MainMenuActivity.this)) {
                         i = new Intent(getApplicationContext(),
-                                FormDownloadListActivity.class);
+                                GoogleDriveActivity.class);
+                    } else {
+                        new PlayServicesChecker().showGooglePlayServicesAvailabilityErrorDialog(MainMenuActivity.this);
+                        return;
                     }
-                    startActivity(i);
+                } else {
+                    i = new Intent(getApplicationContext(),
+                            FormDownloadListActivity.class);
                 }
+                startActivity(i);
             }
         });
 
@@ -241,11 +223,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         manageFilesButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (MultiClickGuard.allowClick(getClass().getName())) {
-                    Intent i = new Intent(getApplicationContext(),
-                            DeleteSavedFormActivity.class);
-                    startActivity(i);
-                }
+                Intent i = new Intent(getApplicationContext(),
+                        DeleteSavedFormActivity.class);
+                startActivity(i);
             }
         });
 
@@ -266,14 +246,24 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             return;
         }
 
-        importSettingsFromLegacyFiles();
+        LegacySettingsFileImporter legacySettingsFileImporter = new LegacySettingsFileImporter(storagePathProvider, analytics, settingsImporter);
+        if (legacySettingsFileImporter.importFromFile()) {
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle(R.string.successfully_imported_settings)
+                    .setMessage(R.string.settings_successfully_loaded_file_notification)
+                    .setPositiveButton(R.string.ok, (dialog, which) -> {
+                        dialog.dismiss();
+                        recreate();
+                    })
+                    .setCancelable(false)
+                    .create().show();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        countSavedForms();
         updateButtons();
         if (!storageMigrationRepository.isMigrationBeingPerformed()) {
             getContentResolver().registerContentObserver(InstanceColumns.CONTENT_URI, true, contentObserver);
@@ -282,6 +272,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         setButtonsVisibility();
         invalidateOptionsMenu();
         setUpStorageMigrationBanner();
+        tryToPerformAutomaticMigration();
     }
 
     private void setButtonsVisibility() {
@@ -322,6 +313,10 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (!MultiClickGuard.allowClick(getClass().getName())) {
+            return true;
+        }
+
         switch (item.getItemId()) {
             case R.id.menu_configure_qr_code:
                 if (adminPasswordProvider.isAdminPasswordSet()) {
@@ -357,48 +352,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         setSupportActionBar(toolbar);
     }
 
-    private void countSavedForms() {
-        InstancesDao instancesDao = new InstancesDao();
-
-        // count for finalized instances
-        try {
-            finalizedCursor = instancesDao.getFinalizedInstancesCursor();
-        } catch (Exception e) {
-            createErrorDialog(e.getMessage(), EXIT);
-            return;
-        }
-
-        if (finalizedCursor != null) {
-            startManagingCursor(finalizedCursor);
-        }
-        completedCount = finalizedCursor != null ? finalizedCursor.getCount() : 0;
-
-        // count for saved instances
-        try {
-            savedCursor = instancesDao.getUnsentInstancesCursor();
-        } catch (Exception e) {
-            createErrorDialog(e.getMessage(), EXIT);
-            return;
-        }
-
-        if (savedCursor != null) {
-            startManagingCursor(savedCursor);
-        }
-        savedCount = savedCursor != null ? savedCursor.getCount() : 0;
-
-        //count for view sent form
-        try {
-            viewSentCursor = instancesDao.getSentInstancesCursor();
-        } catch (Exception e) {
-            createErrorDialog(e.getMessage(), EXIT);
-            return;
-        }
-        if (viewSentCursor != null) {
-            startManagingCursor(viewSentCursor);
-        }
-        viewSentCount = viewSentCursor != null ? viewSentCursor.getCount() : 0;
-    }
-
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
         alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setIcon(android.R.drawable.ic_dialog_info);
@@ -421,49 +374,49 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     private void updateButtons() {
-        if (finalizedCursor != null && !finalizedCursor.isClosed()) {
-            finalizedCursor.requery();
-            completedCount = finalizedCursor.getCount();
+        if (!storageMigrationRepository.isMigrationBeingPerformed()) {
+            InstancesDao instancesDao = new InstancesDao();
+
+            int completedCount;
+            try (Cursor finalizedCursor = instancesDao.getFinalizedInstancesCursor()) {
+                completedCount = finalizedCursor != null ? finalizedCursor.getCount() : 0;
+            } catch (Exception ignored) {
+                completedCount = 0;
+            }
+
+            try (Cursor savedCursor = instancesDao.getUnsentInstancesCursor()) {
+                savedCount = savedCursor != null ? savedCursor.getCount() : 0;
+            } catch (Exception ignored) {
+                savedCount = 0;
+            }
+
+            int viewSentCount;
+            try (Cursor viewSentCursor = instancesDao.getSentInstancesCursor()) {
+                viewSentCount = viewSentCursor != null ? viewSentCursor.getCount() : 0;
+            } catch (Exception ignored) {
+                viewSentCount = 0;
+            }
+
             if (completedCount > 0) {
                 sendDataButton.setText(
                         getString(R.string.send_data_button, String.valueOf(completedCount)));
             } else {
                 sendDataButton.setText(getString(R.string.send_data));
             }
-        } else {
-            sendDataButton.setText(getString(R.string.send_data));
-            Timber.w("Cannot update \"Send Finalized\" button label since the database is closed. "
-                    + "Perhaps the app is running in the background?");
-        }
 
-        if (savedCursor != null && !savedCursor.isClosed()) {
-            savedCursor.requery();
-            savedCount = savedCursor.getCount();
             if (savedCount > 0) {
                 reviewDataButton.setText(getString(R.string.review_data_button,
                         String.valueOf(savedCount)));
             } else {
                 reviewDataButton.setText(getString(R.string.review_data));
             }
-        } else {
-            reviewDataButton.setText(getString(R.string.review_data));
-            Timber.w("Cannot update \"Edit Form\" button label since the database is closed. "
-                    + "Perhaps the app is running in the background?");
-        }
 
-        if (viewSentCursor != null && !viewSentCursor.isClosed()) {
-            viewSentCursor.requery();
-            viewSentCount = viewSentCursor.getCount();
             if (viewSentCount > 0) {
                 viewSentFormsButton.setText(
                         getString(R.string.view_sent_forms_button, String.valueOf(viewSentCount)));
             } else {
                 viewSentFormsButton.setText(getString(R.string.view_sent_forms));
             }
-        } else {
-            viewSentFormsButton.setText(getString(R.string.view_sent_forms));
-            Timber.w("Cannot update \"View Sent\" button label since the database is closed. "
-                    + "Perhaps the app is running in the background?");
         }
     }
 
@@ -574,30 +527,12 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         });
     }
 
-    private void importSettingsFromLegacyFiles() {
-        try {
-            String settings = new LegacySettingsFileReader(storagePathProvider).toJSON();
-
-            if (settings != null) {
-                String type = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json").exists()
-                        ? SETTINGS_IMPORT_JSON : SETTINGS_IMPORT_SERIALIZED;
-                String settingsHash = FileUtils.getMd5Hash(new ByteArrayInputStream(settings.getBytes()));
-
-                if (settingsImporter.fromJSON(settings)) {
-                    ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
-                    analytics.logEvent(type, "Success", settingsHash);
-                    recreate();
-                } else {
-                    ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
-                    analytics.logEvent(type, "Corrupt", settingsHash);
-                }
+    private void tryToPerformAutomaticMigration() {
+        if (storageStateProvider.shouldPerformAutomaticMigration()) {
+            StorageMigrationDialog dialog = showStorageMigrationDialog();
+            if (dialog != null) {
+                dialog.startStorageMigration();
             }
-        } catch (LegacySettingsFileReader.CorruptSettingsFileException e) {
-            ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
-
-            String type = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json").exists()
-                    ? SETTINGS_IMPORT_JSON : SETTINGS_IMPORT_SERIALIZED;
-            analytics.logEvent(type, "Corrupt exception", "none");
         }
     }
 }

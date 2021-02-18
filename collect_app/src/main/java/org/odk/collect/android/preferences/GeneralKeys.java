@@ -66,7 +66,6 @@ public final class GeneralKeys {
     public static final String KEY_METADATA_USERNAME        = "metadata_username";
     public static final String KEY_METADATA_PHONENUMBER     = "metadata_phonenumber";
     public static final String KEY_METADATA_EMAIL           = "metadata_email";
-    public static final String KEY_MAGENTA_THEME            = "magenta";
 
     static final String KEY_FORM_METADATA                   = "form_metadata";
 
@@ -74,10 +73,11 @@ public final class GeneralKeys {
 
     // values
     public static final String NAVIGATION_SWIPE             = "swipe";
-    public static final String CONSTRAINT_BEHAVIOR_ON_SWIPE = "on_swipe";
     public static final String CONSTRAINT_BEHAVIOR_ON_FINALIZE = "on_finalize";       // smap
-    public static final String NAVIGATION_BUTTONS           = "buttons";
     public static final String GOOGLE_MAPS                 = "google_maps";     // smap make public
+    public static final String NAVIGATION_BUTTONS           = "buttons";
+    public static final String NAVIGATION_BOTH              = "swipe_buttons";
+    public static final String CONSTRAINT_BEHAVIOR_ON_SWIPE = "on_swipe";
     private static final String AUTOSEND_OFF                = "off";
     private static final String GUIDANCE_HINT_OFF           = "no";
     static final String KEY_AUTOSEND_WIFI                   = "autosend_wifi";
@@ -121,6 +121,10 @@ public final class GeneralKeys {
     public static final String KEY_SMAP_PASSWORD_POLICY = "pw_policy";
     // end smap
 
+    // experimental
+    public static final String KEY_MAGENTA_THEME            = "magenta";
+    public static final String KEY_EXTERNAL_APP_RECORDING   = "external_app_recording";
+
     private static HashMap<String, Object> getHashMap() {
         HashMap<String, Object> hashMap = new HashMap<>();
         // odk_server_preferences.xmll
@@ -159,7 +163,7 @@ public final class GeneralKeys {
         hashMap.put(KEY_APP_THEME,                  Collect.getInstance().getString(R.string.app_theme_light));
         hashMap.put(KEY_APP_LANGUAGE,               "");
         hashMap.put(KEY_FONT_SIZE,                  String.valueOf(QuestionFontSizeUtils.DEFAULT_FONT_SIZE));
-        hashMap.put(KEY_NAVIGATION,                 NAVIGATION_SWIPE);
+        hashMap.put(KEY_NAVIGATION,                 NAVIGATION_BOTH);
         hashMap.put(KEY_SHOW_SPLASH,                false);
         hashMap.put(KEY_SPLASH_PATH,                Collect.getInstance().getString(R.string.default_splash_path));
         hashMap.put(KEY_MAGENTA_THEME,              false);
@@ -192,6 +196,7 @@ public final class GeneralKeys {
         hashMap.put(KEY_SMAP_PASSWORD_POLICY, "-1");
         // end smap
 
+        hashMap.put(KEY_EXTERNAL_APP_RECORDING,     true);
         // map_preferences.xml
         hashMap.put(KEY_BASEMAP_SOURCE,             BASEMAP_SOURCE_GOOGLE);
         hashMap.put(KEY_CARTO_MAP_STYLE,            "positron");

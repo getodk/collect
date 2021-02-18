@@ -14,6 +14,8 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
@@ -243,22 +245,22 @@ public class FillBlankFormTest {
         // would catch regressions for https://github.com/getodk/collect/issues/3340
         new MainMenuPage(rule).startBlankForm("CSV error Form")
                 .clickOnText("Greg Pommen")
-                .swipeToNextQuestion()
+                .swipeToNextQuestion("* Select trap program:")
                 .clickOnText("Mountain pine beetle")
-                .swipeToNextQuestion()
+                .swipeToNextQuestion("Pick Trap Name:")
                 .assertText("2018-COE-MPB-001 @ Wellington")
-                .swipeToPreviousQuestion()
+                .swipeToPreviousQuestion("* Select trap program:")
                 .clickOnText("Invasive alien species")
-                .swipeToNextQuestion()
+                .swipeToNextQuestion("Pick Trap Name:")
                 .assertText("2018-COE-IAS-e-001 @ Coronation")
-                .swipeToPreviousQuestion()
+                .swipeToPreviousQuestion("* Select trap program:")
                 .clickOnText("Longhorn beetles")
-                .swipeToNextQuestion()
+                .swipeToNextQuestion("Pick Trap Name:")
                 .assertText("2018-COE-LGH-M-001 @ Acheson")
                 .clickOnText("2018-COE-LGH-L-004 @ Acheson")
-                .swipeToNextQuestion()
+                .swipeToNextQuestion("* Were there specimens in the trap:")
                 .clickOnText("No")
-                .swipeToNextQuestion()
+                .swipeToNextQuestion("Any other notes?")
                 .swipeToEndScreen()
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
@@ -655,20 +657,22 @@ public class FillBlankFormTest {
 
     @Test
     public void missingFileMessage_shouldBeDisplayedIfExternalFIleIsMissing() {
+        String formsDirPath = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS);
+
         //TestCase55
         new MainMenuPage(rule)
                 .startBlankForm("search_and_select")
-                .assertText("File: /storage/emulated/0/odk/forms/search_and_select-media/nombre.csv is missing.")
-                .assertText("File: /storage/emulated/0/odk/forms/search_and_select-media/nombre2.csv is missing.")
+                .assertText("File: " + formsDirPath + "/search_and_select-media/nombre.csv is missing.")
+                .assertText("File: " + formsDirPath + "/search_and_select-media/nombre2.csv is missing.")
                 .swipeToEndScreen()
                 .clickSaveAndExit()
 
                 .startBlankForm("cascading select test")
                 .clickOnText("Texas")
                 .swipeToNextQuestion()
-                .assertText("File: /storage/emulated/0/odk/forms/select_one_external-media/itemsets.csv is missing.")
+                .assertText("File: " + formsDirPath + "/select_one_external-media/itemsets.csv is missing.")
                 .swipeToNextQuestion()
-                .assertText("File: /storage/emulated/0/odk/forms/select_one_external-media/itemsets.csv is missing.")
+                .assertText("File: " + formsDirPath + "/select_one_external-media/itemsets.csv is missing.")
                 .swipeToNextQuestion(3)
                 .swipeToEndScreen()
                 .clickSaveAndExit()
@@ -678,7 +682,7 @@ public class FillBlankFormTest {
                 .clickGoUpIcon()
                 .clickOnElementInHierarchy(14)
                 .clickOnQuestion("Source15")
-                .assertText("File: /storage/emulated/0/odk/forms/fieldlist-updates_nocsv-media/fruits.csv is missing.")
+                .assertText("File: " + formsDirPath + "/fieldlist-updates_nocsv-media/fruits.csv is missing.")
                 .swipeToEndScreen()
                 .clickSaveAndExit();
     }
@@ -697,29 +701,6 @@ public class FillBlankFormTest {
                 .assertText("submission")
                 .rotateToPortrait(new FormEntryPage("All widgets", rule))
                 .assertText("submission");
-    }
-
-    @Test
-    public void backwardButton_shouldNotBeClickableOnTheFirstFormPage() {
-        //TestCase14
-        new MainMenuPage(rule)
-                .startBlankForm("All widgets")
-                .checkAreNavigationButtonsNotDisplayed()
-                .clickOptionsIcon()
-                .clickGeneralSettings()
-                .clickOnUserInterface()
-                .clickNavigation()
-                .clickUseNavigationButtons()
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new FormEntryPage("All widgets", rule))
-                .checkBackNavigationButtonIsNotsDisplayed()
-                .checkNextNavigationButtonIsDisplayed()
-                .rotateToLandscape(new FormEntryPage("All widgets", rule))
-                .checkBackNavigationButtonIsNotsDisplayed()
-                .checkNextNavigationButtonIsDisplayed()
-                .rotateToPortrait(new FormEntryPage("All widgets", rule))
-                .checkBackNavigationButtonIsNotsDisplayed()
-                .checkNextNavigationButtonIsDisplayed();
     }
 
     @Test

@@ -24,6 +24,7 @@ import android.location.Location;       // smap
 import androidx.annotation.Nullable;
 import androidx.multidex.MultiDex;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
@@ -41,6 +42,8 @@ import org.odk.collect.android.application.initialization.ApplicationInitializer
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.LocaleHelper;
+import org.odk.collect.strings.LocalizedApplication;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -50,12 +53,13 @@ import java.util.Stack;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
 import static org.odk.collect.android.preferences.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
 
-public class Collect extends Application {
+public class Collect extends Application implements LocalizedApplication {
     public static String defaultSysLanguage;
     private static Collect singleton;
 
@@ -360,5 +364,11 @@ public class Collect extends Application {
         } catch (Exception ignored) {
             // ignored
         }
+    }
+
+    @NotNull
+    @Override
+    public Locale getLocale() {
+        return new Locale(LocaleHelper.getLocaleCode(this));
     }
 }

@@ -20,10 +20,10 @@ import android.content.Context;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.android.forms.Form;
+import org.odk.collect.android.forms.FormsRepository;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -78,7 +78,7 @@ public class InstanceUploaderUtils {
 
     private static String localizeDefaultAggregateSuccessfulText(String text) {
         if (text != null && text.equals(DEFAULT_SUCCESSFUL_TEXT)) {
-            text = Collect.getInstance().getString(R.string.success);
+            text = TranslationHandler.getString(Collect.getInstance(), R.string.success);
         }
         return text;
     }
@@ -98,7 +98,7 @@ public class InstanceUploaderUtils {
      * If the form explicitly sets the auto-delete property, then it overrides the preference.
      */
     public static boolean shouldFormBeDeleted(FormsRepository formsRepository, String jrFormId, String jrFormVersion, boolean isAutoDeleteAppSettingEnabled) {
-        Form form = formsRepository.get(jrFormId, jrFormVersion);
+        Form form = formsRepository.getOneByFormIdAndVersion(jrFormId, jrFormVersion);
         if (form == null) {
             return false;
         }

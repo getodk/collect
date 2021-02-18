@@ -62,3 +62,6 @@ android {
         xmlOutput file("$reportsDir/lint/lint-result.xml")
     }
 }
+//------------------------ktlint------------------------//
+
+apply plugin: "org.jlleitschuh.gradle.ktlint"

@@ -1,0 +1,278 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data">خالی فورمه ډک کړي</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data_button">خالی فورمه ډک کړي</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="review_data">ثبت شوي فورمه تصحیح کړي</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="review_data_button">ثبت شوي فورمه تصحیح کړي (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="send_data">نهايی شوي فورمي ولیږی</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="send_data_button">نهايی شوي فورمه ولیږی ( %s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="view_sent_forms">لیږل شوي فورمي ښکاره کړي</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="view_sent_forms_button">لیږل شوي فورمي ښکاره کړي ( %s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="get_forms">سپینه فورمه تر لاسه کړی</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="manage_files">ثبت شوی فورمه لري کړی</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Displayed in search boxes for form lists or question types that involve search-->
+  <string name="no_items_display">د نندارې لپاره هیڅ شتون نلري.</string>
+  <!--##############################################
+    # FILL BLANK FORM
+    ##############################################-->
+  <string name="cannot_edit_completed_form">دا فورمه کله چې بشپړ شوي په توګه نښه شوې وي نه شي کولی چی تصحیح یی کړی. دا کیدی شي کوډ شوی وي.</string>
+  <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
+  <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
+  <string name="change_language">ژبه تغیر کړی</string>
+  <!--Text for button displayed in the form filling menu to see the form's table of contents-->
+  <!--Text for button displayed in the form filling menu to save the form-->
+  <string name="save_all_answers">فورمه ثبت کړي</string>
+  <!--Text of button from the form's table of contents to jump to the beginning of the form-->
+  <string name="jump_to_beginning">اولي برخي ته لاړ شی</string>
+  <!--Text of button from the form's table of contents to jump to the end of the form-->
+  <string name="jump_to_end">اخرني برخي ته لاړ شی</string>
+  <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
+  <string name="jump_to_previous">پورته لاړ شی</string>
+  <!--Displayed below group names in a form's table of contents-->
+  <!--Displayed below repeat names in a form's table of contents-->
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <!--Title of overlay menu displayed when long pressing on a question in a form-->
+  <string name="clearanswer_confirm">ځواب %sته لري کړي</string>
+  <string name="clear_answer">ځواب لري کړی</string>
+  <string name="clear_answer_ask">ځواب لري کړی؟</string>
+  <string name="clear_answer_no">فسخ کول</string>
+  <string name="discard_answer">ځواب لري کړی</string>
+  <string name="discard_group">ډله لیري کړي</string>
+  <string name="delete_repeat">ډله لیري کړي</string>
+  <string name="delete_repeat_ask">دغه ډله لری کړي؟</string>
+  <string name="delete_repeat_confirm">ډله او ټول فرعی ډلی حذف کړی%s</string>
+  <string name="delete_repeat_no">فسخ کول</string>
+  <string name="invalid_answer_error">اوبخښی! دا ځواب سم ندي!</string>
+  <string name="required_answer_error">اوبخښی، ځواب ورکول اړین دي!</string>
+  <string name="save_enter_data_description">تاسو د %sپای کښی یاست.</string>
+  <string name="mark_finished">د وروستي بڼه په توګه نښه کړئ</string>
+  <string name="quit_entry">فورمه ثبت کړي او خارج شی</string>
+  <string name="data_saved_error">اوبخښی، د فورمي ثبتول ناکامه شو!</string>
+  <string name="data_saved_ok">فورمه په بریالی توکه ثبت شو!</string>
+  <string name="save_point_error">د خطا ثبت بیا موندولو نښه: %s</string>
+  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <string name="quit_application">خارج شی %s</string>
+  <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="do_not_save">بدلون څخه ډد وکړي</string>
+  <string name="saving_form">فورمه د ثبت کیدو په حال کښی</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <!--Text displayed when audio recording fails to start-->
+  <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <!--Error message displayed when copying media from a temporary directory fails-->
+  <!--##############################################
+    # FORM FEATURES
+    ##############################################-->
+  <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
+  <string name="activity_not_found">هیڅ ډول فعالیت نه دی ترسره شوی%s</string>
+  <string name="capture_osm">OpenMapKit خلاص کړی</string>
+  <string name="recapture_osm">OSM ټک کول بیا ترسره کړی</string>
+  <string name="get_barcode">بار کود ثبت کړی</string>
+  <string name="replace_barcode">بارکوډ تغیر کړی</string>
+  <string name="capture_image">عکس واخلی</string>
+  <string name="view_image">انځور وګورئ</string>
+  <string name="annotate_image">تصویر شرحه کړی</string>
+  <!--Dialog heading for saving annotated image-->
+  <string name="signature_capture">د امضا ثبت کول</string>
+  <string name="capture_video">ویدیو ثبت کړی</string>
+  <string name="view_video">ویډیو ښودل</string>
+  <string name="play_video">ویډیو روښانه کړی</string>
+  <!--Text for button that deletes a file that is the answer to a question-->
+  <!--Text for button that starts recording sound-->
+  <string name="capture_audio">غږ ثبت کړی</string>
+  <!--Text for button that lets the user choose a sound file on their device-->
+  <!--Description text for button that that pauses recording sound-->
+  <!--Description text for button that that resumes recording sound-->
+  <!--Title for dialog asking the user if they want to delete a file-->
+  <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="trigger">هوکی، لطفا دوام ورکړی</string>
+  <string name="islamic_month_1">محرم</string>
+  <string name="islamic_month_2">صفر</string>
+  <string name="islamic_month_3">ربیع الاول</string>
+  <string name="islamic_month_4">ربیع الثانی</string>
+  <string name="islamic_month_5">جماد الاول</string>
+  <string name="islamic_month_6">جماد الثانی</string>
+  <string name="islamic_month_7">رجب</string>
+  <string name="islamic_month_8">شعبان</string>
+  <string name="islamic_month_9">رمضان</string>
+  <string name="islamic_month_10">شوال</string>
+  <string name="islamic_month_11">ذیقعده</string>
+  <string name="islamic_month_12">ذولحجة</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="custom_date">%1$s ( %2$s)</string>
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
+  <!--Heading for a dialog which prompts the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Explanation for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Action to close a full screen dialog-->
+  <!--Heading for a dialog which prompts the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Action to save the contents of a full screen dialog-->
+  <!--##############################################
+    # GEO
+    ##############################################-->
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+   These strings are only being used to preserve compatibility with pre-existing
+    tile caches, and are not shown in the UI.-->
+  <string name="getting_location">د موقعیت د پورته کیدو په حال کښی</string>
+  <string name="get_location">موقعیت ثبت کړی</string>
+  <string name="provider_disabled_error">اوبخښه ، د موقعیت وړاندي کوونکي غیر فعاله دی!</string>
+  <!--Action to go to Android settings. Displayed when location providers are disabled.-->
+  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
+  <!--Name of an action button-->
+  <!--##############################################
+    # SEND FINALIZED FORM
+    ##############################################-->
+  <string name="uploading_data">فورمه لیږل</string>
+  <string name="noselect_error">بخښنه غواړو، تاسو کومه فورمه نه ده ټاکلې</string>
+  <string name="no_connection">د شبکې پیوستون شتون نلري</string>
+  <string name="sending_items">د %1$sفورمه(نو) %2$sلیږل</string>
+  <string name="send_selected_data">ټاکل شوي فورمی ولیږی</string>
+  <!--Name of option in Send Finalized Form menu to show only unsent forms (default) or show sent and unsent forms-->
+  <!--##############################################
+    # GET BLANK FORM
+    ##############################################-->
+  <string name="refresh">تازه یی کړی</string>
+  <string name="download">انتخاب شوي راښکته کړي</string>
+  <string name="download_forms_result">د ډانلوډ پایله</string>
+  <string name="downloading_data">سرور ته د نښلیدو په حال کښی</string>
+  <string name="form_updates_available">نوي تصحیح شوی فورمي شتون لري</string>
+  <!--##############################################
+    # DELETE SAVED FORM
+    ##############################################-->
+  <!--Title of a section in "Delete Saved Forms" for deleting filled/saved forms (as opposed to blank forms)-->
+  <string name="data">ثبت شوی فورمی</string>
+  <!--Title of a section in "Delete Saved Forms" for deleting blank forms (as opposed to filled/saved forms)-->
+  <string name="forms">سپین فورمي</string>
+  <string name="delete_confirm">فورم(ونه) حذف کړی %s؟</string>
+  <string name="delete_file">انتخاب شوی حذف کړی</string>
+  <string name="delete_no">مه یی ړنګوی</string>
+  <string name="delete_yes">فورمي حذف کړي</string>
+  <!--##############################################
+    # GENERAL SETTINGS
+    ##############################################-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section only available in beta or development builds.-->
+  <!--Label for server type setting-->
+  <string name="server_url">URL</string>
+  <!--Title of dialog for configuring server URL-->
+  <string name="username">کار نوم</string>
+  <string name="change_username">ODK کارنوم</string>
+  <string name="password">پټنوم</string>
+  <string name="change_password">ODK پټنوم</string>
+  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
+  <!--Description for Fallback submission URL setting-->
+  <string name="app_theme">مدار</string>
+  <string name="theme_light">روښانه مدار</string>
+  <string name="theme_dark">تیاره مدار</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <!--Heading for the settings category about updating blank forms-->
+  <!--Name of the setting that defines how blank forms are updated from the server.-->
+  <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
+  <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
+  <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
+  <!--Name of the setting that defines how often blank forms are updated from the server.-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_fifteen_minutes">هر پنځلس دقیقه </string>
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_one_hour">هر ساعت</string>
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_six_hours">هر ښپږ ساعتونو کښی</string>
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_24_hours">هر 24ساعتونو کښی</string>
+  <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
+  <string name="automatic_download">په اتوماتیک ډول راښکته کول</string>
+  <string name="automatic_download_summary">په اتوماتیک ډول تصحیح شوی فورمي ښکته کړي</string>
+  <string name="hide_old_form_versions_setting_title">زاړه بڼه نسخه پټ کړئ</string>
+  <string name="hide_old_form_versions_setting_summary">یواځې نوې نسخه به په خالي فارم کې راښکاره شي</string>
+  <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
+  <string name="guidance_hint_title">د پوښتنو لپاره لارښوونه ښکاره کړئ</string>
+  <string name="guidance_no">نه</string>
+  <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Displayed when a device property such as the phone number is not available-->
+  <!--##############################################
+     # ADMIN SETTINGS
+     ##############################################-->
+  <string name="show_password">پټنوم ښودل</string>
+  <!--Name of a setting that determines whether users can navigate backwards in a form-->
+  <string name="moving_backwards_title">بیرته شاته تک کول</string>
+  <string name="moving_backwards_disabled_title">د بيرته راګرځولو توانول غیر فعاله دي</string>
+  <string name="yes">هو</string>
+  <string name="no">نه</string>
+  <string name="moving_backwards_enabled_title">د بيرته راګرځولو توانول فعال دي</string>
+  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <string name="save_mid">فورمه ثبت کړي</string>
+  <!--##############################################
+     # GOOGLE DRIVE, GOOGLE SHEETS
+     ##############################################-->
+  <!--Title of the screen that lists forms in user's Google Drive-->
+  <!--Title of the screen that lists forms shared with Google Drive user-->
+  <!--Button for navigating across Google Drive folders-->
+  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
+  <string name="multiple_media_folders_detected_notification">له یوې څخه زیات د رسنیو پوښه اوموندل شو، مهرباني وکړئ یو لیرې کړئ او بیا هڅه وکړئ</string>
+  <!--##############################################
+     # ABOUT
+     ##############################################-->
+  <!--##############################################
+     # SETTINGS IMPORT
+     ##############################################-->
+  <!--##############################################
+     # SCOPED STORAGE MIGRATION
+     ##############################################-->
+  <!--Action to begin a storage migration-->
+  <!--##############################################
+     # MISC
+     ##############################################-->
+  <string name="ok">هوکی</string>
+  <!--Used in many dialogs to dismiss the dialog without taking any action-->
+  <string name="cancel">فسخ کول</string>
+  <string name="cancel_loading_form">فسخ کول</string>
+  <string name="cancel_location">فسخ کول</string>
+  <string name="do_not_change">فسخ کول</string>
+  <string name="do_not_exit">فسخ کول</string>
+  <string name="canceling">فسخ کولو کی قرار لری</string>
+  <string name="error_occured">خطا وشوله</string>
+  <string name="please_wait">مهرباني وکړئ څو ځلې انتظار وکړئ.</string>
+  <string name="please_wait_long">هیله کوم لږ صبر وکړه. دا کیدای شي څو دقیقو وخت ونیسي.</string>
+</resources>

@@ -1,0 +1,580 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data">Mbush formular bosh</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data_button">Mbush formular bosh</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="review_data">Modifiko formularin e ruajtur</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="review_data_button">Modifiko formularin e ruajtur (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="send_data">Dërgo formularin e përfunduar</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="send_data_button">Dërgo formularin e përfunduar (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="view_sent_forms">Shih formularin e dërguar</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="view_sent_forms_button">Shih formularin e dërguar (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="get_forms">Ngarko formular bosh</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="manage_files">Fshi formularin e ruajtur</string>
+  <string name="version_number">Versioni: %s</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="added_on_date_at_time">\'Shtuar më\' EEE, MMM dd, yyyy \'në orën\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="saved_on_date_at_time">\'Ruajtur më\' EEE, MMM dd, yyyy \'në orën\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="finalized_on_date_at_time">\'Finalizuar më\' EEE, MMM dd, yyyy \'në orën\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sent_on_date_at_time">\'Dërguar më\' EEE, MMM dd, yyyy \'në orën\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sending_failed_on_date_at_time">\'Dërgimi dështoi më\' EEE, MMM dd, yyyy \'në orën\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="deleted_on_date_at_time">\'Fshirë më\' EEE, MMM dd, yyyy \'në orën\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="modified_on_date_at_time">\'Modifikuar më\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+  <string name="encrypted_form">Formular i koduar</string>
+  <string name="deleted_form">Formular i fshirë</string>
+  <string name="sort_the_list">Rendit listën</string>
+  <string name="sort_by">Rendit sipas</string>
+  <string name="sort_by_name_asc">Emër, A-Z</string>
+  <string name="sort_by_name_desc">Emër, Z-A</string>
+  <string name="sort_by_date_asc">Datë, më të rejat në fillim</string>
+  <string name="sort_by_date_desc">Datë, më të vjetrat në fillim</string>
+  <string name="sort_by_status_asc">Status, të përmbyllurat të parat</string>
+  <string name="sort_by_status_desc">Status, të papërmbyllurat të parat</string>
+  <string name="filter_the_list">Filtro listën</string>
+  <!--Displayed in search boxes for form lists or question types that involve search-->
+  <string name="search">Kërko</string>
+  <string name="no_items_display">Asgjë nuk mund të shfaqet</string>
+  <string name="no_items_display_forms">Asgjë nuk mund të shfaqet.\n\nProvoni të ngarkoni dhe plotësoni një formular bosh.</string>
+  <string name="no_items_display_sent_forms">Asgjë nuk mund të shfaqet.\n\nProvoni të përfundoni një formular përpara se të shihni</string>
+  <string name="no_items_display_instances">Asgjë nuk mund të shfaqet.\n\nProvoni të ruani një formular përpara se të ngarkoni.</string>
+  <string name="storage_runtime_permission_denied_desc">Pa këto leje Collect nuk mund të aksesojë format tuaja apo të ruajë përgjigjet. Rihapeni applikacionin kur të të jeni gati të lejoni ato.</string>
+  <string name="location_runtime_permissions_denied_title">Lejo aksesin në vendndodhje</string>
+  <string name="camera_runtime_permission_denied_title">Lejo aksesin në kamera</string>
+  <string name="record_audio_runtime_permission_denied_title">Lejo aksesin në regjistrimin audio</string>
+  <!--##############################################
+    # FILL BLANK FORM
+    ##############################################-->
+  <string name="instance_scan_count">%1$d formë/a u shtuan.</string>
+  <string name="finished_disk_scan">Skanimi përfundoi. Të gjitha format u ngarkuan.</string>
+  <string name="xform_parse_error">Gabim në dekodimin e XForm për %1$s: %2$s mungon ose i pavlefshëm.</string>
+  <string name="loading_form">Duke ngarkuar formularin</string>
+  <string name="survey_loading_reading_form_message">Duke lexuar përkufzimin e formularit…</string>
+  <string name="survey_loading_reading_data_message">Duke lexuar të dhënat e sondazhit…</string>
+  <string name="survey_loading_reading_csv_message">Duke lexuar file-t CSV…</string>
+  <string name="parse_error">Formulari nuk mund të dekodohet.</string>
+  <string name="parent_form_not_present">Është e pamundur të modifikohet ky formular i ruajtur pasi formulari bosh që i korrespondon nuk gjendet apo është fshirë.\n\nForm ID: %1$s</string>
+  <string name="cannot_edit_completed_form">Ky formular nuk mund të modifikohet pasi është shënuar \'i plotësuar\'. Mund të jetë i enkriptuar.</string>
+  <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
+  <string name="savepoint_used">Ndryshimet e paruajtura u rikthyen nga pika ku ishin ruajtur!</string>
+  <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
+  <string name="change_language">Ndrysho gjuhën</string>
+  <!--Text for button displayed in the form filling menu to see the form's table of contents-->
+  <!--Text for button displayed in the form filling menu to save the form-->
+  <string name="save_all_answers">Ruaj formularin</string>
+  <!--Text of button from the form's table of contents to jump to the beginning of the form-->
+  <string name="jump_to_beginning">Shko në fillim</string>
+  <!--Text of button from the form's table of contents to jump to the end of the form-->
+  <string name="jump_to_end">Shko në fund</string>
+  <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
+  <string name="jump_to_previous">Shko sipër</string>
+  <!--Displayed below group names in a form's table of contents-->
+  <string name="group_label">Grup</string>
+  <!--Displayed below repeat names in a form's table of contents-->
+  <string name="repeatable_group_label">Grup që përsëritet</string>
+  <string name="exit">Dil</string>
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <string name="add_another_menu">Shto një tjetër</string>
+  <!--Title of overlay menu displayed when long pressing on a question in a form-->
+  <string name="clearanswer_confirm">Hiq përgjigjen nga \"%s\"?</string>
+  <string name="clear_answer">Hiq përgjigjen</string>
+  <string name="clear_answer_ask">Të hiqet përgjigja?</string>
+  <string name="clear_answer_no">Anullo</string>
+  <string name="discard_answer">Hiq përgjigjen</string>
+  <string name="discard_group">Hiq grupin</string>
+  <string name="delete_repeat">Hiq grupin</string>
+  <string name="delete_repeat_ask">Të hiqet grupi?</string>
+  <string name="delete_repeat_confirm">Hiq grupin \"%s\" dhe të gjitha nëngrupet e tij?</string>
+  <string name="delete_repeat_no">Anullo</string>
+  <string name="invalid_answer_error">Ndjesë, kjo përgjigje është e pavlefshme!</string>
+  <string name="required_answer_error">Kjo përgjigje duhet të plotësohet patjetër!</string>
+  <string name="save_enter_data_description">Jeni në fund të %s.</string>
+  <string name="save_form_as">Emërto formularin</string>
+  <string name="save_as_error">Emri i ruajtur nuk mund të jetë bosh!</string>
+  <string name="mark_finished">Shëno formularin si të përfunduar</string>
+  <string name="quit_entry">Ruaj formën dhe dil</string>
+  <string name="data_saved_error">Ndjesë, ruajtja e formualrit dështoi!</string>
+  <string name="data_saved_ok">Formulari u ruajt me sukses!</string>
+  <string name="save_point_error">Gabim në ruajtjen e pikës së shpëtimit: %s</string>
+  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <string name="quit_application">Dil %s</string>
+  <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="no_form_loaded">&lt;nuk u ngarkua formular&gt;</string>
+  <string name="do_not_save">Injoro ndryshimet</string>
+  <string name="keep_changes">Ruaj ndryshimet</string>
+  <string name="saving_form">Duke ruajtur formularin</string>
+  <string name="survey_saving_validating_message">Duke validuar përgjigjet…</string>
+  <string name="survey_saving_collecting_message">Duke mbledhur të dhëna…</string>
+  <string name="survey_saving_saving_message">Duke ruajtur në kartën SD…</string>
+  <string name="survey_saving_finalizing_message">Duke finalizuar në kartën SD…</string>
+  <string name="survey_saving_encrypting_message">Duke enkriptuar të dhënat…</string>
+  <string name="not_exactly_one_record_for_this_instance">Nuk ka vetëm një të dhënë regjistruar për këtë kërkesë!</string>
+  <string name="not_exactly_one_blank_form_for_this_form_id">Kjo jr_form_id nuk përputhet vetëm me një formular bosh.</string>
+  <string name="no_form_id_specified">Nuk është specifikuar numër identifikimi për formën/at???</string>
+  <string name="phone_does_not_support_rsa">Telefoni nuk mund të suportojë enkriptim RSA</string>
+  <string name="invalid_rsa_public_key">Çelësi publik RSA i pavlefshëm.</string>
+  <string name="encryption_error_message">Formulari %s nuk është ruajtur si i finalizuar</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <string name="bad_uri">URL e gabuar: %s</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <string name="unrecognized_uri">URL e panjohur: %s</string>
+  <!--Text displayed when audio recording fails to start-->
+  <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <!--Error message displayed when copying media from a temporary directory fails-->
+  <!--##############################################
+    # FORM FEATURES
+    ##############################################-->
+  <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
+  <string name="launch_app">Nis</string>
+  <string name="activity_not_found">Nuk gjendet aktivitet për t\'u procesuar: %s</string>
+  <string name="no_app">Aplikacioni i kërkuar mungon. Lutemi, futni të dhënat manualisht.</string>
+  <string name="null_intent_value">Aplikacioni i jashtëm nuk dha informacionin e pritshëm.</string>
+  <string name="launch_printer">Printo</string>
+  <string name="no_printer">Printeri i kërkuar nuk është i instaluar. Lutemi, instaloni printerin.</string>
+  <string name="open_url">Hap URL</string>
+  <string name="capture_osm">Hap OpenMapKit</string>
+  <string name="recapture_osm">Etiketo sërish OSM</string>
+  <string name="edited_osm_file">File OSM XML i modifikuar:</string>
+  <string name="invalid_osm_data">Diçka nuk shkoi si duhet. Nuk morrëm të dhëna OSM të vlefshme.</string>
+  <string name="alert">Kujdes</string>
+  <string name="install_openmapkit">Lutemi, instaloni OpenMapKit!</string>
+  <string name="get_barcode">Ngarko barcode</string>
+  <string name="replace_barcode">Zëvendëso barcode-in</string>
+  <string name="barcode_scanner_prompt">Vendos barcode-in brenda drejtkëndëshit</string>
+  <string name="open_file">Hap file</string>
+  <string name="rank_items">Rendit pohimet</string>
+  <string name="invalid_range_widget">Ky widget ka parametra të paplotë!</string>
+  <string name="svg_file_does_not_exist">File-i SVG nuk ekziston!</string>
+  <string name="capture_image">Bëj foto</string>
+  <string name="choose_image">Zgjidh imazh</string>
+  <string name="selected_invalid_image">File i përzgjedhur nuk është imazh i vlefshëm</string>
+  <string name="gdrive_connection_exception">Ky imazh është i ruajtur në Google Drive dhe nuk mund të aksesohet kur nuk jeni i lidhur me internet.</string>
+  <string name="view_image">Shih Imazhin</string>
+  <string name="take_picture_instruction">Prek ekranin për të bërë fotografi</string>
+  <string name="error_front_camera_unavailable">Ky aparat nuk ka maera të përparme</string>
+  <string name="camera_error">Ky aparat nuk suporton Camera2 API.</string>
+  <!--Dialog heading for saving annotated image-->
+  <string name="save_and_close">Ruaj dhe mbyll</string>
+  <string name="signature_capture">Firmos</string>
+  <string name="sign_button">Merr firmën</string>
+  <string name="markup_image">Shëno imazhin</string>
+  <string name="draw_image">Vizato imazh</string>
+  <string name="reset_image">Rivendos</string>
+  <string name="set_color">Cakto ngjyrën</string>
+  <string name="capture_video">Regjistro video</string>
+  <string name="choose_video">Zgjidh video</string>
+  <string name="view_video">Shih videon</string>
+  <string name="start_video_capture_instruction">Prekni ekranin për të nisur regjistrimin</string>
+  <string name="stop_video_capture_instruction">Regjistrimi nisi. Prekni sërish ekranin për ta ndaluar</string>
+  <string name="play_video">Shih videon</string>
+  <string name="choose_file">Përzgjidh file</string>
+  <!--Text for button that deletes a file that is the answer to a question-->
+  <!--Text for button that starts recording sound-->
+  <string name="capture_audio">Regjistro audio</string>
+  <!--Text for button that lets the user choose a sound file on their device-->
+  <string name="choose_sound">Zgjidh tingull</string>
+  <!--Description text for button that that pauses recording sound-->
+  <!--Description text for button that that resumes recording sound-->
+  <!--Title for dialog asking the user if they want to delete a file-->
+  <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="error_attaching_binary_file">Ndodhi një gabim gjatë lidhjes së medias: %s</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="select_value">Përzgjidh vlerën</string>
+  <string name="select_answer">Zgjidh përgjigjen</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="edit_value">Ndrysho vlerën</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="no_value_selected">Nuk keni përzgjedhur vlerën</string>
+  <string name="selected">Përzgjedhur:</string>
+  <string name="trigger">OK. Lutemi, vazhdoni.</string>
+  <string name="ext_file_no_data_error">Ky file nuk ka të dhëna!</string>
+  <string name="ext_conflicting_columns_error">Kolonat %s përputhen!</string>
+  <string name="ext_sortBy_numeric_error">Kolona e renditjes duhet të përmbajë vetëm vlera numerike. Vlera konfliktuese ishte \'%s\'.</string>
+  <string name="ext_search_wrong_arguments_error">Gabim sintaksor në funksionin e kërkimit (): Funksioni kërkon 1, 4 ose 6 argumente.</string>
+  <string name="ext_search_wrong_function_error">Gabim sintaksor në funksionin e kërkimit (): Funksion i panjohur \'%s\'.</string>
+  <string name="ext_search_bad_function_error">Gabim sintaksor në funksionin e kërkimit (): \'%s\' nuk vlerësohet si funksion.</string>
+  <string name="ext_search_return_error">Kërkimi gjen nj objekt të tipit \'%s\'.</string>
+  <string name="ext_import_generic_error">Nuk mund të importohen të dhëna nga %1$s. Arseyja 2%2$s</string>
+  <string name="ext_import_progress_message">Duke ngarkuar të dhëna paraprake nga \'%1$s\', lutemi prisni… %2$s</string>
+  <string name="ext_import_finalizing_message">Duke finalizuar të dhënat e ngarkuara paraprakisht…</string>
+  <string name="ext_import_completed_message">Leximi i të dhënave përfundoi!</string>
+  <string name="ext_not_initialized_error">ExternalDataManager nuk është iniciuar.</string>
+  <string name="ext_import_csv_missing_error">Të dhënat e jashtme për %1$s nuk janë importuar. Ndoshta keni harruar të përfshini file %2$s.csv me formularin tuaj?</string>
+  <string name="ext_search_generic_error">Gabim sintaksor në funksionin e kërkimit (): %s</string>
+  <string name="ext_assign_value_error">Num mund t\'i jepet vlerë \'%s\'.</string>
+  <string name="parser_exception">Përjashtim XPathParser \"%s\"</string>
+  <string name="direction">Drejtim: %s</string>
+  <string name="select_date">Zgjidh datën</string>
+  <string name="select_time">Zgjidh orën</string>
+  <string name="no_date_selected">Data nuk është përzgjedhur</string>
+  <string name="no_time_selected">Ora nuk është përzgjedhur</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="custom_date">%1$s (%2$s)</string>
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
+  <string name="file_invalid">File: 1%s është i pavlefshëm</string>
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
+  <string name="file_missing">File: 1%s mungon.</string>
+  <!--Heading for a dialog which prompts the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Explanation for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Action to close a full screen dialog-->
+  <!--Heading for a dialog which prompts the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Action to save the contents of a full screen dialog-->
+  <!--##############################################
+    # GEO
+    ##############################################-->
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+   These strings are only being used to preserve compatibility with pre-existing
+    tile caches, and are not shown in the UI.-->
+  <string name="basemap">Harta bazë</string>
+  <string name="streets">Rrugë</string>
+  <string name="terrain">Terren</string>
+  <string name="hybrid">Hibride</string>
+  <string name="satellite">Satelit</string>
+  <string name="google_play_services_error_occured">E pamundur të aksesohen Google Maps. A është i instaluar Google Play Services?</string>
+  <string name="view_change_location">Shih ose ndrysho vendndodhjen</string>
+  <string name="change_location">Ndrysho vendndodhjen</string>
+  <string name="getting_location">Duke ngarkuar vendnodhjen</string>
+  <string name="get_location">Regjistro vendndodhjen.</string>
+  <string name="provider_disabled_error">Ofruesit e vendndodhjes janë të ç\'aktivizuar!</string>
+  <string name="gps_result">Gjerësi: %1$s\nGjatësi: %2$s\nLartësi: %3$sm\nSaktësi: %4$sm</string>
+  <!--Action to go to Android settings. Displayed when location providers are disabled.-->
+  <string name="go_to_settings">Shko tek parametrat</string>
+  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
+  <string name="track_location">Gjurmo vendndodhjen</string>
+  <string name="save_point">Ruaj vendndodhjen gjeografike</string>
+  <string name="get_point">Regjistro vendndodhjen gjeografike</string>
+  <string name="geopoint_view_read_only">Shih vendndodhjen gjeografike</string>
+  <string name="get_shape">Nis GeoShape</string>
+  <string name="get_trace">Nis GeoTrace</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <string name="west">P %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <string name="east">L %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <string name="south">J %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="north">V %1$s%2$s%3$s</string>
+  <string name="geoshape_title">GeoShape</string>
+  <string name="start">Fillo</string>
+  <string name="enable_gps">Aktivizo GPS-in</string>
+  <string name="geotrace_title">GeoTrace</string>
+  <string name="geo_clear_warning">Tipari është krijuar tanimë. A doni ta pastroni këtë tipar?</string>
+  <string name="geo_exit_warning">Elimino ndryshimet dhe kthehu në ODK?</string>
+  <string name="polygon_validator">Duhen së paku 3 pika për të krijuar Poligonin</string>
+  <string name="clear">Pastro</string>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
+  <string name="geopoint_instruction">Shtyp për pak sekonda për të vendosur një shenjë ose shtuar buton shenjues</string>
+  <string name="discard">Elimino</string>
+  <string name="geoshape_view_change_location">Shih ose ndrysho GeoShape</string>
+  <string name="geotrace_view_change_location">Shih ose ndrysho GeoTrace</string>
+  <!--Name of an action button-->
+  <!--##############################################
+    # SEND FINALIZED FORM
+    ##############################################-->
+  <string name="uploading_data">Formulari po dërgohet</string>
+  <string name="noselect_error">Ndjesë, ju nuk keni përzgjedhur asnjë formular</string>
+  <string name="no_connection">Nuk jeni i lidhur me internetin</string>
+  <string name="sending_items">Duke dërguar %1$s nga %2$s formular(ë)</string>
+  <string name="send_selected_data">Dërgo të përzgjedhurat</string>
+  <string name="server_auth_credentials">Emri i përdouresit ose fjalëkalimi janë të pavlefshëm për serverin: 1%s</string>
+  <string name="server_requires_auth">Ky server kërkon autentikim</string>
+  <string name="no_forms_uploaded">Nuk është ngarkuar asnjë formular.</string>
+  <string name="upload_results">Ngarko rezultatet</string>
+  <!--Name of option in Send Finalized Form menu to show only unsent forms (default) or show sent and unsent forms-->
+  <string name="change_view">Ndrysho pamjen</string>
+  <string name="show_sent_and_unsent_forms">Trego formularët e dërguar dhe të padërguar</string>
+  <string name="show_unsent_forms">Trego formularët e padërguar</string>
+  <string name="send_in_progress">Një dërgim po ekzekutohet në background, lutemi provoni sërish pas pak.</string>
+  <string name="notification_error">Gabim në shfaqjen e tekstit të njoftimit</string>
+  <!--##############################################
+    # GET BLANK FORM
+    ##############################################-->
+  <string name="refresh">Rifresko</string>
+  <string name="download">Përzgjidhu</string>
+  <string name="download_forms_result">Shkarko rezultatet</string>
+  <string name="downloading_data">Duke u lidhur me server-in</string>
+  <string name="form_download_progress">%1$s. Duke ngarkuar media: %2$s of %3$s</string>
+  <string name="version">Versioni</string>
+  <string name="form_updates_available">Forma të rifreskuara janë gati</string>
+  <string name="newer_version_of_a_form_info">Ky është një përditësim i një formulari që e keni tanimë</string>
+  <!--##############################################
+    # DELETE SAVED FORM
+    ##############################################-->
+  <!--Title of a section in "Delete Saved Forms" for deleting filled/saved forms (as opposed to blank forms)-->
+  <string name="data">Formularët e ruajtur</string>
+  <!--Title of a section in "Delete Saved Forms" for deleting blank forms (as opposed to filled/saved forms)-->
+  <string name="forms">Forma bosh</string>
+  <string name="delete_confirm">Fshi %s formë(a)?</string>
+  <string name="delete_file">Fshi të përzgjedhurat</string>
+  <string name="delete_no">Mos fshi</string>
+  <string name="delete_yes">Fshi format</string>
+  <string name="form_delete_message">Duke fshirë formularët e përzgjedhur</string>
+  <string name="deleting_form_dialog_update_message">Duke fshirë formularin:%1$dnga%2$d</string>
+  <string name="file_deleted_ok">%s formë(a) u fshinë me sukses!</string>
+  <string name="file_delete_in_progress">Një komandë për të fshirë formularin është duke u ekzekutuar!</string>
+  <!--##############################################
+    # GENERAL SETTINGS
+    ##############################################-->
+  <string name="general_preferences">Parametrat e përgjithshëm</string>
+  <!--Title of a settings section-->
+  <string name="server_settings_title">Server</string>
+  <!--Title of a settings section-->
+  <string name="client">Fasada e përdoruesit</string>
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <string name="form_management_preferences">Administrimi i formularëve</string>
+  <!--Title of a settings section-->
+  <string name="user_and_device_identity_title">Identiteti i përdoruesit dhe aparatit</string>
+  <!--Title of a settings section only available in beta or development builds.-->
+  <string name="server_preferences">Parametrat e serverit</string>
+  <!--Label for server type setting-->
+  <string name="type">Tipi</string>
+  <string name="server_url">URL</string>
+  <!--Title of dialog for configuring server URL-->
+  <string name="change_server_url">URL e serverit</string>
+  <string name="url_error">URL-ja nuk është e saktë!</string>
+  <string name="username">Emri i përdoruesit</string>
+  <string name="change_username">Emri i Përdoruesit</string>
+  <string name="password">Fjalëkalimi</string>
+  <string name="change_password">Fjalëkalimi</string>
+  <string name="change_formlist_url">Adresa për listën e formularëve (në fund të URL)</string>
+  <string name="change_submission_url">Adresa për dërgimin (në fund të URL)</string>
+  <string name="formlist_url">Adresa për listën e formave</string>
+  <string name="submission_url">Adresa për dërgimin</string>
+  <string name="selected_google_account_text">Llogaria në Google</string>
+  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
+  <!--Description for Fallback submission URL setting-->
+  <string name="google_sheets_url_hint">Formularët duhet të kenë një URL ku dërgohen. Nëse jo, do të përdoret kjo URL.</string>
+  <string name="app_theme">Tema</string>
+  <string name="language">Gjuha</string>
+  <string name="use_device_language">Përdor gjuhën e aparatit</string>
+  <string name="font_size">Madhësia tekstit</string>
+  <string name="change_font_size">Madhësia e tekstit</string>
+  <string name="font_size_extra_large">Shumë e madhe</string>
+  <string name="font_size_large">E madhe</string>
+  <string name="font_size_medium">Mesatare</string>
+  <string name="font_size_small">E vogël</string>
+  <string name="font_size_extra_small">Shumë e vogël</string>
+  <string name="navigation">Navigim</string>
+  <string name="swipe_navigation">Përdor prekjen horizontale në ekran</string>
+  <string name="buttons_navigation">Përdor butonat përpara/prapa</string>
+  <string name="swipe_buttons_navigation">Përdor prekjen në ekran dhe butonat</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="form_forward">Tjetra</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="show_splash_title">Pamja fillestare</string>
+  <string name="show_splash_summary">Shfaqet me hapjen e aplikacionit</string>
+  <string name="splash_path">Zgjidh imazhin për faqen hyrëse</string>
+  <string name="default_splash_path">Alternativa e parapërcaktuar ODK</string>
+  <string name="select_another_image">Zgjidh një imazh tjetër</string>
+  <string name="use_odk_default">Përdor imazhin e parapërcaktuar</string>
+  <string name="change_splash_path">Ndrysho imazhin</string>
+  <!--Heading for the settings category about updating blank forms-->
+  <!--Name of the setting that defines how blank forms are updated from the server.-->
+  <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
+  <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
+  <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
+  <!--Name of the setting that defines how often blank forms are updated from the server.-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_fifteen_minutes">Çdo pesëmbëdhjetë minuta</string>
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_one_hour">Çdo një orë</string>
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_six_hours">Çdo gjashtë orë</string>
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_24_hours">Çdo 24 orë</string>
+  <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
+  <string name="automatic_download">Shkarkim automatik</string>
+  <string name="automatic_download_summary">Shkarko automatikisht variantet e vjetra të formularit</string>
+  <string name="hide_old_form_versions_setting_title">Fshih variantet e vjetra të formularit</string>
+  <string name="form_submission_category">Dërgimi i formularëve</string>
+  <string name="autosend_selector_title">Dërgo automatikisht</string>
+  <string name="autosend">Dërgo automatikisht</string>
+  <string name="off">Fikur</string>
+  <string name="wifi_autosend">Vetëm wifi</string>
+  <string name="cellular_autosend">Vetëm celular</string>
+  <string name="wifi_cellular_autosend">Wifi ose celular</string>
+  <string name="delete_after_send">Fshi formularët pasi të nisen</string>
+  <string name="delete_after_send_summary">Fshi formularët e finalizuar dhe mediat pasi të jenë ngarkuar në server</string>
+  <string name="form_filling_category">Plotësimi i formularëve</string>
+  <string name="default_completed">Parapërcaktoje të finalizuar</string>
+  <string name="default_completed_summary">Shëno formularin automatikisht si të përfunduar</string>
+  <string name="constraint_behavior_title">Kufizo procesimin</string>
+  <string name="constraint_behavior">Limito sjelljet procesuese</string>
+  <string name="constraint_behavior_on_swipe">Valido pasi të ecet përpara</string>
+  <string name="constraint_behavior_on_finalize">Mos valido deri sa të finalizohet</string>
+  <string name="high_resolution_title">Video me rezolucion të lartë</string>
+  <string name="high_resolution_summary">Mundëso regjistrimin video me rezolucion të lartë</string>
+  <string name="image_size_title">Madhësia e imazhit</string>
+  <string name="image_size_dialog_title">Numri maksimal i pixel-ave në buzën e gjatë të imazhit</string>
+  <string name="image_size_large">E madhe (3072px)</string>
+  <string name="image_size_medium">Mesatare (2048px)</string>
+  <string name="image_size_small">E vogël (1024px)</string>
+  <string name="image_size_very_small">Shumë e vogël (640px)</string>
+  <string name="image_size_original">Madhësia origjinale nga kamera (e parazgjedhur)</string>
+  <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
+  <string name="guidance_hint_title">Trego udhëzuesin për pyetjet</string>
+  <string name="guidance_no">Jo</string>
+  <string name="guidance_yes">Po - gjithnjë e shfaqur</string>
+  <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <string name="form_import_category">Importimi i formularëve</string>
+  <string name="instance_sync">Finalizo format në importim</string>
+  <string name="analytics_preferences">Përdorimi i të dhënave</string>
+  <string name="analytics">Mblidh të dhëna përdorimi anonime</string>
+  <string name="analytics_summary">Mbledhja e të dhënave anonime ndihmon ekipin e ODK të vendosë prioritet në përmirësimet e aplikacionit</string>
+  <string name="form_metadata_title">Metadata të formularit</string>
+  <string name="form_metadata">Metadata të formularit</string>
+  <string name="form_metadata_summary">Këto të dhëna do të shtohen në formularët që kanë një fushë të plotësuar paraprakisht me emër përdoruesi, email dhe/ose telefon në mënyrë që të identifikohet personi që plotësoi formularin.</string>
+  <string name="user_defined">Përdoruesi u përcaktua.</string>
+  <string name="phone_number">Numri i telefonit</string>
+  <string name="email">Adresa email</string>
+  <string name="invalid_email_address">Adresa email nuk është e vlefshme</string>
+  <string name="device_defined">Aparati u përckatua</string>
+  <string name="device_id">Identifikimi i aparatit</string>
+  <!--Displayed when a device property such as the phone number is not available-->
+  <!--##############################################
+     # ADMIN SETTINGS
+     ##############################################-->
+  <string name="admin_preferences">Parametrat e Administratorit</string>
+  <string name="admin_access_settings">Akseso parametrat si administrator</string>
+  <string name="enter_new_password">Vendos fjalëkalim të ri</string>
+  <string name="admin_password">Fjalëkalimi i Administratorit</string>
+  <string name="admin_password_changed">Fjalëkalimi i Administratorit u ndryshua me sukses</string>
+  <string name="admin_password_disabled">Fjalëkalimi i Administratorit është ç\'aktivizuar</string>
+  <string name="admin_password_incorrect">Fjalëkalimi është i pasaktë!</string>
+  <string name="enter_admin_password">Vendos fjalëkalimin e Administratorit</string>
+  <string name="change_admin_password">Ndrysho fjalëkalimin e Administratorit</string>
+  <string name="show_password">Shfaq fjalëkalimin</string>
+  <string name="found_in_main">Hiq përzgjedhjen për ta fshehur nga Menuja Kryesore</string>
+  <string name="found_in_settings">Hiq përzgjedhjen për ta fshehur nga Parametrat e Përgjithshëm</string>
+  <string name="form_entry">Hiq përzgjedhjen për ta fshehur nga Form Entry</string>
+  <string name="reset_settings_dialog">Rivendos aplikacionin…</string>
+  <string name="select_all">Zgjidh të gjitha</string>
+  <string name="clear_all">Pastro të gjitha</string>
+  <string name="reset_settings">Të gjithë parametrat (paramterat e brendshëm, parametrat e ruajtur)</string>
+  <string name="reset_saved_forms">Formularët e ruajtur (direktoritë, baza e të dhënave)</string>
+  <string name="reset_blank_forms">Formularë bosh (dosja e formularëve, baza e të dhënave të formave, baza e të dhënave itemsets)</string>
+  <string name="reset_layers">Shtrasat e hartës (dosja e shtresave)</string>
+  <string name="reset_cache">Cache e ngarkimit të formularëve (.dosja e cache)</string>
+  <string name="reset_osm_tiles">Cache e kuadrateve OSM (dosja osmdroid)</string>
+  <string name="reset_settings_dialog_title">Zgjidh çfarë do të rivendoset</string>
+  <string name="reset_settings_button_reset">Rivendos</string>
+  <string name="reset_in_progress">Duke rivendosur…</string>
+  <string name="reset_app_state_result">Rivendos rezultatet</string>
+  <string name="reset_app_state_warning">Të gjitha të dhënat do të fshihen përgjithmonë. Ky veprim nuk mund të kthehet mbrapsht. </string>
+  <string name="reset_settings_result">Të gjithë paramentrat :: %s</string>
+  <string name="reset_saved_forms_result">Formularë të ruajtur :: %s</string>
+  <string name="reset_blank_forms_result">Formularë bosh :: %s</string>
+  <string name="reset_layers_result">Shtresat e hartës :: %s</string>
+  <string name="reset_cache_result">Cache ngarkimi i formularëve :: %s</string>
+  <string name="reset_osm_tiles_result">Cache e kuadratëve OSM ::%s</string>
+  <string name="user_access_control">Kontrolli i aksesi të përdoruesit</string>
+  <string name="main_menu_settings">Parametrat e Menusë Kryesore</string>
+  <string name="main_menu_settings_summary">Administro elementët e menusë kryesore</string>
+  <string name="user_settings">Parametrat e përdoruesit</string>
+  <string name="user_setting_summary">Administro elementët e parametrave të përgjithshëm</string>
+  <string name="form_entry_setting">Parametrat e plotësimit të formularëve</string>
+  <string name="form_entry_settings_summary">Administro elementët e plotësimit të formularëve</string>
+  <!--Name of a setting that determines whether users can navigate backwards in a form-->
+  <string name="moving_backwards_title">Shko mbrapsht</string>
+  <string name="moving_backwards_disabled_title">Të shkuarit mbrapsht është ç\'aktivizuar</string>
+  <string name="yes">Po</string>
+  <string name="no">Jo</string>
+  <string name="moving_backwards_enabled_title">Të shkuarit mbrapsht është aktivizuar</string>
+  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <string name="save_mid">Ruaj formularin</string>
+  <!--##############################################
+     # GOOGLE DRIVE, GOOGLE SHEETS
+     ##############################################-->
+  <!--Title of the screen that lists forms in user's Google Drive-->
+  <!--Title of the screen that lists forms shared with Google Drive user-->
+  <string name="go_shared">Ndarë me mua</string>
+  <!--Button for navigating across Google Drive folders-->
+  <string name="download_selected">Shkarko të përzgjedhurat</string>
+  <string name="go_back">Kthehu prapa</string>
+  <string name="google_auth_io_exception_msg">Nuk është e mundur të kryhen thirrje API. Nëse jeni duke përdorur një ndërtim lokal, lutemi rishihni instruksionet (readme) e projektit. </string>
+  <string name="drive_get_file">Duke ngarkuar %1$s dhe file-t media.</string>
+  <string name="no_google_account">Nuk keni përzgjedhur një llogari në Google!</string>
+  <string name="google_set_account">Keni përzgjedhur Google Sheets si server, lutemi, zjidhni një llogari në  Google në parametrat e përgjithshëm përpara se të vazhdoni.</string>
+  <string name="google_search_browse">Kërko për formularë. Ose përzgjidh \'My Drive\' më poshtë dhe kërkoni manualisht.</string>
+  <string name="invalid_sheet_id">Numri i identifikimit të tabelës: %1$s i pavlefshëm.</string>
+  <string name="google_sheets_access_denied">Ju është mohuar aksesi. Lutemi, sigurohuni që zotëruesi i spreadsheet-it ju ka dhënë të drejtën për të modifikuar.</string>
+  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
+  <string name="missing_google_account_dialog_title">Llogaria në Google nuk është përcaktuar</string>
+  <string name="multiple_media_folders_detected_notification">U identifikua më tepër sesa një folder me media, lutemi hiqni një prej tyre dhe provoni sërish</string>
+  <!--##############################################
+     # ABOUT
+     ##############################################-->
+  <string name="about_preferences">Rreth</string>
+  <string name="tell_your_friends">Ndaj ODK Collect</string>
+  <string name="tell_your_friends_msg">Kolegët tuaj i mbledhin të dhënat me letër akoma? Ndaj ODK Collect me ta.</string>
+  <string name="leave_a_review">Vlerëso në Play Store</string>
+  <string name="odk_website">Vizitoni faqen e ODK në internet</string>
+  <string name="odk_forum">Bëhu pjesë e forumit ODK</string>
+  <string name="odk_forum_summary">Regjistrohu në forum për suport, kërkuar elementë të rinj apo kontribuar me kodim apo përkthim.</string>
+  <string name="all_open_source_licenses_msg">Ne qëndrojmë mbi shpatullat e gjigantëve!</string>
+  <!--##############################################
+     # SETTINGS IMPORT
+     ##############################################-->
+  <string name="successfully_imported_settings">Parametrat u importuan me sukses</string>
+  <string name="encoding_max_limit">U arrit limiti maksimal i karaktereve: Kodi QR nuk mund të gjenerohet për të gjithë parametrat. </string>
+  <string name="share">Ndaj</string>
+  <string name="turn_on_flashlight">Ndiz dritën e kameras</string>
+  <string name="turn_off_flashlight">Fik dritën e kameras</string>
+  <string name="server_password">Fjalëkalimi i serverit</string>
+  <string name="include_password_dialog">Fjalëkalimët të përfshirë në kod</string>
+  <string name="generate">Gjenero</string>
+  <string name="invalid_qrcode">Kodi QR nuk ka parametra të vlefshëm</string>
+  <string name="corrupt_settings_file_notification">File i parametrave është i korruptuar dhe duhet fshirë ose zëvendësuar</string>
+  <!--##############################################
+     # SCOPED STORAGE MIGRATION
+     ##############################################-->
+  <!--Action to begin a storage migration-->
+  <!--##############################################
+     # MISC
+     ##############################################-->
+  <string name="ok">OK</string>
+  <!--Used in many dialogs to dismiss the dialog without taking any action-->
+  <string name="cancel">Anullo</string>
+  <string name="cancel_loading_form">Anullo</string>
+  <string name="cancel_location">Anullo</string>
+  <string name="do_not_change">Anullo</string>
+  <string name="do_not_exit">Anullo</string>
+  <string name="canceling">Duke anuluar</string>
+  <string name="success">Sukses</string>
+  <string name="error_occured">Ndodhi një gabim</string>
+  <string name="please_wait">Lutemi, prisni pak sekonda.</string>
+  <string name="please_wait_long">Lutemi, prisni. Mund të duhen disa minuta.</string>
+  <string name="sdcard_unmounted">Collect nuk mund të aksesojë kartën SD. Ndoshta është ngarkuar nga USB? (Gjendja aktuale: %s)</string>
+  <string name="fs_delete_media_path_if_file_error">\'%s\' nuk mund të fshihet. Lutemi, fshini fil manualisht dhe shkarkoni formularin sërish.</string>
+  <string name="fs_create_media_folder_error">Dosja media \'%s\' nuk mund të krijohet.</string>
+  <string name="fs_file_copy_error">\'%1$s\' nuk mund të kopjohet mbi \'%2$s\'. Arsyeja: %3$s</string>
+  <string name="survey_multiple_forms_error">Keni ngarkuar dy formularë të ndryshëm me të njëjtin numër identifikues dhe version. Ndoshta është i njëjti formular, i ngarkuar në kohë të ndryshme ose servera të ndryshëm. Në çdo rast, duhet të fshini një prej tyre. </string>
+  <string name="select_odk_shortcut">Përzgjidh ODK Shortcut</string>
+</resources>

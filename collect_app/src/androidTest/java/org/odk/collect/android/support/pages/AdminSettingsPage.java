@@ -28,13 +28,13 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
     }
 
     public GeneralSettingsPage clickGeneralSettings() {
-        scrollToViewAndClickText(getTranslatedString(R.string.general_preferences));
+        scrollToRecyclerViewItemAndClickText(getTranslatedString(R.string.general_preferences));
         return new GeneralSettingsPage(rule).assertOnPage();
     }
 
 
     public AdminSettingsPage clickFormEntrySettings() {
-        scrollToViewAndClickText(getTranslatedString(R.string.form_entry_setting));
+        scrollToRecyclerViewItemAndClickText(getTranslatedString(R.string.form_entry_setting));
         return this;
     }
 
@@ -54,7 +54,7 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
     }
 
     public AdminSettingsPage uncheckServerOption() {
-        clickOnString(R.string.server);
+        clickOnString(R.string.server_settings_title);
         return this;
     }
 }

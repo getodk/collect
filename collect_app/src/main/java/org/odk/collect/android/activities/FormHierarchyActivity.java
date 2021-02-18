@@ -40,7 +40,6 @@ import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.HierarchyListAdapter;
-import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.FormEntryViewModel;
@@ -50,6 +49,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
+import org.odk.collect.android.utilities.MultiClickGuard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +116,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
     protected RecyclerView recyclerView;
 
     @Inject
-    Analytics analytics;
+    FormEntryViewModel.Factory formEntryViewModelFactory;
 
     private FormEntryViewModel formEntryViewModel;
 
@@ -143,7 +143,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
             return;
         }
 
-        formEntryViewModel = new ViewModelProvider(this, new FormEntryViewModel.Factory(analytics)).get(FormEntryViewModel.class);
+        formEntryViewModel = new ViewModelProvider(this, formEntryViewModelFactory).get(FormEntryViewModel.class);
         formEntryViewModel.formLoaded(Collect.getInstance().getFormController());
 
         startIndex = formController.getFormIndex();
@@ -260,6 +260,10 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (!MultiClickGuard.allowClick(getClass().getName())) {
+            return true;
+        }
+
         switch (item.getItemId()) {
             case R.id.menu_delete_child:
                 DialogUtils.showIfNotShowing(DeleteRepeatDialogFragment.class, getSupportFragmentManager());
@@ -268,7 +272,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
             case R.id.menu_add_repeat:
                 Collect.getInstance().getFormController().jumpToIndex(repeatGroupPickerIndex);
                 formEntryViewModel.jumpToNewRepeat();
-                formEntryViewModel.addRepeat(false);
+                formEntryViewModel.addRepeat();
 
                 finish();
                 return true;

@@ -20,13 +20,17 @@
 
     </FrameLayout>
 
-
     <RelativeLayout
         android:id="@+id/answer_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small">
+        android:layout_height="wrap_content">
 
     </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/space_box"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:visibility="gone"/>
 
 </LinearLayout>

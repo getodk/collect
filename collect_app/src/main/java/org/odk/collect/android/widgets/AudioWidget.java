@@ -15,47 +15,37 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.provider.MediaStore.Audio;
+import android.media.MediaMetadataRetriever;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.core.view.ViewCompat;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.audio.AudioControllerView;
-import org.odk.collect.android.audio.AudioHelper;
-import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.databinding.AudioWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.utilities.ActivityAvailability;
-import org.odk.collect.android.utilities.FileUtil;
-import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
-import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
-import org.odk.collect.android.widgets.utilities.FileWidgetUtils;
-import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+import org.odk.collect.android.widgets.utilities.AudioFileRequester;
+import org.odk.collect.android.widgets.utilities.AudioPlayer;
+import org.odk.collect.android.widgets.utilities.RecordingRequester;
+import org.odk.collect.audioclips.Clip;
 
 import java.io.File;
 import java.util.Locale;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+import static org.odk.collect.strings.format.LengthFormatterKt.formatLength;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -66,106 +56,85 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  */
 
 @SuppressLint("ViewConstructor")
-public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDataReceiver {
-    private final Analytics analytics;
+<<<<<<< HEAD
+public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDataReceiver {
+
     public AudioWidgetAnswerBinding binding;	// smap make public
-    AudioControllerView audioController;
+    AudioWidgetAnswerBinding binding;
 
-    @NonNull
-    private FileUtil fileUtil;
+    private final AudioPlayer audioPlayer;
+    private final RecordingRequester recordingRequester;
+    private final QuestionMediaManager questionMediaManager;
+    private final AudioFileRequester audioFileRequester;
 
-    @NonNull
-    private MediaUtil mediaUtil;
-
-    private final WaitingForDataRegistry waitingForDataRegistry;
-    private final ActivityAvailability activityAvailability;
-
-    private QuestionMediaManager questionMediaManager;
+    private boolean recordingInProgress;
     private String binaryName;
 
-    public AudioWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, Analytics analytics) {
-        this(context, prompt, new FileUtil(), new MediaUtil(), null, questionMediaManager,
-                waitingForDataRegistry, null, new ActivityAvailability(context), analytics);
-    }
-
-    @SuppressWarnings("PMD.ExcessiveParameterList")
-    AudioWidget(Context context, QuestionDetails questionDetails, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, @NonNull AudioControllerView audioController,
-                QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, AudioHelper audioHelper, ActivityAvailability activityAvailability, Analytics analytics) {
+    public AudioWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager, AudioPlayer audioPlayer, RecordingRequester recordingRequester, AudioFileRequester audioFileRequester) {
         super(context, questionDetails);
-        this.analytics = analytics;
+        this.audioPlayer = audioPlayer;
 
-        if (audioHelper != null) {
-            this.audioHelper = audioHelper;
-        }
-        if (audioController != null) {
-            this.audioController = audioController;
-        }
-        this.fileUtil = fileUtil;
-        this.mediaUtil = mediaUtil;
         this.questionMediaManager = questionMediaManager;
-        this.waitingForDataRegistry = waitingForDataRegistry;
-        this.activityAvailability = activityAvailability;
-
-        hideButtonsIfNeeded();
+        this.recordingRequester = recordingRequester;
+        this.audioFileRequester = audioFileRequester;
 
         binaryName = questionDetails.getPrompt().getAnswerText();
+
+        updateVisibilities();
         updatePlayerMedia();
+
+        recordingRequester.onIsRecordingBlocked(isRecordingBlocked -> {
+            binding.captureButton.setEnabled(!isRecordingBlocked);
+            binding.chooseButton.setEnabled(!isRecordingBlocked);
+        });
+
+        recordingRequester.onRecordingInProgress(getFormEntryPrompt(), session -> {
+            recordingInProgress = true;
+            updateVisibilities();
+
+            binding.recordingDuration.setText(formatLength(session.first));
+            binding.waveform.addAmplitude(session.second);
+        });
+
+        recordingRequester.onRecordingFinished(getFormEntryPrompt(), recording -> {
+            recordingInProgress = false;
+
+            if (recording != null) {
+                setData(recording);
+            } else {
+                updateVisibilities();
+            }
+        });
     }
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        binding = AudioWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
+        binding = AudioWidgetAnswerBinding.inflate(LayoutInflater.from(context));
 
-        audioController = new AudioControllerView(context);
-        audioController.setAnalytics(new AudioControllerView.AnalyticsListener() {
-            @Override
-            public void onPlay() {
-                // analytics.logFormEvent(AnalyticsEvents.AUDIO_PLAY, getQuestionDetails().getFormAnalyticsID());  // smap
-            }
+        binding.captureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-            @Override
-            public void onFastFwdOrFastRwd() {
-                // analytics.logFormEvent(AnalyticsEvents.AUDIO_FAST_FWD_RWD, getQuestionDetails().getFormAnalyticsID());  // smap
-            }
-
-            @Override
-            public void onSeek() {
-                // analytics.logFormEvent(AnalyticsEvents.AUDIO_SEEK, getQuestionDetails().getFormAnalyticsID());   // smap
-            }
+        binding.captureButton.setOnClickListener(v -> {
+            binding.waveform.clear();
+            recordingRequester.requestRecording(getFormEntryPrompt());
         });
-
-        binding.getRoot().addView(audioController);
-        if (prompt.isReadOnly()) {
-            binding.captureButton.setVisibility(View.GONE);
-            binding.chooseButton.setVisibility(View.GONE);
-        } else {
-            binding.captureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-            binding.chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-
-            binding.captureButton.setOnClickListener(v -> onCaptureAudioButtonClicked());
-            binding.chooseButton.setOnClickListener(v -> chooseSound());
-        }
+        binding.chooseButton.setOnClickListener(v -> audioFileRequester.requestFile(getFormEntryPrompt()));
 
         return binding.getRoot();
     }
 
     @Override
     public void deleteFile() {
-        audioHelper.stop();
-        questionMediaManager.markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
-                getInstanceFolder() + File.separator + binaryName);
+        audioPlayer.stop();
+        questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(), getAudioFile().getAbsolutePath());
         binaryName = null;
     }
 
     @Override
     public void clearAnswer() {
-        // remove the file
         deleteFile();
-
-        // hide audio player
-        audioController.hidePlayer();
-
         widgetValueChanged();
+        updateVisibilities();
     }
 
     @Override
@@ -178,63 +147,67 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
     }
 
     /**
-     * Set this widget with the actual file returned by OnActivityResult.
-     * Both of Uri and File are supported.
-     * If the file is local, a Uri is enough for the copy task below.
-     * If the chose file is from cloud(such as Google Drive),
-     * The retrieve and copy task is already executed in the previous step,
-     * so a File object would be presented.
-     *
-     * @param object Uri or File of the chosen file.
+     * @param object file name of media file that will be available in the {@link QuestionMediaManager}
+     * @see org.odk.collect.android.activities.FormEntryActivity
      */
     @Override
-    public void setBinaryData(Object object) {
-        File newAudio;
-        // get the file path and create a copy in the instance folder
-        if (object instanceof Uri) {
-            String sourcePath = getSourcePathFromUri((Uri) object);
-            String destinationPath = FileWidgetUtils.getDestinationPathFromSourcePath(sourcePath, getInstanceFolder(), fileUtil);
-            File source = fileUtil.getFileAtPath(sourcePath);
-            newAudio = fileUtil.getFileAtPath(destinationPath);
-            fileUtil.copyFile(source, newAudio);
-        } else if (object instanceof File) {
-            // Getting a file indicates we've done the copy in the before step
-            newAudio = (File) object;
+    public void setData(Object object) {
+        // Support being handed a File as well
+        if (object instanceof File) {
+            object = (String) ((File) object).getName();
+        }
+        if (object instanceof String) {
+            String fileName = (String) object;
+            File newAudio = questionMediaManager.getAnswerFile(fileName);
+
+            if (newAudio != null && newAudio.exists()) {
+                questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
+
+                // when replacing an answer. remove the current media.
+                if (binaryName != null && !binaryName.equals(newAudio.getName())) {
+                    deleteFile();
+                }
+
+                binaryName = newAudio.getName();
+                Timber.i("Setting current answer to %s", newAudio.getName());
+
+                updateVisibilities();
+                updatePlayerMedia();
+                widgetValueChanged();
+            } else {
+                Timber.e("Inserting Audio file FAILED");
+            }
         } else {
-            Timber.w("AudioWidget's setBinaryData must receive a File or Uri object.");
+            Timber.w("AudioWidget's setBinaryData must receive a File object.");
             return;
         }
-
-        if (newAudio.exists()) {
-            // Add the copy to the content provider
-            ContentValues values = new ContentValues(6);
-            values.put(Audio.Media.TITLE, newAudio.getName());
-            values.put(Audio.Media.DISPLAY_NAME, newAudio.getName());
-            values.put(Audio.Media.DATE_ADDED, System.currentTimeMillis());
-            values.put(Audio.Media.DATA, newAudio.getAbsolutePath());
-
-            questionMediaManager.replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
-
-            Uri audioURI = getContext().getContentResolver().insert(Audio.Media.EXTERNAL_CONTENT_URI, values);
-
-            if (audioURI != null) {
-                Timber.i("Inserting AUDIO returned uri = %s", audioURI.toString());
-            }
-
-            // when replacing an answer. remove the current media.
-            if (binaryName != null && !binaryName.equals(newAudio.getName())) {
-                deleteFile();
-            }
-
-            binaryName = newAudio.getName();
-            Timber.i("Setting current answer to %s", newAudio.getName());
-
-            widgetValueChanged();
-            updatePlayerMedia();
-        } else {
-            Timber.e("Inserting Audio file FAILED");
-        }
     }
+
+    private void updateVisibilities() {
+        if (recordingInProgress) {
+            binding.captureButton.setVisibility(GONE);
+            binding.chooseButton.setVisibility(GONE);
+            binding.recordingDuration.setVisibility(VISIBLE);
+            binding.waveform.setVisibility(VISIBLE);
+            binding.audioController.setVisibility(GONE);
+        } else if (getAnswer() == null) {
+            binding.captureButton.setVisibility(VISIBLE);
+            binding.chooseButton.setVisibility(VISIBLE);
+            binding.recordingDuration.setVisibility(GONE);
+            binding.waveform.setVisibility(GONE);
+            binding.audioController.setVisibility(GONE);
+        } else {
+            binding.captureButton.setVisibility(GONE);
+            binding.chooseButton.setVisibility(GONE);
+            binding.recordingDuration.setVisibility(GONE);
+            binding.waveform.setVisibility(GONE);
+            binding.audioController.setVisibility(VISIBLE);
+        }
+
+        if (questionDetails.isReadOnly()) {
+            binding.captureButton.setVisibility(GONE);
+            binding.chooseButton.setVisibility(GONE);
+        }
 
     private void hideButtonsIfNeeded() {
         if (getFormEntryPrompt().isReadOnly()) {        // smap
@@ -247,15 +220,47 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
 
     private void updatePlayerMedia() {
         if (binaryName != null) {
-            audioHelper.setAudio(audioController, new Clip(String.valueOf(ViewCompat.generateViewId()), getAudioFile().getAbsolutePath()));
-            audioController.showPlayer();
-        } else {
-            audioController.hidePlayer();
+            Clip clip = new Clip("audio:" + getFormEntryPrompt().getIndex().toString(), getAudioFile().getAbsolutePath());
+
+            audioPlayer.onPlayingChanged(clip.getClipID(), binding.audioController::setPlaying);
+            audioPlayer.onPositionChanged(clip.getClipID(), binding.audioController::setPosition);
+            binding.audioController.setDuration(getDurationOfFile(clip.getURI()));
+            binding.audioController.setListener(new AudioControllerView.Listener() {
+                @Override
+                public void onPlayClicked() {
+                    audioPlayer.play(clip);
+                }
+
+                @Override
+                public void onPauseClicked() {
+                    audioPlayer.pause();
+                }
+
+                @Override
+                public void onPositionChanged(Integer newPosition) {
+                    analytics.logFormEvent(AnalyticsEvents.AUDIO_PLAYER_SEEK, questionDetails.getFormAnalyticsID());
+                    audioPlayer.setPosition(clip.getClipID(), newPosition);
+                }
+
+                @Override
+                public void onRemoveClicked() {
+                    new MaterialAlertDialogBuilder(getContext())
+                            .setTitle(R.string.delete_answer_file_question)
+                            .setMessage(R.string.answer_file_delete_warning)
+                            .setPositiveButton(R.string.delete_answer_file, (dialog, which) -> clearAnswer())
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
+                }
+            });
+
         }
     }
 
-    private String getSourcePathFromUri(@NonNull Uri uri) {
-        return mediaUtil.getPathFromUri(getContext(), uri, Audio.Media.DATA);
+    private Integer getDurationOfFile(String uri) {
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        retriever.setDataSource(uri);
+        String durationString = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+        return durationString != null ? Integer.parseInt(durationString) : 0;
     }
 
     @Override
@@ -271,56 +276,10 @@ public class AudioWidget extends QuestionWidget implements FileWidget, BinaryDat
         binding.chooseButton.cancelLongPress();
     }
 
-    private void onCaptureAudioButtonClicked() {
-        //analytics.logFormEvent(AnalyticsEvents.AUDIO_RECORD, getQuestionDetails().getFormAnalyticsID());  // smap
-
-        getPermissionUtils().requestRecordAudioPermission((Activity) getContext(), new PermissionListener() {
-            @Override
-            public void granted() {
-                captureAudio();
-            }
-
-            @Override
-            public void denied() {
-            }
-        });
-    }
-
-    private void captureAudio() {
-        Intent intent = new Intent(android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION);
-        intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.toString());
-
-        if (activityAvailability.isActivityAvailable(intent)) {
-            waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-            ((Activity) getContext()).startActivityForResult(intent, RequestCodes.AUDIO_CAPTURE);
-        } else {
-            Toast.makeText(getContext(), getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.capture_audio)), Toast.LENGTH_SHORT).show();
-            waitingForDataRegistry.cancelWaitingForData();
-        }
-    }
-
-    private void chooseSound() {
-        analytics.logFormEvent(AnalyticsEvents.AUDIO_CHOOSE, getQuestionDetails().getFormAnalyticsID());
-
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("audio/*");
-
-        if (activityAvailability.isActivityAvailable(intent)) {
-            waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-            ((Activity) getContext()).startActivityForResult(intent, RequestCodes.AUDIO_CHOOSER);
-        } else {
-            Toast.makeText(getContext(), getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.choose_audio)), Toast.LENGTH_SHORT).show();
-            waitingForDataRegistry.cancelWaitingForData();
-        }
-    }
-
     /**
      * Returns the audio file added to the widget for the current instance
      */
     private File getAudioFile() {
-        return new File(getInstanceFolder() + File.separator + binaryName);
+        return questionMediaManager.getAnswerFile(binaryName);
     }
 }

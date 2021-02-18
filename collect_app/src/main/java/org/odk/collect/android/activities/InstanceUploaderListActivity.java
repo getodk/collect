@@ -47,6 +47,7 @@ import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.tasks.InstanceSyncTask;
+import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -271,18 +272,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
             // otherwise, do the normal aggregate/other thing.
             Intent i = new Intent(this, InstanceUploaderActivity.class);
             i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
-            // Not required but without this permission a Device ID attached to a request will be empty.
-            permissionUtils.requestReadPhoneStatePermission(this, false, new PermissionListener() {
-                @Override
-                public void granted() {
-                    startActivityForResult(i, INSTANCE_UPLOADER);
-                }
-
-                @Override
-                public void denied() {
-                    startActivityForResult(i, INSTANCE_UPLOADER);
-                }
-            });
+            startActivityForResult(i, INSTANCE_UPLOADER);
         }
     }
 
@@ -294,6 +284,10 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (!MultiClickGuard.allowClick(getClass().getName())) {
+            return true;
+        }
+
         switch (item.getItemId()) {
             case R.id.menu_preferences:
                 createPreferencesMenu();

@@ -32,12 +32,18 @@ import androidx.appcompat.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toast;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.AboutListAdapter;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.CustomTabHelper;
+import org.odk.collect.android.utilities.MultiClickGuard;
 
 import java.util.List;
 

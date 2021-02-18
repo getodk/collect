@@ -5,8 +5,9 @@
     android:layout_height="match_parent"
     tools:context="org.odk.collect.android.activities.ScannerWithFlashlightActivity">
 
-    <fragment android:name="org.odk.collect.android.fragments.BarcodeWidgetScannerFragment"
+    <androidx.fragment.app.FragmentContainerView
+        android:name="org.odk.collect.android.fragments.BarcodeWidgetScannerFragment"
+        android:id="@+id/fragmentContainerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
 </merge>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.visualizer.amplitude.AudioRecordView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:chunkAlignTo="bottom"
+    app:chunkColor="?colorSecondary"
+    app:chunkMinHeight="2dp"
+    app:chunkRoundedCorners="true"
+    app:chunkSoftTransition="true"
+    app:chunkSpace="1dp"
+    app:chunkWidth="5dp" />
+

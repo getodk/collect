@@ -15,295 +15,96 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.TimePickerDialog;
+import android.app.Activity;
 import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
-import android.text.format.DateFormat;
-import android.util.AttributeSet;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.TimePicker;
+import android.util.TypedValue;
+import android.view.View;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.TimeData;
+import org.javarosa.form.api.FormEntryPrompt;
+
 import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
+import org.odk.collect.android.databinding.TimeWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.formentry.questions.WidgetViewUtils;
-import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
+import org.odk.collect.android.utilities.DateTimeUtils;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.util.Date;
-
-import timber.log.Timber;
-
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerTextView;
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
-
-/**
- * Displays a TimePicker widget.
- *
- * @author Carl Hartung (carlhartung@gmail.com)
- */
 @SuppressLint("ViewConstructor")
-public class TimeWidget extends QuestionWidget implements ButtonClickListener, TimePickerDialog.OnTimeSetListener {
-    private TimePickerDialog timePickerDialog;
+public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
+    TimeWidgetAnswerBinding binding;
 
-    Button timeButton;
-    final TextView timeTextView;
+    private final DateTimeWidgetUtils widgetUtils;
 
-    private int hourOfDay;
-    private int minuteOfHour;
+    private LocalDateTime selectedTime;
 
-    private boolean nullAnswer;
-
-    public TimeWidget(Context context, final QuestionDetails prompt) {
-        this(context, prompt, false);
+    public TimeWidget(Context context, final QuestionDetails prompt, DateTimeWidgetUtils widgetUtils) {
+        super(context, prompt);
+        this.widgetUtils = widgetUtils;
     }
 
-    public TimeWidget(Context context, QuestionDetails prompt, boolean isPartOfDateTimeWidget) {
-        super(context, prompt, !isPartOfDateTimeWidget);
-        createTimeButton();
-        timeTextView = createAnswerTextView(getContext(), getAnswerFontSize());
-        createTimePickerDialog();
-        addViews();
+    @Override
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+        binding = TimeWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
+
+        if (prompt.isReadOnly()) {
+            binding.timeButton.setVisibility(GONE);
+        } else {
+            binding.timeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+
+            binding.timeButton.setOnClickListener(v -> {
+                DateTimeWidgetUtils.setWidgetWaitingForData(prompt.getIndex());
+                widgetUtils.showTimePickerDialog(context, selectedTime);
+            });
+        }
+        binding.timeAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+
+        if (prompt.getAnswerValue() == null) {
+            selectedTime = DateTimeUtils.getCurrentDateTime();
+        } else {
+            DateTime dateTime = new DateTime(getFormEntryPrompt().getAnswerValue().getValue());
+            selectedTime = DateTimeUtils.getSelectedTime(dateTime.toLocalDateTime(), LocalDateTime.now());
+            binding.timeAnswerText.setText(DateTimeUtils.getTimeData(dateTime).getDisplayText());
+        }
+
+        return binding.getRoot();
     }
 
     @Override
     public void clearAnswer() {
-        clearAnswerWithoutValueChangeEvent();
+        selectedTime = DateTimeUtils.getCurrentDateTime();
+        binding.timeAnswerText.setText(R.string.no_time_selected);
         widgetValueChanged();
-    }
-
-    void clearAnswerWithoutValueChangeEvent() {
-        nullAnswer = true;
-        timeTextView.setText(R.string.no_time_selected);
     }
 
     @Override
     public IAnswerData getAnswer() {
-        // use picker time, convert to today's date, store as utc
-        DateTime localDateTime = new DateTime()
-                .withTime(hourOfDay, minuteOfHour, 0, 0);
-
-        return !nullAnswer
-                ? new TimeData(localDateTime.toDate())
-                : null;
+        return binding.timeAnswerText.getText().equals(getContext().getString(R.string.no_time_selected))
+                ? null
+                : new TimeData(selectedTime.toDateTime().toDate());
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        timeButton.setOnLongClickListener(l);
-        timeTextView.setOnLongClickListener(l);
+        binding.timeButton.setOnLongClickListener(l);
+        binding.timeAnswerText.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        timeButton.cancelLongPress();
-        timeTextView.cancelLongPress();
-    }
-
-    private void createTimeButton() {
-        timeButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.select_time), getAnswerFontSize(), this);
-    }
-
-    private void addViews() {
-        LinearLayout linearLayout = new LinearLayout(getContext());
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.addView(timeButton);
-        linearLayout.addView(timeTextView);
-        addAnswerView(linearLayout, WidgetViewUtils.getStandardMargin(getContext()));
-    }
-
-    public void setTimeLabel() {
-        nullAnswer = false;
-        timeTextView.setText(getAnswer().getDisplayText());
-    }
-
-    private void createTimePickerDialog() {
-        timePickerDialog = new CustomTimePickerDialog(getContext(), this, 0, 0);
-        timePickerDialog.setCanceledOnTouchOutside(false);
-
-        if (getFormEntryPrompt().getAnswerValue() == null) {
-            clearAnswer();
-        } else {
-            Date date = (Date) getFormEntryPrompt().getAnswerValue().getValue();
-
-            DateTime dateTime = new DateTime(date);
-            updateTime(dateTime, true);
-        }
-    }
-
-    public int getHour() {
-        return hourOfDay;
-    }
-
-    public int getMinute() {
-        return minuteOfHour;
-    }
-
-    public boolean isNullAnswer() {
-        return nullAnswer;
-    }
-
-    public void setTimeToCurrent() {
-        updateTime(DateTime.now(), false);
-    }
-
-    public void updateTime(DateTime dateTime) {
-        updateTime(dateTime, true);
-    }
-
-    public void updateTime(DateTime dateTime, boolean shouldUpdateLabel) {
-        updateTime(dateTime.getHourOfDay(), dateTime.getMinuteOfHour(), shouldUpdateLabel);
-    }
-
-    public void updateTime(int hourOfDay, int minuteOfHour, boolean shouldUpdateLabel) {
-        this.hourOfDay = hourOfDay;
-        this.minuteOfHour = minuteOfHour;
-
-        timePickerDialog.updateTime(hourOfDay, minuteOfHour);
-
-        if (shouldUpdateLabel) {
-            setTimeLabel();
-        }
+        binding.timeButton.cancelLongPress();
+        binding.timeAnswerText.cancelLongPress();
     }
 
     @Override
-    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-        timePicker.clearFocus();
-
-        this.hourOfDay = timePicker.getCurrentHour();
-        this.minuteOfHour = timePicker.getCurrentMinute();
-
-        setTimeLabel();
-        widgetValueChanged();
-    }
-
-    @Override
-    public void onButtonClick(int buttonId) {
-        if (nullAnswer) {
-            setTimeToCurrent();
-        } else {
-            updateTime(hourOfDay, minuteOfHour, true);
-        }
-        timePickerDialog.show();
-    }
-
-    private class CustomTimePickerDialog extends TimePickerDialog {
-        private final String dialogTitle = getContext().getString(R.string.select_time);
-
-        CustomTimePickerDialog(Context context, OnTimeSetListener callBack, int hour, int minute) {
-            super(context, themeUtils.getHoloDialogTheme(), callBack, hour, minute, DateFormat.is24HourFormat(context));
-            setTitle(dialogTitle);
-            fixSpinner(context, hour, minute, DateFormat.is24HourFormat(context));
-
-            Window window = getWindow();
-            if (window != null) {
-                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            }
-        }
-
-        public void setTitle(CharSequence title) {
-            super.setTitle(dialogTitle);
-        }
-
-        /**
-         * Workaround for this bug: https://code.google.com/p/android/issues/detail?id=222208
-         * In Android 7.0 Nougat, spinner mode for the TimePicker in TimePickerDialog is
-         * incorrectly displayed as clock, even when the theme specifies otherwise.
-         * <p>
-         * Source: https://gist.github.com/jeffdgr8/6bc5f990bf0c13a7334ce385d482af9f
-         */
-        @SuppressWarnings("deprecation")
-        private void fixSpinner(Context context, int hourOfDay, int minute, boolean is24HourView) {
-            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N) {
-                try {
-                    // Get the theme's android:timePickerMode
-                    final int MODE_SPINNER = 2;
-                    Class<?> styleableClass = Class.forName("com.android.internal.R$styleable");
-                    Field timePickerStyleableField = styleableClass.getField("TimePicker");
-                    int[] timePickerStyleable = (int[]) timePickerStyleableField.get(null);
-                    final TypedArray a = context.obtainStyledAttributes(null, timePickerStyleable,
-                            android.R.attr.timePickerStyle, 0);
-                    Field timePickerModeStyleableField = styleableClass.getField("TimePicker_timePickerMode");
-                    int timePickerModeStyleable = timePickerModeStyleableField.getInt(null);
-                    final int mode = a.getInt(timePickerModeStyleable, MODE_SPINNER);
-                    a.recycle();
-
-                    if (mode == MODE_SPINNER) {
-                        Field field = findField(TimePickerDialog.class, TimePicker.class, "mTimePicker");
-                        if (field == null) {
-                            Timber.e("Reflection failed: Couldn't find field 'mTimePicker'");
-                            return;
-                        }
-
-                        TimePicker timePicker = (TimePicker) field.get(this);
-                        Class<?> delegateClass = Class.forName("android.widget.TimePicker$TimePickerDelegate");
-                        Field delegateField = findField(TimePicker.class, delegateClass, "mDelegate");
-
-                        if (delegateField == null) {
-                            Timber.e("Reflection failed: Couldn't find field 'mDelegate'");
-                            return;
-                        }
-                        Object delegate = delegateField.get(timePicker);
-
-                        Class<?> spinnerDelegateClass;
-                        spinnerDelegateClass = Class.forName("android.widget.TimePickerSpinnerDelegate");
-                        // In 7.0 Nougat for some reason the timePickerMode is ignored and the
-                        // delegate is TimePickerClockDelegate
-                        if (delegate.getClass() != spinnerDelegateClass) {
-                            delegateField.set(timePicker, null); // throw out the TimePickerClockDelegate!
-                            timePicker.removeAllViews(); // remove the TimePickerClockDelegate views
-                            Constructor spinnerDelegateConstructor = spinnerDelegateClass
-                                    .getConstructor(TimePicker.class, Context.class,
-                                            AttributeSet.class, int.class, int.class);
-                            spinnerDelegateConstructor.setAccessible(true);
-
-                            // Instantiate a TimePickerSpinnerDelegate
-                            delegate = spinnerDelegateConstructor.newInstance(timePicker, context,
-                                    null, android.R.attr.timePickerStyle, 0);
-
-                            // set the TimePicker.mDelegate to the spinner delegate
-                            delegateField.set(timePicker, delegate);
-
-                            // Set up the TimePicker again, with the TimePickerSpinnerDelegate
-                            timePicker.setIs24HourView(is24HourView);
-                            timePicker.setCurrentHour(hourOfDay);
-                            timePicker.setCurrentMinute(minute);
-                            timePicker.setOnTimeChangedListener(this);
-                        }
-                    }
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-
-        private Field findField(Class objectClass, Class fieldClass, String expectedName) {
-            try {
-                Field field = objectClass.getDeclaredField(expectedName);
-                field.setAccessible(true);
-                return field;
-            } catch (NoSuchFieldException e) {
-                Timber.i(e); // ignore
-            }
-
-            // search for it if it wasn't found under the expected ivar name
-            for (Field searchField : objectClass.getDeclaredFields()) {
-                if (searchField.getType() == fieldClass) {
-                    searchField.setAccessible(true);
-                    return searchField;
-                }
-            }
-            return null;
+    public void setData(Object answer) {
+        if (answer instanceof DateTime) {
+            selectedTime = DateTimeUtils.getSelectedTime(((DateTime) answer).toLocalDateTime(), LocalDateTime.now());
+            binding.timeAnswerText.setText(new TimeData(selectedTime.toDate()).getDisplayText());
         }
     }
 }

@@ -1,0 +1,530 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data">रिक्त फॉर्म भरा</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data_button">रिक्त फॉर्म भरा</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="review_data">जतन फॉर्म संपादित करा</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="review_data_button">जतन फॉर्म संपादित करा (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="send_data">अंतिम फॉर्म पाठवा</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="send_data_button">अंतिम फॉर्म पाठवा (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="view_sent_forms">प्रेषित फॉर्म पहा</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="view_sent_forms_button">प्रेषित फॉर्म पहा (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="get_forms">रिक्त फॉर्म मिळवा</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="manage_files">जतन केलेला फॉर्म हटवा</string>
+  <string name="version_number">आवृत्ती: %s</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="added_on_date_at_time">\'अॅड ईईई, एमएमएम डीडी, यॅय\' एचएच: मि.ह.</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="saved_on_date_at_time">\'सेव्हड् ओव्हर\' ईईई, एमएमएम डीडी, य्वाय \'एट\' एचएच: एमएम</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="finalized_on_date_at_time">\'इ.ई.ई., एमएमएम डीडी, य्यय\' एचएच: एमएम वर अंतिम रूप दिले</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sent_on_date_at_time">\'सेंड ऑन\' ईईई, एमएमएम डीडी, य्य्य \'एचएच: एमएम</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sending_failed_on_date_at_time">\'ईईई, एमएमएम डीडी, येय एचएच: एमएम \'वर पाठविणे अयशस्वी झाले</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="deleted_on_date_at_time">\'EEE वर हटविले\', \'एमएमएम डीडी, याय\' \'एचएच: एमएम\'</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="modified_on_date_at_time">\'सुधारित\' वर EEE, d MMM, yyyy \'at\' HH: mm</string>
+  <string name="encrypted_form">कूटबद्ध फॉर्म</string>
+  <string name="deleted_form">फॉर्म हटविला</string>
+  <string name="sort_the_list">सूची क्रमवारी लावा</string>
+  <string name="filter_the_list">सूची फिल्टर करा</string>
+  <!--Displayed in search boxes for form lists or question types that involve search-->
+  <string name="no_items_display">प्रदर्शनासाठी काहीही उपलब्ध नाही.</string>
+  <string name="no_items_display_forms">प्रदर्शित करण्यासाठी काहीही उपलब्ध नाही. \n\nरिक्त फॉर्म मिळविणे आणि भरण्याचा प्रयत्न करा.</string>
+  <string name="no_items_display_sent_forms">प्रदर्शनासाठी काहीही उपलब्ध नाही.\n\n पाहण्या पूर्वी अंतिम स्वरूप पाठविण्याचा प्रयत्न करा.</string>
+  <string name="no_items_display_instances">प्रदर्शित करण्यासाठी काहीही उपलब्ध नाही.\n\nपाठविण्यापूर्वी जतन केलेले फॉर्म्स ला अंतिम रूप देण्याचा प्रयत्न करा</string>
+  <!--##############################################
+    # FILL BLANK FORM
+    ##############################################-->
+  <string name="instance_scan_count">%1$d  फॉर्म जोडले.</string>
+  <string name="finished_disk_scan">स्कॅनिंग पूर्ण. सर्व फॉर्म लोड केले</string>
+  <string name="xform_parse_error">%1$s साठी XForm parse त्रुटी: %2$s गहाळ आहे किंवा अवैध आहे</string>
+  <string name="loading_form">फॉर्म लोड होत आहे</string>
+  <string name="survey_loading_reading_form_message">फॉर्म व्याख्या वाचत आहे …</string>
+  <string name="survey_loading_reading_data_message">सर्वेक्षण डेटा वाचत आहे …</string>
+  <string name="survey_loading_reading_csv_message">CSV फायली वाचत आहे …</string>
+  <string name="parse_error">क्षमस्व, फॉर्म विश्लेषित करण्यास अक्षम</string>
+  <string name="parent_form_not_present">हा जतन केलेला फॉर्म संपादित करण्यास अक्षम कारण संबंधीत रिक्त फॉर्म उपलब्ध नाही किंवा हटविला गेला नाही. \ n \ n फॉर्म ID %1$s</string>
+  <string name="cannot_edit_completed_form">अंतिम रूपाने चिन्हांकित केल्यावर हे फॉर्म संपादित करणे शक्य नाही. हे कूटबद्ध केले जाऊ शकते.</string>
+  <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
+  <string name="savepoint_used">जतन न केलेले बदल पुनर्प्राप्त!</string>
+  <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
+  <string name="change_language">भाषा बदला</string>
+  <!--Text for button displayed in the form filling menu to see the form's table of contents-->
+  <string name="view_hierarchy">प्रॉम्प्ट वर जा</string>
+  <!--Text for button displayed in the form filling menu to save the form-->
+  <string name="save_all_answers">फॉर्म जतन करा</string>
+  <!--Text of button from the form's table of contents to jump to the beginning of the form-->
+  <string name="jump_to_beginning">सुरू करण्यासाठी जा</string>
+  <!--Text of button from the form's table of contents to jump to the end of the form-->
+  <string name="jump_to_end">संम्पतही कडे जा </string>
+  <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
+  <string name="jump_to_previous">वर जा</string>
+  <!--Displayed below group names in a form's table of contents-->
+  <!--Displayed below repeat names in a form's table of contents-->
+  <string name="exit">निर्गमन करा</string>
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <!--Title of overlay menu displayed when long pressing on a question in a form-->
+  <string name="edit_prompt">सूचना संपादित करा</string>
+  <string name="clearanswer_confirm">\"%s\" ला प्रतिसाद काढायचा का ?</string>
+  <string name="clear_answer">प्रतिसाद काढा</string>
+  <string name="clear_answer_ask">हा प्रतिसाद काढायचा का ?</string>
+  <string name="clear_answer_no">रद्द करा</string>
+  <string name="discard_answer">प्रतिसाद काढा.</string>
+  <string name="discard_group">गट काढा</string>
+  <string name="delete_repeat">गट काढा</string>
+  <string name="delete_repeat_ask">हा गट काढायचा?</string>
+  <string name="delete_repeat_confirm">गट  1%s आणि त्याचे सर्व उप गट काढायचे?</string>
+  <string name="delete_repeat_no">रद्द करा</string>
+  <string name="invalid_answer_error">क्षमस्व, हा प्रतिसाद अवैध आहे!</string>
+  <string name="required_answer_error">क्षमस्व, हे प्रतिसाद आवश्यक आहे!</string>
+  <string name="survey_internal_error">अंतर्गत त्रुटी: प्रॉम्प्टसाठी चरण अयशस्वी.</string>
+  <string name="save_enter_data_description">आपण 1%s च्या समाप्तीस आहात</string>
+  <string name="save_form_as">या फॉर्मला नाव द्या</string>
+  <string name="save_as_error">जतन केलेले नाव रिक्त असू शकत नाही!</string>
+  <string name="mark_finished">अंतिम रूपाने फॉर्म चिन्हांकित करा</string>
+  <string name="quit_entry">फॉर्म जतन करा आणि निर्गमन करा</string>
+  <string name="data_saved_error">क्षमस्व, एक फॉर्म हटविणे क्रिया आधीच प्रगतीपथावर आहे!</string>
+  <string name="data_saved_ok">फॉर्म यशस्वीरित्या जतन केला!</string>
+  <string name="save_point_error">पुनर्प्राप्ती बिंदू जतन करताना त्रुटी: %s</string>
+  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <string name="quit_application">मधून निर्गमन करा %s</string>
+  <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="no_form_loaded">&amp; Lt; कोणतेही फॉर्म लोड झाले &amp; gt;</string>
+  <string name="do_not_save">बदलांकडे दुर्लक्ष करा</string>
+  <string name="keep_changes">बदल जतन करा</string>
+  <string name="saving_form">फॉर्म जतन केला जात आहे</string>
+  <string name="survey_saving_validating_message">उत्तरे सत्यापित करीत आहे …</string>
+  <string name="survey_saving_collecting_message">डेटा संकलित करत आहे …</string>
+  <string name="survey_saving_saving_message">SD कार्डवर जतन करीत आहे …</string>
+  <string name="survey_saving_finalizing_message">SD कार्डमध्ये अंतिम रूप देत आहे …</string>
+  <string name="survey_saving_encrypting_message">डेटा एन्क्रिप्ट करत आहे …</string>
+  <string name="not_exactly_one_record_for_this_instance">या घटनेसाठी नक्की एक रेकॉर्ड नाही!</string>
+  <string name="not_exactly_one_blank_form_for_this_form_id">या jr_form_id शी न जुळणारे एक रिक्त स्वरूप</string>
+  <string name="no_form_id_specified">फॉर्मID निर्दिष्ट नाही ???</string>
+  <string name="phone_does_not_support_rsa">फोन RSA एन्क्रिप्शनचे समर्थन करत नाही.</string>
+  <string name="invalid_rsa_public_key">Invalid RSA public key.</string>
+  <string name="encryption_error_message">%s फॉर्म अंतिम रूपाने जतन केले गेले नाही.</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <string name="bad_uri">खराब युरएल %s</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <string name="unrecognized_uri">अपरिचित युरएल: %s</string>
+  <!--Text displayed when audio recording fails to start-->
+  <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <!--Error message displayed when copying media from a temporary directory fails-->
+  <!--##############################################
+    # FORM FEATURES
+    ##############################################-->
+  <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
+  <string name="launch_app">लाँच करा</string>
+  <string name="activity_not_found">हाताळण्यासाठी कोणतीही गतिविधी आढळली नाही: %s</string>
+  <string name="no_app">विनंती केलेले अनुप्रयोग गहाळ आहे. कृपया स्वतः वाचन प्रविष्ट करा.</string>
+  <string name="launch_printer">मुद्रण प्रारंभ करा</string>
+  <string name="no_printer">विनंती केलेले प्रिंटर स्थापित नाही. प्रिंटर स्थापित करा.</string>
+  <string name="open_url">युरएल उघडा</string>
+  <string name="capture_osm">OpenMapKit लाँच करा</string>
+  <string name="recapture_osm">OSM टॅगिंग पुन्हा करा</string>
+  <string name="edited_osm_file">संपादित OSM XML फाइल:</string>
+  <string name="invalid_osm_data">काहीतरी चूक झाली. आम्हाला वैध ओपन स्ट्रीट नकाशा डेटा प्राप्त झाला नाही.</string>
+  <string name="alert">अॅलर्ट</string>
+  <string name="install_openmapkit">कृपया ओपन मॅप किट स्थापित करा!</string>
+  <string name="get_barcode">बारकोड मिळवा</string>
+  <string name="replace_barcode">बारकोड पुनर्स्थित करा</string>
+  <string name="invalid_range_widget">या विजेटमध्ये अवैध मापदंड आहेत!</string>
+  <string name="capture_image">छायाचित्र काढा</string>
+  <string name="choose_image">प्रतिमा निवडा</string>
+  <string name="selected_invalid_image">निवडलेली फाईल वैध प्रतिमा नाही</string>
+  <string name="gdrive_connection_exception">ही प्रतिमा गूगल ड्राइव्हवर संचयित केली आहे आणि आपण ऑफलाइन असताना प्रवेश केला जाऊ शकत नाही.</string>
+  <string name="take_picture_instruction">एक चित्र घेण्यासाठी स्क्रीन टॅप करा</string>
+  <string name="camera_error">हे साधन कॅमेरॅ2 API ला समर्थन देत नाही.</string>
+  <!--Dialog heading for saving annotated image-->
+  <string name="save_and_close">जतन करा आणि बंद करा</string>
+  <string name="sign_button">स्वाक्षरी एकत्रीकरण</string>
+  <string name="markup_image">मार्कअप प्रतिमा</string>
+  <string name="draw_image">स्केच प्रतिमा</string>
+  <string name="reset_image">रीसेट करा</string>
+  <string name="set_color">रंग सेट करा</string>
+  <string name="capture_video">व्हिडिओ रेकॉर्ड करा</string>
+  <string name="choose_video">व्हिडिओ निवडा</string>
+  <string name="play_video">व्हिडिओ प्ले करा</string>
+  <!--Text for button that deletes a file that is the answer to a question-->
+  <!--Text for button that starts recording sound-->
+  <string name="capture_audio">ध्वनी रेकॉर्ड करा</string>
+  <!--Text for button that lets the user choose a sound file on their device-->
+  <string name="choose_sound">ध्वनी निवडा</string>
+  <!--Description text for button that that pauses recording sound-->
+  <!--Description text for button that that resumes recording sound-->
+  <!--Title for dialog asking the user if they want to delete a file-->
+  <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="error_attaching_binary_file">मिडिया संलग्न करताना त्रुटी आली: 1%s</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="select_answer">उत्तर निवडा</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="selected">निवडलेले:</string>
+  <string name="trigger">ठीक आहे. कृपया चालू ठेवा.</string>
+  <string name="ext_file_no_data_error">फाइलमध्ये कोणताही डेटा नाही!</string>
+  <string name="ext_conflicting_columns_error">स्तंभ%s जुळत आहे!</string>
+  <string name="ext_sortBy_numeric_error">आपल्या क्रमवारीत स्तंभमध्ये केवळ अंकीय मूल्ये असावीत. विवादित मूल्य \' 1%s \'. होता.</string>
+  <string name="ext_search_wrong_arguments_error">शोधात वाक्यरचना त्रुटी () कार्य: कार्य आवश्यक 1, 4 किंवा 6 वितर्क.</string>
+  <string name="ext_search_wrong_function_error">शोधात वाक्यरचना त्रुटी () कार्य: अपरिचीत कार्य \'%s\'.</string>
+  <string name="ext_search_bad_function_error">शोध () फंक्शनमध्ये वाक्यरचना त्रुटी: \' 1%s\' चे फंक्शन म्हणून मूल्यांकन झाले नाही.</string>
+  <string name="ext_search_return_error">शोध हँडलरने \'1%s\' प्रकारचे ऑब्जेक्ट परत केले.</string>
+  <string name="ext_import_generic_error"> %1$sवरून डेटा आयात करू शकले नाही . कारण: %2$s</string>
+  <string name="ext_import_progress_message"> \'%1$s\' वरून डेटा पूर्व लोड होत आहे, कृपया प्रतीक्षा करा, %2$s</string>
+  <string name="ext_import_finalizing_message">पूर्व लोड केलेल्या डेटाला अंतिम रूप देत आहे …</string>
+  <string name="ext_import_completed_message">डेटा वाचन पूर्ण!</string>
+  <string name="ext_not_initialized_error">बाह्यडेटा व्यवस्थापक प्रारंभ झाला नाही.</string>
+  <string name="ext_import_csv_missing_error">%1$s साठी बाह्य डेटा आयात केला गेला नाही. कदाचित आपण आपल्या फॉर्मसह  %2$s.csv फाइल समाविष्ट करणे विसरलात?</string>
+  <string name="ext_search_generic_error">शोधात वाक्यरचना त्रुटी () कार्य: %s</string>
+  <string name="ext_assign_value_error">\'%s\' वर मूल्य नियुक्त करू शकत नाही.</string>
+  <string name="parser_exception">एक्स पाथ पार्सर अपवादः  \"%s\"</string>
+  <string name="get_bearing">रेकॉर्ड बेअरिंग</string>
+  <string name="replace_bearing">बेअरिंग पुनर्स्थित करा</string>
+  <string name="getting_bearing">लोडिंग बेअरिंग</string>
+  <string name="accept_bearing">रेकॉर्ड बेअरिंग</string>
+  <string name="bearing">असणारा:%.3f</string>
+  <string name="direction">दिशा: %s</string>
+  <string name="select_date">तारीख निवडा</string>
+  <string name="select_time">वेळेची निवड करा</string>
+  <string name="no_date_selected">तारीख निवडली नाही</string>
+  <string name="no_time_selected">वेळ निवडला नाही</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
+  <string name="file_invalid">फाइल: %s अवैध आहे.</string>
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
+  <string name="file_missing">फाइल: %s गहाळआहे.</string>
+  <!--Heading for a dialog which prompts the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Explanation for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Action to close a full screen dialog-->
+  <!--Heading for a dialog which prompts the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Action to save the contents of a full screen dialog-->
+  <!--##############################################
+    # GEO
+    ##############################################-->
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+   These strings are only being used to preserve compatibility with pre-existing
+    tile caches, and are not shown in the UI.-->
+  <string name="openmap_usgs_topo">यूएसजीएस राष्ट्रीय नकाशा टोपो</string>
+  <string name="openmap_stamen_terrain">स्टेमेन टेरेइन</string>
+  <string name="openmap_cartodb_positron">कार्टो डीबी पॉझिट्रॉन</string>
+  <string name="openmap_cartodb_darkmatter">कार्टो डीबी गडद बाब</string>
+  <string name="basemap">बेसमॅप</string>
+  <string name="streets">रस्ते</string>
+  <string name="terrain">भूप्रदेश</string>
+  <string name="hybrid">संकरित</string>
+  <string name="satellite">उपग्रह</string>
+  <string name="google_play_services_error_occured">गूगल नकाशे मध्ये प्रवेश करण्यात अक्षम. गूगल प्ले सेवा स्थापित केली आहे का?</string>
+  <string name="view_change_location">दृश्य किंवा स्थान बदला</string>
+  <string name="getting_location">स्थान लोड करत आहे</string>
+  <string name="get_location">स्थान रेकॉर्ड</string>
+  <string name="provider_disabled_error">क्षमस्व, स्थान प्रदाता अक्षम केले आहेत!</string>
+  <string name="gps_result">अक्षांश: %1$s\nरेखांश: %2$s\nअल्टिट्यूड: %3$sm\nअॅक्चुसीसी: %4$sm</string>
+  <!--Action to go to Android settings. Displayed when location providers are disabled.-->
+  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
+  <string name="save_point">जिओ पॉईंट जतन करा</string>
+  <string name="get_point">जिओ पॉईंट प्रारंभ करा</string>
+  <string name="geopoint_view_read_only">जिओ पॉईंट पहा</string>
+  <string name="get_shape">जिओ पॉईंट प्रारंभ करा</string>
+  <string name="get_trace">जिओ ट्रेस प्रारंभ करा</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <string name="west">पश्चिम %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <string name="east">पूर्व %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <string name="south">दक्षिण %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="north">उत्तर %1$s%2$s%3$s</string>
+  <string name="geoshape_title">जिओ शेप</string>
+  <string name="start">प्रारंभ करा</string>
+  <string name="enable_gps">जीपीएस सक्षम करा</string>
+  <string name="geotrace_title">जिओ ट्रेस</string>
+  <string name="geo_clear_warning">वैशिष्ट्य आधीच तयार केले आपण वैशिष्ट्य साफ करू इच्छिता?</string>
+  <string name="geo_exit_warning">बदल टाकून ओडीके कडे परत जा?</string>
+  <string name="polygon_validator">बहुभुज तयार करण्यासाठी किमान 3 गुण असणे आवश्यक आहे</string>
+  <string name="clear">साफ करा</string>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
+  <string name="geopoint_instruction">चिन्ह ठेवण्यासाठी जास्त वेळ दाबा किंवा जोडा मार्कर बटण टॅप करा</string>
+  <string name="geopoint_no_draggable_instruction">जोडा मार्कर बटण टॅप करा</string>
+  <string name="discard">टाकून द्या</string>
+  <string name="geoshape_view_change_location">जिओ शेप पहा किंवा बदला</string>
+  <string name="geotrace_view_change_location">जिओ ट्रेस पहा किंवा बदला</string>
+  <!--Name of an action button-->
+  <!--##############################################
+    # SEND FINALIZED FORM
+    ##############################################-->
+  <string name="uploading_data">फॉर्म पाठवत आहे</string>
+  <string name="noselect_error">क्षमस्व, आपण कोणतेही फॉर्म निवडलेले नाहीत!</string>
+  <string name="no_connection">कोणतेही नेटवर्क कनेक्शन उपलब्ध नाही</string>
+  <string name="sending_items"> फॉर्म(स)%1$s of %2$s पाठवत आहे.</string>
+  <string name="send_selected_data">निवडलेले पाठवा</string>
+  <string name="server_auth_credentials">सर्व्हरसाठी अवैध वापरकर्तानाव किंवा संकेतशब्द: %s</string>
+  <string name="server_requires_auth">सर्व्हरला प्रमाणीकरणाची आवश्यकता आहे</string>
+  <string name="no_forms_uploaded">क्षमस्व, कोणताही फॉर्म अपलोड करण्यात आला नाही</string>
+  <string name="upload_results">परिणाम अपलोड करा</string>
+  <!--Name of option in Send Finalized Form menu to show only unsent forms (default) or show sent and unsent forms-->
+  <string name="change_view">दृश्य बदला</string>
+  <string name="show_sent_and_unsent_forms">पाठवलेले आणि रद्द केलेले फॉर्म दर्शवा</string>
+  <string name="show_unsent_forms">पाठवलेले आणि रद्द केलेले फॉर्म दर्शवा</string>
+  <string name="send_in_progress">पार्श्वभूमी पाठविणे चालू आहे, कृपया लवकरच पुन्हा प्रयत्न करा</string>
+  <string name="notification_error">सूचना मजकूर प्रदर्शित करताना त्रुटी</string>
+  <!--##############################################
+    # GET BLANK FORM
+    ##############################################-->
+  <string name="refresh">रिफ्रेश करा</string>
+  <string name="download">निवडलेले आणा</string>
+  <string name="downloading_data">सर्व्हरशी कनेक्ट करीत आहे</string>
+  <string name="fetching_file"> %1$s  मिळवत आहे. \n\nफॉर्म %2$s च्या%3$s फॉर्म(स) </string>
+  <string name="form_download_progress">%1$s मीडिया फायली मिळवत आहे: %2$s पैकी %3$s</string>
+  <string name="version">आवृत्ती:</string>
+  <!--##############################################
+    # DELETE SAVED FORM
+    ##############################################-->
+  <!--Title of a section in "Delete Saved Forms" for deleting filled/saved forms (as opposed to blank forms)-->
+  <string name="data">जतन केलेले फॉर्म</string>
+  <!--Title of a section in "Delete Saved Forms" for deleting blank forms (as opposed to filled/saved forms)-->
+  <string name="forms">रिक्त फॉर्म</string>
+  <string name="delete_confirm">फॉर्म(स)  %s हटवायचे का?</string>
+  <string name="delete_file">निवडलेले हटवा ?</string>
+  <string name="delete_no">हटवू नका</string>
+  <string name="delete_yes">फॉर्म हटवा</string>
+  <string name="file_deleted_error">क्षमस्व, %1$s पैकी फॉर्म(स) %2$s नी हटविण्यात अयशस्वी!</string>
+  <string name="file_deleted_ok">%s फॉर्म(स) यशस्वीरित्या हटविले!</string>
+  <string name="file_delete_in_progress">क्षमस्व, एक फॉर्म हटविणे क्रिया आधीच प्रगतीपथावर आहे!</string>
+  <!--##############################################
+    # GENERAL SETTINGS
+    ##############################################-->
+  <string name="general_preferences">सामान्य सेटिंग्ज</string>
+  <!--Title of a settings section-->
+  <string name="server_settings_title">सर्व्हर</string>
+  <!--Title of a settings section-->
+  <string name="client">वापरकर्ता इंटरफेस</string>
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <string name="form_management_preferences">फॉर्म व्यवस्थापन</string>
+  <!--Title of a settings section-->
+  <string name="user_and_device_identity_title">वापरकर्ता आणि डिव्हाइस ओळख</string>
+  <!--Title of a settings section only available in beta or development builds.-->
+  <string name="server_preferences">सर्व्हर सेटिंग्ज</string>
+  <!--Label for server type setting-->
+  <string name="type">प्रकार</string>
+  <string name="server_url">यु र एल </string>
+  <!--Title of dialog for configuring server URL-->
+  <string name="change_server_url">सर्व्हर युरएल</string>
+  <string name="url_error">क्षमस्व, अवैध यु र एल </string>
+  <string name="username">वापरकर्तानाव</string>
+  <string name="change_username">ODK वापरकर्तानाव</string>
+  <string name="password">संकेतशब्द</string>
+  <string name="change_password">ODK संकेतशब्द</string>
+  <string name="password_error_whitespace">पासवर्डमध्ये अग्रस्थानी किंवा अनुसरणी व्हायरसपासची परवानगी नाही</string>
+  <string name="username_error_whitespace">वापरकर्तानावांमध्ये अग्रगण्य किंवा अनुसरणी व्हायरसपेस अनुमत नाहीत</string>
+  <string name="change_formlist_url">फॉर्म यादी पथ ( यु र एल  वर जोडलेले )</string>
+  <string name="change_submission_url">सबमिशन पथ (यु र एल वर जोडला आहे)</string>
+  <string name="formlist_url">फॉर्म यादी पथ</string>
+  <string name="submission_url">सबमिशन पथ</string>
+  <string name="server_platform_google_sheets">गूगल ड्राइव्ह, गूगल पत्रक</string>
+  <string name="selected_google_account_text">गूगल खाते</string>
+  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
+  <string name="google_sheets_url">फॉलबॅक सबमिशन युरएल</string>
+  <!--Description for Fallback submission URL setting-->
+  <string name="google_sheets_url_hint">फॉर्म एक सबमिशन युरएल सेट करणे आवश्यक आहे नसल्यास, ही युरएल वापरली जाईल.</string>
+  <string name="language">भाषा</string>
+  <string name="use_device_language">डिव्हाइस भाषा वापरा</string>
+  <string name="font_size">मजकूर फॉन्ट आकार</string>
+  <string name="change_font_size">मजकूर फॉन्ट आकार</string>
+  <string name="font_size_extra_large">जास्त मोठं</string>
+  <string name="font_size_large">मोठा</string>
+  <string name="font_size_medium">मध्यम</string>
+  <string name="font_size_small">लहान</string>
+  <string name="font_size_extra_small">अतिरिक्त लहान</string>
+  <string name="navigation">नेव्हिगेशन</string>
+  <string name="swipe_navigation">क्षैतिज स्वाइप वापरा</string>
+  <string name="buttons_navigation">फॉरवर्ड / बॅकवर्ड बटणे वापरा</string>
+  <string name="swipe_buttons_navigation">स्वाइप आणि बटणे वापरा</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="form_forward">पुढे</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="show_splash_title">स्प्लॅश स्क्रीन</string>
+  <string name="show_splash_summary">अनुप्रयोग प्रारंभ झाल्यावर दर्शविते</string>
+  <string name="splash_path">निवडलेल्या स्प्लॅश प्रतिमा</string>
+  <string name="default_splash_path">डीफॉल्ट प्रतिमा वापरा</string>
+  <string name="select_another_image">भिन्न प्रतिमा निवडा</string>
+  <string name="use_odk_default">डीफॉल्ट प्रतिमा वापरा</string>
+  <string name="change_splash_path">प्रतिमा बदला</string>
+  <!--Heading for the settings category about updating blank forms-->
+  <!--Name of the setting that defines how blank forms are updated from the server.-->
+  <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
+  <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
+  <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
+  <!--Name of the setting that defines how often blank forms are updated from the server.-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
+  <string name="form_submission_category">फॉर्म सबमिशन</string>
+  <string name="autosend_selector_title">स्वयं पाठवा</string>
+  <string name="autosend">स्वयं पाठवा</string>
+  <string name="off">बंद</string>
+  <string name="wifi_autosend">केवळ Wifi</string>
+  <string name="cellular_autosend">केवळ सेल्यूलर</string>
+  <string name="wifi_cellular_autosend">वायफाय किंवा सेल्यूलर</string>
+  <string name="delete_after_send">पाठवानंतर हटवा</string>
+  <string name="delete_after_send_summary">सर्व्हरवर पाठविल्यानंतर अंतिम स्वरूप आणि मीडिया हटविते</string>
+  <string name="form_filling_category">फॉर्म भरणे</string>
+  <string name="default_completed">अंतिम रूप ला डिफॉल्ट करा </string>
+  <string name="default_completed_summary">डीफॉल्टनुसार अंतिम रूप दिलेला फॉर्म चिन्हांकित करा</string>
+  <string name="constraint_behavior_title">प्रतिबंध प्रोसेसिंग</string>
+  <string name="constraint_behavior">प्रतिबंध प्रोसेसिंग वर्तन</string>
+  <string name="constraint_behavior_on_swipe">पुढील स्वाइप वर प्रमाणित करा</string>
+  <string name="constraint_behavior_on_finalize">अंतिम रूपाने होईपर्यंत प्रमाणीकरण स्थगित करा</string>
+  <string name="high_resolution_title">उच्च रिझोल्यूशन व्हिडिओ</string>
+  <string name="high_resolution_summary">उच्च-रिजोल्यूशन व्हिडिओ रेकॉर्डिंग सक्षम करा</string>
+  <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
+  <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <string name="form_import_category">फॉर्म भरणे</string>
+  <string name="analytics_preferences">वापर डेटा</string>
+  <string name="analytics">अनामित वापर डेटा संकलित करा</string>
+  <string name="analytics_summary">अनामित वापर डेटा ओडीके कार्यसंघ निदान आणि वैशिष्ट्ये प्राधान्यक्रमित करण्यात मदत करतो</string>
+  <string name="form_metadata_title">फॉर्म मेटाडेटा</string>
+  <string name="form_metadata">फॉर्म मेटाडेटा</string>
+  <string name="form_metadata_summary">ही मूल्ये डेटा सबमिट करणाऱ्या व्यक्तीस ओळखण्यासाठी वापरकर्तानाव, ईमेल आणि / किंवा टेलिफोन प्रील्डेड फील्ड्स असलेल्या फॉर्ममध्ये जोडली जातील.</string>
+  <string name="user_defined">वापरकर्ता परिभाषित</string>
+  <string name="phone_number">फोन नंबर</string>
+  <string name="email">ईमेल पत्ता</string>
+  <string name="device_defined">डिव्हाइस-परिभाषित</string>
+  <string name="device_id">डिव्हाइस ID</string>
+  <!--Displayed when a device property such as the phone number is not available-->
+  <!--##############################################
+     # ADMIN SETTINGS
+     ##############################################-->
+  <string name="admin_preferences">प्रशासन सेटिंग्ज</string>
+  <string name="admin_access_settings">सेटिंग्जमध्ये प्रशासकीय प्रवेशासाठी टॅप करा</string>
+  <string name="enter_new_password">नवीन संकेतशब्द प्रविष्ट करा</string>
+  <string name="admin_password">प्रशासन संकेतशब्द</string>
+  <string name="admin_password_changed">प्रशासक संकेतशब्द यशस्वीरित्या बदलला</string>
+  <string name="admin_password_disabled">प्रशासन संकेतशब्द अक्षम केला</string>
+  <string name="admin_password_incorrect">क्षमस्व, संकेतशब्द चुकीचा आहे!</string>
+  <string name="enter_admin_password">प्रशासन पासवर्ड प्रविष्ट करा</string>
+  <string name="change_admin_password">प्रशासन पासवर्ड बदला</string>
+  <string name="show_password">संकेतशब्द दर्शवा</string>
+  <string name="found_in_main">मुख्य मेनूमधून लपविण्यासाठी अनचेक करा</string>
+  <string name="found_in_settings">मुख्य मेनूमधून लपविण्यासाठी अनचेक करा</string>
+  <string name="form_entry">फॉर्म एन्ट्रीमधून लपविण्यासाठी अनचेक करा</string>
+  <string name="reset_settings_dialog">अनुप्रयोग रीसेट करा …</string>
+  <string name="select_all">सर्व निवडा</string>
+  <string name="clear_all">सर्व साफ करा</string>
+  <string name="reset_settings">सर्व सेटिंग्ज (अंतर्गत सेटिंग्ज, सेव्ह सेटिंग्ज)</string>
+  <string name="reset_saved_forms">जतन फॉर्म (उदाहरण फोल्डर, उदाहरणे डेटाबेस)</string>
+  <string name="reset_blank_forms">रिक्त फॉर्म (फॉर्म फोल्डर, फॉर्म डेटाबेस, आयटसेट्स डेटाबेस)</string>
+  <string name="reset_layers">नकाशा स्तर (स्तर फलक)</string>
+  <string name="reset_cache">फॉर्म लोड कॅशे (.cache फोल्डर)</string>
+  <string name="reset_osm_tiles">ओपन स्ट्रीट नकाशा टाइल कॅशे (ओपन स्ट्रीट नकाशाdroid फोल्डर)</string>
+  <string name="reset_settings_dialog_title">काय रीसेट करावे ते निवडा</string>
+  <string name="reset_settings_button_reset">रीसेट करा</string>
+  <string name="reset_in_progress">रीसेट करत आहे …</string>
+  <string name="reset_app_state_result">परिणाम रीसेट करा</string>
+  <string name="reset_app_state_warning">सर्व निवडलेला डेटा कायमचा हटविला जाईल. तेथे पूर्ववत नाही</string>
+  <string name="reset_settings_result">सर्व सेटिंग्ज :: %s</string>
+  <string name="reset_saved_forms_result">जतन फॉर्म :: %s</string>
+  <string name="reset_blank_forms_result">रिक्त फॉर्म :: %s</string>
+  <string name="reset_layers_result">नकाशा स्तर :: %s</string>
+  <string name="reset_cache_result">फॉर्म लोड कॅशे :: %s</string>
+  <string name="reset_osm_tiles_result">ओपन स्ट्रीट नकाशा टाइल कॅशे :: %s</string>
+  <string name="user_access_control">वापरकर्ता प्रवेश नियंत्रण</string>
+  <string name="main_menu_settings">मुख्य मेनू सेटिंग्ज</string>
+  <string name="main_menu_settings_summary">मुख्य मेनू आयटम व्यवस्थापित करण्यासाठी टॅप करा</string>
+  <string name="user_settings">वापरकर्ता सेटिंग्ज</string>
+  <string name="user_setting_summary">सामान्य सेटिंग्ज आयटम व्यवस्थापित करण्यासाठी टॅप करा</string>
+  <string name="form_entry_setting">फॉर्म प्रवेश सेटिंग्ज</string>
+  <string name="form_entry_settings_summary">फॉर्म प्रविष्टी आयटम व्यवस्थापित करण्यासाठी टॅप करा</string>
+  <!--Name of a setting that determines whether users can navigate backwards in a form-->
+  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <string name="save_mid">फॉर्म जतन करा</string>
+  <!--##############################################
+     # GOOGLE DRIVE, GOOGLE SHEETS
+     ##############################################-->
+  <!--Title of the screen that lists forms in user's Google Drive-->
+  <string name="go_drive">माझे ड्राइव्ह</string>
+  <!--Title of the screen that lists forms shared with Google Drive user-->
+  <string name="go_shared">माझ्यासह शेअर केलेले</string>
+  <!--Button for navigating across Google Drive folders-->
+  <string name="download_selected">निवडलेल्या डाउनलोड करा</string>
+  <string name="go_back">परत जा</string>
+  <string name="google_auth_io_exception_msg">API कॉल करण्यात अक्षम. आपण स्थानिक बिल्ड चालवत असल्यास, कृपया प्रोजेक्ट रीडमेचे पुनरावलोकन करा.</string>
+  <string name="drive_get_file"> %1$s आणि मीडिया फायली मिळवत आहे</string>
+  <string name="no_google_account">कोणतेही गूगल खाते निवडलेले नाही!</string>
+  <string name="google_set_account">आपण गूगल पत्रक आपल्या सर्व्हर म्हणून निवडले आहे, कृपया सुरू ठेवण्यापूर्वी सामान्य सेटिंग्जमध्ये संबंधित गूगल खाते निवडा</string>
+  <string name="google_search_browse">फॉर्म शोधा किंवा ब्राउझ करण्यासाठी खालील \'माझे ड्राइव्ह\' निवडा.</string>
+  <string name="invalid_sheet_id">अवैध पत्रक id: %1$s</string>
+  <string name="google_sheets_access_denied">प्रवेश नाकारला. कृपया स्प्रेडशीटच्या मालकास आपल्याला संपादन परवानगी मंजूर केल्याची खात्री करा.</string>
+  <string name="google_sheets_missing_columns">स्प्रेडशीटमध्ये खालील स्तंभ गहाळ आहेत:%1$s</string>
+  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
+  <!--##############################################
+     # ABOUT
+     ##############################################-->
+  <string name="about_preferences">विषयी</string>
+  <string name="odk_website">ओडीके वेबसाइट ला भेट द्या</string>
+  <string name="odk_website_summary">ओडीकेे चा उपयोग आव्हानात्मक पर्यावरणात सामाजिक चांगल्यासाठी डेटा गोळा करण्यासाठी केला जातो.</string>
+  <string name="odk_forum">ओडीके मंचात सहभागी व्हा</string>
+  <!--##############################################
+     # SETTINGS IMPORT
+     ##############################################-->
+  <string name="successfully_imported_settings">सेटिंग्ज यशस्वीपणे आयात केली</string>
+  <string name="encoding_max_limit">कमाल वर्ण मर्यादेपर्यंत पोहोचले: सर्व सेटिंग्जसाठी क्यूआर कोड व्युत्पन्न करणे शक्य नाही</string>
+  <string name="share">सामायिक करा</string>
+  <string name="turn_on_flashlight">फ्लॅशलाइट चालू करा</string>
+  <string name="turn_off_flashlight">फ्लॅशलाइट बंद करा</string>
+  <string name="server_password">सर्व्हर पासवर्ड</string>
+  <string name="include_password_dialog">कोडमध्ये समाविष्ट संकेतशब्द</string>
+  <string name="generate">व्युत्पन्न करा</string>
+  <string name="invalid_qrcode">क्यूआर कोडमध्ये वैध सेटिंग्ज नाहीत</string>
+  <string name="corrupt_settings_file_notification">क्षमस्व, सेटिंग्ज फाईल दूषित आहेत आणि हटविल्या गेल्या किंवा पुनर्स्थित केल्या गेल्या पाहिजे</string>
+  <!--##############################################
+     # SCOPED STORAGE MIGRATION
+     ##############################################-->
+  <!--Action to begin a storage migration-->
+  <!--##############################################
+     # MISC
+     ##############################################-->
+  <string name="ok">ठीक आहे</string>
+  <!--Used in many dialogs to dismiss the dialog without taking any action-->
+  <string name="cancel">रद्द करा</string>
+  <string name="cancel_loading_form">रद्द करा</string>
+  <string name="cancel_location">रद्द करा</string>
+  <string name="do_not_change">रद्द करा</string>
+  <string name="do_not_exit">रद्द करा</string>
+  <string name="success">यश</string>
+  <string name="error_occured">त्रुटी झाले</string>
+  <string name="please_wait">कृपया काही क्षण प्रतीक्षा करा</string>
+  <string name="please_wait_long">कृपया थांबा. यास काही मिनिटे लागू शकेल.</string>
+  <string name="sdcard_unmounted">संकलित SD कार्डवर प्रवेश करू शकत नाही. कदाचित तो यूएसबी द्वारे आरोहित आहे? (वर्तमान स्थिती: %s)</string>
+  <string name="fs_delete_media_path_if_file_error">%s\'. हटविणे शक्य नाही. कृपया फाईल व्यक्तिचलितपणे हटवा आणि फॉर्म पुन्हा डाउनलोड करा.</string>
+  <string name="fs_create_media_folder_error">मीडिया फोल्डर \'%s\' तयार करू शकले नाही.</string>
+  <string name="fs_file_copy_error"> \'%1$s\' वर \'%2$s\' कॉपी करू शकलो नाही. कारण :%3$s</string>
+  <string name="survey_multiple_forms_error">आपण एकाच फॉर्म आयडी आणि आवृत्तीसह दोन भिन्न फॉर्म डाउनलोड केले आहेत. कदाचित ते वेगळ्या वेळी किंवा भिन्न सर्व्हरवर अपलोड केलेले समान फॉर्म होते. यापैकी एक फाईल हटवा.</string>
+  <string name="select_odk_shortcut">ओडीके शॉर्टकट निवडा</string>
+</resources>

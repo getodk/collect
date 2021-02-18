@@ -17,62 +17,111 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.util.TypedValue;
+import android.view.View;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
-import org.odk.collect.android.R;
-import org.odk.collect.android.activities.GeoPolyActivity;
-import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.geo.MapProvider;
-import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.javarosa.form.api.FormEntryPrompt;
 
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+import org.odk.collect.android.R;
+import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.geo.MapConfigurator;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 /**
  * GeoTraceWidget allows the user to collect a trace of GPS points as the
  * device moves along a path.
- *
- * @author Jon Nordling (jonnordling@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class GeoTraceWidget extends BaseGeoWidget {
+public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver {
+    GeoWidgetAnswerBinding binding;
 
-    public GeoTraceWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
-        super(context, questionDetails, waitingForDataRegistry);
+    private final WaitingForDataRegistry waitingForDataRegistry;
+    private final MapConfigurator mapConfigurator;
+    private final GeoDataRequester geoDataRequester;
+
+    public GeoTraceWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry,
+                          MapConfigurator mapConfigurator, GeoDataRequester geoDataRequester) {
+        super(context, questionDetails);
+        this.waitingForDataRegistry = waitingForDataRegistry;
+        this.mapConfigurator = mapConfigurator;
+        this.geoDataRequester = geoDataRequester;
     }
 
-    public void startGeoActivity() {
-        Context context = getContext();
-        if (MapProvider.getConfigurator().isAvailable(context)) {
-            Intent intent = new Intent(context, GeoPolyActivity.class)
-                .putExtra(GeoPolyActivity.ANSWER_KEY, answerDisplay.getText().toString())
-                .putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOTRACE);
-            ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOTRACE_CAPTURE);
+    @Override
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+        binding = GeoWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
+
+        binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+
+        binding.simpleButton.setOnClickListener(v -> {
+            if (mapConfigurator.isAvailable(context)) {
+                geoDataRequester.requestGeoTrace(context, prompt, getAnswerText(), waitingForDataRegistry);
+            } else {
+                mapConfigurator.showUnavailableMessage(context);
+            }
+        });
+
+        String stringAnswer = prompt.getAnswerText();
+        binding.geoAnswerText.setText(stringAnswer);
+
+        boolean dataAvailable = stringAnswer != null && !stringAnswer.isEmpty();
+
+        if (getFormEntryPrompt().isReadOnly()) {
+            if (dataAvailable) {
+                binding.simpleButton.setText(R.string.geotrace_view_read_only);
+            } else {
+                binding.simpleButton.setVisibility(View.GONE);
+            }
         } else {
-            MapProvider.getConfigurator().showUnavailableMessage(context);
+            if (dataAvailable) {
+                binding.simpleButton.setText(R.string.geotrace_view_change_location);
+            } else {
+                binding.simpleButton.setText(R.string.get_trace);
+            }
         }
-    }
 
-    public void updateButtonLabelsAndVisibility(boolean dataAvailable) {
-        startGeoButton.setText(dataAvailable ? R.string.geotrace_view_change_location : R.string.get_trace);
-    }
-
-    @Override
-    public String getAnswerToDisplay(String answer) {
-        return answer;
-    }
-
-    @Override
-    public String getDefaultButtonLabel() {
-        return getContext().getString(R.string.get_trace);
+        return binding.getRoot();
     }
 
     @Override
     public IAnswerData getAnswer() {
-        String s = answerDisplay.getText().toString();
-        return !s.equals("")
-                ? new StringData(s)
-                : null;
+        return getAnswerText().isEmpty() ? null : new StringData(getAnswerText());
+    }
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        binding.simpleButton.setOnLongClickListener(l);
+        binding.geoAnswerText.setOnLongClickListener(l);
+    }
+
+    @Override
+    public void clearAnswer() {
+        binding.geoAnswerText.setText(null);
+        binding.simpleButton.setText(R.string.get_trace);
+        widgetValueChanged();
+    }
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        binding.simpleButton.cancelLongPress();
+        binding.geoAnswerText.cancelLongPress();
+    }
+
+    @Override
+    public void setData(Object answer) {
+        binding.geoAnswerText.setText(answer.toString());
+        binding.simpleButton.setText(answer.toString().isEmpty() ? R.string.get_trace : R.string.geotrace_view_change_location);
+        widgetValueChanged();
+    }
+
+    private String getAnswerText() {
+        return binding.geoAnswerText.getText().toString();
     }
 }

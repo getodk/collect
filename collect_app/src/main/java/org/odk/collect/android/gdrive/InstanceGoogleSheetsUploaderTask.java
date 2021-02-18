@@ -27,6 +27,7 @@ import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
 import org.odk.collect.android.upload.UploadException;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
+import org.odk.collect.android.utilities.TranslationHandler;
 
 import java.util.List;
 
@@ -64,7 +65,7 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
 
             if (isCancelled()) {
                 outcome.messagesByInstanceId.put(instance.getId().toString(),
-                        Collect.getInstance().getString(R.string.instance_upload_cancelled));
+                        TranslationHandler.getString(Collect.getInstance(), R.string.instance_upload_cancelled));
                 return outcome;
             }
 
@@ -77,7 +78,7 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
 
             if (forms.size() != 1) {
                 outcome.messagesByInstanceId.put(instance.getId().toString(),
-                        Collect.getInstance().getString(R.string.not_exactly_one_blank_form_for_this_form_id));
+                        TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_blank_form_for_this_form_id));
             } else {
                 try {
                     String destinationUrl = uploader.getUrlToSubmitTo(instance, null, null);

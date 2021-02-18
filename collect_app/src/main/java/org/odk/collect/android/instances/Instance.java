@@ -109,7 +109,7 @@ public final class Instance {
         }
 
         public Builder instanceFilePath(String instanceFilePath) {
-            this.instanceFilePath = new StoragePathProvider().getInstanceDbPath(instanceFilePath);
+            this.instanceFilePath = instanceFilePath;
             return this;
         }
 

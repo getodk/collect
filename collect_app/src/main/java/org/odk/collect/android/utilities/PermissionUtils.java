@@ -4,9 +4,10 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.DexterBuilder;
@@ -29,7 +30,6 @@ import org.odk.collect.android.activities.InstanceUploaderListActivity;
 import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.listeners.PermissionListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
@@ -41,6 +41,12 @@ import timber.log.Timber;
  */
 
 public class PermissionUtils {
+
+    private final int dialogTheme;
+
+    public PermissionUtils(int dialogTheme) {
+        this.dialogTheme = dialogTheme;
+    }
 
     public static boolean areStoragePermissionsGranted(Context context) {
         return isPermissionGranted(context,
@@ -82,33 +88,6 @@ public class PermissionUtils {
             }
         }
         return true;
-    }
-
-    /**
-     * Checks to see if an activity is one of the entry points to the app i.e
-     * an activity that has a view action that can launch the app.
-     *
-     * @param activity that has permission requesting code.
-     * @return true if the activity is an entry point to the app.
-     */
-    public static boolean isEntryPointActivity(CollectAbstractActivity activity) {
-
-        List<Class<?>> activities = new ArrayList<>();
-        activities.add(FormEntryActivity.class);
-        activities.add(InstanceChooserList.class);
-        activities.add(FillBlankFormActivity.class);
-        activities.add(InstanceUploaderListActivity.class);
-        activities.add(SplashScreenActivity.class);
-        activities.add(FormDownloadListActivity.class);
-        activities.add(InstanceUploaderActivity.class);
-
-        for (Class<?> act : activities) {
-            if (activity.getClass().equals(act)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public static void finishAllActivities(Activity activity) {
@@ -287,7 +266,7 @@ public class PermissionUtils {
     }
 
     protected void showAdditionalExplanation(Activity activity, int title, int message, int drawable, @NonNull PermissionListener action) {
-        AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.Theme_Collect_Dialog_PermissionAlert)
+        AlertDialog alertDialog = new AlertDialog.Builder(activity, dialogTheme)
                 .setTitle(title)
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())

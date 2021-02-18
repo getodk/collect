@@ -14,9 +14,9 @@
 
 package org.odk.collect.android.formmanagement;
 
-import java.io.Serializable;
+import org.odk.collect.android.forms.ManifestFile;
 
-import javax.annotation.Nullable;
+import java.io.Serializable;
 
 public class ServerFormDetails implements Serializable {
 
@@ -28,7 +28,6 @@ public class ServerFormDetails implements Serializable {
     private final String formID;
     private final String formVersion;
     private final String hash;
-    private final String manifestFileHash;
     private final boolean isNotOnDevice;
     private final boolean isUpdated;
     private boolean isFormNotDownloaded;    // smap
@@ -36,26 +35,29 @@ public class ServerFormDetails implements Serializable {
     private String formPath;                // smap
     private String project;                 // smap
 
+    private final ManifestFile manifest;
+
     public ServerFormDetails(String formName, String downloadUrl, String manifestUrl, String formID,
-                             String formVersion, String hash, String manifestFileHash,
-                             boolean isNotOnDevice, boolean isUpdated,
+                             String formVersion, String hash,
+                             boolean isNotOnDevice, boolean isUpdated, ManifestFile manifest,
                              boolean isFormNotDownloaded,
                              boolean tasks_only,
                              String formPath,
                              String project) {   // smap add formNotDownloaded, tasks_only, formPath, project
+
         this.formName = formName;
         this.downloadUrl = downloadUrl;
         this.manifestUrl = manifestUrl;
         this.formID = formID;
         this.formVersion = formVersion;
         this.hash = hash;
-        this.manifestFileHash = manifestFileHash;
         this.isNotOnDevice = isNotOnDevice;
         this.isUpdated = isUpdated;
         this.isFormNotDownloaded = isFormNotDownloaded;   // smap
         this.tasks_only = tasks_only;   // smap
         this.formPath = formPath;       // smap
         this.project = project;       // smap
+        this.manifest = manifest;
     }
 
     public String getFormName() {
@@ -98,16 +100,15 @@ public class ServerFormDetails implements Serializable {
         return hash;
     }
 
-    @Nullable
-    public String getManifestFileHash() {
-        return manifestFileHash;
-    }
-
     public boolean isNotOnDevice() {
         return isNotOnDevice;
     }
 
     public boolean isUpdated() {
         return isUpdated;
+    }
+
+    public ManifestFile getManifest() {
+        return manifest;
     }
 }

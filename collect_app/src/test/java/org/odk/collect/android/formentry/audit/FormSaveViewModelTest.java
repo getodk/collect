@@ -5,6 +5,8 @@ import android.net.Uri;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.SavedStateHandle;
 
+import com.google.common.io.Files;
+
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
@@ -14,20 +16,26 @@ import org.mockito.InOrder;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.FormSaver;
+import org.odk.collect.android.forms.FormDesignException;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.testshared.FakeScheduler;
+import org.odk.collect.utilities.Result;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.javarosa.form.api.FormEntryController.EVENT_GROUP;
 import static org.javarosa.form.api.FormEntryController.EVENT_QUESTION;
 import static org.javarosa.form.api.FormEntryController.EVENT_REPEAT;
@@ -50,6 +58,7 @@ public class FormSaveViewModelTest {
 
     private final SavedStateHandle savedStateHandle = new SavedStateHandle();
     private final FakeFormSaver formSaver = new FakeFormSaver();
+    private final FakeScheduler scheduler = new FakeScheduler();
 
     private AuditEventLogger logger;
     private FormSaveViewModel viewModel;
@@ -69,7 +78,7 @@ public class FormSaveViewModelTest {
         when(formController.getAuditEventLogger()).thenReturn(logger);
         when(logger.isChangeReasonRequired()).thenReturn(false);
 
-        viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, analytics);
+        viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, analytics, scheduler);
         viewModel.formLoaded(formController);
     }
 
@@ -121,7 +130,7 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void whenFormSaverFinishes_saved_andFormIsCurrentlyOnQuestion_logsSaveAndQuestionAuditEventsAfterFlush() {
+    public void whenFormSaverFinishes_saved_andFormIsCurrentlyOnQuestion_logsSaveAndQuestionAuditEventsAfterFlush() throws FormDesignException {
         when(formController.getEvent()).thenReturn(EVENT_QUESTION);
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withIndex("index1")
@@ -150,7 +159,7 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void whenFormSaverFinishes_saved_andFormIsCurrentlyOnGroup_logsSaveAndQuestionAuditEventsAfterFlush() {
+    public void whenFormSaverFinishes_saved_andFormIsCurrentlyOnGroup_logsSaveAndQuestionAuditEventsAfterFlush() throws FormDesignException {
         when(formController.getEvent()).thenReturn(EVENT_GROUP);
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withIndex("index1")
@@ -179,7 +188,7 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void whenFormSaverFinishes_saved_andFormIsCurrentlyOnRepeat_logsSaveAndQuestionAuditEventsAfterFlush() {
+    public void whenFormSaverFinishes_saved_andFormIsCurrentlyOnRepeat_logsSaveAndQuestionAuditEventsAfterFlush() throws FormDesignException {
         when(formController.getEvent()).thenReturn(EVENT_REPEAT);
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withIndex("index1")
@@ -333,8 +342,8 @@ public class FormSaveViewModelTest {
 
     @Test
     public void saveForm_savesCorrectFiles() {
-        viewModel.markOriginalFileOrDelete("index", "blah");
-        viewModel.replaceRecentFileForQuestion("index", "blah");
+        viewModel.deleteAnswerFile("index", "blah");
+        viewModel.replaceAnswerFile("index", "blah");
 
         viewModel.saveForm(Uri.parse("file://form"), true, "", true);
         whenFormSaverFinishes(SaveFormToDisk.SAVED);
@@ -389,31 +398,131 @@ public class FormSaveViewModelTest {
         assertThat(saveResult.getValue(), equalTo(null));
     }
 
+    //region QuestionMediaManager implementation
+
+    /**
+     * Covers clearing an answer, adding a new answer and then clearing again - we'd never need
+     * to restore the new answer file in this case.
+     */
     @Test
-    public void markOriginalFileOrDelete_whenQuestionIndexHasAnswer_onRecreatingViewModel_deletesFile() {
-        viewModel.markOriginalFileOrDelete("index", "blah");
+    public void deleteAnswerFile_whenAnswerFileHasAlreadyBeenDeleted_actuallyDeletesNewFile() {
+        viewModel.deleteAnswerFile("index", "blah1");
+        viewModel.deleteAnswerFile("index", "blah2");
 
-        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null);
-        restoredViewModel.formLoaded(formController);
-        restoredViewModel.markOriginalFileOrDelete("index", "blah");
-
-        verify(mediaUtils).deleteImageFileFromMediaProvider("blah");
+        verify(mediaUtils).deleteMediaFile("blah2");
     }
 
     @Test
-    public void replaceRecentFileForQuestion_whenQuestionIndexHasAnswer_onRecreatingViewModel_deletesFile() {
-        viewModel.replaceRecentFileForQuestion("index", "blah");
+    public void deleteAnswerFile_whenAnswerFileHasAlreadyBeenDeleted_onRecreatingViewModel_actuallyDeletesNewFile() {
+        viewModel.deleteAnswerFile("index", "blah1");
 
-        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null);
+        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler);
         restoredViewModel.formLoaded(formController);
-        restoredViewModel.replaceRecentFileForQuestion("index", "blah");
+        restoredViewModel.deleteAnswerFile("index", "blah2");
 
-        verify(mediaUtils).deleteImageFileFromMediaProvider("blah");
+        verify(mediaUtils).deleteMediaFile("blah2");
+    }
+
+    /**
+     * Covers replacing an answer, and then replacing an answer again - we'd never need
+     * to restore the first replacement in this case
+     */
+    @Test
+    public void replaceAnswerFile_whenAnswerFileHasAlreadyBeenReplaced_deletesPreviousReplacement() {
+        viewModel.replaceAnswerFile("index", "blah1");
+        viewModel.replaceAnswerFile("index", "blah2");
+
+        verify(mediaUtils).deleteMediaFile("blah1");
+    }
+
+    @Test
+    public void ignoreChanges_whenThereAreUnsavedFiles_shouldDeleteThoseFiles() {
+        viewModel.replaceAnswerFile("index", "blah1");
+        viewModel.ignoreChanges();
+
+        verify(mediaUtils).deleteMediaFile("blah1");
+    }
+
+    @Test
+    public void replaceAnswerFile_whenAnswerFileHasAlreadyBeenReplaced_afterRecreatingViewModel_deletesPreviousReplacement() {
+        viewModel.replaceAnswerFile("index", "blah1");
+
+        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler);
+        restoredViewModel.formLoaded(formController);
+        restoredViewModel.replaceAnswerFile("index", "blah2");
+
+        verify(mediaUtils).deleteMediaFile("blah1");
+    }
+
+    @Test
+    public void getAnswerFile_returnsFileFromInstance() {
+        File tempDir = Files.createTempDir();
+        when(formController.getInstanceFile()).thenReturn(new File(tempDir + File.separator + "instance.xml"));
+
+        File answerFile = viewModel.getAnswerFile("answer.file");
+        assertThat(answerFile, is(new File(tempDir, "answer.file")));
+    }
+
+    @Test
+    public void createAnswerFile_copiesFileToInstanceFolder_andReturnsNewName() throws Exception {
+        File tempDir = Files.createTempDir();
+        when(formController.getInstanceFile()).thenReturn(new File(tempDir + File.separator + "instance.xml"));
+
+        File externalFile = File.createTempFile("external", ".file");
+        LiveData<Result<String>> answerFile = viewModel.createAnswerFile(externalFile);
+        scheduler.runBackground();
+
+        assertThat(tempDir.listFiles().length, is(1));
+        assertThat(answerFile.getValue().getOrNull(), is(tempDir.listFiles()[0].getName()));
+    }
+
+    @Test
+    public void createAnswerFile_whenThereIsAnError_returnsNull_andSetsAnswerFileErrorToFilePath() throws Exception {
+        File tempDir = Files.createTempDir();
+        tempDir.setWritable(false);
+        when(formController.getInstanceFile()).thenReturn(new File(tempDir + File.separator + "instance.xml"));
+
+        File externalFile = File.createTempFile("external", ".file");
+        LiveData<Result<String>> answerFile = viewModel.createAnswerFile(externalFile);
+        scheduler.runBackground();
+
+        assertThat(answerFile.getValue().getOrNull(), nullValue());
+        assertThat(viewModel.getAnswerFileError().getValue(), equalTo(externalFile.getAbsolutePath()));
+    }
+
+    @Test
+    public void createAnswerFile_forSameFile_returnsSameName() throws Exception {
+        File tempDir = Files.createTempDir();
+        when(formController.getInstanceFile()).thenReturn(new File(tempDir + File.separator + "instance.xml"));
+
+        File externalFile = File.createTempFile("external", ".file");
+        LiveData<Result<String>> fileName1 = viewModel.createAnswerFile(externalFile);
+        scheduler.runBackground();
+        LiveData<Result<String>> fileName2 = viewModel.createAnswerFile(externalFile);
+        scheduler.runBackground();
+
+        assertThat(fileName1.getValue().getOrNull(), is(fileName2.getValue().getOrNull()));
+    }
+
+    //endregion
+
+    @Test
+    public void isSavingFileAnswerFile_isTrueWhenWhileIsSaving() throws Exception {
+        File tempDir = Files.createTempDir();
+        when(formController.getInstanceFile()).thenReturn(new File(tempDir + File.separator + "instance.xml"));
+
+        assertThat(viewModel.isSavingAnswerFile().getValue(), is(false));
+
+        viewModel.createAnswerFile(File.createTempFile("external", ".file"));
+        assertThat(viewModel.isSavingAnswerFile().getValue(), is(true));
+
+        scheduler.runBackground();
+        assertThat(viewModel.isSavingAnswerFile().getValue(), is(false));
     }
 
     @Test
     public void ignoreChanges_whenFormControllerNotSet_doesNothing() {
-        FormSaveViewModel viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null);
+        FormSaveViewModel viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler);
         viewModel.ignoreChanges(); // Checks nothing explodes
     }
 

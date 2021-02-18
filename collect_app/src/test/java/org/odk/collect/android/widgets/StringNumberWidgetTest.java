@@ -21,7 +21,7 @@ public class StringNumberWidgetTest extends GeneralStringWidgetTest<StringNumber
     @NonNull
     @Override
     public StringNumberWidget createWidget() {
-        return new StringNumberWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), false);
+        return new StringNumberWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride));
     }
 
     @NonNull

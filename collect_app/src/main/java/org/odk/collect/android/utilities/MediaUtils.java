@@ -14,24 +14,24 @@
 
 package org.odk.collect.android.utilities;
 
-import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.provider.MediaStore.Audio;
-import android.provider.MediaStore.Images;
-import android.provider.MediaStore.Video;
 import android.provider.OpenableColumns;
+import android.webkit.MimeTypeMap;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.apache.commons.io.IOUtils;
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.BuildConfig;
+import org.odk.collect.android.R;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.network.NetworkStateProvider;
 
@@ -42,10 +42,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.FileUtils.deleteAndReport;
 
 /**
  * Consolidate all interactions with media providers here.
@@ -59,361 +59,37 @@ import timber.log.Timber;
  * @author paulburke
  */
 public class MediaUtils {
+    private static Uri filePathUri;
 
-    protected static String escapePathForLikeSQLClause(String path) {
-        String ep = path;
-        ep = ep.replaceAll("\\!", "!!");
-        ep = ep.replaceAll("_", "!_");
-        ep = ep.replaceAll("%", "!%");
-        return ep;
+    public void deleteMediaFile(String imageFile) {
+        deleteAndReport(new File(imageFile));
     }
 
-    public static final Uri getImageUriFromMediaProvider(String imageFile) {
-        String selection = Images.ImageColumns.DATA + "=?";
-        String[] selectArgs = {imageFile};
-        String[] projection = {Images.ImageColumns._ID};
-        try (Cursor c = Collect
-                .getInstance()
-                .getContentResolver()
-                .query(Images.Media.EXTERNAL_CONTENT_URI,
-                        projection, selection, selectArgs, null)) {
-            if (c != null && c.getCount() > 0) {
-                c.moveToFirst();
-                String id = c.getString(c
-                        .getColumnIndex(Images.ImageColumns._ID));
+    public void openFile(Context context, File file) {
+        Uri fileUri = Uri.fromFile(file);
+        Uri contentUri = ContentUriProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", file);
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setDataAndType(contentUri, getMimeType(getPath(context, fileUri)));
+        FileUtils.grantFileReadPermissions(intent, contentUri, context);
 
-                return Uri
-                        .withAppendedPath(
-                                Images.Media.EXTERNAL_CONTENT_URI,
-                                id);
-            }
-            return null;
+        if (new ActivityAvailability(context).isActivityAvailable(intent)) {
+            context.startActivity(intent);
+        } else {
+            String message = context.getString(R.string.activity_not_found, context.getString(R.string.open_file));
+            ToastUtils.showLongToast(message);
+            Timber.w(message);
         }
     }
 
-    public int deleteImageFileFromMediaProvider(String imageFile) {
-        ContentResolver cr = Collect.getInstance().getContentResolver();
-        // images
-        int count = 0;
-        Cursor imageCursor = null;
-        try {
-            String select = Images.Media.DATA + "=?";
-            String[] selectArgs = {imageFile};
-
-            String[] projection = {Images.ImageColumns._ID};
-            imageCursor = cr
-                    .query(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                            projection, select, selectArgs, null);
-            if (imageCursor.getCount() > 0) {
-                imageCursor.moveToFirst();
-                List<Uri> imagesToDelete = new ArrayList<>();
-                do {
-                    String id = imageCursor.getString(imageCursor
-                            .getColumnIndex(Images.ImageColumns._ID));
-
-                    imagesToDelete
-                            .add(Uri.withAppendedPath(
-                                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                                    id));
-                } while (imageCursor.moveToNext());
-
-                for (Uri uri : imagesToDelete) {
-                    Timber.i("attempting to delete: %s", uri.toString());
-                    count += cr.delete(uri, null, null);
-                }
-            }
-        } catch (Exception e) {
-            Timber.e(e, "Unable to delete image file from media provider");
-        } finally {
-            if (imageCursor != null) {
-                imageCursor.close();
-            }
-        }
-        File f = new File(imageFile);
-        if (f.exists()) {
-            f.delete();
-        }
-        return count;
+    public String getMimeType(String url) {
+        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+        return extension != null ? MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension) : null;
     }
 
-    public static final int deleteImagesInFolderFromMediaProvider(File folder) {
-        ContentResolver cr = Collect.getInstance().getContentResolver();
-        // images
-        int count = 0;
-        Cursor imageCursor = null;
-        try {
-            String select = Images.Media.DATA + " like ? escape '!'";
-            String[] selectArgs = {escapePathForLikeSQLClause(folder.getAbsolutePath())};
-
-            String[] projection = {Images.ImageColumns._ID};
-            imageCursor = cr
-                    .query(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                            projection, select, selectArgs, null);
-            if (imageCursor.getCount() > 0) {
-                imageCursor.moveToFirst();
-                List<Uri> imagesToDelete = new ArrayList<>();
-                do {
-                    String id = imageCursor.getString(imageCursor
-                            .getColumnIndex(Images.ImageColumns._ID));
-
-                    imagesToDelete
-                            .add(Uri.withAppendedPath(
-                                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                                    id));
-                } while (imageCursor.moveToNext());
-
-                for (Uri uri : imagesToDelete) {
-                    Timber.i("attempting to delete: %s", uri.toString());
-                    count += cr.delete(uri, null, null);
-                }
-            }
-        } catch (Exception e) {
-            Timber.e(e, "Unable to delete images in folder %s", folder.getAbsoluteFile());
-        } finally {
-            if (imageCursor != null) {
-                imageCursor.close();
-            }
-        }
-        return count;
-    }
-
-    public static final Uri getAudioUriFromMediaProvider(String audioFile) {
-        String selection = Audio.AudioColumns.DATA + "=?";
-        String[] selectArgs = {audioFile};
-        String[] projection = {Audio.AudioColumns._ID};
-        Cursor c = null;
-        try {
-            c = Collect
-                    .getInstance()
-                    .getContentResolver()
-                    .query(android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                            projection, selection, selectArgs, null);
-            if (c.getCount() > 0) {
-                c.moveToFirst();
-                String id = c.getString(c
-                        .getColumnIndex(Audio.AudioColumns._ID));
-
-                return Uri
-                        .withAppendedPath(
-                                android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                                id);
-            }
-            return null;
-        } finally {
-            if (c != null) {
-                c.close();
-            }
-        }
-    }
-
-    public static final int deleteAudioFileFromMediaProvider(String audioFile) {
-        ContentResolver cr = Collect.getInstance().getContentResolver();
-        // audio
-        int count = 0;
-        Cursor audioCursor = null;
-        try {
-            String select = Audio.Media.DATA + "=?";
-            String[] selectArgs = {audioFile};
-
-            String[] projection = {Audio.AudioColumns._ID};
-            audioCursor = cr
-                    .query(android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                            projection, select, selectArgs, null);
-            if (audioCursor.getCount() > 0) {
-                audioCursor.moveToFirst();
-                List<Uri> audioToDelete = new ArrayList<>();
-                do {
-                    String id = audioCursor.getString(audioCursor
-                            .getColumnIndex(Audio.AudioColumns._ID));
-
-                    audioToDelete
-                            .add(Uri.withAppendedPath(
-                                    android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                                    id));
-                } while (audioCursor.moveToNext());
-
-                for (Uri uri : audioToDelete) {
-                    Timber.i("attempting to delete: %s", uri.toString());
-                    count += cr.delete(uri, null, null);
-                }
-            }
-        } catch (Exception e) {
-            Timber.e(e, "Unable to delete audio file %s ", audioFile);
-        } finally {
-            if (audioCursor != null) {
-                audioCursor.close();
-            }
-        }
-        File f = new File(audioFile);
-        if (f.exists()) {
-            f.delete();
-        }
-        return count;
-    }
-
-    public static final int deleteAudioInFolderFromMediaProvider(File folder) {
-        ContentResolver cr = Collect.getInstance().getContentResolver();
-        // audio
-        int count = 0;
-        Cursor audioCursor = null;
-        try {
-            String select = Audio.Media.DATA + " like ? escape '!'";
-            String[] selectArgs = {escapePathForLikeSQLClause(folder.getAbsolutePath())};
-
-            String[] projection = {Audio.AudioColumns._ID};
-            audioCursor = cr
-                    .query(android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                            projection, select, selectArgs, null);
-            if (audioCursor.getCount() > 0) {
-                audioCursor.moveToFirst();
-                List<Uri> audioToDelete = new ArrayList<>();
-                do {
-                    String id = audioCursor.getString(audioCursor
-                            .getColumnIndex(Audio.AudioColumns._ID));
-
-                    audioToDelete
-                            .add(Uri.withAppendedPath(
-                                    android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                                    id));
-                } while (audioCursor.moveToNext());
-
-                for (Uri uri : audioToDelete) {
-                    Timber.i("attempting to delete: %s", uri.toString());
-                    count += cr.delete(uri, null, null);
-                }
-            }
-        } catch (Exception e) {
-            Timber.e(e, "Unable to delete audio files in folder %s", folder.getAbsolutePath());
-        } finally {
-            if (audioCursor != null) {
-                audioCursor.close();
-            }
-        }
-        return count;
-    }
-
-    public static final Uri getVideoUriFromMediaProvider(String videoFile) {
-        String selection = Video.VideoColumns.DATA + "=?";
-        String[] selectArgs = {videoFile};
-        String[] projection = {Video.VideoColumns._ID};
-        Cursor c = null;
-        try {
-            c = Collect
-                    .getInstance()
-                    .getContentResolver()
-                    .query(android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                            projection, selection, selectArgs, null);
-            if (c.getCount() > 0) {
-                c.moveToFirst();
-                String id = c.getString(c
-                        .getColumnIndex(Video.VideoColumns._ID));
-
-                return Uri
-                        .withAppendedPath(
-                                android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                                id);
-            }
-            return null;
-        } finally {
-            if (c != null) {
-                c.close();
-            }
-        }
-    }
-
-    public static final int deleteVideoFileFromMediaProvider(String videoFile) {
-        ContentResolver cr = Collect.getInstance().getContentResolver();
-        // video
-        int count = 0;
-        Cursor videoCursor = null;
-        try {
-            String select = Video.Media.DATA + "=?";
-            String[] selectArgs = {videoFile};
-
-            String[] projection = {Video.VideoColumns._ID};
-            videoCursor = cr
-                    .query(android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                            projection, select, selectArgs, null);
-            if (videoCursor.getCount() > 0) {
-                videoCursor.moveToFirst();
-                List<Uri> videoToDelete = new ArrayList<>();
-                do {
-                    String id = videoCursor.getString(videoCursor
-                            .getColumnIndex(Video.VideoColumns._ID));
-
-                    videoToDelete
-                            .add(Uri.withAppendedPath(
-                                    android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                                    id));
-                } while (videoCursor.moveToNext());
-
-                for (Uri uri : videoToDelete) {
-                    Timber.i("attempting to delete: %s", uri.toString());
-                    count += cr.delete(uri, null, null);
-                }
-            }
-        } catch (Exception e) {
-            Timber.e(e, "Unable to delete video file %s", videoFile);
-        } finally {
-            if (videoCursor != null) {
-                videoCursor.close();
-            }
-        }
-        File f = new File(videoFile);
-        if (f.exists()) {
-            f.delete();
-        }
-        return count;
-    }
-
-    public static final int deleteVideoInFolderFromMediaProvider(File folder) {
-        ContentResolver cr = Collect.getInstance().getContentResolver();
-        // video
-        int count = 0;
-        Cursor videoCursor = null;
-        try {
-            String select = Video.Media.DATA + " like ? escape '!'";
-            String[] selectArgs = {escapePathForLikeSQLClause(folder.getAbsolutePath())};
-
-            String[] projection = {Video.VideoColumns._ID};
-            videoCursor = cr
-                    .query(android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                            projection, select, selectArgs, null);
-            if (videoCursor.getCount() > 0) {
-                videoCursor.moveToFirst();
-                List<Uri> videoToDelete = new ArrayList<>();
-                do {
-                    String id = videoCursor.getString(videoCursor
-                            .getColumnIndex(Video.VideoColumns._ID));
-
-                    videoToDelete
-                            .add(Uri.withAppendedPath(
-                                    android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                                    id));
-                } while (videoCursor.moveToNext());
-
-                for (Uri uri : videoToDelete) {
-                    Timber.i("attempting to delete: %s", uri.toString());
-                    count += cr.delete(uri, null, null);
-                }
-            }
-        } catch (Exception e) {
-            Timber.e(e, "Unable to delete video files in folder %s", folder.getAbsolutePath());
-        } finally {
-            if (videoCursor != null) {
-                videoCursor.close();
-            }
-        }
-        return count;
-    }
-
-    /**
-     * Consolidates the file path determination functionality of the various
-     * media prompts. Beginning with KitKat, the responses use a different
-     * mechanism and needs a lot of special handling.
-     */
-    public static String getPathFromUri(Context ctxt, Uri uri, String pathKey) {
-        return getPath(ctxt, uri);
+    public String getDestinationPathFromSourcePath(@NonNull String sourcePath, String instanceFolder) {
+        String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
+        return instanceFolder + File.separator + new FileUtil().getRandomFilename() + extension;
     }
 
     /**
@@ -428,7 +104,8 @@ public class MediaUtils {
      * @param uri The Uri to query.
      * @author paulburke
      */
-    public static String getPath(final Context context, final Uri uri) {
+    public String getPath(final Context context, final Uri uri) {
+        filePathUri = uri;
 
         // DocumentProvider
         if (DocumentsContract.isDocumentUri(context, uri)) {
@@ -475,7 +152,7 @@ public class MediaUtils {
 
                 // path could not be retrieved using ContentResolver, therefore copy file to accessible cache using streams
                 // https://github.com/coltoscosmin/FileUtils/blob/master/FileUtils.java
-                String fileName = getFileName(context, uri);
+                String fileName = getFileNameFromUri(context, uri);
                 File cacheDir = getDocumentCacheDir(context);
                 File file = generateFileName(fileName, cacheDir);
                 String destinationPath = null;
@@ -523,9 +200,9 @@ public class MediaUtils {
         return null;
     }
 
-    public static File getFileFromUri(final Context context, final Uri uri, String pathKey, NetworkStateProvider connectivityProvider) throws GDriveConnectionException {
+    public File getFileFromUri(final Context context, final Uri uri, NetworkStateProvider connectivityProvider) throws GDriveConnectionException {
         File file = null;
-        String filePath = getPathFromUri(context, uri, pathKey);
+        String filePath = getPath(context, uri);
         if (filePath != null) {
             file = new File(filePath);
         } else if (isGoogleDriveDocument(uri)) {
@@ -535,7 +212,7 @@ public class MediaUtils {
         return file;
     }
 
-    private static File getGoogleDriveFile(Context context, Uri uri, NetworkStateProvider connectivityProvider) throws GDriveConnectionException {
+    private File getGoogleDriveFile(Context context, Uri uri, NetworkStateProvider connectivityProvider) throws GDriveConnectionException {
         if (!connectivityProvider.isDeviceOnline()) {
             throw new GDriveConnectionException();
         }
@@ -573,7 +250,7 @@ public class MediaUtils {
      * @return Whether the Uri authority is ExternalStorageProvider.
      * @author paulburke
      */
-    public static boolean isExternalStorageDocument(Uri uri) {
+    private boolean isExternalStorageDocument(Uri uri) {
         return "com.android.externalstorage.documents".equals(uri
                 .getAuthority());
     }
@@ -583,7 +260,7 @@ public class MediaUtils {
      * @return Whether the Uri authority is DownloadsProvider.
      * @author paulburke
      */
-    public static boolean isDownloadsDocument(Uri uri) {
+    private boolean isDownloadsDocument(Uri uri) {
         return "com.android.providers.downloads.documents".equals(uri
                 .getAuthority());
     }
@@ -593,7 +270,7 @@ public class MediaUtils {
      * @return Whether the Uri authority is MediaProvider.
      * @author paulburke
      */
-    public static boolean isMediaDocument(Uri uri) {
+    private boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri
                 .getAuthority());
     }
@@ -602,7 +279,7 @@ public class MediaUtils {
      * @param uri The Uri to check.
      * @return Whether the Uri authority is Google Photos.
      */
-    public static boolean isGooglePhotosUri(Uri uri) {
+    private boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri
                 .getAuthority());
     }
@@ -611,7 +288,7 @@ public class MediaUtils {
      * @param uri The Uri to check
      * @return Whether the Uri authority is Google Drive.
      */
-    private static boolean isGoogleDriveDocument(Uri uri) {
+    private boolean isGoogleDriveDocument(Uri uri) {
         return uri.getAuthority().startsWith("com.google.android.apps.docs.storage")
                 || uri.getAuthority().startsWith("com.google.android.apps.photos.content");
     }
@@ -627,7 +304,7 @@ public class MediaUtils {
      * @return The value of the _data column, which is typically a file path.
      * @author paulburke
      */
-    public static String getDataColumn(Context context, Uri uri,
+    public String getDataColumn(Context context, Uri uri,
                                        String selection, String[] selectionArgs) {
 
         Cursor cursor = null;
@@ -642,6 +319,10 @@ public class MediaUtils {
                 final int column_index = cursor.getColumnIndexOrThrow(column);
                 return cursor.getString(column_index);
             }
+        } catch (IllegalArgumentException e) {
+            File file = new File(context.getCacheDir(), "tmp");
+            FileUtils.saveAnswerFileFromUri(filePathUri, file, context);
+            return file.getAbsolutePath();
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -650,32 +331,33 @@ public class MediaUtils {
         return null;
     }
 
-    private static String getFileName(@NonNull Context context, Uri uri) {
+    public String getFileNameFromUri(@NonNull Context context, Uri uri) {
         String mimeType = context.getContentResolver().getType(uri);
-        String filename = null;
+        String fileName = null;
 
         if (mimeType == null) {
             String path = getPath(context, uri);
             if (path == null) {
-                filename = getName(uri.toString());
+                fileName = getName(uri.toString());
             } else {
                 File file = new File(path);
-                filename = file.getName();
+                fileName = file.getName();
             }
         } else {
-            Cursor returnCursor = context.getContentResolver().query(uri, null, null, null, null);
-            if (returnCursor != null) {
-                int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                returnCursor.moveToFirst();
-                filename = returnCursor.getString(nameIndex);
-                returnCursor.close();
+            try (Cursor returnCursor = context.getContentResolver().query(uri, null, null, null, null)) {
+                if (returnCursor != null && returnCursor.moveToFirst()) {
+                    int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    if (nameIndex != -1) {
+                        fileName = returnCursor.getString(nameIndex);
+                    }
+                }
             }
         }
 
-        return filename;
+        return fileName;
     }
 
-    private static String getName(String filename) {
+    private String getName(String filename) {
         if (filename == null) {
             return null;
         }
@@ -683,7 +365,7 @@ public class MediaUtils {
         return filename.substring(index + 1);
     }
 
-    private static File getDocumentCacheDir(@NonNull Context context) {
+    private File getDocumentCacheDir(@NonNull Context context) {
         File dir = new File(context.getCacheDir(), "documents");
         if (!dir.exists()) {
             dir.mkdirs();
@@ -693,7 +375,7 @@ public class MediaUtils {
     }
 
     @Nullable
-    private static File generateFileName(@Nullable String name, File directory) {
+    private File generateFileName(@Nullable String name, File directory) {
         if (name == null) {
             return null;
         }
@@ -730,7 +412,7 @@ public class MediaUtils {
         return file;
     }
 
-    private static void saveFileFromUri(Context context, Uri uri, String destinationPath) {
+    private void saveFileFromUri(Context context, Uri uri, String destinationPath) {
         InputStream is = null;
         BufferedOutputStream bos = null;
         try {

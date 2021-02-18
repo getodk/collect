@@ -1,0 +1,536 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data">Udfyld tom formular</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data_button">Udfyld blank formular</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="review_data">Redigér gemt formular</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="review_data_button">Redigér gemt formular (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="send_data">Gem færdiggjort formular</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="send_data_button">Upload færdiggjort formular (1%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="view_sent_forms">Inspicér afsendt formular</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="view_sent_forms_button">Inpicér afsendt formular (1%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="get_forms">Hent tom formular</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="manage_files">Slet gemt formular</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="added_on_date_at_time">\'Tilføjet til\' EEE, MMM dd, yyyy \'kl\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="saved_on_date_at_time">\'Gemt på\' EEE, MMM dd, yyyy \'kl\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="finalized_on_date_at_time">\'Afsluttet på\' EEE, MMM dd, yyyy \'kl\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sent_on_date_at_time">\'Sendt på\' EEE, MMM dd, yyyy \'kl\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sending_failed_on_date_at_time">\'Sending mislykkedes til\' EEE, MMM dd, yyyy \'kl\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="deleted_on_date_at_time">\'Slettet på\' EEE, MMM dd, yyyy \'kl\' HH:mm</string>
+  <string name="submission_deleted">Indberetning slettet</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sort_the_list">Sortér liste</string>
+  <string name="sort_by_name_asc">Navn, A-Z</string>
+  <string name="sort_by_name_desc">Navn, A-Z</string>
+  <string name="sort_by_date_asc">Dato - nyeste først</string>
+  <string name="sort_by_date_desc">Dato - ældste først</string>
+  <string name="sort_by_status_asc">Status - færdiggjorte først</string>
+  <string name="sort_by_status_desc">Status - ikke-færdiggjorte først</string>
+  <string name="filter_the_list">Filtrér liste</string>
+  <!--Displayed in search boxes for form lists or question types that involve search-->
+  <string name="search">Søg</string>
+  <string name="no_items_display">Intet tilgængeligt at vise</string>
+  <string name="no_items_display_forms">Intet tilgængeligt at vise. \n\n Prøv at hent og udfyld en tom formular.</string>
+  <string name="no_items_display_sent_forms">Intet tilgængeligt at vise. \n\n Prøv upload færdigudfyldt formular før den er gennemset.</string>
+  <string name="no_items_display_instances">Intet tilgængeligt at vise. \n\n Prøv at færdiggøre gemte formularer før upload.</string>
+  <!--##############################################
+    # FILL BLANK FORM
+    ##############################################-->
+  <string name="finished_disk_scan">Skanning fuldendt. Alle formularer hentet.</string>
+  <string name="xform_parse_error">XForm-læsefejl for 1%1$s: 2%2$s mangler eller er invalid </string>
+  <string name="loading_form">Henter formular</string>
+  <string name="survey_loading_reading_data_message">Læser undersøgelsesdata…</string>
+  <string name="survey_loading_reading_csv_message">Læser CSV-filer…</string>
+  <string name="parse_error">Ikke muligt at læse formular</string>
+  <string name="cannot_edit_completed_form">Formularen kan ikke ændres når den er markeret som endelig. Formularen er muligvis krypteret</string>
+  <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
+  <string name="savepoint_used">Ikke-gemte ændringer genskabt fra gendannelsespunkt.</string>
+  <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
+  <string name="change_language">Skift sprog</string>
+  <!--Text for button displayed in the form filling menu to see the form's table of contents-->
+  <string name="view_hierarchy">Gå til prompt</string>
+  <!--Text for button displayed in the form filling menu to save the form-->
+  <string name="save_all_answers">Gem formular</string>
+  <!--Text of button from the form's table of contents to jump to the beginning of the form-->
+  <string name="jump_to_beginning">Gå til start</string>
+  <!--Text of button from the form's table of contents to jump to the end of the form-->
+  <string name="jump_to_end">Gå til slutning</string>
+  <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
+  <string name="jump_to_previous">Gå op</string>
+  <!--Displayed below group names in a form's table of contents-->
+  <string name="group_label">Gruppe</string>
+  <!--Displayed below repeat names in a form's table of contents-->
+  <string name="repeatable_group_label">Gentagelig gruppe</string>
+  <string name="exit">Forlad</string>
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <string name="add_repeat_question">Tilføj \"1%s \"?l</string>
+  <string name="add_repeat">Tilføj</string>
+  <string name="dont_add_repeat">Undlad at tilføje</string>
+  <string name="add_another_menu">Tilføj anden</string>
+  <!--Title of overlay menu displayed when long pressing on a question in a form-->
+  <string name="edit_prompt">Rediger prompt</string>
+  <string name="clearanswer_confirm">Fjern indmelding til \"1%s \"?</string>
+  <string name="clear_answer">Fjern input</string>
+  <string name="clear_answer_ask">Fjern inputtet</string>
+  <string name="clear_answer_no">Afbryd</string>
+  <string name="discard_answer">Fjern input</string>
+  <string name="discard_group">Fjern gruppe</string>
+  <string name="delete_repeat">Fjern gruppe</string>
+  <string name="delete_repeat_ask">Vil du fjerne gruppen?</string>
+  <string name="delete_repeat_confirm">Vil du fjerne gruppe \"1%s\" og dens undergrupper?</string>
+  <string name="delete_repeat_no">Afbryd</string>
+  <string name="invalid_answer_error"> Opfylder ikke svarmuligheder</string>
+  <string name="required_answer_error">Skal udfyldes</string>
+  <string name="invalid_space_in_answer_singular">OBS! Indtastede værdi 1%s har mellemrum</string>
+  <string name="invalid_space_in_answer_plural">OBS! Indtastede værdier 1 %s har mellemrum</string>
+  <string name="save_enter_data_description">Du er ved slutningen af %s.</string>
+  <string name="save_form_as">Navngiv formular</string>
+  <string name="save_as_error">Den gemte titel må ikke være tom - skal hedde noget.</string>
+  <string name="mark_finished">Markér form som færdiggjort</string>
+  <string name="quit_entry">Gem formular og afslut</string>
+  <string name="data_saved_error">Formularen kunne ikke gemmes</string>
+  <string name="data_saved_ok">Formular gemt </string>
+  <string name="save_point_error">Kunne ikke gemme gendannelsespunkt: %s</string>
+  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <string name="quit_application">Afslut 1%s</string>
+  <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="do_not_save">Ignorér ændringer</string>
+  <string name="keep_changes">Gem ændringer</string>
+  <string name="saving_form">Gemmer formular</string>
+  <string name="survey_saving_validating_message">Validerer svar…</string>
+  <string name="survey_saving_collecting_message">Indsamler data…</string>
+  <string name="survey_saving_saving_message">Gemmer på SD-kort…</string>
+  <string name="survey_saving_encrypting_message">Krypterer data…</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <!--Text displayed when audio recording fails to start-->
+  <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <!--Error message displayed when copying media from a temporary directory fails-->
+  <!--##############################################
+    # FORM FEATURES
+    ##############################################-->
+  <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
+  <string name="launch_app">Start</string>
+  <string name="activity_not_found">Ingen aktivitet at handle på 1%s</string>
+  <string name="no_app">Den efterspurgte applikation mangler. Prøv manuelt at tilgå den.</string>
+  <string name="launch_printer">Start udprint</string>
+  <string name="no_printer">Den valgte printer er ikke installeret. Sørg for at få den installeret først.</string>
+  <string name="open_url">Åbn webadresse</string>
+  <string name="capture_osm">Åbn OpenMapKit</string>
+  <string name="recapture_osm">Omgør OSM-tagging</string>
+  <string name="alert">Advarsel</string>
+  <string name="install_openmapkit">Installer venligst OpenMapKit!</string>
+  <string name="get_barcode">Hent stregkode</string>
+  <string name="replace_barcode">Erstat stregkode</string>
+  <string name="open_file">Åben fil</string>
+  <string name="capture_image">Tag billede</string>
+  <string name="choose_image">Vælg billede</string>
+  <string name="view_image">Vis billede</string>
+  <string name="error_front_camera_unavailable">Frontkamera er ikke tilgængeligt på dette device</string>
+  <string name="annotate_image">Kommentér billede</string>
+  <!--Dialog heading for saving annotated image-->
+  <string name="save_and_close">Gem og luk</string>
+  <string name="signature_capture">Underskrift</string>
+  <string name="sign_button">T</string>
+  <string name="reset_image">Nulstil</string>
+  <string name="set_color">Definér farve</string>
+  <string name="capture_video">Optag video</string>
+  <string name="choose_video">Vælg video</string>
+  <string name="view_video">Vis video</string>
+  <string name="play_video">Afspil video</string>
+  <string name="choose_file">Vælg fil</string>
+  <!--Text for button that deletes a file that is the answer to a question-->
+  <!--Text for button that starts recording sound-->
+  <string name="capture_audio">Optag lyd</string>
+  <!--Text for button that lets the user choose a sound file on their device-->
+  <string name="choose_sound">Vælg lyd</string>
+  <!--Description text for button that that pauses recording sound-->
+  <!--Description text for button that that resumes recording sound-->
+  <!--Title for dialog asking the user if they want to delete a file-->
+  <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="error_attaching_binary_file">Fejl opstod ved upload af af medie: 1%s</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="select_answer">Vælg svarmulighed</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="selected">Valgt:</string>
+  <string name="trigger">Fortsæt</string>
+  <string name="ext_file_no_data_error">Filen indeholder intet data.</string>
+  <string name="ext_conflicting_columns_error">Kolonner 1%s stemmer overens</string>
+  <string name="ext_sortBy_numeric_error">Din sorteringskolonne bør kun indeholde numeriske værdier. Der er konflikt på \'%s \' </string>
+  <string name="ext_search_wrong_arguments_error">Indtastningsfejl i funktionen search(): Funktionen kræver 1, 4 eller 6 \"arguments\".</string>
+  <string name="ext_search_wrong_function_error">Indtastningsfejl i funktionen search(): Ukendt function \'%s\'</string>
+  <string name="ext_search_bad_function_error">Indtastningsfejl i funktionen search():%s blev ikke evalueret som en funktion.</string>
+  <string name="ext_search_return_error">Søgeværktøjet returnerede med et objekt af typen \'%s\'.</string>
+  <string name="ext_import_generic_error">Kunne ikke importere data fra%1$s.  Forklaring: %2$s</string>
+  <string name="ext_import_progress_message">Forudindlæser data fra\' %1$s\'.  Vent venligst… %2$s.</string>
+  <string name="ext_import_cancelled_message">Læsning af data afbrudt.</string>
+  <string name="ext_import_finalizing_message">Færdiggører forudindlæst data…</string>
+  <string name="ext_import_completed_message">Læsning af data gennemført.</string>
+  <string name="ext_import_csv_missing_error">Eksternt data for %1$s blev ikke importeret. Måske har du glemt at tilføje %2$s.csv-filen til din fomular?</string>
+  <string name="ext_search_generic_error">Indtastningsfejl i search()-funktion: %s</string>
+  <string name="select_date">Vælg dato</string>
+  <string name="select_time">Vælg tidspunkt</string>
+  <string name="no_date_selected">Ingen dato valgt</string>
+  <string name="no_time_selected">Intet tidspunkt valgt</string>
+  <string name="ethiopian_month_1">Meskerem</string>
+  <string name="ethiopian_month_2">Tikimt</string>
+  <string name="ethiopian_month_3">Hidar</string>
+  <string name="ethiopian_month_4">Tahsas</string>
+  <string name="ethiopian_month_5">Tir</string>
+  <string name="ethiopian_month_6">Yekatit</string>
+  <string name="ethiopian_month_7">Megabit</string>
+  <string name="ethiopian_month_8">Miazia</string>
+  <string name="persian_month_4">Tir</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
+  <string name="file_invalid">Fil 1%s er ugyldig </string>
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
+  <string name="file_missing">Fil 1%s mangler </string>
+  <!--Heading for a dialog which prompts the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Explanation for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Action to close a full screen dialog-->
+  <string name="close">Luk</string>
+  <!--Heading for a dialog which prompts the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Action to save the contents of a full screen dialog-->
+  <string name="save">Gem</string>
+  <!--##############################################
+    # GEO
+    ##############################################-->
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+   These strings are only being used to preserve compatibility with pre-existing
+    tile caches, and are not shown in the UI.-->
+  <string name="openmap_stamen_terrain">Stamen Terræn</string>
+  <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
+  <string name="basemap">Basemap</string>
+  <string name="basemap_source">Kilde</string>
+  <string name="streets">Gader</string>
+  <string name="terrain">Terræn</string>
+  <string name="hybrid">Hybrid</string>
+  <string name="satellite">Satellit</string>
+  <string name="light">Lys</string>
+  <string name="dark">Mørk</string>
+  <string name="outdoors">Udendørs</string>
+  <string name="topographic">Topografisk</string>
+  <string name="carto_map_style_positron">Positron</string>
+  <string name="reference_layer">Referencelag</string>
+  <string name="view_change_location">Se eller skift lokalitet</string>
+  <string name="change_location">Skift position</string>
+  <string name="location_accuracy">Præcision: 1%1$s m</string>
+  <string name="location_provider">Lokalitetsudbyder: 1%s</string>
+  <string name="getting_location">Finder lokation</string>
+  <string name="get_location">Gem lokation</string>
+  <string name="provider_disabled_error">Geolokation er slået fra</string>
+  <!--Action to go to Android settings. Displayed when location providers are disabled.-->
+  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
+  <string name="save_point">Gem GeoPoint</string>
+  <string name="get_point">Start GeoPoint</string>
+  <string name="geopoint_view_read_only">Vis GeoPoint</string>
+  <string name="geoshape_view_read_only">Vis GeoShape</string>
+  <string name="geotrace_view_read_only">Vis GeoTrace</string>
+  <string name="get_shape">Start GeoShape</string>
+  <string name="get_trace">Start GeoTrace</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <string name="west">V %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <string name="east">Ø %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <string name="south">S %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="north">N %1$s%2$s%3$s</string>
+  <string name="geoshape_title">GeoShape</string>
+  <string name="input_method">Inputmetode</string>
+  <string name="start">Start</string>
+  <string name="enable_gps">Tænd GPS</string>
+  <string name="geotrace_title">GeoTrace</string>
+  <string name="gps_enable_message">GPS er slukket på dit udstyr. Har du lyst til at tænde den?</string>
+  <string name="geo_clear_warning">Funktion allerede oprettet. Vil du fjerne funktionen?</string>
+  <string name="geo_exit_warning">Fortryd ændringer og returnér til ODK?</string>
+  <string name="polygon_validator">Du skal have mindst 3 punkter for at lave et polygon</string>
+  <string name="polyline_validator">Du skal have mindst 2 punkter for at lave en polylinje</string>
+  <string name="clear">Ryd</string>
+  <string name="placement_mode">Placering ved tapping</string>
+  <string name="manual_mode">Manuel optagelse af lokation</string>
+  <string name="automatic_mode">Automatisk optagelse af lokation</string>
+  <string name="recording_interval">Optagelsesinterval:</string>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <plurals name="number_of_seconds">
+    <item quantity="one">%d sekunder</item>
+    <item quantity="other">%d sekunder</item>
+  </plurals>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <plurals name="number_of_minutes">
+    <item quantity="one">%d minutter</item>
+    <item quantity="other">%d minutter</item>
+  </plurals>
+  <string name="accuracy_requirement">Nødvendig præcision:</string>
+  <string name="none">Ingen</string>
+  <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
+  <plurals name="number_of_meters">
+    <item quantity="one">%d meter</item>
+    <item quantity="other">%d meter</item>
+  </plurals>
+  <string name="location_status_searching">Søger efter lokation, vent venligst…</string>
+  <string name="location_status_accuracy">Lokations nøjagtighed: %.2f m</string>
+  <string name="location_status_acceptable">Lokations nøjagtighed: %.2f m (acceptabel)</string>
+  <string name="location_status_unacceptable">Lokations nøjagtighed: %.2f m (uacceptabel)</string>
+  <string name="collection_status_paused">Punkter indtastet: %d</string>
+  <string name="collection_status_placement">Punkter indtastet: %d(Tryk for at placere punkter)</string>
+  <string name="collection_status_manual">Punkter indtastet: %d(manuel optagelse)</string>
+  <string name="collection_status_auto_seconds">Punkter indtastet: %1$d(optager hver %2$dsekund)</string>
+  <string name="discard">Kassér</string>
+  <string name="geoshape_view_change_location">Gennemse eller ændr´ GeoShape</string>
+  <!--Name of an action button-->
+  <string name="view_data">Inpicér gemt formular</string>
+  <!--##############################################
+    # SEND FINALIZED FORM
+    ##############################################-->
+  <string name="uploading_data">Uploader formular</string>
+  <string name="noselect_error">Du har ikke valgt nogle formularer</string>
+  <string name="no_connection">Ingen netværksforbindelse tilgængelig</string>
+  <string name="sending_items">Uploader %1$s af %2$s formularer</string>
+  <string name="send_selected_data">Upload valgte</string>
+  <string name="server_auth_credentials">Invalid brugernavn eller adgangskode til server: %s</string>
+  <string name="server_requires_auth">Server kræver identifikation</string>
+  <string name="no_forms_uploaded">Ingen formular blev uploaded</string>
+  <string name="upload_results">Upload-resultater</string>
+  <!--Name of option in Send Finalized Form menu to show only unsent forms (default) or show sent and unsent forms-->
+  <string name="change_view">Skift vinkel</string>
+  <string name="show_sent_and_unsent_forms">Vis afsendte(uploadede) og ikke-afsendte formularer</string>
+  <string name="show_unsent_forms">Vis ikke-afsendte formularer</string>
+  <string name="media_upload_error">Felde ved upload af mediefiler der ikke eksisterer: %1$s</string>
+  <string name="odk_permissions_fail">ODK auto-afsending fejlede. Tjek om du har givet alle nødvendige tilladelser.</string>
+  <string name="odk_auto_note">ODK resultater, autoafsendelse</string>
+  <string name="odk_auto_download_notification_title">ODK, resultater auto-download</string>
+  <string name="notification_error">Fejl ved visning af af notifikationstekst.</string>
+  <!--##############################################
+    # GET BLANK FORM
+    ##############################################-->
+  <string name="refresh">Opdatér</string>
+  <string name="download">Hent valgte</string>
+  <string name="download_forms_result">Hent resultater</string>
+  <string name="downloading_data">Forbinder til server</string>
+  <string name="fetching_file">Henter 1 %1$s. Formular 2%2$s af 3%3$s formularer. </string>
+  <string name="form_download_progress">1%1$s. Henter mediefiler: 2%2$s af 3%3$s</string>
+  <string name="version">Version:</string>
+  <string name="load_remote_form_error">Hentning af formular-oversigt fejlede</string>
+  <!--##############################################
+    # DELETE SAVED FORM
+    ##############################################-->
+  <!--Title of a section in "Delete Saved Forms" for deleting filled/saved forms (as opposed to blank forms)-->
+  <string name="data">Gemte formularer</string>
+  <!--Title of a section in "Delete Saved Forms" for deleting blank forms (as opposed to filled/saved forms)-->
+  <string name="forms">Ikke-udfyldte(tomme) skabeloner</string>
+  <string name="delete_confirm">Slet 1%s formular(er)?</string>
+  <string name="delete_file">Slet valgte</string>
+  <string name="delete_no">Undlad at slette</string>
+  <string name="delete_yes">Fjern formularer</string>
+  <string name="file_deleted_error">Desværre, 1%1$s af 2%2$s valgte formularer fejlede ved sletning  </string>
+  <string name="file_deleted_ok">1%s formular slettet </string>
+  <string name="file_delete_in_progress">Der er allerede en sletning af formular i gang</string>
+  <!--##############################################
+    # GENERAL SETTINGS
+    ##############################################-->
+  <string name="general_preferences">Generelle Indstilinger</string>
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <string name="client">Brugergrænseflade</string>
+  <!--Title of a settings section-->
+  <string name="maps">Kort</string>
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section only available in beta or development builds.-->
+  <string name="server_preferences">Serverindstilinger</string>
+  <!--Label for server type setting-->
+  <string name="server_url">Webadresse</string>
+  <!--Title of dialog for configuring server URL-->
+  <string name="change_server_url">Serveradresse</string>
+  <string name="url_error">Invalid webadresse</string>
+  <string name="username">Brugernavn</string>
+  <string name="change_username">ODK brugernavn</string>
+  <string name="password">Adgangskode</string>
+  <string name="change_password">ODK kodeord</string>
+  <string name="change_formlist_url">Sti til formularoverblik(tilføjet til webadresse) </string>
+  <string name="change_submission_url">Stil til indberetningsdata (tilføjet til webadresse)</string>
+  <string name="formlist_url">Sti til formularoverblik</string>
+  <string name="submission_url">Sti til indberetningsdata</string>
+  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
+  <string name="selected_google_account_text">Google-konto</string>
+  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
+  <!--Description for Fallback submission URL setting-->
+  <string name="google_sheets_url_hint">Formularer skal definere en webadresse til til indberetninger. Hvis ikke den bliver defineret , vil denne webadresse blive anvendt.</string>
+  <string name="app_theme">Tema</string>
+  <string name="theme_light">Lyst tema</string>
+  <string name="theme_dark">Mørkt tema</string>
+  <string name="language">Sprog</string>
+  <string name="font_size">Skriftstørrelse</string>
+  <string name="change_font_size">Skriftstørrelse</string>
+  <string name="font_size_extra_large">Ekstra stor</string>
+  <string name="font_size_large">Stor</string>
+  <string name="font_size_medium">Medium</string>
+  <string name="font_size_small">Lille</string>
+  <string name="font_size_extra_small">Ekstra lille</string>
+  <string name="navigation">Navigation</string>
+  <string name="swipe_navigation">Anvend horisontal swipe</string>
+  <string name="buttons_navigation">Anvend tilbage- og frem-knapper</string>
+  <string name="swipe_buttons_navigation">Anvend swipes og knapper</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="form_forward">Næste</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="form_backward">Tilbage</string>
+  <string name="show_splash_summary">Vises når applikationen starter</string>
+  <string name="default_splash_path">ODK Standardopsætning</string>
+  <string name="select_another_image">Vælg et andet billede</string>
+  <string name="use_odk_default">Benyt standard billede</string>
+  <string name="change_splash_path">Udskift billede</string>
+  <!--Heading for the settings category about updating blank forms-->
+  <!--Name of the setting that defines how blank forms are updated from the server.-->
+  <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
+  <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
+  <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
+  <!--Name of the setting that defines how often blank forms are updated from the server.-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_fifteen_minutes">Hver 15 minutter</string>
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_one_hour">Hver time</string>
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_six_hours">Hver sjette time</string>
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_24_hours">Hver 24. time</string>
+  <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
+  <string name="automatic_download">Automatisk download</string>
+  <string name="autosend_selector_title">Auto-send</string>
+  <string name="autosend">Auto-send</string>
+  <string name="delete_after_send">Slet efter afsendelse</string>
+  <string name="delete_after_send_summary">Sletter færdiggjorte formularer og tilhørende mediefiler efter afsendelse til server.</string>
+  <string name="default_completed">Standard til færdigjort</string>
+  <string name="default_completed_summary">Markér formularen afsluttet som standard.</string>
+  <string name="constraint_behavior_on_swipe">Validér ved brug af fremad-swipe</string>
+  <string name="constraint_behavior_on_finalize">Udsæt validering indtil færdiggørelsen</string>
+  <string name="high_resolution_summary">Aktivér højt-opløselige video-indstillnger</string>
+  <string name="image_size_title">Billedstørrelse</string>
+  <string name="image_size_large">Stor (3072px)</string>
+  <string name="image_size_medium">Mellem (2048px)</string>
+  <string name="image_size_small">Lille (1024px)</string>
+  <string name="image_size_very_small">Meget lille (640px)</string>
+  <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
+  <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <string name="analytics_preferences">Brugerdata</string>
+  <string name="form_metadata_title">Metadata(formular)</string>
+  <string name="form_metadata">Metadata(formular)</string>
+  <string name="form_metadata_summary">Disse værdier vil blive tilføjet til formularer der har brugernavn, email og/eller telefonnr. til ved forudindlæste felter for at identificere inventøreren.</string>
+  <string name="user_defined">Brugerdefineret</string>
+  <string name="phone_number">Telefonnummer</string>
+  <string name="email">Mailadresse</string>
+  <string name="device_defined">Defineret af enhed</string>
+  <!--Displayed when a device property such as the phone number is not available-->
+  <!--##############################################
+     # ADMIN SETTINGS
+     ##############################################-->
+  <string name="admin_preferences">Administrationsindstillinger</string>
+  <string name="admin_access_settings">Tryk for adgang til administrationsindstillinger</string>
+  <string name="enter_new_password">Angiv ny adgangskode</string>
+  <string name="admin_password">Administrator-adgangskode</string>
+  <string name="admin_password_changed">Administrator-adgangskode ændret</string>
+  <string name="admin_password_disabled">Administrator-adgangskode deaktiveret</string>
+  <string name="admin_password_incorrect">Adgangskode ikke korrekt</string>
+  <string name="enter_admin_password">Angiv administrator-adgangskode</string>
+  <string name="change_admin_password">Skift administrator-adgangskode</string>
+  <string name="show_password">Vis kodeord</string>
+  <string name="found_in_main">Fjern markering for at skjule fra hovedmenu </string>
+  <string name="found_in_settings">Fjern markering for at skjule fra Generelle indstillinger</string>
+  <string name="reset_settings_dialog">Nulstil applikation…</string>
+  <string name="select_all">Vælg alle</string>
+  <string name="clear_all">Ryd alle</string>
+  <string name="reset_settings_button_reset">Nulstil</string>
+  <string name="reset_in_progress">Nulstiller…</string>
+  <string name="user_settings">Brugerindstillinger</string>
+  <!--Name of a setting that determines whether users can navigate backwards in a form-->
+  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <string name="save_mid">Gem formular</string>
+  <!--##############################################
+     # GOOGLE DRIVE, GOOGLE SHEETS
+     ##############################################-->
+  <!--Title of the screen that lists forms in user's Google Drive-->
+  <string name="go_drive">Mit Drev (Google Drive)</string>
+  <!--Title of the screen that lists forms shared with Google Drive user-->
+  <string name="go_shared">Delt med mig</string>
+  <!--Button for navigating across Google Drive folders-->
+  <string name="download_selected">Download valgte</string>
+  <string name="go_back">Gå tilbage</string>
+  <string name="google_auth_io_exception_msg">Ikke muligt at foretage API-kald. Hvis du kører med en lokal deployment, læs da projekt \"readme\".</string>
+  <string name="reading_files">Læser filer</string>
+  <string name="drive_get_file">Henter%1$s og mediefiler.</string>
+  <string name="no_google_account">Ingen Google-konto valgt.</string>
+  <string name="google_set_account">Du har valgt Google Sheets som din server. Vælg tilsvarende Google-konto under \"Generelle indstllinger\" før du fortsætter.</string>
+  <string name="google_search_browse">Søg efter formularer. Eller vælg \"My Drive/Mit Drev\" herunder for at gennemse.</string>
+  <string name="invalid_sheet_id">Invalid sheet id: %1$s</string>
+  <string name="missing_submission_url">Mangler indberetningsadresse</string>
+  <string name="google_sheets_access_denied">Adgang ikke tilladt. Tjek om ejeren af regnearket/spreadsheet har givet dig editerings-rettigheder.</string>
+  <string name="google_sheets_missing_columns">Regnearket mangler følgende kolonner: %1$s</string>
+  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
+  <!--##############################################
+     # ABOUT
+     ##############################################-->
+  <string name="about_preferences">Om</string>
+  <string name="tell_your_friends">Del ODK Collect</string>
+  <string name="odk_website">Besøg ODK websiden</string>
+  <string name="all_open_source_licenses">Open source biblioteker/licenser</string>
+  <string name="all_open_source_licenses_msg">Vi står på skuldrene af giganter!</string>
+  <!--##############################################
+     # SETTINGS IMPORT
+     ##############################################-->
+  <string name="scan_qr_code_fragment_title">Scan</string>
+  <string name="view_qr_code_fragment_title">QR kode</string>
+  <string name="share">Del</string>
+  <!--##############################################
+     # SCOPED STORAGE MIGRATION
+     ##############################################-->
+  <string name="storage_migration_more_details">Flere detaljer</string>
+  <string name="try_again">Prøv igen</string>
+  <!--Action to begin a storage migration-->
+  <string name="error">Fejl:</string>
+  <!--##############################################
+     # MISC
+     ##############################################-->
+  <string name="ok">OK</string>
+  <!--Used in many dialogs to dismiss the dialog without taking any action-->
+  <string name="cancel">Afbryd</string>
+  <string name="cancel_loading_form">Afbryd</string>
+  <string name="cancel_location">Afbryd</string>
+  <string name="do_not_change">Afbryd</string>
+  <string name="do_not_exit">Afbryd</string>
+  <string name="canceling">Afbryder</string>
+  <string name="success">Voila!</string>
+  <string name="failures">Fejl</string>
+  <string name="error_occured">Der opstod en fejl</string>
+  <string name="please_wait">Vent et øjeblik</string>
+  <string name="please_wait_long">Vent et øjeblik. Det kan vare et par minutter.</string>
+  <string name="sdcard_unmounted">Collect kan ikke tilgå SD-kort. Måske er det tilsluttet vha. USB? (Aktuel tilstand: 1%s) </string>
+  <string name="survey_multiple_forms_error">Du har downloadet to forskellige formularer med samme formular-id og version. Måske var de den samme form, der blev uploadet på forskellige tidspunkter eller til forskellige servere. Under alle omstændigheder skal du slette en.</string>
+</resources>

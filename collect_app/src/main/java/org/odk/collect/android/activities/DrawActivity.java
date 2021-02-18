@@ -152,9 +152,9 @@ public class DrawActivity extends CollectAbstractActivity {
         if (extras == null) {
             loadOption = OPTION_DRAW;
             refImage = null;
-            savepointImage = new File(storagePathProvider.getTmpDrawFilePath());
+            savepointImage = new File(storagePathProvider.getTmpImageFilePath());
             savepointImage.delete();
-            output = new File(storagePathProvider.getTmpFilePath());
+            output = new File(storagePathProvider.getTmpImageFilePath());
         } else {
             if (extras.getInt(SCREEN_ORIENTATION) == 1) {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -176,7 +176,7 @@ public class DrawActivity extends CollectAbstractActivity {
                     FileUtils.copyFile(refImage, savepointImage);
                 }
             } else {
-                savepointImage = new File(storagePathProvider.getTmpDrawFilePath());
+                savepointImage = new File(storagePathProvider.getTmpImageFilePath());
                 savepointImage.delete();
                 if (refImage != null && refImage.exists()) {
                     FileUtils.copyFile(refImage, savepointImage);
@@ -186,7 +186,7 @@ public class DrawActivity extends CollectAbstractActivity {
             if (uri != null) {
                 output = new File(uri.getPath());
             } else {
-                output = new File(storagePathProvider.getTmpFilePath());
+                output = new File(storagePathProvider.getTmpImageFilePath());
             }
         }
 

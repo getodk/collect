@@ -9,7 +9,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -47,11 +46,11 @@ public class QRCodeScannerFragment extends BarCodeScannerFragment {
         String settingsHash = FileUtils.getMd5Hash(new ByteArrayInputStream(result.getText().getBytes()));
 
         if (importSuccess) {
-            ToastUtils.showLongToast(Collect.getInstance().getString(R.string.successfully_imported_settings));
+            ToastUtils.showLongToast(getString(R.string.successfully_imported_settings));
             analytics.logEvent(AnalyticsEvents.SETTINGS_IMPORT_QR, "Success", settingsHash);
             startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity.class);
         } else {
-            ToastUtils.showLongToast(Collect.getInstance().getString(R.string.invalid_qrcode));
+            ToastUtils.showLongToast(getString(R.string.invalid_qrcode));
             analytics.logEvent(AnalyticsEvents.SETTINGS_IMPORT_QR, "No valid settings", settingsHash);
         }
     }

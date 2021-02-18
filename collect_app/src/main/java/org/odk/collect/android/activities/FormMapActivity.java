@@ -104,10 +104,11 @@ public class FormMapActivity extends BaseGeoMapActivity {
         List<Form> forms = dao.getFormsFromCursor(dao.getFormsCursor(getIntent().getData()));
         if (forms.size() == 1) {
             form = forms.get(0);
-        } else {
+        } else if (viewModelFactory == null) {
             // This shouldn't be possible because the instance URI had to be used in the calling
             // activity but it has been logged to Crashlytics.
             finish();
+            return;
         }
 
         if (viewModelFactory == null) { // tests set their factories directly

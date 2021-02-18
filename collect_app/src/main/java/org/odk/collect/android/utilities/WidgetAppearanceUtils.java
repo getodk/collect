@@ -16,7 +16,6 @@
 
 package org.odk.collect.android.utilities;
 
-import android.content.Context;
 import android.content.res.Configuration;
 
 import org.javarosa.form.api.FormEntryPrompt;
@@ -25,6 +24,7 @@ import org.odk.collect.android.external.ExternalDataUtil;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
+
 import timber.log.Timber;
 
 public class WidgetAppearanceUtils {
@@ -113,7 +113,7 @@ public class WidgetAppearanceUtils {
     appearance (compact-n for backwards compatibility), that number is determined from the n in the
     appearance string. For columns (without any number), this is determined by the device screen size.
      */
-    public static int getNumberOfColumns(FormEntryPrompt formEntryPrompt, Context context) {
+    public static int getNumberOfColumns(FormEntryPrompt formEntryPrompt, ScreenUtils screenUtils) {
         int numColumns = 1;
         String appearance = getSanitizedAppearanceHint(formEntryPrompt);
         if (appearance.contains(COLUMNS_N) || appearance.contains(COMPACT_N)) {
@@ -140,7 +140,7 @@ public class WidgetAppearanceUtils {
                 Timber.e(EXCEPTION_PARSING_COLUMNS);
             }
         } else if (appearance.contains(COLUMNS)) {
-            switch (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) {
+            switch (screenUtils.getScreenSizeConfiguration()) {
                 case Configuration.SCREENLAYOUT_SIZE_SMALL:
                     numColumns = 2;
                     break;
@@ -169,15 +169,19 @@ public class WidgetAppearanceUtils {
     }
 
     public static boolean useThousandSeparator(FormEntryPrompt prompt) {
-        return getSanitizedAppearanceHint(prompt).contains(WidgetAppearanceUtils.THOUSANDS_SEP);
+        return getSanitizedAppearanceHint(prompt).contains(THOUSANDS_SEP);
+    }
+
+    public static boolean isFrontCameraAppearance(FormEntryPrompt prompt) {
+        String appearance = getSanitizedAppearanceHint(prompt);
+        return appearance.contains(FRONT) || appearance.contains(NEW_FRONT) || appearance.contains(SELFIE);
     }
 
     public static boolean isFlexAppearance(FormEntryPrompt prompt) {
         String appearance = getSanitizedAppearanceHint(prompt);
 
-        return !appearance.startsWith(WidgetAppearanceUtils.COMPACT_N) && (appearance.startsWith(WidgetAppearanceUtils.COMPACT)
-                || appearance.startsWith(WidgetAppearanceUtils.QUICKCOMPACT)
-                || appearance.startsWith(WidgetAppearanceUtils.COLUMNS_PACK));
+        return !appearance.contains(COMPACT_N) && (appearance.contains(COMPACT)
+                || appearance.contains(QUICKCOMPACT) || appearance.contains(COLUMNS_PACK));
     }
 
     public static boolean isAutocomplete(FormEntryPrompt prompt) {

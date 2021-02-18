@@ -18,47 +18,87 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.material.slider.Slider;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.views.TrackingTouchSlider;
+import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
+
+import java.math.BigDecimal;
 
 @SuppressLint("ViewConstructor")
-public class RangeIntegerWidget extends RangeWidget {
+public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChangeListener {
+    TrackingTouchSlider slider;
+    TextView currentValue;
+
+    private int visibleThumbRadius;
 
     public RangeIntegerWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
     }
 
     @Override
-    public IAnswerData getAnswer() {
-        return actualValue == null ? null : new IntegerData(actualValue.intValue());
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+        RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.setUpLayoutElements(context, prompt);
+        slider = layoutElements.getSlider();
+        currentValue = layoutElements.getCurrentValue();
+
+        visibleThumbRadius = slider.getThumbRadius();
+        setUpActualValueLabel(RangeWidgetUtils.setUpSlider(prompt, slider, true));
+
+        if (slider.isEnabled()) {
+            slider.addOnChangeListener(this);
+        }
+        return layoutElements.getAnswerView();
     }
 
     @Override
-    protected void setUpActualValueLabel() {
-        String value = actualValue != null ? String.valueOf(actualValue.intValue()) : "";
+    public IAnswerData getAnswer() {
+        String stringAnswer = currentValue.getText().toString();
+        return stringAnswer.isEmpty() ? null : new IntegerData(Integer.parseInt(stringAnswer));
+    }
 
-        if (currentValue != null) {
-            currentValue.setText(value);
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+    }
+
+    @Override
+    public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        return slider.isTrackingTouch();
+    }
+
+    @Override
+    public void clearAnswer() {
+        setUpActualValueLabel(null);
+        widgetValueChanged();
+    }
+
+    @Override
+    public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
+        if (fromUser) {
+            BigDecimal actualValue = RangeWidgetUtils.getActualValue(getFormEntryPrompt(), slider, value);
+            setUpActualValueLabel(actualValue);
+            widgetValueChanged();
         }
     }
 
-    @Override
-    protected void setUpDisplayedValuesForNumberPicker() {
-        int index = 0;
-        displayedValuesForNumberPicker = new String[elementCount + 1];
-
-        if (rangeEnd.compareTo(rangeStart) > -1) {
-            for (int i = rangeEnd.intValue(); i >= rangeStart.intValue(); i -= rangeStep.abs().intValue()) {
-                displayedValuesForNumberPicker[index] = String.valueOf(i);
-                index++;
-            }
+    private void setUpActualValueLabel(BigDecimal actualValue) {
+        if (actualValue != null) {
+            currentValue.setText(String.valueOf(actualValue.intValue()));
+            slider.setThumbRadius(visibleThumbRadius);
         } else {
-            for (int i = rangeEnd.intValue(); i <= rangeStart.intValue(); i += rangeStep.abs().intValue()) {
-                displayedValuesForNumberPicker[index] = String.valueOf(i);
-                index++;
-            }
+            slider.setValue(slider.getValueFrom());
+            slider.setThumbRadius(0);
+            currentValue.setText("");
         }
     }
 }

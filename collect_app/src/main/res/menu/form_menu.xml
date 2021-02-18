@@ -16,19 +16,19 @@
     than title-->
     <item
         android:id="@+id/menu_add_repeat"
-        android:icon="@drawable/ic_add_circle"
+        android:icon="@drawable/ic_add_circle_24"
         android:title="@string/add_another_menu"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/menu_save"
-        android:icon="@drawable/ic_save_menu"
+        android:icon="@drawable/ic_save_menu_24"
         android:title="@string/save_all_answers"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/menu_goto"
-        android:icon="@drawable/ic_menu_goto"
+        android:icon="@drawable/ic_menu_goto_24"
         android:title="@string/view_hierarchy"
         app:showAsAction="always" />
 

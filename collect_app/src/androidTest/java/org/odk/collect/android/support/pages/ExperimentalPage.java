@@ -15,9 +15,4 @@ public class ExperimentalPage extends Page<ExperimentalPage> {
         assertToolbarTitle(getTranslatedString(R.string.experimental));
         return this;
     }
-
-    public ExperimentalPage clickMatchExactly() {
-        clickOnString(R.string.match_exactly);
-        return this;
-    }
 }

@@ -1,133 +1,216 @@
 package org.odk.collect.android.widgets;
 
-import android.content.Intent;
-
-import androidx.annotation.NonNull;
+import android.view.View;
 
 import org.javarosa.core.model.data.StringData;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.ShadowPlayServicesUtil;
-import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.preferences.PrefUtils;
-import org.odk.collect.android.widgets.base.BaseGeoWidgetTest;
-import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
-import org.robolectric.annotation.Config;
+import org.odk.collect.android.geo.MapConfigurator;
+import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.robolectric.RobolectricTestRunner;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_OSM;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASEMAP_SOURCE;
+import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.stringFromDoubleList;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndAnswer;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 
-/**
- * @author James Knight
- */
+@RunWith(RobolectricTestRunner.class)
+public class GeoTraceWidgetTest {
+    private final String answer = stringFromDoubleList();
 
-@Config(shadows = {ShadowPlayServicesUtil.class})
-public class GeoTraceWidgetTest extends BaseGeoWidgetTest<GeoTraceWidget, StringData> {
-
-    private List<double[]> initialDoubles;
-    private List<double[]> answerDoubles;
-
-    @Override
-    public StringData getInitialAnswer() {
-        return new StringData(stringFromDoubleList(initialDoubles));
-    }
-
-    @NonNull
-    @Override
-    public GeoTraceWidget createWidget() {
-        return new GeoTraceWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), new FakeWaitingForDataRegistry());
-    }
-
-    @Override
-    public Object createBinaryData(StringData answerData) {
-        return stringFromDoubleList(answerDoubles);
-    }
-
-    @NonNull
-    @Override
-    public StringData getNextAnswer() {
-        return new StringData(stringFromDoubleList(answerDoubles));
-    }
+    private WaitingForDataRegistry waitingForDataRegistry;
+    private GeoDataRequester geoDataRequester;
+    private MapConfigurator mapConfigurator;
 
     @Before
-    public void setUp() throws Exception {
-        super.setUp();
-
-        initialDoubles = getRandomDoubleArrayList();
-        answerDoubles = getRandomDoubleArrayList();
-    }
-
-    @Override
-    public void getAnswerShouldReturnExistingAnswerIfPromptHasExistingAnswer() {
-        when(formEntryPrompt.getAnswerText()).thenReturn(stringFromDoubleList(initialDoubles));
-        super.getAnswerShouldReturnExistingAnswerIfPromptHasExistingAnswer();
-    }
-
-    private ArrayList<double[]> getRandomDoubleArrayList() {
-        ArrayList<double[]> doubleList = new ArrayList<>();
-
-        int pointCount = Math.max(1, random.nextInt() % 5);
-        for (int i = 0; i < pointCount; ++i) {
-            doubleList.add(getRandomDoubleArray());
-        }
-
-        return doubleList;
-    }
-
-    private double[] getRandomDoubleArray() {
-        return new double[]{
-                random.nextDouble(),
-                random.nextDouble(),
-                random.nextDouble(),
-                random.nextDouble()
-        };
-    }
-
-    /**
-     * Matches {@link org.javarosa.core.model.data.GeoTraceData#getDisplayText()}
-     */
-    private String stringFromDoubleList(List<double[]> doubleList) {
-        StringBuilder b = new StringBuilder();
-        boolean first = true;
-        for (double[] doubles : doubleList) {
-            if (!first) {
-                b.append("; ");
-            }
-            first = false;
-            b.append(stringFromDoubles(doubles));
-        }
-        return b.toString();
-    }
-
-    private String stringFromDoubles(double[] doubles) {
-        StringBuilder b = new StringBuilder();
-        for (int i = 0; i < doubles.length; i++) {
-            b.append(doubles[i]);
-            if (i != doubles.length - 1) {
-                b.append(' ');
-            }
-        }
-
-        return b.toString();
+    public void setup() {
+        waitingForDataRegistry = mock(WaitingForDataRegistry.class);
+        geoDataRequester = mock(GeoDataRequester.class);
+        mapConfigurator = mock(MapConfigurator.class);
+        when(mapConfigurator.isAvailable(any())).thenReturn(true);
     }
 
     @Test
-    public void buttonsShouldLaunchCorrectIntents() {
-        stubAllRuntimePermissionsGranted(true);
+    public void getAnswer_whenPromptDoesNotHaveAnswer_returnsNull() {
+        GeoTraceWidget widget = createWidget(promptWithAnswer(null));
+        assertNull(widget.getAnswer());
+    }
 
-        // The default basemap source is Google, which isn't available during
-        // testing, probably because of GL version incompatibility.
-        // Switching to OSMDroid ensures that the activity will launch.
-        PrefUtils.getSharedPrefs().edit().putString(
-            KEY_BASEMAP_SOURCE, BASEMAP_SOURCE_OSM).commit();
+    @Test
+    public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
+        GeoTraceWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
+        assertEquals(widget.getAnswer().getDisplayText(), answer);
+    }
 
-        Intent intent = getIntentLaunchedByClick(R.id.simple_button);
-        assertComponentEquals(activity, GeoPolyActivity.class, intent);
+    @Test
+    public void whenPromptDoesNotHaveAnswer_textViewDisplaysEmptyString() {
+        GeoTraceWidget widget = createWidget(promptWithAnswer(null));
+        assertEquals(widget.binding.geoAnswerText.getText().toString(), "");
+    }
+
+    @Test
+    public void whenPromptHasAnswer_textViewDisplaysAnswer() {
+        GeoTraceWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
+        assertEquals(widget.binding.geoAnswerText.getText().toString(), answer);
+    }
+
+    @Test
+    public void whenPromptIsReadOnlyAndDoesNotHaveAnswer_geoButtonIsNotDisplayed() {
+        GeoTraceWidget widget = createWidget(promptWithReadOnly());
+        assertEquals(widget.binding.simpleButton.getVisibility(), View.GONE);
+    }
+
+    @Test
+    public void whenPromptIsReadOnlyAndHasAnswer_viewGeoShapeButtonIsShown() {
+        GeoTraceWidget widget = createWidget(promptWithReadOnlyAndAnswer(new StringData(answer)));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.geotrace_view_read_only));
+    }
+
+    @Test
+    public void whenPromptIsNotReadOnlyAndDoesNotHaveAnswer_startGeoShapeButtonIsShown() {
+        GeoTraceWidget widget = createWidget(promptWithAnswer(null));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.get_trace));
+    }
+
+    @Test
+    public void whenPromptIsNotReadOnlyAndHasAnswer_viewOrChangeGeoShapeButtonIsShown() {
+        GeoTraceWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.geotrace_view_change_location));
+    }
+
+    @Test
+    public void clearAnswer_clearsWidgetAnswer() {
+        GeoTraceWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
+        widget.clearAnswer();
+
+        assertEquals(widget.binding.geoAnswerText.getText(), "");
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.get_trace));
+    }
+
+    @Test
+    public void clearAnswer_callsValueChangeListeners() {
+        GeoTraceWidget widget = createWidget(promptWithAnswer(null));
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+        widget.clearAnswer();
+
+        verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void clickingButtonAndAnswerTextViewForLong_callsLongClickListener() {
+        View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
+        GeoTraceWidget widget = createWidget(promptWithAnswer(null));
+
+        widget.setOnLongClickListener(listener);
+        widget.binding.simpleButton.performLongClick();
+        widget.binding.geoAnswerText.performLongClick();
+
+        verify(listener).onLongClick(widget.binding.simpleButton);
+        verify(listener).onLongClick(widget.binding.geoAnswerText);
+    }
+
+    @Test
+    public void setData_updatesWidgetAnswer() {
+        GeoTraceWidget widget = createWidget(promptWithAnswer(null));
+        widget.setData(answer);
+        assertEquals(widget.getAnswer().getDisplayText(), answer);
+    }
+
+    @Test
+    public void setData_setsCorrectAnswerInAnswerTextView() {
+        GeoTraceWidget widget = createWidget(promptWithAnswer(null));
+        widget.setData(answer);
+        assertEquals(widget.binding.geoAnswerText.getText().toString(), answer);
+    }
+
+    @Test
+    public void setData_updatesWidgetDisplayedAnswer() {
+        GeoTraceWidget widget = createWidget(promptWithAnswer(null));
+        widget.setData(answer);
+        assertEquals(widget.binding.geoAnswerText.getText().toString(), answer);
+    }
+
+    @Test
+    public void setData_whenDataIsNull_updatesButtonLabel() {
+        GeoTraceWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
+        widget.setData("");
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.get_trace));
+    }
+
+    @Test
+    public void setData_whenDataIsNotNull_updatesButtonLabel() {
+        GeoTraceWidget widget = createWidget(promptWithAnswer(null));
+        widget.setData(answer);
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.geotrace_view_change_location));
+    }
+
+    @Test
+    public void setData_callsValueChangeListener() {
+        GeoTraceWidget widget = createWidget(promptWithAnswer(null));
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+        widget.setData(answer);
+
+        verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void buttonClick_whenMapConfiguratorIsUnavailable_doesNotRequestGeoTrace() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        GeoTraceWidget widget = createWidget(prompt);
+
+        when(mapConfigurator.isAvailable(widget.getContext())).thenReturn(false);
+        widget.binding.simpleButton.performClick();
+
+        verify(geoDataRequester, never()).requestGeoTrace(widget.getContext(), prompt, "",  waitingForDataRegistry);
+        verify(mapConfigurator).showUnavailableMessage(widget.getContext());
+    }
+
+    @Test
+    public void buttonClick_whenMapConfiguratorIsAvailable_requestsGeoTrace() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        GeoTraceWidget widget = createWidget(prompt);
+        widget.binding.simpleButton.performClick();
+
+        verify(geoDataRequester).requestGeoTrace(widget.getContext(), prompt, "", waitingForDataRegistry);
+    }
+
+    @Test
+    public void buttonClick_requestsGeoTrace_whenAnswerIsCleared() {
+        FormEntryPrompt prompt = promptWithAnswer(new StringData(answer));
+        GeoTraceWidget widget = createWidget(prompt);
+        widget.clearAnswer();
+        widget.binding.simpleButton.performClick();
+
+        verify(geoDataRequester).requestGeoTrace(widget.getContext(), prompt, "", waitingForDataRegistry);
+    }
+
+    @Test
+    public void buttonClick_requestsGeoTrace_whenAnswerIsUpdated() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        GeoTraceWidget widget = createWidget(prompt);
+        widget.setData(answer);
+        widget.binding.simpleButton.performClick();
+
+        verify(geoDataRequester).requestGeoTrace(widget.getContext(), prompt, answer, waitingForDataRegistry);
+    }
+
+    private GeoTraceWidget createWidget(FormEntryPrompt prompt) {
+        return new GeoTraceWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"),
+                waitingForDataRegistry, mapConfigurator, geoDataRequester);
     }
 }

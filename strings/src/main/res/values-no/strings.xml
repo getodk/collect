@@ -1,0 +1,377 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data">Fyll ut skjema</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data_button">Fyll ut skjema</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="review_data">Rediger lagret skjema</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="review_data_button">Rediger lagret skjema (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="send_data">Send ferdig skjema</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="send_data_button">Send ferdig skjema (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <!--Text for an action button on the main screen.-->
+  <string name="get_forms">Hent blank skjema</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="manage_files">Slett lagret skjema</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="added_on_date_at_time">\'Lagt til\' EEE, MMM dd, yyyy \'klokken\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="saved_on_date_at_time">\'Lagret\' EEE, MMM dd, yyyy \'klokken\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="finalized_on_date_at_time">\'Sluttført den\' EEE, MMM dd, yyyy \'klokken\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sent_on_date_at_time">\'Sendt\' EEE, MMM dd, yyyy \'klokken\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sending_failed_on_date_at_time">\'Sending mislyktes den\' EEE, MMM dd, yyyy \'klokken\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="modified_on_date_at_time">\'Endret den\' EEE, MMM dd, yyyy \'kl\' HH:mm</string>
+  <!--Displayed in search boxes for form lists or question types that involve search-->
+  <string name="no_items_display">Ingenting å vise.</string>
+  <string name="no_items_display_forms">Ingen elementer å vise.\n\nForsøk å hente ned og fylle ut et nytt skjema.</string>
+  <string name="no_items_display_instances">Ingen elementer å vise.\n\nEventuelle lagrede skjemaer må fullføres før du kan sende dem. </string>
+  <!--##############################################
+    # FILL BLANK FORM
+    ##############################################-->
+  <string name="finished_disk_scan">Henting fullført.</string>
+  <string name="loading_form">Henter skjema</string>
+  <string name="survey_loading_reading_form_message">Leser inn skjemadefinisjoner…</string>
+  <string name="survey_loading_reading_data_message">Leser skjemadata…</string>
+  <string name="survey_loading_reading_csv_message">Leser CSV filer…</string>
+  <string name="parse_error">Beklager, klarte ikke å analysere skjema.</string>
+  <string name="parent_form_not_present">Kan ikke endre dette lagrede skjemaet fordi den tilhørende skjemamalen ikke lenger er tilgjengelig eller er slettet.\n\nForm-ID: %1$s</string>
+  <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
+  <string name="savepoint_used">Ikke lagret endringer hentet fra lagringspunkt</string>
+  <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
+  <string name="change_language">Endre språk</string>
+  <!--Text for button displayed in the form filling menu to see the form's table of contents-->
+  <string name="view_hierarchy">Gå til prompt</string>
+  <!--Text for button displayed in the form filling menu to save the form-->
+  <string name="save_all_answers">Lagre skjema</string>
+  <!--Text of button from the form's table of contents to jump to the beginning of the form-->
+  <string name="jump_to_beginning">Gå til start</string>
+  <!--Text of button from the form's table of contents to jump to the end of the form-->
+  <string name="jump_to_end">Gå til slutten</string>
+  <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
+  <string name="jump_to_previous">Gå opp</string>
+  <!--Displayed below group names in a form's table of contents-->
+  <!--Displayed below repeat names in a form's table of contents-->
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <!--Title of overlay menu displayed when long pressing on a question in a form-->
+  <string name="edit_prompt">Rediger prompt</string>
+  <string name="clearanswer_confirm">Slette svar til \"%s\"?</string>
+  <string name="clear_answer">Slett svar</string>
+  <string name="clear_answer_ask">Slette svaret?</string>
+  <string name="clear_answer_no">Avbryt</string>
+  <string name="discard_answer">Slett svar</string>
+  <string name="discard_group">Slett gruppe</string>
+  <string name="delete_repeat">Slett gruppe</string>
+  <string name="delete_repeat_ask">Slette gruppen?</string>
+  <string name="delete_repeat_confirm">Slette gruppen \"%s\" og dens subgrupper?</string>
+  <string name="delete_repeat_no">Avbryt</string>
+  <string name="invalid_answer_error">Beklager, ugyldig svar!</string>
+  <string name="required_answer_error">Beklager, svaret er påkrevd!</string>
+  <string name="survey_internal_error">Intern feil: step to prompt feilet.</string>
+  <string name="save_enter_data_description">Du er på slutten av \"%s\".</string>
+  <string name="save_form_as">Lagre som:</string>
+  <string name="save_as_error">Navnet kan ikke være blank!</string>
+  <string name="mark_finished">Kryss skjema som ferdig</string>
+  <string name="quit_entry">Lagre skjema og avslutt</string>
+  <string name="data_saved_error">Beklager, skjemalagring mislyktes!</string>
+  <string name="data_saved_ok">Skjema lagret!</string>
+  <string name="save_point_error">Feil under lagring av gjenopprettingspunkt: %s</string>
+  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <string name="quit_application">Avslutt %s</string>
+  <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="do_not_save">Annuler endringer</string>
+  <string name="keep_changes">Lagre endringer</string>
+  <string name="saving_form">Lagrer skjema</string>
+  <string name="survey_saving_validating_message">Validerer svar…</string>
+  <string name="survey_saving_collecting_message">Henter data…</string>
+  <string name="survey_saving_saving_message">Lagrer til SD-kort…</string>
+  <string name="survey_saving_finalizing_message">Fullfører til SD-kort…</string>
+  <string name="survey_saving_encrypting_message">Krypterer data…</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <!--Text displayed when audio recording fails to start-->
+  <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <!--Error message displayed when copying media from a temporary directory fails-->
+  <!--##############################################
+    # FORM FEATURES
+    ##############################################-->
+  <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
+  <string name="launch_app">Start</string>
+  <string name="activity_not_found">Fant ingen handling: %s</string>
+  <string name="no_app">Applikasjon mangler. Vennligst tast inn teksten manuelt</string>
+  <string name="launch_printer">Initiate Printing</string>
+  <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
+  <string name="open_url">Åpne URL</string>
+  <string name="capture_osm">Start OpenMapKit</string>
+  <string name="recapture_osm">Gjør om OSM tagging</string>
+  <string name="get_barcode">Registrer strekkode</string>
+  <string name="replace_barcode">Erstatt strekkode</string>
+  <string name="capture_image">Ta bilde</string>
+  <string name="choose_image">Velg bilde</string>
+  <!--Dialog heading for saving annotated image-->
+  <string name="save_and_close">Save and Close</string>
+  <string name="sign_button">Gather Signature</string>
+  <string name="markup_image">Markup Image</string>
+  <string name="draw_image">Sketch Image</string>
+  <string name="reset_image">Reset</string>
+  <string name="set_color">Set Color</string>
+  <string name="capture_video">Ta opp video</string>
+  <string name="choose_video">Velg video</string>
+  <string name="play_video">Spill video</string>
+  <!--Text for button that deletes a file that is the answer to a question-->
+  <!--Text for button that starts recording sound-->
+  <string name="capture_audio">Ta opp lyd</string>
+  <!--Text for button that lets the user choose a sound file on their device-->
+  <string name="choose_sound">Velg lyd</string>
+  <!--Description text for button that that pauses recording sound-->
+  <!--Description text for button that that resumes recording sound-->
+  <!--Title for dialog asking the user if they want to delete a file-->
+  <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="error_attaching_binary_file">En feil oppstod under lagring av media: %s</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="select_answer">Velg svar</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="selected">Valgt: </string>
+  <string name="trigger">OK. Vennligst fortsett.</string>
+  <string name="ext_file_no_data_error">Filen inneholder ingen data!</string>
+  <string name="ext_conflicting_columns_error">Kolonnene %s er like!</string>
+  <string name="ext_sortBy_numeric_error">Sorteringskolonnen må bare inneholde numeriske verdier. Konflikt oppstår ved verdi \'%s\'.</string>
+  <string name="ext_search_wrong_arguments_error">Syntaksfeil i funksjonen search(): Denne funksjonen trenger 1, 4 eller 6 argumenter.</string>
+  <string name="ext_search_wrong_function_error">Syntaksfeil i funksjonen search(): Ukjent funksjon \'%s\'.</string>
+  <string name="ext_search_bad_function_error">Syntaksfeil i funksjonen search(): \'%s\' er ikke en gyldig funksjon.</string>
+  <string name="ext_search_return_error">Søket returnerte et objekt av typen  \'%s\'.</string>
+  <string name="ext_import_generic_error">Kan ikke importere data data fra %1$s. Årsak: %2$s</string>
+  <string name="ext_import_progress_message">Forhåndslater data fra \'%1$s\', vennligst vent… %2$s</string>
+  <string name="ext_import_finalizing_message">Fullfører forhåndslastede data</string>
+  <string name="ext_import_completed_message">Innlesing av data fullført!</string>
+  <string name="ext_not_initialized_error">ExternalDataManager er ikke startet opp.</string>
+  <string name="ext_import_csv_missing_error">Eksterne data for  %1$s ble ikke importert. Kanskje du har glemt å legge ved filen  %2$s.csv med skjemamalen?</string>
+  <string name="ext_search_generic_error">Syntaksfeil i fuksjonen search(): %s</string>
+  <string name="ext_assign_value_error">Kan ikke tildele verdien  \'%s\'.</string>
+  <string name="get_bearing">Registrer posisjon</string>
+  <string name="replace_bearing">Legg inn ny posisjon</string>
+  <string name="getting_bearing">Hent posisjon</string>
+  <string name="accept_bearing">Registrer posisjon</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
+  <string name="file_invalid">Filen: %s er ugyldig.</string>
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
+  <string name="file_missing">Filen: %s mangler.</string>
+  <!--Heading for a dialog which prompts the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Explanation for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Action to close a full screen dialog-->
+  <!--Heading for a dialog which prompts the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Action to save the contents of a full screen dialog-->
+  <!--##############################################
+    # GEO
+    ##############################################-->
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+   These strings are only being used to preserve compatibility with pre-existing
+    tile caches, and are not shown in the UI.-->
+  <string name="google_play_services_error_occured">Ikke mulig å åpne Google Maps. Er Google Play Services installert?</string>
+  <string name="view_change_location">Vis eller endre plassering</string>
+  <string name="getting_location">Henter posisjon</string>
+  <string name="get_location">Registrer posisjon</string>
+  <string name="provider_disabled_error">Beklager, stedstjenesten er deaktivert!</string>
+  <!--Action to go to Android settings. Displayed when location providers are disabled.-->
+  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
+  <!--Name of an action button-->
+  <!--##############################################
+    # SEND FINALIZED FORM
+    ##############################################-->
+  <string name="uploading_data">Sender skjema</string>
+  <string name="noselect_error">Beklager, du har ikke valgt skjema!</string>
+  <string name="no_connection">Nettverket er ikke tilgjengelig</string>
+  <string name="sending_items">Sender %1$s av %2$s skjema(er)</string>
+  <string name="send_selected_data">Send utvalgte</string>
+  <string name="server_requires_auth">Server krever godkjenning</string>
+  <string name="no_forms_uploaded">Beklager, opplasting feilet.</string>
+  <string name="upload_results">Vis oversikt</string>
+  <!--Name of option in Send Finalized Form menu to show only unsent forms (default) or show sent and unsent forms-->
+  <string name="change_view">Endre visning</string>
+  <string name="show_sent_and_unsent_forms">Sendte og usendte skjemaer</string>
+  <string name="show_unsent_forms">Usendte skjemaer</string>
+  <string name="send_in_progress">Bakgrunnssending kjører, vennligst prøv igjen senere</string>
+  <string name="notification_error">Feil ved visning av kvitteringstekst</string>
+  <!--##############################################
+    # GET BLANK FORM
+    ##############################################-->
+  <string name="refresh">Oppdater</string>
+  <string name="download">Hent utvalgte</string>
+  <string name="downloading_data">Kobler til server</string>
+  <string name="fetching_file">Henter %1$s.\n\nSkjema %2$s av %3$s skjema(er).</string>
+  <string name="form_download_progress">%1$s. Henter mediafiler: %2$s av %3$s</string>
+  <string name="version">Versjon:</string>
+  <!--##############################################
+    # DELETE SAVED FORM
+    ##############################################-->
+  <!--Title of a section in "Delete Saved Forms" for deleting filled/saved forms (as opposed to blank forms)-->
+  <string name="data">Lagrede skjemaer</string>
+  <!--Title of a section in "Delete Saved Forms" for deleting blank forms (as opposed to filled/saved forms)-->
+  <string name="forms">Blanke skjemaer</string>
+  <string name="delete_confirm">Slette %s skjema(er)?</string>
+  <string name="delete_file">Slett utvalgte</string>
+  <string name="delete_no">Ikke slett</string>
+  <string name="delete_yes">Slett skjemaer</string>
+  <string name="file_deleted_error">Beklager, %1$s av %2$s utvalgte skjema(er) sletting mislyktes!</string>
+  <string name="file_deleted_ok">%s skjema(er) er slettet!</string>
+  <string name="file_delete_in_progress">Beklager, sletting pågår!</string>
+  <!--##############################################
+    # GENERAL SETTINGS
+    ##############################################-->
+  <string name="general_preferences">Endre innstillinger</string>
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section only available in beta or development builds.-->
+  <string name="server_preferences">Server</string>
+  <!--Label for server type setting-->
+  <string name="server_url">URL</string>
+  <!--Title of dialog for configuring server URL-->
+  <string name="change_server_url">Server URL</string>
+  <string name="url_error">Beklager, ugyldig URL!</string>
+  <string name="username">Brukernavn</string>
+  <string name="change_username">ODK brukernavn</string>
+  <string name="password">Passord</string>
+  <string name="change_password">Passord</string>
+  <string name="password_error_whitespace">Mellomrom er ikke tillatt før eller etter passord</string>
+  <string name="username_error_whitespace">Mellomrom er ikke tillatt før eller etter brukernavn</string>
+  <string name="change_formlist_url">Sti</string>
+  <string name="change_submission_url">Sti</string>
+  <string name="formlist_url">Skjema oversikt</string>
+  <string name="submission_url">Bane for innsending</string>
+  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
+  <string name="selected_google_account_text">Google-konto</string>
+  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
+  <!--Description for Fallback submission URL setting-->
+  <string name="font_size">Fontstørrelse</string>
+  <string name="change_font_size">Fontstørrelse</string>
+  <string name="font_size_extra_large">Ekstra stor</string>
+  <string name="font_size_large">Stor</string>
+  <string name="font_size_medium">Medium</string>
+  <string name="font_size_small">Liten</string>
+  <string name="font_size_extra_small">Ekstra liten</string>
+  <string name="navigation">Navigation</string>
+  <string name="swipe_navigation">Use horizontal swipes</string>
+  <string name="buttons_navigation">Use forward/backward buttons</string>
+  <string name="swipe_buttons_navigation">Use swipes and buttons</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="form_forward">Next</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="show_splash_summary">Vis når programmet starter</string>
+  <string name="splash_path">Velg oppstartbilde</string>
+  <string name="default_splash_path">ODK Default</string>
+  <string name="select_another_image">Velg annet bilde</string>
+  <string name="use_odk_default">Bruk standard bilde</string>
+  <string name="change_splash_path">Endre bilde</string>
+  <!--Heading for the settings category about updating blank forms-->
+  <!--Name of the setting that defines how blank forms are updated from the server.-->
+  <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
+  <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
+  <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
+  <!--Name of the setting that defines how often blank forms are updated from the server.-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
+  <string name="delete_after_send">Slett etter innsendt.</string>
+  <string name="delete_after_send_summary">Sletter fullførte skjemaer og media etter at de er sendt til serveren</string>
+  <string name="default_completed">Default til fullført</string>
+  <string name="default_completed_summary">Sette fullført som default</string>
+  <string name="constraint_behavior">Begrens prosesseringsmetoden</string>
+  <string name="constraint_behavior_on_swipe">Validere ved sveip forover</string>
+  <string name="constraint_behavior_on_finalize">Avvent validering til skjemaet er fullført</string>
+  <string name="high_resolution_summary">Slå på høyoppløst videoopptak.</string>
+  <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
+  <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Displayed when a device property such as the phone number is not available-->
+  <!--##############################################
+     # ADMIN SETTINGS
+     ##############################################-->
+  <string name="admin_preferences">Admin Settings</string>
+  <string name="admin_access_settings">Tap for admin access to settings</string>
+  <string name="enter_new_password">Enter new password</string>
+  <string name="admin_password_changed">Admin password successfully changed</string>
+  <string name="admin_password_disabled">Admin password disabled</string>
+  <string name="admin_password_incorrect">Sorry, password is incorrect!</string>
+  <string name="enter_admin_password">Enter Admin Password</string>
+  <string name="found_in_main">Uncheck to hide from Main Menu</string>
+  <string name="found_in_settings">Uncheck to hide from General Settings</string>
+  <!--Name of a setting that determines whether users can navigate backwards in a form-->
+  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <string name="save_mid">Mid-form saving</string>
+  <!--##############################################
+     # GOOGLE DRIVE, GOOGLE SHEETS
+     ##############################################-->
+  <!--Title of the screen that lists forms in user's Google Drive-->
+  <string name="go_drive">Min Drive</string>
+  <!--Title of the screen that lists forms shared with Google Drive user-->
+  <string name="go_shared">Delt med meg</string>
+  <!--Button for navigating across Google Drive folders-->
+  <string name="drive_get_file">Henter %1$s og mediafiler.</string>
+  <string name="no_google_account">Ingen Goggle-konto er valgt!</string>
+  <string name="google_set_account">Du har valgt Google Sheets som din server. Nå må du angi en Google-konto i Generelle innstillinger før du fortsetter.</string>
+  <string name="google_search_browse">Søk etter skjemaer.  Eller velg \'Min disk\' nedenfor for å bla igjennom.</string>
+  <string name="invalid_sheet_id">Ugyldig ark id: %1$s</string>
+  <string name="google_sheets_missing_columns">Regnearket mangler følgende kolonner: %1$s</string>
+  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
+  <!--##############################################
+     # ABOUT
+     ##############################################-->
+  <!--##############################################
+     # SETTINGS IMPORT
+     ##############################################-->
+  <!--##############################################
+     # SCOPED STORAGE MIGRATION
+     ##############################################-->
+  <!--Action to begin a storage migration-->
+  <!--##############################################
+     # MISC
+     ##############################################-->
+  <string name="ok">OK</string>
+  <!--Used in many dialogs to dismiss the dialog without taking any action-->
+  <string name="cancel">Avbryt</string>
+  <string name="cancel_loading_form">Avbryt</string>
+  <string name="cancel_location">Avbryt</string>
+  <string name="do_not_change">Avbryt</string>
+  <string name="do_not_exit">Avbryt</string>
+  <string name="success">Suksess</string>
+  <string name="error_occured">Det er oppstatt en feil</string>
+  <string name="please_wait">Vennligst vent.</string>
+  <string name="please_wait_long">Vennligst vent. Det kan ta litt tid.</string>
+  <string name="sdcard_unmounted">Collect kan ikke lese SD-kortet. Kan de være montert via USB? (Status: %s)</string>
+  <string name="fs_delete_media_path_if_file_error">Kan ikke slette \'%s\'. Slett filen manuelt, og last ned skjemamal på nytt. </string>
+  <string name="fs_create_media_folder_error">Kan ikke opprette mediamappe \'%s\'.</string>
+  <string name="fs_file_copy_error">Kan ikke kopiere \'%1$s\' over \'%2$s\'. Årsak: %3$s</string>
+  <string name="survey_multiple_forms_error">Du har lastet ned to ulike skjemamaler med samme skjema-ID og versjon. Kanskje er samme skjemamal lastet opp til ulike tidspunkt eller til ulike servere. Uansett bør du slette en av dem. </string>
+</resources>

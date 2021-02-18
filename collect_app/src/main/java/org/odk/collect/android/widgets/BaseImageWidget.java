@@ -18,12 +18,10 @@ package org.odk.collect.android.widgets;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
@@ -47,7 +45,7 @@ import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
-import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -57,7 +55,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerImageView;
 
-public abstract class BaseImageWidget extends QuestionWidget implements FileWidget, BinaryDataReceiver {
+public abstract class BaseImageWidget extends QuestionWidget implements FileWidget, WidgetDataReceiver {
 
     @Nullable
     protected ImageView imageView;
@@ -70,11 +68,14 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
+    private final MediaUtils mediaUtils;
 
-    public BaseImageWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
+    public BaseImageWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager,
+                           WaitingForDataRegistry waitingForDataRegistry, MediaUtils mediaUtils) {
         super(context, prompt);
         this.questionMediaManager = questionMediaManager;
         this.waitingForDataRegistry = waitingForDataRegistry;
+        this.mediaUtils = mediaUtils;
     }
 
     @Override
@@ -95,13 +96,13 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
     @Override
     public void deleteFile() {
-        questionMediaManager.markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
+        questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
                         getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
     }
 
     @Override
-    public void setBinaryData(Object newImageObj) {
+    public void setData(Object newImageObj) {
         // you are replacing an answer. delete the previous image using the
         // content provider.
         if (binaryName != null) {
@@ -110,24 +111,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
         File newImage = (File) newImageObj;
         if (newImage.exists()) {
-            // Add the new image to the Media content provider so that the
-            // viewing is fast in Android 2.0+
-            ContentValues values = new ContentValues(6);
-            values.put(MediaStore.Images.Media.TITLE, newImage.getName());
-            values.put(MediaStore.Images.Media.DISPLAY_NAME, newImage.getName());
-            values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
-            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-            values.put(MediaStore.Images.Media.DATA, newImage.getAbsolutePath());
-
-            questionMediaManager.replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
-
-            Uri imageURI = getContext().getContentResolver().insert(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-
-            if (imageURI != null) {
-                Timber.i("Inserting image returned uri = %s", imageURI.toString());
-            }
-
+            questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
             binaryName = newImage.getName();
             Timber.i("Setting current answer to %s", newImage.getName());
 
@@ -213,22 +197,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
         @Override
         public void clickImage(String context) {
-            Intent i = new Intent("android.intent.action.VIEW");
-            Uri uri = MediaUtils.getImageUriFromMediaProvider(
-                    getInstanceFolder() + File.separator + binaryName);
-            if (uri != null) {
-                Timber.i("setting view path to: %s", uri.toString());
-                i.setDataAndType(uri, "image/*");
-
-                try {
-                    getContext().startActivity(i);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(getContext(),
-                            getContext().getString(R.string.activity_not_found,
-                                    getContext().getString(R.string.view_image)),
-                            Toast.LENGTH_SHORT).show();
-                }
-            }
+            mediaUtils.openFile(getContext(), new File(getInstanceFolder() + File.separator + binaryName));
         }
     }
 
@@ -261,7 +230,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             if (binaryName != null) {
                 i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(getFile()));
             }
-            i.putExtra(DrawActivity.EXTRA_OUTPUT, Uri.fromFile(new File(new StoragePathProvider().getTmpFilePath())));
+            i.putExtra(DrawActivity.EXTRA_OUTPUT, Uri.fromFile(new File(new StoragePathProvider().getTmpImageFilePath())));
             i = addExtrasToIntent(i);
             launchActivityForResult(i, requestCode, stringResourceId);
         }

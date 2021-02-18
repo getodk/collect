@@ -8,12 +8,17 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.testing.FragmentScenario;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.core.app.ApplicationProvider;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -27,6 +32,8 @@ import org.robolectric.shadows.ShadowEnvironment;
 import org.robolectric.shadows.ShadowMediaMetadataRetriever;
 import org.robolectric.shadows.ShadowMediaPlayer;
 import org.robolectric.shadows.util.DataSource;
+
+import java.util.List;
 
 import static org.mockito.Mockito.mock;
 import static org.robolectric.Shadows.shadowOf;
@@ -45,6 +52,10 @@ public class RobolectricHelpers {
 
     public static AppDependencyComponent getApplicationComponent() {
         return ((Collect) RuntimeEnvironment.application).getComponent();
+    }
+
+    public static void createThemedContext() {
+        ApplicationProvider.getApplicationContext().setTheme(R.style.Theme_Collect_Light);
     }
 
     public static <T extends FragmentActivity> T createThemedActivity(Class<T> clazz) {
@@ -118,6 +129,11 @@ public class RobolectricHelpers {
         });
     }
 
+    /**
+     * @deprecated should switch out ViewModel in test using Dagger - @Inject factory into
+     * component and then override in test.
+     */
+    @Deprecated
     public static <V> ViewModelProvider mockViewModelProvider(FragmentActivity activity, final Class<V> viewModelClass) {
         return ViewModelProviders.of(activity, new ViewModelProvider.Factory() {
             @NonNull
@@ -126,5 +142,30 @@ public class RobolectricHelpers {
                 return (T) mock(viewModelClass);
             }
         });
+    }
+
+    @Nullable
+    public static <F extends Fragment> F getFragmentByClass(FragmentManager fragmentManager, Class<F> fragmentClass) {
+        List<Fragment> fragments = fragmentManager.getFragments();
+        for (Fragment fragment : fragments) {
+            if (fragment.getClass().isAssignableFrom(fragmentClass)) {
+                return (F) fragment;
+            }
+        }
+
+        return null;
+    }
+
+    public static <F extends Fragment> FragmentScenario<F> launchDialogFragment(Class<F> fragmentClass) {
+        /*
+          Needed to avoid explosion (NullPointerException) inside internal platform code (WindowDecorActionBar).
+          For some reason AppCompat.Light or AppCompat.Light.NoActionBar don't work. Our theme must declare
+          something that is missing in those base themes when they are used in Robolectric.
+
+          This is probably something that should be fixed within Robolectric.
+         */
+        ApplicationProvider.getApplicationContext().setTheme(R.style.Theme_Collect_Light);
+
+        return FragmentScenario.launch(fragmentClass);
     }
 }

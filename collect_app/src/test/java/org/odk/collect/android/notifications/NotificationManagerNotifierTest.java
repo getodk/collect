@@ -11,12 +11,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.openrosa.api.FormApiException;
+import org.odk.collect.android.forms.FormSourceException;
+import org.odk.collect.android.forms.ManifestFile;
 import org.odk.collect.android.preferences.PreferencesProvider;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.robolectric.Shadows.shadowOf;
@@ -36,7 +38,7 @@ public class NotificationManagerNotifierTest {
 
     @Test
     public void onSync_whenExceptionNull_clearsNotification() {
-        notifier.onSync(new FormApiException(FormApiException.Type.FETCH_ERROR));
+        notifier.onSync(new FormSourceException(FormSourceException.Type.FETCH_ERROR));
         assertThat(shadowOf(notificationManager).getAllNotifications().size(), is(1));
 
         notifier.onSync(null);
@@ -46,7 +48,7 @@ public class NotificationManagerNotifierTest {
     @Test
     public void onUpdatesAvailable_whenUpdatesHaveBeenSeenBefore_doesNotNotifyASecondTime() {
         List<ServerFormDetails> updates = asList(
-                new ServerFormDetails("form-1", "http://example.com/form-1", null, "form-1", "server", "md5:form-1-hash", "manifest-hash", false, true)
+                new ServerFormDetails("form-1", "http://example.com/form-1", null, "form-1", "server", "md5:form-1-hash", false, true, null)
         );
 
         notifier.onUpdatesAvailable(updates);
@@ -60,14 +62,14 @@ public class NotificationManagerNotifierTest {
     @Test
     public void onUpdatesAvailable_whenUpdateForFormHasBeenHasNewHash_notifies() {
         List<ServerFormDetails> updates = asList(
-                new ServerFormDetails("form-1", "http://example.com/form-1", null, "form-1", "server", "md5:form-1-hash", "manifest-hash", false, true)
+                new ServerFormDetails("form-1", "http://example.com/form-1", null, "form-1", "server", "md5:form-1-hash", false, true, null)
         );
 
         notifier.onUpdatesAvailable(updates);
         assertThat(shadowOf(notificationManager).getAllNotifications().size(), is(1));
 
         updates = asList(
-                new ServerFormDetails("form-1", "http://example.com/form-1", null, "form-1", "server", "md5:form-1-hash-changed", "manifest-hash", false, true)
+                new ServerFormDetails("form-1", "http://example.com/form-1", null, "form-1", "server", "md5:form-1-hash-changed", false, true, null)
         );
 
         notificationManager.cancelAll();
@@ -78,14 +80,14 @@ public class NotificationManagerNotifierTest {
     @Test
     public void onUpdatesAvailable_whenUpdateForFormHasBeenHasNewManifestHash_notifies() {
         List<ServerFormDetails> updates = asList(
-                new ServerFormDetails("form-1", "http://example.com/form-1", null, "form-1", "server", "md5:form-1-hash", "manifest-hash", false, true)
+                new ServerFormDetails("form-1", "http://example.com/form-1", null, "form-1", "server", "md5:form-1-hash", false, true, new ManifestFile("manifest-hash", emptyList()))
         );
 
         notifier.onUpdatesAvailable(updates);
         assertThat(shadowOf(notificationManager).getAllNotifications().size(), is(1));
 
         updates = asList(
-                new ServerFormDetails("form-1", "http://example.com/form-1", null, "form-1", "server", "md5:form-1-hash", "manifest-hash-changed", false, true)
+                new ServerFormDetails("form-1", "http://example.com/form-1", null, "form-1", "server", "md5:form-1-hash", false, true, new ManifestFile("manifest-hash-changed", emptyList()))
         );
 
         notificationManager.cancelAll();

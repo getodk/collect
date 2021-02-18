@@ -34,6 +34,7 @@ import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.ListFragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -105,7 +107,7 @@ abstract class AppListFragment extends ListFragment {
         super.onViewCreated(view, savedInstanceState);
 
         ListView listView = getListView();
-        listView.setDivider(getResources().getDrawable(R.drawable.list_item_divider, getActivity().getTheme()));
+        listView.setDivider(ContextCompat.getDrawable(getContext(), R.drawable.list_item_divider));
         listView.setDividerHeight(1);
     }
 
@@ -157,6 +159,10 @@ abstract class AppListFragment extends ListFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (!MultiClickGuard.allowClick(getClass().getName())) {
+            return true;
+        }
+
         switch (item.getItemId()) {
             case R.id.menu_sort:
                 bottomSheetDialog.show();

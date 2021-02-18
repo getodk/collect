@@ -5,7 +5,6 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/map_button"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-        android:background="?selectableItemBackground"
         android:focusable="false"
         android:clickable="false"
         android:layout_width="40sp"

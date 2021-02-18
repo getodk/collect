@@ -62,6 +62,10 @@ To create your own widget your class needs to override several methods:
 
 As you'll see from the example you need to call `widgetValueChanged` whenever the answer is changed in someway. This will make sure that any listeners attached to the widget will be called.
 
+### Handling rotation/configuration changes
+
+When the device is rotated during form entry, the on screen answers will be saved. Then, when it is is recreated, the `Widget` will be passed the correct answers in with `FormEntryPrompt` meaning no extra work is required to handle configuration changes. If a widget's answer layout contains any editable views (like an `EditText` for example) they should include `android:saveEnabled="false"` to prevent Android from trying to load previous values in.
+
 ## Testing widgets
 
 Widgets should have the majority of their behavior driven out by tests that treat them as an individual component. This means higher level feature tests for Collect won't have to be as concerned around the many types of question that exist and can be more focused on form entry, form management, settings etc as a whole.

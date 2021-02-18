@@ -2,6 +2,8 @@ package org.odk.collect.android.instrumented.tasks;
 
 import android.net.Uri;
 
+import androidx.test.rule.GrantPermissionRule;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -10,13 +12,13 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.openrosa.OpenRosaConstants;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.support.MockedServerTest;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
-import org.odk.collect.android.support.MockedServerTest;
 
 import java.io.File;
 
-import androidx.test.rule.GrantPermissionRule;
 import okhttp3.mockwebserver.RecordedRequest;
 
 import static org.junit.Assert.assertEquals;
@@ -64,7 +66,7 @@ public class InstanceServerUploaderTaskTest extends MockedServerTest {
         HEAD: {
             RecordedRequest r = nextRequest();
             assertEquals("HEAD", r.getMethod());
-            assertMatches("/submission\\?deviceID=\\w+%3A\\w+", r.getPath());
+            assertMatches("/submission\\?deviceID=collect%\\w+", r.getPath());
             assertMatches("org.odk.collect.android/.* Dalvik/.*", r.getHeader("User-Agent"));
             assertEquals("1.0", r.getHeader(OpenRosaConstants.VERSION_HEADER));
             assertTrue(r.getHeader("Accept-Encoding").contains("gzip"));
@@ -74,7 +76,7 @@ public class InstanceServerUploaderTaskTest extends MockedServerTest {
         POST: {
             RecordedRequest r = nextRequest();
             assertEquals("POST", r.getMethod());
-            assertMatches("/submission\\?deviceID=\\w+%3A\\w+", r.getPath());
+            assertMatches("/submission\\?deviceID=collect%\\w+", r.getPath());
             assertMatches("org.odk.collect.android/.* Dalvik/.*", r.getHeader("User-Agent"));
             assertEquals("1.0", r.getHeader(OpenRosaConstants.VERSION_HEADER));
             assertTrue(r.getHeader("Accept-Encoding").contains("gzip"));
@@ -88,7 +90,7 @@ public class InstanceServerUploaderTaskTest extends MockedServerTest {
 
         Instance i = new Instance.Builder()
                 .displayName("Test Form")
-                .instanceFilePath(xml.getAbsolutePath())
+                .instanceFilePath(new StoragePathProvider().getInstanceDbPath(xml.getPath()))
                 .jrFormId("test_form")
                 .status(Instance.STATUS_COMPLETE)
                 .lastStatusChangeDate(123L)

@@ -1,0 +1,677 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data">បំពេញសំណុំបែបបទទទេ</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data_button">បំពេញសំណុំបែបបទទទេ</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="review_data">កែប្រែសំណុំ​បែប​បទ​ដែលបានរក្សាទុក</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="review_data_button">កែប្រែសំណុំ​បែប​បទ​ដែលរក្សាទុក (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="send_data">បញ្ជូនសំណុំ​បែប​បទ​ដែលបានបញ្ចប់</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="send_data_button">បញ្ជូនសំណុំ​បែប​បទ​ដែលបានបញ្ចប់ (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="view_sent_forms">បង្ហាញសំណុំ​បែប​បទដែលបានផ្ញើចេញ</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="view_sent_forms_button">បង្ហាញសំណុំ​បែប​បទដែលបានផ្ញើចេញ (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="get_forms">ទាញសំណុំបែបបទ</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="manage_files">លុបសំណុំបែបបទដែលបានរក្សាទុក</string>
+  <string name="version_number">ជំនាន់: %s</string>
+  <string name="id_number">ID: %s</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="added_on_date_at_time">\'បន្ថែមនៅ\'  EEE, MMM dd, yyyy \'នៅម៉ោង\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="saved_on_date_at_time">\'រក្សាទុកនៅ\'  EEE, MMM dd, yyyy \'នៅម៉ោង\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="finalized_on_date_at_time">\'បញ្ចប់នៅ\'  EEE, MMM dd, yyyy \'នៅម៉ោង\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sent_on_date_at_time">\'ផ្ញើចេញនៅ\'  EEE, MMM dd, yyyy \'នៅម៉ោង\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sending_failed_on_date_at_time">\'ការផ្ញើចេញបរាជ័យនៅ\'  EEE, MMM dd, yyyy \'នៅម៉ោង\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="deleted_on_date_at_time">\'បានលុបនៅថ្ងៃទី \' EEE, MMM dd, yyyy \'ម៉ោង\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="modified_on_date_at_time">\'កែប្រែនៅថ្ងៃ\' EEE, MMM dd, yyyy \'នៅម៉ោង\' HH:mm</string>
+  <string name="encrypted_form">បម្លែងសំណុំបែបបទ​ជារហស្សលិខ</string>
+  <string name="deleted_form">សំណុំបែបបទដែលបានលុប​</string>
+  <string name="sort_the_list">តម្រៀបបញ្ជី</string>
+  <string name="sort_by">តំរៀបតាម</string>
+  <string name="sort_by_name_asc">ឈ្មោះ, ក-អ</string>
+  <string name="sort_by_name_desc">ឈ្មោះ, អ-ក</string>
+  <string name="sort_by_date_asc">ថ្ងៃខែឆ្នាំ, ថ្មីបំផុតមុន</string>
+  <string name="sort_by_date_desc">ថ្ងៃខែឆ្នាំ, យូរបំផុតមុន</string>
+  <string name="sort_by_status_asc">ស្ថានភាព, បានបញ្ចប់មុនបំផុត</string>
+  <string name="sort_by_status_desc">ស្ថានភាព, មិនបានបញ្ចប់មុនបំផុត</string>
+  <string name="filter_the_list">តម្រងបញ្ជី</string>
+  <!--Displayed in search boxes for form lists or question types that involve search-->
+  <string name="search">ស្វែងរក</string>
+  <string name="no_items_display">គ្មានអ្វីដែលត្រូវបង្ហាញបាន</string>
+  <string name="no_items_display_forms">គ្មានអ្វីដែលអាចបង្ហាញបាន.\n\nសូមព្យាយាមទាញ និងបំពេញទិន្នន័យ​ពី​សំណុំ​បែប​បទ​ទទេ</string>
+  <string name="no_items_display_sent_forms">គ្មានអ្វីដែលអាចបង្ហាញបាន។\n\nសូម​ព្យាយាម​បំពេញបញ្ចប់សំណុំ​បែប​បទ​​មុននឹងបង្ហាញ។</string>
+  <string name="no_items_display_instances">គ្មានអ្វីដែលអាចបង្ហាញបាន.\n\nសូម​ព្យាយាម​បំពេញបញ្ចប់សំណុំ​បែប​បទ​ដែល​​បាន​​រក្សា​​ទុក​​មុន​​នឹង​​ផ្ញើ​​ចេញ</string>
+  <string name="storage_runtime_permission_denied_title">សិទ្ធិក្នុងការផ្ទុក</string>
+  <string name="storage_runtime_permission_denied_desc">បើគ្មានការអនុញ្ញាតទាំងនេះ Collect មិនអាចចូលប្រើទម្រង់របស់អ្នក ឬរក្សាទុកចម្លើយ​បើក​កម្មវិធី​ឡើង​វិញ​នៅ​ពេល​អ្នក​រួចរាល់​ដើម្បី​ផ្តល់​សិទ្ធិ​ទាំងនេះ។</string>
+  <!--##############################################
+    # FILL BLANK FORM
+    ##############################################-->
+  <string name="instance_scan_count">%1$d សំណុំបែបបទបានបន្ថែម។</string>
+  <string name="finished_disk_scan">បញ្ចប់ការស្កេន. សំណុំបែបបទទាំងអស់បានផ្ទុករួចរាល់.</string>
+  <string name="xform_parse_error">XForm មាន​បញ្ហា​ក្នុង​ការ​ញែក​ដោយ​បាត់បង់ ឬ​មិន​ត្រឹម​ត្រូវ​សម្រាប់ %1$s: %2$s</string>
+  <string name="loading_form">កំពុងផ្ទុកសំណុំបែបបទ</string>
+  <string name="survey_loading_reading_form_message">កំពុង​អាន​ទម្រង់​សំណុំបែប​បទ​…</string>
+  <string name="survey_loading_reading_data_message">ការអានទិន្នន័យស្ទង់មតិ …</string>
+  <string name="survey_loading_reading_csv_message">កំពុង​អាន​ឯកសារ CSV</string>
+  <string name="parse_error">សុំទោស, សំណុំ​បែប​បទ​មិន​អាច​បែកចែកបាន</string>
+  <string name="parent_form_not_present">មិន​អាច​ធ្វើ​ការ​កែ​ប្រែ​សំុណុំ​បែប​បទ​ដែល​បាន​រក្សាទុក​ ពីព្រោះ​សំណុំបែប​បទ​ទទេ​ដែលត្រូវគ្នាមិន​នៅ ឬត្រូវ​បាន​លុប។ \n\nលេខ​សម្គាល់​សំណុំ​បែប​បទ: %1$s</string>
+  <string name="cannot_edit_completed_form">ទម្រង់នេះមិនអាចកែប្រែម្តងទៀតទេ, វាត្រូវបានគេសម្គាល់ថាបានបញ្ចប់ហើយ។ វាប្រហែលជាត្រូវបានអ៊ិនគ្រីប។</string>
+  <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
+  <string name="savepoint_used">ការផ្លាស់ប្តូរមិនបានរក្សាទុកត្រូវបានស្តារឡើងវិញពី savepoint!</string>
+  <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
+  <string name="change_language">ប្ដូរ​ភាសា</string>
+  <!--Text for button displayed in the form filling menu to see the form's table of contents-->
+  <string name="view_hierarchy">ទៅ Prompt</string>
+  <!--Text for button displayed in the form filling menu to save the form-->
+  <string name="save_all_answers">រក្សាទុកសំណុំ​បែប​បទ​</string>
+  <!--Text of button from the form's table of contents to jump to the beginning of the form-->
+  <string name="jump_to_beginning">ទៅកន្លែងចាប់ផ្តើម</string>
+  <!--Text of button from the form's table of contents to jump to the end of the form-->
+  <string name="jump_to_end">ទៅកន្លែងបញ្ចប់</string>
+  <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
+  <string name="jump_to_previous">ទៅឡើង</string>
+  <!--Displayed below group names in a form's table of contents-->
+  <string name="group_label">ក្រុម</string>
+  <!--Displayed below repeat names in a form's table of contents-->
+  <string name="exit">ចាកចេញ</string>
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <string name="add_repeat_question">បន្ថែម \"%s\"?</string>
+  <string name="add_repeat">បន្ថែម</string>
+  <string name="dont_add_repeat">កុំបន្ថែម</string>
+  <string name="add_another_menu">បន្ថែមមួយផ្សេងទៀត</string>
+  <!--Title of overlay menu displayed when long pressing on a question in a form-->
+  <string name="edit_prompt">កែប្រែ Prompt</string>
+  <string name="clearanswer_confirm">បោះបង់ចម្លើយ​ដើម្បី \"%s\"?</string>
+  <string name="clear_answer">បោះបង់ចម្លើយ</string>
+  <string name="clear_answer_ask">បោះ​បង់ការឆ្លើយនេះ</string>
+  <string name="clear_answer_no">បោះបង់</string>
+  <string name="discard_answer">បោះបង់ចម្លើយ</string>
+  <string name="discard_group">ដក​ក្រុម​ចេញ</string>
+  <string name="delete_repeat">ដក​ក្រុម​ចេញ</string>
+  <string name="delete_repeat_ask">ដក​ក្រុម​នេះ​ចេញ?</string>
+  <string name="delete_repeat_confirm">ដក​ក្រុម \"%s\" និង​កូន​ក្រុម​នានា​ចេញ?</string>
+  <string name="delete_repeat_no">បោះបង់</string>
+  <string name="invalid_answer_error">សុំទោស, ការឆ្លើយតបនេះមិនត្រឹមត្រូវ</string>
+  <string name="required_answer_error">សុំទោស, ការឆ្លើយតបនេះទាមទារ</string>
+  <string name="invalid_space_in_answer_singular">ព្រមាន: តម្លៃមូលដ្ឋាន %s មានដកឃ្លា</string>
+  <string name="invalid_space_in_answer_plural">ព្រមាន: តម្លៃមូលដ្ឋាន %s មានដកឃ្លា</string>
+  <string name="survey_internal_error">កំហុសខាងក្នុង: ជំហានដើម្បីជំរុញឱ្យបរាជ័យ។</string>
+  <string name="save_enter_data_description">អ្នកដល់ទីបញ្ចប់នៃ %s</string>
+  <string name="save_form_as">ឈ្មោះសំណុំ​បែប​បទនេះ</string>
+  <string name="save_as_error">ឈ្មោះរក្សាទុកមិនអាចទទេ!</string>
+  <string name="mark_finished">សម្គាល់សំណុំបែបបទថាបានបញ្ចប់</string>
+  <string name="quit_entry">រក្សា​ទុក​សំណុំ​បែប​បទ​ និង​ចាក​ចេញ</string>
+  <string name="data_saved_error">សុំទោស, រក្សា​ទុកសំណុំ​បែបបទ​មិន​បាន​សម្រេច!</string>
+  <string name="data_saved_ok">បាន​រក្សាទុកសំណុំ​បែបបទ​ដោយ​ជោគជ័យ!</string>
+  <string name="save_point_error">បញ្ហាក្នុងការរក្សាទុកនូវចំនុចស្តារឡើងវិញ: %s</string>
+  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <string name="quit_application">ចាកចេញ %s</string>
+  <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="no_form_loaded">&lt;no ទម្រង់បានផ្ទុក&gt;</string>
+  <string name="do_not_save">បោះបង់ការផ្លាស់ប្តូរ</string>
+  <string name="keep_changes">រក្សាការផ្លាស់ប្តូរ</string>
+  <string name="saving_form">កំពុងរក្សាទុកសំណុំ​បែប​បទ​</string>
+  <string name="survey_saving_validating_message">កំពុងផ្ទៀងផ្ទាត់ចម្លើយ</string>
+  <string name="survey_saving_collecting_message">កំពុងប្រមូលទិន្នន័យ</string>
+  <string name="survey_saving_saving_message">កំពុងរក្សាទុកទៅកាន់ថាស SD</string>
+  <string name="survey_saving_finalizing_message">កំពុងបញ្ចប់ទៅកាន់ថាស SD</string>
+  <string name="survey_saving_encrypting_message">កំពុងបម្លែង​ជារហស្សលិខទិន្នន័យ</string>
+  <string name="not_exactly_one_record_for_this_instance">ពុំមានទិន្នន័យណាមួយដែលត្រូវនឹង instance នេះ!</string>
+  <string name="not_exactly_one_blank_form_for_this_form_id">មិន​មាន​សំណុំ​បែប​បទ​ទទេរពិតប្រាកដមួយដែលត្រូវគ្នានឹង jr_form_id នេះ។</string>
+  <string name="no_form_id_specified">មិនបញ្ជាក់ពី ID របស់ទម្រង់???</string>
+  <string name="phone_does_not_support_rsa">ទូរស័ព្ទមិនបានគាំទ្រការអ៊ីនគ្រីបប្រភេទ RSA</string>
+  <string name="invalid_rsa_public_key">កូនសោរសាធាណះ RSA មិនត្រឹមត្រូវ</string>
+  <string name="encryption_error_message">%s ទម្រង់មិនត្រូវបានរក្សាជាទម្រង់បញ្ចប់។</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <string name="bad_uri">URI អាក្រក់: %s</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <string name="unrecognized_uri">មិនស្គាល់ URI: %s</string>
+  <!--Text displayed when audio recording fails to start-->
+  <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <!--Error message displayed when copying media from a temporary directory fails-->
+  <!--##############################################
+    # FORM FEATURES
+    ##############################################-->
+  <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
+  <string name="launch_app">ដំណើរការ</string>
+  <string name="activity_not_found">គ្មានសកម្មភាពដើម្បីដោះស្រាយបាន : %s</string>
+  <string name="no_app">ការ​ស្នើ​សុំ​របស់កម្មវិធី​បានបាត់បង់ ។​ សូមធ្វើការអាន​ដោយ​ដៃ ។</string>
+  <string name="null_intent_value">កម្មវិធីខាងក្រៅមិនបានផ្តល់នូវព័ត៌មានដូចការរំពឹងទុក</string>
+  <string name="launch_printer">ការផ្តួចផ្តើមបោះពុម្ភ</string>
+  <string name="no_printer">ម៉ាស៊ីន​បោះ​ពុម្ព​ដែល​បាន​ស្នើ​មិន​ត្រូវ​បាន​ដំឡើង​។ សូម​ដំឡើង​ម៉ាស៊ីន​បោះ​ពុម្ព​។</string>
+  <string name="open_url">បើក​អាសយដ្ឋាន</string>
+  <string name="capture_osm">បើក OpenMapKit</string>
+  <string name="recapture_osm">ធ្វើម្តងទៀត OSM tagging</string>
+  <string name="edited_osm_file">បានកែប្រែឯកសារ XML របស់ OSM:</string>
+  <string name="invalid_osm_data">មានកំហុសកើតឡើង, យើងមិនអាចទទួលយកទិន្នន័យ OSM ត្រឹមត្រូវ។</string>
+  <string name="alert">ព្រមាន</string>
+  <string name="install_openmapkit">សូមចុចដើម្បីដំឡើង OpenMapKit!</string>
+  <string name="get_barcode">ទាញបារកូដ</string>
+  <string name="replace_barcode">ជំនួសបារកូដ</string>
+  <string name="barcode_scanner_prompt">សូមដាក់បារកូដនៅក្នុងប្រអប់ចតុកោណកែង</string>
+  <string name="open_file">បើក​ឯកសារ</string>
+  <string name="rank_items">ចំណាត់ថ្នាក់ធាតុ</string>
+  <string name="invalid_range_widget">ធាតុក្រាហ្វិកនេះមានប៉ារ៉ាម៉ែត្រមិនត្រឹមត្រូវ!</string>
+  <string name="svg_file_does_not_exist">ឯកសារ SVG មិនត្រូវបានរកឃើញ</string>
+  <string name="capture_image">ថត​រូបភាព</string>
+  <string name="choose_image">ជ្រើសរើសរូបថត</string>
+  <string name="selected_invalid_image">ឯកសារ​ដែល​បាន​រើស​មិន​មែន​លក្ខណះ​ជា​រូបភាព​ត្រឹម​ត្រូវ</string>
+  <string name="gdrive_connection_exception">រូបភាព​នេះ​ត្រូវ​បាន​រក្សា​ទុក​នៅ​លើ​ Google Drive និង​មិន​អាច​ត្រូវ​បាន​ចូល​ដំណើរ​ខណៈ​ពេល​ដែល​អ្នក​នៅ​ក្រៅ​បណ្ដាញ​។</string>
+  <string name="view_image">បង្ហាញរូបថត</string>
+  <string name="take_picture_instruction">ប៉ះលើផ្ទៃ​អេក្រង់ដើម្បីថត​រូប</string>
+  <string name="error_front_camera_unavailable">កាមេរ៉ាខាងមុខមិនមាននៅលើឧបករណ៍នេះទេ</string>
+  <string name="camera_error">ឧបករណ៍នេះមិនមានការគាំទ្រ​ក្នុង​ការ​ប្រើ​ប្រាស់ API របស់ Camera2</string>
+  <string name="annotate_image">Annotate Image</string>
+  <!--Dialog heading for saving annotated image-->
+  <string name="save_and_close">រក្សាទុក និងបិទ</string>
+  <string name="signature_capture">ថតហត្ថលេខា</string>
+  <string name="sign_button">ប្រមូលហត្ថលេខា</string>
+  <string name="markup_image">រូបភាពសម្គាល់</string>
+  <string name="draw_image">រូបគំនូរវាស</string>
+  <string name="reset_image">ធ្វើសារឡើងវិញ</string>
+  <string name="set_color">កំណត់ពណ៌</string>
+  <string name="capture_video">ថត​វីដេអូ</string>
+  <string name="choose_video">ជ្រើសរើសវីដេអូ</string>
+  <string name="view_video">បង្ហាញវីដេអូ</string>
+  <string name="start_video_capture_instruction">ប៉ះលើផ្ទៃ​អេក្រង់​ដើម្បីចាប់​ផ្តើម​ថត</string>
+  <string name="stop_video_capture_instruction">ការថតបានចាប់ផ្តើម, ប៉ះវាម្តងទៀតដើម្បីបញ្ចប់</string>
+  <string name="play_video">ចាក់វីដេអូ</string>
+  <string name="choose_file">ជ្រើសរើស​ឯកសារ</string>
+  <!--Text for button that deletes a file that is the answer to a question-->
+  <!--Text for button that starts recording sound-->
+  <string name="capture_audio">ថត​សំឡេង</string>
+  <!--Text for button that lets the user choose a sound file on their device-->
+  <string name="choose_sound">ជ្រើសរើសសំឡេង</string>
+  <!--Description text for button that that pauses recording sound-->
+  <!--Description text for button that that resumes recording sound-->
+  <!--Title for dialog asking the user if they want to delete a file-->
+  <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="error_attaching_binary_file">មានបញ្ហាមួយបានកើតឡើងខណៈដែលភ្ជាប់ឯកសារមេឌៀ: %s</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="select_value">ជ្រើសរើសតម្លៃ</string>
+  <string name="select_answer">ជ្រើសរើសចម្លើយ</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="edit_value">កែប្រែ​តម្លៃ</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="no_value_selected">គ្មាន​តម្លៃត្រូវបានរើស</string>
+  <string name="selected">បានជ្រើសរើសៈ</string>
+  <string name="trigger">យល់ព្រម. សូមបន្ត.</string>
+  <string name="ext_file_no_data_error">ឯកសារពុំមានទិន្នន័យ!</string>
+  <string name="ext_conflicting_columns_error">ជួរឈរ %s ដូចគ្នា!</string>
+  <string name="ext_sortBy_numeric_error">ការ​តម្រៀប​តាម​ជួរ​ឈ គួរតែមានតម្លៃជាតួលេខតែប៉ុណ្ណោះ។ តម្លៃដែលប៉ះទង្គិចគ្នា គឺ \'%s\'</string>
+  <string name="ext_search_wrong_arguments_error">មានបញ្ហាវាក្យសម្ព័ន្ធក្នុងមុខងារស្វែងរក (search): មុខងារនេះ​ត្រូវ​ការ​អាគុយម៉ង់​​ចំនួន 1, 4 ឬ 6 ។</string>
+  <string name="ext_search_wrong_function_error">មានបញ្ហាវាក្យសម្ព័ន្ធក្នុងមុខងារស្វែងរក (search): មុខងារដែលមិនស្គាល់មាន \'%s\' ។</string>
+  <string name="ext_search_bad_function_error">មានបញ្ហាវាក្យសម្ព័ន្ធក្នុងមុខងារស្វែងរក (search): \'%s\' មិន​អាច​វាយ​តម្លៃ​ថា​ជា​មុខ​ងារ​ណា​មួយ​បាន​</string>
+  <string name="ext_search_return_error">ការដោះស្រាយស្វែងរកបានត្រឡប់នូវវត្ថុមួយ​ប្រភេទ \'%s\'.</string>
+  <string name="ext_import_generic_error">មិន​អាច​នាំ​ចូល​ទិន្នន័យពី %1$s។ មូលហេតុ: %2$s</string>
+  <string name="ext_import_progress_message">កំពុងផ្ទុកទិន្នន័យជាមុនពី \'%1$s\' សូមរងចាំ… %2$s</string>
+  <string name="ext_import_cancelled_message">ការអានទិន្នន័យ​បានបោះបង់</string>
+  <string name="ext_import_finalizing_message">កំពុងបញ្ចប់ការផ្ទុកទិន្នន័យមុន</string>
+  <string name="ext_import_completed_message">ការអានទិន្នន័យ​បានបញ្ចប់!</string>
+  <string name="ext_not_initialized_error">ExternalDataManager មិនត្រូវបានចាប់ផ្តើមទេ។</string>
+  <string name="ext_import_csv_missing_error">ទិន្នន័យ​ខាង​ក្រៅ​សម្រាប់ %1$s មិនត្រូវបាននាំចូល។ ប្រហែល​ជា​អ្នក​ភ្លេច​ភ្ជាប់​ឯកសារ %2$s.csv ជា​មួយ​នឹង​សំណំុ​បែប​បទ​របស់​អ្នក?</string>
+  <string name="ext_search_generic_error">មានបញ្ហាវាក្យសម្ព័ន្ធក្នុងមុខងារស្វែងរក (search): %s</string>
+  <string name="ext_assign_value_error">មិនអាចដាក់តម្លៃនៅ \'%s\' ។</string>
+  <string name="parser_exception">XPathParser Exception: \"%s\"</string>
+  <string name="get_bearing">កត់​ត្រា​​ទ្រង់ទ្រាយ</string>
+  <string name="replace_bearing">ជំនួស​ទ្រង់ទ្រាយ</string>
+  <string name="getting_bearing">កំពុង​ផ្ទុក​ទ្រង់ទ្រាយ</string>
+  <string name="accept_bearing">កត់​ត្រា​​ទ្រង់ទ្រាយ</string>
+  <string name="bearing">ទ្រង់ទ្រាយ៖ %.3f</string>
+  <string name="direction">ទិសដៅ៖ %s</string>
+  <string name="bearing_lack_of_sensors">មិនអាចប្រមូលផលបានឡើយ: ឧបករណ៏ខ្វះល្បឿន, ឧបករណ៏ម៉ាញេទិចឬទាំងពីរ។</string>
+  <string name="select_date">ជ្រើសរើសថ្ងៃខែឆ្នាំ</string>
+  <string name="select_time">ជ្រើសរើសម៉ោង</string>
+  <string name="no_date_selected">មិនបានជ្រើសរើសថ្ងៃខែឆ្នាំ</string>
+  <string name="no_time_selected">មិនបានជ្រើសរើសម៉ោង</string>
+  <string name="ethiopian_month_1">Meskerem</string>
+  <string name="ethiopian_month_2">Tikimt</string>
+  <string name="ethiopian_month_3">Hidar</string>
+  <string name="ethiopian_month_4">Tahsas</string>
+  <string name="ethiopian_month_5">Tir</string>
+  <string name="ethiopian_month_6">Yekatit</string>
+  <string name="ethiopian_month_7">មេកាប៊ិទ</string>
+  <string name="ethiopian_month_8">Miazia</string>
+  <string name="ethiopian_month_9">Ginbot</string>
+  <string name="ethiopian_month_10">Senie</string>
+  <string name="ethiopian_month_11">Hamlie</string>
+  <string name="ethiopian_month_12">Nehasie</string>
+  <string name="ethiopian_month_13">Pagumien</string>
+  <string name="coptic_month_1">Thout</string>
+  <string name="coptic_month_2">Paopi</string>
+  <string name="coptic_month_3">Hathor</string>
+  <string name="coptic_month_4">Koiak</string>
+  <string name="coptic_month_5">Tobi</string>
+  <string name="coptic_month_6">Meshir</string>
+  <string name="coptic_month_7">Paremhat</string>
+  <string name="coptic_month_8">Parmouti</string>
+  <string name="coptic_month_9">Pashons</string>
+  <string name="coptic_month_10">Paoni</string>
+  <string name="coptic_month_11">Epip</string>
+  <string name="coptic_month_12">Mesori</string>
+  <string name="coptic_month_13">Pi Kogi Enavot</string>
+  <string name="islamic_month_1">Muharram</string>
+  <string name="islamic_month_2">Safar</string>
+  <string name="islamic_month_3">Rabi\' al-awwal</string>
+  <string name="islamic_month_4">Rabi\' al-thani</string>
+  <string name="islamic_month_5">Jumada al-awwal</string>
+  <string name="islamic_month_6">Jumada al-thani</string>
+  <string name="islamic_month_7">Rajab</string>
+  <string name="islamic_month_8">Sha\'ban</string>
+  <string name="islamic_month_9">Ramadan</string>
+  <string name="islamic_month_10">Shawwal</string>
+  <string name="islamic_month_11">Dhu al-Qidah</string>
+  <string name="islamic_month_12">Dhu al-Hijjah</string>
+  <string name="persian_month_4">Tir</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="custom_date">%1$s (%2$s)</string>
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
+  <string name="file_invalid">ឯកសារ៖ %s មិនត្រឹមត្រូវ</string>
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
+  <string name="file_missing">ឯកសារ៖ %s ខ្វះខាត</string>
+  <!--Heading for a dialog which prompts the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Explanation for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Action to close a full screen dialog-->
+  <string name="close">បិទ</string>
+  <!--Heading for a dialog which prompts the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <string name="reason_for_changes">ហេតុផលនៃការផ្លាស់ប្តូរ</string>
+  <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <string name="reason">ហេតុផល</string>
+  <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Action to save the contents of a full screen dialog-->
+  <string name="save">រក្សាទុក</string>
+  <!--##############################################
+    # GEO
+    ##############################################-->
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+   These strings are only being used to preserve compatibility with pre-existing
+    tile caches, and are not shown in the UI.-->
+  <string name="openmap_usgs_topo">USGS National Map Topo</string>
+  <string name="openmap_usgs_sat">ផែនទីជាតិ Hybrid USGS </string>
+  <string name="openmap_usgs_img">ផែនទីជាតិរូបភាព USGS </string>
+  <string name="openmap_stamen_terrain">Stamen Terrain</string>
+  <string name="openmap_cartodb_positron">CartoDB Positron</string>
+  <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
+  <string name="basemap">ផែនទីមូលដ្ឋាន</string>
+  <string name="basemap_source">ប្រភព</string>
+  <string name="map_style_label">%s រចនាបទផែនទី</string>
+  <string name="streets">ផ្លូវ</string>
+  <string name="terrain">លក្ខណៈភូមិសាស្ត្រ</string>
+  <string name="hybrid">ផែនទីកូនកាត់</string>
+  <string name="satellite">ផ្កាយរណប</string>
+  <string name="google_play_services_error_occured">មិនអាចចូលដំណើរការផែនទី Google ។ តើសេវា Google Play បានដំឡើងហើយឬនៅ?</string>
+  <string name="view_change_location">មើល ឬផ្លាស់ប្តូរទីតាំង</string>
+  <string name="change_location">ផ្លាស់ប្តូរ​ទីតាំង</string>
+  <string name="getting_location">កំពុងផ្ទុកទីតាំង</string>
+  <string name="get_location">ចាប់​យក​ទីតាំង</string>
+  <string name="provider_disabled_error">សុំទោស, សេវាចាប់យកទីតាំងត្រូវបានបិទ</string>
+  <string name="gps_result">រយៈទទឹង: %1$s\nរយៈបណ្ដោយ: %2$s\nរយៈកំពស់: %3$sm\nភាពត្រឹមត្រូវ: %4$sm</string>
+  <string name="location_metadata">ផ្កាយរណបមាន៖ %1$d/24\n\nពេលវេលាកន្លងទៅ៖ %2$s</string>
+  <!--Action to go to Android settings. Displayed when location providers are disabled.-->
+  <string name="go_to_settings">ទៅកាន់ការកំណត់</string>
+  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
+  <string name="track_location">តាមដានទីតាំង</string>
+  <string name="save_point">រក្សា GeoPoint</string>
+  <string name="get_point">ចាប់ផ្តើម GeoPoint</string>
+  <string name="geopoint_view_read_only">មើល GeoPoint</string>
+  <string name="get_shape">ចាប់ផ្តើម GeoShape</string>
+  <string name="get_trace">ចាប់ផ្តើម GeoTrace</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <string name="west">ខាងលិច %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <string name="east">ខាងកើត %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <string name="south">ខាងត្បូង %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="north">ខាងជើង %1$s%2$s%3$s</string>
+  <string name="geoshape_title">GeoShape</string>
+  <string name="start">ចាប់ផ្តើម</string>
+  <string name="enable_gps">ដំណើរ​ការ​ប្រព័ន្ធ​ចាប់​ទីតាំង</string>
+  <string name="geotrace_title">GeoTrace</string>
+  <string name="geo_clear_warning">លក្ខណះ​ពិសេស​ត្រូវ​បាន​បង្កើត។ តើ​អ្នក​ចង់​លុប​លក្ខណះ​នេះ​ដែរ​ឬ​ទេ?</string>
+  <string name="geo_exit_warning">បោះបង់​ការផ្លាស់​ប្តូរ និងត្រឡប់ទៅកាន់ ODK វិញ?</string>
+  <string name="polygon_validator">ត្រូវការចំនុចយ៉ាងតិច 3 ដើម្បី​បង្កើតពហុកោណ</string>
+  <string name="clear">លុ​បចេញ</string>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <string name="none">គ្មាន</string>
+  <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
+  <plurals name="number_of_meters">
+    <item quantity="other">%d ម៉ែត្រ</item>
+  </plurals>
+  <string name="geopoint_instruction">ចុចយូរដើម្បីដាក់ស្លាកកន្លែង ឬប៉ះប៊ូតុងបន្ថែមស្លាក</string>
+  <string name="geopoint_no_draggable_instruction">ប៉ះដើម្បីបន្ថែមប៊ូតុងសម្គាល់</string>
+  <string name="discard">បោះបង់</string>
+  <string name="geoshape_view_change_location">មើល ឬផ្លាស់ប្តូរ GeoShape</string>
+  <string name="geotrace_view_change_location">មើល ឬផ្លាស់ប្តូរ GeoTrace</string>
+  <!--Name of an action button-->
+  <!--##############################################
+    # SEND FINALIZED FORM
+    ##############################################-->
+  <string name="uploading_data">កំពុងបញ្ជូនសំណុំ​បែប​បទ​</string>
+  <string name="noselect_error">សុំទោស, អ្នកមិនបានជ្រើសរើសសំណុំបែបបទណាមួយទេ!</string>
+  <string name="no_connection">គ្មានការតភ្ជាប់បណ្តាញដែល​អាច​ប្រើបាន</string>
+  <string name="sending_items">កំពុងបញ្ជូនសំណុំ​បែប​បទ​ %1$s នៃ %2$s</string>
+  <string name="send_selected_data">បញ្ជូនការជ្រើសរើស</string>
+  <string name="server_auth_credentials">ឈ្មោះអ្នកប្រើប្រាស់ ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវសម្រាប់ម៉ាស៊ីនមេ៖ %s</string>
+  <string name="server_requires_auth">ម៉ាស៊ីនមេទាមទារឲ្យមានការផ្ទៀងផ្ទាត់</string>
+  <string name="no_forms_uploaded">សុំទោស, គ្មានសំណុំ​បែប​បទសម្រាប់ផ្ទុកឡើង.</string>
+  <string name="upload_results">លទ្ធផលនៃការផ្ទុកឡើង</string>
+  <!--Name of option in Send Finalized Form menu to show only unsent forms (default) or show sent and unsent forms-->
+  <string name="change_view">ការផ្លាស់ប្តូរទិដ្ឋភាព</string>
+  <string name="show_sent_and_unsent_forms">បង្ហាញសំណុំ​បែប​បទដែលបានផ្ញើចេញ និងមិនទាន់ផ្ញើចេញ</string>
+  <string name="show_unsent_forms">បង្ហាញសំណុំ​បែប​បទដែលមិនទាន់បានផ្ញើចេញ</string>
+  <string name="media_upload_error">បរាជ័យក្នុងការផ្ទុកឯកសារមេឌៀដែលមិនមាន៖ %1$s</string>
+  <string name="send_in_progress">កំពុងផ្ញើផ្នែកខាងក្រោយ, សូមព្យាយាមម្តងទៀតក្នុងរយះពេលខ្លី</string>
+  <string name="notification_error">បង្ហាញសារជួនដំណឹងដែលមានបញ្ហា</string>
+  <!--##############################################
+    # GET BLANK FORM
+    ##############################################-->
+  <string name="refresh">ធ្វើឲ្យថ្មីឡើងវិញ</string>
+  <string name="download">ទទួលការជ្រើសរើស</string>
+  <string name="download_forms_result">លទ្ធផលនៃការទាញយក</string>
+  <string name="downloading_data">កំពុង​ភ្ជាប់​ទៅ​កាន់​ម៉ាស៊ីន​មេ</string>
+  <string name="fetching_file">កំពុង​​ទទួល​យក %1$s ។ \n\n ​សំណុំបែបបទ​ទី %2$s នៃ %3$s ។</string>
+  <string name="form_download_progress">%1$s. កំពុងទាញយកឯកសារមេឌៀ: %2$s of %3$s</string>
+  <string name="version">ជំនាន់ ៖</string>
+  <string name="form_updates_available">មានទម្រង់សម្រាប់ធ្វើបច្ចុប្បន្នភាព</string>
+  <string name="newer_version_of_a_form_info">នេះជាការធ្វើ​បច្ចុប្បន្នភាព​លើទម្រង់​ដែល​អ្នក​មាន</string>
+  <!--##############################################
+    # DELETE SAVED FORM
+    ##############################################-->
+  <!--Title of a section in "Delete Saved Forms" for deleting filled/saved forms (as opposed to blank forms)-->
+  <string name="data">សំណុំបែបបទដែល​​បាន​រក្សា​ទុក</string>
+  <!--Title of a section in "Delete Saved Forms" for deleting blank forms (as opposed to filled/saved forms)-->
+  <string name="forms">សំណុំបែបបទទទេ</string>
+  <string name="delete_confirm">លុប​សំណុំបែបបទ %s?</string>
+  <string name="delete_file">លុប​អ្វី​ដែល​បាន​ជ្រើស</string>
+  <string name="delete_no">កុំ​លុប</string>
+  <string name="delete_yes">លុប​សំណុំបែបបទ</string>
+  <string name="file_deleted_error">សំុទោស សំណុំ​បែប​បទ​ %1$s នៃ %2$s ដែលបានជ្រើសរើស​មិន​អាច​លុប​បាន​ទេ!</string>
+  <string name="form_delete_message">កំពុងលុបទម្រង់ដែលបានជ្រើសរើសរួច</string>
+  <string name="deleting_form_dialog_update_message"> កំពុងលុបទម្រង់: %1$d នៃ %2$d </string>
+  <string name="file_deleted_ok">%s សំណុំបែបបទបានលុបដោយជោគជ័យ ! </string>
+  <string name="file_delete_in_progress">សុំទោស, សកម្មភាពនៃការលុបសំណុំបែបបទគឺបានដំណើរការ!</string>
+  <!--##############################################
+    # GENERAL SETTINGS
+    ##############################################-->
+  <string name="general_preferences">ការកំណត់ទូទៅ</string>
+  <!--Title of a settings section-->
+  <string name="server_settings_title">ម៉ាស៊ីនមេ</string>
+  <!--Title of a settings section-->
+  <string name="client">ចំណុច​ប្រទាក់​អ្នក​ប្រើប្រាស់​</string>
+  <!--Title of a settings section-->
+  <string name="maps">ផែនទី</string>
+  <!--Title of a settings section-->
+  <string name="form_management_preferences">ការគ្រប់គ្រងទម្រង់</string>
+  <!--Title of a settings section-->
+  <string name="user_and_device_identity_title">អត្តសញ្ញាណ​អ្នក​ប្រើ​ប្រាស់ និងឧបករណ៍</string>
+  <!--Title of a settings section only available in beta or development builds.-->
+  <string name="server_preferences">ការកំណត់ម៉ាស៊ីនមេ</string>
+  <!--Label for server type setting-->
+  <string name="type">ប្រភេទ</string>
+  <string name="server_url">អាសយដ្ឋាន</string>
+  <!--Title of dialog for configuring server URL-->
+  <string name="change_server_url">URL ម៉ាស៊ីន​បម្រើ</string>
+  <string name="url_error">សុំទោស, អាសយដ្ឋានមិនត្រឹមត្រូវ!</string>
+  <string name="username">អ្នក​ប្រើប្រាស់</string>
+  <string name="change_username">ឈ្មោះ​អ្នកប្រើ ODK</string>
+  <string name="password">ពាក្យសម្ងាត់</string>
+  <string name="change_password">ពាក្យ​សម្ងាត់ ODK</string>
+  <string name="password_error_whitespace">ការ​ដក​ឃ្លា​មិន​ត្រូវ​បាន​អនុញ្ញាតិ​នៅ​ក្នុង​ពាក្យ​សម្ងាត់​នៅផ្នែក​ខាង​មុខ ឬ​ខាង​ក្រោយ</string>
+  <string name="username_error_whitespace">ការ​ដក​ឃ្លា​មិន​ត្រូវ​បាន​អនុញ្ញាតិ​នៅ​ក្នុង​ឈ្មោះ​អ្នក​ប្រើ​ប្រាស់​នៅ​ផ្នែក​​ខាង​​មុខ​ ឬ​​ខាង​​ក្រោយ</string>
+  <string name="change_formlist_url">ផ្លូវរបស់បញ្ជីសំណុំ​បែប​បទ​(បានបន្ថែមលើ URL)</string>
+  <string name="change_submission_url">ផ្លូវដាក់ចូល (បន្ថែមលើ URL)</string>
+  <string name="formlist_url">ទីតាំងបញ្ជីសំណុំ​បែប​បទ</string>
+  <string name="submission_url">ផ្លូវដាក់ចូល</string>
+  <string name="server_platform_google_sheets">ថាស Google, សន្លឹក Google</string>
+  <string name="selected_google_account_text">គណនី Google</string>
+  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
+  <string name="google_sheets_url">URL ដែលបានដាក់ស្នើ Fallback</string>
+  <!--Description for Fallback submission URL setting-->
+  <string name="google_sheets_url_hint">ទម្រង់​ត្រូវតែ​កំណត់ URLក្នុងការបញ្ជូន​។ ប្រសិន​មិន​បាន​កំណត់, URL នេះ​នឹង​ត្រូវ​បាន​ប្រើប្រាស់។</string>
+  <string name="app_theme">Theme</string>
+  <string name="theme_light">Light theme</string>
+  <string name="theme_dark">Dark theme</string>
+  <string name="language">ភាសា</string>
+  <string name="use_device_language">ប្រើ​ប្រាស់​ភាសារបស់​ឧបករណ៍</string>
+  <string name="font_size">ទំហំពុម្ភអក្សរ</string>
+  <string name="change_font_size">ទំហំពុម្ភអក្សរ</string>
+  <string name="font_size_extra_large">ធំបំផុត</string>
+  <string name="font_size_large">ធំ</string>
+  <string name="font_size_medium">មធ្បម</string>
+  <string name="font_size_small">តូច</string>
+  <string name="font_size_extra_small">តូចបំផុត</string>
+  <string name="navigation">ការ​ស្វែង​រកផ្លូវ</string>
+  <string name="swipe_navigation">ប្រើការកកិតដេក</string>
+  <string name="buttons_navigation">ប្រើប៊ូតុង ទៅមុខ/ថយក្រោយ</string>
+  <string name="swipe_buttons_navigation">ប្រើការកកិត និងប៊ូតុង</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="form_forward">បន្ទាប់</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="form_backward">ត្រឡប់ក្រោយ</string>
+  <string name="show_splash_title">ស្វាគមន៍អេក្រង់</string>
+  <string name="show_splash_summary">បង្ហាញពេលកម្មវិធីចាប់ផ្តើម</string>
+  <string name="splash_path">ជ្រើសរើសរូបស្វាគមន៍</string>
+  <string name="default_splash_path">ODK លំនាំដើម</string>
+  <string name="select_another_image">ជ្រើសរើសរូបផ្សេងទៀត</string>
+  <string name="use_odk_default">ប្រើប្រាស់រូបលំនាំដើម</string>
+  <string name="change_splash_path">ផ្លាស់ប្តូររូបថត</string>
+  <!--Heading for the settings category about updating blank forms-->
+  <string name="form_update_category">ទម្រង់សម្រាប់ធ្វើបច្ចុប្បន្នភាព</string>
+  <!--Name of the setting that defines how blank forms are updated from the server.-->
+  <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
+  <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
+  <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
+  <!--Name of the setting that defines how often blank forms are updated from the server.-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_fifteen_minutes">រៀងរាល់ ១៥នាទី</string>
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_one_hour">រៀងរាល់ម៉ោង</string>
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_six_hours">រៀងរាល់ ៦ ម៉ោង</string>
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_24_hours">រៀងរាល់ ២៤ ម៉ោង</string>
+  <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
+  <string name="automatic_download">ទាញយក​ដោយ​ស្វ័យ​ប្រវត្តិ</string>
+  <string name="automatic_download_summary">ធ្វើបច្ចុប្បន្នភាពជំនាន់ទម្រង់​ដោយទាញយក​​ដោយ​ស្វ័យ​ប្រវត្តិ</string>
+  <string name="form_submission_category">ការដាក់ស្នើរទម្រង់</string>
+  <string name="autosend_selector_title">ផ្ញើ​ចេញ​ដោយ​ស្វ័យ​ប្រវត្តិ</string>
+  <string name="autosend">ផ្ញើចេញ​ដោយ​ស្វ័យ​ប្រវត្តិ</string>
+  <string name="off">បិទ</string>
+  <string name="wifi_autosend">តែ Wifi ប៉ុណ្ណោះ</string>
+  <string name="cellular_autosend">តែ Cellular ប៉ុណ្ណោះ</string>
+  <string name="wifi_cellular_autosend">Wifi ឬ Cellular</string>
+  <string name="delete_after_send">លុបទម្រង់បន្ទាប់ការផ្ញើចេញ</string>
+  <string name="delete_after_send_summary">លុប​សំណុំ​​បែប​​បទ​ដែល​បាន​បញ្ចប់ និង​មីឌៀ ​បន្ទាប់​ពី​ការ​ផ្ញើ​ចេញ​ទៅ​កាន់​ម៉ាស៊ីន​មេ</string>
+  <string name="form_filling_category">ការបំពេញទម្រង់</string>
+  <string name="default_completed">លំដាំដើមដើម្បីបញ្ចប់</string>
+  <string name="default_completed_summary">កំណត់ថាសំណុំបែបបទបានបញ្ចប់ដោយលំនាំដើម</string>
+  <string name="constraint_behavior_title">ដំណើរការនៃការរឹតបន្តឹង</string>
+  <string name="constraint_behavior">កំពុងដំណើរការឥរិយាបទឧបសគ្គ</string>
+  <string name="constraint_behavior_on_swipe">ផ្តល់​សុពលភាព​នៅ​ពេលដែលអូស​ទៅ​មុខ</string>
+  <string name="constraint_behavior_on_finalize">ពន្យា​សុពលភាព​រហូត​ដល់​បញ្ចប់</string>
+  <string name="high_resolution_title">កំរិតច្បាស់វីដេអូ</string>
+  <string name="high_resolution_summary">បើកការថតវីដេអូគុណភាពច្បាស់</string>
+  <string name="image_size_title">ទំហំរូបថត</string>
+  <string name="image_size_dialog_title">ភីកសែលអតិបរមានៃគែមវែងរបស់រូបភាព</string>
+  <string name="image_size_large">ធំ (3072px)</string>
+  <string name="image_size_medium">មធ្យម (2048px)</string>
+  <string name="image_size_small">តូច (1024px)</string>
+  <string name="image_size_very_small">តូចខ្លាំង (640px)</string>
+  <string name="image_size_original">ទំហំដើមចេញពីកាមេរ៉ា (លំនាំដើម)</string>
+  <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
+  <string name="guidance_hint_title">បង្ហាញការណែនាំសម្រាប់សំណួរ</string>
+  <string name="guidance_no">ទេ</string>
+  <string name="guidance_yes">បាទ/ចាស - តែងតែបង្ហាញ</string>
+  <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
+  <string name="guidance_yes_collapsed">បាទ - បញ្ចូលគ្នា</string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <string name="form_import_category">នាំចូលទម្រង់</string>
+  <string name="instance_sync">ទម្រង់បញ្ចប់ដែលនាំចូល</string>
+  <string name="instance_sync_summary">ទម្រង់ដែលប៉ះពាល់ត្រូវបានបន្ថែមដោយផ្ទាល់ទៅកាន់ថតទម្រង់</string>
+  <string name="analytics_preferences">ការប្រើប្រាស់ទិន្នន័យ</string>
+  <string name="analytics">ប្រមូលទិន្នន័យប្រើប្រាស់អនាមិក</string>
+  <string name="analytics_summary">ផ្តល់​ទិន្នន័យ​ប្រើប្រាស់​ជា​អនាមិក​ដើម្បី​ជួយ​ឱ្យ​ក្រុម​មួយ​នេះ​បាន​ផ្តល់​អាទិភាព​ដល់​ការ​ជួស​ជុល​ ODK និង​លក្ខណៈ​ពិសេស​របស់​វា</string>
+  <string name="form_metadata_title">ទម្រង់ទិន្នន័យមេតា</string>
+  <string name="form_metadata">ទម្រង់ទិន្នន័យមេតា</string>
+  <string name="form_metadata_summary">តម្លៃទាំងនេះនឹងត្រូវបានបញ្ចូលបន្ថែមទៅក្នុងទម្រង់ដែលរួមមានឈ្មោះអ្នកប្រើប្រាស់, អ៊ីម៉ែល និង/ឬលេខទូរស័ព្ទដើម្បីកំណត់អ្នកដែលបានបញ្ជូនទិន្នន័យ។</string>
+  <string name="user_defined">អ្នកប្រើប្រាស់កំណត់</string>
+  <string name="phone_number">លេខទូរស័ព្ទ</string>
+  <string name="email">អាសយដ្ឋានអ៊ីម៉ែល</string>
+  <string name="invalid_email_address">អាសយដ្ឋាន​អ៊ីម៉េល​មិនត្រឹមត្រូវ!</string>
+  <string name="device_defined">ឧបករណ៍កំណត់</string>
+  <string name="device_id">ID របស់ឧបករណ៍</string>
+  <!--Displayed when a device property such as the phone number is not available-->
+  <!--##############################################
+     # ADMIN SETTINGS
+     ##############################################-->
+  <string name="admin_preferences">ការកំណត់របស់ Admin</string>
+  <string name="admin_access_settings">ប៉ះសម្រាប់កំណត់ដំណើរការរបស់ Admin</string>
+  <string name="enter_new_password">សូមបំពេញពាក្យសម្ងាត់ថ្មី</string>
+  <string name="admin_password">ពាក្យសម្ងាត់ Admin</string>
+  <string name="admin_password_changed">ពាក្យសម្ងាត់របស់ Admin បានផ្លាស់ប្តូរដោយជោគជ័យ</string>
+  <string name="admin_password_disabled">ពាក្យសម្ងាត់របស់ Admin មិនដំណើការ</string>
+  <string name="admin_password_incorrect">សោកស្តាយផង, ពាក្យសម្ងាត់នេះមិនត្រឹមត្រូវ!</string>
+  <string name="enter_admin_password">បញ្ចូលពាក្យសម្ងាត់របស់ Admin</string>
+  <string name="change_admin_password">ផ្លាស់​ប្តូរ​ពាក្យ​សម្ងាត់​ Admin</string>
+  <string name="show_password">បង្ហាញ​ពាក្យសម្ងាត់</string>
+  <string name="found_in_main">ដោះ​ធីក​ដើម្បី​លាក់ចេញ​ពី​ម៉ឺនុយមេ</string>
+  <string name="found_in_settings">ដោះធីក​ដើម្បី​លាក់ចេញ​ពីការ​កំណត់ទូទៅ</string>
+  <string name="form_entry">ដោះ​ធីក​ដើម្បី​លាក់ពី​ទម្រង់​បញ្ចូល</string>
+  <string name="reset_settings_dialog">កំណត់កម្មវិធីឡើងវិញ</string>
+  <string name="select_all">ជ្រើសរើសទាំងអស់</string>
+  <string name="clear_all">លុបចេញទាំងអស់</string>
+  <string name="reset_settings">ការកំណត់ទាំងអស់ (ការកំណត់ខាងក្នុង, ការកំណត់ដែលរក្សាទុក)</string>
+  <string name="reset_saved_forms">រក្សាទម្រង់ (ថតករណី, មូលដ្ឋានទិន្នន័យករណី)</string>
+  <string name="reset_blank_forms">ទម្រង់ទទេរ (ថតទម្រង់, មូលដ្ឋានទិន្នន័យទម្រង់, មូលដ្ឋានទិន្នន័យ itemsets)</string>
+  <string name="reset_layers">ស្រទាប់ផែនទី (ថតស្រទាប់)</string>
+  <string name="reset_cache">ទម្រង់ផ្ទុកខាឆឹះ (.ថតខាឆឹះ)</string>
+  <string name="reset_osm_tiles">ខាឆឹះក្បឿងរបស់ OSM (ថត osmdroid)</string>
+  <string name="reset_settings_dialog_title">ជ្រើសរើសអ្វីដែលត្រូវកំណត់ឡើងវិញ</string>
+  <string name="reset_settings_button_reset">កំណត់ឡើងវិញ</string>
+  <string name="reset_in_progress">កំពុងកំណត់ឡើងវិញ</string>
+  <string name="reset_app_state_result">កំណត់លទ្ធផលឡើងវិញ</string>
+  <string name="reset_app_state_warning">ទិន្នន័យដែល​បានជ្រើសរើសទាំងអស់នឹងត្រូវលុប។ ទាំងនេះមិនធ្វើវិញបានទេ។</string>
+  <string name="reset_settings_result">ការកំណត់ទាំងអស់ :: %s</string>
+  <string name="reset_saved_forms_result">សំណុំបែបបទដែល​​បាន​រក្សា​ទុក :: %s</string>
+  <string name="reset_blank_forms_result">សំណុំបែបបទទទេ :: %s</string>
+  <string name="reset_layers_result">ស្រទាប់ផែនទី :: %s</string>
+  <string name="reset_cache_result">ទម្រង់ផ្ទុកខាឆឹះ :: %s</string>
+  <string name="reset_osm_tiles_result">ខាឆឹះក្បឿងរបស់ OSM :: %s</string>
+  <string name="user_access_control">ការត្រួតពិនិត្យការចូលប្រើរបស់អ្នកប្រើ</string>
+  <string name="main_menu_settings">ការកំណត់ផ្ទាំងមេមីនុយ</string>
+  <string name="main_menu_settings_summary">ប៉ះ​ដើម្បី​គ្រប់គ្រង​ធាតុ​នៃផ្ទាំងមេមីនុយ</string>
+  <string name="user_settings">ការកំណត់របស់អ្នកប្រើប្រាស់</string>
+  <string name="user_setting_summary">ប៉ះ​ដើម្បី​គ្រប់​គ្រងធាតុ​នៃ​ការ​កំណត់​ទូទៅ</string>
+  <string name="form_entry_setting">ការ​កំណត់​នៃ​ទម្រង់​បញ្ជូល</string>
+  <string name="form_entry_settings_summary">ប៉ះ​ដើម្បី​គ្រប់​គ្រង​ធាតុនៃទម្រង់បញ្ជូលទិន្នន័យ</string>
+  <!--Name of a setting that determines whether users can navigate backwards in a form-->
+  <string name="moving_backwards_title">កំពុងរំកិលថយក្រោយ</string>
+  <string name="moving_backwards_disabled_title">ការរំកិលថយក្រោយមិនបានអនុញ្ញាតិ</string>
+  <string name="moving_backwards_disabled_message">កំណត់រចនាសម្ព័ន្ធឧបករណ៍ដើម្បីរារាំងអ្នកប្រើពីការឆ្លងកាត់ការកំណត់នេះ?\n\nការប្រែប្រួលមាន:\n\u2022 បិទដំណើរការកែប្រែទម្រង់រក្សាទុក\n\u2022 បិទដំណើរការរក្សាទុកទម្រង់\n\u2022 បិទដំណើរការទៅប្រអប់បញ្ចូល\n\u2022 កំណត់ដំណើរការការរឹតបន្តឹងដើម្បីធ្វើឱ្យមានសុពលភាពលើការបញ្ច្រាស់ទៅមុខ</string>
+  <string name="yes">បាទ/ចាស</string>
+  <string name="no">ទេ</string>
+  <string name="moving_backwards_enabled_title">អាច​ដំណើរការ​ត្រឡប់​ថយ​ក្រោយ​បាន</string>
+  <string name="moving_backwards_enabled_message">អ្នកប្រហែលជាចង់មើលម្តងទៀតអំពីការកំណត់៖ \n\n\u2022 កែប្រែទម្រង់ដែលបានរក្សាទុក\n\u2022 រក្សាទុកទម្រង់\n\u2022 ទៅកាន់កន្លែងបញ្ចូល\n\u2022 កំពុងដំណើរការកំហិត</string>
+  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <string name="save_mid">រក្សាទុកសំណុំ​បែប​បទ</string>
+  <!--##############################################
+     # GOOGLE DRIVE, GOOGLE SHEETS
+     ##############################################-->
+  <!--Title of the screen that lists forms in user's Google Drive-->
+  <string name="go_drive">ថាសរបស់ខ្ញុំ</string>
+  <!--Title of the screen that lists forms shared with Google Drive user-->
+  <string name="go_shared">ចែក​រំលែក​ជាមួយ​ខ្ញុំ</string>
+  <!--Button for navigating across Google Drive folders-->
+  <string name="download_selected">ទាញយកនូវជំរើស</string>
+  <string name="go_back">ត្រឡប់ក្រោយ</string>
+  <string name="google_auth_io_exception_msg">មិន​អាច​ប្រើប្រាស់​ API បាន​។ ប្រសិន​ជា​អ្នក​កំពុង​ដំណើរការ​កសាង​ក្នុង​ម៉ាស៊ីន (local), សូម​អាន​អំពី​គម្រោង​នេះ​សារ​ឡើង​វិញ​។</string>
+  <string name="drive_get_file">កំពុង​ទទួល​ %1$s និង ឯកសារមេឌៀ</string>
+  <string name="no_google_account">គ្មាន​គណនី​ Google បាន​ជ្រើស​រើស</string>
+  <string name="google_set_account">អ្នក​បាន​ជ្រើស​សន្លឹក​ Google ជា​ម៉ាស៊ីន​មេ​របស់​អ្នក​សូម​ជ្រើស​រើស​គណនី Google ត្រូវគ្នា ដែលឋិតក្នុងការកំណត់ទូទៅមុននឹងបន្ត</string>
+  <string name="google_search_browse">ការ​​ស្វែង​​រក​​សម្រាប់​​សំណុំ​​​បែប​​​បទ​។ ឬ​​រើស​ \'ថាស​​របស់​​ខ្ញុំ\' ខាង​​ក្រោម​​ដើម្បី​​រក​មើល</string>
+  <string name="invalid_sheet_id">លេខសម្គាល់សន្លឹកកិច្ចការមិនត្រឹមត្រូវ៖ %1$s</string>
+  <string name="google_sheets_access_denied">ដំណើរ​ការ​ត្រូវ​បាន​បដិសេធ។ សូមធ្វើឱ្យប្រាកដថាម្ចាស់សៀវភៅបញ្ជីប្រោសប្រណីអនុញ្ញាតឲ្យអ្នកកែសម្រួល។</string>
+  <string name="google_sheets_missing_columns">សៀវភៅបញ្ជីគឺបាត់បង់ជួរឈ: %1$s</string>
+  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
+  <string name="instance_upload_cancelled">បានបោះបង់ការផ្ទុកឡើងភ្លាមៗ</string>
+  <string name="no_columns_to_upload">មិនមានជួរឈរក្នុងសំណុំបែបបទដើម្បីផ្ទុកឡើង។</string>
+  <string name="missing_google_account_dialog_title">មិនទាន់ដាក់គណនី Google</string>
+  <string name="multiple_media_folders_detected_notification">ថតមេឌៀច្រើនជាងមួយត្រូវបានរកឃើញ សូមដកមួយហើយព្យាយាមម្តងទៀត</string>
+  <!--##############################################
+     # ABOUT
+     ##############################################-->
+  <string name="about_preferences">អំពី</string>
+  <string name="tell_your_friends">ចែក​រំលែក​ ODK Collect</string>
+  <string name="tell_your_friends_msg">តើ​សហការី​របស់​អ្នក​នៅ​តែ​ប្រមូល​ទិន្នន័យ​នៅ​លើ​ក្រដាស​មែន​ទេ? ចែក​រំលែក ODK Collect ជាមួយពួកគេ។</string>
+  <string name="leave_a_review">ទុកមតិនៅក្នុងហាង Play</string>
+  <string name="leave_a_review_msg">ការ​ផ្តល់​មតិ​ (សង្ឃឹមថាជាវិជ្ជមាន) របស់​អ្នក​បង្កើន​ភាព​មើល​ឃើញ​នៃ​កម្មវិធី​នៅ​ក្នុង Play Store ។</string>
+  <string name="odk_website">ចូលទៅកាន់គេហទំព័រ ODK</string>
+  <string name="odk_website_summary">ODK បាន​ប្រើ​ប្រាស់​ដើម្បី​ប្រមូល​ទិន្នន័យសម្រាប់ភាពប្រសើរ​របស់​សង្គមនៅក្នុងបរិយាកាស​ប្រកួត​ប្រជែង​។</string>
+  <string name="odk_forum">ចូល​រួម​ជា​មួយ​វេទិកា ODK</string>
+  <string name="odk_forum_summary">ចូលរួមវេទិកាដើម្បីទទួលបានការគាំទ្រ, លក្ខណៈពិសេសស្នើសុំ, រួមចំណែកកូដ / ការបកប្រែ!</string>
+  <string name="all_open_source_licenses">ប្រភពបណ្ណាល័យបើកចំហ/អាជ្ញាបណ្ណ</string>
+  <string name="all_open_source_licenses_msg">We stand on the shoulders of giants!</string>
+  <!--##############################################
+     # SETTINGS IMPORT
+     ##############################################-->
+  <string name="successfully_imported_settings">បាន​នាំ​ចូល​ការ​កំណត់​ដោយ​ជោគ​ជ័យ</string>
+  <string name="encoding_max_limit">តួអក្សរ​ដល់​ដែន​កំណត់​អតិបរមា​: លេខកូដ​ QR ​មិន​អាច​បង្កើត​តាម​ការកំណត់​ទាំងអស់​</string>
+  <string name="share">ចែករំលែក</string>
+  <string name="turn_on_flashlight">បើក​ភ្លើងពិល</string>
+  <string name="turn_off_flashlight">បិទភ្លើងពិល</string>
+  <string name="server_password">ពាក្យសម្ងាត់​ម៉ាស៊ីន​មេ</string>
+  <string name="include_password_dialog">ពាក្យ​សម្ងាត់​មានភ្ជាប់នៅក្នុង​កូដ</string>
+  <string name="generate">បង្កើត</string>
+  <string name="invalid_qrcode">លេខកូដ QR មិនមានការកំណត់ត្រឹមត្រូវ</string>
+  <string name="corrupt_settings_file_notification">សុំទោស, ឯកសារ​កំណត់​បាន​បំផ្លាញ​ និង​គួរ​តែ​លុប ឬ​ផ្លាស់​ប្តូរ​ចេញ​</string>
+  <!--##############################################
+     # SCOPED STORAGE MIGRATION
+     ##############################################-->
+  <!--Action to begin a storage migration-->
+  <!--##############################################
+     # MISC
+     ##############################################-->
+  <string name="ok">យល់ព្រម</string>
+  <!--Used in many dialogs to dismiss the dialog without taking any action-->
+  <string name="cancel">បោះបង់</string>
+  <string name="cancel_loading_form">បោះបង់</string>
+  <string name="cancel_location">បោះបង់</string>
+  <string name="do_not_change">បោះបង់</string>
+  <string name="do_not_exit">បោះបង់</string>
+  <string name="canceling">កំពុង​បោះបង់</string>
+  <string name="notification_channel_name">ការជូនដំណឹង​ជាទូទៅ</string>
+  <string name="success">ជោគជ័យ</string>
+  <string name="failures">បរាជ័យ</string>
+  <string name="error_occured">មានបញ្ហាបានកើតឡើង</string>
+  <string name="please_wait">សូមរង់ចាំមួយភ្លែត</string>
+  <string name="please_wait_long">សូមរងចាំ. វាអាចចំណាយរយះពេលពីរបីនាទី.</string>
+  <string name="sdcard_unmounted">Collect មិនអាចចូលទៅកាន់កាត SD បានទេ ។ វា​ប្រហែល​ជាបាន​ម៉ោនតាម​រយះ​ USB?  (ស្ថានភាពបច្ចុប្បន្ន: %s)</string>
+  <string name="fs_delete_media_path_if_file_error">មិនអាចលុប \'%s\' ។ សូម​លុប​ឯកសារ​ដោយ​ដៃ​ហើយ​ធ្វើ​ការ​ទាញ​យក​សំណុំ​បែបបទ​ឡើង​វិញ។</string>
+  <string name="fs_create_media_folder_error">មិនអាចបង្កើតថតមេឌៀបាន \'%s\'.</string>
+  <string name="fs_file_copy_error">មិនអាចចម្លងបាន \'%1$s\' លើសពី \'%2$s\' ។ មូលហេតុ: %3$s</string>
+  <string name="survey_multiple_forms_error">អ្នក​បាន​ទាញ​យក​សំណុំ​បែប​បទ​ពីរខុស​គ្នា​ដែល​មាន​លេខ​សម្គាល់​ទម្រង់​ និង​កំណែ។ ពួក​វា​ប្រហែល​ជា​សំណុំ​បែប​បទ​តែ​មួយ​ដែល​បាន​ផ្ទុក​ឡើង​នៅ​ម៉ោង​ ឬ​ម៉ាស៊ីន​មេ​ខុស​គ្នា។ សូម​អ្នក​លុប​វាមួយ​ក្នុង​​ករណី​ណា​មួយ។</string>
+  <string name="cannot_create_directory">ពុំអាច​បង្កើត​ថតឯកសារ: %s</string>
+  <string name="not_a_directory">%s មានរួច, ប៉ុន្តែ​ពុំមែន​ជាថត​ឯក​សារ</string>
+  <string name="select_odk_shortcut">ជ្រើសរើសផ្លូវកាត់ ODK</string>
+</resources>

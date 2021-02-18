@@ -16,6 +16,7 @@ public class FirebaseAnalytics implements Analytics {
         // setupRemoteAnalytics();  // smap commented
     }
 
+    @Deprecated
     @Override
     public void logEvent(String category, String action) {
         //Bundle bundle = new Bundle();     // smap
@@ -23,6 +24,7 @@ public class FirebaseAnalytics implements Analytics {
         //firebaseAnalytics.logEvent(category, bundle);
     }
 
+    @Deprecated
     @Override
     public void logEvent(String category, String action, String label) {
         //Bundle bundle = new Bundle();     //smap
@@ -36,6 +38,20 @@ public class FirebaseAnalytics implements Analytics {
         Bundle bundle = new Bundle();
         bundle.putString("form", formId);
         //firebaseAnalytics.logEvent(event, bundle);  // smap
+    }
+
+    @Override
+    public void logFormEvent(String event, String formId) {
+        Bundle bundle = new Bundle();
+        bundle.putString("form", formId);
+        firebaseAnalytics.logEvent(event, bundle);
+    }
+
+    @Override
+    public void logServerEvent(String event, String serverHash) {
+        Bundle bundle = new Bundle();
+        bundle.putString("server", serverHash);
+        firebaseAnalytics.logEvent(event, bundle);
     }
 
     private void setupRemoteAnalytics() {

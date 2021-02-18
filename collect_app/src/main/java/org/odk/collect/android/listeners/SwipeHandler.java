@@ -16,6 +16,7 @@ import org.odk.collect.android.utilities.ScreenUtils;
 import timber.log.Timber;
 
 public class SwipeHandler {
+
     private final GestureDetector gestureDetector;
     private final OnSwipeListener onSwipe;
     private ODKView odkView;
@@ -23,8 +24,8 @@ public class SwipeHandler {
     private boolean beenSwiped;
 
     public interface OnSwipeListener {
-        void showPreviousView();
-        void showNextView();
+        void onSwipeBackward();
+        void onSwipeForward();
     }
 
     public SwipeHandler(Context context) {
@@ -119,16 +120,16 @@ public class SwipeHandler {
                     if (velocityX > 0) {
                         if (e1.getX() > e2.getX()) {
                             Timber.e("showNextView VelocityX is bogus! %f > %f", e1.getX(), e2.getX());
-                            onSwipe.showNextView();
+                            onSwipe.onSwipeForward();
                         } else {
-                            onSwipe.showPreviousView();
+                            onSwipe.onSwipeBackward();
                         }
                     } else {
                         if (e1.getX() < e2.getX()) {
                             Timber.e("showPreviousView VelocityX is bogus! %f < %f", e1.getX(), e2.getX());
-                            onSwipe.showPreviousView();
+                            onSwipe.onSwipeBackward();
                         } else {
-                            onSwipe.showNextView();
+                            onSwipe.onSwipeForward();
                         }
                     }
                     return true;

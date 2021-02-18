@@ -24,9 +24,9 @@ import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
-import org.odk.collect.android.audio.Clip;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
+import org.odk.collect.android.formentry.questions.NoButtonsItem;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.injection.config.AppDependencyModule;
@@ -34,9 +34,11 @@ import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.audioclips.Clip;
 
 import java.util.List;
 
@@ -46,6 +48,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -66,6 +70,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
         if (isQuick()) {
             selectOneWidget.setListener(listener);
         }
+        selectOneWidget.setFocus(activity);
         return selectOneWidget;
     }
 
@@ -105,7 +110,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
     public void whenNoButtonsModeExist_shouldFrameLayoutBeUsedAsItemView() {
         when(formEntryPrompt.getAppearanceHint()).thenReturn("no-buttons");
         populateRecyclerView(getWidget());
-        assertThat(getChoiceView(getWidget(), 0).getClass().getName(), is(FrameLayout.class.getName()));
+        assertThat(getChoiceView(getWidget(), 0).getClass().getName(), is(NoButtonsItem.class.getName()));
     }
 
     @Test
@@ -124,6 +129,27 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
     public void whenAutocompleteAppearanceDoesNotExist_shouldSearchBoxBeHidden() {
         when(formEntryPrompt.getAppearanceHint()).thenReturn("");
         assertThat(getSpyWidget().binding.choicesSearchBox.getVisibility(), is(View.GONE));
+    }
+
+    @Test
+    public void whenAutocompleteAppearanceDoesNotExist_shouldNotKeyboardBeDisplayed() {
+        SelectOneWidget widget = getSpyWidget();
+        verify(widget.softKeyboardController, never()).showSoftKeyboard(widget.binding.choicesSearchBox);
+    }
+
+    @Test
+    public void whenAutocompleteAppearanceExist_shouldKeyboardBeDisplayed() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("autocomplete");
+        SelectOneWidget widget = getSpyWidget();
+        verify(widget.softKeyboardController).showSoftKeyboard(widget.binding.choicesSearchBox);
+    }
+
+    @Test
+    public void whenAutocompleteAppearanceExistAndWidgetIsReadOnly_shouldNotKeyboardBeDisplayed() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn("autocomplete");
+        when(formEntryPrompt.isReadOnly()).thenReturn(true);
+        SelectOneWidget widget = getSpyWidget();
+        verify(widget.softKeyboardController, never()).showSoftKeyboard(widget.binding.choicesSearchBox);
     }
 
     @Test
@@ -301,6 +327,11 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
             @Override
             public Analytics providesAnalytics(Application application, GeneralSharedPreferences generalSharedPreferences) {
                 return analytics;
+            }
+
+            @Override
+            public SoftKeyboardController provideSoftKeyboardController() {
+                return mock(SoftKeyboardController.class);
             }
         });
     }

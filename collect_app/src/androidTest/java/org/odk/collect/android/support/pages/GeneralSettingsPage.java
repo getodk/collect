@@ -40,17 +40,17 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
     }
 
     public GeneralSettingsPage openConstraintProcessing() {
-        scrollToViewAndClickText(getTranslatedString(R.string.constraint_behavior_title));
+        scrollToRecyclerViewItemAndClickText(getTranslatedString(R.string.constraint_behavior_title));
         return this;
     }
 
     public GeneralSettingsPage openShowGuidanceForQuestions() {
-        scrollToViewAndClickText(getTranslatedString(R.string.guidance_hint_title));
+        scrollToRecyclerViewItemAndClickText(getTranslatedString(R.string.guidance_hint_title));
         return this;
     }
 
     public ServerSettingsPage clickServerSettings() {
-        clickOnString(R.string.server);
+        clickOnString(R.string.server_settings_title);
         return new ServerSettingsPage(rule).assertOnPage();
     }
 
@@ -66,7 +66,7 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
     }
 
     public GeneralSettingsPage checkIfServerOptionIsDisplayed() {
-        onView(withText(getTranslatedString(R.string.server))).check(matches(isDisplayed()));
+        onView(withText(getTranslatedString(R.string.server_settings_title))).check(matches(isDisplayed()));
         return this;
     }
 
@@ -107,7 +107,7 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
     }
 
     public GeneralSettingsPage clickOnDefaultToFinalized() {
-        scrollToViewAndClickText(getTranslatedString(R.string.default_completed));
+        scrollToRecyclerViewItemAndClickText(getTranslatedString(R.string.default_completed));
         return this;
     }
 

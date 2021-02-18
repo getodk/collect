@@ -36,7 +36,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 
 import timber.log.Timber;
 
@@ -45,15 +44,12 @@ import timber.log.Timber;
  */
 @SuppressLint("ViewConstructor")
 public class StringWidget extends QuestionWidget {
-
-    boolean readOnly;
     public final EditText answerText;
 
-    protected StringWidget(Context context, QuestionDetails questionDetails, boolean readOnlyOverride) {
+    protected StringWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
 
-        readOnly = questionDetails.getPrompt().isReadOnly() || readOnlyOverride;
-        answerText = getAnswerEditText(readOnly, getFormEntryPrompt());
+        answerText = getAnswerEditText(questionDetails.isReadOnly() || this instanceof ExStringWidget, getFormEntryPrompt());
         setUpLayout(context);
     }
 
@@ -70,8 +66,8 @@ public class StringWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        String s = getAnswerText();
-        return !s.equals("") ? new StringData(s) : null;
+        String answer = getAnswerText();
+        return !answer.isEmpty() ? new StringData(answer) : null;
     }
 
     @NonNull
@@ -81,8 +77,8 @@ public class StringWidget extends QuestionWidget {
 
     @Override
     public void setFocus(Context context) {
-        if (!readOnly) {
-            SoftKeyboardUtils.showSoftKeyboard(answerText);
+        if (!questionDetails.isReadOnly()) {
+            softKeyboardController.showSoftKeyboard(answerText);
             /*
              * If you do a multi-question screen after a "add another group" dialog, this won't
              * automatically pop up. It's an Android issue.
@@ -93,7 +89,7 @@ public class StringWidget extends QuestionWidget {
              * is focused before the dialog pops up, everything works fine. great.
              */
         } else {
-            SoftKeyboardUtils.hideSoftKeyboard(answerText);
+            softKeyboardController.hideSoftKeyboard(answerText);
         }
     }
 

@@ -1,6 +1,7 @@
 package org.odk.collect.android.formentry.audit;
 
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.forms.FormDesignException;
 import org.odk.collect.android.javarosawrapper.FormController;
 
 import static org.javarosa.form.api.FormEntryController.EVENT_GROUP;
@@ -17,10 +18,14 @@ public class AuditUtils {
         if (formController.getEvent() == EVENT_QUESTION
                 || formController.getEvent() == EVENT_GROUP
                 || formController.getEvent() == EVENT_REPEAT) {
-            FormEntryPrompt[] prompts = formController.getQuestionPrompts();
-            for (FormEntryPrompt question : prompts) {
-                String answer = question.getAnswerValue() != null ? question.getAnswerValue().getDisplayText() : null;
-                auditEventLogger.logEvent(AuditEvent.AuditEventType.QUESTION, question.getIndex(), true, answer, currentTime, null);
+            try {
+                FormEntryPrompt[] prompts = formController.getQuestionPrompts();
+                for (FormEntryPrompt question : prompts) {
+                    String answer = question.getAnswerValue() != null ? question.getAnswerValue().getDisplayText() : null;
+                    auditEventLogger.logEvent(AuditEvent.AuditEventType.QUESTION, question.getIndex(), true, answer, currentTime, null);
+                }
+            } catch (FormDesignException e) {
+                throw new RuntimeException(e.getMessage(), e);
             }
         }
     }

@@ -8,13 +8,8 @@
         app:iconSpaceReserved="false">
         <CheckBoxPreference
             android:key="change_server"
-            android:title="@string/server"
+            android:title="@string/server_settings_title"
             app:iconSpaceReserved="false" />
-        <!--<org.odk.collect.android.preferences.ExtendedCheckboxPreference-->
-        <!--android:key="change_submission_transport"-->
-        <!--android:title="@string/submission_transport_admin_setting"-->
-        <!--android:dependency="change_server"-->
-        <!--/>-->
         <CheckBoxPreference
             android:key="change_app_theme"
             android:title="@string/app_theme"
@@ -45,7 +40,7 @@
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="periodic_form_updates_check"
-            android:title="@string/periodic_form_updates_check_title"
+            android:title="@string/form_update_frequency_title"
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="automatic_update"
@@ -82,6 +77,10 @@
         <CheckBoxPreference
             android:key="guidance_hint"
             android:title="@string/guidance_hint_title"
+            app:iconSpaceReserved="false" />
+        <CheckBoxPreference
+            android:key="external_app_recording"
+            android:title="@string/external_app_recording"
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="instance_form_sync"

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.mockwebserver.MockWebServer;
-import okhttp3.tls.internal.TlsUtil;
 
 public class MockWebServerRule implements TestRule {
 
@@ -35,15 +34,6 @@ public class MockWebServerRule implements TestRule {
 
         mockWebServer.start();
         return mockWebServer;
-    }
-
-    public MockWebServer startHTTPS() throws IOException {
-        MockWebServer httpsMockWebServer = new MockWebServer();
-        mockWebServers.add(httpsMockWebServer);
-
-        httpsMockWebServer.useHttps(TlsUtil.localhost().sslSocketFactory(), false);
-        httpsMockWebServer.start();
-        return httpsMockWebServer;
     }
 
     public void teardown() throws IOException {

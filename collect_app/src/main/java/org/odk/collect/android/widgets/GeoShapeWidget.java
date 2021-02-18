@@ -16,55 +16,99 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.util.TypedValue;
+import android.view.View;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
+import org.javarosa.form.api.FormEntryPrompt;
+
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.GeoPolyActivity;
+import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-
-/**
- * GeoShapeWidget is the widget that allows the user to get Collect multiple GPS points.
- *
- * @author Jon Nordling (jonnordling@gmail.com)
- */
 @SuppressLint("ViewConstructor")
-public class GeoShapeWidget extends BaseGeoWidget {
+public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver {
+    GeoWidgetAnswerBinding binding;
 
-    public GeoShapeWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
-        super(context, questionDetails, waitingForDataRegistry);
-    }
+    private final WaitingForDataRegistry waitingForDataRegistry;
+    private final GeoDataRequester geoDataRequester;
 
-    public void startGeoActivity() {
-        Intent intent = new Intent(getContext(), GeoPolyActivity.class)
-            .putExtra(GeoPolyActivity.ANSWER_KEY, answerDisplay.getText().toString())
-            .putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOSHAPE);
-        ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOSHAPE_CAPTURE);
-    }
-
-    public void updateButtonLabelsAndVisibility(boolean dataAvailable) {
-        startGeoButton.setText(dataAvailable ? R.string.geoshape_view_change_location : R.string.get_shape);
+    public GeoShapeWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry,
+                          GeoDataRequester geoDataRequester) {
+        super(context, questionDetails);
+        this.waitingForDataRegistry = waitingForDataRegistry;
+        this.geoDataRequester = geoDataRequester;
     }
 
     @Override
-    public String getAnswerToDisplay(String answer) {
-        return answer;
-    }
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+        binding = GeoWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
-    @Override
-    public String getDefaultButtonLabel() {
-        return getContext().getString(R.string.get_shape);
+        binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+
+        binding.simpleButton.setOnClickListener(v ->
+                geoDataRequester.requestGeoShape(context, prompt, getAnswerText(), waitingForDataRegistry));
+
+        String stringAnswer = prompt.getAnswerText();
+        binding.geoAnswerText.setText(stringAnswer);
+
+        boolean dataAvailable = stringAnswer != null && !stringAnswer.isEmpty();
+
+        if (getFormEntryPrompt().isReadOnly()) {
+            if (dataAvailable) {
+                binding.simpleButton.setText(R.string.geoshape_view_read_only);
+            } else {
+                binding.simpleButton.setVisibility(View.GONE);
+            }
+        } else {
+            if (dataAvailable) {
+                binding.simpleButton.setText(R.string.geoshape_view_change_location);
+            } else {
+                binding.simpleButton.setText(R.string.get_shape);
+            }
+        }
+
+        return binding.getRoot();
     }
 
     @Override
     public IAnswerData getAnswer() {
-        String s = answerDisplay.getText().toString();
-        return !s.isEmpty()
-                ? new StringData(s)
-                : null;
+        return getAnswerText().isEmpty() ? null : new StringData(getAnswerText());
+    }
+
+    @Override
+    public void clearAnswer() {
+        binding.geoAnswerText.setText(null);
+        binding.simpleButton.setText(R.string.get_shape);
+        widgetValueChanged();
+    }
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        binding.simpleButton.setOnLongClickListener(l);
+        binding.geoAnswerText.setOnLongClickListener(l);
+    }
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        binding.simpleButton.cancelLongPress();
+        binding.geoAnswerText.cancelLongPress();
+    }
+
+    @Override
+    public void setData(Object answer) {
+        binding.geoAnswerText.setText(answer.toString());
+        binding.simpleButton.setText(answer.toString().isEmpty() ? R.string.get_shape : R.string.geoshape_view_change_location);
+        widgetValueChanged();
+    }
+
+    private String getAnswerText() {
+        return binding.geoAnswerText.getText().toString();
     }
 }

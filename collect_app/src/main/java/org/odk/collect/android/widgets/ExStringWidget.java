@@ -31,16 +31,15 @@ import android.widget.Toast;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.ActivityAvailability;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.util.Map;
@@ -94,7 +93,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * </pre>
  */
 @SuppressLint("ViewConstructor")
-public class ExStringWidget extends StringWidget implements BinaryDataReceiver, ButtonClickListener {
+public class ExStringWidget extends StringWidget implements WidgetDataReceiver, ButtonClickListener {
     // If an extra with this key is specified, it will be parsed as a URI and used as intent data
     private static final String URI_KEY = "uri_data";
     protected static final String DATA_NAME = "value";
@@ -107,7 +106,7 @@ public class ExStringWidget extends StringWidget implements BinaryDataReceiver, 
     public ActivityAvailability activityAvailability;
 
     public ExStringWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
-        super(context, questionDetails, true);
+        super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
         getComponent(context).inject(this);
     }
@@ -139,11 +138,8 @@ public class ExStringWidget extends StringWidget implements BinaryDataReceiver, 
         }
     }
 
-    /**
-     * Allows answer to be set externally in {@link FormEntryActivity}.
-     */
     @Override
-    public void setBinaryData(Object answer) {
+    public void setData(Object answer) {
         StringData stringData = ExternalAppsUtils.asStringData(answer);
         answerText.setText(stringData == null ? null : stringData.getValue().toString());
         widgetValueChanged();
@@ -152,12 +148,12 @@ public class ExStringWidget extends StringWidget implements BinaryDataReceiver, 
     @Override
     public void setFocus(Context context) {
         if (hasExApp) {
-            SoftKeyboardUtils.hideSoftKeyboard(answerText);
+            softKeyboardController.hideSoftKeyboard(answerText);
             // focus on launch button
             launchIntentButton.requestFocus();
         } else {
             if (!getFormEntryPrompt().isReadOnly()) {
-                SoftKeyboardUtils.showSoftKeyboard(answerText);
+                softKeyboardController.showSoftKeyboard(answerText);
             /*
              * If you do a multi-question screen after a "add another group" dialog, this won't
              * automatically pop up. It's an Android issue.
@@ -169,7 +165,7 @@ public class ExStringWidget extends StringWidget implements BinaryDataReceiver, 
              * is focused before the dialog pops up, everything works fine. great.
              */
             } else {
-                SoftKeyboardUtils.hideSoftKeyboard(answerText);
+                softKeyboardController.hideSoftKeyboard(answerText);
             }
         }
     }
@@ -212,6 +208,16 @@ public class ExStringWidget extends StringWidget implements BinaryDataReceiver, 
             }
         }
 
+        if (!activityAvailability.isActivityAvailable(i)) {
+            Intent launchIntent = Collect.getInstance().getPackageManager().getLaunchIntentForPackage(intentName);
+
+            if (launchIntent != null) {
+                // Make sure FLAG_ACTIVITY_NEW_TASK is not set because it doesn't work with startActivityForResult
+                launchIntent.setFlags(0);
+                i = launchIntent;
+            }
+        }
+
         if (activityAvailability.isActivityAvailable(i)) {
             try {
                 ExternalAppsUtils.populateParameters(i, exParams,
@@ -234,7 +240,7 @@ public class ExStringWidget extends StringWidget implements BinaryDataReceiver, 
     }
 
     private void focusAnswer() {
-        SoftKeyboardUtils.showSoftKeyboard(answerText);
+        softKeyboardController.showSoftKeyboard(answerText);
     }
 
     private void onException(String toastText) {

@@ -2,10 +2,10 @@ package org.odk.collect.android.utilities;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.android.support.InMemInstancesRepository;
+import org.odk.collect.android.forms.Form;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.HashMap;
@@ -78,7 +78,8 @@ public class InstanceUploaderUtilsTest {
 
     @Test
     public void getUploadResultMessageTest() {
-        assertThat(getExpectedResultMsg(), is(InstanceUploaderUtils.getUploadResultMessage(getTestInstancesRepository(), null, getTestUploadResult())));
+        assertThat(InstanceUploaderUtils.getUploadResultMessage(getTestInstancesRepository(), null, getTestUploadResult()),
+                is(getExpectedResultMsg()));
     }
 
     @Test
@@ -93,7 +94,7 @@ public class InstanceUploaderUtilsTest {
         for (int i = 1; i <= NUMBER_OF_INSTANCES_TO_SEND; i++) {
             long time = System.currentTimeMillis();
             Instance instance = new Instance.Builder()
-                    .id(Long.valueOf(i))
+                    .id((long) i)
                     .displayName("InstanceTest")
                     .jrFormId("instanceTest")
                     .status(Instance.STATUS_COMPLETE)

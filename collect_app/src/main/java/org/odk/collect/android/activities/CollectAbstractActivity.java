@@ -30,11 +30,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
-import static org.odk.collect.android.utilities.PermissionUtils.isEntryPointActivity;
 
 public abstract class CollectAbstractActivity extends AppCompatActivity {
 
@@ -121,5 +122,32 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
             toolbar.setTitle(title);
             setSupportActionBar(toolbar);
         }
+    }
+
+    /**
+     * Checks to see if an activity is one of the entry points to the app i.e
+     * an activity that has a view action that can launch the app.
+     *
+     * @param activity that has permission requesting code.
+     * @return true if the activity is an entry point to the app.
+     */
+    public static boolean isEntryPointActivity(CollectAbstractActivity activity) {
+
+        List<Class<?>> activities = new ArrayList<>();
+        activities.add(FormEntryActivity.class);
+        activities.add(InstanceChooserList.class);
+        activities.add(FillBlankFormActivity.class);
+        activities.add(InstanceUploaderListActivity.class);
+        activities.add(SplashScreenActivity.class);
+        activities.add(FormDownloadListActivity.class);
+        activities.add(InstanceUploaderActivity.class);
+
+        for (Class<?> act : activities) {
+            if (activity.getClass().equals(act)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

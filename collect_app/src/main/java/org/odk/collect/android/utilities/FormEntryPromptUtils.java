@@ -24,15 +24,21 @@ import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.MultipleItemsData;
 import org.javarosa.core.model.data.helper.Selection;
+import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.dao.ItemsetDao;
+import org.odk.collect.android.fastexternalitemset.ItemsetDao;
+import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
+import javax.annotation.Nullable;
 
 import static org.javarosa.core.model.Constants.DATATYPE_TEXT;
 
@@ -65,13 +71,13 @@ public class FormEntryPromptUtils {
         }
 
         if (data instanceof DateTimeData) {
-            return DateTimeUtils.getDateTimeLabel((Date) data.getValue(),
-                    DateTimeUtils.getDatePickerDetails(appearance), true, context);
+            return DateTimeWidgetUtils.getDateTimeLabel((Date) data.getValue(),
+                    DateTimeWidgetUtils.getDatePickerDetails(appearance), true, context);
         }
 
         if (data instanceof DateData) {
-            return DateTimeUtils.getDateTimeLabel((Date) data.getValue(),
-                    DateTimeUtils.getDatePickerDetails(appearance), false, context);
+            return DateTimeWidgetUtils.getDateTimeLabel((Date) data.getValue(),
+                    DateTimeWidgetUtils.getDatePickerDetails(appearance), false, context);
         }
 
         if (data != null && appearance != null && appearance.contains(WidgetAppearanceUtils.THOUSANDS_SEP)) {
@@ -107,7 +113,7 @@ public class FormEntryPromptUtils {
                 language = formController.getLanguage();
             }
 
-            return new ItemsetDao().getItemLabel(fep.getAnswerValue().getDisplayText(), formController.getMediaFolder().getAbsolutePath(), language);
+            return new ItemsetDao(new ItemsetDbAdapter()).getItemLabel(fep.getAnswerValue().getDisplayText(), formController.getMediaFolder().getAbsolutePath(), language);
         }
 
         return fep.getAnswerText();
@@ -122,5 +128,15 @@ public class FormEntryPromptUtils {
         }
 
         return questionText;
+    }
+
+    @Nullable
+    public static String getAttributeValue(FormEntryPrompt prompt, String attributeName) {
+        List<TreeElement> attributes = prompt.getBindAttributes();
+        Optional<TreeElement> attribute = attributes.stream().filter(attr ->
+                attr.getName().equals(attributeName)
+        ).findAny();
+
+        return attribute.map(TreeElement::getAttributeValue).orElse(null);
     }
 }

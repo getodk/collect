@@ -37,7 +37,7 @@ public class SchedulerFormUpdateAndSubmitManager implements FormUpdateManager, F
         }
 
         String period = sharedPreferences.getString(KEY_PERIODIC_FORM_UPDATES_CHECK, null);
-        long periodInMilliseconds = getPeriodInMilliseconds(period);
+        long periodInMilliseconds = getPeriodInMilliseconds(period, application);
 
         switch (getFormUpdateMode(application, sharedPreferences)) {
             case MANUAL:

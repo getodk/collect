@@ -1,7 +1,6 @@
 package org.odk.collect.android.widgets;
 
 import android.net.Uri;
-import android.view.View;
 import android.view.View.OnLongClickListener;
 
 import androidx.browser.customtabs.CustomTabsServiceConnection;
@@ -15,6 +14,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.CustomTabHelper;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.shadows.ShadowToast;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -25,7 +25,6 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 
 /**
@@ -34,7 +33,6 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 
 @RunWith(RobolectricTestRunner.class)
 public class UrlWidgetTest {
-
     private TestScreenContextActivity spyActivity;
     private CustomTabHelper customTabHelper;
     private OnLongClickListener listener;
@@ -58,12 +56,6 @@ public class UrlWidgetTest {
     }
 
     @Test
-    public void usingReadOnlyOption_makeAllClickableElementsDisabled() {
-        UrlWidget widget = createWidget(promptWithReadOnly());
-        assertThat(widget.getBinding().urlButton.getVisibility(), equalTo(View.GONE));
-    }
-
-    @Test
     public void clearAnswer_doesNotClearWidgetAnswer() {
         UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         widget.clearAnswer();
@@ -71,30 +63,35 @@ public class UrlWidgetTest {
     }
 
     @Test
-    public void whenPromptHasAnswer_displaysAnswer() {
+    public void clearAnswer_showsToastThatTheUrlIsReadOnly() {
         UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        assertThat(widget.getBinding().urlAnswerText.getText().toString(), equalTo("blah"));
+        widget.clearAnswer();
+        assertThat(ShadowToast.getTextOfLatestToast(), equalTo("URL is readonly"));
     }
 
     @Test
-    public void whenPromptAnswerDoesNotHaveAnswer_displayEmptyString() {
+    public void clickingButton_whenUrlIsEmpty_doesNotOpensUri() {
         UrlWidget widget = createWidget(promptWithAnswer(null));
-        assertThat(widget.getBinding().urlAnswerText.getText().toString(), equalTo(""));
-    }
-
-    @Test
-    public void clickingButtonWhenUrlIsEmpty_doesNotCallOpenUri() {
-        UrlWidget widget = createWidget(promptWithAnswer(null));
-        widget.getBinding().urlButton.performClick();
+        widget.binding.urlButton.performClick();
 
         verify(customTabHelper, never()).bindCustomTabsService(null, null);
         verify(customTabHelper, never()).openUri(null, null);
     }
 
     @Test
-    public void clickingButtonWhenUrlIsNotEmpty_callsOpenUri() {
+    public void clickingButton_whenUrlIsEmpty_showsToastMessage() {
+        UrlWidget widget = createWidget(promptWithAnswer(null));
+        widget.binding.urlButton.performClick();
+
+        verify(customTabHelper, never()).bindCustomTabsService(null, null);
+        verify(customTabHelper, never()).openUri(null, null);
+        assertThat(ShadowToast.getTextOfLatestToast(), equalTo("No URL set"));
+    }
+
+    @Test
+    public void clickingButton_whenUrlIsNotEmpty_opensUriAndBindsCustomTabService() {
         UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        widget.getBinding().urlButton.performClick();
+        widget.binding.urlButton.performClick();
 
         verify(customTabHelper).bindCustomTabsService(widget.getContext(), null);
         verify(customTabHelper).openUri(widget.getContext(), Uri.parse("blah"));
@@ -104,9 +101,8 @@ public class UrlWidgetTest {
     public void clickingButtonForLong_callsLongClickListener() {
         UrlWidget widget = createWidget(promptWithAnswer(null));
         widget.setOnLongClickListener(listener);
-        widget.getBinding().urlButton.performLongClick();
-
-        verify(listener).onLongClick(widget.getBinding().urlButton);
+        widget.binding.urlButton.performLongClick();
+        verify(listener).onLongClick(widget.binding.urlButton);
     }
 
     @Test

@@ -34,8 +34,9 @@
             android:layout_below="@id/form_title"
             android:layout_above="@id/geometry_status" />
 
-        <androidx.appcompat.widget.AppCompatImageButton
+        <org.odk.collect.android.views.MultiClickSafeImageButton
             android:id="@+id/new_instance"
+            style="@style/Widget.Collect.ImageButton.MapButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -56,8 +57,9 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <androidx.appcompat.widget.AppCompatImageButton
+                <org.odk.collect.android.views.MultiClickSafeImageButton
                     android:id="@+id/zoom_to_location"
+                    style="@style/Widget.Collect.ImageButton.MapButton"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
@@ -65,8 +67,9 @@
                     app:srcCompat="@drawable/ic_my_location"
                     android:padding="15dp" />
 
-                <androidx.appcompat.widget.AppCompatImageButton
+                <org.odk.collect.android.views.MultiClickSafeImageButton
                     android:id="@+id/zoom_to_bounds"
+                    style="@style/Widget.Collect.ImageButton.MapButton"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
@@ -76,6 +79,7 @@
 
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/layer_menu"
+                    style="@style/Widget.Collect.ImageButton.MapButton"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"

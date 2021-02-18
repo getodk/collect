@@ -17,10 +17,7 @@ package org.odk.collect.android.logic;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.properties.IPropertyRules;
@@ -53,21 +50,13 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_USERNAME;
 public class PropertyManager implements IPropertyManager {
 
     public static final String PROPMGR_DEVICE_ID        = "deviceid";
-    public static final String PROPMGR_SUBSCRIBER_ID    = "subscriberid";
-    public static final String PROPMGR_SIM_SERIAL       = "simserial";
     public static final String PROPMGR_PHONE_NUMBER     = "phonenumber";
     public static final String PROPMGR_USERNAME         = "username";
     public static final String PROPMGR_EMAIL            = "email";
 
-    private static final String ANDROID6_FAKE_MAC = "02:00:00:00:00:00";
-
     public static final String SCHEME_USERNAME     = "username";
     private static final String SCHEME_TEL          = "tel";
     private static final String SCHEME_MAILTO       = "mailto";
-    private static final String SCHEME_IMSI         = "imsi";
-    private static final String SCHEME_SIMSERIAL    = "simserial";
-    private static final String SCHEME_IMEI         = "imei";
-    private static final String SCHEME_MAC          = "mac";
 
     private final Map<String, String> properties = new HashMap<>();
 
@@ -86,16 +75,6 @@ public class PropertyManager implements IPropertyManager {
         return "Property Manager";
     }
 
-    private static class IdAndPrefix {
-        String id;
-        String prefix;
-
-        IdAndPrefix(String id, String prefix) {
-            this.id = id;
-            this.prefix = prefix;
-        }
-    }
-
     public PropertyManager(Context context) {
         this.context = context;
         Collect.getInstance().getComponent().inject(this);
@@ -112,18 +91,14 @@ public class PropertyManager implements IPropertyManager {
 
     public PropertyManager reload() {
         try {
-            // Device-defined properties
-            IdAndPrefix idp = findDeviceId(context, deviceDetailsProvider);
-            putProperty(PROPMGR_DEVICE_ID,     idp.prefix,          idp.id);
+            putProperty(PROPMGR_DEVICE_ID,     "",         deviceDetailsProvider.getDeviceId());
             try {   // smap don't care about these
-                putProperty(PROPMGR_PHONE_NUMBER, SCHEME_TEL, deviceDetailsProvider.getLine1Number());
-                putProperty(PROPMGR_SUBSCRIBER_ID, SCHEME_IMSI, deviceDetailsProvider.getSubscriberId());
-                putProperty(PROPMGR_SIM_SERIAL, SCHEME_SIMSERIAL, deviceDetailsProvider.getSimSerialNumber());
+                putProperty(PROPMGR_PHONE_NUMBER,  SCHEME_TEL,          deviceDetailsProvider.getLine1Number());
             } catch(Exception ex) {
                 // smap ignore
             }
         } catch (SecurityException e) {
-            Timber.e(e);
+            Timber.i(e);
         }
 
         // User-defined properties. Will replace any above with the same PROPMGR_ name.
@@ -138,48 +113,6 @@ public class PropertyManager implements IPropertyManager {
         }
 
         return this;
-    }
-
-    // telephonyManager.getDeviceId() requires permission READ_PHONE_STATE (ISSUE #2506). Permission should be handled or exception caught.
-    private IdAndPrefix findDeviceId(Context context, DeviceDetailsProvider deviceDetailsProvider) throws SecurityException {
-        final String androidIdName = Settings.Secure.ANDROID_ID;
-        String deviceId = null;
-        try { // smap
-            deviceId = deviceDetailsProvider.getDeviceId();
-        } catch(Exception e) {
-            Timber.i(e.getMessage());
-        }
-        String scheme = null;
-
-        if (deviceId != null) {
-            if (deviceId.contains("*") || deviceId.contains("000000000000000")) {
-                deviceId = Settings.Secure.getString(context.getContentResolver(), androidIdName);
-                scheme = androidIdName;
-            } else {
-                scheme = SCHEME_IMEI;
-            }
-        }
-
-        if (deviceId == null) {
-            // no SIM -- WiFi only
-            // Retrieve WiFiManager
-            WifiManager wifi = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-
-            // Get WiFi status
-            WifiInfo info = wifi.getConnectionInfo();
-            if (info != null && !ANDROID6_FAKE_MAC.equals(info.getMacAddress())) {
-                deviceId = info.getMacAddress();
-                scheme = SCHEME_MAC;
-            }
-        }
-
-        // if it is still null, use ANDROID_ID
-        if (deviceId == null) {
-            deviceId = Settings.Secure.getString(context.getContentResolver(), androidIdName);
-            scheme = androidIdName;
-        }
-
-        return new IdAndPrefix(deviceId, scheme);
     }
 
     /**
@@ -223,11 +156,7 @@ public class PropertyManager implements IPropertyManager {
      * @return True if the given property is dangerous, false otherwise.
      */
     private boolean isPropertyDangerous(String propertyName) {
-        return propertyName != null
-                && (propertyName.equalsIgnoreCase(PROPMGR_DEVICE_ID)
-                || propertyName.equalsIgnoreCase(PROPMGR_SUBSCRIBER_ID)
-                || propertyName.equalsIgnoreCase(PROPMGR_SIM_SERIAL)
-                || propertyName.equalsIgnoreCase(PROPMGR_PHONE_NUMBER));
+        return propertyName != null && propertyName.equalsIgnoreCase(PROPMGR_PHONE_NUMBER);
     }
 
     @Override

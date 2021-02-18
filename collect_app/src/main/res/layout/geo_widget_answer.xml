@@ -1,30 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="@dimen/margin_standard">
 
-    <com.google.android.material.button.MaterialButton
+    <org.odk.collect.android.views.MultiClickSafeButton
         android:id="@+id/simple_button"
-        style="@style/Widget.Collect.Button.Custom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/margin_small"
-        android:text="@string/get_location"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:layout_marginTop="@dimen/margin_extra_small"
-        android:layout_marginBottom="@dimen/margin_extra_small"
-        />
+        style="@style/Widget.Collect.Button.WidgetAnswer"
+        android:text="@string/get_location" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/geo_answer_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="@dimen/margin_standard"
-        android:textAppearance="@style/TextAppearance.Collect.Body1"
-        android:textColor="?colorOnSurface"
-        android:text=""
-        />
+        style="@style/Widget.Collect.TextView.WidgetAnswer" />
 
 </LinearLayout>

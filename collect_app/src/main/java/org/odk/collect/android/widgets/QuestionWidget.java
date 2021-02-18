@@ -15,17 +15,12 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -51,7 +46,8 @@ import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
+import org.odk.collect.android.utilities.ScreenUtils;
+import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
@@ -60,38 +56,31 @@ import org.odk.collect.android.widgets.interfaces.Widget;
 import org.odk.collect.android.widgets.items.SelectImageMapWidget;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.analytics.AnalyticsEvents.AUDIO_QUESTION;
+import static org.odk.collect.android.analytics.AnalyticsEvents.PROMPT;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getClipID;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColor;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
 import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 
-public abstract class QuestionWidget
-        extends FrameLayout
-        implements Widget {
+public abstract class QuestionWidget extends FrameLayout implements Widget {
 
     private final FormEntryPrompt formEntryPrompt;
     private final AudioVideoImageTextLabel audioVideoImageTextLabel;
-    private final QuestionDetails questionDetails;
+    protected final QuestionDetails questionDetails;
     private final TextView helpTextView;
     private final View helpTextLayout;
     private final View guidanceTextLayout;
     private final View textLayout;
     private final TextView warningText;
     private PermissionUtils permissionUtils;
-    private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
     private AtomicBoolean expanded;
-    private Bundle state;
     protected final ThemeUtils themeUtils;
     protected AudioHelper audioHelper;
     private final ViewGroup containerView;
@@ -108,11 +97,14 @@ public abstract class QuestionWidget
     //@Inject
     //public Analytics analytics;
 
-    public QuestionWidget(Context context, QuestionDetails questionDetails) {
-        this(context, questionDetails, true);
-    }
+    @Inject
+    public ScreenUtils screenUtils;
 
-    public QuestionWidget(Context context, QuestionDetails questionDetails, boolean registerForContextMenu) {
+    @Inject
+    public
+    SoftKeyboardController softKeyboardController;
+
+    public QuestionWidget(Context context, QuestionDetails questionDetails) {
         super(context);
         getComponent(context).inject(this);
         setId(View.generateViewId());
@@ -121,8 +113,7 @@ public abstract class QuestionWidget
         themeUtils = new ThemeUtils(context);
 
         if (context instanceof FormEntryActivity) {
-            state = ((FormEntryActivity) context).getState();
-            permissionUtils = new PermissionUtils();
+            permissionUtils = new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert);
         }
 
         this.questionDetails = questionDetails;
@@ -145,9 +136,10 @@ public abstract class QuestionWidget
             addAnswerView(answerView);
         }
 
-        if (registerForContextMenu && context instanceof FormEntryActivity && !getFormEntryPrompt().isReadOnly()) {
+        if (context instanceof FormEntryActivity && !questionDetails.isReadOnly()) {
             registerToClearAnswerOnLongPress((FormEntryActivity) context, this);
         }
+        hideAnswerContainerIfNeeded();
     }
 
     /**
@@ -192,7 +184,7 @@ public abstract class QuestionWidget
             }
             if (playableAudioURI != null) {
                 label.setAudio(playableAudioURI, audioHelper);
-                //analytics.logEvent(AUDIO_QUESTION, "AudioLabel", questionDetails.getFormAnalyticsID()); // smap commented
+                //analytics.logEvent(PROMPT, "AudioLabel", questionDetails.getFormAnalyticsID());  // smap commented
             }
         } catch (InvalidReferenceException e) {
             Timber.d(e, "Invalid media reference due to %s ", e.getMessage());
@@ -218,13 +210,6 @@ public abstract class QuestionWidget
         guidance = configureGuidanceTextView(guidanceTextView, guidanceHint);
 
         expanded = new AtomicBoolean(false);
-
-        if (getState() != null) {
-            if (getState().containsKey(GUIDANCE_EXPANDED_STATE + getFormEntryPrompt().getIndex())) {
-                Boolean result = getState().getBoolean(GUIDANCE_EXPANDED_STATE + getFormEntryPrompt().getIndex());
-                expanded = new AtomicBoolean(result);
-            }
-        }
 
         if (setting.equals(GuidanceHint.Yes)) {
             guidanceTextLayout.setVisibility(VISIBLE);
@@ -294,42 +279,8 @@ public abstract class QuestionWidget
         return questionDetails;
     }
 
-    // http://code.google.com/p/android/issues/detail?id=8488
-    private void recycleDrawablesRecursive(ViewGroup viewGroup, List<ImageView> images) {
-
-        int childCount = viewGroup.getChildCount();
-        for (int index = 0; index < childCount; index++) {
-            View child = viewGroup.getChildAt(index);
-            if (child instanceof ImageView) {
-                images.add((ImageView) child);
-            } else if (child instanceof ViewGroup) {
-                recycleDrawablesRecursive((ViewGroup) child, images);
-            }
-        }
-        viewGroup.destroyDrawingCache();
-    }
-
-    // http://code.google.com/p/android/issues/detail?id=8488
-    public void recycleDrawables() {
-        List<ImageView> images = new ArrayList<>();
-        // collect all the image views
-        recycleDrawablesRecursive(this, images);
-        for (ImageView imageView : images) {
-            imageView.destroyDrawingCache();
-            Drawable d = imageView.getDrawable();
-            if (d != null && d instanceof BitmapDrawable) {
-                imageView.setImageDrawable(null);
-                BitmapDrawable bd = (BitmapDrawable) d;
-                Bitmap bmp = bd.getBitmap();
-                if (bmp != null) {
-                    bmp.recycle();
-                }
-            }
-        }
-    }
-
     public void setFocus(Context context) {
-        SoftKeyboardUtils.hideSoftKeyboard(this);
+        softKeyboardController.hideSoftKeyboard(this);
     }
 
     /**
@@ -354,24 +305,6 @@ public abstract class QuestionWidget
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
         containerView.addView(v, params);
-    }
-
-    public Bundle getState() {
-        return state;
-    }
-
-    public Bundle getCurrentState() {
-        saveState();
-        return state;
-    }
-
-    @OverridingMethodsMustInvokeSuper
-    protected void saveState() {
-        state = new Bundle();
-
-        if (expanded != null) {
-            state.putBoolean(GUIDANCE_EXPANDED_STATE + getFormEntryPrompt().getIndex(), expanded.get());
-        }
     }
 
     private TextView setupHelpText(TextView helpText, FormEntryPrompt prompt) {
@@ -415,6 +348,18 @@ public abstract class QuestionWidget
         }
 
         answerContainer.addView(v, params);
+    }
+
+    private void hideAnswerContainerIfNeeded() {
+        if (questionDetails.isReadOnly() && formEntryPrompt.getAnswerValue() == null) {
+            findViewById(R.id.space_box).setVisibility(VISIBLE);
+            findViewById(R.id.answer_container).setVisibility(GONE);
+        }
+    }
+
+    public void showAnswerContainer() {
+        findViewById(R.id.space_box).setVisibility(GONE);
+        findViewById(R.id.answer_container).setVisibility(VISIBLE);
     }
 
     /**
@@ -463,7 +408,13 @@ public abstract class QuestionWidget
 
     //region Accessors
 
+    /**
+     * @deprecated widgets shouldn't need to know about the instance folder. They can use
+     * {@link org.odk.collect.android.utilities.QuestionMediaManager} to access media attached
+     * to the instance.
+     */
     @Nullable
+    @Deprecated
     public final String getInstanceFolder() {
         Collect collect = Collect.getInstance();
         if (collect == null) {

@@ -31,6 +31,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.utilities.SelectOneWidgetUtils;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 
 import timber.log.Timber;
@@ -63,7 +64,7 @@ public class SelectOneWidget extends BaseSelectListWidget {
 
     @Override
     protected AbstractSelectListAdapter setUpAdapter() {
-        int numColumns = WidgetAppearanceUtils.getNumberOfColumns(getFormEntryPrompt(), getContext());
+        int numColumns = WidgetAppearanceUtils.getNumberOfColumns(getFormEntryPrompt(), screenUtils);
         boolean noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(getFormEntryPrompt()) || WidgetAppearanceUtils.isNoButtonsAppearance(getFormEntryPrompt());
 
         recyclerViewAdapter = new SelectOneListAdapter(getSelectedValue(), this, getContext(), items,
@@ -81,9 +82,8 @@ public class SelectOneWidget extends BaseSelectListWidget {
     }
 
     protected String getSelectedValue() {
-        return getQuestionDetails().getPrompt().getAnswerValue() == null
-                ? null
-                : ((Selection) getQuestionDetails().getPrompt().getAnswerValue().getValue()).getValue();
+        Selection selectedItem = SelectOneWidgetUtils.getSelectedItem(getQuestionDetails().getPrompt(), items);
+        return selectedItem == null ? null : selectedItem.getValue();
     }
 
     @Override

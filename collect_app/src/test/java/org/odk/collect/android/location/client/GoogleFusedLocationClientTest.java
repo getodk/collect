@@ -125,6 +125,29 @@ public class GoogleFusedLocationClientTest {
     }
 
     @Test
+    public void whenGoogleApiClientNotConnected_shouldNotRemoveLocationUpdatesBeCalled() {
+        when(googleApiClient.isConnected()).thenReturn(false);
+
+        client.start();
+
+        TestLocationListener listener = new TestLocationListener();
+        client.requestLocationUpdates(listener);
+
+        client.stop();
+        verify(fusedLocationProviderApi, never()).removeLocationUpdates(googleApiClient, listener);
+    }
+
+    @Test
+    public void whenGoogleApiClientNotConnected_shouldNotRequestLocationUpdatesBeCalled() {
+        when(googleApiClient.isConnected()).thenReturn(false);
+
+        client.start();
+        client.requestLocationUpdates(new TestLocationListener());
+
+        verify(fusedLocationProviderApi, never()).requestLocationUpdates(any(), any(), (LocationListener) any());
+    }
+
+    @Test
     public void requestingLocationUpdatesShouldUpdateCorrectListener() {
         client.start();
 

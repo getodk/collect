@@ -10,6 +10,15 @@
         <item name="android:textSize">21sp</item>
     </style>
 
+    <style name="Widget.Collect.TextView.WidgetAnswer" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/margin_standard</item>
+        <item name="android:textAppearance">@style/TextAppearance.Collect.Body1</item>
+        <item name="android:textColor">?colorOnSurface</item>
+    </style>
+
     <style name="Theme.Collect.MaterialDialogSheet.Dark" parent="Theme.Design.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/Widget.Collect.BottomSheet.Modal</item>
         <item name="android:windowAnimationStyle">@style/MaterialDialogSheetAnimation</item>

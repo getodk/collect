@@ -15,82 +15,66 @@
 package org.odk.collect.android.audio;
 
 import android.content.Context;
-import android.view.View;
+import android.os.Build;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.odk.collect.android.R;
+import androidx.core.content.ContextCompat;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import com.google.android.material.button.MaterialButton;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.databinding.AudioControllerLayoutBinding;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static org.odk.collect.strings.format.LengthFormatterKt.formatLength;
 
 public class AudioControllerView extends FrameLayout {
 
-    @BindView(R.id.currentDuration)
-    TextView currentDurationLabel;
+    public final AudioControllerLayoutBinding binding;
 
-    @BindView(R.id.totalDuration)
-    TextView totalDurationLabel;
-
-    @BindView(R.id.playBtn)
-    @SuppressFBWarnings("UR")
-    ImageButton playButton;
-
-    @BindView(R.id.seekBar)
-    @SuppressFBWarnings("UR")
-    SeekBar seekBar;
-
+    private final TextView currentDurationLabel;
+    private final TextView totalDurationLabel;
+    private final MaterialButton playButton;
+    private final SeekBar seekBar;
     private final SwipeListener swipeListener;
 
-    private Boolean playing = false;
-    private Integer position = 0;
-    private Integer duration = 0;
+    private boolean playing;
+    private int position;
+    private int duration;
 
     private Listener listener;
     private AnalyticsListener analytics;
 
     public AudioControllerView(Context context) {
-        super(context);
+        this(context, null);
+    }
 
-        View.inflate(context, R.layout.audio_controller_layout, this);
-        ButterKnife.bind(this);
+    public AudioControllerView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+
+        binding = AudioControllerLayoutBinding.inflate(LayoutInflater.from(context), this, true);
+        playButton = binding.play;
+        currentDurationLabel = binding.currentDuration;
+        totalDurationLabel = binding.totalDuration;
+        seekBar = binding.seekBar;
 
         swipeListener = new SwipeListener();
         seekBar.setOnSeekBarChangeListener(swipeListener);
-        playButton.setImageResource(R.drawable.ic_play_arrow_24dp);
+
+        binding.play.setOnClickListener(view -> playClicked());
+        binding.remove.setOnClickListener(view -> listener.onRemoveClicked());
     }
 
-    @OnClick(R.id.fastForwardBtn)
-    void fastForwardMedia() {
-        if (analytics != null) {
-            analytics.onFastFwdOrFastRwd();
+    private void playClicked() {
+        if (listener == null) {
+            return;
         }
 
-        int newPosition = position + 5000;
-        onPositionChanged(newPosition);
-    }
-
-    @OnClick(R.id.fastRewindBtn)
-    void rewindMedia() {
-        if (analytics != null) {
-            analytics.onFastFwdOrFastRwd();
-        }
-
-        int newPosition = position - 5000;
-        onPositionChanged(newPosition);
-    }
-
-    @OnClick(R.id.playBtn)
-    void playClicked() {
         if (playing) {
             if (analytics != null) {
                 analytics.onPlay();
@@ -115,25 +99,13 @@ public class AudioControllerView extends FrameLayout {
         }
     }
 
-    public void hidePlayer() {
-        setVisibility(GONE);
-    }
-
-    public void showPlayer() {
-        setVisibility(View.VISIBLE);
-    }
-
-    private static String getTime(long seconds) {
-        return new DateTime(seconds, DateTimeZone.UTC).toString("mm:ss");
-    }
-
     public void setPlaying(Boolean playing) {
         this.playing = playing;
 
         if (playing) {
-            playButton.setImageResource(R.drawable.ic_pause_24dp);
+            playButton.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_pause_24dp));
         } else {
-            playButton.setImageResource(R.drawable.ic_play_arrow_24dp);
+            playButton.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_play_arrow_24dp));
         }
     }
 
@@ -150,17 +122,21 @@ public class AudioControllerView extends FrameLayout {
     public void setDuration(Integer duration) {
         this.duration = duration;
 
-        totalDurationLabel.setText(getTime(duration));
+        totalDurationLabel.setText(formatLength((long) duration));
         seekBar.setMax(duration);
-
         setPosition(0);
     }
 
     private void renderPosition(Integer position) {
         this.position = position;
 
-        currentDurationLabel.setText(getTime(position));
-        seekBar.setProgress(position);
+        currentDurationLabel.setText(formatLength((long) position));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            seekBar.setProgress(position, true);
+        } else {
+            seekBar.setProgress(position);
+        }
     }
 
     public interface SwipableParent {
@@ -174,6 +150,8 @@ public class AudioControllerView extends FrameLayout {
         void onPauseClicked();
 
         void onPositionChanged(Integer newPosition);
+
+        void onRemoveClicked();
     }
 
     private class SwipeListener implements SeekBar.OnSeekBarChangeListener {

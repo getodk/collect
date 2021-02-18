@@ -10,6 +10,11 @@ import org.javarosa.core.model.FormIndex;
  */
 public class FormIndexAnimationHandler {
 
+    public enum Direction {
+        FORWARDS,
+        BACKWARDS
+    }
+
     private final Listener listener;
     private FormIndex lastIndex;
 
@@ -23,14 +28,14 @@ public class FormIndexAnimationHandler {
         }
 
         if (lastIndex == null) {
-            listener.refreshCurrentView();
+            listener.onScreenRefresh();
         } else {
             if (index.compareTo(lastIndex) > 0) {
-                listener.animateToNextView();
+                listener.onScreenChange(Direction.FORWARDS);
             } else if (index.compareTo(lastIndex) < 0) {
-                listener.animateToPreviousView();
+                listener.onScreenChange(Direction.BACKWARDS);
             } else {
-                listener.refreshCurrentView();
+                listener.onScreenRefresh();
             }
         }
 
@@ -46,10 +51,8 @@ public class FormIndexAnimationHandler {
     }
 
     public interface Listener {
-        void animateToPreviousView();
+        void onScreenChange(Direction direction);
 
-        void animateToNextView();
-
-        void refreshCurrentView();
+        void onScreenRefresh();
     }
 }

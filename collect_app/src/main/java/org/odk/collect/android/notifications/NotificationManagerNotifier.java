@@ -5,7 +5,6 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -21,16 +20,16 @@ import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.FormApiExceptionMapper;
+import org.odk.collect.android.formmanagement.FormSourceExceptionMapper;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.openrosa.api.FormApiException;
+import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.android.preferences.MetaKeys;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.IconUtils;
-import org.odk.collect.android.utilities.LocaleHelper;
+import org.odk.collect.android.utilities.TranslationHandler;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -64,7 +63,7 @@ public class NotificationManagerNotifier implements Notifier {
             if (notificationManager != null) {
                 notificationManager.createNotificationChannel(new NotificationChannel(
                         COLLECT_NOTIFICATION_CHANNEL,
-                        application.getString(R.string.notification_channel_name),
+                        TranslationHandler.getString(application, R.string.notification_channel_name),
                         NotificationManager.IMPORTANCE_DEFAULT)
                 );
             }
@@ -74,7 +73,7 @@ public class NotificationManagerNotifier implements Notifier {
     @Override
     public void onUpdatesAvailable(List<ServerFormDetails> updates) {
         SharedPreferences metaPrefs = preferencesProvider.getMetaSharedPreferences();
-        Set<String> updateId = updates.stream().map(f -> f.getFormId() + f.getHash() + f.getManifestFileHash()).collect(toSet());
+        Set<String> updateId = updates.stream().map(f -> f.getFormId() + f.getHash() + (f.getManifest() != null ? f.getManifest().getHash() : null)).collect(toSet());
         if (metaPrefs.getStringSet(MetaKeys.LAST_UPDATED_NOTIFICATION, emptySet()).equals(updateId)) {
             return;
         }
@@ -83,10 +82,9 @@ public class NotificationManagerNotifier implements Notifier {
         intent.putExtra(DISPLAY_ONLY_UPDATED_FORMS, true);
         PendingIntent contentIntent = PendingIntent.getActivity(application, FORM_UPDATES_AVAILABLE_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Resources localizedResources = getLocalizedResources(application);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(application, COLLECT_NOTIFICATION_CHANNEL)
                 .setContentIntent(contentIntent)
-                .setContentTitle(localizedResources.getString(R.string.form_updates_available))
+                .setContentTitle(TranslationHandler.getString(application, R.string.form_updates_available))
                 .setContentText(null)
                 .setSmallIcon(IconUtils.getNotificationAppIcon())
                 .setAutoCancel(true);
@@ -100,20 +98,18 @@ public class NotificationManagerNotifier implements Notifier {
 
     @Override
     public void onUpdatesDownloaded(HashMap<ServerFormDetails, String> result) {
-        Resources localizedResources = getLocalizedResources(application);
-
         Intent intent = new Intent(application, NotificationActivity.class);
-        intent.putExtra(NotificationActivity.NOTIFICATION_TITLE, localizedResources.getString(R.string.download_forms_result));
+        intent.putExtra(NotificationActivity.NOTIFICATION_TITLE, TranslationHandler.getString(application, R.string.download_forms_result));
         intent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, FormDownloadListActivity.getDownloadResultMessage(result));
         PendingIntent contentIntent = PendingIntent.getActivity(application, FORMS_DOWNLOADED_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        String content = localizedResources.getString(allFormsDownloadedSuccessfully(application, result) ?
+        String content = TranslationHandler.getString(application, allFormsDownloadedSuccessfully(result) ?
                 R.string.success :
                 R.string.failures);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(application, COLLECT_NOTIFICATION_CHANNEL)
                 .setContentIntent(contentIntent)
-                .setContentTitle(localizedResources.getString(R.string.odk_auto_download_notification_title))
+                .setContentTitle(TranslationHandler.getString(application, R.string.odk_auto_download_notification_title))
                 .setContentText(content)
                 .setSmallIcon(IconUtils.getNotificationAppIcon())
                 .setAutoCancel(true);
@@ -122,17 +118,15 @@ public class NotificationManagerNotifier implements Notifier {
     }
 
     @Override
-    public void onSync(@Nullable FormApiException exception) {
+    public void onSync(@Nullable FormSourceException exception) {
         if (exception != null) {
             Intent intent = new Intent(application, FillBlankFormActivity.class);
             PendingIntent contentIntent = PendingIntent.getActivity(application, FORM_SYNC_NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            Resources localizedResources = getLocalizedResources(application);
-
             NotificationCompat.Builder builder = new NotificationCompat.Builder(application, COLLECT_NOTIFICATION_CHANNEL)
                     .setContentIntent(contentIntent)
-                    .setContentTitle(localizedResources.getString(R.string.form_update_error))
-                    .setStyle(new NotificationCompat.BigTextStyle().bigText(new FormApiExceptionMapper(localizedResources).getMessage(exception)))
+                    .setContentTitle(TranslationHandler.getString(application, R.string.form_update_error))
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(new FormSourceExceptionMapper(application).getMessage(exception)))
                     .setSmallIcon(IconUtils.getNotificationAppIcon())
                     .setAutoCancel(true);
 
@@ -144,22 +138,21 @@ public class NotificationManagerNotifier implements Notifier {
 
     @Override
     public void onSubmission(boolean failure, String message) {
-        Resources localizedResources = getLocalizedResources(application);
-
         Intent notifyIntent = new Intent(application, NotificationActivity.class);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_TITLE, localizedResources.getString(R.string.upload_results));
+        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_TITLE, TranslationHandler.getString(application, R.string.upload_results));
         notifyIntent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, message.trim());
 
         PendingIntent pendingNotify = PendingIntent.getActivity(application, FORMS_UPLOADED_NOTIFICATION,
                 notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        String content = failure ? localizedResources.getString(R.string.failures)
-                : localizedResources.getString(R.string.success);
+        String content = failure
+                ? TranslationHandler.getString(application, R.string.failures)
+                : TranslationHandler.getString(application, R.string.success);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(application, COLLECT_NOTIFICATION_CHANNEL)
                 .setContentIntent(pendingNotify)
-                .setContentTitle(localizedResources.getString(R.string.odk_auto_note))
+                .setContentTitle(TranslationHandler.getString(application, R.string.odk_auto_note))
                 .setContentText(content)
                 .setSmallIcon(IconUtils.getNotificationAppIcon())
                 .setAutoCancel(true);
@@ -167,22 +160,13 @@ public class NotificationManagerNotifier implements Notifier {
         notificationManager.notify(AUTO_SEND_RESULT_NOTIFICATION_ID, builder.build());
     }
 
-    private boolean allFormsDownloadedSuccessfully(Context context, HashMap<ServerFormDetails, String> result) {
+    private boolean allFormsDownloadedSuccessfully(HashMap<ServerFormDetails, String> result) {
         for (Map.Entry<ServerFormDetails, String> item : result.entrySet()) {
-            if (!item.getValue().equals(context.getString(R.string.success))) {
+            if (!item.getValue().equals(TranslationHandler.getString(application, R.string.success))) {
                 return false;
             }
         }
         return true;
-    }
-
-    // The application context will give us the system's locale
-    private Resources getLocalizedResources(Context context) {
-        Configuration conf = context.getResources().getConfiguration();
-        conf = new Configuration(conf);
-        conf.setLocale(new Locale(LocaleHelper.getLocaleCode(context)));
-        Context localizedContext = context.createConfigurationContext(conf);
-        return localizedContext.getResources();
     }
 
     /*

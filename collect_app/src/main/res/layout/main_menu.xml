@@ -35,12 +35,11 @@
                 custom:text="blah"
                 custom:secondaryActionColor="true" />
             
-            <fragment
+            <androidx.fragment.app.FragmentContainerView
                 android:name="org.odk.collect.android.fragments.MapBoxInitializationFragment"
                 android:id="@+id/map_box_initialization_fragment"
                 android:layout_width="match_parent"
-                android:layout_height="1dp">
-            </fragment>
+                android:layout_height="1dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -51,71 +50,63 @@
                 android:paddingRight="@dimen/margin_standard"
                 android:paddingBottom="@dimen/margin_standard">
 
-                <LinearLayout
+                <org.odk.collect.android.views.MultiClickSafeButton
+                    android:id="@+id/enter_data"
+                    style="@style/Widget.Collect.Button.FullWidth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginTop="@dimen/margin_extra_small"
+                    tools:text="@string/enter_data" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/enter_data"
-                        style="@style/Widget.Collect.Button.FullWidth"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_extra_small"
-                        tools:text="@string/enter_data" />
+                <org.odk.collect.android.views.MultiClickSafeButton
+                    android:id="@+id/review_data"
+                    style="@style/Widget.Collect.Button.FullWidth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_extra_small"
+                    tools:text="@string/review_data" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/review_data"
-                        style="@style/Widget.Collect.Button.FullWidth"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_extra_small"
-                        tools:text="@string/review_data" />
+                <org.odk.collect.android.views.MultiClickSafeButton
+                    android:id="@+id/send_data"
+                    style="@style/Widget.Collect.Button.FullWidth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_extra_small"
+                    tools:text="@string/send_data" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/send_data"
-                        style="@style/Widget.Collect.Button.FullWidth"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_extra_small"
-                        tools:text="@string/send_data" />
+                <org.odk.collect.android.views.MultiClickSafeButton
+                    android:id="@+id/view_sent_forms"
+                    style="@style/Widget.Collect.Button.FullWidth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_extra_small"
+                    android:text="@string/view_sent_forms" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/view_sent_forms"
-                        style="@style/Widget.Collect.Button.FullWidth"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_extra_small"
-                        android:text="@string/view_sent_forms" />
+                <org.odk.collect.android.views.MultiClickSafeButton
+                    android:id="@+id/get_forms"
+                    style="@style/Widget.Collect.Button.FullWidth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_extra_small"
+                    tools:text="@string/get_forms" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/get_forms"
-                        style="@style/Widget.Collect.Button.FullWidth"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_extra_small"
-                        tools:text="@string/get_forms" />
+                <org.odk.collect.android.views.MultiClickSafeButton
+                    android:id="@+id/manage_forms"
+                    style="@style/Widget.Collect.Button.FullWidth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_extra_small"
+                    tools:text="@string/manage_files" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/manage_forms"
-                        style="@style/Widget.Collect.Button.FullWidth"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_extra_small"
-                        tools:text="@string/manage_files" />
-
-                    <TextView
-                        android:id="@+id/version_sha"
-                        style="@style/TextAppearance.Collect.Caption"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/margin_standard"
-                        tools:text="commit sha" />
-
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/version_sha"
+                    style="@style/TextAppearance.Collect.Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/margin_standard"
+                    tools:text="commit sha" />
             </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

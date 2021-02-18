@@ -103,7 +103,7 @@ public class FormManagementSettingsTest {
                 .clickOnString(R.string.automatic_download);
 
         FormLoadingUtils.copyFormToStorage("one-question.xml");
-        testDependencies.server.addForm("One Question Updated", "one_question", "one-question-updated.xml");
+        testDependencies.server.addForm("One Question Updated", "one_question", "2", "one-question-updated.xml");
         testDependencies.scheduler.runDeferredTasks();
 
         page.pressBack(new GeneralSettingsPage(rule))

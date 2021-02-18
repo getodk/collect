@@ -111,7 +111,7 @@ public class FillBlankFormActivity extends FormListActivity implements
 
         menuDelegate = new BlankFormListMenuDelegate(this, blankFormsListViewModel, networkStateProvider);
 
-        new PermissionUtils().requestStoragePermissions(this, new PermissionListener() {
+        new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
@@ -148,6 +148,10 @@ public class FillBlankFormActivity extends FormListActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (!MultiClickGuard.allowClick(getClass().getName())) {
+            return true;
+        }
+
         if (super.onOptionsItemSelected(item)) {
             return true;
         } else {
@@ -212,7 +216,7 @@ public class FillBlankFormActivity extends FormListActivity implements
     public void onMapButtonClick(AdapterView<?> parent, View view, int position, long id) {
         final Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, id);
         final Intent intent = new Intent(Intent.ACTION_EDIT, formUri, this, FormMapActivity.class);
-        new PermissionUtils().requestLocationPermissions(this, new PermissionListener() {
+        new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestLocationPermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 startActivity(intent);

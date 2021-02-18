@@ -27,13 +27,13 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
-import org.odk.collect.android.database.ItemsetDbAdapter;
+import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.database.FormsDatabaseHelper;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MediaUtils;
 
 import java.io.File;
 import java.util.HashMap;
@@ -43,6 +43,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
 import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
+import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
 public class FormsProvider extends ContentProvider {
     private static HashMap<String, String> sFormsProjectionMap;
@@ -189,8 +190,8 @@ public class FormsProvider extends ContentProvider {
 
             // Normalize the file path.
             // (don't trust the requester).
-                StoragePathProvider storagePathProvider = new StoragePathProvider();
-                String filePath = storagePathProvider.getAbsoluteFormFilePath(values.getAsString(FormsColumns.FORM_FILE_PATH));
+            StoragePathProvider storagePathProvider = new StoragePathProvider();
+            String filePath = getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), values.getAsString(FormsColumns.FORM_FILE_PATH));
             File form = new File(filePath);
             filePath = form.getAbsolutePath(); // normalized
                 values.put(FormsColumns.FORM_FILE_PATH, storagePathProvider.getFormDbPath(filePath));
@@ -263,17 +264,6 @@ public class FormsProvider extends ContentProvider {
         File file = new File(fileName);
         if (file.exists()) {
             if (file.isDirectory()) {
-                // delete any media entries for files in this directory...
-                int images = MediaUtils
-                        .deleteImagesInFolderFromMediaProvider(file);
-                int audio = MediaUtils
-                        .deleteAudioInFolderFromMediaProvider(file);
-                int video = MediaUtils
-                        .deleteVideoInFolderFromMediaProvider(file);
-
-                Timber.i("removed from content providers: %d image files, %d audio files, and %d"
-                        + " video files.", images, audio, video);
-
                 // delete all the containing files
                 File[] files = file.listFiles();
                 if (files != null) {
@@ -312,17 +302,22 @@ public class FormsProvider extends ContentProvider {
                 try {
                     del = this.query(uri, null, where, whereArgs, null);
                         if (del != null && del.getCount() > 0) {
-                        del.moveToFirst();
-                        do {
-                            deleteFileOrDir(storagePathProvider.getAbsoluteCacheFilePath(del
-                                    .getString(del
-                                            .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH))));
-                            String formFilePath = storagePathProvider.getAbsoluteFormFilePath(del.getString(del
-                                    .getColumnIndex(FormsColumns.FORM_FILE_PATH)));
-                            deleteFileOrDir(formFilePath);
-                            deleteFileOrDir(storagePathProvider.getAbsoluteFormFilePath(del.getString(del
-                                    .getColumnIndex(FormsColumns.FORM_MEDIA_PATH))));
-                        } while (del.moveToNext());
+                            del.moveToFirst();
+                            do {
+                                deleteFileOrDir(storagePathProvider.getAbsoluteCacheFilePath(del
+                                        .getString(del
+                                                .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH))));
+                                String formFilePath = getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), del.getString(del
+                                        .getColumnIndex(FormsColumns.FORM_FILE_PATH)));
+                                deleteFileOrDir(formFilePath);
+                                deleteFileOrDir(getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), del.getString(del
+                                        .getColumnIndex(FormsColumns.FORM_MEDIA_PATH))));
+                            } while (del.moveToNext());
+                        }
+                    } finally {
+                        if (del != null) {
+                            del.close();
+                        }
                     }
                 } finally {
                     if (del != null) {
@@ -344,10 +339,10 @@ public class FormsProvider extends ContentProvider {
                         do {
                                 deleteFileOrDir(storagePathProvider.getAbsoluteCacheFilePath(c.getString(c
                                         .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH))));
-                                String formFilePath = storagePathProvider.getAbsoluteFormFilePath(c.getString(c
+                                String formFilePath = getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), c.getString(c
                                         .getColumnIndex(FormsColumns.FORM_FILE_PATH)));
-                            deleteFileOrDir(formFilePath);
-                                deleteFileOrDir(storagePathProvider.getAbsoluteFormFilePath(c.getString(c
+                                deleteFileOrDir(formFilePath);
+                                deleteFileOrDir(getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), c.getString(c
                                         .getColumnIndex(FormsColumns.FORM_MEDIA_PATH))));
 
                             try {
@@ -413,8 +408,8 @@ public class FormsProvider extends ContentProvider {
                     // updated
                     // this probably isn't a great thing to do.
                     if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
-                            String formFile = storagePathProvider.getAbsoluteFormFilePath(values
-                                    .getAsString(FormsColumns.FORM_FILE_PATH));
+                        String formFile = getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), values
+                                .getAsString(FormsColumns.FORM_FILE_PATH));
                         values.put(FormsColumns.MD5_HASH,
                                 FileUtils.getMd5Hash(new File(formFile)));
                     }
@@ -428,9 +423,9 @@ public class FormsProvider extends ContentProvider {
                             while (c.moveToNext()) {
                                 // before updating the paths, delete all the files
                                 if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
-                                        String newFile = storagePathProvider.getAbsoluteFormFilePath(values
-                                                .getAsString(FormsColumns.FORM_FILE_PATH));
-                                        String delFile = storagePathProvider.getAbsoluteFormFilePath(c
+                                    String newFile = getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), values
+                                            .getAsString(FormsColumns.FORM_FILE_PATH));
+                                    String delFile = getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), c
                                             .getString(c
                                                         .getColumnIndex(FormsColumns.FORM_FILE_PATH)));
                                         if (!newFile.equalsIgnoreCase(delFile)) {
@@ -482,10 +477,10 @@ public class FormsProvider extends ContentProvider {
                             }
 
                             if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
-                                    String formFile = storagePathProvider.getAbsoluteFormFilePath(values
-                                            .getAsString(FormsColumns.FORM_FILE_PATH));
-                                    String oldFile = storagePathProvider.getAbsoluteFormFilePath(update.getString(update
-                                            .getColumnIndex(FormsColumns.FORM_FILE_PATH)));
+                                String formFile = getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), values
+                                        .getAsString(FormsColumns.FORM_FILE_PATH));
+                                String oldFile = getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), update.getString(update
+                                        .getColumnIndex(FormsColumns.FORM_FILE_PATH)));
 
                                 if (formFile == null || !formFile.equalsIgnoreCase(oldFile)) {
                                     deleteFileOrDir(oldFile);

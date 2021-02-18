@@ -1,0 +1,412 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data">ባዶዉን ቅጽ ሙላ</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data_button">ባዶ ቅጽ መሙላት</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="review_data">የተቀመጠ ቅጽን ያርትዑ</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="review_data_button">የተቀመጠ ቅጽ ( %s) ያርትዑ</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="send_data">ተጠናቆ የተሞላ  ቅጽ ላክ</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="send_data_button">ተጠናቆ የተሞላ ቅጽ ላክ (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="view_sent_forms">ተሞልቶ የተላከዉን  ቅጽ ይመልከቱ</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="view_sent_forms_button">ተሞልቶ የተላከዉን ቅጽ ( 1 %s ) ይመልከቱ</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="get_forms">አዲስ ቅጽ</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="manage_files">የተሞላዉን ቅጽ ያጥፉ</string>
+  <string name="version_number">ሥሪት: 1 %s</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="added_on_date_at_time">\'ታክሏል በ\' EEE፣ ወወወ ቀቀ፣ ዓዓዓዓ \'በ\' ሰሰ:ደደ</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="saved_on_date_at_time">\'የተመዘገበዉ በ\' EEE፣ ወወወ ቀቀ ዓዓዓዓ \'በ\' ሰሰ:ደደ</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="finalized_on_date_at_time">\'የተጠናቀቀዉ በ\' EEE፣ ወወወ ቀቀ ዓዓዓዓ \'በ\' ሰሰ:ደደ</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sent_on_date_at_time">\'የተላከወዉ በ\' EEE፣ ወወወ ቀቀ ዓዓዓዓ \'በ\' ሰሰ:ደደ</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sending_failed_on_date_at_time">\'በመላክ ላይ ያልተሳካዉ በ\'  EEE፣ ወወወ ቀቀ ዓዓዓዓ \'በ\' ሰሰ:ደደ</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="deleted_on_date_at_time">\'የተሰረዘዉ በ\' EEE፣ ወወወ ቀቀ ዓዓዓዓ \'በ\' ሰሰ:ደደ</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="encrypted_form">የተመሳጠረ ቅጽ</string>
+  <string name="deleted_form">የተሰረዘ ቅጽ</string>
+  <string name="sort_by">ቅደምተከተሉ የተስተካከለው</string>
+  <string name="sort_by_name_asc">ስም፣ ሀ-ፐ</string>
+  <string name="sort_by_name_desc">ስም፣ ፐ-ሀ</string>
+  <!--Displayed in search boxes for form lists or question types that involve search-->
+  <string name="search">ፈልግ</string>
+  <string name="no_items_display">ምንም የሚታይ የለም</string>
+  <string name="no_items_display_forms">ምንም የሚታይ ነገር የለም:: \n\n አንድ ባዶ ቅጽ በማግኘትና በመሙላት ይሞክሩ::</string>
+  <string name="no_items_display_sent_forms">ምንም የሚታይ ነገር የለም:: \n\n ከማየትዎ በፊት የተጠናቀቁ ቅጾችን ይላኩ::</string>
+  <string name="no_items_display_instances">ምንም የሚታይ ነገር የለም:: \n\n ከመላኩ በፊት የተቀመጡ ቅጾች ማጠናቀቅ ይሞክሩ</string>
+  <!--##############################################
+    # FILL BLANK FORM
+    ##############################################-->
+  <string name="finished_disk_scan">ስካን ተጠናቋል፡፡ ሁሉም ቅጾች ተጭነዋል፡፡</string>
+  <string name="loading_form">ቅጽ በመጫን ላይ</string>
+  <string name="survey_loading_reading_form_message">የቅፅ ፍቺ በማንበብ ላይ …</string>
+  <string name="survey_loading_reading_data_message">የዳሰሳ ጥናት ውሂብ በማንበብ ላይ …</string>
+  <string name="parse_error">ይቅርታ፣ ቅፁን ለመተንተን አልተቻለም</string>
+  <string name="cannot_edit_completed_form">ይህ ቅጽ እንደተጠናቀቀ ምልክት ከተደረገ በኋላ አርትዕ ሊደረግ አይችልም. ቅፁ ምናልባት የተመሳጠረ ሊሆን ይችላል፡፡</string>
+  <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
+  <string name="savepoint_used">ያልተቀመጡ ለውጦች በጥንቃቄ ተመልሰዋል!</string>
+  <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
+  <string name="change_language">ቋንቋ ይቀይሩ</string>
+  <!--Text for button displayed in the form filling menu to see the form's table of contents-->
+  <!--Text for button displayed in the form filling menu to save the form-->
+  <string name="save_all_answers">ቅጽ አስቀምጥ</string>
+  <!--Text of button from the form's table of contents to jump to the beginning of the form-->
+  <string name="jump_to_beginning">ወደ መጀመሪያ ይሂዱ</string>
+  <!--Text of button from the form's table of contents to jump to the end of the form-->
+  <string name="jump_to_end">ወደ መጨረሻ ይሂዱ</string>
+  <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
+  <string name="jump_to_previous">ወደ ላይ ውጣ</string>
+  <!--Displayed below group names in a form's table of contents-->
+  <!--Displayed below repeat names in a form's table of contents-->
+  <string name="exit">ውጣ</string>
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <!--Title of overlay menu displayed when long pressing on a question in a form-->
+  <string name="clearanswer_confirm">የ \" 1 %s \" ምላሽ ይወግድ?</string>
+  <string name="clear_answer">ምላሹን አስወግድ</string>
+  <string name="clear_answer_ask">ይህ ምላሽ ይወገድ?</string>
+  <string name="clear_answer_no">ሰርዝ</string>
+  <string name="discard_answer">ምላሹን አስወግድ</string>
+  <string name="discard_group">ቡድን አስወግድ</string>
+  <string name="delete_repeat">ቡድን አስወግድ</string>
+  <string name="delete_repeat_ask">ይህ ቡድን ይወገድ?</string>
+  <string name="delete_repeat_confirm">ቡድን \" 1%s \" ን እና ሁሉንም ንዑስ ቡድኖቹን አስወግድ?</string>
+  <string name="delete_repeat_no">ሰርዝ</string>
+  <string name="invalid_answer_error">ይቅርታ፣ ይህ ምላሽ ልክ አይደለም!</string>
+  <string name="required_answer_error">ይቅርታ፣ ይህ ምላሽ ያስፈልጋል!</string>
+  <string name="save_enter_data_description">በ 1 %s መጨረሻ ላይ ነዎት</string>
+  <string name="save_form_as">ይህን ቅጽ ይሰይሙ</string>
+  <string name="save_as_error">የተቀመጠው ስም ባዶ መሆን የለበትም!</string>
+  <string name="mark_finished">ቅጹን እንደተጠናቀቀ ምልክት አድርግ</string>
+  <string name="quit_entry">ቅጹን አስቀምጠዉ ይውጡ</string>
+  <string name="data_saved_error">ይቅርታ፣ ቅፁን ማስቀመጥ አልተሳካም!</string>
+  <string name="data_saved_ok">ቅፁ በተሳካ ሁኔታ ተቀምጧል!</string>
+  <string name="save_point_error">የመልሶ ማግኛ ነጥብ ማስቀመጥ አልተቻለም፡ 1 %s</string>
+  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <string name="quit_application">ከ 1 %s ይውጡ</string>
+  <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="no_form_loaded">&amp;lt፣ምንም ቅጽ አልተጫነም&amp;gt፣</string>
+  <string name="do_not_save">ለውጦቹን ችላ በል</string>
+  <string name="keep_changes">ለውጦችን አስቀምጥ</string>
+  <string name="saving_form">ቅጽን በማስቀመጥ ላይ</string>
+  <string name="survey_saving_validating_message">መልሶችን በማረጋገጥ ላይ …</string>
+  <string name="survey_saving_collecting_message">ውሂብ በመሰብሰብ ላይ …</string>
+  <string name="survey_saving_saving_message">ወደ SD ካርድ በማስቀመጥ ላይ …</string>
+  <string name="survey_saving_finalizing_message">ወደ SD ካርድ በማጠናቀቅ ላይ …</string>
+  <string name="survey_saving_encrypting_message">ውሂብ በማመስጠር ላይ …</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <!--Text displayed when audio recording fails to start-->
+  <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <!--Error message displayed when copying media from a temporary directory fails-->
+  <!--##############################################
+    # FORM FEATURES
+    ##############################################-->
+  <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
+  <string name="launch_app">አስጀምር</string>
+  <string name="activity_not_found">የሚስተናገዱ ምንም እንቅስቃሴዎች አልተገኙም: 1 %s</string>
+  <string name="launch_printer">ማተምን ያስጀምሩ</string>
+  <string name="open_url">ዩአርኤል ይክፈቱ</string>
+  <string name="capture_osm">OpenMapKitን አስጀምር</string>
+  <string name="alert">ማንቂያ</string>
+  <string name="install_openmapkit">እባክዎ OpenMapKitን ይጫኑ!</string>
+  <string name="get_barcode">ባርኮድ ያግኙ</string>
+  <string name="replace_barcode">ባርኮዱን ተካ</string>
+  <string name="capture_image">ፎቶ አንሳ</string>
+  <string name="choose_image">ምስል ይምረጡ</string>
+  <string name="selected_invalid_image">የተመረጠው ፋይል ትክክለኛ ምስል አይደለም</string>
+  <!--Dialog heading for saving annotated image-->
+  <string name="save_and_close">አስቀምጥ እና ዝጋ</string>
+  <string name="sign_button">ፊርማ ያሰባስቡ</string>
+  <string name="draw_image">ንድፍ ምስል</string>
+  <string name="reset_image">ዳግም አስጀምር</string>
+  <string name="set_color">ቀለም አዘጋጅ</string>
+  <string name="capture_video">ቪዲዮ ቅዳ</string>
+  <string name="choose_video">ቪዲዮ ይምረጡ</string>
+  <string name="play_video">ቪድዮ አጫውት</string>
+  <!--Text for button that deletes a file that is the answer to a question-->
+  <!--Text for button that starts recording sound-->
+  <string name="capture_audio">ድምጽ ቅረፅ</string>
+  <!--Text for button that lets the user choose a sound file on their device-->
+  <string name="choose_sound">ድምጽ ይምረጡ</string>
+  <!--Description text for button that that pauses recording sound-->
+  <!--Description text for button that that resumes recording sound-->
+  <!--Title for dialog asking the user if they want to delete a file-->
+  <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="error_attaching_binary_file">ሚደያዉን በማያያዝ ላይ ስህተት ተከስቷል 1 %s</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="select_answer">መልሱን ይምረጡ</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="selected">ተመርጧል:</string>
+  <string name="trigger">እሺ:: እባክዎ ይቀጥሉ::</string>
+  <string name="ext_file_no_data_error">ፋይሉ ምንም ውሂብ አልያዘም!</string>
+  <string name="ext_conflicting_columns_error">አምዶች 1 %s ይመሳሰላሉ!</string>
+  <string name="ext_import_generic_error">ከ 1 %1$s ውሂብ ማስመጣት አልተቻለም፡፡ ምክንያት፣ 2 %2$s</string>
+  <string name="ext_import_finalizing_message">ቀድሞ የተጫነ ውሂብ በማጠናቀቅ ላይ …</string>
+  <string name="ext_import_completed_message">የንባብ ውሂብ ተጠናቅቋል!</string>
+  <string name="ext_not_initialized_error">ውጫዊ ውሂብ አደራጅ አልተነሳም</string>
+  <string name="direction">አቅጣጫ: 1 %s</string>
+  <string name="select_date">ቀን ምረጥ</string>
+  <string name="select_time">ሰዓት ምረጥ</string>
+  <string name="ethiopian_month_1">መስከረም</string>
+  <string name="ethiopian_month_2">ጥቅምት</string>
+  <string name="ethiopian_month_3">ኅዳር</string>
+  <string name="ethiopian_month_4">ታኅሣሥ</string>
+  <string name="ethiopian_month_5">ጥር</string>
+  <string name="ethiopian_month_6">የካቲት</string>
+  <string name="ethiopian_month_7">መጋቢት</string>
+  <string name="ethiopian_month_8">ሚያዝያ</string>
+  <string name="ethiopian_month_9">ግንቦት</string>
+  <string name="ethiopian_month_10">ሰኔ</string>
+  <string name="ethiopian_month_11">ሐምሌ</string>
+  <string name="ethiopian_month_12">ነሐሴ</string>
+  <string name="ethiopian_month_13">ጳጉሜን</string>
+  <string name="persian_month_4">ጥር</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
+  <string name="file_invalid">ፋይል፡ 1 %s ልክ ያልኾነ ነው</string>
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
+  <string name="file_missing">ፋይል፡ 1 %s ይጎድላል</string>
+  <!--Heading for a dialog which prompts the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Explanation for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Action to close a full screen dialog-->
+  <!--Heading for a dialog which prompts the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Action to save the contents of a full screen dialog-->
+  <!--##############################################
+    # GEO
+    ##############################################-->
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+   These strings are only being used to preserve compatibility with pre-existing
+    tile caches, and are not shown in the UI.-->
+  <string name="streets">መንገዶች</string>
+  <string name="terrain">መልከአ ምድር</string>
+  <string name="satellite">ሳተላይት</string>
+  <string name="view_change_location">አካባቢን ይመልከቱ ወይም ይቀይሩ</string>
+  <string name="getting_location">ቦታን በመጫን ላይ</string>
+  <string name="get_location">ቦታን መዝግብ</string>
+  <string name="provider_disabled_error">ይቅርታ፣ የአካባቢ አቅራቢዎች አይሰሩም፡፡</string>
+  <!--Action to go to Android settings. Displayed when location providers are disabled.-->
+  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <string name="west">ም 1 %1$s  2 %2$s  3%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="start">ይጀምሩ</string>
+  <string name="enable_gps">GPSን አንቃ</string>
+  <string name="clear">አጽዳ</string>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
+  <string name="discard">አስወግድ</string>
+  <string name="geoshape_view_change_location">GeoShapeን ይመልከቱ ወይም ይቀይሩ</string>
+  <string name="geotrace_view_change_location">GeoTraceን ይመልከቱ ወይም ይቀይሩ</string>
+  <!--Name of an action button-->
+  <!--##############################################
+    # SEND FINALIZED FORM
+    ##############################################-->
+  <string name="uploading_data">ቅጹን በመላክ ላይ</string>
+  <string name="noselect_error">ይቅርታ፣ ምንም ቅጽ አልመረጡም!</string>
+  <string name="no_connection">ምንም የአውታረ መረብ ግንኙነት የለም</string>
+  <string name="sending_items">1 %1$s ከ 2 %2$s ቅጽ (ዎች) በመላክ ላይ</string>
+  <string name="send_selected_data">የተመረጠውን ላክ</string>
+  <string name="server_auth_credentials">ልክ ያልሆነ የተጠቃሚ ስም ወይም የይለፍ ቃል ለሰርቨሩ፣ 1 %s</string>
+  <string name="server_requires_auth">ሰርቨር ማረጋገጫ ያስፈልገዋል</string>
+  <string name="no_forms_uploaded">ይቅርታ፣ ምንም ቅጽ አልተጫነም፡፡</string>
+  <string name="upload_results">ውጤቶችን ጫን</string>
+  <!--Name of option in Send Finalized Form menu to show only unsent forms (default) or show sent and unsent forms-->
+  <string name="change_view">እይታን ለውጥ</string>
+  <string name="show_sent_and_unsent_forms">የተላኩ እና ያልተላኩ ቅጾችን አሳይ</string>
+  <string name="show_unsent_forms">ያልተላኩ ቅጾችን አሳይ</string>
+  <string name="notification_error">የማሳወቂያ ጽሁፍ በማሳየት ላይ ስህተት</string>
+  <!--##############################################
+    # GET BLANK FORM
+    ##############################################-->
+  <string name="refresh">አድስ</string>
+  <string name="download">የተመረጠውን ያግኙ</string>
+  <string name="downloading_data">ከአገልጋይ ኮምፒውተር ጋር በመገናኘት ላይ</string>
+  <string name="version">ስሪት:</string>
+  <!--##############################################
+    # DELETE SAVED FORM
+    ##############################################-->
+  <!--Title of a section in "Delete Saved Forms" for deleting filled/saved forms (as opposed to blank forms)-->
+  <string name="data">የተቀመጡ ቅጾች</string>
+  <!--Title of a section in "Delete Saved Forms" for deleting blank forms (as opposed to filled/saved forms)-->
+  <string name="forms">ባዶ ቅጾች</string>
+  <string name="delete_confirm">የ 1 %s ቅጽ (ዎች) ይወገድ?</string>
+  <string name="delete_file">የተመረጠውን ሰርዝ</string>
+  <string name="delete_no">አትሰርዝ</string>
+  <string name="delete_yes">ቅጾችን ሰርዝ</string>
+  <string name="file_deleted_error">እናዝናለን፣ የተመረጠው 1 %1$s የ 2 %2$s ቅጽ (ዎች) መሰረዝ አልተሳካም!</string>
+  <string name="file_deleted_ok">1 %s ቅጽ (ዎች) በተሳካ ሁኔታ ተሰርዘዋል!</string>
+  <string name="file_delete_in_progress">ይቅርታ፣ ቅጽ የመሰረዝ እርምጃ አስቀድሞ በሂደት ላይ ነው!</string>
+  <!--##############################################
+    # GENERAL SETTINGS
+    ##############################################-->
+  <string name="general_preferences">አጠቃላይ ቅንብሮች</string>
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <string name="client">የተጠቃሚ በይነገጽ</string>
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <string name="form_management_preferences">የቅጽ ማስተዳደር</string>
+  <!--Title of a settings section-->
+  <!--Title of a settings section only available in beta or development builds.-->
+  <string name="server_preferences">የሰርቨር ቅንብሮች</string>
+  <!--Label for server type setting-->
+  <string name="server_url">URL</string>
+  <!--Title of dialog for configuring server URL-->
+  <string name="url_error">ይቅርታ፣ ልክ ያልሆነ URL!</string>
+  <string name="username">የተጠቃሚ ስም</string>
+  <string name="change_username">ODK የተጠቃሚ ስም</string>
+  <string name="password">የይለፍ ቃል</string>
+  <string name="change_password">ODK የይለፍ ቃል</string>
+  <string name="server_platform_google_sheets">ጉግል Drive, ጉግል ሉሆች</string>
+  <string name="selected_google_account_text">የ Google መለያ</string>
+  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
+  <!--Description for Fallback submission URL setting-->
+  <string name="language">ቋንቋ</string>
+  <string name="font_size">የጽሑፍ ቅርጸ ቁምፊ መጠን</string>
+  <string name="change_font_size">የጽሑፍ ቅርጸ ቁምፊ መጠን</string>
+  <string name="font_size_extra_large">በጣም ትልቅ</string>
+  <string name="font_size_large">ትልቅ</string>
+  <string name="font_size_medium">መካከለኛ</string>
+  <string name="font_size_small">ትንሽ</string>
+  <string name="font_size_extra_small">በጣም ትንሽ</string>
+  <string name="navigation">ዳሰሳ</string>
+  <string name="swipe_navigation">አግድም ማጠፊያዎችን ይጠቀሙ</string>
+  <string name="buttons_navigation">ወደፊት/ወደኋላ አዝራሮችን ይጠቀሙ</string>
+  <string name="swipe_buttons_navigation">ማጠፊያዎችን እና አዝራሮችን ይጠቀሙ</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="form_forward">ቀጣይ</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="show_splash_summary">መተግበሪያው ሲጀምር ያሳያል</string>
+  <string name="select_another_image">ሌላ ምስል ይምረጡ</string>
+  <string name="change_splash_path">ምስል ለውጥ</string>
+  <!--Heading for the settings category about updating blank forms-->
+  <!--Name of the setting that defines how blank forms are updated from the server.-->
+  <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
+  <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
+  <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
+  <!--Name of the setting that defines how often blank forms are updated from the server.-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
+  <string name="form_submission_category">የቅጽ ማስረከብ</string>
+  <string name="off">ጠፍቷል</string>
+  <string name="delete_after_send">ከላክ በኋላ ይሰርዙ</string>
+  <string name="delete_after_send_summary">ወደ ሰርቨር ከተላኩ በኋላ የተጠናቀቁ ቅጾችን እና ሚዲያዎችን ይሰርዛል</string>
+  <string name="form_filling_category">የቅጽ መሙላት</string>
+  <string name="high_resolution_title">ከፍተኛ ጥራት ቪዲዮ</string>
+  <string name="high_resolution_summary">ባለከፍተኛ ጥራት ቪዲዮ ቀረጻዎችን ያንቁ</string>
+  <string name="image_size_title">የምስል መጠን</string>
+  <string name="image_size_large">ትልቅ (3072 ፒክስል)</string>
+  <string name="image_size_medium">መካከለኛ (2048 ፒክሰል)</string>
+  <string name="image_size_small">ትንሽ (1024 ፒክሰል)</string>
+  <string name="image_size_very_small">በጣም ትንሽ (640 ፒክሰል)</string>
+  <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
+  <string name="guidance_no">አይ</string>
+  <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <string name="analytics_preferences">የአጠቃቀም ውሂብ</string>
+  <string name="phone_number">ስልክ ቁጥር</string>
+  <string name="email">የ ኢሜል አድራሻ</string>
+  <!--Displayed when a device property such as the phone number is not available-->
+  <!--##############################################
+     # ADMIN SETTINGS
+     ##############################################-->
+  <string name="admin_preferences">የአስተዳዳሪ ቅንጅቶች</string>
+  <string name="enter_new_password">አዲስ የይለፍ ቃል ያስገቡ</string>
+  <string name="admin_password">የአስተዳዳሪ ይለፍ ቃል</string>
+  <string name="admin_password_changed">የአስተዳዳሪ የይለፍ ቃል በተሳካ ሁኔታ ተለውጧል</string>
+  <string name="admin_password_disabled">የአስተዳዳሪ ይለፍ ቃል ተዘግቷል</string>
+  <string name="admin_password_incorrect">ይቅርታ፣ የይለፍ ቃል ትክክል አይደለም!</string>
+  <string name="enter_admin_password">የአስተዳዳሪ የይለፍ ቃል ያስገቡ</string>
+  <string name="change_admin_password">የአስተዳዳሪ የይለፍ ቃል ለውጥ</string>
+  <string name="show_password">የይለፍ ቃሉን አሳይ</string>
+  <string name="found_in_main">ከመደበኛው ምናሌ ለመደበቅ አትምረጥ</string>
+  <string name="found_in_settings">ከጠቅላላ ቅንብሮች ለመደበቅ አትምረጥ</string>
+  <string name="reset_settings_dialog">መተግበሪያዉን ዳግም አስጀምር …</string>
+  <string name="select_all">ሁሉንም ምረጥ</string>
+  <string name="clear_all">ሁሉንም ያፅዱ</string>
+  <string name="reset_settings_dialog_title">ምን ዳግም ለመጀመር ይምረጡ</string>
+  <string name="reset_settings_button_reset">ዳግም አስጀምር</string>
+  <string name="reset_in_progress">እንደገና በማስጀመር ላይ …</string>
+  <string name="reset_app_state_result">ውጤቶችን ዳግም ያስጀምሩ</string>
+  <string name="reset_settings_result">ሁሉም ቅንብሮች :: %s</string>
+  <string name="reset_saved_forms_result">የተቀመጡ ቅጾች :: %s</string>
+  <string name="reset_blank_forms_result">ባዶ ቅጾች :: %s</string>
+  <!--Name of a setting that determines whether users can navigate backwards in a form-->
+  <string name="moving_backwards_title">ወደኋላ መሄድ</string>
+  <string name="moving_backwards_disabled_title">ወደኋላ መሄድ አልተመረጠም</string>
+  <string name="yes">አዎ</string>
+  <string name="no">አይ</string>
+  <string name="moving_backwards_enabled_title">ወደኋላ መሄድ ተመርጧል</string>
+  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <string name="save_mid">ቅጽ አስቀምጥ</string>
+  <!--##############################################
+     # GOOGLE DRIVE, GOOGLE SHEETS
+     ##############################################-->
+  <!--Title of the screen that lists forms in user's Google Drive-->
+  <string name="go_drive">የእኔ Drive</string>
+  <!--Title of the screen that lists forms shared with Google Drive user-->
+  <string name="go_shared">ከእኔ ጋር የተጋሩ</string>
+  <!--Button for navigating across Google Drive folders-->
+  <string name="download_selected">የተመረጠውን አውርድ</string>
+  <string name="go_back">ተመለስ</string>
+  <string name="no_google_account">ምንም የ Google መለያ አልተመረጠም!</string>
+  <string name="google_set_account">Google ሉሆችን እንደ አገልጋይዎ መርጠዋል, እባክዎ ከመቀጠልዎ በፊት በአጠቃላይ ቅንብሮች ውስጥ ተዛማጅ የ Google መለያ ይምረጡ</string>
+  <string name="google_search_browse">ቅጾችን ይፈልጉ፡፡ ወይም ለማሰስ ከታች \"የእኔ Drive\" ን ይምረጡ.</string>
+  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
+  <!--##############################################
+     # ABOUT
+     ##############################################-->
+  <string name="about_preferences">ስለ</string>
+  <string name="odk_website">የODKን ድረ ገፅ ይጎብኙ</string>
+  <string name="odk_forum">የODKን መድረክ ይቀላቀሉ</string>
+  <!--##############################################
+     # SETTINGS IMPORT
+     ##############################################-->
+  <string name="share">አጋራ</string>
+  <string name="generate">ፍጠር</string>
+  <!--##############################################
+     # SCOPED STORAGE MIGRATION
+     ##############################################-->
+  <!--Action to begin a storage migration-->
+  <!--##############################################
+     # MISC
+     ##############################################-->
+  <string name="ok">እሺ</string>
+  <!--Used in many dialogs to dismiss the dialog without taking any action-->
+  <string name="cancel">ሰርዝ</string>
+  <string name="cancel_loading_form">ሰርዝ</string>
+  <string name="cancel_location">ሰርዝ</string>
+  <string name="do_not_change">ሰርዝ</string>
+  <string name="do_not_exit">ሰርዝ</string>
+  <string name="success">ስኬት</string>
+  <string name="error_occured">ስህተት ተከስቷል</string>
+  <string name="please_wait">እባክዎ ጥቂት ጊዜ ይጠብቁ</string>
+  <string name="please_wait_long">እባክዎ ትንሽ ይጠብቁ፡፡ ይሄ ጥቂት ደቂቃዎችን ሊወስድ ይችላል፡፡</string>
+</resources>

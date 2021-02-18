@@ -12,7 +12,12 @@
     <issue id="TextFields" severity="error" />
 
     <issue id="GradleOverrides" severity="error" />
-
+    <issue id="FragmentTagUsage" severity="error" />
+    <issue id="UseCompatLoadingForDrawables" severity="error" />
+    <issue id="UselessParent" severity="error" />
+    <issue id="BinaryOperationInTimber" severity="error" />
+    <issue id="RelativeOverlap" severity="error" />
+    <issue id="Typos" severity="error" />
     <issue id="SetTextI18n" severity="error" />
     <issue id="HardcodedText" severity="error" />
     <issue id="TypographyEllipsis" severity="error" />
@@ -50,4 +55,5 @@
 
     <!-- This check crashes if request interval is passed as a param :S -->
     <issue id="InvalidPeriodicWorkRequestInterval" severity="ignore" />
+    <issue id="AlwaysShowAction" severity="ignore" />
 </lint>

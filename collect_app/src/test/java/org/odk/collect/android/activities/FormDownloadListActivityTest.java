@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,7 +21,6 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.robolectric.shadows.ShadowEnvironment;
@@ -47,11 +45,6 @@ public class FormDownloadListActivityTest {
     @Before public void setup() {
         overrideAppDependencyModule(new AppDependencyModule(analytics, formsDao));
         ShadowEnvironment.setExternalStorageState(MEDIA_MOUNTED); // Required for ODK directories to be created
-    }
-
-    @After
-    public void teardown() {
-        FormsProvider.releaseDatabaseHelper();
     }
 
     @Test
@@ -101,6 +94,10 @@ public class FormDownloadListActivityTest {
     }
 
     private static class AlwaysGrantStoragePermissionsPermissionUtils extends PermissionUtils {
+        private AlwaysGrantStoragePermissionsPermissionUtils() {
+            super(R.style.Theme_Collect_Dialog_PermissionAlert);
+        }
+
         @Override
         public void requestStoragePermissions(Activity activity, @NonNull PermissionListener action) {
             action.granted();

@@ -25,6 +25,8 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.utilities.DialogUtils;
+import org.odk.collect.async.Scheduler;
+import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
 
 import java.util.List;
 
@@ -37,7 +39,16 @@ public class QuitFormDialogFragment extends DialogFragment {
     @Inject
     Analytics analytics;
 
-    private FormSaveViewModel viewModel;
+    @Inject
+    AudioRecorderViewModelFactory audioRecorderViewModelFactory;
+
+    @Inject
+    Scheduler scheduler;
+
+    @Inject
+    FormSaveViewModel.FactoryFactory formSaveViewModelFactoryFactory;
+
+    private FormSaveViewModel formSaveViewModel;
     private Listener listener;
 
     @Override
@@ -45,8 +56,8 @@ public class QuitFormDialogFragment extends DialogFragment {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
 
-        FormSaveViewModel.Factory factory = new FormSaveViewModel.Factory(requireActivity(), null, analytics);
-        viewModel = new ViewModelProvider(requireActivity(), factory).get(FormSaveViewModel.class);
+        ViewModelProvider.Factory factory = formSaveViewModelFactoryFactory.create(requireActivity(), null);
+        formSaveViewModel = new ViewModelProvider(requireActivity(), factory).get(FormSaveViewModel.class);
 
         if (context instanceof Listener) {
             listener = (Listener) context;
@@ -58,8 +69,7 @@ public class QuitFormDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
 
-        String title =  viewModel.getFormName() == null ? getActivity().getString(R.string.no_form_loaded)
-                : viewModel.getFormName();
+        String title =  formSaveViewModel.getFormName() == null ? getActivity().getString(R.string.no_form_loaded) : formSaveViewModel.getFormName();
 
         List<IconMenuItem> items;
         if ((boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_MID)) {
@@ -81,12 +91,12 @@ public class QuitFormDialogFragment extends DialogFragment {
                     listener.onSaveChangesClicked();
                 }
             } else {
-                viewModel.ignoreChanges();
+                formSaveViewModel.ignoreChanges();
 
                 String action = getActivity().getIntent().getAction();
                 if (Intent.ACTION_PICK.equals(action) || Intent.ACTION_EDIT.equals(action)) {
                     // caller is waiting on a picked form
-                    Uri uri = InstancesDaoHelper.getLastInstanceUri(viewModel.getAbsoluteInstancePath());
+                    Uri uri = InstancesDaoHelper.getLastInstanceUri(formSaveViewModel.getAbsoluteInstancePath());
                     if (uri != null) {
                         getActivity().setResult(RESULT_OK, new Intent().setData(uri));
                     }

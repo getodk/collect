@@ -7,6 +7,10 @@ import androidx.annotation.AttrRes;
 
 class ContextUtils {
 
+    private ContextUtils() {
+
+    }
+
     static int getAttributeValue(Context context, @AttrRes int resId) {
         TypedValue outValue = new TypedValue();
         context.getTheme().resolveAttribute(resId, outValue, true);

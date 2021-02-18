@@ -27,8 +27,8 @@ import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
 @SuppressLint("ViewConstructor")
 public class IntegerWidget extends StringWidget {
 
-    public IntegerWidget(Context context, QuestionDetails questionDetails, boolean readOnlyOverride) {
-        super(context, questionDetails, readOnlyOverride);
+    public IntegerWidget(Context context, QuestionDetails questionDetails) {
+        super(context, questionDetails);
         StringWidgetUtils.adjustEditTextAnswerToIntegerWidget(answerText, questionDetails.getPrompt());
     }
 

@@ -16,11 +16,9 @@
 
 package org.odk.collect.android.fragments.dialogs;
 
-import org.javarosa.core.model.FormIndex;
 import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.PersianChronologyKhayyamBorkowski;
 import org.odk.collect.android.R;
-import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
 
 import java.util.Arrays;
@@ -30,13 +28,6 @@ public class PersianDatePickerDialog extends CustomDatePickerDialog {
     private static final int MAX_SUPPORTED_YEAR = 1478; //2100 in Gregorian calendar
 
     private String[] monthsArray;
-
-    public static PersianDatePickerDialog newInstance(FormIndex formIndex, LocalDateTime date, DatePickerDetails datePickerDetails) {
-        PersianDatePickerDialog dialog = new PersianDatePickerDialog();
-        dialog.setArguments(getArgs(formIndex, date, datePickerDetails));
-
-        return dialog;
-    }
 
     @Override
     public void onResume() {
@@ -80,6 +71,9 @@ public class PersianDatePickerDialog extends CustomDatePickerDialog {
         LocalDateTime persianDate = new LocalDateTime(persianYear, persianMonth + 1, 1, 0, 0, 0, 0, PersianChronologyKhayyamBorkowski.getInstance());
         if (persianDay > persianDate.dayOfMonth().getMaximumValue()) {
             persianDay = persianDate.dayOfMonth().getMaximumValue();
+        }
+        if (persianDay < persianDate.dayOfMonth().getMinimumValue()) {
+            persianDay = persianDate.dayOfMonth().getMinimumValue();
         }
 
         return new LocalDateTime(persianYear, persianMonth + 1, persianDay, 0, 0, 0, 0, PersianChronologyKhayyamBorkowski.getInstance());

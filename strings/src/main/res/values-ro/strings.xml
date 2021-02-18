@@ -1,0 +1,405 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data">Completați formular necompletat</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="enter_data_button">Completați formular necompletat</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="review_data">Editați formular salvat</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="review_data_button">Editați formular salvat (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="send_data">Trimiteți formular finalizat</string>
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="send_data_button">Trimiteți formular finalizat (%s)</string>
+  <!--Text for an action button on the main screen.-->
+  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <!--Text for an action button on the main screen.-->
+  <string name="get_forms">Preluați formular necompletat</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="manage_files">Ștergeți formular salvat</string>
+  <string name="version_number">Versiunea %s</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="added_on_date_at_time">\'Adăugat\' EEE, dd MMM yyyy \'la\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="saved_on_date_at_time">\'Salvat\' EEE, dd MMM yyyy \'la\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="finalized_on_date_at_time">\'Finalizat\' EEE, dd MMM yyyy \'la\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sent_on_date_at_time">\'Trimis\' EEE, dd MMM yyyy \'la\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sending_failed_on_date_at_time">\'Trimitere eșuată\' EEE, dd MMM yyyy \'la\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="modified_on_date_at_time">\'Modificat în\' EEE, dd MMM yyyy \'la\' HH:mm</string>
+  <!--Displayed in search boxes for form lists or question types that involve search-->
+  <string name="search">Căutare</string>
+  <string name="no_items_display">Nimic disponibil pentru afișare.</string>
+  <string name="no_items_display_forms">Nimic disponibil pentru afișare.\n\nÎncercați să preluați și să completați un formular gol.</string>
+  <string name="no_items_display_instances">Nimic disponibil pentru afișare.\n\nÎncercați să finalizați formularele salvate înaintea trimiterii.</string>
+  <!--##############################################
+    # FILL BLANK FORM
+    ##############################################-->
+  <string name="finished_disk_scan">Scanare finalizată. Toate formularele sunt încărcate.</string>
+  <string name="loading_form">Încărcare formular</string>
+  <string name="survey_loading_reading_form_message">Citesc definiția formularului…</string>
+  <string name="survey_loading_reading_data_message">Citesc datele chestionarului…</string>
+  <string name="survey_loading_reading_csv_message">Citesc fișierele CSV…</string>
+  <string name="parse_error">Ne pare rău, nu am putut examina formularul.</string>
+  <string name="parent_form_not_present">Nu a putut fi modificat formularul salvat din cauză că formularul gol corespunzător nu este prezent sau a fost șters.\n\nForm ID: %1$s</string>
+  <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
+  <string name="savepoint_used">Modificările nesalvate au fost restaurate din punctul de salvare!</string>
+  <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
+  <string name="change_language">Schimbă limba</string>
+  <!--Text for button displayed in the form filling menu to see the form's table of contents-->
+  <string name="view_hierarchy">Mergeți către promt</string>
+  <!--Text for button displayed in the form filling menu to save the form-->
+  <string name="save_all_answers">Salvați formularul</string>
+  <!--Text of button from the form's table of contents to jump to the beginning of the form-->
+  <string name="jump_to_beginning">Mergeți la început</string>
+  <!--Text of button from the form's table of contents to jump to the end of the form-->
+  <string name="jump_to_end">Mergeți la sfârșit</string>
+  <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
+  <string name="jump_to_previous">Mergeți sus</string>
+  <!--Displayed below group names in a form's table of contents-->
+  <!--Displayed below repeat names in a form's table of contents-->
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <!--Title of overlay menu displayed when long pressing on a question in a form-->
+  <string name="edit_prompt">Editare câmp</string>
+  <string name="clearanswer_confirm">Ștergeți răspunsul de la \"%s\"?</string>
+  <string name="clear_answer">Ștergeți răspunsul</string>
+  <string name="clear_answer_ask">Ștergeți acest răspuns?</string>
+  <string name="clear_answer_no">Anulează</string>
+  <string name="discard_answer">Eliminați răspunsul</string>
+  <string name="discard_group">Eliminați grupul</string>
+  <string name="delete_repeat">Eliminați grupul</string>
+  <string name="delete_repeat_ask">Eliminați acest grup?</string>
+  <string name="delete_repeat_confirm">Eliminați grupul \"%s\" și toate sub-grupurile lui?</string>
+  <string name="delete_repeat_no">Anulați</string>
+  <string name="invalid_answer_error">Ne pare rău, răspunsul este invalid!</string>
+  <string name="required_answer_error">Ne pare rău, răspunsul este obligatoriu!</string>
+  <string name="survey_internal_error">Eroare internă: trecerea către prompt eșuată.</string>
+  <string name="save_enter_data_description">Sunteți la sfârșitul \"%s\".</string>
+  <string name="save_form_as">Denumiți acest formular:</string>
+  <string name="save_as_error">Numele salvat nu trebuie să fie gol!</string>
+  <string name="mark_finished">Marcați formularul ca finalizat</string>
+  <string name="quit_entry">Salvați formularul și ieșiți</string>
+  <string name="data_saved_error">Ne pare rău, salvarea formularului nu a reușit!</string>
+  <string name="data_saved_ok">Salvarea formularului a reușit!</string>
+  <string name="save_point_error">Eroare la salvarea punctului de recuperare: %s</string>
+  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <string name="quit_application">Ieșire %s</string>
+  <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="do_not_save">Ignorați modificările</string>
+  <string name="keep_changes">Salvați modificările</string>
+  <string name="saving_form">Salvare formular</string>
+  <string name="survey_saving_validating_message">Validez răspunsurile…</string>
+  <string name="survey_saving_collecting_message">Colectez date…</string>
+  <string name="survey_saving_saving_message">Salvez pe SD card…</string>
+  <string name="survey_saving_finalizing_message">Fizalizez pe SD card…</string>
+  <string name="survey_saving_encrypting_message">Criptez datele…</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <!--Text displayed when audio recording fails to start-->
+  <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <!--Error message displayed when copying media from a temporary directory fails-->
+  <!--##############################################
+    # FORM FEATURES
+    ##############################################-->
+  <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
+  <string name="launch_app">Lansare</string>
+  <string name="activity_not_found">Nu s-a găsit nicio activitate care să se ocupe de : %s</string>
+  <string name="no_app">Aplicația solicitată lipsește. Vă rugăm să introduceți manual textul.</string>
+  <string name="launch_printer">Printare inițializată</string>
+  <string name="no_printer">Imprimanta specificată nu este instalată. Vă rugăm să instalați implimanta.</string>
+  <string name="open_url">Deschideți Url</string>
+  <string name="capture_osm">Lansează OpenMapKit</string>
+  <string name="recapture_osm">Reface etichetare (tagging) OSM</string>
+  <string name="alert">Alertă</string>
+  <string name="install_openmapkit">Vă rugăm instalați OpenMapKit!</string>
+  <string name="get_barcode">Preluați cod de bare</string>
+  <string name="replace_barcode">Înlocuiți codul de bare</string>
+  <string name="capture_image">Fă o poză</string>
+  <string name="choose_image">Alegeți imagine</string>
+  <!--Dialog heading for saving annotated image-->
+  <string name="save_and_close">Salvați și închideți</string>
+  <string name="sign_button">Colectați semnătura</string>
+  <string name="markup_image">Marcați imaginea</string>
+  <string name="draw_image">Desenați imaginea</string>
+  <string name="reset_image">Resetați</string>
+  <string name="set_color">Setați culoarea</string>
+  <string name="capture_video">Înregistrează videoclipul</string>
+  <string name="choose_video">Alegeți video</string>
+  <string name="play_video">Redați video</string>
+  <!--Text for button that deletes a file that is the answer to a question-->
+  <!--Text for button that starts recording sound-->
+  <string name="capture_audio">Înregistrează sunet</string>
+  <!--Text for button that lets the user choose a sound file on their device-->
+  <string name="choose_sound">Alegeți sunet</string>
+  <!--Description text for button that that pauses recording sound-->
+  <!--Description text for button that that resumes recording sound-->
+  <!--Title for dialog asking the user if they want to delete a file-->
+  <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <!--Text for button that stops audio recording-->
+  <!--Text to let the user know a recording is in progress-->
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <!--Text for button that plays audio clip-->
+  <!--Text to let the user know a file is being saved-->
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="error_attaching_binary_file">A intervenit o eroare în timpul atașării fișierului media: %s</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="select_answer">Selectați răspunsul</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="selected">Selectat: </string>
+  <string name="trigger">OK. Vă rugăm să continuați.</string>
+  <string name="ext_file_no_data_error">Fișierul nu conține date!</string>
+  <string name="ext_conflicting_columns_error">%s coloane se potrivesc!</string>
+  <string name="ext_sortBy_numeric_error">Coloana de sortare trebuie să conțină doar valori numerice. Valoarea care a generat conflictul a fost \'%s\'.</string>
+  <string name="ext_search_wrong_arguments_error">Eroare de sintaxă în funcția search(): Funcția necesită 1, 4 sau 6 argumente.</string>
+  <string name="ext_search_wrong_function_error">Eroare de sintaxă în funcția search(): Funcția \'%s\' nerecunoscută.</string>
+  <string name="ext_search_bad_function_error">Eroare de sintaxă în funcția search(): \'%s\' nu a fost evaluată ca funcție.</string>
+  <string name="ext_search_return_error">Search handler a returnat un obiect de tip \'%s\'.</string>
+  <string name="ext_import_generic_error">Nu am putut importa date din %1$s. Motiv: %2$s</string>
+  <string name="ext_import_progress_message">Preîncarc date din \'%1$s\', vă rugăm să așteptați… %2$s</string>
+  <string name="ext_import_finalizing_message">Finalizez preîncărcarea datelor…</string>
+  <string name="ext_import_completed_message">Citirea datelor a fost finalizată!</string>
+  <string name="ext_not_initialized_error">ExternalDataManager nu a fost inițializat.</string>
+  <string name="ext_import_csv_missing_error">Datele externe pentru %1$s nu au fost importate. Poate ai uitat să includeți fișierul %2$s.csv în formularul dumneavoastră?</string>
+  <string name="ext_search_generic_error">Eroare de sintaxă în funcția search(): %s.</string>
+  <string name="ext_assign_value_error">Nu pot atribui valoarea la \'%s\'.</string>
+  <string name="get_bearing">Înregistrare poziție</string>
+  <string name="replace_bearing">Înlocuire poziție</string>
+  <string name="getting_bearing">Încărcare poziție</string>
+  <string name="accept_bearing">Înregistrare poziție</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
+  <string name="file_invalid">Fișierul %s este invalid.</string>
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
+  <string name="file_missing">Fișierul %s lipsește.</string>
+  <!--Heading for a dialog which prompts the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Explanation for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <!--Action to close a full screen dialog-->
+  <!--Heading for a dialog which prompts the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <!--Action to save the contents of a full screen dialog-->
+  <!--##############################################
+    # GEO
+    ##############################################-->
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+   These strings are only being used to preserve compatibility with pre-existing
+    tile caches, and are not shown in the UI.-->
+  <string name="openmap_usgs_topo">USGS National Map Topo</string>
+  <string name="streets">Străzi</string>
+  <string name="terrain">Teren</string>
+  <string name="hybrid">Hibrid</string>
+  <string name="satellite">Satelit</string>
+  <string name="google_play_services_error_occured">Nu am putut accesa Google Maps. Aveți instalat Google Play Services?</string>
+  <string name="view_change_location">Vizualizați sau modificați locația</string>
+  <string name="getting_location">Încărcare locație</string>
+  <string name="get_location">Înregistrați coordonatele</string>
+  <string name="provider_disabled_error">Ne pare rău, localizarea este dezactivată!</string>
+  <!--Action to go to Android settings. Displayed when location providers are disabled.-->
+  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
+  <string name="save_point">Salvați GeoPoint</string>
+  <string name="get_point">Start GeoPoint</string>
+  <string name="get_shape">Start GeoShape</string>
+  <string name="get_trace">Start GeoTrace</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <string name="west">Vest %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <string name="east">Est %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <string name="south">Sud %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="north">Nord%1$s%2$s%3$s</string>
+  <string name="geoshape_title">GeoShape</string>
+  <string name="start">Start</string>
+  <string name="enable_gps">Activați GPS</string>
+  <string name="geotrace_title">GeoTrace</string>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
+  <!--Name of an action button-->
+  <!--##############################################
+    # SEND FINALIZED FORM
+    ##############################################-->
+  <string name="uploading_data">Trimitere formular</string>
+  <string name="noselect_error">Ne pare rău, nu ați selectat niciun formular!</string>
+  <string name="no_connection">Nu sunt disponibile legături la rețea</string>
+  <string name="sending_items">Trimitere %1$s din %2$s formular(e)</string>
+  <string name="send_selected_data">Trimiteți selectatele</string>
+  <string name="server_requires_auth">Serverul necesită autentificare</string>
+  <string name="no_forms_uploaded">Ne pare rău, niciun formular nu a fost încărcat.</string>
+  <string name="upload_results">Încărcați rezultate</string>
+  <!--Name of option in Send Finalized Form menu to show only unsent forms (default) or show sent and unsent forms-->
+  <string name="change_view">Schimbați vederea</string>
+  <string name="show_sent_and_unsent_forms">Afișați formularele trimise și netrimise</string>
+  <string name="show_unsent_forms">Doar formularele netrimise</string>
+  <string name="send_in_progress">Trimiterea în fundal rulează, vă rugăm să încercați din nou mai târziu.</string>
+  <string name="notification_error">Eroare la afișarea textului notificării</string>
+  <!--##############################################
+    # GET BLANK FORM
+    ##############################################-->
+  <string name="refresh">Actualizați</string>
+  <string name="download">Luați cele selectate</string>
+  <string name="downloading_data">Conectare la server</string>
+  <string name="fetching_file">Preluare %1$s.\n\nFormular %2$s din %3$s formular(e).</string>
+  <string name="form_download_progress">%1$s. Preluare fișiere media: %2$s din %3$s</string>
+  <string name="version">Versiune:</string>
+  <!--##############################################
+    # DELETE SAVED FORM
+    ##############################################-->
+  <!--Title of a section in "Delete Saved Forms" for deleting filled/saved forms (as opposed to blank forms)-->
+  <string name="data">Formulare salvate</string>
+  <!--Title of a section in "Delete Saved Forms" for deleting blank forms (as opposed to filled/saved forms)-->
+  <string name="forms">Formulare necompletate</string>
+  <string name="delete_confirm">Ștergeți %s formular(e)?</string>
+  <string name="delete_file">Ștergeți cele selectate</string>
+  <string name="delete_no">Nu ștergeți</string>
+  <string name="delete_yes">Ștergeți formulare</string>
+  <string name="file_deleted_error">Ne pare rău, %1$s din %2$s formular(e) selectat(e) nu au putut fi șterse!</string>
+  <string name="file_deleted_ok">%s formular(e) șters(e) cu succes!</string>
+  <string name="file_delete_in_progress">Ne pare rău, formularul este deja în proces de ștergere!</string>
+  <!--##############################################
+    # GENERAL SETTINGS
+    ##############################################-->
+  <string name="general_preferences">Modificați setările</string>
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section-->
+  <!--Title of a settings section only available in beta or development builds.-->
+  <string name="server_preferences">Setări server</string>
+  <!--Label for server type setting-->
+  <string name="server_url">URL</string>
+  <!--Title of dialog for configuring server URL-->
+  <string name="change_server_url">URL server</string>
+  <string name="url_error">Ne pare rău, URL invalid!</string>
+  <string name="username">Nume de utilizator</string>
+  <string name="change_username">Nume utilizator ODK</string>
+  <string name="password">Parola</string>
+  <string name="change_password">Parola ODK</string>
+  <string name="password_error_whitespace">Nu sunt permise spații în parole</string>
+  <string name="username_error_whitespace">Nu sunt permise spații în numele de utilizator</string>
+  <string name="change_formlist_url">Calea către lista formularelor (adăugată adresei URL a serverului)</string>
+  <string name="change_submission_url">Calea transmiterii (adăugată adresei URL a serverului)</string>
+  <string name="formlist_url">Calea către lista formularelor</string>
+  <string name="submission_url">Calea către transmitere</string>
+  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
+  <string name="selected_google_account_text">Cont Google</string>
+  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
+  <!--Description for Fallback submission URL setting-->
+  <string name="font_size">Mărimea fontului textului</string>
+  <string name="change_font_size">Mărimea fontului textului</string>
+  <string name="font_size_extra_large">Extra mare</string>
+  <string name="font_size_large">Mare</string>
+  <string name="font_size_medium">Medie</string>
+  <string name="font_size_small">Mică</string>
+  <string name="font_size_extra_small">Extra mică</string>
+  <string name="navigation">Navigare</string>
+  <string name="swipe_navigation">Utilizați gesturi orizontale</string>
+  <string name="buttons_navigation">Utilizați butoanele înainte/înapoi</string>
+  <string name="swipe_buttons_navigation">Utilizați gesturi și butoane</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="form_forward">Următor</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="show_splash_summary">Afișat la startul aplicației</string>
+  <string name="splash_path">Pagină de start selectată</string>
+  <string name="default_splash_path">ODK Implicit</string>
+  <string name="select_another_image">Selectați altă imagine</string>
+  <string name="use_odk_default">Utilizați imaginea implicită</string>
+  <string name="change_splash_path">Schimbați imaginea</string>
+  <!--Heading for the settings category about updating blank forms-->
+  <!--Name of the setting that defines how blank forms are updated from the server.-->
+  <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
+  <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
+  <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
+  <!--Name of the setting that defines how often blank forms are updated from the server.-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Frequency for requesting blank form updates from the server-->
+  <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
+  <string name="delete_after_send">Ștergeți după trimitere</string>
+  <string name="delete_after_send_summary">Ștergeți formulare finalizate și fișierele media după trimiterea către server</string>
+  <string name="default_completed">Implicit finalizat</string>
+  <string name="default_completed_summary">Marcați formularul ca finalizat, implicit</string>
+  <string name="constraint_behavior">Comportament de procesare constrâns</string>
+  <string name="constraint_behavior_on_swipe">Validare în timpul inaintării</string>
+  <string name="constraint_behavior_on_finalize">Amânați validarea până la finalizare</string>
+  <string name="high_resolution_summary">Activați înregistrările video high-resolution</string>
+  <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
+  <string name="guidance_no">Nu</string>
+  <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <!--Displayed when a device property such as the phone number is not available-->
+  <!--##############################################
+     # ADMIN SETTINGS
+     ##############################################-->
+  <string name="admin_preferences">Setări administrator</string>
+  <string name="admin_access_settings">Atingeți pentru accesul ca administrator la setări</string>
+  <string name="enter_new_password">Introduceți noua parolă</string>
+  <string name="admin_password">Parola administratorului</string>
+  <string name="admin_password_changed">Parola de administrator a fost schimbată cu succes</string>
+  <string name="admin_password_disabled">Parola de administrator dezactivată</string>
+  <string name="admin_password_incorrect">Ne pare rău, parola este incorectă!</string>
+  <string name="enter_admin_password">Introduceți parola de administrator</string>
+  <string name="change_admin_password">Schimbați parola administratorului</string>
+  <string name="found_in_main">Deselectați pentru a ascunde din Meniul principal</string>
+  <string name="found_in_settings">Deselectați pentru a ascunde din Setări generale</string>
+  <!--Name of a setting that determines whether users can navigate backwards in a form-->
+  <string name="yes">Da</string>
+  <string name="no">Nu</string>
+  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <string name="save_mid">Salvați formularul</string>
+  <!--##############################################
+     # GOOGLE DRIVE, GOOGLE SHEETS
+     ##############################################-->
+  <!--Title of the screen that lists forms in user's Google Drive-->
+  <string name="go_drive">Discul meu</string>
+  <!--Title of the screen that lists forms shared with Google Drive user-->
+  <string name="go_shared">Partajate cu mine</string>
+  <!--Button for navigating across Google Drive folders-->
+  <string name="go_back">Înapoi</string>
+  <string name="drive_get_file">Preluare %1$s și fișiere media.</string>
+  <string name="no_google_account">Niciun cont Google nu a fost selectat!</string>
+  <string name="google_set_account">Ați selectat Google Sheets ca server, vă rugăm să selectați un cont Google asociat în Setări generale înainte de a continua</string>
+  <string name="google_search_browse">Căutați formulare. Sau selectați mai jos \'Discul meu\' pentru a naviga. </string>
+  <string name="invalid_sheet_id">ID foaie invalid: %1$s</string>
+  <string name="google_sheets_missing_columns">Din foaia de calcul lipsesc următoarele coloane: %1$s</string>
+  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
+  <!--##############################################
+     # ABOUT
+     ##############################################-->
+  <string name="about_preferences">Descriere</string>
+  <!--##############################################
+     # SETTINGS IMPORT
+     ##############################################-->
+  <!--##############################################
+     # SCOPED STORAGE MIGRATION
+     ##############################################-->
+  <!--Action to begin a storage migration-->
+  <!--##############################################
+     # MISC
+     ##############################################-->
+  <string name="ok">OK</string>
+  <!--Used in many dialogs to dismiss the dialog without taking any action-->
+  <string name="cancel">Anulează</string>
+  <string name="cancel_loading_form">Anulează</string>
+  <string name="cancel_location">Anulează</string>
+  <string name="do_not_change">Anulați</string>
+  <string name="do_not_exit">Anulați</string>
+  <string name="success">Succes</string>
+  <string name="error_occured">Eroare</string>
+  <string name="please_wait">Vă rugăm să așteptați câteva momente.</string>
+  <string name="please_wait_long">Vă rugăm să așteptați. Ar putea dura câteva minute.</string>
+  <string name="sdcard_unmounted">Collect nu poate accesa SD card-ul. Poate este montat via USB? (Starea curentă este: %s)</string>
+  <string name="fs_delete_media_path_if_file_error">Nu am putut șterge \'%s\'. Vă rugăm să ștergeți fișierul maunal și să re-descărcați formularul.</string>
+  <string name="fs_create_media_folder_error">Nu pot crea directorul media \'%s\'.</string>
+  <string name="fs_file_copy_error">Nu pot copia \'%1$s\' peste \'%2$s\'. Motiv: %3$s</string>
+  <string name="survey_multiple_forms_error">Ați descărcat două formulare diferite cu același form ID și versiune. Poate a fost același formular încărcat la momente diferite sau către servere diferite. Va trebui să ștergeți unul.</string>
+</resources>

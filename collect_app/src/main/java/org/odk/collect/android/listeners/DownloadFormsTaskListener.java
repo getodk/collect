@@ -16,13 +16,13 @@ package org.odk.collect.android.listeners;
 
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface DownloadFormsTaskListener {
-    void formsDownloadingComplete(HashMap<ServerFormDetails, String> result);
+    void formsDownloadingComplete(Map<ServerFormDetails, String> result);
 
     void progressUpdate(String currentFile, int progress, int total);
 

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?colorPrimary"
+    android:paddingVertical="@dimen/margin_small"
+    android:paddingEnd="@dimen/margin_standard"
+    android:paddingStart="@dimen/margin_standard"
+    tools:ignore="RtlSymmetry">
+
+    <ImageView
+        android:id="@+id/recording_status"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_baseline_mic_24"
+        app:tint="?colorOnPrimary" />
+
+    <TextView
+        android:id="@+id/time_code"
+        style="@style/TextAppearance.Collect.Subtitle1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/margin_small"
+        android:layout_toStartOf="@id/buttons"
+        android:layout_toEndOf="@id/recording_status"
+        android:text="@string/recording"
+        android:textColor="?colorOnPrimary" />
+
+    <LinearLayout
+        android:id="@+id/buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/pause_recording"
+            style="@style/Widget.Collect.Button.OutlinedIconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:contentDescription="@string/pause_recording"
+            app:icon="@drawable/ic_pause_24dp"
+            app:iconTint="?colorOnPrimary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/stop_recording"
+            style="@style/Widget.Collect.Button.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:contentDescription="@string/stop_recording"
+            app:icon="@drawable/ic_stop_black_24dp" />
+    </LinearLayout>
+</RelativeLayout>

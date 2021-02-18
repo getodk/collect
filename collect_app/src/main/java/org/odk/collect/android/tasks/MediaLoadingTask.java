@@ -2,7 +2,6 @@ package org.odk.collect.android.tasks;
 
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.provider.MediaStore;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
@@ -56,10 +55,14 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
             if (instanceFile != null) {
                 String instanceFolder = instanceFile.getParent();
                 String extension = ContentResolverHelper.getFileExtensionFromUri(formEntryActivity.get(), uris[0]);
-                String destMediaPath = instanceFolder + File.separator + System.currentTimeMillis() + extension;
+                String destMediaPath = instanceFolder
+                        + File.separator
+                        + System.currentTimeMillis()
+                        + "."
+                        + extension;
 
                 try {
-                    File chosenFile = MediaUtils.getFileFromUri(formEntryActivity.get(), uris[0], MediaStore.Images.Media.DATA, connectivityProvider.get());
+                    File chosenFile = new MediaUtils().getFileFromUri(formEntryActivity.get(), uris[0], connectivityProvider.get());
                     if (chosenFile != null) {
                         final File newFile = new File(destMediaPath);
                         FileUtils.copyFile(chosenFile, newFile);
@@ -93,6 +96,6 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
         if (prev != null && !formEntryActivity.get().isInstanceStateSaved()) {
             ((DialogFragment) prev).dismiss();
         }
-        formEntryActivity.get().setBinaryWidgetData(result);
+        formEntryActivity.get().setWidgetData(result);
     }
 }

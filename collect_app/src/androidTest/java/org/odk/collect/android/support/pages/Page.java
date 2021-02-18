@@ -3,6 +3,7 @@ package org.odk.collect.android.support.pages;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.ViewAction;
@@ -12,6 +13,8 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import androidx.test.runner.lifecycle.Stage;
+
+import junit.framework.AssertionFailedError;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.FormLoadingUtils;
@@ -33,12 +36,14 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
+import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -78,6 +83,10 @@ abstract class Page<T extends Page<T>> {
     }
 
     public abstract T assertOnPage();
+
+    public <P extends Page<P>> P assertOnPage(P page) {
+        return page.assertOnPage();
+    }
 
     /**
      * Presses back and then returns the Page object passed in after
@@ -228,7 +237,7 @@ abstract class Page<T extends Page<T>> {
     }
 
     public T assertEnabled(int string) {
-        onView(withText(string)).check(matches(isEnabled()));
+        onView(withText(string)).check(matches(allOf(isDisplayed(), isEnabled())));
         return (T) this;
     }
 
@@ -291,11 +300,19 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
-    public T scrollToViewAndClickText(String text) {
+    public T scrollToRecyclerViewItemAndClickText(String text) {
         onView(withId(R.id.recycler_view)).perform(RecyclerViewActions
                 .actionOnItem(hasDescendant(withText(text)), scrollTo()));
         onView(withId(R.id.recycler_view)).perform(RecyclerViewActions
                 .actionOnItem(hasDescendant(withText(text)), click()));
+        return (T) this;
+    }
+
+    public T scrollToRecyclerViewItemAndClickText(int string) {
+        onView(isAssignableFrom(RecyclerView.class)).perform(RecyclerViewActions
+                .actionOnItem(hasDescendant(withText(getTranslatedString(string))), scrollTo()));
+        onView(isAssignableFrom(RecyclerView.class)).perform(RecyclerViewActions
+                .actionOnItem(hasDescendant(withText(getTranslatedString(string))), click()));
         return (T) this;
     }
 
@@ -339,12 +356,7 @@ abstract class Page<T extends Page<T>> {
                 return;
             } catch (Exception e) {
                 failure = e;
-
-                try {
-                    Thread.sleep(250);
-                } catch (InterruptedException ignored) {
-                    // ignored
-                }
+                wait250ms();
             }
         }
 
@@ -357,26 +369,32 @@ abstract class Page<T extends Page<T>> {
 
     protected <T> T waitFor(Callable<T> callable) {
         int counter = 0;
-        Exception failure = null;
+        Throwable failure = null;
 
         // Try 20 times/for 5 seconds
         while (counter < 20) {
             try {
                 return callable.call();
-            } catch (Exception throwable) {
+            } catch (Exception | AssertionFailedError throwable) {
                 failure = throwable;
             }
 
-            try {
-                Thread.sleep(250);
-            } catch (InterruptedException ignored) {
-                // ignored
-            }
+            wait250ms();
 
             counter++;
         }
 
         throw new RuntimeException("waitFor failed", failure);
+    }
+
+    public T wait250ms() {
+        try {
+            Thread.sleep(250);
+        } catch (InterruptedException ignored) {
+            // ignored
+        }
+
+        return (T) this;
     }
 
     public T assertTextNotDisplayed(int string) {
@@ -399,6 +417,21 @@ abstract class Page<T extends Page<T>> {
             throw new RuntimeException(e);
         }
 
+        return (T) this;
+    }
+
+    public T assertContentDescriptionDisplayed(int string) {
+        onView(withContentDescription(string)).check(matches(isDisplayed()));
+        return (T) this;
+    }
+
+    public T assertContentDescriptionNotDisplayed(int string) {
+        onView(withContentDescription(string)).check(matches(not(isDisplayed())));
+        return (T) this;
+    }
+
+    public T clickOnContentDescription(int string) {
+        onView(withContentDescription(string)).perform(click());
         return (T) this;
     }
 }

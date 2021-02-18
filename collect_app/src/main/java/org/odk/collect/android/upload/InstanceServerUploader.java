@@ -29,6 +29,7 @@ import org.odk.collect.android.openrosa.OpenRosaConstants;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.ResponseMessageParser;
+import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.File;
@@ -90,7 +91,7 @@ public class InstanceServerUploader extends InstanceUploader {
             } catch (IllegalArgumentException e) {
                 saveFailedStatusToDatabase(instance);
                 Timber.d(e.getMessage() != null ? e.getMessage() : e.toString());
-                throw new UploadException(Collect.getInstance().getString(R.string.url_error));
+                throw new UploadException(TranslationHandler.getString(Collect.getInstance(), R.string.url_error));
             }
 
             HttpHeadResult headResult;
@@ -116,7 +117,7 @@ public class InstanceServerUploader extends InstanceUploader {
 
             if (headResult.getStatusCode() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
                 saveFailedStatusToDatabase(instance);
-                throw new UploadAuthRequestedException(Collect.getInstance().getString(R.string.server_auth_credentials, submissionUri.getHost()),
+                throw new UploadAuthRequestedException(TranslationHandler.getString(Collect.getInstance(), R.string.server_auth_credentials, submissionUri.getHost()),
                         submissionUri);
             } else if (headResult.getStatusCode() == HttpsURLConnection.HTTP_NO_CONTENT) {
                 // Redirect header received
@@ -147,12 +148,12 @@ public class InstanceServerUploader extends InstanceUploader {
                     }
                 }
             } else {
-                Timber.w("Status code on Head request: %d", headResult.getStatusCode());
                 if (headResult.getStatusCode() >= HttpsURLConnection.HTTP_OK
                         && headResult.getStatusCode() < HttpsURLConnection.HTTP_MULT_CHOICE) {
                     saveFailedStatusToDatabase(instance);
-                    throw new UploadException(FAIL + "Invalid status code on Head request. If "
-                            + "you have a web proxy, you may need to log in to your network.");
+                    throw new UploadException("Failed to send to " + uri + ". Is this an OpenRosa " +
+                            "submission endpoint? If you have a web proxy you may need to log in to " +
+                            "your network.\n\nHEAD request result status code: " + headResult.getStatusCode());
                 }
             }
         }
