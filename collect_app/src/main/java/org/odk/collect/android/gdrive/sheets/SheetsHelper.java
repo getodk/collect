@@ -26,10 +26,14 @@ import com.google.api.services.sheets.v4.model.UpdateSheetPropertiesRequest;
 import com.google.api.services.sheets.v4.model.UpdateSpreadsheetPropertiesRequest;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
+import org.odk.collect.android.utilities.StringUtils;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import timber.log.Timber;
 
 public class SheetsHelper {
 
@@ -79,6 +83,34 @@ public class SheetsHelper {
 
         // send the API request
         sheetsAPI.batchUpdate(spreadsheetId, requests);
+    }
+
+    // Force a locale that correctly interprets dates sent by Collect, unlike en_US
+    public void updateSpreadsheetLocaleForNewSpreadsheet(String spreadsheetId, String mainSheetTitle) {
+       try {
+           if (!isNewSpreadsheet(spreadsheetId, mainSheetTitle)) {
+               return;
+           }
+
+           SpreadsheetProperties sheetProperties = new SpreadsheetProperties()
+                   .setLocale("en_GB");
+
+           List<Request> requests = new ArrayList<>();
+           requests.add(
+                   new Request().setUpdateSpreadsheetProperties(
+                           new UpdateSpreadsheetPropertiesRequest()
+                                   .setProperties(sheetProperties)
+                                   .setFields("locale")));
+
+           sheetsAPI.batchUpdate(spreadsheetId, requests);
+        } catch (IOException e) {
+            Timber.w(e);
+        }
+    }
+
+    public boolean isNewSpreadsheet(String spreadsheetId, String mainSheetTitle) throws IOException {
+        List<List<Object>> sheetCells = getSheetCells(spreadsheetId, StringUtils.ellipsizeBeginning(mainSheetTitle));
+        return sheetCells == null || sheetCells.isEmpty();
     }
 
     /**
