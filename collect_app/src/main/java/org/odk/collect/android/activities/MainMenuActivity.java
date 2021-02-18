@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.ContentObserver;
@@ -30,7 +29,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -53,7 +51,6 @@ import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -67,7 +64,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
 
@@ -79,14 +75,12 @@ import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class MainMenuActivity extends CollectAbstractActivity implements AdminPasswordDialogFragment.AdminPasswordDialogCallback {
-    private static final boolean EXIT = true;
     // buttons
     private Button manageFilesButton;
     private Button sendDataButton;
     private Button viewSentFormsButton;
     private Button reviewDataButton;
     private Button getFormsButton;
-    private AlertDialog alertDialog;
     private MenuItem qrcodeScannerMenuItem;
     private final IncomingHandler handler = new IncomingHandler(this);
     private final MyContentObserver contentObserver = new MyContentObserver();
@@ -216,16 +210,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             versionSHAView.setVisibility(View.GONE);
         }
 
-        // must be at the beginning of any activity that can be called from an
-        // external intent
-        Timber.i("Starting up, creating directories");
-        try {
-            new StorageInitializer().createOdkDirsOnStorage();
-        } catch (RuntimeException e) {
-            createErrorDialog(e.getMessage(), EXIT);
-            return;
-        }
-
         LegacySettingsFileImporter legacySettingsFileImporter = new LegacySettingsFileImporter(storagePathProvider, analytics, settingsImporter);
         if (legacySettingsFileImporter.importFromFile()) {
             new MaterialAlertDialogBuilder(this)
@@ -261,9 +245,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     @Override
     protected void onPause() {
         super.onPause();
-        if (alertDialog != null && alertDialog.isShowing()) {
-            alertDialog.dismiss();
-        }
         getContentResolver().unregisterContentObserver(contentObserver);
     }
 
@@ -319,27 +300,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         Toolbar toolbar = findViewById(R.id.toolbar);
         setTitle(String.format("%s %s", getString(R.string.app_name), viewModel.getVersion()));
         setSupportActionBar(toolbar);
-    }
-
-    private void createErrorDialog(String errorMsg, final boolean shouldExit) {
-        alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
-        alertDialog.setMessage(errorMsg);
-        DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        if (shouldExit) {
-                            finish();
-                        }
-                        break;
-                }
-            }
-        };
-        alertDialog.setCancelable(false);
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok), errorListener);
-        alertDialog.show();
     }
 
     private void updateButtons() {

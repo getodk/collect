@@ -24,6 +24,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.util.Locale;
@@ -41,23 +42,30 @@ public class ApplicationInitializer {
     private final Analytics analytics;
     private final GeneralSharedPreferences generalSharedPreferences;
     private final AdminSharedPreferences adminSharedPreferences;
+    private final StorageInitializer storageInitializer;
 
     public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator,
-                                  PropertyManager propertyManager, Analytics analytics) {
+                                  PropertyManager propertyManager, Analytics analytics, StorageInitializer storageInitializer) {
         this.context = context;
         this.userAgentProvider = userAgentProvider;
         this.preferenceMigrator = preferenceMigrator;
         this.propertyManager = propertyManager;
         this.analytics = analytics;
+        this.storageInitializer = storageInitializer;
 
         generalSharedPreferences = GeneralSharedPreferences.getInstance();
         adminSharedPreferences = AdminSharedPreferences.getInstance();
     }
 
     public void initialize() {
+        initializeStorage();
         initializePreferences();
         initializeFrameworks();
         initializeLocale();
+    }
+
+    private void initializeStorage() {
+        storageInitializer.createOdkDirsOnStorage();
     }
 
     private void initializePreferences() {

@@ -32,7 +32,6 @@ import org.odk.collect.android.database.FormsDatabaseHelper;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
-import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.utilities.Clock;
@@ -63,13 +62,6 @@ public class FormsProvider extends ContentProvider {
     Clock clock;
 
     private synchronized FormsDatabaseHelper getDbHelper() {
-        // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
-        try {
-            new StorageInitializer().createOdkDirsOnStorage();
-        } catch (RuntimeException e) {
-            return null;
-        }
-
         if (dbHelper == null) {
             recreateDatabaseHelper();
         }
@@ -96,9 +88,7 @@ public class FormsProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        // must be at the beginning of any activity that can be called from an external intent
-        FormsDatabaseHelper h = getDbHelper();
-        return h != null;
+        return true;
     }
 
     @Override

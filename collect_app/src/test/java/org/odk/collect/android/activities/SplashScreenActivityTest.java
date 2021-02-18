@@ -20,6 +20,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.utilities.UserAgentProvider;
@@ -46,7 +47,9 @@ public class SplashScreenActivityTest {
         RobolectricHelpers.mountExternalStorage();
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
-            public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager, Analytics analytics) {
+            public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider,
+                                                                         SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager,
+                                                                         Analytics analytics, StorageInitializer storageInitializer) {
                 return applicationInitializer;
             }
         });

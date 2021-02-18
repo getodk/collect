@@ -26,12 +26,10 @@ import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.AuthDialogUtility;
-import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 
 import java.util.ArrayList;
@@ -56,8 +54,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     private static final String AUTH_URI = "auth";
     private static final String ALERT_MSG = "alertmsg";
     private static final String TO_SEND = "tosend";
-
-    private static final boolean EXIT = true;
 
     private ProgressDialog progressDialog;
 
@@ -86,14 +82,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
-
-        // must be at the beginning of any activity that can be called from an external intent
-        try {
-            new StorageInitializer().createOdkDirsOnStorage();
-            init(savedInstanceState);
-        } catch (RuntimeException e) {
-            DialogUtils.showDialog(DialogUtils.createErrorDialog(this, e.getMessage(), EXIT), this);
-        }
+        init(savedInstanceState);
     }
 
     private void init(Bundle savedInstanceState) {

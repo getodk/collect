@@ -34,7 +34,6 @@ import org.odk.collect.android.database.InstanceDatabaseMigrator;
 import org.odk.collect.android.database.InstancesDatabaseHelper;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.io.File;
@@ -58,13 +57,6 @@ public class InstanceProvider extends ContentProvider {
     private static InstancesDatabaseHelper dbHelper;
 
     private synchronized InstancesDatabaseHelper getDbHelper() {
-        // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
-        try {
-            new StorageInitializer().createOdkDirsOnStorage();
-        } catch (RuntimeException e) {
-            return null;
-        }
-
         if (dbHelper == null) {
             recreateDatabaseHelper();
         }
@@ -86,9 +78,7 @@ public class InstanceProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        // must be at the beginning of any activity that can be called from an external intent
-        InstancesDatabaseHelper h = getDbHelper();
-        return h != null;
+        return true;
     }
 
     @Override

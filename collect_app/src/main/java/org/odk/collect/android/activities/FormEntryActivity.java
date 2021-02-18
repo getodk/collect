@@ -137,7 +137,6 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
@@ -427,14 +426,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             mediaLoadingFragment = (MediaLoadingFragment) getFragmentManager().findFragmentByTag(TAG_MEDIA_LOADING_FRAGMENT);
         }
 
-        // must be at the beginning of any activity that can be called from an external intent
-        try {
-            new StorageInitializer().createOdkDirsOnStorage();
-            setupFields(savedInstanceState);
-            loadForm();
-        } catch (RuntimeException e) {
-            createErrorDialog(e.getMessage(), true);
-        }
+        setupFields(savedInstanceState);
+        loadForm();
     }
 
     private void setupViewModels() {
