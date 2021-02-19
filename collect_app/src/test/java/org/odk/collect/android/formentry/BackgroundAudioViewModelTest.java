@@ -143,6 +143,11 @@ public class BackgroundAudioViewModelTest {
         assertThat(viewModel.isPermissionRequired().getValue(), is(false));
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void grantAudioPermission_whenThereWasNoPermissionCheck_throwsIllegalStateException() {
+        viewModel.grantAudioPermission();
+    }
+
     @Test
     public void setBackgroundRecordingEnabled_whenFalse_logsEventToAuditLog() {
         FormController formController = mock(FormController.class);
