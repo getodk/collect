@@ -20,6 +20,8 @@ import org.odk.collect.android.permissions.PermissionsProvider;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 public class BackgroundAudioPermissionDialogFragment extends DialogFragment {
 
     @Inject
@@ -57,6 +59,8 @@ public class BackgroundAudioPermissionDialogFragment extends DialogFragment {
                 try {
                     viewModel.grantAudioPermission();
                 } catch (IllegalStateException e) {
+                    Timber.e(e);
+
                     Toast.makeText(
                             activity,
                             "Could not start recording. Please reopen form.",
