@@ -5,10 +5,11 @@ import android.os.Handler;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.startup.AppInitializer;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
-import net.danlew.android.joda.JodaTimeAndroid;
+import net.danlew.android.joda.JodaTimeInitializer;
 
 import org.javarosa.core.model.CoreModelModule;
 import org.javarosa.core.services.PrototypeManager;
@@ -74,7 +75,7 @@ public class ApplicationInitializer {
     }
 
     private void initializeFrameworks() {
-        JodaTimeAndroid.init(context);
+        AppInitializer.getInstance(context).initializeComponent(JodaTimeInitializer.class);
         initializeLogging();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         initializeMapFrameworks();
