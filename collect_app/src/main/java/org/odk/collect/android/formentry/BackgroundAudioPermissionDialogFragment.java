@@ -3,6 +3,7 @@ package org.odk.collect.android.formentry;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -56,6 +57,11 @@ public class BackgroundAudioPermissionDialogFragment extends DialogFragment {
                 try {
                     viewModel.grantAudioPermission();
                 } catch (IllegalStateException e) {
+                    Toast.makeText(
+                            activity,
+                            "Could not start recording. Please reopen form.",
+                            Toast.LENGTH_LONG
+                    ).show();
                     activity.finish();
                 }
             }
