@@ -44,18 +44,26 @@ public class BackgroundAudioPermissionDialogFragment extends DialogFragment {
         return new MaterialAlertDialogBuilder(requireContext())
                 .setMessage(R.string.background_audio_permission_explanation)
                 .setPositiveButton(R.string.ok, (dialog, which) -> {
-                    permissionsProvider.requestRecordAudioPermission(activity, new PermissionListener() {
-                        @Override
-                        public void granted() {
-                            viewModel.grantAudioPermission();
-                        }
-
-                        @Override
-                        public void denied() {
-                            activity.finish();
-                        }
-                    });
+                    onOKClicked(activity);
                 })
                 .create();
+    }
+
+    private void onOKClicked(FragmentActivity activity) {
+        permissionsProvider.requestRecordAudioPermission(activity, new PermissionListener() {
+            @Override
+            public void granted() {
+                try {
+                    viewModel.grantAudioPermission();
+                } catch (IllegalStateException e) {
+                    activity.finish();
+                }
+            }
+
+            @Override
+            public void denied() {
+                activity.finish();
+            }
+        });
     }
 }
