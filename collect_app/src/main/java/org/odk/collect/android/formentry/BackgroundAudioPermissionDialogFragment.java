@@ -3,6 +3,7 @@ package org.odk.collect.android.formentry;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,8 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.permissions.PermissionsProvider;
 
 import javax.inject.Inject;
+
+import timber.log.Timber;
 
 public class BackgroundAudioPermissionDialogFragment extends DialogFragment {
 
@@ -44,18 +47,33 @@ public class BackgroundAudioPermissionDialogFragment extends DialogFragment {
         return new MaterialAlertDialogBuilder(requireContext())
                 .setMessage(R.string.background_audio_permission_explanation)
                 .setPositiveButton(R.string.ok, (dialog, which) -> {
-                    permissionsProvider.requestRecordAudioPermission(activity, new PermissionListener() {
-                        @Override
-                        public void granted() {
-                            viewModel.grantAudioPermission();
-                        }
-
-                        @Override
-                        public void denied() {
-                            activity.finish();
-                        }
-                    });
+                    onOKClicked(activity);
                 })
                 .create();
+    }
+
+    private void onOKClicked(FragmentActivity activity) {
+        permissionsProvider.requestRecordAudioPermission(activity, new PermissionListener() {
+            @Override
+            public void granted() {
+                try {
+                    viewModel.grantAudioPermission();
+                } catch (IllegalStateException e) {
+                    Timber.e(e);
+
+                    Toast.makeText(
+                            activity,
+                            "Could not start recording. Please reopen form.",
+                            Toast.LENGTH_LONG
+                    ).show();
+                    activity.finish();
+                }
+            }
+
+            @Override
+            public void denied() {
+                activity.finish();
+            }
+        });
     }
 }

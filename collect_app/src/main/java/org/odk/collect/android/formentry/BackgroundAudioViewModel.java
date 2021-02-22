@@ -117,6 +117,10 @@ public class BackgroundAudioViewModel extends ViewModel implements RequiresFormC
     }
 
     public void grantAudioPermission() {
+        if (tempTreeReferences.isEmpty()) {
+            throw new IllegalStateException("No TreeReferences to start recording with!");
+        }
+
         isPermissionRequired.setValue(false);
         startBackgroundRecording(tempQuality, new HashSet<>(tempTreeReferences));
         
