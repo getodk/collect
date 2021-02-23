@@ -1,6 +1,7 @@
 package org.odk.collect.android.audio;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -115,9 +116,11 @@ public class AudioRecordingControllerFragment extends Fragment {
         binding.stopRecording.setVisibility(GONE);
     }
 
-    private void renderRecordingInProgress(RecordingSession session) {
-        binding.timeCode.setText(LengthFormatterKt.formatLength(session.getDuration()));
-        binding.waveform.addAmplitude(session.getAmplitude());
+    private void renderRecordingInProgress(RecordingSession session) {        binding.timeCode.setText(LengthFormatterKt.formatLength(session.getDuration()));
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                binding.waveform.setProgress((int) ((session.getAmplitude() * 6) / 22760d * 100), true);
+            }
 
         if (session.getPaused()) {
             binding.pauseRecording.setIcon(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_mic_24));
@@ -137,7 +140,7 @@ public class AudioRecordingControllerFragment extends Fragment {
         }
 
         // Pause not available before API 24
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             binding.pauseRecording.setVisibility(GONE);
         }
 
