@@ -1,5 +1,6 @@
 package org.odk.collect.android.support;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.utilities.FileUtils;
@@ -53,7 +54,11 @@ public class InMemFormsRepository implements FormsRepository {
 
     @Nullable
     @Override
-    public Form getOneByMd5Hash(String hash) {
+    public Form getOneByMd5Hash(@NotNull String hash) {
+        if (hash == null) {
+            throw new IllegalArgumentException("null hash");
+        }
+
         return forms.stream().filter(f -> f.getMD5Hash().equals(hash)).findFirst().orElse(null);
     }
 

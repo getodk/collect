@@ -55,7 +55,17 @@ public class ServerFormDownloader implements FormDownloader {
 
     @Override
     public void downloadForm(ServerFormDetails form, @Nullable ProgressReporter progressReporter, @Nullable Supplier<Boolean> isCancelled) throws FormDownloadException, InterruptedException {
-        Form formOnDevice = formsRepository.getOneByMd5Hash(getMd5HashWithoutPrefix(form.getHash()));
+        Form formOnDevice;
+        if (form.getHash() != null) {
+            formOnDevice = formsRepository.getOneByMd5Hash(getMd5HashWithoutPrefix(form.getHash()));
+        } else {
+            /*
+             This allows us to support non open rosa servers and open rosa servers that don't
+             return hashes. Can be removed when we drop support for these.
+             */
+            formOnDevice = formsRepository.getLatestByFormIdAndVersion(form.getFormId(), form.getFormVersion());
+        }
+
         if (formOnDevice != null) {
             if (formOnDevice.isDeleted()) {
                 formsRepository.restore(formOnDevice.getId());

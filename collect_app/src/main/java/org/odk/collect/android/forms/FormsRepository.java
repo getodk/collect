@@ -1,5 +1,7 @@
 package org.odk.collect.android.forms;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -15,7 +17,7 @@ public interface FormsRepository {
     Form getOneByPath(String path);
 
     @Nullable
-    Form getOneByMd5Hash(String hash);
+    Form getOneByMd5Hash(@NotNull String hash);
 
     List<Form> getAll();
 
@@ -31,7 +33,7 @@ public interface FormsRepository {
 
     void softDelete(Long id);
 
-    void deleteByMd5Hash(String md5Hash);
+    void deleteByMd5Hash(@NotNull String md5Hash);
 
     void restore(Long id);
 }
