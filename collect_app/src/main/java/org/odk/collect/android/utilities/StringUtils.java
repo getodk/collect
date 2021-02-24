@@ -167,7 +167,7 @@ public class StringUtils {
         int len = text.length();
         int start = 0;
         int end = len - 1;
-        while (Character.isWhitespace(text.charAt(start)) && start < len) {
+        while (start < len && Character.isWhitespace(text.charAt(start))) {
             start++;
         }
         while (Character.isWhitespace(text.charAt(end)) && end > 0) {
