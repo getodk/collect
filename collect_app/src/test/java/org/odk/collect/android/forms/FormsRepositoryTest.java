@@ -200,4 +200,9 @@ public abstract class FormsRepositoryTest {
         formsRepository.delete(1L);
         assertThat(formsDir.listFiles(), emptyArray());
     }
+
+    @Test(expected = Exception.class)
+    public void getOneByMd5Hash_whenHashIsNull_explodes() {
+        buildSubject().getOneByMd5Hash(null);
+    }
 }
