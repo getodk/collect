@@ -42,6 +42,7 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     private String password;
     private boolean alwaysReturnError;
     private boolean fetchingFormsError;
+    private boolean noHashInFormList;
 
     @NonNull
     @Override
@@ -135,6 +136,11 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
         fetchingFormsError = true;
     }
 
+    public void removeHashInFormList() {
+        noHashInFormList = true;
+    }
+
+
     public String getURL() {
         return "https://" + HOST;
     }
@@ -169,15 +175,18 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
         for (int i = 0; i < forms.size(); i++) {
             FormManifestEntry form = forms.get(i);
 
-            String hash = getMd5Hash(getFormXML(String.valueOf(i)));
-
-            stringBuilder
+            StringBuilder xform = stringBuilder
                     .append("<xform>\n")
                     .append("<formID>" + form.getID() + "</formID>\n")
                     .append("<name>" + form.getFormLabel() + "</name>\n")
-                    .append("<version>" + form.getVersion() + "</version>\n")
-                    .append("<hash>md5:" + hash + "</hash>\n")
-                    .append("<downloadUrl>" + getURL() + "/form?formId=" + i + "</downloadUrl>\n")
+                    .append("<version>" + form.getVersion() + "</version>\n");
+
+            if (!noHashInFormList) {
+                String hash = getMd5Hash(getFormXML(String.valueOf(i)));
+                xform.append("<hash>md5:" + hash + "</hash>\n");
+            }
+
+            xform.append("<downloadUrl>" + getURL() + "/form?formId=" + i + "</downloadUrl>\n")
                     .append("</xform>\n");
         }
 

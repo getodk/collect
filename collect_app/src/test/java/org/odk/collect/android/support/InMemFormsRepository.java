@@ -56,7 +56,7 @@ public class InMemFormsRepository implements FormsRepository {
     @Override
     public Form getOneByMd5Hash(@NotNull String hash) {
         if (hash == null) {
-            throw new IllegalArgumentException("Null hash");
+            throw new IllegalArgumentException("null hash");
         }
 
         return forms.stream().filter(f -> f.getMD5Hash().equals(hash)).findFirst().orElse(null);

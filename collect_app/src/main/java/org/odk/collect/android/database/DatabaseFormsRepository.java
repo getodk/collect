@@ -67,7 +67,7 @@ public class DatabaseFormsRepository implements FormsRepository {
     @Override
     public Form getOneByMd5Hash(@NotNull String hash) {
         if (hash == null) {
-            throw new IllegalArgumentException("Null hash");
+            throw new IllegalArgumentException("null hash");
         }
 
         FormsDao formsDao = new FormsDao();
