@@ -122,25 +122,25 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void whenTextContainWhitespaces_shouldTrimReturnTrimmedCharSequence() {
+    public void whenCharSequenceContainWhitespaces_shouldTrimReturnTrimmedCharSequence() {
         CharSequence result = StringUtils.trim("\n\t <p style=\"text-align:center\">Text</p> \t\n");
         assertThat(result, equalTo("<p style=\"text-align:center\">Text</p>"));
     }
 
     @Test
-    public void whenTextContainOnlyWhitespaces_shouldTrimReturnOriginalCharSequence() {
+    public void whenCharSequenceContainOnlyWhitespaces_shouldTrimReturnOriginalCharSequence() {
         CharSequence result = StringUtils.trim("\n\t \t\n");
         assertThat(result, equalTo("\n\t \t\n"));
     }
 
     @Test
-    public void whenTextIsNull_shouldTrimReturnNull() {
+    public void whenCharSequenceIsNull_shouldTrimReturnNull() {
         CharSequence result = StringUtils.trim(null);
         assertThat(result, equalTo(null));
     }
 
     @Test
-    public void whenTextIsEmpty_shouldTrimReturnEmptyCharSequence() {
+    public void whenCharSequenceIsEmpty_shouldTrimReturnEmptyCharSequence() {
         CharSequence result = StringUtils.trim("");
         assertThat(result, equalTo(""));
     }
