@@ -159,7 +159,7 @@ public class StringUtils {
         return true;
     }
 
-    private static CharSequence trim(CharSequence text) {
+    public static CharSequence trim(CharSequence text) {
         if (text == null || text.length() == 0) {
             return text;
         }
