@@ -787,10 +787,6 @@
   <string name="invalid_qrcode">كود QR لا يتضمن إعدادات صحيحة</string>
   <string name="qr_code_not_found">كود QR غير موجود في الصورة المحددة</string>
   <string name="corrupt_imported_preferences_error">الإعدادات الحالية تالفة. من إعدادات المسؤول، أعد ضبط الإعدادات أو قم باستيراد الإعدادات العاملة.</string>
-  <string name="save_legacy_settings">حفظ ملف .settings القديم على القرص</string>
-  <string name="save_legacy_settings_warning">ستتم إزالته في إصدار مستقبلي. الرجاء استخدام رمز QR أعلاه.</string>
-  <string name="settings_successfully_loaded_file_notification">تم استيراد الإعدادات بنجاح من ملف .settings. ستتم إزالة هذه الوظيفة في إصدار مستقبلي. الرجاء استخدام تكوين رمز QR بدلا من ذلك.</string>
-  <string name="corrupt_settings_file_notification">عذرا، ملف الإعدادات تالف ويجب حذفه أو استبداله</string>
   <!--##############################################
      # MISC
      ##############################################-->

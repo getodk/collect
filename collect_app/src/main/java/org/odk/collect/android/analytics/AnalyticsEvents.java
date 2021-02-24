@@ -123,18 +123,6 @@ public class AnalyticsEvents {
     public static final String SETTINGS_IMPORT_QR_IMAGE = "SettingsImportQrImage";
 
     /**
-     * Track the outcome of a .collect.settings file being imported. The action should be the outcome.
-     * The label should be a hash of the settings represented by the file.
-     */
-    public static final String SETTINGS_IMPORT_SERIALIZED = "SettingsImportSerialized";
-
-    /**
-     * Track the outcome of a .collect.settings.json file being imported. The action should be the outcome.
-     * The label should be a hash of the settings represented by the file.
-     */
-    public static final String SETTINGS_IMPORT_JSON = "SettingsImportJson";
-
-    /**
      * Track submissions to a URL with a custom submission endpoint configured in settings. The action
      * should be a hash of the endpoint setting.
      */

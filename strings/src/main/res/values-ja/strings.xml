@@ -768,9 +768,6 @@
   <string name="invalid_qrcode">QR コードに有効な設定が含まれていません</string>
   <string name="qr_code_not_found">選択した画像に QR コードが見つかりませんでした</string>
   <string name="corrupt_imported_preferences_error">現在の設定が間違っています。 管理の設定から、設定をリセットするか、有効なものをインポートしてください。</string>
-  <string name="save_legacy_settings">以前の .settings ファイルをディスクに保存する</string>
-  <string name="save_legacy_settings_warning">将来のバージョンで削除されます。上の QR コードを使用してください。</string>
-  <string name="corrupt_settings_file_notification">申し訳ありません。設定ファイルが壊れているため、削除または置き換えしてください</string>
   <!--##############################################
      # MISC
      ##############################################-->

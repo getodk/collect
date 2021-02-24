@@ -681,7 +681,6 @@
   <string name="include_password_dialog">Nenosiri limejumuishwa ndani ya kanuni</string>
   <string name="generate">Zalisha</string>
   <string name="invalid_qrcode">Kanuni za QR hazijajumuisha mipangilio sahihi</string>
-  <string name="corrupt_settings_file_notification">Samahani, mpangilio wa mafaili yako umeharibika na unatakiwa kufutwa au kubadilishwa</string>
   <!--##############################################
      # MISC
      ##############################################-->

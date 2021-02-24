@@ -99,10 +99,7 @@ public class ApplicationResetter {
         boolean deletedSettingsFolderContest = !new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS)).exists()
                 || deleteFolderContents(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS));
 
-        boolean deletedSettingsFile = !new File(storagePathProvider.getOdkRootDirPath() + "/collect.settings").exists()
-                || (new File(storagePathProvider.getOdkRootDirPath() + "/collect.settings").delete());
-
-        if (deletedSettingsFolderContest && deletedSettingsFile) {
+        if (deletedSettingsFolderContest) {
             failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_PREFERENCES));
         }
 

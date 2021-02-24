@@ -32,14 +32,9 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
-import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.configure.SettingsImporter;
-import org.odk.collect.android.configure.legacy.LegacySettingsFileImporter;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
@@ -51,7 +46,6 @@ import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
@@ -85,20 +79,11 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     private final IncomingHandler handler = new IncomingHandler(this);
     private final MyContentObserver contentObserver = new MyContentObserver();
 
-    @Inject
-    public Analytics analytics;
-
     @BindView(R.id.version_sha)
     TextView versionSHAView;
 
     @Inject
-    StoragePathProvider storagePathProvider;
-
-    @Inject
     AdminPasswordProvider adminPasswordProvider;
-
-    @Inject
-    SettingsImporter settingsImporter;
 
     @Inject
     MainMenuViewModel.Factory viewModelFactory;
@@ -208,19 +193,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             versionSHAView.setText(versionSHA);
         } else {
             versionSHAView.setVisibility(View.GONE);
-        }
-
-        LegacySettingsFileImporter legacySettingsFileImporter = new LegacySettingsFileImporter(storagePathProvider, analytics, settingsImporter);
-        if (legacySettingsFileImporter.importFromFile()) {
-            new MaterialAlertDialogBuilder(this)
-                    .setTitle(R.string.successfully_imported_settings)
-                    .setMessage(R.string.settings_successfully_loaded_file_notification)
-                    .setPositiveButton(R.string.ok, (dialog, which) -> {
-                        dialog.dismiss();
-                        recreate();
-                    })
-                    .setCancelable(false)
-                    .create().show();
         }
     }
 

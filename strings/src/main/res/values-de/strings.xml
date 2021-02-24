@@ -792,10 +792,6 @@
   <string name="invalid_qrcode">QR-Code enthält keine gültigen Einstellungen</string>
   <string name="qr_code_not_found">Kein QR-Code im ausgewählten Bild gefunden</string>
   <string name="corrupt_imported_preferences_error">Die aktuellen Einstellungen sind beschädigt. Setze die Einstellungen in den Admin-Einstellungen zurück oder importiere funktionierende.</string>
-  <string name="save_legacy_settings">Speichere alte .settings-Datei auf Laufwerk</string>
-  <string name="save_legacy_settings_warning">Wird in einer zukünfigen Version entfernt. Bitte nutzen Sie den QR-Code oben.</string>
-  <string name="settings_successfully_loaded_file_notification">Einstellungen wurden erfolgreich aus einer .settings-Datei importiert. Diese Funktionalität wird in einer zukünftigen Version entfernt. Bitte nutzen Sie stattdessen QR-Code-Konfiguration.</string>
-  <string name="corrupt_settings_file_notification">Entschuldigung, die Einstellungsdatei ist beschädigt und sollte gelöscht oder ersetzt werden</string>
   <!--##############################################
      # MISC
      ##############################################-->

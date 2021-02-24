@@ -790,10 +790,6 @@
   <string name="invalid_qrcode">El código QR no contiene ajustes válidos</string>
   <string name="qr_code_not_found">Código QR no encontrado en la imagen seleccionada</string>
   <string name="corrupt_imported_preferences_error">Los ajustes actuales están corruptos. Desde la configuración de administrador, restablecer la configuración o importar.</string>
-  <string name="save_legacy_settings">Guardar ajustes heredados a disco</string>
-  <string name="save_legacy_settings_warning">Será removido en una versión futura. Favor usar el código QR de arriba</string>
-  <string name="settings_successfully_loaded_file_notification">La configuración fué importada exitosamente  del archivo  .settings. Esta funcionalidad será removida en una versión futura. Se recomienda usar la configuración con QR.</string>
-  <string name="corrupt_settings_file_notification">Lo sentimos, el archivo de configuración está dañado y debe ser eliminado o reemplazado</string>
   <!--##############################################
      # MISC
      ##############################################-->

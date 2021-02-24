@@ -156,8 +156,6 @@ public class ResetAppStateTest {
         assertFalse(settings.getBoolean(AdminKeys.KEY_VIEW_SENT, false));
 
         assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS)).exists() || new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS)).mkdir());
-        assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS) + "/collect.settings").createNewFile());
-        assertTrue(new File(storagePathProvider.getOdkRootDirPath() + "/collect.settings").createNewFile());
     }
 
     private void setupTestFormsDatabase() {

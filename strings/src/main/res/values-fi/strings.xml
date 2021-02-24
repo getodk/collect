@@ -791,10 +791,6 @@
   <string name="invalid_qrcode">QR-koodi ei sisällä kelvollisia asetuksia</string>
   <string name="qr_code_not_found">Valitusta kuvasta ei löytynyt QR-koodia</string>
   <string name="corrupt_imported_preferences_error">Tämänhetkiset asetukset ovat vialliset. Pääkäyttäjän asetuksissa voit palauttaa oletusasetukset tai touda toimivat.</string>
-  <string name="save_legacy_settings">Tallenna vanhanmuotoinen .settings -tiedosto</string>
-  <string name="save_legacy_settings_warning">Poistetaan tulevassa versiossa. Käytä QR-koodia yllä.</string>
-  <string name="settings_successfully_loaded_file_notification">Asetukset tuotu onnistuneesti .settings -tiedostosta. Tämä toiminnallisuus poistetaan tulevassa versiossa. Ole hyvä ja käytä sen asemasta konfigurointia QR-koodilla.</string>
-  <string name="corrupt_settings_file_notification">Pahoittelut, asetustiedosto on viallinen ja pitäisi poistaa tai korvata</string>
   <!--##############################################
      # MISC
      ##############################################-->
