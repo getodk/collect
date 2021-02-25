@@ -40,6 +40,8 @@
             android:id="@+id/waveform"
             style="@android:style/Widget.ProgressBar.Horizontal"
             android:layout_width="match_parent"
+            android:progressTint="?colorSecondary"
+            android:progressBackgroundTint="@color/color_on_surface_low_emphasis"
             android:layout_height="24dp"
             android:layout_marginStart="@dimen/margin_small"
             android:indeterminate="false" />
