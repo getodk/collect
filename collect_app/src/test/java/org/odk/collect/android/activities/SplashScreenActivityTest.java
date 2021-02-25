@@ -7,8 +7,6 @@ import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,12 +19,9 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StorageInitializer;
-import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.utilities.UserAgentProvider;
 import org.robolectric.annotation.LooperMode;
-
-import java.io.File;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -53,17 +48,6 @@ public class SplashScreenActivityTest {
                 return applicationInitializer;
             }
         });
-    }
-
-    @Test
-    public void whenAppStarts_createsODKDirectories() {
-        ActivityScenario.launch(SplashScreenActivity.class);
-
-        for (String dirName : new StoragePathProvider().getOdkDirPaths()) {
-            File dir = new File(dirName);
-            Assert.assertTrue("File " + dirName + "does not exist", dir.exists());
-            Assert.assertTrue("File" + dirName + "does not exist", dir.isDirectory());
-        }
     }
 
     @Test
