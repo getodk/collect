@@ -25,8 +25,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import java.util.TimeZone;
-
 import static org.junit.Assert.assertEquals;
 
 @RunWith(RobolectricTestRunner.class)
@@ -83,11 +81,11 @@ public class DateTimeUtilsTest {
     @Test
     public void skipDaylightSavingGapIfExistsTest() {
         DateTimeZone originalDefaultTimeZone = DateTimeZone.getDefault();
-        DateTimeZone.setDefault(DateTimeZone.forTimeZone(TimeZone.getTimeZone("Africa/Nairobi")));
+        DateTimeZone.setDefault(DateTimeZone.forID("Europe/Warsaw"));
 
-        // 1 Jan 1960 at 00:00:00 clocks were turned forward to 00:15:00
-        LocalDateTime ldtOriginal = new LocalDateTime().withYear(1960).withMonthOfYear(1).withDayOfMonth(1).withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
-        LocalDateTime ldtExpected = new LocalDateTime().withYear(1960).withMonthOfYear(1).withDayOfMonth(1).withHourOfDay(0).withMinuteOfHour(15).withSecondOfMinute(0).withMillisOfSecond(0);
+        // 29 March 2020 at 02:00:00 clocks were turned forward to 03:00:00
+        LocalDateTime ldtOriginal = new LocalDateTime().withYear(2020).withMonthOfYear(3).withDayOfMonth(29).withHourOfDay(2).withMinuteOfHour(30).withSecondOfMinute(0).withMillisOfSecond(0);
+        LocalDateTime ldtExpected = new LocalDateTime().withYear(2020).withMonthOfYear(3).withDayOfMonth(29).withHourOfDay(3).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
 
         assertEquals(ldtExpected, DateTimeUtils.skipDaylightSavingGapIfExists(ldtOriginal));
         DateTimeZone.setDefault(originalDefaultTimeZone);

@@ -6,8 +6,10 @@ import androidx.lifecycle.LifecycleRegistry
 
 class FakeLifecycleOwner : LifecycleOwner {
 
-    private val lifecycle = LifecycleRegistry(this).also {
-        it.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    private val lifecycle: LifecycleRegistry by lazy {
+        LifecycleRegistry(this).also {
+            it.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
+        }
     }
 
     fun destroy() {
