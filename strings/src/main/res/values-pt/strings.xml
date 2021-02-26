@@ -189,7 +189,6 @@
   <string name="choose_image">
 Escolher Imagem</string>
   <string name="selected_invalid_image">O arquivo selecionado não é uma imagem válida</string>
-  <string name="gdrive_connection_exception">Esta imagem está armazenada no Google Drive e não pode ser acessada offline.</string>
   <string name="view_image">Ver Imagem</string>
   <string name="take_picture_instruction">Toque na tela para tirar uma fotografia</string>
   <string name="error_front_camera_unavailable">A câmera da frente não está disponível neste dispositivo</string>
@@ -801,7 +800,6 @@ Escolher Imagem</string>
   <string name="error_occured">Ocorreu um erro</string>
   <string name="please_wait">Por favor, aguarde um pouco.</string>
   <string name="please_wait_long">Por favor, aguarde. Isto levará alguns minutos.</string>
-  <string name="sdcard_unmounted">Collect não conseguiu acessar o cartão de memória. Ele está utilizando o USB? (Estado atual: %s)</string>
   <string name="fs_delete_media_path_if_file_error">Não foi possível apagar \'%s\'. Por favor apague o arquivo manualmente e descarregue o formulário novamente.</string>
   <string name="fs_create_media_folder_error">Não foi possível criar a pasta de mídia \'%s\'.</string>
   <string name="fs_file_copy_error">Não foi possível copiar os dados de \'%1$s\' para \'%2$s\'.. Motivo: %3$s</string>

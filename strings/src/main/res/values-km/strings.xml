@@ -169,7 +169,6 @@
   <string name="capture_image">ថត​រូបភាព</string>
   <string name="choose_image">ជ្រើសរើសរូបថត</string>
   <string name="selected_invalid_image">ឯកសារ​ដែល​បាន​រើស​មិន​មែន​លក្ខណះ​ជា​រូបភាព​ត្រឹម​ត្រូវ</string>
-  <string name="gdrive_connection_exception">រូបភាព​នេះ​ត្រូវ​បាន​រក្សា​ទុក​នៅ​លើ​ Google Drive និង​មិន​អាច​ត្រូវ​បាន​ចូល​ដំណើរ​ខណៈ​ពេល​ដែល​អ្នក​នៅ​ក្រៅ​បណ្ដាញ​។</string>
   <string name="view_image">បង្ហាញរូបថត</string>
   <string name="take_picture_instruction">ប៉ះលើផ្ទៃ​អេក្រង់ដើម្បីថត​រូប</string>
   <string name="error_front_camera_unavailable">កាមេរ៉ាខាងមុខមិនមាននៅលើឧបករណ៍នេះទេ</string>
@@ -666,7 +665,6 @@
   <string name="error_occured">មានបញ្ហាបានកើតឡើង</string>
   <string name="please_wait">សូមរង់ចាំមួយភ្លែត</string>
   <string name="please_wait_long">សូមរងចាំ. វាអាចចំណាយរយះពេលពីរបីនាទី.</string>
-  <string name="sdcard_unmounted">Collect មិនអាចចូលទៅកាន់កាត SD បានទេ ។ វា​ប្រហែល​ជាបាន​ម៉ោនតាម​រយះ​ USB?  (ស្ថានភាពបច្ចុប្បន្ន: %s)</string>
   <string name="fs_delete_media_path_if_file_error">មិនអាចលុប \'%s\' ។ សូម​លុប​ឯកសារ​ដោយ​ដៃ​ហើយ​ធ្វើ​ការ​ទាញ​យក​សំណុំ​បែបបទ​ឡើង​វិញ។</string>
   <string name="fs_create_media_folder_error">មិនអាចបង្កើតថតមេឌៀបាន \'%s\'.</string>
   <string name="fs_file_copy_error">មិនអាចចម្លងបាន \'%1$s\' លើសពី \'%2$s\' ។ មូលហេតុ: %3$s</string>

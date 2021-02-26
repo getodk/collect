@@ -175,7 +175,6 @@
   <string name="capture_image">تصویر لیں</string>
   <string name="choose_image">تصویر کا انتخاب کریں</string>
   <string name="selected_invalid_image">منتخب فائل ایک درست تصویر نہیں ہے</string>
-  <string name="gdrive_connection_exception">یہ تصویر گوگل ڈرائیو  پر محفوظ ہے اورجب تک آپ آف لائن ہیں رسائی حاصل نہیں کی جا سکتی.</string>
   <string name="view_image">تصویر دیکھیں </string>
   <string name="take_picture_instruction"> تصویر کھینچنے کے لئے اسکرین کو ٹیپ کریں</string>
   <string name="error_front_camera_unavailable">اس ڈیوائس پر فرنٹ کمیرہ دستیاب نہیں ہے</string>
@@ -675,7 +674,6 @@
   <string name="error_occured">غلطی ہوگئ</string>
   <string name="please_wait">براہ مہربانی چند منٹ انتظار کرلیں</string>
   <string name="please_wait_long">براہ مہربانی انتظار کریں۔ اسکو چند منٹ لگ سکتے ہیں</string>
-  <string name="sdcard_unmounted">کولیکٹ ایس ڈی کارڈ تک رسائی حاصل نہیں کر سکتا. شاید اس کو یو ایس بی کے ذریعے لگایا گیا ہے؟ (کرنٹ سٹیٹ: %s)</string>
   <string name="fs_delete_media_path_if_file_error">\'%s\'ڈیلیٹ نہیں ھو سکا۔ برائے مہربانی فائل کو خود سے ڈٰیلیٹ کریں اور فارم دوبارہ ڈاؤنلوڈ کریں،</string>
   <string name="fs_create_media_folder_error">میڈیا فولڈر نہیں بن سکا\'%s\'.</string>
   <string name="fs_file_copy_error">کاپی نہیں کر سکا \'%1$s\' اوور \'%2$s\'. وجہ:%3$s</string>

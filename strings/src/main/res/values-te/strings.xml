@@ -185,7 +185,6 @@
   <string name="capture_image">ఫోటో తియ్యి</string>
   <string name="choose_image">ఫోటో ని ఎంచుకోండి</string>
   <string name="selected_invalid_image">ఎంచుకున్న ఫైల్ చెల్లుబాటు అయ్యే చిత్రం కాదు</string>
-  <string name="gdrive_connection_exception">ఈ చిత్రం గూగుల్ డ్రైవ్ లో నిల్వ చేయబడింది మరియు మీరు ఆఫ్‌లైన్‌లో ఉన్నప్పుడు ఈ చిత్రాన్ని పొందలేరు .</string>
   <string name="view_image">ఫోటో ని చూడండి </string>
   <string name="take_picture_instruction">ఫోటో తీయడానికి స్క్రీన్ పైన నొక్కండి</string>
   <string name="error_front_camera_unavailable">ముందు వైపు కెమెరా ఈ పరికరంలో లేదు</string>
@@ -764,7 +763,6 @@
   <string name="error_occured">ఎర్రర్ వచ్చింది</string>
   <string name="please_wait">దయచేసి కొన్ని క్షణాలు వేచి ఉండండి.</string>
   <string name="please_wait_long">దయచేసి వేచి ఉండండి. దీనికి కొన్ని నిమిషాలు పట్టవచ్చు.</string>
-  <string name="sdcard_unmounted"> SD కార్డ్‌ను collect యాక్సెస్ చేయదు. బహుశా ఇది USB ద్వారా అమర్చబడిందా? (ప్రస్తుత పరిస్తితి: %s)</string>
   <string name="fs_delete_media_path_if_file_error">\'%s\' తొలగించడం సాధ్యం కాలేదు. దయచేసి ఫైల్‌ను మాన్యువల్‌గా తొలగించి, ఫారమ్‌ను తిరిగి డౌన్‌లోడ్ చేయండి.</string>
   <string name="fs_create_media_folder_error">మీడియా ఫోల్డర్‌%sను తయారు చేయడం సాధ్యం కాలేదు.</string>
   <string name="fs_file_copy_error">%2$sమీద %1$sను కాపీ చేయలేకపోయింది . కారణం :%3$s</string>

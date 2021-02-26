@@ -398,7 +398,6 @@
   <string name="error_occured">Eroare</string>
   <string name="please_wait">Vă rugăm să așteptați câteva momente.</string>
   <string name="please_wait_long">Vă rugăm să așteptați. Ar putea dura câteva minute.</string>
-  <string name="sdcard_unmounted">Collect nu poate accesa SD card-ul. Poate este montat via USB? (Starea curentă este: %s)</string>
   <string name="fs_delete_media_path_if_file_error">Nu am putut șterge \'%s\'. Vă rugăm să ștergeți fișierul maunal și să re-descărcați formularul.</string>
   <string name="fs_create_media_folder_error">Nu pot crea directorul media \'%s\'.</string>
   <string name="fs_file_copy_error">Nu pot copia \'%1$s\' peste \'%2$s\'. Motiv: %3$s</string>

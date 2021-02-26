@@ -239,7 +239,6 @@
     <string name="capture_image">Take Picture</string>
     <string name="choose_image">Choose Image</string>
     <string name="selected_invalid_image">Selected file is not a valid image</string>
-    <string name="gdrive_connection_exception">This image is stored on Google Drive and cannot be accessed while you are offline.</string>
     <string name="view_image">View Image</string>
     <string name="take_picture_instruction">Tap the screen to take a picture</string>
     <string name="error_front_camera_unavailable">Front camera not available on this device</string>
@@ -971,7 +970,6 @@
     <string name="please_wait">Please wait a few moments.</string>
     <string name="please_wait_long">Please wait. This could take a few minutes.</string>
 
-    <string name="sdcard_unmounted">Collect cannot access the SD card. Perhaps it is mounted via USB? (Current state: %s)</string>
     <string name="fs_delete_media_path_if_file_error">Could not delete \'%s\'. Please delete the file manually and re-download the form.</string>
     <string name="fs_create_media_folder_error">Could not create media folder \'%s\'.</string>
     <string name="fs_file_copy_error">Could not copy \'%1$s\' over \'%2$s\'. Reason: %3$s</string>

@@ -163,7 +163,6 @@
   <string name="capture_image">Bëj foto</string>
   <string name="choose_image">Zgjidh imazh</string>
   <string name="selected_invalid_image">File i përzgjedhur nuk është imazh i vlefshëm</string>
-  <string name="gdrive_connection_exception">Ky imazh është i ruajtur në Google Drive dhe nuk mund të aksesohet kur nuk jeni i lidhur me internet.</string>
   <string name="view_image">Shih Imazhin</string>
   <string name="take_picture_instruction">Prek ekranin për të bërë fotografi</string>
   <string name="error_front_camera_unavailable">Ky aparat nuk ka maera të përparme</string>
@@ -571,7 +570,6 @@
   <string name="error_occured">Ndodhi një gabim</string>
   <string name="please_wait">Lutemi, prisni pak sekonda.</string>
   <string name="please_wait_long">Lutemi, prisni. Mund të duhen disa minuta.</string>
-  <string name="sdcard_unmounted">Collect nuk mund të aksesojë kartën SD. Ndoshta është ngarkuar nga USB? (Gjendja aktuale: %s)</string>
   <string name="fs_delete_media_path_if_file_error">\'%s\' nuk mund të fshihet. Lutemi, fshini fil manualisht dhe shkarkoni formularin sërish.</string>
   <string name="fs_create_media_folder_error">Dosja media \'%s\' nuk mund të krijohet.</string>
   <string name="fs_file_copy_error">\'%1$s\' nuk mund të kopjohet mbi \'%2$s\'. Arsyeja: %3$s</string>

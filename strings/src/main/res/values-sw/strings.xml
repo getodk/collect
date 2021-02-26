@@ -181,7 +181,6 @@
   <string name="capture_image">Chukua picha</string>
   <string name="choose_image">Chagua picha</string>
   <string name="selected_invalid_image">Faili lillilochaguliwa sio picha sahihi</string>
-  <string name="gdrive_connection_exception">Picha hii imehifadhiwa katika hifadhi ya Google na haiwezi kupatikana wakati haujaunganishwa na intaneti/mtandao.</string>
   <string name="view_image">Onesha picha</string>
   <string name="take_picture_instruction">Bofya kioo kuchukua picha</string>
   <string name="error_front_camera_unavailable">Kamera ya mbele haipo katika kifaa hiki</string>
@@ -697,7 +696,6 @@
   <string name="error_occured">Kosa limetokea</string>
   <string name="please_wait">Tafadhali subiri kidogo.</string>
   <string name="please_wait_long">Tafadhali subiri. Hii itachukua dakika chache.</string>
-  <string name="sdcard_unmounted">Collect haiwezi fikia SD kadi. Labda imeingizwa pitia USB? (Hali ya sasa:%s)</string>
   <string name="fs_delete_media_path_if_file_error">Imeshindwa kufuta\'%s\'. Tafadhali futa kabrasha na rudia kupakua fomu.</string>
   <string name="fs_create_media_folder_error">Imeshindwa tengeneza kabrasha la midia\'%s\'.</string>
   <string name="fs_file_copy_error">Haiwezi nakili  \'%1$s\' zidi ya \'%2$s\'. Sababu:%3$s</string>

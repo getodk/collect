@@ -185,7 +185,6 @@
   <string name="capture_image">التقط صورة</string>
   <string name="choose_image">إختر صورة</string>
   <string name="selected_invalid_image">الملف المحدد ليس صورة بتنسيق مقبول</string>
-  <string name="gdrive_connection_exception">هذه الصورة مخزنة على سواقة غوغل ولا يمكن الوصول إليها حينما تكون غير متصل.</string>
   <string name="view_image">عرض الصورة</string>
   <string name="take_picture_instruction">انقر على الشاشة لإلتقاط صورة</string>
   <string name="error_front_camera_unavailable">الكاميرا الأمامية غير متوفرة على هذا الجهاز</string>
@@ -804,7 +803,6 @@
   <string name="error_occured">حدث خطأ</string>
   <string name="please_wait">الرجاء الانتظار للحظات قليلة.</string>
   <string name="please_wait_long">الرجاء الانتظار. قد يتطلّب ذلك بضع دقائق.</string>
-  <string name="sdcard_unmounted">لا يمكن للجمع الوصول الى بطاقة SD. ربما قد تم تركيبها عن طريق USB؟ (الوضع الحالي  %s)</string>
   <string name="fs_delete_media_path_if_file_error">لا يمكن حذف  \'%s\'.  يرجى حذف الملف يدويا وقم باعادة تحميل الاستمارة.</string>
   <string name="fs_create_media_folder_error">لا يمكن انشاء ملف وسائط متعددة \'%s\'.</string>
   <string name="fs_file_copy_error">لا يمكن النسخ  \'%1$s\' فوق  \'%2$s\'. السبب: \'%3$s\'</string>

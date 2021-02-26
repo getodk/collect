@@ -174,7 +174,6 @@
   <string name="capture_image">Ta bild</string>
   <string name="choose_image">Välj bild</string>
   <string name="selected_invalid_image">Vald fil är inte en giltig bild</string>
-  <string name="gdrive_connection_exception">Denna bild är lagrad på Google Drive och kan inte nås när du är offline.</string>
   <string name="view_image">Visa bild</string>
   <string name="take_picture_instruction">Knacka på skärmen för att ta ett kort</string>
   <string name="error_front_camera_unavailable">Frontkamera inte tillgänglig på denna enhet</string>
@@ -681,7 +680,6 @@ Dela ODK Collect med dem.</string>
   <string name="error_occured">Ett fel inträffade</string>
   <string name="please_wait">Var vänlig och vänta ett tag.</string>
   <string name="please_wait_long">Var vänlig och vänta. Detta kan ta en stund.</string>
-  <string name="sdcard_unmounted">Collect kan inte läsa minneskortet. Är det kanske monterat via USB? (Nuvarande status: %s)</string>
   <string name="fs_delete_media_path_if_file_error">Kan inte radera \'%s\'. Vänligen radera filen manuellt och ladda hem formuläret igen.</string>
   <string name="fs_create_media_folder_error">Kan inte skapa mediamappen \'%s\'.</string>
   <string name="fs_file_copy_error">Kan inte kopiera \'%1$s\' över \'%2$s\'. Orsak: %3$s</string>

@@ -360,7 +360,6 @@
   <string name="error_occured">ມີຄວາມຜິດພາດເກີດຂຶ້ນ</string>
   <string name="please_wait">ກະລຸນາລໍຖ້າຈັກໜ້ອຍ</string>
   <string name="please_wait_long">ກະລຸນາລໍຖ້າ. ມັນອາດຕ້ອງໃຊ້ເວລາໜ້ອຍໜື່ງ</string>
-  <string name="sdcard_unmounted">​ໂປ​ແກມບໍ່​ສາ​ມາດ​ເຂົ້າ​ເຖິງ​ກາດ​ຄວາມ​ຈຳ. ບາງ​ເທື່ອ​ມັນ​ຖືກ​ເຊື່ອມ​ຜ່ານ USB? (ສະ​ຖາ​ນະ​ປະຈຸ​ບັນ:%s)</string>
   <string name="fs_delete_media_path_if_file_error">ບໍ່​ສາ​ມາດ​ລຶບ \'%s\'. ກະ​ລຸ​ນາ​ລຶບ​ເອ​ກະ​ສານດ້ວຍ​ມື ແລະ ດາວ​ໂຫຼດ​ຟອມ​ມາ​ໃໝ່.</string>
   <string name="fs_create_media_folder_error">ບໍ່​ສາ​ມາດ​ສ້າງ​ໂຟນ​ເດີ \'%s\'.</string>
   <string name="fs_file_copy_error">ບໍ່​ສາ​ມາດ​ກ໋ອບ​ປີ້ \'%1$s\' ຈາກ​ທັງ​ໝົດ \'%2$s\'. ​ເຫດຜົນ: %3$s</string>

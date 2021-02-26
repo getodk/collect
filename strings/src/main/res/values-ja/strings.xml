@@ -185,7 +185,6 @@
   <string name="capture_image">写真を撮影</string>
   <string name="choose_image">画像を選択</string>
   <string name="selected_invalid_image">選択したファイルは有効な画像ではありません</string>
-  <string name="gdrive_connection_exception">この画像はGoogleドライブに保存されており、オフラインではアクセスできません。</string>
   <string name="view_image">画像を表示</string>
   <string name="take_picture_instruction">画面をタップすると写真を撮ります</string>
   <string name="error_front_camera_unavailable">このデバイスは前面カメラが利用できません</string>
@@ -785,7 +784,6 @@
   <string name="error_occured">エラーが発生しました</string>
   <string name="please_wait">しばらくお待ちください。</string>
   <string name="please_wait_long">しばらくお待ちください。数分間かかることがあります。</string>
-  <string name="sdcard_unmounted">Collect がSDカードにアクセスできません。USB接続でマウントされていませんか? (現在のステータス: %s)</string>
   <string name="fs_delete_media_path_if_file_error">\'%s\' を削除できませんでした。ファイルを手動で削除して、フォームを再ダウンロードしてください。</string>
   <string name="fs_create_media_folder_error">メディアフォルダー \'%s\' を作成できませんでした。</string>
   <string name="fs_file_copy_error">\'%1$s\' を \'%2$s\' に上書きコピーできませんでした。理由: %3$s</string>

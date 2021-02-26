@@ -152,7 +152,6 @@
   <string name="capture_image">फोटो खींचें</string>
   <string name="choose_image">इमेज चुनें</string>
   <string name="selected_invalid_image">चयनित फाइल मान्य इमेज नहीं है</string>
-  <string name="gdrive_connection_exception">यह इमेज गूगल ड्राइव पर संग्रहीत है और ऑफ़लाइन होने पर एक्सेस नहीं कर सकते।</string>
   <string name="view_image">इमेज देखें</string>
   <string name="take_picture_instruction">तस्वीर लेने के लिए स्क्रीन को टैप करें</string>
   <string name="camera_error">यह डिवाइस Camera2 API का समर्थन नहीं करता है</string>
@@ -535,7 +534,6 @@
   <string name="error_occured">गलती हुई</string>
   <string name="please_wait">कृपया कुछ क्षण प्रतीक्षा करें</string>
   <string name="please_wait_long">कृपया प्रतीक्षा करें। इसमें कुछ मिनट लग सकते हैं।</string>
-  <string name="sdcard_unmounted">ODK कलेक्ट की SD कार्ड तक पहुंच नहीं हुई. शायद यह USB के माध्यम से लगाया है? (वर्तमान स्थिति:%s)</string>
   <string name="fs_delete_media_path_if_file_error">%sको नहीं मिटाया जा सका. कृपया फाइल को स्वयं हटा दें और फ़ॉर्म को पुनः डाउनलोड करें.</string>
   <string name="fs_create_media_folder_error">\'%s\' मीडिया फ़ोल्डर नहीं बना सका.</string>
   <string name="fs_file_copy_error">\'%2$s\' पर \'%1$s\' की नकल नहीं कर सकता. कारण: %3$s</string>

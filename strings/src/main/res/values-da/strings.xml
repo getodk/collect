@@ -529,6 +529,5 @@
   <string name="error_occured">Der opstod en fejl</string>
   <string name="please_wait">Vent et øjeblik</string>
   <string name="please_wait_long">Vent et øjeblik. Det kan vare et par minutter.</string>
-  <string name="sdcard_unmounted">Collect kan ikke tilgå SD-kort. Måske er det tilsluttet vha. USB? (Aktuel tilstand: 1%s) </string>
   <string name="survey_multiple_forms_error">Du har downloadet to forskellige formularer med samme formular-id og version. Måske var de den samme form, der blev uploadet på forskellige tidspunkter eller til forskellige servere. Under alle omstændigheder skal du slette en.</string>
 </resources>

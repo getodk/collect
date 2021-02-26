@@ -182,7 +182,6 @@
   <string name="capture_image">Fotografiši</string>
   <string name="choose_image">Izaberi sliku</string>
   <string name="selected_invalid_image">Odabrani fajl nije validna slika</string>
-  <string name="gdrive_connection_exception">Slika je sačuvana na Google Drive i ne možete joj pristupiti dok ste van mreže.</string>
   <string name="view_image">Pogledaj sliku</string>
   <string name="take_picture_instruction">Dodirni ekran kako bi fotografisao</string>
   <string name="error_front_camera_unavailable">Prednja kamera nije dostupna na ovom uređaju</string>
@@ -714,7 +713,6 @@
   <string name="error_occured">Greška</string>
   <string name="please_wait">Molim sačekajte par trenutaka</string>
   <string name="please_wait_long">Molim sačekajte. Ovo može potrajati nekoliko minuta.</string>
-  <string name="sdcard_unmounted">Aplikacija ne može da pristupi SD kartici. Možda je pokrenuta preko USB-a?(Trenutno stanje:%s)</string>
   <string name="fs_delete_media_path_if_file_error">Nisam mogao da obrišem \'%s\'. Molim obrišite fajl ručno ili ponovo preuzmite formular.</string>
   <string name="fs_create_media_folder_error">Ne mogu da kreiram medija folder \'%s\'.</string>
   <string name="fs_file_copy_error">Nisam mogao da prekopiram \'%1$s\' preko \'%2$s\'. Razlog: %3$s</string>

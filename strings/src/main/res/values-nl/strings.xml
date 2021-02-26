@@ -472,7 +472,6 @@
   <string name="error_occured">Fout opgetreden</string>
   <string name="please_wait">Een moment geduld alstublieft.</string>
   <string name="please_wait_long">Geduld, dit kan enkele minuten duren.</string>
-  <string name="sdcard_unmounted">Collect kan de SD-kaart niet benaderen. Is deze misschien via USB verbonden? (Status: %s)</string>
   <string name="fs_delete_media_path_if_file_error">Kon bestand \'%s\' niet verwijderen. Verwijd het bestand handmatig en download het formulier opnieuw.</string>
   <string name="fs_create_media_folder_error">Kon media directory \'%s\' niet aanmaken.</string>
   <string name="fs_file_copy_error">Kon \'%1$s\' niet over \'%2$s\' kopieren. Oorzaak: %3$s</string>

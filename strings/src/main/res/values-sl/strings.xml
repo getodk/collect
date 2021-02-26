@@ -456,7 +456,6 @@
   <string name="error_occured">Nastala je napaka</string>
   <string name="please_wait">Malo počakaj, prosim.</string>
   <string name="please_wait_long">Počakaj. To lahko traja nekaj minut.</string>
-  <string name="sdcard_unmounted">Collect ne more do SD kartice. Mogoče je nameščena preko USB? (trenutno stanje %s)</string>
   <string name="fs_delete_media_path_if_file_error">Ne morem izbrisati\'%s\'. Izbriši datoteko ročno in ponovno naloži obrazec.</string>
   <string name="fs_create_media_folder_error">Ne morem ustvariti medijsko mapo \'%s\'.</string>
   <string name="fs_file_copy_error">Ne morem kopirat \'%1$s\' preko \'%2$s\'. Razlog: %3$s.</string>

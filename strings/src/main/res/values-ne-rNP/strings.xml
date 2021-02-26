@@ -133,7 +133,6 @@
   <string name="barcode_scanner_prompt">बार कोडलाई समकोण (चार पाटे बाक्सा) भित्र राख्नुहोस्</string>
   <string name="capture_image">फोटो लिनुहोस् </string>
   <string name="choose_image">तस्विर छान्नुहोस् </string>
-  <string name="gdrive_connection_exception">यो इमेज गुगल ड्राइवमा स्टोर गरिएको छ । तपाईं अफलाइन हुँदा प्राप्त गर्न सकिदैन ।</string>
   <string name="view_image">तस्विर हेर्नुहोस्।</string>
   <string name="take_picture_instruction">फोटो लिन स्क्रीन ट्याप गर्नुहोस्</string>
   <string name="error_front_camera_unavailable">यस यन्त्रमा फ्रन्ट क्यामेरा छैन</string>
@@ -478,7 +477,6 @@
   <string name="error_occured">गल्ती भयो </string>
   <string name="please_wait">कृपया केही समय पर्खनुहोस् </string>
   <string name="please_wait_long">कृपया पर्खनुहोस् । केही समय लाग्न सक्छ । </string>
-  <string name="sdcard_unmounted">संकलनले मेमोरी कार्डमा प्रवेश पाउन सकेन | सायद मेमोरी कार्डलाई USB बाट जडान गरिएको छ कि ? (हालको अवस्था: %s)</string>
   <string name="fs_delete_media_path_if_file_error">\'%s\' डिलिट गर्न सकिएन | कृपया सो फाइल आफैं डिलिट गर्नुहोस् र फारम फेरी डाउनलोड गर्नुहोस् |</string>
   <string name="fs_create_media_folder_error">मिडिया फोल्डर बनाउन असमर्थ \'%s\'।</string>
   <string name="fs_file_copy_error">\'%2$s\' माथि \'%1$s\' कपी गर्न सकिएन | कारण: %3$s</string>
