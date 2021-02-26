@@ -207,6 +207,7 @@ android {
         xmlReport true
         htmlReport true
         checkGeneratedSources true
+        checkDependencies true
         lintConfig file("${project.rootDir}/config/lint.xml")
     }
 }
