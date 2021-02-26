@@ -1,20 +1,18 @@
-package org.odk.collect.android.instrumented.storage;
+package org.odk.collect.android.storage;
 
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.storage.StorageInitializer;
-import org.odk.collect.android.storage.StoragePathProvider;
+import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-@RunWith(AndroidJUnit4.class)
+@RunWith(RobolectricTestRunner.class)
 public class StorageInitializerTest {
     private StoragePathProvider storagePathProvider;
     private StorageInitializer storageInitializer;
