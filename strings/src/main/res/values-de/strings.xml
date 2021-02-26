@@ -665,7 +665,7 @@
   <string name="analytics_summary">Anonyme Nutzungsdaten helfen dem ODK-Team Fehlerbehebungen und neue Funktionen zu priorisieren.</string>
   <string name="form_metadata_title">Formular-Metadaten</string>
   <string name="form_metadata">Formular-Metadaten</string>
-  <string name="form_metadata_summary">Diese Werte werden Formularen hinzugefügt, die Usernamen, E-Mail und/oder durch das Telefon vorbelegte Felder beinhalten, um die Person zu identifizieren, die die Daten eingibt.</string>
+  <string name="form_metadata_summary">Diese Werte werden Formularen hinzugefügt, die Usernamen, E-Mail und/oder durch das Telefon vorbelegte Felder beinhalten, um die Person zu identifizieren, die Daten eingibt.</string>
   <string name="user_defined">Benutzerdefiniert</string>
   <string name="phone_number">Telefonnummer</string>
   <string name="email">E-Mail-Adresse</string>
