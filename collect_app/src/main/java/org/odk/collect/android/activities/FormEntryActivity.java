@@ -137,7 +137,6 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
@@ -285,7 +284,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private String startingXPath;
     private String waitingXPath;
     private boolean newForm = true;
-    private boolean onResumeWasCalledWithoutPermissions;
     private boolean readPhoneStatePermissionRequestNeeded;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -428,36 +426,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             mediaLoadingFragment = (MediaLoadingFragment) getFragmentManager().findFragmentByTag(TAG_MEDIA_LOADING_FRAGMENT);
         }
 
-        permissionsProvider.requestStoragePermissions(this, new PermissionListener() {
-            @Override
-            public void granted() {
-                // must be at the beginning of any activity that can be called from an external intent
-                try {
-                    new StorageInitializer().createOdkDirsOnStorage();
-                    setupFields(savedInstanceState);
-                    loadForm();
-
-                    /**
-                     * Since onResume is called after onCreate we check to see if
-                     * it was called without the permissions that are required. If so then
-                     * we call it.This is especially useful for cases where a user might revoke
-                     * permissions to storage and not know the implications it has on the form entry.
-                     */
-                    if (onResumeWasCalledWithoutPermissions) {
-                        onResume();
-                    }
-                } catch (RuntimeException e) {
-                    createErrorDialog(e.getMessage(), true);
-                    return;
-                }
-            }
-
-            @Override
-            public void denied() {
-                // The activity has to finish because ODK Collect cannot function without these permissions.
-                finishAndRemoveTask();
-            }
-        });
+        setupFields(savedInstanceState);
+        loadForm();
     }
 
     private void setupViewModels() {
@@ -676,7 +646,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         formPath.lastIndexOf('.'))
                         + "_";
                 final String fileSuffix = ".xml.save";
-                File cacheDir = new File(storagePathProvider.getDirPath(StorageSubdirectory.CACHE));
+                File cacheDir = new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE));
                 File[] files = cacheDir.listFiles(pathname -> {
                     String name = pathname.getName();
                     return name.startsWith(filePrefix)
@@ -694,7 +664,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                     candidate.getName().length()
                                             - fileSuffix.length());
                     File instanceDir = new File(
-                            storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES) + File.separator
+                            storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES) + File.separator
                                     + instanceDirName);
                     File instanceFile = new File(instanceDir,
                             instanceDirName + ".xml");
@@ -1920,7 +1890,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                         languages[whichButton]);
                                 String selection = FormsColumns.FORM_FILE_PATH
                                         + "=?";
-                                String[] selectArgs = {storagePathProvider.getFormDbPath(formPath)};
+                                String[] selectArgs = {storagePathProvider.getRelativeFormPath(formPath)};
                                 int updated = new FormsDao().updateForm(values, selection, selectArgs);
                                 Timber.i("Updated language to: %s in %d rows",
                                         languages[whichButton],
@@ -2003,11 +1973,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     protected void onResume() {
         super.onResume();
-
-        if (!permissionsProvider.areStoragePermissionsGranted()) {
-            onResumeWasCalledWithoutPermissions = true;
-            return;
-        }
 
         String navigation = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_NAVIGATION);
         showNavigationButtons = navigation.contains(GeneralKeys.NAVIGATION_BUTTONS);

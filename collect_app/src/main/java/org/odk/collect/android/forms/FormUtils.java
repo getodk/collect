@@ -29,7 +29,7 @@ public class FormUtils {
         // This should get moved to the Application Class
         if (referenceManager.getFactories().length == 0) {
             // Always build URIs against the ODK root, regardless of the absolute path of formMediaDir
-            referenceManager.addReferenceFactory(new FileReferenceFactory(new StoragePathProvider().getStorageRootDirPath()));
+            referenceManager.addReferenceFactory(new FileReferenceFactory(new StoragePathProvider().getOdkRootDirPath()));
         }
 
         addSessionRootTranslators(referenceManager,

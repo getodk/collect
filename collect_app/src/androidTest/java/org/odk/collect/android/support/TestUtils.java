@@ -77,7 +77,7 @@ public final class TestUtils {
     }
 
     private static File tempFileDirectory() {
-        return new File(new StoragePathProvider().getDirPath(StorageSubdirectory.INSTANCES), "test-tmp");
+        return new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.INSTANCES), "test-tmp");
     }
 
     public static void closeSafely(Closeable c) {

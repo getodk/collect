@@ -1,8 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="MaterialBanner">
-        <attr name="text" format="string"/>
-        <attr name="actionText" format="string"/>
-        <attr name="secondaryActionColor" format="boolean"/>
-    </declare-styleable>
 </resources>

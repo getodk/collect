@@ -397,10 +397,6 @@
   <string name="share">አጋራ</string>
   <string name="generate">ፍጠር</string>
   <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <!--Action to begin a storage migration-->
-  <!--##############################################
      # MISC
      ##############################################-->
   <string name="ok">እሺ</string>

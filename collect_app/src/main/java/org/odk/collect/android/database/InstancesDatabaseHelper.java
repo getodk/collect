@@ -34,7 +34,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     private final DatabaseMigrator databaseMigrator;
 
     public InstancesDatabaseHelper(DatabaseMigrator databaseMigrator, StoragePathProvider storagePathProvider) {
-        super(new DatabaseContext(storagePathProvider.getDirPath(StorageSubdirectory.METADATA)), INSTANCES_DATABASE_NAME, null, INSTANCES_DATABASE_VERSION);
+        super(new DatabaseContext(storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA)), INSTANCES_DATABASE_NAME, null, INSTANCES_DATABASE_VERSION);
         this.databaseMigrator = databaseMigrator;
     }
 

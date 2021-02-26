@@ -79,7 +79,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
         StoragePathProvider storagePathProvider = new StoragePathProvider();
         try {
             List<String> candidateInstances = new LinkedList<>();
-            File instancesPath = new File(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES));
+            File instancesPath = new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES));
             if (instancesPath.exists() && instancesPath.isDirectory()) {
                 File[] instanceFolders = instancesPath.listFiles();
                 if (instanceFolders == null || instanceFolders.length == 0) {
@@ -170,7 +170,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
                                 // add missing fields into content values
                                 ContentValues values = new ContentValues();
-                                values.put(InstanceColumns.INSTANCE_FILE_PATH, storagePathProvider.getInstanceDbPath(candidateInstance));
+                                values.put(InstanceColumns.INSTANCE_FILE_PATH, storagePathProvider.getRelativeInstancePath(candidateInstance));
                                 values.put(InstanceColumns.SUBMISSION_URI, submissionUri);
                                 values.put(InstanceColumns.DISPLAY_NAME, formName);
                                 values.put(InstanceColumns.JR_FORM_ID, jrFormId);
@@ -264,7 +264,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(false));
                 values.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
                 values.put(InstanceColumns.GEOMETRY, (String) null);
-                instancesDao.updateInstance(values, InstanceColumns.INSTANCE_FILE_PATH + "=?", new String[]{new StoragePathProvider().getInstanceDbPath(candidateInstance)});
+                instancesDao.updateInstance(values, InstanceColumns.INSTANCE_FILE_PATH + "=?", new String[]{new StoragePathProvider().getRelativeInstancePath(candidateInstance)});
 
                 SaveFormToDisk.manageFilesAfterSavingEncryptedForm(instanceXml, submissionXml);
                 if (!EncryptionUtils.deletePlaintextFiles(instanceXml, null)) {

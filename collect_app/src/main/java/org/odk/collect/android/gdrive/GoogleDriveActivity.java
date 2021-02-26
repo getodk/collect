@@ -798,7 +798,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         FormsDao formsDao = new FormsDao();
         for (DriveListItem item : driveList) {
             if (item.getType() == DriveListItem.FILE) {
-                try (Cursor cursor = formsDao.getFormsCursorForFormFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName())) {
+                try (Cursor cursor = formsDao.getFormsCursorForFormFilePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName())) {
                     if (cursor != null && cursor.moveToFirst() && (isNewerFormVersionAvailable(item) || areNewerMediaFilesAvailable(item))) {
                         item.setNewerVersion(true);
                     }
@@ -808,7 +808,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     }
 
     private boolean isNewerFormVersionAvailable(DriveListItem item) {
-        Long lastModifiedLocal = new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName()).lastModified();
+        Long lastModifiedLocal = new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName()).lastModified();
         Long lastModifiedServer = item.getDate().getValue();
         return lastModifiedServer > lastModifiedLocal;
     }
@@ -826,7 +826,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
             if (mediaFileList != null) {
                 for (com.google.api.services.drive.model.File mediaFile : mediaFileList) {
-                    File localMediaFile = new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + mediaDirName + File.separator + mediaFile.getName());
+                    File localMediaFile = new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + mediaDirName + File.separator + mediaFile.getName());
                     if (!localMediaFile.exists()) {
                         return true;
                     } else {
@@ -889,7 +889,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                     }
 
                     if (mediaFileList != null) {
-                        FileUtils.createFolder(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + mediaDirName);
+                        FileUtils.createFolder(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + mediaDirName);
 
                         for (com.google.api.services.drive.model.File mediaFile : mediaFileList) {
                             String filePath = mediaDirName + File.separator + mediaFile.getName();
@@ -907,7 +907,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         }
 
         private void downloadFile(@NonNull String fileId, String fileName) throws IOException {
-            File file = new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + fileName);
+            File file = new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + fileName);
             driveHelper.downloadFile(fileId, file);
 
             // If the form already exists in the DB and is soft deleted we need to restore it

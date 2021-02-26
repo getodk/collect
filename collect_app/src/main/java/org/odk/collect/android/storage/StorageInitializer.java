@@ -1,7 +1,6 @@
 package org.odk.collect.android.storage;
 
 import android.content.Context;
-import android.os.Environment;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -12,25 +11,19 @@ import timber.log.Timber;
 
 public class StorageInitializer {
 
-    private StorageStateProvider storageStateProvider;
-    private StoragePathProvider storagePathProvider;
-    private Context context;
+    private final StoragePathProvider storagePathProvider;
+    private final Context context;
 
     public StorageInitializer() {
-        this(new StorageStateProvider(), new StoragePathProvider(), Collect.getInstance());
+        this(new StoragePathProvider(), Collect.getInstance());
     }
 
-    public StorageInitializer(StorageStateProvider storageStateProvider, StoragePathProvider storagePathProvider, Context context) {
-        this.storageStateProvider = storageStateProvider;
+    public StorageInitializer(StoragePathProvider storagePathProvider, Context context) {
         this.storagePathProvider = storagePathProvider;
         this.context = context;
     }
 
     public void createOdkDirsOnStorage() throws RuntimeException {
-        if (!storageStateProvider.isStorageMounted()) {
-            throw new RuntimeException(context.getString(R.string.sdcard_unmounted, Environment.getExternalStorageState()));
-        }
-
         for (String dirPath : storagePathProvider.getOdkDirPaths()) {
             File dir = new File(dirPath);
             if (!dir.exists()) {

@@ -23,7 +23,6 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.FirebaseAnalytics;
-import org.odk.collect.android.application.AppStateProvider;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CollectSettingsPreferenceMigrator;
@@ -92,11 +91,7 @@ import org.odk.collect.android.preferences.JsonPreferencesGenerator;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.android.storage.migration.StorageEraser;
-import org.odk.collect.android.storage.migration.StorageMigrationRepository;
-import org.odk.collect.android.storage.migration.StorageMigrator;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
@@ -190,7 +185,7 @@ public class AppDependencyModule {
 
     @Provides
     public FormDownloader providesFormDownloader(FormSource formSource, FormsRepository formsRepository, StoragePathProvider storagePathProvider, Analytics analytics) {
-        return new ServerFormDownloader(formSource, formsRepository, new File(storagePathProvider.getDirPath(StorageSubdirectory.CACHE)), storagePathProvider.getDirPath(StorageSubdirectory.FORMS), new FormMetadataParser(ReferenceManager.instance()), analytics);
+        return new ServerFormDownloader(formSource, formsRepository, new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE)), storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS), new FormMetadataParser(ReferenceManager.instance()), analytics);
     }
 
     @Provides
@@ -201,8 +196,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
-        return new PermissionsProvider(permissionsChecker, storageStateProvider);
+    public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker) {
+        return new PermissionsProvider(permissionsChecker);
     }
 
     @Provides
@@ -222,21 +217,8 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public StorageMigrationRepository providesStorageMigrationRepository() {
-        return new StorageMigrationRepository();
-    }
-
-    @Provides
-    @Singleton
     public StorageInitializer providesStorageInitializer() {
         return new StorageInitializer();
-    }
-
-    @Provides
-    public StorageMigrator providesStorageMigrator(StoragePathProvider storagePathProvider, StorageStateProvider storageStateProvider, StorageMigrationRepository storageMigrationRepository, ReferenceManager referenceManager, FormUpdateManager formUpdateManager, FormSubmitManager formSubmitManager, Analytics analytics, @Named("FORMS") ChangeLock changeLock) {
-        StorageEraser storageEraser = new StorageEraser(storagePathProvider);
-
-        return new StorageMigrator(storagePathProvider, storageStateProvider, storageEraser, storageMigrationRepository, GeneralSharedPreferences.getInstance(), referenceManager, analytics);
     }
 
     @Provides
@@ -284,12 +266,6 @@ public class AppDependencyModule {
     @Singleton
     public MapProvider providesMapProvider() {
         return new MapProvider();
-    }
-
-    @Provides
-    @Singleton
-    public StorageStateProvider providesStorageStateProvider() {
-        return new StorageStateProvider();
     }
 
     @Provides
@@ -344,8 +320,10 @@ public class AppDependencyModule {
 
     @Singleton
     @Provides
-    public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager, Analytics analytics, AppStateProvider appStateProvider, StorageStateProvider storageStateProvider) {
-        return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator, propertyManager, analytics, appStateProvider, storageStateProvider);
+    public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider,
+                                                                 SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager,
+                                                                 Analytics analytics, StorageInitializer storageInitializer) {
+        return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator, propertyManager, analytics, storageInitializer);
     }
 
     @Provides
@@ -505,12 +483,6 @@ public class AppDependencyModule {
     @Provides
     public JsonPreferencesGenerator providesJsonPreferencesGenerator() {
         return new JsonPreferencesGenerator();
-    }
-
-    @Provides
-    @Singleton
-    public AppStateProvider providesAppStateProvider() {
-        return new AppStateProvider();
     }
 
     @Provides

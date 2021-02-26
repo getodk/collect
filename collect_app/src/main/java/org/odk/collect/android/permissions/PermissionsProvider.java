@@ -20,7 +20,6 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 
 import java.util.List;
@@ -34,16 +33,9 @@ import timber.log.Timber;
  */
 public class PermissionsProvider {
     private final PermissionsChecker permissionsChecker;
-    private final StorageStateProvider storageStateProvider;
 
-    public PermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+    public PermissionsProvider(PermissionsChecker permissionsChecker) {
         this.permissionsChecker = permissionsChecker;
-        this.storageStateProvider = storageStateProvider;
-    }
-
-    public boolean areStoragePermissionsGranted() {
-        return storageStateProvider.isScopedStorageUsed()
-                || permissionsChecker.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
     public boolean isCameraPermissionGranted() {
@@ -64,33 +56,6 @@ public class PermissionsProvider {
 
     public boolean isReadPhoneStatePermissionGranted() {
         return permissionsChecker.isPermissionGranted(Manifest.permission.READ_PHONE_STATE);
-    }
-
-    /**
-     * Checks to see if the user granted Collect the permissions necessary for reading
-     * and writing to storage and if not utilizes the permissions API to request them.
-     *
-     * @param activity needed for requesting permissions
-     * @param action is a listener that provides the calling component with the permission result.
-     */
-    public void requestStoragePermissions(Activity activity, @NonNull PermissionListener action) {
-        if (storageStateProvider.isScopedStorageUsed()) {
-            action.granted();
-            return;
-        }
-
-        requestPermissions(activity, new PermissionListener() {
-            @Override
-            public void granted() {
-                action.granted();
-            }
-
-            @Override
-            public void denied() {
-                showAdditionalExplanation(activity, R.string.storage_runtime_permission_denied_title,
-                        R.string.storage_runtime_permission_denied_desc, R.drawable.sd, action);
-            }
-        }, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
     public void requestReadStoragePermission(Activity activity, @NonNull PermissionListener action) {

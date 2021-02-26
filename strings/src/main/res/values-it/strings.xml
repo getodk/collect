@@ -698,12 +698,6 @@
   <string name="generate">Genera</string>
   <string name="invalid_qrcode">Il codice QR non contiene parametri validi</string>
   <string name="qr_code_not_found">Il codice QR non è stato rilevato nell\'immagine selezionata</string>
-  <string name="corrupt_settings_file_notification">Spiacente, il file di impostazioni è danneggiato e deve essere cancellato o sostituito</string>
-  <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <string name="scoped_storage_dismiss">Abbandonare</string>
-  <!--Action to begin a storage migration-->
   <!--##############################################
      # MISC
      ##############################################-->

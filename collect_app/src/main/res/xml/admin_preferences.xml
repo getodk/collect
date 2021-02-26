@@ -30,12 +30,6 @@
             android:key="import_settings"
             android:title="@string/configure_via_qr_code"
             app:iconSpaceReserved="false" />
-
-        <PreferenceScreen
-            android:key="save_legacy_settings"
-            android:title="@string/save_legacy_settings"
-            android:summary="@string/save_legacy_settings_warning"
-            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/user_access_control"

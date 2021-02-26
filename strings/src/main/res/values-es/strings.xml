@@ -790,30 +790,6 @@
   <string name="invalid_qrcode">El código QR no contiene ajustes válidos</string>
   <string name="qr_code_not_found">Código QR no encontrado en la imagen seleccionada</string>
   <string name="corrupt_imported_preferences_error">Los ajustes actuales están corruptos. Desde la configuración de administrador, restablecer la configuración o importar.</string>
-  <string name="save_legacy_settings">Guardar ajustes heredados a disco</string>
-  <string name="save_legacy_settings_warning">Será removido en una versión futura. Favor usar el código QR de arriba</string>
-  <string name="settings_successfully_loaded_file_notification">La configuración fué importada exitosamente  del archivo  .settings. Esta funcionalidad será removida en una versión futura. Se recomienda usar la configuración con QR.</string>
-  <string name="corrupt_settings_file_notification">Lo sentimos, el archivo de configuración está dañado y debe ser eliminado o reemplazado</string>
-  <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <string name="scoped_storage_banner_text">Debe migrar los formularios a un almacenamiento privado para cumplir con los requisitos de Android. Error en un intento de migración automática. Favor migrar manualmente.</string>
-  <string name="scoped_storage_learn_more">Conocer más y migrar</string>
-  <string name="storage_migration_completed">¡Migración de almacenamiento completada!</string>
-  <string name="scoped_storage_dismiss">Descartar</string>
-  <string name="storage_migration_dialog_message1">Los requisitos de Android han cambiado y los archivos utilizados en la aplicación móvil deben migrarse.</string>
-  <string name="storage_migration_dialog_message2">Usted tiene %d formularios sin enviar. Se recomienda enviar todos los datos guardados antes de la migración.</string>
-  <string name="storage_migration_dialog_message3">Si utiliza una aplicación de integración externa como OpenMapKit, no migre todavía.</string>
-  <string name="storage_migration_more_details">Más detalles</string>
-  <string name="try_again">Intente de nuevo</string>
-  <!--Action to begin a storage migration-->
-  <string name="migrate">Iniciar Migración</string>
-  <string name="error">Error:</string>
-  <string name="storage_migration_not_enough_space">No tiene suficiente espacio en su almacenamiento interno para migrar sus datos. Libere espacio e intente nuevamente.</string>
-  <string name="changes_in_progress">Se está ejecutando el envío automático o la descarga de un formulario en blanco. Por favor, inténtelo de nuevo más tarde.</string>
-  <string name="storage_migration_failed">La migración de datos falló. Inténtalo de nuevo.</string>
-  <string name="storage_migration_dialog_title">Migración de almacenamiento</string>
-  <string name="storage_migration_progress_msg">Migración en progreso.\nEsto puede tomar algunos segundos.</string>
   <!--##############################################
      # MISC
      ##############################################-->

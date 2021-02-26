@@ -16,12 +16,10 @@
 
 package org.odk.collect.android.instrumented.utilities;
 
-import android.Manifest;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -48,11 +46,7 @@ public class CustomSQLiteQueryExecutionTest {
 
     @Rule
     public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            )
-            .around(new RunnableRule(() -> {
+            .outerRule(new RunnableRule(() -> {
                 try {
                     File dbPath = File.createTempFile("test", ".db");
                     dbPath.deleteOnExit();

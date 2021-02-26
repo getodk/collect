@@ -681,15 +681,6 @@
   <string name="include_password_dialog">Nenosiri limejumuishwa ndani ya kanuni</string>
   <string name="generate">Zalisha</string>
   <string name="invalid_qrcode">Kanuni za QR hazijajumuisha mipangilio sahihi</string>
-  <string name="corrupt_settings_file_notification">Samahani, mpangilio wa mafaili yako umeharibika na unatakiwa kufutwa au kubadilishwa</string>
-  <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <!--Action to begin a storage migration-->
-  <string name="storage_migration_not_enough_space">Huna nafasi kwenye kifaa chako cha ndani kuhamisha data, Tafadhali ongeza nafasi kiasi na ujaribu tena.</string>
-  <string name="storage_migration_failed">Hamisho la data limesitishwa, Tafadhali jaribu tena</string>
-  <string name="storage_migration_dialog_title">Uhamiaji wa uhifadhi</string>
-  <string name="storage_migration_progress_msg">Uhamiaji unaendelea. \ Hii inaweza kuchukua sekunde chache…</string>
   <!--##############################################
      # MISC
      ##############################################-->

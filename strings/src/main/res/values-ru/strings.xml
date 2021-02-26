@@ -647,11 +647,6 @@
   <string name="include_password_dialog">Пароли включены в код</string>
   <string name="generate">Сгенерировать</string>
   <string name="invalid_qrcode">В QR-коде не содержатся правильные настройки</string>
-  <string name="corrupt_settings_file_notification">Извините, файл настроек повреждён и должен быть удалён или изменён</string>
-  <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <!--Action to begin a storage migration-->
   <!--##############################################
      # MISC
      ##############################################-->

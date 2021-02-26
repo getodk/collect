@@ -780,30 +780,6 @@
   <string name="invalid_qrcode">QR code tidak mengandung pengaturan yang benar</string>
   <string name="qr_code_not_found">Kode QR tidak ditemukan pada gambar terpilih</string>
   <string name="corrupt_imported_preferences_error">Pengaturan yang sekarang bermasalah. Dari pengaturan admin, set ulang pengaturan atau impor pengaturan.</string>
-  <string name="save_legacy_settings">Simpan barkas .settings lawas ke disk</string>
-  <string name="save_legacy_settings_warning">Akan dihapus pada versi mendatang. Mohon gunakan kode QR di atas.</string>
-  <string name="settings_successfully_loaded_file_notification">Pengaturan berhasil diimpor dari berkas .settings. Fungsi ini akan dihapus di versi mendatang. Silakan gunakan konfigurasi kode QR sebagai gantinya.</string>
-  <string name="corrupt_settings_file_notification">Maaf, berkas pengaturan rusak dan harus dihapus atau diganti</string>
-  <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <string name="scoped_storage_banner_text">Anda harus memigrasi formulir Collect ke penyimpanan pribadi untuk mematuhi persyaratan Android. Upaya migrasi otomatis gagal. Harap bermigrasi secara manual.</string>
-  <string name="scoped_storage_learn_more">Pelajari lebih lanjut dan lakukan migrasi</string>
-  <string name="storage_migration_completed">Migrasi penyimpanan berhasil!</string>
-  <string name="scoped_storage_dismiss">Singkirkan</string>
-  <string name="storage_migration_dialog_message1">Persyaratan Android telah berubah dan file yang digunakan oleh Collect harus dimigrasikan.</string>
-  <string name="storage_migration_dialog_message2">Anda memiliki %d pengiriman yang belum terkirim. Anda disarankan untuk mengirim seluruh data sebelum melakukan migrasi.</string>
-  <string name="storage_migration_dialog_message3">Jika Anda menggunakan aplikasi eksternal yang terintegrasi seperti OpenMapKit, mohon tidak melakukan migrasi terlebih dahulu.</string>
-  <string name="storage_migration_more_details">Rincian tambahan</string>
-  <string name="try_again">Coba lagi</string>
-  <!--Action to begin a storage migration-->
-  <string name="migrate">Migrasi</string>
-  <string name="error">Kesalahan:</string>
-  <string name="storage_migration_not_enough_space">Anda tidak memiliki ruang penyimpanan yang cukup pada penyimpanan internal untuk melakukan migrasi data yang Anda miliki. Mohon kosongkan beberapa ruang penyimpanan dan coba lagi.</string>
-  <string name="changes_in_progress">Pengiriman otomatis atau pengunduhan formulir sedang berlangsung. Mohon coba lagi.</string>
-  <string name="storage_migration_failed">Migrasi data tidak berhasil. Mohon coba lagi.</string>
-  <string name="storage_migration_dialog_title">Migrasi penyimpanan</string>
-  <string name="storage_migration_progress_msg">Migrasi sedang berlangsung.\nProses ini mungkin perlu beberapa detik…</string>
   <!--##############################################
      # MISC
      ##############################################-->

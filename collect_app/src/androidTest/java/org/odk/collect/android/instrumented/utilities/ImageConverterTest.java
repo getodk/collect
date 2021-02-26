@@ -16,12 +16,10 @@
 
 package org.odk.collect.android.instrumented.utilities;
 
-import android.Manifest;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
 
-import androidx.test.rule.GrantPermissionRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.core.model.instance.TreeElement;
@@ -59,15 +57,11 @@ import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.
 
 @RunWith(AndroidJUnit4.class)
 public class ImageConverterTest {
-    private static final String TEST_IMAGE_PATH = new StoragePathProvider().getDirPath(StorageSubdirectory.INSTANCES) + File.separator + "testForm_2017-10-12_19-36-15" + File.separator + "testImage.jpg";
+    private static final String TEST_IMAGE_PATH = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.INSTANCES) + File.separator + "testForm_2017-10-12_19-36-15" + File.separator + "testImage.jpg";
 
     @Rule
     public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            )
-            .around(new ResetStateRule());
+            .outerRule(new ResetStateRule());
 
     @Before
     public void setUp() {

@@ -20,7 +20,6 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.PreferencesProvider;
-import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.utilities.Clock;
@@ -56,7 +55,7 @@ public class BackgroundAudioPermissionDialogFragmentTest {
             }
 
             @Override
-            public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+            public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker) {
                 return fakePermissionsProvider;
             }
         });

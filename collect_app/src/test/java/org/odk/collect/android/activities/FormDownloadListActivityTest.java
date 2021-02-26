@@ -14,15 +14,11 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.support.AlwaysGrantStoragePermissionsPermissionsProvider;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StorageInitializer;
-import org.odk.collect.android.storage.StorageStateProvider;
-import org.odk.collect.android.permissions.PermissionsProvider;
 import org.robolectric.shadows.ShadowEnvironment;
 
 import static android.os.Environment.MEDIA_MOUNTED;
@@ -80,11 +76,6 @@ public class FormDownloadListActivityTest {
         @Override
         public FormsDao provideFormsDao() {
             return formsDao;
-        }
-
-        @Override
-        public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
-            return new AlwaysGrantStoragePermissionsPermissionsProvider(permissionsChecker, storageStateProvider);
         }
 
         @Override

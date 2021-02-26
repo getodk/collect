@@ -1,10 +1,7 @@
 package org.odk.collect.android.feature.formentry.audit;
 
-import android.Manifest;
-
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
-import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,11 +24,7 @@ public class IdentifyUserTest {
 
     @Rule
     public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ))
-            .around(new ResetStateRule())
+            .outerRule(new ResetStateRule())
             .around(new CopyFormRule(IDENTIFY_USER_AUDIT_FORM))
             .around(new CopyFormRule(IDENTIFY_USER_AUDIT_FALSE_FORM));
 

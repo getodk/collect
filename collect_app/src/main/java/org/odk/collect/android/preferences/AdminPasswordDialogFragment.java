@@ -23,7 +23,7 @@ public class AdminPasswordDialogFragment extends DialogFragment {
 
     public static final String ARG_ACTION = "ACTION";
 
-    public enum Action { ADMIN_SETTINGS, STORAGE_MIGRATION, SCAN_QR_CODE }
+    public enum Action { ADMIN_SETTINGS, SCAN_QR_CODE }
 
     private EditText input;
     private AdminPasswordDialogCallback callback;

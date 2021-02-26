@@ -16,8 +16,6 @@ import java.security.NoSuchAlgorithmException;
 
 import timber.log.Timber;
 
-import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
-
 public class ItemsetDbAdapter {
 
     private DatabaseHelper dbHelper;
@@ -42,7 +40,7 @@ public class ItemsetDbAdapter {
      */
     private static class DatabaseHelper extends SQLiteOpenHelper {
         DatabaseHelper() {
-            super(new DatabaseContext(new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA)), DATABASE_NAME, null, DATABASE_VERSION);
+            super(new DatabaseContext(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.METADATA)), DATABASE_NAME, null, DATABASE_VERSION);
         }
 
         @Override
@@ -120,7 +118,7 @@ public class ItemsetDbAdapter {
 
         ContentValues cv = new ContentValues();
         cv.put(KEY_ITEMSET_HASH, formHash);
-        cv.put(KEY_PATH, new StoragePathProvider().getFormDbPath(path));
+        cv.put(KEY_PATH, new StoragePathProvider().getRelativeFormPath(path));
         db.insert(ITEMSET_TABLE, null, cv);
 
         return true;
@@ -160,7 +158,7 @@ public class ItemsetDbAdapter {
         // and remove the entry from the itemsets table
         String where = KEY_PATH + "=?";
         String[] whereArgs = {
-                new StoragePathProvider().getFormDbPath(path)
+                new StoragePathProvider().getRelativeFormPath(path)
         };
         db.delete(ITEMSET_TABLE, where, whereArgs);
     }
@@ -168,7 +166,7 @@ public class ItemsetDbAdapter {
     public Cursor getItemsets(String path) {
         String selection = KEY_PATH + "=?";
         String[] selectionArgs = {
-                new StoragePathProvider().getFormDbPath(path)
+                new StoragePathProvider().getRelativeFormPath(path)
         };
         return db.query(ITEMSET_TABLE, null, selection, selectionArgs, null, null, null);
     }
@@ -187,7 +185,7 @@ public class ItemsetDbAdapter {
         if (c != null) {
             if (c.getCount() == 1) {
                 c.moveToFirst();
-                String table = getMd5FromString(getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), c.getString(c.getColumnIndex(KEY_PATH))));
+                String table = getMd5FromString(storagePathProvider.getAbsoluteFormFilePath(c.getString(c.getColumnIndex(KEY_PATH))));
                 db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE + table);
             }
             c.close();
@@ -195,7 +193,7 @@ public class ItemsetDbAdapter {
 
         String where = KEY_PATH + "=?";
         String[] whereArgs = {
-                storagePathProvider.getFormDbPath(path)
+                storagePathProvider.getRelativeFormPath(path)
         };
         db.delete(ITEMSET_TABLE, where, whereArgs);
     }

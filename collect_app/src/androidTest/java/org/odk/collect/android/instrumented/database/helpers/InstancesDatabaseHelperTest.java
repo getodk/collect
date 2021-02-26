@@ -49,7 +49,7 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
 
     @Before
     public void saveRealDb() {
-        databasePath = new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA) + File.separator + "instances.db";
+        databasePath = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.METADATA) + File.separator + "instances.db";
         FileUtils.copyFile(new File(databasePath), new File(databasePath + TEMPORARY_EXTENSION));
     }
 

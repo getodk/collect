@@ -649,11 +649,6 @@
   <string name="include_password_dialog">ពាក្យ​សម្ងាត់​មានភ្ជាប់នៅក្នុង​កូដ</string>
   <string name="generate">បង្កើត</string>
   <string name="invalid_qrcode">លេខកូដ QR មិនមានការកំណត់ត្រឹមត្រូវ</string>
-  <string name="corrupt_settings_file_notification">សុំទោស, ឯកសារ​កំណត់​បាន​បំផ្លាញ​ និង​គួរ​តែ​លុប ឬ​ផ្លាស់​ប្តូរ​ចេញ​</string>
-  <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <!--Action to begin a storage migration-->
   <!--##############################################
      # MISC
      ##############################################-->

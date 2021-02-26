@@ -39,10 +39,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.analytics.AnalyticsEvents.DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH;
+import static org.odk.collect.android.storage.StoragePathProvider.getAbsoluteFilePath;
 import static org.odk.collect.android.support.FormUtils.buildForm;
 import static org.odk.collect.android.support.FormUtils.createXFormBody;
 import static org.odk.collect.android.utilities.FileUtils.read;
-import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
 @SuppressWarnings("PMD.DoubleBraceInitialization")
 public class ServerFormDownloaderTest {

@@ -47,10 +47,8 @@ import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
-import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -136,9 +134,6 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     FormsDao formsDao;
 
     @Inject
-    StorageInitializer storageInitializer;
-
-    @Inject
     FormDownloader formDownloader;
 
     @SuppressWarnings("unchecked")
@@ -153,27 +148,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         viewModel = new ViewModelProvider(this, new FormDownloadListViewModel.Factory(analytics))
                 .get(FormDownloadListViewModel.class);
 
-        // This activity is accessed directly externally
-        permissionsProvider.requestStoragePermissions(this, new PermissionListener() {
-            @Override
-            public void granted() {
-                // must be at the beginning of any activity that can be called from an external intent
-                try {
-                    storageInitializer.createOdkDirsOnStorage();
-                } catch (RuntimeException e) {
-                    DialogUtils.showDialog(DialogUtils.createErrorDialog(FormDownloadListActivity.this, e.getMessage(), EXIT), FormDownloadListActivity.this);
-                    return;
-                }
-
-                init(savedInstanceState);
-            }
-
-            @Override
-            public void denied() {
-                // The activity has to finish because ODK Collect cannot function without these permissions.
-                finish();
-            }
-        });
+        init(savedInstanceState);
     }
 
     private void init(Bundle savedInstanceState) {
@@ -336,9 +311,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     @Override
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
-        if (permissionsProvider.areStoragePermissionsGranted()) {
-            updateAdapter();
-        }
+        updateAdapter();
     }
 
     @Override

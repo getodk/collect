@@ -25,15 +25,12 @@ import androidx.loader.content.CursorLoader;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.FormsDatabaseHelper;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
 /**
  * This class is used to encapsulate all access to the {@link FormsDatabaseHelper#DATABASE_NAME}
@@ -161,7 +158,7 @@ public class FormsDao {
             try {
                 if (cursor.moveToFirst()) {
                     int formMediaPathColumnIndex = cursor.getColumnIndex(FormsColumns.FORM_MEDIA_PATH);
-                    formMediaPath = getAbsoluteFilePath(new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS), cursor.getString(formMediaPathColumnIndex));
+                    formMediaPath = new StoragePathProvider().getAbsoluteFormFilePath(cursor.getString(formMediaPathColumnIndex));
                 }
             } finally {
                 cursor.close();
@@ -172,7 +169,7 @@ public class FormsDao {
 
     public Cursor getFormsCursorForFormFilePath(String formFilePath) {
         String selection = FormsColumns.FORM_FILE_PATH + "=?";
-        String[] selectionArgs = {new StoragePathProvider().getFormDbPath(formFilePath)};
+        String[] selectionArgs = {new StoragePathProvider().getRelativeFormPath(formFilePath)};
 
         return getFormsCursor(null, selection, selectionArgs, null);
     }
@@ -246,13 +243,13 @@ public class FormsDao {
                             .description(cursor.getString(descriptionColumnIndex))
                             .jrFormId(cursor.getString(jrFormIdColumnIndex))
                             .jrVersion(cursor.getString(jrVersionColumnIndex))
-                            .formFilePath(new StoragePathProvider().getFormDbPath(cursor.getString(formFilePathColumnIndex)))
+                            .formFilePath(new StoragePathProvider().getRelativeFormPath(cursor.getString(formFilePathColumnIndex)))
                             .submissionUri(cursor.getString(submissionUriColumnIndex))
                             .base64RSAPublicKey(cursor.getString(base64RSAPublicKeyColumnIndex))
                             .md5Hash(cursor.getString(md5HashColumnIndex))
                             .date(cursor.getLong(dateColumnIndex))
-                            .jrCacheFilePath(new StoragePathProvider().getCacheDbPath(cursor.getString(jrCacheFilePathColumnIndex)))
-                            .formMediaPath(new StoragePathProvider().getFormDbPath(cursor.getString(formMediaPathColumnIndex)))
+                            .jrCacheFilePath(new StoragePathProvider().getRelativeCachePath(cursor.getString(jrCacheFilePathColumnIndex)))
+                            .formMediaPath(new StoragePathProvider().getRelativeFormPath(cursor.getString(formMediaPathColumnIndex)))
                             .language(cursor.getString(languageColumnIndex))
                             .autoSend(cursor.getString(autoSendColumnIndex))
                             .autoDelete(cursor.getString(autoDeleteColumnIndex))

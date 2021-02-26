@@ -15,7 +15,6 @@ import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
 
 import java.io.File;
@@ -26,19 +25,13 @@ import static org.odk.collect.android.preferences.AdminPreferencesFragment.ADMIN
 
 public class ResetStateRule implements TestRule {
 
-    private final boolean useScopedStorage;
     private AppDependencyModule appDependencyModule;
 
     public ResetStateRule() {
-        this(true, null);
+        this(null);
     }
 
     public ResetStateRule(AppDependencyModule appDependencyModule) {
-        this(true, appDependencyModule);
-    }
-
-    public ResetStateRule(boolean useScopedStorage, AppDependencyModule appDependencyModule) {
-        this.useScopedStorage = useScopedStorage;
         this.appDependencyModule = appDependencyModule;
     }
 
@@ -78,17 +71,9 @@ public class ResetStateRule implements TestRule {
     private void clearDisk() {
         try {
             StoragePathProvider storagePathProvider = new StoragePathProvider();
-            deleteDirectory(new File(storagePathProvider.getUnscopedStorageRootDirPath()));
-            deleteDirectory(new File(storagePathProvider.getScopedStorageRootDirPath()));
+            deleteDirectory(new File(storagePathProvider.getOdkRootDirPath()));
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
-
-        // Setup storage location for tests
-        if (useScopedStorage) {
-            new StorageStateProvider().enableUsingScopedStorage();
-        } else {
-            new StorageStateProvider().disableUsingScopedStorage();
         }
 
         FormsProvider.recreateDatabaseHelper();

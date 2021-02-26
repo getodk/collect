@@ -1,9 +1,6 @@
 package org.odk.collect.android.feature.formentry;
 
-import android.Manifest;
-
 import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -25,16 +22,12 @@ public class ExternalDataFileNotFoundTest {
 
     @Rule
     public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            )
-            .around(new ResetStateRule())
+            .outerRule(new ResetStateRule())
             .around(new CopyFormRule(EXTERNAL_DATA_QUESTIONS, true));
 
     @Test
     public void questionsThatUseExternalFiles_ShouldDisplayFriendlyMessageWhenFilesAreMissing() {
-        String formsDirPath = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS);
+        String formsDirPath = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS);
 
         new FormEntryPage("externalDataQuestions", activityTestRule)
                 .assertText(activityTestRule.getActivity().getString(R.string.file_missing, formsDirPath + "/external_data_questions-media/fruits.csv"))

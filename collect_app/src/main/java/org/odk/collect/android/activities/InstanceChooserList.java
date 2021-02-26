@@ -36,9 +36,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.listeners.DiskSyncListener;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
@@ -56,7 +54,6 @@ public class InstanceChooserList extends InstanceListActivity implements
     private static final String INSTANCE_LIST_ACTIVITY_SORTING_ORDER = "instanceListActivitySortingOrder";
     private static final String VIEW_SENT_FORM_SORTING_ORDER = "ViewSentFormSortingOrder";
 
-    private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
 
     private InstanceSyncTask instanceSyncTask;
@@ -89,25 +86,7 @@ public class InstanceChooserList extends InstanceListActivity implements
             ((TextView) findViewById(android.R.id.empty)).setText(R.string.no_items_display_sent_forms);
         }
 
-        permissionsProvider.requestStoragePermissions(this, new PermissionListener() {
-            @Override
-            public void granted() {
-                // must be at the beginning of any activity that can be called from an external intent
-                try {
-                    new StorageInitializer().createOdkDirsOnStorage();
-                } catch (RuntimeException e) {
-                    createErrorDialog(e.getMessage(), EXIT);
-                    return;
-                }
-                init();
-            }
-
-            @Override
-            public void denied() {
-                // The activity has to finish because ODK Collect cannot function without these permissions.
-                finishAndRemoveTask();
-            }
-        });
+        init();
     }
 
     private void init() {

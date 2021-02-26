@@ -18,7 +18,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
@@ -77,9 +76,9 @@ public class BackgroundAudioRecordingTest {
         }
 
         @Override
-        public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+        public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker) {
             if (permissionsProvider == null) {
-                permissionsProvider = new ControllableRecordAudioPermissionsProvider(permissionsChecker, storageStateProvider);
+                permissionsProvider = new ControllableRecordAudioPermissionsProvider(permissionsChecker);
             }
 
             return permissionsProvider;
@@ -108,7 +107,7 @@ public class BackgroundAudioRecordingTest {
         formEndPage.clickSaveAndExit();
         assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
 
-        File instancesDir = new File(testDependencies.storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES));
+        File instancesDir = new File(testDependencies.storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES));
         File recording = Arrays.stream(instancesDir.listFiles()[0].listFiles()).filter(f -> f.getName().contains(".fake")).findAny().get();
         File instanceFile = Arrays.stream(instancesDir.listFiles()[0].listFiles()).filter(f -> f.getName().contains(".xml")).findAny().get();
         String instanceXml = new String(Files.readAllBytes(instanceFile.toPath()));
@@ -130,7 +129,7 @@ public class BackgroundAudioRecordingTest {
         formEndPage.clickSaveAndExit();
         assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
 
-        File instancesDir = new File(testDependencies.storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES));
+        File instancesDir = new File(testDependencies.storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES));
         File recording = Arrays.stream(instancesDir.listFiles()[0].listFiles()).filter(f -> f.getName().contains(".fake")).findAny().get();
         File instanceFile = Arrays.stream(instancesDir.listFiles()[0].listFiles()).filter(f -> f.getName().contains(".xml")).findAny().get();
         String instanceXml = new String(Files.readAllBytes(instanceFile.toPath()));
@@ -223,8 +222,8 @@ public class BackgroundAudioRecordingTest {
         private PermissionListener action;
         private boolean controllable;
 
-        ControllableRecordAudioPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
-            super(permissionsChecker, storageStateProvider);
+        ControllableRecordAudioPermissionsProvider(PermissionsChecker permissionsChecker) {
+            super(permissionsChecker);
         }
 
         @Override

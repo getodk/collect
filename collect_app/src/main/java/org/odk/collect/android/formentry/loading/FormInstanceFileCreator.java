@@ -27,7 +27,7 @@ public class FormInstanceFileCreator {
                 .format(new Date(clock.getCurrentTime()));
         String formFileName = formDefinitionPath.substring(formDefinitionPath.lastIndexOf('/') + 1,
                 formDefinitionPath.lastIndexOf('.'));
-        String instancesDir = storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES);
+        String instancesDir = storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES);
         String instanceDir = instancesDir + File.separator + formFileName + "_" + timestamp;
 
         if (FileUtils.createFolder(instanceDir)) {

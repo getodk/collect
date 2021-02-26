@@ -664,11 +664,6 @@ Dela ODK Collect med dem.</string>
   <string name="generate">Generera</string>
   <string name="invalid_qrcode">QR-koden innehåller inga giltiga inställningar</string>
   <string name="qr_code_not_found">Ingen QR-kod kunde hittas i vald bild</string>
-  <string name="corrupt_settings_file_notification">Tyvärr, filen med inställningar är korrupt och bör raderas eller ersättas</string>
-  <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <!--Action to begin a storage migration-->
   <!--##############################################
      # MISC
      ##############################################-->

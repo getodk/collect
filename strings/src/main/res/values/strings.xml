@@ -946,33 +946,6 @@
     <string name="invalid_qrcode">QR code does not contain valid settings</string>
     <string name="qr_code_not_found">QR Code not found in the selected image</string>
     <string name="corrupt_imported_preferences_error">Current settings are corrupt. From the admin settings, reset settings or import working ones.</string>
-    <string name="save_legacy_settings">Save legacy .settings file to disk</string>
-    <string name="save_legacy_settings_warning">Will be removed in a future version. Please use the QR code above.</string>
-    <string name="settings_successfully_loaded_file_notification">Settings were successfully imported from a .settings file. This functionality will be removed in a future version. Please use QR code configuration instead.</string>
-    <string name="corrupt_settings_file_notification">Sorry, settings file is corrupt and should be deleted or replaced</string>
-
-    <!--
-     ##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################
-     -->
-    <string name="scoped_storage_banner_text">You must migrate Collect forms to private storage to comply with Android requirements. An automatic migration attempt failed. Please migrate manually.</string>
-    <string name="scoped_storage_learn_more">Learn more and migrate</string>
-    <string name="storage_migration_completed">Storage migration completed!</string>
-    <string name="scoped_storage_dismiss">Dismiss</string>
-    <string name="storage_migration_dialog_message1">Android requirements have changed and files used by Collect must be migrated.</string>
-    <string name="storage_migration_dialog_message2">You have %d unsent submissions. You are encouraged to submit all data before migrating.</string>
-    <string name="storage_migration_dialog_message3">If you use an external application integration such as OpenMapKit, please do not migrate yet.</string>
-    <string name="storage_migration_more_details">More details</string>
-    <string name="try_again">Try again</string>
-    <!-- Action to begin a storage migration -->
-    <string name="migrate">Migrate</string>
-    <string name="error">Error:</string>
-    <string name="storage_migration_not_enough_space">You do not have enough space on your internal storage to migrate your data. Please free up some space and try again.</string>
-    <string name="changes_in_progress">Automatic send or blank form download is running. Please try again later.</string>
-    <string name="storage_migration_failed">Data migration failed. Please try again.</string>
-    <string name="storage_migration_dialog_title">Storage migration</string>
-    <string name="storage_migration_progress_msg">Migration in progress.\nThis may take a few seconds…</string>
 
     <!--
      ##############################################

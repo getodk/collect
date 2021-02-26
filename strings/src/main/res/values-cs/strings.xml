@@ -791,31 +791,6 @@
   <string name="invalid_qrcode">Kód QR neobsahuje platná nastavení</string>
   <string name="qr_code_not_found">QR kód nebyl nalezen ve vybraném snímku</string>
   <string name="corrupt_imported_preferences_error">Aktuální nastavení je poškozeno. Z nastavení administrátora obnovte nastavení nebo importujte pracovní nastavení.</string>
-  <string name="save_legacy_settings">Uložit starší soubor .settings na disk</string>
-  <string name="save_legacy_settings_warning">Bude odebráno v budoucí verzi. Použijte výše uvedený kód QR.</string>
-  <string name="settings_successfully_loaded_file_notification">Nastavení byla úspěšně importována ze souboru .settings. Tato funkce bude v budoucí verzi odebrána. Místo toho použijte konfiguraci QR kódu.</string>
-  <string name="corrupt_settings_file_notification">Soubor nastavení je poškozen a měl by být smazán nebo nahrazen</string>
-  <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <string name="scoped_storage_banner_text">Abyste splnili požadavky Androidu, musíte migrovat formuláře Collect do soukromého úložiště. Pokus o automatickou migraci se nezdařil. Migrujte prosím ručně.</string>
-  <string name="scoped_storage_learn_more">Další informace a migrace</string>
-  <string name="storage_migration_completed">Migrace úložiště byla dokončena!</string>
-  <string name="scoped_storage_dismiss">Zavrhnout</string>
-  <string name="storage_migration_dialog_message1">Požadavky na Android se změnily a soubory používané programem Collect je nutné migrovat.</string>
-  <string name="storage_migration_dialog_message2">Máte %d neodeslané příspěvky. Před migrací se doporučuje odeslat všechna data.</string>
-  <string name="storage_migration_dialog_message3">Používáte-li integraci externí aplikace, jako je OpenMapKit, zatím prosím nemigrujte.</string>
-  <string name="storage_migration_more_details">Více informací</string>
-  <string name="try_again">Zkusit znovu</string>
-  <!--Action to begin a storage migration-->
-  <string name="migrate">Migrovat</string>
-  <string name="error">Chyba:</string>
-  <string name="storage_migration_not_enough_space">Na interním úložišti nemáte dostatek místa pro migraci dat. Uvolněte místo a zkuste to znovu.</string>
-  <string name="changes_in_progress">Probíhá automatické stahování nebo odesílání prázdných formulářů. Prosím zkuste to znovu později.</string>
-  <string name="storage_migration_failed">Migrace dat se nezdařila. Prosím zkuste to znovu.</string>
-  <string name="storage_migration_dialog_title">Migrace úložiště</string>
-  <string name="storage_migration_progress_msg">Probíhá migrace. 
-Může to trvat několik sekund …</string>
   <!--##############################################
      # MISC
      ##############################################-->

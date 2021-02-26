@@ -16,7 +16,6 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.permissions.PermissionsChecker;
-import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.permissions.PermissionsProvider;
@@ -43,7 +42,7 @@ public class FormMetadataFragmentTest {
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
 
             @Override
-            public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+            public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker) {
                 return permissionsProvider;
             }
 
@@ -109,7 +108,7 @@ public class FormMetadataFragmentTest {
         private boolean granted;
 
         private FakePhoneStatePermissionsProvider() {
-            super(new PermissionsChecker(InstrumentationRegistry.getInstrumentation().getTargetContext()), new StorageStateProvider());
+            super(new PermissionsChecker(InstrumentationRegistry.getInstrumentation().getTargetContext()));
         }
 
         @Override

@@ -747,16 +747,6 @@
   <string name="invalid_qrcode">QR కోడ్‌లో చెల్లుబాటు అయ్యే సెట్టింగ్‌లు లేవు</string>
   <string name="qr_code_not_found">ఎంచుకున్న ఫోటో లో QR కోడ్ కనపడటం లేదు</string>
   <string name="corrupt_imported_preferences_error">ప్రస్తుత సెట్టింగులు పాడైపోయాయి. అడ్మిన్ సెట్టింగ్‌ల నుండి, సెట్టింగ్‌లను రీసెట్ చేయండి లేదా పని చేసే వాటిని దిగుమతి చేయండి.</string>
-  <string name="save_legacy_settings">లెగసీ .సెట్టింగ్స్ ఫైల్‌ను డిస్క్‌కి సేవ్ చేయండి</string>
-  <string name="corrupt_settings_file_notification">క్షమించండి, సెట్టింగుల ఫైల్ పాడైంది. ఇది తొలగించబడాలి లేదా భర్తీ చేయాలి</string>
-  <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <string name="scoped_storage_dismiss">తొలగించండి</string>
-  <string name="storage_migration_more_details">మరిన్ని వివరాలు</string>
-  <string name="try_again">మళ్ళీ ప్రయత్నించండి</string>
-  <!--Action to begin a storage migration-->
-  <string name="error">లోపం</string>
   <!--##############################################
      # MISC
      ##############################################-->

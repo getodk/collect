@@ -8,7 +8,7 @@ public enum StorageSubdirectory {
     LAYERS("layers"),
     SETTINGS("settings");
 
-    private String directoryName;
+    private final String directoryName;
 
     StorageSubdirectory(String directoryName) {
         this.directoryName = directoryName;

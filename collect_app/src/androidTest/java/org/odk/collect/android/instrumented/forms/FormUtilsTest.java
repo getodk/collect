@@ -1,9 +1,5 @@
 package org.odk.collect.android.instrumented.forms;
 
-import android.Manifest;
-
-import androidx.test.rule.GrantPermissionRule;
-
 import org.javarosa.core.reference.RootTranslator;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -25,11 +21,7 @@ public class FormUtilsTest {
 
     @Rule
     public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ))
-            .around(new ResetStateRule())
+            .outerRule(new ResetStateRule())
             .around(new CopyFormRule(BASIC_FORM));
 
     /* Verify that each host string matches only a single root translator, allowing for them to
@@ -37,7 +29,7 @@ public class FormUtilsTest {
     */
     @Test
     public void sessionRootTranslatorOrderDoesNotMatter() throws Exception {
-        final String formPath = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + File.separator + BASIC_FORM;
+        final String formPath = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + BASIC_FORM;
         // Load the form in order to populate the ReferenceManager
         FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null);
         formLoaderTask.execute(formPath).get();

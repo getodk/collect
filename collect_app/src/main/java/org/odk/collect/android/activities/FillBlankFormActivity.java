@@ -15,7 +15,6 @@
 package org.odk.collect.android.activities;
 
 import android.content.ContentUris;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -27,7 +26,6 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
@@ -45,7 +43,6 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.ServerAuthDialogFragment;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
-import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -67,7 +64,6 @@ public class FillBlankFormActivity extends FormListActivity implements
         DiskSyncListener, AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String FORM_CHOOSER_LIST_SORTING_ORDER = "formChooserListSortingOrder";
-    private static final boolean EXIT = true;
 
     private DiskSyncTask diskSyncTask;
 
@@ -107,26 +103,7 @@ public class FillBlankFormActivity extends FormListActivity implements
         });
 
         menuDelegate = new BlankFormListMenuDelegate(this, blankFormsListViewModel, networkStateProvider);
-
-        permissionsProvider.requestStoragePermissions(this, new PermissionListener() {
-            @Override
-            public void granted() {
-                // must be at the beginning of any activity that can be called from an external intent
-                try {
-                    new StorageInitializer().createOdkDirsOnStorage();
-                    init();
-                } catch (RuntimeException e) {
-                    createErrorDialog(e.getMessage(), EXIT);
-                    return;
-                }
-            }
-
-            @Override
-            public void denied() {
-                // The activity has to finish because ODK Collect cannot function without these permissions.
-                finishAndRemoveTask();
-            }
-        });
+        init();
     }
 
     @Override
@@ -281,32 +258,6 @@ public class FillBlankFormActivity extends FormListActivity implements
     @Override
     protected void updateAdapter() {
         getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
-    }
-
-    /**
-     * Creates a dialog with the given message. Will exit the activity when the user preses "ok" if
-     * shouldExit is set to true.
-     */
-    private void createErrorDialog(String errorMsg, final boolean shouldExit) {
-
-        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
-        alertDialog.setMessage(errorMsg);
-        DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        if (shouldExit) {
-                            finish();
-                        }
-                        break;
-                }
-            }
-        };
-        alertDialog.setCancelable(false);
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok), errorListener);
-        alertDialog.show();
     }
 
     @NonNull

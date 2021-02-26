@@ -46,7 +46,6 @@ import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.upload.InstanceUploader;
 import org.odk.collect.android.upload.UploadException;
@@ -69,7 +68,6 @@ import java.util.regex.Pattern;
 import timber.log.Timber;
 
 import static org.odk.collect.android.javarosawrapper.FormController.INSTANCE_ID;
-import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
 public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private static final String PARENT_KEY = "PARENT_KEY";
@@ -112,7 +110,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 throw new UploadException(TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_blank_form_for_this_form_id));
             }
             Form form = forms.get(0);
-            String formFilePath = getAbsoluteFilePath(new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS), form.getFormFilePath());
+            String formFilePath = new StoragePathProvider().getAbsoluteFormFilePath(form.getFormFilePath());
 
             TreeElement instanceElement = getInstanceElement(formFilePath, instanceFile);
             setUpSpreadsheet(spreadsheetUrl);

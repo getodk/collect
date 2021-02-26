@@ -787,30 +787,6 @@
   <string name="invalid_qrcode">كود QR لا يتضمن إعدادات صحيحة</string>
   <string name="qr_code_not_found">كود QR غير موجود في الصورة المحددة</string>
   <string name="corrupt_imported_preferences_error">الإعدادات الحالية تالفة. من إعدادات المسؤول، أعد ضبط الإعدادات أو قم باستيراد الإعدادات العاملة.</string>
-  <string name="save_legacy_settings">حفظ ملف .settings القديم على القرص</string>
-  <string name="save_legacy_settings_warning">ستتم إزالته في إصدار مستقبلي. الرجاء استخدام رمز QR أعلاه.</string>
-  <string name="settings_successfully_loaded_file_notification">تم استيراد الإعدادات بنجاح من ملف .settings. ستتم إزالة هذه الوظيفة في إصدار مستقبلي. الرجاء استخدام تكوين رمز QR بدلا من ذلك.</string>
-  <string name="corrupt_settings_file_notification">عذرا، ملف الإعدادات تالف ويجب حذفه أو استبداله</string>
-  <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <string name="scoped_storage_banner_text">يجب عليك ترحيل نماذج Collect إلى مساحة تخزين خاصة لتتوافق مع متطلبات Android. فشلت محاولة الترحيل التلقائي. يرجى الترحيل يدويًا.</string>
-  <string name="scoped_storage_learn_more">تعلم المزيد وقم بالترحيل</string>
-  <string name="storage_migration_completed">اكتمل ترحيل التخزين!</string>
-  <string name="scoped_storage_dismiss">تجاهل</string>
-  <string name="storage_migration_dialog_message1">تغيرت متطلبات Android ويجب ترحيل الملفات المستخدمة بواسطة Collect.</string>
-  <string name="storage_migration_dialog_message2">لديك %d عملية إرسال غير مرسلة. نشجعك على إرسال جميع البيانات قبل الترحيل.</string>
-  <string name="storage_migration_dialog_message3">إذا كنت تستخدم دمج تطبيق خارجي مثل OpenMapKit ، فالرجاء عدم الترحيل بعد.</string>
-  <string name="storage_migration_more_details">تفاصيل أكثر</string>
-  <string name="try_again">حاول مرة أخرى</string>
-  <!--Action to begin a storage migration-->
-  <string name="migrate">ترحيل</string>
-  <string name="error">خطأ:</string>
-  <string name="storage_migration_not_enough_space">ليس لديك مساحة كافية على وحدة التخزين الداخلية لترحيل بياناتك. يرجى إخلاء بعض المساحة والمحاولة مرة أخرى.</string>
-  <string name="changes_in_progress">الإرسال التلقائي أو تنزيل نموذج فارغ قيد التشغيل. الرجاء معاودة المحاولة في وقت لاحق.</string>
-  <string name="storage_migration_failed">فشل ترحيل البيانات. حاول مرة اخرى.</string>
-  <string name="storage_migration_dialog_title">ترحيل التخزين</string>
-  <string name="storage_migration_progress_msg">الترحيل قيد التقدم.\nقد يستغرق هذا بضع ثوان…</string>
   <!--##############################################
      # MISC
      ##############################################-->

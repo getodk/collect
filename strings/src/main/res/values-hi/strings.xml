@@ -521,11 +521,6 @@
   <string name="include_password_dialog">पासवर्ड कोड में शामिल </string>
   <string name="generate">उत्पन्न</string>
   <string name="invalid_qrcode">QR कोड में मान्य सेटिंग्स शामिल नहीं हैं I</string>
-  <string name="corrupt_settings_file_notification">क्षमा करें, सेटिंग्स फाइल ख़राब है और इसे मिटाया या प्रतिस्थापित किया जाना चाहिए</string>
-  <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <!--Action to begin a storage migration-->
   <!--##############################################
      # MISC
      ##############################################-->

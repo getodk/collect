@@ -184,10 +184,6 @@
      # SETTINGS IMPORT
      ##############################################-->
   <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <!--Action to begin a storage migration-->
-  <!--##############################################
      # MISC
      ##############################################-->
   <!--Used in many dialogs to dismiss the dialog without taking any action-->

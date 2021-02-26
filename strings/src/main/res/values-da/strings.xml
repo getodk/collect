@@ -514,13 +514,6 @@
   <string name="view_qr_code_fragment_title">QR kode</string>
   <string name="share">Del</string>
   <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <string name="storage_migration_more_details">Flere detaljer</string>
-  <string name="try_again">Prøv igen</string>
-  <!--Action to begin a storage migration-->
-  <string name="error">Fejl:</string>
-  <!--##############################################
      # MISC
      ##############################################-->
   <string name="ok">OK</string>

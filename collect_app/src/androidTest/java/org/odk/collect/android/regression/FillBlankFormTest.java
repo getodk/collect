@@ -48,11 +48,7 @@ public class FillBlankFormTest {
 
     @Rule
     public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_PHONE_STATE)
-            )
+            .outerRule(GrantPermissionRule.grant(Manifest.permission.READ_PHONE_STATE))
             .around(new ResetStateRule())
             .around(rule);
 
@@ -618,7 +614,7 @@ public class FillBlankFormTest {
 
     @Test
     public void missingFileMessage_shouldBeDisplayedIfExternalFIleIsMissing() {
-        String formsDirPath = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS);
+        String formsDirPath = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS);
 
         //TestCase55
         rule.mainMenu()

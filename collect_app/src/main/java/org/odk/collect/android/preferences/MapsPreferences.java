@@ -29,7 +29,6 @@ import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.preferences.CaptionedListPreference.Item;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
@@ -195,18 +194,13 @@ public class MapsPreferences extends BasePreferenceFragment {
     /** Sets up the contents of the reference layer selection dialog. */
     private void populateReferenceLayerPref() {
         MapConfigurator cftor = MapProvider.getConfigurator();
-        StorageStateProvider storageStateProvider = new StorageStateProvider();
         StoragePathProvider storagePathProvider = new StoragePathProvider();
 
         List<Item> items = new ArrayList<>();
         items.add(new Item(null, getString(R.string.none), ""));
         for (File file : getSupportedLayerFiles(cftor)) {
-            String path = storageStateProvider.isScopedStorageUsed()
-                    ? FileUtils.simplifyScopedStoragePath(file.getPath())
-                    : FileUtils.simplifyPath(file);
-            String value = storageStateProvider.isScopedStorageUsed()
-                    ? storagePathProvider.getRelativeMapLayerPath(file.getAbsolutePath())
-                    : path;
+            String path = FileUtils.simplifyScopedStoragePath(file.getPath());
+            String value = storagePathProvider.getRelativeMapLayerPath(file.getAbsolutePath());
             String name = cftor.getDisplayName(new File(file.getAbsolutePath()));
             items.add(new Item(value, name, path));
         }
@@ -230,9 +224,7 @@ public class MapsPreferences extends BasePreferenceFragment {
 
         referenceLayerPref.setItems(items);
 
-        String layerDir = storageStateProvider.isScopedStorageUsed()
-                ? FileUtils.simplifyScopedStoragePath(storagePathProvider.getDirPath(StorageSubdirectory.LAYERS))
-                : FileUtils.simplifyPath(new File(storagePathProvider.getDirPath(StorageSubdirectory.LAYERS)));
+        String layerDir = FileUtils.simplifyScopedStoragePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS));
         referenceLayerPref.setDialogCaption(context.getString(
             items.size() > 1 ? R.string.layer_data_caption : R.string.layer_data_caption_none,
             layerDir, context.getString(MapProvider.getSourceLabelId())
@@ -244,7 +236,7 @@ public class MapsPreferences extends BasePreferenceFragment {
     /** Gets the list of layer data files supported by the current MapConfigurator. */
     private static List<File> getSupportedLayerFiles(MapConfigurator cftor) {
         List<File> files = new ArrayList<>();
-        for (File file : FileUtils.walk(new File(new StoragePathProvider().getDirPath(StorageSubdirectory.LAYERS)))) {
+        for (File file : FileUtils.walk(new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.LAYERS)))) {
             if (cftor.supportsLayer(file)) {
                 files.add(file);
             }

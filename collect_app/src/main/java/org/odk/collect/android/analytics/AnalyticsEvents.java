@@ -67,11 +67,6 @@ public class AnalyticsEvents {
     public static final String PROMPT = "Prompt";
 
     /**
-     * Track scoped storage migration attempts. The action should be the result of the attempt.
-     */
-    public static final String SCOPED_STORAGE_MIGRATION = "ScopedStorageMigration";
-
-    /**
      * Track attempts to download a form with the same formid/version but different contents as one
      * already on the device. We know this happens in the case of Central drafts but it should
      * otherwise be rare.
@@ -126,18 +121,6 @@ public class AnalyticsEvents {
      * be a hash of the settings represented by the code.
      */
     public static final String SETTINGS_IMPORT_QR_IMAGE = "SettingsImportQrImage";
-
-    /**
-     * Track the outcome of a .collect.settings file being imported. The action should be the outcome.
-     * The label should be a hash of the settings represented by the file.
-     */
-    public static final String SETTINGS_IMPORT_SERIALIZED = "SettingsImportSerialized";
-
-    /**
-     * Track the outcome of a .collect.settings.json file being imported. The action should be the outcome.
-     * The label should be a hash of the settings represented by the file.
-     */
-    public static final String SETTINGS_IMPORT_JSON = "SettingsImportJson";
 
     /**
      * Track submissions to a URL with a custom submission endpoint configured in settings. The action

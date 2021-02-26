@@ -34,7 +34,7 @@ public class CachingQRCodeGenerator implements QRCodeGenerator {
         boolean shouldWriteToDisk = true;
 
         // check if settings directory exists, if not then create one
-        File writeDir = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.SETTINGS));
+        File writeDir = new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.SETTINGS));
         if (!writeDir.exists()) {
             if (!writeDir.mkdirs()) {
                 Timber.e("Error creating directory %s", writeDir.getAbsolutePath());
@@ -73,10 +73,10 @@ public class CachingQRCodeGenerator implements QRCodeGenerator {
     }
 
     private String getQRCodeFilepath() {
-        return new StoragePathProvider().getDirPath(StorageSubdirectory.SETTINGS) + File.separator + "collect-settings.png";
+        return new StoragePathProvider().getOdkDirPath(StorageSubdirectory.SETTINGS) + File.separator + "collect-settings.png";
     }
 
     private String getMd5CachePath() {
-        return new StoragePathProvider().getDirPath(StorageSubdirectory.SETTINGS) + File.separator + SETTINGS_MD5_FILE;
+        return new StoragePathProvider().getOdkDirPath(StorageSubdirectory.SETTINGS) + File.separator + SETTINGS_MD5_FILE;
     }
 }

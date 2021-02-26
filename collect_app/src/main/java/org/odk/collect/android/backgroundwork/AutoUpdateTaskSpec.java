@@ -29,7 +29,6 @@ import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.PreferencesProvider;
-import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
@@ -49,9 +48,6 @@ public class AutoUpdateTaskSpec implements TaskSpec {
 
     @Inject
     ServerFormsDetailsFetcher serverFormsDetailsFetcher;
-
-    @Inject
-    StorageMigrationRepository storageMigrationRepository;
 
     @Inject
     FormDownloader formDownloader;

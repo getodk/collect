@@ -768,28 +768,6 @@
   <string name="invalid_qrcode">QR コードに有効な設定が含まれていません</string>
   <string name="qr_code_not_found">選択した画像に QR コードが見つかりませんでした</string>
   <string name="corrupt_imported_preferences_error">現在の設定が間違っています。 管理の設定から、設定をリセットするか、有効なものをインポートしてください。</string>
-  <string name="save_legacy_settings">以前の .settings ファイルをディスクに保存する</string>
-  <string name="save_legacy_settings_warning">将来のバージョンで削除されます。上の QR コードを使用してください。</string>
-  <string name="corrupt_settings_file_notification">申し訳ありません。設定ファイルが壊れているため、削除または置き換えしてください</string>
-  <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <string name="scoped_storage_learn_more">詳細と移行について</string>
-  <string name="storage_migration_completed">ストレージの移行が完了しました!</string>
-  <string name="scoped_storage_dismiss">消去</string>
-  <string name="storage_migration_dialog_message1">Android要件が変更され、Collectで使用するファイルを移行する必要があります。</string>
-  <string name="storage_migration_dialog_message2">未送信の提出が %d あります。移行する前にすべてのデータを提出することをお勧めします。</string>
-  <string name="storage_migration_dialog_message3">OpenMapKitなどの外部アプリケーション統合を使用している場合は、まだ移行しないでください。</string>
-  <string name="storage_migration_more_details">詳細について</string>
-  <string name="try_again">もう一度試す</string>
-  <!--Action to begin a storage migration-->
-  <string name="migrate">移行</string>
-  <string name="error">エラー:</string>
-  <string name="storage_migration_not_enough_space">内部ストレージにデータを移行するための十分なスペースがありません。スペースを空けてもう一度お試しください。</string>
-  <string name="changes_in_progress">自動送信または空のフォームのダウンロードが実行中です。後でもう一度お試しください。</string>
-  <string name="storage_migration_failed">データの移行に失敗しました。もう一度お試しください。</string>
-  <string name="storage_migration_dialog_title">ストレージの移行</string>
-  <string name="storage_migration_progress_msg">移行中です。\nこれは数秒かかることがあります…</string>
   <!--##############################################
      # MISC
      ##############################################-->

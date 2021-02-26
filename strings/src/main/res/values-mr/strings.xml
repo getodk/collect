@@ -507,11 +507,6 @@
   <string name="include_password_dialog">कोडमध्ये समाविष्ट संकेतशब्द</string>
   <string name="generate">व्युत्पन्न करा</string>
   <string name="invalid_qrcode">क्यूआर कोडमध्ये वैध सेटिंग्ज नाहीत</string>
-  <string name="corrupt_settings_file_notification">क्षमस्व, सेटिंग्ज फाईल दूषित आहेत आणि हटविल्या गेल्या किंवा पुनर्स्थित केल्या गेल्या पाहिजे</string>
-  <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <!--Action to begin a storage migration-->
   <!--##############################################
      # MISC
      ##############################################-->

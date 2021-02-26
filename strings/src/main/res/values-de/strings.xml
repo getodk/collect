@@ -792,30 +792,6 @@
   <string name="invalid_qrcode">QR-Code enthält keine gültigen Einstellungen</string>
   <string name="qr_code_not_found">Kein QR-Code im ausgewählten Bild gefunden</string>
   <string name="corrupt_imported_preferences_error">Die aktuellen Einstellungen sind beschädigt. Setze die Einstellungen in den Admin-Einstellungen zurück oder importiere funktionierende.</string>
-  <string name="save_legacy_settings">Speichere alte .settings-Datei auf Laufwerk</string>
-  <string name="save_legacy_settings_warning">Wird in einer zukünfigen Version entfernt. Bitte nutzen Sie den QR-Code oben.</string>
-  <string name="settings_successfully_loaded_file_notification">Einstellungen wurden erfolgreich aus einer .settings-Datei importiert. Diese Funktionalität wird in einer zukünftigen Version entfernt. Bitte nutzen Sie stattdessen QR-Code-Konfiguration.</string>
-  <string name="corrupt_settings_file_notification">Entschuldigung, die Einstellungsdatei ist beschädigt und sollte gelöscht oder ersetzt werden</string>
-  <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <string name="scoped_storage_banner_text">Sie müssen Collect Formulare in den privaten Speicher migrieren um den Android-Anforderungen zu entsprechen. Eine automatische Migration ist fehlgeschlagen. Bitte migrieren Sie manuell. &lt;/b&gt;</string>
-  <string name="scoped_storage_learn_more">Mehr erfahren und migrieren</string>
-  <string name="storage_migration_completed">Speichermigration abgeschlossen! </string>
-  <string name="scoped_storage_dismiss">Verwerfen</string>
-  <string name="storage_migration_dialog_message1">Android-Anforderungen haben sich geändert und Dateien von Collect müssen migriert werden. </string>
-  <string name="storage_migration_dialog_message2">Sie haben %d nicht versandte Übermittlungen. Es wird empfohlen vor der Migration alle Daten zu übermitteln. </string>
-  <string name="storage_migration_dialog_message3">Wenn Sie eine externe App-Integration, wie OpenMapKit, nutzen, bitte noch nicht migrieren. </string>
-  <string name="storage_migration_more_details">Mehr Details</string>
-  <string name="try_again">Erneut versuchen</string>
-  <!--Action to begin a storage migration-->
-  <string name="migrate">Migrieren</string>
-  <string name="error">Fehler:</string>
-  <string name="storage_migration_not_enough_space">Sie haben nicht genug Platz auf Ihrem internen Speicher um Ihre Daten zu migrieren. Bitte geben Sie Speicherplatz frei und versuchen  Sie es erneut. </string>
-  <string name="changes_in_progress">Automatisches Senden oder Leerformular-Download läuft. Bitte versuchen Sie es später nochmal.</string>
-  <string name="storage_migration_failed">Datenmigration fehlgeschlagen. Bitte erneut versuchen. </string>
-  <string name="storage_migration_dialog_title">Speichermigration</string>
-  <string name="storage_migration_progress_msg">Migration läuft. \nDas kann einige Sekunden dauern… </string>
   <!--##############################################
      # MISC
      ##############################################-->

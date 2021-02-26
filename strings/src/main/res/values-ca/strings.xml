@@ -433,11 +433,6 @@
   <string name="server_password">Clau d\'accés servidor</string>
   <string name="include_password_dialog">Claus d\'accés incloses al codi</string>
   <string name="generate">Genera</string>
-  <string name="corrupt_settings_file_notification">Arxiu de configuració corrupte. Cal se esborrat o reemplaçat</string>
-  <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <!--Action to begin a storage migration-->
   <!--##############################################
      # MISC
      ##############################################-->

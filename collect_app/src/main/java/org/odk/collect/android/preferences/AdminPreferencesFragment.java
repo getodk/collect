@@ -28,13 +28,8 @@ import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.android.utilities.ToastUtils;
-
-import java.io.File;
 
 import javax.inject.Inject;
 
@@ -68,7 +63,6 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
         findPreference("main_menu").setOnPreferenceClickListener(this);
         findPreference("user_settings").setOnPreferenceClickListener(this);
         findPreference("form_entry").setOnPreferenceClickListener(this);
-        findPreference("save_legacy_settings").setOnPreferenceClickListener(this);
     }
 
     @Override
@@ -107,24 +101,6 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
                     Intent pref = new Intent(getActivity(), QRCodeTabsActivity.class);
                     startActivity(pref);
                     break;
-                case "save_legacy_settings":
-                    File writeDir = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.SETTINGS));
-                    if (!writeDir.exists()) {
-                        if (!writeDir.mkdirs()) {
-                            ToastUtils.showShortToast("Error creating directory "
-                                    + writeDir.getAbsolutePath());
-                            return false;
-                        }
-                    }
-                    File dst = new File(writeDir.getAbsolutePath() + "/collect.settings");
-                    boolean success = AdminPreferencesActivity.saveSharedPreferencesToFile(dst, getActivity());
-                    if (success) {
-                        ToastUtils.showLongToast("Settings successfully written to "
-                                + dst.getAbsolutePath());
-                    } else {
-                        ToastUtils.showLongToast("Error writing settings to " + dst.getAbsolutePath());
-                    }
-                    return true;
                 case "main_menu":
                     displayPreferences(new MainMenuAccessPreferences());
                     break;

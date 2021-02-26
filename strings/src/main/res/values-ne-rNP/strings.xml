@@ -464,10 +464,6 @@
   <string name="generate">निकाल्नुस्</string>
   <string name="invalid_qrcode">QR कोडमा सही सेटिङ्स छैन</string>
   <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <!--Action to begin a storage migration-->
-  <!--##############################################
      # MISC
      ##############################################-->
   <string name="ok">ठीक</string>

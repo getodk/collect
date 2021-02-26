@@ -31,7 +31,7 @@ import timber.log.Timber;
 
 import static org.apache.commons.io.FileUtils.deleteDirectory;
 import static org.odk.collect.android.analytics.AnalyticsEvents.DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH;
-import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
+import static org.odk.collect.android.storage.StoragePathProvider.getAbsoluteFilePath;
 
 public class ServerFormDownloader implements FormDownloader {
 

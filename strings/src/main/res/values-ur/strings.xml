@@ -659,14 +659,6 @@
   <string name="generate">جنریٹ </string>
   <string name="invalid_qrcode">کیو آر کوڈ درست سیٹنگنز پر مشتمل نہیں ہے</string>
   <string name="qr_code_not_found">منتخب تصویر میں QR کوڈ موجود نھیں ہے</string>
-  <string name="corrupt_settings_file_notification">معذرت،سیٹنگز فائل خراب ہے اور اسے ڈیلیٹ کر دیا جائے یا تبدیل کرنا چاہئے</string>
-  <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <string name="scoped_storage_dismiss">ختم کریں</string>
-  <string name="storage_migration_more_details">مزید تفصیلات</string>
-  <string name="try_again">دوبارہ کوشش کریں</string>
-  <!--Action to begin a storage migration-->
   <!--##############################################
      # MISC
      ##############################################-->

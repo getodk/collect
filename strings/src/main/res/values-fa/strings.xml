@@ -413,10 +413,6 @@
   <string name="turn_on_flashlight">روشن نمودن چراغ </string>
   <string name="turn_off_flashlight">خاموش نمودن چراغ</string>
   <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <!--Action to begin a storage migration-->
-  <!--##############################################
      # MISC
      ##############################################-->
   <string name="ok">درست است</string>

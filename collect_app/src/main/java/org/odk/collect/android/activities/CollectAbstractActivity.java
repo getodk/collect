@@ -28,12 +28,9 @@ import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -52,27 +49,6 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
         setTheme(this instanceof FormEntryActivity ? themeUtils.getFormEntryActivityTheme() : themeUtils.getAppTheme());
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
-
-        /**
-         * If a user has revoked the storage permission then this check ensures the app doesn't quit unexpectedly and
-         * informs the user of the implications of their decision before exiting. The app can't function with these permissions
-         * so if a user wishes to grant them they just restart.
-         *
-         * This code won't run on activities that are entry points to the app because those activities
-         * are able to handle permission checks and requests by themselves.
-         */
-        if (!permissionsProvider.areStoragePermissionsGranted() && !isEntryPointActivity(this)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog);
-
-            builder.setTitle(R.string.storage_runtime_permission_denied_title)
-                    .setMessage(R.string.storage_runtime_permission_denied_desc)
-                    .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
-                        finishAndRemoveTask();
-                    })
-                    .setIcon(R.drawable.sd)
-                    .setCancelable(false)
-                    .show();
-        }
     }
 
     @Override
@@ -127,32 +103,5 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
             toolbar.setTitle(title);
             setSupportActionBar(toolbar);
         }
-    }
-
-    /**
-     * Checks to see if an activity is one of the entry points to the app i.e
-     * an activity that has a view action that can launch the app.
-     *
-     * @param activity that has permission requesting code.
-     * @return true if the activity is an entry point to the app.
-     */
-    public static boolean isEntryPointActivity(CollectAbstractActivity activity) {
-
-        List<Class<?>> activities = new ArrayList<>();
-        activities.add(FormEntryActivity.class);
-        activities.add(InstanceChooserList.class);
-        activities.add(FillBlankFormActivity.class);
-        activities.add(InstanceUploaderListActivity.class);
-        activities.add(SplashScreenActivity.class);
-        activities.add(FormDownloadListActivity.class);
-        activities.add(InstanceUploaderActivity.class);
-
-        for (Class<?> act : activities) {
-            if (activity.getClass().equals(act)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

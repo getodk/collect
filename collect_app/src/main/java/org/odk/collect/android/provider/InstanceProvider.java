@@ -32,11 +32,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.InstanceDatabaseMigrator;
 import org.odk.collect.android.database.InstancesDatabaseHelper;
-import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.io.File;
@@ -44,8 +41,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
-
-import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -61,17 +56,7 @@ public class InstanceProvider extends ContentProvider {
 
     private static InstancesDatabaseHelper dbHelper;
 
-    @Inject
-    PermissionsProvider permissionsProvider;
-
     private synchronized InstancesDatabaseHelper getDbHelper() {
-        // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
-        try {
-            new StorageInitializer().createOdkDirsOnStorage();
-        } catch (RuntimeException e) {
-            return null;
-        }
-
         if (dbHelper == null) {
             recreateDatabaseHelper();
         }
@@ -91,26 +76,14 @@ public class InstanceProvider extends ContentProvider {
         }
     }
 
-    // Do not call it in onCreate() https://stackoverflow.com/questions/23521083/inject-database-in-a-contentprovider-with-dagger
-    private void deferDaggerInit() {
-        DaggerUtils.getComponent(getContext()).inject(this);
-    }
-
     @Override
     public boolean onCreate() {
-        // must be at the beginning of any activity that can be called from an external intent
-        InstancesDatabaseHelper h = getDbHelper();
-        return h != null;
+        return true;
     }
 
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
-        deferDaggerInit();
-        if (!permissionsProvider.areStoragePermissionsGranted()) {
-            return null;
-        }
-
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(INSTANCES_TABLE_NAME);
         qb.setProjectionMap(sInstancesProjectionMap);
@@ -156,11 +129,6 @@ public class InstanceProvider extends ContentProvider {
 
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues initialValues) {
-        deferDaggerInit();
-        if (!permissionsProvider.areStoragePermissionsGranted()) {
-            return null;
-        }
-
         // Validate the requested uri
         if (URI_MATCHER.match(uri) != INSTANCES) {
             throw new IllegalArgumentException("Unknown URI " + uri);
@@ -253,11 +221,6 @@ public class InstanceProvider extends ContentProvider {
      */
     @Override
     public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
-        deferDaggerInit();
-        if (!permissionsProvider.areStoragePermissionsGranted()) {
-            return 0;
-        }
-
         int count = 0;
         InstancesDatabaseHelper instancesDatabaseHelper = getDbHelper();
         if (instancesDatabaseHelper != null) {
@@ -350,11 +313,6 @@ public class InstanceProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String where, String[] whereArgs) {
-        deferDaggerInit();
-        if (!permissionsProvider.areStoragePermissionsGranted()) {
-            return 0;
-        }
-
         int count = 0;
         InstancesDatabaseHelper instancesDatabaseHelper = getDbHelper();
         if (instancesDatabaseHelper != null) {

@@ -19,7 +19,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Environment;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.Constants;
@@ -34,7 +33,6 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.storage.StorageStateProvider;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -58,7 +56,6 @@ import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import timber.log.Timber;
 
 /**
@@ -87,12 +84,6 @@ public class FileUtils {
 
     /** Valid XML stub that can be parsed without error. */
     public static final String STUB_XML = "<?xml version='1.0' ?><stub />";
-
-    /** True if we have checked whether /sdcard points to getExternalStorageDirectory(). */
-    private static boolean isSdcardSymlinkChecked;
-
-    /** The result of checking whether /sdcard points to getExternalStorageDirectory(). */
-    private static boolean isSdcardSymlinkSameAsExternalStorageDirectory;
 
     static int bufSize = 16 * 1024; // May be set by unit test
 
@@ -586,33 +577,6 @@ public class FileUtils {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
     }
 
-    /** Uses the /sdcard symlink to shorten a path, if it's valid to do so. */
-    @SuppressWarnings("PMD.DoNotHardCodeSDCard")
-    public static String simplifyPath(File file) {
-        if (new StorageStateProvider().isScopedStorageUsed()) {
-            return file.getAbsolutePath();
-        } else {
-            // The symlink at /sdcard points to the same location as the storage
-            // path returned by getExternalStorageDirectory() on every Android
-            // device and emulator as far as we know; but, just to be certain
-            // that we don't lie to the user, we'll confirm that's really true.
-            if (!isSdcardSymlinkChecked) {
-                checkIfSdcardSymlinkSameAsExternalStorageDirectory();
-                isSdcardSymlinkChecked = true;  // this check is expensive; only do it once
-            }
-            if (isSdcardSymlinkSameAsExternalStorageDirectory) {
-                // They point to the same place, so it's safe to replace the longer
-                // storage path with the short symlink.
-                String storagePath = Environment.getExternalStorageDirectory().getAbsolutePath();
-                String path = file.getAbsolutePath();
-                if (path.startsWith(storagePath + "/")) {
-                    return "/sdcard" + path.substring(storagePath.length());
-                }
-            }
-            return file.getAbsolutePath();
-        }
-    }
-
     @SuppressWarnings("PMD.DoNotHardCodeSDCard")
     public static String simplifyScopedStoragePath(String path) {
         if (path != null && path.startsWith("/storage/emulated/0/")) {
@@ -620,36 +584,6 @@ public class FileUtils {
         }
 
         return path;
-    }
-
-    /** Checks whether /sdcard points to the same place as getExternalStorageDirectory(). */
-    @SuppressWarnings("PMD.DoNotHardCodeSDCard")
-    @SuppressFBWarnings(
-        value = "DMI_HARDCODED_ABSOLUTE_FILENAME",
-        justification = "The purpose of this function is to test this specific path."
-    )
-    private static void checkIfSdcardSymlinkSameAsExternalStorageDirectory() {
-        try {
-            // createTempFile() guarantees a randomly named file that did not previously exist.
-            File shortPathFile = File.createTempFile("odk", null, new File("/sdcard"));
-            try {
-                String name = shortPathFile.getName();
-                File longPathFile = new File(Environment.getExternalStorageDirectory(), name);
-
-                // If we delete the file via one path and the file disappears at the
-                // other path, then we know that both paths point to the same place.
-                if (shortPathFile.exists() && longPathFile.exists()) {
-                    longPathFile.delete();
-                    if (!shortPathFile.exists()) {
-                        isSdcardSymlinkSameAsExternalStorageDirectory = true;
-                        return;
-                    }
-                }
-            } finally {
-                shortPathFile.delete();
-            }
-        } catch (IOException e) { /* ignore */ }
-        isSdcardSymlinkSameAsExternalStorageDirectory = false;
     }
 
     /** Iterates over all directories and files under a root path. */

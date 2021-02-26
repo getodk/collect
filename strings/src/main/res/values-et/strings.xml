@@ -444,11 +444,6 @@
   <!--##############################################
      # SETTINGS IMPORT
      ##############################################-->
-  <string name="corrupt_settings_file_notification">Sätete fail on vigane. Palun kustutage või asendage</string>
-  <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <!--Action to begin a storage migration-->
   <!--##############################################
      # MISC
      ##############################################-->

@@ -39,7 +39,7 @@ public class ContentUriProvider {
                 } else {
                     Timber.w(e, "%s: %s", ContentUriProvider.class.getSimpleName(), "ANR Risk -- Copying the file the location cache to avoid Huawei 'external-files-path' bug for N+ devices");
                     // Note: Periodically clear this cache
-                    final File cacheFolder = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.CACHE), HUAWEI_MANUFACTURER);
+                    final File cacheFolder = new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE), HUAWEI_MANUFACTURER);
                     final File cacheLocation = new File(cacheFolder, file.getName());
                     InputStream in = null;
                     OutputStream out = null;

@@ -111,8 +111,8 @@ public class DatabaseFormsRepository implements FormsRepository {
     @Override
     public Form save(Form form) {
         final ContentValues v = new ContentValues();
-        v.put(FORM_FILE_PATH, storagePathProvider.getFormDbPath(form.getFormFilePath()));
-        v.put(FORM_MEDIA_PATH, storagePathProvider.getFormDbPath(form.getFormMediaPath()));
+        v.put(FORM_FILE_PATH, storagePathProvider.getRelativeFormPath(form.getFormFilePath()));
+        v.put(FORM_MEDIA_PATH, storagePathProvider.getRelativeFormPath(form.getFormMediaPath()));
         v.put(DISPLAY_NAME, form.getDisplayName());
         v.put(JR_VERSION, form.getJrVersion());
         v.put(JR_FORM_ID, form.getJrFormId());

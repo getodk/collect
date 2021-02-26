@@ -792,30 +792,6 @@
   <string name="invalid_qrcode">Le QR code ne contient pas de paramètres valides</string>
   <string name="qr_code_not_found">Le code QR n\'a pas été trouvé dans l\'image sélectionnée. </string>
   <string name="corrupt_imported_preferences_error">Les paramètres actuels sont corrompus. À partir des paramètres d’administrateur, réinitialisez les paramètres ou importez ceux qui fonctionnent.</string>
-  <string name="save_legacy_settings">Enregistrer fichier .settings (ancienne fonctionnalité)</string>
-  <string name="save_legacy_settings_warning">Sera enlevé dans une version à venir. Veuillez utiliser le code QR ci-dessus.</string>
-  <string name="settings_successfully_loaded_file_notification">Paramètres chargés avec succès. La possibilité de configurer Collect avec un fichier .settings sera supprimée dans une version à venir. Veuillez utiliser la configuration par code QR.</string>
-  <string name="corrupt_settings_file_notification">Désolé, le fichier de paramétrage est corrompu. Il doit être supprimé ou remplacé.</string>
-  <!--##############################################
-     # SCOPED STORAGE MIGRATION
-     ##############################################-->
-  <string name="scoped_storage_banner_text">Vous devez migrer les formulaires Collect vers le stockage privé pour vous conformer aux exigences d\'Android. Une tentative de migration automatique a échouée. Veuillez migrer manuellement.</string>
-  <string name="scoped_storage_learn_more">En apprendre plus et transférer</string>
-  <string name="storage_migration_completed">Migration des données terminée !</string>
-  <string name="scoped_storage_dismiss">Fermer</string>
-  <string name="storage_migration_dialog_message1">Les exigences de Android ont changé et les fichiers de Collect doivent être transférés.</string>
-  <string name="storage_migration_dialog_message2">Vous avez %d soumissions qui n\'ont pas encore été envoyées. Vous êtes encouragés à envoyer toutes vos données avant de commencer le transfert.</string>
-  <string name="storage_migration_dialog_message3">Si vous utiliser une application externe telle que OpenMapKit, veuillez attendre avant de transférer vos données.</string>
-  <string name="storage_migration_more_details">En apprendre plus</string>
-  <string name="try_again">Essayer encore</string>
-  <!--Action to begin a storage migration-->
-  <string name="migrate">Transférer</string>
-  <string name="error">Erreur:</string>
-  <string name="storage_migration_not_enough_space">Votre mémoire interne n\'a pas assez d\'espace pour transférer vos données. Veuillez libérer de l\'espace et réessayer.</string>
-  <string name="changes_in_progress">L\'envoi automatique ou le téléchargement de formulaires vierges est en cours. Veuillez réessayer plus tard.</string>
-  <string name="storage_migration_failed">Le transfert des données a échoué. Veuillez réessayer.</string>
-  <string name="storage_migration_dialog_title">Transfert des données</string>
-  <string name="storage_migration_progress_msg">Transfert en cours.\nCeci pourrait prendre quelques secondes…</string>
   <!--##############################################
      # MISC
      ##############################################-->

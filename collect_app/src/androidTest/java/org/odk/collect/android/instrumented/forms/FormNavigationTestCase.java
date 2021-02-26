@@ -141,7 +141,7 @@ public class FormNavigationTestCase {
     }
 
     private static String formPath(String formName) {
-        return new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS)
+        return new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS)
                 + File.separator
                 + formName;
     }

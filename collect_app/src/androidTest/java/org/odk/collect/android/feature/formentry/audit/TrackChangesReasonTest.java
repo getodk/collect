@@ -1,9 +1,6 @@
 package org.odk.collect.android.feature.formentry.audit;
 
-import android.Manifest;
-
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -30,11 +27,7 @@ public class TrackChangesReasonTest {
 
     @Rule
     public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ))
-            .around(new ResetStateRule())
+            .outerRule(new ResetStateRule())
             .around(new CopyFormRule(TRACK_CHANGES_REASON_ON_EDIT_FORM))
             .around(new CopyFormRule(NO_TRACK_CHANGES_REASON_FORM))
             .around(rule);

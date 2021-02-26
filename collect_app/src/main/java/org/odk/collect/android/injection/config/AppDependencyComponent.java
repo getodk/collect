@@ -64,8 +64,6 @@ import org.odk.collect.android.preferences.UserInterfacePreferencesFragment;
 import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.storage.StorageInitializer;
-import org.odk.collect.android.storage.migration.StorageMigrationDialog;
-import org.odk.collect.android.storage.migration.StorageMigrationService;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.utilities.ApplicationResetter;
 import org.odk.collect.android.utilities.AuthDialogUtility;
@@ -165,11 +163,7 @@ public interface AppDependencyComponent {
 
     void inject(StorageInitializer storageInitializer);
 
-    void inject(StorageMigrationService storageMigrationService);
-
     void inject(AutoSendTaskSpec autoSendTaskSpec);
-
-    void inject(StorageMigrationDialog storageMigrationDialog);
 
     void inject(AdminPasswordDialogFragment adminPasswordDialogFragment);
 
