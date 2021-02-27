@@ -56,11 +56,9 @@ import static org.odk.collect.strings.format.LengthFormatterKt.formatLength;
  */
 
 @SuppressLint("ViewConstructor")
-<<<<<<< HEAD
 public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDataReceiver {
 
     public AudioWidgetAnswerBinding binding;	// smap make public
-    AudioWidgetAnswerBinding binding;
 
     private final AudioPlayer audioPlayer;
     private final RecordingRequester recordingRequester;
@@ -209,7 +207,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
             binding.chooseButton.setVisibility(GONE);
         }
 
-    private void hideButtonsIfNeeded() {
         if (getFormEntryPrompt().isReadOnly()) {        // smap
             binding.captureButton.setVisibility(View.GONE);
             binding.chooseButton.setVisibility(View.GONE);
@@ -238,7 +235,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
 
                 @Override
                 public void onPositionChanged(Integer newPosition) {
-                    analytics.logFormEvent(AnalyticsEvents.AUDIO_PLAYER_SEEK, questionDetails.getFormAnalyticsID());
+                    // analytics.logFormEvent(AnalyticsEvents.AUDIO_PLAYER_SEEK, questionDetails.getFormAnalyticsID()); // smap commented out
                     audioPlayer.setPosition(clip.getClipID(), newPosition);
                 }
 

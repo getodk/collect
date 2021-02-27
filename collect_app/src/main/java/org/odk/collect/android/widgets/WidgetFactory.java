@@ -154,13 +154,13 @@ public class WidgetFactory {
                     case Constants.DATATYPE_TEXT:
                         String query = prompt.getQuestion().getAdditionalAttribute(null, "query");
                         if (query != null) {
-                            questionWidget = getSelectOneWidget(appearance, questionDetails, readOnlyOverride);  // smap add readOnlyOverride
+                            questionWidget = getSelectOneWidget(appearance, questionDetails);
                         } else if (appearance.contains(WidgetAppearanceUtils.PRINTER)) {   // smap change to contains rather than equals
                             questionWidget = new ExPrinterWidget(context, questionDetails, waitingForDataRegistry);
                         } else if (appearance.startsWith(WidgetAppearanceUtils.EX)) {
                             questionWidget = new ExStringWidget(context, questionDetails, waitingForDataRegistry);
                         } else if (appearance.contains(WidgetAppearanceUtils.NUMBERS)) {
-                            questionWidget = new StringNumberWidget(context, questionDetails, readOnlyOverride);
+                            questionWidget = new StringNumberWidget(context, questionDetails);
                         } else if (appearance.contains(WidgetAppearanceUtils.URL)) {	// smap change to contains rather than equals
                             questionWidget = new UrlWidget(context, questionDetails, new CustomTabHelper());
                         } else if (appearance.contains("chart")) {        // smap chart
@@ -212,7 +212,7 @@ public class WidgetFactory {
                 questionWidget = new VideoWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 break;
             case Constants.CONTROL_SELECT_ONE:
-                questionWidget = getSelectOneWidget(appearance, questionDetails, readOnlyOverride);  // smap
+                questionWidget = getSelectOneWidget(appearance, questionDetails);
                 break;
             case Constants.CONTROL_SELECT_MULTI:
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets

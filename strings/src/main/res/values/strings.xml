@@ -770,84 +770,8 @@
     <!-- Guidance hints can be displayed behind an icon that must be tapped to reveal the hint. -->
     <string name="guidance_yes_collapsed">Yes - collapsed</string>
 
-<<<<<<< HEAD:collect_app/src/main/res/values/strings.xml
-    <string name="geoshape_title">GeoShape</string>
-    <string name="input_method">Input method</string>
-    <string name="start">Start</string>
-    <string name="enable_gps">Enable GPS</string>
-    <string name="geotrace_title">GeoTrace</string>
-    <string name="gps_enable_message">GPS is disabled on your device. Would you like to enable it?</string>
-    <string name="geo_clear_warning">Feature already created. Would you like to clear the feature?</string>
-    <string name="geo_exit_warning">Discard changes and return to ODK?</string>
-    <string name="polygon_validator">Must have at least 3 points to create Polygon</string>
-    <string name="polyline_validator">Must have at least 2 points to create Polyline</string>
-    <string name="clear">Clear</string>
-    <string name="placement_mode">Placement by tapping</string>
-    <string name="manual_mode">Manual location recording</string>
-    <string name="automatic_mode">Automatic location recording</string>
-    <string name="recording_interval">Recording interval:</string>
-    <plurals name="number_of_seconds">
-        <item quantity="one">%d second</item>
-        <item quantity="other">%d seconds</item>
-    </plurals>
-    <plurals name="number_of_minutes">
-        <item quantity="one">%d minute</item>
-        <item quantity="other">%d minutes</item>
-    </plurals>
-    <string name="accuracy_requirement">Accuracy requirement:</string>
-    <string name="none">None</string>
-    <plurals name="number_of_meters">
-        <item quantity="one">%d meter</item>
-        <item quantity="other">%d meters</item>
-    </plurals>
-    <string name="location_status_searching">Searching for location, please wait&#8230;</string>
-    <string name="location_status_accuracy">Location accuracy: %.2f m</string>
-    <string name="location_status_acceptable">Location accuracy: %.2f m (acceptable)</string>
-    <string name="location_status_unacceptable">Location accuracy: %.2f m (unacceptable)</string>
-    <string name="collection_status_paused">Points entered: %d</string>
-    <string name="collection_status_placement">Points entered: %d (tap to place points)</string>
-    <string name="collection_status_manual">Points entered: %d (manual recording)</string>
-    <string name="collection_status_auto_seconds">Points entered: %1$d (recording every %2$d sec)</string>
-    <string name="collection_status_auto_minutes">Points entered: %1$d (recording every %2$d min)</string>
-    <string name="collection_status_auto_seconds_accuracy">Points entered: %1$d (recording every %2$d sec, accuracy %3$d m)</string>
-    <string name="collection_status_auto_minutes_accuracy">Points entered: %1$d (recording every %2$d min, accuracy %3$d m)</string>
-    <string name="geopoint_instruction">Long press to place mark or tap add marker button.</string>
-    <string name="geopoint_no_draggable_instruction">Tap add marker button.</string>
-    <string name="discard">Discard</string>
-    <string name="geoshape_view_change_location">View or Change GeoShape</string>
-    <string name="geotrace_view_change_location">View or Change GeoTrace</string>
-    <string name="geometry_status">Saved forms: %d (%d shown on map)</string>
-    <string name="bearing">Bearing: %.3f</string>
-    <string name="direction">Direction: %s</string>
-    <string name="select_odk_shortcut">Select Shortcut</string>
-    <string name="bad_uri">Bad URI: %s</string>
-    <string name="unrecognized_uri">Unrecognized URI: %s</string>
-    <!-- &lt; and &gt; surrounds the text so it will appear as <no form loaded> -->
-    <string name="no_form_loaded">&lt;no form loaded&gt;</string>
-    <string name="settings_successfully_loaded_file_notification">Settings successfully loaded from file</string>
-    <string name="corrupt_settings_file_notification">Sorry, settings file is corrupt and should be deleted or replaced</string>
-    <string name="selected_invalid_image">Selected file is not a valid image</string>
-    <string name="edited_osm_file">Edited OSM XML File:</string>
-    <string name="invalid_osm_data">Something went wrong. We did not get valid OSM data.</string>
-    <string name="alert">Alert</string>
-    <string name="install_openmapkit">Please install OpenMapKit!</string>
-    <string name="go_back">Go back</string>
-    <string name="download_selected">Download Selected</string>
-    <string name="record_geopoint">Record a point</string>
-    <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nAccuracy: %4$sm</string>
-    <string name="parser_exception">XPathParser Exception: \"%1$s\"</string>
-    <string name="version_number">Version: %s</string>
-    <string name="id_number">ID: %s</string>
-    <string name="odk_website">Visit the ODK website</string>
-    <string name="odk_website_summary">ODK is used to collect data for social good in challenging environments.</string>
-    <string name="odk_forum">Join the ODK forum</string>
-    <string name="odk_forum_summary">Join the forum to get support, request features, contribute code/translations! </string>
-    <string name="all_open_source_licenses">Open source libraries/licenses</string>
-    <string name="all_open_source_licenses_msg">We stand on the shoulders of giants!</string>
-=======
     <!-- Title for setting to let the user switch between using Collect or another app (on the device) for recording audio -->
     <string name="external_app_recording">Use external app for audio recording</string>
->>>>>>> merge_master:strings/src/main/res/values/strings.xml
 
     <string name="form_import_category">Form import</string>
     <string name="instance_sync">Finalize forms on import</string>

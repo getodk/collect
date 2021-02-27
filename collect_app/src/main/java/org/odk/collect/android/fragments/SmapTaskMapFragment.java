@@ -248,7 +248,7 @@ public class SmapTaskMapFragment extends Fragment
         Timber.i("######## onMapReady");
         mMap = googleMap;
 
-        new PermissionUtils().requestLocationPermissions((Activity) getContext(), new PermissionListener() {
+        new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestLocationPermissions((Activity) getContext(), new PermissionListener() {
             @Override
             public void granted() {
                 mapReadyPermissionGranted();

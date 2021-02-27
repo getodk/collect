@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.Button;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 
@@ -142,5 +143,13 @@ public class BarcodeWidget extends QuestionWidget implements WidgetDataReceiver 
                 ToastUtils.showLongToast(R.string.error_front_camera_unavailable);
             }
         }
+    }
+
+    /*
+     * smap
+     * add a method to return the barcode button
+     */
+    public Button getBarcodeButton() {
+        return binding.barcodeButton;
     }
 }

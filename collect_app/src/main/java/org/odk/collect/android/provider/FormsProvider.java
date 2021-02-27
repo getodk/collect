@@ -301,23 +301,18 @@ public class FormsProvider extends ContentProvider {
                 Cursor del = null;
                 try {
                     del = this.query(uri, null, where, whereArgs, null);
-                        if (del != null && del.getCount() > 0) {
-                            del.moveToFirst();
-                            do {
-                                deleteFileOrDir(storagePathProvider.getAbsoluteCacheFilePath(del
-                                        .getString(del
-                                                .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH))));
-                                String formFilePath = getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), del.getString(del
-                                        .getColumnIndex(FormsColumns.FORM_FILE_PATH)));
-                                deleteFileOrDir(formFilePath);
-                                deleteFileOrDir(getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), del.getString(del
-                                        .getColumnIndex(FormsColumns.FORM_MEDIA_PATH))));
-                            } while (del.moveToNext());
-                        }
-                    } finally {
-                        if (del != null) {
-                            del.close();
-                        }
+                    if (del != null && del.getCount() > 0) {
+                        del.moveToFirst();
+                        do {
+                            deleteFileOrDir(storagePathProvider.getAbsoluteCacheFilePath(del
+                                    .getString(del
+                                            .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH))));
+                            String formFilePath = getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), del.getString(del
+                                    .getColumnIndex(FormsColumns.FORM_FILE_PATH)));
+                            deleteFileOrDir(formFilePath);
+                            deleteFileOrDir(getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), del.getString(del
+                                    .getColumnIndex(FormsColumns.FORM_MEDIA_PATH))));
+                        } while (del.moveToNext());
                     }
                 } finally {
                     if (del != null) {

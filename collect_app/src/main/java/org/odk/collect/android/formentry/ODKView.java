@@ -34,6 +34,7 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -207,7 +208,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
         this.widgetFactory = new WidgetFactory(
                 context,
-                readOnlyOverride,
+                readOnlyOverride,   // smap
                 preferencesProvider.getGeneralSharedPreferences().getBoolean(KEY_EXTERNAL_APP_RECORDING, true),
                 waitingForDataRegistry,
                 questionMediaManager,
@@ -274,7 +275,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                     } else if (barcodePrompt != null) {    // Smap - auto get barcode
                         BarcodeWidget bcWidget = (BarcodeWidget) widgets.get(0);
                         if (bcWidget != null) {
-                            bcWidget.getBarcodeButton.performClick();
+                            bcWidget.getBarcodeButton().performClick();
                         }
                     } else if (exPrompt != null) {    // Smap - auto external app
                         ExStringWidget exWidget = (ExStringWidget) widgets.get(0);
@@ -347,7 +348,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      * and adds it to the end of the view. If this widget is not the first one, add a divider above
      * it.
      */
-    private void addWidgetForQuestion(FormEntryPrompt question, boolean readOnlyOverride) {
+    private void addWidgetForQuestion(FormEntryPrompt question) {
 
         nfcPrompt = null;           // smap - Set these to null for this widget.  Used later for auto launch
         barcodePrompt = null;       // smap
@@ -358,7 +359,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         videoPrompt = null;         // smap
         audioPrompt = null;         // smap
 
-        QuestionWidget qw = configureWidgetForQuestion(question, readOnlyOverride);
+        QuestionWidget qw = configureWidgetForQuestion(question);
 
         widgets.add(qw);
 
@@ -454,8 +455,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      * <p>
      * Note: if the given question is of an unsupported type, a text widget will be created.
      */
-    private QuestionWidget configureWidgetForQuestion(FormEntryPrompt question, boolean readOnlyOverride) {  // smap add readOnlyOverrid
-        QuestionWidget qw = widgetFactory.createWidgetFromPrompt(question, readOnlyOverride);               // smap readOnlyOverrid
+    private QuestionWidget configureWidgetForQuestion(FormEntryPrompt question) {
+        QuestionWidget qw = widgetFactory.createWidgetFromPrompt(question);
         qw.setOnLongClickListener(this);
         qw.setValueChangedListener(this);
 
