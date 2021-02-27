@@ -43,14 +43,16 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.SurveyDataViewModel;
 import org.odk.collect.android.adapters.ViewPagerAdapter;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.configure.LegacySettingsFileReader;
 import org.odk.collect.android.configure.SettingsImporter;
+import org.odk.collect.android.configure.legacy.LegacySettingsFileImporter;
+import org.odk.collect.android.formentry.RefreshFormListDialogFragment;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.fragments.SmapFormListFragment;
 import org.odk.collect.android.fragments.SmapTaskListFragment;
@@ -77,6 +79,7 @@ import org.odk.collect.android.taskModel.NfcTrigger;
 import org.odk.collect.android.tasks.DownloadTasksTask;
 import org.odk.collect.android.tasks.NdefReaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.MultiClickGuard;
@@ -242,7 +245,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         }
 
         // Start the location service
-        new PermissionUtils().requestLocationPermissions(this, new PermissionListener() {
+        new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestLocationPermissions(this, new PermissionListener() {
             @Override public void granted() {
 
                 /*
@@ -260,7 +263,18 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             @Override public void denied() { }
         });
 
-        importSettingsFromLegacyFiles();
+        LegacySettingsFileImporter legacySettingsFileImporter = new LegacySettingsFileImporter(storagePathProvider, null, settingsImporter);
+        if (legacySettingsFileImporter.importFromFile()) {
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle(R.string.successfully_imported_settings)
+                    .setMessage(R.string.settings_successfully_loaded_file_notification)
+                    .setPositiveButton(R.string.ok, (dialog, which) -> {
+                        dialog.dismiss();
+                        recreate();
+                    })
+                    .setCancelable(false)
+                    .create().show();
+        }
     }
 
     @Override
@@ -477,7 +491,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
      * Forms Downloading Overrides
      */
     @Override
-    public void formsDownloadingComplete(HashMap<ServerFormDetails, String> result) {
+    public void formsDownloadingComplete(Map<ServerFormDetails, String> result) {
         // TODO Auto-generated method stub
         // Ignore formsDownloading is called synchronously from taskDownloader
     }
@@ -665,39 +679,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             String formURI = intent.getStringExtra("uri");
 
             formCompleted(instanceId, formStatus, formURI);
-        }
-    }
-
-    /*
-     * Copy from main menu activity
-     */
-    private void importSettingsFromLegacyFiles() {
-        try {
-            if(storagePathProvider == null) {
-                storagePathProvider = new StoragePathProvider();        // Why is this needed here when not required in main menu
-            }
-            String settings = new LegacySettingsFileReader(storagePathProvider).toJSON();
-
-            if (settings != null) {
-                String type = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json").exists()
-                        ? SETTINGS_IMPORT_JSON : SETTINGS_IMPORT_SERIALIZED;
-                String settingsHash = FileUtils.getMd5Hash(new ByteArrayInputStream(settings.getBytes()));
-
-                if (settingsImporter.fromJSON(settings)) {
-                    ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
-                    //analytics.logEvent(type, "Success", settingsHash);
-                    recreate();
-                } else {
-                    ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
-                    //analytics.logEvent(type, "Corrupt", settingsHash);
-                }
-            }
-        } catch (LegacySettingsFileReader.CorruptSettingsFileException e) {
-            ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
-
-            String type = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json").exists()
-                    ? SETTINGS_IMPORT_JSON : SETTINGS_IMPORT_SERIALIZED;
-            //analytics.logEvent(type, "Corrupt exception", "none");
         }
     }
 
@@ -1088,5 +1069,4 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
         }
     }
-
 }

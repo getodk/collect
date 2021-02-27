@@ -17,11 +17,7 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-<<<<<<< HEAD
-import android.content.Intent;
-import android.widget.Button;
-=======
->>>>>>> merge_master
+
 import android.util.TypedValue;
 import android.view.View;
 

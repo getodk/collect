@@ -20,7 +20,6 @@ import org.odk.collect.android.database.FormDatabaseMigrator;
 import org.odk.collect.android.database.InstancesDatabaseHelper;
 import org.odk.collect.android.database.FormsDatabaseHelper;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.database.TraceUtilities;
 import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.configure.ServerRepository;
