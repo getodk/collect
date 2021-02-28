@@ -18,19 +18,12 @@
 
 package org.odk.collect.android.external.handler;
 
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.condition.IFunctionHandler;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.tasks.SmapRemoteWebServicePostTask;
 import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;
-import org.odk.collect.android.utilities.FormDownloader;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -7,7 +7,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.handler.SmapRemoteDataItem;
 import org.odk.collect.android.listeners.SmapRemoteListener;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.utilities.FormDownloader;
+import org.odk.collect.android.utilities.SmapInfoDownloader;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.File;
@@ -79,7 +79,7 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
             HashMap<String, String> headers = new HashMap<String, String> ();
 
             if(imagePath != null) {
-                FormDownloader fd = new FormDownloader();
+                SmapInfoDownloader fd = new SmapInfoDownloader();
                 File f = new File(imagePath);
                 if(!f.exists()) {
                     fd.downloadFile(f, is, lookupUrl, true);

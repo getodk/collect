@@ -42,12 +42,14 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.taskModel.FormLaunchDetail;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ManageForm;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
-import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
+import org.odk.collect.android.utilities.SoftKeyboardController;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 
 import java.util.HashMap;
 import java.util.regex.Pattern;
+
+import javax.inject.Inject;
 
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 
@@ -57,7 +59,7 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.create
  * @author neilpenman@smap.com.au
  */
 @SuppressLint("ViewConstructor")
-public class SmapFormWidget extends QuestionWidget implements BinaryDataReceiver, ButtonClickListener {
+public class SmapFormWidget extends QuestionWidget implements WidgetDataReceiver, ButtonClickListener {
     // If an extra with this key is specified, it will be parsed as a URI and used as intent data
     private static final String URI_KEY = "uri_data";
 
@@ -75,6 +77,10 @@ public class SmapFormWidget extends QuestionWidget implements BinaryDataReceiver
     private ActivityAvailability activityAvailability;
 
     private long formId;
+
+    @Inject
+    public SoftKeyboardController softKeyboardController;
+
 
     public SmapFormWidget(Context context, QuestionDetails questionDetails, String appearance, boolean readOnlyOverride) {
 
@@ -209,7 +215,7 @@ public class SmapFormWidget extends QuestionWidget implements BinaryDataReceiver
      * Allows answer to be set externally in {@link FormEntryActivity}.
      */
     @Override
-    public void setBinaryData(Object answer) {
+    public void setData(Object answer) {
         StringData stringData = ExternalAppsUtils.asStringData(answer);
         this.answer.setText(stringData == null ? null : stringData.getValue().toString());
     }
@@ -217,12 +223,12 @@ public class SmapFormWidget extends QuestionWidget implements BinaryDataReceiver
     @Override
     public void setFocus(Context context) {
         if (hasExApp) {
-            SoftKeyboardUtils.hideSoftKeyboard(answer);
+            softKeyboardController.hideSoftKeyboard(answer);
             // focus on launch button
             launchIntentButton.requestFocus();
         } else {
             if (!getFormEntryPrompt().isReadOnly()) {
-                SoftKeyboardUtils.showSoftKeyboard(answer);
+                softKeyboardController.showSoftKeyboard(answer);
             /*
              * If you do a multi-question screen after a "add another group" dialog, this won't
              * automatically pop up. It's an Android issue.
@@ -234,7 +240,7 @@ public class SmapFormWidget extends QuestionWidget implements BinaryDataReceiver
              * is focused before the dialog pops up, everything works fine. great.
              */
             } else {
-                SoftKeyboardUtils.hideSoftKeyboard(answer);
+                softKeyboardController.hideSoftKeyboard(answer);
             }
         }
     }
@@ -276,7 +282,7 @@ public class SmapFormWidget extends QuestionWidget implements BinaryDataReceiver
     }
 
     private void focusAnswer() {
-        SoftKeyboardUtils.showSoftKeyboard(answer);
+        softKeyboardController.showSoftKeyboard(answer);
     }
 
     /*

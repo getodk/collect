@@ -50,7 +50,7 @@ import static org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME;
 import static org.odk.collect.android.utilities.FileUtils.STUB_XML;
 import static org.odk.collect.android.utilities.FileUtils.write;
 
-public class FormDownloader {
+public class SmapInfoDownloader {
 
     private static class TaskCancelledException extends Exception {
         private final File file;
@@ -68,8 +68,6 @@ public class FormDownloader {
 
     private static final String MD5_COLON_PREFIX = "md5:";
     private static final String TEMP_DOWNLOAD_EXTENSION = ".tempDownload";
-
-    private FormDownloaderListener stateListener;
 
     private FormsDao formsDao;
 
@@ -95,9 +93,6 @@ public class FormDownloader {
         int attemptCount = 0;
         final int MAX_ATTEMPT_COUNT = 2;
         while (!success && ++attemptCount <= MAX_ATTEMPT_COUNT) {
-            if (stateListener != null && stateListener.isTaskCanceled()) {
-                throw new TaskCancelledException(tempFile);
-            }
             Timber.i("Started downloading to %s from %s", tempFile.getAbsolutePath(), downloadUrl);
 
             // write connection to file
@@ -109,7 +104,7 @@ public class FormDownloader {
 
                 byte[] buf = new byte[4096];
                 int len;
-                while ((len = is.read(buf)) > 0 && (stateListener == null || !stateListener.isTaskCanceled())) {
+                while ((len = is.read(buf)) > 0) {
                     os.write(buf, 0, len);
                 }
                 os.flush();
@@ -149,11 +144,6 @@ public class FormDownloader {
                         Timber.e(e);
                     }
                 }
-            }
-
-            if (stateListener != null && stateListener.isTaskCanceled()) {
-                FileUtils.deleteAndReport(tempFile);
-                throw new TaskCancelledException(tempFile);
             }
         }
 

@@ -1027,7 +1027,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 break;
             case RequestCodes.NFC_CAPTURE:       // smap
                 String nfcId = intent.getStringExtra(NFC_RESULT);
-                setBinaryWidgetData(nfcId);
+                setWidgetData(nfcId);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case RequestCodes.BEARING_CAPTURE:
@@ -1106,6 +1106,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         // These actions should move into the `FormEntryMenuDelegate`
+        FormController formController = getFormController();  // smap
         switch (item.getItemId()) {
             case R.id.menu_languages:
                 createLanguageDialog();
@@ -2765,7 +2766,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
 
             if(item.choices) {
-                refreshCurrentView();
+                onScreenRefresh();
             } else {
                 // calculate
                 if (swipeDirection != null) {

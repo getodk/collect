@@ -41,8 +41,8 @@ import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.widgets.interfaces.BinaryDataReceiver;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
@@ -55,7 +55,7 @@ import static org.odk.collect.android.formentry.questions.WidgetViewUtils.getCen
  * @author Neil Penman (neilpenman@gmail.com)
  * Based on BarcodeWidget by Yaw Anokwa (yanokwa@gmail.com)
  */
-public class NfcWidget extends QuestionWidget implements BinaryDataReceiver, ButtonClickListener {
+public class NfcWidget extends QuestionWidget implements WidgetDataReceiver, ButtonClickListener {
 	private Button mGetNfcButton;
 	private TextView mStringAnswer;
     private NfcAdapter mNfcAdapter;
@@ -124,11 +124,11 @@ public class NfcWidget extends QuestionWidget implements BinaryDataReceiver, But
 	/**
 	 * Allows answer to be set externally in {@Link FormEntryActivity}.
 	 */
-	@Override
-	public void setBinaryData(Object answer) {
-		mStringAnswer.setText((String) answer);
-		Collect.getInstance().getFormController().setIndexWaitingForData(null);
-	}
+    @Override
+    public void setData(Object answer) {
+        mStringAnswer.setText((String) answer);
+        widgetValueChanged();
+    }
 
 	@Override
 	public void setFocus(Context context) {

@@ -8,18 +8,6 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import org.odk.collect.android.amazonaws.mobile.AWSMobileClient;
 import org.odk.collect.android.amazonaws.models.nosql.DevicesDO;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.external.handler.SmapRemoteDataItem;
-import org.odk.collect.android.listeners.SmapRemoteListener;
-import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.utilities.FormDownloader;
-import org.odk.collect.android.utilities.WebCredentialsUtils;
-
-import java.io.File;
-import java.net.URI;
-import java.net.URL;
-import java.util.HashMap;
-
-import javax.inject.Inject;
 
 import timber.log.Timber;
 

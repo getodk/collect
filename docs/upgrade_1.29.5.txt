@@ -668,6 +668,8 @@ Unmerged paths:
 	both modified:   collect_app/src/main/java/org/odk/collect/android/utilities/ApplicationResetter.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/utilities/DateTimeUtils.java
 	deleted by them: collect_app/src/main/java/org/odk/collect/android/utilities/MultiFormDownloader.java
+	deleted by them: collect_app/src/main/java/org/odk/collect/android/utilities/FormDownloader.java
+	     Continue to use as renamed file SmapInfoDownloader.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/utilities/PermissionUtils.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/widgets/AudioWidget.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/widgets/BarcodeWidget.java

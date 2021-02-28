@@ -40,6 +40,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.database.Assignment;
 import org.odk.collect.android.database.TaskAssignment;
 import org.odk.collect.android.database.TraceUtilities;
+import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.instances.Instance;
@@ -64,7 +65,6 @@ import org.odk.collect.android.taskModel.TaskResponse;
 import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.ManageForm.ManageFormDetails;
 import org.odk.collect.android.utilities.ManageFormResponse;
-import org.odk.collect.android.utilities.MultiFormDownloader;
 import org.odk.collect.android.utilities.Utilities;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
@@ -76,6 +76,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 import javax.inject.Inject;
@@ -111,13 +112,13 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
     WebCredentialsUtils webCredentialsUtils;
 
     @Inject
-    MultiFormDownloader multiFormDownloader;
-
-    @Inject
     Notifier notifier;
 
     @Inject
     InstancesRepository instancesRepository;
+
+    @Inject
+    FormDownloader formDownloader;
 
     @Inject
     FormsRepository formsRepository;
@@ -539,7 +540,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                  *  Get any forms the user does not currently have
                  *  Delete any forms that are no longer accessible to the user
                  */
-                HashMap<ServerFormDetails, String> outcome = synchroniseForms(tr.forms);
+                Map<ServerFormDetails, String> outcome = synchroniseForms(tr.forms);
                 if(outcome != null) {
                     for (ServerFormDetails key : outcome.keySet()) {
                         results.put(key.getFormName(), outcome.get(key));
@@ -837,10 +838,10 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
      *   (2) Delete forms not on the server or older versions of forms
      *       unless there is an uncompleted data instance using that form
      */
-	private HashMap<ServerFormDetails, String> synchroniseForms(List<FormLocator> forms) throws Exception {
+	private Map<ServerFormDetails, String> synchroniseForms(List<FormLocator> forms) throws Exception {
     	
 
-		HashMap<ServerFormDetails, String> dfResults = null;
+		Map<ServerFormDetails, String> dfResults = null;
     	
     	if(forms == null) {
         	publishProgress(Collect.getInstance().getString(R.string.smap_no_forms));
@@ -889,7 +890,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
             Timber.i("Downloading " + toDownload.size() + " forms");
             if(toDownload.size() > 0) {
-                DownloadFormsTask downloadFormsTask = new DownloadFormsTask(multiFormDownloader);
+                DownloadFormsTask downloadFormsTask = new DownloadFormsTask(formDownloader);
                 publishProgress(Collect.getInstance().getString(R.string.smap_downloading, toDownload.size()));
 
                 downloadFormsTask.setDownloaderListener((DownloadFormsTaskListener) mStateListener);

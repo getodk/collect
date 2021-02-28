@@ -32,8 +32,6 @@ import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.android.openrosa.api.FormListApi;
-import org.odk.collect.android.openrosa.api.MediaFile;
-import org.odk.collect.android.openrosa.api.OpenRosaFormListApi;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -228,7 +226,7 @@ public class MultiFormDownloader {
         return submission == null || Validator.isUrlValid(submission);
     }
 
-    boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields, 
+    boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields,
             ServerFormDetails fd, String orgTempMediaPath, String orgMediaPath)   {   // smap add fd,  organisational paths
         UriResult uriResult = null;
         try {

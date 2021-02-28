@@ -290,7 +290,7 @@ public class Utilities {
 
                     if (instance.paths != null && instance.paths.size() > 0) {
                         for (String media : instance.paths) {
-                            FormDownloader fd = new FormDownloader();
+                            SmapInfoDownloader fd = new SmapInfoDownloader();
                             String mediaUrl = serverUrl + "/" + media;
                             int idx = media.lastIndexOf('/');
                             String mediaName = null;
@@ -316,7 +316,7 @@ public class Utilities {
                         }
                     } else if (instance.files != null && instance.files.size() > 0) {       // Deprecate instance.files
                         for (String media : instance.files) {
-                            FormDownloader fd = new FormDownloader();
+                            SmapInfoDownloader fd = new SmapInfoDownloader();
                             String mediaUrl = serverUrl + "/attachments/" +
                                     formId + "/" + media;
                             String mediaPath = file.getParent() + "/" + media;

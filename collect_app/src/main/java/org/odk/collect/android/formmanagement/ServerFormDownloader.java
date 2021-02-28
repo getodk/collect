@@ -306,7 +306,7 @@ public class ServerFormDownloader implements FormDownloader {
                     .base64RSAPublicKey(formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY))
                     .autoDelete(formInfo.get(FileUtils.AUTO_DELETE))
                     .autoSend(formInfo.get(FileUtils.AUTO_SEND))
-                    .geometryXpath(formInfo.get(FileUtils.GEOMETRY_XPATH))
+                    //.geometryXpath(formInfo.get(FileUtils.GEOMETRY_XPATH))   // smap
                     .build();
 
             return formsRepository.save(form);
