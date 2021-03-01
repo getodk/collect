@@ -6,7 +6,7 @@ import org.odk.collect.android.backgroundwork.FormUpdateManager;
 import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesRepository;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -18,7 +18,7 @@ public class CollectSettingsChangeHandlerTest {
     private final FormUpdateManager formUpdateManager = mock(FormUpdateManager.class);
     private final ServerRepository serverRepository = mock(ServerRepository.class);
 
-    CollectSettingsChangeHandler handler = new CollectSettingsChangeHandler(propertyManager, formUpdateManager, serverRepository, mock(Analytics.class), mock(PreferencesProvider.class));
+    CollectSettingsChangeHandler handler = new CollectSettingsChangeHandler(propertyManager, formUpdateManager, serverRepository, mock(Analytics.class), mock(PreferencesRepository.class));
 
     @Test
     public void updatesPropertyManager() {

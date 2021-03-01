@@ -50,9 +50,6 @@ public class FormManagementPreferences extends BasePreferenceFragment {
     Analytics analytics;
 
     @Inject
-    PreferencesProvider preferencesProvider;
-
-    @Inject
     PreferencesRepository preferencesRepository;
 
     @Inject
@@ -88,13 +85,13 @@ public class FormManagementPreferences extends BasePreferenceFragment {
     }
 
     private void updateDisabledPrefs() {
-        SharedPreferences sharedPrefs = preferencesProvider.getGeneralSharedPreferences();
+        PreferencesDataSource generalPrefs = preferencesRepository.getGeneralPreferences();
 
         // Might be null if disabled in Admin settings
         @Nullable Preference updateFrequency = findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK);
         @Nullable CheckBoxPreference automaticDownload = findPreference(KEY_AUTOMATIC_UPDATE);
 
-        if (Protocol.parse(getActivity(), sharedPrefs.getString(KEY_PROTOCOL, null)) == Protocol.GOOGLE) {
+        if (Protocol.parse(getActivity(), generalPrefs.getString(KEY_PROTOCOL)) == Protocol.GOOGLE) {
             displayDisabled(findPreference(KEY_FORM_UPDATE_MODE), getString(R.string.manual));
             if (automaticDownload != null) {
                 displayDisabled(automaticDownload, false);
@@ -103,7 +100,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 updateFrequency.setEnabled(false);
             }
         } else {
-            switch (getFormUpdateMode(requireContext(), sharedPrefs)) {
+            switch (getFormUpdateMode(requireContext(), generalPrefs)) {
                 case MANUAL:
                     if (automaticDownload != null) {
                         displayDisabled(automaticDownload, false);
@@ -115,7 +112,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 case PREVIOUSLY_DOWNLOADED_ONLY:
                     if (automaticDownload != null) {
                         automaticDownload.setEnabled(true);
-                        automaticDownload.setChecked(sharedPrefs.getBoolean(KEY_AUTOMATIC_UPDATE, false));
+                        automaticDownload.setChecked(generalPrefs.getBoolean(KEY_AUTOMATIC_UPDATE));
                     }
                     if (updateFrequency != null) {
                         updateFrequency.setEnabled(true);
@@ -159,8 +156,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
 
         if (pref != null) {
             if (key.equals(KEY_AUTOMATIC_UPDATE)) {
-                String formUpdateCheckPeriod = (String) GeneralSharedPreferences.getInstance()
-                        .get(KEY_PERIODIC_FORM_UPDATES_CHECK);
+                String formUpdateCheckPeriod = preferencesRepository.getGeneralPreferences().getString(KEY_PERIODIC_FORM_UPDATES_CHECK);
 
                 // Only enable automatic form updates if periodic updates are set
                 pref.setEnabled(!formUpdateCheckPeriod.equals(getString(R.string.never_value)));

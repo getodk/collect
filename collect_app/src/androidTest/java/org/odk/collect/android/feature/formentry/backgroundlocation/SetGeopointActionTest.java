@@ -6,14 +6,11 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.rule.GrantPermissionRule;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.FormLoadingUtils;
@@ -36,12 +33,6 @@ public class SetGeopointActionTest {
             .outerRule(GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION))
             .around(new ResetStateRule())
             .around(new CopyFormRule(SETGEOPOINT_ACTION_FORM, true));
-
-    @Before
-    @After
-    public void resetGeneralPreferences() {
-        GeneralSharedPreferences.getInstance().loadDefaultPreferences();
-    }
 
     @Test
     public void locationCollectionSnackbar_ShouldBeDisplayedAtFormLaunch() {

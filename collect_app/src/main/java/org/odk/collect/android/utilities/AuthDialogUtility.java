@@ -26,7 +26,6 @@ import android.widget.EditText;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 
 import javax.inject.Inject;
 
@@ -45,8 +44,6 @@ public class AuthDialogUtility {
     WebCredentialsUtils webCredentialsUtils;
     @Inject
     PropertyManager propertyManager;
-    @Inject
-    GeneralSharedPreferences generalSharedPreferences;
 
     public AuthDialogUtility() {
         Collect.getInstance().getComponent().inject(this);
@@ -96,7 +93,7 @@ public class AuthDialogUtility {
                 if (customUsername != null && customPassword != null) {
                     webCredentialsUtils.saveCredentials(finalOverriddenUrl != null ? finalOverriddenUrl : webCredentialsUtils.getServerUrlFromPreferences(), userNameValue, passwordValue);
                 } else if (finalOverriddenUrl == null) {
-                    webCredentialsUtils.saveCredentialsPreferences(generalSharedPreferences, userNameValue, passwordValue, propertyManager);
+                    webCredentialsUtils.saveCredentialsPreferences(userNameValue, passwordValue, propertyManager);
                 } else {
                     webCredentialsUtils.saveCredentials(finalOverriddenUrl, userNameValue, passwordValue);
                 }

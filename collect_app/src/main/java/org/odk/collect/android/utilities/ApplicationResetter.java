@@ -23,7 +23,6 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -96,7 +95,8 @@ public class ApplicationResetter {
     private void resetPreferences() {
         WebCredentialsUtils.clearAllCredentials();
 
-        GeneralSharedPreferences.getInstance().loadDefaultPreferences();
+        preferencesRepository.getGeneralPreferences().clear();
+        preferencesRepository.getGeneralPreferences().loadDefaultPreferences();
         preferencesRepository.getAdminPreferences().clear();
         preferencesRepository.getAdminPreferences().loadDefaultPreferences();
 

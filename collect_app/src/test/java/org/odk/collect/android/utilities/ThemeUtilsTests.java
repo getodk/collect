@@ -3,12 +3,17 @@ package org.odk.collect.android.utilities;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 
+import androidx.test.core.app.ApplicationProvider;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
@@ -19,13 +24,13 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_THEME;
 /**
  * Unit tests for checking the behaviour of updating themes from User Interface settings
  */
-
 @RunWith(RobolectricTestRunner.class)
 public class ThemeUtilsTests {
 
     private final int[] attrs;
     private ThemeUtils themeUtils;
     private MainMenuActivity mainMenuActivity;
+    private PreferencesDataSource generalPrefs;
 
     public ThemeUtilsTests() {
         attrs = new int[]{
@@ -39,6 +44,8 @@ public class ThemeUtilsTests {
     public void setup() {
         mainMenuActivity = Robolectric.setupActivity(MainMenuActivity.class);
         themeUtils = new ThemeUtils(mainMenuActivity);
+        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
+        generalPrefs = component.preferencesRepository().getGeneralPreferences();
     }
 
     @Test
@@ -109,10 +116,10 @@ public class ThemeUtilsTests {
     }
 
     private void applyDarkTheme() {
-        GeneralSharedPreferences.getInstance().save(KEY_APP_THEME, mainMenuActivity.getString(R.string.app_theme_dark));
+        generalPrefs.save(KEY_APP_THEME, mainMenuActivity.getString(R.string.app_theme_dark));
     }
 
     private void applyLightTheme() {
-        GeneralSharedPreferences.getInstance().save(KEY_APP_THEME, mainMenuActivity.getString(R.string.app_theme_light));
+        generalPrefs.save(KEY_APP_THEME, mainMenuActivity.getString(R.string.app_theme_light));
     }
 }

@@ -4,14 +4,16 @@ import android.content.Intent;
 import android.net.Uri;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.test.core.app.ApplicationProvider;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.preferences.JsonPreferencesGenerator;
-import org.odk.collect.android.preferences.PreferencesProvider;
-import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.testshared.FakeScheduler;
@@ -21,7 +23,6 @@ import org.robolectric.fakes.RoboMenuItem;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowToast;
 
-import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -46,9 +47,10 @@ public class QRCodeMenuDelegateTest {
 
     @Before
     public void setup() {
+        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
         activity = Robolectric.setupActivity(FragmentActivity.class);
         menuDelegate = new QRCodeMenuDelegate(activity, activityAvailability, qrCodeGenerator,
-                jsonPreferencesGenerator, fileProvider, new PreferencesProvider(getApplicationContext()), new PreferencesRepository(getApplicationContext()), fakeScheduler);
+                jsonPreferencesGenerator, fileProvider, component.preferencesRepository(), fakeScheduler);
     }
 
     @Test

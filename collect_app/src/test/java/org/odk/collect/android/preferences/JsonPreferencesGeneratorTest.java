@@ -8,6 +8,9 @@ import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.ArrayList;
@@ -22,13 +25,13 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 @RunWith(RobolectricTestRunner.class)
 public class JsonPreferencesGeneratorTest extends TestCase {
     private JsonPreferencesGenerator jsonPreferencesGenerator;
-    private GeneralSharedPreferences generalSharedPreferences;
-    private final PreferencesRepository preferencesRepository = new PreferencesRepository(ApplicationProvider.getApplicationContext());
+    private PreferencesRepository preferencesRepository;
 
     @Before
     public void setup() {
+        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
+        preferencesRepository = component.preferencesRepository();
         jsonPreferencesGenerator = new JsonPreferencesGenerator(preferencesRepository);
-        generalSharedPreferences = new GeneralSharedPreferences(ApplicationProvider.getApplicationContext());
     }
 
     @Test
@@ -49,7 +52,7 @@ public class JsonPreferencesGeneratorTest extends TestCase {
 
     @Test
     public void whenUserPasswordIncluded_shouldBePresentInJson() throws JSONException {
-        generalSharedPreferences.save(KEY_PASSWORD, "123456");
+        preferencesRepository.getGeneralPreferences().save(KEY_PASSWORD, "123456");
         String jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences(Collections.singletonList(KEY_PASSWORD));
         assertThat(jsonPrefs, containsString("password"));
         assertThat(jsonPrefs, containsString("123456"));
@@ -57,7 +60,7 @@ public class JsonPreferencesGeneratorTest extends TestCase {
 
     @Test
     public void whenUserPasswordExcluded_shouldNotBePresentInJson() throws JSONException {
-        generalSharedPreferences.save(KEY_PASSWORD, "123456");
+        preferencesRepository.getGeneralPreferences().save(KEY_PASSWORD, "123456");
         String jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences(new ArrayList<>());
         assertThat(jsonPrefs, not(containsString("password")));
         assertThat(jsonPrefs, not(containsString("123456")));

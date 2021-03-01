@@ -1,7 +1,7 @@
 package org.odk.collect.android.application.initialization.migration;
 
-import android.content.SharedPreferences;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 
 public interface Migration {
-    void apply(SharedPreferences prefs);
+    void apply(PreferencesDataSource prefs);
 }

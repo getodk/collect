@@ -1,7 +1,6 @@
 package org.odk.collect.android.preferences;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.preference.CheckBoxPreference;
@@ -22,21 +21,19 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_GET_BLANK;
 public class MainMenuAccessPreferencesTest {
 
     private Context context;
-    private SharedPreferences generalPrefs;
+    private PreferencesDataSource generalPrefs;
     private PreferencesDataSource adminPrefs;
 
     @Before
     public void setup() {
         context = ApplicationProvider.getApplicationContext();
-        generalPrefs = getComponent(context).preferencesProvider().getGeneralSharedPreferences();
+        generalPrefs = getComponent(context).preferencesRepository().getGeneralPreferences();
         adminPrefs = getComponent(context).preferencesRepository().getAdminPreferences();
     }
 
     @Test
     public void whenMatchExactlyEnabled_showsGetBlankFormAsUncheckedAndDisabled() {
-        generalPrefs.edit()
-                .putString(GeneralKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context))
-                .apply();
+        generalPrefs.save(GeneralKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context));
 
         FragmentScenario<MainMenuAccessPreferences> scenario = FragmentScenario.launch(MainMenuAccessPreferences.class);
         scenario.onFragment(f -> {
@@ -49,10 +46,8 @@ public class MainMenuAccessPreferencesTest {
 
     @Test
     public void whenMatchExactlyEnabled_andGoogleUsedAsProtocol_getBlankFormIsEnabled() {
-        generalPrefs.edit()
-                .putString(GeneralKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context))
-                .putString(GeneralKeys.KEY_PROTOCOL, Protocol.GOOGLE.getValue(context))
-                .apply();
+        generalPrefs.save(GeneralKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context));
+        generalPrefs.save(GeneralKeys.KEY_PROTOCOL, Protocol.GOOGLE.getValue(context));
 
         FragmentScenario<MainMenuAccessPreferences> scenario = FragmentScenario.launch(MainMenuAccessPreferences.class);
         scenario.onFragment(f -> {

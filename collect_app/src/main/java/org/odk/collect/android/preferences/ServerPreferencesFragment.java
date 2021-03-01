@@ -80,9 +80,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     Analytics analytics;
 
     @Inject
-    PreferencesProvider preferencesProvider;
-
-    @Inject
     FormUpdateManager formUpdateManager;
 
     @Inject
@@ -398,8 +395,8 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     }
 
     private void runGoogleAccountValidation() {
-        String account = (String) GeneralSharedPreferences.getInstance().get(KEY_SELECTED_GOOGLE_ACCOUNT);
-        String protocol = (String) GeneralSharedPreferences.getInstance().get(KEY_PROTOCOL);
+        String account = preferencesRepository.getGeneralPreferences().getString(KEY_SELECTED_GOOGLE_ACCOUNT);
+        String protocol = preferencesRepository.getGeneralPreferences().getString(KEY_PROTOCOL);
 
         if (TextUtils.isEmpty(account) && protocol.equals(getString(R.string.protocol_google_sheets))) {
 

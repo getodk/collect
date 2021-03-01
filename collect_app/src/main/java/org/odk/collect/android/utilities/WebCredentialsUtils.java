@@ -7,8 +7,8 @@ import androidx.annotation.Nullable;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.HttpCredentials;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -19,7 +19,13 @@ import javax.inject.Singleton;
 @Singleton
 public class WebCredentialsUtils {
 
+    private final PreferencesDataSource generalPrefs;
+
     private static final Map<String, HttpCredentialsInterface> HOST_CREDENTIALS = new HashMap<>();
+
+    public WebCredentialsUtils(PreferencesDataSource generalPrefs) {
+        this.generalPrefs = generalPrefs;
+    }
 
     public void saveCredentials(@NonNull String url, @NonNull String username, @NonNull String password) {
         if (username.isEmpty()) {
@@ -30,9 +36,9 @@ public class WebCredentialsUtils {
         HOST_CREDENTIALS.put(host, new HttpCredentials(username, password));
     }
 
-    public void saveCredentialsPreferences(GeneralSharedPreferences generalSharedPreferences, String userName, String password, PropertyManager propertyManager) {
-        generalSharedPreferences.save(GeneralKeys.KEY_USERNAME, userName);
-        generalSharedPreferences.save(GeneralKeys.KEY_PASSWORD, password);
+    public void saveCredentialsPreferences(String userName, String password, PropertyManager propertyManager) {
+        generalPrefs.save(GeneralKeys.KEY_USERNAME, userName);
+        generalPrefs.save(GeneralKeys.KEY_PASSWORD, password);
 
         propertyManager.reload();
     }
@@ -63,24 +69,15 @@ public class WebCredentialsUtils {
     }
 
     public String getServerUrlFromPreferences() {
-        if (GeneralSharedPreferences.getInstance() == null) {
-            return "";
-        }
-        return (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SERVER_URL);
+        return generalPrefs.getString(GeneralKeys.KEY_SERVER_URL);
     }
 
     public String getPasswordFromPreferences() {
-        if (GeneralSharedPreferences.getInstance() == null) {
-            return "";
-        }
-        return (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_PASSWORD);
+        return generalPrefs.getString(GeneralKeys.KEY_PASSWORD);
     }
 
     public String getUserNameFromPreferences() {
-        if (GeneralSharedPreferences.getInstance() == null) {
-            return "";
-        }
-        return (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_USERNAME);
+        return generalPrefs.getString(GeneralKeys.KEY_USERNAME);
     }
 
     /**

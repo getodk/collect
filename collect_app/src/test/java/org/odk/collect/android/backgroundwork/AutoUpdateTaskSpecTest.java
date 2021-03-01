@@ -1,8 +1,6 @@
 package org.odk.collect.android.backgroundwork;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
 
 import androidx.test.core.app.ApplicationProvider;
 
@@ -22,10 +20,12 @@ import org.odk.collect.android.forms.FormSource;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.forms.ManifestFile;
 import org.odk.collect.android.forms.MediaFileRepository;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.BooleanChangeLock;
@@ -52,11 +52,12 @@ public class AutoUpdateTaskSpecTest {
     private final FormDownloader formDownloader = mock(FormDownloader.class);
     private final ServerFormsDetailsFetcher serverFormsDetailsFetcher = mock(ServerFormsDetailsFetcher.class);
     private final Notifier notifier = mock(Notifier.class);
-    private SharedPreferences generalPrefs;
+    private PreferencesDataSource generalPrefs;
 
     @Before
     public void setup() {
-        generalPrefs = ApplicationProvider.getApplicationContext().getSharedPreferences("test", Context.MODE_PRIVATE);
+        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
+        generalPrefs = component.preferencesRepository().getGeneralPreferences();
 
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
@@ -72,16 +73,6 @@ public class AutoUpdateTaskSpecTest {
             @Override
             public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormsRepository formsRepository, MediaFileRepository mediaFileRepository, FormSource formSource, DiskFormsSynchronizer diskFormsSynchronizer) {
                 return serverFormsDetailsFetcher;
-            }
-
-            @Override
-            public PreferencesProvider providesPreferencesProvider(Context context) {
-                return new PreferencesProvider(context) {
-                    @Override
-                    public SharedPreferences getGeneralSharedPreferences() {
-                        return generalPrefs;
-                    }
-                };
             }
 
             @Override
@@ -110,7 +101,7 @@ public class AutoUpdateTaskSpecTest {
     @Test
     public void whenAutoDownloadEnabled_andChangeLockLocked_doesNotDownload() throws Exception {
         when(serverFormsDetailsFetcher.fetchFormDetails()).thenReturn(asList(new ServerFormDetails("", "", "", "", "", false, true, new ManifestFile("", emptyList()))));
-        generalPrefs.edit().putBoolean(GeneralKeys.KEY_AUTOMATIC_UPDATE, true).apply();
+        generalPrefs.save(GeneralKeys.KEY_AUTOMATIC_UPDATE, true);
         changeLock.lock();
 
         AutoUpdateTaskSpec taskSpec = new AutoUpdateTaskSpec();
@@ -122,7 +113,7 @@ public class AutoUpdateTaskSpecTest {
 
     @Test
     public void whenAutoDownloadEnabled_andDownloadIsCancelled_sendsCompletedDownloadsToNotifier() throws Exception {
-        generalPrefs.edit().putBoolean(GeneralKeys.KEY_AUTOMATIC_UPDATE, true).apply();
+        generalPrefs.save(GeneralKeys.KEY_AUTOMATIC_UPDATE, true);
 
         ServerFormDetails form1 = new ServerFormDetails("", "", "form1", "", "", false, true, new ManifestFile("", emptyList()));
         ServerFormDetails form2 = new ServerFormDetails("", "", "form2", "", "", false, true, new ManifestFile("", emptyList()));

@@ -2,6 +2,7 @@ package org.odk.collect.android.support;
 
 import android.view.View;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.PerformException;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
@@ -10,7 +11,8 @@ import androidx.test.espresso.util.TreeIterables;
 
 import org.hamcrest.Matcher;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -27,19 +29,22 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 public final class TestUtils {
+    private static final PreferencesDataSource GENERAL_PREFS = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext()).preferencesRepository().getGeneralPreferences();
+
     private TestUtils() {
+
     }
 
     public static Map<String, ?> backupPreferences() {
-        return Collections.unmodifiableMap(GeneralSharedPreferences.getInstance().getAll());
+        return Collections.unmodifiableMap(GENERAL_PREFS.getAll());
     }
 
     public static void restorePreferences(Map<String, ?> backup) {
-        GeneralSharedPreferences.getInstance().clear();
+        GENERAL_PREFS.clear();
 
         for (Map.Entry<String, ?> e : backup.entrySet()) {
             Object v = e.getValue();
-            GeneralSharedPreferences.getInstance().save(e.getKey(), v);
+            GENERAL_PREFS.save(e.getKey(), v);
         }
     }
 

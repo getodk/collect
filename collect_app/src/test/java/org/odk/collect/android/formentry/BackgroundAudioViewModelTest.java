@@ -9,12 +9,14 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.permissions.PermissionsChecker;
-import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.utilities.Clock;
@@ -42,10 +44,12 @@ public class BackgroundAudioViewModelTest {
 
     @Before
     public void setup() {
-        PreferencesProvider preferencesProvider = new PreferencesProvider(ApplicationProvider.getApplicationContext());
         clock = mock(Clock.class);
 
-        viewModel = new BackgroundAudioViewModel(audioRecorder, preferencesProvider, recordAudioActionRegistry, permissionsChecker, clock, mock(Analytics.class));
+        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
+        PreferencesDataSource generalPreferences = component.preferencesRepository().getGeneralPreferences();
+
+        viewModel = new BackgroundAudioViewModel(audioRecorder, generalPreferences, recordAudioActionRegistry, permissionsChecker, clock, mock(Analytics.class));
     }
 
     @Test

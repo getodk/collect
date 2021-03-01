@@ -1,7 +1,5 @@
 package org.odk.collect.android.application;
 
-import android.content.SharedPreferences;
-
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -14,7 +12,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
-import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.odk.collect.android.preferences.PreferencesRepository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -33,57 +31,54 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_USGS_MAP_STYLE
 @RunWith(AndroidJUnit4.class)
 public class SettingsImporterRegressionTest {
 
-
     private SettingsImporter settingsImporter;
-    private PreferencesProvider preferencesProvider;
     private PreferencesRepository preferencesRepository;
 
     @Before
     public void setup() {
         AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
         settingsImporter = component.settingsImporter();
-        preferencesProvider = component.preferencesProvider();
         preferencesRepository = component.preferencesRepository();
     }
 
     @Test
     public void cartoDarkMatter() {
         settingsImporter.fromJSON("{\"general\":{\"map_sdk_behavior\":\"osmdroid\",\"map_basemap_behavior\":\"openmap_cartodb_darkmatter\"},\"admin\":{}}");
-        SharedPreferences prefs = preferencesProvider.getGeneralSharedPreferences();
-        assertThat(prefs.getString(KEY_BASEMAP_SOURCE, null), is(BASEMAP_SOURCE_CARTO));
-        assertThat(prefs.getString(KEY_CARTO_MAP_STYLE, null), is("dark_matter"));
+        PreferencesDataSource prefs = preferencesRepository.getGeneralPreferences();
+        assertThat(prefs.getString(KEY_BASEMAP_SOURCE), is(BASEMAP_SOURCE_CARTO));
+        assertThat(prefs.getString(KEY_CARTO_MAP_STYLE), is("dark_matter"));
     }
 
     @Test
     public void cartoPositron() {
         settingsImporter.fromJSON("{\"general\":{\"map_sdk_behavior\":\"osmdroid\",\"map_basemap_behavior\":\"openmap_cartodb_positron\"},\"admin\":{}}");
-        SharedPreferences prefs = preferencesProvider.getGeneralSharedPreferences();
-        assertThat(prefs.getString(KEY_BASEMAP_SOURCE, null), is(BASEMAP_SOURCE_CARTO));
-        assertThat(prefs.getString(KEY_CARTO_MAP_STYLE, null), is("positron"));
+        PreferencesDataSource prefs = preferencesRepository.getGeneralPreferences();
+        assertThat(prefs.getString(KEY_BASEMAP_SOURCE), is(BASEMAP_SOURCE_CARTO));
+        assertThat(prefs.getString(KEY_CARTO_MAP_STYLE), is("positron"));
     }
 
     @Test
     public void usgsHybrid() {
         settingsImporter.fromJSON("{\"general\":{\"map_sdk_behavior\":\"osmdroid\",\"map_basemap_behavior\":\"openmap_usgs_sat\"},\"admin\":{}}");
-        SharedPreferences prefs = preferencesProvider.getGeneralSharedPreferences();
-        assertThat(prefs.getString(KEY_BASEMAP_SOURCE, null), is(BASEMAP_SOURCE_USGS));
-        assertThat(prefs.getString(KEY_USGS_MAP_STYLE, null), is("hybrid"));
+        PreferencesDataSource prefs = preferencesRepository.getGeneralPreferences();
+        assertThat(prefs.getString(KEY_BASEMAP_SOURCE), is(BASEMAP_SOURCE_USGS));
+        assertThat(prefs.getString(KEY_USGS_MAP_STYLE), is("hybrid"));
     }
 
     @Test
     public void googleMapsSatellite() {
         settingsImporter.fromJSON("{\"general\":{\"map_sdk_behavior\":\"google_maps\",\"map_basemap_behavior\":\"satellite\"},\"admin\":{}}");
-        SharedPreferences prefs = preferencesProvider.getGeneralSharedPreferences();
-        assertThat(prefs.getString(KEY_BASEMAP_SOURCE, null), is(BASEMAP_SOURCE_GOOGLE));
-        assertThat(prefs.getString(KEY_GOOGLE_MAP_STYLE, null), is(String.valueOf(GoogleMap.MAP_TYPE_SATELLITE)));
+        PreferencesDataSource prefs = preferencesRepository.getGeneralPreferences();
+        assertThat(prefs.getString(KEY_BASEMAP_SOURCE), is(BASEMAP_SOURCE_GOOGLE));
+        assertThat(prefs.getString(KEY_GOOGLE_MAP_STYLE), is(String.valueOf(GoogleMap.MAP_TYPE_SATELLITE)));
     }
 
     @Test
     public void mapboxLight() {
         settingsImporter.fromJSON("{\"general\":{\"map_sdk_behavior\":\"mapbox_maps\",\"map_basemap_behavior\":\"mapbox_light\"},\"admin\":{}}");
-        SharedPreferences prefs = preferencesProvider.getGeneralSharedPreferences();
-        assertThat(prefs.getString(KEY_BASEMAP_SOURCE, null), is(BASEMAP_SOURCE_MAPBOX));
-        assertThat(prefs.getString(KEY_MAPBOX_MAP_STYLE, null), is(String.valueOf(Style.LIGHT)));
+        PreferencesDataSource prefs = preferencesRepository.getGeneralPreferences();
+        assertThat(prefs.getString(KEY_BASEMAP_SOURCE), is(BASEMAP_SOURCE_MAPBOX));
+        assertThat(prefs.getString(KEY_MAPBOX_MAP_STYLE), is(Style.LIGHT));
     }
 
     @Test

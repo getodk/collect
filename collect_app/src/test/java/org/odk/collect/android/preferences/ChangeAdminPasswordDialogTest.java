@@ -1,8 +1,6 @@
 package org.odk.collect.android.preferences;
 
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.text.InputType;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -10,12 +8,16 @@ import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.test.core.app.ApplicationProvider;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.support.DialogFragmentHelpers;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestActivityScenario;
 import org.robolectric.RobolectricTestRunner;
@@ -26,7 +28,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
-import static org.odk.collect.android.preferences.AdminPreferencesActivity.ADMIN_PREFERENCES;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
@@ -34,12 +35,13 @@ public class ChangeAdminPasswordDialogTest {
 
     private FragmentManager fragmentManager;
     private ChangeAdminPasswordDialog dialogFragment;
-    private SharedPreferences sharedPreferences;
+    private PreferencesDataSource adminPrefs;
 
     @Before
     public void setup() {
         FragmentActivity activity = RobolectricHelpers.createThemedActivity(FragmentActivity.class);
-        sharedPreferences = activity.getSharedPreferences(ADMIN_PREFERENCES, Context.MODE_PRIVATE);
+        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
+        adminPrefs = component.preferencesRepository().getAdminPreferences();
 
         fragmentManager = activity.getSupportFragmentManager();
         dialogFragment = new ChangeAdminPasswordDialog();
@@ -59,7 +61,7 @@ public class ChangeAdminPasswordDialogTest {
         passwordEditText.setText("blah");
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
 
-        assertThat(sharedPreferences.getString(KEY_ADMIN_PW, ""), equalTo("blah"));
+        assertThat(adminPrefs.getString(KEY_ADMIN_PW), equalTo("blah"));
     }
 
     @Test

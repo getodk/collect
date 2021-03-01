@@ -1,13 +1,12 @@
 package org.odk.collect.android.application.initialization;
 
-import android.content.SharedPreferences;
-
 import com.google.android.gms.maps.GoogleMap;
 import com.mapbox.mapboxsdk.maps.Style;
 
 import org.odk.collect.android.application.initialization.migration.KeyRenamer;
 import org.odk.collect.android.application.initialization.migration.KeyTranslator;
 import org.odk.collect.android.application.initialization.migration.Migration;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import java.util.List;
 
@@ -34,20 +33,20 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_USGS_MAP_STYLE
  */
 public class CollectSettingsPreferenceMigrator implements SettingsPreferenceMigrator {
 
-    private final SharedPreferences metaSharedPrefs;
+    private final PreferencesDataSource metaSharedPrefs;
 
-    public CollectSettingsPreferenceMigrator(SharedPreferences metaSharedPrefs) {
+    public CollectSettingsPreferenceMigrator(PreferencesDataSource metaSharedPrefs) {
         this.metaSharedPrefs = metaSharedPrefs;
     }
 
     @Override
-    public void migrate(SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences) {
+    public void migrate(PreferencesDataSource generalPreferences, PreferencesDataSource adminPreferences) {
         for (Migration migration : getGeneralMigrations()) {
-            migration.apply(generalSharedPreferences);
+            migration.apply(generalPreferences);
         }
 
         for (Migration migration : getAdminMigrations()) {
-            migration.apply(adminSharedPreferences);
+            migration.apply(adminPreferences);
         }
 
         for (Migration migration : getMetaMigrations()) {

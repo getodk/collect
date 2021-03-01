@@ -120,7 +120,7 @@ public class StoragePathProviderTest {
     @Test
     public void getRelativeMapLayerPathTest() {
         assertThat(storagePathProvider.getRelativeMapLayerPath(null), is(nullValue()));
-        assertThat(storagePathProvider.getRelativeMapLayerPath(""), is(""));
+        assertThat(storagePathProvider.getRelativeMapLayerPath(""), is(nullValue()));
         assertThat(storagePathProvider.getRelativeMapLayerPath("countries/countries-raster.mbtiles"), is("countries/countries-raster.mbtiles"));
         assertThat(storagePathProvider.getRelativeMapLayerPath("/storage/emulated/0/Android/data/org.odk.collect.android/files/layers/countries/countries-raster.mbtiles"), is("countries/countries-raster.mbtiles"));
     }

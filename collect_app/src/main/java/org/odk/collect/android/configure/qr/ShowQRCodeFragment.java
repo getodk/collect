@@ -31,7 +31,6 @@ import androidx.lifecycle.ViewModelProvider;
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.JsonPreferencesGenerator;
-import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.async.Scheduler;
 
@@ -70,9 +69,6 @@ public class ShowQRCodeFragment extends Fragment {
     public QRCodeGenerator qrCodeGenerator;
 
     @Inject
-    public PreferencesProvider preferencesProvider;
-
-    @Inject
     public PreferencesRepository preferencesRepository;
 
     @Inject
@@ -90,7 +86,7 @@ public class ShowQRCodeFragment extends Fragment {
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
         passwordsSet[0] = !preferencesRepository.getAdminPreferences().getString(KEY_ADMIN_PW).isEmpty();
-        passwordsSet[1] = !preferencesProvider.getGeneralSharedPreferences().getString(KEY_PASSWORD, "").isEmpty();
+        passwordsSet[1] = !preferencesRepository.getGeneralPreferences().getString(KEY_PASSWORD).isEmpty();
 
         qrCodeViewModel.getBitmap().observe(this.getViewLifecycleOwner(), bitmap -> {
             if (bitmap != null) {
@@ -121,7 +117,7 @@ public class ShowQRCodeFragment extends Fragment {
         DaggerUtils.getComponent(context).inject(this);
         qrCodeViewModel = new ViewModelProvider(
                 requireActivity(),
-                new QRCodeViewModel.Factory(qrCodeGenerator, jsonPreferencesGenerator, preferencesProvider, preferencesRepository, scheduler)
+                new QRCodeViewModel.Factory(qrCodeGenerator, jsonPreferencesGenerator, preferencesRepository, scheduler)
         ).get(QRCodeViewModel.class);
     }
 

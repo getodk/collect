@@ -1,6 +1,7 @@
 package org.odk.collect.android.application.initialization.migration;
 
-import android.content.SharedPreferences;
+import org.odk.collect.android.preferences.PreferencesDataSource;
+
 import java.util.Map;
 
 import static org.odk.collect.android.utilities.SharedPreferencesUtils.put;
@@ -26,7 +27,7 @@ public class ValueTranslator implements Migration {
     }
 
     @Override
-    public void apply(SharedPreferences prefs) {
+    public void apply(PreferencesDataSource prefs) {
         if (!prefs.contains(key)) {
             return;
         }
@@ -35,9 +36,7 @@ public class ValueTranslator implements Migration {
         Object prefValue = all.get(key);
 
         if (prefValue.equals(oldValue)) {
-            SharedPreferences.Editor editor = prefs.edit();
-            put(editor, key, newValue);
-            editor.apply();
+            put(prefs, key, newValue);
         }
     }
 }

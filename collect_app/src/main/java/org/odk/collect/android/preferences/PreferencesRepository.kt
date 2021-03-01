@@ -16,6 +16,11 @@ open class PreferencesRepository(private val context: Context) {
         return PreferencesDataSource(context.getSharedPreferences(ADMIN_PREFS_NAME, Context.MODE_PRIVATE), AdminKeys.getDefaults())
     }
 
+    // Just for tests
+    fun getTestPreferences(name: String): PreferencesDataSource {
+        return PreferencesDataSource(context.getSharedPreferences(name, Context.MODE_PRIVATE))
+    }
+
     companion object {
         private const val META_PREFS_NAME = "meta"
         private const val ADMIN_PREFS_NAME = "admin_prefs"

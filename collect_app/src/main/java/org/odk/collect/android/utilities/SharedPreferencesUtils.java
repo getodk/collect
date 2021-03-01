@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.utilities;
 
-import android.content.SharedPreferences;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -43,18 +43,8 @@ public final class SharedPreferencesUtils {
     }
 
     /** Writes a key with a value of varying type to a SharedPreferences.Editor. */
-    public static void put(SharedPreferences.Editor editor, String key, Object value) {
-        if (value instanceof String) {
-            editor.putString(key, (String) value);
-        } else if (value instanceof Boolean) {
-            editor.putBoolean(key, (Boolean) value);
-        } else if (value instanceof Long) {
-            editor.putLong(key, (Long) value);
-        } else if (value instanceof Integer) {
-            editor.putInt(key, (Integer) value);
-        } else if (value instanceof Float) {
-            editor.putFloat(key, (Float) value);
-        }
+    public static void put(PreferencesDataSource prefs, String key, Object value) {
+        prefs.save(key, value);
     }
 }
 

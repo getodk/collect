@@ -2,7 +2,6 @@ package org.odk.collect.android.geo;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.preference.Preference;
@@ -13,6 +12,7 @@ import com.google.common.collect.ImmutableSet;
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MbtilesFile.LayerType;
 import org.odk.collect.android.preferences.PrefUtils;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -84,12 +84,12 @@ class GoogleMapConfigurator implements MapConfigurator {
             ImmutableSet.of(prefKey, KEY_REFERENCE_LAYER);
     }
 
-    @Override public Bundle buildConfig(SharedPreferences prefs) {
+    @Override public Bundle buildConfig(PreferencesDataSource prefs) {
         Bundle config = new Bundle();
         config.putInt(GoogleMapFragment.KEY_MAP_TYPE,
             PrefUtils.getInt(KEY_GOOGLE_MAP_STYLE, GoogleMap.MAP_TYPE_NORMAL));
         config.putString(GoogleMapFragment.KEY_REFERENCE_LAYER,
-            prefs.getString(KEY_REFERENCE_LAYER, null));
+            prefs.getString(KEY_REFERENCE_LAYER));
         return config;
     }
 

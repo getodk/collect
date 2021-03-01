@@ -5,19 +5,21 @@ import android.view.View;
 
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.support.RobolectricHelpers;
@@ -33,11 +35,10 @@ import static org.mockito.Mockito.mock;
 public class SplashScreenActivityTest {
 
     private ApplicationInitializer applicationInitializer;
-    private GeneralSharedPreferences generalSharedPreferences;
+    private PreferencesRepository preferencesRepository;
 
     @Before
     public void setup() {
-        generalSharedPreferences = GeneralSharedPreferences.getInstance();
         applicationInitializer = mock(ApplicationInitializer.class);
 
         RobolectricHelpers.mountExternalStorage();
@@ -49,14 +50,13 @@ public class SplashScreenActivityTest {
                 return applicationInitializer;
             }
         });
+        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
+        preferencesRepository = component.preferencesRepository();
     }
 
     @Test
     public void whenShowSplashScreenEnabled_showSplashScreen() {
-        generalSharedPreferences.getSharedPreferences()
-                .edit()
-                .putBoolean(GeneralKeys.KEY_SHOW_SPLASH, true)
-                .apply();
+        preferencesRepository.getGeneralPreferences().save(GeneralKeys.KEY_SHOW_SPLASH, true);
 
         ActivityScenario<SplashScreenActivity> scenario1 = ActivityScenario.launch(SplashScreenActivity.class);
         assertThat(scenario1.getState(), is(Lifecycle.State.RESUMED));

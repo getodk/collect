@@ -1,7 +1,6 @@
 package org.odk.collect.android.application.initialization;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import androidx.test.core.app.ApplicationProvider;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.mapbox.mapboxsdk.maps.Style;
@@ -9,11 +8,15 @@ import com.mapbox.mapboxsdk.maps.Style;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
+import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.PreferencesRepository;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
 
-import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static java.util.Arrays.asList;
 import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.assertPrefs;
 import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.assertPrefsEmpty;
@@ -22,15 +25,20 @@ import static org.odk.collect.android.application.initialization.migration.Share
 @RunWith(RobolectricTestRunner.class)
 public class CollectSettingsPreferenceMigratorTest {
 
-    private SharedPreferences generalPrefs;
-    private SharedPreferences adminPrefs;
-    private SharedPreferences metaPrefs;
+    private PreferencesDataSource generalPrefs;
+    private PreferencesDataSource adminPrefs;
+    private PreferencesDataSource metaPrefs;
 
     @Before
     public void setUp() throws Exception {
-        generalPrefs = getApplicationContext().getSharedPreferences("generalTest", Context.MODE_PRIVATE);
-        adminPrefs = getApplicationContext().getSharedPreferences("adminTest", Context.MODE_PRIVATE);
-        metaPrefs = getApplicationContext().getSharedPreferences("metaTest", Context.MODE_PRIVATE);
+        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
+        PreferencesRepository preferencesRepository = component.preferencesRepository();
+        generalPrefs = preferencesRepository.getGeneralPreferences();
+        generalPrefs.clear();
+        adminPrefs = preferencesRepository.getAdminPreferences();
+        adminPrefs.clear();
+        metaPrefs = preferencesRepository.getMetaPreferences();
+        metaPrefs.clear();
     }
 
     @Test

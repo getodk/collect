@@ -1,10 +1,8 @@
 package org.odk.collect.android.utilities;
 
-import android.content.Context;
-import android.preference.PreferenceManager;
-
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import java.util.Locale;
 import java.util.TreeMap;
@@ -15,9 +13,8 @@ import java.util.TreeMap;
  * @author abdulwd
  */
 public class LocaleHelper {
-    public static String getLocaleCode(Context context) {
-        String localeCode = PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(GeneralKeys.KEY_APP_LANGUAGE, "");
+    public static String getLocaleCode(PreferencesDataSource generalPrefs) {
+        String localeCode = generalPrefs.getString(GeneralKeys.KEY_APP_LANGUAGE);
         boolean isUsingSysLanguage = localeCode.equals("");
         if (isUsingSysLanguage) {
             localeCode = Collect.defaultSysLanguage;
@@ -35,8 +32,8 @@ public class LocaleHelper {
         return languageList;
     }
 
-    public Locale getLocale(Context context) {
-        return getLocale(getLocaleCode(context));
+    public Locale getLocale(PreferencesDataSource generalPrefs) {
+        return getLocale(getLocaleCode(generalPrefs));
     }
 
     private Locale getLocale(String splitLocaleCode) {

@@ -1,7 +1,8 @@
 package org.odk.collect.android.application.initialization.migration;
 
 import android.annotation.SuppressLint;
-import android.content.SharedPreferences;
+
+import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import static org.odk.collect.android.utilities.SharedPreferencesUtils.put;
 
@@ -59,7 +60,7 @@ public class MigrationUtils {
     }
 
     public static Migration removeKey(String key) {
-        return prefs -> prefs.edit().remove(key).apply();
+        return prefs -> prefs.remove(key);
     }
 
     public static KeyExtractor extractNewKey(String oldKey) {
@@ -68,24 +69,20 @@ public class MigrationUtils {
 
     /** Removes an old key and sets a new key. */
     @SuppressLint("ApplySharedPref")
-    static void replace(SharedPreferences prefs, String oldKey, String newKey, Object newValue) {
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.remove(oldKey);
-        put(editor, newKey, newValue);
-        editor.commit();
+    static void replace(PreferencesDataSource prefs, String oldKey, String newKey, Object newValue) {
+        prefs.remove(oldKey);
+        put(prefs, newKey, newValue);
     }
 
     /** Removes one or more old keys, then adds one or more new key-value pairs. */
     @SuppressLint("ApplySharedPref")
-    static void replace(SharedPreferences prefs, String[] oldKeys, KeyValuePair... newKeyValuePairs) {
-        SharedPreferences.Editor editor = prefs.edit();
+    static void replace(PreferencesDataSource prefs, String[] oldKeys, KeyValuePair... newKeyValuePairs) {
         for (String key : oldKeys) {
-            editor.remove(key);
+            prefs.remove(key);
         }
         for (KeyValuePair keyValuePair : newKeyValuePairs) {
-            put(editor, keyValuePair.key, keyValuePair.value);
+            put(prefs, keyValuePair.key, keyValuePair.value);
         }
-        editor.commit();
     }
 
     /** Converts an array of alternating keys and values into an array of Pairs. */

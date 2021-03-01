@@ -1,12 +1,15 @@
 package org.odk.collect.android.configure;
 
+import androidx.test.core.app.ApplicationProvider;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.robolectric.RobolectricTestRunner;
 
-import static java.util.Collections.emptyMap;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.initPrefs;
@@ -19,8 +22,9 @@ public class SharedPreferencesServerRepositoryTest {
 
     @Before
     public void setup() {
+        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
         defaultServer = "http://default.example";
-        repository = new SharedPreferencesServerRepository(defaultServer, new PreferencesDataSource(initPrefs(), emptyMap()));
+        repository = new SharedPreferencesServerRepository(defaultServer, initPrefs(component.preferencesRepository()));
     }
 
     @Test

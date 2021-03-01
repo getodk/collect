@@ -1,14 +1,16 @@
 package org.odk.collect.android.application.initialization.migration;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import androidx.test.core.app.ApplicationProvider;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.robolectric.RobolectricTestRunner;
 
-import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.moveKey;
@@ -18,17 +20,18 @@ import static org.odk.collect.android.application.initialization.migration.Share
 @RunWith(RobolectricTestRunner.class)
 public class KeyMoverTest {
 
-    private SharedPreferences prefs;
+    private PreferencesDataSource prefs;
+    private PreferencesDataSource other;
 
     @Before
     public void setUp() throws Exception {
-        prefs = getApplicationContext().getSharedPreferences("test", Context.MODE_PRIVATE);
+        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
+        prefs = component.preferencesRepository().getTestPreferences("test");
+        other = component.preferencesRepository().getTestPreferences("other");
     }
 
     @Test
     public void movesKeyAndValueToOtherPrefs() {
-        SharedPreferences other = getApplicationContext().getSharedPreferences("other", Context.MODE_PRIVATE);
-
         initPrefs(prefs,
                 "key", "value"
         );
@@ -45,8 +48,6 @@ public class KeyMoverTest {
 
     @Test
     public void whenKeyNotInOriginalPrefs_doesNothing() {
-        SharedPreferences other = getApplicationContext().getSharedPreferences("other", Context.MODE_PRIVATE);
-
         moveKey("key")
                 .toPreferences(other)
                 .apply(prefs);
@@ -57,8 +58,6 @@ public class KeyMoverTest {
 
     @Test
     public void whenKeyInOtherPrefs_doesNothing() {
-        SharedPreferences other = getApplicationContext().getSharedPreferences("other", Context.MODE_PRIVATE);
-
         initPrefs(prefs,
                 "key", "value"
         );

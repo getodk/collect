@@ -42,8 +42,8 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
+import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
@@ -82,7 +82,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     protected final ThemeUtils themeUtils;
     protected AudioHelper audioHelper;
     private final ViewGroup containerView;
-    private final QuestionTextSizeHelper questionTextSizeHelper = new QuestionTextSizeHelper();
+    private final QuestionTextSizeHelper questionTextSizeHelper;
 
     private WidgetValueChangedListener valueChangedListener;
 
@@ -104,10 +104,14 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     @Inject
     PermissionsProvider permissionsProvider;
 
+    @Inject
+    PreferencesRepository preferencesRepository;
+
     public QuestionWidget(Context context, QuestionDetails questionDetails) {
         super(context);
         getComponent(context).inject(this);
         setId(View.generateViewId());
+        questionTextSizeHelper = new QuestionTextSizeHelper(preferencesRepository.getGeneralPreferences());
         this.audioHelper = audioHelperFactory.create(context);
 
         themeUtils = new ThemeUtils(context);
@@ -191,7 +195,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
 
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
         TextView guidance;
-        GuidanceHint setting = GuidanceHint.get((String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_GUIDANCE_HINT));
+        GuidanceHint setting = GuidanceHint.get(preferencesRepository.getGeneralPreferences().getString(GeneralKeys.KEY_GUIDANCE_HINT));
 
         if (setting.equals(GuidanceHint.No)) {
             return null;

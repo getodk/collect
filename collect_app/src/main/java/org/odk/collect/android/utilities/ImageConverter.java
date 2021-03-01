@@ -24,14 +24,12 @@ import androidx.exifinterface.media.ExifInterface;
 
 import org.javarosa.core.model.instance.TreeElement;
 import org.odk.collect.android.R;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.widgets.QuestionWidget;
 
 import java.io.IOException;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_IMAGE_SIZE;
 import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.XML_OPENROSA_NAMESPACE;
 
 public class ImageConverter {
@@ -43,7 +41,7 @@ public class ImageConverter {
      * Before proceed with scaling or rotating, make sure existing exif information is stored/restored.
      * @author Khuong Ninh (khuong.ninh@it-development.com)
      */
-    public static void execute(String imagePath, QuestionWidget questionWidget, Context context) {
+    public static void execute(String imagePath, QuestionWidget questionWidget, Context context, String imageSizeMode) {
         ExifInterface exif = null;
         try {
             exif = new ExifInterface(imagePath);
@@ -52,7 +50,7 @@ public class ImageConverter {
         }
 
         rotateImageIfNeeded(imagePath);
-        scaleDownImageIfNeeded(imagePath, questionWidget, context);
+        scaleDownImageIfNeeded(imagePath, questionWidget, context, imageSizeMode);
         
         if (exif != null) {
             try {
@@ -63,14 +61,14 @@ public class ImageConverter {
         }
     }
 
-    private static void scaleDownImageIfNeeded(String imagePath, QuestionWidget questionWidget, Context context) {
+    private static void scaleDownImageIfNeeded(String imagePath, QuestionWidget questionWidget, Context context, String imageSizeMode) {
         Integer maxPixels;
 
         if (questionWidget != null) {
             maxPixels = getMaxPixelsFromFormIfDefined(questionWidget);
 
             if (maxPixels == null) {
-                maxPixels = getMaxPixelsFromSettings(context);
+                maxPixels = getMaxPixelsFromSettings(context, imageSizeMode);
             }
 
             if (maxPixels != null && maxPixels > 0) {
@@ -93,9 +91,8 @@ public class ImageConverter {
         return maxPixels;
     }
 
-    private static Integer getMaxPixelsFromSettings(Context context) {
+    private static Integer getMaxPixelsFromSettings(Context context, String imageSizeMode) {
         Integer maxPixels = null;
-        String imageSizeMode = (String) GeneralSharedPreferences.getInstance().get(KEY_IMAGE_SIZE);
         String[] imageEntryValues = context.getResources().getStringArray(R.array.image_size_entry_values);
         if (!imageSizeMode.equals(imageEntryValues[0])) {
             if (imageSizeMode.equals(imageEntryValues[1])) {

@@ -18,7 +18,6 @@ import org.odk.collect.android.formentry.questions.AnswersProvider;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -101,7 +100,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
                 && new PlayServicesChecker().isGooglePlayServicesAvailable(activity)) {
             MenuItem backgroundLocation = menu.findItem(R.id.track_location);
             backgroundLocation.setVisible(true);
-            backgroundLocation.setChecked(GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true));
+            backgroundLocation.setChecked(preferencesRepository.getGeneralPreferences().getBoolean(KEY_BACKGROUND_LOCATION));
         }
 
         menu.findItem(R.id.menu_add_repeat).setVisible(formEntryViewModel.canAddRepeat());
@@ -131,7 +130,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
 
             return true;
         } else if (item.getItemId() == R.id.track_location) {
-            backgroundLocationViewModel.backgroundLocationPreferenceToggled();
+            backgroundLocationViewModel.backgroundLocationPreferenceToggled(preferencesRepository.getGeneralPreferences());
             return true;
         } else if (item.getItemId() == R.id.menu_goto) {
             if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {

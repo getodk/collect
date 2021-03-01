@@ -40,7 +40,7 @@ public class JsonPreferencesGenerator {
             }
 
             Object defaultValue = DEFAULTS.get(key);
-            Object value = GeneralSharedPreferences.getInstance().get(key);
+            Object value = preferencesRepository.getGeneralPreferences().get(key);
 
             if (value == null) {
                 value = "";
@@ -65,12 +65,8 @@ public class JsonPreferencesGenerator {
             }
 
             Object defaultValue = AdminKeys.getDefaults().get(key);
-            Object value;
-            if (key.equals(KEY_ADMIN_PW)) {
-                value = preferencesRepository.getAdminPreferences().getString(key);
-            } else {
-                value = preferencesRepository.getAdminPreferences().getBoolean(key);
-            }
+            Object value = preferencesRepository.getAdminPreferences().get(key);
+
             if (defaultValue != value) {
                 adminPrefs.put(key, value);
             }

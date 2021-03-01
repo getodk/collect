@@ -1,7 +1,6 @@
 package org.odk.collect.android.activities.viewmodels;
 
 import android.app.Application;
-import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,7 +12,6 @@ import org.odk.collect.android.configure.SettingsUtils;
 import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.version.VersionInformation;
 
@@ -22,14 +20,14 @@ import javax.inject.Inject;
 public class MainMenuViewModel extends ViewModel {
 
     private final VersionInformation version;
-    private final SharedPreferences generalSharedPreferences;
+    private final PreferencesDataSource generalPreferences;
     private final PreferencesDataSource adminPreferences;
     private final Application application;
 
-    public MainMenuViewModel(Application application, VersionInformation versionInformation, PreferencesProvider preferencesProvider, PreferencesRepository preferencesRepository) {
+    public MainMenuViewModel(Application application, VersionInformation versionInformation, PreferencesRepository preferencesRepository) {
         this.application = application;
         this.version = versionInformation;
-        this.generalSharedPreferences = preferencesProvider.getGeneralSharedPreferences();
+        this.generalPreferences = preferencesRepository.getGeneralPreferences();
         this.adminPreferences = preferencesRepository.getAdminPreferences();
     }
 
@@ -86,7 +84,7 @@ public class MainMenuViewModel extends ViewModel {
     }
 
     private boolean isMatchExactlyEnabled() {
-        return SettingsUtils.getFormUpdateMode(application, generalSharedPreferences) == FormUpdateMode.MATCH_EXACTLY;
+        return SettingsUtils.getFormUpdateMode(application, generalPreferences) == FormUpdateMode.MATCH_EXACTLY;
     }
 
     @NotNull
@@ -103,21 +101,19 @@ public class MainMenuViewModel extends ViewModel {
 
         private final VersionInformation versionInformation;
         private final Application application;
-        private final PreferencesProvider preferencesProvider;
         private final PreferencesRepository preferencesRepository;
 
         @Inject
-        public Factory(VersionInformation versionInformation, Application application, PreferencesProvider preferencesProvider, PreferencesRepository preferencesRepository) {
+        public Factory(VersionInformation versionInformation, Application application, PreferencesRepository preferencesRepository) {
             this.versionInformation = versionInformation;
             this.application = application;
-            this.preferencesProvider = preferencesProvider;
             this.preferencesRepository = preferencesRepository;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new MainMenuViewModel(application, versionInformation, preferencesProvider, preferencesRepository);
+            return (T) new MainMenuViewModel(application, versionInformation, preferencesRepository);
         }
     }
 }

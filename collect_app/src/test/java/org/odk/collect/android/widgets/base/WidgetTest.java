@@ -1,5 +1,7 @@
 package org.odk.collect.android.widgets.base;
 
+import androidx.test.core.app.ApplicationProvider;
+
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.IFormElement;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -10,6 +12,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
+import org.odk.collect.android.preferences.PreferencesRepository;
 import org.robolectric.RobolectricTestRunner;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -31,12 +37,17 @@ public abstract class WidgetTest {
 
     public boolean readOnlyOverride;
 
+    protected PreferencesRepository preferencesRepository;
+
     @Before
     @OverridingMethodsMustInvokeSuper
     public void setUp() throws Exception {
         when(formEntryPrompt.getIndex()).thenReturn(mock(FormIndex.class));
         when(formEntryPrompt.getIndex().toString()).thenReturn("0, 0");
         when(formEntryPrompt.getFormElement()).thenReturn(formElement);
+
+        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
+        preferencesRepository = component.preferencesRepository();
     }
 
     @Test

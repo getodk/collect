@@ -1,23 +1,24 @@
 package org.odk.collect.android.configure;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
 import androidx.core.util.Pair;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
@@ -31,8 +32,8 @@ import static org.odk.collect.android.application.initialization.migration.Share
 @SuppressWarnings("PMD.DoubleBraceInitialization")
 public class SettingsImporterTest {
 
-    private SharedPreferences generalPrefs;
-    private SharedPreferences adminPrefs;
+    private PreferencesDataSource generalPrefs;
+    private PreferencesDataSource adminPrefs;
     private SettingsValidator settingsValidator;
     private SettingsImporter importer;
 
@@ -47,15 +48,14 @@ public class SettingsImporterTest {
 
     @Before
     public void setup() {
-        Context context = getApplicationContext();
-
-        generalPrefs = context.getSharedPreferences("test1", Context.MODE_PRIVATE);
-        adminPrefs = context.getSharedPreferences("test2", Context.MODE_PRIVATE);
+        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
+        generalPrefs = component.preferencesRepository().getGeneralPreferences();
+        adminPrefs = component.preferencesRepository().getAdminPreferences();
 
         settingsValidator = mock(SettingsValidator.class);
         when(settingsValidator.isValid(any())).thenReturn(true);
 
-        importer = new SettingsImporter(generalPrefs, adminPrefs, (SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences) -> {}, settingsValidator, generalDefaults, adminDefaults, (key, newValue) -> {});
+        importer = new SettingsImporter(generalPrefs, adminPrefs, (PreferencesDataSource generalPreferences, PreferencesDataSource adminPreferences) -> {}, settingsValidator, generalDefaults, adminDefaults, (key, newValue) -> {});
     }
 
     @Test
@@ -110,7 +110,7 @@ public class SettingsImporterTest {
 
     @Test // Migrations might add/rename/move keys
     public void migratesPreferences_beforeLoadingDefaults() throws Exception {
-        SettingsPreferenceMigrator migrator = (SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences) -> {
+        SettingsPreferenceMigrator migrator = (PreferencesDataSource generalPreferences, PreferencesDataSource adminPreferences) -> {
             if (generalPrefs.contains("key1")) {
                 throw new RuntimeException("defaults already loaded!");
             }
@@ -126,7 +126,7 @@ public class SettingsImporterTest {
                 .put("general", new JSONObject()
                         .put("unknown_key", "value"));
 
-        SettingsPreferenceMigrator migrator = (SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences) -> {
+        SettingsPreferenceMigrator migrator = (PreferencesDataSource generalPreferences, PreferencesDataSource adminPreferences) -> {
             if (!generalPrefs.contains("unknown_key")) {
                 throw new RuntimeException("unknowns already cleared!");
             }
@@ -140,7 +140,7 @@ public class SettingsImporterTest {
     public void afterSettingsImportedAndMigrated_runsSettingsChangeHandlerForEveryKey() throws Exception {
         RecordingSettingsChangeHandler handler = new RecordingSettingsChangeHandler();
 
-        importer = new SettingsImporter(generalPrefs, adminPrefs, (SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences) -> {}, settingsValidator, generalDefaults, adminDefaults, handler);
+        importer = new SettingsImporter(generalPrefs, adminPrefs, (PreferencesDataSource generalPreferences, PreferencesDataSource adminPreferences) -> {}, settingsValidator, generalDefaults, adminDefaults, handler);
         assertThat(importer.fromJSON(emptySettings()), is(true));
         assertThat(handler.changes, containsInAnyOrder(
                 new Pair<>("key1", "default"),

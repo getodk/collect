@@ -216,6 +216,6 @@ public class Collect extends Application implements LocalizedApplication {
     @NotNull
     @Override
     public Locale getLocale() {
-        return new Locale(LocaleHelper.getLocaleCode(this));
+        return new Locale(LocaleHelper.getLocaleCode(preferencesRepository.getGeneralPreferences()));
     }
 }

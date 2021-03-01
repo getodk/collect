@@ -25,7 +25,7 @@ import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.io.IOException;
@@ -38,12 +38,13 @@ public class GoogleAccountsManager {
 
     private Intent intentChooseAccount;
     private Context context;
-    private GeneralSharedPreferences preferences;
     private ThemeUtils themeUtils;
+    private final PreferencesRepository preferencesRepository;
 
     @Inject
-    public GoogleAccountsManager(@NonNull Context context, GoogleAccountPicker googleAccountPicker) {
+    public GoogleAccountsManager(@NonNull Context context, GoogleAccountPicker googleAccountPicker, PreferencesRepository preferencesRepository) {
         this.accountPicker = googleAccountPicker;
+        this.preferencesRepository = preferencesRepository;
         initCredential(context);
     }
 
@@ -51,12 +52,12 @@ public class GoogleAccountsManager {
      * This constructor should be used only for testing purposes
      */
     public GoogleAccountsManager(@NonNull GoogleAccountCredential credential,
-                                 @NonNull GeneralSharedPreferences preferences,
+                                 @NonNull PreferencesRepository preferencesRepository,
                                  @NonNull Intent intentChooseAccount,
                                  @NonNull ThemeUtils themeUtils
     ) {
         this.accountPicker = new GoogleAccountCredentialGoogleAccountPicker(credential);
-        this.preferences = preferences;
+        this.preferencesRepository = preferencesRepository;
         this.intentChooseAccount = intentChooseAccount;
         this.themeUtils = themeUtils;
     }
@@ -68,7 +69,7 @@ public class GoogleAccountsManager {
     @NonNull
     public String getLastSelectedAccountIfValid() {
         Account[] googleAccounts = accountPicker.getAllAccounts();
-        String account = (String) preferences.get(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+        String account = preferencesRepository.getGeneralPreferences().getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
 
         if (googleAccounts != null && googleAccounts.length > 0) {
             for (Account googleAccount : googleAccounts) {
@@ -77,7 +78,7 @@ public class GoogleAccountsManager {
                 }
             }
 
-            preferences.reset(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+            preferencesRepository.getGeneralPreferences().reset(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
         }
 
         return "";
@@ -85,7 +86,7 @@ public class GoogleAccountsManager {
 
     public void selectAccount(String accountName) {
         if (accountName != null) {
-            preferences.save(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
+            preferencesRepository.getGeneralPreferences().save(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
             accountPicker.setSelectedAccountName(accountName);
         }
     }
@@ -121,8 +122,6 @@ public class GoogleAccountsManager {
 
     private void initCredential(@NonNull Context context) {
         this.context = context;
-
-        preferences = GeneralSharedPreferences.getInstance();
 
         intentChooseAccount = accountPicker.newChooseAccountIntent();
         themeUtils = new ThemeUtils(context);

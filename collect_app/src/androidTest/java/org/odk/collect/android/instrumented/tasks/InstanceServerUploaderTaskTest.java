@@ -2,15 +2,20 @@ package org.odk.collect.android.instrumented.tasks;
 
 import android.net.Uri;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.openrosa.OpenRosaConstants;
+import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.MockedServerTest;
@@ -35,9 +40,12 @@ public class InstanceServerUploaderTaskTest extends MockedServerTest {
     public GrantPermissionRule runtimepermissionrule = GrantPermissionRule.grant(android.Manifest.permission.READ_PHONE_STATE);
 
     private InstancesDao dao;
+    private PreferencesRepository preferencesRepository;
 
     @Before
     public void setUp() throws Exception {
+        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
+        preferencesRepository = component.preferencesRepository();
         resetInstancesContentProvider();
         dao = new InstancesDao();
     }
@@ -55,7 +63,9 @@ public class InstanceServerUploaderTaskTest extends MockedServerTest {
         willRespondWith(headResponse(), postResponse());
 
         // when
-        InstanceUploaderTask.Outcome o = new InstanceServerUploaderTask().doInBackground(id);
+        InstanceServerUploaderTask task = new InstanceServerUploaderTask();
+        task.setRepositories(null, null, preferencesRepository);
+        InstanceUploaderTask.Outcome o = task.doInBackground(id);
 
         // then
         assertNull(o.authRequestingServer);

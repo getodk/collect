@@ -23,11 +23,9 @@ package org.odk.collect.android.gdrive;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -45,7 +43,7 @@ import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
@@ -91,7 +89,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     FormsRepository formsRepository;
 
     @Inject
-    PreferencesProvider preferencesProvider;
+    PreferencesRepository preferencesRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,13 +137,11 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     }
 
     private void runTask() {
-        instanceGoogleSheetsUploaderTask = new InstanceGoogleSheetsUploaderTask(googleApiProvider, analytics, preferencesProvider);
-        instanceGoogleSheetsUploaderTask.setRepositories(instancesRepository, formsRepository);
+        instanceGoogleSheetsUploaderTask = new InstanceGoogleSheetsUploaderTask(googleApiProvider, analytics);
+        instanceGoogleSheetsUploaderTask.setRepositories(instancesRepository, formsRepository, preferencesRepository);
 
         // ensure we have a google account selected
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String googleUsername = prefs.getString(
-                GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
+        String googleUsername = preferencesRepository.getGeneralPreferences().getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
         if (googleUsername == null || googleUsername.equals("")) {
             showDialog(GOOGLE_USER_DIALOG);
         } else {

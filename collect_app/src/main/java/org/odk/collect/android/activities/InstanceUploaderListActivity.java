@@ -43,8 +43,8 @@ import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.network.NetworkStateProvider;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
@@ -97,6 +97,9 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
 
     @Inject
     NetworkStateProvider connectivityProvider;
+
+    @Inject
+    PreferencesRepository preferencesRepository;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -172,7 +175,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
             uploadButton.setEnabled(areCheckedItems());
         });
 
-        instanceSyncTask = new InstanceSyncTask();
+        instanceSyncTask = new InstanceSyncTask(preferencesRepository);
         instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();
 
@@ -236,7 +239,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     private void uploadSelectedFiles() {
         long[] instanceIds = listView.getCheckedItemIds();
 
-        String server = (String) GeneralSharedPreferences.getInstance().get(KEY_PROTOCOL);
+        String server = preferencesRepository.getGeneralPreferences().getString(KEY_PROTOCOL);
 
         if (server.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
             // if it's Sheets, start the Sheets uploader

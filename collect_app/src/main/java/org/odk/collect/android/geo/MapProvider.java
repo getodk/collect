@@ -1,7 +1,6 @@
 package org.odk.collect.android.geo;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 
 import androidx.annotation.NonNull;
@@ -14,6 +13,7 @@ import org.odk.collect.android.geo.GoogleMapConfigurator.GoogleMapTypeOption;
 import org.odk.collect.android.geo.MapboxMapConfigurator.MapboxUrlOption;
 import org.odk.collect.android.geo.OsmDroidMapConfigurator.WmsOption;
 import org.odk.collect.android.preferences.PrefUtils;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -191,7 +191,7 @@ public class MapProvider {
      */
     private static @NonNull SourceOption getOption(String id) {
         if (id == null) {
-            id = PrefUtils.getSharedPrefs().getString(KEY_BASEMAP_SOURCE, null);
+            id = PrefUtils.getSharedPrefs().getString(KEY_BASEMAP_SOURCE);
         }
         for (SourceOption option : SOURCE_OPTIONS) {
             if (option.id.equals(id)) {
@@ -204,14 +204,14 @@ public class MapProvider {
     void onMapFragmentStart(MapFragment map) {
         MapConfigurator cftor = configuratorsByMap.get(map);
         if (cftor != null) {
+            PreferencesDataSource generalPrefs = PrefUtils.getSharedPrefs();
             OnSharedPreferenceChangeListener listener = (prefs, key) -> {
                 if (cftor.getPrefKeys().contains(key)) {
-                    map.applyConfig(cftor.buildConfig(prefs));
+                    map.applyConfig(cftor.buildConfig(generalPrefs));
                 }
             };
-            SharedPreferences prefs = PrefUtils.getSharedPrefs();
-            map.applyConfig(cftor.buildConfig(prefs));
-            prefs.registerOnSharedPreferenceChangeListener(listener);
+            map.applyConfig(cftor.buildConfig(generalPrefs));
+            generalPrefs.registerOnSharedPreferenceChangeListener(listener);
             listenersByMap.put(map, listener);
         }
     }
@@ -219,7 +219,7 @@ public class MapProvider {
     void onMapFragmentStop(MapFragment map) {
         OnSharedPreferenceChangeListener listener = listenersByMap.get(map);
         if (listener != null) {
-            SharedPreferences prefs = PrefUtils.getSharedPrefs();
+            PreferencesDataSource prefs = PrefUtils.getSharedPrefs();
             prefs.unregisterOnSharedPreferenceChangeListener(listener);
             listenersByMap.remove(map);
         }

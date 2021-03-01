@@ -3,7 +3,7 @@ package org.odk.collect.android.utilities;
 import org.junit.Test;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -13,14 +13,14 @@ public class WebCredentialsUtilsTest {
 
     @Test
     public void saveCredentialsPreferencesMethod_shouldSaveNewCredentialsAndReloadPropertyManager() {
-        WebCredentialsUtils webCredentialsUtils = new WebCredentialsUtils();
-        GeneralSharedPreferences generalSharedPreferences = mock(GeneralSharedPreferences.class);
+        PreferencesDataSource generalPreferences = mock(PreferencesDataSource.class);
+        WebCredentialsUtils webCredentialsUtils = new WebCredentialsUtils(generalPreferences);
         PropertyManager propertyManager = mock(PropertyManager.class);
 
-        webCredentialsUtils.saveCredentialsPreferences(generalSharedPreferences, "username", "password", propertyManager);
+        webCredentialsUtils.saveCredentialsPreferences("username", "password", propertyManager);
 
-        verify(generalSharedPreferences, times(1)).save(GeneralKeys.KEY_USERNAME, "username");
-        verify(generalSharedPreferences, times(1)).save(GeneralKeys.KEY_PASSWORD, "password");
+        verify(generalPreferences, times(1)).save(GeneralKeys.KEY_USERNAME, "username");
+        verify(generalPreferences, times(1)).save(GeneralKeys.KEY_PASSWORD, "password");
         verify(propertyManager, times(1)).reload();
     }
 }

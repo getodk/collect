@@ -1,6 +1,5 @@
 package org.odk.collect.android.configure.qr;
 
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -14,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider;
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.JsonPreferencesGenerator;
 import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.async.Scheduler;
@@ -29,7 +27,7 @@ class QRCodeViewModel extends ViewModel {
 
     private final QRCodeGenerator qrCodeGenerator;
     private final JsonPreferencesGenerator jsonPreferencesGenerator;
-    private final SharedPreferences generalSharedPreferences;
+    private final PreferencesDataSource generalPreferences;
     private final PreferencesDataSource adminPreferences;
     private final Scheduler scheduler;
     private final MutableLiveData<String> qrCodeFilePath = new MutableLiveData<>(null);
@@ -38,10 +36,10 @@ class QRCodeViewModel extends ViewModel {
     private Collection<String> includedKeys = asList(KEY_ADMIN_PW, KEY_PASSWORD);
 
     QRCodeViewModel(QRCodeGenerator qrCodeGenerator, JsonPreferencesGenerator jsonPreferencesGenerator,
-                    SharedPreferences generalSharedPreferences, PreferencesDataSource adminPreferences, Scheduler scheduler) {
+                    PreferencesDataSource generalPreferences, PreferencesDataSource adminPreferences, Scheduler scheduler) {
         this.qrCodeGenerator = qrCodeGenerator;
         this.jsonPreferencesGenerator = jsonPreferencesGenerator;
-        this.generalSharedPreferences = generalSharedPreferences;
+        this.generalPreferences = generalPreferences;
         this.adminPreferences = adminPreferences;
         this.scheduler = scheduler;
 
@@ -86,7 +84,7 @@ class QRCodeViewModel extends ViewModel {
                     qrCodeFilePath.setValue(qrCode.first);
                     qrCodeBitmap.setValue(qrCode.second);
 
-                    boolean serverPasswordSet = !generalSharedPreferences.getString(KEY_PASSWORD, "").isEmpty();
+                    boolean serverPasswordSet = !generalPreferences.getString(KEY_PASSWORD).isEmpty();
                     boolean adminPasswordSet = !adminPreferences.getString(KEY_ADMIN_PW).isEmpty();
 
                     if (serverPasswordSet || adminPasswordSet) {
@@ -110,15 +108,13 @@ class QRCodeViewModel extends ViewModel {
 
         private final QRCodeGenerator qrCodeGenerator;
         private final JsonPreferencesGenerator jsonPreferencesGenerator;
-        private final PreferencesProvider preferencesProvider;
         private final PreferencesRepository preferencesRepository;
         private final Scheduler scheduler;
 
         Factory(QRCodeGenerator qrCodeGenerator, JsonPreferencesGenerator jsonPreferencesGenerator,
-                PreferencesProvider preferencesProvider, PreferencesRepository preferencesRepository, Scheduler scheduler) {
+                PreferencesRepository preferencesRepository, Scheduler scheduler) {
             this.qrCodeGenerator = qrCodeGenerator;
             this.jsonPreferencesGenerator = jsonPreferencesGenerator;
-            this.preferencesProvider = preferencesProvider;
             this.preferencesRepository = preferencesRepository;
             this.scheduler = scheduler;
         }
@@ -129,7 +125,7 @@ class QRCodeViewModel extends ViewModel {
             return (T) new QRCodeViewModel(
                     qrCodeGenerator,
                     jsonPreferencesGenerator,
-                    preferencesProvider.getGeneralSharedPreferences(),
+                    preferencesRepository.getGeneralPreferences(),
                     preferencesRepository.getAdminPreferences(),
                     scheduler
             );

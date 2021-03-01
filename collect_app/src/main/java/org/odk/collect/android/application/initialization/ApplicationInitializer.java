@@ -20,7 +20,6 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
 import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.storage.StorageInitializer;
@@ -39,7 +38,7 @@ public class ApplicationInitializer {
     private final SettingsPreferenceMigrator preferenceMigrator;
     private final PropertyManager propertyManager;
     private final Analytics analytics;
-    private final GeneralSharedPreferences generalSharedPreferences;
+    private final PreferencesDataSource generalPrefs;
     private final PreferencesDataSource adminPrefs;
     private final StorageInitializer storageInitializer;
 
@@ -52,7 +51,7 @@ public class ApplicationInitializer {
         this.analytics = analytics;
         this.storageInitializer = storageInitializer;
 
-        generalSharedPreferences = GeneralSharedPreferences.getInstance();
+        generalPrefs = preferencesRepository.getGeneralPreferences();
         adminPrefs = preferencesRepository.getAdminPreferences();
     }
 
@@ -82,10 +81,10 @@ public class ApplicationInitializer {
     }
 
     private void initializeAnalytics() {
-        boolean isAnalyticsEnabled = generalSharedPreferences.getBoolean(GeneralKeys.KEY_ANALYTICS, true);
+        boolean isAnalyticsEnabled = generalPrefs.getBoolean(GeneralKeys.KEY_ANALYTICS);
         analytics.setAnalyticsCollectionEnabled(isAnalyticsEnabled);
 
-        FormUpdateMode formUpdateMode = getFormUpdateMode(context, generalSharedPreferences.getSharedPreferences());
+        FormUpdateMode formUpdateMode = getFormUpdateMode(context, generalPrefs);
         analytics.setUserProperty("FormUpdateMode", formUpdateMode.getValue(context));
     }
 
@@ -117,12 +116,12 @@ public class ApplicationInitializer {
     }
 
     private void reloadSharedPreferences() {
-        generalSharedPreferences.reloadPreferences();
+        generalPrefs.loadDefaultPreferences();
         adminPrefs.loadDefaultPreferences();
     }
 
     private void performMigrations() {
-        preferenceMigrator.migrate(generalSharedPreferences.getSharedPreferences(), adminPrefs.getSharedPreferences());
+        preferenceMigrator.migrate(generalPrefs, adminPrefs);
     }
 
     private void initializeMapFrameworks() {

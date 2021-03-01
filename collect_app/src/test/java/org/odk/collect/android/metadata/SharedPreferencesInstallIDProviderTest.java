@@ -1,15 +1,16 @@
 package org.odk.collect.android.metadata;
 
-import androidx.preference.PreferenceManager;
 import androidx.test.core.app.ApplicationProvider;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.robolectric.RobolectricTestRunner;
 
-import static java.util.Collections.emptyMap;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
@@ -19,13 +20,14 @@ import static org.hamcrest.Matchers.startsWith;
 @RunWith(RobolectricTestRunner.class)
 public class SharedPreferencesInstallIDProviderTest {
 
-    private PreferencesDataSource preferencesDataSource;
+    private PreferencesDataSource metaPreferences;
     private SharedPreferencesInstallIDProvider provider;
 
     @Before
     public void setup() {
-        preferencesDataSource = new PreferencesDataSource(PreferenceManager.getDefaultSharedPreferences(ApplicationProvider.getApplicationContext()), emptyMap());
-        provider = new SharedPreferencesInstallIDProvider(preferencesDataSource, "blah");
+        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
+        metaPreferences = component.preferencesRepository().getMetaPreferences();
+        provider = new SharedPreferencesInstallIDProvider(metaPreferences, "blah");
     }
 
     @Test
@@ -48,7 +50,7 @@ public class SharedPreferencesInstallIDProviderTest {
     @Test
     public void clearingSharedPreferences_resetsInstallID() {
         String firstValue = provider.getInstallID();
-        preferencesDataSource.clear();
+        metaPreferences.clear();
 
         String secondValue = provider.getInstallID();
         assertThat(secondValue, notNullValue());

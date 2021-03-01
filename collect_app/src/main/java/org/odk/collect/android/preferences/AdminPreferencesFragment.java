@@ -31,8 +31,6 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 
-import javax.inject.Inject;
-
 import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
 import static org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MOVING_BACKWARDS_DIALOG_TAG;
 import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
@@ -130,9 +128,6 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
 
     public static class MainMenuAccessPreferences extends BasePreferenceFragment {
 
-        @Inject
-        PreferencesProvider preferencesProvider;
-
         @Override
         public void onAttach(@NonNull Context context) {
             super.onAttach(context);
@@ -146,7 +141,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             setPreferencesFromResource(R.xml.main_menu_access_preferences, rootKey);
             findPreference(KEY_EDIT_SAVED).setEnabled(preferencesRepository.getAdminPreferences().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
 
-            FormUpdateMode formUpdateMode = getFormUpdateMode(requireContext(), preferencesProvider.getGeneralSharedPreferences());
+            FormUpdateMode formUpdateMode = getFormUpdateMode(requireContext(), preferencesRepository.getGeneralPreferences());
             if (formUpdateMode == FormUpdateMode.MATCH_EXACTLY) {
                 displayDisabled(findPreference(KEY_GET_BLANK), false);
             }
@@ -188,7 +183,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             preferencesRepository.getAdminPreferences().save(KEY_EDIT_SAVED, false);
             preferencesRepository.getAdminPreferences().save(KEY_SAVE_MID, false);
             preferencesRepository.getAdminPreferences().save(KEY_JUMP_TO, false);
-            GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR, CONSTRAINT_BEHAVIOR_ON_SWIPE);
+            preferencesRepository.getGeneralPreferences().save(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR, CONSTRAINT_BEHAVIOR_ON_SWIPE);
 
             findPreference(KEY_JUMP_TO).setEnabled(false);
             findPreference(KEY_SAVE_MID).setEnabled(false);
