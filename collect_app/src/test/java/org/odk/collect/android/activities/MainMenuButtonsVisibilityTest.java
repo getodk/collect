@@ -3,10 +3,16 @@ package org.odk.collect.android.activities;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.test.core.app.ApplicationProvider;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
@@ -22,6 +28,13 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_VIEW_SENT;
 public class MainMenuButtonsVisibilityTest {
 
     private MainMenuActivity mainMenuActivity;
+    private PreferencesDataSource adminPrefs;
+
+    @Before
+    public void setup() {
+        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
+        adminPrefs = component.preferencesRepository().getAdminPreferences();
+    }
 
     @Test
     public void when_editSavedFormButtonIsEnabledInSettings_shouldBeVisible() {
@@ -33,7 +46,7 @@ public class MainMenuButtonsVisibilityTest {
 
     @Test
     public void when_editSavedFormButtonIsDisabledInSettings_shouldBeGone() {
-        AdminSharedPreferences.getInstance().save(KEY_EDIT_SAVED, false);
+        adminPrefs.save(KEY_EDIT_SAVED, false);
         createActivity();
 
         Button editSavedFormButton = mainMenuActivity.findViewById(R.id.review_data);
@@ -50,7 +63,7 @@ public class MainMenuButtonsVisibilityTest {
 
     @Test
     public void when_sendFinalizedFormButtonIsDisabledInSettings_shouldBeGone() {
-        AdminSharedPreferences.getInstance().save(KEY_SEND_FINALIZED, false);
+        adminPrefs.save(KEY_SEND_FINALIZED, false);
         createActivity();
 
         Button sendFinalizedFormButton = mainMenuActivity.findViewById(R.id.send_data);
@@ -67,7 +80,7 @@ public class MainMenuButtonsVisibilityTest {
 
     @Test
     public void when_viewSentFormButtonIsDisabledInSettings_shouldBeGone() {
-        AdminSharedPreferences.getInstance().save(KEY_VIEW_SENT, false);
+        adminPrefs.save(KEY_VIEW_SENT, false);
         createActivity();
 
         Button viewSentFormButton = mainMenuActivity.findViewById(R.id.view_sent_forms);
@@ -84,7 +97,7 @@ public class MainMenuButtonsVisibilityTest {
 
     @Test
     public void when_getBlankFormButtonIsDisabledInSettings_shouldBeGone() {
-        AdminSharedPreferences.getInstance().save(KEY_GET_BLANK, false);
+        adminPrefs.save(KEY_GET_BLANK, false);
         createActivity();
 
         Button getBlankFormButton = mainMenuActivity.findViewById(R.id.get_forms);
@@ -101,7 +114,7 @@ public class MainMenuButtonsVisibilityTest {
 
     @Test
     public void when_deleteSavedFormButtonIsDisabledInSettings_shouldBeGone() {
-        AdminSharedPreferences.getInstance().save(KEY_DELETE_SAVED, false);
+        adminPrefs.save(KEY_DELETE_SAVED, false);
         createActivity();
 
         Button deleteSavedFormButton = mainMenuActivity.findViewById(R.id.manage_forms);

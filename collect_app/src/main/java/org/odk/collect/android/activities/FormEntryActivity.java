@@ -131,10 +131,10 @@ import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -354,6 +354,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Inject
     BackgroundAudioViewModel.Factory backgroundAudioViewModelFactory;
 
+    @Inject
+    PreferencesRepository preferencesRepository;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -404,7 +407,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 formEntryViewModel,
                 audioRecorder,
                 backgroundLocationViewModel,
-                backgroundAudioViewModel
+                backgroundAudioViewModel,
+                preferencesRepository
         );
 
         nextButton = findViewById(R.id.form_forward_button);
@@ -552,7 +556,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void loadForm() {
-        allowMovingBackwards = (boolean) AdminSharedPreferences.getInstance().get(KEY_MOVING_BACKWARDS);
+        allowMovingBackwards = preferencesRepository.getAdminPreferences().getBoolean(KEY_MOVING_BACKWARDS);
 
         // If a parse error message is showing then nothing else is loaded
         // Dialogs mid form just disappear on rotation.
@@ -1295,7 +1299,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
-        if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_MARK_AS_FINALIZED)) {
+        if (!preferencesRepository.getAdminPreferences().getBoolean(AdminKeys.KEY_MARK_AS_FINALIZED)) {
             endView.findViewById(R.id.mark_finished).setVisibility(View.GONE);
         }
 
@@ -1309,7 +1313,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         // override the visibility settings based upon admin preferences
-        if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_AS)) {
+        if (!preferencesRepository.getAdminPreferences().getBoolean(AdminKeys.KEY_SAVE_AS)) {
             endView.findViewById(R.id.save_form_as).setVisibility(View.GONE);
             endView.findViewById(R.id.save_name).setVisibility(View.GONE);
         }

@@ -15,6 +15,7 @@ import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesRepository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -35,12 +36,14 @@ public class SettingsImporterRegressionTest {
 
     private SettingsImporter settingsImporter;
     private PreferencesProvider preferencesProvider;
+    private PreferencesRepository preferencesRepository;
 
     @Before
     public void setup() {
         AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
         settingsImporter = component.settingsImporter();
         preferencesProvider = component.preferencesProvider();
+        preferencesRepository = component.preferencesRepository();
     }
 
     @Test
@@ -86,7 +89,6 @@ public class SettingsImporterRegressionTest {
     @Test
     public void adminPW() {
         settingsImporter.fromJSON("{\"general\":{\"periodic_form_updates_check\":\"every_fifteen_minutes\"},\"admin\":{\"admin_pw\":\"blah\"}}");
-        SharedPreferences prefs = preferencesProvider.getAdminSharedPreferences();
-        assertThat(prefs.getString(KEY_ADMIN_PW, null), is("blah"));
+        assertThat(preferencesRepository.getAdminPreferences().getString(KEY_ADMIN_PW), is("blah"));
     }
 }

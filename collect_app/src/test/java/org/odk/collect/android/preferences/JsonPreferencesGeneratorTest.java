@@ -22,19 +22,18 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 @RunWith(RobolectricTestRunner.class)
 public class JsonPreferencesGeneratorTest extends TestCase {
     private JsonPreferencesGenerator jsonPreferencesGenerator;
-    private AdminSharedPreferences adminSharedPreferences;
     private GeneralSharedPreferences generalSharedPreferences;
+    private final PreferencesRepository preferencesRepository = new PreferencesRepository(ApplicationProvider.getApplicationContext());
 
     @Before
     public void setup() {
-        jsonPreferencesGenerator = new JsonPreferencesGenerator();
-        adminSharedPreferences = new AdminSharedPreferences(ApplicationProvider.getApplicationContext());
+        jsonPreferencesGenerator = new JsonPreferencesGenerator(preferencesRepository);
         generalSharedPreferences = new GeneralSharedPreferences(ApplicationProvider.getApplicationContext());
     }
 
     @Test
     public void whenAdminPasswordIncluded_shouldBePresentInJson() throws JSONException {
-        adminSharedPreferences.save(KEY_ADMIN_PW, "123456");
+        preferencesRepository.getAdminPreferences().save(KEY_ADMIN_PW, "123456");
         String jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences(Collections.singletonList(KEY_ADMIN_PW));
         assertThat(jsonPrefs, containsString("admin_pw"));
         assertThat(jsonPrefs, containsString("123456"));
@@ -42,7 +41,7 @@ public class JsonPreferencesGeneratorTest extends TestCase {
 
     @Test
     public void whenAdminPasswordExcluded_shouldNotBePresentInJson() throws JSONException {
-        adminSharedPreferences.save(KEY_ADMIN_PW, "123456");
+        preferencesRepository.getAdminPreferences().save(KEY_ADMIN_PW, "123456");
         String jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences(new ArrayList<>());
         assertThat(jsonPrefs, not(containsString("admin_pw")));
         assertThat(jsonPrefs, not(containsString("123456")));

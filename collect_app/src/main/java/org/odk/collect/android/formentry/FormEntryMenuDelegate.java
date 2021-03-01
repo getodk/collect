@@ -18,9 +18,9 @@ import org.odk.collect.android.formentry.questions.AnswersProvider;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MenuDelegate;
@@ -42,8 +42,13 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
     @Nullable
     private FormController formController;
     private final AudioRecorder audioRecorder;
+    private final PreferencesRepository preferencesRepository;
 
-    public FormEntryMenuDelegate(AppCompatActivity activity, AnswersProvider answersProvider, FormIndexAnimationHandler formIndexAnimationHandler, FormSaveViewModel formSaveViewModel, FormEntryViewModel formEntryViewModel, AudioRecorder audioRecorder, BackgroundLocationViewModel backgroundLocationViewModel, BackgroundAudioViewModel backgroundAudioViewModel) {
+    public FormEntryMenuDelegate(AppCompatActivity activity, AnswersProvider answersProvider,
+                                 FormIndexAnimationHandler formIndexAnimationHandler, FormSaveViewModel formSaveViewModel,
+                                 FormEntryViewModel formEntryViewModel, AudioRecorder audioRecorder,
+                                 BackgroundLocationViewModel backgroundLocationViewModel,
+                                 BackgroundAudioViewModel backgroundAudioViewModel, PreferencesRepository preferencesRepository) {
         this.activity = activity;
         this.answersProvider = answersProvider;
         this.formIndexAnimationHandler = formIndexAnimationHandler;
@@ -53,6 +58,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
         this.formSaveViewModel = formSaveViewModel;
         this.backgroundLocationViewModel = backgroundLocationViewModel;
         this.backgroundAudioViewModel = backgroundAudioViewModel;
+        this.preferencesRepository = preferencesRepository;
     }
 
     @Override
@@ -69,16 +75,16 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
     public void onPrepareOptionsMenu(Menu menu) {
         boolean useability;
 
-        useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_MID);
+        useability = preferencesRepository.getAdminPreferences().getBoolean(AdminKeys.KEY_SAVE_MID);
 
         menu.findItem(R.id.menu_save).setVisible(useability).setEnabled(useability);
 
-        useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_JUMP_TO);
+        useability = preferencesRepository.getAdminPreferences().getBoolean(AdminKeys.KEY_JUMP_TO);
 
         menu.findItem(R.id.menu_goto).setVisible(useability)
                 .setEnabled(useability);
 
-        useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_CHANGE_LANGUAGE)
+        useability = preferencesRepository.getAdminPreferences().getBoolean(AdminKeys.KEY_CHANGE_LANGUAGE)
                 && (formController != null)
                 && formController.getLanguages() != null
                 && formController.getLanguages().length > 1;
@@ -86,7 +92,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
         menu.findItem(R.id.menu_languages).setVisible(useability)
                 .setEnabled(useability);
 
-        useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_ACCESS_SETTINGS);
+        useability = preferencesRepository.getAdminPreferences().getBoolean(AdminKeys.KEY_ACCESS_SETTINGS);
 
         menu.findItem(R.id.menu_preferences).setVisible(useability)
                 .setEnabled(useability);

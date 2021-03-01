@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.version.VersionInformation;
 import org.robolectric.RobolectricTestRunner;
 
@@ -78,6 +79,6 @@ public class MainMenuViewModelTest {
 
     @NotNull
     private MainMenuViewModel createViewModelWithVersion(String version) {
-        return new MainMenuViewModel(mock(Application.class), new VersionInformation(() -> version), mock(PreferencesProvider.class));
+        return new MainMenuViewModel(mock(Application.class), new VersionInformation(() -> version), mock(PreferencesProvider.class), mock(PreferencesRepository.class));
     }
 }

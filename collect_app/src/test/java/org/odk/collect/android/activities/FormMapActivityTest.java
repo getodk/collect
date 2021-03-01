@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.test.core.app.ApplicationProvider;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.chip.Chip;
@@ -19,13 +20,16 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.TestMapFragment;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.support.InMemInstancesRepository;
 import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
@@ -55,6 +59,7 @@ import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 public class FormMapActivityTest {
     private ActivityController activityController;
     private FormMapActivity activity;
+    private PreferencesRepository preferencesRepository;
 
     private final TestMapFragment map = new TestMapFragment();
 
@@ -63,6 +68,7 @@ public class FormMapActivityTest {
             new MapPoint(10.3, 125.6), new MapPoint(10.3, 125.7),
             new MapPoint(10.4, 125.6));
     private final MapPoint currentLocation = new MapPoint(5, 5);
+
 
     @Before public void setUpActivity() {
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
@@ -73,6 +79,8 @@ public class FormMapActivityTest {
                    return mapProvider;
                }
            });
+        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
+        preferencesRepository = component.preferencesRepository();
 
         activityController = RobolectricHelpers.buildThemedActivity(FormMapActivity.class);
         activity = (FormMapActivity) activityController.get();
@@ -229,7 +237,7 @@ public class FormMapActivityTest {
 
     @LooperMode(PAUSED)
     @Test public void openingEditableInstance_whenEditingSettingisOff_launchesViewActivity() {
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_EDIT_SAVED, false);
+        preferencesRepository.getAdminPreferences().save(AdminKeys.KEY_EDIT_SAVED, false);
 
         MapPoint editableAndFinalized = new MapPoint(10.1, 125.6);
         MapPoint unfinalized = new MapPoint(10.1, 126.6);

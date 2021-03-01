@@ -144,7 +144,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             getPreferenceManager().setSharedPreferencesName(ADMIN_PREFERENCES);
 
             setPreferencesFromResource(R.xml.main_menu_access_preferences, rootKey);
-            findPreference(KEY_EDIT_SAVED).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
+            findPreference(KEY_EDIT_SAVED).setEnabled(preferencesRepository.getAdminPreferences().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
 
             FormUpdateMode formUpdateMode = getFormUpdateMode(requireContext(), preferencesProvider.getGeneralSharedPreferences());
             if (formUpdateMode == FormUpdateMode.MATCH_EXACTLY) {
@@ -179,15 +179,15 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
                 }
                 return true;
             });
-            findPreference(KEY_JUMP_TO).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
-            findPreference(KEY_SAVE_MID).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
+            findPreference(KEY_JUMP_TO).setEnabled(preferencesRepository.getAdminPreferences().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
+            findPreference(KEY_SAVE_MID).setEnabled(preferencesRepository.getAdminPreferences().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
         }
 
         private void preventOtherWaysOfEditingForm() {
-            AdminSharedPreferences.getInstance().save(ALLOW_OTHER_WAYS_OF_EDITING_FORM, false);
-            AdminSharedPreferences.getInstance().save(KEY_EDIT_SAVED, false);
-            AdminSharedPreferences.getInstance().save(KEY_SAVE_MID, false);
-            AdminSharedPreferences.getInstance().save(KEY_JUMP_TO, false);
+            preferencesRepository.getAdminPreferences().save(ALLOW_OTHER_WAYS_OF_EDITING_FORM, false);
+            preferencesRepository.getAdminPreferences().save(KEY_EDIT_SAVED, false);
+            preferencesRepository.getAdminPreferences().save(KEY_SAVE_MID, false);
+            preferencesRepository.getAdminPreferences().save(KEY_JUMP_TO, false);
             GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR, CONSTRAINT_BEHAVIOR_ON_SWIPE);
 
             findPreference(KEY_JUMP_TO).setEnabled(false);
@@ -198,7 +198,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
         }
 
         private void onMovingBackwardsEnabled() {
-            AdminSharedPreferences.getInstance().save(ALLOW_OTHER_WAYS_OF_EDITING_FORM, true);
+            preferencesRepository.getAdminPreferences().save(ALLOW_OTHER_WAYS_OF_EDITING_FORM, true);
             findPreference(KEY_JUMP_TO).setEnabled(true);
             findPreference(KEY_SAVE_MID).setEnabled(true);
         }

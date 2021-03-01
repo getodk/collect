@@ -85,7 +85,6 @@ import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvide
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.JsonPreferencesGenerator;
@@ -270,12 +269,6 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    AdminSharedPreferences providesAdminSharedPreferences(Context context) {
-        return new AdminSharedPreferences(context);
-    }
-
-    @Provides
-    @Singleton
     public MapProvider providesMapProvider() {
         return new MapProvider();
     }
@@ -286,8 +279,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public AdminPasswordProvider providesAdminPasswordProvider() {
-        return new AdminPasswordProvider(AdminSharedPreferences.getInstance());
+    public AdminPasswordProvider providesAdminPasswordProvider(PreferencesRepository preferencesRepository) {
+        return new AdminPasswordProvider(preferencesRepository.getAdminPreferences());
     }
 
     @Provides
@@ -334,8 +327,8 @@ public class AppDependencyModule {
     @Provides
     public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider,
                                                                  SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager,
-                                                                 Analytics analytics, StorageInitializer storageInitializer) {
-        return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator, propertyManager, analytics, storageInitializer);
+                                                                 Analytics analytics, StorageInitializer storageInitializer, PreferencesRepository preferencesRepository) {
+        return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator, propertyManager, analytics, storageInitializer, preferencesRepository);
     }
 
     @Provides
@@ -360,12 +353,12 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SettingsImporter providesCollectSettingsImporter(PreferencesProvider preferencesProvider, SettingsPreferenceMigrator preferenceMigrator, SettingsChangeHandler settingsChangeHandler) {
+    public SettingsImporter providesCollectSettingsImporter(PreferencesProvider preferencesProvider, PreferencesRepository preferencesRepository, SettingsPreferenceMigrator preferenceMigrator, SettingsChangeHandler settingsChangeHandler) {
         HashMap<String, Object> generalDefaults = GeneralKeys.DEFAULTS;
         Map<String, Object> adminDefaults = AdminKeys.getDefaults();
         return new SettingsImporter(
                 preferencesProvider.getGeneralSharedPreferences(),
-                preferencesProvider.getAdminSharedPreferences(),
+                preferencesRepository.getAdminPreferences().getSharedPreferences(),
                 preferenceMigrator,
                 new StructureAndTypeSettingsValidator(generalDefaults, adminDefaults),
                 generalDefaults,
@@ -493,8 +486,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public JsonPreferencesGenerator providesJsonPreferencesGenerator() {
-        return new JsonPreferencesGenerator();
+    public JsonPreferencesGenerator providesJsonPreferencesGenerator(PreferencesRepository preferencesRepository) {
+        return new JsonPreferencesGenerator(preferencesRepository);
     }
 
     @Provides

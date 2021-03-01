@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 public class PreferencesProvider {
-    private static final String ADMIN_PREFS_NAME = "admin_prefs";
-
     private final Context context;
 
     public PreferencesProvider(Context context) {
@@ -15,10 +13,6 @@ public class PreferencesProvider {
 
     public SharedPreferences getGeneralSharedPreferences() {
         return PreferenceManager.getDefaultSharedPreferences(context);
-    }
-
-    public SharedPreferences getAdminSharedPreferences() {
-        return context.getSharedPreferences(ADMIN_PREFS_NAME, Context.MODE_PRIVATE);
     }
 }
 

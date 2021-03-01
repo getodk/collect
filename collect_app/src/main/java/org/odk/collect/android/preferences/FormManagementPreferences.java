@@ -53,6 +53,9 @@ public class FormManagementPreferences extends BasePreferenceFragment {
     PreferencesProvider preferencesProvider;
 
     @Inject
+    PreferencesRepository preferencesRepository;
+
+    @Inject
     FormUpdateManager formUpdateManager;
 
     @Override
@@ -146,7 +149,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 return true;
             });
             if (key.equals(KEY_CONSTRAINT_BEHAVIOR)) {
-                pref.setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
+                pref.setEnabled(preferencesRepository.getAdminPreferences().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
             }
         }
     }

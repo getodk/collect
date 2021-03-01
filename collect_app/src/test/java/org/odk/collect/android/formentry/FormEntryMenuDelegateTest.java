@@ -35,6 +35,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 import static org.odk.collect.android.support.RobolectricHelpers.createThemedActivity;
 import static org.odk.collect.android.support.RobolectricHelpers.getFragmentByClass;
 import static org.robolectric.Shadows.shadowOf;
@@ -76,7 +77,8 @@ public class FormEntryMenuDelegateTest {
                 formEntryViewModel,
                 audioRecorder,
                 backgroundLocationViewModel,
-                backgroundAudioViewModel
+                backgroundAudioViewModel,
+                getComponent(activity).preferencesRepository()
         );
         formEntryMenuDelegate.formLoaded(formController);
     }

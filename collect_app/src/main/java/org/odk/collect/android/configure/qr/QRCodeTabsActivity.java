@@ -18,6 +18,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.JsonPreferencesGenerator;
 import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
@@ -42,6 +43,9 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
     PreferencesProvider preferencesProvider;
 
     @Inject
+    PreferencesRepository preferencesRepository;
+
+    @Inject
     Scheduler scheduler;
 
     @Inject
@@ -64,12 +68,12 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
 
-        menuDelegate = new QRCodeMenuDelegate(this, activityAvailability, qrCodeGenerator, jsonPreferencesGenerator, fileProvider, preferencesProvider, scheduler);
+        menuDelegate = new QRCodeMenuDelegate(this, activityAvailability, qrCodeGenerator, jsonPreferencesGenerator, fileProvider, preferencesProvider, preferencesRepository, scheduler);
         activityResultDelegate = new QRCodeActivityResultDelegate(this, settingsImporter, qrCodeDecoder, analytics);
         setContentView(R.layout.tabs_layout);
 
         initToolbar(getString(R.string.configure_via_qr_code));
-        menuDelegate = new QRCodeMenuDelegate(this, activityAvailability, qrCodeGenerator, jsonPreferencesGenerator, fileProvider, preferencesProvider, scheduler);
+        menuDelegate = new QRCodeMenuDelegate(this, activityAvailability, qrCodeGenerator, jsonPreferencesGenerator, fileProvider, preferencesProvider, preferencesRepository, scheduler);
 
         permissionsProvider.requestCameraPermission(this, new PermissionListener() {
             @Override

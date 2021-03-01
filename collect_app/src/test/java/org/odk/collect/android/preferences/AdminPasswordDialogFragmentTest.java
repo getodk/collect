@@ -34,7 +34,7 @@ public class AdminPasswordDialogFragmentTest {
     public void setup() {
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
-            public AdminPasswordProvider providesAdminPasswordProvider() {
+            public AdminPasswordProvider providesAdminPasswordProvider(PreferencesRepository preferencesRepository) {
                 return new StubAdminPasswordProvider();
             }
         });

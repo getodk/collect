@@ -48,7 +48,6 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.AdminPreferencesFragment;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.BasePreferenceFragment;
 import org.odk.collect.android.preferences.ExperimentalPreferencesFragment;
 import org.odk.collect.android.preferences.FormManagementPreferences;
@@ -237,8 +236,6 @@ public interface AppDependencyComponent {
     Analytics analytics();
 
     GeneralSharedPreferences generalSharedPreferences();
-
-    AdminSharedPreferences adminSharedPreferences();
 
     PreferencesProvider preferencesProvider();
 

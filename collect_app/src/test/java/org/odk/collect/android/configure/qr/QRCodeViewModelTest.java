@@ -9,6 +9,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.JsonPreferencesGenerator;
+import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.testshared.FakeScheduler;
 
 import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
@@ -30,15 +32,17 @@ public class QRCodeViewModelTest {
     private final FakeScheduler fakeScheduler = new FakeScheduler();
 
     private SharedPreferences preferences;
+    private PreferencesDataSource adminPreferences;
 
     @Before
     public void setup() {
         preferences = getDefaultSharedPreferences(getApplicationContext());
+        adminPreferences = new PreferencesRepository(getApplicationContext()).getAdminPreferences();
     }
 
     @Test
     public void setIncludedKeys_generatesQRCodeWithKeys() throws Exception {
-        QRCodeViewModel viewModel = new QRCodeViewModel(qrCodeGenerator, jsonPreferencesGenerator, preferences, preferences, fakeScheduler);
+        QRCodeViewModel viewModel = new QRCodeViewModel(qrCodeGenerator, jsonPreferencesGenerator, preferences, adminPreferences, fakeScheduler);
 
         viewModel.setIncludedKeys(asList("foo", "bar"));
         fakeScheduler.runBackground();
@@ -48,7 +52,7 @@ public class QRCodeViewModelTest {
 
     @Test
     public void warning_whenNeitherServerOrAdminPasswordSet_isNull() {
-        QRCodeViewModel viewModel = new QRCodeViewModel(qrCodeGenerator, jsonPreferencesGenerator, preferences, preferences, fakeScheduler);
+        QRCodeViewModel viewModel = new QRCodeViewModel(qrCodeGenerator, jsonPreferencesGenerator, preferences, adminPreferences, fakeScheduler);
         assertThat(viewModel.getWarning().getValue(), is(nullValue()));
     }
 
@@ -56,10 +60,11 @@ public class QRCodeViewModelTest {
     public void warning_whenServerAndAdminPasswordSet_isForBoth() {
         preferences.edit()
                 .putString(KEY_PASSWORD, "blah")
-                .putString(KEY_ADMIN_PW, "blah")
                 .apply();
 
-        QRCodeViewModel viewModel = new QRCodeViewModel(qrCodeGenerator, jsonPreferencesGenerator, preferences, preferences, fakeScheduler);
+        adminPreferences.save(KEY_ADMIN_PW, "blah");
+
+        QRCodeViewModel viewModel = new QRCodeViewModel(qrCodeGenerator, jsonPreferencesGenerator, preferences, adminPreferences, fakeScheduler);
         fakeScheduler.runBackground();
 
         assertThat(viewModel.getWarning().getValue(), is(R.string.qrcode_with_both_passwords));

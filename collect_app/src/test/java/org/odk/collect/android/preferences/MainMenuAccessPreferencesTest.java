@@ -23,13 +23,13 @@ public class MainMenuAccessPreferencesTest {
 
     private Context context;
     private SharedPreferences generalPrefs;
-    private SharedPreferences adminPrefs;
+    private PreferencesDataSource adminPrefs;
 
     @Before
     public void setup() {
         context = ApplicationProvider.getApplicationContext();
         generalPrefs = getComponent(context).preferencesProvider().getGeneralSharedPreferences();
-        adminPrefs = getComponent(context).preferencesProvider().getAdminSharedPreferences();
+        adminPrefs = getComponent(context).preferencesRepository().getAdminPreferences();
     }
 
     @Test
@@ -43,7 +43,7 @@ public class MainMenuAccessPreferencesTest {
             CheckBoxPreference getBlankForm = f.findPreference(KEY_GET_BLANK);
             assertThat(getBlankForm.isEnabled(), is(false));
             assertThat(getBlankForm.isChecked(), is(false));
-            assertThat(adminPrefs.getBoolean(KEY_GET_BLANK, false), is(true));
+            assertThat(adminPrefs.getBoolean(KEY_GET_BLANK), is(true));
         });
     }
 
