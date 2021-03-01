@@ -3,8 +3,10 @@ package org.odk.collect.android.configure;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.robolectric.RobolectricTestRunner;
 
+import static java.util.Collections.emptyMap;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.initPrefs;
@@ -18,7 +20,7 @@ public class SharedPreferencesServerRepositoryTest {
     @Before
     public void setup() {
         defaultServer = "http://default.example";
-        repository = new SharedPreferencesServerRepository(defaultServer, initPrefs());
+        repository = new SharedPreferencesServerRepository(defaultServer, new PreferencesDataSource(initPrefs(), emptyMap()));
     }
 
     @Test

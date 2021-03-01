@@ -82,4 +82,9 @@ class PreferencesDataSource(private val sharedPreferences: SharedPreferences, pr
         val defaultValue = (defaultPreferences[key] ?: emptySet<Any>()) as Set<String>
         return sharedPreferences.getStringSet(key, defaultValue)
     }
+
+    // TODO: Remove once all type of preferences are refactored
+    fun getSharedPreferences(): SharedPreferences {
+        return sharedPreferences
+    }
 }

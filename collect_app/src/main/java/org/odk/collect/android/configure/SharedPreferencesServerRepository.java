@@ -1,11 +1,10 @@
 package org.odk.collect.android.configure;
 
-import android.content.SharedPreferences;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.odk.collect.android.preferences.MetaKeys;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,11 +13,11 @@ import java.util.List;
 public class SharedPreferencesServerRepository implements ServerRepository {
 
     private final String defaultServer;
-    private final SharedPreferences sharedPreferences;
+    private final PreferencesDataSource preferencesDataSource;
 
-    public SharedPreferencesServerRepository(String defaultServer, SharedPreferences sharedPreferences) {
+    public SharedPreferencesServerRepository(String defaultServer, PreferencesDataSource preferencesDataSource) {
         this.defaultServer = defaultServer;
-        this.sharedPreferences = sharedPreferences;
+        this.preferencesDataSource = preferencesDataSource;
     }
 
     @Override
@@ -32,12 +31,12 @@ public class SharedPreferencesServerRepository implements ServerRepository {
         }
 
         urlList.add(0, url);
-        getSharedPreferences().edit().putString(MetaKeys.SERVER_LIST, new Gson().toJson(urlList)).apply();
+        preferencesDataSource.save(MetaKeys.SERVER_LIST, new Gson().toJson(urlList));
     }
 
     @Override
     public List<String> getServers() {
-        String urlListString = getSharedPreferences().getString(MetaKeys.SERVER_LIST, null);
+        String urlListString = preferencesDataSource.getString(MetaKeys.SERVER_LIST);
         return urlListString == null || urlListString.isEmpty()
                 ? new ArrayList<>(Collections.singletonList(defaultServer))
                 : new Gson().fromJson(urlListString, new TypeToken<List<String>>() {}.getType());
@@ -45,10 +44,6 @@ public class SharedPreferencesServerRepository implements ServerRepository {
 
     @Override
     public void clear() {
-        getSharedPreferences().edit().remove(MetaKeys.SERVER_LIST).apply();
-    }
-
-    private SharedPreferences getSharedPreferences() {
-        return sharedPreferences;
+        preferencesDataSource.remove(MetaKeys.SERVER_LIST);
     }
 }

@@ -1,23 +1,23 @@
 package org.odk.collect.android.metadata;
 
-import android.content.SharedPreferences;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import static org.odk.collect.utilities.RandomString.randomString;
 
 public class SharedPreferencesInstallIDProvider implements InstallIDProvider {
 
-    private final SharedPreferences sharedPreferences;
+    private final PreferencesDataSource preferencesDataSource;
     private final String preferencesKey;
 
-    public SharedPreferencesInstallIDProvider(SharedPreferences sharedPreferences, String preferencesKey) {
-        this.sharedPreferences = sharedPreferences;
+    public SharedPreferencesInstallIDProvider(PreferencesDataSource sharedPreferences, String preferencesKey) {
+        this.preferencesDataSource = sharedPreferences;
         this.preferencesKey = preferencesKey;
     }
 
     @Override
     public String getInstallID() {
-        if (sharedPreferences.contains(preferencesKey)) {
-            return sharedPreferences.getString(preferencesKey, null);
+        if (preferencesDataSource.contains(preferencesKey)) {
+            return preferencesDataSource.getString(preferencesKey);
         } else {
             return generateAndStoreInstallID();
         }
@@ -25,10 +25,7 @@ public class SharedPreferencesInstallIDProvider implements InstallIDProvider {
 
     private String generateAndStoreInstallID() {
         String installID = "collect:" + randomString(16);
-        sharedPreferences
-                .edit()
-                .putString(preferencesKey, installID)
-                .apply();
+        preferencesDataSource.save(preferencesKey, installID);
 
         return installID;
     }

@@ -90,6 +90,7 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.JsonPreferencesGenerator;
 import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -233,8 +234,13 @@ public class AppDependencyModule {
     }
 
     @Provides
-    InstallIDProvider providesInstallIDProvider(PreferencesProvider preferencesProvider) {
-        return new SharedPreferencesInstallIDProvider(preferencesProvider.getMetaSharedPreferences(), KEY_INSTALL_ID);
+    public PreferencesRepository providesPreferencesRepository(Context context) {
+        return new PreferencesRepository(context);
+    }
+
+    @Provides
+    InstallIDProvider providesInstallIDProvider(PreferencesRepository preferencesRepository) {
+        return new SharedPreferencesInstallIDProvider(preferencesRepository.getMetaPreferences(), KEY_INSTALL_ID);
     }
 
     @Provides
@@ -333,8 +339,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SettingsPreferenceMigrator providesPreferenceMigrator(PreferencesProvider preferencesProvider) {
-        return new CollectSettingsPreferenceMigrator(preferencesProvider.getMetaSharedPreferences());
+    public SettingsPreferenceMigrator providesPreferenceMigrator(PreferencesRepository preferencesRepository) {
+        return new CollectSettingsPreferenceMigrator(preferencesRepository.getMetaPreferences().getSharedPreferences());
     }
 
     @Provides
@@ -344,8 +350,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ServerRepository providesServerRepository(Context context, PreferencesProvider preferencesProvider) {
-        return new SharedPreferencesServerRepository(context.getString(R.string.default_server_url), preferencesProvider.getMetaSharedPreferences());
+    public ServerRepository providesServerRepository(Context context, PreferencesRepository preferencesRepository) {
+        return new SharedPreferencesServerRepository(context.getString(R.string.default_server_url), preferencesRepository.getMetaPreferences());
     }
 
     @Provides
@@ -419,8 +425,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public Notifier providesNotifier(Application application, PreferencesProvider preferencesProvider) {
-        return new NotificationManagerNotifier(application, preferencesProvider);
+    public Notifier providesNotifier(Application application, PreferencesRepository preferencesRepository) {
+        return new NotificationManagerNotifier(application, preferencesRepository);
     }
 
     @Provides

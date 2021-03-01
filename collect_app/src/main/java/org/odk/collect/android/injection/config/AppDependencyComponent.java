@@ -58,6 +58,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.IdentityPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.preferences.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.preferences.UserInterfacePreferencesFragment;
@@ -240,6 +241,8 @@ public interface AppDependencyComponent {
     AdminSharedPreferences adminSharedPreferences();
 
     PreferencesProvider preferencesProvider();
+
+    PreferencesRepository preferencesRepository();
 
     ApplicationInitializer applicationInitializer();
 
