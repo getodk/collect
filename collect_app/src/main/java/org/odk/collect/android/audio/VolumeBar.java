@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 
 import static androidx.core.content.res.ResourcesCompat.getDrawable;
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
 import static org.odk.collect.android.utilities.ViewUtils.pxFromDp;
 
 public class VolumeBar extends LinearLayout {
@@ -55,8 +56,9 @@ public class VolumeBar extends LinearLayout {
         super.onLayout(changed, left, top, right, bottom);
 
         if (changed && getHeight() > 0) {
-            int pipSize = pxFromDp(getContext(), 24);
+            int pipSize = getBestPipSize(getWidth());
             int marginSize = pxFromDp(getContext(), 4);
+
             pips = (getWidth() + marginSize) / (pipSize + marginSize);
 
             this.removeAllViews();
@@ -88,6 +90,14 @@ public class VolumeBar extends LinearLayout {
     @Nullable
     public Integer getLatestAmplitude() {
         return lastAmplitude;
+    }
+
+    private int getBestPipSize(int width) {
+        if (dpFromPx(getContext(), width) >= 164) {
+            return pxFromDp(getContext(), 24);
+        } else {
+            return pxFromDp(getContext(), 20);
+        }
     }
 
     @NotNull
