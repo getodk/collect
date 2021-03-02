@@ -7,7 +7,6 @@ import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -23,6 +22,8 @@ import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
+import org.odk.collect.shared.livedata.MutableNonNullLiveData;
+import org.odk.collect.shared.livedata.NonNullLiveData;
 import org.odk.collect.utilities.Clock;
 
 import java.util.HashSet;
@@ -42,8 +43,8 @@ public class BackgroundAudioViewModel extends ViewModel implements RequiresFormC
     private final Clock clock;
     private final Analytics analytics;
 
-    private final MutableLiveData<Boolean> isPermissionRequired = new MutableLiveData<>(false);
-    private final MutableLiveData<Boolean> isBackgroundRecordingEnabled;
+    private final MutableNonNullLiveData<Boolean> isPermissionRequired = new MutableNonNullLiveData<>(false);
+    private final MutableNonNullLiveData<Boolean> isBackgroundRecordingEnabled;
 
     // These fields handle storing record action details while we're granting permissions
     private final HashSet<TreeReference> tempTreeReferences = new HashSet<>();
@@ -65,7 +66,7 @@ public class BackgroundAudioViewModel extends ViewModel implements RequiresFormC
             new Handler(Looper.getMainLooper()).post(() -> handleRecordAction(treeReference, quality));
         });
 
-        isBackgroundRecordingEnabled = new MutableLiveData<>(preferencesProvider.getGeneralSharedPreferences().getBoolean(KEY_BACKGROUND_RECORDING, true));
+        isBackgroundRecordingEnabled = new MutableNonNullLiveData<>(preferencesProvider.getGeneralSharedPreferences().getBoolean(KEY_BACKGROUND_RECORDING, true));
     }
 
     @Override
@@ -83,7 +84,7 @@ public class BackgroundAudioViewModel extends ViewModel implements RequiresFormC
         return isPermissionRequired;
     }
 
-    public LiveData<Boolean> isBackgroundRecordingEnabled() {
+    public NonNullLiveData<Boolean> isBackgroundRecordingEnabled() {
         return isBackgroundRecordingEnabled;
     }
 
@@ -123,13 +124,13 @@ public class BackgroundAudioViewModel extends ViewModel implements RequiresFormC
 
         isPermissionRequired.setValue(false);
         startBackgroundRecording(tempQuality, new HashSet<>(tempTreeReferences));
-        
+
         tempTreeReferences.clear();
         tempQuality = null;
     }
 
     private void handleRecordAction(TreeReference treeReference, String quality) {
-        if (isBackgroundRecordingEnabled.getValue() != null && isBackgroundRecordingEnabled.getValue()) {
+        if (isBackgroundRecordingEnabled.getValue()) {
             if (permissionsChecker.isPermissionGranted(Manifest.permission.RECORD_AUDIO)) {
                 if (isBackgroundRecording()) {
                     RecordingSession session = audioRecorder.getCurrentSession().getValue();

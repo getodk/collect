@@ -13,6 +13,7 @@ import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Com
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_STOP
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.EXTRA_OUTPUT
 import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.EXTRA_SESSION_ID
+import org.odk.collect.shared.data.Consumable
 import java.io.Serializable
 
 internal class ForegroundServiceAudioRecorder internal constructor(private val application: Application, private val recordingRepository: RecordingRepository) : AudioRecorder() {
@@ -24,6 +25,10 @@ internal class ForegroundServiceAudioRecorder internal constructor(private val a
 
     override fun getCurrentSession(): LiveData<RecordingSession?> {
         return recordingRepository.currentSession
+    }
+
+    override fun failedToStart(): LiveData<Consumable<Exception?>> {
+        return recordingRepository.failedToStart
     }
 
     override fun start(sessionId: Serializable, output: Output) {

@@ -326,6 +326,7 @@ dependencies {
         exclude group: 'org.hamcrest'
     }
 
+    implementation project(':shared')
     implementation project(':nbistubs')
     implementation project(':strings')
     implementation project(':material')

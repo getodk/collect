@@ -15,7 +15,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.MicInUseException;
-import org.odk.collect.audiorecorder.recording.RecordingSession;
+import org.odk.collect.shared.data.Consumable;
 
 import javax.inject.Inject;
 
@@ -24,10 +24,14 @@ public class AudioRecordingErrorDialogFragment extends DialogFragment {
     @Inject
     AudioRecorder audioRecorder;
 
+    @Nullable
+    Consumable<Exception> exception;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
+        exception = audioRecorder.failedToStart().getValue();
     }
 
     @NonNull
@@ -36,8 +40,7 @@ public class AudioRecordingErrorDialogFragment extends DialogFragment {
         MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(requireContext())
                 .setPositiveButton(R.string.ok, null);
 
-        RecordingSession session = audioRecorder.getCurrentSession().getValue();
-        if (session != null && session.getFailedToStart() instanceof MicInUseException) {
+        if (exception != null && exception.getValue() instanceof MicInUseException) {
             dialogBuilder.setMessage(R.string.mic_in_use);
         } else {
             dialogBuilder.setMessage(R.string.start_recording_failed);
@@ -49,6 +52,8 @@ public class AudioRecordingErrorDialogFragment extends DialogFragment {
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
-        audioRecorder.cleanUp();
+        if (exception != null) {
+            exception.consume();
+        }
     }
 }

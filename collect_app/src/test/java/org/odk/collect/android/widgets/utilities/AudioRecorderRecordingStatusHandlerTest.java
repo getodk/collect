@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
+import org.odk.collect.shared.livedata.MutableNonNullLiveData;
 import org.odk.collect.testshared.FakeLifecycleOwner;
 
 import java.util.function.Consumer;
@@ -32,7 +33,7 @@ public class AudioRecorderRecordingStatusHandlerTest {
 
     @Before
     public void setup() {
-        when(formEntryViewModel.hasBackgroundRecording()).thenReturn(new MutableLiveData<>(false));
+        when(formEntryViewModel.hasBackgroundRecording()).thenReturn(new MutableNonNullLiveData<>(false));
         provider = new AudioRecorderRecordingStatusHandler(audioRecorder, formEntryViewModel, new FakeLifecycleOwner());
     }
 
@@ -51,7 +52,7 @@ public class AudioRecorderRecordingStatusHandlerTest {
 
     @Test
     public void onIsRecordingChangedBlocked_whenFormHasBackgroundAudio_isAlwaysTrue() {
-        when(formEntryViewModel.hasBackgroundRecording()).thenReturn(new MutableLiveData<>(true));
+        when(formEntryViewModel.hasBackgroundRecording()).thenReturn(new MutableNonNullLiveData<>(true));
 
         MutableLiveData<RecordingSession> liveData = new MutableLiveData<>(null);
         when(audioRecorder.getCurrentSession()).thenReturn(liveData);

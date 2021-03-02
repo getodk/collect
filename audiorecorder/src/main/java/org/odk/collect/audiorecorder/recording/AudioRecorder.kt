@@ -2,6 +2,7 @@ package org.odk.collect.audiorecorder.recording
 
 import androidx.lifecycle.LiveData
 import org.odk.collect.audiorecorder.recorder.Output
+import org.odk.collect.shared.data.Consumable
 import java.io.File
 import java.io.Serializable
 
@@ -12,6 +13,7 @@ import java.io.Serializable
 abstract class AudioRecorder {
     abstract fun isRecording(): Boolean
     abstract fun getCurrentSession(): LiveData<RecordingSession?>
+    abstract fun failedToStart(): LiveData<Consumable<Exception?>>
 
     abstract fun start(sessionId: Serializable, output: Output)
     abstract fun pause()
@@ -25,10 +27,7 @@ abstract class AudioRecorder {
     abstract fun cleanUp()
 }
 
-data class RecordingSession(val id: Serializable, val file: File?, val duration: Long, val amplitude: Int, val paused: Boolean, val failedToStart: Exception?) {
-
-    constructor(id: Serializable, file: File?, duration: Long, amplitude: Int, paused: Boolean) : this(id, file, duration, amplitude, paused, null)
-}
+data class RecordingSession(val id: Serializable, val file: File?, val duration: Long, val amplitude: Int, val paused: Boolean)
 
 class SetupException : java.lang.Exception()
 class MicInUseException : java.lang.Exception()

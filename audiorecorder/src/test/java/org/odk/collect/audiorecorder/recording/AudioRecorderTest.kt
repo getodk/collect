@@ -147,15 +147,6 @@ abstract class AudioRecorderTest {
     }
 
     @Test
-    fun getCurrentSession_whenRecording_failedToStartIsNull() {
-        val session = liveDataTester.activate(viewModel.getCurrentSession())
-        viewModel.start("session", Output.AAC)
-
-        runBackground()
-        assertThat(session.value?.failedToStart, equalTo(null))
-    }
-
-    @Test
     fun supportsSerializableSessionIds() {
         val sessionId = SerializableId()
         val session = liveDataTester.activate(viewModel.getCurrentSession())

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recording.AudioRecorder
 import org.odk.collect.audiorecorder.recording.RecordingSession
+import org.odk.collect.shared.data.Consumable
 import java.io.File
 import java.io.Serializable
 
@@ -35,7 +36,8 @@ class StubAudioRecorder(private val stubRecordingPath: String) : AudioRecorder()
 
     private var isRecording = false
     private var failOnStart = false
-    private val currentSession = MutableLiveData<RecordingSession>(null)
+    private val currentSession = MutableLiveData<RecordingSession?>(null)
+    private val failedToStart = MutableLiveData<Consumable<Exception?>>(Consumable(null))
 
     override fun isRecording(): Boolean {
         return isRecording
@@ -45,10 +47,15 @@ class StubAudioRecorder(private val stubRecordingPath: String) : AudioRecorder()
         return currentSession
     }
 
+    override fun failedToStart(): LiveData<Consumable<java.lang.Exception?>> {
+        return failedToStart
+    }
+
     override fun start(sessionId: Serializable, output: Output) {
         if (!isRecording) {
             if (failOnStart) {
-                currentSession.value = RecordingSession(sessionId, null, 0, 0, paused = false, failedToStart = Exception())
+                currentSession.value = null
+                failedToStart.value = Consumable(Exception())
             } else {
                 wasCleanedUp = false
                 lastSession = sessionId

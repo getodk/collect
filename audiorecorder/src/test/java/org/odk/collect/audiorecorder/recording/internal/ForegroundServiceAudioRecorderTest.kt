@@ -21,6 +21,7 @@ import org.odk.collect.audiorecorder.recording.AudioRecorderTest
 import org.odk.collect.audiorecorder.recording.MicInUseException
 import org.odk.collect.audiorecorder.setupDependencies
 import org.odk.collect.audiorecorder.support.FakeRecorder
+import org.odk.collect.shared.data.Consumable
 import org.odk.collect.testshared.FakeScheduler
 import org.robolectric.Robolectric
 import org.robolectric.Shadows.shadowOf
@@ -112,12 +113,36 @@ class ForegroundServiceAudioRecorderTest : AudioRecorderTest() {
     }
 
     @Test
-    fun start_whenRecorderStartThrowsException_setsFailedToStartToException() {
+    fun start_whenRecorderStartThrowsException_setsSessionToNull() {
         val exception = MicInUseException()
         fakeRecorder.failOnStart(exception)
 
         viewModel.start("blah", Output.AAC)
         runBackground()
-        assertThat(viewModel.getCurrentSession().value?.failedToStart, equalTo(exception))
+        assertThat(viewModel.getCurrentSession().value, equalTo(null))
+    }
+
+    @Test
+    fun start_whenRecorderStartThrowsException_setsFailedToStart() {
+        val exception = MicInUseException()
+        fakeRecorder.failOnStart(exception)
+
+        viewModel.start("blah", Output.AAC)
+        runBackground()
+        assertThat(viewModel.failedToStart().value, equalTo(Consumable(exception)))
+    }
+
+    @Test
+    fun start_whenRecorderStartThrowsException_thenSucceeds_setsFailedToStartToNull() {
+        val exception = MicInUseException()
+        fakeRecorder.failOnStart(exception)
+        viewModel.start("blah", Output.AAC)
+        runBackground()
+
+        fakeRecorder.failOnStart(null)
+        viewModel.start("blah", Output.AAC)
+        runBackground()
+
+        assertThat(viewModel.failedToStart().value, equalTo(Consumable(null)))
     }
 }

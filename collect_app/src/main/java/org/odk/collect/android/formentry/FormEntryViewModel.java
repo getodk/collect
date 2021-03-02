@@ -18,6 +18,8 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.shared.livedata.MutableNonNullLiveData;
+import org.odk.collect.shared.livedata.NonNullLiveData;
 import org.odk.collect.utilities.Clock;
 
 import java.util.Objects;
@@ -30,7 +32,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     private final Analytics analytics;
 
     private final MutableLiveData<FormError> error = new MutableLiveData<>(null);
-    private final MutableLiveData<Boolean> hasBackgroundRecording = new MutableLiveData<>(false);
+    private final MutableNonNullLiveData<Boolean> hasBackgroundRecording = new MutableNonNullLiveData<>(false);
 
     @Nullable
     private FormController formController;
@@ -175,7 +177,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         analytics.logFormEvent(event, getFormIdentifierHash());
     }
 
-    public LiveData<Boolean> hasBackgroundRecording() {
+    public NonNullLiveData<Boolean> hasBackgroundRecording() {
         return hasBackgroundRecording;
     }
 
