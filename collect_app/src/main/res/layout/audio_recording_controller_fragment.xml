@@ -38,8 +38,9 @@
 
         <org.odk.collect.android.audio.VolumeBar
             android:id="@+id/volume_bar"
-            android:layout_height="24dp"
-            android:layout_width="match_parent"/>
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_marginStart="@dimen/margin_standard" />
 
     </LinearLayout>
 
