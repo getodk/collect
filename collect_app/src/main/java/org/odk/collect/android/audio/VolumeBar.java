@@ -8,34 +8,44 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 
+import static androidx.core.content.res.ResourcesCompat.getDrawable;
 import static org.odk.collect.android.utilities.ViewUtils.pxFromDp;
 
 public class VolumeBar extends LinearLayout {
 
+    public static final int MAX_AMPLITUDE = 22760;
     private Integer lastAmplitude;
     private int pips;
+    private Drawable filledBackground;
+    private Drawable unfilledBackground;
+    private LayoutParams pipLayoutParams;
 
     public VolumeBar(@NonNull Context context) {
         super(context);
-        init();
+        init(context);
     }
 
     public VolumeBar(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context);
     }
 
     public VolumeBar(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context);
     }
 
-    private void init() {
+    private void init(Context context) {
         setOrientation(LinearLayout.HORIZONTAL);
+
+        // Setup objects used during drawing/rendering amplitude
+        pipLayoutParams = new LayoutParams(0, 0);
+        filledBackground = getDrawable(context.getResources(), R.drawable.pill_filled, context.getTheme());
+        unfilledBackground = getDrawable(context.getResources(), R.drawable.pill_unfilled, context.getTheme());
     }
 
     @Override
@@ -49,16 +59,7 @@ public class VolumeBar extends LinearLayout {
 
             this.removeAllViews();
             for (int i = 0; i < pips; i++) {
-                View pip = new View(getContext());
-
-                LayoutParams layoutParams = new LayoutParams(pipSize, getHeight());
-                if (i != pips - 1) {
-                    layoutParams.setMarginEnd(marginSize);
-                } else {
-                    layoutParams.setMarginEnd(0);
-                }
-
-                pip.setLayoutParams(layoutParams);
+                View pip = createPipView(pipSize, marginSize, i != pips - 1);
                 addView(pip);
             }
         }
@@ -68,11 +69,9 @@ public class VolumeBar extends LinearLayout {
         lastAmplitude = amplitude;
 
         if (pips > 0) {
-            int segmentAmplitude = 22760 / pips;
-            int segmentsToFill = amplitude * 6 / segmentAmplitude;
-
-            Drawable filledBackground = ResourcesCompat.getDrawable(getResources(), R.drawable.pill_filled, getContext().getTheme());
-            Drawable unfilledBackground = ResourcesCompat.getDrawable(getResources(), R.drawable.pill_unfilled, getContext().getTheme());
+            int segmentAmplitude = MAX_AMPLITUDE / pips;
+            int adjustedAmplitude = amplitude * 6;
+            int segmentsToFill = adjustedAmplitude / segmentAmplitude;
 
             for (int i = 0; i < pips; i++) {
                 if (i < segmentsToFill) {
@@ -87,5 +86,22 @@ public class VolumeBar extends LinearLayout {
     @Nullable
     public Integer getLatestAmplitude() {
         return lastAmplitude;
+    }
+
+    @NotNull
+    private View createPipView(int pipSize, int marginSize, boolean isLast) {
+        View pip = new View(getContext());
+
+        pipLayoutParams.width = pipSize;
+        pipLayoutParams.height = getHeight();
+
+        if (!isLast) {
+            pipLayoutParams.setMarginEnd(marginSize);
+        } else {
+            pipLayoutParams.setMarginEnd(0);
+        }
+
+        pip.setLayoutParams(pipLayoutParams);
+        return pip;
     }
 }
