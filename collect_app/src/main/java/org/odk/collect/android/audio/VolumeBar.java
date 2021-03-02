@@ -1,13 +1,14 @@
 package org.odk.collect.android.audio;
 
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 
 import org.odk.collect.android.R;
 
@@ -70,14 +71,14 @@ public class VolumeBar extends LinearLayout {
             int segmentAmplitude = 22760 / pips;
             int segmentsToFill = amplitude * 6 / segmentAmplitude;
 
-            int filledColor = getContext().getResources().getColor(R.color.blue_500);
-            int unfilledColor = getContext().getResources().getColor(R.color.gray600);
+            Drawable filledBackground = ResourcesCompat.getDrawable(getResources(), R.drawable.pill_filled, getContext().getTheme());
+            Drawable unfilledBackground = ResourcesCompat.getDrawable(getResources(), R.drawable.pill_unfilled, getContext().getTheme());
 
             for (int i = 0; i < pips; i++) {
                 if (i < segmentsToFill) {
-                    getChildAt(i).setBackground(new ColorDrawable(filledColor));
+                    getChildAt(i).setBackground(filledBackground);
                 } else {
-                    getChildAt(i).setBackground(new ColorDrawable(unfilledColor));
+                    getChildAt(i).setBackground(unfilledBackground);
                 }
             }
         }
