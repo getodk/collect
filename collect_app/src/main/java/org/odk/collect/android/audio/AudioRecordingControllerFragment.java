@@ -111,16 +111,14 @@ public class AudioRecordingControllerFragment extends Fragment {
     private void renderRecordingProblem(String string) {
         binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_mic_off_24));
         binding.timeCode.setText(string);
-        binding.waveform.setVisibility(GONE);
+        binding.volumeBar.setVisibility(GONE);
         binding.pauseRecording.setVisibility(GONE);
         binding.stopRecording.setVisibility(GONE);
     }
 
-    private void renderRecordingInProgress(RecordingSession session) {        binding.timeCode.setText(LengthFormatterKt.formatLength(session.getDuration()));
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                binding.waveform.setProgress((int) ((session.getAmplitude() * 6) / 22760d * 100), true);
-            }
+    private void renderRecordingInProgress(RecordingSession session) {
+        binding.timeCode.setText(LengthFormatterKt.formatLength(session.getDuration()));
+        binding.volumeBar.addAmplitude(session.getAmplitude());
 
         if (session.getPaused()) {
             binding.pauseRecording.setIcon(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_mic_24));

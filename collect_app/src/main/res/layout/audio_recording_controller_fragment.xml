@@ -36,15 +36,11 @@
             android:text="@string/recording"
             android:textColor="?colorOnPrimary" />
 
-        <ProgressBar
-            android:id="@+id/waveform"
-            style="@android:style/Widget.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:progressTint="?colorSecondary"
-            android:progressBackgroundTint="@color/color_on_surface_low_emphasis"
+        <org.odk.collect.android.audio.VolumeBar
+            android:id="@+id/volume_bar"
             android:layout_height="24dp"
-            android:layout_marginStart="@dimen/margin_small"
-            android:indeterminate="false" />
+            android:layout_width="match_parent"/>
+
     </LinearLayout>
 
     <LinearLayout

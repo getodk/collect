@@ -115,10 +115,10 @@ public class AudioRecordingControllerFragmentTest {
 
         FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
-            assertThat(fragment.binding.waveform.getLatestAmplitude(), equalTo(0));
+            assertThat(fragment.binding.volumeBar.getLatestAmplitude(), equalTo(0));
 
             audioRecorder.setAmplitude(156);
-            assertThat(fragment.binding.waveform.getLatestAmplitude(), equalTo(156));
+            assertThat(fragment.binding.volumeBar.getLatestAmplitude(), equalTo(156));
         });
     }
 
@@ -238,7 +238,7 @@ public class AudioRecordingControllerFragmentTest {
             assertThat(fragment.binding.timeCode.getText(), is(fragment.getString(R.string.recording_disabled, "⋮")));
             assertThat(fragment.binding.pauseRecording.getVisibility(), is(View.GONE));
             assertThat(fragment.binding.stopRecording.getVisibility(), is(View.GONE));
-            assertThat(fragment.binding.waveform.getVisibility(), is(View.GONE));
+            assertThat(fragment.binding.volumeBar.getVisibility(), is(View.GONE));
         });
     }
 
@@ -269,7 +269,7 @@ public class AudioRecordingControllerFragmentTest {
             assertThat(fragment.binding.timeCode.getText(), is(fragment.getString(R.string.start_recording_failed)));
             assertThat(fragment.binding.pauseRecording.getVisibility(), is(View.GONE));
             assertThat(fragment.binding.stopRecording.getVisibility(), is(View.GONE));
-            assertThat(fragment.binding.waveform.getVisibility(), is(View.GONE));
+            assertThat(fragment.binding.volumeBar.getVisibility(), is(View.GONE));
         });
     }
 
