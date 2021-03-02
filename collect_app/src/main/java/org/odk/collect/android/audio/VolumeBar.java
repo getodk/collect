@@ -18,8 +18,10 @@ import static org.odk.collect.android.utilities.ViewUtils.pxFromDp;
 public class VolumeBar extends LinearLayout {
 
     public static final int MAX_AMPLITUDE = 22760;
+
     private Integer lastAmplitude;
     private int pips;
+
     private Drawable filledBackground;
     private Drawable unfilledBackground;
     private LayoutParams pipLayoutParams;
@@ -55,7 +57,7 @@ public class VolumeBar extends LinearLayout {
         if (changed && getHeight() > 0) {
             int pipSize = pxFromDp(getContext(), 24);
             int marginSize = pxFromDp(getContext(), 4);
-            pips = getWidth() / (pipSize + marginSize);
+            pips = (getWidth() + marginSize) / (pipSize + marginSize);
 
             this.removeAllViews();
             for (int i = 0; i < pips; i++) {

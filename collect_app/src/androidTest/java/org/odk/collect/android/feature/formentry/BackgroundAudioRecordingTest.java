@@ -137,19 +137,6 @@ public class BackgroundAudioRecordingTest {
         assertThat(instanceXml, containsString("<recording2>" + recording.getName() + "</recording2>"));
     }
 
-    /**
-     * This could probably be tested at a lower level when the background recording implementation
-     * stabilizes.
-     */
-    @Test
-    public void fillingOutForm_doesntShowStopOrPauseButtons() {
-        rule.mainMenu()
-                .copyForm("one-question-background-audio.xml")
-                .startBlankForm("One Question")
-                .assertContentDescriptionNotDisplayed(R.string.stop_recording)
-                .assertContentDescriptionNotDisplayed(R.string.pause_recording);
-    }
-
     @Test
     public void pressingBackWhileRecording_andClickingSave_exitsForm() {
         rule.mainMenu()

@@ -143,8 +143,7 @@ public class AudioRecordingControllerFragment extends Fragment {
         }
 
         if (backgroundAudioViewModel.isBackgroundRecording()) {
-            binding.pauseRecording.setVisibility(GONE);
-            binding.stopRecording.setVisibility(GONE);
+            binding.controls.setVisibility(GONE);
         }
     }
 }

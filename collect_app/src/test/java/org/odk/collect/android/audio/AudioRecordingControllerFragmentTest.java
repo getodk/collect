@@ -216,6 +216,17 @@ public class AudioRecordingControllerFragmentTest {
     }
 
     @Test
+    public void whenBackgroundRecording_hidesControls() {
+        when(backgroundAudioViewModel.isBackgroundRecording()).thenReturn(true);
+        audioRecorder.start("session", Output.AAC);
+
+        FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
+        scenario.onFragment(fragment -> {
+            assertThat(fragment.binding.controls.getVisibility(), is(View.GONE));
+        });
+    }
+
+    @Test
     public void whenThereIsAnErrorStartingRecording_showsErrorDialog() {
         FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
 
