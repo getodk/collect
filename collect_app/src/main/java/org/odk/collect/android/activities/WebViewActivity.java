@@ -25,7 +25,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.utilities.CustomTabHelper;
+import org.odk.collect.android.utilities.ExternalWebPageHelper;
 
 public class WebViewActivity extends CollectAbstractActivity {
 
@@ -42,7 +42,7 @@ public class WebViewActivity extends CollectAbstractActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
 
-        String url = getIntent().getStringExtra(CustomTabHelper.OPEN_URL);
+        String url = getIntent().getStringExtra(ExternalWebPageHelper.OPEN_URL);
         webView = (WebView) findViewById(R.id.webView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
