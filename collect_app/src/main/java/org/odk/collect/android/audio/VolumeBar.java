@@ -19,6 +19,7 @@ import static org.odk.collect.android.utilities.ViewUtils.pxFromDp;
 public class VolumeBar extends LinearLayout {
 
     public static final int MAX_AMPLITUDE = 22760;
+    public static final int MAX_PIPS = 20;
 
     private Integer lastAmplitude;
     private int pips;
@@ -59,11 +60,12 @@ public class VolumeBar extends LinearLayout {
             int pipSize = getBestPipSize(getWidth());
             int marginSize = pxFromDp(getContext(), 4);
 
-            pips = (getWidth() + marginSize) / (pipSize + marginSize);
+            int possiblePips = (getWidth() + marginSize) / (pipSize + marginSize);
+            this.pips = Math.min(possiblePips, MAX_PIPS);
 
             this.removeAllViews();
-            for (int i = 0; i < pips; i++) {
-                View pip = createPipView(pipSize, marginSize, i != pips - 1);
+            for (int i = 0; i < this.pips; i++) {
+                View pip = createPipView(pipSize, marginSize, i != this.pips - 1);
                 addView(pip);
             }
         }
@@ -92,8 +94,8 @@ public class VolumeBar extends LinearLayout {
         return lastAmplitude;
     }
 
-    private int getBestPipSize(int width) {
-        if (dpFromPx(getContext(), width) >= 164) {
+    private int getBestPipSize(int availableWidth) {
+        if (dpFromPx(getContext(), availableWidth) >= 164) {
             return pxFromDp(getContext(), 24);
         } else {
             return pxFromDp(getContext(), 20);
