@@ -10,12 +10,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.application.Collect;
+
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.android.forms.ManifestFile;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
+import org.odk.collect.utilities.PreferencesUtils;
 
 import java.util.List;
 
@@ -35,8 +34,7 @@ public class NotificationManagerNotifierTest {
     public void setup() {
         Application context = ApplicationProvider.getApplicationContext();
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
-        notifier = new NotificationManagerNotifier(context, component.preferencesRepository());
+        notifier = new NotificationManagerNotifier(context, PreferencesUtils.getPreferencesRepository());
     }
 
     @Test

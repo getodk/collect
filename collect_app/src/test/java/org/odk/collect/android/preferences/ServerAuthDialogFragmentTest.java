@@ -4,17 +4,14 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.testing.FragmentScenario;
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.utilities.PreferencesUtils;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -22,12 +19,10 @@ import static org.hamcrest.Matchers.is;
 @RunWith(AndroidJUnit4.class)
 public class ServerAuthDialogFragmentTest {
 
-    private PreferencesDataSource generalPrefs;
+    private final PreferencesDataSource generalPrefs = PreferencesUtils.getGeneralPreferences();
 
     @Before
     public void setup() {
-        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
-        generalPrefs = component.preferencesRepository().getGeneralPreferences();
         generalPrefs.save(GeneralKeys.KEY_USERNAME, "Alpen");
         generalPrefs.save(GeneralKeys.KEY_PASSWORD, "swiss");
     }

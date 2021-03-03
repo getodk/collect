@@ -40,7 +40,6 @@ import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.preferences.ServerAuthDialogFragment;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DiskSyncTask;
@@ -66,9 +65,6 @@ public class FillBlankFormActivity extends FormListActivity implements
     private static final String FORM_CHOOSER_LIST_SORTING_ORDER = "formChooserListSortingOrder";
 
     private DiskSyncTask diskSyncTask;
-
-    @Inject
-    PreferencesRepository preferencesDataSource;
 
     @Inject
     NetworkStateProvider networkStateProvider;
@@ -283,6 +279,6 @@ public class FillBlankFormActivity extends FormListActivity implements
     }
 
     private boolean hideOldFormVersions() {
-        return preferencesDataSource.getGeneralPreferences().getBoolean(GeneralKeys.KEY_HIDE_OLD_FORM_VERSIONS);
+        return preferencesRepository.getGeneralPreferences().getBoolean(GeneralKeys.KEY_HIDE_OLD_FORM_VERSIONS);
     }
 }

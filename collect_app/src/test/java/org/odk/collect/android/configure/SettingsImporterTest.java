@@ -1,18 +1,15 @@
 package org.odk.collect.android.configure;
 
 import androidx.core.util.Pair;
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.utilities.PreferencesUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,8 +29,8 @@ import static org.odk.collect.android.application.initialization.migration.Share
 @SuppressWarnings("PMD.DoubleBraceInitialization")
 public class SettingsImporterTest {
 
-    private PreferencesDataSource generalPrefs;
-    private PreferencesDataSource adminPrefs;
+    private final PreferencesDataSource generalPrefs = PreferencesUtils.getGeneralPreferences();
+    private final PreferencesDataSource adminPrefs = PreferencesUtils.getAdminPreferences();
     private SettingsValidator settingsValidator;
     private SettingsImporter importer;
 
@@ -48,10 +45,6 @@ public class SettingsImporterTest {
 
     @Before
     public void setup() {
-        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
-        generalPrefs = component.preferencesRepository().getGeneralPreferences();
-        adminPrefs = component.preferencesRepository().getAdminPreferences();
-
         settingsValidator = mock(SettingsValidator.class);
         when(settingsValidator.isValid(any())).thenReturn(true);
 

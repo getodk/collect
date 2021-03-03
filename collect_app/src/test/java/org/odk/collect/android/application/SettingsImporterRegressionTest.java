@@ -10,13 +10,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.configure.SettingsImporter;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.odk.collect.android.preferences.PreferencesRepository;
+import org.odk.collect.utilities.PreferencesUtils;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_CARTO;
 import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_GOOGLE;
@@ -32,13 +32,11 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_USGS_MAP_STYLE
 public class SettingsImporterRegressionTest {
 
     private SettingsImporter settingsImporter;
-    private PreferencesRepository preferencesRepository;
+    private final PreferencesRepository preferencesRepository = PreferencesUtils.getPreferencesRepository();
 
     @Before
     public void setup() {
-        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
-        settingsImporter = component.settingsImporter();
-        preferencesRepository = component.preferencesRepository();
+        settingsImporter = getComponent(ApplicationProvider.<Collect>getApplicationContext()).settingsImporter();
     }
 
     @Test

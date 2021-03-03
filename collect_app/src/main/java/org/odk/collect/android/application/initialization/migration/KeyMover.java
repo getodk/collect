@@ -4,8 +4,6 @@ import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import java.util.Map;
 
-import static org.odk.collect.android.utilities.SharedPreferencesUtils.put;
-
 public class KeyMover implements Migration {
     private final String key;
     private PreferencesDataSource newPrefs;
@@ -29,6 +27,6 @@ public class KeyMover implements Migration {
         Object value = all.get(key);
 
         prefs.remove(key);
-        put(newPrefs, key, value);
+        newPrefs.save(key, value);
     }
 }

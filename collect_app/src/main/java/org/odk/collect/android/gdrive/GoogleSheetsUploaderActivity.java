@@ -43,7 +43,6 @@ import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
@@ -87,9 +86,6 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
 
     @Inject
     FormsRepository formsRepository;
-
-    @Inject
-    PreferencesRepository preferencesRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

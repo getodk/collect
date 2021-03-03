@@ -1,14 +1,11 @@
 package org.odk.collect.android.support;
 
-import androidx.test.core.app.ApplicationProvider;
-
 import org.junit.After;
 import org.junit.Before;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
+
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.PreferencesRepository;
+import org.odk.collect.utilities.PreferencesUtils;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -24,12 +21,10 @@ public abstract class MockedServerTest {
     private Map<String, ?> prefsBackup;
 
     protected MockWebServer server;
-    private PreferencesDataSource generalPreferences;
+    protected final PreferencesRepository preferencesRepository = PreferencesUtils.getPreferencesRepository();
 
     @Before
     public void http_setUp() throws Exception {
-        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
-        generalPreferences = component.preferencesRepository().getGeneralPreferences();
         prefsBackup = backupPreferences();
         server = mockWebServer();
     }
@@ -86,6 +81,6 @@ public abstract class MockedServerTest {
     }
 
     private void configAppFor(MockWebServer server) {
-        generalPreferences.save(GeneralKeys.KEY_SERVER_URL, server.url("/").toString());
+        preferencesRepository.getGeneralPreferences().save(GeneralKeys.KEY_SERVER_URL, server.url("/").toString());
     }
 }

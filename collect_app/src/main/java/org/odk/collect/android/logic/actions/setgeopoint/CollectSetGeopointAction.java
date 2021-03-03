@@ -54,7 +54,7 @@ public class CollectSetGeopointAction extends SetGeopointAction implements Locat
     private static final int SECONDS_TO_CONSIDER_UPDATES = 20;
 
     private MaxAccuracyWithinTimeoutLocationClient maxAccuracyLocationClient;
-    private PreferencesDataSource generalPreferences;
+    private PreferencesDataSource generalPrefs;
 
     public CollectSetGeopointAction() {
         // For serialization
@@ -63,7 +63,7 @@ public class CollectSetGeopointAction extends SetGeopointAction implements Locat
     // Needed to set the action name.
     CollectSetGeopointAction(TreeReference targetReference) {
         super(targetReference);
-        generalPreferences = new PreferencesRepository(Collect.getInstance()).getGeneralPreferences();
+        generalPrefs = new PreferencesRepository(Collect.getInstance()).getGeneralPreferences();
     }
 
     @Override
@@ -75,7 +75,7 @@ public class CollectSetGeopointAction extends SetGeopointAction implements Locat
 
         // Only start acquiring location if the Collect preference allows it and Google Play
         // Services are available. If it's not allowed, leave the target field blank.
-        if (generalPreferences.getBoolean(KEY_BACKGROUND_LOCATION)
+        if (generalPrefs.getBoolean(KEY_BACKGROUND_LOCATION)
             && new PlayServicesChecker().isGooglePlayServicesAvailable(Collect.getInstance().getApplicationContext())) {
             maxAccuracyLocationClient.requestLocationUpdates(SECONDS_TO_CONSIDER_UPDATES);
         }
@@ -91,7 +91,7 @@ public class CollectSetGeopointAction extends SetGeopointAction implements Locat
      */
     @Override
     public void onLocationChanged(Location location) {
-        if (generalPreferences.getBoolean(KEY_BACKGROUND_LOCATION)) {
+        if (generalPrefs.getBoolean(KEY_BACKGROUND_LOCATION)) {
             Timber.i("Setgeopoint action for " + getContextualizedTargetReference() + ": location update");
 
             String formattedLocation = GeoUtils.formatLocationResultString(location);

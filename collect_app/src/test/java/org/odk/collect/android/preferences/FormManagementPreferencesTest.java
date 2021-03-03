@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.utilities.PreferencesUtils;
 
 import static android.os.Looper.getMainLooper;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -22,7 +23,6 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.odk.collect.android.preferences.FormUpdateMode.MANUAL;
 import static org.odk.collect.android.preferences.FormUpdateMode.MATCH_EXACTLY;
 import static org.odk.collect.android.preferences.FormUpdateMode.PREVIOUSLY_DOWNLOADED_ONLY;
-import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORM_UPDATE_MODE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
@@ -34,14 +34,12 @@ import static org.robolectric.Shadows.shadowOf;
 public class FormManagementPreferencesTest {
 
     private Context context;
-    private PreferencesDataSource generalPrefs;
-    private PreferencesDataSource adminPrefs;
+    private final PreferencesDataSource generalPrefs = PreferencesUtils.getGeneralPreferences();
+    private final PreferencesDataSource adminPrefs = PreferencesUtils.getAdminPreferences();
 
     @Before
     public void setup() {
         context = ApplicationProvider.getApplicationContext();
-        generalPrefs = getComponent(context).preferencesRepository().getGeneralPreferences();
-        adminPrefs = getComponent(context).preferencesRepository().getAdminPreferences();
     }
 
     @Test

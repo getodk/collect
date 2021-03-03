@@ -4,8 +4,6 @@ import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import java.util.Map;
 
-import static org.odk.collect.android.utilities.SharedPreferencesUtils.put;
-
 public class ValueTranslator implements Migration {
 
     private final String oldValue;
@@ -36,7 +34,7 @@ public class ValueTranslator implements Migration {
         Object prefValue = all.get(key);
 
         if (prefValue.equals(oldValue)) {
-            put(prefs, key, newValue);
+            prefs.save(key, newValue);
         }
     }
 }

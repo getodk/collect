@@ -1,16 +1,12 @@
 package org.odk.collect.android.preferences;
 
-import androidx.test.core.app.ApplicationProvider;
-
 import junit.framework.TestCase;
 
 import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
+import org.odk.collect.utilities.PreferencesUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.ArrayList;
@@ -25,12 +21,10 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 @RunWith(RobolectricTestRunner.class)
 public class JsonPreferencesGeneratorTest extends TestCase {
     private JsonPreferencesGenerator jsonPreferencesGenerator;
-    private PreferencesRepository preferencesRepository;
+    private final PreferencesRepository preferencesRepository = PreferencesUtils.getPreferencesRepository();
 
     @Before
     public void setup() {
-        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
-        preferencesRepository = component.preferencesRepository();
         jsonPreferencesGenerator = new JsonPreferencesGenerator(preferencesRepository);
     }
 

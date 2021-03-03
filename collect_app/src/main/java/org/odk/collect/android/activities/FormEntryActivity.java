@@ -132,7 +132,6 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -350,9 +349,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     BackgroundAudioViewModel.Factory backgroundAudioViewModelFactory;
-
-    @Inject
-    PreferencesRepository preferencesRepository;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 

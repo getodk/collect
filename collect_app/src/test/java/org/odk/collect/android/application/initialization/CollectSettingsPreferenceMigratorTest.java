@@ -1,18 +1,13 @@
 package org.odk.collect.android.application.initialization;
 
-import androidx.test.core.app.ApplicationProvider;
-
 import com.google.android.gms.maps.GoogleMap;
 import com.mapbox.mapboxsdk.maps.Style;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesRepository;
+import org.odk.collect.utilities.PreferencesUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
@@ -25,19 +20,14 @@ import static org.odk.collect.android.application.initialization.migration.Share
 @RunWith(RobolectricTestRunner.class)
 public class CollectSettingsPreferenceMigratorTest {
 
-    private PreferencesDataSource generalPrefs;
-    private PreferencesDataSource adminPrefs;
-    private PreferencesDataSource metaPrefs;
+    private final PreferencesDataSource generalPrefs = PreferencesUtils.getGeneralPreferences();
+    private final PreferencesDataSource adminPrefs = PreferencesUtils.getAdminPreferences();
+    private final PreferencesDataSource metaPrefs = PreferencesUtils.getMetaPreferences();
 
     @Before
     public void setUp() throws Exception {
-        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
-        PreferencesRepository preferencesRepository = component.preferencesRepository();
-        generalPrefs = preferencesRepository.getGeneralPreferences();
         generalPrefs.clear();
-        adminPrefs = preferencesRepository.getAdminPreferences();
         adminPrefs.clear();
-        metaPrefs = preferencesRepository.getMetaPreferences();
         metaPrefs.clear();
     }
 

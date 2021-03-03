@@ -17,7 +17,6 @@ import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.JsonPreferencesGenerator;
-import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
@@ -37,9 +36,6 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
 
     @Inject
     FileProvider fileProvider;
-
-    @Inject
-    PreferencesRepository preferencesRepository;
 
     @Inject
     Scheduler scheduler;

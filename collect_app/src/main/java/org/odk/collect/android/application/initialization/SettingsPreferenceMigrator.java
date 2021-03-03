@@ -4,5 +4,5 @@ import org.odk.collect.android.preferences.PreferencesDataSource;
 
 public interface SettingsPreferenceMigrator {
 
-    void migrate(PreferencesDataSource generalSharedPreferences, PreferencesDataSource adminSharedPreferences);
+    void migrate(PreferencesDataSource generalPreferences, PreferencesDataSource adminPreferences);
 }

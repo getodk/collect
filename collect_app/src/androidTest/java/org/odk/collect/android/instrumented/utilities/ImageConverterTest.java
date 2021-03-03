@@ -20,7 +20,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
 
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.core.model.instance.TreeElement;
@@ -31,8 +30,6 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -40,6 +37,7 @@ import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.widgets.ImageWidget;
+import org.odk.collect.utilities.PreferencesUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,7 +65,7 @@ public class ImageConverterTest {
     private static final String IMAGE_SIZE_SMALL = "small";
     private static final String IMAGE_SIZE_VERY_SMALL = "very_small";
 
-    private PreferencesDataSource generalPrefs;
+    private final PreferencesDataSource generalPrefs = PreferencesUtils.getGeneralPreferences();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -75,8 +73,6 @@ public class ImageConverterTest {
 
     @Before
     public void setUp() {
-        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
-        generalPrefs = component.preferencesRepository().getGeneralPreferences();
         new File(TEST_IMAGE_PATH).getParentFile().mkdirs();
     }
 

@@ -11,24 +11,22 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.preferences.AdminPreferencesFragment.MainMenuAccessPreferences;
+import org.odk.collect.utilities.PreferencesUtils;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_GET_BLANK;
 
 @RunWith(AndroidJUnit4.class)
 public class MainMenuAccessPreferencesTest {
 
     private Context context;
-    private PreferencesDataSource generalPrefs;
-    private PreferencesDataSource adminPrefs;
+    private final PreferencesDataSource generalPrefs = PreferencesUtils.getGeneralPreferences();
+    private final PreferencesDataSource adminPrefs = PreferencesUtils.getAdminPreferences();
 
     @Before
     public void setup() {
         context = ApplicationProvider.getApplicationContext();
-        generalPrefs = getComponent(context).preferencesRepository().getGeneralPreferences();
-        adminPrefs = getComponent(context).preferencesRepository().getAdminPreferences();
     }
 
     @Test

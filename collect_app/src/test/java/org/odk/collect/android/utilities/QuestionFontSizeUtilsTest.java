@@ -1,12 +1,9 @@
 package org.odk.collect.android.utilities;
 
-import androidx.test.core.app.ApplicationProvider;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
+
+import org.odk.collect.utilities.PreferencesUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,8 +20,7 @@ public class QuestionFontSizeUtilsTest {
 
     @Test
     public void whenFontSizeSpecified_shouldReturnSelectedValue() {
-        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
-        component.preferencesRepository().getGeneralPreferences().save(KEY_FONT_SIZE, "30");
+        PreferencesUtils.getGeneralPreferences().save(KEY_FONT_SIZE, "30");
         assertThat(QuestionFontSizeUtils.getQuestionFontSize(), is(30));
     }
 }

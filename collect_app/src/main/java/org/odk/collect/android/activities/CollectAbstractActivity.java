@@ -45,6 +45,7 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
     protected PermissionsProvider permissionsProvider;
 
     @Inject
+    protected
     PreferencesRepository preferencesRepository;
 
     @Override

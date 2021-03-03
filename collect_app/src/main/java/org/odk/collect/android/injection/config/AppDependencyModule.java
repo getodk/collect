@@ -225,6 +225,7 @@ public class AppDependencyModule {
     }
 
     @Provides
+    @Singleton
     public PreferencesRepository providesPreferencesRepository(Context context) {
         return new PreferencesRepository(context);
     }

@@ -3,7 +3,7 @@ package org.odk.collect.android.preferences
 import android.content.Context
 import androidx.preference.PreferenceManager
 
-open class PreferencesRepository(private val context: Context) {
+class PreferencesRepository(private val context: Context) {
     fun getMetaPreferences(): PreferencesDataSource {
         return PreferencesDataSource(context.getSharedPreferences(META_PREFS_NAME, Context.MODE_PRIVATE))
     }

@@ -2,21 +2,20 @@ package org.odk.collect.android.support;
 
 import android.content.Context;
 
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
+
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.utilities.PreferencesUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +25,7 @@ import static org.apache.commons.io.FileUtils.deleteDirectory;
 public class ResetStateRule implements TestRule {
 
     private final AppDependencyModule appDependencyModule;
-    private final PreferencesRepository preferencesRepository;
+    private final PreferencesRepository preferencesRepository = PreferencesUtils.getPreferencesRepository();
 
     public ResetStateRule() {
         this(null);
@@ -34,8 +33,6 @@ public class ResetStateRule implements TestRule {
 
     public ResetStateRule(AppDependencyModule appDependencyModule) {
         this.appDependencyModule = appDependencyModule;
-        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
-        preferencesRepository = component.preferencesRepository();
     }
 
     @Override
@@ -56,7 +53,7 @@ public class ResetStateRule implements TestRule {
             Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
             resetDagger();
-            clearSharedPrefs();
+            clearPrefs();
             clearDisk();
             setTestState();
 
@@ -91,7 +88,7 @@ public class ResetStateRule implements TestRule {
         }
     }
 
-    private void clearSharedPrefs() {
+    private void clearPrefs() {
         preferencesRepository.getGeneralPreferences().clear();
         preferencesRepository.getAdminPreferences().clear();
         preferencesRepository.getMetaPreferences().clear();

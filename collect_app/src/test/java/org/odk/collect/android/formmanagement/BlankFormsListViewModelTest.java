@@ -5,22 +5,17 @@ import android.app.Application;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.android.forms.FormSourceException;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesRepository;
@@ -28,6 +23,7 @@ import org.odk.collect.android.support.BooleanChangeLock;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.testshared.FakeScheduler;
 import org.odk.collect.testshared.LiveDataTester;
+import org.odk.collect.utilities.PreferencesUtils;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -48,13 +44,7 @@ public class BlankFormsListViewModelTest {
     private final SyncStatusRepository syncRepository = mock(SyncStatusRepository.class);
     private final BooleanChangeLock changeLock = new BooleanChangeLock();
     private final Analytics analytics = mock(Analytics.class);
-    private PreferencesRepository preferencesRepository;
-
-    @Before
-    public void setup() {
-        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
-        preferencesRepository = component.preferencesRepository();
-    }
+    private final PreferencesRepository preferencesRepository = PreferencesUtils.getPreferencesRepository();
 
     @After
     public void teardown() {

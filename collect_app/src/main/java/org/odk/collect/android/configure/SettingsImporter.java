@@ -11,8 +11,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import static org.odk.collect.android.utilities.SharedPreferencesUtils.put;
-
 public class SettingsImporter {
 
     private final PreferencesDataSource generalPrefs;
@@ -79,14 +77,14 @@ public class SettingsImporter {
 
         while (generalKeys.hasNext()) {
             String key = generalKeys.next();
-            put(preferences, key, object.get(key));
+            preferences.save(key, object.get(key));
         }
     }
 
     private void loadDefaults(PreferencesDataSource preferences, Map<String, Object> defaults) {
         for (Map.Entry<String, Object> entry : defaults.entrySet()) {
             if (!preferences.contains(entry.getKey())) {
-                put(preferences, entry.getKey(), entry.getValue());
+                preferences.save(entry.getKey(), entry.getValue());
             }
         }
     }

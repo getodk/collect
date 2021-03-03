@@ -3,16 +3,12 @@ package org.odk.collect.android.activities;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.test.core.app.ApplicationProvider;
-
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
+
 import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.utilities.PreferencesUtils;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
@@ -28,13 +24,7 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_VIEW_SENT;
 public class MainMenuButtonsVisibilityTest {
 
     private MainMenuActivity mainMenuActivity;
-    private PreferencesDataSource adminPrefs;
-
-    @Before
-    public void setup() {
-        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
-        adminPrefs = component.preferencesRepository().getAdminPreferences();
-    }
+    private final PreferencesDataSource adminPrefs = PreferencesUtils.getAdminPreferences();
 
     @Test
     public void when_editSavedFormButtonIsEnabledInSettings_shouldBeVisible() {

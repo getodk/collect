@@ -12,7 +12,7 @@ public class PrefUtils {
     private PrefUtils() { }  // prevent instantiation of this utility class
 
     public static PreferencesDataSource getSharedPrefs() {
-        return new PreferencesRepository(Collect.getInstance().getApplicationContext()).getGeneralPreferences();
+        return new PreferencesRepository(Collect.getInstance()).getGeneralPreferences();
     }
 
     public static ListPreference createListPref(

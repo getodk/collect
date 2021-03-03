@@ -5,8 +5,6 @@ import org.odk.collect.android.preferences.PreferencesDataSource;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.odk.collect.android.utilities.SharedPreferencesUtils.put;
-
 public class KeyExtractor implements Migration {
 
     private final String newKey;
@@ -44,7 +42,7 @@ public class KeyExtractor implements Migration {
         Object newValue = translatedValues.get(oldValue);
 
         if (newValue != null) {
-            put(prefs, newKey, newValue);
+            prefs.save(newKey, newValue);
         }
     }
 }

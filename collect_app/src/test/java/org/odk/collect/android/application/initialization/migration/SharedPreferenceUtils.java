@@ -4,18 +4,16 @@ import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.odk.collect.android.preferences.PreferencesRepository;
 
 import static org.junit.Assert.assertEquals;
-import static org.odk.collect.android.utilities.SharedPreferencesUtils.put;
 
 public class SharedPreferenceUtils {
 
     private SharedPreferenceUtils() {
-
     }
 
     public static void initPrefs(PreferencesDataSource prefs, Object... pairs) {
         prefs.clear();
         for (int i = 0; i + 1 < pairs.length; i += 2) {
-            put(prefs, (String) pairs[i], pairs[i + 1]);
+            prefs.save((String) pairs[i], pairs[i + 1]);
         }
     }
 

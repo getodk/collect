@@ -44,7 +44,6 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
@@ -97,9 +96,6 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
 
     @Inject
     NetworkStateProvider connectivityProvider;
-
-    @Inject
-    PreferencesRepository preferencesRepository;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

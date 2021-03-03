@@ -47,7 +47,6 @@ import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.MapsPreferences;
-import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -73,9 +72,6 @@ public class FormMapActivity extends BaseGeoMapActivity {
 
     @Inject
     MapProvider mapProvider;
-
-    @Inject
-    PreferencesRepository preferencesRepository;
 
     private MapFragment map;
 

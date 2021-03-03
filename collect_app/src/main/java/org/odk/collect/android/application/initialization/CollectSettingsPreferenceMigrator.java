@@ -33,10 +33,10 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_USGS_MAP_STYLE
  */
 public class CollectSettingsPreferenceMigrator implements SettingsPreferenceMigrator {
 
-    private final PreferencesDataSource metaSharedPrefs;
+    private final PreferencesDataSource metaPrefs;
 
-    public CollectSettingsPreferenceMigrator(PreferencesDataSource metaSharedPrefs) {
-        this.metaSharedPrefs = metaSharedPrefs;
+    public CollectSettingsPreferenceMigrator(PreferencesDataSource metaPrefs) {
+        this.metaPrefs = metaPrefs;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class CollectSettingsPreferenceMigrator implements SettingsPreferenceMigr
         }
 
         for (Migration migration : getMetaMigrations()) {
-            migration.apply(metaSharedPrefs);
+            migration.apply(metaPrefs);
         }
     }
 
@@ -104,9 +104,9 @@ public class CollectSettingsPreferenceMigrator implements SettingsPreferenceMigr
 
                 removeKey("firstRun"),
                 removeKey("lastVersion"),
-                moveKey("scoped_storage_used").toPreferences(metaSharedPrefs),
+                moveKey("scoped_storage_used").toPreferences(metaPrefs),
                 removeKey("metadata_migrated"),
-                moveKey("mapbox_initialized").toPreferences(metaSharedPrefs),
+                moveKey("mapbox_initialized").toPreferences(metaPrefs),
 
                 combineKeys("autosend_wifi", "autosend_network")
                         .withValues(false, false).toPairs("autosend", "off")
@@ -126,7 +126,7 @@ public class CollectSettingsPreferenceMigrator implements SettingsPreferenceMigr
 
                 translateValue("never").toValue("every_fifteen_minutes").forKey("periodic_form_updates_check"),
 
-                moveKey("knownUrlList").toPreferences(metaSharedPrefs)
+                moveKey("knownUrlList").toPreferences(metaPrefs)
         );
     }
 

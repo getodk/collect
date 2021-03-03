@@ -4,15 +4,13 @@ import android.content.Intent;
 
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.Preference;
-import androidx.test.core.app.ApplicationProvider;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
+
+import org.odk.collect.utilities.PreferencesUtils;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
@@ -41,7 +39,7 @@ public class AdminPreferencesActivityTest {
 
     private AdminPreferencesFragment adminPreferencesFragment;
     private ActivityController<AdminPreferencesActivity> activityController;
-    private PreferencesDataSource adminPrefs;
+    private final PreferencesDataSource adminPrefs = PreferencesUtils.getAdminPreferences();
 
     @Before
     public void setUp() throws Exception {
@@ -52,9 +50,6 @@ public class AdminPreferencesActivityTest {
         adminPreferencesFragment = (AdminPreferencesFragment) activityController.get()
                 .getSupportFragmentManager()
                 .findFragmentById(R.id.preferences_fragment_container);
-
-        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
-        adminPrefs = component.preferencesRepository().getAdminPreferences();
     }
 
     @Test

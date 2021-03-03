@@ -1,18 +1,15 @@
 package org.odk.collect.android.configure.qr;
 
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
+
 import org.odk.collect.android.preferences.JsonPreferencesGenerator;
 import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.odk.collect.testshared.FakeScheduler;
+import org.odk.collect.utilities.PreferencesUtils;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -30,15 +27,8 @@ public class QRCodeViewModelTest {
     private final JsonPreferencesGenerator jsonPreferencesGenerator = mock(JsonPreferencesGenerator.class);
     private final FakeScheduler fakeScheduler = new FakeScheduler();
 
-    private PreferencesDataSource generalPreferences;
-    private PreferencesDataSource adminPreferences;
-
-    @Before
-    public void setup() {
-        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
-        generalPreferences = component.preferencesRepository().getGeneralPreferences();
-        adminPreferences = component.preferencesRepository().getAdminPreferences();
-    }
+    private final PreferencesDataSource generalPreferences = PreferencesUtils.getGeneralPreferences();
+    private final PreferencesDataSource adminPreferences = PreferencesUtils.getAdminPreferences();
 
     @Test
     public void setIncludedKeys_generatesQRCodeWithKeys() throws Exception {

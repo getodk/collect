@@ -43,7 +43,6 @@ import org.odk.collect.android.preferences.AdminPasswordDialogFragment.Action;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -86,9 +85,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     @Inject
     MainMenuViewModel.Factory viewModelFactory;
-
-    @Inject
-    PreferencesRepository preferencesRepository;
 
     private MainMenuViewModel viewModel;
 

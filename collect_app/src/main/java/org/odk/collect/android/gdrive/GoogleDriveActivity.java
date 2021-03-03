@@ -57,7 +57,6 @@ import org.odk.collect.android.listeners.TaskListener;
 import org.odk.collect.android.logic.DriveListItem;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -122,9 +121,6 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
     @Inject
     GoogleApiProvider googleApiProvider;
-
-    @Inject
-    PreferencesRepository preferencesRepository;
 
     @Inject
     FormsRepository formsRepository;

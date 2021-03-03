@@ -19,7 +19,6 @@ package org.odk.collect.android.instrumented.settings;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.After;
@@ -27,8 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
+
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesDataSource;
@@ -38,6 +36,7 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ApplicationResetter;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.utilities.PreferencesUtils;
 import org.osmdroid.config.Configuration;
 
 import java.io.File;
@@ -55,14 +54,11 @@ import static org.junit.Assert.assertTrue;
 public class ResetAppStateTest {
 
     private final StoragePathProvider storagePathProvider = new StoragePathProvider();
-    private PreferencesDataSource generalPrefs;
-    private PreferencesDataSource adminPrefs;
+    private final PreferencesDataSource generalPrefs = PreferencesUtils.getGeneralPreferences();
+    private final PreferencesDataSource adminPrefs = PreferencesUtils.getAdminPreferences();
 
     @Before
     public void setUp() throws IOException {
-        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
-        generalPrefs = component.preferencesRepository().getGeneralPreferences();
-        adminPrefs = component.preferencesRepository().getAdminPreferences();
         resetAppState(Arrays.asList(
                 ApplicationResetter.ResetAction.RESET_PREFERENCES, ApplicationResetter.ResetAction.RESET_INSTANCES,
                 ApplicationResetter.ResetAction.RESET_FORMS, ApplicationResetter.ResetAction.RESET_LAYERS,

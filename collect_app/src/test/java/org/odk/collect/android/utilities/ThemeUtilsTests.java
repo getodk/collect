@@ -3,17 +3,13 @@ package org.odk.collect.android.utilities;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 
-import androidx.test.core.app.ApplicationProvider;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.utilities.PreferencesUtils;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
@@ -30,7 +26,7 @@ public class ThemeUtilsTests {
     private final int[] attrs;
     private ThemeUtils themeUtils;
     private MainMenuActivity mainMenuActivity;
-    private PreferencesDataSource generalPrefs;
+    private final PreferencesDataSource generalPrefs = PreferencesUtils.getGeneralPreferences();
 
     public ThemeUtilsTests() {
         attrs = new int[]{
@@ -44,8 +40,6 @@ public class ThemeUtilsTests {
     public void setup() {
         mainMenuActivity = Robolectric.setupActivity(MainMenuActivity.class);
         themeUtils = new ThemeUtils(mainMenuActivity);
-        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
-        generalPrefs = component.preferencesRepository().getGeneralPreferences();
     }
 
     @Test

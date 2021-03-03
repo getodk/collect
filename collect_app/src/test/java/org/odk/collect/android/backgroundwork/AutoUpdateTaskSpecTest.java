@@ -20,8 +20,6 @@ import org.odk.collect.android.forms.FormSource;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.forms.ManifestFile;
 import org.odk.collect.android.forms.MediaFileRepository;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -30,6 +28,7 @@ import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.BooleanChangeLock;
 import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.utilities.PreferencesUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.HashMap;
@@ -52,13 +51,10 @@ public class AutoUpdateTaskSpecTest {
     private final FormDownloader formDownloader = mock(FormDownloader.class);
     private final ServerFormsDetailsFetcher serverFormsDetailsFetcher = mock(ServerFormsDetailsFetcher.class);
     private final Notifier notifier = mock(Notifier.class);
-    private PreferencesDataSource generalPrefs;
+    private final PreferencesDataSource generalPrefs = PreferencesUtils.getGeneralPreferences();
 
     @Before
     public void setup() {
-        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Collect>getApplicationContext());
-        generalPrefs = component.preferencesRepository().getGeneralPreferences();
-
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
             public ChangeLock providesFormsChangeLock() {

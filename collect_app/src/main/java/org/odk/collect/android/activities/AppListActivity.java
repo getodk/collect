@@ -35,7 +35,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
-import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.SnackbarUtils;
@@ -54,14 +53,9 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import javax.inject.Inject;
-
 import timber.log.Timber;
 
 public abstract class AppListActivity extends CollectAbstractActivity {
-
-    @Inject
-    PreferencesRepository preferencesRepository;
 
     protected static final int LOADER_ID = 0x01;
     private static final String SELECTED_INSTANCES = "selectedInstances";
