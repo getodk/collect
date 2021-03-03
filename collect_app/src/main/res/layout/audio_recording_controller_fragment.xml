@@ -69,4 +69,13 @@
             android:contentDescription="@string/stop_recording"
             app:icon="@drawable/ic_stop_black_24dp" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/help"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:src="@drawable/ic_baseline_help_outline_24"
+        app:tint="?colorOnPrimary" />
 </LinearLayout>

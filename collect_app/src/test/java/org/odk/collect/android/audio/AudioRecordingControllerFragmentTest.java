@@ -1,6 +1,8 @@
 package org.odk.collect.android.audio;
 
 import android.app.Application;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -223,6 +225,33 @@ public class AudioRecordingControllerFragmentTest {
         FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
             assertThat(fragment.binding.controls.getVisibility(), is(View.GONE));
+        });
+    }
+
+    @Test
+    public void whenBackgroundRecording_clickingHelpButton_opensDocs() {
+        when(backgroundAudioViewModel.isBackgroundRecording()).thenReturn(true);
+        audioRecorder.start("session", Output.AAC);
+
+        FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
+        scenario.onFragment(fragment -> {
+            assertThat(fragment.binding.help.getVisibility(), is(View.VISIBLE));
+            fragment.binding.help.performClick();
+
+            Intent intent = shadowOf(fragment.getActivity()).getNextStartedActivity();
+            assertThat(intent.getAction(), equalTo(Intent.ACTION_VIEW));
+            assertThat(intent.getData(), equalTo(Uri.parse("https://docs.getodk.org/form-question-types/#background-audio-recording")));
+        });
+    }
+
+    @Test
+    public void whenNotBackgroundRecording_hidesHelpButton() {
+        when(backgroundAudioViewModel.isBackgroundRecording()).thenReturn(false);
+        audioRecorder.start("session", Output.AAC);
+
+        FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
+        scenario.onFragment(fragment -> {
+            assertThat(fragment.binding.help.getVisibility(), is(View.GONE));
         });
     }
 
