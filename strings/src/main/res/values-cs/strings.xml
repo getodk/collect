@@ -188,7 +188,6 @@
   <string name="capture_image">Udělat fotku</string>
   <string name="choose_image">Vyberte obrázek</string>
   <string name="selected_invalid_image">Vybraný soubor není platný obrázek</string>
-  <string name="gdrive_connection_exception">Tento obrázek je uložen na Disku Google a není dostupný, když jste offline.</string>
   <string name="view_image">Zobrazit obrázek</string>
   <string name="take_picture_instruction">Klepnutím na obrazovku udělejte snímek</string>
   <string name="error_front_camera_unavailable">Přední fotoaparát není v tomto zařízení k dispozici</string>
@@ -808,7 +807,6 @@
   <string name="error_occured">Vyskytla se chyba</string>
   <string name="please_wait">Prosím chvilku počkejte.</string>
   <string name="please_wait_long">Prosím čekejte. Může to trvat několik minut.</string>
-  <string name="sdcard_unmounted">Nemohu přistoupit na SD kartu. Možná jste připojeni přes USB (Současný stav: %s)</string>
   <string name="fs_delete_media_path_if_file_error">Nemohu vymazat \'%s\'. Vymažte soubor ručně a stáhněte dotazník znovu.</string>
   <string name="fs_create_media_folder_error">Nemohu vytvořit adresář pro mediální soubory \'%s\'.</string>
   <string name="fs_file_copy_error">Nezdařilo se nakopírovat \'%1$s\' přes \'%2$s\'. Důvod: %3$s </string>

@@ -189,7 +189,6 @@
   <string name="capture_image">Ota kuva</string>
   <string name="choose_image">Valitse kuva</string>
   <string name="selected_invalid_image">Valittu tiedosto ei ole kelvollinen kuva</string>
-  <string name="gdrive_connection_exception">Tämä kuva on tallennettu Google Drive -palveluun eikä siihen ole pääsyä offline-tilassa.</string>
   <string name="view_image">Katso kuva</string>
   <string name="take_picture_instruction">Napsauta näyttöä ottaaksesi kuvan</string>
   <string name="error_front_camera_unavailable">Etukamera ei ole käytettävissä tällä laitteella</string>
@@ -808,7 +807,6 @@
   <string name="error_occured">Virhe</string>
   <string name="please_wait">Odota hetki.</string>
   <string name="please_wait_long">Ole hyvä ja odota. Tämä voi kestää muutaman minuutin.</string>
-  <string name="sdcard_unmounted">Ei pääsyä SD-korttiin. Ehkä se on käytössä USB:n kautta? (Tila: %s)</string>
   <string name="fs_delete_media_path_if_file_error">\'%s\' ei voitu poistaa. Poista tiedosto manuaalisesti ja hae lomake uudelleen.</string>
   <string name="fs_create_media_folder_error">Ei voitu luoda mediakansiota \'%s\'.</string>
   <string name="fs_file_copy_error">Ei voitu kopioida \'%1$s\' yli \'%2$s\'. Syy: %3$s</string>

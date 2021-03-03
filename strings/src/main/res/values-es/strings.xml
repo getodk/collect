@@ -188,7 +188,6 @@
   <string name="capture_image">Tomar la Foto</string>
   <string name="choose_image">Escoja la Imagen</string>
   <string name="selected_invalid_image">El archivo seleccionado no es una imagen válida</string>
-  <string name="gdrive_connection_exception">Esta imagen se almacena en Google Drive y no se puede acceder mientras está fuera de línea.</string>
   <string name="view_image">Ver imagen</string>
   <string name="take_picture_instruction">Toca la pantalla para tomar una foto</string>
   <string name="error_front_camera_unavailable">Este dispositivo no tiene Cámara frontal disponible </string>
@@ -807,7 +806,6 @@
   <string name="error_occured">Se ha producido un error</string>
   <string name="please_wait">Por favor, espere un momento.</string>
   <string name="please_wait_long">Por favor espere. Esto podria demorarse unos minutos.</string>
-  <string name="sdcard_unmounted">Collect no puede acceder tarjeta SD. ¿Está conectada vía USB? (estado actual: %s)</string>
   <string name="fs_delete_media_path_if_file_error">No puede borrar \'%s\'. Por favor, borre manualmente el archivo y recargue el formulario.</string>
   <string name="fs_create_media_folder_error">No pudo crear la carpeta de medios \'%s\'</string>
   <string name="fs_file_copy_error">No ha podido copiar \'%1$s\' sobre \'%2$s\'. Razón: %3$s</string>

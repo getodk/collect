@@ -185,7 +185,6 @@
   <string name="capture_image">Zrób Zdjęcie</string>
   <string name="choose_image">Wybierz Obraz</string>
   <string name="selected_invalid_image">Wybrany plik nie jest poprawnym obrazem</string>
-  <string name="gdrive_connection_exception">To zdjęcie znajduje się na Google Drive i nie może zostać pobrane gdy nie ma dostępu do internetu.</string>
   <string name="view_image">Zobacz Obraz</string>
   <string name="take_picture_instruction">Dotknij ekran, by zrobić zdjęcie</string>
   <string name="error_front_camera_unavailable">Przednia kamera nie jest dostępna w tym urządzeniu</string>
@@ -755,7 +754,6 @@
   <string name="error_occured">Wystąpił Błąd</string>
   <string name="please_wait">Poczekaj kilka chwil.</string>
   <string name="please_wait_long">Poczekaj. To może zająć kilka minut.</string>
-  <string name="sdcard_unmounted">Collect nie ma dostępu do karty SD. Czy jest zamontowana przez USB? (Aktualny stan: %s)</string>
   <string name="fs_delete_media_path_if_file_error">Nie mogę skasować \'%s\'. Skasuj, proszę, plik manualnie i ponownie pobierz formularz.</string>
   <string name="fs_create_media_folder_error">Nie mogę utworzyć folderu mediów \'%s\'.</string>
   <string name="fs_file_copy_error">Nie mogę skopiować \'%1$s\' na \'%2$s\'. Powód: %3$s</string>

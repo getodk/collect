@@ -189,7 +189,6 @@
   <string name="capture_image">Foto machen</string>
   <string name="choose_image">Bild auswählen</string>
   <string name="selected_invalid_image">Ausgewählte Datei ist kein gültiges Bild.</string>
-  <string name="gdrive_connection_exception">Diese Bild wurde in Google Drive gespeichert und kann offline nicht angezeigt werden.</string>
   <string name="view_image">Bild anzeigen</string>
   <string name="take_picture_instruction">Bildschirm berühren um ein Foto aufzunehmen</string>
   <string name="error_front_camera_unavailable">Frontkamera bei diesem Gerät nicht verfügbar</string>
@@ -665,7 +664,7 @@
   <string name="analytics_summary">Anonyme Nutzungsdaten helfen dem ODK-Team Fehlerbehebungen und neue Funktionen zu priorisieren.</string>
   <string name="form_metadata_title">Formular-Metadaten</string>
   <string name="form_metadata">Formular-Metadaten</string>
-  <string name="form_metadata_summary">Diese Werte werden Formularen hinzugefügt, die Usernamen, E-Mail und/oder durch das Telefon vorbelegte Felder beinhalten, um die Person zu identifizieren, die die Daten eingibt.</string>
+  <string name="form_metadata_summary">Diese Werte werden Formularen hinzugefügt, die Usernamen, E-Mail und/oder durch das Telefon vorbelegte Felder beinhalten, um die Person zu identifizieren, die Daten eingibt.</string>
   <string name="user_defined">Benutzerdefiniert</string>
   <string name="phone_number">Telefonnummer</string>
   <string name="email">E-Mail-Adresse</string>
@@ -809,7 +808,6 @@
   <string name="error_occured">Fehler</string>
   <string name="please_wait">Bitte haben Sie einen Moment Geduld.</string>
   <string name="please_wait_long">Bitte warten. Dies kann einige Minuten dauern.</string>
-  <string name="sdcard_unmounted">Programm kann auf die SD-Card nicht zugreifen. Ist Sie via USB gemountet? (Aktueller Zustand: %s)</string>
   <string name="fs_delete_media_path_if_file_error">\'%s\' konnte nicht gelöscht werden. Bitte löschen Sie die Datei manuell und laden Sie das Formular erneut herunter.</string>
   <string name="fs_create_media_folder_error">Das Medien-Verzeichnis \'%s\' kann nicht angelegt werden.</string>
   <string name="fs_file_copy_error">Konnte \'%1$s\' nicht über \'%2$s\' kopieren. Grund: %3$s</string>

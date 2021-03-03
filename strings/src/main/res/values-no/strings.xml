@@ -370,7 +370,6 @@
   <string name="error_occured">Det er oppstatt en feil</string>
   <string name="please_wait">Vennligst vent.</string>
   <string name="please_wait_long">Vennligst vent. Det kan ta litt tid.</string>
-  <string name="sdcard_unmounted">Collect kan ikke lese SD-kortet. Kan de være montert via USB? (Status: %s)</string>
   <string name="fs_delete_media_path_if_file_error">Kan ikke slette \'%s\'. Slett filen manuelt, og last ned skjemamal på nytt. </string>
   <string name="fs_create_media_folder_error">Kan ikke opprette mediamappe \'%s\'.</string>
   <string name="fs_file_copy_error">Kan ikke kopiere \'%1$s\' over \'%2$s\'. Årsak: %3$s</string>

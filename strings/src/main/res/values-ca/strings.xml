@@ -447,7 +447,6 @@
   <string name="error_occured">S\'ha produït un error</string>
   <string name="please_wait">Un moment si us plau.</string>
   <string name="please_wait_long">Un moment si us plau. Això pot trigar uns minuts.</string>
-  <string name="sdcard_unmounted">Collect no pot accedir tarja SD. Esta connectada via USB? (Estat actual: %s)</string>
   <string name="fs_delete_media_path_if_file_error">No pot esborrar \'%s\': Si us plau, esborrar l\'arxiu manualment i recarregar el formulari.</string>
   <string name="fs_create_media_folder_error">No pot crear la carpeta de medis \'%s\'</string>
   <string name="fs_file_copy_error">No pot copiar \'%1$s\' sobre \'%2$s\'. Raó: %3$s</string>

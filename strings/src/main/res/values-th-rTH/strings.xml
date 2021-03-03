@@ -129,7 +129,6 @@
   <string name="replace_barcode">เปลี่ยนบาร์โคดใหม่</string>
   <string name="capture_image">ถ่ายภาพ</string>
   <string name="choose_image">เลือกรูปภาพ</string>
-  <string name="gdrive_connection_exception">ภาพนี้บันทึกอยู่ใน Google Drive และไม่สามารถเปิดได้เมื่อไม่เชื่อมต่อ</string>
   <string name="view_image">ดูรูปภาพ</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">บันทึกและปิดการทำงาน</string>
@@ -454,7 +453,6 @@
   <string name="error_occured">มีข้อผิดพลาดเกิดขึ้น</string>
   <string name="please_wait">โปรดรอสักครู่</string>
   <string name="please_wait_long">โปรดรอ อาจต้องใช้เวลาสักครู่</string>
-  <string name="sdcard_unmounted">โปรแกรมไม่สามารถอ่านข้อมูลใน SD card บางทีอาจเชื่อมต่อผ่าน USB (สถานะปัจจุบัน: %s)</string>
   <string name="fs_delete_media_path_if_file_error">ไม่สามารถลบ \'%s\' กรุณาลบไฟล์ด้วยตนเองแล้วดาวน์โหลดแบบสำรวจใหม่</string>
   <string name="fs_create_media_folder_error">ไม่สามารถสร้างแฟ้มมีเดีย \'%s\'</string>
   <string name="fs_file_copy_error">ไม่สามารถคัดลอก \'%1$s\' บน \'%2$s\' เนื่องจาก %3$s</string>

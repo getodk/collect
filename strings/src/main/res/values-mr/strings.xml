@@ -146,7 +146,6 @@
   <string name="capture_image">छायाचित्र काढा</string>
   <string name="choose_image">प्रतिमा निवडा</string>
   <string name="selected_invalid_image">निवडलेली फाईल वैध प्रतिमा नाही</string>
-  <string name="gdrive_connection_exception">ही प्रतिमा गूगल ड्राइव्हवर संचयित केली आहे आणि आपण ऑफलाइन असताना प्रवेश केला जाऊ शकत नाही.</string>
   <string name="take_picture_instruction">एक चित्र घेण्यासाठी स्क्रीन टॅप करा</string>
   <string name="camera_error">हे साधन कॅमेरॅ2 API ला समर्थन देत नाही.</string>
   <!--Dialog heading for saving annotated image-->
@@ -521,7 +520,6 @@
   <string name="error_occured">त्रुटी झाले</string>
   <string name="please_wait">कृपया काही क्षण प्रतीक्षा करा</string>
   <string name="please_wait_long">कृपया थांबा. यास काही मिनिटे लागू शकेल.</string>
-  <string name="sdcard_unmounted">संकलित SD कार्डवर प्रवेश करू शकत नाही. कदाचित तो यूएसबी द्वारे आरोहित आहे? (वर्तमान स्थिती: %s)</string>
   <string name="fs_delete_media_path_if_file_error">%s\'. हटविणे शक्य नाही. कृपया फाईल व्यक्तिचलितपणे हटवा आणि फॉर्म पुन्हा डाउनलोड करा.</string>
   <string name="fs_create_media_folder_error">मीडिया फोल्डर \'%s\' तयार करू शकले नाही.</string>
   <string name="fs_file_copy_error"> \'%1$s\' वर \'%2$s\' कॉपी करू शकलो नाही. कारण :%3$s</string>

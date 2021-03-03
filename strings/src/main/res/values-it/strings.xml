@@ -64,7 +64,7 @@
   <string name="record_audio_runtime_permission_denied_desc">Senza questa autorizzazione Collect non può registrare i suoni. Prova di nuovo quando hai autorizzato l\'uso del microfono</string>
   <string name="get_accounts_runtime_permission_denied_title">Autorizzazione uso account</string>
   <string name="get_accounts_runtime_permission_denied_desc">Senza questa autorizzazione Collect non può accedere al tuo account. Prova di nuovo quando hai autorizzato l\'accesso al tuo account</string>
-  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect non effettua chiamate ma necessita di accedere ad alcune propietà del tuo dispositivo quali ad esempio il numero telefonico e l\'Identificativo del dispositivo.</string>
+  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect non effettua chiamate ma necessita di accedere ad alcune proprietà del tuo dispositivo quali ad esempio il numero telefonico e l\'Identificativo del dispositivo.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -181,7 +181,6 @@
   <string name="capture_image">Scatta Foto</string>
   <string name="choose_image">Seleziona Foto</string>
   <string name="selected_invalid_image">Il file selezionato non è una valida immagine</string>
-  <string name="gdrive_connection_exception">Questa immagine è salvata su Google Drive e non può essere aperta se si è offline.</string>
   <string name="view_image">Visualizza Immagine</string>
   <string name="take_picture_instruction">Tocca lo schermo per scattare una foto</string>
   <string name="error_front_camera_unavailable">Fotocamera frontale non disponibile in questo dispositivo</string>
@@ -715,7 +714,6 @@
   <string name="error_occured">Si è verificato un errore.</string>
   <string name="please_wait">Si prega di attendere qualche istante.</string>
   <string name="please_wait_long">Si prega di attendere. Questo potrebbe richiedere alcuni minuti.</string>
-  <string name="sdcard_unmounted">Collect non può accedere alla scheda SD. Forse è stata montata via USB? (Stato attuale: %s)</string>
   <string name="fs_delete_media_path_if_file_error">Non puoi cancellare \'%s\'. Perpiacere cancella il file manualmente e scarica nuovamente il Modulo.</string>
   <string name="fs_create_media_folder_error">Non puoi creare la cartella media \'%s\'.</string>
   <string name="fs_file_copy_error">Non puoi copiare \'%1$s\' in \'%2$s\'. Motivo: %3$s</string>

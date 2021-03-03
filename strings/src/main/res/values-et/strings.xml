@@ -140,7 +140,6 @@
   <string name="capture_image">Pildista</string>
   <string name="choose_image">Vali pilt</string>
   <string name="selected_invalid_image">Valitud fail ei ole pilt</string>
-  <string name="gdrive_connection_exception">Pilti hoiustatakse Google Drive-is ja võrguühenduse puudumisel ei ole pilt kasutatav.</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">Salvesta ja sulge</string>
   <string name="sign_button">Allkirja kogumine</string>
@@ -458,7 +457,6 @@
   <string name="error_occured">Esines viga</string>
   <string name="please_wait">Palun oodake.</string>
   <string name="please_wait_long">Palun oodake. See võib võtta mõne minuti.</string>
-  <string name="sdcard_unmounted">Ligipääse SD kaardile puudub. Äkki unustasite ühendusse USB-ga? (Hetkel staatus: %s)</string>
   <string name="fs_delete_media_path_if_file_error">\'%s\' kustutamine ebaõnnestus. Palun kusutage fail käsitsi ja laadige vorm uuesti alla.</string>
   <string name="fs_create_media_folder_error">\'%s\' meediakausta loomine ebaõnnestus.</string>
   <string name="fs_file_copy_error">\'%1$s\' kopeerimine \'%2$s\' ebaõnnestus. Põhjuseks: %3$s</string>

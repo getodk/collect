@@ -188,7 +188,6 @@
   <string name="capture_image">Ambil Foto</string>
   <string name="choose_image">Pilih Gambar</string>
   <string name="selected_invalid_image">Berkas terpilih bukan gambar yang valid</string>
-  <string name="gdrive_connection_exception">Gambar ini tersimpan di Google Drive dan tidak dapat diakses saat offline.</string>
   <string name="view_image">Lihat Gambar</string>
   <string name="take_picture_instruction">Sentuh layar untuk ambil gambar</string>
   <string name="error_front_camera_unavailable">Kamera depan tidak tersedia dalam perangkat ini.</string>
@@ -797,7 +796,6 @@
   <string name="error_occured">Terjadi Kesalahan</string>
   <string name="please_wait">Mohon tunggu sebentar…</string>
   <string name="please_wait_long">Mohon tunggu. Proses ini membutuhkan waktu beberapa menit.</string>
-  <string name="sdcard_unmounted">ODK Collect tidak dapat mengakses SD card. Mungkin SD card terpasang melalui USB? (Kondisi saat ini: %s)</string>
   <string name="fs_delete_media_path_if_file_error">Tidak dapat menghapus \'%s\'. Mohon hapus berkas secara manual dan unduh ulang formulirnya.</string>
   <string name="fs_create_media_folder_error">Tidak dapat membuat folder media \'%s\'.</string>
   <string name="fs_file_copy_error">Tidak dapat menyalin \'%1$s\' terhadap \'%2$s\'. Penyebab: %3$s</string>

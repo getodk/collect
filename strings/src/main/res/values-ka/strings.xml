@@ -378,5 +378,4 @@
   <string name="error_occured">მოხდა შეცდომა</string>
   <string name="please_wait">გთხოვთ, დაიცადოთ.</string>
   <string name="please_wait_long">გთხოვთ, დაიცადოთ; ოპერაციის შესრულებას შეიძლება რამდენიმე წუთი დაჭირდეს</string>
-  <string name="sdcard_unmounted">Collect-ი ვერ უკავშირდება SD-ბარათს. იქნებ USB-ითაა მიერთებული?  (ამჟამინდელი მდგომარეობა: %s)</string>
 </resources>
