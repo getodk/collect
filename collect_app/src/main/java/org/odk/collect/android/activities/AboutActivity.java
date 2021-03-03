@@ -90,10 +90,10 @@ public class AboutActivity extends CollectAbstractActivity implements
         if (MultiClickGuard.allowClick(getClass().getName())) {
             switch (position) {
                 case 0:
-                    websiteTabHelper.openWebPage(this, websiteUri);
+                    websiteTabHelper.openWebPageInCustomTab(this, websiteUri);
                     break;
                 case 1:
-                    forumTabHelper.openWebPage(this, forumUri);
+                    forumTabHelper.openWebPageInCustomTab(this, forumUri);
                     break;
                 case 2:
                     Intent shareIntent = new Intent(Intent.ACTION_SEND);

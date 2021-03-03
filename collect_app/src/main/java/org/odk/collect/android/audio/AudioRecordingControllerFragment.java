@@ -1,7 +1,6 @@
 package org.odk.collect.android.audio;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +20,7 @@ import org.odk.collect.android.databinding.AudioRecordingControllerFragmentBindi
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
@@ -36,6 +36,8 @@ import static org.odk.collect.shared.livedata.LiveDataUtils.zip4;
 
 public class AudioRecordingControllerFragment extends Fragment {
 
+    public static final String BACKGROUND_AUDIO_DOCS_URL = "https://docs.getodk.org/form-question-types/#background-audio-recording";
+
     @Inject
     AudioRecorder audioRecorder;
 
@@ -44,6 +46,9 @@ public class AudioRecordingControllerFragment extends Fragment {
 
     @Inject
     BackgroundAudioViewModel.Factory backgroundAudioViewModelFactory;
+
+    @Inject
+    ExternalWebPageHelper externalWebPageHelper;
 
     public AudioRecordingControllerFragmentBinding binding;
     private FormEntryViewModel formEntryViewModel;
@@ -88,7 +93,7 @@ public class AudioRecordingControllerFragment extends Fragment {
 
         binding.stopRecording.setOnClickListener(v -> audioRecorder.stop());
         binding.help.setOnClickListener(v -> {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.getodk.org/form-question-types/#background-audio-recording")));
+            externalWebPageHelper.openWebPage(getActivity(), Uri.parse(BACKGROUND_AUDIO_DOCS_URL));
         });
     }
 

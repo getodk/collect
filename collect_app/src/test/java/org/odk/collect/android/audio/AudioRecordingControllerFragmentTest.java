@@ -1,7 +1,6 @@
 package org.odk.collect.android.audio;
 
 import android.app.Application;
-import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
 
@@ -22,6 +21,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorder;
@@ -37,6 +37,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.RobolectricHelpers.getFragmentByClass;
 import static org.robolectric.Shadows.shadowOf;
@@ -49,6 +50,7 @@ public class AudioRecordingControllerFragmentTest {
     private FormEntryViewModel formEntryViewModel;
     private MutableNonNullLiveData<Boolean> hasBackgroundRecording;
     private MutableNonNullLiveData<Boolean> isBackgroundRecordingEnabled;
+    private ExternalWebPageHelper externalWebPageHelper;
 
     @Before
     public void setup() throws IOException {
@@ -63,6 +65,8 @@ public class AudioRecordingControllerFragmentTest {
         when(formEntryViewModel.hasBackgroundRecording()).thenReturn(hasBackgroundRecording);
         isBackgroundRecordingEnabled = new MutableNonNullLiveData<>(false);
         when(backgroundAudioViewModel.isBackgroundRecordingEnabled()).thenReturn(isBackgroundRecordingEnabled);
+
+        externalWebPageHelper = mock(ExternalWebPageHelper.class);
 
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
 
@@ -91,6 +95,11 @@ public class AudioRecordingControllerFragmentTest {
             @Override
             public AudioRecorder providesAudioRecorder(Application application) {
                 return audioRecorder;
+            }
+
+            @Override
+            public ExternalWebPageHelper providesExternalWebPageHelper() {
+                return externalWebPageHelper;
             }
         });
 
@@ -236,11 +245,9 @@ public class AudioRecordingControllerFragmentTest {
         FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
             assertThat(fragment.binding.help.getVisibility(), is(View.VISIBLE));
-            fragment.binding.help.performClick();
 
-            Intent intent = shadowOf(fragment.getActivity()).getNextStartedActivity();
-            assertThat(intent.getAction(), equalTo(Intent.ACTION_VIEW));
-            assertThat(intent.getData(), equalTo(Uri.parse("https://docs.getodk.org/form-question-types/#background-audio-recording")));
+            fragment.binding.help.performClick();
+            verify(externalWebPageHelper).openWebPage(fragment.getActivity(), Uri.parse("https://docs.getodk.org/form-question-types/#background-audio-recording"));
         });
     }
 

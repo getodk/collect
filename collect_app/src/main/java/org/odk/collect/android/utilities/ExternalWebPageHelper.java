@@ -62,17 +62,23 @@ public class ExternalWebPageHelper {
         return serviceConnection;
     }
 
-    public void openWebPage(Activity activity, Uri uri) {
+    public void openWebPageInCustomTab(Activity activity, Uri uri) {
         uri = uri.normalizeScheme();
 
         try {
             openUriInChromeTabs(activity, uri);
         } catch (Exception | Error e1) {
-            try {
-                openUriInExternalBrowser(activity, uri);
-            } catch (Exception | Error e2) {
-                openUriInWebView(activity, uri);
-            }
+            openWebPage(activity, uri);
+        }
+    }
+
+    public void openWebPage(Activity activity, Uri uri) {
+        uri = uri.normalizeScheme();
+
+        try {
+            openUriInExternalBrowser(activity, uri);
+        } catch (Exception | Error e2) {
+            openUriInWebView(activity, uri);
         }
     }
 
