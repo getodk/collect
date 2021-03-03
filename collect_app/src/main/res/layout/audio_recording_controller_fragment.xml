@@ -77,5 +77,6 @@
         android:layout_gravity="center_vertical"
         android:layout_marginStart="@dimen/margin_standard"
         android:src="@drawable/ic_baseline_help_outline_24"
+        android:visibility="gone"
         app:tint="?colorOnPrimary" />
 </LinearLayout>

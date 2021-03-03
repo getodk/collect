@@ -218,8 +218,8 @@ public class AudioRecordingControllerFragmentTest {
     }
 
     @Test
-    public void whenBackgroundRecording_hidesControls() {
-        when(backgroundAudioViewModel.isBackgroundRecording()).thenReturn(true);
+    public void whenFormHasBackgroundRecording_hidesControls() {
+        hasBackgroundRecording.setValue(true);
         audioRecorder.start("session", Output.AAC);
 
         FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
@@ -229,8 +229,8 @@ public class AudioRecordingControllerFragmentTest {
     }
 
     @Test
-    public void whenBackgroundRecording_clickingHelpButton_opensDocs() {
-        when(backgroundAudioViewModel.isBackgroundRecording()).thenReturn(true);
+    public void whenFormHasBackgroundRecording_clickingHelpButton_opensDocs() {
+        hasBackgroundRecording.setValue(true);
         audioRecorder.start("session", Output.AAC);
 
         FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
@@ -245,8 +245,8 @@ public class AudioRecordingControllerFragmentTest {
     }
 
     @Test
-    public void whenNotBackgroundRecording_hidesHelpButton() {
-        when(backgroundAudioViewModel.isBackgroundRecording()).thenReturn(false);
+    public void whenFormDoesNotHaveBackgroundRecording_hidesHelpButton() {
+        hasBackgroundRecording.setValue(false);
         audioRecorder.start("session", Output.AAC);
 
         FragmentScenario<AudioRecordingControllerFragment> scenario = FragmentScenario.launch(AudioRecordingControllerFragment.class);
@@ -276,9 +276,9 @@ public class AudioRecordingControllerFragmentTest {
         scenario.onFragment(fragment -> {
             assertThat(fragment.binding.getRoot().getVisibility(), is(View.VISIBLE));
             assertThat(fragment.binding.timeCode.getText(), is(fragment.getString(R.string.recording_disabled, "⋮")));
-            assertThat(fragment.binding.pauseRecording.getVisibility(), is(View.GONE));
-            assertThat(fragment.binding.stopRecording.getVisibility(), is(View.GONE));
             assertThat(fragment.binding.volumeBar.getVisibility(), is(View.GONE));
+            assertThat(fragment.binding.controls.getVisibility(), is(View.GONE));
+            assertThat(fragment.binding.help.getVisibility(), is(View.GONE));
         });
     }
 
@@ -307,9 +307,9 @@ public class AudioRecordingControllerFragmentTest {
         scenario.onFragment(fragment -> {
             assertThat(fragment.binding.getRoot().getVisibility(), is(View.VISIBLE));
             assertThat(fragment.binding.timeCode.getText(), is(fragment.getString(R.string.start_recording_failed)));
-            assertThat(fragment.binding.pauseRecording.getVisibility(), is(View.GONE));
-            assertThat(fragment.binding.stopRecording.getVisibility(), is(View.GONE));
             assertThat(fragment.binding.volumeBar.getVisibility(), is(View.GONE));
+            assertThat(fragment.binding.controls.getVisibility(), is(View.GONE));
+            assertThat(fragment.binding.help.getVisibility(), is(View.GONE));
         });
     }
 
