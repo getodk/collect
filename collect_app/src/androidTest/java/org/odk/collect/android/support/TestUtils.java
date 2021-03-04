@@ -14,7 +14,7 @@ import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 
 import java.io.Closeable;
 import java.io.File;
@@ -28,7 +28,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 public final class TestUtils {
-    private static final PreferencesDataSource GENERAL_PREFS = PreferencesUtils.getGeneralPreferences();
+    private static final PreferencesDataSource GENERAL_PREFS = TestPreferencesProvider.getGeneralPreferences();
 
     private TestUtils() {
 

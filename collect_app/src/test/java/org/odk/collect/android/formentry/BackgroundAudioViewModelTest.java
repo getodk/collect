@@ -16,7 +16,7 @@ import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.utilities.Clock;
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 
 import java.util.HashSet;
 import java.util.function.BiConsumer;
@@ -43,7 +43,7 @@ public class BackgroundAudioViewModelTest {
     public void setup() {
         clock = mock(Clock.class);
 
-        PreferencesDataSource generalPreferences = PreferencesUtils.getGeneralPreferences();
+        PreferencesDataSource generalPreferences = TestPreferencesProvider.getGeneralPreferences();
 
         viewModel = new BackgroundAudioViewModel(audioRecorder, generalPreferences, recordAudioActionRegistry, permissionsChecker, clock, mock(Analytics.class));
     }

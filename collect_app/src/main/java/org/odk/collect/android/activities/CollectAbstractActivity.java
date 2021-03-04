@@ -45,8 +45,7 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
     protected PermissionsProvider permissionsProvider;
 
     @Inject
-    protected
-    PreferencesRepository preferencesRepository;
+    protected PreferencesRepository preferencesRepository;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

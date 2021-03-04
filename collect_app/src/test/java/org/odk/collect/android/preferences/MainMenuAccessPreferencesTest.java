@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.preferences.AdminPreferencesFragment.MainMenuAccessPreferences;
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -21,8 +21,8 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_GET_BLANK;
 public class MainMenuAccessPreferencesTest {
 
     private Context context;
-    private final PreferencesDataSource generalPrefs = PreferencesUtils.getGeneralPreferences();
-    private final PreferencesDataSource adminPrefs = PreferencesUtils.getAdminPreferences();
+    private final PreferencesDataSource generalPrefs = TestPreferencesProvider.getGeneralPreferences();
+    private final PreferencesDataSource adminPrefs = TestPreferencesProvider.getAdminPreferences();
 
     @Before
     public void setup() {

@@ -5,7 +5,7 @@ import org.junit.Before;
 
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesRepository;
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -21,7 +21,7 @@ public abstract class MockedServerTest {
     private Map<String, ?> prefsBackup;
 
     protected MockWebServer server;
-    protected final PreferencesRepository preferencesRepository = PreferencesUtils.getPreferencesRepository();
+    protected final PreferencesRepository preferencesRepository = TestPreferencesProvider.getPreferencesRepository();
 
     @Before
     public void http_setUp() throws Exception {

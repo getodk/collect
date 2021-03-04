@@ -4,8 +4,12 @@ import android.content.SharedPreferences
 import java.util.Collections
 
 class PreferencesDataSource(private val sharedPreferences: SharedPreferences, private val defaultPreferences: Map<String, Any> = emptyMap()) {
-    fun loadDefaultPreferences() {
-        saveAll(defaultPreferences)
+    fun loadDefaultPreferencesIfNotExist() {
+        for ((key, _) in defaultPreferences) {
+            if (!sharedPreferences.contains(key)) {
+                save(key, get(key))
+            }
+        }
     }
 
     fun save(key: String, value: Any?) {

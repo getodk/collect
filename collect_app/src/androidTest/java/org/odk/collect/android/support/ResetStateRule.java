@@ -15,7 +15,7 @@ import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +25,7 @@ import static org.apache.commons.io.FileUtils.deleteDirectory;
 public class ResetStateRule implements TestRule {
 
     private final AppDependencyModule appDependencyModule;
-    private final PreferencesRepository preferencesRepository = PreferencesUtils.getPreferencesRepository();
+    private final PreferencesRepository preferencesRepository = TestPreferencesProvider.getPreferencesRepository();
 
     public ResetStateRule() {
         this(null);
@@ -90,7 +90,9 @@ public class ResetStateRule implements TestRule {
 
     private void clearPrefs() {
         preferencesRepository.getGeneralPreferences().clear();
+        preferencesRepository.getGeneralPreferences().loadDefaultPreferencesIfNotExist();
         preferencesRepository.getAdminPreferences().clear();
+        preferencesRepository.getAdminPreferences().loadDefaultPreferencesIfNotExist();
         preferencesRepository.getMetaPreferences().clear();
     }
 }

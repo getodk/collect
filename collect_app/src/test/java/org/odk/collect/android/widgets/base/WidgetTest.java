@@ -12,7 +12,7 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 import org.odk.collect.android.preferences.PreferencesRepository;
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 import org.robolectric.RobolectricTestRunner;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -34,7 +34,7 @@ public abstract class WidgetTest {
 
     public boolean readOnlyOverride;
 
-    protected final PreferencesRepository preferencesRepository = PreferencesUtils.getPreferencesRepository();
+    protected final PreferencesRepository preferencesRepository = TestPreferencesProvider.getPreferencesRepository();
 
     @Before
     @OverridingMethodsMustInvokeSuper

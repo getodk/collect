@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
@@ -20,9 +20,9 @@ import static org.odk.collect.android.application.initialization.migration.Share
 @RunWith(RobolectricTestRunner.class)
 public class CollectSettingsPreferenceMigratorTest {
 
-    private final PreferencesDataSource generalPrefs = PreferencesUtils.getGeneralPreferences();
-    private final PreferencesDataSource adminPrefs = PreferencesUtils.getAdminPreferences();
-    private final PreferencesDataSource metaPrefs = PreferencesUtils.getMetaPreferences();
+    private final PreferencesDataSource generalPrefs = TestPreferencesProvider.getGeneralPreferences();
+    private final PreferencesDataSource adminPrefs = TestPreferencesProvider.getAdminPreferences();
+    private final PreferencesDataSource metaPrefs = TestPreferencesProvider.getMetaPreferences();
 
     @Before
     public void setUp() throws Exception {

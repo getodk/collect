@@ -96,9 +96,9 @@ public class ApplicationResetter {
         WebCredentialsUtils.clearAllCredentials();
 
         preferencesRepository.getGeneralPreferences().clear();
-        preferencesRepository.getGeneralPreferences().loadDefaultPreferences();
+        preferencesRepository.getGeneralPreferences().loadDefaultPreferencesIfNotExist();
         preferencesRepository.getAdminPreferences().clear();
-        preferencesRepository.getAdminPreferences().loadDefaultPreferences();
+        preferencesRepository.getAdminPreferences().loadDefaultPreferencesIfNotExist();
 
         boolean deletedSettingsFolderContest = !new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS)).exists()
                 || deleteFolderContents(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS));

@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.odk.collect.android.preferences.PreferencesRepository;
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -32,7 +32,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_USGS_MAP_STYLE
 public class SettingsImporterRegressionTest {
 
     private SettingsImporter settingsImporter;
-    private final PreferencesRepository preferencesRepository = PreferencesUtils.getPreferencesRepository();
+    private final PreferencesRepository preferencesRepository = TestPreferencesProvider.getPreferencesRepository();
 
     @Before
     public void setup() {

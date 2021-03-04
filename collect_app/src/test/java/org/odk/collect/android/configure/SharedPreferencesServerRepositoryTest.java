@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.odk.collect.utilities.PreferencesUtils;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -20,7 +19,7 @@ public class SharedPreferencesServerRepositoryTest {
     @Before
     public void setup() {
         defaultServer = "http://default.example";
-        repository = new SharedPreferencesServerRepository(defaultServer, initPrefs(PreferencesUtils.getPreferencesRepository()));
+        repository = new SharedPreferencesServerRepository(defaultServer, initPrefs());
     }
 
     @Test

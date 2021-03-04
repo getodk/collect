@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 
 import static android.os.Looper.getMainLooper;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,12 +34,16 @@ import static org.robolectric.Shadows.shadowOf;
 public class FormManagementPreferencesTest {
 
     private Context context;
-    private final PreferencesDataSource generalPrefs = PreferencesUtils.getGeneralPreferences();
-    private final PreferencesDataSource adminPrefs = PreferencesUtils.getAdminPreferences();
+    private final PreferencesDataSource generalPrefs = TestPreferencesProvider.getGeneralPreferences();
+    private final PreferencesDataSource adminPrefs = TestPreferencesProvider.getAdminPreferences();
 
     @Before
     public void setup() {
         context = ApplicationProvider.getApplicationContext();
+        generalPrefs.clear();
+        generalPrefs.loadDefaultPreferencesIfNotExist();
+        adminPrefs.clear();
+        adminPrefs.loadDefaultPreferencesIfNotExist();
     }
 
     @Test

@@ -1,12 +1,14 @@
 package org.odk.collect.utilities
 
+import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.PreferencesDataSource
 import org.odk.collect.android.preferences.PreferencesRepository
 
-object PreferencesUtils {
+// Use just fo testing
+object TestPreferencesProvider {
     @JvmStatic
     fun getPreferencesRepository(): PreferencesRepository {
         return DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Collect>()).preferencesRepository()
@@ -29,6 +31,6 @@ object PreferencesUtils {
 
     @JvmStatic
     fun getTestPreferences(name: String?): PreferencesDataSource {
-        return getPreferencesRepository().getTestPreferences(name!!)
+        return PreferencesDataSource(ApplicationProvider.getApplicationContext<Collect>().getSharedPreferences(name, Context.MODE_PRIVATE))
     }
 }

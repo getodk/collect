@@ -11,7 +11,7 @@ import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.odk.collect.android.preferences.Protocol;
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -22,7 +22,7 @@ public class SettingsUtilsTest {
 
     @Test
     public void getFormUpdateMode_whenProtocolIsGoogleDrive_andModeNotManual_returnsManual() {
-        PreferencesDataSource generalPrefs = PreferencesUtils.getGeneralPreferences();
+        PreferencesDataSource generalPrefs = TestPreferencesProvider.getGeneralPreferences();
         Context context = getApplicationContext();
 
         generalPrefs.save(GeneralKeys.KEY_PROTOCOL, Protocol.GOOGLE.getValue(context));

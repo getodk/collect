@@ -116,8 +116,8 @@ public class ApplicationInitializer {
     }
 
     private void reloadSharedPreferences() {
-        generalPrefs.loadDefaultPreferences();
-        adminPrefs.loadDefaultPreferences();
+        generalPrefs.loadDefaultPreferencesIfNotExist();
+        adminPrefs.loadDefaultPreferencesIfNotExist();
     }
 
     private void performMigrations() {

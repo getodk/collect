@@ -45,7 +45,7 @@ import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.FormLoadingUtils;
 import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -327,7 +327,7 @@ public class FieldListUpdateTest {
 
     @Test
     public void changeInValueUsedInGuidanceHint_ShouldChangeGuidanceHintText() {
-        PreferencesUtils.getGeneralPreferences().save(GeneralKeys.KEY_GUIDANCE_HINT, GuidanceHint.Yes.toString());
+        TestPreferencesProvider.getGeneralPreferences().save(GeneralKeys.KEY_GUIDANCE_HINT, GuidanceHint.Yes.toString());
         jumpToGroupWithText("Guidance hint");
         onView(withText(startsWith("Source11"))).perform(click());
 

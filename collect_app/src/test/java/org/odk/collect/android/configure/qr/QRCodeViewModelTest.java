@@ -9,7 +9,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.JsonPreferencesGenerator;
 import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.odk.collect.testshared.FakeScheduler;
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -27,8 +27,8 @@ public class QRCodeViewModelTest {
     private final JsonPreferencesGenerator jsonPreferencesGenerator = mock(JsonPreferencesGenerator.class);
     private final FakeScheduler fakeScheduler = new FakeScheduler();
 
-    private final PreferencesDataSource generalPreferences = PreferencesUtils.getGeneralPreferences();
-    private final PreferencesDataSource adminPreferences = PreferencesUtils.getAdminPreferences();
+    private final PreferencesDataSource generalPreferences = TestPreferencesProvider.getGeneralPreferences();
+    private final PreferencesDataSource adminPreferences = TestPreferencesProvider.getAdminPreferences();
 
     @Test
     public void setIncludedKeys_generatesQRCodeWithKeys() throws Exception {

@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,7 +17,7 @@ import static org.hamcrest.Matchers.startsWith;
 @RunWith(RobolectricTestRunner.class)
 public class SharedPreferencesInstallIDProviderTest {
 
-    private final PreferencesDataSource metaPreferences = PreferencesUtils.getMetaPreferences();
+    private final PreferencesDataSource metaPreferences = TestPreferencesProvider.getMetaPreferences();
     private SharedPreferencesInstallIDProvider provider;
 
     @Before

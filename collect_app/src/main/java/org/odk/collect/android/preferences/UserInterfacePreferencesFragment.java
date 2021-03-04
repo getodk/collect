@@ -53,9 +53,6 @@ public class UserInterfacePreferencesFragment extends BasePreferenceFragment {
     @Inject
     VersionInformation versionInformation;
 
-    @Inject
-    PreferencesRepository preferencesRepository;
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

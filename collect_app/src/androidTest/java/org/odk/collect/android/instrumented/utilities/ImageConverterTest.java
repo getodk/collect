@@ -37,7 +37,7 @@ import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.widgets.ImageWidget;
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,7 +65,7 @@ public class ImageConverterTest {
     private static final String IMAGE_SIZE_SMALL = "small";
     private static final String IMAGE_SIZE_VERY_SMALL = "very_small";
 
-    private final PreferencesDataSource generalPrefs = PreferencesUtils.getGeneralPreferences();
+    private final PreferencesDataSource generalPrefs = TestPreferencesProvider.getGeneralPreferences();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -289,7 +289,7 @@ public class ImageConverterTest {
     public void scaleImageDownFormAndSettingsLevel2() {
         generalPrefs.save("image_size", "small");
         saveTestBitmap(4000, 4000);
-        ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "650"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
+        ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "650"), Collect.getInstance(), IMAGE_SIZE_SMALL);
 
         Bitmap image = FileUtils.getBitmap(TEST_IMAGE_PATH, new BitmapFactory.Options());
         assertEquals(650, image.getWidth());

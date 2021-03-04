@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 
 import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
@@ -24,7 +24,7 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_VIEW_SENT;
 public class MainMenuButtonsVisibilityTest {
 
     private MainMenuActivity mainMenuActivity;
-    private final PreferencesDataSource adminPrefs = PreferencesUtils.getAdminPreferences();
+    private final PreferencesDataSource adminPrefs = TestPreferencesProvider.getAdminPreferences();
 
     @Test
     public void when_editSavedFormButtonIsEnabledInSettings_shouldBeVisible() {

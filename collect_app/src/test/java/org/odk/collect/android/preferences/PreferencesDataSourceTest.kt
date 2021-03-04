@@ -189,7 +189,7 @@ class PreferencesDataSourceTest {
     }
 
     @Test
-    fun `When clear() called, should all saved preferences be removed`() {
+    fun `When clear() called, should all saved preferences be removed and defaults should be loaded`() {
         preferencesSource = PreferencesDataSource(sharedPreferences, defaultPrefs)
 
         preferencesSource.save(KEY_STRING, CUSTOM_STRING_VALUE)
@@ -198,10 +198,12 @@ class PreferencesDataSourceTest {
         preferencesSource.save(KEY_INT, CUSTOM_INT_VALUE)
         preferencesSource.save(KEY_FLOAT, CUSTOM_FLOAT_VALUE)
         preferencesSource.save(KEY_SET, CUSTOM_SET_VALUE)
+        preferencesSource.save("something_else", "something_else")
 
         preferencesSource.clear()
 
-        assertThat(preferencesSource.getAll().size, `is`(0))
+        assertDefaultPrefs(defaultPrefs)
+        assertThat(preferencesSource.contains("something_else"), `is`(false))
     }
 
     @Test
@@ -239,11 +241,19 @@ class PreferencesDataSourceTest {
     }
 
     @Test
-    fun `When loadDefaultPreferences() called, should save all defaults`() {
+    fun `When loadDefaultPreferencesIfNotExist() called, should save all defaults that do not exist`() {
         preferencesSource = PreferencesDataSource(sharedPreferences, defaultPrefs)
-        assertThat(preferencesSource.getAll().size, `is`(0))
-        preferencesSource.loadDefaultPreferences()
-        assertDefaultPrefs(preferencesSource.getAll())
+        preferencesSource.save(KEY_STRING, CUSTOM_STRING_VALUE)
+        assertThat(preferencesSource.getAll().size, `is`(1))
+        preferencesSource.loadDefaultPreferencesIfNotExist()
+        val prefs = preferencesSource.getAll()
+        assertThat(prefs.size, `is`(defaultPrefs.size))
+        assertThat(prefs[KEY_STRING], `is`(CUSTOM_STRING_VALUE))
+        assertThat(prefs[KEY_BOOLEAN], `is`(DEFAULT_BOOLEAN_VALUE))
+        assertThat(prefs[KEY_LONG], `is`(DEFAULT_LONG_VALUE))
+        assertThat(prefs[KEY_INT], `is`(DEFAULT_INT_VALUE))
+        assertThat(prefs[KEY_FLOAT], `is`(DEFAULT_FLOAT_VALUE))
+        assertThat(prefs[KEY_SET], `is`(DEFAULT_SET_VALUE))
     }
 
     fun assertDefaultPrefs(allPreferences: Map<String, *>) {

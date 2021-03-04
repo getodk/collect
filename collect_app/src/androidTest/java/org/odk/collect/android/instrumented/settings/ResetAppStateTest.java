@@ -36,7 +36,7 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ApplicationResetter;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 import org.osmdroid.config.Configuration;
 
 import java.io.File;
@@ -54,8 +54,8 @@ import static org.junit.Assert.assertTrue;
 public class ResetAppStateTest {
 
     private final StoragePathProvider storagePathProvider = new StoragePathProvider();
-    private final PreferencesDataSource generalPrefs = PreferencesUtils.getGeneralPreferences();
-    private final PreferencesDataSource adminPrefs = PreferencesUtils.getAdminPreferences();
+    private final PreferencesDataSource generalPrefs = TestPreferencesProvider.getGeneralPreferences();
+    private final PreferencesDataSource adminPrefs = TestPreferencesProvider.getAdminPreferences();
 
     @Before
     public void setUp() throws IOException {

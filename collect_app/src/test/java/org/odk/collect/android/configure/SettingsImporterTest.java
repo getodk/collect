@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
 import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,8 +29,8 @@ import static org.odk.collect.android.application.initialization.migration.Share
 @SuppressWarnings("PMD.DoubleBraceInitialization")
 public class SettingsImporterTest {
 
-    private final PreferencesDataSource generalPrefs = PreferencesUtils.getGeneralPreferences();
-    private final PreferencesDataSource adminPrefs = PreferencesUtils.getAdminPreferences();
+    private final PreferencesDataSource generalPrefs = TestPreferencesProvider.getGeneralPreferences();
+    private final PreferencesDataSource adminPrefs = TestPreferencesProvider.getAdminPreferences();
     private SettingsValidator settingsValidator;
     private SettingsImporter importer;
 

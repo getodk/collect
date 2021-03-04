@@ -6,7 +6,7 @@ import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 @RunWith(RobolectricTestRunner.class)
 public class JsonPreferencesGeneratorTest extends TestCase {
     private JsonPreferencesGenerator jsonPreferencesGenerator;
-    private final PreferencesRepository preferencesRepository = PreferencesUtils.getPreferencesRepository();
+    private final PreferencesRepository preferencesRepository = TestPreferencesProvider.getPreferencesRepository();
 
     @Before
     public void setup() {

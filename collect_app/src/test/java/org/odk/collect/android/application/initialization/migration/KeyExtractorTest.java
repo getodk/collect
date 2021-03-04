@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.extractNewKey;
 import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.assertPrefs;
@@ -16,7 +16,7 @@ import static org.odk.collect.android.application.initialization.migration.Share
 @RunWith(AndroidJUnit4.class)
 public class KeyExtractorTest {
 
-    private final PreferencesDataSource prefs = PreferencesUtils.getTestPreferences("test");
+    private final PreferencesDataSource prefs = TestPreferencesProvider.getTestPreferences("test");
 
     @Test
     public void createsNewKeyBasedOnExistingKeysValue() {

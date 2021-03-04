@@ -19,7 +19,7 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesRepository;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.support.RobolectricHelpers;
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 import org.odk.collect.utilities.UserAgentProvider;
 import org.robolectric.annotation.LooperMode;
 
@@ -50,7 +50,7 @@ public class SplashScreenActivityTest {
 
     @Test
     public void whenShowSplashScreenEnabled_showSplashScreen() {
-        PreferencesUtils.getGeneralPreferences().save(GeneralKeys.KEY_SHOW_SPLASH, true);
+        TestPreferencesProvider.getGeneralPreferences().save(GeneralKeys.KEY_SHOW_SPLASH, true);
 
         ActivityScenario<SplashScreenActivity> scenario1 = ActivityScenario.launch(SplashScreenActivity.class);
         assertThat(scenario1.getState(), is(Lifecycle.State.RESUMED));

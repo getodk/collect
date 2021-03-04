@@ -3,7 +3,7 @@ package org.odk.collect.android.utilities;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -20,7 +20,7 @@ public class QuestionFontSizeUtilsTest {
 
     @Test
     public void whenFontSizeSpecified_shouldReturnSelectedValue() {
-        PreferencesUtils.getGeneralPreferences().save(KEY_FONT_SIZE, "30");
+        TestPreferencesProvider.getGeneralPreferences().save(KEY_FONT_SIZE, "30");
         assertThat(QuestionFontSizeUtils.getQuestionFontSize(), is(30));
     }
 }

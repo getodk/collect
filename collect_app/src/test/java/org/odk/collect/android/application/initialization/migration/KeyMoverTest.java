@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -16,8 +16,8 @@ import static org.odk.collect.android.application.initialization.migration.Share
 @RunWith(RobolectricTestRunner.class)
 public class KeyMoverTest {
 
-    private final PreferencesDataSource prefs = PreferencesUtils.getTestPreferences("test");
-    private final PreferencesDataSource other = PreferencesUtils.getTestPreferences("other");
+    private final PreferencesDataSource prefs = TestPreferencesProvider.getTestPreferences("test");
+    private final PreferencesDataSource other = TestPreferencesProvider.getTestPreferences("other");
 
     @Test
     public void movesKeyAndValueToOtherPrefs() {

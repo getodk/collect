@@ -14,7 +14,7 @@ import org.odk.collect.android.preferences.JsonPreferencesGenerator;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.testshared.FakeScheduler;
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.fakes.RoboMenuItem;
@@ -47,7 +47,7 @@ public class QRCodeMenuDelegateTest {
     public void setup() {
         activity = Robolectric.setupActivity(FragmentActivity.class);
         menuDelegate = new QRCodeMenuDelegate(activity, activityAvailability, qrCodeGenerator,
-                jsonPreferencesGenerator, fileProvider, PreferencesUtils.getPreferencesRepository(), fakeScheduler);
+                jsonPreferencesGenerator, fileProvider, TestPreferencesProvider.getPreferencesRepository(), fakeScheduler);
     }
 
     @Test

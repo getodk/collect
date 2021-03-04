@@ -1,7 +1,7 @@
 package org.odk.collect.android.application.initialization.migration;
 
 import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesRepository;
+import org.odk.collect.utilities.TestPreferencesProvider;
 
 import static org.junit.Assert.assertEquals;
 
@@ -17,8 +17,8 @@ public class SharedPreferenceUtils {
         }
     }
 
-    public static PreferencesDataSource initPrefs(PreferencesRepository preferencesRepository, Object... pairs) {
-        PreferencesDataSource prefs = preferencesRepository.getTestPreferences("test");
+    public static PreferencesDataSource initPrefs(Object... pairs) {
+        PreferencesDataSource prefs = TestPreferencesProvider.getTestPreferences("test");
         initPrefs(prefs, pairs);
         return prefs;
     }

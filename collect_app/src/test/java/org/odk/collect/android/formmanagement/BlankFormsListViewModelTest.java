@@ -23,7 +23,7 @@ import org.odk.collect.android.support.BooleanChangeLock;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.testshared.FakeScheduler;
 import org.odk.collect.testshared.LiveDataTester;
-import org.odk.collect.utilities.PreferencesUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -44,7 +44,7 @@ public class BlankFormsListViewModelTest {
     private final SyncStatusRepository syncRepository = mock(SyncStatusRepository.class);
     private final BooleanChangeLock changeLock = new BooleanChangeLock();
     private final Analytics analytics = mock(Analytics.class);
-    private final PreferencesRepository preferencesRepository = PreferencesUtils.getPreferencesRepository();
+    private final PreferencesRepository preferencesRepository = TestPreferencesProvider.getPreferencesRepository();
 
     @After
     public void teardown() {

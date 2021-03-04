@@ -50,9 +50,6 @@ public class FormManagementPreferences extends BasePreferenceFragment {
     Analytics analytics;
 
     @Inject
-    PreferencesRepository preferencesRepository;
-
-    @Inject
     FormUpdateManager formUpdateManager;
 
     @Override

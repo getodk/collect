@@ -33,7 +33,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.SortDialogAdapter;
-import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.MultiClickGuard;
@@ -45,7 +44,6 @@ import java.util.List;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuItemCompat;
@@ -55,7 +53,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import timber.log.Timber;
 
-public abstract class AppListActivity extends CollectAbstractActivity {
+abstract class AppListActivity extends CollectAbstractActivity {
 
     protected static final int LOADER_ID = 0x01;
     private static final String SELECTED_INSTANCES = "selectedInstances";
@@ -79,12 +77,6 @@ public abstract class AppListActivity extends CollectAbstractActivity {
 
     private boolean canHideProgressBar;
     private boolean progressBarVisible;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        DaggerUtils.getComponent(this).inject(this);
-    }
 
     // toggles to all checked or all unchecked
     // returns:
