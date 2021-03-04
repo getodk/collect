@@ -18,6 +18,8 @@ import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.smap.openrosa.api.FormListApiSmap;
+import org.odk.collect.android.smap.openrosa.api.OpenRosaFormListApiSmap;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
@@ -48,12 +50,12 @@ public class MultiFormDownloaderSmap {
     private static final String MD5_COLON_PREFIX = "md5:";
     private static final String TEMP_DOWNLOAD_EXTENSION = ".tempDownload";
 
-    private final FormListApi formListApi;
+    private final FormListApiSmap formListApi;
     private final FormsRepository formsRepository;
 
-    public MultiFormDownloader(OpenRosaXmlFetcher openRosaXmlFetcher) {
+    public MultiFormDownloaderSmap(OpenRosaXmlFetcher openRosaXmlFetcher) {
         this.formsRepository = new DatabaseFormsRepository();
-        formListApi = new OpenRosaFormListApi(openRosaXmlFetcher);
+        formListApi = new OpenRosaFormListApiSmap(openRosaXmlFetcher);
     }
 
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST =

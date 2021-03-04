@@ -7,14 +7,14 @@ import org.odk.collect.android.utilities.WebCredentialsUtils;
 import java.io.InputStream;
 import java.util.List;
 
-public class FormListApiSmap {
-    List<FormListItem> fetchFormList() throws FormApiException;
+public interface FormListApiSmap {
+    List<FormListItem> fetchFormList() throws FormApiExceptionSmap;
 
-    ManifestFile fetchManifest(String manifestURL) throws FormApiException;
+    ManifestFile fetchManifest(String manifestURL) throws FormApiExceptionSmap;
 
-    InputStream fetchForm(String formURL, boolean credentials) throws FormApiException;             // smap add credentials
+    InputStream fetchForm(String formURL, boolean credentials) throws FormApiExceptionSmap;             // smap add credentials
 
-    InputStream fetchMediaFile(String mediaFileURL, boolean credentials) throws FormApiException;   // smap add credentials
+    InputStream fetchMediaFile(String mediaFileURL, boolean credentials) throws FormApiExceptionSmap;   // smap add credentials
 
     void updateUrl(String url);
 
