@@ -317,7 +317,7 @@ public class ServerFormDownloader implements FormDownloader {
          * object representing the downloaded file.
          */
         FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener, File tempDir, String formsDirPath) throws FormSourceException, IOException, InterruptedException {
-            InputStream xform = formSource.fetchForm(url);
+            InputStream xform = formSource.fetchForm(url, true);
 
             String fileName = getFormFileName(formName, formsDirPath);
             File tempFormFile = new File(tempDir + File.separator + fileName);
@@ -510,7 +510,7 @@ public class ServerFormDownloader implements FormDownloader {
                     File tempMediaFile = new File(tempMediaDir, toDownload.getFilename());
 
                     if (!finalMediaFile.exists()) {
-                        InputStream mediaFile = formSource.fetchMediaFile(toDownload.getDownloadUrl());
+                        InputStream mediaFile = formSource.fetchMediaFile(toDownload.getDownloadUrl(), true);
                         writeFile(mediaFile, tempMediaFile, tempDir, stateListener);
                     } else {
                         String currentFileHash = FileUtils.getMd5Hash(finalMediaFile);
@@ -520,7 +520,7 @@ public class ServerFormDownloader implements FormDownloader {
                             // if the hashes match, it's the same file
                             // otherwise delete our current one and replace it with the new one
                             FileUtils.deleteAndReport(finalMediaFile);
-                            InputStream mediaFile = formSource.fetchMediaFile(toDownload.getDownloadUrl());
+                            InputStream mediaFile = formSource.fetchMediaFile(toDownload.getDownloadUrl(), true);
                             writeFile(mediaFile, tempMediaFile, tempDir, stateListener);
                         } else {
                             // exists, and the hash is the same
