@@ -18,7 +18,15 @@ import static org.odk.collect.android.utilities.ViewUtils.pxFromDp;
 
 public class VolumeBar extends LinearLayout {
 
-    public static final int MAX_AMPLITUDE = 22760;
+    /**
+     * Amplitude is a reported by Android as a positive Short so
+     * the cannot be higher than the max value.
+     */
+    public static final int MAX_AMPLITUDE = Short.MAX_VALUE;
+
+    /**
+     * The max amount of pips we want to show on larger screens
+     */
     public static final int MAX_PIPS = 20;
 
     private Integer lastAmplitude;
@@ -76,7 +84,7 @@ public class VolumeBar extends LinearLayout {
 
         if (pips > 0) {
             int segmentAmplitude = MAX_AMPLITUDE / pips;
-            int adjustedAmplitude = amplitude * 6;
+            int adjustedAmplitude = amplitude * 6; // Optimize for voice rather than louder noises
             int segmentsToFill = adjustedAmplitude / segmentAmplitude;
 
             for (int i = 0; i < pips; i++) {
