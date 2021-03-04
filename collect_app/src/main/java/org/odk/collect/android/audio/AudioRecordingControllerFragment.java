@@ -1,7 +1,6 @@
 package org.odk.collect.android.audio;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,7 +19,6 @@ import org.odk.collect.android.databinding.AudioRecordingControllerFragmentBindi
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
@@ -46,9 +44,6 @@ public class AudioRecordingControllerFragment extends Fragment {
 
     @Inject
     BackgroundAudioViewModel.Factory backgroundAudioViewModelFactory;
-
-    @Inject
-    ExternalWebPageHelper externalWebPageHelper;
 
     public AudioRecordingControllerFragmentBinding binding;
     private FormEntryViewModel formEntryViewModel;
@@ -93,7 +88,7 @@ public class AudioRecordingControllerFragment extends Fragment {
 
         binding.stopRecording.setOnClickListener(v -> audioRecorder.stop());
         binding.help.setOnClickListener(v -> {
-            externalWebPageHelper.openWebPage(getActivity(), Uri.parse(BACKGROUND_AUDIO_DOCS_URL));
+            showIfNotShowing(BackgroundAudioHelpDialogFragment.class, getParentFragmentManager());
         });
     }
 

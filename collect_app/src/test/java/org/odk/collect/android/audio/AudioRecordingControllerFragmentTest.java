@@ -1,7 +1,6 @@
 package org.odk.collect.android.audio;
 
 import android.app.Application;
-import android.net.Uri;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -37,7 +36,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.RobolectricHelpers.getFragmentByClass;
 import static org.robolectric.Shadows.shadowOf;
@@ -238,7 +236,7 @@ public class AudioRecordingControllerFragmentTest {
     }
 
     @Test
-    public void whenFormHasBackgroundRecording_clickingHelpButton_opensDocs() {
+    public void whenFormHasBackgroundRecording_clickingHelpButton_opensHelpDialog() {
         hasBackgroundRecording.setValue(true);
         audioRecorder.start("session", Output.AAC);
 
@@ -247,7 +245,8 @@ public class AudioRecordingControllerFragmentTest {
             assertThat(fragment.binding.help.getVisibility(), is(View.VISIBLE));
 
             fragment.binding.help.performClick();
-            verify(externalWebPageHelper).openWebPage(fragment.getActivity(), Uri.parse("https://docs.getodk.org/form-question-types/#background-audio-recording"));
+            BackgroundAudioHelpDialogFragment dialog = getFragmentByClass(fragment.getParentFragmentManager(), BackgroundAudioHelpDialogFragment.class);
+            assertThat(dialog, notNullValue());
         });
     }
 
