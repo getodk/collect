@@ -27,6 +27,10 @@ public class MainMenuAccessPreferencesTest {
     @Before
     public void setup() {
         context = ApplicationProvider.getApplicationContext();
+        generalPrefs.clear();
+        generalPrefs.loadDefaultPreferencesIfNotExist();
+        adminPrefs.clear();
+        adminPrefs.loadDefaultPreferencesIfNotExist();
     }
 
     @Test

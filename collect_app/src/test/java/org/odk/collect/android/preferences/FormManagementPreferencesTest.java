@@ -136,7 +136,7 @@ public class FormManagementPreferencesTest {
 
     @Test
     public void whenManualUpdatesEnabled_andAutomaticDownloadDisabled_settingToPreviouslyDownloaded_resetsAutomaticDownload() {
-        generalPrefs.save(KEY_FORM_UPDATE_MODE, MATCH_EXACTLY.getValue(context));
+        generalPrefs.save(KEY_FORM_UPDATE_MODE, MANUAL.getValue(context));
         generalPrefs.save(KEY_AUTOMATIC_UPDATE, false);
 
         FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class);

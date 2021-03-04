@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.utilities.TestPreferencesProvider;
@@ -17,6 +18,12 @@ import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY
 @RunWith(AndroidJUnit4.class)
 public class IdentityPreferencesFragmentTest {
     private final PreferencesDataSource adminPrefs = TestPreferencesProvider.getAdminPreferences();
+
+    @Before
+    public void setup() {
+        adminPrefs.clear();
+        adminPrefs.loadDefaultPreferencesIfNotExist();
+    }
 
     @Test
     public void visiblePreferences_shouldBeVisibleIfOpenedFromGeneralPreferences() {

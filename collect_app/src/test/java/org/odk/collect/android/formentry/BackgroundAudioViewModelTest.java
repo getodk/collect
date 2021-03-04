@@ -44,6 +44,7 @@ public class BackgroundAudioViewModelTest {
         clock = mock(Clock.class);
 
         PreferencesDataSource generalPreferences = TestPreferencesProvider.getGeneralPreferences();
+        generalPreferences.clear();
 
         viewModel = new BackgroundAudioViewModel(audioRecorder, generalPreferences, recordAudioActionRegistry, permissionsChecker, clock, mock(Analytics.class));
     }

@@ -3,6 +3,7 @@ package org.odk.collect.android.activities;
 import android.view.View;
 import android.widget.Button;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
@@ -25,6 +26,12 @@ public class MainMenuButtonsVisibilityTest {
 
     private MainMenuActivity mainMenuActivity;
     private final PreferencesDataSource adminPrefs = TestPreferencesProvider.getAdminPreferences();
+
+    @Before
+    public void setup() {
+        adminPrefs.clear();
+        adminPrefs.loadDefaultPreferencesIfNotExist();
+    }
 
     @Test
     public void when_editSavedFormButtonIsEnabledInSettings_shouldBeVisible() {

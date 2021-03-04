@@ -39,6 +39,11 @@ public abstract class WidgetTest {
     @Before
     @OverridingMethodsMustInvokeSuper
     public void setUp() throws Exception {
+        preferencesRepository.getGeneralPreferences().clear();
+        preferencesRepository.getGeneralPreferences().loadDefaultPreferencesIfNotExist();
+        preferencesRepository.getAdminPreferences().clear();
+        preferencesRepository.getAdminPreferences().loadDefaultPreferencesIfNotExist();
+
         when(formEntryPrompt.getIndex()).thenReturn(mock(FormIndex.class));
         when(formEntryPrompt.getIndex().toString()).thenReturn("0, 0");
         when(formEntryPrompt.getFormElement()).thenReturn(formElement);

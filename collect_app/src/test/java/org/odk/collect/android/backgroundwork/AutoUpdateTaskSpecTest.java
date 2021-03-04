@@ -76,6 +76,8 @@ public class AutoUpdateTaskSpecTest {
                 return notifier;
             }
         });
+        generalPrefs.clear();
+        generalPrefs.loadDefaultPreferencesIfNotExist();
     }
 
     @Test
