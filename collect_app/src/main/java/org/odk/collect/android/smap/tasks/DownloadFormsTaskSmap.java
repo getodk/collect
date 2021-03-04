@@ -19,13 +19,13 @@ import java.util.HashMap;
  * @author msundt
  * @author carlhartung
  */
-public class DownloadFormsTask extends
+public class DownloadFormsTaskSmap extends
         AsyncTask<ArrayList<ServerFormDetails>, String, HashMap<ServerFormDetails, String>> implements FormDownloaderListener {
 
     private final MultiFormDownloaderSmap multiFormDownloader;
     private DownloadFormsTaskListener stateListener;
 
-    public DownloadFormsTask(MultiFormDownloaderSmap multiFormDownloader) {
+    public DownloadFormsTaskSmap(MultiFormDownloaderSmap multiFormDownloader) {
         this.multiFormDownloader = multiFormDownloader;
     }
 

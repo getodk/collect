@@ -116,7 +116,7 @@ public class MultiFormDownloaderSmap {
             stateListener.progressUpdate(fd.getFormName(), String.valueOf(count), String.valueOf(total));
         }
         boolean success = true;
-        if (stateListener != null && stateListener.isTaskCanceled()) {
+        if (stateListener != null && stateListener.isTaskCancelled()) {
             throw new TaskCancelledException();
         }
 
@@ -159,7 +159,7 @@ public class MultiFormDownloaderSmap {
             return false;
         }
 
-        if (stateListener != null && stateListener.isTaskCanceled()) {
+        if (stateListener != null && stateListener.isTaskCancelled()) {
             cleanUp(fileResult, null, tempMediaPath, orgTempMediaPath);     // smap
             fileResult = null;
         }
@@ -196,7 +196,7 @@ public class MultiFormDownloaderSmap {
 
         boolean installed = false;
 
-        if ((stateListener == null || !stateListener.isTaskCanceled()) && parsedFields != null) {    // smap remove check on empty message and check that parsed fields is not empty
+        if ((stateListener == null || !stateListener.isTaskCancelled()) && parsedFields != null) {    // smap remove check on empty message and check that parsed fields is not empty
             if (!fileResult.isNew || isSubmissionOk(parsedFields)) {
                 installed = installEverything(tempMediaPath, fileResult, parsedFields, fd, orgTempMediaPath, orgMediaPath);   // Smap Added organisation paths
             } else {
@@ -280,7 +280,7 @@ public class MultiFormDownloaderSmap {
             if(fileResult.file.exists()) {  // smap
                 String md5Hash = FileUtils.getMd5Hash(fileResult.file);
                 if (md5Hash != null) {
-                    formsRepository.deleteFormsByMd5Hash(md5Hash);
+                    formsRepository.deleteByMd5Hash(md5Hash);
                 }
             }
         }
@@ -312,7 +312,7 @@ public class MultiFormDownloaderSmap {
         FileUtils.checkMediaPath(new File(mediaPath));
 
 
-        Form form = formsRepository.getByPath(formFile.getAbsolutePath());
+        Form form = formsRepository.getOneByPath(formFile.getAbsolutePath());
 
         if (form == null) {
             uri = saveNewForm(formInfo, formFile, mediaPath, tasks_only, source, project);       // smap add tasks_only and source
@@ -374,7 +374,7 @@ public class MultiFormDownloaderSmap {
 
             // we've downloaded the file, and we may have renamed it
             // make sure it's not the same as a file we already have
-            Form form = formsRepository.getByMd5Hash(FileUtils.getMd5Hash(f));
+            Form form = formsRepository.getOneByMd5Hash(FileUtils.getMd5Hash(f));
             if (form != null) {
                 isNew = false;
 
@@ -420,7 +420,7 @@ public class MultiFormDownloaderSmap {
         int attemptCount = 0;
         final int MAX_ATTEMPT_COUNT = 2;
         while (!success && ++attemptCount <= MAX_ATTEMPT_COUNT) {
-            if (stateListener != null && stateListener.isTaskCanceled()) {
+            if (stateListener != null && stateListener.isTaskCancelled()) {
                 throw new TaskCancelledException(tempFile);
             }
 
@@ -434,7 +434,7 @@ public class MultiFormDownloaderSmap {
 
                 byte[] buf = new byte[4096];
                 int len;
-                while ((len = is.read(buf)) > 0 && (stateListener == null || !stateListener.isTaskCanceled())) {
+                while ((len = is.read(buf)) > 0 && (stateListener == null || !stateListener.isTaskCancelled())) {
                     os.write(buf, 0, len);
                 }
                 os.flush();
@@ -476,7 +476,7 @@ public class MultiFormDownloaderSmap {
                 }
             }
 
-            if (stateListener != null && stateListener.isTaskCanceled()) {
+            if (stateListener != null && stateListener.isTaskCancelled()) {
                 FileUtils.deleteAndReport(tempFile);
                 throw new TaskCancelledException(tempFile);
             }

@@ -59,6 +59,8 @@ import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
 import org.odk.collect.android.loaders.TaskEntry;
+import org.odk.collect.android.smap.formmanagement.MultiFormDownloaderSmap;
+import org.odk.collect.android.smap.tasks.DownloadFormsTaskSmap;
 import org.odk.collect.android.taskModel.FormLocator;
 import org.odk.collect.android.taskModel.TaskCompletionInfo;
 import org.odk.collect.android.taskModel.TaskResponse;
@@ -116,9 +118,6 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
     @Inject
     InstancesRepository instancesRepository;
-
-    @Inject
-    FormDownloader formDownloader;
 
     @Inject
     FormsRepository formsRepository;
@@ -888,9 +887,10 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             Timber.i("=================================  delete forms");
             mf.deleteForms(formMap, results);
 
+            MultiFormDownloaderSmap multiFormDownloader = new MultiFormDownloaderSmap();
             Timber.i("Downloading " + toDownload.size() + " forms");
             if(toDownload.size() > 0) {
-                DownloadFormsTask downloadFormsTask = new DownloadFormsTask(formDownloader);
+                DownloadFormsTaskSmap downloadFormsTask = new DownloadFormsTaskSmap(multiFormDownloader);
                 publishProgress(Collect.getInstance().getString(R.string.smap_downloading, toDownload.size()));
 
                 downloadFormsTask.setDownloaderListener((DownloadFormsTaskListener) mStateListener);
