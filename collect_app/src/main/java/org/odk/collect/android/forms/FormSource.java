@@ -17,10 +17,10 @@ public interface FormSource {
     ManifestFile fetchManifest(String manifestURL) throws FormSourceException;
 
     @NotNull
-    InputStream fetchForm(String formURL) throws FormSourceException;
+    InputStream fetchForm(String formURL, boolean credentials) throws FormSourceException;   // smap add credentials
 
     @NotNull
-    InputStream fetchMediaFile(String mediaFileURL) throws FormSourceException;
+    InputStream fetchMediaFile(String mediaFileURL, boolean credentials) throws FormSourceException;     // smap add credentials
 
     /**
      * @deprecated This is specific to the Open Rosa/HTTP implementation so should really move

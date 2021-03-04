@@ -865,10 +865,10 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         			}
 
                     ServerFormDetails fd = new ServerFormDetails(form.name, form.url, form.manifestUrl, form.ident, formVersionString,
-                            null,               // form hash
                             null,      // manifest hash
                             !mfd.exists,        // New form version available
                             form.hasManifest,   // Are newer media files available
+                            null,
                             !mfd.exists,
                             form.tasks_only,
                             mfd.formPath,

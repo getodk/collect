@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.injection.DaggerUtils;

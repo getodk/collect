@@ -95,7 +95,7 @@ public class ServerFormsDetailsFetcher {
                     listItem.getVersion(),
                     listItem.getHashWithPrefix(),
                     !thisFormAlreadyDownloaded,
-                    isNewerFormVersionAvailable || areNewerMediaFilesAvailable,
+                    isNewerFormVersionAvailable,
                     manifestFile,
                     formNotDownloaded,        // smap
                     false,          // smap tasks only

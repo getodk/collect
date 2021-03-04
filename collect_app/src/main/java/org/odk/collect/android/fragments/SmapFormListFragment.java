@@ -543,7 +543,7 @@ public class SmapFormListFragment extends ListFragment {
         } else {
             final Uri formUri = ContentUris.withAppendedId(FormsProviderAPI.FormsColumns.CONTENT_URI, task.id);
             final Intent intent = new Intent(Intent.ACTION_EDIT, formUri, getActivity(), FormMapActivity.class);
-            new PermissionUtils().requestLocationPermissions(getActivity(), new PermissionListener() {
+            new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestLocationPermissions(getActivity(), new PermissionListener() {
                 @Override public void granted() {
                     startActivity(intent);
                 }
