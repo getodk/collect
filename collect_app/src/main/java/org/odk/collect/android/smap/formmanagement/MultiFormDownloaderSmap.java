@@ -1,20 +1,5 @@
-/*
- * Copyright 2018 Nafundi
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.smap.formmanagement;
 
 import android.net.Uri;
 
@@ -27,14 +12,19 @@ import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.forms.MediaFile;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
-import org.odk.collect.android.openrosa.api.FormListApi;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FormNameUtils;
+import org.odk.collect.android.utilities.STFileUtils;
+import org.odk.collect.android.utilities.Utilities;
+import org.odk.collect.android.utilities.Validator;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -53,8 +43,7 @@ import static org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME;
 import static org.odk.collect.android.utilities.FileUtils.STUB_XML;
 import static org.odk.collect.android.utilities.FileUtils.write;
 
-@Deprecated
-public class MultiFormDownloader {
+public class MultiFormDownloaderSmap {
 
     private static final String MD5_COLON_PREFIX = "md5:";
     private static final String TEMP_DOWNLOAD_EXTENSION = ".tempDownload";
@@ -62,7 +51,6 @@ public class MultiFormDownloader {
     private final FormListApi formListApi;
     private final FormsRepository formsRepository;
 
-    @Deprecated
     public MultiFormDownloader(OpenRosaXmlFetcher openRosaXmlFetcher) {
         this.formsRepository = new DatabaseFormsRepository();
         formListApi = new OpenRosaFormListApi(openRosaXmlFetcher);
@@ -227,7 +215,7 @@ public class MultiFormDownloader {
     }
 
     boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields,
-            ServerFormDetails fd, String orgTempMediaPath, String orgMediaPath)   {   // smap add fd,  organisational paths
+                              ServerFormDetails fd, String orgTempMediaPath, String orgMediaPath)   {   // smap add fd,  organisational paths
         UriResult uriResult = null;
         try {
             uriResult = findExistingOrCreateNewUri(fileResult.file, parsedFields,
@@ -557,8 +545,8 @@ public class MultiFormDownloader {
     String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
                                          ServerFormDetails fd, int count,
                                          int total, FormDownloaderListener stateListener,
-                                                 String orgTempMediaPath,   // smap
-                                                 String orgMediaPath) throws Exception {        // smap
+                                         String orgTempMediaPath,   // smap
+                                         String orgMediaPath) throws Exception {        // smap
         if (fd.getManifestUrl() == null) {
             return null;
         }
@@ -659,4 +647,5 @@ public class MultiFormDownloader {
     public static String getMd5Hash(String hash) {
         return hash == null || hash.isEmpty() ? null : hash.substring(MD5_COLON_PREFIX.length());
     }
+
 }
