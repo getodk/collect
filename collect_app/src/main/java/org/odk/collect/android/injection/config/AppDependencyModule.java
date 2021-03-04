@@ -19,10 +19,11 @@ import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
 
 import org.javarosa.core.reference.ReferenceManager;
+import org.odk.collect.analytics.Analytics;
+import org.odk.collect.analytics.BlockableFirebaseAnalytics;
+import org.odk.collect.analytics.NoopAnalytics;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.analytics.Analytics;
-import org.odk.collect.android.analytics.FirebaseAnalytics;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CollectSettingsPreferenceMigrator;
@@ -190,9 +191,14 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public Analytics providesAnalytics(Application application, GeneralSharedPreferences generalSharedPreferences) {
-        com.google.firebase.analytics.FirebaseAnalytics firebaseAnalyticsInstance = com.google.firebase.analytics.FirebaseAnalytics.getInstance(application);
-        return new FirebaseAnalytics(firebaseAnalyticsInstance, generalSharedPreferences);
+    public Analytics providesAnalytics(Application application) {
+        try {
+            return new BlockableFirebaseAnalytics(application);
+        } catch (IllegalStateException e) {
+            // Couldn't setup Firebase so use no-op instance
+            return new NoopAnalytics();
+        }
+
     }
 
     @Provides

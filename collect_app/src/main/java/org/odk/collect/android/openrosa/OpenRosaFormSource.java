@@ -3,7 +3,7 @@ package org.odk.collect.android.openrosa;
 import org.javarosa.xform.parse.XFormParser;
 import org.jetbrains.annotations.NotNull;
 import org.kxml2.kdom.Element;
-import org.odk.collect.android.analytics.Analytics;
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.forms.FormListItem;
 import org.odk.collect.android.forms.FormSource;
 import org.odk.collect.android.forms.FormSourceException;
