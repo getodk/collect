@@ -57,6 +57,7 @@ import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.fragments.SmapFormListFragment;
 import org.odk.collect.android.fragments.SmapTaskListFragment;
 import org.odk.collect.android.fragments.SmapTaskMapFragment;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.NFCListener;
@@ -205,6 +206,8 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.smap_main_layout);
 
+        DaggerUtils.getComponent(this).inject(this);
+
         String[] tabNames = {getString(R.string.smap_forms), getString(R.string.smap_tasks), getString(R.string.smap_map)};
         // Get the ViewPager and set its PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
@@ -293,8 +296,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
         //ButterKnife.bind(this);  // banner
         initToolbar();
-
-        // DaggerUtils.getComponent(this).inject(this);  // banner
 
         model = new ViewModelProvider(this).get(SurveyDataViewModel.class);
         model.getSurveyData().observe(this, surveyData -> {
