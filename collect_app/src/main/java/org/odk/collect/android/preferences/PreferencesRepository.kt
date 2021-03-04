@@ -4,16 +4,40 @@ import android.content.Context
 import androidx.preference.PreferenceManager
 
 class PreferencesRepository(private val context: Context) {
-    fun getMetaPreferences(): PreferencesDataSource {
-        return PreferencesDataSource(context.getSharedPreferences(META_PREFS_NAME, Context.MODE_PRIVATE))
+    private val preferences = mutableMapOf<String, PreferencesDataSource>()
+
+    @JvmOverloads
+    fun getMetaPreferences(projectId: String = ""): PreferencesDataSource {
+        val preferenceId = META_PREFS_NAME + projectId
+
+        if (!preferences.containsKey(preferenceId)) {
+            preferences[META_PREFS_NAME + projectId] = PreferencesDataSource(context.getSharedPreferences(preferenceId, Context.MODE_PRIVATE))
+        }
+        return preferences[preferenceId]!!
     }
 
-    fun getGeneralPreferences(): PreferencesDataSource {
-        return PreferencesDataSource(PreferenceManager.getDefaultSharedPreferences(context), GeneralKeys.DEFAULTS)
+    @JvmOverloads
+    fun getGeneralPreferences(projectId: String = ""): PreferencesDataSource {
+        val preferenceId = GENERAL_PREFS_NAME + projectId
+
+        if (!preferences.containsKey(preferenceId)) {
+            if (projectId.isBlank()) {
+                preferences[preferenceId] = PreferencesDataSource(PreferenceManager.getDefaultSharedPreferences(context), GeneralKeys.DEFAULTS)
+            } else {
+                preferences[preferenceId] = PreferencesDataSource(context.getSharedPreferences(preferenceId, Context.MODE_PRIVATE), GeneralKeys.DEFAULTS)
+            }
+        }
+        return preferences[preferenceId]!!
     }
 
-    fun getAdminPreferences(): PreferencesDataSource {
-        return PreferencesDataSource(context.getSharedPreferences(ADMIN_PREFS_NAME, Context.MODE_PRIVATE), AdminKeys.getDefaults())
+    @JvmOverloads
+    fun getAdminPreferences(projectId: String = ""): PreferencesDataSource {
+        val preferenceId = ADMIN_PREFS_NAME + projectId
+
+        if (!preferences.containsKey(preferenceId)) {
+            preferences[preferenceId] = PreferencesDataSource(context.getSharedPreferences(preferenceId, Context.MODE_PRIVATE), AdminKeys.getDefaults())
+        }
+        return preferences[preferenceId]!!
     }
 
     // Just for tests
@@ -23,6 +47,7 @@ class PreferencesRepository(private val context: Context) {
 
     companion object {
         private const val META_PREFS_NAME = "meta"
+        private const val GENERAL_PREFS_NAME = "general_prefs"
         private const val ADMIN_PREFS_NAME = "admin_prefs"
     }
 }
