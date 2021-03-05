@@ -36,7 +36,10 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     @Override
     public Instance get(Long databaseId) {
-        Cursor c = dao.getInstancesCursorForId(Long.toString(databaseId));
+        String selection = InstanceColumns._ID + "=?";
+        String[] selectionArgs = {Long.toString(databaseId)};
+
+        Cursor c = dao.getInstancesCursor(null, selection, selectionArgs, null);
         List<Instance> result = dao.getInstancesFromCursor(c);
         return !result.isEmpty() ? result.get(0) : null;
     }

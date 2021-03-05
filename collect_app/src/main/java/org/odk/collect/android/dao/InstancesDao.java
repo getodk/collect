@@ -197,19 +197,8 @@ public class InstancesDao {
         return cursorLoader;
     }
 
-    public Cursor getInstancesCursorForId(String id) {
-        String selection = InstanceColumns._ID + "=?";
-        String[] selectionArgs = {id};
-
-        return getInstancesCursor(null, selection, selectionArgs, null);
-    }
-
     public Cursor getInstancesCursor(String selection, String[] selectionArgs) {
         return getInstancesCursor(null, selection, selectionArgs, null);
-    }
-
-    public Cursor getInstancesCursor() {
-        return getInstancesCursor(null, null, null, null);
     }
 
     public Cursor getInstancesCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
