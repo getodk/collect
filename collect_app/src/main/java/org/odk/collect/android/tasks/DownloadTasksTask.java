@@ -50,6 +50,7 @@ import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -887,7 +888,8 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             Timber.i("=================================  delete forms");
             mf.deleteForms(formMap, results);
 
-            MultiFormDownloaderSmap multiFormDownloader = new MultiFormDownloaderSmap();
+            OpenRosaHttpInterface httpInterface = Collect.getInstance().getComponent().openRosaHttpInterface();
+            MultiFormDownloaderSmap multiFormDownloader = new MultiFormDownloaderSmap(new OpenRosaXmlFetcher(httpInterface, webCredentialsUtils));
             Timber.i("Downloading " + toDownload.size() + " forms");
             if(toDownload.size() > 0) {
                 DownloadFormsTaskSmap downloadFormsTask = new DownloadFormsTaskSmap(multiFormDownloader);

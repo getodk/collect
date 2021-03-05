@@ -553,12 +553,7 @@ public class MultiFormDownloaderSmap {
             return null;
         }
 
-        StringBuffer downloadMsg = new StringBuffer("");        // smap
-        if (stateListener != null) {
-            stateListener.progressUpdate(Collect.getInstance().getString(R.string.fetching_manifest, fd.getFormName()),
-                    String.valueOf(count), String.valueOf(total));
-        }
-
+        StringBuffer downloadMsg = new StringBuffer("");      //smap
         List<MediaFile> files = formListApi.fetchManifest(fd.getManifestUrl()).getMediaFiles();
 
         // OK we now have the full set of files to download...
