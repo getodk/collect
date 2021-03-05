@@ -74,7 +74,7 @@ public abstract class InstanceUploader {
             selectionBuf.append(')');
             String selection = selectionBuf.toString();
 
-            Cursor c = dao.getInstancesCursor(selection, selectionArgs);
+            Cursor c = dao.getInstancesCursor(null, selection, selectionArgs, null);
             instancesToUpload.addAll(dao.getInstancesFromCursor(c));
 
             counter++;

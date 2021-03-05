@@ -88,7 +88,7 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
 
     private void assertThatInstancesAreKeptAfterMigrating() {
         InstancesDao instancesDao = new InstancesDao();
-        List<Instance> instances = instancesDao.getInstancesFromCursor(instancesDao.getInstancesCursor(null, null));
+        List<Instance> instances = instancesDao.getInstancesFromCursor(instancesDao.getInstancesCursor(null, null, null, null));
         assertEquals(2, instances.size());
         assertEquals("complete", instances.get(0).getStatus());
         assertEquals(Long.valueOf(1564413556249L), instances.get(0).getLastStatusChangeDate());

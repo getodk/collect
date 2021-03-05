@@ -37,6 +37,37 @@ import java.util.List;
  */
 public class InstancesDao {
 
+    public Cursor getSavedInstancesCursor(String sortOrder) {
+        String selection = InstanceColumns.DELETED_DATE + " IS NULL ";
+
+        return getInstancesCursor(null, selection, null, sortOrder);
+    }
+
+    public Cursor getInstancesCursorForFilePath(String path) {
+        String selection = InstanceColumns.INSTANCE_FILE_PATH + "=?";
+        String[] selectionArgs = {new StoragePathProvider().getRelativeInstancePath(path)};
+
+        return getInstancesCursor(null, selection, selectionArgs, null);
+    }
+
+    public Cursor getAllCompletedUndeletedInstancesCursor() {
+        String selection = InstanceColumns.DELETED_DATE + " IS NULL and ("
+                + InstanceColumns.STATUS + "=? or "
+                + InstanceColumns.STATUS + "=? or "
+                + InstanceColumns.STATUS + "=?)";
+
+        String[] selectionArgs = {Instance.STATUS_COMPLETE,
+                Instance.STATUS_SUBMISSION_FAILED,
+                Instance.STATUS_SUBMITTED};
+        String sortOrder = InstanceColumns.DISPLAY_NAME + " ASC";
+
+        return getInstancesCursor(null, selection, selectionArgs, sortOrder);
+    }
+
+    public Cursor getInstancesCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        return Collect.getInstance().getContentResolver().query(InstanceColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
+    }
+
     public CursorLoader getSentInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
         CursorLoader cursorLoader;
         if (charSequence.length() == 0) {
@@ -87,12 +118,6 @@ public class InstancesDao {
         return cursorLoader;
     }
 
-    public Cursor getSavedInstancesCursor(String sortOrder) {
-        String selection = InstanceColumns.DELETED_DATE + " IS NULL ";
-
-        return getInstancesCursor(null, selection, null, sortOrder);
-    }
-
     public CursorLoader getSavedInstancesCursorLoader(String sortOrder) {
         String selection = InstanceColumns.DELETED_DATE + " IS NULL ";
 
@@ -141,27 +166,6 @@ public class InstancesDao {
         return cursorLoader;
     }
 
-    public Cursor getInstancesCursorForFilePath(String path) {
-        String selection = InstanceColumns.INSTANCE_FILE_PATH + "=?";
-        String[] selectionArgs = {new StoragePathProvider().getRelativeInstancePath(path)};
-
-        return getInstancesCursor(null, selection, selectionArgs, null);
-    }
-
-    public Cursor getAllCompletedUndeletedInstancesCursor() {
-        String selection = InstanceColumns.DELETED_DATE + " IS NULL and ("
-                + InstanceColumns.STATUS + "=? or "
-                + InstanceColumns.STATUS + "=? or "
-                + InstanceColumns.STATUS + "=?)";
-
-        String[] selectionArgs = {Instance.STATUS_COMPLETE,
-                Instance.STATUS_SUBMISSION_FAILED,
-                Instance.STATUS_SUBMITTED};
-        String sortOrder = InstanceColumns.DISPLAY_NAME + " ASC";
-
-        return getInstancesCursor(null, selection, selectionArgs, sortOrder);
-    }
-
     public CursorLoader getAllCompletedUndeletedInstancesCursorLoader(String sortOrder) {
         String selection = InstanceColumns.DELETED_DATE + " IS NULL and ("
                 + InstanceColumns.STATUS + "=? or "
@@ -195,15 +199,6 @@ public class InstancesDao {
             cursorLoader = getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
         }
         return cursorLoader;
-    }
-
-    public Cursor getInstancesCursor(String selection, String[] selectionArgs) {
-        return getInstancesCursor(null, selection, selectionArgs, null);
-    }
-
-    public Cursor getInstancesCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return Collect.getInstance().getContentResolver()
-                .query(InstanceColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
     }
 
     public CursorLoader getInstancesCursorLoader(String[] projection, String selection, String[] selectionArgs, String sortOrder) {

@@ -46,8 +46,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     @Override
     public Instance getOneByPath(String instancePath) {
-        Cursor c = dao.getInstancesCursor(InstanceColumns.INSTANCE_FILE_PATH + "=?",
-                new String[] {new StoragePathProvider().getRelativeInstancePath(instancePath)});
+        Cursor c = dao.getInstancesCursor(null, InstanceColumns.INSTANCE_FILE_PATH + "=?", new String[]{new StoragePathProvider().getRelativeInstancePath(instancePath)}, null);
         List<Instance> instances = dao.getInstancesFromCursor(c);
         if (instances.size() == 1) {
             return instances.get(0);
@@ -63,22 +62,22 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
             selection.append(" or ").append(InstanceColumns.STATUS).append("=?");
         }
 
-        return dao.getInstancesFromCursor(dao.getInstancesCursor(selection.toString(), status));
+        return dao.getInstancesFromCursor(dao.getInstancesCursor(null, selection.toString(), status, null));
     }
 
 
     @Override
     public List<Instance> getAllByFormId(String formId) {
-        Cursor c = dao.getInstancesCursor(JR_FORM_ID + " = ?", new String[] {formId});
+        Cursor c = dao.getInstancesCursor(null, JR_FORM_ID + " = ?", new String[]{formId}, null);
         return dao.getInstancesFromCursor(c);
     }
 
     @Override
     public List<Instance> getAllNotDeletedByFormIdAndVersion(String jrFormId, String jrVersion) {
         if (jrVersion != null) {
-            return dao.getInstancesFromCursor(dao.getInstancesCursor(JR_FORM_ID + " = ? AND " + JR_VERSION + " = ? AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId, jrVersion}));
+            return dao.getInstancesFromCursor(dao.getInstancesCursor(null, JR_FORM_ID + " = ? AND " + JR_VERSION + " = ? AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId, jrVersion}, null));
         } else {
-            return dao.getInstancesFromCursor(dao.getInstancesCursor(JR_FORM_ID + " = ? AND " + JR_VERSION + " IS NULL AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId}));
+            return dao.getInstancesFromCursor(dao.getInstancesCursor(null, JR_FORM_ID + " = ? AND " + JR_VERSION + " IS NULL AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId}, null));
         }
     }
 
