@@ -20,6 +20,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.odk.collect.android.support.InstanceUtils.buildInstance;
 
 public abstract class InstancesRepositoryTest {
@@ -74,5 +75,17 @@ public abstract class InstancesRepositoryTest {
 
         List<Instance> instances = instancesRepository.getAllNotDeletedByFormIdAndVersion("formid", "1");
         assertThat(instances.size(), is(3));
+    }
+
+    @Test
+    public void deleteAll_deletesAllInstances() {
+        InstancesRepository instancesRepository = buildSubject();
+
+        instancesRepository.save(buildInstance(1L, "formid", "1").build());
+        instancesRepository.save(buildInstance(2L, "formid", "1").build());
+
+        instancesRepository.deleteAll();
+        assertThat(instancesRepository.get(1L), is(nullValue()));
+        assertThat(instancesRepository.get(2L), is(nullValue()));
     }
 }

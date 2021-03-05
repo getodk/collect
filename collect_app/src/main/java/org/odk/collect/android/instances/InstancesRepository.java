@@ -33,5 +33,7 @@ public interface InstancesRepository {
 
     void delete(Long id);
 
+    void deleteAll();
+
     Uri save(Instance instance);
 }

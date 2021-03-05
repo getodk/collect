@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.instrumented.dao;
+package org.odk.collect.android.database;
 
 import android.database.Cursor;
 import android.net.Uri;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,13 +36,9 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
-/**
- * This class contains tests for {@link InstancesDao}
- */
 public class InstancesDaoTest {
 
     private InstancesDao instancesDao;
@@ -60,7 +55,6 @@ public class InstancesDaoTest {
     @Before
     public void setUp() {
         instancesDao = new InstancesDao();
-        instancesDao.deleteInstancesDatabase();
         fillDatabase();
     }
 
@@ -249,10 +243,5 @@ public class InstancesDaoTest {
                 .lastStatusChangeDate(1487597090653L)
                 .build();
         instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(biggestNOfSet2Instance));
-    }
-
-    @After
-    public void tearDown() {
-        instancesDao.deleteInstancesDatabase();
     }
 }

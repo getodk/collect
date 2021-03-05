@@ -91,6 +91,11 @@ public final class InMemInstancesRepository implements InstancesRepository {
     }
 
     @Override
+    public void deleteAll() {
+        instances.clear();
+    }
+
+    @Override
     public Uri save(Instance instance) {
         instances.add(instance);
         return null;

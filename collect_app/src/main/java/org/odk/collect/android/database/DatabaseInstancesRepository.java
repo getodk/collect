@@ -82,6 +82,11 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     }
 
     @Override
+    public void deleteAll() {
+        Collect.getInstance().getContentResolver().delete(InstanceColumns.CONTENT_URI, null, null);
+    }
+
+    @Override
     public Uri save(Instance instance) {
         ContentValues values = dao.getValuesFromInstanceObject(instance);
         return dao.saveInstance(values);

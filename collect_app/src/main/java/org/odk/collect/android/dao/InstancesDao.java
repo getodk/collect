@@ -259,10 +259,6 @@ public class InstancesDao {
         return Collect.getInstance().getContentResolver().update(InstanceColumns.CONTENT_URI, values, where, whereArgs);
     }
 
-    public void deleteInstancesDatabase() {
-        Collect.getInstance().getContentResolver().delete(InstanceColumns.CONTENT_URI, null, null);
-    }
-
     public void deleteInstancesFromInstanceFilePaths(List<String> instanceFilePaths) {
         int count = instanceFilePaths.size();
         int counter = 0;
