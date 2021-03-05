@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.preference.PreferenceManager
 
 class PreferencesRepository(private val context: Context) {
+    private val preferences = mutableMapOf<String, PreferencesDataSource>()
+
     @JvmOverloads
     fun getMetaPreferences(projectId: String = ""): PreferencesDataSource {
         val preferenceId = META_PREFS_NAME + projectId
@@ -36,8 +38,6 @@ class PreferencesRepository(private val context: Context) {
     }
 
     companion object {
-        private val preferences = mutableMapOf<String, PreferencesDataSource>()
-
         private const val META_PREFS_NAME = "meta"
         private const val GENERAL_PREFS_NAME = "general_prefs"
         private const val ADMIN_PREFS_NAME = "admin_prefs"
