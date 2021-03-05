@@ -8,34 +8,31 @@ class PreferencesRepository(private val context: Context) {
     fun getMetaPreferences(projectId: String = ""): PreferencesDataSource {
         val preferenceId = META_PREFS_NAME + projectId
 
-        if (!preferences.containsKey(preferenceId)) {
-            preferences[META_PREFS_NAME + projectId] = PreferencesDataSource(context.getSharedPreferences(preferenceId, Context.MODE_PRIVATE))
+        return preferences.getOrPut(preferenceId) {
+            PreferencesDataSource(context.getSharedPreferences(preferenceId, Context.MODE_PRIVATE))
         }
-        return preferences[preferenceId]!!
     }
 
     @JvmOverloads
     fun getGeneralPreferences(projectId: String = ""): PreferencesDataSource {
         val preferenceId = GENERAL_PREFS_NAME + projectId
 
-        if (!preferences.containsKey(preferenceId)) {
+        return preferences.getOrPut(preferenceId) {
             if (projectId.isBlank()) {
-                preferences[preferenceId] = PreferencesDataSource(PreferenceManager.getDefaultSharedPreferences(context), GeneralKeys.DEFAULTS)
+                PreferencesDataSource(PreferenceManager.getDefaultSharedPreferences(context), GeneralKeys.DEFAULTS)
             } else {
-                preferences[preferenceId] = PreferencesDataSource(context.getSharedPreferences(preferenceId, Context.MODE_PRIVATE), GeneralKeys.DEFAULTS)
+                PreferencesDataSource(context.getSharedPreferences(preferenceId, Context.MODE_PRIVATE), GeneralKeys.DEFAULTS)
             }
         }
-        return preferences[preferenceId]!!
     }
 
     @JvmOverloads
     fun getAdminPreferences(projectId: String = ""): PreferencesDataSource {
         val preferenceId = ADMIN_PREFS_NAME + projectId
 
-        if (!preferences.containsKey(preferenceId)) {
-            preferences[preferenceId] = PreferencesDataSource(context.getSharedPreferences(preferenceId, Context.MODE_PRIVATE), AdminKeys.getDefaults())
+        return preferences.getOrPut(preferenceId) {
+            PreferencesDataSource(context.getSharedPreferences(preferenceId, Context.MODE_PRIVATE), AdminKeys.getDefaults())
         }
-        return preferences[preferenceId]!!
     }
 
     companion object {
