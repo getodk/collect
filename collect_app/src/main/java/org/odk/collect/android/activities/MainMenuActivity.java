@@ -37,11 +37,13 @@ import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.keys.AdminKeys;
+import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment.Action;
-import org.odk.collect.android.preferences.screens.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.screens.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
@@ -51,6 +53,7 @@ import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -85,6 +88,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     @Inject
     MainMenuViewModel.Factory viewModelFactory;
+
+    @Inject
+    InstancesRepository instancesRepository;
 
     private MainMenuViewModel viewModel;
 
@@ -273,12 +279,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     private void updateButtons() {
         InstancesDao instancesDao = new InstancesDao();
 
-        int completedCount;
-        try (Cursor finalizedCursor = instancesDao.getFinalizedInstancesCursor()) {
-            completedCount = finalizedCursor != null ? finalizedCursor.getCount() : 0;
-        } catch (Exception ignored) {
-            completedCount = 0;
-        }
+        List<Instance> finalizedInstances = instancesRepository.getAllByStatus(Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED);
 
         int savedCount;
         try (Cursor savedCursor = instancesDao.getUnsentInstancesCursor()) {
@@ -294,9 +295,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             viewSentCount = 0;
         }
 
-        if (completedCount > 0) {
+        if (!finalizedInstances.isEmpty()) {
             sendDataButton.setText(
-                    getString(R.string.send_data_button, String.valueOf(completedCount)));
+                    getString(R.string.send_data_button, String.valueOf(finalizedInstances.size())));
         } else {
             sendDataButton.setText(getString(R.string.send_data));
         }

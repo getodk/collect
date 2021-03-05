@@ -130,14 +130,6 @@ public class InstancesDao {
         return cursorLoader;
     }
 
-    public Cursor getFinalizedInstancesCursor() {
-        String selection = InstanceColumns.STATUS + "=? or " + InstanceColumns.STATUS + "=?";
-        String[] selectionArgs = {Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED};
-        String sortOrder = InstanceColumns.DISPLAY_NAME + " ASC";
-
-        return getInstancesCursor(null, selection, selectionArgs, sortOrder);
-    }
-
     public CursorLoader getFinalizedInstancesCursorLoader(String sortOrder) {
         String selection = InstanceColumns.STATUS + "=? or " + InstanceColumns.STATUS + "=?";
         String[] selectionArgs = {Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED};
