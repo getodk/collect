@@ -37,14 +37,6 @@ import java.util.List;
  */
 public class InstancesDao {
 
-    public Cursor getSentInstancesCursor() {
-        String selection = InstanceColumns.STATUS + " =? ";
-        String[] selectionArgs = {Instance.STATUS_SUBMITTED};
-        String sortOrder = InstanceColumns.DISPLAY_NAME + " ASC";
-
-        return getInstancesCursor(null, selection, selectionArgs, sortOrder);
-    }
-
     public CursorLoader getSentInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
         CursorLoader cursorLoader;
         if (charSequence.length() == 0) {
@@ -68,14 +60,6 @@ public class InstancesDao {
         String[] selectionArgs = {Instance.STATUS_SUBMITTED};
 
         return getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
-    }
-
-    public Cursor getUnsentInstancesCursor() {
-        String selection = InstanceColumns.STATUS + " !=? ";
-        String[] selectionArgs = {Instance.STATUS_SUBMITTED};
-        String sortOrder = InstanceColumns.STATUS + " DESC, " + InstanceColumns.DISPLAY_NAME + " ASC";
-
-        return getInstancesCursor(null, selection, selectionArgs, sortOrder);
     }
 
     public CursorLoader getUnsentInstancesCursorLoader(String sortOrder) {

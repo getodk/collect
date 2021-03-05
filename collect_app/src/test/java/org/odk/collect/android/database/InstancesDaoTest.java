@@ -48,7 +48,6 @@ public class InstancesDaoTest {
     private Instance hypertensionScreeningInstance;
     private Instance cascadingSelectInstance;
     private Instance biggestNOfSetInstance;
-    private Instance widgetsInstance;
     private Instance sampleInstance;
     private Instance biggestNOfSet2Instance;
 
@@ -56,28 +55,6 @@ public class InstancesDaoTest {
     public void setUp() {
         instancesDao = new InstancesDao();
         fillDatabase();
-    }
-
-    @Test
-    public void getUnsentInstancesCursorTest() {
-        Cursor cursor = instancesDao.getUnsentInstancesCursor();
-        List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
-
-        assertEquals(4, instances.size());
-        assertEquals(cascadingSelectInstance, instances.get(0));
-        assertEquals(hypertensionScreeningInstance, instances.get(1));
-        assertEquals(sampleInstance, instances.get(2));
-        assertEquals(biggestNOfSet2Instance, instances.get(3));
-    }
-
-    @Test
-    public void getSentInstancesCursorTest() {
-        Cursor cursor = instancesDao.getSentInstancesCursor();
-        List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
-
-        assertEquals(2, instances.size());
-        assertEquals(biggestNOfSetInstance, instances.get(0));
-        assertEquals(widgetsInstance, instances.get(1));
     }
 
     @Test
@@ -152,7 +129,8 @@ public class InstancesDaoTest {
         assertEquals(biggestNOfSet2Instance, instances.get(0));
     }
 
-    @Test public void deletingSentInstance_keepsItsDatabaseRow_butClearsItsGeometryFields() {
+    @Test
+    public void deletingSentInstance_keepsItsDatabaseRow_butClearsItsGeometryFields() {
         Instance formWithGeopointInstance = new Instance.Builder()
                 .jrFormId("fake")
                 .displayName("Form with geopoint")
@@ -205,7 +183,7 @@ public class InstancesDaoTest {
         instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(biggestNOfSetInstance));
 
         String widgetPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES) + "/Widgets_2017-02-20_14-06-58/Widgets_2017-02-20_14-06-58.xml";
-        widgetsInstance = new Instance.Builder()
+        Instance widgetsInstance = new Instance.Builder()
                 .displayName("Widgets")
                 .instanceFilePath(storagePathProvider.getRelativeInstancePath(widgetPath))
                 .jrFormId("widgets")

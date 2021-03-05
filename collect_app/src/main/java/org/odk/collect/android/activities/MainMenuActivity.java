@@ -16,7 +16,6 @@ package org.odk.collect.android.activities;
 
 import android.content.Intent;
 import android.database.ContentObserver;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -34,7 +33,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
-import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.Instance;
@@ -277,23 +275,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     private void updateButtons() {
-        InstancesDao instancesDao = new InstancesDao();
-
         List<Instance> finalizedInstances = instancesRepository.getAllByStatus(Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED);
-
-        int savedCount;
-        try (Cursor savedCursor = instancesDao.getUnsentInstancesCursor()) {
-            savedCount = savedCursor != null ? savedCursor.getCount() : 0;
-        } catch (Exception ignored) {
-            savedCount = 0;
-        }
-
-        int viewSentCount;
-        try (Cursor viewSentCursor = instancesDao.getSentInstancesCursor()) {
-            viewSentCount = viewSentCursor != null ? viewSentCursor.getCount() : 0;
-        } catch (Exception ignored) {
-            viewSentCount = 0;
-        }
+        List<Instance> sentInstances = instancesRepository.getAllByStatus(Instance.STATUS_SUBMITTED);
+        List<Instance> unsentInstances = instancesRepository.getAllByStatus(Instance.STATUS_INCOMPLETE, Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED);
 
         if (!finalizedInstances.isEmpty()) {
             sendDataButton.setText(
@@ -302,16 +286,16 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             sendDataButton.setText(getString(R.string.send_data));
         }
 
-        if (savedCount > 0) {
+        if (!unsentInstances.isEmpty()) {
             reviewDataButton.setText(getString(R.string.review_data_button,
-                    String.valueOf(savedCount)));
+                    String.valueOf(unsentInstances.size())));
         } else {
             reviewDataButton.setText(getString(R.string.review_data));
         }
 
-        if (viewSentCount > 0) {
+        if (!sentInstances.isEmpty()) {
             viewSentFormsButton.setText(
-                    getString(R.string.view_sent_forms_button, String.valueOf(viewSentCount)));
+                    getString(R.string.view_sent_forms_button, String.valueOf(sentInstances.size())));
         } else {
             viewSentFormsButton.setText(getString(R.string.view_sent_forms));
         }
