@@ -147,7 +147,7 @@ public class InstanceSubmitter {
     @NonNull
     private List<Instance> getInstancesToAutoSend(boolean isAutoSendAppSettingEnabled) {
         List<Instance> toUpload = new ArrayList<>();
-        for (Instance instance : instancesRepository.getAllFinalized()) {
+        for (Instance instance : instancesRepository.getAllByStatus(Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED)) {
             if (shouldFormBeSent(formsRepository, instance.getJrFormId(), instance.getJrVersion(), isAutoSendAppSettingEnabled)) {
                 toUpload.add(instance);
             }

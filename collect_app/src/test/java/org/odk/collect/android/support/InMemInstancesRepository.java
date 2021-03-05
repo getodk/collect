@@ -6,6 +6,7 @@ import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -51,11 +52,12 @@ public final class InMemInstancesRepository implements InstancesRepository {
     }
 
     @Override
-    public List<Instance> getAllFinalized() {
+    public List<Instance> getAllByStatus(String... status) {
+        List<String> statuses = Arrays.asList(status);
         List<Instance> result = new ArrayList<>();
 
         for (Instance instance : instances) {
-            if (instance.getStatus().equals(Instance.STATUS_COMPLETE) || instance.getStatus().equals(Instance.STATUS_SUBMISSION_FAILED)) {
+            if (statuses.contains(instance.getStatus())) {
                 result.add(instance);
             }
         }

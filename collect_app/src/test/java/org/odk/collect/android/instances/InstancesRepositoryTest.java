@@ -20,6 +20,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.odk.collect.android.support.InstanceUtils.buildInstance;
 
@@ -27,20 +28,60 @@ public abstract class InstancesRepositoryTest {
     public abstract InstancesRepository buildSubject();
 
     @Test
-    public void getAllFinalized_excludesUnfinalized() {
+    public void getAllByStatus_withOneStatus_returnsMatchingInstances() {
         InstancesRepository instancesRepository = buildSubject();
 
-        instancesRepository.save(buildInstance(1L, "formid", "1").build());
-        instancesRepository.save(buildInstance(2L, "formid", "1", "display", Instance.STATUS_COMPLETE, System.currentTimeMillis())
+        instancesRepository.save(buildInstance(1L, "incomplete", "1")
+                .status(Instance.STATUS_INCOMPLETE)
                 .build());
-        instancesRepository.save(buildInstance(3L, "formid", "1").build());
-        instancesRepository.save(buildInstance(4L, "formid", "1", "display", Instance.STATUS_COMPLETE, null)
-                .build());
-        instancesRepository.save(buildInstance(5L, "formid2", "1", "display", Instance.STATUS_COMPLETE, System.currentTimeMillis())
+        instancesRepository.save(buildInstance(2L, "incomplete", "1")
+                .status(Instance.STATUS_INCOMPLETE)
                 .build());
 
-        List<Instance> instances = instancesRepository.getAllFinalized();
-        assertThat(instances.size(), is(3));
+        instancesRepository.save(buildInstance(3L, "complete", "1")
+                .status(Instance.STATUS_COMPLETE)
+                .build());
+        instancesRepository.save(buildInstance(4L, "complete", "1")
+                .status(Instance.STATUS_COMPLETE)
+                .build());
+
+        List<Instance> incomplete = instancesRepository.getAllByStatus(Instance.STATUS_INCOMPLETE);
+        assertThat(incomplete.size(), is(2));
+        assertThat(incomplete.get(0).getJrFormId(), is("incomplete"));
+        assertThat(incomplete.get(1).getStatus(), is("incomplete"));
+    }
+
+    @Test
+    public void getAllByStatus_withMultipleStatus_returnsMatchingInstances() {
+        InstancesRepository instancesRepository = buildSubject();
+
+        instancesRepository.save(buildInstance(1L, "incomplete", "1")
+                .status(Instance.STATUS_INCOMPLETE)
+                .build());
+        instancesRepository.save(buildInstance(2L, "incomplete", "1")
+                .status(Instance.STATUS_INCOMPLETE)
+                .build());
+
+        instancesRepository.save(buildInstance(3L, "complete", "1")
+                .status(Instance.STATUS_COMPLETE)
+                .build());
+        instancesRepository.save(buildInstance(4L, "complete", "1")
+                .status(Instance.STATUS_COMPLETE)
+                .build());
+
+        instancesRepository.save(buildInstance(5L, "submitted", "1")
+                .status(Instance.STATUS_SUBMITTED)
+                .build());
+        instancesRepository.save(buildInstance(6L, "submitted", "1")
+                .status(Instance.STATUS_SUBMITTED)
+                .build());
+
+        List<Instance> incomplete = instancesRepository.getAllByStatus(Instance.STATUS_INCOMPLETE, Instance.STATUS_SUBMITTED);
+        assertThat(incomplete.size(), is(4));
+        assertThat(incomplete.get(0).getJrFormId(), is(not("complete")));
+        assertThat(incomplete.get(1).getJrFormId(), is(not("complete")));
+        assertThat(incomplete.get(2).getJrFormId(), is(not("complete")));
+        assertThat(incomplete.get(3).getStatus(), is(not("complete")));
     }
 
     @Test

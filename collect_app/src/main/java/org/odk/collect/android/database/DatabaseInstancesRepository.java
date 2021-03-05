@@ -54,9 +54,13 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     }
 
     @Override
-    public List<Instance> getAllFinalized() {
-        Cursor c = dao.getFinalizedInstancesCursor();
-        return dao.getInstancesFromCursor(c);
+    public List<Instance> getAllByStatus(String... status) {
+        StringBuilder selection = new StringBuilder(InstanceColumns.STATUS + "=?");
+        for (int i = 1;  i < status.length; i++) {
+            selection.append(" or ").append(InstanceColumns.STATUS).append("=?");
+        }
+
+        return dao.getInstancesFromCursor(dao.getInstancesCursor(selection.toString(), status));
     }
 
 
