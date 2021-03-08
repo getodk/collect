@@ -5,10 +5,10 @@ import androidx.test.core.app.ApplicationProvider
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.PreferencesDataSource
-import org.odk.collect.android.preferences.SharedPreferencesDataSource
 import org.odk.collect.android.preferences.PreferencesDataSourceProvider
+import org.odk.collect.android.preferences.SharedPreferencesDataSource
 
-// Use just fo testing
+// Use just for testing
 object TestPreferencesProvider {
     @JvmStatic
     fun getPreferencesRepository(): PreferencesDataSourceProvider {
