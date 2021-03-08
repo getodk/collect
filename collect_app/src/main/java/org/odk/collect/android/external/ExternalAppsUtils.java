@@ -19,7 +19,6 @@
 package org.odk.collect.android.external;
 
 import android.content.Intent;
-import android.database.Cursor;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.condition.EvaluationContext;
@@ -36,11 +35,9 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.javarosa.xpath.expr.XPathPathExpr;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import java.io.Serializable;
 import java.util.ArrayList;
