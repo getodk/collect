@@ -19,6 +19,7 @@ import android.net.Uri;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -43,7 +44,7 @@ public final class InstancesDaoHelper {
      * then resaved.
      *
      * @return true if form has been marked completed, false otherwise.
-     *
+     * <p>
      * TODO: replace with method in {@link org.odk.collect.android.instances.InstancesRepository}
      * that returns an {@link Instance} object from a path.
      */
@@ -58,19 +59,14 @@ public final class InstancesDaoHelper {
 
             // Then see if we've already marked this form as complete before
             String path = formController.getInstanceFile().getAbsolutePath();
-            try (Cursor c = new InstancesDao().getInstancesCursorForFilePath(path)) {
-                if (c != null && c.getCount() > 0) {
-                    c.moveToFirst();
-                    int columnIndex = c.getColumnIndex(InstanceColumns.STATUS);
-                    String status = c.getString(columnIndex);
-                    if (Instance.STATUS_COMPLETE.equals(status)) {
-                        complete = true;
-                    }
-                }
+            Instance instance = new DatabaseInstancesRepository().getOneByPath(path);
+            if (instance != null && instance.getStatus().equals(Instance.STATUS_COMPLETE)) {
+                complete = true;
             }
         } else {
             Timber.w("FormController or its instanceFile field has a null value");
         }
+
         return complete;
     }
 
