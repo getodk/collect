@@ -14,11 +14,9 @@
 
 package org.odk.collect.android.dao.helpers;
 
-import android.database.Cursor;
 import android.net.Uri;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -86,14 +84,11 @@ public final class InstancesDaoHelper {
     // TODO: replace with method in {@link org.odk.collect.android.instances.InstancesRepository}
     // that returns an {@link Instance} object from a path.
     public static boolean isInstanceAvailable(String path) {
-        boolean isAvailable = false;
         if (path != null) {
-            try (Cursor c = new InstancesDao().getInstancesCursorForFilePath(path)) {
-                if (c != null) {
-                    isAvailable = c.getCount() > 0;
-                }
-            }
+            Instance instance = new DatabaseInstancesRepository().getOneByPath(path);
+            return instance != null;
+        } else {
+            return false;
         }
-        return isAvailable;
     }
 }
