@@ -25,7 +25,25 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.odk.collect.android.support.InstanceUtils.buildInstance;
 
 public abstract class InstancesRepositoryTest {
+
     public abstract InstancesRepository buildSubject();
+
+    @Test
+    public void getAllNotDeleted_returnsUndeletedInstances() {
+        InstancesRepository instancesRepository = buildSubject();
+
+        instancesRepository.save(buildInstance(1L, "incomplete", "1")
+                .status(Instance.STATUS_COMPLETE)
+                .deletedDate(System.currentTimeMillis())
+                .build());
+        instancesRepository.save(buildInstance(2L, "incomplete", "1")
+                .status(Instance.STATUS_COMPLETE)
+                .build());
+
+        List<Instance> allNotDeleted = instancesRepository.getAllNotDeleted();
+        assertThat(allNotDeleted.size(), is(1));
+        assertThat(allNotDeleted.get(0).getId(), is(2L));
+    }
 
     @Test
     public void getAllByStatus_withOneStatus_returnsMatchingInstances() {

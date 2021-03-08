@@ -46,28 +46,13 @@ public class InstancesDaoTest {
 
     // sample instances
     private Instance hypertensionScreeningInstance;
-    private Instance cascadingSelectInstance;
     private Instance biggestNOfSetInstance;
-    private Instance sampleInstance;
     private Instance biggestNOfSet2Instance;
 
     @Before
     public void setUp() {
         instancesDao = new InstancesDao();
         fillDatabase();
-    }
-
-    @Test
-    public void getSavedInstancesCursorTest() {
-        Cursor cursor = instancesDao.getSavedInstancesCursor(InstanceColumns.DISPLAY_NAME + " ASC");
-        List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
-
-        assertEquals(5, instances.size());
-        assertEquals(biggestNOfSetInstance, instances.get(0));
-        assertEquals(biggestNOfSet2Instance, instances.get(1));
-        assertEquals(cascadingSelectInstance, instances.get(2));
-        assertEquals(hypertensionScreeningInstance, instances.get(3));
-        assertEquals(sampleInstance, instances.get(4));
     }
 
     @Test
@@ -154,7 +139,7 @@ public class InstancesDaoTest {
         instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(hypertensionScreeningInstance));
 
         String cascadingSelectInstancePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES) + "/Cascading Select Form_2017-02-20_14-06-44/Cascading Select Form_2017-02-20_14-06-44.xml";
-        cascadingSelectInstance = new Instance.Builder()
+        Instance cascadingSelectInstance = new Instance.Builder()
                 .displayName("Cascading Select Form")
                 .instanceFilePath(storagePathProvider.getRelativeInstancePath(cascadingSelectInstancePath))
                 .jrFormId("CascadingSelect")
@@ -185,7 +170,7 @@ public class InstancesDaoTest {
         instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(widgetsInstance));
 
         String samplePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES) + "/sample_2017-02-20_14-07-03/sample_2017-02-20_14-07-03.xml";
-        sampleInstance = new Instance.Builder()
+        Instance sampleInstance = new Instance.Builder()
                 .displayName("sample")
                 .instanceFilePath(storagePathProvider.getRelativeInstancePath(samplePath))
                 .jrFormId("sample")

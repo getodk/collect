@@ -25,6 +25,8 @@ public interface InstancesRepository {
     @Nullable
     Instance getOneByPath(String instancePath);
 
+    List<Instance> getAllNotDeleted();
+
     List<Instance> getAllByStatus(String... status);
 
     List<Instance> getAllByFormId(String formId);

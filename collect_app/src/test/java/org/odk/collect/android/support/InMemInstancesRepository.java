@@ -52,6 +52,13 @@ public final class InMemInstancesRepository implements InstancesRepository {
     }
 
     @Override
+    public List<Instance> getAllNotDeleted() {
+        return instances.stream()
+                .filter(instance -> instance.getDeletedDate() == null)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<Instance> getAllByStatus(String... status) {
         List<String> statuses = Arrays.asList(status);
         List<Instance> result = new ArrayList<>();

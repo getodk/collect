@@ -35,12 +35,6 @@ import java.util.List;
  */
 public class InstancesDao {
 
-    public Cursor getSavedInstancesCursor(String sortOrder) {
-        String selection = InstanceColumns.DELETED_DATE + " IS NULL ";
-
-        return getInstancesCursor(null, selection, null, sortOrder);
-    }
-
     public Cursor getInstancesCursorForFilePath(String path) {
         String selection = InstanceColumns.INSTANCE_FILE_PATH + "=?";
         String[] selectionArgs = {new StoragePathProvider().getRelativeInstancePath(path)};

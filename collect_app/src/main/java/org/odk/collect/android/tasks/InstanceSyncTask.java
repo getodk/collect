@@ -25,6 +25,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.listeners.DiskSyncListener;
@@ -79,8 +80,8 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
     @Override
     protected String doInBackground(Void... params) {
-        int instance = ++counter;
-        Timber.i("[%d] doInBackground begins!", instance);
+        int currentInstance = ++counter;
+        Timber.i("[%d] doInBackground begins!", currentInstance);
         StoragePathProvider storagePathProvider = new StoragePathProvider();
         try {
             List<String> candidateInstances = new LinkedList<>();
@@ -88,7 +89,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
             if (instancesPath.exists() && instancesPath.isDirectory()) {
                 File[] instanceFolders = instancesPath.listFiles();
                 if (instanceFolders == null || instanceFolders.length == 0) {
-                    Timber.i("[%d] Empty instance folder. Stopping scan process.", instance);
+                    Timber.i("[%d] Empty instance folder. Stopping scan process.", currentInstance);
                     Timber.d("Instance scan completed");
                     return currentStatus;
                 }
@@ -106,7 +107,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                     if (instanceFile.exists() && instanceFile.canRead()) {
                         candidateInstances.add(instanceFile.getAbsolutePath());
                     } else {
-                        Timber.i("[%d] Ignoring: %s", instance, instanceDir.getAbsolutePath());
+                        Timber.i("[%d] Ignoring: %s", currentInstance, instanceDir.getAbsolutePath());
                     }
                 }
                 Collections.sort(candidateInstances);
@@ -114,33 +115,16 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 List<String> filesToRemove = new ArrayList<>();
 
                 // Remove all the path that's already in the content provider
-                Cursor instanceCursor = null;
                 InstancesDao instancesDao = new InstancesDao();
-                try {
-                    String sortOrder = InstanceColumns.INSTANCE_FILE_PATH + " ASC ";
-                    instanceCursor = instancesDao.getSavedInstancesCursor(sortOrder);
-                    if (instanceCursor == null) {
-                        Timber.e("[%d] Instance content provider returned null", instance);
-                        return currentStatus;
-                    }
+                List<Instance> instances = new DatabaseInstancesRepository().getAllNotDeleted();
 
-                    instanceCursor.moveToPosition(-1);
+                for (Instance instance : instances) {
+                    String instanceFilename = storagePathProvider.getAbsoluteInstanceFilePath(instance.getInstanceFilePath());
 
-                    while (instanceCursor.moveToNext()) {
-                        String instanceFilename = storagePathProvider.getAbsoluteInstanceFilePath(instanceCursor.getString(
-                                instanceCursor.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
-                        String instanceStatus = instanceCursor.getString(
-                                instanceCursor.getColumnIndex(InstanceColumns.STATUS));
-                        if (candidateInstances.contains(instanceFilename) || instanceStatus.equals(Instance.STATUS_SUBMITTED)) {
-                            candidateInstances.remove(instanceFilename);
-                        } else {
-                            filesToRemove.add(instanceFilename);
-                        }
-                    }
-
-                } finally {
-                    if (instanceCursor != null) {
-                        instanceCursor.close();
+                    if (candidateInstances.contains(instanceFilename) || instance.getStatus().equals(Instance.STATUS_SUBMITTED)) {
+                        candidateInstances.remove(instanceFilename);
+                    } else {
+                        filesToRemove.add(instanceFilename);
                     }
                 }
 
@@ -202,7 +186,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 }
             }
         } finally {
-            Timber.i("[%d] doInBackground ends!", instance);
+            Timber.i("[%d] doInBackground ends!", currentInstance);
         }
         return currentStatus;
     }
