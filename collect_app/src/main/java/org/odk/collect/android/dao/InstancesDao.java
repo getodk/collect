@@ -42,20 +42,6 @@ public class InstancesDao {
         return getInstancesCursor(null, selection, selectionArgs, null);
     }
 
-    public Cursor getAllCompletedUndeletedInstancesCursor() {
-        String selection = InstanceColumns.DELETED_DATE + " IS NULL and ("
-                + InstanceColumns.STATUS + "=? or "
-                + InstanceColumns.STATUS + "=? or "
-                + InstanceColumns.STATUS + "=?)";
-
-        String[] selectionArgs = {Instance.STATUS_COMPLETE,
-                Instance.STATUS_SUBMISSION_FAILED,
-                Instance.STATUS_SUBMITTED};
-        String sortOrder = InstanceColumns.DISPLAY_NAME + " ASC";
-
-        return getInstancesCursor(null, selection, selectionArgs, sortOrder);
-    }
-
     public Cursor getInstancesCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         return Collect.getInstance().getContentResolver().query(InstanceColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
     }

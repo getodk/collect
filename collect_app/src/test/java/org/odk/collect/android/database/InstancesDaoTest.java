@@ -66,16 +66,6 @@ public class InstancesDaoTest {
     }
 
     @Test
-    public void getAllCompletedUndeletedInstancesCursorTest() {
-        Cursor cursor = instancesDao.getAllCompletedUndeletedInstancesCursor();
-        List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
-
-        assertEquals(2, instances.size());
-        assertEquals(biggestNOfSetInstance, instances.get(0));
-        assertEquals(biggestNOfSet2Instance, instances.get(1));
-    }
-
-    @Test
     public void updateInstanceTest() {
         String filePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES) + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml";
         Cursor cursor = instancesDao.getInstancesCursorForFilePath(filePath);
