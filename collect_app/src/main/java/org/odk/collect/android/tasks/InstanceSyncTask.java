@@ -18,18 +18,19 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.provider.BaseColumns;
 
 import org.apache.commons.io.FileUtils;
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.exception.EncryptionException;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -40,6 +41,7 @@ import org.odk.collect.android.utilities.TranslationHandler;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,6 +55,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import timber.log.Timber;
 
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import static org.odk.collect.android.utilities.FileUtils.getMd5Hash;
 
 /**
  * Background task for syncing form instances from the instances folder to the instances table.
@@ -219,26 +222,30 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
         return instanceId;
     }
 
-    private void encryptInstanceIfNeeded(Cursor formCursor, String candidateInstance,
-                                         ContentValues values, InstancesDao instancesDao)
-            throws EncryptionException, IOException {
-
-        try (Cursor instanceCursor = new InstancesDao().getInstancesCursorForFilePath(candidateInstance)) {
-            if (instanceCursor != null && instanceCursor.moveToFirst()) {
-                if (shouldInstanceBeEncrypted(formCursor)) {
-                    encryptInstance(instanceCursor, candidateInstance, values, instancesDao);
-                }
+    private void encryptInstanceIfNeeded(Cursor formCursor, String candidateInstance, ContentValues values, InstancesDao instancesDao) throws EncryptionException, IOException {
+        Instance instance = new DatabaseInstancesRepository().getOneByPath(candidateInstance);
+        if (instance != null) {
+            if (shouldInstanceBeEncrypted(formCursor)) {
+                logImportAndEncrypt(formCursor);
+                encryptInstance(instance, candidateInstance, values, instancesDao);
             }
         }
     }
 
-    private void encryptInstance(Cursor instanceCursor, String candidateInstance,
+    private void logImportAndEncrypt(Cursor formCursor) {
+        String id = formCursor.getString(formCursor.getColumnIndex(FormsColumns.JR_FORM_ID));
+        String title = formCursor.getString(formCursor.getColumnIndex(FormsColumns.DISPLAY_NAME));
+        String formIdHash = getMd5Hash(new ByteArrayInputStream((id + " " + title).getBytes()));
+        DaggerUtils.getComponent(Collect.getInstance()).analytics().logFormEvent(AnalyticsEvents.IMPORT_AND_ENCRYPT_INSTANCE, formIdHash);
+    }
+
+    private void encryptInstance(Instance instance, String candidateInstance,
                                  ContentValues values, InstancesDao instancesDao)
             throws EncryptionException, IOException {
 
         File instanceXml = new File(candidateInstance);
         if (!new File(instanceXml.getParentFile(), "submission.xml.enc").exists()) {
-            Uri uri = Uri.parse(InstanceColumns.CONTENT_URI + "/" + instanceCursor.getInt(instanceCursor.getColumnIndex(BaseColumns._ID)));
+            Uri uri = Uri.parse(InstanceColumns.CONTENT_URI + "/" + instance.getId());
             FormController.InstanceMetadata instanceMetadata = new FormController.InstanceMetadata(getInstanceIdFromInstance(candidateInstance), null, null);
             EncryptionUtils.EncryptedFormInformation formInfo = EncryptionUtils.getEncryptedFormInformation(uri, instanceMetadata);
 
