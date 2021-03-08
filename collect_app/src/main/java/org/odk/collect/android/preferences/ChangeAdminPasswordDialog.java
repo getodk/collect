@@ -23,7 +23,7 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 public class ChangeAdminPasswordDialog extends DialogFragment {
 
     @Inject
-    PreferencesRepository preferencesRepository;
+    PreferencesDataSourceProvider preferencesDataSourceProvider;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class ChangeAdminPasswordDialog extends DialogFragment {
         builder.setView(dialogView);
         builder.setPositiveButton(getString(R.string.ok), (dialog, which) -> {
             String password = passwordEditText.getText().toString();
-            preferencesRepository.getAdminPreferences().save(KEY_ADMIN_PW, password);
+            preferencesDataSourceProvider.getAdminPreferences().save(KEY_ADMIN_PW, password);
             if (password.equals("")) {
                 ToastUtils.showShortToast(R.string.admin_password_disabled);
             } else {

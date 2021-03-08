@@ -21,16 +21,16 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 @RunWith(RobolectricTestRunner.class)
 public class JsonPreferencesGeneratorTest extends TestCase {
     private JsonPreferencesGenerator jsonPreferencesGenerator;
-    private final PreferencesRepository preferencesRepository = TestPreferencesProvider.getPreferencesRepository();
+    private final PreferencesDataSourceProvider preferencesDataSourceProvider = TestPreferencesProvider.getPreferencesRepository();
 
     @Before
     public void setup() {
-        jsonPreferencesGenerator = new JsonPreferencesGenerator(preferencesRepository);
+        jsonPreferencesGenerator = new JsonPreferencesGenerator(preferencesDataSourceProvider);
     }
 
     @Test
     public void whenAdminPasswordIncluded_shouldBePresentInJson() throws JSONException {
-        preferencesRepository.getAdminPreferences().save(KEY_ADMIN_PW, "123456");
+        preferencesDataSourceProvider.getAdminPreferences().save(KEY_ADMIN_PW, "123456");
         String jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences(Collections.singletonList(KEY_ADMIN_PW));
         assertThat(jsonPrefs, containsString("admin_pw"));
         assertThat(jsonPrefs, containsString("123456"));
@@ -38,7 +38,7 @@ public class JsonPreferencesGeneratorTest extends TestCase {
 
     @Test
     public void whenAdminPasswordExcluded_shouldNotBePresentInJson() throws JSONException {
-        preferencesRepository.getAdminPreferences().save(KEY_ADMIN_PW, "123456");
+        preferencesDataSourceProvider.getAdminPreferences().save(KEY_ADMIN_PW, "123456");
         String jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences(new ArrayList<>());
         assertThat(jsonPrefs, not(containsString("admin_pw")));
         assertThat(jsonPrefs, not(containsString("123456")));
@@ -46,7 +46,7 @@ public class JsonPreferencesGeneratorTest extends TestCase {
 
     @Test
     public void whenUserPasswordIncluded_shouldBePresentInJson() throws JSONException {
-        preferencesRepository.getGeneralPreferences().save(KEY_PASSWORD, "123456");
+        preferencesDataSourceProvider.getGeneralPreferences().save(KEY_PASSWORD, "123456");
         String jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences(Collections.singletonList(KEY_PASSWORD));
         assertThat(jsonPrefs, containsString("password"));
         assertThat(jsonPrefs, containsString("123456"));
@@ -54,7 +54,7 @@ public class JsonPreferencesGeneratorTest extends TestCase {
 
     @Test
     public void whenUserPasswordExcluded_shouldNotBePresentInJson() throws JSONException {
-        preferencesRepository.getGeneralPreferences().save(KEY_PASSWORD, "123456");
+        preferencesDataSourceProvider.getGeneralPreferences().save(KEY_PASSWORD, "123456");
         String jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences(new ArrayList<>());
         assertThat(jsonPrefs, not(containsString("password")));
         assertThat(jsonPrefs, not(containsString("123456")));

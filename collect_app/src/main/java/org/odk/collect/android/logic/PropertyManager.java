@@ -21,7 +21,7 @@ import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesRepository;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 
 import java.util.HashMap;
@@ -66,7 +66,7 @@ public class PropertyManager implements IPropertyManager {
     PermissionsProvider permissionsProvider;
 
     @Inject
-    PreferencesRepository preferencesRepository;
+    PreferencesDataSourceProvider preferencesDataSourceProvider;
 
     public String getName() {
         return "Property Manager";
@@ -78,11 +78,11 @@ public class PropertyManager implements IPropertyManager {
         reload();
     }
 
-    public PropertyManager(RxEventBus rxEventBus, PermissionsProvider permissionsProvider, DeviceDetailsProvider deviceDetailsProvider, PreferencesRepository preferencesRepository) {
+    public PropertyManager(RxEventBus rxEventBus, PermissionsProvider permissionsProvider, DeviceDetailsProvider deviceDetailsProvider, PreferencesDataSourceProvider preferencesDataSourceProvider) {
         this.eventBus = rxEventBus;
         this.permissionsProvider = permissionsProvider;
         this.deviceDetailsProvider = deviceDetailsProvider;
-        this.preferencesRepository = preferencesRepository;
+        this.preferencesDataSourceProvider = preferencesDataSourceProvider;
     }
 
     public PropertyManager reload() {
@@ -94,14 +94,14 @@ public class PropertyManager implements IPropertyManager {
         }
 
         // User-defined properties. Will replace any above with the same PROPMGR_ name.
-        PreferencesDataSource generalPrefs = preferencesRepository.getGeneralPreferences();
+        PreferencesDataSource generalPrefs = preferencesDataSourceProvider.getGeneralPreferences();
         initUserDefined(generalPrefs, KEY_METADATA_USERNAME,    PROPMGR_USERNAME,      SCHEME_USERNAME);
         initUserDefined(generalPrefs, KEY_METADATA_PHONENUMBER, PROPMGR_PHONE_NUMBER,  SCHEME_TEL);
         initUserDefined(generalPrefs, KEY_METADATA_EMAIL,       PROPMGR_EMAIL,         SCHEME_MAILTO);
 
         // Use the server username by default if the metadata username is not defined
         if (getSingularProperty(PROPMGR_USERNAME) == null || getSingularProperty(PROPMGR_USERNAME).isEmpty()) {
-            putProperty(PROPMGR_USERNAME, SCHEME_USERNAME, preferencesRepository.getGeneralPreferences().getString(KEY_USERNAME));
+            putProperty(PROPMGR_USERNAME, SCHEME_USERNAME, preferencesDataSourceProvider.getGeneralPreferences().getString(KEY_USERNAME));
         }
 
         return this;

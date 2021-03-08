@@ -7,7 +7,7 @@ import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesRepository;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.ByteArrayInputStream;
@@ -24,14 +24,14 @@ public class CollectSettingsChangeHandler implements SettingsChangeHandler {
     private final FormUpdateManager formUpdateManager;
     private final ServerRepository serverRepository;
     private final Analytics analytics;
-    private final PreferencesRepository preferencesRepository;
+    private final PreferencesDataSourceProvider preferencesDataSourceProvider;
 
-    public CollectSettingsChangeHandler(PropertyManager propertyManager, FormUpdateManager formUpdateManager, ServerRepository serverRepository, Analytics analytics, PreferencesRepository preferencesRepository) {
+    public CollectSettingsChangeHandler(PropertyManager propertyManager, FormUpdateManager formUpdateManager, ServerRepository serverRepository, Analytics analytics, PreferencesDataSourceProvider preferencesDataSourceProvider) {
         this.propertyManager = propertyManager;
         this.formUpdateManager = formUpdateManager;
         this.serverRepository = serverRepository;
         this.analytics = analytics;
-        this.preferencesRepository = preferencesRepository;
+        this.preferencesDataSourceProvider = preferencesDataSourceProvider;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class CollectSettingsChangeHandler implements SettingsChangeHandler {
         }
 
         if (changedKey.equals(KEY_EXTERNAL_APP_RECORDING) && !((Boolean) newValue)) {
-            PreferencesDataSource generalPrefs = preferencesRepository.getGeneralPreferences();
+            PreferencesDataSource generalPrefs = preferencesDataSourceProvider.getGeneralPreferences();
             String currentServerUrl = generalPrefs.getString(KEY_SERVER_URL);
             String serverHash = FileUtils.getMd5Hash(new ByteArrayInputStream(currentServerUrl.getBytes()));
 

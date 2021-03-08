@@ -12,7 +12,7 @@ import org.odk.collect.android.configure.SettingsUtils;
 import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesRepository;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.version.VersionInformation;
 
 import javax.inject.Inject;
@@ -24,11 +24,11 @@ public class MainMenuViewModel extends ViewModel {
     private final PreferencesDataSource adminPreferences;
     private final Application application;
 
-    public MainMenuViewModel(Application application, VersionInformation versionInformation, PreferencesRepository preferencesRepository) {
+    public MainMenuViewModel(Application application, VersionInformation versionInformation, PreferencesDataSourceProvider preferencesDataSourceProvider) {
         this.application = application;
         this.version = versionInformation;
-        this.generalPreferences = preferencesRepository.getGeneralPreferences();
-        this.adminPreferences = preferencesRepository.getAdminPreferences();
+        this.generalPreferences = preferencesDataSourceProvider.getGeneralPreferences();
+        this.adminPreferences = preferencesDataSourceProvider.getAdminPreferences();
     }
 
     public String getVersion() {
@@ -101,19 +101,19 @@ public class MainMenuViewModel extends ViewModel {
 
         private final VersionInformation versionInformation;
         private final Application application;
-        private final PreferencesRepository preferencesRepository;
+        private final PreferencesDataSourceProvider preferencesDataSourceProvider;
 
         @Inject
-        public Factory(VersionInformation versionInformation, Application application, PreferencesRepository preferencesRepository) {
+        public Factory(VersionInformation versionInformation, Application application, PreferencesDataSourceProvider preferencesDataSourceProvider) {
             this.versionInformation = versionInformation;
             this.application = application;
-            this.preferencesRepository = preferencesRepository;
+            this.preferencesDataSourceProvider = preferencesDataSourceProvider;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new MainMenuViewModel(application, versionInformation, preferencesRepository);
+            return (T) new MainMenuViewModel(application, versionInformation, preferencesDataSourceProvider);
         }
     }
 }

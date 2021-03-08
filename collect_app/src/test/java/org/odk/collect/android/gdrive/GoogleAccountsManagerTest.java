@@ -12,7 +12,7 @@ import org.mockito.Mock;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesRepository;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -45,7 +45,7 @@ public class GoogleAccountsManagerTest {
     private GoogleAccountCredential mockedCredential;
 
     @Mock
-    private PreferencesRepository preferencesRepository;
+    private PreferencesDataSourceProvider preferencesDataSourceProvider;
 
     @Mock
     private PreferencesDataSource generalPreferences;
@@ -62,8 +62,8 @@ public class GoogleAccountsManagerTest {
 
     @Before
     public void setup() {
-        googleAccountsManager = spy(new GoogleAccountsManager(mockedCredential, preferencesRepository, mockIntent, mockThemeUtils));
-        when(preferencesRepository.getGeneralPreferences()).thenReturn(generalPreferences);
+        googleAccountsManager = spy(new GoogleAccountsManager(mockedCredential, preferencesDataSourceProvider, mockIntent, mockThemeUtils));
+        when(preferencesDataSourceProvider.getGeneralPreferences()).thenReturn(generalPreferences);
         stubCredential();
         stubPreferences();
         mockPermissionsProvider();

@@ -24,7 +24,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesRepository;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.BooleanChangeLock;
 import org.odk.collect.android.support.RobolectricHelpers;
@@ -72,7 +72,7 @@ public class AutoUpdateTaskSpecTest {
             }
 
             @Override
-            public Notifier providesNotifier(Application application, PreferencesRepository preferencesRepository) {
+            public Notifier providesNotifier(Application application, PreferencesDataSourceProvider preferencesDataSourceProvider) {
                 return notifier;
             }
         });

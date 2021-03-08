@@ -31,7 +31,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.JsonPreferencesGenerator;
-import org.odk.collect.android.preferences.PreferencesRepository;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.async.Scheduler;
 
 import java.util.ArrayList;
@@ -69,7 +69,7 @@ public class ShowQRCodeFragment extends Fragment {
     public QRCodeGenerator qrCodeGenerator;
 
     @Inject
-    public PreferencesRepository preferencesRepository;
+    public PreferencesDataSourceProvider preferencesDataSourceProvider;
 
     @Inject
     public Scheduler scheduler;
@@ -85,8 +85,8 @@ public class ShowQRCodeFragment extends Fragment {
         View view = inflater.inflate(R.layout.show_qrcode_fragment, container, false);
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
-        passwordsSet[0] = !preferencesRepository.getAdminPreferences().getString(KEY_ADMIN_PW).isEmpty();
-        passwordsSet[1] = !preferencesRepository.getGeneralPreferences().getString(KEY_PASSWORD).isEmpty();
+        passwordsSet[0] = !preferencesDataSourceProvider.getAdminPreferences().getString(KEY_ADMIN_PW).isEmpty();
+        passwordsSet[1] = !preferencesDataSourceProvider.getGeneralPreferences().getString(KEY_PASSWORD).isEmpty();
 
         qrCodeViewModel.getBitmap().observe(this.getViewLifecycleOwner(), bitmap -> {
             if (bitmap != null) {
@@ -117,7 +117,7 @@ public class ShowQRCodeFragment extends Fragment {
         DaggerUtils.getComponent(context).inject(this);
         qrCodeViewModel = new ViewModelProvider(
                 requireActivity(),
-                new QRCodeViewModel.Factory(qrCodeGenerator, jsonPreferencesGenerator, preferencesRepository, scheduler)
+                new QRCodeViewModel.Factory(qrCodeGenerator, jsonPreferencesGenerator, preferencesDataSourceProvider, scheduler)
         ).get(QRCodeViewModel.class);
     }
 

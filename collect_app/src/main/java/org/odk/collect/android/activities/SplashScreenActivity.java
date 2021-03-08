@@ -30,7 +30,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesRepository;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.permissions.PermissionsProvider;
 
@@ -60,7 +60,7 @@ public class SplashScreenActivity extends Activity {
     PermissionsProvider permissionsProvider;
 
     @Inject
-    PreferencesRepository preferencesRepository;
+    PreferencesDataSourceProvider preferencesDataSourceProvider;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,8 +77,8 @@ public class SplashScreenActivity extends Activity {
 
         setContentView(R.layout.splash_screen);
 
-        boolean showSplash = preferencesRepository.getGeneralPreferences().getBoolean(GeneralKeys.KEY_SHOW_SPLASH);
-        String splashPath = preferencesRepository.getGeneralPreferences().getString(KEY_SPLASH_PATH);
+        boolean showSplash = preferencesDataSourceProvider.getGeneralPreferences().getBoolean(GeneralKeys.KEY_SHOW_SPLASH);
+        String splashPath = preferencesDataSourceProvider.getGeneralPreferences().getString(KEY_SPLASH_PATH);
 
         if (showSplash) {
             startSplashScreen(splashPath);

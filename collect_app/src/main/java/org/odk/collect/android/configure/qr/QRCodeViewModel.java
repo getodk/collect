@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.JsonPreferencesGenerator;
 import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesRepository;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.async.Scheduler;
 
@@ -108,14 +108,14 @@ class QRCodeViewModel extends ViewModel {
 
         private final QRCodeGenerator qrCodeGenerator;
         private final JsonPreferencesGenerator jsonPreferencesGenerator;
-        private final PreferencesRepository preferencesRepository;
+        private final PreferencesDataSourceProvider preferencesDataSourceProvider;
         private final Scheduler scheduler;
 
         Factory(QRCodeGenerator qrCodeGenerator, JsonPreferencesGenerator jsonPreferencesGenerator,
-                PreferencesRepository preferencesRepository, Scheduler scheduler) {
+                PreferencesDataSourceProvider preferencesDataSourceProvider, Scheduler scheduler) {
             this.qrCodeGenerator = qrCodeGenerator;
             this.jsonPreferencesGenerator = jsonPreferencesGenerator;
-            this.preferencesRepository = preferencesRepository;
+            this.preferencesDataSourceProvider = preferencesDataSourceProvider;
             this.scheduler = scheduler;
         }
 
@@ -125,8 +125,8 @@ class QRCodeViewModel extends ViewModel {
             return (T) new QRCodeViewModel(
                     qrCodeGenerator,
                     jsonPreferencesGenerator,
-                    preferencesRepository.getGeneralPreferences(),
-                    preferencesRepository.getAdminPreferences(),
+                    preferencesDataSourceProvider.getGeneralPreferences(),
+                    preferencesDataSourceProvider.getAdminPreferences(),
                     scheduler
             );
         }

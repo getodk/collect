@@ -134,10 +134,10 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
 
     private void runTask() {
         instanceGoogleSheetsUploaderTask = new InstanceGoogleSheetsUploaderTask(googleApiProvider, analytics);
-        instanceGoogleSheetsUploaderTask.setRepositories(instancesRepository, formsRepository, preferencesRepository);
+        instanceGoogleSheetsUploaderTask.setRepositories(instancesRepository, formsRepository, preferencesDataSourceProvider);
 
         // ensure we have a google account selected
-        String googleUsername = preferencesRepository.getGeneralPreferences().getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+        String googleUsername = preferencesDataSourceProvider.getGeneralPreferences().getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
         if (googleUsername == null || googleUsername.equals("")) {
             showDialog(GOOGLE_USER_DIALOG);
         } else {

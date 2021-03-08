@@ -16,7 +16,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesRepository;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 
 import javax.inject.Inject;
 
@@ -25,7 +25,7 @@ import static org.odk.collect.android.preferences.MetaKeys.KEY_MAPBOX_INITIALIZE
 public class MapBoxInitializationFragment extends Fragment {
 
     @Inject
-    PreferencesRepository preferencesRepository;
+    PreferencesDataSourceProvider preferencesDataSourceProvider;
 
     @Inject
     NetworkStateProvider connectivityProvider;
@@ -102,7 +102,7 @@ public class MapBoxInitializationFragment extends Fragment {
     }
 
     private void initMapBox(View rootView) {
-        PreferencesDataSource metaSharedPreferences = preferencesRepository.getMetaPreferences();
+        PreferencesDataSource metaSharedPreferences = preferencesDataSourceProvider.getMetaPreferences();
         if (!metaSharedPreferences.getBoolean(KEY_MAPBOX_INITIALIZED) && connectivityProvider.isDeviceOnline()) {
             // This "one weird trick" lets us initialize MapBox at app start when the internet is
             // most likely to be available. This is annoyingly needed for offline tiles to work.

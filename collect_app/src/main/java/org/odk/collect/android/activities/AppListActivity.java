@@ -263,11 +263,11 @@ abstract class AppListActivity extends CollectAbstractActivity {
 
     private void saveSelectedSortingOrder(int selectedStringOrder) {
         selectedSortingOrder = selectedStringOrder;
-        preferencesRepository.getGeneralPreferences().save(getSortingOrderKey(), selectedStringOrder);
+        preferencesDataSourceProvider.getGeneralPreferences().save(getSortingOrderKey(), selectedStringOrder);
     }
 
     protected void restoreSelectedSortingOrder() {
-        selectedSortingOrder = preferencesRepository.getGeneralPreferences().getInt(getSortingOrderKey());
+        selectedSortingOrder = preferencesDataSourceProvider.getGeneralPreferences().getInt(getSortingOrderKey());
     }
 
     protected int getSelectedSortingOrder() {

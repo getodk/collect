@@ -91,7 +91,7 @@ public class InstanceChooserList extends InstanceListActivity implements
 
     private void init() {
         setupAdapter();
-        instanceSyncTask = new InstanceSyncTask(preferencesRepository);
+        instanceSyncTask = new InstanceSyncTask(preferencesDataSourceProvider);
         instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);

@@ -81,7 +81,7 @@ public class ExImageWidgetTest extends FileWidgetTest<ExImageWidget> {
 
     @Test
     public void whenFontSizeChanged_CustomFontSizeShouldBeUsed() {
-        preferencesRepository.getGeneralPreferences().save(KEY_FONT_SIZE, "30");
+        preferencesDataSourceProvider.getGeneralPreferences().save(KEY_FONT_SIZE, "30");
 
         assertThat((int) getWidget().binding.launchExternalAppButton.getTextSize(), is(29));
     }

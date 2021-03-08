@@ -22,7 +22,7 @@ import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActio
 import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesRepository;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.utilities.UserAgentProvider;
 
@@ -44,7 +44,7 @@ public class ApplicationInitializer {
     private final StorageInitializer storageInitializer;
 
     public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator,
-                                  PropertyManager propertyManager, Analytics analytics, StorageInitializer storageInitializer, PreferencesRepository preferencesRepository) {
+                                  PropertyManager propertyManager, Analytics analytics, StorageInitializer storageInitializer, PreferencesDataSourceProvider preferencesDataSourceProvider) {
         this.context = context;
         this.userAgentProvider = userAgentProvider;
         this.preferenceMigrator = preferenceMigrator;
@@ -52,8 +52,8 @@ public class ApplicationInitializer {
         this.analytics = analytics;
         this.storageInitializer = storageInitializer;
 
-        generalPrefs = preferencesRepository.getGeneralPreferences();
-        adminPrefs = preferencesRepository.getAdminPreferences();
+        generalPrefs = preferencesDataSourceProvider.getGeneralPreferences();
+        adminPrefs = preferencesDataSourceProvider.getAdminPreferences();
     }
 
     public void initialize() {

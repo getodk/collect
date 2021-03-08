@@ -67,7 +67,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.preferences.PreferencesRepository;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
@@ -133,7 +133,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     PermissionsProvider permissionsProvider;
 
     @Inject
-    PreferencesRepository preferencesRepository;
+    PreferencesDataSourceProvider preferencesDataSourceProvider;
 
     private final WidgetFactory widgetFactory;
     private final LifecycleOwner viewLifecycle;
@@ -176,7 +176,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         this.widgetFactory = new WidgetFactory(
                 context,
                 readOnlyOverride,
-                preferencesRepository.getGeneralPreferences().getBoolean(KEY_EXTERNAL_APP_RECORDING),
+                preferencesDataSourceProvider.getGeneralPreferences().getBoolean(KEY_EXTERNAL_APP_RECORDING),
                 waitingForDataRegistry,
                 questionMediaManager,
                 audioPlayer,
@@ -349,7 +349,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             TextView tv = findViewById(R.id.group_text);
             tv.setText(path);
 
-            QuestionTextSizeHelper textSizeHelper = new QuestionTextSizeHelper(preferencesRepository.getGeneralPreferences());
+            QuestionTextSizeHelper textSizeHelper = new QuestionTextSizeHelper(preferencesDataSourceProvider.getGeneralPreferences());
             tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSizeHelper.getSubtitle1());
 
             tv.setVisibility(VISIBLE);

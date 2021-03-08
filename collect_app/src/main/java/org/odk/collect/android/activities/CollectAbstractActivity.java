@@ -23,7 +23,7 @@ import android.os.Bundle;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.PreferencesRepository;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -45,7 +45,7 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
     protected PermissionsProvider permissionsProvider;
 
     @Inject
-    protected PreferencesRepository preferencesRepository;
+    protected PreferencesDataSourceProvider preferencesDataSourceProvider;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -93,7 +93,7 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
             }
         }
 
-        Locale locale = new LocaleHelper().getLocale(preferencesRepository.getGeneralPreferences());
+        Locale locale = new LocaleHelper().getLocale(preferencesDataSourceProvider.getGeneralPreferences());
         if (locale != null) {
             config.setLocale(locale);
             config.setLayoutDirection(locale);

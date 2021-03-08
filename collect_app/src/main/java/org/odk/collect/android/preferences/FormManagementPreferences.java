@@ -82,7 +82,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
     }
 
     private void updateDisabledPrefs() {
-        PreferencesDataSource generalPrefs = preferencesRepository.getGeneralPreferences();
+        PreferencesDataSource generalPrefs = preferencesDataSourceProvider.getGeneralPreferences();
 
         // Might be null if disabled in Admin settings
         @Nullable Preference updateFrequency = findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK);
@@ -143,7 +143,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 return true;
             });
             if (key.equals(KEY_CONSTRAINT_BEHAVIOR)) {
-                pref.setEnabled(preferencesRepository.getAdminPreferences().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
+                pref.setEnabled(preferencesDataSourceProvider.getAdminPreferences().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
             }
         }
     }
@@ -153,7 +153,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
 
         if (pref != null) {
             if (key.equals(KEY_AUTOMATIC_UPDATE)) {
-                String formUpdateCheckPeriod = preferencesRepository.getGeneralPreferences().getString(KEY_PERIODIC_FORM_UPDATES_CHECK);
+                String formUpdateCheckPeriod = preferencesDataSourceProvider.getGeneralPreferences().getString(KEY_PERIODIC_FORM_UPDATES_CHECK);
 
                 // Only enable automatic form updates if periodic updates are set
                 pref.setEnabled(!formUpdateCheckPeriod.equals(getString(R.string.never_value)));

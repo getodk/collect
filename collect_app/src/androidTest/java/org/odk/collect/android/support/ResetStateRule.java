@@ -10,7 +10,7 @@ import org.junit.runners.model.Statement;
 import org.odk.collect.android.application.Collect;
 
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.preferences.PreferencesRepository;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -25,7 +25,7 @@ import static org.apache.commons.io.FileUtils.deleteDirectory;
 public class ResetStateRule implements TestRule {
 
     private final AppDependencyModule appDependencyModule;
-    private final PreferencesRepository preferencesRepository = TestPreferencesProvider.getPreferencesRepository();
+    private final PreferencesDataSourceProvider preferencesDataSourceProvider = TestPreferencesProvider.getPreferencesRepository();
 
     public ResetStateRule() {
         this(null);
@@ -89,10 +89,10 @@ public class ResetStateRule implements TestRule {
     }
 
     private void clearPrefs() {
-        preferencesRepository.getGeneralPreferences().clear();
-        preferencesRepository.getGeneralPreferences().loadDefaultPreferencesIfNotExist();
-        preferencesRepository.getAdminPreferences().clear();
-        preferencesRepository.getAdminPreferences().loadDefaultPreferencesIfNotExist();
-        preferencesRepository.getMetaPreferences().clear();
+        preferencesDataSourceProvider.getGeneralPreferences().clear();
+        preferencesDataSourceProvider.getGeneralPreferences().loadDefaultPreferencesIfNotExist();
+        preferencesDataSourceProvider.getAdminPreferences().clear();
+        preferencesDataSourceProvider.getAdminPreferences().loadDefaultPreferencesIfNotExist();
+        preferencesDataSourceProvider.getMetaPreferences().clear();
     }
 }

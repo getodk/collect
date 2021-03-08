@@ -19,7 +19,7 @@ import javax.inject.Inject;
 public class ServerAuthDialogFragment extends DialogFragment {
 
     @Inject
-    PreferencesRepository preferencesRepository;
+    PreferencesDataSourceProvider preferencesDataSourceProvider;
 
     private View dialogView;
 
@@ -35,7 +35,7 @@ public class ServerAuthDialogFragment extends DialogFragment {
         ServerAuthDialogBinding binding = ServerAuthDialogBinding.inflate(requireActivity().getLayoutInflater());
         dialogView = binding.getRoot();
 
-        PreferencesDataSource generalPreferences = preferencesRepository.getGeneralPreferences();
+        PreferencesDataSource generalPreferences = preferencesDataSourceProvider.getGeneralPreferences();
         binding.usernameEdit.setText(generalPreferences.getString(GeneralKeys.KEY_USERNAME));
         binding.passwordEdit.setText(generalPreferences.getString(GeneralKeys.KEY_PASSWORD));
 

@@ -113,7 +113,7 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
             preferenceScreen.removePreference(findPreference("user_interface"));
         }
 
-        boolean mapsScreenEnabled = preferencesRepository.getAdminPreferences().getBoolean(KEY_MAPS);
+        boolean mapsScreenEnabled = preferencesDataSourceProvider.getAdminPreferences().getBoolean(KEY_MAPS);
         if (!mapsScreenEnabled) {
             preferenceScreen.removePreference(findPreference("maps"));
         }
@@ -129,7 +129,7 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
 
     private boolean hasAtleastOneSettingEnabled(Collection<String> keys) {
         for (String key : keys) {
-            boolean value = preferencesRepository.getAdminPreferences().getBoolean(key);
+            boolean value = preferencesDataSourceProvider.getAdminPreferences().getBoolean(key);
             if (value) {
                 return true;
             }

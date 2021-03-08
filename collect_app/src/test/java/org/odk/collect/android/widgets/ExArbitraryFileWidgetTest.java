@@ -62,7 +62,7 @@ public class ExArbitraryFileWidgetTest extends FileWidgetTest<ExArbitraryFileWid
 
     @Test
     public void whenFontSizeChanged_CustomFontSizeShouldBeUsed() {
-        preferencesRepository.getGeneralPreferences().save(KEY_FONT_SIZE, "30");
+        preferencesDataSourceProvider.getGeneralPreferences().save(KEY_FONT_SIZE, "30");
 
         assertThat((int) getWidget().binding.exArbitraryFileButton.getTextSize(), is(29));
         assertThat((int) getWidget().binding.exArbitraryFileAnswerText.getTextSize(), is(29));

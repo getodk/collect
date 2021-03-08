@@ -25,14 +25,14 @@ import androidx.annotation.StyleRes;
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesRepository;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 
 import javax.inject.Inject;
 
 public final class ThemeUtils {
 
     @Inject
-    PreferencesRepository preferencesRepository;
+    PreferencesDataSourceProvider preferencesDataSourceProvider;
 
     private final Context context;
 
@@ -128,11 +128,11 @@ public final class ThemeUtils {
     }
 
     private boolean isMagentaEnabled() {
-        return preferencesRepository.getGeneralPreferences().getBoolean(GeneralKeys.KEY_MAGENTA_THEME);
+        return preferencesDataSourceProvider.getGeneralPreferences().getBoolean(GeneralKeys.KEY_MAGENTA_THEME);
     }
 
     private String getPrefsTheme() {
-        return preferencesRepository.getGeneralPreferences().getString(GeneralKeys.KEY_APP_THEME);
+        return preferencesDataSourceProvider.getGeneralPreferences().getString(GeneralKeys.KEY_APP_THEME);
     }
 
     /**

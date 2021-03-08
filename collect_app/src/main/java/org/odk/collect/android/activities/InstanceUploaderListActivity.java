@@ -171,7 +171,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
             uploadButton.setEnabled(areCheckedItems());
         });
 
-        instanceSyncTask = new InstanceSyncTask(preferencesRepository);
+        instanceSyncTask = new InstanceSyncTask(preferencesDataSourceProvider);
         instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();
 
@@ -235,7 +235,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     private void uploadSelectedFiles() {
         long[] instanceIds = listView.getCheckedItemIds();
 
-        String server = preferencesRepository.getGeneralPreferences().getString(KEY_PROTOCOL);
+        String server = preferencesDataSourceProvider.getGeneralPreferences().getString(KEY_PROTOCOL);
 
         if (server.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
             // if it's Sheets, start the Sheets uploader

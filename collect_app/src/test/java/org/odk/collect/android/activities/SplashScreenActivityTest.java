@@ -17,7 +17,7 @@ import org.odk.collect.android.application.initialization.SettingsPreferenceMigr
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesRepository;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.utilities.TestPreferencesProvider;
@@ -43,7 +43,7 @@ public class SplashScreenActivityTest {
             @Override
             public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider,
                                                                          SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager,
-                                                                         Analytics analytics, StorageInitializer storageInitializer, PreferencesRepository preferencesRepository) {
+                                                                         Analytics analytics, StorageInitializer storageInitializer, PreferencesDataSourceProvider preferencesDataSourceProvider) {
                 return applicationInitializer;
             }
         });

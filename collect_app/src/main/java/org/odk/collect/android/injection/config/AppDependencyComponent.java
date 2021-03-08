@@ -57,7 +57,7 @@ import org.odk.collect.android.preferences.FormMetadataFragment;
 import org.odk.collect.android.preferences.GeneralPreferencesFragment;
 import org.odk.collect.android.preferences.IdentityPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.preferences.PreferencesRepository;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.preferences.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.preferences.UserInterfacePreferencesFragment;
@@ -245,7 +245,7 @@ public interface AppDependencyComponent {
 
     Analytics analytics();
 
-    PreferencesRepository preferencesRepository();
+    PreferencesDataSourceProvider preferencesRepository();
 
     ApplicationInitializer applicationInitializer();
 

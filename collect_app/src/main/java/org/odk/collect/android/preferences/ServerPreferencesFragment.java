@@ -395,8 +395,8 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     }
 
     private void runGoogleAccountValidation() {
-        String account = preferencesRepository.getGeneralPreferences().getString(KEY_SELECTED_GOOGLE_ACCOUNT);
-        String protocol = preferencesRepository.getGeneralPreferences().getString(KEY_PROTOCOL);
+        String account = preferencesDataSourceProvider.getGeneralPreferences().getString(KEY_SELECTED_GOOGLE_ACCOUNT);
+        String protocol = preferencesDataSourceProvider.getGeneralPreferences().getString(KEY_PROTOCOL);
 
         if (TextUtils.isEmpty(account) && protocol.equals(getString(R.string.protocol_google_sheets))) {
 

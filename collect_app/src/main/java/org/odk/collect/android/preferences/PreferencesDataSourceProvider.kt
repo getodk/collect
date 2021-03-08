@@ -3,7 +3,7 @@ package org.odk.collect.android.preferences
 import android.content.Context
 import androidx.preference.PreferenceManager
 
-class PreferencesRepository(private val context: Context) {
+class PreferencesDataSourceProvider(private val context: Context) {
     private val preferences = mutableMapOf<String, PreferencesDataSource>()
 
     fun getMetaPreferences(): PreferencesDataSource {

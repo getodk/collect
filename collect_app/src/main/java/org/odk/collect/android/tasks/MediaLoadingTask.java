@@ -11,7 +11,7 @@ import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.preferences.PreferencesRepository;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.widgets.BaseImageWidget;
@@ -27,7 +27,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_IMAGE_SIZE;
 public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
 
     @Inject
-    PreferencesRepository preferencesRepository;
+    PreferencesDataSourceProvider preferencesDataSourceProvider;
 
     private WeakReference<FormEntryActivity> formEntryActivity;
 
@@ -59,7 +59,7 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
 
                 // apply image conversion if the widget is an image widget
                 if (questionWidget instanceof BaseImageWidget) {
-                    String imageSizeMode = preferencesRepository.getGeneralPreferences().getString(KEY_IMAGE_SIZE);
+                    String imageSizeMode = preferencesDataSourceProvider.getGeneralPreferences().getString(KEY_IMAGE_SIZE);
                     ImageConverter.execute(newFile.getPath(), questionWidget, formEntryActivity.get(), imageSizeMode);
                 }
                 return newFile;

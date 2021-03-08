@@ -20,7 +20,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesRepository;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.upload.InstanceUploader;
@@ -50,21 +50,21 @@ public class InstanceSubmitter {
     private final GoogleAccountsManager googleAccountsManager;
     private final GoogleApiProvider googleApiProvider;
     private final PermissionsProvider permissionsProvider;
-    private final PreferencesRepository preferencesRepository;
+    private final PreferencesDataSourceProvider preferencesDataSourceProvider;
 
     public InstanceSubmitter(Analytics analytics, FormsRepository formsRepository, InstancesRepository instancesRepository,
-                             GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, PreferencesRepository preferencesRepository) {
+                             GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, PreferencesDataSourceProvider preferencesDataSourceProvider) {
         this.analytics = analytics;
         this.formsRepository = formsRepository;
         this.instancesRepository = instancesRepository;
         this.googleAccountsManager = googleAccountsManager;
         this.googleApiProvider = googleApiProvider;
         this.permissionsProvider = permissionsProvider;
-        this.preferencesRepository = preferencesRepository;
+        this.preferencesDataSourceProvider = preferencesDataSourceProvider;
     }
 
     public Pair<Boolean, String> submitUnsubmittedInstances() throws SubmitException {
-        List<Instance> toUpload = getInstancesToAutoSend(!preferencesRepository.getGeneralPreferences().getString(GeneralKeys.KEY_AUTOSEND).equals("off"));
+        List<Instance> toUpload = getInstancesToAutoSend(!preferencesDataSourceProvider.getGeneralPreferences().getString(GeneralKeys.KEY_AUTOSEND).equals("off"));
         return submitSelectedInstances(toUpload);
     }
 
@@ -73,7 +73,7 @@ public class InstanceSubmitter {
             throw new SubmitException(Type.NOTHING_TO_SUBMIT);
         }
 
-        String protocol = preferencesRepository.getGeneralPreferences().getString(GeneralKeys.KEY_PROTOCOL);
+        String protocol = preferencesDataSourceProvider.getGeneralPreferences().getString(GeneralKeys.KEY_PROTOCOL);
 
         InstanceUploader uploader;
         Map<String, String> resultMessagesByInstanceId = new HashMap<>();
@@ -93,7 +93,7 @@ public class InstanceSubmitter {
             }
         } else {
             OpenRosaHttpInterface httpInterface = Collect.getInstance().getComponent().openRosaHttpInterface();
-            uploader = new InstanceServerUploader(httpInterface, new WebCredentialsUtils(preferencesRepository.getGeneralPreferences()), new HashMap<>(), preferencesRepository);
+            uploader = new InstanceServerUploader(httpInterface, new WebCredentialsUtils(preferencesDataSourceProvider.getGeneralPreferences()), new HashMap<>(), preferencesDataSourceProvider);
             deviceId = new PropertyManager().getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID);
         }
 
@@ -115,7 +115,7 @@ public class InstanceSubmitter {
                 // perhaps another worker. It also feels like this could fail and if so should be
                 // communicated to the user. Maybe successful delete should also be communicated?
                 if (InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, instance.getJrFormId(), instance.getJrVersion(),
-                        preferencesRepository.getGeneralPreferences().getBoolean(GeneralKeys.KEY_DELETE_AFTER_SEND))) {
+                        preferencesDataSourceProvider.getGeneralPreferences().getBoolean(GeneralKeys.KEY_DELETE_AFTER_SEND))) {
                     Uri deleteForm = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, instance.getId().toString());
                     Collect.getInstance().getContentResolver().delete(deleteForm, null, null);
                 }
@@ -125,7 +125,7 @@ public class InstanceSubmitter {
                 String label = Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion());
                 analytics.logEvent(SUBMISSION, action, label);
 
-                String submissionEndpoint = preferencesRepository.getGeneralPreferences().getString(GeneralKeys.KEY_SUBMISSION_URL);
+                String submissionEndpoint = preferencesDataSourceProvider.getGeneralPreferences().getString(GeneralKeys.KEY_SUBMISSION_URL);
                 if (!submissionEndpoint.equals(TranslationHandler.getString(Collect.getInstance(), R.string.default_odk_submission))) {
                     String submissionEndpointHash = FileUtils.getMd5Hash(new ByteArrayInputStream(submissionEndpoint.getBytes()));
                     analytics.logEvent(CUSTOM_ENDPOINT_SUB, submissionEndpointHash);

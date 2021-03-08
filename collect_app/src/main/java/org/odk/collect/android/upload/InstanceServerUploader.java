@@ -27,7 +27,7 @@ import org.odk.collect.android.openrosa.OpenRosaConstants;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesRepository;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -51,15 +51,15 @@ public class InstanceServerUploader extends InstanceUploader {
     private final OpenRosaHttpInterface httpInterface;
     private final WebCredentialsUtils webCredentialsUtils;
     private final Map<Uri, Uri> uriRemap;
-    private final PreferencesRepository preferencesRepository;
+    private final PreferencesDataSourceProvider preferencesDataSourceProvider;
 
     public InstanceServerUploader(OpenRosaHttpInterface httpInterface,
                                   WebCredentialsUtils webCredentialsUtils,
-                                  Map<Uri, Uri> uriRemap, PreferencesRepository preferencesRepository) {
+                                  Map<Uri, Uri> uriRemap, PreferencesDataSourceProvider preferencesDataSourceProvider) {
         this.httpInterface = httpInterface;
         this.webCredentialsUtils = webCredentialsUtils;
         this.uriRemap = uriRemap;
-        this.preferencesRepository = preferencesRepository;
+        this.preferencesDataSourceProvider = preferencesDataSourceProvider;
     }
 
     /**
@@ -293,7 +293,7 @@ public class InstanceServerUploader extends InstanceUploader {
     }
 
     private String getServerSubmissionURL() {
-        PreferencesDataSource generalPrefs = preferencesRepository.getGeneralPreferences();
+        PreferencesDataSource generalPrefs = preferencesDataSourceProvider.getGeneralPreferences();
         String serverBase = generalPrefs.getString(GeneralKeys.KEY_SERVER_URL);
 
         if (serverBase.endsWith(URL_PATH_SEP)) {
