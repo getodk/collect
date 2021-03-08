@@ -74,15 +74,12 @@ public final class InstancesDaoHelper {
     // that returns an {@link Instance} object from a path.
     public static Uri getLastInstanceUri(String path) {
         if (path != null) {
-            try (Cursor c = new InstancesDao().getInstancesCursorForFilePath(path)) {
-                if (c != null && c.getCount() > 0) {
-                    // should only be one...
-                    c.moveToFirst();
-                    String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
-                    return Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
-                }
+            Instance instance = new DatabaseInstancesRepository().getOneByPath(path);
+            if (instance != null && instance.getStatus().equals(Instance.STATUS_COMPLETE)) {
+                return Uri.withAppendedPath(InstanceColumns.CONTENT_URI, instance.getId().toString());
             }
         }
+
         return null;
     }
 
