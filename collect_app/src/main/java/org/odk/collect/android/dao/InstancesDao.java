@@ -20,8 +20,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
-import androidx.loader.content.CursorLoader;
-
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -66,149 +64,6 @@ public class InstancesDao {
 
     public Cursor getInstancesCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         return Collect.getInstance().getContentResolver().query(InstanceColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
-    }
-
-    public CursorLoader getSentInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
-        CursorLoader cursorLoader;
-        if (charSequence.length() == 0) {
-            cursorLoader = getSentInstancesCursorLoader(sortOrder);
-        } else {
-            String selection =
-                    InstanceColumns.STATUS + " =? and "
-                            + InstanceColumns.DISPLAY_NAME + " LIKE ?";
-            String[] selectionArgs = {
-                    Instance.STATUS_SUBMITTED,
-                    "%" + charSequence + "%"};
-
-            cursorLoader = getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
-        }
-
-        return cursorLoader;
-    }
-
-    public CursorLoader getSentInstancesCursorLoader(String sortOrder) {
-        String selection = InstanceColumns.STATUS + " =? ";
-        String[] selectionArgs = {Instance.STATUS_SUBMITTED};
-
-        return getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
-    }
-
-    public CursorLoader getUnsentInstancesCursorLoader(String sortOrder) {
-        String selection = InstanceColumns.STATUS + " !=? ";
-        String[] selectionArgs = {Instance.STATUS_SUBMITTED};
-
-        return getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
-    }
-
-    public CursorLoader getUnsentInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
-        CursorLoader cursorLoader;
-        if (charSequence.length() == 0) {
-            cursorLoader = getUnsentInstancesCursorLoader(sortOrder);
-        } else {
-            String selection =
-                    InstanceColumns.STATUS + " !=? and "
-                            + InstanceColumns.DISPLAY_NAME + " LIKE ?";
-            String[] selectionArgs = {
-                    Instance.STATUS_SUBMITTED,
-                    "%" + charSequence + "%"};
-
-            cursorLoader = getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
-        }
-
-        return cursorLoader;
-    }
-
-    public CursorLoader getSavedInstancesCursorLoader(String sortOrder) {
-        String selection = InstanceColumns.DELETED_DATE + " IS NULL ";
-
-        return getInstancesCursorLoader(null, selection, null, sortOrder);
-    }
-
-    public CursorLoader getSavedInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
-        CursorLoader cursorLoader;
-        if (charSequence.length() == 0) {
-            cursorLoader = getSavedInstancesCursorLoader(sortOrder);
-        } else {
-            String selection =
-                    InstanceColumns.DELETED_DATE + " IS NULL and "
-                            + InstanceColumns.DISPLAY_NAME + " LIKE ?";
-            String[] selectionArgs = {"%" + charSequence + "%"};
-            cursorLoader = getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
-        }
-
-        return cursorLoader;
-    }
-
-    public CursorLoader getFinalizedInstancesCursorLoader(String sortOrder) {
-        String selection = InstanceColumns.STATUS + "=? or " + InstanceColumns.STATUS + "=?";
-        String[] selectionArgs = {Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED};
-
-        return getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
-    }
-
-    public CursorLoader getFinalizedInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
-        CursorLoader cursorLoader;
-        if (charSequence.length() == 0) {
-            cursorLoader = getFinalizedInstancesCursorLoader(sortOrder);
-        } else {
-            String selection =
-                    "(" + InstanceColumns.STATUS + "=? or "
-                            + InstanceColumns.STATUS + "=?) and "
-                            + InstanceColumns.DISPLAY_NAME + " LIKE ?";
-            String[] selectionArgs = {
-                    Instance.STATUS_COMPLETE,
-                    Instance.STATUS_SUBMISSION_FAILED,
-                    "%" + charSequence + "%"};
-
-            cursorLoader = getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
-        }
-
-        return cursorLoader;
-    }
-
-    public CursorLoader getAllCompletedUndeletedInstancesCursorLoader(String sortOrder) {
-        String selection = InstanceColumns.DELETED_DATE + " IS NULL and ("
-                + InstanceColumns.STATUS + "=? or "
-                + InstanceColumns.STATUS + "=? or "
-                + InstanceColumns.STATUS + "=?)";
-
-        String[] selectionArgs = {Instance.STATUS_COMPLETE,
-                Instance.STATUS_SUBMISSION_FAILED,
-                Instance.STATUS_SUBMITTED};
-
-        return getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
-    }
-
-    public CursorLoader getCompletedUndeletedInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
-        CursorLoader cursorLoader;
-        if (charSequence.length() == 0) {
-            cursorLoader = getAllCompletedUndeletedInstancesCursorLoader(sortOrder);
-        } else {
-            String selection = InstanceColumns.DELETED_DATE + " IS NULL and ("
-                    + InstanceColumns.STATUS + "=? or "
-                    + InstanceColumns.STATUS + "=? or "
-                    + InstanceColumns.STATUS + "=?) and "
-                    + InstanceColumns.DISPLAY_NAME + " LIKE ?";
-
-            String[] selectionArgs = {
-                    Instance.STATUS_COMPLETE,
-                    Instance.STATUS_SUBMISSION_FAILED,
-                    Instance.STATUS_SUBMITTED,
-                    "%" + charSequence + "%"};
-
-            cursorLoader = getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
-        }
-        return cursorLoader;
-    }
-
-    public CursorLoader getInstancesCursorLoader(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return new CursorLoader(
-                Collect.getInstance(),
-                InstanceColumns.CONTENT_URI,
-                projection,
-                selection,
-                selectionArgs,
-                sortOrder);
     }
 
     public Uri saveInstance(ContentValues values) {
@@ -304,7 +159,7 @@ public class InstancesDao {
     /**
      * Returns the values of an instance as a ContentValues object for use with
      * {@link #saveInstance(ContentValues)} or {@link #updateInstance(ContentValues, String, String[])}
-     *
+     * <p>
      * Does NOT include the database ID.
      */
     public ContentValues getValuesFromInstanceObject(Instance instance) {
