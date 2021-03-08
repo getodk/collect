@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.preference.PreferenceManager
 
 class PreferencesDataSourceProvider(private val context: Context) {
-    private val preferences = mutableMapOf<String, PreferencesDataSource>()
-
     fun getMetaPreferences(): PreferencesDataSource {
         return preferences.getOrPut(META_PREFS_NAME) {
             SharedPreferencesDataSource(context.getSharedPreferences(META_PREFS_NAME, Context.MODE_PRIVATE))
@@ -35,6 +33,8 @@ class PreferencesDataSourceProvider(private val context: Context) {
     }
 
     companion object {
+        private val preferences = mutableMapOf<String, PreferencesDataSource>()
+
         private const val META_PREFS_NAME = "meta"
         private const val GENERAL_PREFS_NAME = "general_prefs"
         private const val ADMIN_PREFS_NAME = "admin_prefs"

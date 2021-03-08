@@ -8,6 +8,9 @@ import org.hamcrest.Matchers.`is`
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.never
+import org.mockito.Mockito.verify
 import org.robolectric.RobolectricTestRunner
 import java.math.BigDecimal
 
@@ -237,6 +240,18 @@ class PreferencesDataSourceTest {
         assertThat(prefs[KEY_INT], `is`(DEFAULT_INT_VALUE))
         assertThat(prefs[KEY_FLOAT], `is`(DEFAULT_FLOAT_VALUE))
         assertThat(prefs[KEY_SET], `is`(DEFAULT_SET_VALUE))
+    }
+
+    @Test
+    fun `When PreferenceChangeListener registered, should listen to changes in preferences`() {
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences, defaultPrefs)
+        val listener: PreferencesDataSource.OnPreferenceChangeListener = mock(PreferencesDataSource.OnPreferenceChangeListener::class.java)
+        preferencesSource.registerOnPreferenceChangeListener(listener)
+        preferencesSource.save("test", "string")
+        verify(listener).onPreferenceChanged("test")
+        preferencesSource.unregisterOnPreferenceChangeListener(listener)
+        preferencesSource.save("test2", "string2")
+        verify(listener, never()).onPreferenceChanged("test2")
     }
 
     fun assertDefaultPrefs(allPreferences: Map<String, *>) {

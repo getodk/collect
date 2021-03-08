@@ -4,6 +4,8 @@ import android.content.SharedPreferences
 import java.util.Collections
 
 class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferences, private val defaultPreferences: Map<String, Any> = emptyMap()) : PreferencesDataSource {
+    private lateinit var sharedPreferencesListener: SharedPreferences.OnSharedPreferenceChangeListener
+
     override fun loadDefaultPreferencesIfNotExist() {
         for ((key, value) in defaultPreferences) {
             if (!sharedPreferences.contains(key)) {
@@ -82,11 +84,12 @@ class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferenc
         return sharedPreferences.getStringSet(key, defaultValue)
     }
 
-    override fun registerOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
-        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+    override fun registerOnPreferenceChangeListener(listener: PreferencesDataSource.OnPreferenceChangeListener) {
+        sharedPreferencesListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key -> listener.onPreferenceChanged(key) }
+        sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferencesListener)
     }
 
-    override fun unregisterOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
-        sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener)
+    override fun unregisterOnPreferenceChangeListener(listener: PreferencesDataSource.OnPreferenceChangeListener) {
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferencesListener)
     }
 }

@@ -1,7 +1,5 @@
 package org.odk.collect.android.preferences
 
-import android.content.SharedPreferences
-
 interface PreferencesDataSource {
     fun loadDefaultPreferencesIfNotExist()
 
@@ -31,7 +29,11 @@ interface PreferencesDataSource {
 
     fun getStringSet(key: String): Set<String>?
 
-    fun registerOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener)
+    fun registerOnPreferenceChangeListener(listener: OnPreferenceChangeListener)
 
-    fun unregisterOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener)
+    fun unregisterOnPreferenceChangeListener(listener: OnPreferenceChangeListener)
+
+    interface OnPreferenceChangeListener {
+        fun onPreferenceChanged(key: String)
+    }
 }

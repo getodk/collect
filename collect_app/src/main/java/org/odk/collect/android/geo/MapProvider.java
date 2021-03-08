@@ -1,7 +1,6 @@
 package org.odk.collect.android.geo;
 
 import android.content.Context;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 
 import androidx.annotation.NonNull;
 
@@ -52,7 +51,7 @@ public class MapProvider {
     // automatically when it's no longer needed.
 
     /** Keeps track of the listener associated with a given MapFragment. */
-    private final Map<MapFragment, OnSharedPreferenceChangeListener>
+    private final Map<MapFragment, PreferencesDataSource.OnPreferenceChangeListener>
         listenersByMap = new WeakHashMap<>();
 
     /** Keeps track of the configurator associated with a given MapFragment. */
@@ -205,22 +204,22 @@ public class MapProvider {
         MapConfigurator cftor = configuratorsByMap.get(map);
         if (cftor != null) {
             PreferencesDataSource generalPrefs = PrefUtils.getSharedPrefs();
-            OnSharedPreferenceChangeListener listener = (prefs, key) -> {
+            PreferencesDataSource.OnPreferenceChangeListener listener = key -> {
                 if (cftor.getPrefKeys().contains(key)) {
                     map.applyConfig(cftor.buildConfig(generalPrefs));
                 }
             };
             map.applyConfig(cftor.buildConfig(generalPrefs));
-            generalPrefs.registerOnSharedPreferenceChangeListener(listener);
+            generalPrefs.registerOnPreferenceChangeListener(listener);
             listenersByMap.put(map, listener);
         }
     }
 
     void onMapFragmentStop(MapFragment map) {
-        OnSharedPreferenceChangeListener listener = listenersByMap.get(map);
+        PreferencesDataSource.OnPreferenceChangeListener listener = listenersByMap.get(map);
         if (listener != null) {
             PreferencesDataSource prefs = PrefUtils.getSharedPrefs();
-            prefs.unregisterOnSharedPreferenceChangeListener(listener);
+            prefs.unregisterOnPreferenceChangeListener(listener);
             listenersByMap.remove(map);
         }
     }
