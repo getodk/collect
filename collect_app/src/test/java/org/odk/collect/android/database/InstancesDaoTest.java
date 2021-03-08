@@ -56,16 +56,6 @@ public class InstancesDaoTest {
     }
 
     @Test
-    public void getInstancesCursorForFilePathTest() {
-        String instancePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES) + "/Hypertension Screening_2017-02-20_14-03-53/Hypertension Screening_2017-02-20_14-03-53.xml";
-        Cursor cursor = instancesDao.getInstancesCursorForFilePath(instancePath);
-        List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
-
-        assertEquals(1, instances.size());
-        assertEquals(hypertensionScreeningInstance, instances.get(0));
-    }
-
-    @Test
     public void updateInstanceTest() {
         String filePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES) + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml";
         Cursor cursor = instancesDao.getInstancesCursorForFilePath(filePath);
