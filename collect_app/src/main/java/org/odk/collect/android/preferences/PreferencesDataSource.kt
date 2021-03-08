@@ -1,92 +1,37 @@
 package org.odk.collect.android.preferences
 
 import android.content.SharedPreferences
-import java.util.Collections
 
-class PreferencesDataSource(private val sharedPreferences: SharedPreferences, private val defaultPreferences: Map<String, Any> = emptyMap()) {
-    fun loadDefaultPreferencesIfNotExist() {
-        for ((key, value) in defaultPreferences) {
-            if (!sharedPreferences.contains(key)) {
-                save(key, value)
-            }
-        }
-    }
+interface PreferencesDataSource {
+    fun loadDefaultPreferencesIfNotExist()
 
-    fun save(key: String, value: Any?) {
-        saveAll(Collections.singletonMap(key, value))
-    }
+    fun save(key: String, value: Any?)
 
-    fun saveAll(prefs: Map<String, Any?>) {
-        val editor = sharedPreferences.edit()
-        for ((key, value) in prefs) {
-            when (value) {
-                null, is String -> editor.putString(key, value as String?)
-                is Boolean -> editor.putBoolean(key, value)
-                is Long -> editor.putLong(key, value)
-                is Int -> editor.putInt(key, value)
-                is Float -> editor.putFloat(key, value)
-                is Set<*> -> editor.putStringSet(key, value as Set<String?>)
-                else -> throw RuntimeException("Unhandled preference value type: $value")
-            }
-        }
-        editor.apply()
-    }
+    fun saveAll(prefs: Map<String, Any?>)
 
-    fun remove(key: String) {
-        sharedPreferences.edit().remove(key).apply()
-    }
+    fun remove(key: String)
 
-    fun reset(key: String) {
-        save(key, defaultPreferences[key])
-    }
+    fun reset(key: String)
 
-    fun clear() {
-        sharedPreferences.edit().clear().apply()
-    }
+    fun clear()
 
-    fun contains(key: String): Boolean {
-        return sharedPreferences.contains(key)
-    }
+    fun contains(key: String): Boolean
 
-    fun getAll(): Map<String, *> {
-        return sharedPreferences.all
-    }
+    fun getAll(): Map<String, *>
 
-    fun getString(key: String): String? {
-        val defaultValue = (defaultPreferences[key] ?: "") as String
-        return sharedPreferences.getString(key, defaultValue)
-    }
+    fun getString(key: String): String?
 
-    fun getBoolean(key: String): Boolean {
-        val defaultValue = (defaultPreferences[key] ?: false) as Boolean
-        return sharedPreferences.getBoolean(key, defaultValue)
-    }
+    fun getBoolean(key: String): Boolean
 
-    fun getLong(key: String): Long {
-        val defaultValue = (defaultPreferences[key] ?: 0L) as Long
-        return sharedPreferences.getLong(key, defaultValue)
-    }
+    fun getLong(key: String): Long
 
-    fun getInt(key: String): Int {
-        val defaultValue = (defaultPreferences[key] ?: 0) as Int
-        return sharedPreferences.getInt(key, defaultValue)
-    }
+    fun getInt(key: String): Int
 
-    fun getFloat(key: String): Float {
-        val defaultValue = (defaultPreferences[key] ?: 0f) as Float
-        return sharedPreferences.getFloat(key, defaultValue)
-    }
+    fun getFloat(key: String): Float
 
-    fun getStringSet(key: String): Set<String>? {
-        val defaultValue = (defaultPreferences[key] ?: emptySet<Any>()) as Set<String>
-        return sharedPreferences.getStringSet(key, defaultValue)
-    }
+    fun getStringSet(key: String): Set<String>?
 
-    fun registerOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
-        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
-    }
+    fun registerOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener)
 
-    fun unregisterOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
-        sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener)
-    }
+    fun unregisterOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener)
 }

@@ -13,7 +13,7 @@ import java.math.BigDecimal
 
 @RunWith(RobolectricTestRunner::class)
 class PreferencesDataSourceTest {
-    private lateinit var preferencesSource: PreferencesDataSource
+    private lateinit var preferencesSource: SharedPreferencesDataSource
     private lateinit var sharedPreferences: SharedPreferences
 
     @Before
@@ -23,121 +23,121 @@ class PreferencesDataSourceTest {
 
     @Test
     fun `When nothing has been saved to a string preference and a custom default value exist, that value should be returned`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences, defaultPrefs)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences, defaultPrefs)
         assertThat(preferencesSource.getString(KEY_STRING), `is`(DEFAULT_STRING_VALUE))
     }
 
     @Test
     fun `When nothing has been saved to a string preference and there are no custom defaults, the default value should be returned`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences)
         assertThat(preferencesSource.getString(KEY_STRING), `is`(""))
     }
 
     @Test
     fun `When a value has been saved to a string preference, the saved value should be returned`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences, defaultPrefs)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences, defaultPrefs)
         preferencesSource.save(KEY_STRING, CUSTOM_STRING_VALUE)
         assertThat(preferencesSource.getString(KEY_STRING), `is`(CUSTOM_STRING_VALUE))
     }
 
     @Test
     fun `When nothing has been saved to a boolean preference and a custom default value exist, that value should be returned`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences, defaultPrefs)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences, defaultPrefs)
         assertThat(preferencesSource.getBoolean(KEY_BOOLEAN), `is`(DEFAULT_BOOLEAN_VALUE))
     }
 
     @Test
     fun `When nothing has been saved to a boolean preference and there are no custom defaults, the default value should be returned`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences)
         assertThat(preferencesSource.getBoolean(KEY_BOOLEAN), `is`(false))
     }
 
     @Test
     fun `When a value has been saved to a boolean preference, the saved value should be returned`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences, defaultPrefs)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences, defaultPrefs)
         preferencesSource.save(KEY_BOOLEAN, CUSTOM_BOOLEAN_VALUE)
         assertThat(preferencesSource.getBoolean(KEY_BOOLEAN), `is`(CUSTOM_BOOLEAN_VALUE))
     }
 
     @Test
     fun `When nothing has been saved to a long preference and a custom default value exist, that value should be returned`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences, defaultPrefs)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences, defaultPrefs)
         assertThat(preferencesSource.getLong(KEY_LONG), `is`(DEFAULT_LONG_VALUE))
     }
 
     @Test
     fun `When nothing has been saved to a long preference and there are no custom defaults, the default value should be returned`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences)
         assertThat(preferencesSource.getLong(KEY_LONG), `is`(0L))
     }
 
     @Test
     fun `When a value has been saved to a long preference, the saved value should be returned`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences, defaultPrefs)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences, defaultPrefs)
         preferencesSource.save(KEY_LONG, CUSTOM_LONG_VALUE)
         assertThat(preferencesSource.getLong(KEY_LONG), `is`(CUSTOM_LONG_VALUE))
     }
 
     @Test
     fun `When nothing has been saved to an int preference and a custom default value exist, that value should be returned`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences, defaultPrefs)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences, defaultPrefs)
         assertThat(preferencesSource.getInt(KEY_INT), `is`(DEFAULT_INT_VALUE))
     }
 
     @Test
     fun `When nothing has been saved to an int preference and there are no custom defaults, the default value should be returned`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences)
         assertThat(preferencesSource.getInt(KEY_INT), `is`(0))
     }
 
     @Test
     fun `When a value has been saved to int preferences, the saved value should be returned`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences, defaultPrefs)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences, defaultPrefs)
         preferencesSource.save(KEY_INT, CUSTOM_INT_VALUE)
         assertThat(preferencesSource.getInt(KEY_INT), `is`(CUSTOM_INT_VALUE))
     }
 
     @Test
     fun `When nothing has been saved to a float preference and a custom default value exist, that value should be returned`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences, defaultPrefs)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences, defaultPrefs)
         assertThat(preferencesSource.getFloat(KEY_FLOAT), `is`(DEFAULT_FLOAT_VALUE))
     }
 
     @Test
     fun `When nothing has been saved to a float preference and there are no custom defaults, the default value should be returned`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences)
         assertThat(preferencesSource.getFloat(KEY_FLOAT), `is`(0f))
     }
 
     @Test
     fun `When a value has been saved to a float preference, the saved value should be returned`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences, defaultPrefs)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences, defaultPrefs)
         preferencesSource.save(KEY_FLOAT, CUSTOM_FLOAT_VALUE)
         assertThat(preferencesSource.getFloat(KEY_FLOAT), `is`(CUSTOM_FLOAT_VALUE))
     }
 
     @Test
     fun `When nothing has been saved to a stringSet preference and a custom default value exist, that value should be returned`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences, defaultPrefs)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences, defaultPrefs)
         assertThat(preferencesSource.getStringSet(KEY_SET), `is`(DEFAULT_SET_VALUE))
     }
 
     @Test
     fun `When nothing has been saved to a stringSet preference and there are no custom defaults, the default value should be returned`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences)
         assertThat(preferencesSource.getStringSet(KEY_SET), `is`(emptySet()))
     }
 
     @Test
     fun `When a value has been saved to stringSet preference, the saved value should be returned`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences, defaultPrefs)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences, defaultPrefs)
         preferencesSource.save(KEY_SET, CUSTOM_SET_VALUE)
         assertThat(preferencesSource.getStringSet(KEY_SET), `is`(CUSTOM_SET_VALUE))
     }
 
     @Test
     fun `When multiple preferences have been saved in one go, all values should be properly saved`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences)
         preferencesSource.saveAll(
             mapOf(
                 KEY_STRING to CUSTOM_STRING_VALUE,
@@ -157,7 +157,7 @@ class PreferencesDataSourceTest {
 
     @Test
     fun `When remove() called, should saved preference be properly removed`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences, defaultPrefs)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences, defaultPrefs)
         preferencesSource.save(KEY_STRING, CUSTOM_STRING_VALUE)
         preferencesSource.remove(KEY_STRING)
         assertThat(preferencesSource.getAll().containsKey(KEY_STRING), `is`(false))
@@ -165,7 +165,7 @@ class PreferencesDataSourceTest {
 
     @Test
     fun `When reset() called, should default value be loaded for given key`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences, defaultPrefs)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences, defaultPrefs)
         preferencesSource.save(KEY_STRING, CUSTOM_STRING_VALUE)
         preferencesSource.reset(KEY_STRING)
         assertThat(preferencesSource.getAll()[KEY_STRING], `is`(DEFAULT_STRING_VALUE))
@@ -173,7 +173,7 @@ class PreferencesDataSourceTest {
 
     @Test
     fun `When clear() called, should all saved preferences be removed and defaults should be loaded`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences, defaultPrefs)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences, defaultPrefs)
 
         preferencesSource.save(KEY_STRING, CUSTOM_STRING_VALUE)
         preferencesSource.save(KEY_BOOLEAN, CUSTOM_BOOLEAN_VALUE)
@@ -191,7 +191,7 @@ class PreferencesDataSourceTest {
 
     @Test
     fun `When getAll() called, should return all saved preferences`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences)
         preferencesSource.saveAll(
             mapOf(
                 KEY_STRING to CUSTOM_STRING_VALUE,
@@ -208,7 +208,7 @@ class PreferencesDataSourceTest {
 
     @Test
     fun `When contains() called, should return true for saved preferences`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences)
         preferencesSource.saveAll(
             mapOf(
                 KEY_STRING to CUSTOM_STRING_VALUE,
@@ -225,7 +225,7 @@ class PreferencesDataSourceTest {
 
     @Test
     fun `When loadDefaultPreferencesIfNotExist() called, should save all defaults that do not exist`() {
-        preferencesSource = PreferencesDataSource(sharedPreferences, defaultPrefs)
+        preferencesSource = SharedPreferencesDataSource(sharedPreferences, defaultPrefs)
         preferencesSource.save(KEY_STRING, CUSTOM_STRING_VALUE)
         assertThat(preferencesSource.getAll().size, `is`(1))
         preferencesSource.loadDefaultPreferencesIfNotExist()

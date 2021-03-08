@@ -8,7 +8,7 @@ class PreferencesDataSourceProvider(private val context: Context) {
 
     fun getMetaPreferences(): PreferencesDataSource {
         return preferences.getOrPut(META_PREFS_NAME) {
-            PreferencesDataSource(context.getSharedPreferences(META_PREFS_NAME, Context.MODE_PRIVATE))
+            SharedPreferencesDataSource(context.getSharedPreferences(META_PREFS_NAME, Context.MODE_PRIVATE))
         }
     }
 
@@ -18,9 +18,9 @@ class PreferencesDataSourceProvider(private val context: Context) {
 
         return preferences.getOrPut(preferenceId) {
             if (projectId.isBlank()) {
-                PreferencesDataSource(PreferenceManager.getDefaultSharedPreferences(context), GeneralKeys.DEFAULTS)
+                SharedPreferencesDataSource(PreferenceManager.getDefaultSharedPreferences(context), GeneralKeys.DEFAULTS)
             } else {
-                PreferencesDataSource(context.getSharedPreferences(preferenceId, Context.MODE_PRIVATE), GeneralKeys.DEFAULTS)
+                SharedPreferencesDataSource(context.getSharedPreferences(preferenceId, Context.MODE_PRIVATE), GeneralKeys.DEFAULTS)
             }
         }
     }
@@ -30,7 +30,7 @@ class PreferencesDataSourceProvider(private val context: Context) {
         val preferenceId = ADMIN_PREFS_NAME + projectId
 
         return preferences.getOrPut(preferenceId) {
-            PreferencesDataSource(context.getSharedPreferences(preferenceId, Context.MODE_PRIVATE), AdminKeys.getDefaults())
+            SharedPreferencesDataSource(context.getSharedPreferences(preferenceId, Context.MODE_PRIVATE), AdminKeys.getDefaults())
         }
     }
 

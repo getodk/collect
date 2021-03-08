@@ -5,6 +5,7 @@ import androidx.test.core.app.ApplicationProvider
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.PreferencesDataSource
+import org.odk.collect.android.preferences.SharedPreferencesDataSource
 import org.odk.collect.android.preferences.PreferencesDataSourceProvider
 
 // Use just fo testing
@@ -31,6 +32,6 @@ object TestPreferencesProvider {
 
     @JvmStatic
     fun getTestPreferences(name: String?): PreferencesDataSource {
-        return PreferencesDataSource(ApplicationProvider.getApplicationContext<Collect>().getSharedPreferences(name, Context.MODE_PRIVATE))
+        return SharedPreferencesDataSource(ApplicationProvider.getApplicationContext<Collect>().getSharedPreferences(name, Context.MODE_PRIVATE))
     }
 }
