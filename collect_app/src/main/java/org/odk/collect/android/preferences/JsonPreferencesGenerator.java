@@ -40,7 +40,7 @@ public class JsonPreferencesGenerator {
             }
 
             Object defaultValue = DEFAULTS.get(key);
-            Object value = preferencesDataSourceProvider.getGeneralPreferences().get(key);
+            Object value = preferencesDataSourceProvider.getGeneralPreferences().getAll().get(key);
 
             if (value == null) {
                 value = "";
@@ -65,7 +65,7 @@ public class JsonPreferencesGenerator {
             }
 
             Object defaultValue = AdminKeys.getDefaults().get(key);
-            Object value = preferencesDataSourceProvider.getAdminPreferences().get(key);
+            Object value = preferencesDataSourceProvider.getAdminPreferences().getAll().get(key);
 
             if (defaultValue != value) {
                 adminPrefs.put(key, value);

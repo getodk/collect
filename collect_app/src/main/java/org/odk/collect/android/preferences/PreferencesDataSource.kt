@@ -5,9 +5,9 @@ import java.util.Collections
 
 class PreferencesDataSource(private val sharedPreferences: SharedPreferences, private val defaultPreferences: Map<String, Any> = emptyMap()) {
     fun loadDefaultPreferencesIfNotExist() {
-        for ((key, _) in defaultPreferences) {
+        for ((key, value) in defaultPreferences) {
             if (!sharedPreferences.contains(key)) {
-                save(key, get(key))
+                save(key, value)
             }
         }
     }
@@ -50,19 +50,6 @@ class PreferencesDataSource(private val sharedPreferences: SharedPreferences, pr
 
     fun getAll(): Map<String, *> {
         return sharedPreferences.all
-    }
-
-    // Use only for General and Admin settings which have default values, otherwise it won't be possible to determine the type
-    fun get(key: String): Any? {
-        return when (defaultPreferences[key]) {
-            null, is String -> getString(key)
-            is Boolean -> getBoolean(key)
-            is Long -> getLong(key)
-            is Int -> getInt(key)
-            is Float -> getFloat(key)
-            is Set<*> -> getStringSet(key)
-            else -> throw RuntimeException("Unhandled preference value type: ${defaultPreferences[key]}")
-        }
     }
 
     fun getString(key: String): String? {
