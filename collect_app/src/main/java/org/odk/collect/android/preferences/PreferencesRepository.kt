@@ -6,12 +6,9 @@ import androidx.preference.PreferenceManager
 class PreferencesRepository(private val context: Context) {
     private val preferences = mutableMapOf<String, PreferencesDataSource>()
 
-    @JvmOverloads
-    fun getMetaPreferences(projectId: String = ""): PreferencesDataSource {
-        val preferenceId = META_PREFS_NAME + projectId
-
-        return preferences.getOrPut(preferenceId) {
-            PreferencesDataSource(context.getSharedPreferences(preferenceId, Context.MODE_PRIVATE))
+    fun getMetaPreferences(): PreferencesDataSource {
+        return preferences.getOrPut(META_PREFS_NAME) {
+            PreferencesDataSource(context.getSharedPreferences(META_PREFS_NAME, Context.MODE_PRIVATE))
         }
     }
 
