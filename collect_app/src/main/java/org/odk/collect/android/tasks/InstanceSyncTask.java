@@ -54,6 +54,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.dao.InstancesDao.getValuesFromInstanceObject;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import static org.odk.collect.android.utilities.FileUtils.getMd5Hash;
 
@@ -158,22 +159,19 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                                 String jrVersion = formCursor.getString(formCursor.getColumnIndex(FormsColumns.JR_VERSION));
                                 String formName = formCursor.getString(formCursor.getColumnIndex(FormsColumns.DISPLAY_NAME));
 
-                                // add missing fields into content values
-                                ContentValues values = new ContentValues();
-                                values.put(InstanceColumns.INSTANCE_FILE_PATH, storagePathProvider.getRelativeInstancePath(candidateInstance));
-                                values.put(InstanceColumns.SUBMISSION_URI, submissionUri);
-                                values.put(InstanceColumns.DISPLAY_NAME, formName);
-                                values.put(InstanceColumns.JR_FORM_ID, jrFormId);
-                                values.put(InstanceColumns.JR_VERSION, jrVersion);
-                                values.put(InstanceColumns.STATUS, instanceSyncFlag
-                                        ? Instance.STATUS_COMPLETE : Instance.STATUS_INCOMPLETE);
-                                values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(true));
-                                // save the new instance object
-
-                                instancesDao.saveInstance(values);
+                                new DatabaseInstancesRepository().save(new Instance.Builder()
+                                        .instanceFilePath(storagePathProvider.getRelativeInstancePath(candidateInstance))
+                                        .submissionUri(submissionUri)
+                                        .displayName(formName)
+                                        .jrFormId(jrFormId)
+                                        .jrVersion(jrVersion)
+                                        .status(instanceSyncFlag ? Instance.STATUS_COMPLETE : Instance.STATUS_INCOMPLETE)
+                                        .canEditWhenComplete(true)
+                                        .build()
+                                );
                                 counter++;
 
-                                encryptInstanceIfNeeded(formCursor, candidateInstance, values, instancesDao);
+                                encryptInstanceIfNeeded(formCursor, candidateInstance, instancesDao);
                             }
                         } catch (IOException | EncryptionException e) {
                             Timber.w(e);
@@ -222,12 +220,13 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
         return instanceId;
     }
 
-    private void encryptInstanceIfNeeded(Cursor formCursor, String candidateInstance, ContentValues values, InstancesDao instancesDao) throws EncryptionException, IOException {
+    private void encryptInstanceIfNeeded(Cursor formCursor, String candidateInstance, InstancesDao instancesDao) throws EncryptionException, IOException {
         Instance instance = new DatabaseInstancesRepository().getOneByPath(candidateInstance);
+
         if (instance != null) {
             if (shouldInstanceBeEncrypted(formCursor)) {
                 logImportAndEncrypt(formCursor);
-                encryptInstance(instance, candidateInstance, values, instancesDao);
+                encryptInstance(instance, candidateInstance, instancesDao);
             }
         }
     }
@@ -240,7 +239,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
     }
 
     private void encryptInstance(Instance instance, String candidateInstance,
-                                 ContentValues values, InstancesDao instancesDao)
+                                 InstancesDao instancesDao)
             throws EncryptionException, IOException {
 
         File instanceXml = new File(candidateInstance);
@@ -255,6 +254,8 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
                 EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
 
+                // add missing fields into content values
+                ContentValues values = getValuesFromInstanceObject(instance);
                 values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(false));
                 values.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
                 values.put(InstanceColumns.GEOMETRY, (String) null);
