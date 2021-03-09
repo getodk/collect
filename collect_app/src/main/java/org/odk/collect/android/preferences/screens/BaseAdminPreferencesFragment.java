@@ -1,10 +1,12 @@
 package org.odk.collect.android.preferences.screens;
 
+import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.source.AdminPreferencesDataStore;
 
 import javax.inject.Inject;
@@ -14,8 +16,13 @@ public abstract class BaseAdminPreferencesFragment extends BasePreferencesFragme
     AdminPreferencesDataStore adminPreferencesDataStore;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
+    }
+
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         getPreferenceManager().setPreferenceDataStore(adminPreferencesDataStore);
     }
 

@@ -62,6 +62,7 @@ public class UserInterfacePreferencesFragment extends BaseGeneralPreferencesFrag
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        super.onCreatePreferences(savedInstanceState, rootKey);
         setPreferencesFromResource(R.xml.user_interface_preferences, rootKey);
 
         initThemePrefs();

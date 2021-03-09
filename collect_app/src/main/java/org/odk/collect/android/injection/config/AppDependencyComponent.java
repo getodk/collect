@@ -49,6 +49,8 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.screens.AdminPreferencesFragment;
+import org.odk.collect.android.preferences.screens.BaseAdminPreferencesFragment;
+import org.odk.collect.android.preferences.screens.BaseGeneralPreferencesFragment;
 import org.odk.collect.android.preferences.screens.BasePreferencesFragment;
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog;
 import org.odk.collect.android.preferences.screens.ExperimentalPreferencesFragment;
@@ -238,6 +240,10 @@ public interface AppDependencyComponent {
     void inject(MediaLoadingTask mediaLoadingTask);
 
     void inject(ThemeUtils themeUtils);
+
+    void inject(BaseGeneralPreferencesFragment baseGeneralPreferencesFragment);
+
+    void inject(BaseAdminPreferencesFragment baseAdminPreferencesFragment);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 

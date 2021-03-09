@@ -45,6 +45,7 @@ public class FormMetadataPreferencesFragment extends BaseGeneralPreferencesFragm
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        super.onCreatePreferences(savedInstanceState, rootKey);
         setPreferencesFromResource(R.xml.form_metadata_preferences, rootKey);
 
         emailPreference = findPreference(KEY_METADATA_EMAIL);

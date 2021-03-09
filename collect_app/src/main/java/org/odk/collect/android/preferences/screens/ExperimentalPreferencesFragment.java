@@ -16,6 +16,7 @@ public class ExperimentalPreferencesFragment extends BaseGeneralPreferencesFragm
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        super.onCreatePreferences(savedInstanceState, rootKey);
         setPreferencesFromResource(R.xml.experimental_preferences, rootKey);
 
         findPreference(GeneralKeys.KEY_MAGENTA_THEME).setOnPreferenceChangeListener((preference, newValue) -> {

@@ -43,6 +43,7 @@ public class IdentityPreferencesFragment extends BaseGeneralPreferencesFragment 
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        super.onCreatePreferences(savedInstanceState, rootKey);
         setPreferencesFromResource(R.xml.identity_preferences, rootKey);
 
         findPreference("form_metadata").setOnPreferenceClickListener(preference -> {

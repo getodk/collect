@@ -84,6 +84,7 @@ public class MapsPreferencesFragment extends BaseGeneralPreferencesFragment {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        super.onCreatePreferences(savedInstanceState, rootKey);
         setPreferencesFromResource(R.xml.maps_preferences, rootKey);
 
         context = getPreferenceScreen().getContext();

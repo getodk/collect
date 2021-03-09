@@ -108,6 +108,7 @@ public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment im
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        super.onCreatePreferences(savedInstanceState, rootKey);
         setPreferencesFromResource(R.xml.server_preferences, rootKey);
         initProtocolPrefs();
     }

@@ -8,6 +8,7 @@ public class CustomServerPathsPreferencesFragment extends BaseGeneralPreferences
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        super.onCreatePreferences(savedInstanceState, rootKey);
         setPreferencesFromResource(R.xml.custom_server_paths_preferences, rootKey);
     }
 }
