@@ -47,6 +47,7 @@ import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.android.geo.OsmDroidMapFragment;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.preferences.CaptionedListPreference;
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.screens.AdminPreferencesFragment;
 import org.odk.collect.android.preferences.screens.BaseAdminPreferencesFragment;
@@ -244,6 +245,8 @@ public interface AppDependencyComponent {
     void inject(BaseGeneralPreferencesFragment baseGeneralPreferencesFragment);
 
     void inject(BaseAdminPreferencesFragment baseAdminPreferencesFragment);
+
+    void inject(CaptionedListPreference captionedListPreference);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 
