@@ -1,11 +1,12 @@
 package org.odk.collect.android.geo;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
+
+import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import java.io.File;
 import java.util.Collection;
@@ -47,7 +48,7 @@ public interface MapConfigurator {
     Collection<String> getPrefKeys();
 
     /** Packs map-related preferences into a Bundle for MapFragment.applyConfig(). */
-    Bundle buildConfig(SharedPreferences prefs);
+    Bundle buildConfig(PreferencesDataSource prefs);
 
     /**
      * Returns true if map fragments obtained from this MapConfigurator are

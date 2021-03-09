@@ -8,7 +8,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.utilities.TestPreferencesProvider;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
@@ -19,13 +20,13 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_THEME;
 /**
  * Unit tests for checking the behaviour of updating themes from User Interface settings
  */
-
 @RunWith(RobolectricTestRunner.class)
 public class ThemeUtilsTests {
 
     private final int[] attrs;
     private ThemeUtils themeUtils;
     private MainMenuActivity mainMenuActivity;
+    private final PreferencesDataSource generalPrefs = TestPreferencesProvider.getGeneralPreferences();
 
     public ThemeUtilsTests() {
         attrs = new int[]{
@@ -109,10 +110,10 @@ public class ThemeUtilsTests {
     }
 
     private void applyDarkTheme() {
-        GeneralSharedPreferences.getInstance().save(KEY_APP_THEME, mainMenuActivity.getString(R.string.app_theme_dark));
+        generalPrefs.save(KEY_APP_THEME, mainMenuActivity.getString(R.string.app_theme_dark));
     }
 
     private void applyLightTheme() {
-        GeneralSharedPreferences.getInstance().save(KEY_APP_THEME, mainMenuActivity.getString(R.string.app_theme_light));
+        generalPrefs.save(KEY_APP_THEME, mainMenuActivity.getString(R.string.app_theme_light));
     }
 }

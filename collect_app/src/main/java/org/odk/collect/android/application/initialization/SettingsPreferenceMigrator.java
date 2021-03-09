@@ -1,8 +1,8 @@
 package org.odk.collect.android.application.initialization;
 
-import android.content.SharedPreferences;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 
 public interface SettingsPreferenceMigrator {
 
-    void migrate(SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences);
+    void migrate(PreferencesDataSource generalPreferences, PreferencesDataSource adminPreferences);
 }

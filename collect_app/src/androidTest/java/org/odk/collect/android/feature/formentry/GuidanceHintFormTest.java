@@ -6,8 +6,6 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 
 import org.javarosa.form.api.FormEntryPrompt;
-import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,11 +14,11 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.FormLoadingUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 
 import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy;
@@ -50,16 +48,6 @@ public class GuidanceHintFormTest {
             .outerRule(new ResetStateRule())
             .around(new CopyFormRule(GUIDANCE_SAMPLE_FORM, true));
 
-    @Before
-    public void resetPreferences() {
-        GeneralSharedPreferences.getInstance().reloadPreferences();
-    }
-
-    @AfterClass
-    public static void resetPreferencesAtEnd() {
-        GeneralSharedPreferences.getInstance().reloadPreferences();
-    }
-
     @Test
     public void guidanceHint_ShouldBeHiddenByDefault() {
         onView(ViewMatchers.withId(R.id.guidance_text_view)).check(matches(not(isDisplayed())));
@@ -67,7 +55,7 @@ public class GuidanceHintFormTest {
 
     @Test
     public void guidanceHint_ShouldBeDisplayedWhenSettingSetToYes() {
-        GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_GUIDANCE_HINT, GuidanceHint.Yes.toString());
+        TestPreferencesProvider.getGeneralPreferences().save(GeneralKeys.KEY_GUIDANCE_HINT, GuidanceHint.Yes.toString());
         // jump to force recreation of the view after the settings change
         onView(withId(R.id.menu_goto)).perform(click());
         onView(withId(R.id.jumpBeginningButton)).perform(click());
@@ -83,7 +71,7 @@ public class GuidanceHintFormTest {
 
     @Test
     public void guidanceHint_ShouldBeDisplayedAfterClickWhenSettingSetToYesCollapsed() {
-        GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_GUIDANCE_HINT, GuidanceHint.YesCollapsed.toString());
+        TestPreferencesProvider.getGeneralPreferences().save(GeneralKeys.KEY_GUIDANCE_HINT, GuidanceHint.YesCollapsed.toString());
         // jump to force recreation of the view after the settings change
         onView(withId(R.id.menu_goto)).perform(click());
         onView(withId(R.id.jumpBeginningButton)).perform(click());

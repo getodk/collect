@@ -10,10 +10,11 @@ import androidx.test.espresso.util.TreeIterables;
 
 import org.hamcrest.Matcher;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.utilities.TestPreferencesProvider;
 
 import java.io.Closeable;
 import java.io.File;
@@ -27,19 +28,22 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 public final class TestUtils {
+    private static final PreferencesDataSource GENERAL_PREFS = TestPreferencesProvider.getGeneralPreferences();
+
     private TestUtils() {
+
     }
 
     public static Map<String, ?> backupPreferences() {
-        return Collections.unmodifiableMap(GeneralSharedPreferences.getInstance().getAll());
+        return Collections.unmodifiableMap(GENERAL_PREFS.getAll());
     }
 
     public static void restorePreferences(Map<String, ?> backup) {
-        GeneralSharedPreferences.getInstance().clear();
+        GENERAL_PREFS.clear();
 
         for (Map.Entry<String, ?> e : backup.entrySet()) {
             Object v = e.getValue();
-            GeneralSharedPreferences.getInstance().save(e.getKey(), v);
+            GENERAL_PREFS.save(e.getKey(), v);
         }
     }
 

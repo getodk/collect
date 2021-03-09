@@ -1,13 +1,12 @@
 package org.odk.collect.android.application.initialization;
 
-import android.content.SharedPreferences;
-
 import com.google.android.gms.maps.GoogleMap;
 import com.mapbox.mapboxsdk.maps.Style;
 
 import org.odk.collect.android.application.initialization.migration.KeyRenamer;
 import org.odk.collect.android.application.initialization.migration.KeyTranslator;
 import org.odk.collect.android.application.initialization.migration.Migration;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import java.util.List;
 
@@ -34,24 +33,24 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_USGS_MAP_STYLE
  */
 public class CollectSettingsPreferenceMigrator implements SettingsPreferenceMigrator {
 
-    private final SharedPreferences metaSharedPrefs;
+    private final PreferencesDataSource metaPrefs;
 
-    public CollectSettingsPreferenceMigrator(SharedPreferences metaSharedPrefs) {
-        this.metaSharedPrefs = metaSharedPrefs;
+    public CollectSettingsPreferenceMigrator(PreferencesDataSource metaPrefs) {
+        this.metaPrefs = metaPrefs;
     }
 
     @Override
-    public void migrate(SharedPreferences generalSharedPreferences, SharedPreferences adminSharedPreferences) {
+    public void migrate(PreferencesDataSource generalPreferences, PreferencesDataSource adminPreferences) {
         for (Migration migration : getGeneralMigrations()) {
-            migration.apply(generalSharedPreferences);
+            migration.apply(generalPreferences);
         }
 
         for (Migration migration : getAdminMigrations()) {
-            migration.apply(adminSharedPreferences);
+            migration.apply(adminPreferences);
         }
 
         for (Migration migration : getMetaMigrations()) {
-            migration.apply(metaSharedPrefs);
+            migration.apply(metaPrefs);
         }
     }
 
@@ -105,9 +104,9 @@ public class CollectSettingsPreferenceMigrator implements SettingsPreferenceMigr
 
                 removeKey("firstRun"),
                 removeKey("lastVersion"),
-                moveKey("scoped_storage_used").toPreferences(metaSharedPrefs),
+                moveKey("scoped_storage_used").toPreferences(metaPrefs),
                 removeKey("metadata_migrated"),
-                moveKey("mapbox_initialized").toPreferences(metaSharedPrefs),
+                moveKey("mapbox_initialized").toPreferences(metaPrefs),
 
                 combineKeys("autosend_wifi", "autosend_network")
                         .withValues(false, false).toPairs("autosend", "off")
@@ -127,7 +126,7 @@ public class CollectSettingsPreferenceMigrator implements SettingsPreferenceMigr
 
                 translateValue("never").toValue("every_fifteen_minutes").forKey("periodic_form_updates_check"),
 
-                moveKey("knownUrlList").toPreferences(metaSharedPrefs)
+                moveKey("knownUrlList").toPreferences(metaPrefs)
         );
     }
 

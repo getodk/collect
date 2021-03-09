@@ -43,7 +43,7 @@ public class InstanceServerUploaderTaskTest extends MockedServerTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         cleanUpTempFiles();
         resetInstancesContentProvider();
     }
@@ -55,7 +55,9 @@ public class InstanceServerUploaderTaskTest extends MockedServerTest {
         willRespondWith(headResponse(), postResponse());
 
         // when
-        InstanceUploaderTask.Outcome o = new InstanceServerUploaderTask().doInBackground(id);
+        InstanceServerUploaderTask task = new InstanceServerUploaderTask();
+        task.setRepositories(null, null, preferencesDataSourceProvider);
+        InstanceUploaderTask.Outcome o = task.doInBackground(id);
 
         // then
         assertNull(o.authRequestingServer);

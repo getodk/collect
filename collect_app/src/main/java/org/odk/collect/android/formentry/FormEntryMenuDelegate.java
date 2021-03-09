@@ -18,9 +18,8 @@ import org.odk.collect.android.formentry.questions.AnswersProvider;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MenuDelegate;
@@ -42,8 +41,13 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
     @Nullable
     private FormController formController;
     private final AudioRecorder audioRecorder;
+    private final PreferencesDataSourceProvider preferencesDataSourceProvider;
 
-    public FormEntryMenuDelegate(AppCompatActivity activity, AnswersProvider answersProvider, FormIndexAnimationHandler formIndexAnimationHandler, FormSaveViewModel formSaveViewModel, FormEntryViewModel formEntryViewModel, AudioRecorder audioRecorder, BackgroundLocationViewModel backgroundLocationViewModel, BackgroundAudioViewModel backgroundAudioViewModel) {
+    public FormEntryMenuDelegate(AppCompatActivity activity, AnswersProvider answersProvider,
+                                 FormIndexAnimationHandler formIndexAnimationHandler, FormSaveViewModel formSaveViewModel,
+                                 FormEntryViewModel formEntryViewModel, AudioRecorder audioRecorder,
+                                 BackgroundLocationViewModel backgroundLocationViewModel,
+                                 BackgroundAudioViewModel backgroundAudioViewModel, PreferencesDataSourceProvider preferencesDataSourceProvider) {
         this.activity = activity;
         this.answersProvider = answersProvider;
         this.formIndexAnimationHandler = formIndexAnimationHandler;
@@ -53,6 +57,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
         this.formSaveViewModel = formSaveViewModel;
         this.backgroundLocationViewModel = backgroundLocationViewModel;
         this.backgroundAudioViewModel = backgroundAudioViewModel;
+        this.preferencesDataSourceProvider = preferencesDataSourceProvider;
     }
 
     @Override
@@ -69,16 +74,16 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
     public void onPrepareOptionsMenu(Menu menu) {
         boolean useability;
 
-        useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_MID);
+        useability = preferencesDataSourceProvider.getAdminPreferences().getBoolean(AdminKeys.KEY_SAVE_MID);
 
         menu.findItem(R.id.menu_save).setVisible(useability).setEnabled(useability);
 
-        useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_JUMP_TO);
+        useability = preferencesDataSourceProvider.getAdminPreferences().getBoolean(AdminKeys.KEY_JUMP_TO);
 
         menu.findItem(R.id.menu_goto).setVisible(useability)
                 .setEnabled(useability);
 
-        useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_CHANGE_LANGUAGE)
+        useability = preferencesDataSourceProvider.getAdminPreferences().getBoolean(AdminKeys.KEY_CHANGE_LANGUAGE)
                 && (formController != null)
                 && formController.getLanguages() != null
                 && formController.getLanguages().length > 1;
@@ -86,7 +91,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
         menu.findItem(R.id.menu_languages).setVisible(useability)
                 .setEnabled(useability);
 
-        useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_ACCESS_SETTINGS);
+        useability = preferencesDataSourceProvider.getAdminPreferences().getBoolean(AdminKeys.KEY_ACCESS_SETTINGS);
 
         menu.findItem(R.id.menu_preferences).setVisible(useability)
                 .setEnabled(useability);
@@ -95,7 +100,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
                 && new PlayServicesChecker().isGooglePlayServicesAvailable(activity)) {
             MenuItem backgroundLocation = menu.findItem(R.id.track_location);
             backgroundLocation.setVisible(true);
-            backgroundLocation.setChecked(GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true));
+            backgroundLocation.setChecked(preferencesDataSourceProvider.getGeneralPreferences().getBoolean(KEY_BACKGROUND_LOCATION));
         }
 
         menu.findItem(R.id.menu_add_repeat).setVisible(formEntryViewModel.canAddRepeat());
@@ -125,7 +130,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
 
             return true;
         } else if (item.getItemId() == R.id.track_location) {
-            backgroundLocationViewModel.backgroundLocationPreferenceToggled();
+            backgroundLocationViewModel.backgroundLocationPreferenceToggled(preferencesDataSourceProvider.getGeneralPreferences());
             return true;
         } else if (item.getItemId() == R.id.menu_goto) {
             if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {

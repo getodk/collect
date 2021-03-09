@@ -1,7 +1,6 @@
 package org.odk.collect.android.activities.viewmodels;
 
 import android.app.Application;
-import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,7 +11,8 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.configure.SettingsUtils;
 import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.version.VersionInformation;
 
 import javax.inject.Inject;
@@ -20,15 +20,15 @@ import javax.inject.Inject;
 public class MainMenuViewModel extends ViewModel {
 
     private final VersionInformation version;
-    private final SharedPreferences generalSharedPreferences;
-    private final SharedPreferences adminSharedPreferences;
+    private final PreferencesDataSource generalPreferences;
+    private final PreferencesDataSource adminPreferences;
     private final Application application;
 
-    public MainMenuViewModel(Application application, VersionInformation versionInformation, PreferencesProvider preferencesProvider) {
+    public MainMenuViewModel(Application application, VersionInformation versionInformation, PreferencesDataSourceProvider preferencesDataSourceProvider) {
         this.application = application;
         this.version = versionInformation;
-        this.generalSharedPreferences = preferencesProvider.getGeneralSharedPreferences();
-        this.adminSharedPreferences = preferencesProvider.getAdminSharedPreferences();
+        this.generalPreferences = preferencesDataSourceProvider.getGeneralPreferences();
+        this.adminPreferences = preferencesDataSourceProvider.getAdminPreferences();
     }
 
     public String getVersion() {
@@ -63,28 +63,28 @@ public class MainMenuViewModel extends ViewModel {
     }
 
     public boolean shouldEditSavedFormButtonBeVisible() {
-        return adminSharedPreferences.getBoolean(AdminKeys.KEY_EDIT_SAVED, true);
+        return adminPreferences.getBoolean(AdminKeys.KEY_EDIT_SAVED);
     }
 
     public boolean shouldSendFinalizedFormButtonBeVisible() {
-        return adminSharedPreferences.getBoolean(AdminKeys.KEY_SEND_FINALIZED, true);
+        return adminPreferences.getBoolean(AdminKeys.KEY_SEND_FINALIZED);
     }
 
     public boolean shouldViewSentFormButtonBeVisible() {
-        return adminSharedPreferences.getBoolean(AdminKeys.KEY_VIEW_SENT, true);
+        return adminPreferences.getBoolean(AdminKeys.KEY_VIEW_SENT);
     }
 
     public boolean shouldGetBlankFormButtonBeVisible() {
-        boolean buttonEnabled = adminSharedPreferences.getBoolean(AdminKeys.KEY_GET_BLANK, true);
+        boolean buttonEnabled = adminPreferences.getBoolean(AdminKeys.KEY_GET_BLANK);
         return !isMatchExactlyEnabled() && buttonEnabled;
     }
 
     public boolean shouldDeleteSavedFormButtonBeVisible() {
-        return adminSharedPreferences.getBoolean(AdminKeys.KEY_DELETE_SAVED, true);
+        return adminPreferences.getBoolean(AdminKeys.KEY_DELETE_SAVED);
     }
 
     private boolean isMatchExactlyEnabled() {
-        return SettingsUtils.getFormUpdateMode(application, generalSharedPreferences) == FormUpdateMode.MATCH_EXACTLY;
+        return SettingsUtils.getFormUpdateMode(application, generalPreferences) == FormUpdateMode.MATCH_EXACTLY;
     }
 
     @NotNull
@@ -101,19 +101,19 @@ public class MainMenuViewModel extends ViewModel {
 
         private final VersionInformation versionInformation;
         private final Application application;
-        private final PreferencesProvider preferencesProvider;
+        private final PreferencesDataSourceProvider preferencesDataSourceProvider;
 
         @Inject
-        public Factory(VersionInformation versionInformation, Application application, PreferencesProvider preferencesProvider) {
+        public Factory(VersionInformation versionInformation, Application application, PreferencesDataSourceProvider preferencesDataSourceProvider) {
             this.versionInformation = versionInformation;
             this.application = application;
-            this.preferencesProvider = preferencesProvider;
+            this.preferencesDataSourceProvider = preferencesDataSourceProvider;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new MainMenuViewModel(application, versionInformation, preferencesProvider);
+            return (T) new MainMenuViewModel(application, versionInformation, preferencesDataSourceProvider);
         }
     }
 }

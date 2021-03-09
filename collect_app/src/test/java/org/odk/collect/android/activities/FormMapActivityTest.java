@@ -25,11 +25,11 @@ import org.odk.collect.android.geo.TestMapFragment;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.InMemInstancesRepository;
 import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.utilities.TestPreferencesProvider;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
@@ -229,7 +229,7 @@ public class FormMapActivityTest {
 
     @LooperMode(PAUSED)
     @Test public void openingEditableInstance_whenEditingSettingisOff_launchesViewActivity() {
-        AdminSharedPreferences.getInstance().save(AdminKeys.KEY_EDIT_SAVED, false);
+        TestPreferencesProvider.getAdminPreferences().save(AdminKeys.KEY_EDIT_SAVED, false);
 
         MapPoint editableAndFinalized = new MapPoint(10.1, 125.6);
         MapPoint unfinalized = new MapPoint(10.1, 126.6);

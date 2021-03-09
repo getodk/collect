@@ -1,14 +1,13 @@
 package org.odk.collect.android.metadata;
 
-import android.content.SharedPreferences;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
-import static android.preference.PreferenceManager.getDefaultSharedPreferences;
+import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.utilities.TestPreferencesProvider;
+import org.robolectric.RobolectricTestRunner;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
@@ -18,13 +17,12 @@ import static org.hamcrest.Matchers.startsWith;
 @RunWith(RobolectricTestRunner.class)
 public class SharedPreferencesInstallIDProviderTest {
 
-    private SharedPreferences sharedPreferences;
+    private final PreferencesDataSource metaPreferences = TestPreferencesProvider.getMetaPreferences();
     private SharedPreferencesInstallIDProvider provider;
 
     @Before
     public void setup() {
-        sharedPreferences = getDefaultSharedPreferences(RuntimeEnvironment.application);
-        provider = new SharedPreferencesInstallIDProvider(sharedPreferences, "blah");
+        provider = new SharedPreferencesInstallIDProvider(metaPreferences, "blah");
     }
 
     @Test
@@ -47,7 +45,7 @@ public class SharedPreferencesInstallIDProviderTest {
     @Test
     public void clearingSharedPreferences_resetsInstallID() {
         String firstValue = provider.getInstallID();
-        sharedPreferences.edit().clear().commit();
+        metaPreferences.clear();
 
         String secondValue = provider.getInstallID();
         assertThat(secondValue, notNullValue());

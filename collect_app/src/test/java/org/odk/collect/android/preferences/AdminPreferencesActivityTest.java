@@ -1,7 +1,6 @@
 package org.odk.collect.android.preferences;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.Preference;
@@ -10,6 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+
+import org.odk.collect.utilities.TestPreferencesProvider;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
@@ -38,7 +39,7 @@ public class AdminPreferencesActivityTest {
 
     private AdminPreferencesFragment adminPreferencesFragment;
     private ActivityController<AdminPreferencesActivity> activityController;
-    private SharedPreferences sharedPreferences;
+    private final PreferencesDataSource adminPrefs = TestPreferencesProvider.getAdminPreferences();
 
     @Before
     public void setUp() throws Exception {
@@ -49,10 +50,6 @@ public class AdminPreferencesActivityTest {
         adminPreferencesFragment = (AdminPreferencesFragment) activityController.get()
                 .getSupportFragmentManager()
                 .findFragmentById(R.id.preferences_fragment_container);
-
-        sharedPreferences = activityController
-                .get()
-                .getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
     }
 
     @Test
@@ -65,11 +62,11 @@ public class AdminPreferencesActivityTest {
 
                 assertNotNull("Preference not found: " + adminKey, checkBoxPreference);
                 checkBoxPreference.setChecked(true);
-                boolean actual = sharedPreferences.getBoolean(adminKey, false);
+                boolean actual = adminPrefs.getBoolean(adminKey);
                 assertTrue("Error in preference " + adminKey, actual);
 
                 checkBoxPreference.setChecked(false);
-                actual = sharedPreferences.getBoolean(adminKey, true);
+                actual = adminPrefs.getBoolean(adminKey);
                 assertFalse("Error in preference " + adminKey, actual);
             }
         }

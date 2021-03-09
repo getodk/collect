@@ -34,6 +34,7 @@ import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveAnswerFileErrorDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
+import org.odk.collect.android.fragments.AppListFragment;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
 import org.odk.collect.android.fragments.BlankFormListFragment;
 import org.odk.collect.android.fragments.MapBoxInitializationFragment;
@@ -48,16 +49,15 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.AdminPreferencesFragment;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.BasePreferenceFragment;
+import org.odk.collect.android.preferences.ChangeAdminPasswordDialog;
 import org.odk.collect.android.preferences.ExperimentalPreferencesFragment;
 import org.odk.collect.android.preferences.FormManagementPreferences;
 import org.odk.collect.android.preferences.FormMetadataFragment;
 import org.odk.collect.android.preferences.GeneralPreferencesFragment;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.IdentityPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.preferences.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.preferences.UserInterfacePreferencesFragment;
@@ -65,8 +65,10 @@ import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
+import org.odk.collect.android.tasks.MediaLoadingTask;
 import org.odk.collect.android.utilities.ApplicationResetter;
 import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 
@@ -229,17 +231,21 @@ public interface AppDependencyComponent {
 
     void inject(BackgroundAudioPermissionDialogFragment backgroundAudioPermissionDialogFragment);
 
+    void inject(AppListFragment appListFragment);
+
+    void inject(ChangeAdminPasswordDialog changeAdminPasswordDialog);
+
+    void inject(MediaLoadingTask mediaLoadingTask);
+
+    void inject(ThemeUtils themeUtils);
+
     OpenRosaHttpInterface openRosaHttpInterface();
 
     ReferenceManager referenceManager();
 
     Analytics analytics();
 
-    GeneralSharedPreferences generalSharedPreferences();
-
-    AdminSharedPreferences adminSharedPreferences();
-
-    PreferencesProvider preferencesProvider();
+    PreferencesDataSourceProvider preferencesRepository();
 
     ApplicationInitializer applicationInitializer();
 

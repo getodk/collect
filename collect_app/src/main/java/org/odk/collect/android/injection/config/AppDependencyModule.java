@@ -3,7 +3,6 @@ package org.odk.collect.android.injection.config;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.telephony.TelephonyManager;
 import android.webkit.MimeTypeMap;
@@ -85,11 +84,9 @@ import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvide
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.JsonPreferencesGenerator;
-import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -180,8 +177,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    WebCredentialsUtils provideWebCredentials() {
-        return new WebCredentialsUtils();
+    WebCredentialsUtils provideWebCredentials(PreferencesDataSourceProvider preferencesDataSourceProvider) {
+        return new WebCredentialsUtils(preferencesDataSourceProvider.getGeneralPreferences());
     }
 
     @Provides
@@ -198,7 +195,6 @@ public class AppDependencyModule {
             // Couldn't setup Firebase so use no-op instance
             return new NoopAnalytics();
         }
-
     }
 
     @Provides
@@ -228,13 +224,14 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public PreferencesProvider providesPreferencesProvider(Context context) {
-        return new PreferencesProvider(context);
+    @Singleton
+    public PreferencesDataSourceProvider providesPreferencesRepository(Context context) {
+        return new PreferencesDataSourceProvider(context);
     }
 
     @Provides
-    InstallIDProvider providesInstallIDProvider(PreferencesProvider preferencesProvider) {
-        return new SharedPreferencesInstallIDProvider(preferencesProvider.getMetaSharedPreferences(), KEY_INSTALL_ID);
+    InstallIDProvider providesInstallIDProvider(PreferencesDataSourceProvider preferencesDataSourceProvider) {
+        return new SharedPreferencesInstallIDProvider(preferencesDataSourceProvider.getMetaPreferences(), KEY_INSTALL_ID);
     }
 
     @Provides
@@ -258,18 +255,6 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    GeneralSharedPreferences providesGeneralSharedPreferences(Context context) {
-        return new GeneralSharedPreferences(context);
-    }
-
-    @Provides
-    @Singleton
-    AdminSharedPreferences providesAdminSharedPreferences(Context context) {
-        return new AdminSharedPreferences(context);
-    }
-
-    @Provides
-    @Singleton
     public MapProvider providesMapProvider() {
         return new MapProvider();
     }
@@ -280,18 +265,18 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public AdminPasswordProvider providesAdminPasswordProvider() {
-        return new AdminPasswordProvider(AdminSharedPreferences.getInstance());
+    public AdminPasswordProvider providesAdminPasswordProvider(PreferencesDataSourceProvider preferencesDataSourceProvider) {
+        return new AdminPasswordProvider(preferencesDataSourceProvider.getAdminPreferences());
     }
 
     @Provides
-    public FormUpdateManager providesFormUpdateManger(Scheduler scheduler, PreferencesProvider preferencesProvider, Application application, WorkManager workManager) {
-        return new SchedulerFormUpdateAndSubmitManager(scheduler, preferencesProvider.getGeneralSharedPreferences(), application);
+    public FormUpdateManager providesFormUpdateManger(Scheduler scheduler, PreferencesDataSourceProvider preferencesDataSourceProvider, Application application) {
+        return new SchedulerFormUpdateAndSubmitManager(scheduler, preferencesDataSourceProvider.getGeneralPreferences(), application);
     }
 
     @Provides
-    public FormSubmitManager providesFormSubmitManager(Scheduler scheduler, PreferencesProvider preferencesProvider, Application application, WorkManager workManager) {
-        return new SchedulerFormUpdateAndSubmitManager(scheduler, preferencesProvider.getGeneralSharedPreferences(), application);
+    public FormSubmitManager providesFormSubmitManager(Scheduler scheduler, PreferencesDataSourceProvider preferencesDataSourceProvider, Application application) {
+        return new SchedulerFormUpdateAndSubmitManager(scheduler, preferencesDataSourceProvider.getGeneralPreferences(), application);
     }
 
     @Provides
@@ -328,38 +313,38 @@ public class AppDependencyModule {
     @Provides
     public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider,
                                                                  SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager,
-                                                                 Analytics analytics, StorageInitializer storageInitializer) {
-        return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator, propertyManager, analytics, storageInitializer);
+                                                                 Analytics analytics, StorageInitializer storageInitializer, PreferencesDataSourceProvider preferencesDataSourceProvider) {
+        return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator, propertyManager, analytics, storageInitializer, preferencesDataSourceProvider);
     }
 
     @Provides
-    public SettingsPreferenceMigrator providesPreferenceMigrator(PreferencesProvider preferencesProvider) {
-        return new CollectSettingsPreferenceMigrator(preferencesProvider.getMetaSharedPreferences());
+    public SettingsPreferenceMigrator providesPreferenceMigrator(PreferencesDataSourceProvider preferencesDataSourceProvider) {
+        return new CollectSettingsPreferenceMigrator(preferencesDataSourceProvider.getMetaPreferences());
     }
 
     @Provides
     @Singleton
-    public PropertyManager providesPropertyManager(Application application, RxEventBus eventBus, PermissionsProvider permissionsProvider, DeviceDetailsProvider deviceDetailsProvider) {
-        return new PropertyManager(application, eventBus, permissionsProvider, deviceDetailsProvider);
+    public PropertyManager providesPropertyManager(RxEventBus eventBus, PermissionsProvider permissionsProvider, DeviceDetailsProvider deviceDetailsProvider, PreferencesDataSourceProvider preferencesDataSourceProvider) {
+        return new PropertyManager(eventBus, permissionsProvider, deviceDetailsProvider, preferencesDataSourceProvider);
     }
 
     @Provides
-    public ServerRepository providesServerRepository(Context context, PreferencesProvider preferencesProvider) {
-        return new SharedPreferencesServerRepository(context.getString(R.string.default_server_url), preferencesProvider.getMetaSharedPreferences());
+    public ServerRepository providesServerRepository(Context context, PreferencesDataSourceProvider preferencesDataSourceProvider) {
+        return new SharedPreferencesServerRepository(context.getString(R.string.default_server_url), preferencesDataSourceProvider.getMetaPreferences());
     }
 
     @Provides
-    public SettingsChangeHandler providesSettingsChangeHandler(PropertyManager propertyManager, FormUpdateManager formUpdateManager, ServerRepository serverRepository, Analytics analytics, PreferencesProvider preferencesProvider) {
-        return new CollectSettingsChangeHandler(propertyManager, formUpdateManager, serverRepository, analytics, preferencesProvider);
+    public SettingsChangeHandler providesSettingsChangeHandler(PropertyManager propertyManager, FormUpdateManager formUpdateManager, ServerRepository serverRepository, Analytics analytics, PreferencesDataSourceProvider preferencesDataSourceProvider) {
+        return new CollectSettingsChangeHandler(propertyManager, formUpdateManager, serverRepository, analytics, preferencesDataSourceProvider);
     }
 
     @Provides
-    public SettingsImporter providesCollectSettingsImporter(PreferencesProvider preferencesProvider, SettingsPreferenceMigrator preferenceMigrator, SettingsChangeHandler settingsChangeHandler) {
+    public SettingsImporter providesCollectSettingsImporter(PreferencesDataSourceProvider preferencesDataSourceProvider, SettingsPreferenceMigrator preferenceMigrator, SettingsChangeHandler settingsChangeHandler) {
         HashMap<String, Object> generalDefaults = GeneralKeys.DEFAULTS;
         Map<String, Object> adminDefaults = AdminKeys.getDefaults();
         return new SettingsImporter(
-                preferencesProvider.getGeneralSharedPreferences(),
-                preferencesProvider.getAdminSharedPreferences(),
+                preferencesDataSourceProvider.getGeneralPreferences(),
+                preferencesDataSourceProvider.getAdminPreferences(),
                 preferenceMigrator,
                 new StructureAndTypeSettingsValidator(generalDefaults, adminDefaults),
                 generalDefaults,
@@ -389,10 +374,9 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormSource providesFormSource(GeneralSharedPreferences generalSharedPreferences, Context context, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils, Analytics analytics) {
-        SharedPreferences generalPrefs = generalSharedPreferences.getSharedPreferences();
-        String serverURL = generalPrefs.getString(GeneralKeys.KEY_SERVER_URL, context.getString(R.string.default_server_url));
-        String formListPath = generalPrefs.getString(GeneralKeys.KEY_FORMLIST_URL, context.getString(R.string.default_odk_formlist));
+    public FormSource providesFormSource(PreferencesDataSourceProvider preferencesDataSourceProvider, Context context, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils, Analytics analytics) {
+        String serverURL = preferencesDataSourceProvider.getGeneralPreferences().getString(GeneralKeys.KEY_SERVER_URL);
+        String formListPath = preferencesDataSourceProvider.getGeneralPreferences().getString(GeneralKeys.KEY_FORMLIST_URL);
 
         return new OpenRosaFormSource(serverURL, formListPath, openRosaHttpInterface, webCredentialsUtils, analytics, new OpenRosaResponseParserImpl());
     }
@@ -419,8 +403,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public Notifier providesNotifier(Application application, PreferencesProvider preferencesProvider) {
-        return new NotificationManagerNotifier(application, preferencesProvider);
+    public Notifier providesNotifier(Application application, PreferencesDataSourceProvider preferencesDataSourceProvider) {
+        return new NotificationManagerNotifier(application, preferencesDataSourceProvider);
     }
 
     @Provides
@@ -443,9 +427,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public GoogleApiProvider providesGoogleApiProvider(Context context, PreferencesProvider preferencesProvider) {
-        return new GoogleApiProvider(context
-        );
+    public GoogleApiProvider providesGoogleApiProvider(Context context) {
+        return new GoogleApiProvider(context);
     }
 
     @Provides
@@ -487,8 +470,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public JsonPreferencesGenerator providesJsonPreferencesGenerator() {
-        return new JsonPreferencesGenerator();
+    public JsonPreferencesGenerator providesJsonPreferencesGenerator(PreferencesDataSourceProvider preferencesDataSourceProvider) {
+        return new JsonPreferencesGenerator(preferencesDataSourceProvider);
     }
 
     @Provides
@@ -509,7 +492,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, PreferencesProvider preferencesProvider, PermissionsChecker permissionsChecker, Clock clock, Analytics analytics) {
-        return new BackgroundAudioViewModel.Factory(audioRecorder, preferencesProvider, permissionsChecker, clock, analytics);
+    public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, PreferencesDataSourceProvider preferencesDataSourceProvider, PermissionsChecker permissionsChecker, Clock clock, Analytics analytics) {
+        return new BackgroundAudioViewModel.Factory(audioRecorder, preferencesDataSourceProvider.getGeneralPreferences(), permissionsChecker, clock, analytics);
     }
 }

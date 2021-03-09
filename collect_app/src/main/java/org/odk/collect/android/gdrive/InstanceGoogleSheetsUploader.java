@@ -43,8 +43,6 @@ import org.odk.collect.android.gdrive.sheets.DriveHelper;
 import org.odk.collect.android.gdrive.sheets.SheetsApi;
 import org.odk.collect.android.gdrive.sheets.SheetsHelper;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.upload.InstanceUploader;
@@ -153,12 +151,12 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     @Override
     @NonNull
-    public String getUrlToSubmitTo(Instance instance, String deviceId, String overrideURL) {
+    public String getUrlToSubmitTo(Instance instance, String deviceId, String overrideURL, String urlFromSettings) {
         String urlString = instance.getSubmissionUri();
 
         // if we didn't find one in the content provider, try to get from settings
         return urlString == null
-                ? (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_GOOGLE_SHEETS_URL)
+                ? urlFromSettings
                 : urlString;
     }
 

@@ -11,7 +11,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -44,7 +45,10 @@ public class GoogleAccountsManagerTest {
     private GoogleAccountCredential mockedCredential;
 
     @Mock
-    private GeneralSharedPreferences mockPreferences;
+    private PreferencesDataSourceProvider preferencesDataSourceProvider;
+
+    @Mock
+    private PreferencesDataSource generalPreferences;
 
     @Mock
     private Intent mockIntent;
@@ -58,8 +62,8 @@ public class GoogleAccountsManagerTest {
 
     @Before
     public void setup() {
-        googleAccountsManager = spy(new GoogleAccountsManager(mockedCredential, mockPreferences, mockIntent, mockThemeUtils));
-
+        googleAccountsManager = spy(new GoogleAccountsManager(mockedCredential, preferencesDataSourceProvider, mockIntent, mockThemeUtils));
+        when(preferencesDataSourceProvider.getGeneralPreferences()).thenReturn(generalPreferences);
         stubCredential();
         stubPreferences();
         mockPermissionsProvider();
@@ -69,7 +73,7 @@ public class GoogleAccountsManagerTest {
      * Stubbing
      */
     private void stubSavedAccount(String accountName) {
-        when(mockPreferences.get(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT)).thenReturn(accountName);
+        when(generalPreferences.getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT)).thenReturn(accountName);
         stubAccount(accountName);
     }
 
@@ -103,7 +107,7 @@ public class GoogleAccountsManagerTest {
                 savedAccount = invocation.getArgument(1);
             }
             return null;
-        }).when(mockPreferences).save(anyString(), anyString());
+        }).when(generalPreferences).save(anyString(), anyString());
     }
 
     @Test

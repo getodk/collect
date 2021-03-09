@@ -71,7 +71,7 @@ public class StoragePathProvider {
     }
 
     public static String getRelativeFilePath(String dirPath, String filePath) {
-        if (filePath == null) {
+        if (filePath == null || filePath.isEmpty()) {
             return null;
         }
         return filePath.startsWith(dirPath)
@@ -80,7 +80,7 @@ public class StoragePathProvider {
     }
 
     public static String getAbsoluteFilePath(String dirPath, String filePath) {
-        if (filePath == null) {
+        if (filePath == null || filePath.isEmpty()) {
             return null;
         }
         return filePath.startsWith(dirPath)

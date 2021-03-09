@@ -13,6 +13,11 @@ import static org.odk.collect.android.preferences.GeneralKeys.DEFAULTS;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 
 public class JsonPreferencesGenerator {
+    private final PreferencesDataSourceProvider preferencesDataSourceProvider;
+    public JsonPreferencesGenerator(PreferencesDataSourceProvider preferencesDataSourceProvider) {
+        this.preferencesDataSourceProvider = preferencesDataSourceProvider;
+    }
+
     public String getJSONFromPreferences(Collection<String> includedPasswordKeys) throws JSONException {
         JSONObject sharedPrefJson = getPrefsAsJson(includedPasswordKeys);
         Timber.i(sharedPrefJson.toString());
@@ -35,7 +40,7 @@ public class JsonPreferencesGenerator {
             }
 
             Object defaultValue = DEFAULTS.get(key);
-            Object value = GeneralSharedPreferences.getInstance().get(key);
+            Object value = preferencesDataSourceProvider.getGeneralPreferences().getAll().get(key);
 
             if (value == null) {
                 value = "";
@@ -59,8 +64,9 @@ public class JsonPreferencesGenerator {
                 continue;
             }
 
-            Object defaultValue = AdminSharedPreferences.getInstance().getDefault(key);
-            Object value = AdminSharedPreferences.getInstance().get(key);
+            Object defaultValue = AdminKeys.getDefaults().get(key);
+            Object value = preferencesDataSourceProvider.getAdminPreferences().getAll().get(key);
+
             if (defaultValue != value) {
                 adminPrefs.put(key, value);
             }

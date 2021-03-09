@@ -9,7 +9,6 @@ import androidx.core.widget.NestedScrollView;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.FlingRegister;
 import org.odk.collect.android.utilities.ScreenUtils;
 
@@ -22,15 +21,17 @@ public class SwipeHandler {
     private ODKView odkView;
     private boolean allowSwiping = true;
     private boolean beenSwiped;
+    private final String navigationMode;
 
     public interface OnSwipeListener {
         void onSwipeBackward();
         void onSwipeForward();
     }
 
-    public SwipeHandler(Context context) {
+    public SwipeHandler(Context context, String navigationMode) {
         gestureDetector = new GestureDetector(context, new GestureListener());
         this.onSwipe = (OnSwipeListener) context;
+        this.navigationMode = navigationMode;
     }
 
     public void setOdkView(ODKView odkView) {
@@ -88,12 +89,8 @@ public class SwipeHandler {
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             FlingRegister.flingDetected();
 
-            // only check the swipe if it's enabled in preferences
-            String navigation = (String) GeneralSharedPreferences.getInstance()
-                    .get(GeneralKeys.KEY_NAVIGATION);
-
             if (e1 != null && e2 != null
-                    && navigation.contains(GeneralKeys.NAVIGATION_SWIPE) && allowSwiping) {
+                    && navigationMode.contains(GeneralKeys.NAVIGATION_SWIPE) && allowSwiping) {
                 // Looks for user swipes. If the user has swiped, move to the appropriate screen.
 
                 // For all screens a swipe is left/right of at least .25" and up/down of less than .25" OR left/right of > .5"

@@ -43,7 +43,7 @@ public abstract class InstanceUploader {
     public abstract String uploadOneSubmission(Instance instance, String destinationUrl) throws UploadException;
 
     @NonNull
-    public abstract String getUrlToSubmitTo(Instance currentInstance, String deviceId, String overrideURL);
+    public abstract String getUrlToSubmitTo(Instance currentInstance, String deviceId, String overrideURL, String urlFromSettings);
 
     /**
      * Returns a list of Instance objects corresponding to the database IDs passed in.

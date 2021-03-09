@@ -1,32 +1,29 @@
 package org.odk.collect.android.configure;
 
-import android.content.SharedPreferences;
-
 import androidx.annotation.NonNull;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import static org.odk.collect.android.utilities.SharedPreferencesUtils.put;
-
 public class SettingsImporter {
 
-    private final SharedPreferences generalSharedPrefs;
-    private final SharedPreferences adminSharedPrefs;
+    private final PreferencesDataSource generalPrefs;
+    private final PreferencesDataSource adminPrefs;
     private final SettingsPreferenceMigrator preferenceMigrator;
     private final SettingsValidator settingsValidator;
     private final Map<String, Object> generalDefaults;
     private final Map<String, Object> adminDefaults;
     private final SettingsChangeHandler settingsChangedHandler;
 
-    public SettingsImporter(SharedPreferences generalSharedPrefs, SharedPreferences adminSharedPrefs, SettingsPreferenceMigrator preferenceMigrator, SettingsValidator settingsValidator, Map<String, Object> generalDefaults, Map<String, Object> adminDefaults, SettingsChangeHandler settingsChangedHandler) {
-        this.generalSharedPrefs = generalSharedPrefs;
-        this.adminSharedPrefs = adminSharedPrefs;
+    public SettingsImporter(PreferencesDataSource generalPrefs, PreferencesDataSource adminPrefs, SettingsPreferenceMigrator preferenceMigrator, SettingsValidator settingsValidator, Map<String, Object> generalDefaults, Map<String, Object> adminDefaults, SettingsChangeHandler settingsChangedHandler) {
+        this.generalPrefs = generalPrefs;
+        this.adminPrefs = adminPrefs;
         this.preferenceMigrator = preferenceMigrator;
         this.settingsValidator = settingsValidator;
         this.generalDefaults = generalDefaults;
@@ -39,34 +36,34 @@ public class SettingsImporter {
             return false;
         }
 
-        generalSharedPrefs.edit().clear().apply();
-        adminSharedPrefs.edit().clear().apply();
+        generalPrefs.clear();
+        adminPrefs.clear();
 
         try {
             JSONObject jsonObject = new JSONObject(json);
 
             JSONObject general = jsonObject.getJSONObject("general");
-            importToPrefs(general, generalSharedPrefs);
+            importToPrefs(general, generalPrefs);
 
             JSONObject admin = jsonObject.getJSONObject("admin");
-            importToPrefs(admin, adminSharedPrefs);
+            importToPrefs(admin, adminPrefs);
         } catch (JSONException ignored) {
             // Ignored
         }
 
-        preferenceMigrator.migrate(generalSharedPrefs, adminSharedPrefs);
+        preferenceMigrator.migrate(generalPrefs, adminPrefs);
 
-        clearUnknownKeys(generalSharedPrefs, generalDefaults);
-        clearUnknownKeys(adminSharedPrefs, adminDefaults);
+        clearUnknownKeys(generalPrefs, generalDefaults);
+        clearUnknownKeys(adminPrefs, adminDefaults);
 
-        loadDefaults(generalSharedPrefs, generalDefaults);
-        loadDefaults(adminSharedPrefs, adminDefaults);
+        loadDefaults(generalPrefs, generalDefaults);
+        loadDefaults(adminPrefs, adminDefaults);
 
-        for (Map.Entry<String, ?> entry: generalSharedPrefs.getAll().entrySet()) {
+        for (Map.Entry<String, ?> entry: generalPrefs.getAll().entrySet()) {
             settingsChangedHandler.onSettingChanged(entry.getKey(), entry.getValue());
         }
 
-        for (Map.Entry<String, ?> entry: adminSharedPrefs.getAll().entrySet()) {
+        for (Map.Entry<String, ?> entry: adminPrefs.getAll().entrySet()) {
             settingsChangedHandler.onSettingChanged(entry.getKey(), entry.getValue());
         }
 
@@ -75,35 +72,28 @@ public class SettingsImporter {
 
 
 
-    private void importToPrefs(JSONObject object, SharedPreferences sharedPreferences) throws JSONException {
+    private void importToPrefs(JSONObject object, PreferencesDataSource preferences) throws JSONException {
         Iterator<String> generalKeys = object.keys();
-        SharedPreferences.Editor editor = sharedPreferences.edit();
 
         while (generalKeys.hasNext()) {
             String key = generalKeys.next();
-            put(editor, key, object.get(key));
+            preferences.save(key, object.get(key));
         }
-
-        editor.apply();
     }
 
-    private void loadDefaults(SharedPreferences sharedPreferences, Map<String, Object> defaults) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
+    private void loadDefaults(PreferencesDataSource preferences, Map<String, Object> defaults) {
         for (Map.Entry<String, Object> entry : defaults.entrySet()) {
-            if (!sharedPreferences.contains(entry.getKey())) {
-                put(editor, entry.getKey(), entry.getValue());
+            if (!preferences.contains(entry.getKey())) {
+                preferences.save(entry.getKey(), entry.getValue());
             }
         }
-
-        editor.apply();
     }
 
-    private void clearUnknownKeys(SharedPreferences sharedPreferences, Map<String, Object> defaults) {
-        Set<String> keys = sharedPreferences.getAll().keySet();
+    private void clearUnknownKeys(PreferencesDataSource preferences, Map<String, Object> defaults) {
+        Set<String> keys = preferences.getAll().keySet();
         for (String key : keys) {
             if (!defaults.containsKey(key)) {
-                sharedPreferences.edit().remove(key).apply();
+                preferences.remove(key);
             }
         }
     }

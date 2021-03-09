@@ -1,6 +1,7 @@
 package org.odk.collect.android.utilities;
 
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
 
@@ -13,7 +14,7 @@ public class QuestionFontSizeUtils {
 
     public static int getQuestionFontSize() {
         try {
-            return Integer.parseInt(String.valueOf(GeneralSharedPreferences.getInstance().get(KEY_FONT_SIZE)));
+            return Integer.parseInt(new PreferencesDataSourceProvider(Collect.getInstance()).getGeneralPreferences().getString(KEY_FONT_SIZE));
         } catch (Exception | Error e) {
             return DEFAULT_FONT_SIZE;
         }

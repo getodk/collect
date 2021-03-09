@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
 
@@ -24,7 +24,7 @@ public class ApplicationResetterTest {
     public void setup() {
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
-            public ServerRepository providesServerRepository(Context context, PreferencesProvider preferencesProvider) {
+            public ServerRepository providesServerRepository(Context context, PreferencesDataSourceProvider preferencesDataSourceProvider) {
                 return serverRepository;
             }
         });

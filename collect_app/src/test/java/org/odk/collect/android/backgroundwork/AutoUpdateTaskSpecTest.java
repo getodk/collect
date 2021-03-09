@@ -1,8 +1,6 @@
 package org.odk.collect.android.backgroundwork;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
 
 import androidx.test.core.app.ApplicationProvider;
 
@@ -25,10 +23,12 @@ import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.BooleanChangeLock;
 import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.utilities.TestPreferencesProvider;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.HashMap;
@@ -51,12 +51,10 @@ public class AutoUpdateTaskSpecTest {
     private final FormDownloader formDownloader = mock(FormDownloader.class);
     private final ServerFormsDetailsFetcher serverFormsDetailsFetcher = mock(ServerFormsDetailsFetcher.class);
     private final Notifier notifier = mock(Notifier.class);
-    private SharedPreferences generalPrefs;
+    private final PreferencesDataSource generalPrefs = TestPreferencesProvider.getGeneralPreferences();
 
     @Before
     public void setup() {
-        generalPrefs = ApplicationProvider.getApplicationContext().getSharedPreferences("test", Context.MODE_PRIVATE);
-
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
             public ChangeLock providesFormsChangeLock() {
@@ -74,20 +72,12 @@ public class AutoUpdateTaskSpecTest {
             }
 
             @Override
-            public PreferencesProvider providesPreferencesProvider(Context context) {
-                return new PreferencesProvider(context) {
-                    @Override
-                    public SharedPreferences getGeneralSharedPreferences() {
-                        return generalPrefs;
-                    }
-                };
-            }
-
-            @Override
-            public Notifier providesNotifier(Application application, PreferencesProvider preferencesProvider) {
+            public Notifier providesNotifier(Application application, PreferencesDataSourceProvider preferencesDataSourceProvider) {
                 return notifier;
             }
         });
+        generalPrefs.clear();
+        generalPrefs.loadDefaultPreferencesIfNotExist();
     }
 
     @Test
@@ -109,7 +99,7 @@ public class AutoUpdateTaskSpecTest {
     @Test
     public void whenAutoDownloadEnabled_andChangeLockLocked_doesNotDownload() throws Exception {
         when(serverFormsDetailsFetcher.fetchFormDetails()).thenReturn(asList(new ServerFormDetails("", "", "", "", "", false, true, new ManifestFile("", emptyList()))));
-        generalPrefs.edit().putBoolean(GeneralKeys.KEY_AUTOMATIC_UPDATE, true).apply();
+        generalPrefs.save(GeneralKeys.KEY_AUTOMATIC_UPDATE, true);
         changeLock.lock();
 
         AutoUpdateTaskSpec taskSpec = new AutoUpdateTaskSpec();
@@ -121,7 +111,7 @@ public class AutoUpdateTaskSpecTest {
 
     @Test
     public void whenAutoDownloadEnabled_andDownloadIsCancelled_sendsCompletedDownloadsToNotifier() throws Exception {
-        generalPrefs.edit().putBoolean(GeneralKeys.KEY_AUTOMATIC_UPDATE, true).apply();
+        generalPrefs.save(GeneralKeys.KEY_AUTOMATIC_UPDATE, true);
 
         ServerFormDetails form1 = new ServerFormDetails("", "", "form1", "", "", false, true, new ManifestFile("", emptyList()));
         ServerFormDetails form2 = new ServerFormDetails("", "", "form2", "", "", false, true, new ManifestFile("", emptyList()));

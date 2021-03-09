@@ -5,8 +5,10 @@ import android.os.Bundle;
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.utilities.TestPreferencesProvider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -15,7 +17,13 @@ import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY
 
 @RunWith(AndroidJUnit4.class)
 public class IdentityPreferencesFragmentTest {
-    private final AdminSharedPreferences adminSharedPreferences = AdminSharedPreferences.getInstance();
+    private final PreferencesDataSource adminPrefs = TestPreferencesProvider.getAdminPreferences();
+
+    @Before
+    public void setup() {
+        adminPrefs.clear();
+        adminPrefs.loadDefaultPreferencesIfNotExist();
+    }
 
     @Test
     public void visiblePreferences_shouldBeVisibleIfOpenedFromGeneralPreferences() {
@@ -40,8 +48,8 @@ public class IdentityPreferencesFragmentTest {
 
     @Test
     public void hiddenPreferences_shouldBeHiddenIfOpenedFromGeneralPreferences() {
-        adminSharedPreferences.save(AdminKeys.KEY_CHANGE_FORM_METADATA, false);
-        adminSharedPreferences.save(AdminKeys.KEY_ANALYTICS, false);
+        adminPrefs.save(AdminKeys.KEY_CHANGE_FORM_METADATA, false);
+        adminPrefs.save(AdminKeys.KEY_ANALYTICS, false);
 
         FragmentScenario<IdentityPreferences> scenario = FragmentScenario.launch(IdentityPreferences.class);
         scenario.onFragment(fragment -> {
@@ -52,8 +60,8 @@ public class IdentityPreferencesFragmentTest {
 
     @Test
     public void hiddenPreferences_shouldBeVisibleIfOpenedFromAdminSettings() {
-        adminSharedPreferences.save(AdminKeys.KEY_CHANGE_FORM_METADATA, false);
-        adminSharedPreferences.save(AdminKeys.KEY_ANALYTICS, false);
+        adminPrefs.save(AdminKeys.KEY_CHANGE_FORM_METADATA, false);
+        adminPrefs.save(AdminKeys.KEY_ANALYTICS, false);
 
         Bundle args = new Bundle();
         args.putBoolean(INTENT_KEY_ADMIN_MODE, true);

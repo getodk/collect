@@ -1,11 +1,9 @@
 package org.odk.collect.android.application.initialization.migration;
 
-import android.content.SharedPreferences;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.odk.collect.android.utilities.SharedPreferencesUtils.put;
 
 public class KeyExtractor implements Migration {
 
@@ -35,18 +33,16 @@ public class KeyExtractor implements Migration {
     }
 
     @Override
-    public void apply(SharedPreferences prefs) {
+    public void apply(PreferencesDataSource prefs) {
         if (prefs.contains(newKey)) {
             return;
         }
 
         Object oldValue = prefs.getAll().get(oldKey);
-        SharedPreferences.Editor editor = prefs.edit();
         Object newValue = translatedValues.get(oldValue);
 
         if (newValue != null) {
-            put(editor, newKey, newValue);
-            editor.apply();
+            prefs.save(newKey, newValue);
         }
     }
 }

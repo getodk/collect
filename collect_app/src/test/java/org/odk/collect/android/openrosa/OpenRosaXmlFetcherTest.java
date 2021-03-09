@@ -3,8 +3,10 @@ package org.odk.collect.android.openrosa;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 import org.robolectric.RobolectricTestRunner;
 
 import java.io.ByteArrayInputStream;
@@ -26,7 +28,7 @@ public class OpenRosaXmlFetcherTest {
     @Before
     public void setup() {
         httpInterface = mock(OpenRosaHttpInterface.class);
-        openRosaXMLFetcher = new OpenRosaXmlFetcher(httpInterface, new WebCredentialsUtils());
+        openRosaXMLFetcher = new OpenRosaXmlFetcher(httpInterface, new WebCredentialsUtils(TestPreferencesProvider.getGeneralPreferences()));
     }
 
     @Test

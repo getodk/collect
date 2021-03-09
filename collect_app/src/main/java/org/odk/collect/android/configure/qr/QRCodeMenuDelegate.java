@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.JsonPreferencesGenerator;
-import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.MenuDelegate;
@@ -31,14 +31,14 @@ public class QRCodeMenuDelegate implements MenuDelegate {
 
     QRCodeMenuDelegate(FragmentActivity activity, ActivityAvailability activityAvailability, QRCodeGenerator qrCodeGenerator,
                        JsonPreferencesGenerator jsonPreferencesGenerator, FileProvider fileProvider,
-                       PreferencesProvider preferencesProvider, Scheduler scheduler) {
+                       PreferencesDataSourceProvider preferencesDataSourceProvider, Scheduler scheduler) {
         this.activity = activity;
         this.activityAvailability = activityAvailability;
         this.fileProvider = fileProvider;
 
         QRCodeViewModel qrCodeViewModel = new ViewModelProvider(
                 activity,
-                new QRCodeViewModel.Factory(qrCodeGenerator, jsonPreferencesGenerator, preferencesProvider, scheduler)
+                new QRCodeViewModel.Factory(qrCodeGenerator, jsonPreferencesGenerator, preferencesDataSourceProvider, scheduler)
         ).get(QRCodeViewModel.class);
         qrCodeViewModel.getFilePath().observe(activity, filePath -> {
             if (filePath != null) {

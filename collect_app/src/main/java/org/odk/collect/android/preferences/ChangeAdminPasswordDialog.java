@@ -1,7 +1,6 @@
 package org.odk.collect.android.preferences;
 
 import android.app.Dialog;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -14,17 +13,22 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
-import static android.content.Context.MODE_PRIVATE;
+import javax.inject.Inject;
+
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
-import static org.odk.collect.android.preferences.AdminPreferencesActivity.ADMIN_PREFERENCES;
 
 public class ChangeAdminPasswordDialog extends DialogFragment {
+
+    @Inject
+    PreferencesDataSourceProvider preferencesDataSourceProvider;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
+        DaggerUtils.getComponent(requireActivity()).inject(this);
 
         LayoutInflater factory = LayoutInflater.from(getActivity());
         View dialogView = factory.inflate(R.layout.password_dialog_layout, null);
@@ -46,15 +50,12 @@ public class ChangeAdminPasswordDialog extends DialogFragment {
         builder.setView(dialogView);
         builder.setPositiveButton(getString(R.string.ok), (dialog, which) -> {
             String password = passwordEditText.getText().toString();
-            SharedPreferences.Editor editor = getActivity().getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
-            editor.putString(KEY_ADMIN_PW, password);
-
+            preferencesDataSourceProvider.getAdminPreferences().save(KEY_ADMIN_PW, password);
             if (password.equals("")) {
                 ToastUtils.showShortToast(R.string.admin_password_disabled);
             } else {
                 ToastUtils.showShortToast(R.string.admin_password_changed);
             }
-            editor.apply();
             dismiss();
         });
         builder.setNegativeButton(getString(R.string.cancel), (dialog, which) -> dismiss());

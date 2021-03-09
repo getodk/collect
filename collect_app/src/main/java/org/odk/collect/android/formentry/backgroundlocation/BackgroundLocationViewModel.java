@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModelProvider;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.client.GoogleFusedLocationClient;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.permissions.PermissionsProvider;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
 
@@ -60,16 +60,18 @@ public class BackgroundLocationViewModel extends ViewModel {
         locationManager.locationProvidersChanged();
     }
 
-    public void backgroundLocationPreferenceToggled() {
-        GeneralSharedPreferences.getInstance().save(KEY_BACKGROUND_LOCATION, !GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true));
+    public void backgroundLocationPreferenceToggled(PreferencesDataSource generalPreference) {
+        generalPreference.save(KEY_BACKGROUND_LOCATION, !generalPreference.getBoolean(KEY_BACKGROUND_LOCATION));
         locationManager.backgroundLocationPreferenceToggled();
     }
 
     public static class Factory implements ViewModelProvider.Factory {
         private final PermissionsProvider permissionsProvider;
+        private final PreferencesDataSource generalPreferences;
 
-        public Factory(PermissionsProvider permissionsProvider) {
+        public Factory(PermissionsProvider permissionsProvider, PreferencesDataSource generalPreferences) {
             this.permissionsProvider = permissionsProvider;
+            this.generalPreferences = generalPreferences;
         }
 
         @Override
@@ -78,7 +80,7 @@ public class BackgroundLocationViewModel extends ViewModel {
                 GoogleFusedLocationClient googleLocationClient = new GoogleFusedLocationClient(Collect.getInstance());
 
                 BackgroundLocationManager locationManager =
-                        new BackgroundLocationManager(googleLocationClient, new BackgroundLocationHelper(permissionsProvider));
+                        new BackgroundLocationManager(googleLocationClient, new BackgroundLocationHelper(permissionsProvider, generalPreferences));
                 return (T) new BackgroundLocationViewModel(locationManager);
             }
             return null;

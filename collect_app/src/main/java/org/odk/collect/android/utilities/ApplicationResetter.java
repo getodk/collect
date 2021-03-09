@@ -23,8 +23,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.osmdroid.config.Configuration;
@@ -47,6 +46,9 @@ public class ApplicationResetter {
 
     @Inject
     ServerRepository serverRepository;
+
+    @Inject
+    PreferencesDataSourceProvider preferencesDataSourceProvider;
 
     public ApplicationResetter() {
         // This should probably just take arguments in the constructor rather than use Dagger
@@ -93,8 +95,10 @@ public class ApplicationResetter {
     private void resetPreferences() {
         WebCredentialsUtils.clearAllCredentials();
 
-        GeneralSharedPreferences.getInstance().loadDefaultPreferences();
-        AdminSharedPreferences.getInstance().loadDefaultPreferences();
+        preferencesDataSourceProvider.getGeneralPreferences().clear();
+        preferencesDataSourceProvider.getGeneralPreferences().loadDefaultPreferencesIfNotExist();
+        preferencesDataSourceProvider.getAdminPreferences().clear();
+        preferencesDataSourceProvider.getAdminPreferences().loadDefaultPreferencesIfNotExist();
 
         boolean deletedSettingsFolderContest = !new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS)).exists()
                 || deleteFolderContents(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS));

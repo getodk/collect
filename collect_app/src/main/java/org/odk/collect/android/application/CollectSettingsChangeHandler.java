@@ -1,14 +1,13 @@
 package org.odk.collect.android.application;
 
-import android.content.SharedPreferences;
-
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.backgroundwork.FormUpdateManager;
 import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.ByteArrayInputStream;
@@ -25,14 +24,14 @@ public class CollectSettingsChangeHandler implements SettingsChangeHandler {
     private final FormUpdateManager formUpdateManager;
     private final ServerRepository serverRepository;
     private final Analytics analytics;
-    private final PreferencesProvider preferencesProvider;
+    private final PreferencesDataSourceProvider preferencesDataSourceProvider;
 
-    public CollectSettingsChangeHandler(PropertyManager propertyManager, FormUpdateManager formUpdateManager, ServerRepository serverRepository, Analytics analytics, PreferencesProvider preferencesProvider) {
+    public CollectSettingsChangeHandler(PropertyManager propertyManager, FormUpdateManager formUpdateManager, ServerRepository serverRepository, Analytics analytics, PreferencesDataSourceProvider preferencesDataSourceProvider) {
         this.propertyManager = propertyManager;
         this.formUpdateManager = formUpdateManager;
         this.serverRepository = serverRepository;
         this.analytics = analytics;
-        this.preferencesProvider = preferencesProvider;
+        this.preferencesDataSourceProvider = preferencesDataSourceProvider;
     }
 
     @Override
@@ -48,8 +47,8 @@ public class CollectSettingsChangeHandler implements SettingsChangeHandler {
         }
 
         if (changedKey.equals(KEY_EXTERNAL_APP_RECORDING) && !((Boolean) newValue)) {
-            SharedPreferences generalSharedPrefs = preferencesProvider.getGeneralSharedPreferences();
-            String currentServerUrl = generalSharedPrefs.getString(KEY_SERVER_URL, "");
+            PreferencesDataSource generalPrefs = preferencesDataSourceProvider.getGeneralPreferences();
+            String currentServerUrl = generalPrefs.getString(KEY_SERVER_URL);
             String serverHash = FileUtils.getMd5Hash(new ByteArrayInputStream(currentServerUrl.getBytes()));
 
             analytics.logServerEvent(AnalyticsEvents.INTERNAL_RECORDING_OPT_IN, serverHash);

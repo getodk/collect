@@ -2,7 +2,6 @@ package org.odk.collect.android.formentry;
 
 import android.Manifest;
 
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.core.model.instance.TreeReference;
@@ -14,10 +13,11 @@ import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.permissions.PermissionsChecker;
-import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.utilities.Clock;
+import org.odk.collect.utilities.TestPreferencesProvider;
 
 import java.util.HashSet;
 import java.util.function.BiConsumer;
@@ -42,10 +42,12 @@ public class BackgroundAudioViewModelTest {
 
     @Before
     public void setup() {
-        PreferencesProvider preferencesProvider = new PreferencesProvider(ApplicationProvider.getApplicationContext());
         clock = mock(Clock.class);
 
-        viewModel = new BackgroundAudioViewModel(audioRecorder, preferencesProvider, recordAudioActionRegistry, permissionsChecker, clock, mock(Analytics.class));
+        PreferencesDataSource generalPreferences = TestPreferencesProvider.getGeneralPreferences();
+        generalPreferences.clear();
+
+        viewModel = new BackgroundAudioViewModel(audioRecorder, generalPreferences, recordAudioActionRegistry, permissionsChecker, clock, mock(Analytics.class));
     }
 
     @Test

@@ -18,7 +18,6 @@ package org.odk.collect.android.activities;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,7 +33,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.SortDialogAdapter;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.MultiClickGuard;
@@ -52,9 +50,8 @@ import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
+import timber.log.Timber;
 
 abstract class AppListActivity extends CollectAbstractActivity {
 
@@ -266,16 +263,11 @@ abstract class AppListActivity extends CollectAbstractActivity {
 
     private void saveSelectedSortingOrder(int selectedStringOrder) {
         selectedSortingOrder = selectedStringOrder;
-        PreferenceManager.getDefaultSharedPreferences(Collect.getInstance())
-                .edit()
-                .putInt(getSortingOrderKey(), selectedStringOrder)
-                .apply();
+        preferencesDataSourceProvider.getGeneralPreferences().save(getSortingOrderKey(), selectedStringOrder);
     }
 
     protected void restoreSelectedSortingOrder() {
-        selectedSortingOrder = PreferenceManager
-                .getDefaultSharedPreferences(Collect.getInstance())
-                .getInt(getSortingOrderKey(), BY_NAME_ASC);
+        selectedSortingOrder = preferencesDataSourceProvider.getGeneralPreferences().getInt(getSortingOrderKey());
     }
 
     protected int getSelectedSortingOrder() {

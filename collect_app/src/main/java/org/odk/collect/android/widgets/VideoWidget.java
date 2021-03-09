@@ -19,8 +19,6 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
@@ -31,7 +29,6 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CaptureSelfieVideoActivity;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -65,9 +62,6 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  */
 @SuppressLint("ViewConstructor")
 public class VideoWidget extends QuestionWidget implements FileWidget, ButtonClickListener, WidgetDataReceiver {
-
-    public static final boolean DEFAULT_HIGH_RESOLUTION = true;
-
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
     private final MediaUtils mediaUtils;
@@ -236,13 +230,8 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
             i = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         }
 
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
-                .getInstance());
-
         // request high resolution if configured for that...
-        boolean highResolution = settings.getBoolean(
-                GeneralKeys.KEY_HIGH_RESOLUTION,
-                VideoWidget.DEFAULT_HIGH_RESOLUTION);
+        boolean highResolution = preferencesDataSourceProvider.getGeneralPreferences().getBoolean(GeneralKeys.KEY_HIGH_RESOLUTION);
         if (highResolution) {
             i.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
             analytics.logEvent(REQUEST_HIGH_RES_VIDEO, getQuestionDetails().getFormAnalyticsID(), "");

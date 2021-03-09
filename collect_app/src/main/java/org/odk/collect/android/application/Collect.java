@@ -16,7 +16,6 @@ package org.odk.collect.android.application;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.StrictMode;
 
@@ -31,7 +30,8 @@ import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
@@ -58,7 +58,7 @@ public class Collect extends Application implements LocalizedApplication {
     ApplicationInitializer applicationInitializer;
 
     @Inject
-    PreferencesProvider preferencesProvider;
+    PreferencesDataSourceProvider preferencesDataSourceProvider;
 
     public static Collect getInstance() {
         return singleton;
@@ -198,18 +198,15 @@ public class Collect extends Application implements LocalizedApplication {
     // https://issuetracker.google.com/issues/154855417
     private void fixGoogleBug154855417() {
         try {
-            SharedPreferences metaSharedPreferences = preferencesProvider.getMetaSharedPreferences();
+            PreferencesDataSource metaSharedPreferences = preferencesDataSourceProvider.getMetaPreferences();
 
-            boolean hasFixedGoogleBug154855417 = metaSharedPreferences.getBoolean(KEY_GOOGLE_BUG_154855417_FIXED, false);
+            boolean hasFixedGoogleBug154855417 = metaSharedPreferences.getBoolean(KEY_GOOGLE_BUG_154855417_FIXED);
 
             if (!hasFixedGoogleBug154855417) {
                 File corruptedZoomTables = new File(getFilesDir(), "ZoomTables.data");
                 corruptedZoomTables.delete();
 
-                metaSharedPreferences
-                        .edit()
-                        .putBoolean(KEY_GOOGLE_BUG_154855417_FIXED, true)
-                        .apply();
+                metaSharedPreferences.save(KEY_GOOGLE_BUG_154855417_FIXED, true);
             }
         } catch (Exception ignored) {
             // ignored
@@ -219,6 +216,6 @@ public class Collect extends Application implements LocalizedApplication {
     @NotNull
     @Override
     public Locale getLocale() {
-        return new Locale(LocaleHelper.getLocaleCode(this));
+        return new Locale(LocaleHelper.getLocaleCode(preferencesDataSourceProvider.getGeneralPreferences()));
     }
 }

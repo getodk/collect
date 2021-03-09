@@ -1,7 +1,7 @@
 package org.odk.collect.android.utilities;
 
 import org.junit.Test;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -14,8 +14,8 @@ public class AdminPasswordProviderTest {
 
     @Test
     public void when_adminPassHasEmptyValue_should_isAdminPasswordSetReturnFalse() {
-        AdminSharedPreferences adminSharedPreferences = mock(AdminSharedPreferences.class);
-        when(adminSharedPreferences.get(KEY_ADMIN_PW)).thenReturn("");
+        PreferencesDataSource adminSharedPreferences = mock(PreferencesDataSource.class);
+        when(adminSharedPreferences.getString(KEY_ADMIN_PW)).thenReturn("");
 
         AdminPasswordProvider adminPasswordProvider = new AdminPasswordProvider(adminSharedPreferences);
         assertThat(adminPasswordProvider.isAdminPasswordSet(), is(false));
@@ -23,8 +23,8 @@ public class AdminPasswordProviderTest {
 
     @Test
     public void when_adminPassHasNullValue_should_isAdminPasswordSetReturnFalse() {
-        AdminSharedPreferences adminSharedPreferences = mock(AdminSharedPreferences.class);
-        when(adminSharedPreferences.get(KEY_ADMIN_PW)).thenReturn(null);
+        PreferencesDataSource adminSharedPreferences = mock(PreferencesDataSource.class);
+        when(adminSharedPreferences.getString(KEY_ADMIN_PW)).thenReturn(null);
 
         AdminPasswordProvider adminPasswordProvider = new AdminPasswordProvider(adminSharedPreferences);
         assertThat(adminPasswordProvider.isAdminPasswordSet(), is(false));
@@ -32,8 +32,8 @@ public class AdminPasswordProviderTest {
 
     @Test
     public void when_adminPassIsSetProperly_should_isAdminPasswordSetReturnTrue() {
-        AdminSharedPreferences adminSharedPreferences = mock(AdminSharedPreferences.class);
-        when(adminSharedPreferences.get(KEY_ADMIN_PW)).thenReturn("123");
+        PreferencesDataSource adminSharedPreferences = mock(PreferencesDataSource.class);
+        when(adminSharedPreferences.getString(KEY_ADMIN_PW)).thenReturn("123");
 
         AdminPasswordProvider adminPasswordProvider = new AdminPasswordProvider(adminSharedPreferences);
         assertThat(adminPasswordProvider.isAdminPasswordSet(), is(true));
@@ -41,8 +41,8 @@ public class AdminPasswordProviderTest {
 
     @Test
     public void when_adminPassHasEmptyValue_should_getAdminPasswordReturnEmptyString() {
-        AdminSharedPreferences adminSharedPreferences = mock(AdminSharedPreferences.class);
-        when(adminSharedPreferences.get(KEY_ADMIN_PW)).thenReturn("");
+        PreferencesDataSource adminSharedPreferences = mock(PreferencesDataSource.class);
+        when(adminSharedPreferences.getString(KEY_ADMIN_PW)).thenReturn("");
 
         AdminPasswordProvider adminPasswordProvider = new AdminPasswordProvider(adminSharedPreferences);
         assertThat(adminPasswordProvider.getAdminPassword(), is(""));
@@ -50,8 +50,8 @@ public class AdminPasswordProviderTest {
 
     @Test
     public void when_adminPassHasNullValue_should_getAdminPasswordReturnNull() {
-        AdminSharedPreferences adminSharedPreferences = mock(AdminSharedPreferences.class);
-        when(adminSharedPreferences.get(KEY_ADMIN_PW)).thenReturn(null);
+        PreferencesDataSource adminSharedPreferences = mock(PreferencesDataSource.class);
+        when(adminSharedPreferences.getString(KEY_ADMIN_PW)).thenReturn(null);
 
         AdminPasswordProvider adminPasswordProvider = new AdminPasswordProvider(adminSharedPreferences);
         assertThat(adminPasswordProvider.getAdminPassword(), is(nullValue()));
@@ -59,8 +59,8 @@ public class AdminPasswordProviderTest {
 
     @Test
     public void when_adminPassIsSetProperly_should_getAdminPasswordReturnCorrectValue() {
-        AdminSharedPreferences adminSharedPreferences = mock(AdminSharedPreferences.class);
-        when(adminSharedPreferences.get(KEY_ADMIN_PW)).thenReturn("123");
+        PreferencesDataSource adminSharedPreferences = mock(PreferencesDataSource.class);
+        when(adminSharedPreferences.getString(KEY_ADMIN_PW)).thenReturn("123");
 
         AdminPasswordProvider adminPasswordProvider = new AdminPasswordProvider(adminSharedPreferences);
         assertThat(adminPasswordProvider.getAdminPassword(), is("123"));

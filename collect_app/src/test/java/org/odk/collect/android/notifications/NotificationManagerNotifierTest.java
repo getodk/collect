@@ -10,10 +10,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.android.forms.ManifestFile;
-import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.utilities.TestPreferencesProvider;
 
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class NotificationManagerNotifierTest {
     public void setup() {
         Application context = ApplicationProvider.getApplicationContext();
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notifier = new NotificationManagerNotifier(context, new PreferencesProvider(context));
+        notifier = new NotificationManagerNotifier(context, TestPreferencesProvider.getPreferencesRepository());
     }
 
     @Test

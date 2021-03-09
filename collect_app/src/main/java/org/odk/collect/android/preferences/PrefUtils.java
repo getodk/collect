@@ -1,10 +1,8 @@
 package org.odk.collect.android.preferences;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import androidx.preference.ListPreference;
-import androidx.preference.PreferenceManager;
 
 import org.odk.collect.android.application.Collect;
 
@@ -13,13 +11,8 @@ import java.util.Arrays;
 public class PrefUtils {
     private PrefUtils() { }  // prevent instantiation of this utility class
 
-    public static SharedPreferences getSharedPrefs() {
-        return PreferenceManager.getDefaultSharedPreferences(
-            Collect.getInstance().getApplicationContext());
-    }
-
-    public static SharedPreferences getAdminSharedPrefs() {
-        return AdminSharedPreferences.getInstance().getSharedPreferences();
+    public static PreferencesDataSource getSharedPrefs() {
+        return new PreferencesDataSourceProvider(Collect.getInstance()).getGeneralPreferences();
     }
 
     public static ListPreference createListPref(
@@ -46,13 +39,13 @@ public class PrefUtils {
     }
 
     private static void ensurePrefHasValidValue(String key, String[] validValues) {
-        SharedPreferences prefs = getSharedPrefs();
-        String value = prefs.getString(key, null);
+        PreferencesDataSource prefs = getSharedPrefs();
+        String value = prefs.getString(key);
         if (Arrays.asList(validValues).indexOf(value) < 0) {
             if (validValues.length > 0) {
-                prefs.edit().putString(key, validValues[0]).apply();
+                prefs.save(key, validValues[0]);
             } else {
-                prefs.edit().remove(key).apply();
+                prefs.remove(key);
             }
         }
     }

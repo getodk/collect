@@ -9,18 +9,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+
 import org.odk.collect.android.preferences.JsonPreferencesGenerator;
-import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.testshared.FakeScheduler;
+import org.odk.collect.utilities.TestPreferencesProvider;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.fakes.RoboMenuItem;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowToast;
 
-import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -47,7 +47,7 @@ public class QRCodeMenuDelegateTest {
     public void setup() {
         activity = Robolectric.setupActivity(FragmentActivity.class);
         menuDelegate = new QRCodeMenuDelegate(activity, activityAvailability, qrCodeGenerator,
-                jsonPreferencesGenerator, fileProvider, new PreferencesProvider(getApplicationContext()), fakeScheduler);
+                jsonPreferencesGenerator, fileProvider, TestPreferencesProvider.getPreferencesRepository(), fakeScheduler);
     }
 
     @Test

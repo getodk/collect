@@ -1,8 +1,6 @@
 package org.odk.collect.android.support;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -10,22 +8,24 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.odk.collect.android.application.Collect;
+
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.utilities.TestPreferencesProvider;
 
 import java.io.File;
 import java.io.IOException;
 
 import static org.apache.commons.io.FileUtils.deleteDirectory;
-import static org.odk.collect.android.preferences.AdminPreferencesFragment.ADMIN_PREFERENCES;
 
 public class ResetStateRule implements TestRule {
 
-    private AppDependencyModule appDependencyModule;
+    private final AppDependencyModule appDependencyModule;
+    private final PreferencesDataSourceProvider preferencesDataSourceProvider = TestPreferencesProvider.getPreferencesRepository();
 
     public ResetStateRule() {
         this(null);
@@ -53,7 +53,7 @@ public class ResetStateRule implements TestRule {
             Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
             resetDagger();
-            clearSharedPrefs(context);
+            clearPrefs();
             clearDisk();
             setTestState();
 
@@ -88,11 +88,11 @@ public class ResetStateRule implements TestRule {
         }
     }
 
-    private void clearSharedPrefs(Context context) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().clear().commit();
-        context.getSharedPreferences(ADMIN_PREFERENCES, 0).edit().clear().commit();
-        SharedPreferences metaSharedPreferences = new PreferencesProvider(context).getMetaSharedPreferences();
-        metaSharedPreferences.edit().clear().commit();
+    private void clearPrefs() {
+        preferencesDataSourceProvider.getGeneralPreferences().clear();
+        preferencesDataSourceProvider.getGeneralPreferences().loadDefaultPreferencesIfNotExist();
+        preferencesDataSourceProvider.getAdminPreferences().clear();
+        preferencesDataSourceProvider.getAdminPreferences().loadDefaultPreferencesIfNotExist();
+        preferencesDataSourceProvider.getMetaPreferences().clear();
     }
-
 }

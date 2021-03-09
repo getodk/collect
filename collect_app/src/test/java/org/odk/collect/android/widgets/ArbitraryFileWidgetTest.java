@@ -8,7 +8,6 @@ import org.javarosa.core.model.data.StringData;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
@@ -53,7 +52,7 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
 
     @Test
     public void whenFontSizeChanged_CustomFontSizeShouldBeUsed() {
-        GeneralSharedPreferences.getInstance().save(KEY_FONT_SIZE, "30");
+        preferencesDataSourceProvider.getGeneralPreferences().save(KEY_FONT_SIZE, "30");
 
         assertThat((int) getWidget().binding.arbitraryFileButton.getTextSize(), is(29));
         assertThat((int) getWidget().binding.arbitraryFileAnswerText.getTextSize(), is(29));

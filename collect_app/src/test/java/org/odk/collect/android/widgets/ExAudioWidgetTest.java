@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -86,7 +85,7 @@ public class ExAudioWidgetTest extends FileWidgetTest<ExAudioWidget> {
 
     @Test
     public void whenFontSizeChanged_CustomFontSizeShouldBeUsed() {
-        GeneralSharedPreferences.getInstance().save(KEY_FONT_SIZE, "30");
+        preferencesDataSourceProvider.getGeneralPreferences().save(KEY_FONT_SIZE, "30");
 
         assertThat((int) getWidget().binding.launchExternalAppButton.getTextSize(), is(29));
     }

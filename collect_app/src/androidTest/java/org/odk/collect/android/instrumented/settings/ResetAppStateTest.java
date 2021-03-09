@@ -17,9 +17,7 @@
 package org.odk.collect.android.instrumented.settings;
 
 import android.content.ContentValues;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.preference.PreferenceManager;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -28,14 +26,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
+
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ApplicationResetter;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.utilities.TestPreferencesProvider;
 import org.osmdroid.config.Configuration;
 
 import java.io.File;
@@ -53,6 +54,8 @@ import static org.junit.Assert.assertTrue;
 public class ResetAppStateTest {
 
     private final StoragePathProvider storagePathProvider = new StoragePathProvider();
+    private final PreferencesDataSource generalPrefs = TestPreferencesProvider.getGeneralPreferences();
+    private final PreferencesDataSource adminPrefs = TestPreferencesProvider.getAdminPreferences();
 
     @Before
     public void setUp() throws IOException {
@@ -74,16 +77,15 @@ public class ResetAppStateTest {
 
     @Test
     public void resetSettingsTest() throws IOException {
-        WebCredentialsUtils webCredentialsUtils = new WebCredentialsUtils();
+        WebCredentialsUtils webCredentialsUtils = new WebCredentialsUtils(generalPrefs);
         webCredentialsUtils.saveCredentials("https://demo.getodk.org", "admin", "admin");
 
         setupTestSettings();
         resetAppState(Collections.singletonList(ApplicationResetter.ResetAction.RESET_PREFERENCES));
 
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-        assertEquals(settings.getString(GeneralKeys.KEY_USERNAME, ""), "");
-        assertEquals(settings.getString(GeneralKeys.KEY_PASSWORD, ""), "");
-        assertTrue(settings.getBoolean(AdminKeys.KEY_VIEW_SENT, true));
+        assertEquals(generalPrefs.getString(GeneralKeys.KEY_USERNAME), "");
+        assertEquals(generalPrefs.getString(GeneralKeys.KEY_PASSWORD), "");
+        assertTrue(adminPrefs.getBoolean(AdminKeys.KEY_VIEW_SENT));
 
         assertEquals(0, getFormsCount());
         assertEquals(0, getInstancesCount());
@@ -138,22 +140,15 @@ public class ResetAppStateTest {
     private void setupTestSettings() throws IOException {
         String username = "usernameTest";
         String password = "passwordTest";
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-        settings
-                .edit()
-                .putString(GeneralKeys.KEY_USERNAME, username)
-                .putString(GeneralKeys.KEY_PASSWORD, password)
-                .apply();
+        generalPrefs.save(GeneralKeys.KEY_USERNAME, username);
+        generalPrefs.save(GeneralKeys.KEY_PASSWORD, password);
 
-        assertEquals(username, settings.getString(GeneralKeys.KEY_USERNAME, null));
-        assertEquals(password, settings.getString(GeneralKeys.KEY_PASSWORD, null));
+        assertEquals(username, generalPrefs.getString(GeneralKeys.KEY_USERNAME));
+        assertEquals(password, generalPrefs.getString(GeneralKeys.KEY_PASSWORD));
 
-        settings
-                .edit()
-                .putBoolean(AdminKeys.KEY_VIEW_SENT, false)
-                .apply();
+        adminPrefs.save(AdminKeys.KEY_VIEW_SENT, false);
 
-        assertFalse(settings.getBoolean(AdminKeys.KEY_VIEW_SENT, false));
+        assertFalse(adminPrefs.getBoolean(AdminKeys.KEY_VIEW_SENT));
 
         assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS)).exists() || new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS)).mkdir());
     }

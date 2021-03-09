@@ -5,8 +5,10 @@ import android.os.Bundle;
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.utilities.TestPreferencesProvider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -15,7 +17,13 @@ import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY
 
 @RunWith(AndroidJUnit4.class)
 public class UserInterfacePreferencesFragmentTest {
-    private final AdminSharedPreferences adminSharedPreferences = AdminSharedPreferences.getInstance();
+    private final PreferencesDataSource adminPreferences = TestPreferencesProvider.getAdminPreferences();
+
+    @Before
+    public void setup() {
+        adminPreferences.clear();
+        adminPreferences.loadDefaultPreferencesIfNotExist();
+    }
 
     @Test
     public void visiblePreferences_shouldBeVisibleIfOpenedFromGeneralPreferences() {
@@ -48,11 +56,11 @@ public class UserInterfacePreferencesFragmentTest {
 
     @Test
     public void hiddenPreferences_shouldBeHiddenIfOpenedFromGeneralPreferences() {
-        adminSharedPreferences.save(AdminKeys.KEY_APP_THEME, false);
-        adminSharedPreferences.save(AdminKeys.KEY_APP_LANGUAGE, false);
-        adminSharedPreferences.save(AdminKeys.KEY_CHANGE_FONT_SIZE, false);
-        adminSharedPreferences.save(AdminKeys.KEY_NAVIGATION, false);
-        adminSharedPreferences.save(AdminKeys.KEY_SHOW_SPLASH_SCREEN, false);
+        adminPreferences.save(AdminKeys.KEY_APP_THEME, false);
+        adminPreferences.save(AdminKeys.KEY_APP_LANGUAGE, false);
+        adminPreferences.save(AdminKeys.KEY_CHANGE_FONT_SIZE, false);
+        adminPreferences.save(AdminKeys.KEY_NAVIGATION, false);
+        adminPreferences.save(AdminKeys.KEY_SHOW_SPLASH_SCREEN, false);
 
         FragmentScenario<UserInterfacePreferencesFragment> scenario = FragmentScenario.launch(UserInterfacePreferencesFragment.class);
         scenario.onFragment(fragment -> {
@@ -67,11 +75,11 @@ public class UserInterfacePreferencesFragmentTest {
 
     @Test
     public void hiddenPreferences_shouldBeVisibleIfOpenedFromAdminSettings() {
-        adminSharedPreferences.save(AdminKeys.KEY_APP_THEME, false);
-        adminSharedPreferences.save(AdminKeys.KEY_APP_LANGUAGE, false);
-        adminSharedPreferences.save(AdminKeys.KEY_CHANGE_FONT_SIZE, false);
-        adminSharedPreferences.save(AdminKeys.KEY_NAVIGATION, false);
-        adminSharedPreferences.save(AdminKeys.KEY_SHOW_SPLASH_SCREEN, false);
+        adminPreferences.save(AdminKeys.KEY_APP_THEME, false);
+        adminPreferences.save(AdminKeys.KEY_APP_LANGUAGE, false);
+        adminPreferences.save(AdminKeys.KEY_CHANGE_FONT_SIZE, false);
+        adminPreferences.save(AdminKeys.KEY_NAVIGATION, false);
+        adminPreferences.save(AdminKeys.KEY_SHOW_SPLASH_SCREEN, false);
 
         Bundle args = new Bundle();
         args.putBoolean(INTENT_KEY_ADMIN_MODE, true);

@@ -2,7 +2,6 @@ package org.odk.collect.android.preferences;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -20,7 +19,7 @@ import javax.inject.Inject;
 public class ServerAuthDialogFragment extends DialogFragment {
 
     @Inject
-    PreferencesProvider preferencesProvider;
+    PreferencesDataSourceProvider preferencesDataSourceProvider;
 
     private View dialogView;
 
@@ -36,19 +35,17 @@ public class ServerAuthDialogFragment extends DialogFragment {
         ServerAuthDialogBinding binding = ServerAuthDialogBinding.inflate(requireActivity().getLayoutInflater());
         dialogView = binding.getRoot();
 
-        SharedPreferences generalSharedPreferences = preferencesProvider.getGeneralSharedPreferences();
-        binding.usernameEdit.setText(generalSharedPreferences.getString(GeneralKeys.KEY_USERNAME, ""));
-        binding.passwordEdit.setText(generalSharedPreferences.getString(GeneralKeys.KEY_PASSWORD, ""));
+        PreferencesDataSource generalPreferences = preferencesDataSourceProvider.getGeneralPreferences();
+        binding.usernameEdit.setText(generalPreferences.getString(GeneralKeys.KEY_USERNAME));
+        binding.passwordEdit.setText(generalPreferences.getString(GeneralKeys.KEY_PASSWORD));
 
         return new AlertDialog.Builder(requireContext())
                 .setTitle(R.string.server_requires_auth)
-                .setMessage(requireContext().getString(R.string.server_auth_credentials, generalSharedPreferences.getString(GeneralKeys.KEY_SERVER_URL, "")))
+                .setMessage(requireContext().getString(R.string.server_auth_credentials, generalPreferences.getString(GeneralKeys.KEY_SERVER_URL)))
                 .setView(dialogView)
                 .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
-                    generalSharedPreferences.edit()
-                            .putString(GeneralKeys.KEY_USERNAME, binding.usernameEdit.getText().toString())
-                            .putString(GeneralKeys.KEY_PASSWORD, binding.passwordEdit.getText().toString())
-                            .apply();
+                    generalPreferences.save(GeneralKeys.KEY_USERNAME, binding.usernameEdit.getText().toString());
+                    generalPreferences.save(GeneralKeys.KEY_PASSWORD, binding.passwordEdit.getText().toString());
                 })
                 .create();
     }

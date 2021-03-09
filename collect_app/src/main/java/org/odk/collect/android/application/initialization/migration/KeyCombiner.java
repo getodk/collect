@@ -1,6 +1,6 @@
 package org.odk.collect.android.application.initialization.migration;
 
-import android.content.SharedPreferences;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +32,7 @@ public class KeyCombiner implements Migration {
         return this;
     }
 
-    public void apply(SharedPreferences prefs) {
+    public void apply(PreferencesDataSource prefs) {
         Map<String, ?> prefMap = prefs.getAll();
         Object[] oldValues = new Object[oldKeys.length];
         for (int i = 0; i < oldKeys.length; i++) {

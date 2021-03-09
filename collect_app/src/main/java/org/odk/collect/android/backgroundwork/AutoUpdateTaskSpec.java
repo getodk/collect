@@ -28,7 +28,7 @@ import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
@@ -56,7 +56,7 @@ public class AutoUpdateTaskSpec implements TaskSpec {
     Notifier notifier;
 
     @Inject
-    PreferencesProvider preferencesProvider;
+    PreferencesDataSourceProvider preferencesDataSourceProvider;
 
     @Inject
     @Named("FORMS")
@@ -73,7 +73,7 @@ public class AutoUpdateTaskSpec implements TaskSpec {
                 List<ServerFormDetails> updatedForms = serverForms.stream().filter(ServerFormDetails::isUpdated).collect(Collectors.toList());
 
                 if (!updatedForms.isEmpty()) {
-                    if (preferencesProvider.getGeneralSharedPreferences().getBoolean(KEY_AUTOMATIC_UPDATE, false)) {
+                    if (preferencesDataSourceProvider.getGeneralPreferences().getBoolean(KEY_AUTOMATIC_UPDATE)) {
                         changeLock.withLock(acquiredLock -> {
                             if (acquiredLock) {
                                 HashMap<ServerFormDetails, String> results = new HashMap<>();

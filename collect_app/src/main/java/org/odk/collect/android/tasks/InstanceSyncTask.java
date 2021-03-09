@@ -18,7 +18,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 
 import org.apache.commons.io.FileUtils;
@@ -31,6 +30,7 @@ import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -63,6 +63,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
     private String currentStatus = "";
     private DiskSyncListener diskSyncListener;
+    private final PreferencesDataSourceProvider preferencesDataSourceProvider;
 
     public String getStatusMessage() {
         return currentStatus;
@@ -70,6 +71,10 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
     public void setDiskSyncListener(DiskSyncListener diskSyncListener) {
         this.diskSyncListener = diskSyncListener;
+    }
+
+    public InstanceSyncTask(PreferencesDataSourceProvider preferencesDataSourceProvider) {
+        this.preferencesDataSourceProvider = preferencesDataSourceProvider;
     }
 
     @Override
@@ -141,9 +146,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
                 instancesDao.deleteInstancesFromInstanceFilePaths(filesToRemove);
 
-                final boolean instanceSyncFlag = PreferenceManager.getDefaultSharedPreferences(
-                        Collect.getInstance().getApplicationContext()).getBoolean(
-                        GeneralKeys.KEY_INSTANCE_SYNC, true);
+                final boolean instanceSyncFlag = preferencesDataSourceProvider.getGeneralPreferences().getBoolean(GeneralKeys.KEY_INSTANCE_SYNC);
 
                 int counter = 0;
                 // Begin parsing and add them to the content provider

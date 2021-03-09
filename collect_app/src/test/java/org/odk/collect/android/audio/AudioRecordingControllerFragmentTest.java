@@ -18,7 +18,7 @@ import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.permissions.PermissionsChecker;
-import org.odk.collect.android.preferences.PreferencesProvider;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -65,8 +65,8 @@ public class AudioRecordingControllerFragmentTest {
         RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
 
             @Override
-            public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, PreferencesProvider preferencesProvider, PermissionsChecker permissionsChecker, Clock clock, Analytics analytics) {
-                return new BackgroundAudioViewModel.Factory(audioRecorder, preferencesProvider, permissionsChecker, clock, analytics) {
+            public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, PreferencesDataSourceProvider preferencesDataSourceProvider, PermissionsChecker permissionsChecker, Clock clock, Analytics analytics) {
+                return new BackgroundAudioViewModel.Factory(audioRecorder, preferencesDataSourceProvider.getGeneralPreferences(), permissionsChecker, clock, analytics) {
                     @NonNull
                     @Override
                     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {

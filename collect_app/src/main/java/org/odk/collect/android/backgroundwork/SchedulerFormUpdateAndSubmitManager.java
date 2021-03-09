@@ -1,8 +1,8 @@
 package org.odk.collect.android.backgroundwork;
 
 import android.app.Application;
-import android.content.SharedPreferences;
 
+import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.odk.collect.android.preferences.Protocol;
 import org.odk.collect.async.Scheduler;
 
@@ -18,28 +18,28 @@ public class SchedulerFormUpdateAndSubmitManager implements FormUpdateManager, F
     public static final String AUTO_SEND_TAG = "AutoSendWorker";
 
     private final Scheduler scheduler;
-    private final SharedPreferences sharedPreferences;
+    private final PreferencesDataSource generalPreferences;
     private final Application application;
 
-    public SchedulerFormUpdateAndSubmitManager(Scheduler scheduler, SharedPreferences sharedPreferences, Application application) {
+    public SchedulerFormUpdateAndSubmitManager(Scheduler scheduler, PreferencesDataSource generalPreferences, Application application) {
         this.scheduler = scheduler;
-        this.sharedPreferences = sharedPreferences;
+        this.generalPreferences = generalPreferences;
         this.application = application;
     }
 
     @Override
     public void scheduleUpdates() {
-        String protocol = sharedPreferences.getString(KEY_PROTOCOL, null);
+        String protocol = generalPreferences.getString(KEY_PROTOCOL);
         if (Protocol.parse(application, protocol) == Protocol.GOOGLE) {
             scheduler.cancelDeferred(MATCH_EXACTLY_SYNC_TAG);
             scheduler.cancelDeferred(AUTO_UPDATE_TAG);
             return;
         }
 
-        String period = sharedPreferences.getString(KEY_PERIODIC_FORM_UPDATES_CHECK, null);
+        String period = generalPreferences.getString(KEY_PERIODIC_FORM_UPDATES_CHECK);
         long periodInMilliseconds = getPeriodInMilliseconds(period, application);
 
-        switch (getFormUpdateMode(application, sharedPreferences)) {
+        switch (getFormUpdateMode(application, generalPreferences)) {
             case MANUAL:
                 scheduler.cancelDeferred(MATCH_EXACTLY_SYNC_TAG);
                 scheduler.cancelDeferred(AUTO_UPDATE_TAG);

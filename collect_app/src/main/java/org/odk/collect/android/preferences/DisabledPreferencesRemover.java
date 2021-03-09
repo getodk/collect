@@ -25,9 +25,11 @@ import timber.log.Timber;
 class DisabledPreferencesRemover {
 
     private final PreferenceFragmentCompat pf;
+    private final PreferencesDataSource adminPrefs;
 
-    DisabledPreferencesRemover(PreferenceFragmentCompat pf) {
+    DisabledPreferencesRemover(PreferenceFragmentCompat pf, PreferencesDataSource adminPrefs) {
         this.pf = pf;
+        this.adminPrefs = adminPrefs;
     }
 
     /**
@@ -37,7 +39,7 @@ class DisabledPreferencesRemover {
      */
     void remove(AdminAndGeneralKeys... keyPairs) {
         for (AdminAndGeneralKeys agKeys : keyPairs) {
-            boolean prefAllowed = (boolean) AdminSharedPreferences.getInstance().get(agKeys.adminKey);
+            boolean prefAllowed = adminPrefs.getBoolean(agKeys.adminKey);
 
             if (!prefAllowed) {
                 Preference preference = pf.findPreference(agKeys.generalKey);

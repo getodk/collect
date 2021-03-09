@@ -1,14 +1,14 @@
 package org.odk.collect.android.utilities;
 
-import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 
 public class AdminPasswordProvider {
-    private final AdminSharedPreferences adminSharedPreferences;
+    private final PreferencesDataSource adminPrefs;
 
-    public AdminPasswordProvider(AdminSharedPreferences adminSharedPreferences) {
-        this.adminSharedPreferences = adminSharedPreferences;
+    public AdminPasswordProvider(PreferencesDataSource adminPrefs) {
+        this.adminPrefs = adminPrefs;
     }
 
     public boolean isAdminPasswordSet() {
@@ -17,6 +17,6 @@ public class AdminPasswordProvider {
     }
 
     public String getAdminPassword() {
-        return (String) adminSharedPreferences.get(KEY_ADMIN_PW);
+        return adminPrefs.getString(KEY_ADMIN_PW);
     }
 }

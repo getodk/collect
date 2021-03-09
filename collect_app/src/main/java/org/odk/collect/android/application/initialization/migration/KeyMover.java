@@ -1,26 +1,24 @@
 package org.odk.collect.android.application.initialization.migration;
 
-import android.content.SharedPreferences;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import java.util.Map;
 
-import static org.odk.collect.android.utilities.SharedPreferencesUtils.put;
-
 public class KeyMover implements Migration {
     private final String key;
-    private SharedPreferences newPrefs;
+    private PreferencesDataSource newPrefs;
 
     public KeyMover(String key) {
         this.key = key;
     }
 
-    public KeyMover toPreferences(SharedPreferences newPrefs) {
+    public KeyMover toPreferences(PreferencesDataSource newPrefs) {
         this.newPrefs = newPrefs;
         return this;
     }
 
     @Override
-    public void apply(SharedPreferences prefs) {
+    public void apply(PreferencesDataSource prefs) {
         if (newPrefs.contains(key)) {
             return;
         }
@@ -28,12 +26,7 @@ public class KeyMover implements Migration {
         Map<String, ?> all = prefs.getAll();
         Object value = all.get(key);
 
-        prefs.edit()
-                .remove(key)
-                .apply();
-
-        SharedPreferences.Editor editor = newPrefs.edit();
-        put(editor, key, value);
-        editor.apply();
+        prefs.remove(key);
+        newPrefs.save(key, value);
     }
 }

@@ -1,7 +1,6 @@
 package org.odk.collect.android.geo;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.preference.Preference;
@@ -10,6 +9,7 @@ import com.google.common.collect.ImmutableSet;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.PrefUtils;
+import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import java.io.File;
 import java.util.Collection;
@@ -73,12 +73,12 @@ class OsmDroidMapConfigurator implements MapConfigurator {
             ImmutableSet.of(prefKey, KEY_REFERENCE_LAYER);
     }
 
-    @Override public Bundle buildConfig(SharedPreferences prefs) {
+    @Override public Bundle buildConfig(PreferencesDataSource prefs) {
         Bundle config = new Bundle();
         if (options.length == 1) {
             config.putSerializable(OsmDroidMapFragment.KEY_WEB_MAP_SERVICE, options[0].service);
         } else {
-            String value = prefs.getString(prefKey, null);
+            String value = prefs.getString(prefKey);
             for (int i = 0; i < options.length; i++) {
                 if (options[i].id.equals(value)) {
                     config.putSerializable(OsmDroidMapFragment.KEY_WEB_MAP_SERVICE, options[i].service);
@@ -86,7 +86,7 @@ class OsmDroidMapConfigurator implements MapConfigurator {
             }
         }
         config.putString(OsmDroidMapFragment.KEY_REFERENCE_LAYER,
-            prefs.getString(KEY_REFERENCE_LAYER, null));
+            prefs.getString(KEY_REFERENCE_LAYER));
         return config;
     }
 

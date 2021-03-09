@@ -15,13 +15,11 @@
 package org.odk.collect.android.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -87,6 +85,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     @Inject
     MainMenuViewModel.Factory viewModelFactory;
+
     private MainMenuViewModel viewModel;
 
     @Override
@@ -155,10 +154,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         getFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences sharedPreferences = PreferenceManager
-                        .getDefaultSharedPreferences(MainMenuActivity.this);
-                String protocol = sharedPreferences.getString(
-                        GeneralKeys.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
+                String protocol = preferencesDataSourceProvider.getGeneralPreferences().getString(GeneralKeys.KEY_PROTOCOL);
                 Intent i = null;
                 if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
                     if (new PlayServicesChecker().isGooglePlayServicesAvailable(MainMenuActivity.this)) {
@@ -229,7 +225,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        qrcodeScannerMenuItem.setVisible(this.getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES, 0).getBoolean(AdminKeys.KEY_QR_CODE_SCANNER, true));
+        qrcodeScannerMenuItem.setVisible(preferencesDataSourceProvider.getAdminPreferences().getBoolean(AdminKeys.KEY_QR_CODE_SCANNER));
         return super.onPrepareOptionsMenu(menu);
     }
 

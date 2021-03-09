@@ -16,12 +16,10 @@ package org.odk.collect.android.preferences;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceManager;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
@@ -143,9 +141,7 @@ public class UserInterfacePreferencesFragment extends BasePreferenceFragment {
                 String entry = (String) ((ListPreference) preference).getEntries()[index];
                 preference.setSummary(entry);
 
-                SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
-                edit.putString(KEY_APP_LANGUAGE, newValue.toString());
-                edit.apply();
+                preferencesDataSourceProvider.getGeneralPreferences().save(KEY_APP_LANGUAGE, newValue.toString());
 
                 startActivityAndCloseAllOthers(getActivity(), MainMenuActivity.class);
                 return true;
@@ -158,7 +154,7 @@ public class UserInterfacePreferencesFragment extends BasePreferenceFragment {
 
         if (pref != null) {
             pref.setOnPreferenceClickListener(new SplashClickListener(this, pref));
-            pref.setSummary((String) GeneralSharedPreferences.getInstance().get(KEY_SPLASH_PATH));
+            pref.setSummary(preferencesDataSourceProvider.getGeneralPreferences().getString(KEY_SPLASH_PATH));
         }
     }
 
@@ -180,7 +176,7 @@ public class UserInterfacePreferencesFragment extends BasePreferenceFragment {
     }
 
     void setSplashPath(String path) {
-        GeneralSharedPreferences.getInstance().save(KEY_SPLASH_PATH, path);
+        preferencesDataSourceProvider.getGeneralPreferences().save(KEY_SPLASH_PATH, path);
         Preference splashPathPreference = findPreference(KEY_SPLASH_PATH);
         splashPathPreference.setSummary(path);
     }

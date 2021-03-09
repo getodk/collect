@@ -23,6 +23,7 @@ import android.os.Bundle;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -43,12 +44,14 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
     @Inject
     protected PermissionsProvider permissionsProvider;
 
+    @Inject
+    protected PreferencesDataSourceProvider preferencesDataSourceProvider;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         themeUtils = new ThemeUtils(this);
         setTheme(this instanceof FormEntryActivity ? themeUtils.getFormEntryActivityTheme() : themeUtils.getAppTheme());
         super.onCreate(savedInstanceState);
-        DaggerUtils.getComponent(this).inject(this);
     }
 
     @Override
@@ -70,6 +73,7 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
+        DaggerUtils.getComponent(base).inject(this);
         applyOverrideConfiguration(new Configuration());
     }
 
@@ -89,7 +93,7 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
             }
         }
 
-        Locale locale = new LocaleHelper().getLocale(this);
+        Locale locale = new LocaleHelper().getLocale(preferencesDataSourceProvider.getGeneralPreferences());
         if (locale != null) {
             config.setLocale(locale);
             config.setLayoutDirection(locale);

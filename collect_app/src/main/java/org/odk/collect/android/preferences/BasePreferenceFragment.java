@@ -27,6 +27,9 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat im
     @Inject
     SettingsChangeHandler settingsChangeHandler;
 
+    @Inject
+    PreferencesDataSourceProvider preferencesDataSourceProvider;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -75,7 +78,7 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat im
 
     private void removeDisabledPrefs() {
         if (!isInAdminMode()) {
-            DisabledPreferencesRemover preferencesRemover = new DisabledPreferencesRemover(this);
+            DisabledPreferencesRemover preferencesRemover = new DisabledPreferencesRemover(this, preferencesDataSourceProvider.getAdminPreferences());
             preferencesRemover.remove(AdminKeys.adminToGeneral);
             preferencesRemover.removeEmptyCategories();
         }

@@ -16,7 +16,6 @@ package org.odk.collect.android.fragments;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,8 +30,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.adapters.SortDialogAdapter;
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -50,11 +50,15 @@ import androidx.fragment.app.ListFragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
+public abstract class AppListFragment extends ListFragment {
 
-abstract class AppListFragment extends ListFragment {
+    @Inject
+    PreferencesDataSourceProvider preferencesDataSourceProvider;
 
     protected int[] sortingOptions;
     protected SimpleCursorAdapter listAdapter;
@@ -100,6 +104,12 @@ abstract class AppListFragment extends ListFragment {
         } else {
             toggleButton.setText(R.string.clear_all);
         }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        DaggerUtils.getComponent(requireActivity()).inject(this);
     }
 
     @Override
@@ -265,16 +275,11 @@ abstract class AppListFragment extends ListFragment {
 
     private void saveSelectedSortingOrder(int selectedStringOrder) {
         selectedSortingOrder = selectedStringOrder;
-        PreferenceManager.getDefaultSharedPreferences(Collect.getInstance())
-                .edit()
-                .putInt(getSortingOrderKey(), selectedStringOrder)
-                .apply();
+        preferencesDataSourceProvider.getGeneralPreferences().save(getSortingOrderKey(), selectedStringOrder);
     }
 
     protected void restoreSelectedSortingOrder() {
-        selectedSortingOrder = PreferenceManager
-                .getDefaultSharedPreferences(Collect.getInstance())
-                .getInt(getSortingOrderKey(), BY_NAME_ASC);
+        selectedSortingOrder = preferencesDataSourceProvider.getGeneralPreferences().getInt(getSortingOrderKey());
     }
 
     protected int getSelectedSortingOrder() {

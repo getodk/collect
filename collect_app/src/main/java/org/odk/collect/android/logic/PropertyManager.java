@@ -14,18 +14,14 @@
 
 package org.odk.collect.android.logic;
 
-import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.properties.IPropertyRules;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 
 import java.util.HashMap;
@@ -69,24 +65,24 @@ public class PropertyManager implements IPropertyManager {
     @Inject
     PermissionsProvider permissionsProvider;
 
-    private final Context context;
+    @Inject
+    PreferencesDataSourceProvider preferencesDataSourceProvider;
 
     public String getName() {
         return "Property Manager";
     }
 
-    public PropertyManager(Context context) {
-        this.context = context;
+    public PropertyManager() {
         Collect.getInstance().getComponent().inject(this);
 
         reload();
     }
 
-    public PropertyManager(Application application, RxEventBus rxEventBus, PermissionsProvider permissionsProvider, DeviceDetailsProvider deviceDetailsProvider) {
+    public PropertyManager(RxEventBus rxEventBus, PermissionsProvider permissionsProvider, DeviceDetailsProvider deviceDetailsProvider, PreferencesDataSourceProvider preferencesDataSourceProvider) {
         this.eventBus = rxEventBus;
         this.permissionsProvider = permissionsProvider;
         this.deviceDetailsProvider = deviceDetailsProvider;
-        this.context = application;
+        this.preferencesDataSourceProvider = preferencesDataSourceProvider;
     }
 
     public PropertyManager reload() {
@@ -98,14 +94,14 @@ public class PropertyManager implements IPropertyManager {
         }
 
         // User-defined properties. Will replace any above with the same PROPMGR_ name.
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        initUserDefined(prefs, KEY_METADATA_USERNAME,    PROPMGR_USERNAME,      SCHEME_USERNAME);
-        initUserDefined(prefs, KEY_METADATA_PHONENUMBER, PROPMGR_PHONE_NUMBER,  SCHEME_TEL);
-        initUserDefined(prefs, KEY_METADATA_EMAIL,       PROPMGR_EMAIL,         SCHEME_MAILTO);
+        PreferencesDataSource generalPrefs = preferencesDataSourceProvider.getGeneralPreferences();
+        initUserDefined(generalPrefs, KEY_METADATA_USERNAME,    PROPMGR_USERNAME,      SCHEME_USERNAME);
+        initUserDefined(generalPrefs, KEY_METADATA_PHONENUMBER, PROPMGR_PHONE_NUMBER,  SCHEME_TEL);
+        initUserDefined(generalPrefs, KEY_METADATA_EMAIL,       PROPMGR_EMAIL,         SCHEME_MAILTO);
 
         // Use the server username by default if the metadata username is not defined
         if (getSingularProperty(PROPMGR_USERNAME) == null || getSingularProperty(PROPMGR_USERNAME).isEmpty()) {
-            putProperty(PROPMGR_USERNAME, SCHEME_USERNAME, (String) GeneralSharedPreferences.getInstance().get(KEY_USERNAME));
+            putProperty(PROPMGR_USERNAME, SCHEME_USERNAME, preferencesDataSourceProvider.getGeneralPreferences().getString(KEY_USERNAME));
         }
 
         return this;
@@ -113,14 +109,14 @@ public class PropertyManager implements IPropertyManager {
 
     /**
      * Initializes a property and its associated “with URI” property, from shared preferences.
-     * @param preferences the shared preferences object to be used
+     * @param generalPrefs the preferences object to be used
      * @param prefKey the preferences key
      * @param propName the name of the property to set
      * @param scheme the scheme for the associated “with URI” property
      */
-    private void initUserDefined(SharedPreferences preferences, String prefKey,
+    private void initUserDefined(PreferencesDataSource generalPrefs, String prefKey,
                                  String propName, String scheme) {
-        putProperty(propName, scheme, preferences.getString(prefKey, null));
+        putProperty(propName, scheme, generalPrefs.getString(prefKey));
     }
 
     public void putProperty(String propName, String scheme, String value) {
