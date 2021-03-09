@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 import org.odk.collect.utilities.TestPreferencesProvider;
 
 import java.util.Map;

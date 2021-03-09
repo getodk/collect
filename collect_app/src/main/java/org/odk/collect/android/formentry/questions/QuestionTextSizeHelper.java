@@ -1,6 +1,6 @@
 package org.odk.collect.android.formentry.questions;
 
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.PreferencesDataSource;
 
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_FONT_SIZE;
 

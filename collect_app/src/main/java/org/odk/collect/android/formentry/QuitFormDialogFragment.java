@@ -23,7 +23,7 @@ import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.keys.AdminKeys;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.async.Scheduler;
 

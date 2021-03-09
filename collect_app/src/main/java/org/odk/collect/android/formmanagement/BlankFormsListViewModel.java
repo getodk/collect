@@ -19,8 +19,8 @@ import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.async.Scheduler;
 

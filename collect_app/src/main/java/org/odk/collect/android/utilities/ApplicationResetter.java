@@ -23,7 +23,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.osmdroid.config.Configuration;

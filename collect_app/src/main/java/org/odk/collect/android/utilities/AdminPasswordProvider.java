@@ -1,6 +1,6 @@
 package org.odk.collect.android.utilities;
 
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.PreferencesDataSource;
 
 import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_ADMIN_PW;
 

@@ -2,7 +2,7 @@ package org.odk.collect.android.backgroundwork;
 
 import android.app.Application;
 
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.PreferencesDataSource;
 import org.odk.collect.android.preferences.Protocol;
 import org.odk.collect.async.Scheduler;
 

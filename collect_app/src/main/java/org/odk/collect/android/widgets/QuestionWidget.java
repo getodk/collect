@@ -43,7 +43,7 @@ import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.GuidanceHint;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ScreenUtils;

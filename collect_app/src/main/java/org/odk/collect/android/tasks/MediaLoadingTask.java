@@ -11,7 +11,7 @@ import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.widgets.BaseImageWidget;

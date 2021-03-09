@@ -5,6 +5,8 @@ import android.content.Context;
 import androidx.preference.ListPreference;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.source.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 
 import java.util.Arrays;
 

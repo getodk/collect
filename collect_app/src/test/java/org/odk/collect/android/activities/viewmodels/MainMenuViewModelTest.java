@@ -5,7 +5,7 @@ import android.app.Application;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 import org.odk.collect.android.version.VersionInformation;
 import org.robolectric.RobolectricTestRunner;
 

@@ -39,7 +39,7 @@ import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
 

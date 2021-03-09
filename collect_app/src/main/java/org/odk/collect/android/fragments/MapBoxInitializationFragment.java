@@ -15,8 +15,8 @@ import com.mapbox.mapboxsdk.maps.Style;
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.network.NetworkStateProvider;
-import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 
 import javax.inject.Inject;
 

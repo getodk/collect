@@ -1,4 +1,4 @@
-package org.odk.collect.android.preferences
+package org.odk.collect.android.preferences.source
 
 import android.content.Context
 import androidx.preference.PreferenceManager

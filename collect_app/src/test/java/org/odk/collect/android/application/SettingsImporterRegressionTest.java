@@ -10,8 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.configure.SettingsImporter;
-import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 import org.odk.collect.utilities.TestPreferencesProvider;
 
 import static org.hamcrest.MatcherAssert.assertThat;

@@ -29,7 +29,7 @@ import org.odk.collect.android.application.Collect;
 
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.PreferencesDataSource;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;

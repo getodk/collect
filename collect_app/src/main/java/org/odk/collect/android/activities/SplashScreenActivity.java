@@ -30,7 +30,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.permissions.PermissionsProvider;
 

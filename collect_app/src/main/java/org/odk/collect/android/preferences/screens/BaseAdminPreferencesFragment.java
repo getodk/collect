@@ -5,7 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.preferences.stores.AdminPreferencesDataStore;
+import org.odk.collect.android.preferences.source.AdminPreferencesDataStore;
 
 import javax.inject.Inject;
 

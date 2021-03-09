@@ -6,7 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.PreferencesDataSource;
 
 import java.io.File;
 import java.util.Collection;

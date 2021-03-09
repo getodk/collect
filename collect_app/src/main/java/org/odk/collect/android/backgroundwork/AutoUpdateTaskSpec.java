@@ -28,7 +28,7 @@ import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;

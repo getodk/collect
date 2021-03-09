@@ -25,8 +25,8 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.client.GoogleFusedLocationClient;
 import org.odk.collect.android.location.client.MaxAccuracyWithinTimeoutLocationClient;
-import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 

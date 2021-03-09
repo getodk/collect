@@ -1,7 +1,7 @@
 package org.odk.collect.android.utilities;
 
 import org.junit.Test;
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.PreferencesDataSource;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

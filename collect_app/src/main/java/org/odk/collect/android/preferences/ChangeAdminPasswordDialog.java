@@ -14,6 +14,7 @@ import androidx.fragment.app.DialogFragment;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import javax.inject.Inject;

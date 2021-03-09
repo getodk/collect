@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 import org.odk.collect.utilities.TestPreferencesProvider;
 import org.robolectric.RobolectricTestRunner;
 

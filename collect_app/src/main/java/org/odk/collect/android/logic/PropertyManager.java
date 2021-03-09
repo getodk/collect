@@ -20,8 +20,8 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 
 import java.util.HashMap;

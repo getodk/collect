@@ -10,7 +10,7 @@ import org.junit.runners.model.Statement;
 import org.odk.collect.android.application.Collect;
 
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.storage.StoragePathProvider;

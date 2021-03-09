@@ -12,7 +12,7 @@ import org.odk.collect.android.geo.GoogleMapConfigurator.GoogleMapTypeOption;
 import org.odk.collect.android.geo.MapboxMapConfigurator.MapboxUrlOption;
 import org.odk.collect.android.geo.OsmDroidMapConfigurator.WmsOption;
 import org.odk.collect.android.preferences.PrefUtils;
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.PreferencesDataSource;
 
 import java.util.Map;
 import java.util.WeakHashMap;

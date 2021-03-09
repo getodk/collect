@@ -57,7 +57,7 @@ import org.odk.collect.android.preferences.screens.FormMetadataPreferencesFragme
 import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity;
 import org.odk.collect.android.preferences.screens.GeneralPreferencesFragment;
 import org.odk.collect.android.preferences.screens.IdentityPreferencesFragment;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 import org.odk.collect.android.preferences.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.screens.ServerPreferencesFragment;
 import org.odk.collect.android.preferences.screens.UserInterfacePreferencesFragment;

@@ -7,7 +7,7 @@ import org.odk.collect.android.formentry.audit.AuditConfig;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.PreferencesDataSource;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_BACKGROUND_LOCATION;

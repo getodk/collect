@@ -3,6 +3,7 @@ package org.odk.collect.android.preferences;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.preferences.keys.AdminKeys;
+import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 
 import java.util.Collection;
 

@@ -1,7 +1,6 @@
-package org.odk.collect.android.preferences.stores
+package org.odk.collect.android.preferences.source
 
 import androidx.preference.PreferenceDataStore
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider
 
 class AdminPreferencesDataStore(val preferencesDataSourceProvider: PreferencesDataSourceProvider) : PreferenceDataStore() {
     override fun putString(key: String, value: String?) {

@@ -1,6 +1,6 @@
 package org.odk.collect.android.application.initialization;
 
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.PreferencesDataSource;
 
 public interface SettingsPreferenceMigrator {
 

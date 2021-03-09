@@ -1,7 +1,7 @@
 package org.odk.collect.android.utilities;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_FONT_SIZE;
 

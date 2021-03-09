@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.source.PreferencesDataSource;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.utilities.TestPreferencesProvider;
 

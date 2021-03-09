@@ -9,7 +9,7 @@ import com.google.common.collect.ImmutableSet;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.PrefUtils;
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.PreferencesDataSource;
 
 import java.io.File;
 import java.util.Collection;

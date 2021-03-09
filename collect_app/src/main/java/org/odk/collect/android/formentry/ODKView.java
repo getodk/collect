@@ -67,7 +67,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;

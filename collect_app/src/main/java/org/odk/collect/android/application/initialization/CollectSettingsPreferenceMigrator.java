@@ -6,7 +6,7 @@ import com.mapbox.mapboxsdk.maps.Style;
 import org.odk.collect.android.application.initialization.migration.KeyRenamer;
 import org.odk.collect.android.application.initialization.migration.KeyTranslator;
 import org.odk.collect.android.application.initialization.migration.Migration;
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.PreferencesDataSource;
 
 import java.util.List;
 
