@@ -28,7 +28,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.preferences.screens.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
+import static org.odk.collect.android.preferences.screens.GeneralPreferencesActivity.INTENT_KEY_ADMIN_MODE;
 import static org.robolectric.Shadows.shadowOf;
 import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 
@@ -86,7 +86,7 @@ public class AdminPreferencesActivityTest {
 
         adminPreferencesFragment.onPreferenceClick(preference);
 
-        Intent expectedIntent = new Intent(activityController.get(), PreferencesActivity.class);
+        Intent expectedIntent = new Intent(activityController.get(), GeneralPreferencesActivity.class);
         Intent actual = shadowOf(RuntimeEnvironment.application).getNextStartedActivity();
         assertThat(expectedIntent.getComponent(), is(actual.getComponent()));
         assertThat(actual.getExtras().getBoolean(INTENT_KEY_ADMIN_MODE), is(true));

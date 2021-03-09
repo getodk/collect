@@ -9,7 +9,7 @@ import org.odk.collect.android.preferences.stores.AdminPreferencesDataStore;
 
 import javax.inject.Inject;
 
-public abstract class BaseAdminPreferencesFragment extends BasePreferenceFragment {
+public abstract class BaseAdminPreferencesFragment extends BasePreferencesFragment {
     @Inject
     AdminPreferencesDataStore adminPreferencesDataStore;
 

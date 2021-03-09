@@ -92,11 +92,11 @@ public class GeneralPreferencesFragment extends BaseGeneralPreferencesFragment i
             case "user_interface":
                 return new UserInterfacePreferencesFragment();
             case "maps":
-                return new MapsPreferences();
+                return new MapsPreferencesFragment();
             case "form_management":
-                return new FormManagementPreferences();
+                return new FormManagementPreferencesFragment();
             case "user_and_device_identity":
-                return new IdentityPreferences();
+                return new IdentityPreferencesFragment();
             case "experimental":
                 return new ExperimentalPreferencesFragment();
             default:

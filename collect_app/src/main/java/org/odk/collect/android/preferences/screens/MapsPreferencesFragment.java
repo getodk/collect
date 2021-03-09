@@ -44,7 +44,7 @@ import java.util.List;
 import static org.odk.collect.android.preferences.GeneralKeys.CATEGORY_BASEMAP;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASEMAP_SOURCE;
 
-public class MapsPreferences extends BaseGeneralPreferencesFragment {
+public class MapsPreferencesFragment extends BaseGeneralPreferencesFragment {
 
     private Context context;
     private ListPreference basemapSourcePref;
@@ -74,7 +74,7 @@ public class MapsPreferences extends BaseGeneralPreferencesFragment {
         // and attaching it to an activity.  So, we instantiate a MapsPreference
         // fragment that is configured to immediately open the dialog when it's
         // attached, then instantiate it and attach it.
-        MapsPreferences prefs = new MapsPreferences();
+        MapsPreferencesFragment prefs = new MapsPreferencesFragment();
         prefs.autoShowReferenceLayerDialog = true;  // makes dialog open immediately
         ((AppCompatActivity) activity).getSupportFragmentManager()
             .beginTransaction()

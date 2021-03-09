@@ -16,10 +16,10 @@ import org.odk.collect.utilities.TestPreferencesProvider;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
-import static org.odk.collect.android.preferences.screens.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
+import static org.odk.collect.android.preferences.screens.GeneralPreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 @RunWith(AndroidJUnit4.class)
-public class IdentityPreferencesFragmentTest {
+public class IdentityPreferencesFragmentFragmentTest {
     private final PreferencesDataSource adminPrefs = TestPreferencesProvider.getAdminPreferences();
 
     @Before
@@ -30,7 +30,7 @@ public class IdentityPreferencesFragmentTest {
 
     @Test
     public void visiblePreferences_shouldBeVisibleIfOpenedFromGeneralPreferences() {
-        FragmentScenario<IdentityPreferences> scenario = FragmentScenario.launch(IdentityPreferences.class);
+        FragmentScenario<IdentityPreferencesFragment> scenario = FragmentScenario.launch(IdentityPreferencesFragment.class);
         scenario.onFragment(fragment -> {
             assertThat(fragment.findPreference(GeneralKeys.KEY_FORM_METADATA).isVisible(), equalTo(true));
             assertThat(fragment.findPreference(GeneralKeys.KEY_ANALYTICS).isVisible(), equalTo(true));
@@ -42,7 +42,7 @@ public class IdentityPreferencesFragmentTest {
         Bundle args = new Bundle();
         args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
 
-        FragmentScenario<IdentityPreferences> scenario = FragmentScenario.launch(IdentityPreferences.class, args);
+        FragmentScenario<IdentityPreferencesFragment> scenario = FragmentScenario.launch(IdentityPreferencesFragment.class, args);
         scenario.onFragment(fragment -> {
             assertThat(fragment.findPreference(GeneralKeys.KEY_FORM_METADATA).isVisible(), equalTo(true));
             assertThat(fragment.findPreference(GeneralKeys.KEY_ANALYTICS).isVisible(), equalTo(true));
@@ -54,7 +54,7 @@ public class IdentityPreferencesFragmentTest {
         adminPrefs.save(AdminKeys.KEY_CHANGE_FORM_METADATA, false);
         adminPrefs.save(AdminKeys.KEY_ANALYTICS, false);
 
-        FragmentScenario<IdentityPreferences> scenario = FragmentScenario.launch(IdentityPreferences.class);
+        FragmentScenario<IdentityPreferencesFragment> scenario = FragmentScenario.launch(IdentityPreferencesFragment.class);
         scenario.onFragment(fragment -> {
             assertThat(fragment.findPreference(GeneralKeys.KEY_FORM_METADATA), nullValue());
             assertThat(fragment.findPreference(GeneralKeys.KEY_ANALYTICS), nullValue());
@@ -69,7 +69,7 @@ public class IdentityPreferencesFragmentTest {
         Bundle args = new Bundle();
         args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
 
-        FragmentScenario<IdentityPreferences> scenario = FragmentScenario.launch(IdentityPreferences.class, args);
+        FragmentScenario<IdentityPreferencesFragment> scenario = FragmentScenario.launch(IdentityPreferencesFragment.class, args);
         scenario.onFragment(fragment -> {
             assertThat(fragment.findPreference(GeneralKeys.KEY_FORM_METADATA).isVisible(), equalTo(true));
             assertThat(fragment.findPreference(GeneralKeys.KEY_ANALYTICS).isVisible(), equalTo(true));

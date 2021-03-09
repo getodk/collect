@@ -42,7 +42,7 @@ import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.AdminPasswordDialogFragment.Action;
 import org.odk.collect.android.preferences.screens.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.screens.PreferencesActivity;
+import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -249,7 +249,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;
             case R.id.menu_general_preferences:
-                startActivity(new Intent(this, PreferencesActivity.class));
+                startActivity(new Intent(this, GeneralPreferencesActivity.class));
                 return true;
             case R.id.menu_admin_preferences:
                 if (adminPasswordProvider.isAdminPasswordSet()) {

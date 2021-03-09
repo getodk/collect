@@ -30,7 +30,7 @@ import javax.inject.Inject;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_ANALYTICS;
 
-public class IdentityPreferences extends BaseGeneralPreferencesFragment {
+public class IdentityPreferencesFragment extends BaseGeneralPreferencesFragment {
 
     @Inject
     Analytics analytics;
@@ -47,7 +47,7 @@ public class IdentityPreferences extends BaseGeneralPreferencesFragment {
 
         findPreference("form_metadata").setOnPreferenceClickListener(preference -> {
             if (MultiClickGuard.allowClick(getClass().getName())) {
-                Fragment fragment = new FormMetadataFragment();
+                Fragment fragment = new FormMetadataPreferencesFragment();
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.preferences_fragment_container, fragment)

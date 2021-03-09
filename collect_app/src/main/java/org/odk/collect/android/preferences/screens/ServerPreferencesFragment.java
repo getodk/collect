@@ -103,7 +103,7 @@ public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment im
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
 
-        ((PreferencesActivity) context).setOnBackPressedListener(this);
+        ((GeneralPreferencesActivity) context).setOnBackPressedListener(this);
     }
 
     @Override
@@ -183,7 +183,7 @@ public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment im
 
         findPreference("custom_server_paths").setOnPreferenceClickListener(preference -> {
             if (MultiClickGuard.allowClick(getClass().getName())) {
-                Fragment fragment = new CustomServerPathsFragment();
+                Fragment fragment = new CustomServerPathsPreferencesFragment();
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.preferences_fragment_container, fragment)
@@ -417,7 +417,7 @@ public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment im
     }
 
     private void continueOnBackPressed() {
-        ((PreferencesActivity) getActivity()).setOnBackPressedListener(null);
+        ((GeneralPreferencesActivity) getActivity()).setOnBackPressedListener(null);
         getActivity().onBackPressed();
     }
 

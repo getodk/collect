@@ -32,7 +32,7 @@ import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 
 @RunWith(AndroidJUnit4.class)
 @LooperMode(PAUSED)
-public class FormMetadataFragmentTest {
+public class FormMetadataPreferencesFragmentTest {
 
     private final FakePhoneStatePermissionsProvider permissionsProvider = new FakePhoneStatePermissionsProvider();
     private final DeviceDetailsProvider deviceDetailsProvider = mock(DeviceDetailsProvider.class);
@@ -55,7 +55,7 @@ public class FormMetadataFragmentTest {
 
     @Test
     public void recreating_doesntRequestPermissionsAgain() {
-        FragmentScenario<FormMetadataFragment> scenario = FragmentScenario.launch(FormMetadataFragment.class);
+        FragmentScenario<FormMetadataPreferencesFragment> scenario = FragmentScenario.launch(FormMetadataPreferencesFragment.class);
         assertThat(permissionsProvider.timesRequested, equalTo(1));
 
         scenario.recreate();
@@ -66,7 +66,7 @@ public class FormMetadataFragmentTest {
     public void recreating_whenPermissionsAcceptedPreviously_showsPermissionDependantPreferences() {
         when(deviceDetailsProvider.getDeviceId()).thenReturn("123456789");
 
-        FragmentScenario<FormMetadataFragment> scenario = FragmentScenario.launch(FormMetadataFragment.class);
+        FragmentScenario<FormMetadataPreferencesFragment> scenario = FragmentScenario.launch(FormMetadataPreferencesFragment.class);
         permissionsProvider.grant();
         scenario.onFragment(fragment -> {
             assertThat(fragment.findPreference(PROPMGR_DEVICE_ID).getSummary(), equalTo("123456789"));
@@ -80,7 +80,7 @@ public class FormMetadataFragmentTest {
 
     @Test
     public void recreating_whenPermissionsGrantedPreviously_doesNotShowPermissionDependantPreferences() {
-        FragmentScenario<FormMetadataFragment> scenario = FragmentScenario.launch(FormMetadataFragment.class);
+        FragmentScenario<FormMetadataPreferencesFragment> scenario = FragmentScenario.launch(FormMetadataPreferencesFragment.class);
         permissionsProvider.deny();
         scenario.recreate();
         verifyNoInteractions(deviceDetailsProvider);
@@ -91,7 +91,7 @@ public class FormMetadataFragmentTest {
         when(deviceDetailsProvider.getLine1Number()).thenReturn(null);
         when(deviceDetailsProvider.getDeviceId()).thenReturn(null);
 
-        FragmentScenario<FormMetadataFragment> scenario = FragmentScenario.launch(FormMetadataFragment.class);
+        FragmentScenario<FormMetadataPreferencesFragment> scenario = FragmentScenario.launch(FormMetadataPreferencesFragment.class);
         permissionsProvider.grant();
         scenario.onFragment(fragment -> {
             String notSetMessage = fragment.getContext().getString(R.string.preference_not_available);

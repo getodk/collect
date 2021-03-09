@@ -23,9 +23,9 @@ import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 
 import javax.inject.Inject;
 
-import static org.odk.collect.android.preferences.screens.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
+import static org.odk.collect.android.preferences.screens.GeneralPreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
-public abstract class BasePreferenceFragment extends PreferenceFragmentCompat implements PreferencesDataSource.OnPreferenceChangeListener {
+public abstract class BasePreferencesFragment extends PreferenceFragmentCompat implements PreferencesDataSource.OnPreferenceChangeListener {
 
     @Inject
     SettingsChangeHandler settingsChangeHandler;

@@ -16,7 +16,7 @@ import org.odk.collect.utilities.TestPreferencesProvider;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
-import static org.odk.collect.android.preferences.screens.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
+import static org.odk.collect.android.preferences.screens.GeneralPreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 @RunWith(AndroidJUnit4.class)
 public class GeneralPreferencesFragmentTest {

@@ -9,7 +9,7 @@ import org.odk.collect.android.preferences.stores.GeneralPreferencesDataStore;
 
 import javax.inject.Inject;
 
-public abstract class BaseGeneralPreferencesFragment extends BasePreferenceFragment {
+public abstract class BaseGeneralPreferencesFragment extends BasePreferencesFragment {
     @Inject
     GeneralPreferencesDataStore generalPreferencesDataStore;
 

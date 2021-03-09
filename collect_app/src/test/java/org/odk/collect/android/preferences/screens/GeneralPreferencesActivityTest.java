@@ -19,17 +19,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.preferences.screens.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
+import static org.odk.collect.android.preferences.screens.GeneralPreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 @LooperMode(LooperMode.Mode.PAUSED)
 @RunWith(ParameterizedRobolectricTestRunner.class)
-public class PreferencesActivityTest {
+public class GeneralPreferencesActivityTest {
 
     private GeneralPreferencesFragment generalPreferencesFragment;
-    private ActivityController<PreferencesActivity> activityController;
+    private ActivityController<GeneralPreferencesActivity> activityController;
     private final boolean accessedFromAdminSettings;
 
-    public PreferencesActivityTest(boolean accessedFromAdminSettings) {
+    public GeneralPreferencesActivityTest(boolean accessedFromAdminSettings) {
         this.accessedFromAdminSettings = accessedFromAdminSettings;
     }
 
@@ -45,7 +45,7 @@ public class PreferencesActivityTest {
         Intent intent = new Intent();
         intent.putExtra(INTENT_KEY_ADMIN_MODE, accessedFromAdminSettings);
         activityController = Robolectric
-                .buildActivity(PreferencesActivity.class, intent)
+                .buildActivity(GeneralPreferencesActivity.class, intent)
                 .setup();
 
         generalPreferencesFragment = (GeneralPreferencesFragment) activityController.get()
@@ -98,8 +98,8 @@ public class PreferencesActivityTest {
         generalPreferencesFragment.onPreferenceClick(preference);
         activityController.resume();
 
-        MapsPreferences preferences
-                = (MapsPreferences) activityController.get()
+        MapsPreferencesFragment preferences
+                = (MapsPreferencesFragment) activityController.get()
                 .getSupportFragmentManager()
                 .findFragmentById(R.id.preferences_fragment_container);
 
@@ -114,8 +114,8 @@ public class PreferencesActivityTest {
         generalPreferencesFragment.onPreferenceClick(preference);
         activityController.resume();
 
-        FormManagementPreferences preferences
-                = (FormManagementPreferences) activityController.get()
+        FormManagementPreferencesFragment preferences
+                = (FormManagementPreferencesFragment) activityController.get()
                 .getSupportFragmentManager()
                 .findFragmentById(R.id.preferences_fragment_container);
 
@@ -130,8 +130,8 @@ public class PreferencesActivityTest {
         generalPreferencesFragment.onPreferenceClick(preference);
         activityController.resume();
 
-        IdentityPreferences preferences
-                = (IdentityPreferences) activityController.get()
+        IdentityPreferencesFragment preferences
+                = (IdentityPreferencesFragment) activityController.get()
                 .getSupportFragmentManager()
                 .findFragmentById(R.id.preferences_fragment_container);
 

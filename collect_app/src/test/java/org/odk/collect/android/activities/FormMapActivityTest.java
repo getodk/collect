@@ -25,7 +25,7 @@ import org.odk.collect.android.geo.TestMapFragment;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.InMemInstancesRepository;
 import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.screens.MapsPreferences;
+import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -151,13 +151,13 @@ public class FormMapActivityTest {
     @LooperMode(PAUSED)
     @Test public void tappingOnLayerMenu_opensLayerDialog() {
         List<Fragment> fragments = activity.getSupportFragmentManager().getFragments();
-        assertThat(fragments, not(hasItem(isA(MapsPreferences.class))));
+        assertThat(fragments, not(hasItem(isA(MapsPreferencesFragment.class))));
 
         activity.findViewById(R.id.layer_menu).performClick();
 
         activity.getSupportFragmentManager().executePendingTransactions();
         fragments = activity.getSupportFragmentManager().getFragments();
-        assertThat(fragments, hasItem(isA(MapsPreferences.class)));
+        assertThat(fragments, hasItem(isA(MapsPreferencesFragment.class)));
     }
 
     @LooperMode(PAUSED)

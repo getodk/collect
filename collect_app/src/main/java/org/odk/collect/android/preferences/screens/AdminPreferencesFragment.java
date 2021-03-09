@@ -47,7 +47,7 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_JUMP_TO;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_SAVE_MID;
 import static org.odk.collect.android.preferences.GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE;
-import static org.odk.collect.android.preferences.screens.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
+import static org.odk.collect.android.preferences.screens.GeneralPreferencesActivity.INTENT_KEY_ADMIN_MODE;
 import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
 
 public class AdminPreferencesFragment extends BaseAdminPreferencesFragment implements Preference.OnPreferenceClickListener {
@@ -90,7 +90,7 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
         if (MultiClickGuard.allowClick(getClass().getName())) {
             switch (preference.getKey()) {
                 case "odk_preferences":
-                    Intent intent = new Intent(getActivity(), PreferencesActivity.class);
+                    Intent intent = new Intent(getActivity(), GeneralPreferencesActivity.class);
                     intent.putExtra(INTENT_KEY_ADMIN_MODE, true);
                     startActivity(intent);
                     break;

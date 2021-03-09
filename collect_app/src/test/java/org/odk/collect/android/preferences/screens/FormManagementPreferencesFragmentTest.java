@@ -31,11 +31,11 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDA
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORM_UPDATE_MODE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
-import static org.odk.collect.android.preferences.screens.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
+import static org.odk.collect.android.preferences.screens.GeneralPreferencesActivity.INTENT_KEY_ADMIN_MODE;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(AndroidJUnit4.class)
-public class FormManagementPreferencesTest {
+public class FormManagementPreferencesFragmentTest {
 
     private Context context;
     private final PreferencesDataSource generalPrefs = TestPreferencesProvider.getGeneralPreferences();
@@ -55,7 +55,7 @@ public class FormManagementPreferencesTest {
         generalPrefs.save(KEY_PROTOCOL, Protocol.GOOGLE.getValue(context));
         generalPrefs.save(KEY_FORM_UPDATE_MODE, MATCH_EXACTLY.getValue(context));
 
-        FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class);
+        FragmentScenario<FormManagementPreferencesFragment> scenario = FragmentScenario.launch(FormManagementPreferencesFragment.class);
         scenario.onFragment(f -> {
             assertThat(f.findPreference(KEY_FORM_UPDATE_MODE).getSummary(), is(context.getString(R.string.manual)));
             assertThat(generalPrefs.getString(KEY_FORM_UPDATE_MODE), is(MATCH_EXACTLY.getValue(context)));
@@ -70,7 +70,7 @@ public class FormManagementPreferencesTest {
     public void whenManualUpdatesEnabled_disablesPrefs() {
         generalPrefs.save(KEY_FORM_UPDATE_MODE, MANUAL.getValue(context));
 
-        FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class);
+        FragmentScenario<FormManagementPreferencesFragment> scenario = FragmentScenario.launch(FormManagementPreferencesFragment.class);
         scenario.onFragment(f -> {
             assertThat(f.findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).isEnabled(), is(false));
             assertThat(f.findPreference(KEY_AUTOMATIC_UPDATE).isEnabled(), is(false));
@@ -81,7 +81,7 @@ public class FormManagementPreferencesTest {
     public void whenPreviouslyDownloadedOnlyEnabled_disablesPrefs() {
         generalPrefs.save(KEY_FORM_UPDATE_MODE, PREVIOUSLY_DOWNLOADED_ONLY.getValue(context));
 
-        FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class);
+        FragmentScenario<FormManagementPreferencesFragment> scenario = FragmentScenario.launch(FormManagementPreferencesFragment.class);
         scenario.onFragment(f -> {
             assertThat(f.findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).isEnabled(), is(true));
             assertThat(f.findPreference(KEY_AUTOMATIC_UPDATE).isEnabled(), is(true));
@@ -92,7 +92,7 @@ public class FormManagementPreferencesTest {
     public void whenMatchExactlyEnabled_disablesPrefs() {
         generalPrefs.save(KEY_FORM_UPDATE_MODE, MATCH_EXACTLY.getValue(context));
 
-        FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class);
+        FragmentScenario<FormManagementPreferencesFragment> scenario = FragmentScenario.launch(FormManagementPreferencesFragment.class);
         scenario.onFragment(f -> {
             assertThat(f.findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).isEnabled(), is(true));
             assertThat(f.findPreference(KEY_AUTOMATIC_UPDATE).isEnabled(), is(false));
@@ -104,7 +104,7 @@ public class FormManagementPreferencesTest {
         generalPrefs.save(KEY_FORM_UPDATE_MODE, MATCH_EXACTLY.getValue(context));
         generalPrefs.save(KEY_AUTOMATIC_UPDATE, false);
 
-        FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class);
+        FragmentScenario<FormManagementPreferencesFragment> scenario = FragmentScenario.launch(FormManagementPreferencesFragment.class);
         scenario.onFragment(f -> {
             CheckBoxPreference automaticDownload = f.findPreference(KEY_AUTOMATIC_UPDATE);
             assertThat(automaticDownload.isChecked(), is(true));
@@ -117,7 +117,7 @@ public class FormManagementPreferencesTest {
         generalPrefs.save(KEY_FORM_UPDATE_MODE, MANUAL.getValue(context));
         generalPrefs.save(KEY_AUTOMATIC_UPDATE, true);
 
-        FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class);
+        FragmentScenario<FormManagementPreferencesFragment> scenario = FragmentScenario.launch(FormManagementPreferencesFragment.class);
         scenario.onFragment(f -> {
             CheckBoxPreference automaticDownload = f.findPreference(KEY_AUTOMATIC_UPDATE);
             assertThat(automaticDownload.isChecked(), is(false));
@@ -130,7 +130,7 @@ public class FormManagementPreferencesTest {
         generalPrefs.save(KEY_PROTOCOL, Protocol.GOOGLE.getValue(context));
         generalPrefs.save(KEY_AUTOMATIC_UPDATE, true);
 
-        FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class);
+        FragmentScenario<FormManagementPreferencesFragment> scenario = FragmentScenario.launch(FormManagementPreferencesFragment.class);
         scenario.onFragment(f -> {
             CheckBoxPreference automaticDownload = f.findPreference(KEY_AUTOMATIC_UPDATE);
             assertThat(automaticDownload.isChecked(), is(false));
@@ -143,7 +143,7 @@ public class FormManagementPreferencesTest {
         generalPrefs.save(KEY_FORM_UPDATE_MODE, MANUAL.getValue(context));
         generalPrefs.save(KEY_AUTOMATIC_UPDATE, false);
 
-        FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class);
+        FragmentScenario<FormManagementPreferencesFragment> scenario = FragmentScenario.launch(FormManagementPreferencesFragment.class);
         scenario.onFragment(f -> {
             ListPreference updateMode = f.findPreference(KEY_FORM_UPDATE_MODE);
             updateMode.setValue(PREVIOUSLY_DOWNLOADED_ONLY.getValue(context));
@@ -160,7 +160,7 @@ public class FormManagementPreferencesTest {
         adminPrefs.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false);
         adminPrefs.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false);
 
-        FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class);
+        FragmentScenario<FormManagementPreferencesFragment> scenario = FragmentScenario.launch(FormManagementPreferencesFragment.class);
         scenario.onFragment(f -> {
             assertThat(f.findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK), nullValue());
             assertThat(f.findPreference(KEY_AUTOMATIC_UPDATE), nullValue());
@@ -176,7 +176,7 @@ public class FormManagementPreferencesTest {
 
     @Test
     public void visiblePreferences_shouldBeVisibleIfOpenedFromGeneralPreferences() {
-        FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class);
+        FragmentScenario<FormManagementPreferencesFragment> scenario = FragmentScenario.launch(FormManagementPreferencesFragment.class);
         scenario.onFragment(fragment -> {
             assertThat(fragment.findPreference(GeneralKeys.KEY_AUTOMATIC_UPDATE).isVisible(), equalTo(true));
             assertThat(fragment.findPreference(GeneralKeys.KEY_HIDE_OLD_FORM_VERSIONS).isVisible(), equalTo(true));
@@ -196,7 +196,7 @@ public class FormManagementPreferencesTest {
         Bundle args = new Bundle();
         args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
 
-        FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class, args);
+        FragmentScenario<FormManagementPreferencesFragment> scenario = FragmentScenario.launch(FormManagementPreferencesFragment.class, args);
         scenario.onFragment(fragment -> {
             assertThat(fragment.findPreference(GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK).isVisible(), equalTo(true));
             assertThat(fragment.findPreference(GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK).isVisible(), equalTo(true));
@@ -228,7 +228,7 @@ public class FormManagementPreferencesTest {
         adminPrefs.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false);
         adminPrefs.save(AdminKeys.KEY_EXTERNAL_APP_RECORDING, false);
 
-        FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class);
+        FragmentScenario<FormManagementPreferencesFragment> scenario = FragmentScenario.launch(FormManagementPreferencesFragment.class);
         scenario.onFragment(fragment -> {
             assertThat(fragment.findPreference(GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK), nullValue());
             assertThat(fragment.findPreference(GeneralKeys.KEY_AUTOMATIC_UPDATE), nullValue());
@@ -262,7 +262,7 @@ public class FormManagementPreferencesTest {
         Bundle args = new Bundle();
         args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
 
-        FragmentScenario<FormManagementPreferences> scenario = FragmentScenario.launch(FormManagementPreferences.class, args);
+        FragmentScenario<FormManagementPreferencesFragment> scenario = FragmentScenario.launch(FormManagementPreferencesFragment.class, args);
         scenario.onFragment(fragment -> {
             assertThat(fragment.findPreference(GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK).isVisible(), equalTo(true));
             assertThat(fragment.findPreference(GeneralKeys.KEY_AUTOMATIC_UPDATE).isVisible(), equalTo(true));
