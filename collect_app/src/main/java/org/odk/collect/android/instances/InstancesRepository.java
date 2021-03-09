@@ -1,7 +1,5 @@
 package org.odk.collect.android.instances;
 
-import android.net.Uri;
-
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -37,5 +35,5 @@ public interface InstancesRepository {
 
     void deleteAll();
 
-    Uri save(Instance instance);
+    void save(Instance instance);
 }

@@ -1,7 +1,5 @@
 package org.odk.collect.android.support;
 
-import android.net.Uri;
-
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 
@@ -105,9 +103,8 @@ public final class InMemInstancesRepository implements InstancesRepository {
     }
 
     @Override
-    public Uri save(Instance instance) {
+    public void save(Instance instance) {
         instances.add(instance);
-        return null;
     }
 
     public void removeInstanceById(Long databaseId) {
