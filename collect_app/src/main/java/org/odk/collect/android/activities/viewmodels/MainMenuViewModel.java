@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.configure.SettingsUtils;
 import org.odk.collect.android.preferences.FormUpdateMode;
-import org.odk.collect.android.preferences.AdminKeys;
+import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.version.VersionInformation;

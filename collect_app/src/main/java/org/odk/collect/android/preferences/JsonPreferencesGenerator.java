@@ -2,15 +2,16 @@ package org.odk.collect.android.preferences;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.odk.collect.android.preferences.keys.AdminKeys;
 
 import java.util.Collection;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.AdminKeys.ALL_KEYS;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
-import static org.odk.collect.android.preferences.GeneralKeys.DEFAULTS;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
+import static org.odk.collect.android.preferences.keys.AdminKeys.ALL_KEYS;
+import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_ADMIN_PW;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.DEFAULTS;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PASSWORD;
 
 public class JsonPreferencesGenerator {
     private final PreferencesDataSourceProvider preferencesDataSourceProvider;

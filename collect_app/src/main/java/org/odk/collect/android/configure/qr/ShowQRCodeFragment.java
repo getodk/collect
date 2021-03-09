@@ -46,8 +46,8 @@ import butterknife.OnClick;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
+import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_ADMIN_PW;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PASSWORD;
 
 public class ShowQRCodeFragment extends Fragment {
 

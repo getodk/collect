@@ -15,11 +15,11 @@ import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_DELETE_SAVED;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_EDIT_SAVED;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_GET_BLANK;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_SEND_FINALIZED;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_VIEW_SENT;
+import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_DELETE_SAVED;
+import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_EDIT_SAVED;
+import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_GET_BLANK;
+import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_SEND_FINALIZED;
+import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_VIEW_SENT;
 
 @RunWith(RobolectricTestRunner.class)
 public class MainMenuButtonsVisibilityTest {

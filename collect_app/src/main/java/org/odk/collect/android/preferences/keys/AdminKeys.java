@@ -1,4 +1,4 @@
-package org.odk.collect.android.preferences;
+package org.odk.collect.android.preferences.keys;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.odk.collect.android.preferences.AdminAndGeneralKeys.ag;
+import static org.odk.collect.android.preferences.keys.AdminAndGeneralKeys.ag;
 
 /** Admin preference settings keys. The values match those of the keys in admin_preferences.xml. */
 public final class AdminKeys {

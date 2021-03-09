@@ -18,7 +18,7 @@ import org.odk.collect.android.utilities.ToastUtils;
 
 import javax.inject.Inject;
 
-import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
+import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_ADMIN_PW;
 
 public class ChangeAdminPasswordDialog extends DialogFragment {
 

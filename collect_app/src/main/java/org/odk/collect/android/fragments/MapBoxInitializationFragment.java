@@ -20,7 +20,7 @@ import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 
 import javax.inject.Inject;
 
-import static org.odk.collect.android.preferences.MetaKeys.KEY_MAPBOX_INITIALIZED;
+import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_MAPBOX_INITIALIZED;
 
 public class MapBoxInitializationFragment extends Fragment {
 

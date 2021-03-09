@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.preferences.FormUpdateMode;
-import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.odk.collect.android.preferences.Protocol;
 import org.odk.collect.android.preferences.screens.AdminPreferencesFragment.MainMenuAccessPreferences;
@@ -19,7 +19,7 @@ import org.odk.collect.utilities.TestPreferencesProvider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_GET_BLANK;
+import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_GET_BLANK;
 
 @RunWith(AndroidJUnit4.class)
 public class MainMenuAccessPreferencesTest {

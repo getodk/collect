@@ -1,12 +1,12 @@
-package org.odk.collect.android.preferences;
+package org.odk.collect.android.preferences.keys;
 
 /**
  * A pair of preference keys: An admin preference string, and the string of the general preference
  * that should be disabled when it is false.
  */
-class AdminAndGeneralKeys {
-    String adminKey;
-    String generalKey;
+public class AdminAndGeneralKeys {
+    public String adminKey;
+    public String generalKey;
 
     private AdminAndGeneralKeys(String adminKey, String generalKey) {
         this.adminKey = adminKey;

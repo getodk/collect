@@ -43,7 +43,7 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import static org.odk.collect.android.preferences.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
+import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
 
 public class Collect extends Application implements LocalizedApplication {
     public static String defaultSysLanguage;

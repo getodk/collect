@@ -2,7 +2,7 @@ package org.odk.collect.android.formentry.questions;
 
 import org.odk.collect.android.preferences.PreferencesDataSource;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_FONT_SIZE;
 
 public class QuestionTextSizeHelper {
 

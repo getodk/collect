@@ -32,7 +32,7 @@ import org.odk.collect.android.utilities.PlayServicesChecker;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_BACKGROUND_LOCATION;
 
 /**
  * An Android-specific implementation of {@link SetGeopointAction}.

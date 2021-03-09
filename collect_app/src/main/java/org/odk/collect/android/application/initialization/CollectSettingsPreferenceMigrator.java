@@ -18,15 +18,15 @@ import static org.odk.collect.android.application.initialization.migration.Migra
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.renameKey;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.translateKey;
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.translateValue;
-import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_CARTO;
-import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_OSM;
-import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_STAMEN;
-import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_USGS;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASEMAP_SOURCE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_CARTO_MAP_STYLE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_GOOGLE_MAP_STYLE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAPBOX_MAP_STYLE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_USGS_MAP_STYLE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.BASEMAP_SOURCE_CARTO;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.BASEMAP_SOURCE_OSM;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.BASEMAP_SOURCE_STAMEN;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.BASEMAP_SOURCE_USGS;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_BASEMAP_SOURCE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_CARTO_MAP_STYLE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_GOOGLE_MAP_STYLE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_MAPBOX_MAP_STYLE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_USGS_MAP_STYLE;
 
 /**
  * Migrates old preference keys and values to new ones.

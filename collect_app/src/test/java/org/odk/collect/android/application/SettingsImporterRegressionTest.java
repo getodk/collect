@@ -17,16 +17,16 @@ import org.odk.collect.utilities.TestPreferencesProvider;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.odk.collect.android.injection.DaggerUtils.getComponent;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
-import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_CARTO;
-import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_GOOGLE;
-import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_MAPBOX;
-import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_USGS;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASEMAP_SOURCE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_CARTO_MAP_STYLE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_GOOGLE_MAP_STYLE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAPBOX_MAP_STYLE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_USGS_MAP_STYLE;
+import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_ADMIN_PW;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.BASEMAP_SOURCE_CARTO;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.BASEMAP_SOURCE_GOOGLE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.BASEMAP_SOURCE_MAPBOX;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.BASEMAP_SOURCE_USGS;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_BASEMAP_SOURCE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_CARTO_MAP_STYLE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_GOOGLE_MAP_STYLE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_MAPBOX_MAP_STYLE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_USGS_MAP_STYLE;
 
 @RunWith(AndroidJUnit4.class)
 public class SettingsImporterRegressionTest {

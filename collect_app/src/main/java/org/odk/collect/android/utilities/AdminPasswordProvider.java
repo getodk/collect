@@ -2,7 +2,7 @@ package org.odk.collect.android.utilities;
 
 import org.odk.collect.android.preferences.PreferencesDataSource;
 
-import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
+import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_ADMIN_PW;
 
 public class AdminPasswordProvider {
     private final PreferencesDataSource adminPrefs;

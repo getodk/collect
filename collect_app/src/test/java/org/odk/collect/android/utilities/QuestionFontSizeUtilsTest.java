@@ -8,7 +8,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_FONT_SIZE;
 
 @RunWith(RobolectricTestRunner.class)
 public class QuestionFontSizeUtilsTest {

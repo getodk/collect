@@ -20,6 +20,9 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceGroup;
 
+import org.odk.collect.android.preferences.keys.AdminAndGeneralKeys;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
+
 import timber.log.Timber;
 
 public class DisabledPreferencesRemover {

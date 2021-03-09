@@ -33,10 +33,10 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_EMAIL;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_PHONENUMBER;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_USERNAME;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_USERNAME;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_METADATA_EMAIL;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_METADATA_PHONENUMBER;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_METADATA_USERNAME;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_USERNAME;
 
 /**
  * Returns device properties and metadata to JavaRosa

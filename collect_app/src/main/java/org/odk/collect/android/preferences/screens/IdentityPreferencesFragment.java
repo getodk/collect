@@ -28,7 +28,7 @@ import org.odk.collect.android.utilities.MultiClickGuard;
 
 import javax.inject.Inject;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_ANALYTICS;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_ANALYTICS;
 
 public class IdentityPreferencesFragment extends BaseGeneralPreferencesFragment {
 

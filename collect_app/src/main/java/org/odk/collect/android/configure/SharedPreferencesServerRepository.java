@@ -3,7 +3,7 @@ package org.odk.collect.android.configure;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.odk.collect.android.preferences.MetaKeys;
+import org.odk.collect.android.preferences.keys.MetaKeys;
 import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import java.util.ArrayList;

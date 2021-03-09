@@ -10,7 +10,7 @@ import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_BACKGROUND_LOCATION;
 
 /**
  * Wrapper on resources needed by {@link BackgroundLocationManager} to make testing easier.

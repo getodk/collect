@@ -58,7 +58,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PROTOCOL;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores

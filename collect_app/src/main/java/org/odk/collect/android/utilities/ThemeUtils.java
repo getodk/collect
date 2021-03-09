@@ -24,7 +24,7 @@ import androidx.annotation.StyleRes;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 
 import javax.inject.Inject;

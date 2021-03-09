@@ -41,11 +41,11 @@ import timber.log.Timber;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_LANGUAGE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_THEME;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_NAVIGATION;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_SPLASH_PATH;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_APP_LANGUAGE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_APP_THEME;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_FONT_SIZE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_NAVIGATION;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_SPLASH_PATH;
 
 public class UserInterfacePreferencesFragment extends BaseGeneralPreferencesFragment {
 

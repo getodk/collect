@@ -35,15 +35,15 @@ import javax.inject.Inject;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.AUTO_FORM_UPDATE_PREF_CHANGE;
 import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
-import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOSEND;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_CONSTRAINT_BEHAVIOR;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORM_UPDATE_MODE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_GUIDANCE_HINT;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_IMAGE_SIZE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
+import static org.odk.collect.android.preferences.keys.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_AUTOMATIC_UPDATE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_AUTOSEND;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_CONSTRAINT_BEHAVIOR;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_FORM_UPDATE_MODE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_GUIDANCE_HINT;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_IMAGE_SIZE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
 
 public class FormManagementPreferencesFragment extends BaseGeneralPreferencesFragment {

@@ -41,8 +41,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.odk.collect.android.preferences.GeneralKeys.CATEGORY_BASEMAP;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASEMAP_SOURCE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.CATEGORY_BASEMAP;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_BASEMAP_SOURCE;
 
 public class MapsPreferencesFragment extends BaseGeneralPreferencesFragment {
 

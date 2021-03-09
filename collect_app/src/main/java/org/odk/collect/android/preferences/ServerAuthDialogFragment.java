@@ -13,6 +13,7 @@ import androidx.fragment.app.DialogFragment;
 import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.ServerAuthDialogBinding;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
 
 import javax.inject.Inject;
 

@@ -1,7 +1,7 @@
 package org.odk.collect.android.utilities;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesDataSource;
 
 import java.util.Locale;

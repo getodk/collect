@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 
-import org.odk.collect.android.preferences.AdminKeys;
+import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.PreferencesDataSource;
 import org.odk.collect.utilities.TestPreferencesProvider;
 import org.robolectric.Robolectric;

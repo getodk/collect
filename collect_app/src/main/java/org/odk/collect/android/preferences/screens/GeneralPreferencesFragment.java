@@ -26,7 +26,7 @@ import androidx.preference.PreferenceScreen;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.AdminKeys;
+import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.version.VersionInformation;
 
@@ -34,7 +34,7 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import static org.odk.collect.android.preferences.AdminKeys.KEY_MAPS;
+import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_MAPS;
 
 public class GeneralPreferencesFragment extends BaseGeneralPreferencesFragment implements Preference.OnPreferenceClickListener {
 
