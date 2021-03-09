@@ -23,6 +23,8 @@ public interface InstancesRepository {
     @Nullable
     Instance getOneByPath(String instancePath);
 
+    List<Instance> getAll();
+
     List<Instance> getAllNotDeleted();
 
     List<Instance> getAllByStatus(String... status);

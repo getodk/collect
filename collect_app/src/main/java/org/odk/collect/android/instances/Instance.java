@@ -75,6 +75,25 @@ public final class Instance {
 
         private Long databaseId;
 
+        public Builder() {
+
+        }
+
+        public Builder(Instance instance) {
+            databaseId = instance.databaseId;
+            displayName = instance.displayName;
+            submissionUri = instance.submissionUri;
+            canEditWhenComplete = instance.canEditWhenComplete;
+            instanceFilePath = instance.instanceFilePath;
+            jrFormId = instance.jrFormId;
+            jrVersion = instance.jrVersion;
+            status = instance.status;
+            lastStatusChangeDate = instance.lastStatusChangeDate;
+            deletedDate = instance.deletedDate;
+            geometryType = instance.geometryType;
+            geometry = instance.geometry;
+        }
+
         public Builder displayName(String displayName) {
             this.displayName = displayName;
             return this;

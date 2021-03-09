@@ -29,10 +29,11 @@ public class InstanceDeleterTest {
                 .build()
         );
 
-        instancesRepository.save(buildInstance(1L, "1", "version").build());
-        instancesRepository.save(buildInstance(2L, "1", "version").build());
+        instancesRepository.save(buildInstance("1", "version").build());
+        instancesRepository.save(buildInstance("1", "version").build());
 
-        instanceDeleter.delete(2L);
+        Long id = instancesRepository.getAll().get(0).getId();
+        instanceDeleter.delete(id);
         assertThat(formsRepository.getAll().size(), is(1));
     }
 

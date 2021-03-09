@@ -19,8 +19,10 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.odk.collect.android.support.InstanceUtils.buildInstance;
 
@@ -32,34 +34,34 @@ public abstract class InstancesRepositoryTest {
     public void getAllNotDeleted_returnsUndeletedInstances() {
         InstancesRepository instancesRepository = buildSubject();
 
-        instancesRepository.save(buildInstance(1L, "incomplete", "1")
+        instancesRepository.save(buildInstance("deleted", "1")
                 .status(Instance.STATUS_COMPLETE)
                 .deletedDate(System.currentTimeMillis())
                 .build());
-        instancesRepository.save(buildInstance(2L, "incomplete", "1")
+        instancesRepository.save(buildInstance("undeleted", "1")
                 .status(Instance.STATUS_COMPLETE)
                 .build());
 
         List<Instance> allNotDeleted = instancesRepository.getAllNotDeleted();
         assertThat(allNotDeleted.size(), is(1));
-        assertThat(allNotDeleted.get(0).getId(), is(2L));
+        assertThat(allNotDeleted.get(0).getJrFormId(), is("undeleted"));
     }
 
     @Test
     public void getAllByStatus_withOneStatus_returnsMatchingInstances() {
         InstancesRepository instancesRepository = buildSubject();
 
-        instancesRepository.save(buildInstance(1L, "incomplete", "1")
+        instancesRepository.save(buildInstance("incomplete", "1")
                 .status(Instance.STATUS_INCOMPLETE)
                 .build());
-        instancesRepository.save(buildInstance(2L, "incomplete", "1")
+        instancesRepository.save(buildInstance("incomplete", "1")
                 .status(Instance.STATUS_INCOMPLETE)
                 .build());
 
-        instancesRepository.save(buildInstance(3L, "complete", "1")
+        instancesRepository.save(buildInstance("complete", "1")
                 .status(Instance.STATUS_COMPLETE)
                 .build());
-        instancesRepository.save(buildInstance(4L, "complete", "1")
+        instancesRepository.save(buildInstance("complete", "1")
                 .status(Instance.STATUS_COMPLETE)
                 .build());
 
@@ -73,24 +75,24 @@ public abstract class InstancesRepositoryTest {
     public void getAllByStatus_withMultipleStatus_returnsMatchingInstances() {
         InstancesRepository instancesRepository = buildSubject();
 
-        instancesRepository.save(buildInstance(1L, "incomplete", "1")
+        instancesRepository.save(buildInstance("incomplete", "1")
                 .status(Instance.STATUS_INCOMPLETE)
                 .build());
-        instancesRepository.save(buildInstance(2L, "incomplete", "1")
+        instancesRepository.save(buildInstance("incomplete", "1")
                 .status(Instance.STATUS_INCOMPLETE)
                 .build());
 
-        instancesRepository.save(buildInstance(3L, "complete", "1")
+        instancesRepository.save(buildInstance("complete", "1")
                 .status(Instance.STATUS_COMPLETE)
                 .build());
-        instancesRepository.save(buildInstance(4L, "complete", "1")
+        instancesRepository.save(buildInstance("complete", "1")
                 .status(Instance.STATUS_COMPLETE)
                 .build());
 
-        instancesRepository.save(buildInstance(5L, "submitted", "1")
+        instancesRepository.save(buildInstance("submitted", "1")
                 .status(Instance.STATUS_SUBMITTED)
                 .build());
-        instancesRepository.save(buildInstance(6L, "submitted", "1")
+        instancesRepository.save(buildInstance("submitted", "1")
                 .status(Instance.STATUS_SUBMITTED)
                 .build());
 
@@ -106,14 +108,11 @@ public abstract class InstancesRepositoryTest {
     public void getAllByFormId_includesAllVersionsForFormId() {
         InstancesRepository instancesRepository = buildSubject();
 
-        instancesRepository.save(buildInstance(1L, "formid", "1").build());
-        instancesRepository.save(buildInstance(2L, "formid", "2", "display", Instance.STATUS_COMPLETE, null)
-                .build());
-        instancesRepository.save(buildInstance(3L, "formid", "3").build());
-        instancesRepository.save(buildInstance(4L, "formid", "4", "display", Instance.STATUS_COMPLETE, System.currentTimeMillis())
-                .build());
-        instancesRepository.save(buildInstance(5L, "formid2", "1", "display", Instance.STATUS_COMPLETE, null)
-                .build());
+        instancesRepository.save(buildInstance("formid", "1").build());
+        instancesRepository.save(buildInstance("formid", "2", "display", Instance.STATUS_COMPLETE, null).build());
+        instancesRepository.save(buildInstance("formid", "3").build());
+        instancesRepository.save(buildInstance("formid", "4", "display", Instance.STATUS_COMPLETE, System.currentTimeMillis()).build());
+        instancesRepository.save(buildInstance("formid2", "1", "display", Instance.STATUS_COMPLETE, null).build());
 
         List<Instance> instances = instancesRepository.getAllByFormId("formid");
         assertThat(instances.size(), is(4));
@@ -123,13 +122,13 @@ public abstract class InstancesRepositoryTest {
     public void getAllByFormIdAndVersionNotDeleted_excludesDeleted() {
         InstancesRepository instancesRepository = buildSubject();
 
-        instancesRepository.save(buildInstance(1L, "formid", "1").build());
-        instancesRepository.save(buildInstance(2L, "formid", "1", "display", Instance.STATUS_COMPLETE, null)
+        instancesRepository.save(buildInstance("formid", "1").build());
+        instancesRepository.save(buildInstance("formid", "1", "display", Instance.STATUS_COMPLETE, null)
                 .build());
-        instancesRepository.save(buildInstance(3L, "formid", "1").build());
-        instancesRepository.save(buildInstance(4L, "formid", "1", "display", Instance.STATUS_COMPLETE, System.currentTimeMillis())
+        instancesRepository.save(buildInstance("formid", "1").build());
+        instancesRepository.save(buildInstance("formid", "1", "display", Instance.STATUS_COMPLETE, System.currentTimeMillis())
                 .build());
-        instancesRepository.save(buildInstance(5L, "formid2", "1", "display", Instance.STATUS_COMPLETE, null)
+        instancesRepository.save(buildInstance("formid2", "1", "display", Instance.STATUS_COMPLETE, null)
                 .build());
 
         List<Instance> instances = instancesRepository.getAllNotDeletedByFormIdAndVersion("formid", "1");
@@ -140,11 +139,27 @@ public abstract class InstancesRepositoryTest {
     public void deleteAll_deletesAllInstances() {
         InstancesRepository instancesRepository = buildSubject();
 
-        instancesRepository.save(buildInstance(1L, "formid", "1").build());
-        instancesRepository.save(buildInstance(2L, "formid", "1").build());
+        instancesRepository.save(buildInstance("formid", "1").build());
+        instancesRepository.save(buildInstance("formid", "1").build());
+        Long id1 = instancesRepository.getAll().get(0).getId();
+        Long id2 = instancesRepository.getAll().get(1).getId();
 
         instancesRepository.deleteAll();
-        assertThat(instancesRepository.get(1L), is(nullValue()));
-        assertThat(instancesRepository.get(2L), is(nullValue()));
+        assertThat(instancesRepository.get(id1), is(nullValue()));
+        assertThat(instancesRepository.get(id2), is(nullValue()));
+    }
+
+    @Test
+    public void save_addsUniqueId() {
+        InstancesRepository instancesRepository = buildSubject();
+
+        instancesRepository.save(buildInstance("formid", "1").build());
+        instancesRepository.save(buildInstance("formid", "1").build());
+
+        Long id1 = instancesRepository.getAll().get(0).getId();
+        Long id2 = instancesRepository.getAll().get(1).getId();
+        assertThat(id1, notNullValue());
+        assertThat(id2, notNullValue());
+        assertThat(id1, not(equalTo(id2)));
     }
 }

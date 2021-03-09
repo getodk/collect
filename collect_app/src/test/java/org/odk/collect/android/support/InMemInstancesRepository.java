@@ -11,7 +11,8 @@ import java.util.stream.Collectors;
 
 public final class InMemInstancesRepository implements InstancesRepository {
 
-    List<Instance> instances;
+    private final List<Instance> instances;
+    private long idCounter = 1L;
 
     public InMemInstancesRepository(List<Instance> instances) {
         this.instances = new ArrayList<>(instances);
@@ -47,6 +48,11 @@ public final class InMemInstancesRepository implements InstancesRepository {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public List<Instance> getAll() {
+        return new ArrayList<>(instances);
     }
 
     @Override
@@ -104,7 +110,9 @@ public final class InMemInstancesRepository implements InstancesRepository {
 
     @Override
     public void save(Instance instance) {
-        instances.add(instance);
+        instances.add(new Instance.Builder(instance)
+                .id(idCounter++)
+                .build());
     }
 
     public void removeInstanceById(Long databaseId) {

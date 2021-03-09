@@ -56,6 +56,11 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     }
 
     @Override
+    public List<Instance> getAll() {
+        return getInstancesFromCursor(getInstancesCursor(null, null));
+    }
+
+    @Override
     public List<Instance> getAllNotDeleted() {
         String selection = InstanceColumns.DELETED_DATE + " IS NULL ";
         return getInstancesFromCursor(getInstancesCursor(selection, null));

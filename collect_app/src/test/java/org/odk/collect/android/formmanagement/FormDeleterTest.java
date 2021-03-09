@@ -102,7 +102,7 @@ public class FormDeleterTest {
                 .formFilePath(FormUtils.createXFormFile("1", null).getAbsolutePath())
                 .build());
 
-        instancesRepository.save(buildInstance(1L, "1", null).build());
+        instancesRepository.save(buildInstance("1", null).build());
 
         formDeleter.delete(1L);
         List<Form> forms = formsRepository.getAll();
