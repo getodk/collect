@@ -55,7 +55,7 @@ class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferenc
     }
 
     override fun getString(key: String): String? {
-        val defaultValue = (defaultPreferences[key] ?: "") as String
+        val defaultValue = (defaultPreferences[key]) as String?
         return sharedPreferences.getString(key, defaultValue)
     }
 

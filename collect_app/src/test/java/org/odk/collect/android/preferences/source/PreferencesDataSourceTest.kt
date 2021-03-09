@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.test.core.app.ApplicationProvider
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
+import org.hamcrest.Matchers.nullValue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -33,7 +34,7 @@ class PreferencesDataSourceTest {
     @Test
     fun `When nothing has been saved to a string preference and there are no custom defaults, the default value should be returned`() {
         preferencesSource = SharedPreferencesDataSource(sharedPreferences)
-        assertThat(preferencesSource.getString(KEY_STRING), `is`(""))
+        assertThat(preferencesSource.getString(KEY_STRING), `is`(nullValue()))
     }
 
     @Test
