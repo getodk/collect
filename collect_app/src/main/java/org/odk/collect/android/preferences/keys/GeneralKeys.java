@@ -79,8 +79,6 @@ public final class GeneralKeys {
     public static final String CONSTRAINT_BEHAVIOR_ON_SWIPE = "on_swipe";
     private static final String AUTOSEND_OFF = "off";
     private static final String GUIDANCE_HINT_OFF = "no";
-    static final String KEY_AUTOSEND_WIFI = "autosend_wifi";
-    static final String KEY_AUTOSEND_NETWORK = "autosend_network";
 
     // basemap section
     public static final String CATEGORY_BASEMAP = "category_basemap";
