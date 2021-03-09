@@ -1,4 +1,4 @@
-package org.odk.collect.android.preferences;
+package org.odk.collect.android.configure.qr;
 
 import org.json.JSONException;
 import org.json.JSONObject;

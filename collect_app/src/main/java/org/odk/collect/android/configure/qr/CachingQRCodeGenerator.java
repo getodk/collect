@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import com.google.zxing.WriterException;
 
 import org.json.JSONException;
-import org.odk.collect.android.preferences.JsonPreferencesGenerator;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;

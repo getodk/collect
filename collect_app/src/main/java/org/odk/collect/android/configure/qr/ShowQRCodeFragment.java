@@ -30,7 +30,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.JsonPreferencesGenerator;
 import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 import org.odk.collect.async.Scheduler;
 

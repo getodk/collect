@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.preferences.JsonPreferencesGenerator;
 import org.odk.collect.android.preferences.source.PreferencesDataSource;
 import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.FileUtils;

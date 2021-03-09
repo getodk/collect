@@ -85,7 +85,7 @@ import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.JsonPreferencesGenerator;
+import org.odk.collect.android.configure.qr.JsonPreferencesGenerator;
 import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
 import org.odk.collect.android.preferences.source.AdminPreferencesDataStore;
 import org.odk.collect.android.preferences.source.GeneralPreferencesDataStore;
