@@ -13,41 +13,41 @@ import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.util.List;
 
+import static org.odk.collect.android.dao.InstancesDao.getInstancesFromCursor;
+import static org.odk.collect.android.dao.InstancesDao.getValuesFromInstanceObject;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DELETED_DATE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_VERSION;
 
 /**
  * Mediates between {@link Instance} objects and the underlying SQLite database that stores them.
- *
+ * <p>
  * Uses {@link InstancesDao} to perform database queries. {@link InstancesDao} provides a thin
  * convenience layer over {@link org.odk.collect.android.provider.InstanceProvider} which exposes
  * {@link Cursor} and {@link androidx.loader.content.CursorLoader} objects that need to be managed.
  * This can be advantageous when providing data to Android components (e.g. lists through adapters)
  * but is cumbersome in domain code and makes writing test implementations harder.
- *
+ * <p>
  * Over time, we should consider redefining the responsibility split between
  * {@link org.odk.collect.android.provider.InstanceProvider}, {@link InstancesRepository} and
  * {@link InstancesDao}.
  */
 public final class DatabaseInstancesRepository implements InstancesRepository {
 
-    private final InstancesDao dao = new InstancesDao();
-
     @Override
     public Instance get(Long databaseId) {
         String selection = InstanceColumns._ID + "=?";
         String[] selectionArgs = {Long.toString(databaseId)};
 
-        Cursor c = dao.getInstancesCursor(null, selection, selectionArgs, null);
-        List<Instance> result = dao.getInstancesFromCursor(c);
+        Cursor c = getInstancesCursor(selection, selectionArgs);
+        List<Instance> result = getInstancesFromCursor(c);
         return !result.isEmpty() ? result.get(0) : null;
     }
 
     @Override
     public Instance getOneByPath(String instancePath) {
-        Cursor c = dao.getInstancesCursor(null, InstanceColumns.INSTANCE_FILE_PATH + "=?", new String[]{new StoragePathProvider().getRelativeInstancePath(instancePath)}, null);
-        List<Instance> instances = dao.getInstancesFromCursor(c);
+        Cursor c = getInstancesCursor(InstanceColumns.INSTANCE_FILE_PATH + "=?", new String[]{new StoragePathProvider().getRelativeInstancePath(instancePath)});
+        List<Instance> instances = getInstancesFromCursor(c);
         if (instances.size() == 1) {
             return instances.get(0);
         } else {
@@ -58,32 +58,32 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     @Override
     public List<Instance> getAllNotDeleted() {
         String selection = InstanceColumns.DELETED_DATE + " IS NULL ";
-        return dao.getInstancesFromCursor(dao.getInstancesCursor(null, selection, null, null));
+        return getInstancesFromCursor(getInstancesCursor(selection, null));
     }
 
     @Override
     public List<Instance> getAllByStatus(String... status) {
         StringBuilder selection = new StringBuilder(InstanceColumns.STATUS + "=?");
-        for (int i = 1;  i < status.length; i++) {
+        for (int i = 1; i < status.length; i++) {
             selection.append(" or ").append(InstanceColumns.STATUS).append("=?");
         }
 
-        return dao.getInstancesFromCursor(dao.getInstancesCursor(null, selection.toString(), status, null));
+        return getInstancesFromCursor(getInstancesCursor(selection.toString(), status));
     }
 
 
     @Override
     public List<Instance> getAllByFormId(String formId) {
-        Cursor c = dao.getInstancesCursor(null, JR_FORM_ID + " = ?", new String[]{formId}, null);
-        return dao.getInstancesFromCursor(c);
+        Cursor c = getInstancesCursor(JR_FORM_ID + " = ?", new String[]{formId});
+        return getInstancesFromCursor(c);
     }
 
     @Override
     public List<Instance> getAllNotDeletedByFormIdAndVersion(String jrFormId, String jrVersion) {
         if (jrVersion != null) {
-            return dao.getInstancesFromCursor(dao.getInstancesCursor(null, JR_FORM_ID + " = ? AND " + JR_VERSION + " = ? AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId, jrVersion}, null));
+            return getInstancesFromCursor(getInstancesCursor(JR_FORM_ID + " = ? AND " + JR_VERSION + " = ? AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId, jrVersion}));
         } else {
-            return dao.getInstancesFromCursor(dao.getInstancesCursor(null, JR_FORM_ID + " = ? AND " + JR_VERSION + " IS NULL AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId}, null));
+            return getInstancesFromCursor(getInstancesCursor(JR_FORM_ID + " = ? AND " + JR_VERSION + " IS NULL AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId}));
         }
     }
 
@@ -100,7 +100,11 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     @Override
     public Uri save(Instance instance) {
-        ContentValues values = dao.getValuesFromInstanceObject(instance);
-        return dao.saveInstance(values);
+        ContentValues values = getValuesFromInstanceObject(instance);
+        return Collect.getInstance().getContentResolver().insert(InstanceColumns.CONTENT_URI, values);
+    }
+
+    private Cursor getInstancesCursor(String selection, String[] selectionArgs) {
+        return Collect.getInstance().getContentResolver().query(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
     }
 }

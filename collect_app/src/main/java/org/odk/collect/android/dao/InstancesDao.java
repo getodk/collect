@@ -42,16 +42,16 @@ public class InstancesDao {
         return getInstancesCursor(null, selection, selectionArgs, null);
     }
 
-    public Cursor getInstancesCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return Collect.getInstance().getContentResolver().query(InstanceColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
-    }
-
     public Uri saveInstance(ContentValues values) {
         return Collect.getInstance().getContentResolver().insert(InstanceColumns.CONTENT_URI, values);
     }
 
     public int updateInstance(ContentValues values, String where, String[] whereArgs) {
         return Collect.getInstance().getContentResolver().update(InstanceColumns.CONTENT_URI, values, where, whereArgs);
+    }
+
+    public Cursor getInstancesCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        return Collect.getInstance().getContentResolver().query(InstanceColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
     }
 
     public void deleteInstancesFromInstanceFilePaths(List<String> instanceFilePaths) {
@@ -92,7 +92,7 @@ public class InstancesDao {
     /**
      * Returns all instances available through the cursor and closes the cursor.
      */
-    public List<Instance> getInstancesFromCursor(Cursor cursor) {
+    public static List<Instance> getInstancesFromCursor(Cursor cursor) {
         List<Instance> instances = new ArrayList<>();
         if (cursor != null) {
             try {
@@ -142,7 +142,7 @@ public class InstancesDao {
      * <p>
      * Does NOT include the database ID.
      */
-    public ContentValues getValuesFromInstanceObject(Instance instance) {
+    public static ContentValues getValuesFromInstanceObject(Instance instance) {
         ContentValues values = new ContentValues();
         values.put(InstanceColumns.DISPLAY_NAME, instance.getDisplayName());
         values.put(InstanceColumns.SUBMISSION_URI, instance.getSubmissionUri());

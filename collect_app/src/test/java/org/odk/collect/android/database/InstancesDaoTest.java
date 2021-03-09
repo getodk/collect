@@ -37,6 +37,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.odk.collect.android.dao.InstancesDao.getInstancesFromCursor;
 
 @RunWith(AndroidJUnit4.class)
 public class InstancesDaoTest {
@@ -44,8 +45,6 @@ public class InstancesDaoTest {
     private InstancesDao instancesDao;
     private final StoragePathProvider storagePathProvider = new StoragePathProvider();
 
-    // sample instances
-    private Instance hypertensionScreeningInstance;
     private Instance biggestNOfSetInstance;
     private Instance biggestNOfSet2Instance;
 
@@ -59,7 +58,7 @@ public class InstancesDaoTest {
     public void updateInstanceTest() {
         String filePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES) + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml";
         Cursor cursor = instancesDao.getInstancesCursorForFilePath(filePath);
-        List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
+        List<Instance> instances = getInstancesFromCursor(cursor);
 
         assertEquals(1, instances.size());
         assertEquals(biggestNOfSet2Instance, instances.get(0));
@@ -109,7 +108,8 @@ public class InstancesDaoTest {
 
     private void fillDatabase() {
         String hypertensionScreeningPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES) + "/Hypertension Screening_2017-02-20_14-03-53/Hypertension Screening_2017-02-20_14-03-53.xml";
-        hypertensionScreeningInstance = new Instance.Builder()
+        // sample instances
+        Instance hypertensionScreeningInstance = new Instance.Builder()
                 .displayName("Hypertension Screening")
                 .instanceFilePath(storagePathProvider.getRelativeInstancePath(hypertensionScreeningPath))
                 .jrFormId("hypertension")
