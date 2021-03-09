@@ -100,7 +100,7 @@ public final class AdminKeys {
     };
 
     /** Admin keys other than those in adminToGeneral above */
-    private static final Collection<String> otherKeys = Arrays.asList(
+    private static final Collection<String> OTHER_KEYS = Arrays.asList(
             KEY_EDIT_SAVED,
             KEY_SEND_FINALIZED,
             KEY_VIEW_SENT,
@@ -171,7 +171,7 @@ public final class AdminKeys {
         for (AdminAndGeneralKeys atg : adminToGeneral) {
             keys.add(atg.adminKey);
         }
-        keys.addAll(otherKeys);
+        keys.addAll(OTHER_KEYS);
         return keys;
     }
 
