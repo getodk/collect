@@ -109,10 +109,13 @@ public final class InMemInstancesRepository implements InstancesRepository {
     }
 
     @Override
-    public void save(Instance instance) {
-        instances.add(new Instance.Builder(instance)
+    public Instance save(Instance instance) {
+        Instance newInstance = new Instance.Builder(instance)
                 .id(idCounter++)
-                .build());
+                .build();
+        instances.add(newInstance);
+
+        return newInstance;
     }
 
     public void removeInstanceById(Long databaseId) {

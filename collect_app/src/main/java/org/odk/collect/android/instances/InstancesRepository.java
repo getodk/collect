@@ -37,5 +37,5 @@ public interface InstancesRepository {
 
     void deleteAll();
 
-    void save(Instance instance);
+    Instance save(Instance instance);
 }

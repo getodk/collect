@@ -69,6 +69,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
     private String currentStatus = "";
     private DiskSyncListener diskSyncListener;
     private final SettingsProvider settingsProvider;
+    StoragePathProvider storagePathProvider = new StoragePathProvider();
 
     public String getStatusMessage() {
         return currentStatus;
@@ -86,7 +87,6 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
     protected String doInBackground(Void... params) {
         int currentInstance = ++counter;
         Timber.i("[%d] doInBackground begins!", currentInstance);
-        StoragePathProvider storagePathProvider = new StoragePathProvider();
         try {
             List<String> candidateInstances = new LinkedList<>();
             File instancesPath = new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES));
@@ -159,7 +159,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                                 String jrVersion = formCursor.getString(formCursor.getColumnIndex(FormsColumns.JR_VERSION));
                                 String formName = formCursor.getString(formCursor.getColumnIndex(FormsColumns.DISPLAY_NAME));
 
-                                new DatabaseInstancesRepository().save(new Instance.Builder()
+                                Instance instance = new DatabaseInstancesRepository().save(new Instance.Builder()
                                         .instanceFilePath(storagePathProvider.getRelativeInstancePath(candidateInstance))
                                         .submissionUri(submissionUri)
                                         .displayName(formName)
@@ -171,7 +171,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                                 );
                                 counter++;
 
-                                encryptInstanceIfNeeded(formCursor, candidateInstance, instancesDao);
+                                encryptInstanceIfNeeded(formCursor, instance, instancesDao);
                             }
                         } catch (IOException | EncryptionException e) {
                             Timber.w(e);
@@ -220,13 +220,11 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
         return instanceId;
     }
 
-    private void encryptInstanceIfNeeded(Cursor formCursor, String candidateInstance, InstancesDao instancesDao) throws EncryptionException, IOException {
-        Instance instance = new DatabaseInstancesRepository().getOneByPath(candidateInstance);
-
+    private void encryptInstanceIfNeeded(Cursor formCursor, Instance instance, InstancesDao instancesDao) throws EncryptionException, IOException {
         if (instance != null) {
             if (shouldInstanceBeEncrypted(formCursor)) {
                 logImportAndEncrypt(formCursor);
-                encryptInstance(instance, candidateInstance, instancesDao);
+                encryptInstance(instance, instancesDao);
             }
         }
     }
@@ -238,14 +236,14 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
         DaggerUtils.getComponent(Collect.getInstance()).analytics().logFormEvent(AnalyticsEvents.IMPORT_AND_ENCRYPT_INSTANCE, formIdHash);
     }
 
-    private void encryptInstance(Instance instance, String candidateInstance,
-                                 InstancesDao instancesDao)
+    private void encryptInstance(Instance instance, InstancesDao instancesDao)
             throws EncryptionException, IOException {
 
-        File instanceXml = new File(candidateInstance);
+        String instancePath = storagePathProvider.getAbsoluteInstanceFilePath(instance.getInstanceFilePath());
+        File instanceXml = new File(instancePath);
         if (!new File(instanceXml.getParentFile(), "submission.xml.enc").exists()) {
             Uri uri = Uri.parse(InstanceColumns.CONTENT_URI + "/" + instance.getId());
-            FormController.InstanceMetadata instanceMetadata = new FormController.InstanceMetadata(getInstanceIdFromInstance(candidateInstance), null, null);
+            FormController.InstanceMetadata instanceMetadata = new FormController.InstanceMetadata(getInstanceIdFromInstance(instancePath), null, null);
             EncryptionUtils.EncryptedFormInformation formInfo = EncryptionUtils.getEncryptedFormInformation(uri, instanceMetadata);
 
             if (formInfo != null) {
@@ -259,7 +257,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(false));
                 values.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
                 values.put(InstanceColumns.GEOMETRY, (String) null);
-                instancesDao.updateInstance(values, InstanceColumns.INSTANCE_FILE_PATH + "=?", new String[]{new StoragePathProvider().getRelativeInstancePath(candidateInstance)});
+                instancesDao.updateInstance(values, InstanceColumns.INSTANCE_FILE_PATH + "=?", new String[]{storagePathProvider.getRelativeInstancePath(instancePath)});
 
                 SaveFormToDisk.manageFilesAfterSavingEncryptedForm(instanceXml, submissionXml);
                 if (!EncryptionUtils.deletePlaintextFiles(instanceXml, null)) {

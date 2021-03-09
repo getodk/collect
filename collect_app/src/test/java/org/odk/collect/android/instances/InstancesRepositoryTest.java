@@ -162,4 +162,12 @@ public abstract class InstancesRepositoryTest {
         assertThat(id2, notNullValue());
         assertThat(id1, not(equalTo(id2)));
     }
+
+    @Test
+    public void save_returnsInstanceWithId() {
+        InstancesRepository instancesRepository = buildSubject();
+
+        Instance instance = instancesRepository.save(buildInstance("formid", "1").build());
+        assertThat(instancesRepository.get(instance.getId()), is(instance));
+    }
 }
