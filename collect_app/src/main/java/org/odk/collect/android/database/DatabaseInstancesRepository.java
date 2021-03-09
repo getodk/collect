@@ -105,10 +105,23 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     @Override
     public Instance save(Instance instance) {
+        Long instanceId = instance.getId();
         ContentValues values = getValuesFromInstanceObject(instance);
-        Uri uri = Collect.getInstance().getContentResolver().insert(InstanceColumns.CONTENT_URI, values);
-        Cursor cursor = Collect.getInstance().getContentResolver().query(uri, null, null, null, null);
-        return getInstancesFromCursor(cursor).get(0);
+
+        if (instanceId == null) {
+            Uri uri = Collect.getInstance().getContentResolver().insert(InstanceColumns.CONTENT_URI, values);
+            Cursor cursor = Collect.getInstance().getContentResolver().query(uri, null, null, null, null);
+            return getInstancesFromCursor(cursor).get(0);
+        } else {
+            Collect.getInstance().getContentResolver().update(
+                    InstanceColumns.CONTENT_URI,
+                    values,
+                    InstanceColumns._ID + "=?",
+                    new String[]{instanceId.toString()}
+            );
+
+            return get(instanceId);
+        }
     }
 
     private Cursor getInstancesCursor(String selection, String[] selectionArgs) {

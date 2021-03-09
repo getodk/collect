@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.tasks;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -54,7 +53,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.dao.InstancesDao.getValuesFromInstanceObject;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import static org.odk.collect.android.utilities.FileUtils.getMd5Hash;
 
@@ -171,7 +169,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                                 );
                                 counter++;
 
-                                encryptInstanceIfNeeded(formCursor, instance, instancesDao);
+                                encryptInstanceIfNeeded(formCursor, instance);
                             }
                         } catch (IOException | EncryptionException e) {
                             Timber.w(e);
@@ -220,11 +218,11 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
         return instanceId;
     }
 
-    private void encryptInstanceIfNeeded(Cursor formCursor, Instance instance, InstancesDao instancesDao) throws EncryptionException, IOException {
+    private void encryptInstanceIfNeeded(Cursor formCursor, Instance instance) throws EncryptionException, IOException {
         if (instance != null) {
             if (shouldInstanceBeEncrypted(formCursor)) {
                 logImportAndEncrypt(formCursor);
-                encryptInstance(instance, instancesDao);
+                encryptInstance(instance);
             }
         }
     }
@@ -236,7 +234,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
         DaggerUtils.getComponent(Collect.getInstance()).analytics().logFormEvent(AnalyticsEvents.IMPORT_AND_ENCRYPT_INSTANCE, formIdHash);
     }
 
-    private void encryptInstance(Instance instance, InstancesDao instancesDao)
+    private void encryptInstance(Instance instance)
             throws EncryptionException, IOException {
 
         String instancePath = storagePathProvider.getAbsoluteInstanceFilePath(instance.getInstanceFilePath());
@@ -252,12 +250,12 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
                 EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
 
-                // add missing fields into content values
-                ContentValues values = getValuesFromInstanceObject(instance);
-                values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(false));
-                values.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
-                values.put(InstanceColumns.GEOMETRY, (String) null);
-                instancesDao.updateInstance(values, InstanceColumns.INSTANCE_FILE_PATH + "=?", new String[]{storagePathProvider.getRelativeInstancePath(instancePath)});
+                new DatabaseInstancesRepository().save(new Instance.Builder(instance)
+                        .canEditWhenComplete(false)
+                        .geometryType(null)
+                        .geometry(null)
+                        .build()
+                );
 
                 SaveFormToDisk.manageFilesAfterSavingEncryptedForm(instanceXml, submissionXml);
                 if (!EncryptionUtils.deletePlaintextFiles(instanceXml, null)) {

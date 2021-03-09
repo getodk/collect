@@ -170,4 +170,19 @@ public abstract class InstancesRepositoryTest {
         Instance instance = instancesRepository.save(buildInstance("formid", "1").build());
         assertThat(instancesRepository.get(instance.getId()), is(instance));
     }
+
+    @Test
+    public void save_whenInstanceHasId_updatesExisting() {
+        InstancesRepository instancesRepository = buildSubject();
+
+        Instance originalInstance = instancesRepository.save(buildInstance("formid", "1")
+                .displayName("Blah")
+                .build());
+
+        instancesRepository.save(new Instance.Builder(originalInstance)
+                .displayName("A different blah")
+                .build());
+
+        assertThat(instancesRepository.get(originalInstance.getId()).getDisplayName(), is("A different blah"));
+    }
 }
