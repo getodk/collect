@@ -67,7 +67,7 @@ public final class GeneralKeys {
     public static final String KEY_METADATA_PHONENUMBER = "metadata_phonenumber";
     public static final String KEY_METADATA_EMAIL = "metadata_email";
 
-    static final String KEY_FORM_METADATA = "form_metadata";
+    public static final String KEY_FORM_METADATA = "form_metadata";
 
     public static final String KEY_BACKGROUND_LOCATION = "background_location";
     public static final String KEY_BACKGROUND_RECORDING = "background_recording";

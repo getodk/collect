@@ -1,4 +1,4 @@
-package org.odk.collect.android.preferences;
+package org.odk.collect.android.preferences.screens;
 
 import android.content.Intent;
 
@@ -19,7 +19,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
+import static org.odk.collect.android.preferences.screens.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 @LooperMode(LooperMode.Mode.PAUSED)
 @RunWith(ParameterizedRobolectricTestRunner.class)

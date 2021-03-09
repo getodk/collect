@@ -36,7 +36,7 @@ public final class AdminKeys {
     public static final String KEY_SHOW_SPLASH_SCREEN          = "show_splash_screen";
     public static final String KEY_EXTERNAL_APP_RECORDING      = "external_app_recording";
 
-    static final String KEY_MAPS                                = "maps";
+    public static final String KEY_MAPS                                = "maps";
 
     private static final String KEY_FORM_UPDATE_MODE            = "form_update_mode";
     public static final String KEY_PERIODIC_FORM_UPDATES_CHECK = "periodic_form_updates_check";
@@ -61,16 +61,16 @@ public final class AdminKeys {
     public static final String KEY_SAVE_AS                      = "save_as";
     public static final String KEY_MARK_AS_FINALIZED            = "mark_as_finalized";
 
-    static final String KEY_CHANGE_ADMIN_PASSWORD               = "admin_password";
-    static final String KEY_IMPORT_SETTINGS                     = "import_settings";
-    static final String ALLOW_OTHER_WAYS_OF_EDITING_FORM        = "allow_other_ways_of_editing_form";
+    public static final String KEY_CHANGE_ADMIN_PASSWORD               = "admin_password";
+    public static final String KEY_IMPORT_SETTINGS                     = "import_settings";
+    public static final String ALLOW_OTHER_WAYS_OF_EDITING_FORM        = "allow_other_ways_of_editing_form";
 
     /**
      * The admin preferences allow removing general preferences. This array contains
      * tuples of admin keys and the keys of general preferences that are removed if the admin
      * preference is false.
      */
-    static AdminAndGeneralKeys[] adminToGeneral = {
+    public static AdminAndGeneralKeys[] adminToGeneral = {
             ag(KEY_CHANGE_SERVER,              GeneralKeys.KEY_PROTOCOL),
             ag(KEY_CHANGE_FORM_METADATA,       GeneralKeys.KEY_FORM_METADATA),
 
@@ -120,16 +120,16 @@ public final class AdminKeys {
             KEY_ADMIN_PW
     );
 
-    static Collection<String> serverKeys = Collections.singletonList(
+    public static Collection<String> serverKeys = Collections.singletonList(
             KEY_CHANGE_SERVER
     );
 
-    static Collection<String> identityKeys = Arrays.asList(
+    public static Collection<String> identityKeys = Arrays.asList(
             KEY_CHANGE_FORM_METADATA,
             KEY_ANALYTICS
     );
 
-    static Collection<String> formManagementKeys = Arrays.asList(
+    public static Collection<String> formManagementKeys = Arrays.asList(
             KEY_PERIODIC_FORM_UPDATES_CHECK,
             KEY_AUTOMATIC_UPDATE,
             KEY_HIDE_OLD_FORM_VERSIONS,
@@ -144,7 +144,7 @@ public final class AdminKeys {
             KEY_EXTERNAL_APP_RECORDING
     );
 
-    static Collection<String> userInterfaceKeys = Arrays.asList(
+    public static Collection<String> userInterfaceKeys = Arrays.asList(
             KEY_APP_THEME,
             KEY_APP_LANGUAGE,
             KEY_CHANGE_FONT_SIZE,

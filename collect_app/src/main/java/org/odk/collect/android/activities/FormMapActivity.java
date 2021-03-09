@@ -46,7 +46,7 @@ import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.MapsPreferences;
+import org.odk.collect.android.preferences.screens.MapsPreferences;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;

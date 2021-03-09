@@ -22,12 +22,12 @@ import androidx.preference.PreferenceGroup;
 
 import timber.log.Timber;
 
-class DisabledPreferencesRemover {
+public class DisabledPreferencesRemover {
 
     private final PreferenceFragmentCompat pf;
     private final PreferencesDataSource adminPrefs;
 
-    DisabledPreferencesRemover(PreferenceFragmentCompat pf, PreferencesDataSource adminPrefs) {
+    public DisabledPreferencesRemover(PreferenceFragmentCompat pf, PreferencesDataSource adminPrefs) {
         this.pf = pf;
         this.adminPrefs = adminPrefs;
     }
@@ -37,7 +37,7 @@ class DisabledPreferencesRemover {
      *
      * @param keyPairs one or more AdminAndGeneralKeys objects.
      */
-    void remove(AdminAndGeneralKeys... keyPairs) {
+    public void remove(AdminAndGeneralKeys... keyPairs) {
         for (AdminAndGeneralKeys agKeys : keyPairs) {
             boolean prefAllowed = adminPrefs.getBoolean(agKeys.adminKey);
 
@@ -83,7 +83,7 @@ class DisabledPreferencesRemover {
     /**
      * Deletes all empty PreferenceCategory items.
      */
-    void removeEmptyCategories() {
+    public void removeEmptyCategories() {
         removeEmptyCategories(pf.getPreferenceScreen());
         removeEmptyCategories(pf.getPreferenceScreen());
     }

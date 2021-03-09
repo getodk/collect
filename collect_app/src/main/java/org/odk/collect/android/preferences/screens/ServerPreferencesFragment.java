@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.preferences;
+package org.odk.collect.android.preferences.screens;
 
 import android.accounts.AccountManager;
 import android.content.Context;
@@ -43,6 +43,9 @@ import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.preferences.AggregatePreferencesAdder;
+import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.Protocol;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.utilities.FileUtils;

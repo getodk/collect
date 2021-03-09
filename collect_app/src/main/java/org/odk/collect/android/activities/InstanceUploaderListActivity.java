@@ -43,7 +43,7 @@ import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.network.NetworkStateProvider;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.screens.PreferencesActivity;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;

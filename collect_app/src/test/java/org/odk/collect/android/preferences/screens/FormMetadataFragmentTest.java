@@ -1,4 +1,4 @@
-package org.odk.collect.android.preferences;
+package org.odk.collect.android.preferences.screens;
 
 import android.app.Activity;
 import android.content.Context;

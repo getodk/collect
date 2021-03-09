@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.preferences;
+package org.odk.collect.android.preferences.screens;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -26,6 +26,7 @@ import androidx.preference.PreferenceScreen;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.version.VersionInformation;
 

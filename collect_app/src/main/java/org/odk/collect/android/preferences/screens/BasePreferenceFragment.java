@@ -1,4 +1,4 @@
-package org.odk.collect.android.preferences;
+package org.odk.collect.android.preferences.screens;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,10 +16,14 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.preferences.AdminKeys;
+import org.odk.collect.android.preferences.DisabledPreferencesRemover;
+import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 
 import javax.inject.Inject;
 
-import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
+import static org.odk.collect.android.preferences.screens.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public abstract class BasePreferenceFragment extends PreferenceFragmentCompat implements PreferencesDataSource.OnPreferenceChangeListener {
 

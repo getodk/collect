@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.preferences;
+package org.odk.collect.android.preferences.screens;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -28,6 +28,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.backgroundwork.FormUpdateManager;
+import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.Protocol;
 
 import javax.inject.Inject;
 

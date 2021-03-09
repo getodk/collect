@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.preferences;
+package org.odk.collect.android.preferences.screens;
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +25,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.preferences.SplashClickListener;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
@@ -48,7 +49,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_SPLASH_PATH;
 
 public class UserInterfacePreferencesFragment extends BaseGeneralPreferencesFragment {
 
-    protected static final int IMAGE_CHOOSER = 0;
+    public static final int IMAGE_CHOOSER = 0;
 
     @Inject
     VersionInformation versionInformation;
@@ -175,7 +176,7 @@ public class UserInterfacePreferencesFragment extends BaseGeneralPreferencesFrag
         }
     }
 
-    void setSplashPath(String path) {
+    public void setSplashPath(String path) {
         preferencesDataSourceProvider.getGeneralPreferences().save(KEY_SPLASH_PATH, path);
         Preference splashPathPreference = findPreference(KEY_SPLASH_PATH);
         splashPathPreference.setSummary(path);

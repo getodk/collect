@@ -1,4 +1,4 @@
-package org.odk.collect.android.preferences;
+package org.odk.collect.android.preferences.screens;
 
 import android.content.Context;
 
@@ -10,7 +10,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.preferences.AdminPreferencesFragment.MainMenuAccessPreferences;
+import org.odk.collect.android.preferences.FormUpdateMode;
+import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.Protocol;
+import org.odk.collect.android.preferences.screens.AdminPreferencesFragment.MainMenuAccessPreferences;
 import org.odk.collect.utilities.TestPreferencesProvider;
 
 import static org.hamcrest.MatcherAssert.assertThat;

@@ -7,12 +7,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.preferences.screens.UserInterfacePreferencesFragment;
 
-class SplashClickListener implements Preference.OnPreferenceClickListener {
+public class SplashClickListener implements Preference.OnPreferenceClickListener {
     private final UserInterfacePreferencesFragment preferencesFragment;
     private final Preference splashPathPreference;
 
-    SplashClickListener(UserInterfacePreferencesFragment preferenceFragment, Preference splashPathPreference) {
+    public SplashClickListener(UserInterfacePreferencesFragment preferenceFragment, Preference splashPathPreference) {
         this.preferencesFragment = preferenceFragment;
         this.splashPathPreference = splashPathPreference;
     }

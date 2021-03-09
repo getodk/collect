@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.preferences;
+package org.odk.collect.android.preferences.screens;
 
 import android.app.Activity;
 import android.content.Context;
@@ -27,7 +27,10 @@ import androidx.preference.PreferenceCategory;
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.preferences.CaptionedListPreference;
 import org.odk.collect.android.preferences.CaptionedListPreference.Item;
+import org.odk.collect.android.preferences.PrefUtils;
+import org.odk.collect.android.preferences.ReferenceLayerPreferenceDialog;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;

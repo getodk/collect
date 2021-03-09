@@ -31,7 +31,7 @@ import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.MapsPreferences;
+import org.odk.collect.android.preferences.screens.MapsPreferences;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 

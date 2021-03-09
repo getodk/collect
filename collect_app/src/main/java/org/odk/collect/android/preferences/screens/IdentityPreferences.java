@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.preferences;
+package org.odk.collect.android.preferences.screens;
 
 import android.content.Context;
 import android.os.Bundle;

@@ -18,7 +18,7 @@ import org.odk.collect.android.formentry.questions.AnswersProvider;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.screens.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;

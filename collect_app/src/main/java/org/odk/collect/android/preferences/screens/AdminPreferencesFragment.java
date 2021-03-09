@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.preferences;
+package org.odk.collect.android.preferences.screens;
 
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +28,11 @@ import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.preferences.ChangeAdminPasswordDialog;
+import org.odk.collect.android.preferences.FormUpdateMode;
+import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.ResetDialogPreference;
+import org.odk.collect.android.preferences.ResetDialogPreferenceFragmentCompat;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 
@@ -42,7 +47,7 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_JUMP_TO;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_SAVE_MID;
 import static org.odk.collect.android.preferences.GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE;
-import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
+import static org.odk.collect.android.preferences.screens.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
 
 public class AdminPreferencesFragment extends BaseAdminPreferencesFragment implements Preference.OnPreferenceClickListener {

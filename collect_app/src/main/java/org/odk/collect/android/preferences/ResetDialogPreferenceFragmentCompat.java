@@ -16,6 +16,7 @@ import androidx.preference.PreferenceDialogFragmentCompat;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog;
+import org.odk.collect.android.preferences.screens.AdminPreferencesActivity;
 import org.odk.collect.android.utilities.ApplicationResetter;
 
 import java.util.ArrayList;
