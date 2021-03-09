@@ -35,7 +35,7 @@ import javax.inject.Inject;
 
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MAPS;
 
-public class GeneralPreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceClickListener {
+public class GeneralPreferencesFragment extends BaseGeneralPreferencesFragment implements Preference.OnPreferenceClickListener {
 
     @Inject
     VersionInformation versionInformation;

@@ -30,7 +30,7 @@ import javax.inject.Inject;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_ANALYTICS;
 
-public class IdentityPreferences extends BasePreferenceFragment {
+public class IdentityPreferences extends BaseGeneralPreferencesFragment {
 
     @Inject
     Analytics analytics;

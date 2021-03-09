@@ -45,7 +45,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.CONSTRAINT_BEHAVIO
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
 
-public class AdminPreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceClickListener {
+public class AdminPreferencesFragment extends BaseAdminPreferencesFragment implements Preference.OnPreferenceClickListener {
 
     public static final String ADMIN_PREFERENCES = "admin_prefs";
 
@@ -126,7 +126,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
         }
     }
 
-    public static class MainMenuAccessPreferences extends BasePreferenceFragment {
+    public static class MainMenuAccessPreferences extends BaseAdminPreferencesFragment {
 
         @Override
         public void onAttach(@NonNull Context context) {
@@ -148,7 +148,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
         }
     }
 
-    public static class UserSettingsAccessPreferences extends BasePreferenceFragment {
+    public static class UserSettingsAccessPreferences extends BaseAdminPreferencesFragment {
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -157,7 +157,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
         }
     }
 
-    public static class FormEntryAccessPreferences extends BasePreferenceFragment {
+    public static class FormEntryAccessPreferences extends BaseAdminPreferencesFragment {
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {

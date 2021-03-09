@@ -11,7 +11,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 
 import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
 
-public class ExperimentalPreferencesFragment extends BasePreferenceFragment {
+public class ExperimentalPreferencesFragment extends BaseGeneralPreferencesFragment {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {

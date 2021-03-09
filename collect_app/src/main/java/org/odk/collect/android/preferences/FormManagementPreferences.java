@@ -15,7 +15,6 @@
 package org.odk.collect.android.preferences;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,6 +23,7 @@ import androidx.preference.CheckBoxPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
@@ -44,7 +44,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
 
-public class FormManagementPreferences extends BasePreferenceFragment {
+public class FormManagementPreferences extends BaseGeneralPreferencesFragment {
 
     @Inject
     Analytics analytics;
@@ -73,8 +73,8 @@ public class FormManagementPreferences extends BasePreferenceFragment {
     }
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        super.onSharedPreferenceChanged(sharedPreferences, key);
+    public void onPreferenceChanged(@NotNull String key) {
+        super.onPreferenceChanged(key);
 
         if (key.equals(KEY_FORM_UPDATE_MODE) || key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
             updateDisabledPrefs();

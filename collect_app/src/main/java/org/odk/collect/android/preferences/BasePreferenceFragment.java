@@ -1,7 +1,6 @@
 package org.odk.collect.android.preferences;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -22,7 +21,7 @@ import javax.inject.Inject;
 
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
-public abstract class BasePreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+public abstract class BasePreferenceFragment extends PreferenceFragmentCompat implements PreferencesDataSource.OnPreferenceChangeListener {
 
     @Inject
     SettingsChangeHandler settingsChangeHandler;
@@ -57,23 +56,6 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat im
         removeDisabledPrefs();
 
         super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        settingsChangeHandler.onSettingChanged(key, sharedPreferences.getAll().get(key));
     }
 
     private void removeDisabledPrefs() {

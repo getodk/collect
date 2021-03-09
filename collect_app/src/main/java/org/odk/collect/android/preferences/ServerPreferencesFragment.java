@@ -67,7 +67,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_SELECTED_GOOGL
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_URL;
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 
-public class ServerPreferencesFragment extends BasePreferenceFragment implements View.OnTouchListener, OnBackPressedListener {
+public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment implements View.OnTouchListener, OnBackPressedListener {
 
     private static final int REQUEST_ACCOUNT_PICKER = 1000;
 

@@ -87,6 +87,8 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.JsonPreferencesGenerator;
 import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.stores.AdminPreferencesDataStore;
+import org.odk.collect.android.preferences.stores.GeneralPreferencesDataStore;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -494,5 +496,17 @@ public class AppDependencyModule {
     @Provides
     public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, PreferencesDataSourceProvider preferencesDataSourceProvider, PermissionsChecker permissionsChecker, Clock clock, Analytics analytics) {
         return new BackgroundAudioViewModel.Factory(audioRecorder, preferencesDataSourceProvider.getGeneralPreferences(), permissionsChecker, clock, analytics);
+    }
+
+    @Provides
+    @Singleton
+    public GeneralPreferencesDataStore providesGeneralPreferencesDataStore(PreferencesDataSourceProvider preferencesDataSourceProvider) {
+        return new GeneralPreferencesDataStore(preferencesDataSourceProvider);
+    }
+
+    @Provides
+    @Singleton
+    public AdminPreferencesDataStore providesAdminPreferencesDataStore(PreferencesDataSourceProvider preferencesDataSourceProvider) {
+        return new AdminPreferencesDataStore(preferencesDataSourceProvider);
     }
 }

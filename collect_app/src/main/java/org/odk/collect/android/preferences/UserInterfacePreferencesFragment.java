@@ -46,7 +46,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_NAVIGATION;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SPLASH_PATH;
 
-public class UserInterfacePreferencesFragment extends BasePreferenceFragment {
+public class UserInterfacePreferencesFragment extends BaseGeneralPreferencesFragment {
 
     protected static final int IMAGE_CHOOSER = 0;
 

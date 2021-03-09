@@ -25,7 +25,7 @@ import static org.odk.collect.android.logic.PropertyManager.PROPMGR_PHONE_NUMBER
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_PHONENUMBER;
 
-public class FormMetadataFragment extends BasePreferenceFragment {
+public class FormMetadataFragment extends BaseGeneralPreferencesFragment {
 
     @Inject
     PermissionsProvider permissionsProvider;

@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import org.odk.collect.android.R;
 
-public class CustomServerPathsFragment extends BasePreferenceFragment {
+public class CustomServerPathsFragment extends BaseGeneralPreferencesFragment {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {

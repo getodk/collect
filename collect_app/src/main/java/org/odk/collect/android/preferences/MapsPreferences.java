@@ -41,7 +41,7 @@ import java.util.List;
 import static org.odk.collect.android.preferences.GeneralKeys.CATEGORY_BASEMAP;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASEMAP_SOURCE;
 
-public class MapsPreferences extends BasePreferenceFragment {
+public class MapsPreferences extends BaseGeneralPreferencesFragment {
 
     private Context context;
     private ListPreference basemapSourcePref;
