@@ -26,6 +26,7 @@ import android.widget.EditText;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
 
 import javax.inject.Inject;
 
@@ -50,7 +51,7 @@ public class AuthDialogUtility {
     }
 
     /**
-     * @deprecated should use {@link org.odk.collect.android.preferences.ServerAuthDialogFragment} instead
+     * @deprecated should use {@link ServerAuthDialogFragment} instead
      */
     @Deprecated
     public AlertDialog createDialog(final Context context,

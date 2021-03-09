@@ -14,11 +14,12 @@ import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.preferences.dialogs.ReferenceLayerPreferenceDialog;
 
 import java.util.List;
 import java.util.Objects;
 
-import static org.odk.collect.android.preferences.ReferenceLayerPreferenceDialog.captionView;
+import static org.odk.collect.android.preferences.dialogs.ReferenceLayerPreferenceDialog.captionView;
 
 /** A ListPreference where each item has a caption and the entire dialog also has a caption. */
 public class CaptionedListPreference extends ListPreference {

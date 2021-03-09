@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.preferences;
+package org.odk.collect.android.preferences.dialogs;
 
 import android.content.Context;
 import android.util.AttributeSet;

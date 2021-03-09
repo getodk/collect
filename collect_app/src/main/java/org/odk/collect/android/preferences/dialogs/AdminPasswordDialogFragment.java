@@ -1,4 +1,4 @@
-package org.odk.collect.android.preferences;
+package org.odk.collect.android.preferences.dialogs;
 
 import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
