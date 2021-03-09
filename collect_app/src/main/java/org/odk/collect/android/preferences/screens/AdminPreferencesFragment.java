@@ -51,13 +51,8 @@ import static org.odk.collect.android.preferences.screens.GeneralPreferencesActi
 import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
 
 public class AdminPreferencesFragment extends BaseAdminPreferencesFragment implements Preference.OnPreferenceClickListener {
-
-    public static final String ADMIN_PREFERENCES = "admin_prefs";
-
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        getPreferenceManager().setSharedPreferencesName(ADMIN_PREFERENCES);
-
         setPreferencesFromResource(R.xml.admin_preferences, rootKey);
 
         findPreference("odk_preferences").setOnPreferenceClickListener(this);
@@ -141,8 +136,6 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            getPreferenceManager().setSharedPreferencesName(ADMIN_PREFERENCES);
-
             setPreferencesFromResource(R.xml.main_menu_access_preferences, rootKey);
             findPreference(KEY_EDIT_SAVED).setEnabled(preferencesDataSourceProvider.getAdminPreferences().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
 
@@ -157,7 +150,6 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            getPreferenceManager().setSharedPreferencesName(ADMIN_PREFERENCES);
             setPreferencesFromResource(R.xml.user_settings_access_preferences, rootKey);
         }
     }
@@ -166,8 +158,6 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            getPreferenceManager().setSharedPreferencesName(ADMIN_PREFERENCES);
-
             addPreferencesFromResource(R.xml.form_entry_access_preferences);
 
             findPreference(KEY_MOVING_BACKWARDS).setOnPreferenceChangeListener((preference, newValue) -> {
