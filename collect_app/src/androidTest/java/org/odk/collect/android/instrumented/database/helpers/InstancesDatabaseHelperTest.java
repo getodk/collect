@@ -8,7 +8,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.database.InstanceDatabaseMigrator;
 import org.odk.collect.android.database.InstancesDatabaseHelper;
