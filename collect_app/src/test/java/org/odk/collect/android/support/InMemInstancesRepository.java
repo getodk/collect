@@ -117,7 +117,7 @@ public final class InMemInstancesRepository implements InstancesRepository {
             instances.add(newInstance);
             return newInstance;
         } else {
-            delete(instance.getId());
+            instances.removeIf(i -> i.getId().equals(instance.getId()));
             instances.add(instance);
             return instance;
         }
