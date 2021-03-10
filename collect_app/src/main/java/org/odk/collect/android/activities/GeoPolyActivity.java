@@ -282,7 +282,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
     }
 
     @Override public void onBackPressed() {
-        if (map != null && !formatPoints(map.getPolyPoints(featureId)).equals(originalAnswerString)) {
+        if (map != null && !parsePoints(originalAnswerString).equals(map.getPolyPoints(featureId))) {
             showBackDialog();
         } else {
             finish();
@@ -341,11 +341,13 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         StringBuilder result = new StringBuilder();
         for (MapPoint point : points) {
             // TODO(ping): Remove excess precision when we're ready for the output to change.
-            result.append(String.format(Locale.US, "%s %s %s %s;",
+            result.append(String.format(Locale.US, "%s %s %s %s; ",
                     Double.toString(point.lat), Double.toString(point.lon),
                     Double.toString(point.alt), Float.toString((float) point.sd)));
         }
-        return result.toString().trim();
+
+        String answer = result.toString().trim();
+        return answer.isEmpty() ? answer : answer.substring(0, answer.length() - 1);
     }
 
     @Override
