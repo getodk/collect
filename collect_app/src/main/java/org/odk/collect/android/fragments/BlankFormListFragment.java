@@ -36,7 +36,7 @@ import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DeleteFormsTask;
-import org.odk.collect.android.tasks.DiskSyncTask;
+import org.odk.collect.android.tasks.FormSyncTask;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -79,9 +79,9 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
 
         if (backgroundTasks == null) {
             backgroundTasks = new BackgroundTasks();
-            backgroundTasks.diskSyncTask = new DiskSyncTask();
-            backgroundTasks.diskSyncTask.setDiskSyncListener(this);
-            backgroundTasks.diskSyncTask.execute((Void[]) null);
+            backgroundTasks.formSyncTask = new FormSyncTask();
+            backgroundTasks.formSyncTask.setDiskSyncListener(this);
+            backgroundTasks.formSyncTask.execute((Void[]) null);
         }
         super.onViewCreated(rootView, savedInstanceState);
     }
@@ -89,14 +89,14 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
     @Override
     public void onResume() {
         // hook up to receive completion events
-        backgroundTasks.diskSyncTask.setDiskSyncListener(this);
+        backgroundTasks.formSyncTask.setDiskSyncListener(this);
         if (backgroundTasks.deleteFormsTask != null) {
             backgroundTasks.deleteFormsTask.setDeleteListener(this);
         }
         super.onResume();
         // async task may have completed while we were reorienting...
-        if (backgroundTasks.diskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
-            syncComplete(backgroundTasks.diskSyncTask.getStatusMessage());
+        if (backgroundTasks.formSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
+            syncComplete(backgroundTasks.formSyncTask.getStatusMessage());
         }
         if (backgroundTasks.deleteFormsTask != null
                 && backgroundTasks.deleteFormsTask.getStatus() == AsyncTask.Status.FINISHED) {
@@ -109,8 +109,8 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
 
     @Override
     public void onPause() {
-        if (backgroundTasks.diskSyncTask != null) {
-            backgroundTasks.diskSyncTask.setDiskSyncListener(null);
+        if (backgroundTasks.formSyncTask != null) {
+            backgroundTasks.formSyncTask.setDiskSyncListener(null);
         }
         if (backgroundTasks.deleteFormsTask != null) {
             backgroundTasks.deleteFormsTask.setDeleteListener(null);
@@ -270,7 +270,7 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
     }
 
     private static class BackgroundTasks {
-        DiskSyncTask diskSyncTask;
+        FormSyncTask formSyncTask;
         DeleteFormsTask deleteFormsTask;
 
         BackgroundTasks() {

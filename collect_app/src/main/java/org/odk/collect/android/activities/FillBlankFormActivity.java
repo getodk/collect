@@ -42,7 +42,7 @@ import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
-import org.odk.collect.android.tasks.DiskSyncTask;
+import org.odk.collect.android.tasks.FormSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
@@ -64,7 +64,7 @@ public class FillBlankFormActivity extends FormListActivity implements
 
     private static final String FORM_CHOOSER_LIST_SORTING_ORDER = "formChooserListSortingOrder";
 
-    private DiskSyncTask diskSyncTask;
+    private FormSyncTask formSyncTask;
 
     @Inject
     NetworkStateProvider networkStateProvider;
@@ -137,12 +137,12 @@ public class FillBlankFormActivity extends FormListActivity implements
 
         // DiskSyncTask checks the disk for any forms not already in the content provider
         // that is, put here by dragging and dropping onto the SDCard
-        diskSyncTask = (DiskSyncTask) getLastCustomNonConfigurationInstance();
-        if (diskSyncTask == null) {
+        formSyncTask = (FormSyncTask) getLastCustomNonConfigurationInstance();
+        if (formSyncTask == null) {
             Timber.i("Starting new disk sync task");
-            diskSyncTask = new DiskSyncTask();
-            diskSyncTask.setDiskSyncListener(this);
-            diskSyncTask.execute((Void[]) null);
+            formSyncTask = new FormSyncTask();
+            formSyncTask.setDiskSyncListener(this);
+            formSyncTask.execute((Void[]) null);
         }
         sortingOptions = new int[]{
                 R.string.sort_by_name_asc, R.string.sort_by_name_desc,
@@ -156,7 +156,7 @@ public class FillBlankFormActivity extends FormListActivity implements
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
         // pass the thread on restart
-        return diskSyncTask;
+        return formSyncTask;
     }
 
     /**
@@ -203,18 +203,18 @@ public class FillBlankFormActivity extends FormListActivity implements
     protected void onResume() {
         super.onResume();
 
-        if (diskSyncTask != null) {
-            diskSyncTask.setDiskSyncListener(this);
-            if (diskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
-                syncComplete(diskSyncTask.getStatusMessage());
+        if (formSyncTask != null) {
+            formSyncTask.setDiskSyncListener(this);
+            if (formSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
+                syncComplete(formSyncTask.getStatusMessage());
             }
         }
     }
 
     @Override
     protected void onPause() {
-        if (diskSyncTask != null) {
-            diskSyncTask.setDiskSyncListener(null);
+        if (formSyncTask != null) {
+            formSyncTask.setDiskSyncListener(null);
         }
         super.onPause();
     }

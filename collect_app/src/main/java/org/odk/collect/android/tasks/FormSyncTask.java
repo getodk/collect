@@ -25,7 +25,7 @@ import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class DiskSyncTask extends AsyncTask<Void, String, String> {
+public class FormSyncTask extends AsyncTask<Void, String, String> {
 
     private DiskSyncListener listener;
     private String statusMessage = "";
