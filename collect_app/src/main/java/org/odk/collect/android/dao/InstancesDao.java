@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class is used to encapsulate all access to the instances database // smap
+ * This class is used to encapsulate all access to the instances database
  * For more information about this pattern go to https://en.wikipedia.org/wiki/Data_access_object
  */
 public class InstancesDao {
