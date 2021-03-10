@@ -116,6 +116,12 @@ public final class InMemInstancesRepository implements InstancesRepository {
                     .build();
         }
 
+        if (instance.getLastStatusChangeDate() == null) {
+            instance = new Instance.Builder(instance)
+                    .lastStatusChangeDate(System.currentTimeMillis())
+                    .build();
+        }
+
         Long id = instance.getId();
         if (id == null) {
             Instance newInstance = new Instance.Builder(instance)

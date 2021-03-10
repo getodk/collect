@@ -197,6 +197,16 @@ public abstract class InstancesRepositoryTest {
     }
 
     @Test
+    public void save_whenLastStatusChangeDateIsNull_setsIt() {
+        InstancesRepository instancesRepository = buildSubject();
+
+        Instance instance = instancesRepository.save(buildInstance("formid", "1")
+                .lastStatusChangeDate(null)
+                .build());
+        assertThat(instancesRepository.get(instance.getId()).getLastStatusChangeDate(), is(notNullValue()));
+    }
+
+    @Test
     public void softDelete_setsDeletedDate() {
         InstancesRepository instancesRepository = buildSubject();
         Instance instance = instancesRepository.save(buildInstance("formid", "1").build());

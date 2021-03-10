@@ -144,13 +144,6 @@ public class InstanceProvider extends ContentProvider {
                 values = new ContentValues();
             }
 
-            Long now = System.currentTimeMillis();
-
-            // Make sure that the fields are all set
-            if (!values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE)) {
-                values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
-            }
-
             long rowId = instancesDatabaseHelper.getWritableDatabase().insert(INSTANCES_TABLE_NAME, null, values);
             if (rowId > 0) {
                 Uri instanceUri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, rowId);
