@@ -14,7 +14,6 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import java.util.List;
 
 import static org.odk.collect.android.dao.InstancesDao.getInstancesFromCursor;
-import static org.odk.collect.android.dao.InstancesDao.getValuesFromInstanceObject;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DELETED_DATE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_VERSION;
@@ -146,5 +145,21 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     private Cursor getInstancesCursor(String selection, String[] selectionArgs) {
         return Collect.getInstance().getContentResolver().query(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
+    }
+
+    private static ContentValues getValuesFromInstanceObject(Instance instance) {
+        ContentValues values = new ContentValues();
+        values.put(InstanceColumns.DISPLAY_NAME, instance.getDisplayName());
+        values.put(InstanceColumns.SUBMISSION_URI, instance.getSubmissionUri());
+        values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(instance.canEditWhenComplete()));
+        values.put(InstanceColumns.INSTANCE_FILE_PATH, instance.getInstanceFilePath());
+        values.put(InstanceColumns.JR_FORM_ID, instance.getJrFormId());
+        values.put(InstanceColumns.JR_VERSION, instance.getJrVersion());
+        values.put(InstanceColumns.STATUS, instance.getStatus());
+        values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, instance.getLastStatusChangeDate());
+        values.put(InstanceColumns.DELETED_DATE, instance.getDeletedDate());
+        values.put(InstanceColumns.GEOMETRY, instance.getGeometry());
+        values.put(InstanceColumns.GEOMETRY_TYPE, instance.getGeometryType());
+        return values;
     }
 }
