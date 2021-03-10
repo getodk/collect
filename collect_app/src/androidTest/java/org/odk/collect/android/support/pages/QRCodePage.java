@@ -15,6 +15,8 @@ import org.hamcrest.Matcher;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.ActivityHelpers;
 
+import java.util.concurrent.Callable;
+
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
@@ -41,7 +43,12 @@ public class QRCodePage extends Page<QRCodePage> {
 
     public QRCodePage clickView() {
         onView(withText(R.string.view_qr_code_fragment_title)).perform(click());
-        onView(withText(R.string.barcode_scanner_prompt)).check(doesNotExist());
+
+        waitFor(() -> {
+            onView(withText(R.string.barcode_scanner_prompt)).check(doesNotExist());
+            return null;
+        });
+
         return this;
     }
 
