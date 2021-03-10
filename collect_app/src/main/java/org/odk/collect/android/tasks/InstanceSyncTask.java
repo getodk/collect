@@ -23,7 +23,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -114,10 +113,9 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 }
                 Collections.sort(candidateInstances);
 
-                List<String> filesToRemove = new ArrayList<>();
+                List<Instance> instancesToRemove = new ArrayList<>();
 
                 // Remove all the path that's already in the content provider
-                InstancesDao instancesDao = new InstancesDao();
                 List<Instance> instances = new DatabaseInstancesRepository().getAllNotDeleted();
 
                 for (Instance instance : instances) {
@@ -126,11 +124,13 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                     if (candidateInstances.contains(instanceFilename) || instance.getStatus().equals(Instance.STATUS_SUBMITTED)) {
                         candidateInstances.remove(instanceFilename);
                     } else {
-                        filesToRemove.add(instanceFilename);
+                        instancesToRemove.add(instance);
                     }
                 }
 
-                instancesDao.deleteInstancesFromInstanceFilePaths(filesToRemove);
+                for (Instance instance : instancesToRemove) {
+                    new DatabaseInstancesRepository().delete(instance.getId());
+                }
 
                 final boolean instanceSyncFlag = settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_INSTANCE_SYNC);
 

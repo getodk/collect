@@ -24,7 +24,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.utilities.ApplicationConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,41 +51,6 @@ public class InstancesDao {
 
     public Cursor getInstancesCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         return Collect.getInstance().getContentResolver().query(InstanceColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
-    }
-
-    public void deleteInstancesFromInstanceFilePaths(List<String> instanceFilePaths) {
-        int count = instanceFilePaths.size();
-        int counter = 0;
-        while (count > 0) {
-            String[] selectionArgs = null;
-            if (count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER) {
-                selectionArgs = new String[
-                        ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER];
-            } else {
-                selectionArgs = new String[count];
-            }
-
-            StringBuilder selection = new StringBuilder();
-            selection.append(InstanceColumns.INSTANCE_FILE_PATH + " IN (");
-            int j = 0;
-            while (j < selectionArgs.length) {
-                selectionArgs[j] = new StoragePathProvider().getRelativeInstancePath(instanceFilePaths.get(
-                        counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER + j));
-                selection.append('?');
-
-                if (j != selectionArgs.length - 1) {
-                    selection.append(',');
-                }
-                j++;
-            }
-            counter++;
-            count -= selectionArgs.length;
-            selection.append(')');
-            Collect.getInstance().getContentResolver()
-                    .delete(InstanceColumns.CONTENT_URI,
-                            selection.toString(), selectionArgs);
-
-        }
     }
 
     /**
