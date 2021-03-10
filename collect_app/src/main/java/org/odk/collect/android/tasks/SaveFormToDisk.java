@@ -254,8 +254,6 @@ public class SaveFormToDisk {
      * parsing the geometry and converting it to GeoJSON.
      * <p>
      * Returns null if the given XPath path is null.
-     *
-     * @return
      */
     private Pair<String, String> extractGeometryContentValues(FormInstance instance, String xpath) {
         if (xpath == null) {

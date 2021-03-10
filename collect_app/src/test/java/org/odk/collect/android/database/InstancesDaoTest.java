@@ -27,17 +27,12 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-
-import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.odk.collect.android.dao.InstancesDao.getInstancesFromCursor;
 
 @RunWith(AndroidJUnit4.class)
 public class InstancesDaoTest {
@@ -45,43 +40,10 @@ public class InstancesDaoTest {
     private InstancesDao instancesDao;
     private final StoragePathProvider storagePathProvider = new StoragePathProvider();
 
-    private Instance biggestNOfSetInstance;
-    private Instance biggestNOfSet2Instance;
-
     @Before
     public void setUp() {
         instancesDao = new InstancesDao();
         fillDatabase();
-    }
-
-    @Test
-    public void updateInstanceTest() {
-        String filePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES) + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml";
-        Cursor cursor = instancesDao.getInstancesCursorForFilePath(filePath);
-        List<Instance> instances = getInstancesFromCursor(cursor);
-
-        assertEquals(1, instances.size());
-        assertEquals(biggestNOfSet2Instance, instances.get(0));
-
-        biggestNOfSetInstance = new Instance.Builder()
-                .displayName("Biggest N of Set")
-                .instanceFilePath(storagePathProvider.getRelativeInstancePath(filePath))
-                .jrFormId("N_Biggest")
-                .status(Instance.STATUS_SUBMITTED)
-                .lastStatusChangeDate(1487597090653L)
-                .build();
-
-        String where = InstanceColumns.INSTANCE_FILE_PATH + "=?";
-        String[] whereArgs = {storagePathProvider.getRelativeInstancePath(filePath)};
-
-        assertEquals(instancesDao.updateInstance(instancesDao.getValuesFromInstanceObject(biggestNOfSet2Instance), where, whereArgs), 1);
-
-        cursor = instancesDao.getInstancesCursorForFilePath(filePath);
-
-        instances = instancesDao.getInstancesFromCursor(cursor);
-
-        assertEquals(1, instances.size());
-        assertEquals(biggestNOfSet2Instance, instances.get(0));
     }
 
     @Test
@@ -128,16 +90,6 @@ public class InstancesDaoTest {
                 .build();
         instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(cascadingSelectInstance));
 
-        String biggestN1Path = storagePathProvider.getRelativeInstancePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES) + "/Biggest N of Set_2017-02-20_14-06-51/Biggest N of Set_2017-02-20_14-06-51.xml");
-        biggestNOfSetInstance = new Instance.Builder()
-                .displayName("Biggest N of Set")
-                .instanceFilePath(storagePathProvider.getRelativeInstancePath(biggestN1Path))
-                .jrFormId("N_Biggest")
-                .status(Instance.STATUS_SUBMITTED)
-                .lastStatusChangeDate(1487596015100L)
-                .build();
-        instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(biggestNOfSetInstance));
-
         String widgetPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES) + "/Widgets_2017-02-20_14-06-58/Widgets_2017-02-20_14-06-58.xml";
         Instance widgetsInstance = new Instance.Builder()
                 .displayName("Widgets")
@@ -158,15 +110,5 @@ public class InstancesDaoTest {
                 .lastStatusChangeDate(1487596026373L)
                 .build();
         instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(sampleInstance));
-
-        String biggestN2Path = storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES) + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml";
-        biggestNOfSet2Instance = new Instance.Builder()
-                .displayName("Biggest N of Set")
-                .instanceFilePath(storagePathProvider.getRelativeInstancePath(biggestN2Path))
-                .jrFormId("N_Biggest")
-                .status(Instance.STATUS_COMPLETE)
-                .lastStatusChangeDate(1487597090653L)
-                .build();
-        instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(biggestNOfSet2Instance));
     }
 }

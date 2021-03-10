@@ -45,10 +45,6 @@ public class InstancesDao {
         return Collect.getInstance().getContentResolver().insert(InstanceColumns.CONTENT_URI, values);
     }
 
-    public int updateInstance(ContentValues values, String where, String[] whereArgs) {
-        return Collect.getInstance().getContentResolver().update(InstanceColumns.CONTENT_URI, values, where, whereArgs);
-    }
-
     public Cursor getInstancesCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         return Collect.getInstance().getContentResolver().query(InstanceColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
     }

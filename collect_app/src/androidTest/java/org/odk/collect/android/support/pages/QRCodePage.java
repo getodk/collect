@@ -15,8 +15,6 @@ import org.hamcrest.Matcher;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.ActivityHelpers;
 
-import java.util.concurrent.Callable;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
