@@ -34,8 +34,6 @@ import static org.odk.collect.shared.livedata.LiveDataUtils.zip4;
 
 public class AudioRecordingControllerFragment extends Fragment {
 
-    public static final String BACKGROUND_AUDIO_DOCS_URL = "https://docs.getodk.org/form-question-types/#background-audio-recording";
-
     @Inject
     AudioRecorder audioRecorder;
 

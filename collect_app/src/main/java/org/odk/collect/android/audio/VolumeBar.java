@@ -19,8 +19,8 @@ import static org.odk.collect.android.utilities.ViewUtils.pxFromDp;
 public class VolumeBar extends LinearLayout {
 
     /**
-     * Amplitude is a reported by Android as a positive Short so
-     * the cannot be higher than the max value.
+     * Amplitude is reported by Android as a positive Short (16 bit audio)
+     * so cannot be higher than the max value.
      */
     public static final int MAX_AMPLITUDE = Short.MAX_VALUE;
 
