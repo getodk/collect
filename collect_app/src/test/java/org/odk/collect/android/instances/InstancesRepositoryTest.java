@@ -185,4 +185,23 @@ public abstract class InstancesRepositoryTest {
 
         assertThat(instancesRepository.get(originalInstance.getId()).getDisplayName(), is("A different blah"));
     }
+
+    @Test
+    public void save_whenStatusIsNull_usesIncomplete() {
+        InstancesRepository instancesRepository = buildSubject();
+
+        Instance instance = instancesRepository.save(buildInstance("formid", "1")
+                .status(null)
+                .build());
+        assertThat(instancesRepository.get(instance.getId()).getStatus(), is(Instance.STATUS_INCOMPLETE));
+    }
+
+    @Test
+    public void softDelete_setsDeletedDate() {
+        InstancesRepository instancesRepository = buildSubject();
+        Instance instance = instancesRepository.save(buildInstance("formid", "1").build());
+
+        instancesRepository.softDelete(instance.getId());
+        assertThat(instancesRepository.get(instance.getId()).getDeletedDate(), is(notNullValue()));
+    }
 }

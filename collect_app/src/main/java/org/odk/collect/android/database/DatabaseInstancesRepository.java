@@ -105,6 +105,12 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     @Override
     public Instance save(Instance instance) {
+        if (instance.getStatus() == null) {
+            instance = new Instance.Builder(instance)
+                    .status(Instance.STATUS_INCOMPLETE)
+                    .build();
+        }
+
         Long instanceId = instance.getId();
         ContentValues values = getValuesFromInstanceObject(instance);
 
@@ -123,6 +129,19 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
             return get(instanceId);
         }
+    }
+
+    @Override
+    public void softDelete(Long id) {
+        ContentValues values = new ContentValues();
+        values.put(DELETED_DATE, System.currentTimeMillis());
+
+        Collect.getInstance().getContentResolver().update(
+                InstanceColumns.CONTENT_URI,
+                values,
+                InstanceColumns._ID + "=?",
+                new String[]{id.toString()}
+        );
     }
 
     private Cursor getInstancesCursor(String selection, String[] selectionArgs) {

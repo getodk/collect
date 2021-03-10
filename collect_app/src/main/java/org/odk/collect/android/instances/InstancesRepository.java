@@ -38,4 +38,6 @@ public interface InstancesRepository {
     void deleteAll();
 
     Instance save(Instance instance);
+
+    void softDelete(Long id);
 }

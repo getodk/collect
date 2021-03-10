@@ -110,17 +110,34 @@ public final class InMemInstancesRepository implements InstancesRepository {
 
     @Override
     public Instance save(Instance instance) {
-        if (instance.getId() == null) {
+        if (instance.getStatus() == null) {
+            instance = new Instance.Builder(instance)
+                    .status(Instance.STATUS_INCOMPLETE)
+                    .build();
+        }
+
+        Long id = instance.getId();
+        if (id == null) {
             Instance newInstance = new Instance.Builder(instance)
                     .id(idCounter++)
                     .build();
             instances.add(newInstance);
             return newInstance;
         } else {
-            instances.removeIf(i -> i.getId().equals(instance.getId()));
+            instances.removeIf(i -> i.getId().equals(id));
             instances.add(instance);
             return instance;
         }
+    }
+
+    @Override
+    public void softDelete(Long id) {
+        Instance instance = new Instance.Builder(get(id))
+                .deletedDate(System.currentTimeMillis())
+                .build();
+
+        instances.removeIf(i -> i.getId().equals(id));
+        instances.add(instance);
     }
 
     public void removeInstanceById(Long databaseId) {
