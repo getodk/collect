@@ -26,7 +26,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
-
+import org.odk.collect.android.database.DatabaseInstancesRepository;
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.Settings;
@@ -168,15 +169,14 @@ public class ResetAppStateTest {
     }
 
     private void setupTestInstancesDatabase() {
-        ContentValues values = new ContentValues();
-        values.put(InstanceColumns.INSTANCE_FILE_PATH, storagePathProvider.getRelativeInstancePath("testDir1/testFile1"));
-        values.put(InstanceColumns.SUBMISSION_URI, "submissionUri");
-        values.put(InstanceColumns.DISPLAY_NAME, "displayName");
-        values.put(InstanceColumns.DISPLAY_NAME, "formName");
-        values.put(InstanceColumns.JR_FORM_ID, "jrformid");
-        values.put(InstanceColumns.JR_VERSION, "jrversion");
-        Collect.getInstance().getContentResolver()
-                .insert(InstanceColumns.CONTENT_URI, values);
+        new DatabaseInstancesRepository().save(new Instance.Builder()
+                .instanceFilePath(storagePathProvider.getRelativeInstancePath("testDir1/testFile1"))
+                .submissionUri("submissionUri")
+                .displayName("formName")
+                .jrFormId("jrformid")
+                .jrVersion("jrversion")
+                .build()
+        );
 
         assertEquals(1, getInstancesCount());
     }
