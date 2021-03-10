@@ -201,6 +201,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    public FormEntryPage clickSave() {
+        onView(withId(R.id.menu_save)).perform(click());
+        return this;
+    }
+
     public ChangesReasonPromptPage clickSaveWithChangesReasonPrompt() {
         onView(withId(R.id.menu_save)).perform(click());
         return new ChangesReasonPromptPage(formName, rule).assertOnPage();
