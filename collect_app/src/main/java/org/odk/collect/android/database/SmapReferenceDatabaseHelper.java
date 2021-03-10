@@ -4,11 +4,11 @@ package org.odk.collect.android.database;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.net.Uri;
-import android.provider.BaseColumns;
 
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.android.utilities.SQLiteUtils;
+
 import java.io.File;
 import timber.log.Timber;
 import static android.provider.BaseColumns._ID;
@@ -40,7 +40,7 @@ public class SmapReferenceDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        createLatestVersion(db, TABLE_NAME);
+        createLatestVersion(db);
     }
 
     /**
@@ -67,8 +67,8 @@ public class SmapReferenceDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    private void createLatestVersion(SQLiteDatabase db, String name) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + name + " ("
+    private static void createLatestVersion(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
                 + _ID + " integer primary key, "
                 + SOURCE + " text not null, "
                 + SURVEY + " text not null, "
@@ -109,5 +109,17 @@ public class SmapReferenceDatabaseHelper extends SQLiteOpenHelper {
             Timber.i(e);
         }
         return isDatabaseHelperOutOfDate;
+    }
+
+    public static void recreateDatabase() {
+
+        try {
+            SQLiteDatabase db = SQLiteDatabase.openDatabase(FormsDatabaseHelper.getDatabasePath(), null, SQLiteDatabase.OPEN_READWRITE);
+            SQLiteUtils.dropTable(db, TABLE_NAME);
+            createLatestVersion(db);
+            db.close();
+        } catch (SQLException e) {
+            Timber.i(e);
+        }
     }
 }

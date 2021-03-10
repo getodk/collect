@@ -20,6 +20,7 @@ import org.odk.collect.android.database.FormDatabaseMigrator;
 import org.odk.collect.android.database.InstancesDatabaseHelper;
 import org.odk.collect.android.database.FormsDatabaseHelper;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.SmapReferenceDatabaseHelper;
 import org.odk.collect.android.database.TraceUtilities;
 import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.configure.ServerRepository;
@@ -73,6 +74,7 @@ public class ApplicationResetter {
                     break;
                 case ResetAction.RESET_FORMS:
                     resetForms();
+                    resetReferences();  // smap
                     break;
                 case ResetAction.RESET_LAYERS:
                     if (deleteFolderContents(storagePathProvider.getDirPath(StorageSubdirectory.LAYERS))) {
@@ -135,6 +137,11 @@ public class ApplicationResetter {
         if (deleteFolderContents(storagePathProvider.getDirPath(StorageSubdirectory.FORMS)) && (!itemsetDbFile.exists() || itemsetDbFile.delete())) {
             failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_FORMS));
         }
+    }
+
+    // smap
+    private void resetReferences() {
+        SmapReferenceDatabaseHelper.recreateDatabase();
     }
 
     private boolean deleteFolderContents(String path) {

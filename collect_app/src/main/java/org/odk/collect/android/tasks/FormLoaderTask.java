@@ -47,6 +47,7 @@ import org.odk.collect.android.external.handler.SmapRemoteDataHandlerLookupImage
 import org.odk.collect.android.external.handler.SmapRemoteDataHandlerSearch;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.smap.formmanagement.LocalDataManagerSmap;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormDefCache;
 import org.odk.collect.android.utilities.TranslationHandler;
@@ -179,6 +180,10 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         try {
             loadExternalData(formMediaDir);
+            // Start smap load local data
+            LocalDataManagerSmap ldm = new LocalDataManagerSmap();
+            ldm.loadLocalData();
+            // end smap
         } catch (Exception e) {
             Timber.e(e, "Exception thrown while loading external data");
             errorMsg = e.getMessage();

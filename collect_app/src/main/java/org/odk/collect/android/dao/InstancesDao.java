@@ -147,6 +147,18 @@ public class InstancesDao {
         return getInstancesCursor(null, selection, selectionArgs, sortOrder);
     }
 
+    // start smap - get finalized cursor in order of date finalised
+    public Cursor getFinalizedDateOrderInstancesCursor() {
+        String selection = InstanceColumns.DELETED_DATE + " IS NULL and ("  // smap
+                + InstanceColumns.STATUS + "=? or "
+                + InstanceColumns.STATUS + "=? )";
+        String[] selectionArgs = {Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED};
+        String sortOrder = InstanceColumns.T_ACT_FINISH + " ASC";
+
+        return getInstancesCursor(null, selection, selectionArgs, sortOrder);
+    }
+    // end smap
+
     public CursorLoader getFinalizedInstancesCursorLoader(String sortOrder) {
         String selection = InstanceColumns.DELETED_DATE + " IS NULL and ("  // smap
                 + InstanceColumns.STATUS
