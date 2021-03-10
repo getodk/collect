@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import org.odk.collect.android.database.helpers.SmapTraceDatabaseHelper;
+import org.odk.collect.android.database.SmapTraceDatabaseHelper;
 import org.odk.collect.android.provider.TraceProviderAPI.TraceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 

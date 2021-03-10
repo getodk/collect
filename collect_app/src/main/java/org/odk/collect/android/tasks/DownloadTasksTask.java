@@ -38,6 +38,7 @@ import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.database.Assignment;
+import org.odk.collect.android.database.SmapReferenceDatabaseHelper;
 import org.odk.collect.android.database.TaskAssignment;
 import org.odk.collect.android.database.TraceUtilities;
 import org.odk.collect.android.formmanagement.FormDownloader;
@@ -268,6 +269,10 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         
         if(source != null) {
 	        try {
+
+	            // REFERENCE
+                SmapReferenceDatabaseHelper referenceDatabaseHelper = new SmapReferenceDatabaseHelper();
+                referenceDatabaseHelper.getReadableDatabase();
 
                 /*
                  * Close tasks which were cancelled on the phone and

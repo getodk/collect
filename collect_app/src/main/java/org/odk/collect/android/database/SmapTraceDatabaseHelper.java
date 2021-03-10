@@ -1,5 +1,5 @@
 
-package org.odk.collect.android.database.helpers;
+package org.odk.collect.android.database;
 
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
