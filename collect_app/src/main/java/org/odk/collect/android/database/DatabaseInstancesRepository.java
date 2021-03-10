@@ -109,6 +109,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
         ContentValues values = getValuesFromInstanceObject(instance);
 
         if (instanceId == null) {
+            values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, System.currentTimeMillis()); // TODO: test this
             Uri uri = Collect.getInstance().getContentResolver().insert(InstanceColumns.CONTENT_URI, values);
             Cursor cursor = Collect.getInstance().getContentResolver().query(uri, null, null, null, null);
             return getInstancesFromCursor(cursor).get(0);
