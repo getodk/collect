@@ -15,17 +15,15 @@
 package org.odk.collect.android.upload;
 
 import android.content.ContentValues;
-import android.database.Cursor;
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.utilities.ApplicationConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,38 +47,13 @@ public abstract class InstanceUploader {
      * Returns a list of Instance objects corresponding to the database IDs passed in.
      */
     public List<Instance> getInstancesFromIds(Long... instanceDatabaseIds) {
-        List<Instance> instancesToUpload = new ArrayList<>();
-        InstancesDao dao = new InstancesDao();
+        List<Instance> instances = new ArrayList<>();
 
-        // Split the queries to avoid exceeding SQLITE_MAX_VARIABLE_NUMBER
-        int counter = 0;
-        while (counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER < instanceDatabaseIds.length) {
-            int low = counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
-            int high = (counter + 1) * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
-            if (high > instanceDatabaseIds.length) {
-                high = instanceDatabaseIds.length;
-            }
-
-            StringBuilder selectionBuf = new StringBuilder(InstanceColumns._ID + " IN (");
-            String[] selectionArgs = new String[high - low];
-            for (int i = 0; i < (high - low); i++) {
-                if (i > 0) {
-                    selectionBuf.append(',');
-                }
-                selectionBuf.append('?');
-                selectionArgs[i] = instanceDatabaseIds[i + low].toString();
-            }
-
-            selectionBuf.append(')');
-            String selection = selectionBuf.toString();
-
-            Cursor c = dao.getInstancesCursor(null, selection, selectionArgs, null);
-            instancesToUpload.addAll(dao.getInstancesFromCursor(c));
-
-            counter++;
+        for (Long id : instanceDatabaseIds) {
+            instances.add(new DatabaseInstancesRepository().get(id));
         }
 
-        return instancesToUpload;
+        return instances;
     }
 
     public void saveSuccessStatusToDatabase(Instance instance) {
