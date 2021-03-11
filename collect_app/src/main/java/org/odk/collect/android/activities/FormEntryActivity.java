@@ -418,9 +418,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         if (savedInstanceState == null) {
             mediaLoadingFragment = new MediaLoadingFragment();
-            getFragmentManager().beginTransaction().add(mediaLoadingFragment, TAG_MEDIA_LOADING_FRAGMENT).commit();
+            getSupportFragmentManager().beginTransaction().add(mediaLoadingFragment, TAG_MEDIA_LOADING_FRAGMENT).commit();
         } else {
-            mediaLoadingFragment = (MediaLoadingFragment) getFragmentManager().findFragmentByTag(TAG_MEDIA_LOADING_FRAGMENT);
+            mediaLoadingFragment = (MediaLoadingFragment) getSupportFragmentManager().findFragmentByTag(TAG_MEDIA_LOADING_FRAGMENT);
         }
 
         setupFields(savedInstanceState);

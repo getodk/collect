@@ -1,12 +1,13 @@
 package org.odk.collect.android.fragments;
 
-import android.app.Activity;
-import android.app.Fragment;
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.tasks.MediaLoadingTask;
 
@@ -26,8 +27,8 @@ public class MediaLoadingFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(@NotNull Context context) {
+        super.onAttach(context);
         if (mediaLoadingTask != null) {
             mediaLoadingTask.onAttach((FormEntryActivity) getActivity());
         }
