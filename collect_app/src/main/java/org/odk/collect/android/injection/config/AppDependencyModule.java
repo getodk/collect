@@ -87,8 +87,7 @@ import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.configure.qr.JsonPreferencesGenerator;
 import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
-import org.odk.collect.android.preferences.source.AdminPreferencesDataStore;
-import org.odk.collect.android.preferences.source.GeneralPreferencesDataStore;
+import org.odk.collect.android.preferences.source.PreferencesDataStore;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -499,14 +498,16 @@ public class AppDependencyModule {
     }
 
     @Provides
+    @Named("GENERAL_PREFERENCES_DATA_STORE")
     @Singleton
-    public GeneralPreferencesDataStore providesGeneralPreferencesDataStore(PreferencesDataSourceProvider preferencesDataSourceProvider) {
-        return new GeneralPreferencesDataStore(preferencesDataSourceProvider);
+    public PreferencesDataStore providesGeneralPreferencesDataStore(PreferencesDataSourceProvider preferencesDataSourceProvider) {
+        return new PreferencesDataStore(preferencesDataSourceProvider.getGeneralPreferences());
     }
 
     @Provides
+    @Named("ADMIN_PREFERENCES_DATA_STORE")
     @Singleton
-    public AdminPreferencesDataStore providesAdminPreferencesDataStore(PreferencesDataSourceProvider preferencesDataSourceProvider) {
-        return new AdminPreferencesDataStore(preferencesDataSourceProvider);
+    public PreferencesDataStore providesAdminPreferencesDataStore(PreferencesDataSourceProvider preferencesDataSourceProvider) {
+        return new PreferencesDataStore(preferencesDataSourceProvider.getAdminPreferences());
     }
 }

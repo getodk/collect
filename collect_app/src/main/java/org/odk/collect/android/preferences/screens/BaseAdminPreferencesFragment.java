@@ -7,13 +7,15 @@ import androidx.annotation.NonNull;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.source.AdminPreferencesDataStore;
+import org.odk.collect.android.preferences.source.PreferencesDataStore;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 public abstract class BaseAdminPreferencesFragment extends BasePreferencesFragment {
     @Inject
-    AdminPreferencesDataStore adminPreferencesDataStore;
+    @Named("ADMIN_PREFERENCES_DATA_STORE")
+    PreferencesDataStore adminPreferencesDataStore;
 
     @Override
     public void onAttach(@NonNull Context context) {
