@@ -13,10 +13,9 @@ import org.odk.collect.android.tasks.MediaLoadingTask;
 public class MediaLoadingFragment extends Fragment {
 
     private MediaLoadingTask mediaLoadingTask;
-    private FormEntryActivity formEntryActivity;
 
     public void beginMediaLoadingTask(Uri uri) {
-        mediaLoadingTask = new MediaLoadingTask(formEntryActivity);
+        mediaLoadingTask = new MediaLoadingTask((FormEntryActivity) getActivity());
         mediaLoadingTask.execute(uri);
     }
 
@@ -29,9 +28,8 @@ public class MediaLoadingFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.formEntryActivity = (FormEntryActivity) activity;
         if (mediaLoadingTask != null) {
-            mediaLoadingTask.onAttach(formEntryActivity);
+            mediaLoadingTask.onAttach((FormEntryActivity) getActivity());
         }
     }
 
