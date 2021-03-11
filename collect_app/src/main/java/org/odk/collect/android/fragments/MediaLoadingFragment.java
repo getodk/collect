@@ -33,14 +33,6 @@ public class MediaLoadingFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        if (mediaLoadingTask != null) {
-            mediaLoadingTask.onDetach();
-        }
-    }
-
     public boolean isMediaLoadingTaskRunning() {
         return mediaLoadingTask != null && mediaLoadingTask.getStatus() == AsyncTask.Status.RUNNING;
     }
