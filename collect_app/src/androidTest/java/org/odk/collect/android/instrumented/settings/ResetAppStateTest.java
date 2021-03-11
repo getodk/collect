@@ -32,7 +32,6 @@ import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.Settings;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ApplicationResetter;
@@ -242,23 +241,7 @@ public class ResetAppStateTest {
     }
 
     private int getInstancesCount() {
-        int instances = 0;
-        Cursor cursor = Collect.getInstance().getContentResolver().query(
-                InstanceColumns.CONTENT_URI, null, null, null,
-                InstanceColumns.DISPLAY_NAME + " ASC");
-        if (cursor != null) {
-            try {
-                if (cursor.moveToFirst()) {
-                    while (!cursor.isAfterLast()) {
-                        instances++;
-                        cursor.moveToNext();
-                    }
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-        return instances;
+        return new DatabaseInstancesRepository().getAll().size();
     }
 
     private void assertFolderEmpty(String folder) {

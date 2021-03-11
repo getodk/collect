@@ -9,9 +9,8 @@ import androidx.test.espresso.util.HumanReadables;
 import androidx.test.espresso.util.TreeIterables;
 
 import org.hamcrest.Matcher;
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.preferences.source.Settings;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.utilities.TestSettingsProvider;
@@ -94,8 +93,8 @@ public final class TestUtils {
         }
     }
 
-    public static void resetInstancesContentProvider() {
-        Collect.getInstance().getContentResolver().delete(InstanceColumns.CONTENT_URI, null, null);
+    public static void resetInstances() {
+        new DatabaseInstancesRepository().deleteAll();
     }
 
     public static void assertMatches(String expectedPattern, Object actual) {

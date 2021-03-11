@@ -14,16 +14,11 @@
 
 package org.odk.collect.android.upload;
 
-import android.content.ContentValues;
-import android.net.Uri;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +29,7 @@ public abstract class InstanceUploader {
     /**
      * Uploads the specified instance to the specified destination URL. It may return a custom
      * success message on completion or null if none is available. Errors result in an UploadException.
-     *
+     * <p>
      * Updates the database status for the instance.
      */
     @Nullable
@@ -57,20 +52,16 @@ public abstract class InstanceUploader {
     }
 
     public void saveSuccessStatusToDatabase(Instance instance) {
-        Uri instanceDatabaseUri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI,
-                instance.getId().toString());
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(InstanceColumns.STATUS, Instance.STATUS_SUBMITTED);
-        Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
+        new DatabaseInstancesRepository().save(new Instance.Builder(instance)
+                .status(Instance.STATUS_SUBMITTED)
+                .build()
+        );
     }
 
     public void saveFailedStatusToDatabase(Instance instance) {
-        Uri instanceDatabaseUri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI,
-                instance.getId().toString());
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(InstanceColumns.STATUS, Instance.STATUS_SUBMISSION_FAILED);
-        Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
+        new DatabaseInstancesRepository().save(new Instance.Builder(instance)
+                .status(Instance.STATUS_SUBMISSION_FAILED)
+                .build()
+        );
     }
 }

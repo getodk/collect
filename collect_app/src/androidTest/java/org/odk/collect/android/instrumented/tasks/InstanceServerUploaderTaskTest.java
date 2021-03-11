@@ -24,7 +24,7 @@ import static org.junit.Assert.assertTrue;
 import static org.odk.collect.android.support.TestUtils.assertMatches;
 import static org.odk.collect.android.support.TestUtils.cleanUpTempFiles;
 import static org.odk.collect.android.support.TestUtils.createTempFile;
-import static org.odk.collect.android.support.TestUtils.resetInstancesContentProvider;
+import static org.odk.collect.android.support.TestUtils.resetInstances;
 
 public class InstanceServerUploaderTaskTest extends MockedServerTest {
 
@@ -33,13 +33,13 @@ public class InstanceServerUploaderTaskTest extends MockedServerTest {
 
     @Before
     public void setUp() throws Exception {
-        resetInstancesContentProvider();
+        resetInstances();
     }
 
     @After
     public void tearDown() {
         cleanUpTempFiles();
-        resetInstancesContentProvider();
+        resetInstances();
     }
 
     @Test
