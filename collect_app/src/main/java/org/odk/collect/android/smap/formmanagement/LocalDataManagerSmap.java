@@ -1,15 +1,30 @@
 package org.odk.collect.android.smap.formmanagement;
 
 import android.database.Cursor;
+
+import org.kxml2.io.KXmlParser;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
+import org.xmlpull.v1.XmlPullParser;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
+import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
+
 public class LocalDataManagerSmap {
+
     private class LinkedSurvey {
         String name;
     };
@@ -21,12 +36,49 @@ public class LocalDataManagerSmap {
 
     public void loadLocalData() {
 
+        StoragePathProvider storagePathProvider = new StoragePathProvider();
+
         // 1. Get the hashmap of surveys referenced by the loading survey
         HashMap<String, LinkedSurvey> surveys = getLinkedSurveys();
 
         // 2. Get the links to surveys whose data is referenced - from the references table
         if(surveys.size() > 0) {
-            ArrayList<LinkedInstance> instances = getLinkedInstances(surveys);}
+            ArrayList<LinkedInstance> instances = getLinkedInstances(surveys);
+
+            // 3. TEMP Read contents of instance
+            if(instances.size() > 0) {
+                for(LinkedInstance li : instances) {
+                    try {
+                        String absPath = getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES), li.instanceFilePath);
+                        XmlPullParser parser = new KXmlParser();
+                        parser.setInput(new InputStreamReader(new FileInputStream(absPath), StandardCharsets.UTF_8));
+
+                        parser.nextToken();
+                        while (parser.getEventType() != XmlPullParser.END_DOCUMENT) {
+                            switch (parser.getEventType()) {
+                                case XmlPullParser.START_TAG:
+                                    String tag = parser.getName();
+
+                                    parser.next();
+                                    if(parser.getEventType() == XmlPullParser.TEXT) {
+                                        String value = parser.getText();
+                                        Timber.i("#####################: " +  tag + " : " + value);
+                                    }
+                                    break;
+                                default:
+                            }
+
+                            parser.next();
+                        }
+
+                    } catch (Exception e) {
+                        Timber.e(e);
+                    }
+                }
+            }
+        }
+
+
     }
 
     /*
