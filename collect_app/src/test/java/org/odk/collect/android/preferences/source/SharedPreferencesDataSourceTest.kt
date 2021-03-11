@@ -16,7 +16,7 @@ import org.robolectric.RobolectricTestRunner
 import java.math.BigDecimal
 
 @RunWith(RobolectricTestRunner::class)
-class PreferencesDataSourceTest {
+class SharedPreferencesDataSourceTest {
     private lateinit var preferencesSource: SharedPreferencesDataSource
     private lateinit var sharedPreferences: SharedPreferences
 
