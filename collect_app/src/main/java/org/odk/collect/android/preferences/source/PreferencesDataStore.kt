@@ -2,7 +2,7 @@ package org.odk.collect.android.preferences.source
 
 import androidx.preference.PreferenceDataStore
 
-class PreferencesDataStore(val preferencesDataSource: PreferencesDataSource) : PreferenceDataStore() {
+class PreferencesDataStore(private val preferencesDataSource: PreferencesDataSource) : PreferenceDataStore() {
     override fun putString(key: String, value: String?) {
         preferencesDataSource.save(key, value)
     }
