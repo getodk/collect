@@ -1,30 +1,35 @@
 package org.odk.collect.android.utilities;
 
-import org.junit.Assert;
 import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.odk.collect.android.utilities.CSVUtils.getEscapedValueForCsv;
 
 public class CSVUtilsTest {
     @Test
-    public void testEscapeDoubleQuote() {
-        Assert.assertNull(CSVUtils.escapeDoubleQuote(null));
-        Assert.assertEquals("", CSVUtils.escapeDoubleQuote(""));
-        Assert.assertEquals("no quotes", CSVUtils.escapeDoubleQuote("no quotes"));
-        Assert.assertEquals("string with \"\"quotes\"\"", CSVUtils.escapeDoubleQuote("string with \"quotes\""));
+    public void null_shouldBePassedThrough() {
+        assertThat(getEscapedValueForCsv(null), is(nullValue()));
     }
 
     @Test
-    public void testQuoteString() {
-        Assert.assertNull(CSVUtils.quoteString(null));
-        Assert.assertEquals("\"\"", CSVUtils.quoteString(""));
-        Assert.assertEquals("\"string\"", CSVUtils.quoteString("string"));
-        Assert.assertEquals("\"string with \"quotes\"\"", CSVUtils.quoteString("string with \"quotes\""));
+    public void stringsWithoutQuotesCommasOrNewlines_shouldBePassedThrough() {
+        assertThat(getEscapedValueForCsv("a b c d e"), is("a b c d e"));
     }
 
     @Test
-    public void testGetEscapedValueForCsv() {
-        Assert.assertNull(CSVUtils.getEscapedValueForCsv(null));
-        Assert.assertEquals("\"\"", CSVUtils.getEscapedValueForCsv(""));
-        Assert.assertEquals("\"string\"", CSVUtils.getEscapedValueForCsv("string"));
-        Assert.assertEquals("\"string with \"\"quotes\"\"\"", CSVUtils.getEscapedValueForCsv("string with \"quotes\""));
+    public void quotes_shouldBeEscaped_andSurroundedByQuotes() {
+        assertThat(getEscapedValueForCsv("a\"b\""), is("\"a\"\"b\"\"\""));
+    }
+
+    @Test
+    public void commas_shouldBeSurroundedByQuotes() {
+        assertThat(getEscapedValueForCsv("a,b"), is("\"a,b\""));
+    }
+
+    @Test
+    public void newlines_shouldBeSurroundedByQuotes() {
+        assertThat(getEscapedValueForCsv("a\nb"), is("\"a\nb\""));
     }
 }

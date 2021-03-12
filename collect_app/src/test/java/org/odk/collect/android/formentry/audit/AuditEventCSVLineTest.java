@@ -4,6 +4,8 @@ import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.instance.TreeReference;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -38,6 +40,35 @@ public class AuditEventCSVLineTest {
 
     private static final long START_TIME = 1545392727685L;
     private static final long END_TIME = 1545392728527L;
+
+    //region CSV spec (https://tools.ietf.org/html/rfc4180)
+    @Test
+    public void commas_shouldBeSurroundedByQuotes() {
+        AuditEvent auditEvent = new AuditEvent(1L, QUESTION, getTestFormIndex(), "a, b", "c, d", "e, f");
+        auditEvent.recordValueChange("g, h");
+        auditEvent.setEnd(2L);
+        String csvLine = toCSVLine(auditEvent, false, true, true);
+        assertThat(csvLine, is("question,/data/text1,1,2,\"a, b\",\"g, h\",\"c, d\",\"e, f\""));
+    }
+
+    @Test
+    public void newlines_shouldBeSurroundedByQuotes() {
+        AuditEvent auditEvent = new AuditEvent(1L, QUESTION, getTestFormIndex(), "a\nb", "c\nd", "e\nf");
+        auditEvent.recordValueChange("g\nh");
+        auditEvent.setEnd(2L);
+        String csvLine = toCSVLine(auditEvent, false, true, true);
+        assertThat(csvLine, is("question,/data/text1,1,2,\"a\nb\",\"g\nh\",\"c\nd\",\"e\nf\""));
+    }
+
+    @Test
+    public void quotes_shouldBeEscaped_andSurroundedByQuotes() {
+        AuditEvent auditEvent = new AuditEvent(1L, QUESTION, getTestFormIndex(), "a\"b", "c\"d", "e\"f");
+        auditEvent.recordValueChange("g\"h");
+        auditEvent.setEnd(2L);
+        String csvLine = toCSVLine(auditEvent, false, true, true);
+        assertThat(csvLine, is("question,/data/text1,1,2,\"a\"\"b\",\"g\"\"h\",\"c\"\"d\",\"e\"\"f\""));
+    }
+    //endregion
 
     @Test
     public void toString_() {
