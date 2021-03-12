@@ -15,101 +15,84 @@ class PreferencesDataStoreTest {
     @Before
     fun setup() {
         preferencesDataSource = mock(PreferencesDataSource::class.java)
-        `when`(preferencesDataSource.getString(KEY)).thenReturn(STRING_ANSWER)
-        `when`(preferencesDataSource.getBoolean(KEY)).thenReturn(BOOLEAN_ANSWER)
-        `when`(preferencesDataSource.getLong(KEY)).thenReturn(LONG_ANSWER)
-        `when`(preferencesDataSource.getInt(KEY)).thenReturn(INT_ANSWER)
-        `when`(preferencesDataSource.getFloat(KEY)).thenReturn(FLOAT_ANSWER)
-        `when`(preferencesDataSource.getStringSet(KEY)).thenReturn(SET_OF_STRINGS_ANSWER)
-
         preferencesDataStore = PreferencesDataStore(preferencesDataSource)
     }
 
     @Test
     fun `putString() saves string in preferences`() {
-        preferencesDataStore.putString(KEY, STRING_ANSWER)
-        verify(preferencesDataSource).save(KEY, STRING_ANSWER)
+        preferencesDataStore.putString("key", "value")
+        verify(preferencesDataSource).save("key", "value")
     }
 
     @Test
     fun `putBoolean() saves boolean in preferences`() {
-        preferencesDataStore.putBoolean(KEY, BOOLEAN_ANSWER)
-        verify(preferencesDataSource).save(KEY, BOOLEAN_ANSWER)
+        preferencesDataStore.putBoolean("key", true)
+        verify(preferencesDataSource).save("key", true)
     }
 
     @Test
     fun `putLong() saves long in preferences`() {
-        preferencesDataStore.putLong(KEY, LONG_ANSWER)
-        verify(preferencesDataSource).save(KEY, LONG_ANSWER)
+        preferencesDataStore.putLong("key", 3L)
+        verify(preferencesDataSource).save("key", 3L)
     }
 
     @Test
     fun `putInt() saves int in preferences`() {
-        preferencesDataStore.putInt(KEY, INT_ANSWER)
-        verify(preferencesDataSource).save(KEY, INT_ANSWER)
+        preferencesDataStore.putInt("key", 5)
+        verify(preferencesDataSource).save("key", 5)
     }
 
     @Test
     fun `putFloat() saves float in preferences`() {
-        preferencesDataStore.putFloat(KEY, FLOAT_ANSWER)
-        verify(preferencesDataSource).save(KEY, FLOAT_ANSWER)
+        preferencesDataStore.putFloat("key", 8.43f)
+        verify(preferencesDataSource).save("key", 8.43f)
     }
 
     @Test
     fun `putStringSet() saves set of strings in preferences`() {
-        preferencesDataStore.putStringSet(KEY, SET_OF_STRINGS_ANSWER)
-        verify(preferencesDataSource).save(KEY, SET_OF_STRINGS_ANSWER)
+        preferencesDataStore.putStringSet("key", setOf("x", "y", "z"))
+        verify(preferencesDataSource).save("key", setOf("x", "y", "z"))
     }
 
     @Test
     fun `getString() reads string from preferences`() {
-        val answer = preferencesDataStore.getString(KEY, "")
-        verify(preferencesDataSource).getString(KEY)
-        assertThat(answer, `is`(STRING_ANSWER))
+        `when`(preferencesDataSource.getString("key")).thenReturn("value")
+        val value = preferencesDataStore.getString("key", "")
+        assertThat(value, `is`("value"))
     }
 
     @Test
     fun `getBoolean() reads boolean from preferences`() {
-        val answer = preferencesDataStore.getBoolean(KEY, false)
-        verify(preferencesDataSource).getBoolean(KEY)
-        assertThat(answer, `is`(BOOLEAN_ANSWER))
+        `when`(preferencesDataSource.getBoolean("key")).thenReturn(true)
+        val value = preferencesDataStore.getBoolean("key", false)
+        assertThat(value, `is`(true))
     }
 
     @Test
     fun `getLong() reads long from preferences`() {
-        val answer = preferencesDataStore.getLong(KEY, 0L)
-        verify(preferencesDataSource).getLong(KEY)
-        assertThat(answer, `is`(LONG_ANSWER))
+        `when`(preferencesDataSource.getLong("key")).thenReturn(3L)
+        val value = preferencesDataStore.getLong("key", 0L)
+        assertThat(value, `is`(3L))
     }
 
     @Test
     fun `getInt() reads int from preferences`() {
-        val answer = preferencesDataStore.getInt(KEY, 0)
-        verify(preferencesDataSource).getInt(KEY)
-        assertThat(answer, `is`(INT_ANSWER))
+        `when`(preferencesDataSource.getInt("key")).thenReturn(5)
+        val value = preferencesDataStore.getInt("key", 0)
+        assertThat(value, `is`(5))
     }
 
     @Test
     fun `getFloat() reads float from preferences`() {
-        val answer = preferencesDataStore.getFloat(KEY, 1f)
-        verify(preferencesDataSource).getFloat(KEY)
-        assertThat(answer, `is`(FLOAT_ANSWER))
+        `when`(preferencesDataSource.getFloat("key")).thenReturn(8.43f)
+        val value = preferencesDataStore.getFloat("key", 1f)
+        assertThat(value, `is`(8.43f))
     }
 
     @Test
     fun `getStringSet() reads set of strings from preferences`() {
-        val answer = preferencesDataStore.getStringSet(KEY, emptySet())
-        verify(preferencesDataSource).getStringSet(KEY)
-        assertThat(answer, `is`(SET_OF_STRINGS_ANSWER))
-    }
-
-    companion object {
-        private const val KEY = "Key"
-        private const val STRING_ANSWER = "value"
-        private const val BOOLEAN_ANSWER = true
-        private const val LONG_ANSWER = 3L
-        private const val INT_ANSWER = 5
-        private const val FLOAT_ANSWER = 8.43f
-        private val SET_OF_STRINGS_ANSWER = setOf("x", "y", "z")
+        `when`(preferencesDataSource.getStringSet("key")).thenReturn(setOf("x", "y", "z"))
+        val value = preferencesDataStore.getStringSet("key", emptySet())
+        assertThat(value, `is`(setOf("x", "y", "z")))
     }
 }
