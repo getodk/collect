@@ -40,10 +40,6 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
         DaggerUtils.getComponent(this.formEntryActivity.get()).inject(this);
     }
 
-    public void onDetach() {
-        formEntryActivity = null;
-    }
-
     @Override
     protected File doInBackground(Uri... uris) {
         FormController formController = Collect.getInstance().getFormController();
