@@ -119,6 +119,8 @@ public final class GeneralKeys {
     public static final String KEY_SMAP_REGISTRATION_USER = "registration_user";  // User name that has been registered
     public static final String KEY_SMAP_LAST_LOGIN = "last_login";  // System time in milli seconds that the user last logged in
     public static final String KEY_SMAP_PASSWORD_POLICY = "pw_policy";
+    public static final String KEY_SMAP_CURRENT_ORGANISATION = "smap_current_organisation";
+    public static final String KEY_SMAP_ORGANISATIONS = "smap_organisations";
     // end smap
 
     // experimental

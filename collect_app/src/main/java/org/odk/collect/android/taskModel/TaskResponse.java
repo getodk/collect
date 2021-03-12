@@ -18,10 +18,9 @@ import com.google.gson.annotations.SerializedName;
 
 import org.odk.collect.android.database.TaskAssignment;
 import org.odk.collect.android.loaders.PointEntry;
-import org.odk.collect.android.loaders.Project;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class TaskResponse {
 
@@ -36,5 +35,6 @@ public class TaskResponse {
     public FieldTaskSettings settings;
     public List<TaskCompletionInfo> taskCompletionInfo;
     public List<PointEntry> userTrail;
-    public List<Project> projects;
+    public String current_org;
+    public Set<String> orgs;
 }

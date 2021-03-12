@@ -537,6 +537,12 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                         editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_NAVIGATION, false);
                     }
 
+                    /*
+                     * Record organisation settings
+                     */
+                    editor.putString(GeneralKeys.KEY_SMAP_CURRENT_ORGANISATION, tr.current_org);
+                    editor.putStringSet(GeneralKeys.KEY_SMAP_ORGANISATIONS, tr.orgs);
+
                     editor.apply();
                 }
 
