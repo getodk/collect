@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -37,6 +38,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -73,7 +75,11 @@ import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.services.LocationService;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.android.storage.migration.StorageMigrationDialog;
+import org.odk.collect.android.storage.migration.StorageMigrationRepository;
+import org.odk.collect.android.storage.migration.StorageMigrationResult;
 import org.odk.collect.android.taskModel.FormLaunchDetail;
 import org.odk.collect.android.taskModel.FormRestartDetails;
 import org.odk.collect.android.taskModel.NfcTrigger;
@@ -89,6 +95,7 @@ import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Utilities;
+import org.odk.collect.material.MaterialBanner;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -104,15 +111,20 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import timber.log.Timber;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.SETTINGS_IMPORT_JSON;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SETTINGS_IMPORT_SERIALIZED;
+import static org.odk.collect.android.utilities.DialogUtils.getDialog;
+import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
 
 public class SmapMain extends CollectAbstractActivity implements TaskDownloaderListener,
         NFCListener,
@@ -162,28 +174,16 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
     /*
      * Start scoped storage
-     *
-    private int savedCount;
-    private final SmapMain.IncomingHandler handler = new SmapMain.IncomingHandler();
-    private final SmapMain.MyContentObserver contentObserver = new SmapMain.MyContentObserver();
-    @BindView(R.id.storageMigrationBanner)
-    LinearLayout storageMigrationBanner;
+     */
 
-    @BindView(R.id.storageMigrationBannerText)
-    TextView storageMigrationBannerText;
-
-    @BindView(R.id.storageMigrationBannerDismissButton)
-    Button storageMigrationBannerDismissButton;
-
-    @BindView(R.id.storageMigrationBannerLearnMoreButton)
-    Button storageMigrationBannerLearnMoreButton;
+    @BindView(R.id.storageMigrationBannerSmap)
+    MaterialBanner storageMigrationBanner;
 
     @Inject
     StorageMigrationRepository storageMigrationRepository;
 
     @Inject
     StorageStateProvider storageStateProvider;
- */
 
     @Inject
     SettingsImporter settingsImporter;
@@ -205,8 +205,11 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.smap_main_layout);
+        ButterKnife.bind(this);
 
         DaggerUtils.getComponent(this).inject(this);
+
+        storageMigrationRepository.getResult().observe(this, this::onStorageMigrationFinish);
 
         String[] tabNames = {getString(R.string.smap_forms), getString(R.string.smap_tasks), getString(R.string.smap_map)};
         // Get the ViewPager and set its PagerAdapter so that it can display items
@@ -294,7 +297,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
      */
     private void stateChanged() {
 
-        //ButterKnife.bind(this);  // banner
         initToolbar();
 
         model = new ViewModelProvider(this).get(SurveyDataViewModel.class);
@@ -354,7 +356,8 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             }
         }
 
-        // setUpStorageMigrationBanner();      // banner StorageMigration
+        setUpStorageMigrationBanner();
+        tryToPerformAutomaticMigration();
     }
 
     @Override
@@ -362,6 +365,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         if(mLocationService != null) {
             stopService(mLocationServiceIntent);
         }
+        storageMigrationRepository.clearResult();
         super.onDestroy();
 
     }
@@ -373,7 +377,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     // Get tasks and forms from the server
     public void processGetTask(boolean manual) {
 
-      if(manual || Utilities.isFormAutoSendOptionEnabled()) {
+      if(!storageMigrationRepository.isMigrationBeingPerformed() && (manual || Utilities.isFormAutoSendOptionEnabled())) {
             mDownloadTasks = new DownloadTasksTask();
             if(manual) {
                 mProgressMsg = getString(R.string.smap_synchronising);
@@ -690,7 +694,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
      */
     public void completeTask(TaskEntry entry, boolean force) {
 
-        if(!mPaused || force) {
+        if(!storageMigrationRepository.isMigrationBeingPerformed() && (!mPaused || force)) {
             String surveyNotes = null;
             String formPath = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + entry.taskForm;
             String instancePath = entry.instancePath;
@@ -802,7 +806,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
      * The force parameter can be used to force launching of the new form even when the smap activity is paused
      */
     public void completeForm(TaskEntry entry, boolean force, String initialData) {
-        if(!mPaused || force) {
+        if(!storageMigrationRepository.isMigrationBeingPerformed() && (!mPaused || force)) {
             Uri formUri = ContentUris.withAppendedId(FormsProviderAPI.FormsColumns.CONTENT_URI, entry.id);
 
             // Use an explicit intent
@@ -993,46 +997,33 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     }
 
     /*
-     * Migration to scoped storage
-     *
-    private class MyContentObserver extends ContentObserver {
-
-        MyContentObserver() {
-            super(null);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            super.onChange(selfChange);
-            handler.sendEmptyMessage(0);
-        }
-    }
-
-    static class IncomingHandler extends Handler {
-    }
-
-    public void onStorageMigrationBannerDismiss(View view) {
-        storageMigrationBanner.setVisibility(View.GONE);
-        storageMigrationRepository.clearResult();
-    }
-
-    public void onStorageMigrationBannerLearnMoreClick(View view) {
-        DialogUtils.showIfNotShowing(StorageMigrationDialog.create(savedCount), getSupportFragmentManager());
-        getContentResolver().unregisterContentObserver(contentObserver);
-    }
+     * Start of content migration functions
+     */
 
     private void onStorageMigrationFinish(StorageMigrationResult result) {
         if (result == StorageMigrationResult.SUCCESS) {
             DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
             displayBannerWithSuccessStorageMigrationResult();
         } else {
-            DialogUtils
-                    .showIfNotShowing(StorageMigrationDialog.create(savedCount), getSupportFragmentManager())
-                    .handleMigrationError(result);
+            StorageMigrationDialog dialog = showStorageMigrationDialog();
+
+            if (dialog != null) {
+                dialog.handleMigrationError(result);
+            }
         }
     }
 
+    @Nullable
+    private StorageMigrationDialog showStorageMigrationDialog() {
+        Bundle args = new Bundle();
+        args.putInt(StorageMigrationDialog.ARG_UNSENT_INSTANCES, Utilities.countFinalised());
+
+        showIfNotShowing(StorageMigrationDialog.class, args, getSupportFragmentManager());
+        return getDialog(StorageMigrationDialog.class, getSupportFragmentManager());
+    }
+
     private void setUpStorageMigrationBanner() {
+        //storageStateProvider.disableUsingScopedStorage();       // debug
         if (!storageStateProvider.isScopedStorageUsed()) {
             displayStorageMigrationBanner();
         }
@@ -1040,19 +1031,32 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
     private void displayStorageMigrationBanner() {
         storageMigrationBanner.setVisibility(View.VISIBLE);
-        storageMigrationBannerText.setText(R.string.scoped_storage_banner_text);
-        storageMigrationBannerLearnMoreButton.setVisibility(View.VISIBLE);
-        storageMigrationBannerDismissButton.setVisibility(View.GONE);
+        storageMigrationBanner.setText(getText(R.string.scoped_storage_banner_text));
+        storageMigrationBanner.setActionText(getString(R.string.scoped_storage_learn_more));
+        storageMigrationBanner.setAction(() -> {
+            showStorageMigrationDialog();
+            //getContentResolver().unregisterContentObserver(contentObserver);
+        });
     }
 
     private void displayBannerWithSuccessStorageMigrationResult() {
         storageMigrationBanner.setVisibility(View.VISIBLE);
-        storageMigrationBannerText.setText(R.string.storage_migration_completed);
-        storageMigrationBannerLearnMoreButton.setVisibility(View.GONE);
-        storageMigrationBannerDismissButton.setVisibility(View.VISIBLE);
+        storageMigrationBanner.setText(getString(R.string.storage_migration_completed));
+        storageMigrationBanner.setActionText(getString(R.string.scoped_storage_dismiss));
+        storageMigrationBanner.setAction(() -> {
+            storageMigrationBanner.setVisibility(View.GONE);
+            storageMigrationRepository.clearResult();
+        });
     }
 
-     */
+    private void tryToPerformAutomaticMigration() {
+        if (storageStateProvider.shouldPerformAutomaticMigration()) {
+            StorageMigrationDialog dialog = showStorageMigrationDialog();
+            if (dialog != null) {
+                dialog.startStorageMigration();
+            }
+        }
+    }
 
     protected class RefreshListener extends BroadcastReceiver {
 

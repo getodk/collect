@@ -767,7 +767,7 @@
   <string name="scoped_storage_learn_more">Pelajari lebih lanjut dan lakukan migrasi</string>
   <string name="storage_migration_completed">Migrasi penyimpanan berhasil!</string>
   <string name="scoped_storage_dismiss">Singkirkan</string>
-  <string name="storage_migration_dialog_message1">Persyaratan Android telah berubah dan file yang digunakan oleh Collect harus dimigrasikan.</string>
+  <string name="storage_migration_dialog_message1">Persyaratan Android telah berubah dan file yang digunakan oleh FieldTask harus dimigrasikan.</string>
   <string name="storage_migration_dialog_message2">Anda memiliki %d pengiriman yang belum terkirim. Anda disarankan untuk mengirim seluruh data sebelum melakukan migrasi.</string>
   <string name="storage_migration_dialog_message3">Jika Anda menggunakan aplikasi eksternal yang terintegrasi seperti OpenMapKit, mohon tidak melakukan migrasi terlebih dahulu.</string>
   <string name="storage_migration_more_details">Rincian tambahan</string>

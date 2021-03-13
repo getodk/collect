@@ -1,29 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/tools"
     android:id="@+id/rl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-<!--
-    android:layout_marginBottom="0dp"
-    android:layout_marginLeft="0dp"
-    android:layout_marginRight="0dp"
-    android:layout_marginTop="0dp"
-    android:padding="0dp">
-    -->
-    <!-- Toolbar -->
+
     <!--<include layout="@layout/toolbar"/>-->
     <include layout="@layout/app_bar_layout" />
-
-    <!--
-    <include
-        layout="@layout/toolbar_action_bar_shadow"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"/>
-        -->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,12 +16,14 @@
         android:layout_below="@id/appBarLayout"
         android:orientation="vertical">
 
-        <!--  banner
-        <include
-            layout="@layout/storage_migration_banner"
+        <org.odk.collect.material.MaterialBanner
+            android:id="@+id/storageMigrationBannerSmap"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-            -->
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone"
+            custom:text="blah"
+            custom:secondaryActionColor="true" />
 
         <fragment
             android:name="org.odk.collect.android.fragments.MapBoxInitializationFragment"
