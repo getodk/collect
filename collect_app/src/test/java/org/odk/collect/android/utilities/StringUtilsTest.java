@@ -27,6 +27,12 @@ public class StringUtilsTest {
 
     @Ignore
     @Test
+    public void textToHtml_shouldBeTrimmed() {
+        CharSequence observed = StringUtils.textToHtml("<p style=\"text-align:center\">Text</p>");
+        assertThat(observed.toString(), equalTo("Text"));
+    }
+
+    @Test
     public void markDownToHtmlEscapesBackslash() {
         String[][] tests = {
                 {"A\\_B\\_C", "A_B_C"},
@@ -124,5 +130,29 @@ public class StringUtilsTest {
     @Test
     public void whenStringContainsWhitespace_returnsFalse() {
         assertFalse(StringUtils.isBlank(" hello "));
+    }
+
+    @Test
+    public void whenCharSequenceContainWhitespaces_shouldTrimReturnTrimmedCharSequence() {
+        CharSequence result = StringUtils.trim("\n\t <p style=\"text-align:center\">Text</p> \t\n");
+        assertThat(result, equalTo("<p style=\"text-align:center\">Text</p>"));
+    }
+
+    @Test
+    public void whenCharSequenceContainOnlyWhitespaces_shouldTrimReturnOriginalCharSequence() {
+        CharSequence result = StringUtils.trim("\n\t \t\n");
+        assertThat(result, equalTo("\n\t \t\n"));
+    }
+
+    @Test
+    public void whenCharSequenceIsNull_shouldTrimReturnNull() {
+        CharSequence result = StringUtils.trim(null);
+        assertThat(result, equalTo(null));
+    }
+
+    @Test
+    public void whenCharSequenceIsEmpty_shouldTrimReturnEmptyCharSequence() {
+        CharSequence result = StringUtils.trim("");
+        assertThat(result, equalTo(""));
     }
 }

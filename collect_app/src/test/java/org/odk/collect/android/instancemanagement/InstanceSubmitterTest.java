@@ -1,6 +1,7 @@
 package org.odk.collect.android.instancemanagement;
 
 import org.junit.Test;
+import org.odk.collect.android.support.FormUtils;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.android.forms.Form;
 
@@ -16,6 +17,7 @@ public class InstanceSubmitterTest {
                 .id(1L)
                 .jrFormId("1")
                 .jrVersion("1")
+                .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
                 .build());
 
         assertThat(InstanceSubmitter.shouldFormBeSent(formsRepository, "1", "1", false), is(false));
@@ -29,6 +31,7 @@ public class InstanceSubmitterTest {
                 .id(1L)
                 .jrFormId("1")
                 .jrVersion("1")
+                .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
                 .build());
 
         assertThat(InstanceSubmitter.shouldFormBeSent(formsRepository, "1", "1", true), is(true));
@@ -43,6 +46,7 @@ public class InstanceSubmitterTest {
                 .jrFormId("1")
                 .jrVersion("1")
                 .autoSend("false")
+                .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
                 .build());
 
         assertThat(InstanceSubmitter.shouldFormBeSent(formsRepository, "1", "1", true), is(false));
@@ -57,6 +61,7 @@ public class InstanceSubmitterTest {
                 .jrFormId("1")
                 .jrVersion("1")
                 .autoSend("true")
+                .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
                 .build());
 
         assertThat(InstanceSubmitter.shouldFormBeSent(formsRepository, "1", "1", false), is(true));

@@ -34,7 +34,7 @@ import org.odk.collect.android.listeners.SelectItemClickListener;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.utilities.Appearances;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.android.controller.ActivityController;
 
@@ -508,7 +508,7 @@ public class ChoicesRecyclerViewTest {
     }
 
     private void clickChoice(int index) {
-        if (WidgetAppearanceUtils.isNoButtonsAppearance(formEntryPrompt)) {
+        if (Appearances.isNoButtonsAppearance(formEntryPrompt)) {
             clickNoButtonChoice(index);
         } else {
             clickButtonChoice(index);
@@ -563,7 +563,7 @@ public class ChoicesRecyclerViewTest {
     }
 
     private boolean isItemSelected(int index) {
-        return WidgetAppearanceUtils.isNoButtonsAppearance(formEntryPrompt)
+        return Appearances.isNoButtonsAppearance(formEntryPrompt)
                 ? isNoButtonItemSelected(index)
                 : isButtonItemSelected(index);
     }

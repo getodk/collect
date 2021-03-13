@@ -41,6 +41,13 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/menu_record_audio"
+        android:checkable="true"
+        android:title="@string/record_audio"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/menu_languages"
         android:title="@string/change_language"
         app:showAsAction="never" />

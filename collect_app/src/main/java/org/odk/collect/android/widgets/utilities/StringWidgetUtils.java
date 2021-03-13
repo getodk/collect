@@ -12,7 +12,7 @@ import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.utilities.Appearances;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -28,8 +28,16 @@ public class StringWidgetUtils {
     public static Integer getIntegerAnswerValueFromIAnswerData(IAnswerData dataHolder) {
         if (dataHolder != null) {
             Object dataValue = dataHolder.getValue();
-            if (dataValue != null) {
-                return dataValue instanceof Double ? ((Double) dataValue).intValue() : (Integer) dataValue;
+            if (dataValue instanceof Double) {
+                return ((Double) dataValue).intValue();
+            } else if (dataValue instanceof Integer) {
+                return (Integer) dataValue;
+            } else if (dataValue instanceof String) {
+                try {
+                    return Integer.parseInt((String) dataValue);
+                } catch (NumberFormatException ignored) {
+                    // ignored
+                }
             }
         }
         return null;
@@ -39,15 +47,23 @@ public class StringWidgetUtils {
     public static Double getDoubleAnswerValueFromIAnswerData(IAnswerData dataHolder) {
         if (dataHolder != null) {
             Object dataValue = dataHolder.getValue();
-            if (dataValue != null) {
-                return dataValue instanceof Integer ? (double) (Integer) dataValue : (Double) dataValue;
+            if (dataValue instanceof Double) {
+                return (Double) dataValue;
+            } else if (dataValue instanceof Integer) {
+                return Double.valueOf((Integer) dataValue);
+            } else if (dataValue instanceof String) {
+                try {
+                    return Double.parseDouble((String) dataValue);
+                } catch (NumberFormatException ignored) {
+                    // ignored
+                }
             }
         }
         return null;
     }
 
     public static IntegerData getIntegerData(String answer, FormEntryPrompt prompt) {
-        if (WidgetAppearanceUtils.useThousandSeparator(prompt)) {
+        if (Appearances.useThousandSeparator(prompt)) {
             answer = ThousandsSeparatorTextWatcher.getOriginalString(answer);
         }
 
@@ -63,7 +79,7 @@ public class StringWidgetUtils {
     }
 
     public static DecimalData getDecimalData(String answer, FormEntryPrompt prompt) {
-        if (WidgetAppearanceUtils.useThousandSeparator(prompt)) {
+        if (Appearances.useThousandSeparator(prompt)) {
             answer = ThousandsSeparatorTextWatcher.getOriginalString(answer);
         }
 
@@ -80,7 +96,7 @@ public class StringWidgetUtils {
     }
 
     public static StringData getStringNumberData(String answer, FormEntryPrompt prompt) {
-        if (WidgetAppearanceUtils.useThousandSeparator(prompt)) {
+        if (Appearances.useThousandSeparator(prompt)) {
             answer = ThousandsSeparatorTextWatcher.getOriginalString(answer);
         }
 
@@ -96,8 +112,8 @@ public class StringWidgetUtils {
     }
 
     public static void adjustEditTextAnswerToIntegerWidget(EditText answerText, FormEntryPrompt prompt) {
-        boolean useThousandSeparator = WidgetAppearanceUtils.useThousandSeparator(prompt);
-        if (WidgetAppearanceUtils.useThousandSeparator(prompt)) {
+        boolean useThousandSeparator = Appearances.useThousandSeparator(prompt);
+        if (Appearances.useThousandSeparator(prompt)) {
             answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
         }
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
@@ -121,7 +137,7 @@ public class StringWidgetUtils {
     }
 
     public static void adjustEditTextAnswerToDecimalWidget(EditText answerText, FormEntryPrompt prompt) {
-        boolean useThousandSeparator = WidgetAppearanceUtils.useThousandSeparator(prompt);
+        boolean useThousandSeparator = Appearances.useThousandSeparator(prompt);
         if (useThousandSeparator) {
             answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
         }
@@ -157,7 +173,7 @@ public class StringWidgetUtils {
 
     public static void adjustEditTextAnswerToStringNumberWidget(EditText answerText, FormEntryPrompt prompt) {
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
-        boolean useThousandSeparator = WidgetAppearanceUtils.useThousandSeparator(prompt);
+        boolean useThousandSeparator = Appearances.useThousandSeparator(prompt);
         if (useThousandSeparator) {
             answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
         }

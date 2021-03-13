@@ -98,8 +98,13 @@ public class ApplicationConstants {
         public static final int GEOSHAPE_CAPTURE = 20;
         public static final int GEOTRACE_CAPTURE = 21;
         public static final int ARBITRARY_FILE_CHOOSER = 22;
-        public static final int CHANGE_SETTINGS = 23;
-        public static final int NFC_CAPTURE = 24;                           // smap
+        public static final int EX_ARBITRARY_FILE_CHOOSER  = 23;
+        public static final int EX_VIDEO_CHOOSER  = 24;
+        public static final int EX_IMAGE_CHOOSER  = 25;
+        public static final int EX_AUDIO_CHOOSER  = 26;
+        public static final int CHANGE_SETTINGS = 27;
+
+        public static final int NFC_CAPTURE = 50;                           // smap
 
         public static final int FORMS_UPLOADED_NOTIFICATION = 97;
         public static final int FORMS_DOWNLOADED_NOTIFICATION = 98;

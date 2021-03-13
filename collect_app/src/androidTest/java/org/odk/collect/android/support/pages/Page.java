@@ -23,6 +23,7 @@ import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
 import org.odk.collect.android.support.matchers.ToastMatcher;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import timber.log.Timber;
@@ -413,6 +414,16 @@ abstract class Page<T extends Page<T>> {
     public T copyForm(String formFilename) {
         try {
             FormLoadingUtils.copyFormToStorage(formFilename);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return (T) this;
+    }
+
+    public T copyForm(String formFilename, List<String> mediaFileNames) {
+        try {
+            FormLoadingUtils.copyFormToStorage(formFilename, mediaFileNames, false);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

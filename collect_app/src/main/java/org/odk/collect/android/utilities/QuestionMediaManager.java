@@ -14,7 +14,7 @@ import java.io.File;
  */
 public interface QuestionMediaManager {
 
-    LiveData<Result<String>> createAnswerFile(File file);
+    LiveData<Result<File>> createAnswerFile(File file);
 
     @Nullable
     File getAnswerFile(String fileName);

@@ -20,7 +20,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
-import android.os.ParcelFileDescriptor;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.Constants;
@@ -39,7 +38,6 @@ import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.storage.StorageStateProvider;
 
 import java.io.File;
-import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -47,8 +45,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
-import java.net.FileNameMap;
-import java.net.URLConnection;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
@@ -108,25 +104,9 @@ public class FileUtils {
     }
 
     public static void saveAnswerFileFromUri(Uri uri, File destFile, Context context) {
-        try {
-            ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(uri, "r");
-            if (pfd != null) {
-                FileDescriptor fd = pfd.getFileDescriptor();
-                InputStream fileInputStream = new FileInputStream(fd);
-                OutputStream fileOutputStream = new FileOutputStream(destFile);
-
-                byte[] buffer = new byte[1024];
-                int length;
-
-                while ((length = fileInputStream.read(buffer)) > 0) {
-                    fileOutputStream.write(buffer, 0, length);
-                }
-
-                fileOutputStream.flush();
-                fileInputStream.close();
-                fileOutputStream.close();
-                pfd.close();
-            }
+        try (InputStream fileInputStream = context.getContentResolver().openInputStream(uri);
+             OutputStream fileOutputStream = new FileOutputStream(destFile)) {
+            IOUtils.copy(fileInputStream, fileOutputStream);
         } catch (IOException e) {
             Timber.e(e);
         }
@@ -138,11 +118,6 @@ public class FileUtils {
                 + System.currentTimeMillis()
                 + "."
                 + fileExtension);
-    }
-
-    public static String getMimeType(String fileUrl) throws IOException {
-        FileNameMap fileNameMap = URLConnection.getFileNameMap();
-        return fileNameMap.getContentTypeFor(fileUrl);
     }
 
     public static boolean createFolder(String path) {
@@ -525,26 +500,6 @@ public class FileUtils {
         deleteAndReport(tempMediaFolder);
     }
 
-    public static void moveMediaFiles(String tempMediaPath, File formMediaPath) throws IOException {
-        File tempMediaFolder = new File(tempMediaPath);
-        File[] mediaFiles = tempMediaFolder.listFiles();
-        if (mediaFiles == null || mediaFiles.length == 0) {
-            deleteAndReport(tempMediaFolder);
-        } else {
-            for (File mediaFile : mediaFiles) {
-                deleteOldFile(mediaFile.getName(), formMediaPath);
-                org.apache.commons.io.FileUtils.moveFileToDirectory(mediaFile, formMediaPath, true);
-                //if(mediaFile.getName().endsWith(".csv")) {  // smap remove any imported files
-                //    File importedFile = new File(formMediaPath + "/" + mediaFile.getName() + ".imported");
-                //    if(importedFile.exists()) {
-                //        importedFile.delete();
-                //    }
-                //}
-            }
-            deleteAndReport(tempMediaFolder);
-        }
-    }
-
     /*
      * Smap
      */
@@ -715,10 +670,6 @@ public class FileUtils {
     /** Iterates over all directories and files under a root path. */
     public static Iterable<File> walk(File root) {
         return () -> new Walker(root, true);
-    }
-
-    public static Iterable<File> walkBreadthFirst(File root) {
-        return () -> new Walker(root, false);
     }
 
     /** An iterator that walks over all the directories and files under a given path. */

@@ -45,7 +45,6 @@ import java.util.TimerTask;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermissionsGranted;
 import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.ACCURACY_THRESHOLD;
 import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.DEFAULT_LOCATION_ACCURACY;
 
@@ -80,7 +79,7 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!areLocationPermissionsGranted(this)) {
+        if (!permissionsProvider.areLocationPermissionsGranted()) {
             ToastUtils.showLongToast(R.string.not_granted_permission);
             finish();
             return;

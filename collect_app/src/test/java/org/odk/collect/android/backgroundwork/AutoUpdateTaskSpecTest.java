@@ -92,8 +92,8 @@ public class AutoUpdateTaskSpecTest {
 
     @Test
     public void whenThereAreUpdatedFormsOnServer_sendsUpdatesToNotifier() throws Exception {
-        ServerFormDetails updatedForm = new ServerFormDetails("", "", "", "", "", "", false, true, new ManifestFile("", emptyList()));
-        ServerFormDetails oldForm = new ServerFormDetails("", "", "", "", "", "", false, false, new ManifestFile("", emptyList()));
+        ServerFormDetails updatedForm = new ServerFormDetails("", "", "", "", "", false, true, new ManifestFile("", emptyList()));
+        ServerFormDetails oldForm = new ServerFormDetails("", "", "", "", "", false, false, new ManifestFile("", emptyList()));
         when(serverFormsDetailsFetcher.fetchFormDetails()).thenReturn(asList(
                 updatedForm,
                 oldForm
@@ -108,7 +108,7 @@ public class AutoUpdateTaskSpecTest {
 
     @Test
     public void whenAutoDownloadEnabled_andChangeLockLocked_doesNotDownload() throws Exception {
-        when(serverFormsDetailsFetcher.fetchFormDetails()).thenReturn(asList(new ServerFormDetails("", "", "", "", "", "", false, true, new ManifestFile("", emptyList()))));
+        when(serverFormsDetailsFetcher.fetchFormDetails()).thenReturn(asList(new ServerFormDetails("", "", "", "", "", false, true, new ManifestFile("", emptyList()))));
         generalPrefs.edit().putBoolean(GeneralKeys.KEY_AUTOMATIC_UPDATE, true).apply();
         changeLock.lock();
 
@@ -123,8 +123,8 @@ public class AutoUpdateTaskSpecTest {
     public void whenAutoDownloadEnabled_andDownloadIsCancelled_sendsCompletedDownloadsToNotifier() throws Exception {
         generalPrefs.edit().putBoolean(GeneralKeys.KEY_AUTOMATIC_UPDATE, true).apply();
 
-        ServerFormDetails form1 = new ServerFormDetails("", "", "", "form1", "", "", false, true, new ManifestFile("", emptyList()));
-        ServerFormDetails form2 = new ServerFormDetails("", "", "", "form2", "", "", false, true, new ManifestFile("", emptyList()));
+        ServerFormDetails form1 = new ServerFormDetails("", "", "form1", "", "", false, true, new ManifestFile("", emptyList()));
+        ServerFormDetails form2 = new ServerFormDetails("", "", "form2", "", "", false, true, new ManifestFile("", emptyList()));
         when(serverFormsDetailsFetcher.fetchFormDetails()).thenReturn(asList(form1, form2));
 
         // Cancel form download after downloading one form

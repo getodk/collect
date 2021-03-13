@@ -31,7 +31,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.PRO
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.TASKS_ONLY;    // smap
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SOURCE;        // smap
 
-public class FormDatabaseMigrator {
+public class FormDatabaseMigrator implements DatabaseMigrator {
 
 
     public void onCreate(SQLiteDatabase db) {

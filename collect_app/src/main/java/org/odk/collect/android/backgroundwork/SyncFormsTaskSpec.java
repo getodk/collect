@@ -6,12 +6,11 @@ import androidx.work.WorkerParameters;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.analytics.Analytics;
-import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
+import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
 
@@ -20,6 +19,8 @@ import java.util.function.Supplier;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import static org.odk.collect.android.analytics.AnalyticsUtils.logMatchExactlyCompleted;
 
 public class SyncFormsTaskSpec implements TaskSpec {
 
@@ -49,18 +50,18 @@ public class SyncFormsTaskSpec implements TaskSpec {
                 if (acquiredLock) {
                     syncStatusRepository.startSync();
 
+                    FormSourceException exception = null;
                     try {
                         serverFormsSynchronizer.synchronize();
                         syncStatusRepository.finishSync(null);
                         notifier.onSync(null);
-
-                        analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, "Success");
                     } catch (FormSourceException e) {
+                        exception = e;
                         syncStatusRepository.finishSync(e);
                         notifier.onSync(e);
-
-                        analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, e.getType().toString());
                     }
+
+                    logMatchExactlyCompleted(analytics, exception);
                 }
 
                 return null;

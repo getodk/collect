@@ -15,6 +15,7 @@ the specific language governing permissions and limitations under the License. -
     <string name="default_server_url" translatable="false">https://sg.smap.com.au</string>
     <string name="protocol_odk_default" translatable="false">odk_default</string>
     <string name="protocol_google_sheets" translatable="false">google_sheets</string>
+    <string name="default_server_url" translatable="false">https://demo.getodk.org</string>
     <string name="default_odk_formlist" translatable="false">/formList</string>
     <string name="default_odk_submission" translatable="false">/submission</string>
     <string name="app_url" translatable="false">https://www.smap.org</string>

@@ -4,16 +4,13 @@
 version: 2
 
 references:
-  workspace: &workspace
-               ~/work
-
   android_config: &android_config
-    working_directory: *workspace
+    working_directory: ~/work
     docker:
       - image: circleci/android:api-30
 
 jobs:
-  check_quality:
+  compile:
     <<: *android_config
     environment:
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
@@ -28,6 +25,24 @@ jobs:
       - save_cache:
           paths:
             - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+
+      - run:
+          name: Compile code
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleDebug
+      - persist_to_workspace:
+          root: ~/work
+          paths:
+            - .
+
+  check_quality:
+    <<: *android_config
+    environment:
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
+    steps:
+      - attach_workspace:
+          at: ~/work
+      - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
 
       - run:
@@ -42,16 +57,9 @@ jobs:
     environment:
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
-      - checkout
-
+      - attach_workspace:
+          at: ~/work
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
-      - run:
-          name: Download dependencies
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 androidDependencies
-      - save_cache:
-          paths:
-            - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
 
       - run:
@@ -81,21 +89,15 @@ jobs:
     environment:
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
-      - checkout
-
+      - attach_workspace:
+          at: ~/work
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
-      - run:
-          name: Download dependencies
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 androidDependencies
-      - save_cache:
-          paths:
-            - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
 
       - run:
           name: Run app unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 collect_app:testDebug
+
       - store_artifacts:
           path: collect_app/build/reports
           destination: reports
@@ -107,16 +109,9 @@ jobs:
     environment:
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
-      - checkout
-
+      - attach_workspace:
+          at: ~/work
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
-      - run:
-          name: Download dependencies
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 androidDependencies
-      - save_cache:
-          paths:
-            - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
 
       - run:
@@ -128,16 +123,9 @@ jobs:
     environment:
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
-      - checkout
-
+      - attach_workspace:
+          at: ~/work
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
-      - run:
-          name: Download dependencies
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 androidDependencies
-      - save_cache:
-          paths:
-            - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
 
       - run:
@@ -165,16 +153,25 @@ jobs:
               --environment-variables coverage=true,coverageFile=/sdcard/coverage.ec \
               --directories-to-pull /sdcard --timeout 20m
             fi
-          no_output_timeout: 60m
+          no_output_timeout: 25m
 
 workflows:
   version: 2
   workflow:
     jobs:
-      - check_quality
-      - test_modules
-      - test_app
+      - compile
+      - check_quality:
+          requires:
+            - compile
+      - test_modules:
+          requires:
+            - compile
+      - test_app:
+          requires:
+            - compile
       - build_instrumented:
+          requires:
+            - compile
           filters:
             branches:
               ignore: master

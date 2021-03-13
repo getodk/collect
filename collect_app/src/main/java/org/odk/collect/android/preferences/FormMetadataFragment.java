@@ -14,7 +14,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Validator;
 
@@ -28,7 +28,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_PHONE
 public class FormMetadataFragment extends BasePreferenceFragment {
 
     @Inject
-    PermissionUtils permissionUtils;
+    PermissionsProvider permissionsProvider;
 
     @Inject
     PropertyManager propertyManager;
@@ -58,10 +58,10 @@ public class FormMetadataFragment extends BasePreferenceFragment {
 
         setupPrefs();
 
-        if (permissionUtils.isReadPhoneStatePermissionGranted(getActivity())) {
+        if (permissionsProvider.isReadPhoneStatePermissionGranted()) {
             phonePreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_PHONE_NUMBER));
         } else if (savedInstanceState == null) {
-            permissionUtils.requestReadPhoneStatePermission(getActivity(), true, new PermissionListener() {
+            permissionsProvider.requestReadPhoneStatePermission(getActivity(), true, new PermissionListener() {
                 @Override
                 public void granted() {
                     phonePreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_PHONE_NUMBER));

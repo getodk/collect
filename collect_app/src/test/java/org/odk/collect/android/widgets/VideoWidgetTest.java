@@ -1,7 +1,6 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.View;
 
@@ -16,42 +15,30 @@ import org.mockito.Mock;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.CameraUtils;
-import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 
-import java.io.File;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
  * @author James Knight
  */
 public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
-
-    @Mock
-    Uri uri;
-
     @Mock
     MediaUtils mediaUtils;
-
-    @Mock
-    FileUtil fileUtil;
-
-    @Mock
-    File file;
 
     private String destinationName;
 
     @NonNull
     @Override
     public VideoWidget createWidget() {
-        return new VideoWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride), fileUtil, mediaUtils,
-                new FakeWaitingForDataRegistry(), new FakeQuestionMediaManager(), new CameraUtils());
+        return new VideoWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride), new FakeWaitingForDataRegistry(), new FakeQuestionMediaManager(), new CameraUtils(), mediaUtils);
     }
 
     @NonNull
@@ -60,45 +47,10 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
         return new StringData(destinationName);
     }
 
-    @Override
-    public Object createBinaryData(StringData answerData) {
-        return uri;
-    }
-
     @Before
     public void setUp() throws Exception {
         super.setUp();
         destinationName = RandomString.make();
-    }
-
-    @Override
-    public void settingANewAnswerShouldCallDeleteMediaToRemoveTheOldFile() {
-        prepareForSetAnswer();
-        super.settingANewAnswerShouldCallDeleteMediaToRemoveTheOldFile();
-    }
-
-    @Override
-    public void getAnswerShouldReturnCorrectAnswerAfterBeingSet() {
-        prepareForSetAnswer();
-        super.getAnswerShouldReturnCorrectAnswerAfterBeingSet();
-    }
-
-    @Override
-    public void settingANewAnswerShouldRemoveTheOldAnswer() {
-        prepareForSetAnswer();
-        super.settingANewAnswerShouldRemoveTheOldAnswer();
-    }
-
-    public void prepareForSetAnswer() {
-        when(formEntryPrompt.isReadOnly()).thenReturn(false);
-
-        String sourcePath = String.format("%s.mp4", RandomString.make());
-        when(mediaUtils.getPath(activity, uri)).thenReturn(sourcePath);
-        when(mediaUtils.getDestinationPathFromSourcePath(sourcePath, "")).thenReturn(File.separator + destinationName + ".mp4");
-
-        when(fileUtil.getFileAtPath(File.separator + destinationName + ".mp4")).thenReturn(file);
-
-        when(file.getName()).thenReturn(destinationName);
     }
 
     @Test
@@ -112,9 +64,8 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
         assertActionEquals(Intent.ACTION_GET_CONTENT, intent);
         assertTypeEquals("video/*", intent);
 
-        intent = getIntentLaunchedByClick(R.id.play_video);
-        assertActionEquals(Intent.ACTION_VIEW, intent);
-        assertTypeEquals("video/*", intent);
+        getIntentLaunchedByClick(R.id.play_video);
+        verify(mediaUtils).openFile(any(), any(), any());
     }
 
     @Test

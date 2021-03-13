@@ -4,12 +4,14 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -47,10 +49,10 @@ public class DatabaseFormsRepository implements FormsRepository {
 
     @Nullable
     @Override
-    public Form getOneByFormIdAndVersion(String jrFormId, @Nullable String jrVersion) {
+    public Form getLatestByFormIdAndVersion(String jrFormId, @Nullable String jrVersion) {
         List<Form> all = getAllByFormIdAndVersion(jrFormId, jrVersion);
         if (!all.isEmpty()) {
-            return all.get(0);
+            return all.stream().max(Comparator.comparingLong(Form::getDate)).get();
         } else {
             return null;
         }
@@ -66,7 +68,11 @@ public class DatabaseFormsRepository implements FormsRepository {
 
     @Nullable
     @Override
-    public Form getOneByMd5Hash(String hash) {
+    public Form getOneByMd5Hash(@NotNull String hash) {
+        if (hash == null) {
+            throw new IllegalArgumentException("null hash");
+        }
+
         FormsDao formsDao = new FormsDao();
 
         try (Cursor cursor = formsDao.getFormsCursorForMd5Hash(hash)) {
@@ -106,7 +112,7 @@ public class DatabaseFormsRepository implements FormsRepository {
     }
 
     @Override
-    public Uri save(Form form) {
+    public Form save(Form form) {
         final ContentValues v = new ContentValues();
         v.put(FORM_FILE_PATH, storagePathProvider.getFormDbPath(form.getFormFilePath()));
         v.put(FORM_MEDIA_PATH, storagePathProvider.getFormDbPath(form.getFormMediaPath()));
@@ -128,7 +134,11 @@ public class DatabaseFormsRepository implements FormsRepository {
             v.putNull(DELETED_DATE);
         }
 
-        return new FormsDao().saveForm(v);
+        FormsDao formsDao = new FormsDao();
+        Uri uri = formsDao.saveForm(v);
+        try (Cursor cursor = formsDao.getFormsCursor(uri)) {
+            return getFormOrNull(cursor);
+        }
     }
 
     @Override

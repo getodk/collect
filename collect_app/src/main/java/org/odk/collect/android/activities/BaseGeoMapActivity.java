@@ -21,8 +21,6 @@ import android.os.Bundle;
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.ToastUtils;
 
-import static org.odk.collect.android.utilities.PermissionUtils.areLocationPermissionsGranted;
-
 /**
  * Implementation details common to the geo activities.  (After the migration
  * to storing user selections in the preferences, there's not a lot left here,
@@ -35,7 +33,7 @@ public abstract class BaseGeoMapActivity extends CollectAbstractActivity {
         super.onCreate(savedInstanceState);
         previousState = savedInstanceState;
 
-        if (!areLocationPermissionsGranted(this)) {
+        if (!permissionsProvider.areLocationPermissionsGranted()) {
             ToastUtils.showLongToast(R.string.not_granted_permission);
             finish();
         }

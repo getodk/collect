@@ -17,22 +17,19 @@ package org.odk.collect.android.activities;
  * limitations under the License.
  */
 
-import android.app.Activity;
 import android.os.Bundle;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.Camera2VideoFragment;
 import org.odk.collect.android.utilities.ToastUtils;
 
-import static org.odk.collect.android.utilities.PermissionUtils.areCameraAndRecordAudioPermissionsGranted;
-
-public class CaptureSelfieVideoActivity extends Activity {
+public class CaptureSelfieVideoActivity extends CollectAbstractActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!areCameraAndRecordAudioPermissionsGranted(this)) {
+        if (!permissionsProvider.areCameraAndRecordAudioPermissionsGranted()) {
             finish();
             return;
         }

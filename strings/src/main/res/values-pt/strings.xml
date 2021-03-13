@@ -23,20 +23,20 @@
   <string name="version_number">Versão: %s</string>
   <string name="id_number">ID: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="added_on_date_at_time">\'Adicionada\' EEE, MMM dd, yyyy \'em\' HH:mm</string>
+  <string name="added_on_date_at_time">\'Adicionada em\' EEE, dd \'de\' MMM \'de\' yyyy \'às\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="saved_on_date_at_time">\'Salvo em\' EEE, MMM dd, yyyy \'em\' HH:mm</string>
+  <string name="saved_on_date_at_time">\'Salvo em\' EEE, dd \'de\' MMM \'de\' yyyy \'às\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="finalized_on_date_at_time">\'Finalizado em\' EEE, MMM dd, yyyy \'em\' HH:mm</string>
+  <string name="finalized_on_date_at_time">\'Finalizado em\' EEE, dd \'de\' MMM \'de\' yyyy \'às\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sent_on_date_at_time">\'Envido em\' EEE, MMM dd, yyyy \'em\' HH:mm</string>
+  <string name="sent_on_date_at_time">\'Enviado em\' EEE, dd \'de\' MMM \'de\' yyyy \'às\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sending_failed_on_date_at_time">\'O Envio falhou em\' EEE, MMM dd, yyyy \'em\' HH:mm</string>
+  <string name="sending_failed_on_date_at_time">\'O envio falhou em\' EEE, dd \'de\' MMM \'de\' yyyy \'às\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="deleted_on_date_at_time">\'Apagado em\' EEE, MMM, dd, yyyy \'em\' HH:mm</string>
+  <string name="deleted_on_date_at_time">\'Apagado em\' EEE, dd \'de\' MMM \'de\' yyyy \'às\' HH:mm</string>
   <string name="submission_deleted">Submissão apagada</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="modified_on_date_at_time">\'Modificado em\' EEE, MMM dd, yyyy \'às\' HH:mm</string>
+  <string name="modified_on_date_at_time">\'Modificado em\' EEE, dd \'de\' MMM \'de\' yyyy \'às\' HH:mm</string>
   <string name="encrypted_form">Formulário encriptado</string>
   <string name="deleted_form">Formulário apagado</string>
   <string name="sort_the_list">Ordenar a lista</string>
@@ -56,17 +56,17 @@
   <string name="no_items_display_instances">Nada disponível para exibir.\n\nTente finalizar formulários salvos antes de enviar.</string>
   <string name="not_granted_permission">A atividade que você está tentando iniciar exige uma permissão que você não concedeu.</string>
   <string name="storage_runtime_permission_denied_title">Permissões de armazenamento</string>
-  <string name="storage_runtime_permission_denied_desc">Sem estas permissões, o ODK Collect não consegue acessar os seus formulários ou salvar submissões. Abra o aplicativo novamente quando estiver pronta(o) a dar estas permissões.</string>
+  <string name="storage_runtime_permission_denied_desc">Sem estas permissões, o ODK Collect não pode acessar os seus formulários ou salvar submissões. Abra o aplicativo novamente quando estiver pronto(a) para dar estas permissões.</string>
   <string name="location_runtime_permissions_denied_title">Permissões de localização</string>
-  <string name="location_runtime_permissions_denied_desc">Sem estas permissões, ODK Collect não pode registrar sua localização. Por favor, tente novamente quando estiver pronta(o) para garanti-las.</string>
+  <string name="location_runtime_permissions_denied_desc">Sem estas permissões, ODK Collect não pode registrar sua localização. Por favor, tente novamente quando estiver pronto(a) para garanti-las.</string>
   <string name="camera_runtime_permission_denied_title">Permissão de acesso à câmera</string>
-  <string name="camera_runtime_permission_denied_desc">Sem esta permissão, o ODK Collect não consegue acessar sua câmera. Por favor, tente novamente quando estiver pronta(o) a garanti-la.</string>
+  <string name="camera_runtime_permission_denied_desc">Sem esta permissão, o ODK Collect não consegue acessar sua câmera. Por favor, tente novamente quando estiver pronto(a) a garanti-la.</string>
   <string name="record_audio_runtime_permission_denied_title">Permissão de gravar áudio</string>
-  <string name="record_audio_runtime_permission_denied_desc">Sem esta permissão, o ODK Collect não consegue acessar seu microfone. Por favor, tente novamente quando estiver pronta(o) a garanti-la.</string>
+  <string name="record_audio_runtime_permission_denied_desc">Sem esta permissão, o ODK Collect não consegue acessar seu microfone. Por favor, tente novamente quando estiver pronto(a) a garanti-la.</string>
   <string name="get_accounts_runtime_permission_denied_title">Permissão para acessar contas</string>
-  <string name="get_accounts_runtime_permission_denied_desc">Sem esta permissão, o ODK Collecta não consegue acessar as contas. Por favor, tente novamente quando estiver pronta(o) a garanti-la.</string>
+  <string name="get_accounts_runtime_permission_denied_desc">Sem esta permissão, o ODK Collecta não consegue acessar as contas. Por favor, tente novamente quando estiver pronto(a) a garanti-la.</string>
   <string name="read_phone_state_runtime_permission_denied_title">Permissão para acessar o estado do telefone</string>
-  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect não faz chamadas, mas precisa desta permissão para acessar algumas propriedades sobre o seu dispositivo, como o número do telefone e o ID do dispositivo.</string>
+  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect não faz chamadas, mas precisa desta permissão para acessar algumas informações do seu dispositivo como o número do telefone e o ID do dispositivo.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -79,7 +79,7 @@
   <string name="survey_loading_reading_csv_message">Lendo arquivos CSV…</string>
   <string name="parse_error">Desculpe, não é possível analisar formulário.</string>
   <string name="loading_form_failed">Um erro ocorreu enquanto o formulário era carregado. Por favor, tente novamente.</string>
-  <string name="parent_form_not_present">Não foi possível editar o formulário salvo porque o formulário em branco correspondente não está presente ou foi deletado.\n\nID do formulário: %1$s</string>
+  <string name="parent_form_not_present">Não foi possível editar o formulário salvo porque o formulário em branco correspondente não está presente ou foi apagado.\n\nID do formulário: %1$s</string>
   <string name="cannot_edit_completed_form">Este formulário não pode ser editado, pois ele foi marcado como finalizado. Ele pode estar criptografado.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">Alterações não salvas recuperadas</string>
@@ -146,7 +146,7 @@
   <string name="not_exactly_one_record_for_this_instance">Não há um registro exato para esta instância!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">Um formulário em branco não se ajusta exatamente ao jr_form_id.</string>
   <string name="no_form_id_specified">Nenhum FormId foi especificado???</string>
-  <string name="phone_does_not_support_rsa">O suporte ao telefone não suporta encriptação RSA.</string>
+  <string name="phone_does_not_support_rsa">O telefone não suporta encriptação RSA.</string>
   <string name="invalid_rsa_public_key">Chave pública RSA inválida.</string>
   <string name="encryption_error_message">%s Formulário não foi salvo como finalizado.</string>
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
@@ -154,19 +154,23 @@
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
   <string name="unrecognized_uri">URL não reconhecida: %s</string>
   <!--Text displayed when audio recording fails to start-->
+  <string name="start_recording_failed">Não foi possível iniciar a gravação</string>
   <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <string name="mic_in_use">O microfone está ocupado</string>
   <!--Error message displayed when copying media from a temporary directory fails-->
+  <string name="answer_file_copy_failed_message">O arquivo de mídia não pode ser anexado ao formulário, mas está disponível em%1$s</string>
+  <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
   <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
-  <string name="launch_app">Play App</string>
+  <string name="launch_app">Executar App</string>
   <string name="activity_not_found">Não foi encontrada nenhuma atividade por ser tratada: %s</string>
-  <string name="no_app">Aplicativo perdido. Por favor, inserir manualmente</string>
+  <string name="no_app">Aplicativo faltando. Por favor, inserir manualmente a informação</string>
   <string name="null_intent_value">A aplicação externa não enviou as informações esperadas.</string>
   <string name="launch_printer">Impressão Inicializada</string>
   <string name="no_printer">A impressora solicitada não está instalada. Por favor, instale a impressora</string>
-  <string name="open_url">Abrir Url</string>
+  <string name="open_url">Abrir URL</string>
   <string name="capture_osm">Executar o OpenMapKit</string>
   <string name="recapture_osm">Refazer o tageamento OSM</string>
   <string name="edited_osm_file">Arquivo OSM XML Editado:</string>
@@ -187,7 +191,7 @@ Escolher Imagem</string>
   <string name="selected_invalid_image">O arquivo selecionado não é uma imagem válida</string>
   <string name="gdrive_connection_exception">Esta imagem está armazenada no Google Drive e não pode ser acessada offline.</string>
   <string name="view_image">Ver Imagem</string>
-  <string name="take_picture_instruction">Selecione na tela para tirar uma fotografia</string>
+  <string name="take_picture_instruction">Toque na tela para tirar uma fotografia</string>
   <string name="error_front_camera_unavailable">A câmera da frente não está disponível neste dispositivo</string>
   <string name="camera_error">Este dispositivo não suporta a API da Câmera2</string>
   <string name="annotate_image">Imagem com anotações</string>
@@ -207,20 +211,35 @@ Escolher Imagem</string>
   <string name="play_video">Assistir o Vídeo</string>
   <string name="choose_file">Escolher Arquivo</string>
   <!--Text for button that deletes a file that is the answer to a question-->
+  <string name="delete_answer_file">Apagar</string>
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">Gravar Áudio</string>
   <!--Text for button that lets the user choose a sound file on their device-->
   <string name="choose_sound">Escolher Áudio</string>
   <!--Description text for button that that pauses recording sound-->
+  <string name="pause_recording">Pausar</string>
   <!--Description text for button that that resumes recording sound-->
+  <string name="resume_recording">Continuar</string>
+  <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
+  <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
+  <!--Button text for the dialog confirming whether the user wants to disable background recording-->
+  <!--Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form-->
   <!--Title for dialog asking the user if they want to delete a file-->
+  <string name="delete_answer_file_question">Apagar arquivo?</string>
   <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <string name="answer_file_delete_warning">Você não será capaz de recuperar esse arquivo caso ele seja apagado. Você tem certeza de que deseja continuar?</string>
   <!--Text for button that stops audio recording-->
+  <string name="stop_recording">Parar</string>
   <!--Text to let the user know a recording is in progress-->
+  <string name="recording">Gravando…</string>
   <!--Title of Android Notification Channel for audio recording notifications-->
+  <string name="recording_channel">Gravação de áudio</string>
   <!--Text for button that plays audio clip-->
+  <string name="play_audio">Tocar áudio</string>
   <!--Text to let the user know a file is being saved-->
+  <string name="saving_file">Salvando arquivo</string>
   <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="recording_warning">Você deve parar a gravação antes de sair dessa tela</string>
   <string name="error_attaching_binary_file">Um erro ocorreu ao anexar o arquivo: %s</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="select_value">Selecione valor</string>
@@ -239,7 +258,7 @@ Escolher Imagem</string>
   <string name="ext_search_bad_function_error">Erro de sintaxe na função search():  \'%s\' não foi avaliada como sendo uma função.</string>
   <string name="ext_search_return_error">O gestor de procura retornou um objeto do tipo %s\'.</string>
   <string name="ext_import_generic_error">Não foi possível importar os dados de%1$s. Motivo: %2$s</string>
-  <string name="ext_import_progress_message">Pré-carregando dados de \'%1$s\', por favor aguarde… %2$s</string>
+  <string name="ext_import_progress_message">Pré-carregando dados de \'%1$s\', por favor, aguarde… %2$s</string>
   <string name="ext_import_cancelled_message">Lendo dados cancelados!</string>
   <string name="ext_import_finalizing_message">Finalizando dados pré-carregados…</string>
   <string name="ext_import_completed_message">Leitura de dados finalizada!</string>
@@ -248,13 +267,13 @@ Escolher Imagem</string>
   <string name="ext_search_generic_error">Erro de sintaxe na função search(): %s</string>
   <string name="ext_assign_value_error">Não foi possível atribuir o valor a \'%s\'.</string>
   <string name="parser_exception">Exceção XPathParser: \"%s\"</string>
-  <string name="get_bearing">Gravar mensagem de suporte</string>
-  <string name="replace_bearing">Substituir mensagem de suporte</string>
-  <string name="getting_bearing">Carregar mensagem de suporte</string>
-  <string name="accept_bearing">Gravar Mensagem de Suporte</string>
+  <string name="get_bearing">Gravar rumo</string>
+  <string name="replace_bearing">Substituir rumo</string>
+  <string name="getting_bearing">Carregando rumo</string>
+  <string name="accept_bearing">Gravar rumo</string>
   <string name="bearing">Rumo: %.3f</string>
   <string name="direction">Direção: %s</string>
-  <string name="bearing_lack_of_sensors">O movimento não foi coletado: em seu dispositivo falta o acelerômetro, sensor de campo magnético ou ambos.</string>
+  <string name="bearing_lack_of_sensors">O rumo não foi coletado: em seu dispositivo falta o acelerômetro, sensor de campo magnético ou ambos.</string>
   <string name="select_date">Selecionar data</string>
   <string name="select_time">Selecionar hora</string>
   <string name="no_date_selected">Nenhuma data selecionada</string>
@@ -371,7 +390,7 @@ Escolher Imagem</string>
   <string name="get_location">Gravar Localização</string>
   <string name="provider_disabled_error">Desculpe, provedor de localização desabilitado!</string>
   <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nPrecisão:%4$s m</string>
-  <string name="location_metadata">Satélites disponíveis: %1$d/24\n\nTempo que já passou: %2$s</string>
+  <string name="location_metadata">Satélites disponíveis: %1$d/24\n\nTempo decorrido: %2$s</string>
   <string name="google_play_services_not_available">Este formulário necessita rastrear sua localização</string>
   <string name="location_providers_disabled_dialog_message">Este formulário necessita rastrear sua localização, mas a localização está desabilitada no seu dispositivo. Favor habilitar nas configurações do celular.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -383,6 +402,8 @@ Escolher Imagem</string>
   <string name="save_point">Salva GeoPoint</string>
   <string name="get_point">Inicia GeoPoint</string>
   <string name="geopoint_view_read_only">Visualiza GeoPoint</string>
+  <string name="geoshape_view_read_only">Visualizar GeoShape</string>
+  <string name="geotrace_view_read_only">Visualizar GeoTrace</string>
   <string name="get_shape">Inicia GeoShape</string>
   <string name="get_trace">Inicia GeoTrace</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
@@ -425,7 +446,7 @@ Escolher Imagem</string>
     <item quantity="one">%d metro</item>
     <item quantity="other">%d metros</item>
   </plurals>
-  <string name="location_status_searching">Buscando a localização, por favor aguarde…</string>
+  <string name="location_status_searching">Buscando a localização, por favor, aguarde…</string>
   <string name="location_status_accuracy">Precisão da localização: %.2f m</string>
   <string name="location_status_acceptable">Precisão da localização: %.2f m (aceitável)</string>
   <string name="location_status_unacceptable">Precisão da localização: %.2f m (inaceitável)</string>
@@ -447,10 +468,10 @@ Escolher Imagem</string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
-  <string name="uploading_data">Eviando Formulário</string>
+  <string name="uploading_data">Enviando Formulário</string>
   <string name="noselect_error">Desculpe, você não selecionou nenhum formulário!</string>
   <string name="no_connection">Sem conexão disponível</string>
-  <string name="sending_items">Enviando %1$s de %2$s Formulário(s)</string>
+  <string name="sending_items">Enviando %1$s de %2$s formulário(s)</string>
   <string name="send_selected_data">Enviar selecionado</string>
   <string name="server_auth_credentials">Nome de usuário ou senha inválidos para o servidor: %s</string>
   <string name="server_requires_auth">Servidor Requer Autenticação</string>
@@ -460,9 +481,9 @@ Escolher Imagem</string>
   <string name="change_view">Mudar visualização</string>
   <string name="show_sent_and_unsent_forms">Formulários enviados e não enviados</string>
   <string name="show_unsent_forms">Apenas formulários não enviados</string>
-  <string name="media_upload_error">Falhou ao fazer o upload do arquivo de media, que n´ão existe: %1$s</string>
-  <string name="send_in_progress">Envio automático em segundo plano sendo executado, por favor tente novamente em alguns instantes</string>
-  <string name="odk_permissions_fail">Permissão de envio automático do ODK falhou, por favor, certifique-se que foi dada a você todas as permissões requisitadas.</string>
+  <string name="media_upload_error">Falhou ao fazer o upload do arquivo de media, que não existe: %1$s</string>
+  <string name="send_in_progress">Envio automático em segundo plano sendo executado, por favor, tente novamente em alguns instantes</string>
+  <string name="odk_permissions_fail">Permissão de envio automático do ODK falhou, por favor, certifique-se de que concedeu todas as permissões requisitadas.</string>
   <string name="odk_auto_note">Resultados de envio automático do ODK</string>
   <string name="odk_auto_download_notification_title">Resultados de download automático do ODK</string>
   <string name="notification_error">Erro ao exibir texto de notificação.</string>
@@ -478,6 +499,13 @@ Escolher Imagem</string>
   <string name="version">Versão:</string>
   <string name="form_updates_available">Atualizações de formulários disponíveis</string>
   <string name="newer_version_of_a_form_info">Esta é uma atualização de um formulário que você possui</string>
+  <string name="form_update_error">Falha na atualização do formulário</string>
+  <string name="form_update_succeeded">Sucesso na atualização do formulário</string>
+  <string name="report_to_project_lead">Se o problema persistir, informe a pessoa que lhe pediu para coletar os dados.</string>
+  <string name="unreachable_error">O Collect não consegue se conectar ao servidor em %s . Você digitou a URL corretamente?</string>
+  <string name="security_error">O Collect não consegue se conectar de modo seguro ao servidor em %s. Você digitou a URL corretamente?</string>
+  <string name="failure">Falha</string>
+  <string name="load_remote_form_error">Falha ao baixar a lista de formulários</string>
   <!--##############################################
     # DELETE SAVED FORM
     ##############################################-->
@@ -509,6 +537,7 @@ Escolher Imagem</string>
   <!--Title of a settings section-->
   <string name="user_and_device_identity_title">Identificação de usuário e dispositivo</string>
   <!--Title of a settings section only available in beta or development builds.-->
+  <string name="experimental">Experimental</string>
   <string name="server_preferences">Servidor</string>
   <!--Label for server type setting-->
   <string name="type">Tipo</string>
@@ -523,20 +552,21 @@ Escolher Imagem</string>
   <string name="password_error_whitespace">Espaços em branco antes e depois de senhas não são permitidos</string>
   <string name="username_error_whitespace">Espaços em branco antes e depois de nomes de usuários não são permitidos</string>
   <string name="custom_server_paths">Caminhos (paths) personalizados do servidor</string>
-  <string name="legacy_custom_server_paths_summary">Será removido em uma versão futura. Por favor use /formList e /submission no seu servidor.</string>
-  <string name="change_formlist_url">Listagem do caminho do formulário (adicionado do URL do Servidor)</string>
+  <string name="legacy_custom_server_paths_summary">Será removido em uma versão futura. Por favor, use /formList e /submission no seu servidor.</string>
+  <string name="change_formlist_url">Caminho para listagem de formulários (adicionado do URL do Servidor)</string>
   <string name="change_submission_url">Caminho para submeter (adicionado do URL do Servidor)</string>
-  <string name="formlist_url">Lista de Caminho do Formulário</string>
+  <string name="formlist_url">Caminho para lista de formulários</string>
   <string name="submission_url">Caminho para submeter</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="selected_google_account_text">Conta Google</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">Retornou da submissão da URL</string>
+  <string name="google_sheets_url">URL de submissão de reserva</string>
   <!--Description for Fallback submission URL setting-->
   <string name="google_sheets_url_hint">Os formulários devem configurar um envio. Se não foram, esta URL será utilizada.</string>
   <string name="app_theme">Tema</string>
   <string name="theme_light">Tema claro</string>
   <string name="theme_dark">Tema escuro</string>
+  <string name="theme_magenta">Tema magenta</string>
   <string name="language">Idioma</string>
   <string name="use_device_language">Utilizar idioma do dispositivo</string>
   <string name="font_size">Tamanho da Fonte do Texto</string>
@@ -556,7 +586,7 @@ Escolher Imagem</string>
   <string name="form_backward">Voltar</string>
   <string name="show_splash_title">Tela de abertura</string>
   <string name="show_splash_summary">Mostrar quando a aplicação iniciar</string>
-  <string name="splash_path">Selecionada imagem Splash</string>
+  <string name="splash_path">Tela de abertura selecionada</string>
   <string name="default_splash_path">ODK Default</string>
   <string name="select_another_image">Selecionar Outra Imagem</string>
   <string name="use_odk_default">Usar Imagem Padrão</string>
@@ -564,10 +594,15 @@ Escolher Imagem</string>
   <!--Heading for the settings category about updating blank forms-->
   <string name="form_update_category">Atualização de formulários</string>
   <!--Name of the setting that defines how blank forms are updated from the server.-->
+  <string name="form_update_mode_title">Modo de atualização dos formulários</string>
   <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
+  <string name="manual">Atualização manual</string>
   <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
+  <string name="previously_downloaded_only">Formulários presentes no dispositivo</string>
   <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
+  <string name="match_exactly">Formulários exatamente iguais ao servidor</string>
   <!--Name of the setting that defines how often blank forms are updated from the server.-->
+  <string name="form_update_frequency_title">Intervalo entre as atualizações automáticas</string>
   <!--Frequency for requesting blank form updates from the server-->
   <string name="every_fifteen_minutes">A cada 15 minutos</string>
   <!--Frequency for requesting blank form updates from the server-->
@@ -595,7 +630,7 @@ Escolher Imagem</string>
   <string name="default_completed_summary">Marcar formulário finalizado como padrão</string>
   <string name="constraint_behavior_title">Processamento de regras</string>
   <string name="constraint_behavior">Comportamento de processamento da regra</string>
-  <string name="constraint_behavior_on_swipe">Valide após passar</string>
+  <string name="constraint_behavior_on_swipe">Validar ao avançar</string>
   <string name="constraint_behavior_on_finalize">Adiar validação até finalizar</string>
   <string name="high_resolution_title">Vídeo de alta resolução</string>
   <string name="high_resolution_summary">Ativar gravação de vídeos em alta resolução</string>
@@ -613,6 +648,7 @@ Escolher Imagem</string>
   <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
   <string name="guidance_yes_collapsed">Sim - recolhido</string>
   <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <string name="external_app_recording">Usar outro app para gravação de áudio</string>
   <string name="form_import_category">Importação de formulários</string>
   <string name="instance_sync">Finalizar formulários na importação</string>
   <string name="instance_sync_summary">Afeta formulários adicionados diretamente na pasta instances.</string>
@@ -641,7 +677,7 @@ Escolher Imagem</string>
   <string name="admin_password_disabled">Senha administrativa desabilitada</string>
   <string name="admin_password_incorrect">Lamento, senha incorreta!</string>
   <string name="enter_admin_password">Digite a senha administrativa</string>
-  <string name="change_admin_password">Mudar Senha Administrador</string>
+  <string name="change_admin_password">Mudar Senha Administrativa</string>
   <string name="show_password">Mostra a senha</string>
   <string name="found_in_main">Desmarque para esconder no Menu Principal</string>
   <string name="found_in_settings">Desmarque para não exibir nas Configurações Gerais  </string>
@@ -694,15 +730,15 @@ Escolher Imagem</string>
   <!--Button for navigating across Google Drive folders-->
   <string name="download_selected">Baixar selecionados</string>
   <string name="go_back">Voltar</string>
-  <string name="google_auth_io_exception_msg">Não foi capaz de chamar API. Se você está rodando em uma build local, por favor revise o projeto</string>
+  <string name="google_auth_io_exception_msg">Não foi capaz de chamar API. Se você está rodando em uma build local, por favor, revise o projeto</string>
   <string name="reading_files">Lendo arquivos</string>
   <string name="drive_get_file">Obtendo %1$s e arquivos de mídia.</string>
   <string name="no_google_account">Nenhuma conta do Google foi selecionada!</string>
-  <string name="google_set_account">Você selecionou o Google Sheets com seu servidor, por favor selecione um conta Google correspondente em Configurações Gerais antes de continuar.</string>
+  <string name="google_set_account">Você selecionou o Google Sheets com seu servidor, por favor, selecione um conta Google correspondente em Configurações Gerais antes de continuar.</string>
   <string name="google_search_browse">Procure pelos formulários. Ou selecione \'My Drive\' para procurar.</string>
   <string name="invalid_sheet_id">Nome do id: %1$s da guia incorreto</string>
   <string name="missing_submission_url">Falta a URL de submissão</string>
-  <string name="google_sheets_access_denied">Acesso negado. Por favor, certifique-se que o proprietário da planilha possui a permissão de edição.</string>
+  <string name="google_sheets_access_denied">Acesso negado. Por favor, certifique-se de que o proprietário da planilha possui a permissão de edição.</string>
   <string name="google_sheets_missing_columns">Estão faltando as seguintes colunas na planilha: %1$s</string>
   <string name="google_sheets_encrypted_message">Formulários criptografados não podem ser enviados para Planilhas Google.</string>
   <string name="missing_google_account_dialog_desc">Para enviar formulários via Planilhas Google, você tem que habilitar sua conta Google nas configurações do servidor.</string>
@@ -750,24 +786,28 @@ Escolher Imagem</string>
   <string name="corrupt_imported_preferences_error">As configurações atuais estão corrompidas. Nas configurações administrativas, restaure as configurações padrão ou importe configurações que estejam ok.</string>
   <string name="save_legacy_settings">Salvar antigo arquivo .settings no disco</string>
   <string name="save_legacy_settings_warning">Será removido em uma versão futura. Por favor, use o QR Code acima.</string>
-  <string name="corrupt_settings_file_notification">Desculpe, o arquivo de configurações está corrompido e deveria ser deletado ou substituído</string>
+  <string name="settings_successfully_loaded_file_notification">A importação das configurações de um arquivo .settings foi realizada com sucesso. Essa funcionalidade será removida em uma versão futura. Passe a usar o QR Code de configuração, por favor.</string>
+  <string name="corrupt_settings_file_notification">Desculpe, o arquivo de configurações está corrompido e deve ser apagado ou substituído</string>
   <!--##############################################
      # SCOPED STORAGE MIGRATION
      ##############################################-->
+  <string name="scoped_storage_banner_text">Você deve migrar seus formulários para o arquivamento privado do sistema operacional para atender aos requisitos atualizados do Android. Uma tentativa de migração automática falhou. Migre seus arquivos manualmente, por favor.</string>
   <string name="scoped_storage_learn_more">Saiba mais e faça a migração</string>
   <string name="storage_migration_completed">Migração do armazenamento completa!</string>
   <string name="scoped_storage_dismiss">Cancelar</string>
+  <string name="storage_migration_dialog_message1">Os requisitos do Android foram atualizados, por isso, os arquivos utilizados pelo Collect devem ser migrados</string>
   <string name="storage_migration_dialog_message2">Você tem %d submissões não enviadas. Pedimos que complete a submissão de todos os dados antes de migrar.</string>
-  <string name="storage_migration_dialog_message3">Se você usa um app externo de integração como o OpenMapKit, por favor não faça a migração ainda.</string>
+  <string name="storage_migration_dialog_message3">Se você usa um app externo de integração como o OpenMapKit, por favor, não faça a migração ainda.</string>
   <string name="storage_migration_more_details">Mais detalhes</string>
   <string name="try_again">Tentar novamente</string>
   <!--Action to begin a storage migration-->
   <string name="migrate">Fazer a migração</string>
   <string name="error">Erro:</string>
   <string name="storage_migration_not_enough_space">Você não tem espaço suficiente no armazenamento local para migrar seus dados. Por favor, libere um pouco de espaço e tente novamente.</string>
+  <string name="changes_in_progress">O envio automático ou carregamento de formulário em branco está sendo executado. Tente mais tarde, por favor.</string>
   <string name="storage_migration_failed">A migração de dados falhou. Por favor, tente novamente.</string>
   <string name="storage_migration_dialog_title">Migração do armazenamento</string>
-  <string name="storage_migration_progress_msg">A migração está em processo.\nIsso pode tomar alguns segundos…</string>
+  <string name="storage_migration_progress_msg">A migração está em processo.\nIsso pode levar alguns segundos…</string>
   <!--##############################################
      # MISC
      ##############################################-->

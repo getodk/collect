@@ -1,6 +1,6 @@
 package org.odk.collect.android.forms;
 
-import android.net.Uri;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -11,13 +11,13 @@ public interface FormsRepository {
     Form get(Long id);
 
     @Nullable
-    Form getOneByFormIdAndVersion(String formId, @Nullable String version);
+    Form getLatestByFormIdAndVersion(String formId, @Nullable String version);
 
     @Nullable
     Form getOneByPath(String path);
 
     @Nullable
-    Form getOneByMd5Hash(String hash);
+    Form getOneByMd5Hash(@NotNull String hash);
 
     List<Form> getAll();
 
@@ -27,13 +27,13 @@ public interface FormsRepository {
 
     List<Form> getAllNotDeletedByFormIdAndVersion(String formId, @Nullable String version);
 
-    Uri save(Form form);
+    Form save(Form form);
 
     void delete(Long id);
 
     void softDelete(Long id);
 
-    void deleteByMd5Hash(String md5Hash);
+    void deleteByMd5Hash(@NotNull String md5Hash);
 
     void restore(Long id);
 }

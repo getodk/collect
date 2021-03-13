@@ -48,7 +48,6 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -62,7 +61,6 @@ import butterknife.OnClick;
 import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
-import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -101,9 +99,6 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     //Analytics analytics;
 
     @Inject
-    PermissionUtils permissionUtils;
-
-    @Inject
     NetworkStateProvider connectivityProvider;
 
     @Override
@@ -124,7 +119,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
             showIncomplete = savedInstanceState.getBoolean(SHOW_INCOMPLETE);        // smap
         }
 
-        permissionUtils.requestStoragePermissions(this, new PermissionListener() {
+        permissionsProvider.requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 init();
@@ -133,7 +128,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
             @Override
             public void denied() {
                 // The activity has to finish because ODK Collect cannot function without these permissions.
-                finishAllActivities(InstanceUploaderListActivity.this);
+                finishAndRemoveTask();
             }
         });
     }

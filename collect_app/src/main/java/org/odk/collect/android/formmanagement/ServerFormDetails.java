@@ -24,7 +24,6 @@ public class ServerFormDetails implements Serializable {
 
     private final String formName;
     private final String downloadUrl;
-    private final String manifestUrl;
     private final String formID;
     private final String formVersion;
     private final String hash;
@@ -47,7 +46,6 @@ public class ServerFormDetails implements Serializable {
 
         this.formName = formName;
         this.downloadUrl = downloadUrl;
-        this.manifestUrl = manifestUrl;
         this.formID = formID;
         this.formVersion = formVersion;
         this.hash = hash;
@@ -66,10 +64,6 @@ public class ServerFormDetails implements Serializable {
 
     public String getDownloadUrl() {
         return downloadUrl;
-    }
-
-    public String getManifestUrl() {
-        return manifestUrl;
     }
 
     public String getFormId() {

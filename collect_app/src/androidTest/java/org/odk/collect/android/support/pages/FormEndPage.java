@@ -6,7 +6,6 @@ import org.odk.collect.android.R;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -44,6 +43,16 @@ public class FormEndPage extends Page<FormEndPage> {
         return new FormEntryPage(formName, rule).assertOnPage();
     }
 
+    public OkDialog clickSaveAndExitWithErrorDialog() {
+        onView(withId(R.id.save_exit_button)).perform(click());
+        return new OkDialog(rule).assertOnPage();
+    }
+
+    public ChangesReasonPromptPage clickSaveAndExitWithChangesReasonPrompt() {
+        onView(withId(R.id.save_exit_button)).perform(click());
+        return new ChangesReasonPromptPage(formName, rule).assertOnPage();
+    }
+
     public FormEndPage assertMarkFinishedIsSelected() {
         onView(withId(R.id.mark_finished)).check(matches(isChecked()));
         return this;
@@ -65,8 +74,15 @@ public class FormEndPage extends Page<FormEndPage> {
     }
 
     public FormEntryPage swipeToPreviousQuestion(String questionText) {
-        onView(withId(R.id.questionholder)).perform(swipeRight());
-        assertText(questionText);
-        return new FormEntryPage(formName, rule);
+        return new FormEntryPage(formName, rule).swipeToPreviousQuestion(questionText);
+    }
+
+    public FormEntryPage swipeToPreviousQuestion(String questionText, boolean isRequired) {
+        return new FormEntryPage(formName, rule).swipeToPreviousQuestion(questionText, isRequired);
+    }
+
+    public FormEndPage fillInFormName(String formName) {
+        inputText(formName);
+        return this;
     }
 }

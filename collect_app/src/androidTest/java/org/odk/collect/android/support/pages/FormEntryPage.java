@@ -95,6 +95,13 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return new ErrorDialog(rule).assertOnPage();
     }
 
+    public FormEntryPage swipeToNextQuestionWithConstraintViolation(String constraintText) {
+        flingLeft();
+        checkIsToastWithMessageDisplayed(constraintText);
+
+        return this;
+    }
+
     public FormEntryPage clickOptionsIcon() {
         Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
         return this;
@@ -122,6 +129,18 @@ public class FormEntryPage extends Page<FormEntryPage> {
     public FormEntryPage swipeToPreviousQuestion(String questionText) {
         onView(withId(R.id.questionholder)).perform(swipeRight());
         assertText(questionText);
+        return this;
+    }
+
+    public FormEntryPage swipeToPreviousQuestion(String questionText, boolean isRequired) {
+        onView(withId(R.id.questionholder)).perform(swipeRight());
+
+        if (isRequired) {
+            assertText("* " + questionText);
+        } else {
+            assertText(questionText);
+        }
+
         return this;
     }
 
@@ -180,11 +199,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
     public FormEntryPage clickOnAddGroup() {
         clickOnString(R.string.add_repeat);
         return this;
-    }
-
-    public ChangesReasonPromptPage clickSaveAndExitWithChangesReasonPrompt() {
-        onView(withId(R.id.save_exit_button)).perform(click());
-        return new ChangesReasonPromptPage(formName, rule).assertOnPage();
     }
 
     public ChangesReasonPromptPage clickSaveWithChangesReasonPrompt() {
@@ -300,5 +314,10 @@ public class FormEntryPage extends Page<FormEntryPage> {
         OkDialog okDialog = new OkDialog(rule).assertOnPage();
         assertText(R.string.recording_warning);
         return okDialog;
+    }
+
+    public CancelRecordingDialog clickRecordAudio() {
+        clickOnString(R.string.record_audio);
+        return new CancelRecordingDialog(formName, rule);
     }
 }

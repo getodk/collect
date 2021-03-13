@@ -56,7 +56,6 @@ import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -74,8 +73,6 @@ import javax.inject.Inject;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import timber.log.Timber;
-
-import static org.odk.collect.android.forms.FormSourceException.Type.AUTH_REQUIRED;
 
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the forms directory. One
@@ -140,9 +137,6 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     FormsDao formsDao;
 
     @Inject
-    PermissionUtils permissionUtils;
-
-    @Inject
     StorageInitializer storageInitializer;
 
     @Inject
@@ -161,7 +155,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
                 .get(FormDownloadListViewModel.class);
 
         // This activity is accessed directly externally
-        permissionUtils.requestStoragePermissions(this, new PermissionListener() {
+        permissionsProvider.requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
@@ -343,7 +337,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     @Override
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
-        if (PermissionUtils.areStoragePermissionsGranted(this)) {
+        if (permissionsProvider.areStoragePermissionsGranted()) {
             updateAdapter();
         }
     }
@@ -576,7 +570,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
                 performDownloadModeDownload();
             }
         } else {
-            if (exception.getType() == AUTH_REQUIRED) {
+            if (exception instanceof FormSourceException.AuthRequired) {
                 createAuthDialog();
             } else {
                 String dialogMessage = new FormSourceExceptionMapper(this).getMessage(exception);

@@ -6,6 +6,7 @@ import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.android.support.FormUtils;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.android.support.InMemInstancesRepository;
 
@@ -35,7 +36,7 @@ public class ServerFormsSynchronizerTest {
     @Test
     public void downloadsNewForms() throws Exception {
         when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(asList(
-                new ServerFormDetails("form-1", "http://example.com/form-1", null, "form-1", "server", "md5:form-1-hash", true, false, null)
+                new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "md5:form-1-hash", true, false, null)
         ));
 
         synchronizer.synchronize();
@@ -45,7 +46,7 @@ public class ServerFormsSynchronizerTest {
     @Test
     public void downloadsUpdatedForms() throws Exception {
         when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(asList(
-                new ServerFormDetails("form-1", "http://example.com/form-1", null, "form-1", "server", "md5:form-1-hash", false, true, null)
+                new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "md5:form-1-hash", false, true, null)
         ));
 
         synchronizer.synchronize();
@@ -58,10 +59,11 @@ public class ServerFormsSynchronizerTest {
                 .id(3L)
                 .jrFormId("form-3")
                 .md5Hash("form-3-hash")
+                .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
                 .build());
 
         when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(asList(
-                new ServerFormDetails("form-1", "http://example.com/form-1", null, "form-1", "server", "md5:form-1-hash", false, false, null)
+                new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "md5:form-1-hash", false, false, null)
         ));
 
         synchronizer.synchronize();
@@ -71,7 +73,7 @@ public class ServerFormsSynchronizerTest {
     @Test
     public void doesNotDownloadExistingForms() throws Exception {
         when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(asList(
-                new ServerFormDetails("form-1", "http://example.com/form-1", null, "form-1", "server", "md5:form-1-hash", false, false, null)
+                new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "md5:form-1-hash", false, false, null)
         ));
 
         synchronizer.synchronize();
@@ -80,7 +82,7 @@ public class ServerFormsSynchronizerTest {
 
     @Test
     public void whenFetchingFormDetailsThrowsAnError_throwsError() throws Exception {
-        FormSourceException exception = new FormSourceException(FormSourceException.Type.AUTH_REQUIRED);
+        FormSourceException exception = new FormSourceException.AuthRequired();
         when(serverFormDetailsFetcher.fetchFormDetails()).thenThrow(exception);
 
         try {
@@ -93,8 +95,8 @@ public class ServerFormsSynchronizerTest {
     @Test
     public void whenDownloadingFormThrowsAnError_throwsErrorAndDownloadsOtherForms() throws Exception {
         List<ServerFormDetails> serverForms = asList(
-                new ServerFormDetails("form-1", "http://example.com/form-1", null, "form-1", "server", "md5:form-1-hash", true, false, null),
-                new ServerFormDetails("form-2", "http://example.com/form-2", null, "form-2", "server", "md5:form-2-hash", true, false, null)
+                new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "md5:form-1-hash", true, false, null),
+                new ServerFormDetails("form-2", "http://example.com/form-2", "form-2", "server", "md5:form-2-hash", true, false, null)
         );
 
         when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(serverForms);
@@ -106,8 +108,7 @@ public class ServerFormsSynchronizerTest {
 
         try {
             synchronizer.synchronize();
-        } catch (FormSourceException e) {
-            assertThat(e.getType(), is(FormSourceException.Type.FETCH_ERROR));
+        } catch (FormSourceException.FetchError e) {
             verify(formDownloader).downloadForm(serverForms.get(1), null, null);
         }
     }

@@ -39,15 +39,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -63,7 +61,6 @@ import androidx.lifecycle.ViewModelProviders;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.SelectChoice;
@@ -80,7 +77,9 @@ import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 //import org.odk.collect.android.analytics.Analytics;    // smap commented
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.audio.AMRAppender;
 import org.odk.collect.android.audio.AudioControllerView;
+import org.odk.collect.android.audio.M4AAppender;
 import org.odk.collect.android.backgroundwork.FormSubmitManager;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
@@ -90,6 +89,9 @@ import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.handler.SmapRemoteDataItem;    // smap
+import org.odk.collect.android.formentry.BackgroundAudioPermissionDialogFragment;
+import org.odk.collect.android.formentry.BackgroundAudioViewModel;
+import org.odk.collect.android.formentry.FormEndView;
 import org.odk.collect.android.formentry.FormEntryMenuDelegate;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.FormIndexAnimationHandler;
@@ -97,6 +99,7 @@ import org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction;
 import org.odk.collect.android.formentry.FormLoadingDialogFragment;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
+import org.odk.collect.android.formentry.RecordingHandler;
 import org.odk.collect.android.formentry.RecordingWarningDialogFragment;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditUtils;
@@ -135,11 +138,12 @@ import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.network.NetworkStateProvider;
+import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.taskModel.FormRestartDetails;    // smap
@@ -149,14 +153,12 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveFormIndexTask;
 import org.odk.collect.android.tasks.SavePointTask;
+import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
 import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.android.utilities.FormNameUtils;
-import org.odk.collect.android.utilities.ImageConverter;
-import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SnackbarUtils;
@@ -167,13 +169,14 @@ import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangePickerDecimalWidget;
 import org.odk.collect.android.widgets.RangePickerIntegerWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+import org.odk.collect.android.widgets.utilities.ExternalAppRecordingRequester;
 import org.odk.collect.android.widgets.utilities.FormControllerWaitingForDataRegistry;
+import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
 import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.AudioClipViewModel;
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModel;
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
+import org.odk.collect.audiorecorder.recording.AudioRecorder;
 
 import java.io.BufferedWriter;  // smap
 import java.io.File;
@@ -208,8 +211,6 @@ import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnab
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.DialogUtils.getDialog;
 import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
-import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
-import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 import static org.odk.collect.android.utilities.ToastUtils.showLongToast;
 import static org.odk.collect.android.utilities.ToastUtils.showShortToast;
 
@@ -234,9 +235,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         SelectMinimalDialog.SelectMinimalDialogListener, CustomDatePickerDialog.DateChangeListener,
         CustomTimePickerDialog.TimeChangeListener {
 
-    // Defines for FormEntryActivity
-    private static final boolean EXIT = true;
-    private static final boolean DO_NOT_EXIT = false;
     private static final boolean EVALUATE_CONSTRAINTS = true;
     public static final boolean DO_NOT_EVALUATE_CONSTRAINTS = false;
 
@@ -324,7 +322,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private FormEntryMenuDelegate menuDelegate;
     private FormIndexAnimationHandler formIndexAnimationHandler;
     private WaitingForDataRegistry waitingForDataRegistry;
-    private AudioRecorderViewModel audioRecorderViewModel;
+    private InternalRecordingRequester internalRecordingRequester;
+    private ExternalAppRecordingRequester externalAppRecordingRequester;
 
     @Override
     public void allowSwiping(boolean doSwipe) {
@@ -344,9 +343,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     //Analytics analytics;    // smap commented
 
     @Inject
-    NetworkStateProvider connectivityProvider;
-
-    @Inject
     StoragePathProvider storagePathProvider;
 
     @Inject
@@ -362,7 +358,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     Scheduler scheduler;
 
     @Inject
-    AudioRecorderViewModelFactory audioRecorderViewModelFactory;
+    AudioRecorder audioRecorder;
 
     @Inject
     FormSaveViewModel.FactoryFactory formSaveViewModelFactoryFactory;
@@ -372,6 +368,21 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     SoftKeyboardController softKeyboardController;
+
+    @Inject
+    PreferencesProvider preferencesProvider;
+
+    @Inject
+    PermissionsChecker permissionsChecker;
+
+    @Inject
+    ActivityAvailability activityAvailability;
+
+    @Inject
+    ExternalAppIntentProvider externalAppIntentProvider;
+
+    @Inject
+    BackgroundAudioViewModel.Factory backgroundAudioViewModelFactory;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -387,6 +398,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private IdentityPromptViewModel identityPromptViewModel;
     private FormSaveViewModel formSaveViewModel;
     private FormEntryViewModel formEntryViewModel;
+    private BackgroundAudioViewModel backgroundAudioViewModel;
 
     /**
      * Called when the activity is first created.
@@ -423,11 +435,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 formIndexAnimationHandler,
                 formSaveViewModel,
                 formEntryViewModel,
-                audioRecorderViewModel,
-                backgroundLocationViewModel
+                audioRecorder,
+                backgroundLocationViewModel,
+                backgroundAudioViewModel
         );
-
-        waitingForDataRegistry = new FormControllerWaitingForDataRegistry();
 
         nextButton = findViewById(R.id.form_forward_button);
         nextButton.setOnClickListener(v -> {
@@ -448,7 +459,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             mediaLoadingFragment = (MediaLoadingFragment) getFragmentManager().findFragmentByTag(TAG_MEDIA_LOADING_FRAGMENT);
         }
 
-        new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestStoragePermissions(this, new PermissionListener() {
+        permissionsProvider.requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
@@ -467,7 +478,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         onResume();
                     }
                 } catch (RuntimeException e) {
-                    createErrorDialog(e.getMessage(), EXIT);
+                    createErrorDialog(e.getMessage(), true);
                     return;
                 }
             }
@@ -475,15 +486,23 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             @Override
             public void denied() {
                 // The activity has to finish because ODK Collect cannot function without these permissions.
-                finishAllActivities(FormEntryActivity.this);
+                finishAndRemoveTask();
             }
         });
     }
 
     private void setupViewModels() {
         backgroundLocationViewModel = ViewModelProviders
-                .of(this, new BackgroundLocationViewModel.Factory())
+                .of(this, new BackgroundLocationViewModel.Factory(permissionsProvider))
                 .get(BackgroundLocationViewModel.class);
+
+        backgroundAudioViewModel = new ViewModelProvider(this, backgroundAudioViewModelFactory).get(BackgroundAudioViewModel.class);
+        backgroundAudioViewModel.isPermissionRequired().observe(this, isPermissionRequired -> {
+            if (isPermissionRequired) {
+                showIfNotShowing(BackgroundAudioPermissionDialogFragment.class, getSupportFragmentManager());
+            }
+        });
+
 
         identityPromptViewModel = ViewModelProviders.of(this).get(IdentityPromptViewModel.class);
         identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
@@ -503,8 +522,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .get(FormEntryViewModel.class);
 
         formEntryViewModel.getError().observe(this, error -> {
-            if (error != null) {
-                createErrorDialog(error, DO_NOT_EXIT);
+            if (error instanceof FormEntryViewModel.NonFatal) {
+                createErrorDialog(((FormEntryViewModel.NonFatal) error).getMessage(), false);
                 formEntryViewModel.errorDisplayed();
             }
         });
@@ -525,7 +544,26 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
-        audioRecorderViewModel = new ViewModelProvider(this, audioRecorderViewModelFactory).get(AudioRecorderViewModel.class);
+        internalRecordingRequester = new InternalRecordingRequester(this, audioRecorder, permissionsProvider, formEntryViewModel);
+
+        waitingForDataRegistry = new FormControllerWaitingForDataRegistry();
+        externalAppRecordingRequester = new ExternalAppRecordingRequester(this, activityAvailability, waitingForDataRegistry, permissionsProvider, formEntryViewModel);
+
+        RecordingHandler recordingHandler = new RecordingHandler(formSaveViewModel, this, audioRecorder, new AMRAppender(), new M4AAppender());
+        audioRecorder.getCurrentSession().observe(this, session -> {
+            if (session != null && session.getFile() != null) {
+                recordingHandler.handle(getFormController(), session, success -> {
+                    if (success) {
+                        onScreenRefresh();
+                        formSaveViewModel.resumeSave();
+                    } else {
+                        String path = session.getFile().getAbsolutePath();
+                        String message = getString(R.string.answer_file_copy_failed_message, path);
+                        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
     }
 
     // Precondition: the instance directory must be ready so that the audit file can be created
@@ -535,6 +573,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         identityPromptViewModel.formLoaded(formController);
         formEntryViewModel.formLoaded(formController);
         formSaveViewModel.formLoaded(formController);
+        backgroundAudioViewModel.formLoaded(formController);
     }
 
     private void setupFields(Bundle savedInstanceState) {
@@ -582,7 +621,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // If a parse error message is showing then nothing else is loaded
         // Dialogs mid form just disappear on rotation.
         if (errorMessage != null) {
-            createErrorDialog(errorMessage, EXIT);
+            createErrorDialog(errorMessage, true);
             return;
         }
 
@@ -632,7 +671,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             FormInfo formInfo = ContentResolverHelper.getFormDetails(uri);
 
             if (formInfo == null) {
-                createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
+                createErrorDialog(getString(R.string.bad_uri, uri), true);
                 return;
             }
 
@@ -645,10 +684,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         formInfo.getFormId())
                                 + ((formInfo.getFormVersion() == null) ? ""
                                 : "\n" + getString(R.string.version) + " " + formInfo.getFormVersion()),
-                        EXIT);
+                        true);
                 return;
             } else if (candidateForms.stream().filter(f -> !f.isDeleted()).count() > 1) {
-                createErrorDialog(getString(R.string.survey_multiple_forms_error), EXIT);
+                createErrorDialog(getString(R.string.survey_multiple_forms_error), true);
                 return;
             }
 
@@ -657,7 +696,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 && uriMimeType.equals(FormsColumns.CONTENT_ITEM_TYPE)) {
             formPath = ContentResolverHelper.getFormPath(uri);
             if (formPath == null) {
-                createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
+                createErrorDialog(getString(R.string.bad_uri, uri), true);
                 return;
             } else {
 
@@ -779,6 +818,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
+    // This method may return null if called before form loading is finished
     @Nullable
     private FormController getFormController() {
         return Collect.getInstance().getFormController();
@@ -877,13 +917,21 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case RequestCodes.EX_STRING_CAPTURE:
             case RequestCodes.EX_INT_CAPTURE:
             case RequestCodes.EX_DECIMAL_CAPTURE:
-                String key = "value";
-                boolean exists = intent.getExtras().containsKey(key);
-                if (exists) {
-                    Object externalValue = intent.getExtras().get(key);
-                    if (getCurrentViewIfODKView() != null) {
-                        setWidgetData(externalValue);
-                    }
+                Object externalValue = externalAppIntentProvider.getValueFromIntent(intent);
+                if (getCurrentViewIfODKView() != null) {
+                    setWidgetData(externalValue);
+                }
+                break;
+            case RequestCodes.EX_ARBITRARY_FILE_CHOOSER:
+            case RequestCodes.EX_VIDEO_CHOOSER:
+            case RequestCodes.EX_IMAGE_CHOOSER:
+            case RequestCodes.EX_AUDIO_CHOOSER:
+                if (intent.getClipData() != null
+                        && intent.getClipData().getItemCount() > 0
+                        && intent.getClipData().getItemAt(0) != null) {
+                    loadFile(intent.getClipData().getItemAt(0).getUri());
+                } else {
+                    setWidgetData(null);
                 }
                 break;
             case RequestCodes.EX_GROUP_CAPTURE:
@@ -894,123 +942,23 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                 } catch (JavaRosaException e) {
                     Timber.e(e);
-                    createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
+                    createErrorDialog(e.getCause().getMessage(), false);
                 }
                 break;
             case RequestCodes.DRAW_IMAGE:
             case RequestCodes.ANNOTATE_IMAGE:
             case RequestCodes.SIGNATURE_CAPTURE:
             case RequestCodes.IMAGE_CAPTURE:
-                /*
-                 * We saved the image to the tempfile_path, but we really want it to
-                 * be in: /sdcard/odk/instances/[current instnace]/something.jpg so
-                 * we move it there before inserting it into the content provider.
-                 * Once the android image capture bug gets fixed, (read, we move on
-                 * from Android 1.6) we want to handle images the audio and video
-                 */
-                // The intent is empty, but we know we saved the image to the temp
-                // file
-                ImageConverter.execute(storagePathProvider.getTmpImageFilePath(), getWidgetWaitingForBinaryData(), this);
-                File fi = new File(storagePathProvider.getTmpImageFilePath());
-
-                String instanceFolder = formController.getInstanceFile()
-                        .getParent();
-                String s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
-
-                File nf = new File(s);
-                if (!fi.renameTo(nf)) {
-                    Timber.d("Failed to rename %s", fi.getAbsolutePath());
-                } else {
-                    Timber.i("Renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
-                }
-
-                if (getCurrentViewIfODKView() != null) {
-                    setWidgetData(nf);
-                }
+                loadFile(Uri.fromFile(new File(storagePathProvider.getTmpImageFilePath())));
                 break;
             case RequestCodes.ALIGNED_IMAGE:
-                /*
-                 * We saved the image to the tempfile_path; the app returns the full
-                 * path to the saved file in the EXTRA_OUTPUT extra. Take that file
-                 * and move it into the instance folder.
-                 */
-                String path = intent
-                        .getStringExtra(android.provider.MediaStore.EXTRA_OUTPUT);
-                fi = new File(path);
-                instanceFolder = formController.getInstanceFile().getParent();
-                s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
-
-                nf = new File(s);
-                if (!fi.renameTo(nf)) {
-                    Timber.d("Failed to rename %s", fi.getAbsolutePath());
-                } else {
-                    Timber.i("Renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
-                }
-
-                if (getCurrentViewIfODKView() != null) {
-                    setWidgetData(nf);
-                }
-                break;
             case RequestCodes.ARBITRARY_FILE_CHOOSER:
+            case RequestCodes.AUDIO_CAPTURE:
             case RequestCodes.AUDIO_CHOOSER:
+            case RequestCodes.VIDEO_CAPTURE:
             case RequestCodes.VIDEO_CHOOSER:
             case RequestCodes.IMAGE_CHOOSER:
-                ProgressDialogFragment progressDialog = new ProgressDialogFragment();
-                progressDialog.setMessage(getString(R.string.please_wait));
-                progressDialog.show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
-
-                mediaLoadingFragment.beginMediaLoadingTask(intent.getData(), connectivityProvider);
-                break;
-            case RequestCodes.AUDIO_CAPTURE:
-                /*
-                  Probably this approach should be used in all cases to get a file from an uri.
-                  The approach which was used before and which is still used in other places
-                  might be faulty because sometimes _data column might be not provided in an uri.
-                  e.g. https://github.com/getodk/collect/issues/705
-                  Let's test it here and then we can use the same code in other places if it works well.
-                 */
-                Uri mediaUri = intent.getData();
-                if (mediaUri != null) {
-                    String filePath =
-                            formController.getInstanceFile().getParent()
-                                    + File.separator
-                                    + System.currentTimeMillis()
-                                    + "."
-                                    + ContentResolverHelper.getFileExtensionFromUri(this, mediaUri);
-                    try {
-                        InputStream inputStream = getContentResolver().openInputStream(mediaUri);
-                        if (inputStream != null) {
-                            File newFile = new File(filePath);
-                            OutputStream outputStream = new FileOutputStream(newFile);
-                            IOUtils.copy(inputStream, outputStream);
-                            inputStream.close();
-                            outputStream.close();
-
-                            if (getCurrentViewIfODKView() != null) {
-                                setWidgetData(newFile.getName());
-                            }
-                            saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                        }
-                    } catch (IOException e) {
-                        Timber.e(e);
-                    }
-                }
-                break;
-            case RequestCodes.VIDEO_CAPTURE:
-                mediaUri = intent.getData();
-                if (getCurrentViewIfODKView() != null) {
-                    setWidgetData(mediaUri);
-                }
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                String filePath = new MediaUtils().getDataColumn(this, mediaUri, null, null);
-                if (filePath != null) {
-                    new File(filePath).delete();
-                }
-                try {
-                    getContentResolver().delete(mediaUri, null, null);
-                } catch (Exception e) {
-                    Timber.e(e);
-                }
+                loadFile(intent.getData());
                 break;
             case RequestCodes.LOCATION_CAPTURE:
                 String sl = intent.getStringExtra(LOCATION_RESULT);
@@ -1037,6 +985,24 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
                 break;
         }
+    }
+
+    private void loadFile(Uri uri) {
+        permissionsProvider.requestReadUriPermission(this, uri, getContentResolver(), new PermissionListener() {
+            @Override
+            public void granted() {
+                ProgressDialogFragment progressDialog = new ProgressDialogFragment();
+                progressDialog.setMessage(getString(R.string.please_wait));
+                progressDialog.show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+
+                mediaLoadingFragment.beginMediaLoadingTask(uri);
+            }
+
+            @Override
+            public void denied() {
+
+            }
+        });
     }
 
     public QuestionWidget getWidgetWaitingForBinaryData() {
@@ -1114,7 +1080,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             case R.id.menu_save:
                 // don't exit
-                saveForm(DO_NOT_EXIT, InstancesDaoHelper.isInstanceComplete(false), null, true);
+                saveForm(false, InstancesDaoHelper.isInstanceComplete(false), null, true);
                 return true;
             case R.id.menu_comment:              // smap
                 if (formController != null && formController.currentPromptIsQuestion()) {
@@ -1165,7 +1131,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
             } catch (JavaRosaException | FormDesignException e) {
                 Timber.e(e);
-                createErrorDialog(e.getMessage(), DO_NOT_EXIT);
+                createErrorDialog(e.getMessage(), false);
                 return false;
             }
         }
@@ -1313,11 +1279,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     // this is badness to avoid a crash.
                     try {
                         event = formController.stepToNextScreenEvent();
-                        createErrorDialog(e.getMessage(), DO_NOT_EXIT);
+                        createErrorDialog(e.getMessage(), false);
                     } catch (JavaRosaException e1) {
                         Timber.d(e1);
                         createErrorDialog(e.getMessage() + "\n\n" + e1.getCause().getMessage(),
-                                DO_NOT_EXIT);
+                                false);
                     }
                     return createView(event, advancingPage);
                 }
@@ -1341,10 +1307,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // this is badness to avoid a crash.
                 try {
                     event = formController.stepToNextScreenEvent();
-                    createErrorDialog(getString(R.string.survey_internal_error), EXIT);
+                    createErrorDialog(getString(R.string.survey_internal_error), true);
                 } catch (JavaRosaException e) {
                     Timber.d(e);
-                    createErrorDialog(e.getCause().getMessage(), EXIT);
+                    createErrorDialog(e.getCause().getMessage(), true);
                 }
                 return createView(event, advancingPage);
         }
@@ -1360,7 +1326,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .of(this, factory)
                 .get(AudioClipViewModel.class), odkViewLifecycle);
 
-        return new ODKView(this, prompts, groups, advancingPage, canUpdate, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorderViewModel, formEntryViewModel);  // smap add canUpdate
+        return new ODKView(this, prompts, groups, advancingPage, canUpdate, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorder, formEntryViewModel, internalRecordingRequester, externalAppRecordingRequester);  // smap add canUpdate
     }
 
     @Override
@@ -1392,9 +1358,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         } catch (JavaRosaException e) {
             Timber.d(e);
             if (e.getMessage().equals(e.getCause().getMessage())) {
-                createErrorDialog(e.getMessage(), DO_NOT_EXIT);
+                createErrorDialog(e.getMessage(), false);
             } else {
-                createErrorDialog(e.getMessage() + "\n\n" + e.getCause().getMessage(), DO_NOT_EXIT);
+                createErrorDialog(e.getMessage() + "\n\n" + e.getCause().getMessage(), false);
             }
         }
 
@@ -1407,10 +1373,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * a button for saving and exiting.
      */
     private View createViewForFormEnd(FormController formController) {
-        View endView = View.inflate(this, R.layout.form_entry_end, null);
-        ((TextView) endView.findViewById(R.id.description))
-                .setText(getString(R.string.save_enter_data_description,
-                        formController.getFormTitle()));
 
         boolean showInstanceName = PreferenceManager        // smap
                 .getDefaultSharedPreferences(this)
@@ -1420,31 +1382,25 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .getDefaultSharedPreferences(this)
                 .getBoolean(GeneralKeys.KEY_SMAP_ODK_MARK_FINALIZED, false);
 
-        // checkbox for if finished or ready to send
+        // checkbox for if finished or ready to send  // smap
         final CheckBox instanceComplete = endView
                 .findViewById(R.id.mark_finished);
 
         // Default finalize instance to checked
-        instanceComplete.setChecked(InstancesDaoHelper.isInstanceComplete(true));
+        instanceComplete.setChecked(InstancesDaoHelper.isInstanceComplete(true)); // smap
         if(showMarkFinalized) {     // smap
             instanceComplete.setVisibility(View.VISIBLE);
         } else {
             instanceComplete.setVisibility(View.GONE);
         }
 
-        if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_MARK_AS_FINALIZED)) {
+        if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_MARK_AS_FINALIZED)) {  // smap
             instanceComplete.setVisibility(View.GONE);
         }
 
-        // edittext to change the displayed name of the instance
-        final EditText saveAs = endView.findViewById(R.id.save_name);
-
-        // disallow carriage returns in the name
-        InputFilter returnFilter = (source, start, end, dest, dstart, dend)
-                -> FormNameUtils.normalizeFormName(source.toString().substring(start, end), true);
-        saveAs.setFilters(new InputFilter[]{returnFilter});
-
-        if (formController.getSubmissionMetadata().instanceName == null) {
+        if (formController.getSubmissionMetadata().instanceName != null) {
+            saveName = formController.getSubmissionMetadata().instanceName;
+        } else {
             // no meta/instanceName field in the form -- see if we have a
             // name for this instance from a previous save attempt...
             String uriMimeType = null;
@@ -1471,9 +1427,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                 }
             }
+
             if (saveName == null) {
                 // last resort, default to the form title
-                saveName = formController.getFormTitle();
+                saveName = formSaveViewModel.getFormName();
             }
             // present the prompt to allow user to name the form
             TextView sa = endView.findViewById(R.id.save_form_as);
@@ -1489,52 +1446,47 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 public void afterTextChanged(Editable s) {
                     saveName = String.valueOf(s);
                 }
+            }
+        }
 
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
+        FormEndView endView = new FormEndView(this, formSaveViewModel.getFormName(), saveName, InstancesDaoHelper.isInstanceComplete(true), new FormEndView.Listener() {
+            @Override
+            public void onSaveAsChanged(String saveAs) {
+                // Seems like this is needed for rotation?
+                saveName = saveAs;
+            }
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override
+            public void onSaveClicked(boolean markAsFinalized) {
+                if (saveName.length() < 1) {
+                    showShortToast(R.string.save_as_error);
+                } else {
+                    formSaveViewModel.saveForm(getIntent().getData(), markAsFinalized, saveName, true);
                 }
-            });
-        } else {
+            }
+        });
+
+        if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_MARK_AS_FINALIZED)) {
+            endView.findViewById(R.id.mark_finished).setVisibility(View.GONE);
+        }
+
+        if (formController.getSubmissionMetadata().instanceName != null) {
             // if instanceName is defined in form, this is the name -- no
             // revisions
             // display only the name, not the prompt, and disable edits
-            saveName = formController.getSubmissionMetadata().instanceName;
-            TextView sa = endView.findViewById(R.id.save_form_as);
-            sa.setVisibility(View.GONE);
-            saveAs.setText(saveName);
-            saveAs.setEnabled(false);
-            if (showInstanceName) {      // smap
-                saveAs.setVisibility(View.VISIBLE);
+            endView.findViewById(R.id.save_form_as).setVisibility(View.GONE);
+            endView.findViewById(R.id.save_name).setEnabled(false);
+            endView.findViewById(R.id.save_name).setVisibility(View.VISIBLE);
+            if (!showInstanceName) {      // smap
+                endView.findViewById(R.id.save_name).setVisibility(View.GONE);
             }
         }
 
         // override the visibility settings based upon admin preferences
         if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_AS)) {
-            saveAs.setVisibility(View.GONE);
-            TextView sa = endView
-                    .findViewById(R.id.save_form_as);
-            sa.setVisibility(View.GONE);
+            endView.findViewById(R.id.save_form_as).setVisibility(View.GONE);
+            endView.findViewById(R.id.save_name).setVisibility(View.GONE);
         }
-
-        // Create 'save' button
-        endView.findViewById(R.id.save_exit_button)
-                .setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // Form is marked as 'saved' here.
-                        if (saveAs.getText().length() < 1) {
-                            showShortToast(R.string.save_as_error);
-                        } else {
-                            saveForm(EXIT, instanceComplete
-                                    .isChecked(), saveAs.getText()
-                                    .toString(), true);
-                        }
-                    }
-                });
 
         if (showNavigationButtons) {
             updateNavigationButtonVisibility();
@@ -1575,7 +1527,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             return false;
         }
 
-        if (audioRecorderViewModel.isRecording()) {
+        if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {
             // We want the user to stop recording before changing screens
             DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
             return false;
@@ -1794,7 +1746,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
             } catch (FormDesignException e) {
                 Timber.e(e);
-                createErrorDialog(e.getMessage(), DO_NOT_EXIT);
+                createErrorDialog(e.getMessage(), false);
             }
         }
     }
@@ -1969,6 +1921,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     ToastUtils.showShortToast(R.string.data_saved_ok);
                 }
                 DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
+                DialogUtils.dismissDialog(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
+
                 showShortToast(R.string.data_saved_ok);
 
                 if (result.getRequest().viewExiting()) {
@@ -1985,6 +1939,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             case SAVE_ERROR:
                 DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
+                DialogUtils.dismissDialog(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
+
                 String message;
 
                 if (result.getMessage() != null) {
@@ -2000,6 +1956,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             case FINALIZE_ERROR:
                 DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
+                DialogUtils.dismissDialog(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
+
                 showLongToast(String.format(getString(R.string.encryption_error_message),
                         result.getMessage()));
                 finishAndReturnInstance(result.isComplete());   // smap add isComplete
@@ -2008,6 +1966,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             case CONSTRAINT_ERROR: {
                 DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
+                DialogUtils.dismissDialog(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
+
                 onScreenRefresh();
 
                 // get constraint behavior preference value with appropriate default
@@ -2031,7 +1991,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     public void onSaveChangesClicked() {
-        saveForm(EXIT, InstancesDaoHelper.isInstanceComplete(false), null, true);
+        saveForm(true, InstancesDaoHelper.isInstanceComplete(false), null, true);
     }
 
     @Nullable
@@ -2158,7 +2118,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         // User may have changed location permissions in Android settings
-        if (PermissionUtils.areLocationPermissionsGranted(this) != locationPermissionsPreviouslyGranted) {
+        if (permissionsProvider.areLocationPermissionsGranted() != locationPermissionsPreviouslyGranted) {
             backgroundLocationViewModel.locationPermissionChanged();
             locationPermissionsPreviouslyGranted = !locationPermissionsPreviouslyGranted;
         }
@@ -2195,7 +2155,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     protected void onResume() {
         super.onResume();
 
-        if (!areStoragePermissionsGranted(this)) {
+        if (!permissionsProvider.areStoragePermissionsGranted()) {
             onResumeWasCalledWithoutPermissions = true;
             return;
         }
@@ -2212,7 +2172,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         if (errorMessage != null) {
             if (alertDialog != null && !alertDialog.isShowing()) {
-                createErrorDialog(errorMessage, EXIT);
+                createErrorDialog(errorMessage, true);
             } else {
                 return;
             }
@@ -2277,7 +2237,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
-                if (audioRecorderViewModel.isRecording()) {
+                if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {
                     // We want the user to stop recording before changing screens
                     DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
                     return true;
@@ -2393,7 +2353,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             formController.setCanUpdate(mCanUpdate);            // smap
             formController.setTaskId(mTaskId);                  // smap
             if (readPhoneStatePermissionRequestNeeded) {
-                new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestReadPhoneStatePermission(this, true, new PermissionListener() {
+                permissionsProvider.requestReadPhoneStatePermission(this, true, new PermissionListener() {
                     @Override
                     public void granted() {
                         readPhoneStatePermissionRequestNeeded = false;
@@ -2441,9 +2401,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (pendingActivityResult) {
                     Timber.w("Calling onActivityResult from loadingComplete");
 
-                    // set the current view to whatever group we were at...
+                    formControllerAvailable(formController);
                     onScreenRefresh();
-                    // process the pending activity request...
                     onActivityResult(task.getRequestCode(), task.getResultCode(), task.getIntent());
                     return;
                 }
@@ -2590,9 +2549,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         DialogUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
 
         if (errorMsg != null) {
-            createErrorDialog(errorMsg, EXIT);
+            createErrorDialog(errorMsg, true);
         } else {
-            createErrorDialog(getString(R.string.parse_error), EXIT);
+            createErrorDialog(getString(R.string.parse_error), true);
         }
     }
 
@@ -2638,6 +2597,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 setResult(RESULT_OK, intent);
             }
         }
+
         finish();
     }
 
@@ -2793,7 +2753,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         displayUIFor(backgroundLocationViewModel.activityDisplayed());
 
         if (backgroundLocationViewModel.isBackgroundLocationPermissionsCheckNeeded()) {
-            new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestLocationPermissions(this, new PermissionListener() {
+            permissionsProvider.requestLocationPermissions(this, new PermissionListener() {
                 @Override
                 public void granted() {
                     displayUIFor(backgroundLocationViewModel.locationPermissionsGranted());
@@ -2846,7 +2806,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     public void widgetValueChanged(QuestionWidget changedWidget) {
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = getFormController();
         if (formController == null) {
             // TODO: As usual, no idea if/how this is possible.
             return;
@@ -2871,7 +2831,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         });
                     } catch (FormDesignException e) {
                         Timber.e(e);
-                        createErrorDialog(e.getMessage(), DO_NOT_EXIT);
+                        createErrorDialog(e.getMessage(), false);
                     }
                 }
             });
@@ -2889,7 +2849,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     private void updateFieldListQuestions(FormIndex lastChangedIndex) throws FormDesignException {
         // Save the user-visible state for all questions in this field-list
-        FormEntryPrompt[] questionsBeforeSave = Collect.getInstance().getFormController().getQuestionPrompts();
+        FormEntryPrompt[] questionsBeforeSave = getFormController().getQuestionPrompts();
         List<ImmutableDisplayableQuestion> immutableQuestionsBeforeSave = new ArrayList<>();
         for (FormEntryPrompt questionBeforeSave : questionsBeforeSave) {
             immutableQuestionsBeforeSave.add(new ImmutableDisplayableQuestion(questionBeforeSave));
@@ -2897,7 +2857,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         saveAnswersForCurrentScreen(questionsBeforeSave, immutableQuestionsBeforeSave);
 
-        FormEntryPrompt[] questionsAfterSave = Collect.getInstance().getFormController().getQuestionPrompts();
+        FormEntryPrompt[] questionsAfterSave = getFormController().getQuestionPrompts();
 
         Map<FormIndex, FormEntryPrompt> questionsAfterSaveByIndex = new HashMap<>();
         for (FormEntryPrompt question : questionsAfterSave) {

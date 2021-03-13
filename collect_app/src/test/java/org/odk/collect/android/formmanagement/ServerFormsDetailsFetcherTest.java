@@ -9,6 +9,7 @@ import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.forms.ManifestFile;
 import org.odk.collect.android.forms.MediaFile;
 import org.odk.collect.android.forms.MediaFileRepository;
+import org.odk.collect.android.support.FormUtils;
 import org.odk.collect.android.support.InMemFormsRepository;
 
 import java.io.BufferedWriter;
@@ -81,6 +82,7 @@ public class ServerFormsDetailsFetcherTest {
                 .jrVersion("server")
                 .md5Hash("form-1-hash")
                 .deleted(true)
+                .formFilePath(FormUtils.createXFormFile("form-1", "server").getAbsolutePath())
                 .build());
 
         List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
@@ -94,6 +96,7 @@ public class ServerFormsDetailsFetcherTest {
                 .id(2L)
                 .jrFormId("form-2")
                 .md5Hash("form-2-hash-old")
+                .formFilePath(FormUtils.createXFormFile("form-2", null).getAbsolutePath())
                 .build());
 
         List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
@@ -107,6 +110,7 @@ public class ServerFormsDetailsFetcherTest {
                 .jrFormId("form-2")
                 .jrVersion("server")
                 .md5Hash("form-2-hash")
+                .formFilePath(FormUtils.createXFormFile("form-2", "server").getAbsolutePath())
                 .build());
         when(mediaFileRepository.getAll("form-2", "server")).thenReturn(emptyList());
 
@@ -121,6 +125,7 @@ public class ServerFormsDetailsFetcherTest {
                 .jrFormId("form-2")
                 .jrVersion("server")
                 .md5Hash("form-2-hash")
+                .formFilePath(FormUtils.createXFormFile("form-2", "server").getAbsolutePath())
                 .build());
 
         File oldMediaFile = File.createTempFile("blah", ".csv");
@@ -138,6 +143,7 @@ public class ServerFormsDetailsFetcherTest {
                 .jrFormId("form-1")
                 .jrVersion("server")
                 .md5Hash("form-1-hash")
+                .formFilePath(FormUtils.createXFormFile("form-1", "server").getAbsolutePath())
                 .build());
 
         List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
@@ -152,6 +158,7 @@ public class ServerFormsDetailsFetcherTest {
                 .jrFormId("form-2")
                 .jrVersion("server")
                 .md5Hash("form-2-hash")
+                .formFilePath(FormUtils.createXFormFile("form-2", "server").getAbsolutePath())
                 .build());
 
         File mediaFile = File.createTempFile("blah", ".csv");
@@ -169,6 +176,7 @@ public class ServerFormsDetailsFetcherTest {
                 .id(2L)
                 .jrFormId("form-2")
                 .md5Hash("form-2-hash-old")
+                .formFilePath(FormUtils.createXFormFile("form-2", "server").getAbsolutePath())
                 .build());
 
         File localMediaFile = File.createTempFile("blah", ".csv");

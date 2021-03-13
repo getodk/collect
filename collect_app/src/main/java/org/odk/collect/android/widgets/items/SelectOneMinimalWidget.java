@@ -15,7 +15,7 @@ import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.SelectOneWidgetUtils;
 import org.odk.collect.android.utilities.StringUtils;
-import org.odk.collect.android.utilities.WidgetAppearanceUtils;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.util.List;
@@ -40,12 +40,12 @@ public class SelectOneMinimalWidget extends SelectMinimalWidget {
 
     @Override
     protected void showDialog() {
-        int numColumns = WidgetAppearanceUtils.getNumberOfColumns(getFormEntryPrompt(), screenUtils);
-        boolean noButtonsMode = WidgetAppearanceUtils.isCompactAppearance(getFormEntryPrompt()) || WidgetAppearanceUtils.isNoButtonsAppearance(getFormEntryPrompt());
+        int numColumns = Appearances.getNumberOfColumns(getFormEntryPrompt(), screenUtils);
+        boolean noButtonsMode = Appearances.isCompactAppearance(getFormEntryPrompt()) || Appearances.isNoButtonsAppearance(getFormEntryPrompt());
 
         SelectOneMinimalDialog dialog = new SelectOneMinimalDialog(getSavedSelectedValue(),
-                WidgetAppearanceUtils.isFlexAppearance(getFormEntryPrompt()),
-                WidgetAppearanceUtils.isAutocomplete(getFormEntryPrompt()), getContext(), items,
+                Appearances.isFlexAppearance(getFormEntryPrompt()),
+                Appearances.isAutocomplete(getFormEntryPrompt()), getContext(), items,
                 getFormEntryPrompt(), getReferenceManager(),
                 getPlayColor(getFormEntryPrompt(), themeUtils), numColumns, noButtonsMode);
 

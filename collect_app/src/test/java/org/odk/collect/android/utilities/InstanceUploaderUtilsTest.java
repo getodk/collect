@@ -3,6 +3,7 @@ package org.odk.collect.android.utilities;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.support.FormUtils;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.android.support.InMemInstancesRepository;
 import org.odk.collect.android.forms.Form;
@@ -30,6 +31,7 @@ public class InstanceUploaderUtilsTest {
                 .id(1L)
                 .jrFormId("1")
                 .jrVersion("1")
+                .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
                 .build());
 
         assertThat(InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, "1", "1", false), is(false));
@@ -43,6 +45,7 @@ public class InstanceUploaderUtilsTest {
                 .id(1L)
                 .jrFormId("1")
                 .jrVersion("1")
+                .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
                 .build());
 
         assertThat(InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, "1", "1", true), is(true));
@@ -57,6 +60,7 @@ public class InstanceUploaderUtilsTest {
                 .jrFormId("1")
                 .jrVersion("1")
                 .autoDelete("false")
+                .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
                 .build());
 
         assertThat(InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, "1", "1", true), is(false));
@@ -71,6 +75,7 @@ public class InstanceUploaderUtilsTest {
                 .jrFormId("1")
                 .jrVersion("1")
                 .autoDelete("true")
+                .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
                 .build());
 
         assertThat(InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, "1", "1", false), is(true));

@@ -61,6 +61,10 @@ public class AuditEvent {
 
         CHANGE_REASON("change reason"),
 
+        BACKGROUND_AUDIO_DISABLED("background audio disabled"),
+
+        BACKGROUND_AUDIO_ENABLED("background audio enabled"),
+
         // Google Play Services are not available
         GOOGLE_PLAY_SERVICES_NOT_AVAILABLE("google play services not available", true, false, true),
         // Location permissions are granted

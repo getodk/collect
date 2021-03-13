@@ -90,7 +90,6 @@ public class ServerFormsDetailsFetcher {
             ServerFormDetails serverFormDetails = new ServerFormDetails(
                     listItem.getName(),
                     listItem.getDownloadURL(),
-                    listItem.getManifestURL(),
                     listItem.getFormID(),
                     listItem.getVersion(),
                     listItem.getHashWithPrefix(),

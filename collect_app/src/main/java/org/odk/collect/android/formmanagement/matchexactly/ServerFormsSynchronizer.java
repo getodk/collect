@@ -52,7 +52,7 @@ public class ServerFormsSynchronizer {
         }
 
         if (downloadException) {
-            throw new FormSourceException(FormSourceException.Type.FETCH_ERROR);
+            throw new FormSourceException.FetchError();
         }
     }
 }

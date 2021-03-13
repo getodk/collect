@@ -181,7 +181,7 @@ public class IntentGroupTest {
         Intent resultIntent = new Intent();
 
         Uri uri = mock(Uri.class);
-        when(uri.getScheme()).thenThrow(new SecurityException());
+        when(uri.getScheme()).thenThrow(new RuntimeException());
 
         resultIntent.putExtra("questionImage", uri);
 

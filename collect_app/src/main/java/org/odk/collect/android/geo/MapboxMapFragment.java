@@ -14,11 +14,10 @@ import androidx.annotation.VisibleForTesting;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.google.android.gms.location.LocationListener;
 import com.mapbox.android.core.location.LocationEngine;
-import com.mapbox.android.core.location.LocationEngineCallback;
 import com.mapbox.android.core.location.LocationEngineProvider;
 import com.mapbox.android.core.location.LocationEngineRequest;
-import com.mapbox.android.core.location.LocationEngineResult;
 import com.mapbox.mapboxsdk.camera.CameraUpdate;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -57,12 +56,12 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MbtilesFile.LayerType;
 import org.odk.collect.android.geo.MbtilesFile.MbtilesException;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.location.client.MapboxLocationCallback;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.GeoUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -80,7 +79,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
 
 public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.MapFragment
     implements MapFragment, OnMapReadyCallback,
-    MapboxMap.OnMapClickListener, MapboxMap.OnMapLongClickListener {
+    MapboxMap.OnMapClickListener, MapboxMap.OnMapLongClickListener, LocationListener {
 
     private static final long LOCATION_INTERVAL_MILLIS = 1000;
     private static final long LOCATION_MAX_WAIT_MILLIS = 5000;
@@ -116,7 +115,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     private String styleUrl = Style.MAPBOX_STREETS;
     private File referenceLayerFile;
     private final List<Source> overlaySources = new ArrayList<>();
-    private final LocationCallback locationCallback = new LocationCallback(this);
+    private final MapboxLocationCallback locationCallback = new MapboxLocationCallback(this);
     private static String lastLocationProvider;
 
     private TileHttpServer tileServer;
@@ -210,6 +209,25 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     @Override public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (map != null) {
+            lastLocationFix = fromLocation(location);
+            lastLocationProvider = location != null ? location.getProvider() : null;
+            Timber.i("Received location update: %s (%s)", lastLocationFix, lastLocationProvider);
+            if (locationComponent != null) {
+                locationComponent.forceLocationUpdate(location);
+            }
+            for (ReadyListener listener : gpsLocationReadyListeners) {
+                listener.onReady(this);
+            }
+            gpsLocationReadyListeners.clear();
+            if (gpsLocationListener != null) {
+                gpsLocationListener.onPoint(lastLocationFix);
+            }
+        }
     }
 
     @Override public void onStart() {
@@ -445,37 +463,6 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
     @Override public @Nullable MapPoint getGpsLocation() {
         return lastLocationFix;
-    }
-
-    // See https://docs.mapbox.com/android/core/overview/#requesting-location-updates
-    protected static class LocationCallback implements LocationEngineCallback<LocationEngineResult> {
-        private final WeakReference<MapboxMapFragment> mapRef;
-
-        public LocationCallback(MapboxMapFragment map) {
-            mapRef = new WeakReference<>(map);
-        }
-
-        @Override public void onSuccess(LocationEngineResult result) {
-            MapboxMapFragment map = mapRef.get();
-            if (map != null) {
-                Location location = result.getLastLocation();
-                map.lastLocationFix = fromLocation(location);
-                lastLocationProvider = location != null ? location.getProvider() : null;
-                Timber.i("Received location update: %s (%s)", map.lastLocationFix, lastLocationProvider);
-                if (map.locationComponent != null) {
-                    map.locationComponent.forceLocationUpdate(location);
-                }
-                for (ReadyListener listener : map.gpsLocationReadyListeners) {
-                    listener.onReady(map);
-                }
-                map.gpsLocationReadyListeners.clear();
-                if (map.gpsLocationListener != null) {
-                    map.gpsLocationListener.onPoint(map.lastLocationFix);
-                }
-            }
-        }
-
-        @Override public void onFailure(@NonNull Exception exception) { }
     }
 
     private static @NonNull MapPoint fromLatLng(@NonNull LatLng latLng) {

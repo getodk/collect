@@ -26,7 +26,6 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.async.Scheduler;
-import org.odk.collect.audiorecorder.recording.AudioRecorderViewModelFactory;
 
 import java.util.List;
 
@@ -38,9 +37,6 @@ public class QuitFormDialogFragment extends DialogFragment {
 
     @Inject
     Analytics analytics;
-
-    @Inject
-    AudioRecorderViewModelFactory audioRecorderViewModelFactory;
 
     @Inject
     Scheduler scheduler;

@@ -118,10 +118,6 @@ public class FormsDao {
         return getFormsCursor(null, selection, selectionArgs, null);
     }
 
-    public Cursor getFormsCursorForFormIdAndFormVersion(String formId, String formVersion) {
-        return getFormsCursorSortedByDateDesc(formId, formVersion);
-    }
-
     public String getFormTitleForFormIdAndFormVersion(String formId, String formVersion) {
         String formTitle = "";
 
@@ -205,10 +201,6 @@ public class FormsDao {
 
     public Uri saveForm(ContentValues values) {
         return Collect.getInstance().getContentResolver().insert(FormsColumns.CONTENT_URI, values);
-    }
-
-    public int updateForm(ContentValues values) {
-        return updateForm(values, null, null);
     }
 
     public int updateForm(ContentValues values, String where, String[] whereArgs) {

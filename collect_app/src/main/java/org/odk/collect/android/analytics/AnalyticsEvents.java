@@ -72,9 +72,11 @@ public class AnalyticsEvents {
     public static final String SCOPED_STORAGE_MIGRATION = "ScopedStorageMigration";
 
     /**
-     * Track attempts to download a form with the same formid/version as one already on the device.
+     * Track attempts to download a form with the same formid/version but different contents as one
+     * already on the device. We know this happens in the case of Central drafts but it should
+     * otherwise be rare.
      */
-    public static final String DOWNLOAD_SAME_FORMID_VERSION = "DownloadSameFormidVersion";
+    public static final String DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH = "DownloadSameFormidVersionDifferentHash";
 
     /**
      * Track downloads initiated when there are no downloaded forms on the device. The action should
@@ -180,4 +182,19 @@ public class AnalyticsEvents {
      * Tracks how often people see the URL question
      */
     public static final String URL_QUESTION = "UrlQuestion";
+
+    /**
+     * Track how many forms record background audio
+     */
+    public static final String REQUESTS_BACKGROUND_AUDIO = "RequestsBackgroundAudio";
+
+    /**
+     * Track how often background audio is disabled for a form
+     */
+    public static final String BACKGROUND_AUDIO_ENABLED = "BackgroundAudioEnabled";
+
+    /**
+     * Track how often background audio is enabled for a form
+     */
+    public static final String BACKGROUND_AUDIO_DISABLED = "BackgroundAudioDisabled";
 }

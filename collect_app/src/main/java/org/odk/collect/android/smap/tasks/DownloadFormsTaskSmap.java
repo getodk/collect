@@ -2,7 +2,6 @@ package org.odk.collect.android.smap.tasks;
 
 import android.os.AsyncTask;
 
-import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.formmanagement.ServerFormDetails;

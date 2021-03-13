@@ -197,6 +197,9 @@
     <!-- Error message displayed when copying media from a temporary directory fails -->
     <string name="answer_file_copy_failed_message">Media could not be attached to form but is available at %1$s</string>
 
+    <!-- Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu. -->
+    <string name="recording_disabled">Recording disabled. Enable in %s</string>
+
     <!--
     ##############################################
     # FORM FEATURES
@@ -242,6 +245,7 @@
     <string name="error_front_camera_unavailable">Front camera not available on this device</string>
     <string name="camera_error">This device doesn\'t support the Camera2 API.</string>
     <string name="annotate_image">Annotate Image</string>
+    <string name="invalid_file_type">Application returned an invalid file type</string>
     <!-- Dialog heading for saving annotated image -->
     <string name="save_and_close">Save and Close</string>
     <string name="signature_capture">Signature Capture</string>
@@ -274,6 +278,20 @@
 
     <!-- Description text for button that that resumes recording sound -->
     <string name="resume_recording">Resume</string>
+
+    <!-- Text next to checkbox to allow the user to toggle audio recording on and off -->
+    <string name="record_audio">Record audio</string>
+
+    <string name="background_audio_permission_explanation">This form records audio in the background. You must grant permission to use your microphone. If you do not, you will not be able to open this form.</string>
+
+    <!-- Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file) -->
+    <string name="stop_recording_confirmation">This form requests background audio recording. Disabling it will stop recording and discard existing audio. Are you sure you want to proceed?</string>
+
+    <!-- Button text for the dialog confirming whether the user wants to disable background recording -->
+    <string name="disable_recording">Disable recording</string>
+
+    <!-- Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form -->
+    <string name="background_audio_recording_enabled_explanation">Recording will not begin immediately. You must re-open the form to record.</string>
 
     <!-- Title for dialog asking the user if they want to delete a file -->
     <string name="delete_answer_file_question">Delete file?</string>
@@ -601,6 +619,8 @@
     <string name="report_to_project_lead">If you keep having this problem, report it to the person who asked you to collect data.</string>
     <string name="unreachable_error">Collect can\'t reach the server at %s. Did you enter the URL correctly?</string>
     <string name="security_error">Collect can\'t connect securely to the server at %s. Did you enter the URL correctly?</string>
+    <string name="server_error">The server %1$s returned status code %2$s.</string>
+    <string name="invalid_response">The server %s provided an invalid response.</string>
     <string name="failure">Failure</string>
 
     <string name="load_remote_form_error">Form list download failed</string>

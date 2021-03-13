@@ -1,10 +1,8 @@
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.app.Application;
 import android.database.Cursor;
 
-import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -16,13 +14,15 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.support.AlwaysGrantStoragePermissionsPermissionsProvider;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.storage.StorageInitializer;
-import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.storage.StorageStateProvider;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.robolectric.shadows.ShadowEnvironment;
 
 import static android.os.Environment.MEDIA_MOUNTED;
@@ -83,24 +83,13 @@ public class FormDownloadListActivityTest {
         }
 
         @Override
-        public PermissionUtils providesPermissionUtils() {
-            return new AlwaysGrantStoragePermissionsPermissionUtils();
+        public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {
+            return new AlwaysGrantStoragePermissionsPermissionsProvider(permissionsChecker, storageStateProvider);
         }
 
         @Override
         public StorageInitializer providesStorageInitializer() {
             return new AlwaysSuccessfullyCreateOdkDirsStorageInitializer();
-        }
-    }
-
-    private static class AlwaysGrantStoragePermissionsPermissionUtils extends PermissionUtils {
-        private AlwaysGrantStoragePermissionsPermissionUtils() {
-            super(R.style.Theme_Collect_Dialog_PermissionAlert);
-        }
-
-        @Override
-        public void requestStoragePermissions(Activity activity, @NonNull PermissionListener action) {
-            action.granted();
         }
     }
 

@@ -17,7 +17,6 @@ package org.odk.collect.android.preferences;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.preference.ListPreference;
@@ -28,11 +27,14 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
-import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.version.VersionInformation;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -175,16 +177,11 @@ public class UserInterfacePreferencesFragment extends BasePreferenceFragment {
             return;
         }
 
-        switch (requestCode) {
-            case IMAGE_CHOOSER:
-                // get gp of chosen file
-                Uri selectedMedia = intent.getData();
-                String sourceMediaPath = new MediaUtils().getPath(getActivity(), selectedMedia);
+        if (requestCode == IMAGE_CHOOSER) {
+            File customImage = new File(new StoragePathProvider().getCustomSplashScreenImagePath());
+            FileUtils.saveAnswerFileFromUri(intent.getData(), customImage, Collect.getInstance());
 
-                // setting image path
-                setSplashPath(sourceMediaPath);
-
-                break;
+            setSplashPath(customImage.getAbsolutePath());
         }
     }
 
