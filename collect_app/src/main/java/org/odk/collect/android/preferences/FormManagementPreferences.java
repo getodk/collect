@@ -29,6 +29,8 @@ import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.backgroundwork.FormUpdateManager;
 
+import java.util.Set;
+
 import javax.inject.Inject;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.AUTO_FORM_UPDATE_PREF_CHANGE;
@@ -42,6 +44,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_GUIDANCE_HINT;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_IMAGE_SIZE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_SMAP_CURRENT_ORGANISATION;
 import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
 
 public class FormManagementPreferences extends BasePreferenceFragment {
@@ -71,7 +74,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         initListPref(KEY_AUTOSEND);
         initListPref(KEY_IMAGE_SIZE);
         initGuidancePrefs();
-
+        initOrganisationPrefs();    // smap
         // updateDisabledPrefs();   // smap
     }
 
@@ -141,7 +144,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 preference.setSummary(entry);
 
                 if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
-                    analytics.logEvent(AUTO_FORM_UPDATE_PREF_CHANGE, "Periodic form updates check", (String) newValue);
+                    // analytics.logEvent(AUTO_FORM_UPDATE_PREF_CHANGE, "Periodic form updates check", (String) newValue);  // smap
                 }
                 return true;
             });
@@ -163,7 +166,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 pref.setEnabled(!formUpdateCheckPeriod.equals(getString(R.string.never_value)));
 
                 pref.setOnPreferenceChangeListener((preference, newValue) -> {
-                    analytics.logEvent(AUTO_FORM_UPDATE_PREF_CHANGE, "Automatic form updates", newValue + " " + formUpdateCheckPeriod);
+                    //analytics.logEvent(AUTO_FORM_UPDATE_PREF_CHANGE, "Automatic form updates", newValue + " " + formUpdateCheckPeriod);   // smap
 
                     return true;
                 });
@@ -186,4 +189,56 @@ public class FormManagementPreferences extends BasePreferenceFragment {
             return true;
         });
     }
+
+    /*
+     * Start Smap
+     */
+    private void initOrganisationPrefs() {
+        final ListPreference orgPref = findPreference(KEY_SMAP_CURRENT_ORGANISATION);
+
+        Set<String> orgs = GeneralSharedPreferences.getInstance().getStringSet(GeneralKeys.KEY_SMAP_ORGANISATIONS, null);
+        String currentOrg = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SMAP_CURRENT_ORGANISATION);
+
+        CharSequence entries[];
+        CharSequence entryValues[];
+
+        if(orgs != null && orgs.size() > 0) {
+            entries = new String[orgs.size()];
+            entryValues = new String[orgs.size()];
+            int i = 0;
+            for (String org : orgs) {
+                entries[i] = org;
+                entryValues[i] = org;
+                i++;
+            }
+        } else {
+            entries = new String[1];
+            entryValues = new String[1];
+            entries[0] = getString(R.string.smap_default);
+            entryValues[0] = "_default";
+            currentOrg = "_default";
+        }
+        orgPref.setEntries(entries);
+        orgPref.setDefaultValue(currentOrg);
+        orgPref.setEntryValues(entryValues);
+
+        setPreferenceSummary(orgPref, currentOrg);
+
+        orgPref.setOnPreferenceChangeListener((preference, newValue) -> {
+            setPreferenceSummary(preference, newValue);
+
+            return true;
+        });
+    }
+
+    private void setPreferenceSummary(Preference preference, Object newValue) {
+        int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+        if(index >= 0) {
+            String entry = (String) ((ListPreference) preference).getEntries()[index];
+            preference.setSummary(entry);
+        }
+    }
+    /*
+     * End smap
+     */
 }

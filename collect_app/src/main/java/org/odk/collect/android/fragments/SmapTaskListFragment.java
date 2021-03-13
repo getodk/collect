@@ -415,12 +415,10 @@ public class SmapTaskListFragment extends ListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_about:
-                Intent aboutIntent = new Intent(getActivity(), AboutActivity.class);
-                startActivity(aboutIntent);
+                startActivity(new Intent(getActivity(), AboutActivity.class));
                 return true;
             case R.id.menu_general_preferences:
-                Intent ig = new Intent(getActivity(), PreferencesActivity.class);
-                startActivity(ig);
+                startActivity(new Intent(getActivity(), PreferencesActivity.class));
                 return true;
             case R.id.menu_admin_preferences:
                 String pw = adminPreferences.getString(

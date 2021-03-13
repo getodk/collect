@@ -108,6 +108,11 @@ public class GeneralSharedPreferences {
         return sharedPreferences.getBoolean(key, value);
     }
 
+    // smap
+    public Set<String> getStringSet(String key, Set<String> value) {
+        return sharedPreferences.getStringSet(key, value);
+    }
+
     public void clear() {
         for (Map.Entry<String, ?> prefs : getAll().entrySet()) {
             reset(prefs.getKey());

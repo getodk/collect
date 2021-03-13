@@ -126,6 +126,8 @@
     <string name="smap_android_version">Android Version %1s</string>
     <string name="smap_eval_required">%1$s is not valid as the type of a lookup_choices function that has 3 parameters.  Only eval can be used.</string>
     <string name="smap_other">Other</string>
+    <string name="smap_organisation">Organization</string>
+    <string name="smap_default">Default</string>
     <string-array name="smap_kontrolid_servers">
         <item>Kontrolid Org Server</item>
         <item>Kontrolid Com Server</item>

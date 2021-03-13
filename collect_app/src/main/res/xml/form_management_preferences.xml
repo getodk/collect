@@ -44,6 +44,12 @@
         app:allowDividerAbove="false"
         app:allowDividerBelow="false"
         app:iconSpaceReserved="false">
+        <!-- Smap Add organisation -->
+        <ListPreference
+            android:dialogTitle="@string/smap_organisation"
+            android:key="smap_current_organisation"
+            android:title="@string/smap_organisation"
+            app:iconSpaceReserved="false" />
         <ListPreference
             android:dialogTitle="@string/autosend_selector_title"
             android:entries="@array/autosend_selector_entries"
