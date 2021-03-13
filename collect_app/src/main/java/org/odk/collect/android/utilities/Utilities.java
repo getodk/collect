@@ -825,6 +825,40 @@ public class Utilities {
     }
 
     /*
+     * Return a count of unsubmitted results
+     */
+    public static int countFinalised() {
+
+        String selection = InstanceColumns.SOURCE + "=? and (" + InstanceColumns.STATUS + "=? or " +
+                InstanceColumns.STATUS + "=?)" +
+                " and " + InstanceColumns.DELETED_DATE + " is null ";
+        String selectionArgs[] = {
+                Utilities.getSource(),
+                Instance.STATUS_COMPLETE,
+                Instance.STATUS_SUBMISSION_FAILED
+        };
+
+        Cursor c = null;
+        int count = 0;
+        try {
+            c = Collect.getInstance().getContentResolver().query(InstanceColumns.CONTENT_URI, null, selection,
+                    selectionArgs, null);
+
+            if (c != null) {
+                count = c.getCount();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+        return count;
+    }
+
+    /*
      * Return true if the current task is selfAssigned
      */
     public static boolean isSelfAssigned(String currentStatus) {

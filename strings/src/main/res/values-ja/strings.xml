@@ -772,7 +772,7 @@
   <string name="scoped_storage_learn_more">詳細と移行について</string>
   <string name="storage_migration_completed">ストレージの移行が完了しました!</string>
   <string name="scoped_storage_dismiss">消去</string>
-  <string name="storage_migration_dialog_message1">Android要件が変更され、Collectで使用するファイルを移行する必要があります。</string>
+  <string name="storage_migration_dialog_message1">Android要件が変更され、FieldTaskで使用するファイルを移行する必要があります。</string>
   <string name="storage_migration_dialog_message2">未送信の提出が %d あります。移行する前にすべてのデータを提出することをお勧めします。</string>
   <string name="storage_migration_dialog_message3">OpenMapKitなどの外部アプリケーション統合を使用している場合は、まだ移行しないでください。</string>
   <string name="storage_migration_more_details">詳細について</string>

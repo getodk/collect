@@ -788,7 +788,7 @@
   <string name="scoped_storage_learn_more">Mehr erfahren und migrieren</string>
   <string name="storage_migration_completed">Speichermigration abgeschlossen! </string>
   <string name="scoped_storage_dismiss">Verwerfen</string>
-  <string name="storage_migration_dialog_message1">Android-Anforderungen haben sich geändert und Dateien von Collect müssen migriert werden. </string>
+  <string name="storage_migration_dialog_message1">Android-Anforderungen haben sich geändert und Dateien von FieldTask müssen migriert werden. </string>
   <string name="storage_migration_dialog_message2">Sie haben %d nicht versandte Übermittlungen. Es wird empfohlen vor der Migration alle Daten zu übermitteln. </string>
   <string name="storage_migration_dialog_message3">Wenn Sie eine externe Applikationsintegration, wie OpenMapKit, nutzen, bitte noch nicht migrieren. </string>
   <string name="storage_migration_more_details">Mehr Details</string>
