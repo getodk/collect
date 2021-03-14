@@ -36,7 +36,7 @@ public class ServerFormDetails implements Serializable {
 
     private final ManifestFile manifest;
 
-    public ServerFormDetails(String formName, String downloadUrl, String manifestUrl, String formID,
+    public ServerFormDetails(String formName, String downloadUrl, String formID,
                              String formVersion, String hash,
                              boolean isNotOnDevice, boolean isUpdated, ManifestFile manifest,
                              boolean isFormNotDownloaded,

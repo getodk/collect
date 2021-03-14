@@ -189,20 +189,28 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
     public void resumeSave() {
         if (saveResult.getValue() != null) {
+            // start smap
+            String surveyNotes = formController.getSurveyNotes();
+            long taskId = formController.getTaskId();
+            boolean canUpdate = formController.getCanUpdate();
+            String formPath = formController.getFormPath();
+            boolean saveMessage = formController.getSaveMessage();
+            // end smap
+
             SaveRequest saveRequest = saveResult.getValue().request;
 
             if (saveResult.getValue().getState() == SaveResult.State.CHANGE_REASON_REQUIRED) {
                 if (!saveReason()) {
                     return;
                 } else if (saveRequest.viewExiting && audioRecorder.isRecording()) {
-                    this.saveResult.setValue(new SaveResult(SaveResult.State.WAITING_TO_SAVE, saveRequest));
+                    this.saveResult.setValue(new SaveResult(SaveResult.State.WAITING_TO_SAVE, saveRequest, !canUpdate, taskId, saveMessage));  // smap add canUpdate, taskId, saveMessage
                     audioRecorder.stop();
                     return;
                 }
             }
 
-            this.saveResult.setValue(new SaveResult(SaveResult.State.SAVING, saveRequest));
-            saveToDisk(saveRequest);
+            this.saveResult.setValue(new SaveResult(SaveResult.State.SAVING, saveRequest, !canUpdate, taskId, saveMessage));  // smap add canUpdate, taskId, saveMessage
+            saveToDisk(saveRequest, taskId, formPath, surveyNotes, canUpdate, saveMessage);     // smap added task, formPath, surveyNotes, canUpdate, saveMessage
         }
     }
 

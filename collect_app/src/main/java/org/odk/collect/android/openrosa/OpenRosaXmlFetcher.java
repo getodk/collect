@@ -76,6 +76,11 @@ public class OpenRosaXmlFetcher {       // smap make public
         return new DocumentFetchResult(doc, inputStreamResult.isOpenRosaResponse(), inputStreamResult.getHash());
     }
 
+    @Nullable
+    public InputStream getFile(@NonNull String downloadUrl, @Nullable final String contentType, boolean credentials) throws Exception {
+        return fetch(downloadUrl, contentType, credentials).getInputStream();	// smap add credentials
+    }
+
     /**
      * Creates a Http connection and input stream
      *

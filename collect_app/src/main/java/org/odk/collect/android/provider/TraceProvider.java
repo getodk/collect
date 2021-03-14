@@ -63,11 +63,6 @@ public class TraceProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        if (!permissionsProvider.areStoragePermissionsGranted()) {
-            Timber.i("Read and write permissions are required for this content provider to function.");
-            return false;
-        }
-
         // must be at the beginning of any activity that can be called from an external intent
         SmapTraceDatabaseHelper h = getDbHelper();
         return h != null;
@@ -77,6 +72,10 @@ public class TraceProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String where, String[] selectionArgs,
             String sortOrder) {
+
+        if (!permissionsProvider.areStoragePermissionsGranted()) {
+            return null;
+        }
 
         SQLiteDatabase db = getDbHelper().getWritableDatabase();
 
@@ -119,6 +118,9 @@ public class TraceProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues initialValues) {
+        if (!permissionsProvider.areStoragePermissionsGranted()) {
+            return null;
+        }
         // Validate the requested uri
         if (sUriMatcher.match(uri) != TRACES) {
             throw new IllegalArgumentException("Unknown URI " + uri);
@@ -150,6 +152,9 @@ public class TraceProvider extends ContentProvider {
      */
     @Override
     public int delete(Uri uri, String where, String[] whereArgs) {
+        if (!permissionsProvider.areStoragePermissionsGranted()) {
+            return 0;
+        }
         SQLiteDatabase db = getDbHelper().getWritableDatabase();
         int count;
 
@@ -177,6 +182,9 @@ public class TraceProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String where, String[] whereArgs) {
+        if (!permissionsProvider.areStoragePermissionsGranted()) {
+            return 0;
+        }
         SQLiteDatabase db = getDbHelper().getWritableDatabase();
 
         int count;
