@@ -364,10 +364,10 @@ Issues
 
 	1. New logic around showing 'save as' text and finalize checkbox at end of form completion
 	2. Database migrations changed - move to smap area
-		InstancesDatabasehelper
+		InstanceDatabaseMigrator
+		InstancesDatabaseHelper
 		FormsDatabaseHelper
-		FormsProvider
-		InstanceProvider
+		FormDatabaseMigrator
 	3. Save results - candidate to move to Smap Area
 		FormSaveViewModel
 	4. Files to be restored to unmodifiedState

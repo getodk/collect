@@ -24,14 +24,14 @@ import timber.log.Timber;
  * of the parsing logic here might be better broken out somewhere else however if it can be used
  * in other scenarios.
  */
-class OpenRosaXmlFetcher {
+public class OpenRosaXmlFetcher {       // smap make public
 
     private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
 
     private final OpenRosaHttpInterface httpInterface;
     private WebCredentialsUtils webCredentialsUtils;
 
-    OpenRosaXmlFetcher(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
+    public OpenRosaXmlFetcher(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {       // smap make public
         this.httpInterface = httpInterface;
         this.webCredentialsUtils = webCredentialsUtils;
     }
