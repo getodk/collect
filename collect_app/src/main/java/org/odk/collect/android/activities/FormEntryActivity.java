@@ -29,9 +29,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;    // smap
 import android.preference.PreferenceManager; // smap
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.TextWatcher;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
@@ -1373,31 +1370,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * a button for saving and exiting.
      */
     private View createViewForFormEnd(FormController formController) {
-
-        boolean showInstanceName = PreferenceManager        // smap
-                .getDefaultSharedPreferences(this)
-                .getBoolean(GeneralKeys.KEY_SMAP_ODK_INSTANCENAME, false);
-
-        boolean showMarkFinalized = PreferenceManager        // smap
-                .getDefaultSharedPreferences(this)
-                .getBoolean(GeneralKeys.KEY_SMAP_ODK_MARK_FINALIZED, false);
-
-        // checkbox for if finished or ready to send  // smap
-        final CheckBox instanceComplete = endView
-                .findViewById(R.id.mark_finished);
-
-        // Default finalize instance to checked
-        instanceComplete.setChecked(InstancesDaoHelper.isInstanceComplete(true)); // smap
-        if(showMarkFinalized) {     // smap
-            instanceComplete.setVisibility(View.VISIBLE);
-        } else {
-            instanceComplete.setVisibility(View.GONE);
-        }
-
-        if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_MARK_AS_FINALIZED)) {  // smap
-            instanceComplete.setVisibility(View.GONE);
-        }
-
         if (formController.getSubmissionMetadata().instanceName != null) {
             saveName = formController.getSubmissionMetadata().instanceName;
         } else {
@@ -1432,21 +1404,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // last resort, default to the form title
                 saveName = formSaveViewModel.getFormName();
             }
-            // present the prompt to allow user to name the form
-            TextView sa = endView.findViewById(R.id.save_form_as);
-            //sa.setVisibility(View.VISIBLE);   smap
-            saveAs.setText(saveName);
-            saveAs.setEnabled(true);
-            if (showInstanceName) {      // smap
-                saveAs.setVisibility(View.VISIBLE);
-                sa.setVisibility(View.VISIBLE); // smap
-            }
-            saveAs.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {
-                    saveName = String.valueOf(s);
-                }
-            }
         }
 
         FormEndView endView = new FormEndView(this, formSaveViewModel.getFormName(), saveName, InstancesDaoHelper.isInstanceComplete(true), new FormEndView.Listener() {
@@ -1477,9 +1434,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             endView.findViewById(R.id.save_form_as).setVisibility(View.GONE);
             endView.findViewById(R.id.save_name).setEnabled(false);
             endView.findViewById(R.id.save_name).setVisibility(View.VISIBLE);
-            if (!showInstanceName) {      // smap
-                endView.findViewById(R.id.save_name).setVisibility(View.GONE);
-            }
         }
 
         // override the visibility settings based upon admin preferences
