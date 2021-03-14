@@ -13,12 +13,13 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 import org.odk.collect.android.database.SmapTraceDatabaseHelper;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.provider.TraceProviderAPI.TraceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 
-import timber.log.Timber;
+import javax.inject.Inject;
 
-import static org.odk.collect.android.utilities.PermissionUtils.areStoragePermissionsGranted;
+import timber.log.Timber;
 
 /**
  *
@@ -33,6 +34,9 @@ public class TraceProvider extends ContentProvider {
     private static final UriMatcher sUriMatcher;
 
     private static SmapTraceDatabaseHelper dbHelper;
+
+    @Inject
+    PermissionsProvider permissionsProvider;
 
     private synchronized SmapTraceDatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
@@ -59,7 +63,7 @@ public class TraceProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        if (!areStoragePermissionsGranted(getContext())) {
+        if (!permissionsProvider.areStoragePermissionsGranted()) {
             Timber.i("Read and write permissions are required for this content provider to function.");
             return false;
         }

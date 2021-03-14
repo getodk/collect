@@ -67,6 +67,7 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
 import org.odk.collect.android.loaders.SurveyData;
 import org.odk.collect.android.loaders.TaskEntry;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -112,8 +113,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-import static org.odk.collect.android.analytics.AnalyticsEvents.SETTINGS_IMPORT_JSON;
-import static org.odk.collect.android.analytics.AnalyticsEvents.SETTINGS_IMPORT_SERIALIZED;
 import static org.odk.collect.android.utilities.DialogUtils.getDialog;
 import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
 
@@ -162,6 +161,9 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
     private LocationRequest locationRequest;
     private FusedLocationProviderClient fusedLocationClient;
+
+    @Inject
+    PermissionsProvider permissionsProvider;
 
     /*
      * Start scoped storage
@@ -242,7 +244,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         }
 
         // Start the location service
-        new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestLocationPermissions(this, new PermissionListener() {
+        permissionsProvider.requestLocationPermissions(this, new PermissionListener() {
             @Override public void granted() {
 
                 /*

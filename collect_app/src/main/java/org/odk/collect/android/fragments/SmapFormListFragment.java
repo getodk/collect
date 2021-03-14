@@ -49,15 +49,17 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.loaders.SurveyData;
 import org.odk.collect.android.loaders.TaskEntry;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
+
+import javax.inject.Inject;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -110,6 +112,9 @@ public class SmapFormListFragment extends ListFragment {
     private TaskListArrayAdapter mAdapter;
 
     SurveyDataViewModel model;
+
+    @Inject
+    PermissionsProvider permissionsProvider;
 
     public static SmapFormListFragment newInstance() {
         return new SmapFormListFragment();
@@ -543,7 +548,7 @@ public class SmapFormListFragment extends ListFragment {
         } else {
             final Uri formUri = ContentUris.withAppendedId(FormsProviderAPI.FormsColumns.CONTENT_URI, task.id);
             final Intent intent = new Intent(Intent.ACTION_EDIT, formUri, getActivity(), FormMapActivity.class);
-            new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestLocationPermissions(getActivity(), new PermissionListener() {
+            permissionsProvider.requestLocationPermissions(getActivity(), new PermissionListener() {
                 @Override public void granted() {
                     startActivity(intent);
                 }

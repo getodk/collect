@@ -65,11 +65,11 @@ import org.odk.collect.android.loaders.MapLocationObserver;
 import org.odk.collect.android.loaders.PointEntry;
 import org.odk.collect.android.loaders.SurveyData;
 import org.odk.collect.android.loaders.TaskEntry;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.KeyValueJsonFns;
-import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.Utilities;
 
 import java.util.ArrayList;
@@ -77,6 +77,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -130,6 +132,9 @@ public class SmapTaskMapFragment extends Fragment
     private double tasksWest;
 
     SurveyDataViewModel model;
+
+    @Inject
+    PermissionsProvider permissionsProvider;
 
     public static SmapTaskMapFragment newInstance() {
         return new SmapTaskMapFragment();
@@ -248,7 +253,7 @@ public class SmapTaskMapFragment extends Fragment
         Timber.i("######## onMapReady");
         mMap = googleMap;
 
-        new PermissionUtils(R.style.Theme_Collect_Dialog_PermissionAlert).requestLocationPermissions((Activity) getContext(), new PermissionListener() {
+        permissionsProvider.requestLocationPermissions((Activity) getContext(), new PermissionListener() {
             @Override
             public void granted() {
                 mapReadyPermissionGranted();

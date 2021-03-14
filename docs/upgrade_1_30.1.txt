@@ -178,6 +178,7 @@ Changes to be committed:
 	deleted:    collect_app/src/test/java/org/odk/collect/android/activities/support/AlwaysDenyStoragePermissionPermissionUtils.java
 	new file:   collect_app/src/test/java/org/odk/collect/android/activities/support/AlwaysDenyStoragePermissionPermissionsProvider.java
 	deleted:    collect_app/src/test/java/org/odk/collect/android/activities/support/AlwaysGrantStoragePermissionsPermissionUtils.java
+		Replaced with permissionsProvider
 	new file:   collect_app/src/test/java/org/odk/collect/android/activities/support/AlwaysGrantStoragePermissionsPermissionsProvider.java
 	modified:   collect_app/src/test/java/org/odk/collect/android/audio/AudioRecordingControllerFragmentTest.java
 	renamed:    collect_app/src/test/java/org/odk/collect/android/audio/AudioRecordingErrorDialogFragmentTest.java -> collect_app/src/test/java/org/odk/collect/android/audio/AudioRecordingFormErrorDialogFragmentTest.java
