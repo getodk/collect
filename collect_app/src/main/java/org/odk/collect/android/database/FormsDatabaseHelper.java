@@ -22,6 +22,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 
+import java.io.File;
+
 import timber.log.Timber;
 
 import static org.odk.collect.android.database.DatabaseConstants.FORMS_DATABASE_NAME;
@@ -36,6 +38,10 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     public FormsDatabaseHelper(DatabaseMigrator databaseMigrator, StoragePathProvider storagePathProvider) {
         super(new DatabaseContext(storagePathProvider.getDirPath(StorageSubdirectory.METADATA)), FORMS_DATABASE_NAME, null, FORMS_DATABASE_VERSION);
         this.databaseMigrator = databaseMigrator;
+    }
+
+    public static String getDatabasePath() {
+        return new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA) + File.separator + FORMS_DATABASE_NAME;
     }
 
     @Override

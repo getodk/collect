@@ -16,16 +16,21 @@
 
 package org.odk.collect.android.database;
 
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.android.utilities.SQLiteUtils;
+
+import java.io.File;
 
 import timber.log.Timber;
 
 import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_DATABASE_NAME;
 import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_DATABASE_VERSION;
+import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_TABLE_NAME;
 
 /**
  * This class helps open, create, and upgrade the database file.
@@ -57,4 +62,22 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
         Timber.i("Downgrading database from version %d to %d completed with success.", oldVersion, newVersion);
     }
 
+    // smap
+
+    public static String getDatabasePath() {
+        return new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA) + File.separator + INSTANCES_DATABASE_NAME;
+    }
+
+    public void recreateDatabase() {
+
+        try {
+            SQLiteDatabase db = SQLiteDatabase.openDatabase(InstancesDatabaseHelper.getDatabasePath(), null, SQLiteDatabase.OPEN_READWRITE);
+            SQLiteUtils.dropTable(db, INSTANCES_TABLE_NAME);
+            databaseMigrator.onCreate(db);
+            db.close();
+
+        } catch (SQLException e) {
+            Timber.i(e);
+        }
+    }
 }

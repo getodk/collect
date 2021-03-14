@@ -90,12 +90,13 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
                 + AUTO_DELETE + " text, "
                 + LAST_DETECTED_FORM_VERSION_HASH + " text,"
                 + GEOMETRY_XPATH + " text,"
-                + PROJECT + " text,"
-                + TASKS_ONLY + " text,"
-                + SOURCE + " text,"
+                + PROJECT + " text,"    // smap
+                + TASKS_ONLY + " text," // smap
+                + SOURCE + " text,"     // smap
                 + DELETED_DATE + " integer,"
 
-                + "displaySubtext text "   // Smap keep for downgrading
+                + "displaySubtext text, "         // Smap keep for downgrading
+                + "deleted boolean default(0) "   // Smap keep for downgrading
                 +");");
     }
 
