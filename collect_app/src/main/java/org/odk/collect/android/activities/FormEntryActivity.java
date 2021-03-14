@@ -770,7 +770,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         } else {
             Timber.e("Unrecognized URI: %s", uri);
-            createErrorDialog(getString(R.string.smap_version_changed), EXIT);   // smap change string
+            createErrorDialog(getString(R.string.smap_version_changed), true);   // smap change string
             return;
         }
 
