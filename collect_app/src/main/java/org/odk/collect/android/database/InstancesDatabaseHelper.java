@@ -63,21 +63,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     }
 
     // smap
-
     public static String getDatabasePath() {
         return new StoragePathProvider().getDirPath(StorageSubdirectory.METADATA) + File.separator + INSTANCES_DATABASE_NAME;
-    }
-
-    public void recreateDatabase() {
-
-        try {
-            SQLiteDatabase db = SQLiteDatabase.openDatabase(InstancesDatabaseHelper.getDatabasePath(), null, SQLiteDatabase.OPEN_READWRITE);
-            SQLiteUtils.dropTable(db, INSTANCES_TABLE_NAME);
-            databaseMigrator.onCreate(db);
-            db.close();
-
-        } catch (SQLException e) {
-            Timber.i(e);
-        }
     }
 }

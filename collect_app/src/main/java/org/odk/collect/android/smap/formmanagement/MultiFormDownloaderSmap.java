@@ -18,6 +18,8 @@ import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.smap.database.DatabaseFormsRepositorySmap;
+import org.odk.collect.android.smap.forms.FormsRepositorySmap;
 import org.odk.collect.android.smap.openrosa.api.FormListApiSmap;
 import org.odk.collect.android.smap.openrosa.api.OpenRosaFormListApiSmap;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -51,10 +53,10 @@ public class MultiFormDownloaderSmap {
     private static final String TEMP_DOWNLOAD_EXTENSION = ".tempDownload";
 
     private final FormListApiSmap formListApi;
-    private final FormsRepository formsRepository;
+    private final FormsRepositorySmap formsRepository;
 
     public MultiFormDownloaderSmap(OpenRosaXmlFetcher openRosaXmlFetcher) {
-        this.formsRepository = new DatabaseFormsRepository();
+        this.formsRepository = new DatabaseFormsRepositorySmap();
         formListApi = new OpenRosaFormListApiSmap(openRosaXmlFetcher);
     }
 
@@ -137,7 +139,7 @@ public class MultiFormDownloaderSmap {
                     fd.isFormNotDownloaded() || fd.isFormNotDownloaded(),       // smap add flag on newer form version available or never downloaded
                     fd.getFormPath());                      // smap
 
-            if (fd.getManifestUrl() != null) {
+            if (fd.getManifest() != null && !fd.getManifest().getMediaFiles().isEmpty()) {
                 finalMediaPath = FileUtils.constructMediaPath(
                         fileResult.getFile().getAbsolutePath());
                 String error = downloadManifestAndMediaFiles(tempMediaPath, finalMediaPath, fd,
@@ -549,12 +551,12 @@ public class MultiFormDownloaderSmap {
                                          int total, FormDownloaderListener stateListener,
                                          String orgTempMediaPath,   // smap
                                          String orgMediaPath) throws Exception {        // smap
-        if (fd.getManifestUrl() == null) {
+        if (fd.getManifest() == null || fd.getManifest().getMediaFiles().isEmpty()) {
             return null;
         }
 
         StringBuffer downloadMsg = new StringBuffer("");      //smap
-        List<MediaFile> files = formListApi.fetchManifest(fd.getManifestUrl()).getMediaFiles();
+        List<MediaFile> files = fd.getManifest().getMediaFiles();
 
         // OK we now have the full set of files to download...
         Timber.i("Downloading %d media files.", files.size());

@@ -172,7 +172,7 @@ public class ExAudioWidget extends QuestionWidget implements FileWidget, WidgetD
 
                 @Override
                 public void onPositionChanged(Integer newPosition) {
-                    analytics.logFormEvent(AnalyticsEvents.AUDIO_PLAYER_SEEK, questionDetails.getFormAnalyticsID());
+                    //analytics.logFormEvent(AnalyticsEvents.AUDIO_PLAYER_SEEK, questionDetails.getFormAnalyticsID());  // smap
                     audioPlayer.setPosition(clip.getClipID(), newPosition);
                 }
 

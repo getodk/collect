@@ -16,7 +16,11 @@
 
 package org.odk.collect.android.utilities;
 
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+
 import org.odk.collect.android.database.FormDatabaseMigrator;
+import org.odk.collect.android.database.InstanceDatabaseMigrator;
 import org.odk.collect.android.database.InstancesDatabaseHelper;
 import org.odk.collect.android.database.FormsDatabaseHelper;
 import org.odk.collect.android.application.Collect;
@@ -40,6 +44,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import timber.log.Timber;
+
+import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_DATABASE_NAME;
+import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_TABLE_NAME;
 
 public class ApplicationResetter {
 
@@ -121,7 +130,7 @@ public class ApplicationResetter {
 
     private void resetInstances() {
         //new InstancesDao().deleteInstancesDatabase();
-        InstancesDatabaseHelper.recreateDatabase();      // smap - really delete the database
+        InstanceDatabaseMigrator.recreateDatabase();      // smap - really delete the database
 
         if (deleteFolderContents(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES))) {
             failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_INSTANCES));
@@ -176,4 +185,5 @@ public class ApplicationResetter {
         public static final int RESET_OSM_DROID = 5;
         public static final int SMAP_RESET_LOCATIONS = 6; // smap
     }
+
 }

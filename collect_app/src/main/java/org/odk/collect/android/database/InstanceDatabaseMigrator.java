@@ -1,5 +1,6 @@
 package org.odk.collect.android.database;
 
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.odk.collect.android.instances.Instance;
@@ -12,6 +13,7 @@ import timber.log.Timber;
 
 import static android.provider.BaseColumns._ID;
 import static org.odk.collect.android.database.DatabaseConstants.FORMS_DATABASE_VERSION;
+import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
 import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_DATABASE_NAME;
 import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_DATABASE_VERSION;
 import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_TABLE_NAME;
@@ -99,7 +101,7 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
 
 
     // smap
-    private static void createLatestVersion(SQLiteDatabase db) {
+    public static void createLatestVersion(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + INSTANCES_TABLE_NAME + " ("
                 + _ID + " integer primary key, "
                 + DISPLAY_NAME + " text not null, "
@@ -142,4 +144,16 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
                 + ");");
     }
 
+    // smap
+    public static void recreateDatabase() {
+
+        try {
+            SQLiteDatabase db = SQLiteDatabase.openDatabase(InstancesDatabaseHelper.getDatabasePath(), null, SQLiteDatabase.OPEN_READWRITE);
+            SQLiteUtils.dropTable(db, INSTANCES_TABLE_NAME);
+            createLatestVersion(db);
+            db.close();
+        } catch (SQLException e) {
+            Timber.i(e);
+        }
+    }
 }

@@ -503,6 +503,23 @@ public class FileUtils {
     /*
      * Smap
      */
+    public static void moveMediaFiles(String tempMediaPath, File formMediaPath) throws IOException {
+        File tempMediaFolder = new File(tempMediaPath);
+        File[] mediaFiles = tempMediaFolder.listFiles();
+        if (mediaFiles == null || mediaFiles.length == 0) {
+            deleteAndReport(tempMediaFolder);
+        } else {
+            for (File mediaFile : mediaFiles) {
+                deleteOldFile(mediaFile.getName(), formMediaPath);
+                org.apache.commons.io.FileUtils.moveFileToDirectory(mediaFile, formMediaPath, true);
+            }
+            deleteAndReport(tempMediaFolder);
+        }
+    }
+
+    /*
+     * Smap
+     */
     public static void deleteOldFile(String name, File d) {
         String path = d.getAbsolutePath() + "/" + name;
         File f = new File(path);
