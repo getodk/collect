@@ -93,7 +93,7 @@ public class InstanceChooserList extends InstanceListActivity implements
         setupAdapter();
         instanceSyncTask = new InstanceSyncTask(settingsProvider);
         instanceSyncTask.setDiskSyncListener(this);
-        instanceSyncTask.execute();
+//        instanceSyncTask.execute();
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 

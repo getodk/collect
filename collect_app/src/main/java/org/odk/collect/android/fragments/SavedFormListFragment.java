@@ -89,7 +89,7 @@ public class SavedFormListFragment extends InstanceListFragment
         setupAdapter();
         instanceSyncTask = new InstanceSyncTask(settingsProvider);
         instanceSyncTask.setDiskSyncListener(this);
-        instanceSyncTask.execute();
+//        instanceSyncTask.execute();
 
         super.onViewCreated(rootView, savedInstanceState);
     }

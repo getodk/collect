@@ -170,7 +170,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
 
         instanceSyncTask = new InstanceSyncTask(settingsProvider);
         instanceSyncTask.setDiskSyncListener(this);
-        instanceSyncTask.execute();
+//        instanceSyncTask.execute();
 
         sortingOptions = new int[]{
                 R.string.sort_by_name_asc, R.string.sort_by_name_desc,
