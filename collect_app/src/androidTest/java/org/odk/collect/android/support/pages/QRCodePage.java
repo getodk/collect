@@ -40,9 +40,9 @@ public class QRCodePage extends Page<QRCodePage> {
     }
 
     public QRCodePage clickView() {
-        onView(withText(R.string.view_qr_code_fragment_title)).perform(click());
-
+        // Switching tabs doesn't seem to work sometimes
         waitFor(() -> {
+            onView(withText(R.string.view_qr_code_fragment_title)).perform(click());
             onView(withText(R.string.barcode_scanner_prompt)).check(doesNotExist());
             return null;
         });
