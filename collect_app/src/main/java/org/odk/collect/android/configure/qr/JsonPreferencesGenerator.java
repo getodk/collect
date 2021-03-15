@@ -3,7 +3,7 @@ package org.odk.collect.android.configure.qr;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.preferences.keys.AdminKeys;
-import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 
 import java.util.Collection;
 
@@ -15,9 +15,9 @@ import static org.odk.collect.android.preferences.keys.GeneralKeys.DEFAULTS;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PASSWORD;
 
 public class JsonPreferencesGenerator {
-    private final PreferencesDataSourceProvider preferencesDataSourceProvider;
-    public JsonPreferencesGenerator(PreferencesDataSourceProvider preferencesDataSourceProvider) {
-        this.preferencesDataSourceProvider = preferencesDataSourceProvider;
+    private final SettingsProvider settingsProvider;
+    public JsonPreferencesGenerator(SettingsProvider settingsProvider) {
+        this.settingsProvider = settingsProvider;
     }
 
     public String getJSONFromPreferences(Collection<String> includedPasswordKeys) throws JSONException {
@@ -42,7 +42,7 @@ public class JsonPreferencesGenerator {
             }
 
             Object defaultValue = DEFAULTS.get(key);
-            Object value = preferencesDataSourceProvider.getGeneralPreferences().getAll().get(key);
+            Object value = settingsProvider.getGeneralSettings().getAll().get(key);
 
             if (value == null) {
                 value = "";
@@ -67,7 +67,7 @@ public class JsonPreferencesGenerator {
             }
 
             Object defaultValue = AdminKeys.getDefaults().get(key);
-            Object value = preferencesDataSourceProvider.getAdminPreferences().getAll().get(key);
+            Object value = settingsProvider.getAdminSettings().getAll().get(key);
 
             if (defaultValue != value) {
                 adminPrefs.put(key, value);

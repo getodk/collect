@@ -6,7 +6,7 @@ import com.mapbox.mapboxsdk.maps.Style;
 import org.odk.collect.android.application.initialization.migration.KeyRenamer;
 import org.odk.collect.android.application.initialization.migration.KeyTranslator;
 import org.odk.collect.android.application.initialization.migration.Migration;
-import org.odk.collect.android.preferences.source.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 
 import java.util.List;
 
@@ -33,20 +33,20 @@ import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_USGS_MAP_
  */
 public class CollectSettingsPreferenceMigrator implements SettingsPreferenceMigrator {
 
-    private final PreferencesDataSource metaPrefs;
+    private final Settings metaPrefs;
 
-    public CollectSettingsPreferenceMigrator(PreferencesDataSource metaPrefs) {
+    public CollectSettingsPreferenceMigrator(Settings metaPrefs) {
         this.metaPrefs = metaPrefs;
     }
 
     @Override
-    public void migrate(PreferencesDataSource generalPreferences, PreferencesDataSource adminPreferences) {
+    public void migrate(Settings generalSettings, Settings adminSettings) {
         for (Migration migration : getGeneralMigrations()) {
-            migration.apply(generalPreferences);
+            migration.apply(generalSettings);
         }
 
         for (Migration migration : getAdminMigrations()) {
-            migration.apply(adminPreferences);
+            migration.apply(adminSettings);
         }
 
         for (Migration migration : getMetaMigrations()) {

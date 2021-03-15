@@ -115,7 +115,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
     @Test
     public void whenAutocompleteAppearanceExist_shouldTextSizeBeSetProperly() {
         when(formEntryPrompt.getAppearanceHint()).thenReturn("autocomplete");
-        assertThat(getSpyWidget().binding.choicesSearchBox.getTextSize(), is(new QuestionTextSizeHelper(preferencesDataSourceProvider.getGeneralPreferences()).getHeadline6()));
+        assertThat(getSpyWidget().binding.choicesSearchBox.getTextSize(), is(new QuestionTextSizeHelper(settingsProvider.getGeneralSettings()).getHeadline6()));
     }
 
     @Test

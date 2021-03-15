@@ -220,8 +220,8 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 R.string.sort_by_name_asc, R.string.sort_by_name_desc
         };
 
-        driveHelper = new DriveHelper(googleApiProvider.getDriveApi(preferencesDataSourceProvider
-                .getGeneralPreferences()
+        driveHelper = new DriveHelper(googleApiProvider.getDriveApi(settingsProvider
+                .getGeneralSettings()
                 .getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT)));
         getResultsFromApi();
     }

@@ -8,8 +8,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
-import org.odk.collect.android.preferences.source.PreferencesDataSource;
-import org.odk.collect.utilities.TestPreferencesProvider;
+import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.utilities.TestSettingsProvider;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
@@ -26,7 +26,7 @@ public class ThemeUtilsTests {
     private final int[] attrs;
     private ThemeUtils themeUtils;
     private MainMenuActivity mainMenuActivity;
-    private final PreferencesDataSource generalPrefs = TestPreferencesProvider.getGeneralPreferences();
+    private final Settings generalSettings = TestSettingsProvider.getGeneralSettings();
 
     public ThemeUtilsTests() {
         attrs = new int[]{
@@ -110,10 +110,10 @@ public class ThemeUtilsTests {
     }
 
     private void applyDarkTheme() {
-        generalPrefs.save(KEY_APP_THEME, mainMenuActivity.getString(R.string.app_theme_dark));
+        generalSettings.save(KEY_APP_THEME, mainMenuActivity.getString(R.string.app_theme_dark));
     }
 
     private void applyLightTheme() {
-        generalPrefs.save(KEY_APP_THEME, mainMenuActivity.getString(R.string.app_theme_light));
+        generalSettings.save(KEY_APP_THEME, mainMenuActivity.getString(R.string.app_theme_light));
     }
 }

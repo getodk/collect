@@ -12,7 +12,7 @@ import org.odk.collect.android.geo.GoogleMapConfigurator.GoogleMapTypeOption;
 import org.odk.collect.android.geo.MapboxMapConfigurator.MapboxUrlOption;
 import org.odk.collect.android.geo.OsmDroidMapConfigurator.WmsOption;
 import org.odk.collect.android.preferences.PrefUtils;
-import org.odk.collect.android.preferences.source.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -51,7 +51,7 @@ public class MapProvider {
     // automatically when it's no longer needed.
 
     /** Keeps track of the listener associated with a given MapFragment. */
-    private final Map<MapFragment, PreferencesDataSource.OnPreferenceChangeListener>
+    private final Map<MapFragment, Settings.OnSettingChangeListener>
         listenersByMap = new WeakHashMap<>();
 
     /** Keeps track of the configurator associated with a given MapFragment. */
@@ -203,23 +203,23 @@ public class MapProvider {
     void onMapFragmentStart(MapFragment map) {
         MapConfigurator cftor = configuratorsByMap.get(map);
         if (cftor != null) {
-            PreferencesDataSource generalPrefs = PrefUtils.getSharedPrefs();
-            PreferencesDataSource.OnPreferenceChangeListener listener = key -> {
+            Settings generalSettings = PrefUtils.getSharedPrefs();
+            Settings.OnSettingChangeListener listener = key -> {
                 if (cftor.getPrefKeys().contains(key)) {
-                    map.applyConfig(cftor.buildConfig(generalPrefs));
+                    map.applyConfig(cftor.buildConfig(generalSettings));
                 }
             };
-            map.applyConfig(cftor.buildConfig(generalPrefs));
-            generalPrefs.registerOnPreferenceChangeListener(listener);
+            map.applyConfig(cftor.buildConfig(generalSettings));
+            generalSettings.registerOnSettingChangeListener(listener);
             listenersByMap.put(map, listener);
         }
     }
 
     void onMapFragmentStop(MapFragment map) {
-        PreferencesDataSource.OnPreferenceChangeListener listener = listenersByMap.get(map);
+        Settings.OnSettingChangeListener listener = listenersByMap.get(map);
         if (listener != null) {
-            PreferencesDataSource prefs = PrefUtils.getSharedPrefs();
-            prefs.unregisterOnPreferenceChangeListener(listener);
+            Settings prefs = PrefUtils.getSharedPrefs();
+            prefs.unregisterOnSettingChangeListener(listener);
             listenersByMap.remove(map);
         }
     }

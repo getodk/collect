@@ -154,7 +154,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         getFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                String protocol = preferencesDataSourceProvider.getGeneralPreferences().getString(GeneralKeys.KEY_PROTOCOL);
+                String protocol = settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_PROTOCOL);
                 Intent i = null;
                 if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
                     if (new PlayServicesChecker().isGooglePlayServicesAvailable(MainMenuActivity.this)) {
@@ -225,7 +225,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        qrcodeScannerMenuItem.setVisible(preferencesDataSourceProvider.getAdminPreferences().getBoolean(AdminKeys.KEY_QR_CODE_SCANNER));
+        qrcodeScannerMenuItem.setVisible(settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_QR_CODE_SCANNER));
         return super.onPrepareOptionsMenu(menu);
     }
 

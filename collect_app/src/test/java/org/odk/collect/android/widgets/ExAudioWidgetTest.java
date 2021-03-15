@@ -85,7 +85,7 @@ public class ExAudioWidgetTest extends FileWidgetTest<ExAudioWidget> {
 
     @Test
     public void whenFontSizeChanged_CustomFontSizeShouldBeUsed() {
-        preferencesDataSourceProvider.getGeneralPreferences().save(KEY_FONT_SIZE, "30");
+        settingsProvider.getGeneralSettings().save(KEY_FONT_SIZE, "30");
 
         assertThat((int) getWidget().binding.launchExternalAppButton.getTextSize(), is(29));
     }

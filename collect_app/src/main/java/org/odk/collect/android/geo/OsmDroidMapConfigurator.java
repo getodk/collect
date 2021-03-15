@@ -9,7 +9,7 @@ import com.google.common.collect.ImmutableSet;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.PrefUtils;
-import org.odk.collect.android.preferences.source.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 
 import java.io.File;
 import java.util.Collection;
@@ -73,7 +73,7 @@ class OsmDroidMapConfigurator implements MapConfigurator {
             ImmutableSet.of(prefKey, KEY_REFERENCE_LAYER);
     }
 
-    @Override public Bundle buildConfig(PreferencesDataSource prefs) {
+    @Override public Bundle buildConfig(Settings prefs) {
         Bundle config = new Bundle();
         if (options.length == 1) {
             config.putSerializable(OsmDroidMapFragment.KEY_WEB_MAP_SERVICE, options[0].service);

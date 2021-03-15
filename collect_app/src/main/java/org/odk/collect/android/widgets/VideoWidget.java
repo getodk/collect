@@ -231,7 +231,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         }
 
         // request high resolution if configured for that...
-        boolean highResolution = preferencesDataSourceProvider.getGeneralPreferences().getBoolean(GeneralKeys.KEY_HIGH_RESOLUTION);
+        boolean highResolution = settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_HIGH_RESOLUTION);
         if (highResolution) {
             i.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
             analytics.logEvent(REQUEST_HIGH_RES_VIDEO, getQuestionDetails().getFormAnalyticsID(), "");

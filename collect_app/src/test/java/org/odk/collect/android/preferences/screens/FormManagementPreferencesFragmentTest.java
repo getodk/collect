@@ -15,9 +15,9 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.source.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 import org.odk.collect.android.preferences.Protocol;
-import org.odk.collect.utilities.TestPreferencesProvider;
+import org.odk.collect.utilities.TestSettingsProvider;
 
 import static android.os.Looper.getMainLooper;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -38,27 +38,27 @@ import static org.robolectric.Shadows.shadowOf;
 public class FormManagementPreferencesFragmentTest {
 
     private Context context;
-    private final PreferencesDataSource generalPrefs = TestPreferencesProvider.getGeneralPreferences();
-    private final PreferencesDataSource adminPrefs = TestPreferencesProvider.getAdminPreferences();
+    private final Settings generalSettings = TestSettingsProvider.getGeneralSettings();
+    private final Settings adminSettings = TestSettingsProvider.getAdminSettings();
 
     @Before
     public void setup() {
         context = ApplicationProvider.getApplicationContext();
-        generalPrefs.clear();
-        generalPrefs.loadDefaultPreferencesIfNotExist();
-        adminPrefs.clear();
-        adminPrefs.loadDefaultPreferencesIfNotExist();
+        generalSettings.clear();
+        generalSettings.setDefaultForAllSettingsWithoutValues();
+        adminSettings.clear();
+        adminSettings.setDefaultForAllSettingsWithoutValues();
     }
 
     @Test
     public void whenGoogleDriveUsedAsServer_showsUpdateModeAsManual_andDisablesPrefs() {
-        generalPrefs.save(KEY_PROTOCOL, Protocol.GOOGLE.getValue(context));
-        generalPrefs.save(KEY_FORM_UPDATE_MODE, MATCH_EXACTLY.getValue(context));
+        generalSettings.save(KEY_PROTOCOL, Protocol.GOOGLE.getValue(context));
+        generalSettings.save(KEY_FORM_UPDATE_MODE, MATCH_EXACTLY.getValue(context));
 
         FragmentScenario<FormManagementPreferencesFragment> scenario = FragmentScenario.launch(FormManagementPreferencesFragment.class);
         scenario.onFragment(f -> {
             assertThat(f.findPreference(KEY_FORM_UPDATE_MODE).getSummary(), is(context.getString(R.string.manual)));
-            assertThat(generalPrefs.getString(KEY_FORM_UPDATE_MODE), is(MATCH_EXACTLY.getValue(context)));
+            assertThat(generalSettings.getString(KEY_FORM_UPDATE_MODE), is(MATCH_EXACTLY.getValue(context)));
 
             assertThat(f.findPreference(KEY_FORM_UPDATE_MODE).isEnabled(), is(false));
             assertThat(f.findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK).isEnabled(), is(false));
@@ -68,7 +68,7 @@ public class FormManagementPreferencesFragmentTest {
 
     @Test
     public void whenManualUpdatesEnabled_disablesPrefs() {
-        generalPrefs.save(KEY_FORM_UPDATE_MODE, MANUAL.getValue(context));
+        generalSettings.save(KEY_FORM_UPDATE_MODE, MANUAL.getValue(context));
 
         FragmentScenario<FormManagementPreferencesFragment> scenario = FragmentScenario.launch(FormManagementPreferencesFragment.class);
         scenario.onFragment(f -> {
@@ -79,7 +79,7 @@ public class FormManagementPreferencesFragmentTest {
 
     @Test
     public void whenPreviouslyDownloadedOnlyEnabled_disablesPrefs() {
-        generalPrefs.save(KEY_FORM_UPDATE_MODE, PREVIOUSLY_DOWNLOADED_ONLY.getValue(context));
+        generalSettings.save(KEY_FORM_UPDATE_MODE, PREVIOUSLY_DOWNLOADED_ONLY.getValue(context));
 
         FragmentScenario<FormManagementPreferencesFragment> scenario = FragmentScenario.launch(FormManagementPreferencesFragment.class);
         scenario.onFragment(f -> {
@@ -90,7 +90,7 @@ public class FormManagementPreferencesFragmentTest {
 
     @Test
     public void whenMatchExactlyEnabled_disablesPrefs() {
-        generalPrefs.save(KEY_FORM_UPDATE_MODE, MATCH_EXACTLY.getValue(context));
+        generalSettings.save(KEY_FORM_UPDATE_MODE, MATCH_EXACTLY.getValue(context));
 
         FragmentScenario<FormManagementPreferencesFragment> scenario = FragmentScenario.launch(FormManagementPreferencesFragment.class);
         scenario.onFragment(f -> {
@@ -101,47 +101,47 @@ public class FormManagementPreferencesFragmentTest {
 
     @Test
     public void whenMatchExactlyEnabled_andAutomaticDownloadDisabled_showsAutomaticDownloadAsChecked() {
-        generalPrefs.save(KEY_FORM_UPDATE_MODE, MATCH_EXACTLY.getValue(context));
-        generalPrefs.save(KEY_AUTOMATIC_UPDATE, false);
+        generalSettings.save(KEY_FORM_UPDATE_MODE, MATCH_EXACTLY.getValue(context));
+        generalSettings.save(KEY_AUTOMATIC_UPDATE, false);
 
         FragmentScenario<FormManagementPreferencesFragment> scenario = FragmentScenario.launch(FormManagementPreferencesFragment.class);
         scenario.onFragment(f -> {
             CheckBoxPreference automaticDownload = f.findPreference(KEY_AUTOMATIC_UPDATE);
             assertThat(automaticDownload.isChecked(), is(true));
-            assertThat(generalPrefs.getBoolean(KEY_AUTOMATIC_UPDATE), is(false));
+            assertThat(generalSettings.getBoolean(KEY_AUTOMATIC_UPDATE), is(false));
         });
     }
 
     @Test
     public void whenManualUpdatesEnabled_andAutomaticDownloadEnabled_showsAutomaticDownloadAsNotChecked() {
-        generalPrefs.save(KEY_FORM_UPDATE_MODE, MANUAL.getValue(context));
-        generalPrefs.save(KEY_AUTOMATIC_UPDATE, true);
+        generalSettings.save(KEY_FORM_UPDATE_MODE, MANUAL.getValue(context));
+        generalSettings.save(KEY_AUTOMATIC_UPDATE, true);
 
         FragmentScenario<FormManagementPreferencesFragment> scenario = FragmentScenario.launch(FormManagementPreferencesFragment.class);
         scenario.onFragment(f -> {
             CheckBoxPreference automaticDownload = f.findPreference(KEY_AUTOMATIC_UPDATE);
             assertThat(automaticDownload.isChecked(), is(false));
-            assertThat(generalPrefs.getBoolean(KEY_AUTOMATIC_UPDATE), is(true));
+            assertThat(generalSettings.getBoolean(KEY_AUTOMATIC_UPDATE), is(true));
         });
     }
 
     @Test
     public void whenGoogleDriveUsedAsServer_andAutomaticDownloadEnabled_showsAutomaticDownloadAsNotChecked() {
-        generalPrefs.save(KEY_PROTOCOL, Protocol.GOOGLE.getValue(context));
-        generalPrefs.save(KEY_AUTOMATIC_UPDATE, true);
+        generalSettings.save(KEY_PROTOCOL, Protocol.GOOGLE.getValue(context));
+        generalSettings.save(KEY_AUTOMATIC_UPDATE, true);
 
         FragmentScenario<FormManagementPreferencesFragment> scenario = FragmentScenario.launch(FormManagementPreferencesFragment.class);
         scenario.onFragment(f -> {
             CheckBoxPreference automaticDownload = f.findPreference(KEY_AUTOMATIC_UPDATE);
             assertThat(automaticDownload.isChecked(), is(false));
-            assertThat(generalPrefs.getBoolean(KEY_AUTOMATIC_UPDATE), is(true));
+            assertThat(generalSettings.getBoolean(KEY_AUTOMATIC_UPDATE), is(true));
         });
     }
 
     @Test
     public void whenManualUpdatesEnabled_andAutomaticDownloadDisabled_settingToPreviouslyDownloaded_resetsAutomaticDownload() {
-        generalPrefs.save(KEY_FORM_UPDATE_MODE, MANUAL.getValue(context));
-        generalPrefs.save(KEY_AUTOMATIC_UPDATE, false);
+        generalSettings.save(KEY_FORM_UPDATE_MODE, MANUAL.getValue(context));
+        generalSettings.save(KEY_AUTOMATIC_UPDATE, false);
 
         FragmentScenario<FormManagementPreferencesFragment> scenario = FragmentScenario.launch(FormManagementPreferencesFragment.class);
         scenario.onFragment(f -> {
@@ -151,14 +151,14 @@ public class FormManagementPreferencesFragmentTest {
 
             CheckBoxPreference automaticDownload = f.findPreference(KEY_AUTOMATIC_UPDATE);
             assertThat(automaticDownload.isChecked(), is(false));
-            assertThat(generalPrefs.getBoolean(KEY_AUTOMATIC_UPDATE), is(false));
+            assertThat(generalSettings.getBoolean(KEY_AUTOMATIC_UPDATE), is(false));
         });
     }
 
     @Test
     public void changingFormUpdateMode_shouldNotCauseAnyCrashIfRelatedPreferncesAreDisabledInAdminSettings() {
-        adminPrefs.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false);
-        adminPrefs.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false);
+        adminSettings.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false);
+        adminSettings.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false);
 
         FragmentScenario<FormManagementPreferencesFragment> scenario = FragmentScenario.launch(FormManagementPreferencesFragment.class);
         scenario.onFragment(f -> {
@@ -215,18 +215,18 @@ public class FormManagementPreferencesFragmentTest {
 
     @Test
     public void hiddenPreferences_shouldBeHiddenIfOpenedFromGeneralPreferences() {
-        adminPrefs.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false);
-        adminPrefs.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false);
-        adminPrefs.save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false);
-        adminPrefs.save(AdminKeys.KEY_AUTOSEND, false);
-        adminPrefs.save(AdminKeys.KEY_DELETE_AFTER_SEND, false);
-        adminPrefs.save(AdminKeys.KEY_DEFAULT_TO_FINALIZED, false);
-        adminPrefs.save(AdminKeys.KEY_CONSTRAINT_BEHAVIOR, false);
-        adminPrefs.save(AdminKeys.KEY_HIGH_RESOLUTION, false);
-        adminPrefs.save(AdminKeys.KEY_IMAGE_SIZE, false);
-        adminPrefs.save(AdminKeys.KEY_GUIDANCE_HINT, false);
-        adminPrefs.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false);
-        adminPrefs.save(AdminKeys.KEY_EXTERNAL_APP_RECORDING, false);
+        adminSettings.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false);
+        adminSettings.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false);
+        adminSettings.save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false);
+        adminSettings.save(AdminKeys.KEY_AUTOSEND, false);
+        adminSettings.save(AdminKeys.KEY_DELETE_AFTER_SEND, false);
+        adminSettings.save(AdminKeys.KEY_DEFAULT_TO_FINALIZED, false);
+        adminSettings.save(AdminKeys.KEY_CONSTRAINT_BEHAVIOR, false);
+        adminSettings.save(AdminKeys.KEY_HIGH_RESOLUTION, false);
+        adminSettings.save(AdminKeys.KEY_IMAGE_SIZE, false);
+        adminSettings.save(AdminKeys.KEY_GUIDANCE_HINT, false);
+        adminSettings.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false);
+        adminSettings.save(AdminKeys.KEY_EXTERNAL_APP_RECORDING, false);
 
         FragmentScenario<FormManagementPreferencesFragment> scenario = FragmentScenario.launch(FormManagementPreferencesFragment.class);
         scenario.onFragment(fragment -> {
@@ -247,17 +247,17 @@ public class FormManagementPreferencesFragmentTest {
 
     @Test
     public void hiddenPreferences_shouldBeVisibleIfOpenedFromAdminSettings() {
-        adminPrefs.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false);
-        adminPrefs.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false);
-        adminPrefs.save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false);
-        adminPrefs.save(AdminKeys.KEY_AUTOSEND, false);
-        adminPrefs.save(AdminKeys.KEY_DELETE_AFTER_SEND, false);
-        adminPrefs.save(AdminKeys.KEY_DEFAULT_TO_FINALIZED, false);
-        adminPrefs.save(AdminKeys.KEY_CONSTRAINT_BEHAVIOR, false);
-        adminPrefs.save(AdminKeys.KEY_HIGH_RESOLUTION, false);
-        adminPrefs.save(AdminKeys.KEY_IMAGE_SIZE, false);
-        adminPrefs.save(AdminKeys.KEY_GUIDANCE_HINT, false);
-        adminPrefs.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false);
+        adminSettings.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false);
+        adminSettings.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false);
+        adminSettings.save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false);
+        adminSettings.save(AdminKeys.KEY_AUTOSEND, false);
+        adminSettings.save(AdminKeys.KEY_DELETE_AFTER_SEND, false);
+        adminSettings.save(AdminKeys.KEY_DEFAULT_TO_FINALIZED, false);
+        adminSettings.save(AdminKeys.KEY_CONSTRAINT_BEHAVIOR, false);
+        adminSettings.save(AdminKeys.KEY_HIGH_RESOLUTION, false);
+        adminSettings.save(AdminKeys.KEY_IMAGE_SIZE, false);
+        adminSettings.save(AdminKeys.KEY_GUIDANCE_HINT, false);
+        adminSettings.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false);
 
         Bundle args = new Bundle();
         args.putBoolean(INTENT_KEY_ADMIN_MODE, true);

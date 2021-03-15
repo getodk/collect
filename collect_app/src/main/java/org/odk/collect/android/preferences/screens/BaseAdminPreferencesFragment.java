@@ -7,15 +7,15 @@ import androidx.annotation.NonNull;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.source.PreferencesDataStore;
+import org.odk.collect.android.preferences.source.SettingsStore;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 public abstract class BaseAdminPreferencesFragment extends BasePreferencesFragment {
     @Inject
-    @Named("ADMIN_PREFERENCES_DATA_STORE")
-    PreferencesDataStore adminPreferencesDataStore;
+    @Named("ADMIN_SETTINGS_STORE")
+    SettingsStore adminSettingsStore;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -25,23 +25,23 @@ public abstract class BaseAdminPreferencesFragment extends BasePreferencesFragme
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        getPreferenceManager().setPreferenceDataStore(adminPreferencesDataStore);
+        getPreferenceManager().setPreferenceDataStore(adminSettingsStore);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        preferencesDataSourceProvider.getAdminPreferences().registerOnPreferenceChangeListener(this);
+        settingsProvider.getAdminSettings().registerOnSettingChangeListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        preferencesDataSourceProvider.getAdminPreferences().unregisterOnPreferenceChangeListener(this);
+        settingsProvider.getAdminSettings().unregisterOnSettingChangeListener(this);
     }
 
     @Override
-    public void onPreferenceChanged(@NotNull String key) {
-        settingsChangeHandler.onSettingChanged(key, preferencesDataSourceProvider.getAdminPreferences().getAll().get(key));
+    public void onSettingChanged(@NotNull String key) {
+        settingsChangeHandler.onSettingChanged(key, settingsProvider.getAdminSettings().getAll().get(key));
     }
 }

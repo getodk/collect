@@ -11,8 +11,8 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 
 import org.odk.collect.android.preferences.keys.AdminKeys;
-import org.odk.collect.android.preferences.source.PreferencesDataSource;
-import org.odk.collect.utilities.TestPreferencesProvider;
+import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.utilities.TestSettingsProvider;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
@@ -41,7 +41,7 @@ public class AdminPreferencesActivityTest {
 
     private AdminPreferencesFragment adminPreferencesFragment;
     private ActivityController<AdminPreferencesActivity> activityController;
-    private final PreferencesDataSource adminPrefs = TestPreferencesProvider.getAdminPreferences();
+    private final Settings adminSettings = TestSettingsProvider.getAdminSettings();
 
     @Before
     public void setUp() throws Exception {
@@ -64,11 +64,11 @@ public class AdminPreferencesActivityTest {
 
                 assertNotNull("Preference not found: " + adminKey, checkBoxPreference);
                 checkBoxPreference.setChecked(true);
-                boolean actual = adminPrefs.getBoolean(adminKey);
+                boolean actual = adminSettings.getBoolean(adminKey);
                 assertTrue("Error in preference " + adminKey, actual);
 
                 checkBoxPreference.setChecked(false);
-                actual = adminPrefs.getBoolean(adminKey);
+                actual = adminSettings.getBoolean(adminKey);
                 assertFalse("Error in preference " + adminKey, actual);
             }
         }

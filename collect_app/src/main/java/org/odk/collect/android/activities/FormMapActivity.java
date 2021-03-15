@@ -357,7 +357,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
                 setUpOpenFormButton(false, mappableFormInstance.getDatabaseId());
                 break;
             case OPEN_EDIT:
-                boolean canEditSaved = preferencesDataSourceProvider.getAdminPreferences().getBoolean(AdminKeys.KEY_EDIT_SAVED);
+                boolean canEditSaved = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_EDIT_SAVED);
                 setUpOpenFormButton(canEditSaved, mappableFormInstance.getDatabaseId());
                 break;
         }

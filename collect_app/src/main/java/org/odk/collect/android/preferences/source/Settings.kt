@@ -1,7 +1,7 @@
 package org.odk.collect.android.preferences.source
 
-interface PreferencesDataSource {
-    fun loadDefaultPreferencesIfNotExist()
+interface Settings {
+    fun setDefaultForAllSettingsWithoutValues()
 
     fun save(key: String, value: Any?)
 
@@ -29,11 +29,11 @@ interface PreferencesDataSource {
 
     fun getStringSet(key: String): Set<String>?
 
-    fun registerOnPreferenceChangeListener(listener: OnPreferenceChangeListener)
+    fun registerOnSettingChangeListener(listener: OnSettingChangeListener)
 
-    fun unregisterOnPreferenceChangeListener(listener: OnPreferenceChangeListener)
+    fun unregisterOnSettingChangeListener(listener: OnSettingChangeListener)
 
-    interface OnPreferenceChangeListener {
-        fun onPreferenceChanged(key: String)
+    interface OnSettingChangeListener {
+        fun onSettingChanged(key: String)
     }
 }

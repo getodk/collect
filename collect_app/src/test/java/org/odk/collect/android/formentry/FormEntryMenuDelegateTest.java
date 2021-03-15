@@ -17,7 +17,7 @@ import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.shared.livedata.MutableNonNullLiveData;
-import org.odk.collect.utilities.TestPreferencesProvider;
+import org.odk.collect.utilities.TestSettingsProvider;
 import org.robolectric.Robolectric;
 import org.robolectric.annotation.LooperMode;
 import org.robolectric.fakes.RoboMenu;
@@ -78,7 +78,7 @@ public class FormEntryMenuDelegateTest {
                 audioRecorder,
                 backgroundLocationViewModel,
                 backgroundAudioViewModel,
-                TestPreferencesProvider.getPreferencesRepository()
+                TestSettingsProvider.getSettingsProvider()
         );
         formEntryMenuDelegate.formLoaded(formController);
     }

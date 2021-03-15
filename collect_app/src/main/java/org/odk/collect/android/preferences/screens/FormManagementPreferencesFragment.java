@@ -28,7 +28,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.backgroundwork.FormUpdateManager;
-import org.odk.collect.android.preferences.source.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 import org.odk.collect.android.preferences.Protocol;
 
 import javax.inject.Inject;
@@ -76,8 +76,8 @@ public class FormManagementPreferencesFragment extends BaseGeneralPreferencesFra
     }
 
     @Override
-    public void onPreferenceChanged(@NotNull String key) {
-        super.onPreferenceChanged(key);
+    public void onSettingChanged(@NotNull String key) {
+        super.onSettingChanged(key);
 
         if (key.equals(KEY_FORM_UPDATE_MODE) || key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
             updateDisabledPrefs();
@@ -85,13 +85,13 @@ public class FormManagementPreferencesFragment extends BaseGeneralPreferencesFra
     }
 
     private void updateDisabledPrefs() {
-        PreferencesDataSource generalPrefs = preferencesDataSourceProvider.getGeneralPreferences();
+        Settings generalSettings = settingsProvider.getGeneralSettings();
 
         // Might be null if disabled in Admin settings
         @Nullable Preference updateFrequency = findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK);
         @Nullable CheckBoxPreference automaticDownload = findPreference(KEY_AUTOMATIC_UPDATE);
 
-        if (Protocol.parse(getActivity(), generalPrefs.getString(KEY_PROTOCOL)) == Protocol.GOOGLE) {
+        if (Protocol.parse(getActivity(), generalSettings.getString(KEY_PROTOCOL)) == Protocol.GOOGLE) {
             displayDisabled(findPreference(KEY_FORM_UPDATE_MODE), getString(R.string.manual));
             if (automaticDownload != null) {
                 displayDisabled(automaticDownload, false);
@@ -100,7 +100,7 @@ public class FormManagementPreferencesFragment extends BaseGeneralPreferencesFra
                 updateFrequency.setEnabled(false);
             }
         } else {
-            switch (getFormUpdateMode(requireContext(), generalPrefs)) {
+            switch (getFormUpdateMode(requireContext(), generalSettings)) {
                 case MANUAL:
                     if (automaticDownload != null) {
                         displayDisabled(automaticDownload, false);
@@ -112,7 +112,7 @@ public class FormManagementPreferencesFragment extends BaseGeneralPreferencesFra
                 case PREVIOUSLY_DOWNLOADED_ONLY:
                     if (automaticDownload != null) {
                         automaticDownload.setEnabled(true);
-                        automaticDownload.setChecked(generalPrefs.getBoolean(KEY_AUTOMATIC_UPDATE));
+                        automaticDownload.setChecked(generalSettings.getBoolean(KEY_AUTOMATIC_UPDATE));
                     }
                     if (updateFrequency != null) {
                         updateFrequency.setEnabled(true);
@@ -146,7 +146,7 @@ public class FormManagementPreferencesFragment extends BaseGeneralPreferencesFra
                 return true;
             });
             if (key.equals(KEY_CONSTRAINT_BEHAVIOR)) {
-                pref.setEnabled(preferencesDataSourceProvider.getAdminPreferences().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
+                pref.setEnabled(settingsProvider.getAdminSettings().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
             }
         }
     }
@@ -156,7 +156,7 @@ public class FormManagementPreferencesFragment extends BaseGeneralPreferencesFra
 
         if (pref != null) {
             if (key.equals(KEY_AUTOMATIC_UPDATE)) {
-                String formUpdateCheckPeriod = preferencesDataSourceProvider.getGeneralPreferences().getString(KEY_PERIODIC_FORM_UPDATES_CHECK);
+                String formUpdateCheckPeriod = settingsProvider.getGeneralSettings().getString(KEY_PERIODIC_FORM_UPDATES_CHECK);
 
                 // Only enable automatic form updates if periodic updates are set
                 pref.setEnabled(!formUpdateCheckPeriod.equals(getString(R.string.never_value)));

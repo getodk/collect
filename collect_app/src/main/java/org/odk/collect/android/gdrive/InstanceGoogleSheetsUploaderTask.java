@@ -49,8 +49,8 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
 
     @Override
     protected Outcome doInBackground(Long... instanceIdsToUpload) {
-        String account = preferencesDataSourceProvider
-                .getGeneralPreferences()
+        String account = settingsProvider
+                .getGeneralSettings()
                 .getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
 
         InstanceGoogleSheetsUploader uploader = new InstanceGoogleSheetsUploader(googleApiProvider.getDriveApi(account), googleApiProvider.getSheetsApi(account));
@@ -79,7 +79,7 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
                         TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_blank_form_for_this_form_id));
             } else {
                 try {
-                    String destinationUrl = uploader.getUrlToSubmitTo(instance, null, null, preferencesDataSourceProvider.getGeneralPreferences().getString(KEY_GOOGLE_SHEETS_URL));
+                    String destinationUrl = uploader.getUrlToSubmitTo(instance, null, null, settingsProvider.getGeneralSettings().getString(KEY_GOOGLE_SHEETS_URL));
                     if (InstanceUploaderUtils.doesUrlRefersToGoogleSheetsFile(destinationUrl)) {
                         uploader.uploadOneSubmission(instance, destinationUrl);
                         outcome.messagesByInstanceId.put(instance.getId().toString(), DEFAULT_SUCCESSFUL_TEXT);

@@ -3,11 +3,11 @@ package org.odk.collect.android.preferences.source
 import android.content.SharedPreferences
 import java.util.Collections
 
-class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferences, private val defaultPreferences: Map<String, Any> = emptyMap()) : PreferencesDataSource {
+class SharedPreferencesSettings(private val sharedPreferences: SharedPreferences, private val settingKeysToDefaults: Map<String, Any> = emptyMap()) : Settings {
     private lateinit var sharedPreferencesListener: SharedPreferences.OnSharedPreferenceChangeListener
 
-    override fun loadDefaultPreferencesIfNotExist() {
-        for ((key, value) in defaultPreferences) {
+    override fun setDefaultForAllSettingsWithoutValues() {
+        for ((key, value) in settingKeysToDefaults) {
             if (!sharedPreferences.contains(key)) {
                 save(key, value)
             }
@@ -18,9 +18,9 @@ class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferenc
         saveAll(Collections.singletonMap(key, value))
     }
 
-    override fun saveAll(prefs: Map<String, Any?>) {
+    override fun saveAll(settings: Map<String, Any?>) {
         val editor = sharedPreferences.edit()
-        for ((key, value) in prefs) {
+        for ((key, value) in settings) {
             when (value) {
                 null, is String -> editor.putString(key, value as String?)
                 is Boolean -> editor.putBoolean(key, value)
@@ -28,7 +28,7 @@ class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferenc
                 is Int -> editor.putInt(key, value)
                 is Float -> editor.putFloat(key, value)
                 is Set<*> -> editor.putStringSet(key, value as Set<String?>)
-                else -> throw RuntimeException("Unhandled preference value type: $value")
+                else -> throw RuntimeException("Unhandled setting value type: $value")
             }
         }
         editor.apply()
@@ -39,7 +39,7 @@ class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferenc
     }
 
     override fun reset(key: String) {
-        save(key, defaultPreferences[key])
+        save(key, settingKeysToDefaults[key])
     }
 
     override fun clear() {
@@ -55,41 +55,41 @@ class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferenc
     }
 
     override fun getString(key: String): String? {
-        val defaultValue = (defaultPreferences[key]) as String?
+        val defaultValue = (settingKeysToDefaults[key]) as String?
         return sharedPreferences.getString(key, defaultValue)
     }
 
     override fun getBoolean(key: String): Boolean {
-        val defaultValue = (defaultPreferences[key] ?: false) as Boolean
+        val defaultValue = (settingKeysToDefaults[key] ?: false) as Boolean
         return sharedPreferences.getBoolean(key, defaultValue)
     }
 
     override fun getLong(key: String): Long {
-        val defaultValue = (defaultPreferences[key] ?: 0L) as Long
+        val defaultValue = (settingKeysToDefaults[key] ?: 0L) as Long
         return sharedPreferences.getLong(key, defaultValue)
     }
 
     override fun getInt(key: String): Int {
-        val defaultValue = (defaultPreferences[key] ?: 0) as Int
+        val defaultValue = (settingKeysToDefaults[key] ?: 0) as Int
         return sharedPreferences.getInt(key, defaultValue)
     }
 
     override fun getFloat(key: String): Float {
-        val defaultValue = (defaultPreferences[key] ?: 0f) as Float
+        val defaultValue = (settingKeysToDefaults[key] ?: 0f) as Float
         return sharedPreferences.getFloat(key, defaultValue)
     }
 
     override fun getStringSet(key: String): Set<String>? {
-        val defaultValue = (defaultPreferences[key] ?: emptySet<Any>()) as Set<String>
+        val defaultValue = (settingKeysToDefaults[key] ?: emptySet<Any>()) as Set<String>
         return sharedPreferences.getStringSet(key, defaultValue)
     }
 
-    override fun registerOnPreferenceChangeListener(listener: PreferencesDataSource.OnPreferenceChangeListener) {
-        sharedPreferencesListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key -> listener.onPreferenceChanged(key) }
+    override fun registerOnSettingChangeListener(listener: Settings.OnSettingChangeListener) {
+        sharedPreferencesListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key -> listener.onSettingChanged(key) }
         sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferencesListener)
     }
 
-    override fun unregisterOnPreferenceChangeListener(listener: PreferencesDataSource.OnPreferenceChangeListener) {
+    override fun unregisterOnSettingChangeListener(listener: Settings.OnSettingChangeListener) {
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferencesListener)
     }
 }

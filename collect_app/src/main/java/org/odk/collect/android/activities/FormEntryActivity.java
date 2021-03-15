@@ -375,7 +375,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         Collect.getInstance().getComponent().inject(this);
         setContentView(R.layout.form_entry);
         setupViewModels();
-        swipeHandler = new SwipeHandler(this, preferencesDataSourceProvider.getGeneralPreferences().getString(KEY_NAVIGATION));
+        swipeHandler = new SwipeHandler(this, settingsProvider.getGeneralSettings().getString(KEY_NAVIGATION));
 
         compositeDisposable.add(eventBus
                 .register(ReadPhoneStatePermissionRxEvent.class)
@@ -401,7 +401,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 audioRecorder,
                 backgroundLocationViewModel,
                 backgroundAudioViewModel,
-                preferencesDataSourceProvider
+                settingsProvider
         );
 
         nextButton = findViewById(R.id.form_forward_button);
@@ -429,7 +429,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private void setupViewModels() {
         backgroundLocationViewModel = ViewModelProviders
-                .of(this, new BackgroundLocationViewModel.Factory(permissionsProvider, preferencesDataSourceProvider.getGeneralPreferences()))
+                .of(this, new BackgroundLocationViewModel.Factory(permissionsProvider, settingsProvider.getGeneralSettings()))
                 .get(BackgroundLocationViewModel.class);
 
         backgroundAudioViewModel = new ViewModelProvider(this, backgroundAudioViewModelFactory).get(BackgroundAudioViewModel.class);
@@ -549,7 +549,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void loadForm() {
-        allowMovingBackwards = preferencesDataSourceProvider.getAdminPreferences().getBoolean(KEY_MOVING_BACKWARDS);
+        allowMovingBackwards = settingsProvider.getAdminSettings().getBoolean(KEY_MOVING_BACKWARDS);
 
         // If a parse error message is showing then nothing else is loaded
         // Dialogs mid form just disappear on rotation.
@@ -970,7 +970,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             case R.id.menu_save:
                 // don't exit
-                saveForm(false, InstancesDaoHelper.isInstanceComplete(false, preferencesDataSourceProvider.getGeneralPreferences().getBoolean(KEY_COMPLETED_DEFAULT)), null, true);
+                saveForm(false, InstancesDaoHelper.isInstanceComplete(false, settingsProvider.getGeneralSettings().getBoolean(KEY_COMPLETED_DEFAULT)), null, true);
                 return true;
         }
 
@@ -1275,7 +1275,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
-        FormEndView endView = new FormEndView(this, formSaveViewModel.getFormName(), saveName, InstancesDaoHelper.isInstanceComplete(true, preferencesDataSourceProvider.getGeneralPreferences().getBoolean(KEY_COMPLETED_DEFAULT)), new FormEndView.Listener() {
+        FormEndView endView = new FormEndView(this, formSaveViewModel.getFormName(), saveName, InstancesDaoHelper.isInstanceComplete(true, settingsProvider.getGeneralSettings().getBoolean(KEY_COMPLETED_DEFAULT)), new FormEndView.Listener() {
             @Override
             public void onSaveAsChanged(String saveAs) {
                 // Seems like this is needed for rotation?
@@ -1292,7 +1292,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
-        if (!preferencesDataSourceProvider.getAdminPreferences().getBoolean(AdminKeys.KEY_MARK_AS_FINALIZED)) {
+        if (!settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_MARK_AS_FINALIZED)) {
             endView.findViewById(R.id.mark_finished).setVisibility(View.GONE);
         }
 
@@ -1306,7 +1306,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         // override the visibility settings based upon admin preferences
-        if (!preferencesDataSourceProvider.getAdminPreferences().getBoolean(AdminKeys.KEY_SAVE_AS)) {
+        if (!settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_SAVE_AS)) {
             endView.findViewById(R.id.save_form_as).setVisibility(View.GONE);
             endView.findViewById(R.id.save_name).setVisibility(View.GONE);
         }
@@ -1452,7 +1452,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private boolean saveBeforeNextView(FormController formController) {
         if (formController.currentPromptIsQuestion()) {
             // get constraint behavior preference value with appropriate default
-            String constraintBehavior = preferencesDataSourceProvider.getGeneralPreferences().getString(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR);
+            String constraintBehavior = settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR);
 
             // if constraint behavior says we should validate on swipe, do so
             if (constraintBehavior.equals(GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
@@ -1789,7 +1789,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 onScreenRefresh();
 
                 // get constraint behavior preference value with appropriate default
-                String constraintBehavior = preferencesDataSourceProvider.getGeneralPreferences().getString(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR);
+                String constraintBehavior = settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR);
 
                 // an answer constraint was violated, so we need to display the proper toast(s)
                 // if constraint behavior is on_swipe, this will happen if we do a 'swipe' to the
@@ -1808,7 +1808,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     public void onSaveChangesClicked() {
-        saveForm(true, InstancesDaoHelper.isInstanceComplete(false, preferencesDataSourceProvider.getGeneralPreferences().getBoolean(KEY_COMPLETED_DEFAULT)), null, true);
+        saveForm(true, InstancesDaoHelper.isInstanceComplete(false, settingsProvider.getGeneralSettings().getBoolean(KEY_COMPLETED_DEFAULT)), null, true);
     }
 
     @Nullable
@@ -1969,7 +1969,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     protected void onResume() {
         super.onResume();
 
-        String navigation = preferencesDataSourceProvider.getGeneralPreferences().getString(KEY_NAVIGATION);
+        String navigation = settingsProvider.getGeneralSettings().getString(KEY_NAVIGATION);
         showNavigationButtons = navigation.contains(GeneralKeys.NAVIGATION_BUTTONS);
 
         findViewById(R.id.buttonholder).setVisibility(showNavigationButtons ? View.VISIBLE : View.GONE);

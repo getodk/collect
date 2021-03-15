@@ -14,7 +14,7 @@ import androidx.fragment.app.DialogFragment;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import javax.inject.Inject;
@@ -24,7 +24,7 @@ import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_ADMIN_PW;
 public class ChangeAdminPasswordDialog extends DialogFragment {
 
     @Inject
-    PreferencesDataSourceProvider preferencesDataSourceProvider;
+    SettingsProvider settingsProvider;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class ChangeAdminPasswordDialog extends DialogFragment {
         builder.setView(dialogView);
         builder.setPositiveButton(getString(R.string.ok), (dialog, which) -> {
             String password = passwordEditText.getText().toString();
-            preferencesDataSourceProvider.getAdminPreferences().save(KEY_ADMIN_PW, password);
+            settingsProvider.getAdminSettings().save(KEY_ADMIN_PW, password);
             if (password.equals("")) {
                 ToastUtils.showShortToast(R.string.admin_password_disabled);
             } else {

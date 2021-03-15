@@ -139,9 +139,9 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             super.onCreatePreferences(savedInstanceState, rootKey);
             setPreferencesFromResource(R.xml.main_menu_access_preferences, rootKey);
-            findPreference(KEY_EDIT_SAVED).setEnabled(preferencesDataSourceProvider.getAdminPreferences().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
+            findPreference(KEY_EDIT_SAVED).setEnabled(settingsProvider.getAdminSettings().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
 
-            FormUpdateMode formUpdateMode = getFormUpdateMode(requireContext(), preferencesDataSourceProvider.getGeneralPreferences());
+            FormUpdateMode formUpdateMode = getFormUpdateMode(requireContext(), settingsProvider.getGeneralSettings());
             if (formUpdateMode == FormUpdateMode.MATCH_EXACTLY) {
                 displayDisabled(findPreference(KEY_GET_BLANK), false);
             }
@@ -173,16 +173,16 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
                 }
                 return true;
             });
-            findPreference(KEY_JUMP_TO).setEnabled(preferencesDataSourceProvider.getAdminPreferences().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
-            findPreference(KEY_SAVE_MID).setEnabled(preferencesDataSourceProvider.getAdminPreferences().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
+            findPreference(KEY_JUMP_TO).setEnabled(settingsProvider.getAdminSettings().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
+            findPreference(KEY_SAVE_MID).setEnabled(settingsProvider.getAdminSettings().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
         }
 
         private void preventOtherWaysOfEditingForm() {
-            preferencesDataSourceProvider.getAdminPreferences().save(ALLOW_OTHER_WAYS_OF_EDITING_FORM, false);
-            preferencesDataSourceProvider.getAdminPreferences().save(KEY_EDIT_SAVED, false);
-            preferencesDataSourceProvider.getAdminPreferences().save(KEY_SAVE_MID, false);
-            preferencesDataSourceProvider.getAdminPreferences().save(KEY_JUMP_TO, false);
-            preferencesDataSourceProvider.getGeneralPreferences().save(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR, CONSTRAINT_BEHAVIOR_ON_SWIPE);
+            settingsProvider.getAdminSettings().save(ALLOW_OTHER_WAYS_OF_EDITING_FORM, false);
+            settingsProvider.getAdminSettings().save(KEY_EDIT_SAVED, false);
+            settingsProvider.getAdminSettings().save(KEY_SAVE_MID, false);
+            settingsProvider.getAdminSettings().save(KEY_JUMP_TO, false);
+            settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR, CONSTRAINT_BEHAVIOR_ON_SWIPE);
 
             findPreference(KEY_JUMP_TO).setEnabled(false);
             findPreference(KEY_SAVE_MID).setEnabled(false);
@@ -192,7 +192,7 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
         }
 
         private void onMovingBackwardsEnabled() {
-            preferencesDataSourceProvider.getAdminPreferences().save(ALLOW_OTHER_WAYS_OF_EDITING_FORM, true);
+            settingsProvider.getAdminSettings().save(ALLOW_OTHER_WAYS_OF_EDITING_FORM, true);
             findPreference(KEY_JUMP_TO).setEnabled(true);
             findPreference(KEY_SAVE_MID).setEnabled(true);
         }

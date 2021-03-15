@@ -14,10 +14,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.support.DialogFragmentHelpers;
-import org.odk.collect.android.preferences.source.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestActivityScenario;
-import org.odk.collect.utilities.TestPreferencesProvider;
+import org.odk.collect.utilities.TestSettingsProvider;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowDialog;
 
@@ -33,7 +33,7 @@ public class ChangeAdminPasswordDialogTest {
 
     private FragmentManager fragmentManager;
     private ChangeAdminPasswordDialog dialogFragment;
-    private final PreferencesDataSource adminPrefs = TestPreferencesProvider.getAdminPreferences();
+    private final Settings adminSettings = TestSettingsProvider.getAdminSettings();
 
     @Before
     public void setup() {
@@ -57,7 +57,7 @@ public class ChangeAdminPasswordDialogTest {
         passwordEditText.setText("blah");
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
 
-        assertThat(adminPrefs.getString(KEY_ADMIN_PW), equalTo("blah"));
+        assertThat(adminSettings.getString(KEY_ADMIN_PW), equalTo("blah"));
     }
 
     @Test

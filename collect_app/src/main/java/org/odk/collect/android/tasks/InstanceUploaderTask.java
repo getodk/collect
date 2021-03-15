@@ -27,7 +27,7 @@ import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
@@ -44,7 +44,7 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
 
     private InstancesRepository instancesRepository;
     private FormsRepository formsRepository;
-    protected PreferencesDataSourceProvider preferencesDataSourceProvider;
+    protected SettingsProvider settingsProvider;
     private InstanceUploaderListener stateListener;
     private Boolean deleteInstanceAfterSubmission;
 
@@ -97,7 +97,7 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
                                 List<Long> toDelete = new ArrayList<>();
                                 results.moveToPosition(-1);
 
-                                boolean isFormAutoDeleteOptionEnabled = preferencesDataSourceProvider.getGeneralPreferences().getBoolean(GeneralKeys.KEY_DELETE_AFTER_SEND);
+                                boolean isFormAutoDeleteOptionEnabled = settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_DELETE_AFTER_SEND);
 
                                 // The custom configuration from the third party app overrides
                                 // the app preferences set for delete after submission
@@ -146,10 +146,10 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
         this.deleteInstanceAfterSubmission = deleteInstanceAfterSubmission;
     }
 
-    public void setRepositories(InstancesRepository instancesRepository, FormsRepository formsRepository, PreferencesDataSourceProvider preferencesDataSourceProvider) {
+    public void setRepositories(InstancesRepository instancesRepository, FormsRepository formsRepository, SettingsProvider settingsProvider) {
         this.instancesRepository = instancesRepository;
         this.formsRepository = formsRepository;
-        this.preferencesDataSourceProvider = preferencesDataSourceProvider;
+        this.settingsProvider = settingsProvider;
     }
 
     /**

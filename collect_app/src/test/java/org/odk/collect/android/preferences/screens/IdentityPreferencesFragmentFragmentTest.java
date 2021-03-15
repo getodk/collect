@@ -10,8 +10,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.source.PreferencesDataSource;
-import org.odk.collect.utilities.TestPreferencesProvider;
+import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.utilities.TestSettingsProvider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -20,12 +20,12 @@ import static org.odk.collect.android.preferences.screens.GeneralPreferencesActi
 
 @RunWith(AndroidJUnit4.class)
 public class IdentityPreferencesFragmentFragmentTest {
-    private final PreferencesDataSource adminPrefs = TestPreferencesProvider.getAdminPreferences();
+    private final Settings adminSettings = TestSettingsProvider.getAdminSettings();
 
     @Before
     public void setup() {
-        adminPrefs.clear();
-        adminPrefs.loadDefaultPreferencesIfNotExist();
+        adminSettings.clear();
+        adminSettings.setDefaultForAllSettingsWithoutValues();
     }
 
     @Test
@@ -51,8 +51,8 @@ public class IdentityPreferencesFragmentFragmentTest {
 
     @Test
     public void hiddenPreferences_shouldBeHiddenIfOpenedFromGeneralPreferences() {
-        adminPrefs.save(AdminKeys.KEY_CHANGE_FORM_METADATA, false);
-        adminPrefs.save(AdminKeys.KEY_ANALYTICS, false);
+        adminSettings.save(AdminKeys.KEY_CHANGE_FORM_METADATA, false);
+        adminSettings.save(AdminKeys.KEY_ANALYTICS, false);
 
         FragmentScenario<IdentityPreferencesFragment> scenario = FragmentScenario.launch(IdentityPreferencesFragment.class);
         scenario.onFragment(fragment -> {
@@ -63,8 +63,8 @@ public class IdentityPreferencesFragmentFragmentTest {
 
     @Test
     public void hiddenPreferences_shouldBeVisibleIfOpenedFromAdminSettings() {
-        adminPrefs.save(AdminKeys.KEY_CHANGE_FORM_METADATA, false);
-        adminPrefs.save(AdminKeys.KEY_ANALYTICS, false);
+        adminSettings.save(AdminKeys.KEY_CHANGE_FORM_METADATA, false);
+        adminSettings.save(AdminKeys.KEY_ANALYTICS, false);
 
         Bundle args = new Bundle();
         args.putBoolean(INTENT_KEY_ADMIN_MODE, true);

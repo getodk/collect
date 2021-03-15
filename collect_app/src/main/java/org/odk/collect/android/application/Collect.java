@@ -30,8 +30,8 @@ import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.preferences.source.PreferencesDataSource;
-import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
@@ -58,7 +58,7 @@ public class Collect extends Application implements LocalizedApplication {
     ApplicationInitializer applicationInitializer;
 
     @Inject
-    PreferencesDataSourceProvider preferencesDataSourceProvider;
+    SettingsProvider settingsProvider;
 
     public static Collect getInstance() {
         return singleton;
@@ -198,7 +198,7 @@ public class Collect extends Application implements LocalizedApplication {
     // https://issuetracker.google.com/issues/154855417
     private void fixGoogleBug154855417() {
         try {
-            PreferencesDataSource metaSharedPreferences = preferencesDataSourceProvider.getMetaPreferences();
+            Settings metaSharedPreferences = settingsProvider.getMetaSettings();
 
             boolean hasFixedGoogleBug154855417 = metaSharedPreferences.getBoolean(KEY_GOOGLE_BUG_154855417_FIXED);
 
@@ -216,6 +216,6 @@ public class Collect extends Application implements LocalizedApplication {
     @NotNull
     @Override
     public Locale getLocale() {
-        return new Locale(LocaleHelper.getLocaleCode(preferencesDataSourceProvider.getGeneralPreferences()));
+        return new Locale(LocaleHelper.getLocaleCode(settingsProvider.getGeneralSettings()));
     }
 }

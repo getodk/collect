@@ -56,7 +56,7 @@ public class InstanceServerUploaderTaskTest extends MockedServerTest {
 
         // when
         InstanceServerUploaderTask task = new InstanceServerUploaderTask();
-        task.setRepositories(null, null, preferencesDataSourceProvider);
+        task.setRepositories(null, null, settingsProvider);
         InstanceUploaderTask.Outcome o = task.doInBackground(id);
 
         // then

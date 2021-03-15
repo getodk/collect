@@ -22,18 +22,18 @@ import androidx.preference.PreferenceGroup;
 
 import org.odk.collect.android.preferences.keys.AdminAndGeneralKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.source.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 
 import timber.log.Timber;
 
 public class DisabledPreferencesRemover {
 
     private final PreferenceFragmentCompat pf;
-    private final PreferencesDataSource adminPrefs;
+    private final Settings adminSettings;
 
-    public DisabledPreferencesRemover(PreferenceFragmentCompat pf, PreferencesDataSource adminPrefs) {
+    public DisabledPreferencesRemover(PreferenceFragmentCompat pf, Settings adminSettings) {
         this.pf = pf;
-        this.adminPrefs = adminPrefs;
+        this.adminSettings = adminSettings;
     }
 
     /**
@@ -43,7 +43,7 @@ public class DisabledPreferencesRemover {
      */
     public void remove(AdminAndGeneralKeys... keyPairs) {
         for (AdminAndGeneralKeys agKeys : keyPairs) {
-            boolean prefAllowed = adminPrefs.getBoolean(agKeys.adminKey);
+            boolean prefAllowed = adminSettings.getBoolean(agKeys.adminKey);
 
             if (!prefAllowed) {
                 Preference preference = pf.findPreference(agKeys.generalKey);

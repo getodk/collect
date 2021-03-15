@@ -12,10 +12,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.source.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 import org.odk.collect.android.preferences.Protocol;
 import org.odk.collect.android.preferences.screens.AdminPreferencesFragment.MainMenuAccessPreferences;
-import org.odk.collect.utilities.TestPreferencesProvider;
+import org.odk.collect.utilities.TestSettingsProvider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -25,35 +25,35 @@ import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_GET_BLANK;
 public class MainMenuAccessPreferencesTest {
 
     private Context context;
-    private final PreferencesDataSource generalPrefs = TestPreferencesProvider.getGeneralPreferences();
-    private final PreferencesDataSource adminPrefs = TestPreferencesProvider.getAdminPreferences();
+    private final Settings generalSettings = TestSettingsProvider.getGeneralSettings();
+    private final Settings adminSettings = TestSettingsProvider.getAdminSettings();
 
     @Before
     public void setup() {
         context = ApplicationProvider.getApplicationContext();
-        generalPrefs.clear();
-        generalPrefs.loadDefaultPreferencesIfNotExist();
-        adminPrefs.clear();
-        adminPrefs.loadDefaultPreferencesIfNotExist();
+        generalSettings.clear();
+        generalSettings.setDefaultForAllSettingsWithoutValues();
+        adminSettings.clear();
+        adminSettings.setDefaultForAllSettingsWithoutValues();
     }
 
     @Test
     public void whenMatchExactlyEnabled_showsGetBlankFormAsUncheckedAndDisabled() {
-        generalPrefs.save(GeneralKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context));
+        generalSettings.save(GeneralKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context));
 
         FragmentScenario<MainMenuAccessPreferences> scenario = FragmentScenario.launch(MainMenuAccessPreferences.class);
         scenario.onFragment(f -> {
             CheckBoxPreference getBlankForm = f.findPreference(KEY_GET_BLANK);
             assertThat(getBlankForm.isEnabled(), is(false));
             assertThat(getBlankForm.isChecked(), is(false));
-            assertThat(adminPrefs.getBoolean(KEY_GET_BLANK), is(true));
+            assertThat(adminSettings.getBoolean(KEY_GET_BLANK), is(true));
         });
     }
 
     @Test
     public void whenMatchExactlyEnabled_andGoogleUsedAsProtocol_getBlankFormIsEnabled() {
-        generalPrefs.save(GeneralKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context));
-        generalPrefs.save(GeneralKeys.KEY_PROTOCOL, Protocol.GOOGLE.getValue(context));
+        generalSettings.save(GeneralKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context));
+        generalSettings.save(GeneralKeys.KEY_PROTOCOL, Protocol.GOOGLE.getValue(context));
 
         FragmentScenario<MainMenuAccessPreferences> scenario = FragmentScenario.launch(MainMenuAccessPreferences.class);
         scenario.onFragment(f -> {

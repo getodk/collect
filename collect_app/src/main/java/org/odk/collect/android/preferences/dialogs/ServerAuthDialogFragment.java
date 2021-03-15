@@ -14,15 +14,15 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.ServerAuthDialogBinding;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.source.PreferencesDataSource;
-import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 
 import javax.inject.Inject;
 
 public class ServerAuthDialogFragment extends DialogFragment {
 
     @Inject
-    PreferencesDataSourceProvider preferencesDataSourceProvider;
+    SettingsProvider settingsProvider;
 
     private View dialogView;
 
@@ -38,17 +38,17 @@ public class ServerAuthDialogFragment extends DialogFragment {
         ServerAuthDialogBinding binding = ServerAuthDialogBinding.inflate(requireActivity().getLayoutInflater());
         dialogView = binding.getRoot();
 
-        PreferencesDataSource generalPreferences = preferencesDataSourceProvider.getGeneralPreferences();
-        binding.usernameEdit.setText(generalPreferences.getString(GeneralKeys.KEY_USERNAME));
-        binding.passwordEdit.setText(generalPreferences.getString(GeneralKeys.KEY_PASSWORD));
+        Settings generalSettings = settingsProvider.getGeneralSettings();
+        binding.usernameEdit.setText(generalSettings.getString(GeneralKeys.KEY_USERNAME));
+        binding.passwordEdit.setText(generalSettings.getString(GeneralKeys.KEY_PASSWORD));
 
         return new AlertDialog.Builder(requireContext())
                 .setTitle(R.string.server_requires_auth)
-                .setMessage(requireContext().getString(R.string.server_auth_credentials, generalPreferences.getString(GeneralKeys.KEY_SERVER_URL)))
+                .setMessage(requireContext().getString(R.string.server_auth_credentials, generalSettings.getString(GeneralKeys.KEY_SERVER_URL)))
                 .setView(dialogView)
                 .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
-                    generalPreferences.save(GeneralKeys.KEY_USERNAME, binding.usernameEdit.getText().toString());
-                    generalPreferences.save(GeneralKeys.KEY_PASSWORD, binding.passwordEdit.getText().toString());
+                    generalSettings.save(GeneralKeys.KEY_USERNAME, binding.usernameEdit.getText().toString());
+                    generalSettings.save(GeneralKeys.KEY_PASSWORD, binding.passwordEdit.getText().toString());
                 })
                 .create();
     }

@@ -6,8 +6,8 @@ import org.odk.collect.android.backgroundwork.FormUpdateManager;
 import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.preferences.source.PreferencesDataSource;
-import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.ByteArrayInputStream;
@@ -24,14 +24,14 @@ public class CollectSettingsChangeHandler implements SettingsChangeHandler {
     private final FormUpdateManager formUpdateManager;
     private final ServerRepository serverRepository;
     private final Analytics analytics;
-    private final PreferencesDataSourceProvider preferencesDataSourceProvider;
+    private final SettingsProvider settingsProvider;
 
-    public CollectSettingsChangeHandler(PropertyManager propertyManager, FormUpdateManager formUpdateManager, ServerRepository serverRepository, Analytics analytics, PreferencesDataSourceProvider preferencesDataSourceProvider) {
+    public CollectSettingsChangeHandler(PropertyManager propertyManager, FormUpdateManager formUpdateManager, ServerRepository serverRepository, Analytics analytics, SettingsProvider settingsProvider) {
         this.propertyManager = propertyManager;
         this.formUpdateManager = formUpdateManager;
         this.serverRepository = serverRepository;
         this.analytics = analytics;
-        this.preferencesDataSourceProvider = preferencesDataSourceProvider;
+        this.settingsProvider = settingsProvider;
     }
 
     @Override
@@ -47,8 +47,8 @@ public class CollectSettingsChangeHandler implements SettingsChangeHandler {
         }
 
         if (changedKey.equals(KEY_EXTERNAL_APP_RECORDING) && !((Boolean) newValue)) {
-            PreferencesDataSource generalPrefs = preferencesDataSourceProvider.getGeneralPreferences();
-            String currentServerUrl = generalPrefs.getString(KEY_SERVER_URL);
+            Settings generalSettings = settingsProvider.getGeneralSettings();
+            String currentServerUrl = generalSettings.getString(KEY_SERVER_URL);
             String serverHash = FileUtils.getMd5Hash(new ByteArrayInputStream(currentServerUrl.getBytes()));
 
             analytics.logServerEvent(AnalyticsEvents.INTERNAL_RECORDING_OPT_IN, serverHash);

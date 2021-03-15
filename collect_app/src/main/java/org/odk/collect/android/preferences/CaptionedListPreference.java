@@ -16,7 +16,7 @@ import androidx.preference.ListPreference;
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.dialogs.ReferenceLayerPreferenceDialog;
-import org.odk.collect.android.preferences.source.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 
 import java.util.List;
 import java.util.Objects;
@@ -34,7 +34,7 @@ public class CaptionedListPreference extends ListPreference {
     private int clickedIndex = -1;
 
     @Inject
-    PreferencesDataSourceProvider preferencesDataSourceProvider;
+    SettingsProvider settingsProvider;
 
     public CaptionedListPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -99,7 +99,7 @@ public class CaptionedListPreference extends ListPreference {
         button.setOnClickListener(view -> onItemClicked(i));
         item.setOnClickListener(view -> onItemClicked(i));
         parent.addView(item);
-        if (Objects.equals(value, preferencesDataSourceProvider.getGeneralPreferences().getString(getKey()))) {
+        if (Objects.equals(value, settingsProvider.getGeneralSettings().getString(getKey()))) {
             button.setChecked(true);
             item.post(() -> item.requestRectangleOnScreen(new Rect(0, 0, item.getWidth(), item.getHeight())));
         }

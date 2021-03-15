@@ -10,8 +10,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.source.PreferencesDataSource;
-import org.odk.collect.utilities.TestPreferencesProvider;
+import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.utilities.TestSettingsProvider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -20,12 +20,12 @@ import static org.odk.collect.android.preferences.screens.GeneralPreferencesActi
 
 @RunWith(AndroidJUnit4.class)
 public class GeneralPreferencesFragmentTest {
-    private final PreferencesDataSource adminPrefs = TestPreferencesProvider.getAdminPreferences();
+    private final Settings adminSettings = TestSettingsProvider.getAdminSettings();
 
     @Before
     public void setup() {
-        adminPrefs.clear();
-        adminPrefs.loadDefaultPreferencesIfNotExist();
+        adminSettings.clear();
+        adminSettings.setDefaultForAllSettingsWithoutValues();
     }
 
     @Test
@@ -45,7 +45,7 @@ public class GeneralPreferencesFragmentTest {
 
     @Test
     public void whenServerPreferenceDisabled_shouldBeHiddenWhenOpenedFromGeneralPreferences() {
-        adminPrefs.save(AdminKeys.KEY_CHANGE_SERVER, false);
+        adminSettings.save(AdminKeys.KEY_CHANGE_SERVER, false);
 
         FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference(GeneralKeys.KEY_PROTOCOL), nullValue()));
@@ -53,7 +53,7 @@ public class GeneralPreferencesFragmentTest {
 
     @Test
     public void whenServerPreferenceDisabled_shouldBeVisibleWhenOpenedFromAdminPreferences() {
-        adminPrefs.save(AdminKeys.KEY_CHANGE_SERVER, false);
+        adminSettings.save(AdminKeys.KEY_CHANGE_SERVER, false);
 
         Bundle args = new Bundle();
         args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
@@ -64,11 +64,11 @@ public class GeneralPreferencesFragmentTest {
 
     @Test
     public void whenAllUserInterfacePreferencesDisabled_shouldPreferenceBeHiddenWhenOpenedFromGeneralPreferences() {
-        adminPrefs.save(AdminKeys.KEY_APP_THEME, false);
-        adminPrefs.save(AdminKeys.KEY_APP_LANGUAGE, false);
-        adminPrefs.save(AdminKeys.KEY_CHANGE_FONT_SIZE, false);
-        adminPrefs.save(AdminKeys.KEY_NAVIGATION, false);
-        adminPrefs.save(AdminKeys.KEY_SHOW_SPLASH_SCREEN, false);
+        adminSettings.save(AdminKeys.KEY_APP_THEME, false);
+        adminSettings.save(AdminKeys.KEY_APP_LANGUAGE, false);
+        adminSettings.save(AdminKeys.KEY_CHANGE_FONT_SIZE, false);
+        adminSettings.save(AdminKeys.KEY_NAVIGATION, false);
+        adminSettings.save(AdminKeys.KEY_SHOW_SPLASH_SCREEN, false);
 
         FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference("user_interface"),  nullValue()));
@@ -76,11 +76,11 @@ public class GeneralPreferencesFragmentTest {
 
     @Test
     public void whenAtLeastOneUserInterfacePreferenceIsEnabled_shouldPreferenceBeVisibleWhenOpenedFromGeneralPreferences() {
-        adminPrefs.save(AdminKeys.KEY_APP_THEME, false);
-        adminPrefs.save(AdminKeys.KEY_APP_LANGUAGE, false);
-        adminPrefs.save(AdminKeys.KEY_CHANGE_FONT_SIZE, false);
-        adminPrefs.save(AdminKeys.KEY_NAVIGATION, true);
-        adminPrefs.save(AdminKeys.KEY_SHOW_SPLASH_SCREEN, false);
+        adminSettings.save(AdminKeys.KEY_APP_THEME, false);
+        adminSettings.save(AdminKeys.KEY_APP_LANGUAGE, false);
+        adminSettings.save(AdminKeys.KEY_CHANGE_FONT_SIZE, false);
+        adminSettings.save(AdminKeys.KEY_NAVIGATION, true);
+        adminSettings.save(AdminKeys.KEY_SHOW_SPLASH_SCREEN, false);
 
         FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference("user_interface").isVisible(), equalTo(true)));
@@ -88,11 +88,11 @@ public class GeneralPreferencesFragmentTest {
 
     @Test
     public void whenAllUserInterfacePreferencesDisabled_shouldPreferenceBeVisibleWhenOpenedFromAdminPreferences() {
-        adminPrefs.save(AdminKeys.KEY_APP_THEME, false);
-        adminPrefs.save(AdminKeys.KEY_APP_LANGUAGE, false);
-        adminPrefs.save(AdminKeys.KEY_CHANGE_FONT_SIZE, false);
-        adminPrefs.save(AdminKeys.KEY_NAVIGATION, false);
-        adminPrefs.save(AdminKeys.KEY_SHOW_SPLASH_SCREEN, false);
+        adminSettings.save(AdminKeys.KEY_APP_THEME, false);
+        adminSettings.save(AdminKeys.KEY_APP_LANGUAGE, false);
+        adminSettings.save(AdminKeys.KEY_CHANGE_FONT_SIZE, false);
+        adminSettings.save(AdminKeys.KEY_NAVIGATION, false);
+        adminSettings.save(AdminKeys.KEY_SHOW_SPLASH_SCREEN, false);
 
         Bundle args = new Bundle();
         args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
@@ -118,7 +118,7 @@ public class GeneralPreferencesFragmentTest {
 
     @Test
     public void whenMapsPreferenceDisabled_shouldBeHiddenWhenOpenedFromGeneralPreferences() {
-        adminPrefs.save(AdminKeys.KEY_MAPS, false);
+        adminSettings.save(AdminKeys.KEY_MAPS, false);
 
         FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference(AdminKeys.KEY_MAPS), nullValue()));
@@ -126,7 +126,7 @@ public class GeneralPreferencesFragmentTest {
 
     @Test
     public void whenMapsPreferenceDisabled_shouldBeVisibleWhenOpenedFromAdminPreferences() {
-        adminPrefs.save(AdminKeys.KEY_MAPS, false);
+        adminSettings.save(AdminKeys.KEY_MAPS, false);
 
         Bundle args = new Bundle();
         args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
@@ -137,18 +137,18 @@ public class GeneralPreferencesFragmentTest {
 
     @Test
     public void whenAllFormManagementPreferencesDisabled_shouldPreferenceBeHiddenWhenOpenedFromGeneralPreferences() {
-        adminPrefs.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false);
-        adminPrefs.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false);
-        adminPrefs.save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false);
-        adminPrefs.save(AdminKeys.KEY_AUTOSEND, false);
-        adminPrefs.save(AdminKeys.KEY_DELETE_AFTER_SEND, false);
-        adminPrefs.save(AdminKeys.KEY_DEFAULT_TO_FINALIZED, false);
-        adminPrefs.save(AdminKeys.KEY_CONSTRAINT_BEHAVIOR, false);
-        adminPrefs.save(AdminKeys.KEY_HIGH_RESOLUTION, false);
-        adminPrefs.save(AdminKeys.KEY_IMAGE_SIZE, false);
-        adminPrefs.save(AdminKeys.KEY_GUIDANCE_HINT, false);
-        adminPrefs.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false);
-        adminPrefs.save(AdminKeys.KEY_EXTERNAL_APP_RECORDING, false);
+        adminSettings.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false);
+        adminSettings.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false);
+        adminSettings.save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false);
+        adminSettings.save(AdminKeys.KEY_AUTOSEND, false);
+        adminSettings.save(AdminKeys.KEY_DELETE_AFTER_SEND, false);
+        adminSettings.save(AdminKeys.KEY_DEFAULT_TO_FINALIZED, false);
+        adminSettings.save(AdminKeys.KEY_CONSTRAINT_BEHAVIOR, false);
+        adminSettings.save(AdminKeys.KEY_HIGH_RESOLUTION, false);
+        adminSettings.save(AdminKeys.KEY_IMAGE_SIZE, false);
+        adminSettings.save(AdminKeys.KEY_GUIDANCE_HINT, false);
+        adminSettings.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false);
+        adminSettings.save(AdminKeys.KEY_EXTERNAL_APP_RECORDING, false);
 
         FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference("form_management"),  nullValue()));
@@ -156,17 +156,17 @@ public class GeneralPreferencesFragmentTest {
 
     @Test
     public void whenAtLeastOneFormManagementPreferenceIsEnabled_shouldPreferenceBeVisibleWhenOpenedFromGeneralPreferences() {
-        adminPrefs.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false);
-        adminPrefs.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false);
-        adminPrefs.save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false);
-        adminPrefs.save(AdminKeys.KEY_AUTOSEND, false);
-        adminPrefs.save(AdminKeys.KEY_DELETE_AFTER_SEND, true);
-        adminPrefs.save(AdminKeys.KEY_DEFAULT_TO_FINALIZED, false);
-        adminPrefs.save(AdminKeys.KEY_CONSTRAINT_BEHAVIOR, false);
-        adminPrefs.save(AdminKeys.KEY_HIGH_RESOLUTION, false);
-        adminPrefs.save(AdminKeys.KEY_IMAGE_SIZE, false);
-        adminPrefs.save(AdminKeys.KEY_GUIDANCE_HINT, false);
-        adminPrefs.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false);
+        adminSettings.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false);
+        adminSettings.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false);
+        adminSettings.save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false);
+        adminSettings.save(AdminKeys.KEY_AUTOSEND, false);
+        adminSettings.save(AdminKeys.KEY_DELETE_AFTER_SEND, true);
+        adminSettings.save(AdminKeys.KEY_DEFAULT_TO_FINALIZED, false);
+        adminSettings.save(AdminKeys.KEY_CONSTRAINT_BEHAVIOR, false);
+        adminSettings.save(AdminKeys.KEY_HIGH_RESOLUTION, false);
+        adminSettings.save(AdminKeys.KEY_IMAGE_SIZE, false);
+        adminSettings.save(AdminKeys.KEY_GUIDANCE_HINT, false);
+        adminSettings.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false);
 
         FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference("form_management").isVisible(), equalTo(true)));
@@ -174,17 +174,17 @@ public class GeneralPreferencesFragmentTest {
 
     @Test
     public void whenAllFormManagementPreferencesDisabled_shouldPreferenceBeVisibleWhenOpenedFromAdminPreferences() {
-        adminPrefs.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false);
-        adminPrefs.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false);
-        adminPrefs.save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false);
-        adminPrefs.save(AdminKeys.KEY_AUTOSEND, false);
-        adminPrefs.save(AdminKeys.KEY_DELETE_AFTER_SEND, false);
-        adminPrefs.save(AdminKeys.KEY_DEFAULT_TO_FINALIZED, false);
-        adminPrefs.save(AdminKeys.KEY_CONSTRAINT_BEHAVIOR, false);
-        adminPrefs.save(AdminKeys.KEY_HIGH_RESOLUTION, false);
-        adminPrefs.save(AdminKeys.KEY_IMAGE_SIZE, false);
-        adminPrefs.save(AdminKeys.KEY_GUIDANCE_HINT, false);
-        adminPrefs.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false);
+        adminSettings.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false);
+        adminSettings.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false);
+        adminSettings.save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false);
+        adminSettings.save(AdminKeys.KEY_AUTOSEND, false);
+        adminSettings.save(AdminKeys.KEY_DELETE_AFTER_SEND, false);
+        adminSettings.save(AdminKeys.KEY_DEFAULT_TO_FINALIZED, false);
+        adminSettings.save(AdminKeys.KEY_CONSTRAINT_BEHAVIOR, false);
+        adminSettings.save(AdminKeys.KEY_HIGH_RESOLUTION, false);
+        adminSettings.save(AdminKeys.KEY_IMAGE_SIZE, false);
+        adminSettings.save(AdminKeys.KEY_GUIDANCE_HINT, false);
+        adminSettings.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false);
 
         Bundle args = new Bundle();
         args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
@@ -195,8 +195,8 @@ public class GeneralPreferencesFragmentTest {
 
     @Test
     public void whenAllIdentityPreferencesDisabled_shouldPreferenceBeHiddenWhenOpenedFromGeneralPreferences() {
-        adminPrefs.save(AdminKeys.KEY_CHANGE_FORM_METADATA, false);
-        adminPrefs.save(AdminKeys.KEY_ANALYTICS, false);
+        adminSettings.save(AdminKeys.KEY_CHANGE_FORM_METADATA, false);
+        adminSettings.save(AdminKeys.KEY_ANALYTICS, false);
 
         FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference("user_and_device_identity"),  nullValue()));
@@ -204,8 +204,8 @@ public class GeneralPreferencesFragmentTest {
 
     @Test
     public void whenAtLeastOneIdentityPreferenceIsEnabled_shouldPreferenceBeVisibleWhenOpenedFromGeneralPreferences() {
-        adminPrefs.save(AdminKeys.KEY_CHANGE_FORM_METADATA, false);
-        adminPrefs.save(AdminKeys.KEY_ANALYTICS, true);
+        adminSettings.save(AdminKeys.KEY_CHANGE_FORM_METADATA, false);
+        adminSettings.save(AdminKeys.KEY_ANALYTICS, true);
 
         FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference("user_and_device_identity").isVisible(), equalTo(true)));
@@ -213,8 +213,8 @@ public class GeneralPreferencesFragmentTest {
 
     @Test
     public void whenAllIdentityPreferencesDisabled_shouldPreferenceBeVisibleWhenOpenedFromAdminPreferences() {
-        adminPrefs.save(AdminKeys.KEY_CHANGE_FORM_METADATA, false);
-        adminPrefs.save(AdminKeys.KEY_ANALYTICS, false);
+        adminSettings.save(AdminKeys.KEY_CHANGE_FORM_METADATA, false);
+        adminSettings.save(AdminKeys.KEY_ANALYTICS, false);
 
         Bundle args = new Bundle();
         args.putBoolean(INTENT_KEY_ADMIN_MODE, true);

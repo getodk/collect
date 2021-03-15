@@ -7,15 +7,15 @@ import androidx.annotation.NonNull;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.source.PreferencesDataStore;
+import org.odk.collect.android.preferences.source.SettingsStore;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 public abstract class BaseGeneralPreferencesFragment extends BasePreferencesFragment {
     @Inject
-    @Named("GENERAL_PREFERENCES_DATA_STORE")
-    PreferencesDataStore generalPreferencesDataStore;
+    @Named("GENERAL_SETTINGS_STORE")
+    SettingsStore generalSettingsStore;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -25,23 +25,23 @@ public abstract class BaseGeneralPreferencesFragment extends BasePreferencesFrag
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        getPreferenceManager().setPreferenceDataStore(generalPreferencesDataStore);
+        getPreferenceManager().setPreferenceDataStore(generalSettingsStore);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        preferencesDataSourceProvider.getGeneralPreferences().registerOnPreferenceChangeListener(this);
+        settingsProvider.getGeneralSettings().registerOnSettingChangeListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        preferencesDataSourceProvider.getGeneralPreferences().unregisterOnPreferenceChangeListener(this);
+        settingsProvider.getGeneralSettings().unregisterOnSettingChangeListener(this);
     }
 
     @Override
-    public void onPreferenceChanged(@NotNull String key) {
-        settingsChangeHandler.onSettingChanged(key, preferencesDataSourceProvider.getGeneralPreferences().getAll().get(key));
+    public void onSettingChanged(@NotNull String key) {
+        settingsChangeHandler.onSettingChanged(key, settingsProvider.getGeneralSettings().getAll().get(key));
     }
 }
