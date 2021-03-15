@@ -64,6 +64,7 @@ import org.odk.collect.android.preferences.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.provider.TraceProvider;
 import org.odk.collect.android.tasks.DownloadTasksTask;                 // smap
+import org.odk.collect.android.tasks.SmapChangeOrganisationTask;
 import org.odk.collect.android.tasks.SmapLoginTask;                     // smap
 import org.odk.collect.android.tasks.SmapRemoteWebServicePostTask;      // smap
 import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;          // smap
@@ -150,6 +151,8 @@ public interface AppDependencyComponent {
     void inject(SmapRemoteWebServicePostTask smapRemoteWebServicePostTask);     // smap
 
     void inject(SmapLoginTask smapLoginTask);                                   // smap
+
+    void inject(SmapChangeOrganisationTask smapChangeOrganisationTask);
 
     void inject(SmapTaskMapFragment smapTaskMapFragment);                       // smap
 

@@ -17,6 +17,7 @@ package org.odk.collect.android.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,6 +29,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.backgroundwork.FormUpdateManager;
+import org.odk.collect.android.tasks.SmapChangeOrganisationTask;
+import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;
 
 import java.util.Set;
 
@@ -44,6 +47,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_GUIDANCE_HINT;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_IMAGE_SIZE;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_SERVER_URL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_SMAP_CURRENT_ORGANISATION;
 import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
 
@@ -226,6 +230,11 @@ public class FormManagementPreferences extends BasePreferenceFragment {
 
         orgPref.setOnPreferenceChangeListener((preference, newValue) -> {
             setPreferenceSummary(preference, newValue);
+
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
+            String server = sharedPreferences.getString(KEY_SERVER_URL, "");
+            SmapChangeOrganisationTask task = new SmapChangeOrganisationTask();
+            task.execute(server, newValue.toString());
 
             return true;
         });
