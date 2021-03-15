@@ -296,6 +296,11 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
+    public T scrollToAndClickText(int text) {
+        onView(withText(getTranslatedString(text))).perform(nestedScrollTo(), click());
+        return (T) this;
+    }
+
     public T scrollToAndClickText(String text) {
         onView(withText(text)).perform(nestedScrollTo(), click());
         return (T) this;
