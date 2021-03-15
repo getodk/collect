@@ -20,9 +20,9 @@ import org.odk.collect.android.geo.MapboxUtils;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
 import org.odk.collect.android.preferences.FormUpdateMode;
-import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.utilities.UserAgentProvider;
 
@@ -39,12 +39,12 @@ public class ApplicationInitializer {
     private final SettingsPreferenceMigrator preferenceMigrator;
     private final PropertyManager propertyManager;
     private final Analytics analytics;
-    private final PreferencesDataSource generalPrefs;
-    private final PreferencesDataSource adminPrefs;
+    private final Settings generalSettings;
+    private final Settings adminSettings;
     private final StorageInitializer storageInitializer;
 
     public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator,
-                                  PropertyManager propertyManager, Analytics analytics, StorageInitializer storageInitializer, PreferencesDataSourceProvider preferencesDataSourceProvider) {
+                                  PropertyManager propertyManager, Analytics analytics, StorageInitializer storageInitializer, SettingsProvider settingsProvider) {
         this.context = context;
         this.userAgentProvider = userAgentProvider;
         this.preferenceMigrator = preferenceMigrator;
@@ -52,8 +52,8 @@ public class ApplicationInitializer {
         this.analytics = analytics;
         this.storageInitializer = storageInitializer;
 
-        generalPrefs = preferencesDataSourceProvider.getGeneralPreferences();
-        adminPrefs = preferencesDataSourceProvider.getAdminPreferences();
+        generalSettings = settingsProvider.getGeneralSettings();
+        adminSettings = settingsProvider.getAdminSettings();
     }
 
     public void initialize() {
@@ -82,10 +82,10 @@ public class ApplicationInitializer {
     }
 
     private void initializeAnalytics() {
-        boolean isAnalyticsEnabled = generalPrefs.getBoolean(GeneralKeys.KEY_ANALYTICS);
+        boolean isAnalyticsEnabled = generalSettings.getBoolean(GeneralKeys.KEY_ANALYTICS);
         analytics.setAnalyticsCollectionEnabled(isAnalyticsEnabled);
 
-        FormUpdateMode formUpdateMode = getFormUpdateMode(context, generalPrefs);
+        FormUpdateMode formUpdateMode = getFormUpdateMode(context, generalSettings);
         analytics.setUserProperty("FormUpdateMode", formUpdateMode.getValue(context));
     }
 
@@ -117,12 +117,12 @@ public class ApplicationInitializer {
     }
 
     private void reloadSharedPreferences() {
-        generalPrefs.loadDefaultPreferencesIfNotExist();
-        adminPrefs.loadDefaultPreferencesIfNotExist();
+        generalSettings.setDefaultForAllSettingsWithoutValues();
+        adminSettings.setDefaultForAllSettingsWithoutValues();
     }
 
     private void performMigrations() {
-        preferenceMigrator.migrate(generalPrefs, adminPrefs);
+        preferenceMigrator.migrate(generalSettings, adminSettings);
     }
 
     private void initializeMapFrameworks() {

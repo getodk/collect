@@ -8,29 +8,29 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 
-import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.utilities.TestPreferencesProvider;
+import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.utilities.TestSettingsProvider;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_DELETE_SAVED;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_EDIT_SAVED;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_GET_BLANK;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_SEND_FINALIZED;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_VIEW_SENT;
+import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_DELETE_SAVED;
+import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_EDIT_SAVED;
+import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_GET_BLANK;
+import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_SEND_FINALIZED;
+import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_VIEW_SENT;
 
 @RunWith(RobolectricTestRunner.class)
 public class MainMenuButtonsVisibilityTest {
 
     private MainMenuActivity mainMenuActivity;
-    private final PreferencesDataSource adminPrefs = TestPreferencesProvider.getAdminPreferences();
+    private final Settings adminSettings = TestSettingsProvider.getAdminSettings();
 
     @Before
     public void setup() {
-        adminPrefs.clear();
-        adminPrefs.loadDefaultPreferencesIfNotExist();
+        adminSettings.clear();
+        adminSettings.setDefaultForAllSettingsWithoutValues();
     }
 
     @Test
@@ -43,7 +43,7 @@ public class MainMenuButtonsVisibilityTest {
 
     @Test
     public void when_editSavedFormButtonIsDisabledInSettings_shouldBeGone() {
-        adminPrefs.save(KEY_EDIT_SAVED, false);
+        adminSettings.save(KEY_EDIT_SAVED, false);
         createActivity();
 
         Button editSavedFormButton = mainMenuActivity.findViewById(R.id.review_data);
@@ -60,7 +60,7 @@ public class MainMenuButtonsVisibilityTest {
 
     @Test
     public void when_sendFinalizedFormButtonIsDisabledInSettings_shouldBeGone() {
-        adminPrefs.save(KEY_SEND_FINALIZED, false);
+        adminSettings.save(KEY_SEND_FINALIZED, false);
         createActivity();
 
         Button sendFinalizedFormButton = mainMenuActivity.findViewById(R.id.send_data);
@@ -77,7 +77,7 @@ public class MainMenuButtonsVisibilityTest {
 
     @Test
     public void when_viewSentFormButtonIsDisabledInSettings_shouldBeGone() {
-        adminPrefs.save(KEY_VIEW_SENT, false);
+        adminSettings.save(KEY_VIEW_SENT, false);
         createActivity();
 
         Button viewSentFormButton = mainMenuActivity.findViewById(R.id.view_sent_forms);
@@ -94,7 +94,7 @@ public class MainMenuButtonsVisibilityTest {
 
     @Test
     public void when_getBlankFormButtonIsDisabledInSettings_shouldBeGone() {
-        adminPrefs.save(KEY_GET_BLANK, false);
+        adminSettings.save(KEY_GET_BLANK, false);
         createActivity();
 
         Button getBlankFormButton = mainMenuActivity.findViewById(R.id.get_forms);
@@ -111,7 +111,7 @@ public class MainMenuButtonsVisibilityTest {
 
     @Test
     public void when_deleteSavedFormButtonIsDisabledInSettings_shouldBeGone() {
-        adminPrefs.save(KEY_DELETE_SAVED, false);
+        adminSettings.save(KEY_DELETE_SAVED, false);
         createActivity();
 
         Button deleteSavedFormButton = mainMenuActivity.findViewById(R.id.manage_forms);

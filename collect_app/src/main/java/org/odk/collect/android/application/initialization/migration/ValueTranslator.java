@@ -1,6 +1,6 @@
 package org.odk.collect.android.application.initialization.migration;
 
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 
 import java.util.Map;
 
@@ -25,7 +25,7 @@ public class ValueTranslator implements Migration {
     }
 
     @Override
-    public void apply(PreferencesDataSource prefs) {
+    public void apply(Settings prefs) {
         if (!prefs.contains(key)) {
             return;
         }

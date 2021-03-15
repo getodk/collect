@@ -6,7 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 
 import java.io.File;
 import java.util.Collection;
@@ -48,7 +48,7 @@ public interface MapConfigurator {
     Collection<String> getPrefKeys();
 
     /** Packs map-related preferences into a Bundle for MapFragment.applyConfig(). */
-    Bundle buildConfig(PreferencesDataSource prefs);
+    Bundle buildConfig(Settings prefs);
 
     /**
      * Returns true if map fragments obtained from this MapConfigurator are

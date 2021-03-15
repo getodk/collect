@@ -2,7 +2,7 @@ package org.odk.collect.android.application.initialization.migration;
 
 import android.annotation.SuppressLint;
 
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 
 public class MigrationUtils {
 
@@ -67,14 +67,14 @@ public class MigrationUtils {
 
     /** Removes an old key and sets a new key. */
     @SuppressLint("ApplySharedPref")
-    static void replace(PreferencesDataSource prefs, String oldKey, String newKey, Object newValue) {
+    static void replace(Settings prefs, String oldKey, String newKey, Object newValue) {
         prefs.remove(oldKey);
         prefs.save(newKey, newValue);
     }
 
     /** Removes one or more old keys, then adds one or more new key-value pairs. */
     @SuppressLint("ApplySharedPref")
-    static void replace(PreferencesDataSource prefs, String[] oldKeys, KeyValuePair... newKeyValuePairs) {
+    static void replace(Settings prefs, String[] oldKeys, KeyValuePair... newKeyValuePairs) {
         for (String key : oldKeys) {
             prefs.remove(key);
         }

@@ -19,16 +19,17 @@ import android.widget.Toast;
 import androidx.preference.PreferenceFragmentCompat;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.preferences.screens.ServerPreferencesFragment;
 
 /**
  * Extracted use case class to isolate and allow testing of functionality (in this
  * case error handling). Originally contained in {@link ServerPreferencesFragment}.
  **/
-class AggregatePreferencesAdder {
+public class AggregatePreferencesAdder {
 
     private final PreferenceFragmentCompat fragment;
 
-    AggregatePreferencesAdder(PreferenceFragmentCompat fragment) {
+    public AggregatePreferencesAdder(PreferenceFragmentCompat fragment) {
         this.fragment = fragment;
     }
 

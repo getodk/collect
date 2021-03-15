@@ -6,17 +6,17 @@ import org.odk.collect.android.backgroundwork.FormUpdateManager;
 import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.ByteArrayInputStream;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_EXTERNAL_APP_RECORDING;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_FORM_UPDATE_MODE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_SERVER_URL;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_EXTERNAL_APP_RECORDING;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_FORM_UPDATE_MODE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PROTOCOL;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_SERVER_URL;
 
 public class CollectSettingsChangeHandler implements SettingsChangeHandler {
 
@@ -24,14 +24,14 @@ public class CollectSettingsChangeHandler implements SettingsChangeHandler {
     private final FormUpdateManager formUpdateManager;
     private final ServerRepository serverRepository;
     private final Analytics analytics;
-    private final PreferencesDataSourceProvider preferencesDataSourceProvider;
+    private final SettingsProvider settingsProvider;
 
-    public CollectSettingsChangeHandler(PropertyManager propertyManager, FormUpdateManager formUpdateManager, ServerRepository serverRepository, Analytics analytics, PreferencesDataSourceProvider preferencesDataSourceProvider) {
+    public CollectSettingsChangeHandler(PropertyManager propertyManager, FormUpdateManager formUpdateManager, ServerRepository serverRepository, Analytics analytics, SettingsProvider settingsProvider) {
         this.propertyManager = propertyManager;
         this.formUpdateManager = formUpdateManager;
         this.serverRepository = serverRepository;
         this.analytics = analytics;
-        this.preferencesDataSourceProvider = preferencesDataSourceProvider;
+        this.settingsProvider = settingsProvider;
     }
 
     @Override
@@ -47,8 +47,8 @@ public class CollectSettingsChangeHandler implements SettingsChangeHandler {
         }
 
         if (changedKey.equals(KEY_EXTERNAL_APP_RECORDING) && !((Boolean) newValue)) {
-            PreferencesDataSource generalPrefs = preferencesDataSourceProvider.getGeneralPreferences();
-            String currentServerUrl = generalPrefs.getString(KEY_SERVER_URL);
+            Settings generalSettings = settingsProvider.getGeneralSettings();
+            String currentServerUrl = generalSettings.getString(KEY_SERVER_URL);
             String serverHash = FileUtils.getMd5Hash(new ByteArrayInputStream(currentServerUrl.getBytes()));
 
             analytics.logServerEvent(AnalyticsEvents.INTERNAL_RECORDING_OPT_IN, serverHash);

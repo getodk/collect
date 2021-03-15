@@ -31,7 +31,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_FONT_SIZE;
 import static org.odk.collect.android.utilities.QuestionFontSizeUtils.DEFAULT_FONT_SIZE;
 import static org.robolectric.Shadows.shadowOf;
 
@@ -85,7 +85,7 @@ public class ExAudioWidgetTest extends FileWidgetTest<ExAudioWidget> {
 
     @Test
     public void whenFontSizeChanged_CustomFontSizeShouldBeUsed() {
-        preferencesDataSourceProvider.getGeneralPreferences().save(KEY_FONT_SIZE, "30");
+        settingsProvider.getGeneralSettings().save(KEY_FONT_SIZE, "30");
 
         assertThat((int) getWidget().binding.launchExternalAppButton.getTextSize(), is(29));
     }

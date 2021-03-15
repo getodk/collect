@@ -20,8 +20,8 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 
 import java.util.HashMap;
@@ -33,10 +33,10 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_EMAIL;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_PHONENUMBER;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_USERNAME;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_USERNAME;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_METADATA_EMAIL;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_METADATA_PHONENUMBER;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_METADATA_USERNAME;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_USERNAME;
 
 /**
  * Returns device properties and metadata to JavaRosa
@@ -66,7 +66,7 @@ public class PropertyManager implements IPropertyManager {
     PermissionsProvider permissionsProvider;
 
     @Inject
-    PreferencesDataSourceProvider preferencesDataSourceProvider;
+    SettingsProvider settingsProvider;
 
     public String getName() {
         return "Property Manager";
@@ -78,11 +78,11 @@ public class PropertyManager implements IPropertyManager {
         reload();
     }
 
-    public PropertyManager(RxEventBus rxEventBus, PermissionsProvider permissionsProvider, DeviceDetailsProvider deviceDetailsProvider, PreferencesDataSourceProvider preferencesDataSourceProvider) {
+    public PropertyManager(RxEventBus rxEventBus, PermissionsProvider permissionsProvider, DeviceDetailsProvider deviceDetailsProvider, SettingsProvider settingsProvider) {
         this.eventBus = rxEventBus;
         this.permissionsProvider = permissionsProvider;
         this.deviceDetailsProvider = deviceDetailsProvider;
-        this.preferencesDataSourceProvider = preferencesDataSourceProvider;
+        this.settingsProvider = settingsProvider;
     }
 
     public PropertyManager reload() {
@@ -94,14 +94,14 @@ public class PropertyManager implements IPropertyManager {
         }
 
         // User-defined properties. Will replace any above with the same PROPMGR_ name.
-        PreferencesDataSource generalPrefs = preferencesDataSourceProvider.getGeneralPreferences();
-        initUserDefined(generalPrefs, KEY_METADATA_USERNAME,    PROPMGR_USERNAME,      SCHEME_USERNAME);
-        initUserDefined(generalPrefs, KEY_METADATA_PHONENUMBER, PROPMGR_PHONE_NUMBER,  SCHEME_TEL);
-        initUserDefined(generalPrefs, KEY_METADATA_EMAIL,       PROPMGR_EMAIL,         SCHEME_MAILTO);
+        Settings generalSettings = settingsProvider.getGeneralSettings();
+        initUserDefined(generalSettings, KEY_METADATA_USERNAME,    PROPMGR_USERNAME,      SCHEME_USERNAME);
+        initUserDefined(generalSettings, KEY_METADATA_PHONENUMBER, PROPMGR_PHONE_NUMBER,  SCHEME_TEL);
+        initUserDefined(generalSettings, KEY_METADATA_EMAIL,       PROPMGR_EMAIL,         SCHEME_MAILTO);
 
         // Use the server username by default if the metadata username is not defined
         if (getSingularProperty(PROPMGR_USERNAME) == null || getSingularProperty(PROPMGR_USERNAME).isEmpty()) {
-            putProperty(PROPMGR_USERNAME, SCHEME_USERNAME, preferencesDataSourceProvider.getGeneralPreferences().getString(KEY_USERNAME));
+            putProperty(PROPMGR_USERNAME, SCHEME_USERNAME, settingsProvider.getGeneralSettings().getString(KEY_USERNAME));
         }
 
         return this;
@@ -109,14 +109,14 @@ public class PropertyManager implements IPropertyManager {
 
     /**
      * Initializes a property and its associated “with URI” property, from shared preferences.
-     * @param generalPrefs the preferences object to be used
+     * @param generalSettings the preferences object to be used
      * @param prefKey the preferences key
      * @param propName the name of the property to set
      * @param scheme the scheme for the associated “with URI” property
      */
-    private void initUserDefined(PreferencesDataSource generalPrefs, String prefKey,
+    private void initUserDefined(Settings generalSettings, String prefKey,
                                  String propName, String scheme) {
-        putProperty(propName, scheme, generalPrefs.getString(prefKey));
+        putProperty(propName, scheme, generalSettings.getString(prefKey));
     }
 
     public void putProperty(String propName, String scheme, String value) {

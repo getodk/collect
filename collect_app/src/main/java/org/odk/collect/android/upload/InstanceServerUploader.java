@@ -25,9 +25,9 @@ import org.odk.collect.android.openrosa.HttpHeadResult;
 import org.odk.collect.android.openrosa.HttpPostResult;
 import org.odk.collect.android.openrosa.OpenRosaConstants;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -51,15 +51,15 @@ public class InstanceServerUploader extends InstanceUploader {
     private final OpenRosaHttpInterface httpInterface;
     private final WebCredentialsUtils webCredentialsUtils;
     private final Map<Uri, Uri> uriRemap;
-    private final PreferencesDataSourceProvider preferencesDataSourceProvider;
+    private final SettingsProvider settingsProvider;
 
     public InstanceServerUploader(OpenRosaHttpInterface httpInterface,
                                   WebCredentialsUtils webCredentialsUtils,
-                                  Map<Uri, Uri> uriRemap, PreferencesDataSourceProvider preferencesDataSourceProvider) {
+                                  Map<Uri, Uri> uriRemap, SettingsProvider settingsProvider) {
         this.httpInterface = httpInterface;
         this.webCredentialsUtils = webCredentialsUtils;
         this.uriRemap = uriRemap;
-        this.preferencesDataSourceProvider = preferencesDataSourceProvider;
+        this.settingsProvider = settingsProvider;
     }
 
     /**
@@ -293,15 +293,15 @@ public class InstanceServerUploader extends InstanceUploader {
     }
 
     private String getServerSubmissionURL() {
-        PreferencesDataSource generalPrefs = preferencesDataSourceProvider.getGeneralPreferences();
-        String serverBase = generalPrefs.getString(GeneralKeys.KEY_SERVER_URL);
+        Settings generalSettings = settingsProvider.getGeneralSettings();
+        String serverBase = generalSettings.getString(GeneralKeys.KEY_SERVER_URL);
 
         if (serverBase.endsWith(URL_PATH_SEP)) {
             serverBase = serverBase.substring(0, serverBase.length() - 1);
         }
 
         // NOTE: /submission must not be translated! It is the well-known path on the server.
-        String submissionPath = generalPrefs.getString(GeneralKeys.KEY_SUBMISSION_URL);
+        String submissionPath = generalSettings.getString(GeneralKeys.KEY_SUBMISSION_URL);
 
         if (!submissionPath.startsWith(URL_PATH_SEP)) {
             submissionPath = URL_PATH_SEP + submissionPath;

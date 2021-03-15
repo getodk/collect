@@ -2,14 +2,14 @@ package org.odk.collect.android.backgroundwork;
 
 import android.app.Application;
 
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 import org.odk.collect.android.preferences.Protocol;
 import org.odk.collect.async.Scheduler;
 
 import static org.odk.collect.android.backgroundwork.BackgroundWorkUtils.getPeriodInMilliseconds;
 import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PROTOCOL;
 
 public class SchedulerFormUpdateAndSubmitManager implements FormUpdateManager, FormSubmitManager {
 
@@ -18,28 +18,28 @@ public class SchedulerFormUpdateAndSubmitManager implements FormUpdateManager, F
     public static final String AUTO_SEND_TAG = "AutoSendWorker";
 
     private final Scheduler scheduler;
-    private final PreferencesDataSource generalPreferences;
+    private final Settings generalSettings;
     private final Application application;
 
-    public SchedulerFormUpdateAndSubmitManager(Scheduler scheduler, PreferencesDataSource generalPreferences, Application application) {
+    public SchedulerFormUpdateAndSubmitManager(Scheduler scheduler, Settings generalSettings, Application application) {
         this.scheduler = scheduler;
-        this.generalPreferences = generalPreferences;
+        this.generalSettings = generalSettings;
         this.application = application;
     }
 
     @Override
     public void scheduleUpdates() {
-        String protocol = generalPreferences.getString(KEY_PROTOCOL);
+        String protocol = generalSettings.getString(KEY_PROTOCOL);
         if (Protocol.parse(application, protocol) == Protocol.GOOGLE) {
             scheduler.cancelDeferred(MATCH_EXACTLY_SYNC_TAG);
             scheduler.cancelDeferred(AUTO_UPDATE_TAG);
             return;
         }
 
-        String period = generalPreferences.getString(KEY_PERIODIC_FORM_UPDATES_CHECK);
+        String period = generalSettings.getString(KEY_PERIODIC_FORM_UPDATES_CHECK);
         long periodInMilliseconds = getPeriodInMilliseconds(period, application);
 
-        switch (getFormUpdateMode(application, generalPreferences)) {
+        switch (getFormUpdateMode(application, generalSettings)) {
             case MANUAL:
                 scheduler.cancelDeferred(MATCH_EXACTLY_SYNC_TAG);
                 scheduler.cancelDeferred(AUTO_UPDATE_TAG);

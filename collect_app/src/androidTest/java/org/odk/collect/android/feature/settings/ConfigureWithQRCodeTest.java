@@ -25,7 +25,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.preferences.JsonPreferencesGenerator;
+import org.odk.collect.android.configure.qr.JsonPreferencesGenerator;
 import org.odk.collect.android.support.CallbackCountingTaskExecutorRule;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CountingTaskExecutorIdlingResource;

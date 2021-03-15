@@ -12,22 +12,22 @@ import org.odk.collect.android.geo.GoogleMapConfigurator.GoogleMapTypeOption;
 import org.odk.collect.android.geo.MapboxMapConfigurator.MapboxUrlOption;
 import org.odk.collect.android.geo.OsmDroidMapConfigurator.WmsOption;
 import org.odk.collect.android.preferences.PrefUtils;
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_CARTO;
-import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_GOOGLE;
-import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_MAPBOX;
-import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_OSM;
-import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_STAMEN;
-import static org.odk.collect.android.preferences.GeneralKeys.BASEMAP_SOURCE_USGS;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_BASEMAP_SOURCE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_CARTO_MAP_STYLE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_GOOGLE_MAP_STYLE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAPBOX_MAP_STYLE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_USGS_MAP_STYLE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.BASEMAP_SOURCE_CARTO;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.BASEMAP_SOURCE_GOOGLE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.BASEMAP_SOURCE_MAPBOX;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.BASEMAP_SOURCE_OSM;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.BASEMAP_SOURCE_STAMEN;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.BASEMAP_SOURCE_USGS;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_BASEMAP_SOURCE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_CARTO_MAP_STYLE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_GOOGLE_MAP_STYLE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_MAPBOX_MAP_STYLE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_USGS_MAP_STYLE;
 
 /**
  * Obtains a MapFragment according to the user's preferences.
@@ -51,7 +51,7 @@ public class MapProvider {
     // automatically when it's no longer needed.
 
     /** Keeps track of the listener associated with a given MapFragment. */
-    private final Map<MapFragment, PreferencesDataSource.OnPreferenceChangeListener>
+    private final Map<MapFragment, Settings.OnSettingChangeListener>
         listenersByMap = new WeakHashMap<>();
 
     /** Keeps track of the configurator associated with a given MapFragment. */
@@ -203,23 +203,23 @@ public class MapProvider {
     void onMapFragmentStart(MapFragment map) {
         MapConfigurator cftor = configuratorsByMap.get(map);
         if (cftor != null) {
-            PreferencesDataSource generalPrefs = PrefUtils.getSharedPrefs();
-            PreferencesDataSource.OnPreferenceChangeListener listener = key -> {
+            Settings generalSettings = PrefUtils.getSharedPrefs();
+            Settings.OnSettingChangeListener listener = key -> {
                 if (cftor.getPrefKeys().contains(key)) {
-                    map.applyConfig(cftor.buildConfig(generalPrefs));
+                    map.applyConfig(cftor.buildConfig(generalSettings));
                 }
             };
-            map.applyConfig(cftor.buildConfig(generalPrefs));
-            generalPrefs.registerOnPreferenceChangeListener(listener);
+            map.applyConfig(cftor.buildConfig(generalSettings));
+            generalSettings.registerOnSettingChangeListener(listener);
             listenersByMap.put(map, listener);
         }
     }
 
     void onMapFragmentStop(MapFragment map) {
-        PreferencesDataSource.OnPreferenceChangeListener listener = listenersByMap.get(map);
+        Settings.OnSettingChangeListener listener = listenersByMap.get(map);
         if (listener != null) {
-            PreferencesDataSource prefs = PrefUtils.getSharedPrefs();
-            prefs.unregisterOnPreferenceChangeListener(listener);
+            Settings prefs = PrefUtils.getSharedPrefs();
+            prefs.unregisterOnSettingChangeListener(listener);
             listenersByMap.remove(map);
         }
     }

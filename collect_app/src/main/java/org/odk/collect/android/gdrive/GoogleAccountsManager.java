@@ -24,8 +24,8 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 
-import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.io.IOException;
@@ -39,12 +39,12 @@ public class GoogleAccountsManager {
     private Intent intentChooseAccount;
     private Context context;
     private ThemeUtils themeUtils;
-    private final PreferencesDataSourceProvider preferencesDataSourceProvider;
+    private final SettingsProvider settingsProvider;
 
     @Inject
-    public GoogleAccountsManager(@NonNull Context context, GoogleAccountPicker googleAccountPicker, PreferencesDataSourceProvider preferencesDataSourceProvider) {
+    public GoogleAccountsManager(@NonNull Context context, GoogleAccountPicker googleAccountPicker, SettingsProvider settingsProvider) {
         this.accountPicker = googleAccountPicker;
-        this.preferencesDataSourceProvider = preferencesDataSourceProvider;
+        this.settingsProvider = settingsProvider;
         initCredential(context);
     }
 
@@ -52,12 +52,12 @@ public class GoogleAccountsManager {
      * This constructor should be used only for testing purposes
      */
     public GoogleAccountsManager(@NonNull GoogleAccountCredential credential,
-                                 @NonNull PreferencesDataSourceProvider preferencesDataSourceProvider,
+                                 @NonNull SettingsProvider settingsProvider,
                                  @NonNull Intent intentChooseAccount,
                                  @NonNull ThemeUtils themeUtils
     ) {
         this.accountPicker = new GoogleAccountCredentialGoogleAccountPicker(credential);
-        this.preferencesDataSourceProvider = preferencesDataSourceProvider;
+        this.settingsProvider = settingsProvider;
         this.intentChooseAccount = intentChooseAccount;
         this.themeUtils = themeUtils;
     }
@@ -69,7 +69,7 @@ public class GoogleAccountsManager {
     @NonNull
     public String getLastSelectedAccountIfValid() {
         Account[] googleAccounts = accountPicker.getAllAccounts();
-        String account = preferencesDataSourceProvider.getGeneralPreferences().getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+        String account = settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
 
         if (googleAccounts != null && googleAccounts.length > 0) {
             for (Account googleAccount : googleAccounts) {
@@ -78,7 +78,7 @@ public class GoogleAccountsManager {
                 }
             }
 
-            preferencesDataSourceProvider.getGeneralPreferences().reset(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+            settingsProvider.getGeneralSettings().reset(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
         }
 
         return "";
@@ -86,7 +86,7 @@ public class GoogleAccountsManager {
 
     public void selectAccount(String accountName) {
         if (accountName != null) {
-            preferencesDataSourceProvider.getGeneralPreferences().save(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
+            settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
             accountPicker.setSelectedAccountName(accountName);
         }
     }

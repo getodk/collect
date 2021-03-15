@@ -1,24 +1,24 @@
 package org.odk.collect.android.application.initialization.migration;
 
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 
 import java.util.Map;
 
 public class KeyMover implements Migration {
     private final String key;
-    private PreferencesDataSource newPrefs;
+    private Settings newPrefs;
 
     public KeyMover(String key) {
         this.key = key;
     }
 
-    public KeyMover toPreferences(PreferencesDataSource newPrefs) {
+    public KeyMover toPreferences(Settings newPrefs) {
         this.newPrefs = newPrefs;
         return this;
     }
 
     @Override
-    public void apply(PreferencesDataSource prefs) {
+    public void apply(Settings prefs) {
         if (newPrefs.contains(key)) {
             return;
         }

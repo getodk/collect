@@ -18,7 +18,7 @@ import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.permissions.PermissionsChecker;
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
@@ -32,12 +32,12 @@ import java.util.function.BiConsumer;
 
 import javax.inject.Inject;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_RECORDING;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_BACKGROUND_RECORDING;
 
 public class BackgroundAudioViewModel extends ViewModel implements RequiresFormController {
 
     private final AudioRecorder audioRecorder;
-    private final PreferencesDataSource generalPreferences;
+    private final Settings generalSettings;
     private final RecordAudioActionRegistry recordAudioActionRegistry;
     private final PermissionsChecker permissionsChecker;
     private final Clock clock;
@@ -54,9 +54,9 @@ public class BackgroundAudioViewModel extends ViewModel implements RequiresFormC
     private AuditEventLogger auditEventLogger;
     private FormController formController;
 
-    public BackgroundAudioViewModel(AudioRecorder audioRecorder, PreferencesDataSource generalPreferences, RecordAudioActionRegistry recordAudioActionRegistry, PermissionsChecker permissionsChecker, Clock clock, Analytics analytics) {
+    public BackgroundAudioViewModel(AudioRecorder audioRecorder, Settings generalSettings, RecordAudioActionRegistry recordAudioActionRegistry, PermissionsChecker permissionsChecker, Clock clock, Analytics analytics) {
         this.audioRecorder = audioRecorder;
-        this.generalPreferences = generalPreferences;
+        this.generalSettings = generalSettings;
         this.recordAudioActionRegistry = recordAudioActionRegistry;
         this.permissionsChecker = permissionsChecker;
         this.clock = clock;
@@ -66,7 +66,7 @@ public class BackgroundAudioViewModel extends ViewModel implements RequiresFormC
             new Handler(Looper.getMainLooper()).post(() -> handleRecordAction(treeReference, quality));
         });
 
-        isBackgroundRecordingEnabled = new MutableNonNullLiveData<>(generalPreferences.getBoolean(KEY_BACKGROUND_RECORDING));
+        isBackgroundRecordingEnabled = new MutableNonNullLiveData<>(generalSettings.getBoolean(KEY_BACKGROUND_RECORDING));
     }
 
     @Override
@@ -109,7 +109,7 @@ public class BackgroundAudioViewModel extends ViewModel implements RequiresFormC
             }
         }
 
-        generalPreferences.save(KEY_BACKGROUND_RECORDING, enabled);
+        generalSettings.save(KEY_BACKGROUND_RECORDING, enabled);
         isBackgroundRecordingEnabled.postValue(enabled);
     }
 
@@ -174,15 +174,15 @@ public class BackgroundAudioViewModel extends ViewModel implements RequiresFormC
     public static class Factory implements ViewModelProvider.Factory {
 
         private final AudioRecorder audioRecorder;
-        private final PreferencesDataSource generalPreferences;
+        private final Settings generalSettings;
         private final PermissionsChecker permissionsChecker;
         private final Clock clock;
         private final Analytics analytics;
 
         @Inject
-        public Factory(AudioRecorder audioRecorder, PreferencesDataSource generalPreferences, PermissionsChecker permissionsChecker, Clock clock, Analytics analytics) {
+        public Factory(AudioRecorder audioRecorder, Settings generalSettings, PermissionsChecker permissionsChecker, Clock clock, Analytics analytics) {
             this.audioRecorder = audioRecorder;
-            this.generalPreferences = generalPreferences;
+            this.generalSettings = generalSettings;
             this.permissionsChecker = permissionsChecker;
             this.clock = clock;
             this.analytics = analytics;
@@ -203,7 +203,7 @@ public class BackgroundAudioViewModel extends ViewModel implements RequiresFormC
                 }
             };
 
-            return (T) new BackgroundAudioViewModel(audioRecorder, generalPreferences, recordAudioActionRegistry, permissionsChecker, clock, analytics);
+            return (T) new BackgroundAudioViewModel(audioRecorder, generalSettings, recordAudioActionRegistry, permissionsChecker, clock, analytics);
         }
     }
 }

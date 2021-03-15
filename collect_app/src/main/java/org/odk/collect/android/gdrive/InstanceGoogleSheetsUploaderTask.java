@@ -22,7 +22,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
 import org.odk.collect.android.upload.UploadException;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
@@ -33,7 +33,7 @@ import java.util.List;
 import timber.log.Timber;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.SUBMISSION;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_GOOGLE_SHEETS_URL;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_GOOGLE_SHEETS_URL;
 import static org.odk.collect.android.utilities.InstanceUploaderUtils.DEFAULT_SUCCESSFUL_TEXT;
 import static org.odk.collect.android.utilities.InstanceUploaderUtils.SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE;
 
@@ -49,8 +49,8 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
 
     @Override
     protected Outcome doInBackground(Long... instanceIdsToUpload) {
-        String account = preferencesDataSourceProvider
-                .getGeneralPreferences()
+        String account = settingsProvider
+                .getGeneralSettings()
                 .getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
 
         InstanceGoogleSheetsUploader uploader = new InstanceGoogleSheetsUploader(googleApiProvider.getDriveApi(account), googleApiProvider.getSheetsApi(account));
@@ -79,7 +79,7 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
                         TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_blank_form_for_this_form_id));
             } else {
                 try {
-                    String destinationUrl = uploader.getUrlToSubmitTo(instance, null, null, preferencesDataSourceProvider.getGeneralPreferences().getString(KEY_GOOGLE_SHEETS_URL));
+                    String destinationUrl = uploader.getUrlToSubmitTo(instance, null, null, settingsProvider.getGeneralSettings().getString(KEY_GOOGLE_SHEETS_URL));
                     if (InstanceUploaderUtils.doesUrlRefersToGoogleSheetsFile(destinationUrl)) {
                         uploader.uploadOneSubmission(instance, destinationUrl);
                         outcome.messagesByInstanceId.put(instance.getId().toString(), DEFAULT_SUCCESSFUL_TEXT);

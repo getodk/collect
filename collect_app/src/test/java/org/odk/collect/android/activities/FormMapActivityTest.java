@@ -24,12 +24,12 @@ import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.TestMapFragment;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.InMemInstancesRepository;
-import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.MapsPreferences;
+import org.odk.collect.android.preferences.keys.AdminKeys;
+import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.utilities.TestPreferencesProvider;
+import org.odk.collect.utilities.TestSettingsProvider;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
@@ -151,13 +151,13 @@ public class FormMapActivityTest {
     @LooperMode(PAUSED)
     @Test public void tappingOnLayerMenu_opensLayerDialog() {
         List<Fragment> fragments = activity.getSupportFragmentManager().getFragments();
-        assertThat(fragments, not(hasItem(isA(MapsPreferences.class))));
+        assertThat(fragments, not(hasItem(isA(MapsPreferencesFragment.class))));
 
         activity.findViewById(R.id.layer_menu).performClick();
 
         activity.getSupportFragmentManager().executePendingTransactions();
         fragments = activity.getSupportFragmentManager().getFragments();
-        assertThat(fragments, hasItem(isA(MapsPreferences.class)));
+        assertThat(fragments, hasItem(isA(MapsPreferencesFragment.class)));
     }
 
     @LooperMode(PAUSED)
@@ -229,7 +229,7 @@ public class FormMapActivityTest {
 
     @LooperMode(PAUSED)
     @Test public void openingEditableInstance_whenEditingSettingisOff_launchesViewActivity() {
-        TestPreferencesProvider.getAdminPreferences().save(AdminKeys.KEY_EDIT_SAVED, false);
+        TestSettingsProvider.getAdminSettings().save(AdminKeys.KEY_EDIT_SAVED, false);
 
         MapPoint editableAndFinalized = new MapPoint(10.1, 125.6);
         MapPoint unfinalized = new MapPoint(10.1, 126.6);

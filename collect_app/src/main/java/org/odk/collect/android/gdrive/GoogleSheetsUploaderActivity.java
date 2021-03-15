@@ -42,7 +42,7 @@ import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
-import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
@@ -134,10 +134,10 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
 
     private void runTask() {
         instanceGoogleSheetsUploaderTask = new InstanceGoogleSheetsUploaderTask(googleApiProvider, analytics);
-        instanceGoogleSheetsUploaderTask.setRepositories(instancesRepository, formsRepository, preferencesDataSourceProvider);
+        instanceGoogleSheetsUploaderTask.setRepositories(instancesRepository, formsRepository, settingsProvider);
 
         // ensure we have a google account selected
-        String googleUsername = preferencesDataSourceProvider.getGeneralPreferences().getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+        String googleUsername = settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
         if (googleUsername == null || googleUsername.equals("")) {
             showDialog(GOOGLE_USER_DIALOG);
         } else {

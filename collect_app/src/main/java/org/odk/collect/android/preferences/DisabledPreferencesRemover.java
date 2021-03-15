@@ -20,16 +20,20 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceGroup;
 
+import org.odk.collect.android.preferences.keys.AdminAndGeneralKeys;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.source.Settings;
+
 import timber.log.Timber;
 
-class DisabledPreferencesRemover {
+public class DisabledPreferencesRemover {
 
     private final PreferenceFragmentCompat pf;
-    private final PreferencesDataSource adminPrefs;
+    private final Settings adminSettings;
 
-    DisabledPreferencesRemover(PreferenceFragmentCompat pf, PreferencesDataSource adminPrefs) {
+    public DisabledPreferencesRemover(PreferenceFragmentCompat pf, Settings adminSettings) {
         this.pf = pf;
-        this.adminPrefs = adminPrefs;
+        this.adminSettings = adminSettings;
     }
 
     /**
@@ -37,9 +41,9 @@ class DisabledPreferencesRemover {
      *
      * @param keyPairs one or more AdminAndGeneralKeys objects.
      */
-    void remove(AdminAndGeneralKeys... keyPairs) {
+    public void remove(AdminAndGeneralKeys... keyPairs) {
         for (AdminAndGeneralKeys agKeys : keyPairs) {
-            boolean prefAllowed = adminPrefs.getBoolean(agKeys.adminKey);
+            boolean prefAllowed = adminSettings.getBoolean(agKeys.adminKey);
 
             if (!prefAllowed) {
                 Preference preference = pf.findPreference(agKeys.generalKey);
@@ -83,7 +87,7 @@ class DisabledPreferencesRemover {
     /**
      * Deletes all empty PreferenceCategory items.
      */
-    void removeEmptyCategories() {
+    public void removeEmptyCategories() {
         removeEmptyCategories(pf.getPreferenceScreen());
         removeEmptyCategories(pf.getPreferenceScreen());
     }

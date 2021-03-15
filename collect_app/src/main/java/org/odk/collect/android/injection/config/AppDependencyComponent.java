@@ -47,20 +47,23 @@ import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.android.geo.OsmDroidMapFragment;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.preferences.AdminPasswordDialogFragment;
-import org.odk.collect.android.preferences.AdminPreferencesFragment;
-import org.odk.collect.android.preferences.BasePreferenceFragment;
-import org.odk.collect.android.preferences.ChangeAdminPasswordDialog;
-import org.odk.collect.android.preferences.ExperimentalPreferencesFragment;
-import org.odk.collect.android.preferences.FormManagementPreferences;
-import org.odk.collect.android.preferences.FormMetadataFragment;
-import org.odk.collect.android.preferences.GeneralPreferencesFragment;
-import org.odk.collect.android.preferences.IdentityPreferences;
-import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
-import org.odk.collect.android.preferences.ServerAuthDialogFragment;
-import org.odk.collect.android.preferences.ServerPreferencesFragment;
-import org.odk.collect.android.preferences.UserInterfacePreferencesFragment;
+import org.odk.collect.android.preferences.CaptionedListPreference;
+import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment;
+import org.odk.collect.android.preferences.screens.AdminPreferencesFragment;
+import org.odk.collect.android.preferences.screens.BaseAdminPreferencesFragment;
+import org.odk.collect.android.preferences.screens.BaseGeneralPreferencesFragment;
+import org.odk.collect.android.preferences.screens.BasePreferencesFragment;
+import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog;
+import org.odk.collect.android.preferences.screens.ExperimentalPreferencesFragment;
+import org.odk.collect.android.preferences.screens.FormManagementPreferencesFragment;
+import org.odk.collect.android.preferences.screens.FormMetadataPreferencesFragment;
+import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity;
+import org.odk.collect.android.preferences.screens.GeneralPreferencesFragment;
+import org.odk.collect.android.preferences.screens.IdentityPreferencesFragment;
+import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
+import org.odk.collect.android.preferences.screens.ServerPreferencesFragment;
+import org.odk.collect.android.preferences.screens.UserInterfacePreferencesFragment;
 import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.storage.StorageInitializer;
@@ -143,7 +146,7 @@ public interface AppDependencyComponent {
 
     void inject(ODKView odkView);
 
-    void inject(FormMetadataFragment formMetadataFragment);
+    void inject(FormMetadataPreferencesFragment formMetadataPreferencesFragment);
 
     void inject(GeoPointMapActivity geoMapActivity);
 
@@ -173,9 +176,9 @@ public interface AppDependencyComponent {
 
     void inject(FormHierarchyActivity formHierarchyActivity);
 
-    void inject(FormManagementPreferences formManagementPreferences);
+    void inject(FormManagementPreferencesFragment formManagementPreferencesFragment);
 
-    void inject(IdentityPreferences identityPreferences);
+    void inject(IdentityPreferencesFragment identityPreferencesFragment);
 
     void inject(UserInterfacePreferencesFragment userInterfacePreferencesFragment);
 
@@ -187,7 +190,7 @@ public interface AppDependencyComponent {
 
     void inject(QRCodeScannerFragment qrCodeScannerFragment);
 
-    void inject(PreferencesActivity preferencesActivity);
+    void inject(GeneralPreferencesActivity generalPreferencesActivity);
 
     void inject(ApplicationResetter applicationResetter);
 
@@ -203,7 +206,7 @@ public interface AppDependencyComponent {
 
     void inject(ServerAuthDialogFragment serverAuthDialogFragment);
 
-    void inject(BasePreferenceFragment basePreferenceFragment);
+    void inject(BasePreferencesFragment basePreferencesFragment);
 
     void inject(BlankFormListFragment blankFormListFragment);
 
@@ -239,13 +242,19 @@ public interface AppDependencyComponent {
 
     void inject(ThemeUtils themeUtils);
 
+    void inject(BaseGeneralPreferencesFragment baseGeneralPreferencesFragment);
+
+    void inject(BaseAdminPreferencesFragment baseAdminPreferencesFragment);
+
+    void inject(CaptionedListPreference captionedListPreference);
+
     OpenRosaHttpInterface openRosaHttpInterface();
 
     ReferenceManager referenceManager();
 
     Analytics analytics();
 
-    PreferencesDataSourceProvider preferencesRepository();
+    SettingsProvider preferencesRepository();
 
     ApplicationInitializer applicationInitializer();
 

@@ -3,8 +3,8 @@ package org.odk.collect.android.configure;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.odk.collect.android.preferences.MetaKeys;
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.keys.MetaKeys;
+import org.odk.collect.android.preferences.source.Settings;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,11 +13,11 @@ import java.util.List;
 public class SharedPreferencesServerRepository implements ServerRepository {
 
     private final String defaultServer;
-    private final PreferencesDataSource preferencesDataSource;
+    private final Settings settings;
 
-    public SharedPreferencesServerRepository(String defaultServer, PreferencesDataSource preferencesDataSource) {
+    public SharedPreferencesServerRepository(String defaultServer, Settings settings) {
         this.defaultServer = defaultServer;
-        this.preferencesDataSource = preferencesDataSource;
+        this.settings = settings;
     }
 
     @Override
@@ -31,12 +31,12 @@ public class SharedPreferencesServerRepository implements ServerRepository {
         }
 
         urlList.add(0, url);
-        preferencesDataSource.save(MetaKeys.SERVER_LIST, new Gson().toJson(urlList));
+        settings.save(MetaKeys.SERVER_LIST, new Gson().toJson(urlList));
     }
 
     @Override
     public List<String> getServers() {
-        String urlListString = preferencesDataSource.getString(MetaKeys.SERVER_LIST);
+        String urlListString = settings.getString(MetaKeys.SERVER_LIST);
         return urlListString == null || urlListString.isEmpty()
                 ? new ArrayList<>(Collections.singletonList(defaultServer))
                 : new Gson().fromJson(urlListString, new TypeToken<List<String>>() {}.getType());
@@ -44,6 +44,6 @@ public class SharedPreferencesServerRepository implements ServerRepository {
 
     @Override
     public void clear() {
-        preferencesDataSource.remove(MetaKeys.SERVER_LIST);
+        settings.remove(MetaKeys.SERVER_LIST);
     }
 }

@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -13,17 +13,17 @@ import java.util.Set;
 
 public class SettingsImporter {
 
-    private final PreferencesDataSource generalPrefs;
-    private final PreferencesDataSource adminPrefs;
+    private final Settings generalSettings;
+    private final Settings adminSettings;
     private final SettingsPreferenceMigrator preferenceMigrator;
     private final SettingsValidator settingsValidator;
     private final Map<String, Object> generalDefaults;
     private final Map<String, Object> adminDefaults;
     private final SettingsChangeHandler settingsChangedHandler;
 
-    public SettingsImporter(PreferencesDataSource generalPrefs, PreferencesDataSource adminPrefs, SettingsPreferenceMigrator preferenceMigrator, SettingsValidator settingsValidator, Map<String, Object> generalDefaults, Map<String, Object> adminDefaults, SettingsChangeHandler settingsChangedHandler) {
-        this.generalPrefs = generalPrefs;
-        this.adminPrefs = adminPrefs;
+    public SettingsImporter(Settings generalSettings, Settings adminSettings, SettingsPreferenceMigrator preferenceMigrator, SettingsValidator settingsValidator, Map<String, Object> generalDefaults, Map<String, Object> adminDefaults, SettingsChangeHandler settingsChangedHandler) {
+        this.generalSettings = generalSettings;
+        this.adminSettings = adminSettings;
         this.preferenceMigrator = preferenceMigrator;
         this.settingsValidator = settingsValidator;
         this.generalDefaults = generalDefaults;
@@ -36,34 +36,34 @@ public class SettingsImporter {
             return false;
         }
 
-        generalPrefs.clear();
-        adminPrefs.clear();
+        generalSettings.clear();
+        adminSettings.clear();
 
         try {
             JSONObject jsonObject = new JSONObject(json);
 
             JSONObject general = jsonObject.getJSONObject("general");
-            importToPrefs(general, generalPrefs);
+            importToPrefs(general, generalSettings);
 
             JSONObject admin = jsonObject.getJSONObject("admin");
-            importToPrefs(admin, adminPrefs);
+            importToPrefs(admin, adminSettings);
         } catch (JSONException ignored) {
             // Ignored
         }
 
-        preferenceMigrator.migrate(generalPrefs, adminPrefs);
+        preferenceMigrator.migrate(generalSettings, adminSettings);
 
-        clearUnknownKeys(generalPrefs, generalDefaults);
-        clearUnknownKeys(adminPrefs, adminDefaults);
+        clearUnknownKeys(generalSettings, generalDefaults);
+        clearUnknownKeys(adminSettings, adminDefaults);
 
-        loadDefaults(generalPrefs, generalDefaults);
-        loadDefaults(adminPrefs, adminDefaults);
+        loadDefaults(generalSettings, generalDefaults);
+        loadDefaults(adminSettings, adminDefaults);
 
-        for (Map.Entry<String, ?> entry: generalPrefs.getAll().entrySet()) {
+        for (Map.Entry<String, ?> entry: generalSettings.getAll().entrySet()) {
             settingsChangedHandler.onSettingChanged(entry.getKey(), entry.getValue());
         }
 
-        for (Map.Entry<String, ?> entry: adminPrefs.getAll().entrySet()) {
+        for (Map.Entry<String, ?> entry: adminSettings.getAll().entrySet()) {
             settingsChangedHandler.onSettingChanged(entry.getKey(), entry.getValue());
         }
 
@@ -72,7 +72,7 @@ public class SettingsImporter {
 
 
 
-    private void importToPrefs(JSONObject object, PreferencesDataSource preferences) throws JSONException {
+    private void importToPrefs(JSONObject object, Settings preferences) throws JSONException {
         Iterator<String> generalKeys = object.keys();
 
         while (generalKeys.hasNext()) {
@@ -81,7 +81,7 @@ public class SettingsImporter {
         }
     }
 
-    private void loadDefaults(PreferencesDataSource preferences, Map<String, Object> defaults) {
+    private void loadDefaults(Settings preferences, Map<String, Object> defaults) {
         for (Map.Entry<String, Object> entry : defaults.entrySet()) {
             if (!preferences.contains(entry.getKey())) {
                 preferences.save(entry.getKey(), entry.getValue());
@@ -89,7 +89,7 @@ public class SettingsImporter {
         }
     }
 
-    private void clearUnknownKeys(PreferencesDataSource preferences, Map<String, Object> defaults) {
+    private void clearUnknownKeys(Settings preferences, Map<String, Object> defaults) {
         Set<String> keys = preferences.getAll().keySet();
         for (String key : keys) {
             if (!defaults.containsKey(key)) {

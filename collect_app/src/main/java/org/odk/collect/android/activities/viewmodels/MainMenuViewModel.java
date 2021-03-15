@@ -10,9 +10,9 @@ import androidx.lifecycle.ViewModelProvider;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.configure.SettingsUtils;
 import org.odk.collect.android.preferences.FormUpdateMode;
-import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.keys.AdminKeys;
+import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.version.VersionInformation;
 
 import javax.inject.Inject;
@@ -20,15 +20,15 @@ import javax.inject.Inject;
 public class MainMenuViewModel extends ViewModel {
 
     private final VersionInformation version;
-    private final PreferencesDataSource generalPreferences;
-    private final PreferencesDataSource adminPreferences;
+    private final Settings generalSettings;
+    private final Settings adminSettings;
     private final Application application;
 
-    public MainMenuViewModel(Application application, VersionInformation versionInformation, PreferencesDataSourceProvider preferencesDataSourceProvider) {
+    public MainMenuViewModel(Application application, VersionInformation versionInformation, SettingsProvider settingsProvider) {
         this.application = application;
         this.version = versionInformation;
-        this.generalPreferences = preferencesDataSourceProvider.getGeneralPreferences();
-        this.adminPreferences = preferencesDataSourceProvider.getAdminPreferences();
+        this.generalSettings = settingsProvider.getGeneralSettings();
+        this.adminSettings = settingsProvider.getAdminSettings();
     }
 
     public String getVersion() {
@@ -63,28 +63,28 @@ public class MainMenuViewModel extends ViewModel {
     }
 
     public boolean shouldEditSavedFormButtonBeVisible() {
-        return adminPreferences.getBoolean(AdminKeys.KEY_EDIT_SAVED);
+        return adminSettings.getBoolean(AdminKeys.KEY_EDIT_SAVED);
     }
 
     public boolean shouldSendFinalizedFormButtonBeVisible() {
-        return adminPreferences.getBoolean(AdminKeys.KEY_SEND_FINALIZED);
+        return adminSettings.getBoolean(AdminKeys.KEY_SEND_FINALIZED);
     }
 
     public boolean shouldViewSentFormButtonBeVisible() {
-        return adminPreferences.getBoolean(AdminKeys.KEY_VIEW_SENT);
+        return adminSettings.getBoolean(AdminKeys.KEY_VIEW_SENT);
     }
 
     public boolean shouldGetBlankFormButtonBeVisible() {
-        boolean buttonEnabled = adminPreferences.getBoolean(AdminKeys.KEY_GET_BLANK);
+        boolean buttonEnabled = adminSettings.getBoolean(AdminKeys.KEY_GET_BLANK);
         return !isMatchExactlyEnabled() && buttonEnabled;
     }
 
     public boolean shouldDeleteSavedFormButtonBeVisible() {
-        return adminPreferences.getBoolean(AdminKeys.KEY_DELETE_SAVED);
+        return adminSettings.getBoolean(AdminKeys.KEY_DELETE_SAVED);
     }
 
     private boolean isMatchExactlyEnabled() {
-        return SettingsUtils.getFormUpdateMode(application, generalPreferences) == FormUpdateMode.MATCH_EXACTLY;
+        return SettingsUtils.getFormUpdateMode(application, generalSettings) == FormUpdateMode.MATCH_EXACTLY;
     }
 
     @NotNull
@@ -101,19 +101,19 @@ public class MainMenuViewModel extends ViewModel {
 
         private final VersionInformation versionInformation;
         private final Application application;
-        private final PreferencesDataSourceProvider preferencesDataSourceProvider;
+        private final SettingsProvider settingsProvider;
 
         @Inject
-        public Factory(VersionInformation versionInformation, Application application, PreferencesDataSourceProvider preferencesDataSourceProvider) {
+        public Factory(VersionInformation versionInformation, Application application, SettingsProvider settingsProvider) {
             this.versionInformation = versionInformation;
             this.application = application;
-            this.preferencesDataSourceProvider = preferencesDataSourceProvider;
+            this.settingsProvider = settingsProvider;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new MainMenuViewModel(application, versionInformation, preferencesDataSourceProvider);
+            return (T) new MainMenuViewModel(application, versionInformation, settingsProvider);
         }
     }
 }

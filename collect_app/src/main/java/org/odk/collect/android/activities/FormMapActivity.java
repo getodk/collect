@@ -45,8 +45,8 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
-import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.MapsPreferences;
+import org.odk.collect.android.preferences.keys.AdminKeys;
+import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -195,7 +195,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
             map.zoomToBoundingBox(points, 0.8, false));
 
         findViewById(R.id.layer_menu).setOnClickListener(v -> {
-            MapsPreferences.showReferenceLayerDialog(this);
+            MapsPreferencesFragment.showReferenceLayerDialog(this);
         });
 
         findViewById(R.id.new_instance).setOnClickListener(v -> {
@@ -357,7 +357,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
                 setUpOpenFormButton(false, mappableFormInstance.getDatabaseId());
                 break;
             case OPEN_EDIT:
-                boolean canEditSaved = preferencesDataSourceProvider.getAdminPreferences().getBoolean(AdminKeys.KEY_EDIT_SAVED);
+                boolean canEditSaved = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_EDIT_SAVED);
                 setUpOpenFormButton(canEditSaved, mappableFormInstance.getDatabaseId());
                 break;
         }

@@ -16,9 +16,9 @@ import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.formmanagement.FormSourceExceptionMapper;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.forms.FormSourceException;
-import org.odk.collect.android.preferences.MetaKeys;
-import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.keys.MetaKeys;
+import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
 
@@ -41,16 +41,16 @@ public class NotificationManagerNotifier implements Notifier {
     private static final String COLLECT_NOTIFICATION_CHANNEL = "collect_notification_channel";
     private final Application application;
     private final NotificationManager notificationManager;
-    private final PreferencesDataSourceProvider preferencesDataSourceProvider;
+    private final SettingsProvider settingsProvider;
 
     private static final int FORM_UPDATE_NOTIFICATION_ID = 0;
     private static final int FORM_SYNC_NOTIFICATION_ID = 1;
     private static final int AUTO_SEND_RESULT_NOTIFICATION_ID = 1328974928;
 
-    public NotificationManagerNotifier(Application application, PreferencesDataSourceProvider preferencesDataSourceProvider) {
+    public NotificationManagerNotifier(Application application, SettingsProvider settingsProvider) {
         this.application = application;
         notificationManager = (NotificationManager) application.getSystemService(NOTIFICATION_SERVICE);
-        this.preferencesDataSourceProvider = preferencesDataSourceProvider;
+        this.settingsProvider = settingsProvider;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (notificationManager != null) {
@@ -65,7 +65,7 @@ public class NotificationManagerNotifier implements Notifier {
 
     @Override
     public void onUpdatesAvailable(List<ServerFormDetails> updates) {
-        PreferencesDataSource metaPrefs = preferencesDataSourceProvider.getMetaPreferences();
+        Settings metaPrefs = settingsProvider.getMetaSettings();
         Set<String> updateId = updates.stream().map(f -> f.getFormId() + f.getHash() + (f.getManifest() != null ? f.getManifest().getHash() : null)).collect(toSet());
         if (metaPrefs.getStringSet(MetaKeys.LAST_UPDATED_NOTIFICATION).equals(updateId)) {
             return;

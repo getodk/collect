@@ -18,9 +18,9 @@ import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.FormUpdateMode;
-import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.async.Scheduler;
 
@@ -39,24 +39,24 @@ public class BlankFormsListViewModel extends ViewModel {
     private final Scheduler scheduler;
     private final SyncStatusRepository syncRepository;
     private final ServerFormsSynchronizer serverFormsSynchronizer;
-    private final PreferencesDataSource generalPreferences;
+    private final Settings generalSettings;
     private final Notifier notifier;
     private final ChangeLock changeLock;
     private final Analytics analytics;
 
-    public BlankFormsListViewModel(Application application, Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, PreferencesDataSourceProvider preferencesDataSourceProvider, Notifier notifier, ChangeLock changeLock, Analytics analytics) {
+    public BlankFormsListViewModel(Application application, Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, SettingsProvider settingsProvider, Notifier notifier, ChangeLock changeLock, Analytics analytics) {
         this.application = application;
         this.scheduler = scheduler;
         this.syncRepository = syncRepository;
         this.serverFormsSynchronizer = serverFormsSynchronizer;
-        this.generalPreferences = preferencesDataSourceProvider.getGeneralPreferences();
+        this.generalSettings = settingsProvider.getGeneralSettings();
         this.notifier = notifier;
         this.changeLock = changeLock;
         this.analytics = analytics;
     }
 
     public boolean isMatchExactlyEnabled() {
-        return getFormUpdateMode(application, generalPreferences) == FormUpdateMode.MATCH_EXACTLY;
+        return getFormUpdateMode(application, generalSettings) == FormUpdateMode.MATCH_EXACTLY;
     }
 
     public LiveData<Boolean> isSyncing() {
@@ -118,7 +118,7 @@ public class BlankFormsListViewModel extends ViewModel {
     }
 
     private void logManualSync() {
-        Uri uri = Uri.parse(generalPreferences.getString(GeneralKeys.KEY_SERVER_URL));
+        Uri uri = Uri.parse(generalSettings.getString(GeneralKeys.KEY_SERVER_URL));
         String host = uri.getHost() != null ? uri.getHost() : "";
         String urlHash = FileUtils.getMd5Hash(new ByteArrayInputStream(host.getBytes()));
         analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC, "Manual", urlHash);
@@ -130,18 +130,18 @@ public class BlankFormsListViewModel extends ViewModel {
         private final Scheduler scheduler;
         private final SyncStatusRepository syncRepository;
         private final ServerFormsSynchronizer serverFormsSynchronizer;
-        private final PreferencesDataSourceProvider preferencesDataSourceProvider;
+        private final SettingsProvider settingsProvider;
         private final Notifier notifier;
         private final ChangeLock changeLock;
         private final Analytics analytics;
 
         @Inject
-        public Factory(Application application, Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, PreferencesDataSourceProvider preferencesDataSourceProvider, Notifier notifier, @Named("FORMS") ChangeLock changeLock, Analytics analytics) {
+        public Factory(Application application, Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, SettingsProvider settingsProvider, Notifier notifier, @Named("FORMS") ChangeLock changeLock, Analytics analytics) {
             this.application = application;
             this.scheduler = scheduler;
             this.syncRepository = syncRepository;
             this.serverFormsSynchronizer = serverFormsSynchronizer;
-            this.preferencesDataSourceProvider = preferencesDataSourceProvider;
+            this.settingsProvider = settingsProvider;
             this.notifier = notifier;
             this.changeLock = changeLock;
             this.analytics = analytics;
@@ -150,7 +150,7 @@ public class BlankFormsListViewModel extends ViewModel {
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new BlankFormsListViewModel(application, scheduler, syncRepository, serverFormsSynchronizer, preferencesDataSourceProvider, notifier, changeLock, analytics);
+            return (T) new BlankFormsListViewModel(application, scheduler, syncRepository, serverFormsSynchronizer, settingsProvider, notifier, changeLock, analytics);
         }
     }
 }

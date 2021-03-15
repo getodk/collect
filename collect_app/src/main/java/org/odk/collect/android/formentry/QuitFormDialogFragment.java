@@ -22,8 +22,8 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.keys.AdminKeys;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.async.Scheduler;
 
@@ -45,7 +45,7 @@ public class QuitFormDialogFragment extends DialogFragment {
     FormSaveViewModel.FactoryFactory formSaveViewModelFactoryFactory;
 
     @Inject
-    PreferencesDataSourceProvider preferencesDataSourceProvider;
+    SettingsProvider settingsProvider;
 
     private FormSaveViewModel formSaveViewModel;
     private Listener listener;
@@ -71,7 +71,7 @@ public class QuitFormDialogFragment extends DialogFragment {
         String title =  formSaveViewModel.getFormName() == null ? getActivity().getString(R.string.no_form_loaded) : formSaveViewModel.getFormName();
 
         List<IconMenuItem> items;
-        if (preferencesDataSourceProvider.getAdminPreferences().getBoolean(AdminKeys.KEY_SAVE_MID)) {
+        if (settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_SAVE_MID)) {
             items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save, R.string.keep_changes),
                     new IconMenuItem(R.drawable.ic_delete, R.string.do_not_save));
         } else {

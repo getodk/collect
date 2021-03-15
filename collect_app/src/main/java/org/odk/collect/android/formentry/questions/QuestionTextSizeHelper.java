@@ -1,15 +1,15 @@
 package org.odk.collect.android.formentry.questions;
 
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_FONT_SIZE;
 
 public class QuestionTextSizeHelper {
 
-    private final PreferencesDataSource generalPrefs;
+    private final Settings generalSettings;
 
-    public QuestionTextSizeHelper(PreferencesDataSource generalPrefs) {
-        this.generalPrefs = generalPrefs;
+    public QuestionTextSizeHelper(Settings generalSettings) {
+        this.generalSettings = generalSettings;
     }
 
     public float getHeadline6() {
@@ -21,6 +21,6 @@ public class QuestionTextSizeHelper {
     }
 
     private int getBaseFontSize() {
-        return Integer.parseInt(String.valueOf(generalPrefs.getString(KEY_FONT_SIZE)));
+        return Integer.parseInt(String.valueOf(generalSettings.getString(KEY_FONT_SIZE)));
     }
 }

@@ -41,9 +41,9 @@ import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.GuidanceHint;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
@@ -105,13 +105,13 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     PermissionsProvider permissionsProvider;
 
     @Inject
-    PreferencesDataSourceProvider preferencesDataSourceProvider;
+    SettingsProvider settingsProvider;
 
     public QuestionWidget(Context context, QuestionDetails questionDetails) {
         super(context);
         getComponent(context).inject(this);
         setId(View.generateViewId());
-        questionTextSizeHelper = new QuestionTextSizeHelper(preferencesDataSourceProvider.getGeneralPreferences());
+        questionTextSizeHelper = new QuestionTextSizeHelper(settingsProvider.getGeneralSettings());
         this.audioHelper = audioHelperFactory.create(context);
 
         themeUtils = new ThemeUtils(context);
@@ -195,7 +195,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
 
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
         TextView guidance;
-        GuidanceHint setting = GuidanceHint.get(preferencesDataSourceProvider.getGeneralPreferences().getString(GeneralKeys.KEY_GUIDANCE_HINT));
+        GuidanceHint setting = GuidanceHint.get(settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_GUIDANCE_HINT));
 
         if (setting.equals(GuidanceHint.No)) {
             return null;

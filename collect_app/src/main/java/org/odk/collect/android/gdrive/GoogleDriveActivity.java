@@ -56,7 +56,7 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.TaskListener;
 import org.odk.collect.android.logic.DriveListItem;
 import org.odk.collect.android.network.NetworkStateProvider;
-import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -220,8 +220,8 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 R.string.sort_by_name_asc, R.string.sort_by_name_desc
         };
 
-        driveHelper = new DriveHelper(googleApiProvider.getDriveApi(preferencesDataSourceProvider
-                .getGeneralPreferences()
+        driveHelper = new DriveHelper(googleApiProvider.getDriveApi(settingsProvider
+                .getGeneralSettings()
                 .getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT)));
         getResultsFromApi();
     }

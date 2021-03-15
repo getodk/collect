@@ -14,11 +14,16 @@ import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.preferences.dialogs.ReferenceLayerPreferenceDialog;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 
 import java.util.List;
 import java.util.Objects;
 
-import static org.odk.collect.android.preferences.ReferenceLayerPreferenceDialog.captionView;
+import javax.inject.Inject;
+
+import static org.odk.collect.android.preferences.dialogs.ReferenceLayerPreferenceDialog.captionView;
 
 /** A ListPreference where each item has a caption and the entire dialog also has a caption. */
 public class CaptionedListPreference extends ListPreference {
@@ -28,8 +33,12 @@ public class CaptionedListPreference extends ListPreference {
 
     private int clickedIndex = -1;
 
+    @Inject
+    SettingsProvider settingsProvider;
+
     public CaptionedListPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
+        DaggerUtils.getComponent(context).inject(this);
     }
 
     @Override
@@ -90,7 +99,7 @@ public class CaptionedListPreference extends ListPreference {
         button.setOnClickListener(view -> onItemClicked(i));
         item.setOnClickListener(view -> onItemClicked(i));
         parent.addView(item);
-        if (Objects.equals(value, getSharedPreferences().getString(getKey(), null))) {
+        if (Objects.equals(value, settingsProvider.getGeneralSettings().getString(getKey()))) {
             button.setChecked(true);
             item.post(() -> item.requestRectangleOnScreen(new Rect(0, 0, item.getWidth(), item.getHeight())));
         }

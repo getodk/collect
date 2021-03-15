@@ -29,8 +29,8 @@ import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -63,7 +63,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
     private String currentStatus = "";
     private DiskSyncListener diskSyncListener;
-    private final PreferencesDataSourceProvider preferencesDataSourceProvider;
+    private final SettingsProvider settingsProvider;
 
     public String getStatusMessage() {
         return currentStatus;
@@ -73,8 +73,8 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
         this.diskSyncListener = diskSyncListener;
     }
 
-    public InstanceSyncTask(PreferencesDataSourceProvider preferencesDataSourceProvider) {
-        this.preferencesDataSourceProvider = preferencesDataSourceProvider;
+    public InstanceSyncTask(SettingsProvider settingsProvider) {
+        this.settingsProvider = settingsProvider;
     }
 
     @Override
@@ -146,7 +146,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
                 instancesDao.deleteInstancesFromInstanceFilePaths(filesToRemove);
 
-                final boolean instanceSyncFlag = preferencesDataSourceProvider.getGeneralPreferences().getBoolean(GeneralKeys.KEY_INSTANCE_SYNC);
+                final boolean instanceSyncFlag = settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_INSTANCE_SYNC);
 
                 int counter = 0;
                 // Begin parsing and add them to the content provider

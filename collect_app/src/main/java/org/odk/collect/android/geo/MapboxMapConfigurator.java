@@ -9,7 +9,7 @@ import com.google.common.collect.ImmutableSet;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.PrefUtils;
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
@@ -17,8 +17,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAPBOX_MAP_STYLE;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_REFERENCE_LAYER;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_MAPBOX_MAP_STYLE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_REFERENCE_LAYER;
 
 class MapboxMapConfigurator implements MapConfigurator {
     private final String prefKey;
@@ -64,7 +64,7 @@ class MapboxMapConfigurator implements MapConfigurator {
             ImmutableSet.of(prefKey, KEY_REFERENCE_LAYER);
     }
 
-    @Override public Bundle buildConfig(PreferencesDataSource prefs) {
+    @Override public Bundle buildConfig(Settings prefs) {
         Bundle config = new Bundle();
         config.putString(MapboxMapFragment.KEY_STYLE_URL,
             prefs.getString(KEY_MAPBOX_MAP_STYLE));

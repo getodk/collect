@@ -1,6 +1,6 @@
 package org.odk.collect.android.application.initialization.migration;
 
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +32,7 @@ public class KeyCombiner implements Migration {
         return this;
     }
 
-    public void apply(PreferencesDataSource prefs) {
+    public void apply(Settings prefs) {
         Map<String, ?> prefMap = prefs.getAll();
         Object[] oldValues = new Object[oldKeys.length];
         for (int i = 0; i < oldKeys.length; i++) {

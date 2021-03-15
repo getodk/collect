@@ -10,12 +10,12 @@ import org.junit.runners.model.Statement;
 import org.odk.collect.android.application.Collect;
 
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.utilities.TestPreferencesProvider;
+import org.odk.collect.utilities.TestSettingsProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +25,7 @@ import static org.apache.commons.io.FileUtils.deleteDirectory;
 public class ResetStateRule implements TestRule {
 
     private final AppDependencyModule appDependencyModule;
-    private final PreferencesDataSourceProvider preferencesDataSourceProvider = TestPreferencesProvider.getPreferencesRepository();
+    private final SettingsProvider settingsProvider = TestSettingsProvider.getSettingsProvider();
 
     public ResetStateRule() {
         this(null);
@@ -89,10 +89,10 @@ public class ResetStateRule implements TestRule {
     }
 
     private void clearPrefs() {
-        preferencesDataSourceProvider.getGeneralPreferences().clear();
-        preferencesDataSourceProvider.getGeneralPreferences().loadDefaultPreferencesIfNotExist();
-        preferencesDataSourceProvider.getAdminPreferences().clear();
-        preferencesDataSourceProvider.getAdminPreferences().loadDefaultPreferencesIfNotExist();
-        preferencesDataSourceProvider.getMetaPreferences().clear();
+        settingsProvider.getGeneralSettings().clear();
+        settingsProvider.getGeneralSettings().setDefaultForAllSettingsWithoutValues();
+        settingsProvider.getAdminSettings().clear();
+        settingsProvider.getAdminSettings().setDefaultForAllSettingsWithoutValues();
+        settingsProvider.getMetaSettings().clear();
     }
 }

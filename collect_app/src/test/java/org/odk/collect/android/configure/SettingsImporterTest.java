@@ -8,8 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
-import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.utilities.TestPreferencesProvider;
+import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.utilities.TestSettingsProvider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,8 +29,8 @@ import static org.odk.collect.android.application.initialization.migration.Share
 @SuppressWarnings("PMD.DoubleBraceInitialization")
 public class SettingsImporterTest {
 
-    private final PreferencesDataSource generalPrefs = TestPreferencesProvider.getGeneralPreferences();
-    private final PreferencesDataSource adminPrefs = TestPreferencesProvider.getAdminPreferences();
+    private final Settings generalSettings = TestSettingsProvider.getGeneralSettings();
+    private final Settings adminSettings = TestSettingsProvider.getAdminSettings();
     private SettingsValidator settingsValidator;
     private SettingsImporter importer;
 
@@ -48,7 +48,7 @@ public class SettingsImporterTest {
         settingsValidator = mock(SettingsValidator.class);
         when(settingsValidator.isValid(any())).thenReturn(true);
 
-        importer = new SettingsImporter(generalPrefs, adminPrefs, (PreferencesDataSource generalPreferences, PreferencesDataSource adminPreferences) -> {}, settingsValidator, generalDefaults, adminDefaults, (key, newValue) -> {});
+        importer = new SettingsImporter(generalSettings, adminSettings, (Settings generalSettings, Settings adminSettings) -> {}, settingsValidator, generalDefaults, adminDefaults, (key, newValue) -> {});
     }
 
     @Test
@@ -61,32 +61,32 @@ public class SettingsImporterTest {
     public void forSettingsKeysNotINJSON_savesDefaults() throws Exception {
         assertThat(importer.fromJSON(emptySettings()), is(true));
 
-        assertPrefs(generalPrefs,
+        assertPrefs(generalSettings,
                 "key1", "default",
                 "key2", true
         );
-        assertPrefs(adminPrefs,
+        assertPrefs(adminSettings,
                 "key1", 5
         );
     }
 
     @Test
     public void whenKeysAlreadyExistInPrefs_overridesWithDefaults() throws Exception {
-        initPrefs(generalPrefs,
+        initPrefs(generalSettings,
                 "key1", "existing",
                 "key2", false
         );
-        initPrefs(adminPrefs,
+        initPrefs(adminSettings,
                 "key1", 0
         );
 
         assertThat(importer.fromJSON(emptySettings()), is(true));
 
-        assertPrefs(generalPrefs,
+        assertPrefs(generalSettings,
                 "key1", "default",
                 "key2", true
         );
-        assertPrefs(adminPrefs,
+        assertPrefs(adminSettings,
                 "key1", 5
         );
     }
@@ -98,18 +98,18 @@ public class SettingsImporterTest {
                         .put("unknown_key", "value"));
 
         assertThat(importer.fromJSON(json.toString()), is(true));
-        assertThat(generalPrefs.contains("unknown_key"), is(false));
+        assertThat(generalSettings.contains("unknown_key"), is(false));
     }
 
     @Test // Migrations might add/rename/move keys
     public void migratesPreferences_beforeLoadingDefaults() throws Exception {
-        SettingsPreferenceMigrator migrator = (PreferencesDataSource generalPreferences, PreferencesDataSource adminPreferences) -> {
-            if (generalPrefs.contains("key1")) {
+        SettingsPreferenceMigrator migrator = (Settings generalSettings, Settings adminSettings) -> {
+            if (this.generalSettings.contains("key1")) {
                 throw new RuntimeException("defaults already loaded!");
             }
         };
 
-        importer = new SettingsImporter(generalPrefs, adminPrefs, migrator, settingsValidator, generalDefaults, adminDefaults, (key, newValue) -> {});
+        importer = new SettingsImporter(generalSettings, adminSettings, migrator, settingsValidator, generalDefaults, adminDefaults, (key, newValue) -> {});
         assertThat(importer.fromJSON(emptySettings()), is(true));
     }
 
@@ -119,13 +119,13 @@ public class SettingsImporterTest {
                 .put("general", new JSONObject()
                         .put("unknown_key", "value"));
 
-        SettingsPreferenceMigrator migrator = (PreferencesDataSource generalPreferences, PreferencesDataSource adminPreferences) -> {
-            if (!generalPrefs.contains("unknown_key")) {
+        SettingsPreferenceMigrator migrator = (Settings generalSettings, Settings adminSettings) -> {
+            if (!this.generalSettings.contains("unknown_key")) {
                 throw new RuntimeException("unknowns already cleared!");
             }
         };
 
-        importer = new SettingsImporter(generalPrefs, adminPrefs, migrator, settingsValidator, generalDefaults, adminDefaults, (key, newValue) -> {});
+        importer = new SettingsImporter(generalSettings, adminSettings, migrator, settingsValidator, generalDefaults, adminDefaults, (key, newValue) -> {});
         assertThat(importer.fromJSON(json.toString()), is(true));
     }
 
@@ -133,7 +133,7 @@ public class SettingsImporterTest {
     public void afterSettingsImportedAndMigrated_runsSettingsChangeHandlerForEveryKey() throws Exception {
         RecordingSettingsChangeHandler handler = new RecordingSettingsChangeHandler();
 
-        importer = new SettingsImporter(generalPrefs, adminPrefs, (PreferencesDataSource generalPreferences, PreferencesDataSource adminPreferences) -> {}, settingsValidator, generalDefaults, adminDefaults, handler);
+        importer = new SettingsImporter(generalSettings, adminSettings, (Settings generalSettings, Settings adminSettings) -> {}, settingsValidator, generalDefaults, adminDefaults, handler);
         assertThat(importer.fromJSON(emptySettings()), is(true));
         assertThat(handler.changes, containsInAnyOrder(
                 new Pair<>("key1", "default"),

@@ -3,7 +3,6 @@ package org.odk.collect.android.configure.qr;
 import com.google.zxing.WriterException;
 
 import org.json.JSONException;
-import org.odk.collect.android.preferences.JsonPreferencesGenerator;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;

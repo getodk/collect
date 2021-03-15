@@ -13,11 +13,11 @@ import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationVi
 import org.odk.collect.android.formentry.questions.AnswersProvider;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.shared.livedata.MutableNonNullLiveData;
-import org.odk.collect.utilities.TestPreferencesProvider;
+import org.odk.collect.utilities.TestSettingsProvider;
 import org.robolectric.Robolectric;
 import org.robolectric.annotation.LooperMode;
 import org.robolectric.fakes.RoboMenu;
@@ -78,7 +78,7 @@ public class FormEntryMenuDelegateTest {
                 audioRecorder,
                 backgroundLocationViewModel,
                 backgroundAudioViewModel,
-                TestPreferencesProvider.getPreferencesRepository()
+                TestSettingsProvider.getSettingsProvider()
         );
         formEntryMenuDelegate.formLoaded(formController);
     }
@@ -223,7 +223,7 @@ public class FormEntryMenuDelegateTest {
         formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_preferences));
         ShadowActivity.IntentForResult nextStartedActivity = shadowOf(activity).getNextStartedActivityForResult();
         assertThat(nextStartedActivity, not(nullValue()));
-        assertThat(nextStartedActivity.intent.getComponent().getClassName(), is(PreferencesActivity.class.getName()));
+        assertThat(nextStartedActivity.intent.getComponent().getClassName(), is(GeneralPreferencesActivity.class.getName()));
         assertThat(nextStartedActivity.requestCode, is(ApplicationConstants.RequestCodes.CHANGE_SETTINGS));
     }
 

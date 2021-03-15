@@ -1,6 +1,6 @@
 package org.odk.collect.android.application.initialization.migration;
 
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +33,7 @@ public class KeyTranslator implements Migration {
         return this;
     }
 
-    public void apply(PreferencesDataSource prefs) {
+    public void apply(Settings prefs) {
         if (prefs.contains(oldKey) && !prefs.contains(newKey)) {
             Object oldValue = prefs.getAll().get(oldKey);
             Object newValue = translatedValues.get(oldValue);

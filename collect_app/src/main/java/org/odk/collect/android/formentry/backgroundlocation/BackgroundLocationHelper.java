@@ -7,10 +7,10 @@ import org.odk.collect.android.formentry.audit.AuditConfig;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_BACKGROUND_LOCATION;
 
 /**
  * Wrapper on resources needed by {@link BackgroundLocationManager} to make testing easier.
@@ -24,11 +24,11 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOC
  */
 public class BackgroundLocationHelper {
     private final PermissionsProvider permissionsProvider;
-    private final PreferencesDataSource generalPreferences;
+    private final Settings generalSettings;
 
-    public BackgroundLocationHelper(PermissionsProvider permissionsProvider, PreferencesDataSource generalPreferences) {
+    public BackgroundLocationHelper(PermissionsProvider permissionsProvider, Settings generalSettings) {
         this.permissionsProvider = permissionsProvider;
-        this.generalPreferences = generalPreferences;
+        this.generalSettings = generalSettings;
     }
 
     boolean isAndroidLocationPermissionGranted() {
@@ -36,7 +36,7 @@ public class BackgroundLocationHelper {
     }
 
     boolean isBackgroundLocationPreferenceEnabled() {
-        return generalPreferences.getBoolean(KEY_BACKGROUND_LOCATION);
+        return generalSettings.getBoolean(KEY_BACKGROUND_LOCATION);
     }
 
     boolean arePlayServicesAvailable() {

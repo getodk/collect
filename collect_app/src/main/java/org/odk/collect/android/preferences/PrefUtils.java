@@ -5,14 +5,16 @@ import android.content.Context;
 import androidx.preference.ListPreference;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 
 import java.util.Arrays;
 
 public class PrefUtils {
     private PrefUtils() { }  // prevent instantiation of this utility class
 
-    public static PreferencesDataSource getSharedPrefs() {
-        return new PreferencesDataSourceProvider(Collect.getInstance()).getGeneralPreferences();
+    public static Settings getSharedPrefs() {
+        return new SettingsProvider(Collect.getInstance()).getGeneralSettings();
     }
 
     public static ListPreference createListPref(
@@ -39,7 +41,7 @@ public class PrefUtils {
     }
 
     private static void ensurePrefHasValidValue(String key, String[] validValues) {
-        PreferencesDataSource prefs = getSharedPrefs();
+        Settings prefs = getSharedPrefs();
         String value = prefs.getString(key);
         if (Arrays.asList(validValues).indexOf(value) < 0) {
             if (validValues.length > 0) {

@@ -32,7 +32,7 @@ import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.SettingsDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.MapsPreferences;
+import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -216,7 +216,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         recordButton.setOnClickListener(v -> recordPoint());
 
         findViewById(R.id.layers).setOnClickListener(v -> {
-            MapsPreferences.showReferenceLayerDialog(this);
+            MapsPreferencesFragment.showReferenceLayerDialog(this);
         });
 
         zoomButton = findViewById(R.id.zoom);

@@ -10,11 +10,11 @@ import androidx.test.espresso.util.TreeIterables;
 
 import org.hamcrest.Matcher;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.utilities.TestPreferencesProvider;
+import org.odk.collect.utilities.TestSettingsProvider;
 
 import java.io.Closeable;
 import java.io.File;
@@ -28,7 +28,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 public final class TestUtils {
-    private static final PreferencesDataSource GENERAL_PREFS = TestPreferencesProvider.getGeneralPreferences();
+    private static final Settings GENERAL_PREFS = TestSettingsProvider.getGeneralSettings();
 
     private TestUtils() {
 

@@ -43,7 +43,7 @@ import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.network.NetworkStateProvider;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
@@ -58,7 +58,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PROTOCOL;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -171,7 +171,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
             uploadButton.setEnabled(areCheckedItems());
         });
 
-        instanceSyncTask = new InstanceSyncTask(preferencesDataSourceProvider);
+        instanceSyncTask = new InstanceSyncTask(settingsProvider);
         instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();
 
@@ -235,7 +235,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     private void uploadSelectedFiles() {
         long[] instanceIds = listView.getCheckedItemIds();
 
-        String server = preferencesDataSourceProvider.getGeneralPreferences().getString(KEY_PROTOCOL);
+        String server = settingsProvider.getGeneralSettings().getString(KEY_PROTOCOL);
 
         if (server.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
             // if it's Sheets, start the Sheets uploader
@@ -279,7 +279,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     }
 
     private void createPreferencesMenu() {
-        Intent i = new Intent(this, PreferencesActivity.class);
+        Intent i = new Intent(this, GeneralPreferencesActivity.class);
         startActivity(i);
     }
 

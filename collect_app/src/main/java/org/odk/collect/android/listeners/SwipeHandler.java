@@ -8,7 +8,7 @@ import androidx.core.widget.NestedScrollView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.ODKView;
-import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.utilities.FlingRegister;
 import org.odk.collect.android.utilities.ScreenUtils;
 

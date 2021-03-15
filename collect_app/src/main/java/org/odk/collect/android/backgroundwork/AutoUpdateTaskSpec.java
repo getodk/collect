@@ -28,7 +28,7 @@ import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOMATIC_UPDATE;
+import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_AUTOMATIC_UPDATE;
 
 public class AutoUpdateTaskSpec implements TaskSpec {
 
@@ -56,7 +56,7 @@ public class AutoUpdateTaskSpec implements TaskSpec {
     Notifier notifier;
 
     @Inject
-    PreferencesDataSourceProvider preferencesDataSourceProvider;
+    SettingsProvider settingsProvider;
 
     @Inject
     @Named("FORMS")
@@ -73,7 +73,7 @@ public class AutoUpdateTaskSpec implements TaskSpec {
                 List<ServerFormDetails> updatedForms = serverForms.stream().filter(ServerFormDetails::isUpdated).collect(Collectors.toList());
 
                 if (!updatedForms.isEmpty()) {
-                    if (preferencesDataSourceProvider.getGeneralPreferences().getBoolean(KEY_AUTOMATIC_UPDATE)) {
+                    if (settingsProvider.getGeneralSettings().getBoolean(KEY_AUTOMATIC_UPDATE)) {
                         changeLock.withLock(acquiredLock -> {
                             if (acquiredLock) {
                                 HashMap<ServerFormDetails, String> results = new HashMap<>();

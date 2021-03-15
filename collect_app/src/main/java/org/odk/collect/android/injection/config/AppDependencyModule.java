@@ -83,10 +83,11 @@ import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.JsonPreferencesGenerator;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.keys.AdminKeys;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.configure.qr.JsonPreferencesGenerator;
+import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.android.preferences.source.SettingsStore;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -124,7 +125,7 @@ import dagger.Provides;
 import okhttp3.OkHttpClient;
 
 import static androidx.core.content.FileProvider.getUriForFile;
-import static org.odk.collect.android.preferences.MetaKeys.KEY_INSTALL_ID;
+import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_INSTALL_ID;
 
 /**
  * Add dependency providers here (annotated with @Provides)
@@ -177,8 +178,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    WebCredentialsUtils provideWebCredentials(PreferencesDataSourceProvider preferencesDataSourceProvider) {
-        return new WebCredentialsUtils(preferencesDataSourceProvider.getGeneralPreferences());
+    WebCredentialsUtils provideWebCredentials(SettingsProvider settingsProvider) {
+        return new WebCredentialsUtils(settingsProvider.getGeneralSettings());
     }
 
     @Provides
@@ -225,13 +226,13 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public PreferencesDataSourceProvider providesPreferencesRepository(Context context) {
-        return new PreferencesDataSourceProvider(context);
+    public SettingsProvider providesSettingsProvider(Context context) {
+        return new SettingsProvider(context);
     }
 
     @Provides
-    InstallIDProvider providesInstallIDProvider(PreferencesDataSourceProvider preferencesDataSourceProvider) {
-        return new SharedPreferencesInstallIDProvider(preferencesDataSourceProvider.getMetaPreferences(), KEY_INSTALL_ID);
+    InstallIDProvider providesInstallIDProvider(SettingsProvider settingsProvider) {
+        return new SharedPreferencesInstallIDProvider(settingsProvider.getMetaSettings(), KEY_INSTALL_ID);
     }
 
     @Provides
@@ -265,18 +266,18 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public AdminPasswordProvider providesAdminPasswordProvider(PreferencesDataSourceProvider preferencesDataSourceProvider) {
-        return new AdminPasswordProvider(preferencesDataSourceProvider.getAdminPreferences());
+    public AdminPasswordProvider providesAdminPasswordProvider(SettingsProvider settingsProvider) {
+        return new AdminPasswordProvider(settingsProvider.getAdminSettings());
     }
 
     @Provides
-    public FormUpdateManager providesFormUpdateManger(Scheduler scheduler, PreferencesDataSourceProvider preferencesDataSourceProvider, Application application) {
-        return new SchedulerFormUpdateAndSubmitManager(scheduler, preferencesDataSourceProvider.getGeneralPreferences(), application);
+    public FormUpdateManager providesFormUpdateManger(Scheduler scheduler, SettingsProvider settingsProvider, Application application) {
+        return new SchedulerFormUpdateAndSubmitManager(scheduler, settingsProvider.getGeneralSettings(), application);
     }
 
     @Provides
-    public FormSubmitManager providesFormSubmitManager(Scheduler scheduler, PreferencesDataSourceProvider preferencesDataSourceProvider, Application application) {
-        return new SchedulerFormUpdateAndSubmitManager(scheduler, preferencesDataSourceProvider.getGeneralPreferences(), application);
+    public FormSubmitManager providesFormSubmitManager(Scheduler scheduler, SettingsProvider settingsProvider, Application application) {
+        return new SchedulerFormUpdateAndSubmitManager(scheduler, settingsProvider.getGeneralSettings(), application);
     }
 
     @Provides
@@ -313,38 +314,38 @@ public class AppDependencyModule {
     @Provides
     public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider,
                                                                  SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager,
-                                                                 Analytics analytics, StorageInitializer storageInitializer, PreferencesDataSourceProvider preferencesDataSourceProvider) {
-        return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator, propertyManager, analytics, storageInitializer, preferencesDataSourceProvider);
+                                                                 Analytics analytics, StorageInitializer storageInitializer, SettingsProvider settingsProvider) {
+        return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator, propertyManager, analytics, storageInitializer, settingsProvider);
     }
 
     @Provides
-    public SettingsPreferenceMigrator providesPreferenceMigrator(PreferencesDataSourceProvider preferencesDataSourceProvider) {
-        return new CollectSettingsPreferenceMigrator(preferencesDataSourceProvider.getMetaPreferences());
+    public SettingsPreferenceMigrator providesPreferenceMigrator(SettingsProvider settingsProvider) {
+        return new CollectSettingsPreferenceMigrator(settingsProvider.getMetaSettings());
     }
 
     @Provides
     @Singleton
-    public PropertyManager providesPropertyManager(RxEventBus eventBus, PermissionsProvider permissionsProvider, DeviceDetailsProvider deviceDetailsProvider, PreferencesDataSourceProvider preferencesDataSourceProvider) {
-        return new PropertyManager(eventBus, permissionsProvider, deviceDetailsProvider, preferencesDataSourceProvider);
+    public PropertyManager providesPropertyManager(RxEventBus eventBus, PermissionsProvider permissionsProvider, DeviceDetailsProvider deviceDetailsProvider, SettingsProvider settingsProvider) {
+        return new PropertyManager(eventBus, permissionsProvider, deviceDetailsProvider, settingsProvider);
     }
 
     @Provides
-    public ServerRepository providesServerRepository(Context context, PreferencesDataSourceProvider preferencesDataSourceProvider) {
-        return new SharedPreferencesServerRepository(context.getString(R.string.default_server_url), preferencesDataSourceProvider.getMetaPreferences());
+    public ServerRepository providesServerRepository(Context context, SettingsProvider settingsProvider) {
+        return new SharedPreferencesServerRepository(context.getString(R.string.default_server_url), settingsProvider.getMetaSettings());
     }
 
     @Provides
-    public SettingsChangeHandler providesSettingsChangeHandler(PropertyManager propertyManager, FormUpdateManager formUpdateManager, ServerRepository serverRepository, Analytics analytics, PreferencesDataSourceProvider preferencesDataSourceProvider) {
-        return new CollectSettingsChangeHandler(propertyManager, formUpdateManager, serverRepository, analytics, preferencesDataSourceProvider);
+    public SettingsChangeHandler providesSettingsChangeHandler(PropertyManager propertyManager, FormUpdateManager formUpdateManager, ServerRepository serverRepository, Analytics analytics, SettingsProvider settingsProvider) {
+        return new CollectSettingsChangeHandler(propertyManager, formUpdateManager, serverRepository, analytics, settingsProvider);
     }
 
     @Provides
-    public SettingsImporter providesCollectSettingsImporter(PreferencesDataSourceProvider preferencesDataSourceProvider, SettingsPreferenceMigrator preferenceMigrator, SettingsChangeHandler settingsChangeHandler) {
+    public SettingsImporter providesCollectSettingsImporter(SettingsProvider settingsProvider, SettingsPreferenceMigrator preferenceMigrator, SettingsChangeHandler settingsChangeHandler) {
         HashMap<String, Object> generalDefaults = GeneralKeys.DEFAULTS;
         Map<String, Object> adminDefaults = AdminKeys.getDefaults();
         return new SettingsImporter(
-                preferencesDataSourceProvider.getGeneralPreferences(),
-                preferencesDataSourceProvider.getAdminPreferences(),
+                settingsProvider.getGeneralSettings(),
+                settingsProvider.getAdminSettings(),
                 preferenceMigrator,
                 new StructureAndTypeSettingsValidator(generalDefaults, adminDefaults),
                 generalDefaults,
@@ -374,9 +375,9 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormSource providesFormSource(PreferencesDataSourceProvider preferencesDataSourceProvider, Context context, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils, Analytics analytics) {
-        String serverURL = preferencesDataSourceProvider.getGeneralPreferences().getString(GeneralKeys.KEY_SERVER_URL);
-        String formListPath = preferencesDataSourceProvider.getGeneralPreferences().getString(GeneralKeys.KEY_FORMLIST_URL);
+    public FormSource providesFormSource(SettingsProvider settingsProvider, Context context, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils, Analytics analytics) {
+        String serverURL = settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_SERVER_URL);
+        String formListPath = settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_FORMLIST_URL);
 
         return new OpenRosaFormSource(serverURL, formListPath, openRosaHttpInterface, webCredentialsUtils, analytics, new OpenRosaResponseParserImpl());
     }
@@ -403,8 +404,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public Notifier providesNotifier(Application application, PreferencesDataSourceProvider preferencesDataSourceProvider) {
-        return new NotificationManagerNotifier(application, preferencesDataSourceProvider);
+    public Notifier providesNotifier(Application application, SettingsProvider settingsProvider) {
+        return new NotificationManagerNotifier(application, settingsProvider);
     }
 
     @Provides
@@ -470,8 +471,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public JsonPreferencesGenerator providesJsonPreferencesGenerator(PreferencesDataSourceProvider preferencesDataSourceProvider) {
-        return new JsonPreferencesGenerator(preferencesDataSourceProvider);
+    public JsonPreferencesGenerator providesJsonPreferencesGenerator(SettingsProvider settingsProvider) {
+        return new JsonPreferencesGenerator(settingsProvider);
     }
 
     @Provides
@@ -492,7 +493,21 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, PreferencesDataSourceProvider preferencesDataSourceProvider, PermissionsChecker permissionsChecker, Clock clock, Analytics analytics) {
-        return new BackgroundAudioViewModel.Factory(audioRecorder, preferencesDataSourceProvider.getGeneralPreferences(), permissionsChecker, clock, analytics);
+    public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, SettingsProvider settingsProvider, PermissionsChecker permissionsChecker, Clock clock, Analytics analytics) {
+        return new BackgroundAudioViewModel.Factory(audioRecorder, settingsProvider.getGeneralSettings(), permissionsChecker, clock, analytics);
+    }
+
+    @Provides
+    @Named("GENERAL_SETTINGS_STORE")
+    @Singleton
+    public SettingsStore providesGeneralSettingsStore(SettingsProvider settingsProvider) {
+        return new SettingsStore(settingsProvider.getGeneralSettings());
+    }
+
+    @Provides
+    @Named("ADMIN_SETTINGS_STORE")
+    @Singleton
+    public SettingsStore providesAdminSettingsStore(SettingsProvider settingsProvider) {
+        return new SettingsStore(settingsProvider.getAdminSettings());
     }
 }

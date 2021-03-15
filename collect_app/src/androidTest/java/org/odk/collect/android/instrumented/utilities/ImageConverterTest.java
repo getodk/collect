@@ -30,14 +30,14 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.widgets.ImageWidget;
-import org.odk.collect.utilities.TestPreferencesProvider;
+import org.odk.collect.utilities.TestSettingsProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,7 +65,7 @@ public class ImageConverterTest {
     private static final String IMAGE_SIZE_SMALL = "small";
     private static final String IMAGE_SIZE_VERY_SMALL = "very_small";
 
-    private final PreferencesDataSource generalPrefs = TestPreferencesProvider.getGeneralPreferences();
+    private final Settings generalSettings = TestSettingsProvider.getGeneralSettings();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -78,7 +78,7 @@ public class ImageConverterTest {
 
     @Test
     public void executeConversionWithoutAnySettings() {
-        generalPrefs.save("image_size", "original_image_size");
+        generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 3000);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
 
@@ -89,7 +89,7 @@ public class ImageConverterTest {
 
     @Test
     public void scaleImageDownFormLevelOnly1() {
-        generalPrefs.save("image_size", "original_image_size");
+        generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(4000, 3000);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "2000"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
 
@@ -100,7 +100,7 @@ public class ImageConverterTest {
 
     @Test
     public void scaleImageDownFormLevelOnly2() {
-        generalPrefs.save("image_size", "original_image_size");
+        generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 4000);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "2000"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
 
@@ -111,7 +111,7 @@ public class ImageConverterTest {
 
     @Test
     public void scaleImageDownFormLevelOnly3() {
-        generalPrefs.save("image_size", "original_image_size");
+        generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 3000);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "2000"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
 
@@ -122,7 +122,7 @@ public class ImageConverterTest {
 
     @Test
     public void scaleImageDownFormLevelOnly4() {
-        generalPrefs.save("image_size", "original_image_size");
+        generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 3000);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "3000"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
 
@@ -133,7 +133,7 @@ public class ImageConverterTest {
 
     @Test
     public void scaleImageDownFormLevelOnly5() {
-        generalPrefs.save("image_size", "original_image_size");
+        generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 3000);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "4000"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
 
@@ -144,7 +144,7 @@ public class ImageConverterTest {
 
     @Test
     public void scaleImageDownFormLevelOnly6() {
-        generalPrefs.save("image_size", "original_image_size");
+        generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 3000);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "2998"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
 
@@ -155,7 +155,7 @@ public class ImageConverterTest {
 
     @Test
     public void scaleImageDownFormLevelOnly7() {
-        generalPrefs.save("image_size", "original_image_size");
+        generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 3000);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", ""), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
 
@@ -166,7 +166,7 @@ public class ImageConverterTest {
 
     @Test
     public void scaleImageDownFormLevelOnly8() {
-        generalPrefs.save("image_size", "original_image_size");
+        generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 3000);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget("", "max-pixels", "2000"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
 
@@ -177,7 +177,7 @@ public class ImageConverterTest {
 
     @Test
     public void scaleImageDownFormLevelOnly9() {
-        generalPrefs.save("image_size", "original_image_size");
+        generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 3000);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixel", "2000"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
 
@@ -188,7 +188,7 @@ public class ImageConverterTest {
 
     @Test
     public void scaleImageDownFormLevelOnly10() {
-        generalPrefs.save("image_size", "original_image_size");
+        generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 3000);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "2000.5"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
 
@@ -199,7 +199,7 @@ public class ImageConverterTest {
 
     @Test
     public void scaleImageDownFormLevelOnly11() {
-        generalPrefs.save("image_size", "original_image_size");
+        generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 3000);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "0"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
 
@@ -210,7 +210,7 @@ public class ImageConverterTest {
 
     @Test
     public void scaleImageDownFormLevelOnly12() {
-        generalPrefs.save("image_size", "original_image_size");
+        generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 3000);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "-2000"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
 
@@ -221,7 +221,7 @@ public class ImageConverterTest {
 
     @Test
     public void scaleImageDownSettingsLevelOnly1() {
-        generalPrefs.save("image_size", IMAGE_SIZE_VERY_SMALL);
+        generalSettings.save("image_size", IMAGE_SIZE_VERY_SMALL);
         saveTestBitmap(3000, 3000);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(), Collect.getInstance(), IMAGE_SIZE_VERY_SMALL);
 
@@ -232,7 +232,7 @@ public class ImageConverterTest {
 
     @Test
     public void scaleImageDownSettingsLevelOnly2() {
-        generalPrefs.save("image_size", IMAGE_SIZE_SMALL);
+        generalSettings.save("image_size", IMAGE_SIZE_SMALL);
         saveTestBitmap(3000, 3000);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(), Collect.getInstance(), IMAGE_SIZE_SMALL);
 
@@ -243,7 +243,7 @@ public class ImageConverterTest {
 
     @Test
     public void scaleImageDownSettingsLevelOnly3() {
-        generalPrefs.save("image_size", IMAGE_SIZE_MEDIUM);
+        generalSettings.save("image_size", IMAGE_SIZE_MEDIUM);
         saveTestBitmap(3000, 3000);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(), Collect.getInstance(), IMAGE_SIZE_MEDIUM);
 
@@ -254,7 +254,7 @@ public class ImageConverterTest {
 
     @Test
     public void scaleImageDownSettingsLevelOnly4() {
-        generalPrefs.save("image_size", IMAGE_SIZE_LARGE);
+        generalSettings.save("image_size", IMAGE_SIZE_LARGE);
         saveTestBitmap(3000, 3000);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(), Collect.getInstance(), IMAGE_SIZE_LARGE);
 
@@ -265,7 +265,7 @@ public class ImageConverterTest {
 
     @Test
     public void scaleImageDownSettingsLevelOnly5() {
-        generalPrefs.save("image_size", IMAGE_SIZE_LARGE);
+        generalSettings.save("image_size", IMAGE_SIZE_LARGE);
         saveTestBitmap(4000, 4000);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(), Collect.getInstance(), IMAGE_SIZE_LARGE);
 
@@ -276,7 +276,7 @@ public class ImageConverterTest {
 
     @Test
     public void scaleImageDownFormAndSettingsLevel1() {
-        generalPrefs.save("image_size", IMAGE_SIZE_SMALL);
+        generalSettings.save("image_size", IMAGE_SIZE_SMALL);
         saveTestBitmap(4000, 4000);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "2000"), Collect.getInstance(), IMAGE_SIZE_SMALL);
 
@@ -287,7 +287,7 @@ public class ImageConverterTest {
 
     @Test
     public void scaleImageDownFormAndSettingsLevel2() {
-        generalPrefs.save("image_size", "small");
+        generalSettings.save("image_size", "small");
         saveTestBitmap(4000, 4000);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "650"), Collect.getInstance(), IMAGE_SIZE_SMALL);
 
@@ -301,7 +301,7 @@ public class ImageConverterTest {
         Map<String, String> attributes = new HashMap<>();
         attributes.put(ExifInterface.TAG_ORIENTATION, String.valueOf(ExifInterface.ORIENTATION_ROTATE_90));
 
-        generalPrefs.save("image_size", "original_image_size");
+        generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 4000, attributes);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
 
@@ -315,7 +315,7 @@ public class ImageConverterTest {
         Map<String, String> attributes = new HashMap<>();
         attributes.put(ExifInterface.TAG_ORIENTATION, String.valueOf(ExifInterface.ORIENTATION_ROTATE_270));
 
-        generalPrefs.save("image_size", "original_image_size");
+        generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 4000, attributes);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
 
@@ -329,7 +329,7 @@ public class ImageConverterTest {
         Map<String, String> attributes = new HashMap<>();
         attributes.put(ExifInterface.TAG_ORIENTATION, String.valueOf(ExifInterface.ORIENTATION_ROTATE_180));
 
-        generalPrefs.save("image_size", "original_image_size");
+        generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 4000, attributes);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
 
@@ -343,7 +343,7 @@ public class ImageConverterTest {
         Map<String, String> attributes = new HashMap<>();
         attributes.put(ExifInterface.TAG_ORIENTATION, String.valueOf(ExifInterface.ORIENTATION_UNDEFINED));
 
-        generalPrefs.save("image_size", "original_image_size");
+        generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 4000, attributes);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
 
@@ -354,7 +354,7 @@ public class ImageConverterTest {
 
     @Test
     public void rotateImage5() {
-        generalPrefs.save("image_size", "original_image_size");
+        generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 4000);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
 
@@ -368,7 +368,7 @@ public class ImageConverterTest {
         Map<String, String> attributes = new HashMap<>();
         attributes.put(ExifInterface.TAG_ORIENTATION, String.valueOf(ExifInterface.ORIENTATION_ROTATE_90));
 
-        generalPrefs.save("image_size", "original_image_size");
+        generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 4000, attributes);
         ImageConverter.execute(TEST_IMAGE_PATH, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "2000"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
 

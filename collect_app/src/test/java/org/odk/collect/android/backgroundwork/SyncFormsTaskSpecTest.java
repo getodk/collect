@@ -19,7 +19,7 @@ import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.support.BooleanChangeLock;
 import org.odk.collect.android.support.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
@@ -61,7 +61,7 @@ public class SyncFormsTaskSpecTest {
             }
 
             @Override
-            public Notifier providesNotifier(Application application, PreferencesDataSourceProvider preferencesDataSourceProvider) {
+            public Notifier providesNotifier(Application application, SettingsProvider settingsProvider) {
                 return notifier;
             }
 

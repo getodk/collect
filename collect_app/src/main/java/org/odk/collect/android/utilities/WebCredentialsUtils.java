@@ -7,8 +7,8 @@ import androidx.annotation.Nullable;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.HttpCredentials;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
-import org.odk.collect.android.preferences.GeneralKeys;
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.source.Settings;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -19,12 +19,12 @@ import javax.inject.Singleton;
 @Singleton
 public class WebCredentialsUtils {
 
-    private final PreferencesDataSource generalPrefs;
+    private final Settings generalSettings;
 
     private static final Map<String, HttpCredentialsInterface> HOST_CREDENTIALS = new HashMap<>();
 
-    public WebCredentialsUtils(PreferencesDataSource generalPrefs) {
-        this.generalPrefs = generalPrefs;
+    public WebCredentialsUtils(Settings generalSettings) {
+        this.generalSettings = generalSettings;
     }
 
     public void saveCredentials(@NonNull String url, @NonNull String username, @NonNull String password) {
@@ -37,8 +37,8 @@ public class WebCredentialsUtils {
     }
 
     public void saveCredentialsPreferences(String userName, String password, PropertyManager propertyManager) {
-        generalPrefs.save(GeneralKeys.KEY_USERNAME, userName);
-        generalPrefs.save(GeneralKeys.KEY_PASSWORD, password);
+        generalSettings.save(GeneralKeys.KEY_USERNAME, userName);
+        generalSettings.save(GeneralKeys.KEY_PASSWORD, password);
 
         propertyManager.reload();
     }
@@ -69,15 +69,15 @@ public class WebCredentialsUtils {
     }
 
     public String getServerUrlFromPreferences() {
-        return generalPrefs.getString(GeneralKeys.KEY_SERVER_URL);
+        return generalSettings.getString(GeneralKeys.KEY_SERVER_URL);
     }
 
     public String getPasswordFromPreferences() {
-        return generalPrefs.getString(GeneralKeys.KEY_PASSWORD);
+        return generalSettings.getString(GeneralKeys.KEY_PASSWORD);
     }
 
     public String getUserNameFromPreferences() {
-        return generalPrefs.getString(GeneralKeys.KEY_USERNAME);
+        return generalSettings.getString(GeneralKeys.KEY_USERNAME);
     }
 
     /**

@@ -172,7 +172,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
             // register this activity with the new uploader task
             instanceServerUploaderTask.setUploaderListener(this);
-            instanceServerUploaderTask.setRepositories(instancesRepository, formsRepository, preferencesDataSourceProvider);
+            instanceServerUploaderTask.setRepositories(instancesRepository, formsRepository, settingsProvider);
             instanceServerUploaderTask.execute(instancesToSend);
         }
     }
@@ -348,7 +348,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         if (url != null) {
             instanceServerUploaderTask.setCompleteDestinationUrl(url + getString(R.string.default_odk_submission), false);
         }
-        instanceServerUploaderTask.setRepositories(instancesRepository, formsRepository, preferencesDataSourceProvider);
+        instanceServerUploaderTask.setRepositories(instancesRepository, formsRepository, settingsProvider);
         instanceServerUploaderTask.execute(instancesToSend);
     }
 

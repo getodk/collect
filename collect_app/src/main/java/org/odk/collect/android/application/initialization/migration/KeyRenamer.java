@@ -1,6 +1,6 @@
 package org.odk.collect.android.application.initialization.migration;
 
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.replace;
 
@@ -18,7 +18,7 @@ public class KeyRenamer implements Migration {
         return this;
     }
 
-    public void apply(PreferencesDataSource prefs) {
+    public void apply(Settings prefs) {
         if (prefs.contains(oldKey) && !prefs.contains(newKey)) {
             Object value = prefs.getAll().get(oldKey);
             replace(prefs, oldKey, newKey, value);

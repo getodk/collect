@@ -87,7 +87,7 @@ public class SavedFormListFragment extends InstanceListFragment
         toggleButton.setOnClickListener(this);
 
         setupAdapter();
-        instanceSyncTask = new InstanceSyncTask(preferencesDataSourceProvider);
+        instanceSyncTask = new InstanceSyncTask(settingsProvider);
         instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();
 

@@ -11,8 +11,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import org.odk.collect.android.preferences.PreferencesDataSourceProvider;
-import org.odk.collect.utilities.TestPreferencesProvider;
+import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.utilities.TestSettingsProvider;
 import org.robolectric.RobolectricTestRunner;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -34,15 +34,15 @@ public abstract class WidgetTest {
 
     public boolean readOnlyOverride;
 
-    protected final PreferencesDataSourceProvider preferencesDataSourceProvider = TestPreferencesProvider.getPreferencesRepository();
+    protected final SettingsProvider settingsProvider = TestSettingsProvider.getSettingsProvider();
 
     @Before
     @OverridingMethodsMustInvokeSuper
     public void setUp() throws Exception {
-        preferencesDataSourceProvider.getGeneralPreferences().clear();
-        preferencesDataSourceProvider.getGeneralPreferences().loadDefaultPreferencesIfNotExist();
-        preferencesDataSourceProvider.getAdminPreferences().clear();
-        preferencesDataSourceProvider.getAdminPreferences().loadDefaultPreferencesIfNotExist();
+        settingsProvider.getGeneralSettings().clear();
+        settingsProvider.getGeneralSettings().setDefaultForAllSettingsWithoutValues();
+        settingsProvider.getAdminSettings().clear();
+        settingsProvider.getAdminSettings().setDefaultForAllSettingsWithoutValues();
 
         when(formEntryPrompt.getIndex()).thenReturn(mock(FormIndex.class));
         when(formEntryPrompt.getIndex().toString()).thenReturn("0, 0");

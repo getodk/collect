@@ -6,8 +6,8 @@ import com.mapbox.mapboxsdk.maps.Style;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.preferences.PreferencesDataSource;
-import org.odk.collect.utilities.TestPreferencesProvider;
+import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.utilities.TestSettingsProvider;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
@@ -20,120 +20,120 @@ import static org.odk.collect.android.application.initialization.migration.Share
 @RunWith(RobolectricTestRunner.class)
 public class CollectSettingsPreferenceMigratorTest {
 
-    private final PreferencesDataSource generalPrefs = TestPreferencesProvider.getGeneralPreferences();
-    private final PreferencesDataSource adminPrefs = TestPreferencesProvider.getAdminPreferences();
-    private final PreferencesDataSource metaPrefs = TestPreferencesProvider.getMetaPreferences();
+    private final Settings generalSettings = TestSettingsProvider.getGeneralSettings();
+    private final Settings adminSettings = TestSettingsProvider.getAdminSettings();
+    private final Settings metaSettings = TestSettingsProvider.getMetaSettings();
 
     @Before
     public void setUp() throws Exception {
-        generalPrefs.clear();
-        adminPrefs.clear();
-        metaPrefs.clear();
+        generalSettings.clear();
+        adminSettings.clear();
+        metaSettings.clear();
     }
 
     @Test
     public void shouldMigrateGoogleMapSettings() {
-        initPrefs(generalPrefs, "map_sdk_behavior", "google_maps", "map_basemap_behavior", "streets");
+        initPrefs(generalSettings, "map_sdk_behavior", "google_maps", "map_basemap_behavior", "streets");
         runMigrations();
-        assertPrefs(generalPrefs, "basemap_source", "google", "google_map_style", String.valueOf(GoogleMap.MAP_TYPE_NORMAL));
+        assertPrefs(generalSettings, "basemap_source", "google", "google_map_style", String.valueOf(GoogleMap.MAP_TYPE_NORMAL));
 
-        initPrefs(generalPrefs, "map_sdk_behavior", "google_maps", "map_basemap_behavior", "satellite");
+        initPrefs(generalSettings, "map_sdk_behavior", "google_maps", "map_basemap_behavior", "satellite");
         runMigrations();
-        assertPrefs(generalPrefs, "basemap_source", "google", "google_map_style", String.valueOf(GoogleMap.MAP_TYPE_SATELLITE));
+        assertPrefs(generalSettings, "basemap_source", "google", "google_map_style", String.valueOf(GoogleMap.MAP_TYPE_SATELLITE));
 
-        initPrefs(generalPrefs, "map_sdk_behavior", "google_maps", "map_basemap_behavior", "terrain\u200e");
+        initPrefs(generalSettings, "map_sdk_behavior", "google_maps", "map_basemap_behavior", "terrain\u200e");
         runMigrations();
-        assertPrefs(generalPrefs, "basemap_source", "google", "google_map_style", String.valueOf(GoogleMap.MAP_TYPE_TERRAIN));
+        assertPrefs(generalSettings, "basemap_source", "google", "google_map_style", String.valueOf(GoogleMap.MAP_TYPE_TERRAIN));
 
-        initPrefs(generalPrefs, "map_sdk_behavior", "google_maps", "map_basemap_behavior", "hybrid");
+        initPrefs(generalSettings, "map_sdk_behavior", "google_maps", "map_basemap_behavior", "hybrid");
         runMigrations();
-        assertPrefs(generalPrefs, "basemap_source", "google", "google_map_style", String.valueOf(GoogleMap.MAP_TYPE_HYBRID));
+        assertPrefs(generalSettings, "basemap_source", "google", "google_map_style", String.valueOf(GoogleMap.MAP_TYPE_HYBRID));
     }
 
     @Test
     public void shouldMigrateMapboxMapSettings() {
-        initPrefs(generalPrefs, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_streets");
+        initPrefs(generalSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_streets");
         runMigrations();
-        assertPrefs(generalPrefs, "basemap_source", "mapbox", "mapbox_map_style", Style.MAPBOX_STREETS);
+        assertPrefs(generalSettings, "basemap_source", "mapbox", "mapbox_map_style", Style.MAPBOX_STREETS);
 
-        initPrefs(generalPrefs, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_light");
+        initPrefs(generalSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_light");
         runMigrations();
-        assertPrefs(generalPrefs, "basemap_source", "mapbox", "mapbox_map_style", Style.LIGHT);
+        assertPrefs(generalSettings, "basemap_source", "mapbox", "mapbox_map_style", Style.LIGHT);
 
-        initPrefs(generalPrefs, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_dark");
+        initPrefs(generalSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_dark");
         runMigrations();
-        assertPrefs(generalPrefs, "basemap_source", "mapbox", "mapbox_map_style", Style.DARK);
+        assertPrefs(generalSettings, "basemap_source", "mapbox", "mapbox_map_style", Style.DARK);
 
-        initPrefs(generalPrefs, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_satellite");
+        initPrefs(generalSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_satellite");
         runMigrations();
-        assertPrefs(generalPrefs, "basemap_source", "mapbox", "mapbox_map_style", Style.SATELLITE);
+        assertPrefs(generalSettings, "basemap_source", "mapbox", "mapbox_map_style", Style.SATELLITE);
 
-        initPrefs(generalPrefs, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_satellite_streets");
+        initPrefs(generalSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_satellite_streets");
         runMigrations();
-        assertPrefs(generalPrefs, "basemap_source", "mapbox", "mapbox_map_style", Style.SATELLITE_STREETS);
+        assertPrefs(generalSettings, "basemap_source", "mapbox", "mapbox_map_style", Style.SATELLITE_STREETS);
 
-        initPrefs(generalPrefs, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_outdoors");
+        initPrefs(generalSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_outdoors");
         runMigrations();
-        assertPrefs(generalPrefs, "basemap_source", "mapbox", "mapbox_map_style", Style.OUTDOORS);
+        assertPrefs(generalSettings, "basemap_source", "mapbox", "mapbox_map_style", Style.OUTDOORS);
     }
 
     @Test
     public void shouldMigrateOsmMapSettings() {
-        initPrefs(generalPrefs, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_streets");
+        initPrefs(generalSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_streets");
         runMigrations();
-        assertPrefs(generalPrefs, "basemap_source", "osm");
+        assertPrefs(generalSettings, "basemap_source", "osm");
 
-        initPrefs(generalPrefs, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_usgs_topo");
+        initPrefs(generalSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_usgs_topo");
         runMigrations();
-        assertPrefs(generalPrefs, "basemap_source", "usgs", "usgs_map_style", "topographic");
+        assertPrefs(generalSettings, "basemap_source", "usgs", "usgs_map_style", "topographic");
 
-        initPrefs(generalPrefs, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_usgs_sat");
+        initPrefs(generalSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_usgs_sat");
         runMigrations();
-        assertPrefs(generalPrefs, "basemap_source", "usgs", "usgs_map_style", "hybrid");
+        assertPrefs(generalSettings, "basemap_source", "usgs", "usgs_map_style", "hybrid");
 
-        initPrefs(generalPrefs, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_usgs_img");
+        initPrefs(generalSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_usgs_img");
         runMigrations();
-        assertPrefs(generalPrefs, "basemap_source", "usgs", "usgs_map_style", "satellite");
+        assertPrefs(generalSettings, "basemap_source", "usgs", "usgs_map_style", "satellite");
 
-        initPrefs(generalPrefs, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_stamen_terrain");
+        initPrefs(generalSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_stamen_terrain");
         runMigrations();
-        assertPrefs(generalPrefs, "basemap_source", "stamen");
+        assertPrefs(generalSettings, "basemap_source", "stamen");
 
-        initPrefs(generalPrefs, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_cartodb_positron");
+        initPrefs(generalSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_cartodb_positron");
         runMigrations();
-        assertPrefs(generalPrefs, "basemap_source", "carto", "carto_map_style", "positron");
+        assertPrefs(generalSettings, "basemap_source", "carto", "carto_map_style", "positron");
 
-        initPrefs(generalPrefs, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_cartodb_darkmatter");
+        initPrefs(generalSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_cartodb_darkmatter");
         runMigrations();
-        assertPrefs(generalPrefs, "basemap_source", "carto", "carto_map_style", "dark_matter");
+        assertPrefs(generalSettings, "basemap_source", "carto", "carto_map_style", "dark_matter");
     }
 
     @Test
     public void shouldMigrateAdminSettings() {
-        initPrefs(adminPrefs, "unrelated", "value");
+        initPrefs(adminSettings, "unrelated", "value");
         runMigrations();
-        assertPrefs(adminPrefs, "unrelated", "value");
+        assertPrefs(adminSettings, "unrelated", "value");
 
-        initPrefs(adminPrefs, "show_map_sdk", true);
+        initPrefs(adminSettings, "show_map_sdk", true);
         runMigrations();
-        assertPrefs(adminPrefs, "show_map_sdk", true);
+        assertPrefs(adminSettings, "show_map_sdk", true);
 
-        initPrefs(adminPrefs, "show_map_sdk", false);
+        initPrefs(adminSettings, "show_map_sdk", false);
         runMigrations();
-        assertPrefs(adminPrefs, "maps", false);
+        assertPrefs(adminSettings, "maps", false);
 
-        initPrefs(adminPrefs, "show_map_basemap", true);
+        initPrefs(adminSettings, "show_map_basemap", true);
         runMigrations();
-        assertPrefs(adminPrefs, "show_map_basemap", true);
+        assertPrefs(adminSettings, "show_map_basemap", true);
 
-        initPrefs(adminPrefs, "show_map_basemap", false);
+        initPrefs(adminSettings, "show_map_basemap", false);
         runMigrations();
-        assertPrefs(adminPrefs, "maps", false);
+        assertPrefs(adminSettings, "maps", false);
     }
 
     @Test
     public void migratesMetaKeysToMetaPrefs() {
-        initPrefs(generalPrefs,
+        initPrefs(generalSettings,
                 "firstRun", true,
                 "lastVersion", 1L,
                 "scoped_storage_used", true,
@@ -143,8 +143,8 @@ public class CollectSettingsPreferenceMigratorTest {
 
         runMigrations();
 
-        assertPrefsEmpty(generalPrefs);
-        assertPrefs(metaPrefs,
+        assertPrefsEmpty(generalSettings);
+        assertPrefs(metaSettings,
                 "scoped_storage_used", true,
                 "mapbox_initialized", true
         );
@@ -152,99 +152,99 @@ public class CollectSettingsPreferenceMigratorTest {
 
     @Test
     public void migratesServerType() {
-        initPrefs(generalPrefs, "protocol", "other_protocol");
+        initPrefs(generalSettings, "protocol", "other_protocol");
         runMigrations();
-        assertPrefs(generalPrefs, "protocol", "odk_default");
+        assertPrefs(generalSettings, "protocol", "odk_default");
     }
 
     @Test
     public void migratesAutosendSettings() {
-        initPrefs(generalPrefs,
+        initPrefs(generalSettings,
                 "autosend_wifi", false,
                 "autosend_network", false
         );
         runMigrations();
-        assertPrefs(generalPrefs,
+        assertPrefs(generalSettings,
                 "autosend", "off"
         );
 
-        initPrefs(generalPrefs,
+        initPrefs(generalSettings,
                 "autosend_wifi", true,
                 "autosend_network", false
         );
         runMigrations();
-        assertPrefs(generalPrefs,
+        assertPrefs(generalSettings,
                 "autosend", "wifi_only"
         );
 
-        initPrefs(generalPrefs,
+        initPrefs(generalSettings,
                 "autosend_wifi", false,
                 "autosend_network", true
         );
         runMigrations();
-        assertPrefs(generalPrefs,
+        assertPrefs(generalSettings,
                 "autosend", "cellular_only"
         );
 
-        initPrefs(generalPrefs,
+        initPrefs(generalSettings,
                 "autosend_wifi", true,
                 "autosend_network", true
         );
         runMigrations();
-        assertPrefs(generalPrefs,
+        assertPrefs(generalSettings,
                 "autosend", "wifi_and_cellular"
         );
     }
 
     @Test
     public void migratesFormUpdateModeSettings() {
-        initPrefs(generalPrefs,
+        initPrefs(generalSettings,
                 "periodic_form_updates_check", "never"
         );
         runMigrations();
-        assertPrefs(generalPrefs,
+        assertPrefs(generalSettings,
                 "form_update_mode", "manual",
                 "periodic_form_updates_check", "every_fifteen_minutes"
         );
 
         List<String> periods = asList("every_fifteen_minutes", "every_one_hour", "every_six_hours", "every_24_hours");
         for (String period : periods) {
-            initPrefs(generalPrefs,
+            initPrefs(generalSettings,
                     "periodic_form_updates_check", period
             );
             runMigrations();
-            assertPrefs(generalPrefs,
+            assertPrefs(generalSettings,
                     "periodic_form_updates_check", period,
                     "form_update_mode", "previously_downloaded"
             );
         }
 
-        initPrefs(generalPrefs,
+        initPrefs(generalSettings,
                 "protocol", "google_sheets"
         );
         runMigrations();
-        assertPrefs(generalPrefs,
+        assertPrefs(generalSettings,
                 "protocol", "google_sheets",
                 "form_update_mode", "manual"
         );
 
-        initPrefs(generalPrefs,
+        initPrefs(generalSettings,
                 "protocol", "google_sheets",
                 "periodic_form_updates_check", "every_24_hours"
         );
         runMigrations();
-        assertPrefs(generalPrefs,
+        assertPrefs(generalSettings,
                 "protocol", "google_sheets",
                 "form_update_mode", "manual",
                 "periodic_form_updates_check", "every_24_hours"
         );
 
-        initPrefs(generalPrefs,
+        initPrefs(generalSettings,
                 "protocol", "google_sheets",
                 "periodic_form_updates_check", "never"
         );
         runMigrations();
-        assertPrefs(generalPrefs,
+        assertPrefs(generalSettings,
                 "protocol", "google_sheets",
                 "form_update_mode", "manual",
                 "periodic_form_updates_check", "every_fifteen_minutes"
@@ -253,18 +253,18 @@ public class CollectSettingsPreferenceMigratorTest {
 
     @Test
     public void migratesServerList() {
-        initPrefs(generalPrefs,
+        initPrefs(generalSettings,
                 "knownUrlList", "[\"http://blah.com\"]"
         );
 
         runMigrations();
-        assertPrefsEmpty(generalPrefs);
-        assertPrefs(metaPrefs,
+        assertPrefsEmpty(generalSettings);
+        assertPrefs(metaSettings,
                 "server_list", "[\"http://blah.com\"]"
         );
     }
 
     private void runMigrations() {
-        new CollectSettingsPreferenceMigrator(metaPrefs).migrate(generalPrefs, adminPrefs);
+        new CollectSettingsPreferenceMigrator(metaSettings).migrate(generalSettings, adminSettings);
     }
 }

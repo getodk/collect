@@ -1,14 +1,14 @@
 package org.odk.collect.android.utilities;
 
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 
-import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
+import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_ADMIN_PW;
 
 public class AdminPasswordProvider {
-    private final PreferencesDataSource adminPrefs;
+    private final Settings adminSettings;
 
-    public AdminPasswordProvider(PreferencesDataSource adminPrefs) {
-        this.adminPrefs = adminPrefs;
+    public AdminPasswordProvider(Settings adminSettings) {
+        this.adminSettings = adminSettings;
     }
 
     public boolean isAdminPasswordSet() {
@@ -17,6 +17,6 @@ public class AdminPasswordProvider {
     }
 
     public String getAdminPassword() {
-        return adminPrefs.getString(KEY_ADMIN_PW);
+        return adminSettings.getString(KEY_ADMIN_PW);
     }
 }

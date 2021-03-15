@@ -13,11 +13,11 @@ import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.permissions.PermissionsChecker;
-import org.odk.collect.android.preferences.PreferencesDataSource;
+import org.odk.collect.android.preferences.source.Settings;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.utilities.Clock;
-import org.odk.collect.utilities.TestPreferencesProvider;
+import org.odk.collect.utilities.TestSettingsProvider;
 
 import java.util.HashSet;
 import java.util.function.BiConsumer;
@@ -44,10 +44,10 @@ public class BackgroundAudioViewModelTest {
     public void setup() {
         clock = mock(Clock.class);
 
-        PreferencesDataSource generalPreferences = TestPreferencesProvider.getGeneralPreferences();
-        generalPreferences.clear();
+        Settings generalSettings = TestSettingsProvider.getGeneralSettings();
+        generalSettings.clear();
 
-        viewModel = new BackgroundAudioViewModel(audioRecorder, generalPreferences, recordAudioActionRegistry, permissionsChecker, clock, mock(Analytics.class));
+        viewModel = new BackgroundAudioViewModel(audioRecorder, generalSettings, recordAudioActionRegistry, permissionsChecker, clock, mock(Analytics.class));
     }
 
     @Test
