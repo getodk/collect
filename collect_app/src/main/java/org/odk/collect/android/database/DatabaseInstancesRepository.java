@@ -66,12 +66,13 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     @Override
     public List<Instance> getAllByStatus(String... status) {
-        StringBuilder selection = new StringBuilder(InstanceColumns.STATUS + "=?");
-        for (int i = 1; i < status.length; i++) {
-            selection.append(" or ").append(InstanceColumns.STATUS).append("=?");
-        }
+        Cursor instancesCursor = getCursorForAllByStatus(status);
+        return getInstancesFromCursor(instancesCursor);
+    }
 
-        return getInstancesFromCursor(getInstancesCursor(selection.toString(), status));
+    @Override
+    public int getCountByStatus(String... status) {
+        return getCursorForAllByStatus(status).getCount();
     }
 
 
@@ -145,6 +146,15 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
                 InstanceColumns._ID + "=?",
                 new String[]{id.toString()}
         );
+    }
+
+    private Cursor getCursorForAllByStatus(String[] status) {
+        StringBuilder selection = new StringBuilder(InstanceColumns.STATUS + "=?");
+        for (int i = 1; i < status.length; i++) {
+            selection.append(" or ").append(InstanceColumns.STATUS).append("=?");
+        }
+
+        return getInstancesCursor(selection.toString(), status);
     }
 
     private Cursor getInstancesCursor(String selection, String[] selectionArgs) {

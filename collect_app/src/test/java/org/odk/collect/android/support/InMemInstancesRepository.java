@@ -77,6 +77,11 @@ public final class InMemInstancesRepository implements InstancesRepository {
     }
 
     @Override
+    public int getCountByStatus(String... status) {
+        return getAllByStatus(status).size();
+    }
+
+    @Override
     public List<Instance> getAllByFormId(String formId) {
         List<Instance> result = new ArrayList<>();
 

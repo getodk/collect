@@ -69,6 +69,9 @@ public abstract class InstancesRepositoryTest {
         assertThat(incomplete.size(), is(2));
         assertThat(incomplete.get(0).getJrFormId(), is("incomplete"));
         assertThat(incomplete.get(1).getStatus(), is("incomplete"));
+
+        // Check corresponding count method is also correct
+        assertThat(instancesRepository.getCountByStatus(Instance.STATUS_INCOMPLETE), is(2));
     }
 
     @Test
@@ -102,6 +105,9 @@ public abstract class InstancesRepositoryTest {
         assertThat(incomplete.get(1).getJrFormId(), is(not("complete")));
         assertThat(incomplete.get(2).getJrFormId(), is(not("complete")));
         assertThat(incomplete.get(3).getStatus(), is(not("complete")));
+
+        // Check corresponding count method is also correct
+        assertThat(instancesRepository.getCountByStatus(Instance.STATUS_INCOMPLETE, Instance.STATUS_SUBMITTED), is(4));
     }
 
     @Test

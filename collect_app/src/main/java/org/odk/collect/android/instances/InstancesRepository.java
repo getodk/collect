@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
  * without introducing new specialized methods (e.g. get(Specification s) instead of getBy(XYZ).
  */
 public interface InstancesRepository {
+
     @Nullable
     Instance get(Long id);
 
@@ -28,6 +29,8 @@ public interface InstancesRepository {
     List<Instance> getAllNotDeleted();
 
     List<Instance> getAllByStatus(String... status);
+
+    int getCountByStatus(String... status);
 
     List<Instance> getAllByFormId(String formId);
 

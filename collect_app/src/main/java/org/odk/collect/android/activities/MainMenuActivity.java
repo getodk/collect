@@ -51,7 +51,6 @@ import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.lang.ref.WeakReference;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -275,27 +274,24 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     private void updateButtons() {
-        List<Instance> finalizedInstances = instancesRepository.getAllByStatus(Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED);
-        List<Instance> sentInstances = instancesRepository.getAllByStatus(Instance.STATUS_SUBMITTED);
-        List<Instance> unsentInstances = instancesRepository.getAllByStatus(Instance.STATUS_INCOMPLETE, Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED);
+        int finalizedInstances = instancesRepository.getCountByStatus(Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED);
+        int sentInstances = instancesRepository.getCountByStatus(Instance.STATUS_SUBMITTED);
+        int unsentInstances = instancesRepository.getCountByStatus(Instance.STATUS_INCOMPLETE, Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED);
 
-        if (!finalizedInstances.isEmpty()) {
-            sendDataButton.setText(
-                    getString(R.string.send_data_button, String.valueOf(finalizedInstances.size())));
+        if (finalizedInstances > 0) {
+            sendDataButton.setText(getString(R.string.send_data_button, String.valueOf(finalizedInstances)));
         } else {
             sendDataButton.setText(getString(R.string.send_data));
         }
 
-        if (!unsentInstances.isEmpty()) {
-            reviewDataButton.setText(getString(R.string.review_data_button,
-                    String.valueOf(unsentInstances.size())));
+        if (unsentInstances > 0) {
+            reviewDataButton.setText(getString(R.string.review_data_button, String.valueOf(unsentInstances)));
         } else {
             reviewDataButton.setText(getString(R.string.review_data));
         }
 
-        if (!sentInstances.isEmpty()) {
-            viewSentFormsButton.setText(
-                    getString(R.string.view_sent_forms_button, String.valueOf(sentInstances.size())));
+        if (sentInstances > 0) {
+            viewSentFormsButton.setText(getString(R.string.view_sent_forms_button, String.valueOf(sentInstances)));
         } else {
             viewSentFormsButton.setText(getString(R.string.view_sent_forms));
         }
