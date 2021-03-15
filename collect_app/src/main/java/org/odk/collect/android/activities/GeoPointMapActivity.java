@@ -177,7 +177,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
         }
 
         if (result != null) {
-            setResult(RESULT_OK, new Intent().putExtra(FormEntryActivity.LOCATION_RESULT, result));
+            setResult(RESULT_OK, new Intent().putExtra(FormEntryActivity.ANSWER_KEY, result));
         }
         finish();
     }

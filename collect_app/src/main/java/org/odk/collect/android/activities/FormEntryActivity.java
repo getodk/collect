@@ -52,9 +52,6 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
-
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.SelectChoice;
@@ -185,7 +182,6 @@ import static org.javarosa.form.api.FormEntryController.EVENT_PROMPT_NEW_REPEAT;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SAVE_INCOMPLETE;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.BACKWARDS;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.FORWARDS;
-import static org.odk.collect.android.fragments.BarcodeWidgetScannerFragment.BARCODE_RESULT_KEY;
 import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_COMPLETED_DEFAULT;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_NAVIGATION;
@@ -219,11 +215,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private static final boolean EVALUATE_CONSTRAINTS = true;
     public static final boolean DO_NOT_EVALUATE_CONSTRAINTS = false;
 
-    // Extra returned from gp activity
-    public static final String LOCATION_RESULT = "LOCATION_RESULT";
-    public static final String BEARING_RESULT = "BEARING_RESULT";
-    public static final String GEOSHAPE_RESULTS = "GEOSHAPE_RESULTS";
-    public static final String ANSWER_KEY = "ANSWER_KEY";
+    public static final String ANSWER_KEY = "value"; // this value can not be changed because it is also used by external apps
 
     public static final String KEY_INSTANCES = "instances";
     public static final String KEY_SUCCESS = "success";
@@ -784,39 +776,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             return;
         }
 
-        // Handling results returned by the Zxing Barcode scanning library is done outside the
-        // switch statement because IntentIntegrator.REQUEST_CODE is not final.
-        // TODO: see if we can update the ZXing Android Embedded dependency to 3.6.0.
-        // https://github.com/journeyapps/zxing-android-embedded#adding-aar-dependency-with-gradle
-        // makes it unclear
-        IntentResult barcodeScannerResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (barcodeScannerResult != null) {
-            if (barcodeScannerResult.getContents() == null) {
-                // request was canceled...
-                Timber.i("QR code scanning cancelled");
-            } else {
-                String sb = intent.getStringExtra(BARCODE_RESULT_KEY);
-                if (getCurrentViewIfODKView() != null) {
-                    setWidgetData(sb);
-                }
-                return;
-            }
-        }
-
         switch (requestCode) {
             case RequestCodes.OSM_CAPTURE:
-                String osmFileName = intent.getStringExtra("OSM_FILE_NAME");
-                if (getCurrentViewIfODKView() != null) {
-                    setWidgetData(osmFileName);
-                }
-                break;
-            case RequestCodes.EX_STRING_CAPTURE:
-            case RequestCodes.EX_INT_CAPTURE:
-            case RequestCodes.EX_DECIMAL_CAPTURE:
-                Object externalValue = externalAppIntentProvider.getValueFromIntent(intent);
-                if (getCurrentViewIfODKView() != null) {
-                    setWidgetData(externalValue);
-                }
+                setWidgetData(intent.getStringExtra("OSM_FILE_NAME"));
                 break;
             case RequestCodes.EX_ARBITRARY_FILE_CHOOSER:
             case RequestCodes.EX_VIDEO_CHOOSER:
@@ -857,23 +819,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 loadFile(intent.getData());
                 break;
             case RequestCodes.LOCATION_CAPTURE:
-                String sl = intent.getStringExtra(LOCATION_RESULT);
-                if (getCurrentViewIfODKView() != null) {
-                    setWidgetData(sl);
-                }
-                break;
             case RequestCodes.GEOSHAPE_CAPTURE:
             case RequestCodes.GEOTRACE_CAPTURE:
-                String gshr = intent.getStringExtra(ANSWER_KEY);
-                if (getCurrentViewIfODKView() != null) {
-                    setWidgetData(gshr);
-                }
-                break;
             case RequestCodes.BEARING_CAPTURE:
-                String bearing = intent.getStringExtra(BEARING_RESULT);
-                if (getCurrentViewIfODKView() != null) {
-                    setWidgetData(bearing);
-                }
+            case RequestCodes.BARCODE_CAPTURE:
+            case RequestCodes.EX_STRING_CAPTURE:
+            case RequestCodes.EX_INT_CAPTURE:
+            case RequestCodes.EX_DECIMAL_CAPTURE:
+                setWidgetData(intent.getExtras().get(ANSWER_KEY));
                 break;
         }
     }
