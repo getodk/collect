@@ -18,6 +18,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.fragments.SmapTaskMapFragment;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 
 public class DaggerUtils {
@@ -31,4 +32,5 @@ public class DaggerUtils {
     public static AppDependencyComponent getComponent(Context context) {
         return ((Collect) context.getApplicationContext()).getComponent();
     }
+
 }

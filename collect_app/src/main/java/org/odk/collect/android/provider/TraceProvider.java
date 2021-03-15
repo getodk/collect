@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 import org.odk.collect.android.database.SmapTraceDatabaseHelper;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.provider.TraceProviderAPI.TraceColumns;
 import org.odk.collect.android.storage.StorageInitializer;
@@ -37,6 +38,10 @@ public class TraceProvider extends ContentProvider {
 
     @Inject
     PermissionsProvider permissionsProvider;
+
+    private void deferDaggerInit() {
+        DaggerUtils.getComponent(getContext()).inject(this);
+    }
 
     private synchronized SmapTraceDatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
@@ -73,6 +78,7 @@ public class TraceProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String where, String[] selectionArgs,
             String sortOrder) {
 
+        deferDaggerInit();
         if (!permissionsProvider.areStoragePermissionsGranted()) {
             return null;
         }
@@ -118,6 +124,7 @@ public class TraceProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues initialValues) {
+        deferDaggerInit();
         if (!permissionsProvider.areStoragePermissionsGranted()) {
             return null;
         }
@@ -152,6 +159,7 @@ public class TraceProvider extends ContentProvider {
      */
     @Override
     public int delete(Uri uri, String where, String[] whereArgs) {
+        deferDaggerInit();
         if (!permissionsProvider.areStoragePermissionsGranted()) {
             return 0;
         }
@@ -182,6 +190,7 @@ public class TraceProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String where, String[] whereArgs) {
+        deferDaggerInit();
         if (!permissionsProvider.areStoragePermissionsGranted()) {
             return 0;
         }

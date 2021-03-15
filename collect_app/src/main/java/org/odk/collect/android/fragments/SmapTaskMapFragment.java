@@ -60,6 +60,7 @@ import org.odk.collect.android.activities.AboutActivity;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.activities.viewmodels.SurveyDataViewModel;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.loaders.MapLocationObserver;
 import org.odk.collect.android.loaders.PointEntry;
@@ -160,6 +161,8 @@ public class SmapTaskMapFragment extends Fragment
 
         Timber.i("######## onViewCreated");
         super.onViewCreated(rootView, savedInstanceState);
+
+        DaggerUtils.getComponent(getContext()).inject(this);
 
         model = new ViewModelProvider(requireActivity()).get(SurveyDataViewModel.class);
         model.getSurveyData().observe(getViewLifecycleOwner(), surveyData -> {

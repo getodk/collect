@@ -39,6 +39,7 @@ import org.odk.collect.android.fragments.MapBoxInitializationFragment;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
 import org.odk.collect.android.fragments.BlankFormListFragment;
 import org.odk.collect.android.fragments.SavedFormListFragment;
+import org.odk.collect.android.fragments.SmapTaskMapFragment;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
@@ -61,6 +62,7 @@ import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.preferences.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
+import org.odk.collect.android.provider.TraceProvider;
 import org.odk.collect.android.tasks.DownloadTasksTask;                 // smap
 import org.odk.collect.android.tasks.SmapLoginTask;                     // smap
 import org.odk.collect.android.tasks.SmapRemoteWebServicePostTask;      // smap
@@ -148,6 +150,10 @@ public interface AppDependencyComponent {
     void inject(SmapRemoteWebServicePostTask smapRemoteWebServicePostTask);     // smap
 
     void inject(SmapLoginTask smapLoginTask);                                   // smap
+
+    void inject(SmapTaskMapFragment smapTaskMapFragment);                       // smap
+
+    void inject(TraceProvider traceProvider);                                   // smap
 
     void inject(InstanceUploaderListActivity activity);
 
