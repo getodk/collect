@@ -21,8 +21,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import androidx.loader.content.CursorLoader;
-
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.FormsDatabaseHelper;
 import org.odk.collect.android.forms.Form;
@@ -73,39 +71,6 @@ public class FormsDao {
         String order = FormsColumns.DATE + " DESC";
 
         return getFormsCursor(null, selection, selectionArgs, order);
-    }
-
-    /**
-     * Returns a loader filtered by the specified charSequence in the specified sortOrder. If
-     * newestByFormId is true, only the most recently-downloaded version of each form is included.
-     */
-    public CursorLoader getFormsCursorLoader(CharSequence charSequence, String sortOrder, boolean newestByFormId) {
-        CursorLoader cursorLoader;
-
-        if (charSequence.length() == 0) {
-            cursorLoader = getFormsCursorLoader(FormsColumns.DELETED_DATE + " IS NULL", new String[]{}, sortOrder, newestByFormId);
-        } else {
-            String selection = FormsColumns.DISPLAY_NAME + " LIKE ? AND " + FormsColumns.DELETED_DATE + " IS NULL";
-            String[] selectionArgs = {"%" + charSequence + "%"};
-
-            cursorLoader = getFormsCursorLoader(selection, selectionArgs, sortOrder, newestByFormId);
-        }
-        return cursorLoader;
-    }
-
-    public CursorLoader getFormsCursorLoader(CharSequence charSequence, String sortOrder) {
-        return getFormsCursorLoader(charSequence, sortOrder, false);
-    }
-
-    /**
-     * Builds and returns a new CursorLoader, passing on the configuration parameters. If
-     * newestByFormID is true, only the most recently-downloaded version of each form is included.
-     */
-    private CursorLoader getFormsCursorLoader(String selection, String[] selectionArgs, String sortOrder, boolean newestByFormId) {
-        Uri formUri = newestByFormId ? FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI
-                : FormsColumns.CONTENT_URI;
-
-        return new CursorLoader(Collect.getInstance(), formUri, null, selection, selectionArgs, sortOrder);
     }
 
     public Cursor getFormsCursorForFormId(String formId) {

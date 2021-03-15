@@ -1,9 +1,12 @@
 package org.odk.collect.android.dao;
 
+import android.net.Uri;
+
 import androidx.loader.content.CursorLoader;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
 public class CursorLoaderFactory {
@@ -137,6 +140,30 @@ public class CursorLoaderFactory {
                     "%" + charSequence + "%"};
 
             cursorLoader = getInstancesCursorLoader(selection, selectionArgs, sortOrder);
+        }
+        return cursorLoader;
+    }
+
+    /**
+     * Returns a loader filtered by the specified charSequence in the specified sortOrder. If
+     * newestByFormId is true, only the most recently-downloaded version of each form is included.
+     */
+    public CursorLoader getFormsCursorLoader(CharSequence charSequence, String sortOrder, boolean newestByFormId) {
+        CursorLoader cursorLoader;
+
+        if (charSequence.length() == 0) {
+            Uri formUri = newestByFormId ? FormsProviderAPI.FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI
+                    : FormsProviderAPI.FormsColumns.CONTENT_URI;
+
+            cursorLoader = new CursorLoader(Collect.getInstance(), formUri, null, FormsProviderAPI.FormsColumns.DELETED_DATE + " IS NULL", new String[]{}, sortOrder);
+        } else {
+            String selection = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " LIKE ? AND " + FormsProviderAPI.FormsColumns.DELETED_DATE + " IS NULL";
+            String[] selectionArgs = {"%" + charSequence + "%"};
+
+            Uri formUri = newestByFormId ? FormsProviderAPI.FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI
+                    : FormsProviderAPI.FormsColumns.CONTENT_URI;
+
+            cursorLoader = new CursorLoader(Collect.getInstance(), formUri, null, selection, selectionArgs, sortOrder);
         }
         return cursorLoader;
     }
