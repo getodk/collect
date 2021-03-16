@@ -214,6 +214,22 @@ public abstract class FormsRepositoryTest {
         assertThat(formsDir.listFiles().length, is(0));
     }
 
+    @Test
+    public void deleteByMd5Hash_deletesFormsWithMatchingHash() {
+        FormsRepository formsRepository = buildSubject();
+        formsRepository.save(buildForm("id1", "version", getFormFilesPath()).build());
+        formsRepository.save(buildForm("id1", "version", getFormFilesPath()).build());
+        formsRepository.save(buildForm("id2", "version", getFormFilesPath()).build());
+
+        List<Form> id1Forms = formsRepository.getAllByFormIdAndVersion("id1", "version");
+        assertThat(id1Forms.size(), is(2));
+        assertThat(id1Forms.get(0).getMD5Hash(), is(id1Forms.get(1).getMD5Hash()));
+
+        formsRepository.deleteByMd5Hash(id1Forms.get(0).getMD5Hash());
+        assertThat(formsRepository.getAll().size(), is(1));
+        assertThat(formsRepository.getAll().get(0).getJrFormId(), is("id2"));
+    }
+
     @Test(expected = Exception.class)
     public void getOneByMd5Hash_whenHashIsNull_explodes() {
         buildSubject().getOneByMd5Hash(null);

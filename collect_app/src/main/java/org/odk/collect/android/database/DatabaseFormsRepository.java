@@ -12,7 +12,6 @@ import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -23,6 +22,7 @@ import static org.odk.collect.android.dao.FormsDao.getFormsFromCursor;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.CONTENT_URI;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DELETED_DATE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DISPLAY_NAME;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_FILE_PATH;
@@ -139,7 +139,10 @@ public class DatabaseFormsRepository implements FormsRepository {
 
     @Override
     public void delete(Long id) {
-        new FormsDao().deleteFormsFromIDs(new String[]{id.toString()});
+        String selection = _ID + "=?";
+        String[] selectionArgs = {String.valueOf(id)};
+
+        Collect.getInstance().getContentResolver().delete(CONTENT_URI, selection, selectionArgs);
     }
 
     @Override
@@ -150,32 +153,16 @@ public class DatabaseFormsRepository implements FormsRepository {
     }
 
     @Override
-    public void deleteByMd5Hash(String md5Hash) {
-        FormsDao formsDao = new FormsDao();
-        List<String> idsToDelete = new ArrayList<>();
-        Cursor c = null;
-        try {
-            for (String hash : new String[]{md5Hash}) {
-                c = formsDao.getFormsCursorForMd5Hash(hash);
-                if (c != null && c.moveToFirst()) {
-                    String id = c.getString(c.getColumnIndex(_ID));
-                    idsToDelete.add(id);
-                    c.close();
-                    c = null;
-                }
-            }
-        } finally {
-            if (c != null) {
-                c.close();
-            }
-        }
+    public void deleteByMd5Hash(@NotNull String md5Hash) {
+        String selection = FormsProviderAPI.FormsColumns.MD5_HASH + "=?";
+        String[] selectionArgs = {md5Hash};
 
-        formsDao.deleteFormsFromIDs(idsToDelete.toArray(new String[idsToDelete.size()]));
+        Collect.getInstance().getContentResolver().delete(CONTENT_URI, selection, selectionArgs);
     }
 
     @Override
     public void deleteAll() {
-        Collect.getInstance().getContentResolver().delete(FormsProviderAPI.FormsColumns.CONTENT_URI, null, null);
+        Collect.getInstance().getContentResolver().delete(CONTENT_URI, null, null);
     }
 
     @Override

@@ -18,7 +18,6 @@ package org.odk.collect.android.utilities;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.configure.ServerRepository;
-import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;

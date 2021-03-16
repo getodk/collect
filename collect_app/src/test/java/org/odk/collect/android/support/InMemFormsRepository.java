@@ -130,7 +130,7 @@ public class InMemFormsRepository implements FormsRepository {
     }
 
     @Override
-    public void deleteByMd5Hash(String md5Hash) {
+    public void deleteByMd5Hash(@NotNull String md5Hash) {
         forms.removeIf(f -> f.getMD5Hash().equals(md5Hash));
     }
 

@@ -49,7 +49,7 @@ public class FormUtils {
     }
 
     public static Form.Builder buildForm(String formId, String version, String formFilesPath) {
-        return buildForm(formId, version, formFilesPath, "blah");
+        return buildForm(formId, version, formFilesPath, createXFormBody(formId, version));
     }
 
     public static Form.Builder buildForm(String formId, String version, String formFilesPath, String xform) {
