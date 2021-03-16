@@ -180,7 +180,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 .getDefaultSharedPreferences(Collect.getInstance().getBaseContext());
         source = Utilities.getSource();
         serverUrl = sharedPreferences.getString(GeneralKeys.KEY_SERVER_URL, null);
-        taskURL = serverUrl + "/surveyKPI/myassignments";
+        taskURL = serverUrl + "/surveyKPI/myassignments?orgs=true";
 
         // Should mostly work may be better to add a lock however any error is recoverable
         if(Collect.getInstance().isDownloading()) {
