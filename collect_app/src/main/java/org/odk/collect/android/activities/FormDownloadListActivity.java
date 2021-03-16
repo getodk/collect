@@ -145,7 +145,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         setContentView(R.layout.form_download_list);
         setTitle(getString(R.string.get_forms));
 
-        viewModel = new ViewModelProvider(this, new FormDownloadListViewModel.Factory(analytics))
+        viewModel = new ViewModelProvider(this, new FormDownloadListViewModel.Factory())
                 .get(FormDownloadListViewModel.class);
 
         init(savedInstanceState);
@@ -183,8 +183,6 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
         downloadButton.setOnClickListener(v -> {
             ArrayList<ServerFormDetails> filesToDownload = getFilesToDownload();
-            viewModel.logDownloadAnalyticsEvent(formsDao.getCount(),
-                    webCredentialsUtils.getServerUrlFromPreferences());
             startFormsDownload(filesToDownload);
         });
 

@@ -20,24 +20,14 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import org.odk.collect.android.R;
-import org.odk.collect.analytics.Analytics;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.TranslationHandler;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 
-import static org.odk.collect.android.analytics.AnalyticsEvents.FIRST_FORM_DOWNLOAD;
-import static org.odk.collect.android.analytics.AnalyticsEvents.SUBSEQUENT_FORM_DOWNLOAD;
-
 public class FormDownloadListViewModel extends ViewModel {
-    private final Analytics analytics;
 
     private HashMap<String, ServerFormDetails> formDetailsByFormId = new HashMap<>();
 
@@ -51,7 +41,6 @@ public class FormDownloadListViewModel extends ViewModel {
     private final LinkedHashSet<String> selectedFormIds = new LinkedHashSet<>();
 
     private String alertTitle;
-    private String progressDialogMsg;
     private String alertDialogMsg;
 
     private boolean alertShowing;
@@ -66,10 +55,6 @@ public class FormDownloadListViewModel extends ViewModel {
     private String username;
     private String password;
     private final HashMap<String, Boolean> formResults = new HashMap<>();
-
-    FormDownloadListViewModel(Analytics analytics) {
-        this.analytics = analytics;
-    }
 
     public HashMap<String, ServerFormDetails> getFormDetailsByFormId() {
         return formDetailsByFormId;
@@ -89,14 +74,6 @@ public class FormDownloadListViewModel extends ViewModel {
 
     public void setAlertTitle(String alertTitle) {
         this.alertTitle = alertTitle;
-    }
-
-    public String getProgressDialogMsg() {
-        return progressDialogMsg == null ? TranslationHandler.getString(Collect.getInstance(), R.string.please_wait) : progressDialogMsg;
-    }
-
-    public void setProgressDialogMsg(String progressDialogMsg) {
-        this.progressDialogMsg = progressDialogMsg;
     }
 
     public String getAlertDialogMsg() {
@@ -219,36 +196,13 @@ public class FormDownloadListViewModel extends ViewModel {
         this.loadingCanceled = loadingCanceled;
     }
 
-    public void logDownloadAnalyticsEvent(int downloadedFormCount, String serverUrl) {
-        String analyticsEvent = getDownloadAnalyticsEvent(downloadedFormCount);
-        String analyticsDesc = getDownloadAnalyticsDescription(serverUrl);
-        analytics.logEvent(analyticsEvent, analyticsDesc);
-    }
-
-    private String getDownloadAnalyticsEvent(int downloadedFormCount) {
-        return downloadedFormCount == 0 ? FIRST_FORM_DOWNLOAD : SUBSEQUENT_FORM_DOWNLOAD;
-    }
-
-    private String getDownloadAnalyticsDescription(String serverUrl) {
-        // If a URL was set by intent, use that
-        serverUrl = getUrl() != null ? getUrl() : serverUrl;
-
-        String serverHash = FileUtils.getMd5Hash(new ByteArrayInputStream(serverUrl.getBytes()));
-        return getSelectedFormIds().size() + "/" + getFormList().size() + "-" + serverHash;
-    }
-
     public static class Factory implements ViewModelProvider.Factory {
-        private final Analytics analytics;
-
-        public Factory(Analytics analytics) {
-            this.analytics = analytics;
-        }
 
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormDownloadListViewModel(analytics);
+            return (T) new FormDownloadListViewModel();
         }
     }
 }
