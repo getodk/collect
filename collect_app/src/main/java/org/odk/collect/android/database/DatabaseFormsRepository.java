@@ -12,13 +12,13 @@ import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
 import static android.provider.BaseColumns._ID;
-import static org.odk.collect.android.dao.FormsDao.getFormsFromCursor;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY;
@@ -129,7 +129,7 @@ public class DatabaseFormsRepository implements FormsRepository {
         FormsDao formsDao = new FormsDao();
         Uri uri = formsDao.saveForm(v);
         try (Cursor cursor = Collect.getInstance().getContentResolver().query(uri, null, null, null, null)) {
-            return getFormOrNull(cursor);
+            return getFormsFromCursor(cursor).get(0);
         }
     }
 
@@ -170,23 +170,68 @@ public class DatabaseFormsRepository implements FormsRepository {
 
     @Nullable
     private Form queryForForm(String selection, String[] selectionArgs) {
-        try (Cursor cursor = Collect.getInstance().getContentResolver().query(CONTENT_URI, null, selection, selectionArgs, null)) {
-            return getFormOrNull(cursor);
-        }
+        List<Form> forms = queryForForms(selection, selectionArgs);
+        return !forms.isEmpty() ? forms.get(0) : null;
     }
 
     private List<Form> queryForForms(String selection, String[] selectionArgs) {
         try (Cursor cursor = Collect.getInstance().getContentResolver().query(CONTENT_URI, null, selection, selectionArgs, null)) {
-            return FormsDao.getFormsFromCursor(cursor);
+            return getFormsFromCursor(cursor);
         }
     }
 
-    private Form getFormOrNull(Cursor cursor) {
-        if (cursor != null && cursor.getCount() > 0) {
-            List<Form> forms = getFormsFromCursor(cursor);
-            return forms.get(0);
-        } else {
-            return null;
+    @NotNull
+    private List<Form> getFormsFromCursor(Cursor cursor) {
+        List<Form> forms = new ArrayList<>();
+        if (cursor != null) {
+            cursor.moveToPosition(-1);
+            while (cursor.moveToNext()) {
+                Form form = getFormFromCurrentCursorPosition(cursor);
+
+                forms.add(form);
+            }
+
         }
+        return forms;
+    }
+
+    private Form getFormFromCurrentCursorPosition(Cursor cursor) {
+        int idColumnIndex = cursor.getColumnIndex(_ID);
+        int displayNameColumnIndex = cursor.getColumnIndex(DISPLAY_NAME);
+        int descriptionColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.DESCRIPTION);
+        int jrFormIdColumnIndex = cursor.getColumnIndex(JR_FORM_ID);
+        int jrVersionColumnIndex = cursor.getColumnIndex(JR_VERSION);
+        int formFilePathColumnIndex = cursor.getColumnIndex(FORM_FILE_PATH);
+        int submissionUriColumnIndex = cursor.getColumnIndex(SUBMISSION_URI);
+        int base64RSAPublicKeyColumnIndex = cursor.getColumnIndex(BASE64_RSA_PUBLIC_KEY);
+        int md5HashColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.MD5_HASH);
+        int dateColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.DATE);
+        int jrCacheFilePathColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH);
+        int formMediaPathColumnIndex = cursor.getColumnIndex(FORM_MEDIA_PATH);
+        int languageColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.LANGUAGE);
+        int autoSendColumnIndex = cursor.getColumnIndex(AUTO_SEND);
+        int autoDeleteColumnIndex = cursor.getColumnIndex(AUTO_DELETE);
+        int geometryXpathColumnIndex = cursor.getColumnIndex(GEOMETRY_XPATH);
+        int deletedDateColumnIndex = cursor.getColumnIndex(DELETED_DATE);
+
+        return new Form.Builder()
+                .id(cursor.getLong(idColumnIndex))
+                .displayName(cursor.getString(displayNameColumnIndex))
+                .description(cursor.getString(descriptionColumnIndex))
+                .jrFormId(cursor.getString(jrFormIdColumnIndex))
+                .jrVersion(cursor.getString(jrVersionColumnIndex))
+                .formFilePath(new StoragePathProvider().getRelativeFormPath(cursor.getString(formFilePathColumnIndex)))
+                .submissionUri(cursor.getString(submissionUriColumnIndex))
+                .base64RSAPublicKey(cursor.getString(base64RSAPublicKeyColumnIndex))
+                .md5Hash(cursor.getString(md5HashColumnIndex))
+                .date(cursor.getLong(dateColumnIndex))
+                .jrCacheFilePath(new StoragePathProvider().getRelativeCachePath(cursor.getString(jrCacheFilePathColumnIndex)))
+                .formMediaPath(new StoragePathProvider().getRelativeFormPath(cursor.getString(formMediaPathColumnIndex)))
+                .language(cursor.getString(languageColumnIndex))
+                .autoSend(cursor.getString(autoSendColumnIndex))
+                .autoDelete(cursor.getString(autoDeleteColumnIndex))
+                .geometryXpath(cursor.getString(geometryXpathColumnIndex))
+                .deleted(!cursor.isNull(deletedDateColumnIndex))
+                .build();
     }
 }
