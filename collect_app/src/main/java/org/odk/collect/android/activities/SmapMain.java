@@ -27,7 +27,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -54,13 +53,10 @@ import org.odk.collect.android.adapters.ViewPagerAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.legacy.LegacySettingsFileImporter;
-import org.odk.collect.android.formentry.RefreshFormListDialogFragment;
-import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.fragments.SmapFormListFragment;
 import org.odk.collect.android.fragments.SmapTaskListFragment;
 import org.odk.collect.android.fragments.SmapTaskMapFragment;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.NFCListener;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -75,6 +71,8 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.services.LocationService;
+import org.odk.collect.android.smap.formmanagement.ServerFormDetailsSmap;
+import org.odk.collect.android.smap.listeners.DownloadFormsTaskListenerSmap;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -119,7 +117,7 @@ import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
 public class SmapMain extends CollectAbstractActivity implements TaskDownloaderListener,
         NFCListener,
         InstanceUploaderListener,
-        DownloadFormsTaskListener {
+        DownloadFormsTaskListenerSmap {
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int ALERT_DIALOG = 2;
@@ -489,7 +487,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
      * Forms Downloading Overrides
      */
     @Override
-    public void formsDownloadingComplete(Map<ServerFormDetails, String> result) {
+    public void formsDownloadingComplete(Map<ServerFormDetailsSmap, String> result) {
         // TODO Auto-generated method stub
         // Ignore formsDownloading is called synchronously from taskDownloader
     }

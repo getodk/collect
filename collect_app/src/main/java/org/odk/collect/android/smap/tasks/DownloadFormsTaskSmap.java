@@ -2,10 +2,10 @@ package org.odk.collect.android.smap.tasks;
 
 import android.os.AsyncTask;
 
-import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormDownloaderListener;
-import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.smap.formmanagement.MultiFormDownloaderSmap;
+import org.odk.collect.android.smap.formmanagement.ServerFormDetailsSmap;
+import org.odk.collect.android.smap.listeners.DownloadFormsTaskListenerSmap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,10 +19,10 @@ import java.util.HashMap;
  * @author carlhartung
  */
 public class DownloadFormsTaskSmap extends
-        AsyncTask<ArrayList<ServerFormDetails>, String, HashMap<ServerFormDetails, String>> implements FormDownloaderListener {
+        AsyncTask<ArrayList<ServerFormDetailsSmap>, String, HashMap<ServerFormDetailsSmap, String>> implements FormDownloaderListener {
 
     private final MultiFormDownloaderSmap multiFormDownloader;
-    private DownloadFormsTaskListener stateListener;
+    private DownloadFormsTaskListenerSmap stateListener;
 
     public DownloadFormsTaskSmap(MultiFormDownloaderSmap multiFormDownloader) {
         this.multiFormDownloader = multiFormDownloader;
@@ -39,12 +39,12 @@ public class DownloadFormsTaskSmap extends
     }
 
     @Override
-    public HashMap<ServerFormDetails, String> doInBackground(ArrayList<ServerFormDetails>... values) {  // smap make public
+    public HashMap<ServerFormDetailsSmap, String> doInBackground(ArrayList<ServerFormDetailsSmap>... values) {  // smap make public
         return multiFormDownloader.downloadForms(values[0], this);
     }
 
     @Override
-    protected void onCancelled(HashMap<ServerFormDetails, String> formDetailsStringHashMap) {
+    protected void onCancelled(HashMap<ServerFormDetailsSmap, String> formDetailsStringHashMap) {
         synchronized (this) {
             if (stateListener != null) {
                 stateListener.formsDownloadingCancelled();
@@ -53,7 +53,7 @@ public class DownloadFormsTaskSmap extends
     }
 
     @Override
-    protected void onPostExecute(HashMap<ServerFormDetails, String> value) {
+    protected void onPostExecute(HashMap<ServerFormDetailsSmap, String> value) {
         synchronized (this) {
             if (stateListener != null) {
                 stateListener.formsDownloadingComplete(value);
@@ -74,7 +74,7 @@ public class DownloadFormsTaskSmap extends
 
     }
 
-    public void setDownloaderListener(DownloadFormsTaskListener sl) {
+    public void setDownloaderListener(DownloadFormsTaskListenerSmap sl) {
         synchronized (this) {
             stateListener = sl;
         }

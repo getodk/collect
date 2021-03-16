@@ -81,14 +81,13 @@ public class MultiFormDownloaderSmap {
         }
     }
 
-    @Deprecated
-    public HashMap<ServerFormDetails, String> downloadForms(List<ServerFormDetails> toDownload, FormDownloaderListener stateListener) {
+    public HashMap<ServerFormDetailsSmap, String> downloadForms(List<ServerFormDetailsSmap> toDownload, FormDownloaderListener stateListener) {
         int total = toDownload.size();
         int count = 1;
 
-        final HashMap<ServerFormDetails, String> result = new HashMap<>();
+        final HashMap<ServerFormDetailsSmap, String> result = new HashMap<>();
 
-        for (ServerFormDetails fd : toDownload) {
+        for (ServerFormDetailsSmap fd : toDownload) {
             try {
                 boolean success = processOneForm(total, count++, fd, stateListener);
                 if (success) {
@@ -113,7 +112,7 @@ public class MultiFormDownloaderSmap {
      * @return an empty string for success, or a nonblank string with one or more error messages
      * @throws TaskCancelledException to signal that form downloading is to be canceled
      */
-    private boolean processOneForm(int total, int count, ServerFormDetails fd, FormDownloaderListener stateListener) throws TaskCancelledException {
+    private boolean processOneForm(int total, int count, ServerFormDetailsSmap fd, FormDownloaderListener stateListener) throws TaskCancelledException {
         if (stateListener != null) {
             stateListener.progressUpdate(fd.getFormName(), String.valueOf(count), String.valueOf(total));
         }
@@ -139,7 +138,7 @@ public class MultiFormDownloaderSmap {
                     fd.isFormNotDownloaded() || fd.isFormNotDownloaded(),       // smap add flag on newer form version available or never downloaded
                     fd.getFormPath());                      // smap
 
-            if (fd.getManifest() != null && !fd.getManifest().getMediaFiles().isEmpty()) {
+            if (fd.getManifestUrl() != null) {
                 finalMediaPath = FileUtils.constructMediaPath(
                         fileResult.getFile().getAbsolutePath());
                 String error = downloadManifestAndMediaFiles(tempMediaPath, finalMediaPath, fd,
@@ -219,7 +218,7 @@ public class MultiFormDownloaderSmap {
     }
 
     boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields,
-                              ServerFormDetails fd, String orgTempMediaPath, String orgMediaPath)   {   // smap add fd,  organisational paths
+                              ServerFormDetailsSmap fd, String orgTempMediaPath, String orgMediaPath)   {   // smap add fd,  organisational paths
         UriResult uriResult = null;
         try {
             uriResult = findExistingOrCreateNewUri(fileResult.file, parsedFields,
@@ -547,16 +546,16 @@ public class MultiFormDownloaderSmap {
     }
 
     String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
-                                         ServerFormDetails fd, int count,
+                                         ServerFormDetailsSmap fd, int count,
                                          int total, FormDownloaderListener stateListener,
                                          String orgTempMediaPath,   // smap
                                          String orgMediaPath) throws Exception {        // smap
-        if (fd.getManifest() == null || fd.getManifest().getMediaFiles().isEmpty()) {
+        if (fd.getManifestUrl() == null) {
             return null;
         }
 
         StringBuffer downloadMsg = new StringBuffer("");      //smap
-        List<MediaFile> files = fd.getManifest().getMediaFiles();
+        List<MediaFile> files = formListApi.fetchManifest(fd.getManifestUrl()).getMediaFiles();
 
         // OK we now have the full set of files to download...
         Timber.i("Downloading %d media files.", files.size());

@@ -41,12 +41,9 @@ import org.odk.collect.android.database.Assignment;
 import org.odk.collect.android.database.SmapReferenceDatabaseHelper;
 import org.odk.collect.android.database.TaskAssignment;
 import org.odk.collect.android.database.TraceUtilities;
-import org.odk.collect.android.formmanagement.FormDownloader;
-import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
-import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.notifications.Notifier;
@@ -62,6 +59,8 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.smap.formmanagement.MultiFormDownloaderSmap;
+import org.odk.collect.android.smap.formmanagement.ServerFormDetailsSmap;
+import org.odk.collect.android.smap.listeners.DownloadFormsTaskListenerSmap;
 import org.odk.collect.android.smap.tasks.DownloadFormsTaskSmap;
 import org.odk.collect.android.taskModel.FormLocator;
 import org.odk.collect.android.taskModel.TaskCompletionInfo;
@@ -358,202 +357,16 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
                 if(isCancelled()) { throw new CancelException("cancelled"); };		// Return if the user cancels
 
-                if(tr.settings !=null ) {
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean(GeneralKeys.KEY_SMAP_LOCATION_TRIGGER, tr.settings.ft_location_trigger);
-                    editor.putBoolean(GeneralKeys.KEY_SMAP_ODK_STYLE_MENUS, tr.settings.ft_odk_style_menus);
-                    editor.putBoolean(GeneralKeys.KEY_SMAP_ODK_INSTANCENAME, tr.settings.ft_specify_instancename);
-                    editor.putBoolean(GeneralKeys.KEY_SMAP_ODK_MARK_FINALIZED, tr.settings.ft_mark_finalized);
-                    editor.putBoolean(GeneralKeys.KEY_SMAP_PREVENT_DISABLE_TRACK, tr.settings.ft_prevent_disable_track);
-                    editor.putBoolean(GeneralKeys.KEY_SMAP_ENABLE_GEOFENCE, tr.settings.ft_enable_geofence == null || tr.settings.ft_enable_geofence.equals("on"));
-                    editor.putBoolean(GeneralKeys.KEY_SMAP_ODK_ADMIN_MENU, tr.settings.ft_admin_menu);
-                    editor.putBoolean(GeneralKeys.KEY_SMAP_ADMIN_SERVER_MENU, tr.settings.ft_server_menu);
-                    editor.putBoolean(GeneralKeys.KEY_SMAP_ADMIN_META_MENU, tr.settings.ft_meta_menu);
-                    editor.putBoolean(GeneralKeys.KEY_SMAP_EXIT_TRACK_MENU, tr.settings.ft_exit_track_menu);
-                    editor.putBoolean(GeneralKeys.KEY_SMAP_REVIEW_FINAL, tr.settings.ft_review_final);
-
-                    /*
-                     * Override the user trail setting if this is set from the server
-                     */
-                    if(tr.settings.ft_send_location == null || tr.settings.ft_send_location.equals("off")) {
-                        editor.putBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
-                        editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_LOCATION, true);
-                    } else if(tr.settings.ft_send_location.equals("on")) {
-                        editor.putBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, true);
-                        editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_LOCATION, true);
-                    } else {
-                        editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_LOCATION, false);
-                    }
-
-                    /*
-                     * Override the autosend setting if this is set from the server
-                     */
-                    if(tr.settings.ft_send != null) {
-                        // Server version is 17.11+ or new setting has not been used
-                        if(tr.settings.ft_send.equals("off") || tr.settings.ft_send.equals("wifi_only") || tr.settings.ft_send.equals("wifi_and_cellular")) {
-                            // Set the preference value using the server value and disable from local editing
-                            editor.putString(GeneralKeys.KEY_AUTOSEND, tr.settings.ft_send);
-                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_SYNC, true);
-                        } else {
-                            // Leave the local settings as they are and enable for local editing
-                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_SYNC, false);
-                        }
-                    } else {
-                        // Support legacy servers / settings
-                        String autoSend = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_AUTOSEND);
-                        if (tr.settings.ft_send_wifi_cell) {
-                            autoSend = "wifi_and_cellular";
-                        } else if (tr.settings.ft_send_wifi) {
-                            autoSend = "wifi_only";
-                        }
-                        editor.putString(GeneralKeys.KEY_AUTOSEND, autoSend);
-                        editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_SYNC, false);
-                    }
-
-                    /*
-                     * Override the delete after send setting if this is set from the server
-                     */
-                    if(tr.settings.ft_delete != null) {
-                        if(tr.settings.ft_delete.equals("off")) {
-                            editor.putBoolean(GeneralKeys.KEY_DELETE_AFTER_SEND, false);
-                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_DELETE, true);
-                        } else if(tr.settings.ft_delete.equals("on")) {
-                            editor.putBoolean(GeneralKeys.KEY_DELETE_AFTER_SEND, true);
-                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_DELETE, true);
-                        } else {
-                            // Leave the local settings as they are and enable for local editing
-                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_DELETE, false);
-                        }
-
-                    } else {
-                        // Support legacy servers / settings
-                        editor.putBoolean(GeneralKeys.KEY_DELETE_AFTER_SEND, tr.settings.ft_delete_submitted);
-                    }
-
-                    /*
-                     * Override the camera image size setting
-                     */
-                    if(tr.settings.ft_image_size != null) {
-                        if(!tr.settings.ft_image_size.equals("not set")) {
-                            editor.putString(GeneralKeys.KEY_IMAGE_SIZE, tr.settings.ft_image_size);
-                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_IMAGE_SIZE, true);
-                        } else {
-                            // Leave the local settings as they are and enable for local editing
-                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_IMAGE_SIZE, false);
-                        }
-
-                    } else {
-                        // Leave the local settings as they are and enable for local editing
-                        editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_IMAGE_SIZE, false);
-                    }
-
-                    /*
-                     * Override the guidance setting
-                     */
-                    if(tr.settings.ft_guidance != null) {
-                        if(tr.settings.ft_guidance.equals("no")) {
-                            editor.putString(GeneralKeys.KEY_GUIDANCE_HINT, GuidanceHint.No.toString());
-                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_GUIDANCE, true);
-                        } else if(tr.settings.ft_guidance.equals("yes always")) {
-                            editor.putString(GeneralKeys.KEY_GUIDANCE_HINT, GuidanceHint.Yes.toString());
-                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_GUIDANCE, true);
-                        } else if(tr.settings.ft_guidance.equals("yes collapsed")) {
-                            editor.putString(GeneralKeys.KEY_GUIDANCE_HINT, GuidanceHint.YesCollapsed.toString());
-                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_GUIDANCE, true);
-                        } else {
-                            // Leave the local settings as they are and enable for local editing
-                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_GUIDANCE, false);
-                        }
-                    }
-
-                    /*
-                     * Override the high resolution video
-                     */
-                    if(tr.settings.ft_high_res_video != null) {
-                        if(tr.settings.ft_high_res_video.equals("off")) {
-                            editor.putBoolean(GeneralKeys.KEY_HIGH_RESOLUTION, false);
-                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_HIGH_RES_VIDEO, true);
-                        } else if(tr.settings.ft_high_res_video.equals("on")) {
-                            editor.putBoolean(GeneralKeys.KEY_HIGH_RESOLUTION, true);
-                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_HIGH_RES_VIDEO, true);
-                        } else {
-                            // Leave the local settings as they are and enable for local editing
-                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_HIGH_RES_VIDEO, false);
-                        }
-                    }
-
-                    /*
-                     * Set the password policy
-                     */
-                    editor.putString(GeneralKeys.KEY_SMAP_PASSWORD_POLICY, String.valueOf(tr.settings.ft_pw_policy));
-
-                    /*
-                     * Override backward navigation setting
-                     */
-                    if(tr.settings.ft_backward_navigation != null) {
-                        if(tr.settings.ft_backward_navigation.equals("disable")) {
-                            // Disable moving backwards
-                            AdminSharedPreferences.getInstance().save(AdminKeys.KEY_MOVING_BACKWARDS, false);
-                            AdminSharedPreferences.getInstance().save(AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM, false);
-                            AdminSharedPreferences.getInstance().save(AdminKeys.KEY_EDIT_SAVED, false);
-                            AdminSharedPreferences.getInstance().save(AdminKeys.KEY_SAVE_MID, false);
-                            AdminSharedPreferences.getInstance().save(AdminKeys.KEY_JUMP_TO, false);
-                            GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR, GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE);
-
-                            AdminSharedPreferences.getInstance().getInstance().save(AdminKeys.KEY_SMAP_OVERRIDE_MOVING_BACKWARDS, true);
-                        } else if(tr.settings.ft_backward_navigation.equals("enable")) {
-                            // Enable moving backwards
-                            AdminSharedPreferences.getInstance().save(AdminKeys.KEY_MOVING_BACKWARDS, true);
-                            AdminSharedPreferences.getInstance().save(AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM, true);
-                            AdminSharedPreferences.getInstance().save(AdminKeys.KEY_EDIT_SAVED, true);
-                            AdminSharedPreferences.getInstance().save(AdminKeys.KEY_SAVE_MID, true);
-                            AdminSharedPreferences.getInstance().save(AdminKeys.KEY_JUMP_TO, true);
-                            GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR, GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE);
-
-                            AdminSharedPreferences.getInstance().getInstance().save(AdminKeys.KEY_SMAP_OVERRIDE_MOVING_BACKWARDS, true);
-                        } else {
-                            // Leave the local settings as they are and enable for local editing
-                            AdminSharedPreferences.getInstance().getInstance().save(AdminKeys.KEY_SMAP_OVERRIDE_MOVING_BACKWARDS, false);
-                        }
-                    } else {
-                        // Leave the local settings as they are and enable for local editing
-                        AdminSharedPreferences.getInstance().getInstance().save(AdminKeys.KEY_SMAP_OVERRIDE_MOVING_BACKWARDS, false);
-                    }
-
-                    /*
-                     * Override the screen navigation setting
-                     */
-                    if(tr.settings.ft_navigation != null) {
-                        if(!tr.settings.ft_navigation.equals("not set")) {
-                            editor.putString(GeneralKeys.KEY_NAVIGATION, tr.settings.ft_navigation);
-                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_NAVIGATION, true);
-                        } else {
-                            // Leave the local settings as they are and enable for local editing
-                            editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_NAVIGATION, false);
-                        }
-
-                    } else {
-                        // Leave the local settings as they are and enable for local editing
-                        editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_NAVIGATION, false);
-                    }
-
-                    /*
-                     * Record organisation settings
-                     */
-                    editor.putString(GeneralKeys.KEY_SMAP_CURRENT_ORGANISATION, tr.current_org);
-                    editor.putStringSet(GeneralKeys.KEY_SMAP_ORGANISATIONS, tr.orgs);
-
-                    editor.apply();
-                }
+                updateSettings();       // Update device settings with values returned from server
 
                 /*
                  * Synchronise forms
                  *  Get any forms the user does not currently have
                  *  Delete any forms that are no longer accessible to the user
                  */
-                Map<ServerFormDetails, String> outcome = synchroniseForms(tr.forms);
+                Map<ServerFormDetailsSmap, String> outcome = synchroniseForms(tr.forms);
                 if(outcome != null) {
-                    for (ServerFormDetails key : outcome.keySet()) {
+                    for (ServerFormDetailsSmap key : outcome.keySet()) {
                         results.put(key.getFormName(), outcome.get(key));
                     }
                 }
@@ -849,10 +662,10 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
      *   (2) Delete forms not on the server or older versions of forms
      *       unless there is an uncompleted data instance using that form
      */
-	private Map<ServerFormDetails, String> synchroniseForms(List<FormLocator> forms) throws Exception {
+	private Map<ServerFormDetailsSmap, String> synchroniseForms(List<FormLocator> forms) throws Exception {
     	
 
-		Map<ServerFormDetails, String> dfResults = null;
+		Map<ServerFormDetailsSmap, String> dfResults = null;
     	
     	if(forms == null) {
         	publishProgress(Collect.getInstance().getString(R.string.smap_no_forms));
@@ -860,7 +673,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
     		
     		HashMap <String, String> formMap = new HashMap <String, String> ();
           	ManageForm mf = new ManageForm();
-    		ArrayList<ServerFormDetails> toDownload = new ArrayList<> ();
+    		ArrayList<ServerFormDetailsSmap> toDownload = new ArrayList<> ();
     		
     		// Create an array of ODK form details
         	for(FormLocator form : forms) {
@@ -875,11 +688,12 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         				form.manifestUrl = serverUrl + "/xformsManifest?key=" + form.ident;
         			}
 
-                    ServerFormDetails fd = new ServerFormDetails(form.name, form.url, form.ident, formVersionString,
+                    ServerFormDetailsSmap fd = new ServerFormDetailsSmap(form.name, form.url, form.ident, formVersionString,
                             null,      // manifest hash
                             !mfd.exists,        // New form version available
                             form.hasManifest,   // Are newer media files available
                             null,
+                            form.manifestUrl,
                             !mfd.exists,
                             form.tasks_only,
                             mfd.formPath,
@@ -906,7 +720,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 DownloadFormsTaskSmap downloadFormsTask = new DownloadFormsTaskSmap(multiFormDownloader);
                 publishProgress(Collect.getInstance().getString(R.string.smap_downloading, toDownload.size()));
 
-                downloadFormsTask.setDownloaderListener((DownloadFormsTaskListener) mStateListener);
+                downloadFormsTask.setDownloaderListener((DownloadFormsTaskListenerSmap) mStateListener);
                 dfResults = downloadFormsTask.doInBackground(toDownload);   // Not in background as called directly
             }
 
@@ -998,6 +812,196 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         UriFile(Uri uri, File file) {
             this.uri = uri;
             this.file = file;
+        }
+    }
+
+    private void updateSettings () {
+        if(tr.settings != null) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(GeneralKeys.KEY_SMAP_LOCATION_TRIGGER, tr.settings.ft_location_trigger);
+            editor.putBoolean(GeneralKeys.KEY_SMAP_ODK_STYLE_MENUS, tr.settings.ft_odk_style_menus);
+            editor.putBoolean(GeneralKeys.KEY_SMAP_ODK_INSTANCENAME, tr.settings.ft_specify_instancename);
+            editor.putBoolean(GeneralKeys.KEY_SMAP_ODK_MARK_FINALIZED, tr.settings.ft_mark_finalized);
+            editor.putBoolean(GeneralKeys.KEY_SMAP_PREVENT_DISABLE_TRACK, tr.settings.ft_prevent_disable_track);
+            editor.putBoolean(GeneralKeys.KEY_SMAP_ENABLE_GEOFENCE, tr.settings.ft_enable_geofence == null || tr.settings.ft_enable_geofence.equals("on"));
+            editor.putBoolean(GeneralKeys.KEY_SMAP_ODK_ADMIN_MENU, tr.settings.ft_admin_menu);
+            editor.putBoolean(GeneralKeys.KEY_SMAP_ADMIN_SERVER_MENU, tr.settings.ft_server_menu);
+            editor.putBoolean(GeneralKeys.KEY_SMAP_ADMIN_META_MENU, tr.settings.ft_meta_menu);
+            editor.putBoolean(GeneralKeys.KEY_SMAP_EXIT_TRACK_MENU, tr.settings.ft_exit_track_menu);
+            editor.putBoolean(GeneralKeys.KEY_SMAP_REVIEW_FINAL, tr.settings.ft_review_final);
+
+            /*
+             * Override the user trail setting if this is set from the server
+             */
+            if(tr.settings.ft_send_location == null || tr.settings.ft_send_location.equals("off")) {
+                editor.putBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
+                editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_LOCATION, true);
+            } else if(tr.settings.ft_send_location.equals("on")) {
+                editor.putBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, true);
+                editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_LOCATION, true);
+            } else {
+                editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_LOCATION, false);
+            }
+
+            /*
+             * Override the autosend setting if this is set from the server
+             */
+            if(tr.settings.ft_send != null) {
+                // Server version is 17.11+ or new setting has not been used
+                if(tr.settings.ft_send.equals("off") || tr.settings.ft_send.equals("wifi_only") || tr.settings.ft_send.equals("wifi_and_cellular")) {
+                    // Set the preference value using the server value and disable from local editing
+                    editor.putString(GeneralKeys.KEY_AUTOSEND, tr.settings.ft_send);
+                    editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_SYNC, true);
+                } else {
+                    // Leave the local settings as they are and enable for local editing
+                    editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_SYNC, false);
+                }
+            } else {
+                // Support legacy servers / settings
+                String autoSend = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_AUTOSEND);
+                if (tr.settings.ft_send_wifi_cell) {
+                    autoSend = "wifi_and_cellular";
+                } else if (tr.settings.ft_send_wifi) {
+                    autoSend = "wifi_only";
+                }
+                editor.putString(GeneralKeys.KEY_AUTOSEND, autoSend);
+                editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_SYNC, false);
+            }
+
+            /*
+             * Override the delete after send setting if this is set from the server
+             */
+            if(tr.settings.ft_delete != null) {
+                if(tr.settings.ft_delete.equals("off")) {
+                    editor.putBoolean(GeneralKeys.KEY_DELETE_AFTER_SEND, false);
+                    editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_DELETE, true);
+                } else if(tr.settings.ft_delete.equals("on")) {
+                    editor.putBoolean(GeneralKeys.KEY_DELETE_AFTER_SEND, true);
+                    editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_DELETE, true);
+                } else {
+                    // Leave the local settings as they are and enable for local editing
+                    editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_DELETE, false);
+                }
+
+            } else {
+                // Support legacy servers / settings
+                editor.putBoolean(GeneralKeys.KEY_DELETE_AFTER_SEND, tr.settings.ft_delete_submitted);
+            }
+
+            /*
+             * Override the camera image size setting
+             */
+            if(tr.settings.ft_image_size != null) {
+                if(!tr.settings.ft_image_size.equals("not set")) {
+                    editor.putString(GeneralKeys.KEY_IMAGE_SIZE, tr.settings.ft_image_size);
+                    editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_IMAGE_SIZE, true);
+                } else {
+                    // Leave the local settings as they are and enable for local editing
+                    editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_IMAGE_SIZE, false);
+                }
+
+            } else {
+                // Leave the local settings as they are and enable for local editing
+                editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_IMAGE_SIZE, false);
+            }
+
+            /*
+             * Override the guidance setting
+             */
+            if(tr.settings.ft_guidance != null) {
+                if(tr.settings.ft_guidance.equals("no")) {
+                    editor.putString(GeneralKeys.KEY_GUIDANCE_HINT, GuidanceHint.No.toString());
+                    editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_GUIDANCE, true);
+                } else if(tr.settings.ft_guidance.equals("yes always")) {
+                    editor.putString(GeneralKeys.KEY_GUIDANCE_HINT, GuidanceHint.Yes.toString());
+                    editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_GUIDANCE, true);
+                } else if(tr.settings.ft_guidance.equals("yes collapsed")) {
+                    editor.putString(GeneralKeys.KEY_GUIDANCE_HINT, GuidanceHint.YesCollapsed.toString());
+                    editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_GUIDANCE, true);
+                } else {
+                    // Leave the local settings as they are and enable for local editing
+                    editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_GUIDANCE, false);
+                }
+            }
+
+            /*
+             * Override the high resolution video
+             */
+            if(tr.settings.ft_high_res_video != null) {
+                if(tr.settings.ft_high_res_video.equals("off")) {
+                    editor.putBoolean(GeneralKeys.KEY_HIGH_RESOLUTION, false);
+                    editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_HIGH_RES_VIDEO, true);
+                } else if(tr.settings.ft_high_res_video.equals("on")) {
+                    editor.putBoolean(GeneralKeys.KEY_HIGH_RESOLUTION, true);
+                    editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_HIGH_RES_VIDEO, true);
+                } else {
+                    // Leave the local settings as they are and enable for local editing
+                    editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_HIGH_RES_VIDEO, false);
+                }
+            }
+
+            /*
+             * Set the password policy
+             */
+            editor.putString(GeneralKeys.KEY_SMAP_PASSWORD_POLICY, String.valueOf(tr.settings.ft_pw_policy));
+
+            /*
+             * Override backward navigation setting
+             */
+            if(tr.settings.ft_backward_navigation != null) {
+                if(tr.settings.ft_backward_navigation.equals("disable")) {
+                    // Disable moving backwards
+                    AdminSharedPreferences.getInstance().save(AdminKeys.KEY_MOVING_BACKWARDS, false);
+                    AdminSharedPreferences.getInstance().save(AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM, false);
+                    AdminSharedPreferences.getInstance().save(AdminKeys.KEY_EDIT_SAVED, false);
+                    AdminSharedPreferences.getInstance().save(AdminKeys.KEY_SAVE_MID, false);
+                    AdminSharedPreferences.getInstance().save(AdminKeys.KEY_JUMP_TO, false);
+                    GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR, GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE);
+
+                    AdminSharedPreferences.getInstance().getInstance().save(AdminKeys.KEY_SMAP_OVERRIDE_MOVING_BACKWARDS, true);
+                } else if(tr.settings.ft_backward_navigation.equals("enable")) {
+                    // Enable moving backwards
+                    AdminSharedPreferences.getInstance().save(AdminKeys.KEY_MOVING_BACKWARDS, true);
+                    AdminSharedPreferences.getInstance().save(AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM, true);
+                    AdminSharedPreferences.getInstance().save(AdminKeys.KEY_EDIT_SAVED, true);
+                    AdminSharedPreferences.getInstance().save(AdminKeys.KEY_SAVE_MID, true);
+                    AdminSharedPreferences.getInstance().save(AdminKeys.KEY_JUMP_TO, true);
+                    GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR, GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE);
+
+                    AdminSharedPreferences.getInstance().getInstance().save(AdminKeys.KEY_SMAP_OVERRIDE_MOVING_BACKWARDS, true);
+                } else {
+                    // Leave the local settings as they are and enable for local editing
+                    AdminSharedPreferences.getInstance().getInstance().save(AdminKeys.KEY_SMAP_OVERRIDE_MOVING_BACKWARDS, false);
+                }
+            } else {
+                // Leave the local settings as they are and enable for local editing
+                AdminSharedPreferences.getInstance().getInstance().save(AdminKeys.KEY_SMAP_OVERRIDE_MOVING_BACKWARDS, false);
+            }
+
+            /*
+             * Override the screen navigation setting
+             */
+            if(tr.settings.ft_navigation != null) {
+                if(!tr.settings.ft_navigation.equals("not set")) {
+                    editor.putString(GeneralKeys.KEY_NAVIGATION, tr.settings.ft_navigation);
+                    editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_NAVIGATION, true);
+                } else {
+                    // Leave the local settings as they are and enable for local editing
+                    editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_NAVIGATION, false);
+                }
+
+            } else {
+                // Leave the local settings as they are and enable for local editing
+                editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_NAVIGATION, false);
+            }
+
+            /*
+             * Record organisation settings
+             */
+            editor.putString(GeneralKeys.KEY_SMAP_CURRENT_ORGANISATION, tr.current_org);
+            editor.putStringSet(GeneralKeys.KEY_SMAP_ORGANISATIONS, tr.orgs);
+
+            editor.apply();
         }
     }
     
