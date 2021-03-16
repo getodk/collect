@@ -73,13 +73,6 @@ public class FormsDao {
         return getFormsCursor(null, selection, selectionArgs, order);
     }
 
-    public Cursor getFormsCursorForFormId(String formId) {
-        String selection = FormsColumns.JR_FORM_ID + "=?";
-        String[] selectionArgs = {formId};
-
-        return getFormsCursor(null, selection, selectionArgs, null);
-    }
-
     public String getFormTitleForFormIdAndFormVersion(String formId, String formVersion) {
         String formTitle = "";
 

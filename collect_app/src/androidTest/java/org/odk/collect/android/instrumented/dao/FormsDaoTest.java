@@ -81,15 +81,6 @@ public class FormsDaoTest {
     }
 
     @Test
-    public void getFormsCursorForFormIdTest() {
-        Cursor cursor = formsDao.getFormsCursorForFormId("Birds");
-        List<Form> forms = formsDao.getFormsFromCursor(cursor);
-        assertEquals(2, forms.size());
-
-        assertEquals(birdsForm, forms.get(0));
-    }
-
-    @Test
     public void getFormsCursorTest() {
         Cursor cursor = formsDao.getFormsCursor(null, null, null, null);
         List<Form> forms = formsDao.getFormsFromCursor(cursor);
