@@ -60,9 +60,9 @@ public class DatabaseFormsRepository implements FormsRepository {
     @Nullable
     @Override
     public Form getOneByPath(String path) {
-        try (Cursor cursor = new FormsDao().getFormsCursorForFormFilePath(path)) {
-            return getFormOrNull(cursor);
-        }
+        String selection = FORM_FILE_PATH + "=?";
+        String[] selectionArgs = {new StoragePathProvider().getRelativeFormPath(path)};
+        return queryForForm(selection, selectionArgs);
     }
 
     @Nullable
@@ -72,18 +72,14 @@ public class DatabaseFormsRepository implements FormsRepository {
             throw new IllegalArgumentException("null hash");
         }
 
-        FormsDao formsDao = new FormsDao();
-
-        try (Cursor cursor = formsDao.getFormsCursorForMd5Hash(hash)) {
-            return getFormOrNull(cursor);
-        }
+        String selection = FormsProviderAPI.FormsColumns.MD5_HASH + "=?";
+        String[] selectionArgs = {hash};
+        return queryForForm(selection, selectionArgs);
     }
 
     @Override
     public List<Form> getAll() {
-        try (Cursor cursor = new FormsDao().getFormsCursor()) {
-            return FormsDao.getFormsFromCursor(cursor);
-        }
+        return queryForForms(null, null);
     }
 
     @Override
@@ -132,7 +128,7 @@ public class DatabaseFormsRepository implements FormsRepository {
 
         FormsDao formsDao = new FormsDao();
         Uri uri = formsDao.saveForm(v);
-        try (Cursor cursor = formsDao.getFormsCursor(uri)) {
+        try (Cursor cursor = Collect.getInstance().getContentResolver().query(uri, null, null, null, null)) {
             return getFormOrNull(cursor);
         }
     }
@@ -174,13 +170,13 @@ public class DatabaseFormsRepository implements FormsRepository {
 
     @Nullable
     private Form queryForForm(String selection, String[] selectionArgs) {
-        try (Cursor cursor = new FormsDao().getFormsCursor(selection, selectionArgs)) {
+        try (Cursor cursor = Collect.getInstance().getContentResolver().query(CONTENT_URI, null, selection, selectionArgs, null)) {
             return getFormOrNull(cursor);
         }
     }
 
     private List<Form> queryForForms(String selection, String[] selectionArgs) {
-        try (Cursor cursor = new FormsDao().getFormsCursor(selection, selectionArgs)) {
+        try (Cursor cursor = Collect.getInstance().getContentResolver().query(CONTENT_URI, null, selection, selectionArgs, null)) {
             return FormsDao.getFormsFromCursor(cursor);
         }
     }

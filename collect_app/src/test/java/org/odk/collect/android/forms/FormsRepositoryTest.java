@@ -234,4 +234,24 @@ public abstract class FormsRepositoryTest {
     public void getOneByMd5Hash_whenHashIsNull_explodes() {
         buildSubject().getOneByMd5Hash(null);
     }
+
+    @Test
+    public void getOneByMd5Hash_returnsMatchingForm() {
+        FormsRepository formsRepository = buildSubject();
+        formsRepository.save(buildForm("id1", "version", getFormFilesPath()).build());
+        Form form2 = formsRepository.save(buildForm("id2", "version", getFormFilesPath()).build());
+
+        assertThat(formsRepository.getOneByMd5Hash(form2.getMD5Hash()), is(form2));
+    }
+
+    @Test
+    public void getOneByPath_returnsMatchingForm() {
+        FormsRepository formsRepository = buildSubject();
+        formsRepository.save(buildForm("id1", "version", getFormFilesPath()).build());
+
+        Form form2 = buildForm("id2", "version", getFormFilesPath()).build();
+        formsRepository.save(form2);
+
+        assertThat(formsRepository.getOneByPath(form2.getFormFilePath()).getJrFormId(), is("id2"));
+    }
 }

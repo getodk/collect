@@ -139,13 +139,6 @@ public class FormsDao {
         return getFormsCursor(null, selection, selectionArgs, null);
     }
 
-    public Cursor getFormsCursorForMd5Hash(String md5Hash) {
-        String selection = FormsColumns.MD5_HASH + "=?";
-        String[] selectionArgs = {md5Hash};
-
-        return getFormsCursor(null, selection, selectionArgs, null);
-    }
-
     public Uri saveForm(ContentValues values) {
         return Collect.getInstance().getContentResolver().insert(FormsColumns.CONTENT_URI, values);
     }
