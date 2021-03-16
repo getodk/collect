@@ -146,17 +146,6 @@ public class FormsDao {
         return getFormsCursor(null, selection, selectionArgs, null);
     }
 
-    public void deleteFormsFromIDs(String[] idsToDelete) {
-        StringBuilder selection = new StringBuilder(FormsColumns._ID + " in (");
-        for (int i = 0; i < idsToDelete.length - 1; i++) {
-            selection.append("?, ");
-        }
-        selection.append("? )");
-
-        //This will break if the number of forms to delete > SQLITE_MAX_VARIABLE_NUMBER (999)
-        Collect.getInstance().getContentResolver().delete(FormsColumns.CONTENT_URI, selection.toString(), idsToDelete);
-    }
-
     public Uri saveForm(ContentValues values) {
         return Collect.getInstance().getContentResolver().insert(FormsColumns.CONTENT_URI, values);
     }

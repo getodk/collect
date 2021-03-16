@@ -9,6 +9,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -110,9 +111,9 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
                     }
                 }
 
-                if (!idsToDelete.isEmpty()) {
-                    //Delete the forms not found in sdcard from the database
-                    formsDao.deleteFormsFromIDs(idsToDelete.toArray(new String[idsToDelete.size()]));
+                //Delete the forms not found in sdcard from the database
+                for (String id : idsToDelete) {
+                    new DatabaseFormsRepository().delete(Long.parseLong(id));
                 }
 
                 // Step3: go through uriToUpdate to parse and update each in turn.
@@ -234,12 +235,12 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
 
     /**
      * Parses the given form definition file to get basic form identifiers as a ContentValues object.
-     *
+     * <p>
      * Note: takes time for complex forms and/or slow devices.
      *
      * @return key-value list to update or insert into the content provider
      * @throws IllegalArgumentException if the file failed to parse, is missing title or form_id
-     * fields or includes an invalid submission URL.
+     *                                  fields or includes an invalid submission URL.
      */
     private ContentValues buildContentValues(File formDefFile) throws IllegalArgumentException {
         // Probably someone overwrite the file on the sdcard
