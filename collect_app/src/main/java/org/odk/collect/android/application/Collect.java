@@ -25,8 +25,9 @@ import androidx.multidex.MultiDex;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
-import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -39,6 +40,7 @@ import org.odk.collect.strings.LocalizedApplication;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -120,7 +122,7 @@ public class Collect extends Application implements LocalizedApplication {
 
         setupDagger();
         applicationInitializer.initialize();
-        
+
         fixGoogleBug154855417();
 
         setupStrictMode();
@@ -186,12 +188,22 @@ public class Collect extends Application implements LocalizedApplication {
 
     /**
      * Gets a unique, privacy-preserving identifier for a form based on its id and version.
-     * @param formId id of a form
+     *
+     * @param formId      id of a form
      * @param formVersion version of a form
      * @return md5 hash of the form title, a space, the form ID
      */
     public static String getFormIdentifierHash(String formId, String formVersion) {
-        String formIdentifier = new FormsDao().getFormTitleForFormIdAndFormVersion(formId, formVersion) + " " + formId;
+        List<Form> forms = new DatabaseFormsRepository().getAllByFormIdAndVersion(formId, formVersion);
+
+        String formTitle;
+        if (!forms.isEmpty()) {
+            formTitle = forms.get(0).getDisplayName();
+        } else {
+            formTitle = "";
+        }
+
+        String formIdentifier = formTitle + " " + formId;
         return FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
     }
 
