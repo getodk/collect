@@ -20,7 +20,7 @@ class SettingsProviderTest {
     }
 
     @Test
-    fun `getMetaSettings() should always return the same object no matter what CURRENT_PROJECT_ID is`() {
+    fun `The same mata settings should always be returned no matter what current project is`() {
         val metaSettings = settingsProvider.getMetaSettings()
         assertThat(metaSettings, `is`(settingsProvider.getMetaSettings()))
 
@@ -29,56 +29,54 @@ class SettingsProviderTest {
     }
 
     @Test
-    fun `getGeneralSettings() should always return the same object for given projectId`() {
+    fun `The same general settings should always be returned for current project`() {
         assertThat(settingsProvider.getGeneralSettings(), `is`(settingsProvider.getGeneralSettings()))
+    }
+
+    @Test
+    fun `The same general settings should always be returned for given projectId`() {
         assertThat(settingsProvider.getGeneralSettings("1234"), `is`(settingsProvider.getGeneralSettings("1234")))
+    }
+
+    @Test
+    fun `The same general settings should be returned for given projectId and current project if the those are the same`() {
+        settingsProvider.getMetaSettings().save(CURRENT_PROJECT_ID, "1234")
+        assertThat(settingsProvider.getGeneralSettings("1234"), `is`(settingsProvider.getGeneralSettings()))
+    }
+
+    @Test
+    fun `Different general settings should be returned for different projectIds`() {
+        assertThat(settingsProvider.getGeneralSettings("1234"), `is`(not(settingsProvider.getGeneralSettings("4321"))))
+    }
+
+    @Test
+    fun `Different general settings should be returned for given projectId and current project if those are not the same`() {
         assertThat(settingsProvider.getGeneralSettings("1234"), `is`(not(settingsProvider.getGeneralSettings())))
     }
 
     @Test
-    fun `getAdminSettings() should always return the same object for given projectId`() {
+    fun `The same admin settings should always be returned for current project`() {
         assertThat(settingsProvider.getAdminSettings(), `is`(settingsProvider.getAdminSettings()))
+    }
+
+    @Test
+    fun `The same admin settings should always be returned for given projectId`() {
         assertThat(settingsProvider.getAdminSettings("1234"), `is`(settingsProvider.getAdminSettings("1234")))
+    }
+
+    @Test
+    fun `The same admin settings should be returned for given projectId and current project if those are the same`() {
+        settingsProvider.getMetaSettings().save(CURRENT_PROJECT_ID, "1234")
+        assertThat(settingsProvider.getAdminSettings("1234"), `is`(settingsProvider.getAdminSettings()))
+    }
+
+    @Test
+    fun `Different admin settings should be returned for different projectIds`() {
+        assertThat(settingsProvider.getAdminSettings("1234"), `is`(not(settingsProvider.getAdminSettings("4321"))))
+    }
+
+    @Test
+    fun `Different admin settings should be returned for given projectId and current project if those are not the same`() {
         assertThat(settingsProvider.getAdminSettings("1234"), `is`(not(settingsProvider.getAdminSettings())))
-    }
-
-    @Test
-    fun `Proper general settings should be used depending on CURRENT_PROJECT_ID`() {
-        val generalSettings = settingsProvider.getGeneralSettings()
-
-        settingsProvider.getMetaSettings().save(CURRENT_PROJECT_ID, "1234")
-
-        val generalSettings2 = settingsProvider.getGeneralSettings()
-        assertThat(generalSettings, `is`(not(generalSettings2)))
-
-        settingsProvider.getMetaSettings().save(CURRENT_PROJECT_ID, null)
-
-        val generalSettings3 = settingsProvider.getGeneralSettings()
-        assertThat(generalSettings, `is`(generalSettings3))
-
-        settingsProvider.getMetaSettings().save(CURRENT_PROJECT_ID, "1234")
-
-        val generalSettings4 = settingsProvider.getGeneralSettings()
-        assertThat(generalSettings2, `is`(generalSettings4))
-    }
-
-    @Test
-    fun `Proper admin settings should be used depending on CURRENT_PROJECT_ID`() {
-        val adminSettings = settingsProvider.getAdminSettings()
-
-        settingsProvider.getMetaSettings().save(CURRENT_PROJECT_ID, "1234")
-
-        val adminSettings2 = settingsProvider.getAdminSettings()
-        assertThat(adminSettings, `is`(not(adminSettings2)))
-
-        settingsProvider.getMetaSettings().save(CURRENT_PROJECT_ID, null)
-
-        val adminSettings3 = settingsProvider.getAdminSettings()
-        assertThat(adminSettings, `is`(adminSettings3))
-
-        settingsProvider.getMetaSettings().save(CURRENT_PROJECT_ID, "1234")
-
-        val adminSettings4 = settingsProvider.getAdminSettings()
-        assertThat(adminSettings2, `is`(adminSettings4))
     }
 }
