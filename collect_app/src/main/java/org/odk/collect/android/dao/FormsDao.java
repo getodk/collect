@@ -169,12 +169,6 @@ public class FormsDao {
         return Collect.getInstance().getContentResolver().update(FormsColumns.CONTENT_URI, values, where, whereArgs);
     }
 
-    public int getCount() {
-        try (Cursor c = getFormsCursor()) {
-            return c.getCount();
-        }
-    }
-
     /**
      * Returns all forms available through the cursor and closes the cursor.
      */
