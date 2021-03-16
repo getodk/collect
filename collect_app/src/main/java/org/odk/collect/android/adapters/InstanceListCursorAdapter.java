@@ -25,14 +25,15 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.database.DatabaseFormsRepository;
+import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import timber.log.Timber;
@@ -62,22 +63,18 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
             return view;
         }
 
-        String formId = getCursor().getString(getCursor().getColumnIndex(InstanceColumns.JR_FORM_ID));
-        Cursor cursor = new FormsDao().getFormsCursorForFormId(formId);
-
-        boolean formExists = false;
+        boolean formExists = true;
         boolean isFormEncrypted = false;
-        if (cursor != null) {
-            try {
-                if (cursor.moveToFirst()) {
-                    int base64RSAPublicKeyColumnIndex = cursor.getColumnIndex(FormsColumns.BASE64_RSA_PUBLIC_KEY);
-                    String base64RSAPublicKey = cursor.getString(base64RSAPublicKeyColumnIndex);
-                    isFormEncrypted = base64RSAPublicKey != null && !base64RSAPublicKey.isEmpty();
-                    formExists = true;
-                }
-            } finally {
-                cursor.close();
-            }
+
+        String formId = getCursor().getString(getCursor().getColumnIndex(InstanceColumns.JR_FORM_ID));
+        String formVersion = getCursor().getString(getCursor().getColumnIndex(InstanceColumns.JR_VERSION));
+        List<Form> forms = new DatabaseFormsRepository().getAllByFormIdAndVersion(formId, formVersion);
+
+        if (!forms.isEmpty()) {
+            String base64RSAPublicKey = forms.get(0).getBASE64RSAPublicKey();
+            isFormEncrypted = base64RSAPublicKey != null && !base64RSAPublicKey.isEmpty();
+        } else {
+            formExists = false;
         }
 
         long date = getCursor().getLong(getCursor().getColumnIndex(InstanceColumns.DELETED_DATE));
