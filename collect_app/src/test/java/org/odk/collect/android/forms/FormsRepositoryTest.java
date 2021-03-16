@@ -201,6 +201,19 @@ public abstract class FormsRepositoryTest {
         assertThat(formsDir.listFiles(), emptyArray());
     }
 
+    @Test
+    public void deleteAll_deletesAllForms() {
+        FormsRepository formsRepository = buildSubject();
+        formsRepository.save(buildForm("id1", "version", getFormFilesPath()).build());
+        formsRepository.save(buildForm("id2", "version", getFormFilesPath()).build());
+
+        formsRepository.deleteAll();
+        assertThat(formsRepository.getAll().size(), is(0));
+
+        File formsDir = new File(getFormFilesPath());
+        assertThat(formsDir.listFiles().length, is(0));
+    }
+
     @Test(expected = Exception.class)
     public void getOneByMd5Hash_whenHashIsNull_explodes() {
         buildSubject().getOneByMd5Hash(null);

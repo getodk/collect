@@ -5,9 +5,11 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.util.ArrayList;
@@ -169,6 +171,11 @@ public class DatabaseFormsRepository implements FormsRepository {
         }
 
         formsDao.deleteFormsFromIDs(idsToDelete.toArray(new String[idsToDelete.size()]));
+    }
+
+    @Override
+    public void deleteAll() {
+        Collect.getInstance().getContentResolver().delete(FormsProviderAPI.FormsColumns.CONTENT_URI, null, null);
     }
 
     @Override

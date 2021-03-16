@@ -146,10 +146,6 @@ public class FormsDao {
         return getFormsCursor(null, selection, selectionArgs, null);
     }
 
-    public void deleteFormsDatabase() {
-        Collect.getInstance().getContentResolver().delete(FormsColumns.CONTENT_URI, null, null);
-    }
-
     public void deleteFormsFromIDs(String[] idsToDelete) {
         StringBuilder selection = new StringBuilder(FormsColumns._ID + " in (");
         for (int i = 0; i < idsToDelete.length - 1; i++) {

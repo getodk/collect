@@ -112,26 +112,7 @@ public class InMemFormsRepository implements FormsRepository {
         Optional<Form> formToRemove = forms.stream().filter(f -> f.getId().equals(id)).findFirst();
         if (formToRemove.isPresent()) {
             Form form = formToRemove.get();
-
-            if (form.getFormFilePath() != null) {
-                new File(form.getFormFilePath()).delete();
-            }
-
-            if (form.getFormMediaPath() != null) {
-                try {
-                    File mediaDir = new File(form.getFormMediaPath());
-
-                    if (mediaDir.isDirectory()) {
-                        deleteDirectory(mediaDir);
-                    } else {
-                        mediaDir.delete();
-                    }
-                } catch (IOException ignored) {
-                    // Ignored
-                }
-            }
-
-
+            deleteFilesForForm(form);
             forms.remove(form);
         }
     }
@@ -154,6 +135,15 @@ public class InMemFormsRepository implements FormsRepository {
     }
 
     @Override
+    public void deleteAll() {
+        for (Form form : forms) {
+            deleteFilesForForm(form);
+        }
+
+        forms.clear();
+    }
+
+    @Override
     public void restore(Long id) {
         Form form = forms.stream().filter(f -> f.getId().equals(id)).findFirst().orElse(null);
 
@@ -162,6 +152,26 @@ public class InMemFormsRepository implements FormsRepository {
             forms.add(new Form.Builder(form)
                     .deleted(false)
                     .build());
+        }
+    }
+
+    private void deleteFilesForForm(Form form) {
+        if (form.getFormFilePath() != null) {
+            new File(form.getFormFilePath()).delete();
+        }
+
+        if (form.getFormMediaPath() != null) {
+            try {
+                File mediaDir = new File(form.getFormMediaPath());
+
+                if (mediaDir.isDirectory()) {
+                    deleteDirectory(mediaDir);
+                } else {
+                    mediaDir.delete();
+                }
+            } catch (IOException ignored) {
+                // Ignored
+            }
         }
     }
 }
