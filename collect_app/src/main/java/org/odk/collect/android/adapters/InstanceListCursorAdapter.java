@@ -57,6 +57,7 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
         setUpSubtext(view);
 
         // Some form lists never contain disabled items; if so, we're done.
+        // Update: This only seems to be the case in Edit Saved Forms and it's not clear why...
         if (!shouldCheckDisabled) {
             return view;
         }
