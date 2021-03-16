@@ -9,7 +9,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.preferences.keys.MetaKeys.CURRENT_PROJECT_ID
-import org.odk.collect.android.preferences.keys.MetaKeys.DEFAULT_PROJECT_ID
 
 @RunWith(AndroidJUnit4::class)
 class SettingsProviderTest {
@@ -17,7 +16,7 @@ class SettingsProviderTest {
 
     @Before
     fun setup() {
-        settingsProvider.getMetaSettings().save(CURRENT_PROJECT_ID, DEFAULT_PROJECT_ID)
+        settingsProvider.getMetaSettings().save(CURRENT_PROJECT_ID, null)
     }
 
     @Test
@@ -52,7 +51,7 @@ class SettingsProviderTest {
         val generalSettings2 = settingsProvider.getGeneralSettings()
         assertThat(generalSettings, `is`(not(generalSettings2)))
 
-        settingsProvider.getMetaSettings().save(CURRENT_PROJECT_ID, DEFAULT_PROJECT_ID)
+        settingsProvider.getMetaSettings().save(CURRENT_PROJECT_ID, null)
 
         val generalSettings3 = settingsProvider.getGeneralSettings()
         assertThat(generalSettings, `is`(generalSettings3))
@@ -72,7 +71,7 @@ class SettingsProviderTest {
         val adminSettings2 = settingsProvider.getAdminSettings()
         assertThat(adminSettings, `is`(not(adminSettings2)))
 
-        settingsProvider.getMetaSettings().save(CURRENT_PROJECT_ID, DEFAULT_PROJECT_ID)
+        settingsProvider.getMetaSettings().save(CURRENT_PROJECT_ID, null)
 
         val adminSettings3 = settingsProvider.getAdminSettings()
         assertThat(adminSettings, `is`(adminSettings3))

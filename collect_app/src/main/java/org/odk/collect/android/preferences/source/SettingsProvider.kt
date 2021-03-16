@@ -4,13 +4,11 @@ import android.content.Context
 import androidx.preference.PreferenceManager
 import org.odk.collect.android.preferences.keys.AdminKeys
 import org.odk.collect.android.preferences.keys.GeneralKeys
-import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.android.preferences.keys.MetaKeys.CURRENT_PROJECT_ID
-import org.odk.collect.android.preferences.keys.MetaKeys.DEFAULT_PROJECT_ID
 
 class SettingsProvider(private val context: Context) {
     fun getMetaSettings() = settings.getOrPut(META_SETTINGS_NAME) {
-        SharedPreferencesSettings(context.getSharedPreferences(META_SETTINGS_NAME, Context.MODE_PRIVATE), MetaKeys.getDefaults())
+        SharedPreferencesSettings(context.getSharedPreferences(META_SETTINGS_NAME, Context.MODE_PRIVATE))
     }
 
     @JvmOverloads
@@ -18,7 +16,7 @@ class SettingsProvider(private val context: Context) {
         val settingsId = getSettingsId(GENERAL_SETTINGS_NAME, projectId)
 
         return settings.getOrPut(settingsId) {
-            if (settingsId == GENERAL_SETTINGS_NAME + DEFAULT_PROJECT_ID) {
+            if (settingsId == GENERAL_SETTINGS_NAME) {
                 SharedPreferencesSettings(PreferenceManager.getDefaultSharedPreferences(context), GeneralKeys.DEFAULTS)
             } else {
                 SharedPreferencesSettings(context.getSharedPreferences(settingsId, Context.MODE_PRIVATE), GeneralKeys.DEFAULTS)
@@ -36,7 +34,7 @@ class SettingsProvider(private val context: Context) {
     }
 
     private fun getSettingsId(settingName: String, projectId: String) = if (projectId.isBlank()) {
-        settingName + getMetaSettings().getString(CURRENT_PROJECT_ID)
+        settingName + (getMetaSettings().getString(CURRENT_PROJECT_ID) ?: "")
     } else {
         settingName + projectId
     }
