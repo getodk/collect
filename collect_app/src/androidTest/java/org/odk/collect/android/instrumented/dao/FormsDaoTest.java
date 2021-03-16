@@ -16,7 +16,10 @@
 
 package org.odk.collect.android.instrumented.dao;
 
+import android.content.ContentValues;
 import android.database.Cursor;
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.After;
 import org.junit.Before;
@@ -33,8 +36,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -155,7 +156,7 @@ public class FormsDaoTest {
 
         String where = FormsColumns.DISPLAY_NAME + "=?";
         String[] whereArgs = {"Widgets"};
-        assertEquals(formsDao.updateForm(formsDao.getValuesFromFormObject(widgetsForm), where, whereArgs), 1);
+        assertEquals(formsDao.updateForm(getValuesFromFormObject(widgetsForm), where, whereArgs), 1);
 
         cursor = formsDao.getFormsCursorForFormFilePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/Widgets.xml");
         forms = formsDao.getFormsFromCursor(cursor);
@@ -182,7 +183,7 @@ public class FormsDaoTest {
                 .jrCacheFilePath(new StoragePathProvider().getRelativeCachePath(storagePathProvider.getOdkRootDirPath() + "/.cache/ccce6015dd1b8f935f5f3058e81eeb43.formdef"))
                 .build();
 
-        formsDao.saveForm(formsDao.getValuesFromFormObject(biggestNOfSetForm));
+        formsDao.saveForm(getValuesFromFormObject(biggestNOfSetForm));
 
         assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/Birds.xml").createNewFile());
         birdsForm = new Form.Builder()
@@ -196,7 +197,7 @@ public class FormsDaoTest {
                 .jrCacheFilePath(new StoragePathProvider().getRelativeCachePath(storagePathProvider.getOdkRootDirPath() + "/.cache/4cd980d50f884362afba842cbff3a798.formdef"))
                 .build();
 
-        formsDao.saveForm(formsDao.getValuesFromFormObject(birdsForm));
+        formsDao.saveForm(getValuesFromFormObject(birdsForm));
 
         assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/Miramare.xml").createNewFile());
         miramareForm = new Form.Builder()
@@ -209,7 +210,7 @@ public class FormsDaoTest {
                 .jrCacheFilePath(new StoragePathProvider().getRelativeCachePath(storagePathProvider.getOdkRootDirPath() + "/.cache/e733627cdbf220929bf9c4899cb983ea.formdef"))
                 .build();
 
-        formsDao.saveForm(formsDao.getValuesFromFormObject(miramareForm));
+        formsDao.saveForm(getValuesFromFormObject(miramareForm));
 
         assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/Geo Tagger v2.xml").createNewFile());
         geoTaggerV2Form = new Form.Builder()
@@ -222,7 +223,7 @@ public class FormsDaoTest {
                 .jrCacheFilePath(new StoragePathProvider().getRelativeCachePath(storagePathProvider.getOdkRootDirPath() + "/.cache/1d5e9109298c8ef02bc523b17d7c0451.formdef"))
                 .build();
 
-        formsDao.saveForm(formsDao.getValuesFromFormObject(geoTaggerV2Form));
+        formsDao.saveForm(getValuesFromFormObject(geoTaggerV2Form));
 
         assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/Widgets.xml").createNewFile());
         widgetsForm = new Form.Builder()
@@ -235,7 +236,7 @@ public class FormsDaoTest {
                 .jrCacheFilePath(new StoragePathProvider().getRelativeCachePath(storagePathProvider.getOdkRootDirPath() + "/.cache/0eacc6333449e66826326eb5fcc75749.formdef"))
                 .build();
 
-        formsDao.saveForm(formsDao.getValuesFromFormObject(widgetsForm));
+        formsDao.saveForm(getValuesFromFormObject(widgetsForm));
 
         assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/sample.xml").createNewFile());
         sampleForm = new Form.Builder()
@@ -248,7 +249,7 @@ public class FormsDaoTest {
                 .jrCacheFilePath(new StoragePathProvider().getRelativeCachePath(storagePathProvider.getOdkRootDirPath() + "/.cache/4f495fddd1f2544f65444ea83d25f425.formdef"))
                 .build();
 
-        formsDao.saveForm(formsDao.getValuesFromFormObject(sampleForm));
+        formsDao.saveForm(getValuesFromFormObject(sampleForm));
 
         assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/Birds_4.xml").createNewFile());
         birds2Form = new Form.Builder()
@@ -262,7 +263,7 @@ public class FormsDaoTest {
                 .jrCacheFilePath(new StoragePathProvider().getRelativeCachePath(storagePathProvider.getOdkRootDirPath() + "/.cache/4cd980d50f884362afba842cbff3a775.formdef"))
                 .build();
 
-        formsDao.saveForm(formsDao.getValuesFromFormObject(birds2Form));
+        formsDao.saveForm(getValuesFromFormObject(birds2Form));
     }
 
     @After
@@ -279,5 +280,26 @@ public class FormsDaoTest {
 
         List<Integer> failedResetActions = new ApplicationResetter().reset(resetActions);
         assertEquals(0, failedResetActions.size());
+    }
+
+    private static ContentValues getValuesFromFormObject(Form form) {
+        ContentValues values = new ContentValues();
+        values.put(FormsColumns.DISPLAY_NAME, form.getDisplayName());
+        values.put(FormsColumns.DESCRIPTION, form.getDescription());
+        values.put(FormsColumns.JR_FORM_ID, form.getJrFormId());
+        values.put(FormsColumns.JR_VERSION, form.getJrVersion());
+        values.put(FormsColumns.FORM_FILE_PATH, form.getFormFilePath());
+        values.put(FormsColumns.SUBMISSION_URI, form.getSubmissionUri());
+        values.put(FormsColumns.BASE64_RSA_PUBLIC_KEY, form.getBASE64RSAPublicKey());
+        values.put(FormsColumns.MD5_HASH, form.getMD5Hash());
+        values.put(FormsColumns.DATE, form.getDate());
+        values.put(FormsColumns.JRCACHE_FILE_PATH, form.getJrCacheFilePath());
+        values.put(FormsColumns.FORM_MEDIA_PATH, form.getFormMediaPath());
+        values.put(FormsColumns.LANGUAGE, form.getLanguage());
+        values.put(FormsColumns.AUTO_SEND, form.getAutoSend());
+        values.put(FormsColumns.AUTO_DELETE, form.getAutoDelete());
+        values.put(FormsColumns.GEOMETRY_XPATH, form.getGeometryXpath());
+
+        return values;
     }
 }

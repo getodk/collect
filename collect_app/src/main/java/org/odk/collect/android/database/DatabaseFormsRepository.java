@@ -6,9 +6,9 @@ import android.net.Uri;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.util.ArrayList;
 import java.util.Comparator;

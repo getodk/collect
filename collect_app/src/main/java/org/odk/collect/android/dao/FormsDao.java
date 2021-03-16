@@ -230,25 +230,4 @@ public class FormsDao {
         }
         return forms;
     }
-
-    public ContentValues getValuesFromFormObject(Form form) {
-        ContentValues values = new ContentValues();
-        values.put(FormsColumns.DISPLAY_NAME, form.getDisplayName());
-        values.put(FormsColumns.DESCRIPTION, form.getDescription());
-        values.put(FormsColumns.JR_FORM_ID, form.getJrFormId());
-        values.put(FormsColumns.JR_VERSION, form.getJrVersion());
-        values.put(FormsColumns.FORM_FILE_PATH, form.getFormFilePath());
-        values.put(FormsColumns.SUBMISSION_URI, form.getSubmissionUri());
-        values.put(FormsColumns.BASE64_RSA_PUBLIC_KEY, form.getBASE64RSAPublicKey());
-        values.put(FormsColumns.MD5_HASH, form.getMD5Hash());
-        values.put(FormsColumns.DATE, form.getDate());
-        values.put(FormsColumns.JRCACHE_FILE_PATH, form.getJrCacheFilePath());
-        values.put(FormsColumns.FORM_MEDIA_PATH, form.getFormMediaPath());
-        values.put(FormsColumns.LANGUAGE, form.getLanguage());
-        values.put(FormsColumns.AUTO_SEND, form.getAutoSend());
-        values.put(FormsColumns.AUTO_DELETE, form.getAutoDelete());
-        values.put(FormsColumns.GEOMETRY_XPATH, form.getGeometryXpath());
-
-        return values;
-    }
 }
