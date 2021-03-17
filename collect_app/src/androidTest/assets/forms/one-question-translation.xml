@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<h:html xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2002/xforms">
+    <h:head>
+        <h:title>One Question</h:title>
+        <model>
+            <instance>
+                <data id="one_question" orx:version="1">
+                    <age />
+                </data>
+            </instance>
+            <itext>
+                <translation lang="English (en)">
+                    <text id="/data/age:label">
+                        <value>what is your age</value>
+                    </text>
+                </translation>
+
+                <translation lang="French (fr)">
+                    <text id="/data/age:label">
+                        <value>quel âge as-tu</value>
+                    </text>
+                </translation>
+            </itext>
+            <bind nodeset="age" type="int" />
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/age">
+            <label ref="jr:itext('/data/age:label')" />
+        </input>
+    </h:body>
+</h:html>
