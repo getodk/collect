@@ -20,7 +20,6 @@ import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.forms.FormSource;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.forms.ManifestFile;
-import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
@@ -67,7 +66,7 @@ public class AutoUpdateTaskSpecTest {
             }
 
             @Override
-            public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormsRepository formsRepository, MediaFileRepository mediaFileRepository, FormSource formSource, DiskFormsSynchronizer diskFormsSynchronizer) {
+            public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormsRepository formsRepository, FormSource formSource, DiskFormsSynchronizer diskFormsSynchronizer) {
                 return serverFormsDetailsFetcher;
             }
 

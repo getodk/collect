@@ -38,13 +38,13 @@ import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.SharedPreferencesServerRepository;
 import org.odk.collect.android.configure.StructureAndTypeSettingsValidator;
 import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
+import org.odk.collect.android.configure.qr.JsonPreferencesGenerator;
 import org.odk.collect.android.configure.qr.QRCodeDecoder;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeUtils;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
-import org.odk.collect.android.database.DatabaseMediaFileRepository;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
@@ -61,7 +61,6 @@ import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchroniz
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.android.forms.FormSource;
 import org.odk.collect.android.forms.FormsRepository;
-import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.gdrive.GoogleAccountCredentialGoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
@@ -84,7 +83,6 @@ import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.configure.qr.JsonPreferencesGenerator;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.preferences.source.SettingsStore;
 import org.odk.collect.android.storage.StorageInitializer;
@@ -97,7 +95,6 @@ import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.android.utilities.FileProvider;
-import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
@@ -365,11 +362,6 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public MediaFileRepository providesMediaFileRepository() {
-        return new DatabaseMediaFileRepository(new FormsDao(), new FileUtil());
-    }
-
-    @Provides
     public FormSource providesFormSource(SettingsProvider settingsProvider, Context context, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils, Analytics analytics) {
         String serverURL = settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_SERVER_URL);
         String formListPath = settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_FORMLIST_URL);
@@ -389,8 +381,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormsRepository formsRepository, MediaFileRepository mediaFileRepository, FormSource formSource, DiskFormsSynchronizer diskFormsSynchronizer) {
-        return new ServerFormsDetailsFetcher(formsRepository, mediaFileRepository, formSource, diskFormsSynchronizer);
+    public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormsRepository formsRepository, FormSource formSource, DiskFormsSynchronizer diskFormsSynchronizer) {
+        return new ServerFormsDetailsFetcher(formsRepository, formSource, diskFormsSynchronizer);
     }
 
     @Provides
