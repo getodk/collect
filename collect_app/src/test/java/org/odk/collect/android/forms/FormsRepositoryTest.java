@@ -8,7 +8,6 @@ import java.io.File;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.emptyArray;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -172,33 +171,39 @@ public abstract class FormsRepositoryTest {
     @Test
     public void delete_deletesFiles() {
         FormsRepository formsRepository = buildSubject();
-        Form form = buildForm("id", "version", getFormFilesPath()).build();
-        formsRepository.save(form);
+        Form form = formsRepository.save(buildForm("id", "version", getFormFilesPath()).build());
 
         // FormRepository currently doesn't manage media file path other than deleting it
         String mediaPath = FileUtils.constructMediaPath(form.getFormFilePath());
         new File(mediaPath).mkdir();
 
-        File formsDir = new File(getFormFilesPath());
-        assertThat(formsDir.listFiles().length, is(2));
+        File formFile = new File(form.getFormFilePath());
+        File mediaDir = new File(form.getFormMediaPath());
+        assertThat(formFile.exists(), is(true));
+        assertThat(mediaDir.exists(), is(true));
+
         formsRepository.delete(1L);
-        assertThat(formsDir.listFiles(), emptyArray());
+        assertThat(formFile.exists(), is(false));
+        assertThat(mediaDir.exists(), is(false));
     }
 
     @Test
     public void delete_whenMediaPathIsFile_deletesFiles() throws Exception {
         FormsRepository formsRepository = buildSubject();
-        Form form = buildForm("id", "version", getFormFilesPath()).build();
-        formsRepository.save(form);
+        Form form = formsRepository.save(buildForm("id", "version", getFormFilesPath()).build());
 
         // FormRepository currently doesn't manage media file path other than deleting it
         String mediaPath = FileUtils.constructMediaPath(form.getFormFilePath());
         new File(mediaPath).createNewFile();
 
-        File formsDir = new File(getFormFilesPath());
-        assertThat(formsDir.listFiles().length, is(2));
+        File formFile = new File(form.getFormFilePath());
+        File mediaDir = new File(form.getFormMediaPath());
+        assertThat(formFile.exists(), is(true));
+        assertThat(mediaDir.exists(), is(true));
+
         formsRepository.delete(1L);
-        assertThat(formsDir.listFiles(), emptyArray());
+        assertThat(formFile.exists(), is(false));
+        assertThat(mediaDir.exists(), is(false));
     }
 
     @Test
@@ -207,11 +212,15 @@ public abstract class FormsRepositoryTest {
         formsRepository.save(buildForm("id1", "version", getFormFilesPath()).build());
         formsRepository.save(buildForm("id2", "version", getFormFilesPath()).build());
 
+        List<Form> forms = formsRepository.getAll();
+
         formsRepository.deleteAll();
         assertThat(formsRepository.getAll().size(), is(0));
 
-        File formsDir = new File(getFormFilesPath());
-        assertThat(formsDir.listFiles().length, is(0));
+        for (Form form : forms) {
+            assertThat(new File(form.getFormFilePath()).exists(), is(false));
+            assertThat(new File(form.getFormMediaPath()).exists(), is(false));
+        }
     }
 
     @Test

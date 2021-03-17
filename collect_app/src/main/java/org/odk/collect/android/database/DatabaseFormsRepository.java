@@ -214,19 +214,21 @@ public class DatabaseFormsRepository implements FormsRepository {
         int geometryXpathColumnIndex = cursor.getColumnIndex(GEOMETRY_XPATH);
         int deletedDateColumnIndex = cursor.getColumnIndex(DELETED_DATE);
 
+        StoragePathProvider storagePathProvider = new StoragePathProvider();
+
         return new Form.Builder()
                 .id(cursor.getLong(idColumnIndex))
                 .displayName(cursor.getString(displayNameColumnIndex))
                 .description(cursor.getString(descriptionColumnIndex))
                 .jrFormId(cursor.getString(jrFormIdColumnIndex))
                 .jrVersion(cursor.getString(jrVersionColumnIndex))
-                .formFilePath(new StoragePathProvider().getRelativeFormPath(cursor.getString(formFilePathColumnIndex)))
+                .formFilePath(storagePathProvider.getAbsoluteFormFilePath(cursor.getString(formFilePathColumnIndex)))
                 .submissionUri(cursor.getString(submissionUriColumnIndex))
                 .base64RSAPublicKey(cursor.getString(base64RSAPublicKeyColumnIndex))
                 .md5Hash(cursor.getString(md5HashColumnIndex))
                 .date(cursor.getLong(dateColumnIndex))
-                .jrCacheFilePath(new StoragePathProvider().getRelativeCachePath(cursor.getString(jrCacheFilePathColumnIndex)))
-                .formMediaPath(new StoragePathProvider().getRelativeFormPath(cursor.getString(formMediaPathColumnIndex)))
+                .jrCacheFilePath(storagePathProvider.getAbsoluteCacheFilePath(cursor.getString(jrCacheFilePathColumnIndex)))
+                .formMediaPath(storagePathProvider.getAbsoluteFormFilePath(cursor.getString(formMediaPathColumnIndex)))
                 .language(cursor.getString(languageColumnIndex))
                 .autoSend(cursor.getString(autoSendColumnIndex))
                 .autoDelete(cursor.getString(autoDeleteColumnIndex))
