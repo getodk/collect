@@ -6,7 +6,6 @@ import android.net.Uri;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.provider.FormsProviderAPI;
@@ -117,8 +116,7 @@ public class DatabaseFormsRepository implements FormsRepository {
         }
 
         if (form.getId() == null) {
-            FormsDao formsDao = new FormsDao();
-            Uri uri = formsDao.saveForm(values);
+            Uri uri = Collect.getInstance().getContentResolver().insert(CONTENT_URI, values);
 
             try (Cursor cursor = Collect.getInstance().getContentResolver().query(uri, null, null, null, null)) {
                 return getFormsFromCursor(cursor).get(0);

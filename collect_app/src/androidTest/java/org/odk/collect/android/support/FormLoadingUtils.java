@@ -22,7 +22,7 @@ import androidx.test.espresso.intent.rule.IntentsTestRule;
 
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.odk.collect.android.forms.FormUtils.setupReferenceManagerForForm;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.CONTENT_URI;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
 public class FormLoadingUtils {
@@ -70,7 +71,7 @@ public class FormLoadingUtils {
      * {@link FormLoaderTask}.
      */
     public static void copyFormToStorage(String formFilename) throws IOException {
-            copyFormToStorage(formFilename, null, false);
+        copyFormToStorage(formFilename, null, false);
     }
 
     private static void saveFormToDatabase(File outFile) {
@@ -87,7 +88,7 @@ public class FormLoadingUtils {
         v.put(FormsColumns.AUTO_SEND, formInfo.get(FileUtils.AUTO_SEND));
         v.put(FormsColumns.GEOMETRY_XPATH, formInfo.get(FileUtils.GEOMETRY_XPATH));
 
-        new FormsDao().saveForm(v);
+        Collect.getInstance().getContentResolver().insert(CONTENT_URI, v);
     }
 
     public static IntentsTestRule<FormEntryActivity> getFormActivityTestRuleFor(String formFilename) {
