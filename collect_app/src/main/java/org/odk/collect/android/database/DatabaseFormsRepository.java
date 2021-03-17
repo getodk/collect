@@ -145,7 +145,7 @@ public class DatabaseFormsRepository implements FormsRepository {
     public void softDelete(Long id) {
         ContentValues values = new ContentValues();
         values.put(DELETED_DATE, System.currentTimeMillis());
-        new FormsDao().updateForm(values, _ID + "=?", new String[]{id.toString()});
+        Collect.getInstance().getContentResolver().update(CONTENT_URI, values, _ID + "=?", new String[]{id.toString()});
     }
 
     @Override
@@ -165,7 +165,7 @@ public class DatabaseFormsRepository implements FormsRepository {
     public void restore(Long id) {
         ContentValues values = new ContentValues();
         values.putNull(DELETED_DATE);
-        new FormsDao().updateForm(values, _ID + "=?", new String[]{id.toString()});
+        Collect.getInstance().getContentResolver().update(CONTENT_URI, values, _ID + "=?", new String[]{id.toString()});
     }
 
     @Nullable
