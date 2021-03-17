@@ -193,12 +193,22 @@ public class AppDependencyModule {
         return new ServerFormDownloader(formSource, formsRepository, new File(storagePathProvider.getDirPath(StorageSubdirectory.CACHE)), storagePathProvider.getDirPath(StorageSubdirectory.FORMS), new FormMetadataParser(ReferenceManager.instance()), analytics);
     }
 
+    /*
+     * smap - replace constructor
+     *
     @Provides
     @Singleton
     public Analytics providesAnalytics(Application application, GeneralSharedPreferences generalSharedPreferences) {
         com.google.firebase.analytics.FirebaseAnalytics firebaseAnalyticsInstance = com.google.firebase.analytics.FirebaseAnalytics.getInstance(application);
         return new FirebaseAnalytics(firebaseAnalyticsInstance, generalSharedPreferences);
     }
+     */
+    @Provides
+    @Singleton
+    public Analytics providesAnalytics() {
+        return new FirebaseAnalytics();
+    }
+    // smap - end
 
     @Provides
     public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker, StorageStateProvider storageStateProvider) {

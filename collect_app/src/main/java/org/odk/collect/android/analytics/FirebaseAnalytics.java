@@ -10,10 +10,15 @@ public class FirebaseAnalytics implements Analytics {
     //private final com.google.firebase.analytics.FirebaseAnalytics firebaseAnalytics;  // smap
     //private final GeneralSharedPreferences generalSharedPreferences;  // smap
 
-    public FirebaseAnalytics(com.google.firebase.analytics.FirebaseAnalytics firebaseAnalytics, GeneralSharedPreferences generalSharedPreferences) {
+    //public FirebaseAnalytics(com.google.firebase.analytics.FirebaseAnalytics firebaseAnalytics, GeneralSharedPreferences generalSharedPreferences) {
         // this.firebaseAnalytics = firebaseAnalytics;  // smap commented
         // this.generalSharedPreferences = generalSharedPreferences;  // smap commented
         // setupRemoteAnalytics();  // smap commented
+    //}
+
+    // smap alternate constructor
+    public FirebaseAnalytics() {
+
     }
 
     @Deprecated
@@ -35,15 +40,15 @@ public class FirebaseAnalytics implements Analytics {
 
     @Override
     public void logFormEvent(String event, String formId) {
-        Bundle bundle = new Bundle();
-        bundle.putString("form", formId);
+        //Bundle bundle = new Bundle();  // smap
+        //bundle.putString("form", formId);  // smap
         //firebaseAnalytics.logEvent(event, bundle);  // smap
     }
 
     @Override
     public void logServerEvent(String event, String serverHash) {
-        Bundle bundle = new Bundle();
-        bundle.putString("server", serverHash);
+        //Bundle bundle = new Bundle();  // smap
+        //bundle.putString("server", serverHash);  // smap
         //firebaseAnalytics.logEvent(event, bundle); //smap
     }
 
@@ -60,4 +65,6 @@ public class FirebaseAnalytics implements Analytics {
     public void setUserProperty(String name, String value) {
         //firebaseAnalytics.setUserProperty(name, value);
     }
+
+    // smap - disabled
 }

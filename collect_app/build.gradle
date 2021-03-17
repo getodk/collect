@@ -256,7 +256,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-location:17.1.0"
     implementation "com.google.firebase:firebase-messaging:20.2.4"      // smap synchronisation
 
-    implementation 'com.google.firebase:firebase-analytics:18.0.0'
+    //implementation 'com.google.firebase:firebase-analytics:18.0.0'    // smap commented
     implementation 'com.google.firebase:firebase-crashlytics:17.3.0'
 
     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.2.1'
