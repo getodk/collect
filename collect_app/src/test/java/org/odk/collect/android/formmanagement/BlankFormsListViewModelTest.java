@@ -12,6 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
@@ -23,7 +24,6 @@ import org.odk.collect.android.support.BooleanChangeLock;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.testshared.FakeScheduler;
 import org.odk.collect.testshared.LiveDataTester;
-import org.odk.collect.utilities.TestSettingsProvider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

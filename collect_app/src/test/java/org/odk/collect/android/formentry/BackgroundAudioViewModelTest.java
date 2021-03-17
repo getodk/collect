@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -17,7 +18,6 @@ import org.odk.collect.android.preferences.source.Settings;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.utilities.Clock;
-import org.odk.collect.utilities.TestSettingsProvider;
 
 import java.util.HashSet;
 import java.util.function.BiConsumer;

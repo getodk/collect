@@ -1,4 +1,4 @@
-package org.odk.collect.utilities
+package org.odk.collect.android
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider

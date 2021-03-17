@@ -207,6 +207,15 @@ android {
         checkDependencies true
         lintConfig file("${project.rootDir}/config/lint.xml")
     }
+
+    sourceSets {
+        androidTest {
+            java.srcDirs += "src/commonTest/java"
+        }
+        test {
+            java.srcDirs += "src/commonTest/java"
+        }
+    }
 }
 
 configurations.all {

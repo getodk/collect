@@ -6,9 +6,9 @@ import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.configure.qr.JsonPreferencesGenerator;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.utilities.TestSettingsProvider;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.ArrayList;

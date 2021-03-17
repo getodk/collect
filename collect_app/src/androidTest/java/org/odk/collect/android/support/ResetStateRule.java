@@ -7,6 +7,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.application.Collect;
 
 import org.odk.collect.android.injection.config.AppDependencyModule;
@@ -15,7 +16,6 @@ import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.utilities.TestSettingsProvider;
 
 import java.io.File;
 import java.io.IOException;

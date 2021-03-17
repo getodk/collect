@@ -3,7 +3,7 @@ package org.odk.collect.android.utilities;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.odk.collect.utilities.TestSettingsProvider;
+import org.odk.collect.android.TestSettingsProvider;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;

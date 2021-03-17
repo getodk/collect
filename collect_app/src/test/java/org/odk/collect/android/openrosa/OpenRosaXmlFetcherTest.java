@@ -4,9 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
-import org.odk.collect.utilities.TestSettingsProvider;
 import org.robolectric.RobolectricTestRunner;
 
 import java.io.ByteArrayInputStream;

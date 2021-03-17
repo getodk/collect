@@ -3,9 +3,9 @@ package org.odk.collect.android.support;
 import org.junit.After;
 import org.junit.Before;
 
+import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.utilities.TestSettingsProvider;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;

@@ -29,6 +29,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.source.Settings;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -37,7 +38,6 @@ import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.widgets.ImageWidget;
-import org.odk.collect.utilities.TestSettingsProvider;
 
 import java.io.File;
 import java.io.IOException;

@@ -6,8 +6,8 @@ import com.mapbox.mapboxsdk.maps.Style;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.preferences.source.Settings;
-import org.odk.collect.utilities.TestSettingsProvider;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
