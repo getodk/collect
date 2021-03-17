@@ -1,6 +1,7 @@
 package org.odk.collect.android.audio;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,7 +80,14 @@ public class AudioRecordingControllerFragment extends Fragment {
             update(hasBackgroundRecording, isBackgroundRecordingEnabled, session, failedToStart);
         });
 
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            binding.pauseRecording.setVisibility(GONE);
+        }
+
         binding.stopRecording.setOnClickListener(v -> audioRecorder.stop());
+        binding.help.setOnClickListener(v -> {
+            showIfNotShowing(BackgroundAudioHelpDialogFragment.class, getParentFragmentManager());
+        });
     }
 
     private void update(boolean hasBackgroundRecording, boolean isBackgroundRecordingEnabled, RecordingSession session, Consumable<Exception> failedToStart) {
@@ -90,7 +98,7 @@ public class AudioRecordingControllerFragment extends Fragment {
         if (session != null) {
             if (session.getFile() == null) {
                 binding.getRoot().setVisibility(VISIBLE);
-                renderRecordingInProgress(session);
+                renderRecordingInProgress(session, hasBackgroundRecording);
             } else {
                 binding.getRoot().setVisibility(GONE);
             }
@@ -110,14 +118,25 @@ public class AudioRecordingControllerFragment extends Fragment {
     private void renderRecordingProblem(String string) {
         binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_mic_off_24));
         binding.timeCode.setText(string);
-        binding.waveform.setVisibility(GONE);
-        binding.pauseRecording.setVisibility(GONE);
-        binding.stopRecording.setVisibility(GONE);
+        binding.volumeBar.setVisibility(GONE);
+        binding.controls.setVisibility(GONE);
+        binding.help.setVisibility(GONE);
     }
 
-    private void renderRecordingInProgress(RecordingSession session) {
+    private void renderRecordingInProgress(RecordingSession session, boolean hasBackgroundRecording) {
         binding.timeCode.setText(LengthFormatterKt.formatLength(session.getDuration()));
-        binding.waveform.addAmplitude(session.getAmplitude());
+        binding.volumeBar.addAmplitude(session.getAmplitude());
+
+        if (hasBackgroundRecording) {
+            binding.controls.setVisibility(GONE);
+            binding.help.setVisibility(VISIBLE);
+        } else {
+            renderControls(session);
+        }
+    }
+
+    private void renderControls(RecordingSession session) {
+        binding.controls.setVisibility(VISIBLE);
 
         if (session.getPaused()) {
             binding.pauseRecording.setIcon(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_mic_24));
@@ -134,16 +153,6 @@ public class AudioRecordingControllerFragment extends Fragment {
             });
 
             binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_mic_24));
-        }
-
-        // Pause not available before API 24
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N) {
-            binding.pauseRecording.setVisibility(GONE);
-        }
-
-        if (backgroundAudioViewModel.isBackgroundRecording()) {
-            binding.pauseRecording.setVisibility(GONE);
-            binding.stopRecording.setVisibility(GONE);
         }
     }
 }

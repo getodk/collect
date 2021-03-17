@@ -27,18 +27,18 @@ import org.javarosa.form.api.FormEntryPrompt;
 
 import org.odk.collect.android.databinding.UrlWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.CustomTabHelper;
+import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.android.utilities.ToastUtils;
 
 @SuppressLint("ViewConstructor")
 public class UrlWidget extends QuestionWidget {
     UrlWidgetAnswerBinding binding;
 
-    private final CustomTabHelper customTabHelper;
+    private final ExternalWebPageHelper externalWebPageHelper;
 
-    public UrlWidget(Context context, QuestionDetails questionDetails, CustomTabHelper customTabHelper) {
+    public UrlWidget(Context context, QuestionDetails questionDetails, ExternalWebPageHelper externalWebPageHelper) {
         super(context, questionDetails);
-        this.customTabHelper = customTabHelper;
+        this.externalWebPageHelper = externalWebPageHelper;
     }
 
     @Override
@@ -76,15 +76,15 @@ public class UrlWidget extends QuestionWidget {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (customTabHelper.getServiceConnection() != null) {
-            getContext().unbindService(customTabHelper.getServiceConnection());
+        if (externalWebPageHelper.getServiceConnection() != null) {
+            getContext().unbindService(externalWebPageHelper.getServiceConnection());
         }
     }
 
     public void onButtonClick() {
         if (getFormEntryPrompt().getAnswerValue() != null) {
-            customTabHelper.bindCustomTabsService(getContext(), null);
-            customTabHelper.openUri(getContext(), Uri.parse(getFormEntryPrompt().getAnswerText()));
+            externalWebPageHelper.bindCustomTabsService(getContext(), null);
+            externalWebPageHelper.openWebPageInCustomTab((Activity) getContext(), Uri.parse(getFormEntryPrompt().getAnswerText()));
         } else {
             ToastUtils.showShortToast("No URL set");
         }

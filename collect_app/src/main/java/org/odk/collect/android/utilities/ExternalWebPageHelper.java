@@ -1,9 +1,11 @@
 package org.odk.collect.android.utilities;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+
 import androidx.browser.customtabs.CustomTabsClient;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.browser.customtabs.CustomTabsServiceConnection;
@@ -14,7 +16,8 @@ import org.odk.collect.android.activities.WebViewActivity;
 /**
  * Created by sanjeev on 17/3/17.
  */
-public class CustomTabHelper {
+public class ExternalWebPageHelper {
+
     public static final String OPEN_URL = "url";
     private static final String CUSTOM_TAB_PACKAGE_NAME = "com.android.chrome";
     private CustomTabsClient customTabsClient;
@@ -33,9 +36,9 @@ public class CustomTabHelper {
         serviceConnection = new CustomTabsServiceConnection() {
             @Override
             public void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient customTabsClient) {
-                CustomTabHelper.this.customTabsClient = customTabsClient;
-                CustomTabHelper.this.customTabsClient.warmup(0L);
-                customTabsSession = CustomTabHelper.this.customTabsClient.newSession(null);
+                ExternalWebPageHelper.this.customTabsClient = customTabsClient;
+                ExternalWebPageHelper.this.customTabsClient.warmup(0L);
+                customTabsSession = ExternalWebPageHelper.this.customTabsClient.newSession(null);
                 if (customTabsSession != null) {
                     customTabsSession.mayLaunchUrl(getNonNullUri(url), null, null);
                 }
@@ -59,16 +62,23 @@ public class CustomTabHelper {
         return serviceConnection;
     }
 
-    public void openUri(Context context, Uri uri) {
+    public void openWebPageInCustomTab(Activity activity, Uri uri) {
         uri = uri.normalizeScheme();
+
         try {
-            openUriInChromeTabs(context, uri);
+            openUriInChromeTabs(activity, uri);
         } catch (Exception | Error e1) {
-            try {
-                openUriInExternalBrowser(context, uri);
-            } catch (Exception | Error e2) {
-                openUriInWebView(context, uri);
-            }
+            openWebPage(activity, uri);
+        }
+    }
+
+    public void openWebPage(Activity activity, Uri uri) {
+        uri = uri.normalizeScheme();
+
+        try {
+            openUriInExternalBrowser(activity, uri);
+        } catch (Exception | Error e2) {
+            openUriInWebView(activity, uri);
         }
     }
 

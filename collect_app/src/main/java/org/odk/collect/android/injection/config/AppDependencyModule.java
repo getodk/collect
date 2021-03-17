@@ -96,6 +96,7 @@ import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
+import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
@@ -509,5 +510,10 @@ public class AppDependencyModule {
     @Singleton
     public SettingsStore providesAdminSettingsStore(SettingsProvider settingsProvider) {
         return new SettingsStore(settingsProvider.getAdminSettings());
+    }
+
+    @Provides
+    public ExternalWebPageHelper providesExternalWebPageHelper() {
+        return new ExternalWebPageHelper();
     }
 }

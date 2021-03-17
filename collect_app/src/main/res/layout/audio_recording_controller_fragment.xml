@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?colorPrimary"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
     android:paddingVertical="@dimen/margin_small"
     android:paddingStart="@dimen/margin_standard"
     android:paddingEnd="@dimen/margin_standard"
@@ -13,11 +14,10 @@
 
     <LinearLayout
         android:id="@+id/recording_status"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_toStartOf="@id/buttons"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -37,19 +37,18 @@
             android:text="@string/recording"
             android:textColor="?colorOnPrimary" />
 
-        <org.odk.collect.android.audio.Waveform
-            android:id="@+id/waveform"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="@dimen/margin_small"
-            custom:mini="true" />
+        <org.odk.collect.android.audio.VolumeBar
+            android:id="@+id/volume_bar"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_marginStart="@dimen/margin_standard" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/buttons"
+        android:id="@+id/controls"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
+        android:layout_marginStart="@dimen/margin_standard"
         android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
@@ -57,7 +56,7 @@
             style="@style/Widget.Collect.Button.OutlinedIconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_standard"
+            android:layout_marginEnd="@dimen/margin_standard"
             android:contentDescription="@string/pause_recording"
             app:icon="@drawable/ic_pause_24dp"
             app:iconTint="?colorOnPrimary" />
@@ -67,8 +66,17 @@
             style="@style/Widget.Collect.Button.IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_standard"
             android:contentDescription="@string/stop_recording"
             app:icon="@drawable/ic_stop_black_24dp" />
     </LinearLayout>
-</RelativeLayout>
+
+    <ImageView
+        android:id="@+id/help"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:src="@drawable/ic_baseline_help_outline_24"
+        android:visibility="gone"
+        app:tint="?colorOnPrimary" />
+</LinearLayout>

@@ -30,7 +30,7 @@ import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.CameraUtils;
-import org.odk.collect.android.utilities.CustomTabHelper;
+import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
@@ -170,7 +170,7 @@ public class WidgetFactory {
                         } else if (appearance.contains(Appearances.NUMBERS)) {
                             questionWidget = new StringNumberWidget(context, questionDetails);
                         } else if (appearance.equals(Appearances.URL)) {
-                            questionWidget = new UrlWidget(context, questionDetails, new CustomTabHelper());
+                            questionWidget = new UrlWidget(context, questionDetails, new ExternalWebPageHelper());
                         } else {
                             questionWidget = new StringWidget(context, questionDetails);
                         }
