@@ -180,4 +180,10 @@ public class AnalyticsEvents {
      * Track how often background audio is enabled for a form
      */
     public static final String BACKGROUND_AUDIO_DISABLED = "BackgroundAudioDisabled";
+
+    /**
+     * Tracks if any forms are being used as part of a workflow where instances are imported
+     * from disk and then encrypted
+     */
+    public static final String IMPORT_AND_ENCRYPT_INSTANCE = "ImportAndEncryptInstance";
 }

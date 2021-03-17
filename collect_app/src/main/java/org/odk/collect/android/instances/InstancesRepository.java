@@ -1,7 +1,5 @@
 package org.odk.collect.android.instances;
 
-import android.net.Uri;
-
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -16,6 +14,7 @@ import javax.annotation.Nullable;
  * without introducing new specialized methods (e.g. get(Specification s) instead of getBy(XYZ).
  */
 public interface InstancesRepository {
+
     @Nullable
     Instance get(Long id);
 
@@ -25,7 +24,13 @@ public interface InstancesRepository {
     @Nullable
     Instance getOneByPath(String instancePath);
 
-    List<Instance> getAllFinalized();
+    List<Instance> getAll();
+
+    List<Instance> getAllNotDeleted();
+
+    List<Instance> getAllByStatus(String... status);
+
+    int getCountByStatus(String... status);
 
     List<Instance> getAllByFormId(String formId);
 
@@ -33,5 +38,9 @@ public interface InstancesRepository {
 
     void delete(Long id);
 
-    Uri save(Instance instance);
+    void deleteAll();
+
+    Instance save(Instance instance);
+
+    void softDelete(Long id);
 }

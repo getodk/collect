@@ -26,12 +26,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
-
+import org.odk.collect.android.database.DatabaseInstancesRepository;
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.Settings;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ApplicationResetter;
@@ -168,15 +168,14 @@ public class ResetAppStateTest {
     }
 
     private void setupTestInstancesDatabase() {
-        ContentValues values = new ContentValues();
-        values.put(InstanceColumns.INSTANCE_FILE_PATH, storagePathProvider.getRelativeInstancePath("testDir1/testFile1"));
-        values.put(InstanceColumns.SUBMISSION_URI, "submissionUri");
-        values.put(InstanceColumns.DISPLAY_NAME, "displayName");
-        values.put(InstanceColumns.DISPLAY_NAME, "formName");
-        values.put(InstanceColumns.JR_FORM_ID, "jrformid");
-        values.put(InstanceColumns.JR_VERSION, "jrversion");
-        Collect.getInstance().getContentResolver()
-                .insert(InstanceColumns.CONTENT_URI, values);
+        new DatabaseInstancesRepository().save(new Instance.Builder()
+                .instanceFilePath(storagePathProvider.getRelativeInstancePath("testDir1/testFile1"))
+                .submissionUri("submissionUri")
+                .displayName("formName")
+                .jrFormId("jrformid")
+                .jrVersion("jrversion")
+                .build()
+        );
 
         assertEquals(1, getInstancesCount());
     }
@@ -242,23 +241,7 @@ public class ResetAppStateTest {
     }
 
     private int getInstancesCount() {
-        int instances = 0;
-        Cursor cursor = Collect.getInstance().getContentResolver().query(
-                InstanceColumns.CONTENT_URI, null, null, null,
-                InstanceColumns.DISPLAY_NAME + " ASC");
-        if (cursor != null) {
-            try {
-                if (cursor.moveToFirst()) {
-                    while (!cursor.isAfterLast()) {
-                        instances++;
-                        cursor.moveToNext();
-                    }
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-        return instances;
+        return new DatabaseInstancesRepository().getAll().size();
     }
 
     private void assertFolderEmpty(String folder) {

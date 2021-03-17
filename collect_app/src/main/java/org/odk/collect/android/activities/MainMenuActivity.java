@@ -16,7 +16,6 @@ package org.odk.collect.android.activities;
 
 import android.content.Intent;
 import android.database.ContentObserver;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -34,14 +33,15 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
-import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.keys.AdminKeys;
+import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment.Action;
-import org.odk.collect.android.preferences.screens.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.screens.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
@@ -85,6 +85,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     @Inject
     MainMenuViewModel.Factory viewModelFactory;
+
+    @Inject
+    InstancesRepository instancesRepository;
 
     private MainMenuViewModel viewModel;
 
@@ -271,46 +274,24 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     private void updateButtons() {
-        InstancesDao instancesDao = new InstancesDao();
+        int finalizedInstances = instancesRepository.getCountByStatus(Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED);
+        int sentInstances = instancesRepository.getCountByStatus(Instance.STATUS_SUBMITTED);
+        int unsentInstances = instancesRepository.getCountByStatus(Instance.STATUS_INCOMPLETE, Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED);
 
-        int completedCount;
-        try (Cursor finalizedCursor = instancesDao.getFinalizedInstancesCursor()) {
-            completedCount = finalizedCursor != null ? finalizedCursor.getCount() : 0;
-        } catch (Exception ignored) {
-            completedCount = 0;
-        }
-
-        int savedCount;
-        try (Cursor savedCursor = instancesDao.getUnsentInstancesCursor()) {
-            savedCount = savedCursor != null ? savedCursor.getCount() : 0;
-        } catch (Exception ignored) {
-            savedCount = 0;
-        }
-
-        int viewSentCount;
-        try (Cursor viewSentCursor = instancesDao.getSentInstancesCursor()) {
-            viewSentCount = viewSentCursor != null ? viewSentCursor.getCount() : 0;
-        } catch (Exception ignored) {
-            viewSentCount = 0;
-        }
-
-        if (completedCount > 0) {
-            sendDataButton.setText(
-                    getString(R.string.send_data_button, String.valueOf(completedCount)));
+        if (finalizedInstances > 0) {
+            sendDataButton.setText(getString(R.string.send_data_button, String.valueOf(finalizedInstances)));
         } else {
             sendDataButton.setText(getString(R.string.send_data));
         }
 
-        if (savedCount > 0) {
-            reviewDataButton.setText(getString(R.string.review_data_button,
-                    String.valueOf(savedCount)));
+        if (unsentInstances > 0) {
+            reviewDataButton.setText(getString(R.string.review_data_button, String.valueOf(unsentInstances)));
         } else {
             reviewDataButton.setText(getString(R.string.review_data));
         }
 
-        if (viewSentCount > 0) {
-            viewSentFormsButton.setText(
-                    getString(R.string.view_sent_forms_button, String.valueOf(viewSentCount)));
+        if (sentInstances > 0) {
+            viewSentFormsButton.setText(getString(R.string.view_sent_forms_button, String.valueOf(sentInstances)));
         } else {
             viewSentFormsButton.setText(getString(R.string.view_sent_forms));
         }

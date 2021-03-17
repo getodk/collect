@@ -31,7 +31,7 @@ import androidx.loader.content.CursorLoader;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
-import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.InstancesRepository;
@@ -89,7 +89,7 @@ public class SavedFormListFragment extends InstanceListFragment
         setupAdapter();
         instanceSyncTask = new InstanceSyncTask(settingsProvider);
         instanceSyncTask.setDiskSyncListener(this);
-        instanceSyncTask.execute();
+//        instanceSyncTask.execute();
 
         super.onViewCreated(rootView, savedInstanceState);
     }
@@ -149,7 +149,7 @@ public class SavedFormListFragment extends InstanceListFragment
 
     @Override
     protected CursorLoader getCursorLoader() {
-        return new InstancesDao().getSavedInstancesCursorLoader(getFilterText(), getSortingOrder());
+        return new CursorLoaderFactory().createSavedInstancesCursorLoader(getFilterText(), getSortingOrder());
     }
 
     /**

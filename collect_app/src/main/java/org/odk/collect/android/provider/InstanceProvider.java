@@ -68,7 +68,8 @@ public class InstanceProvider extends ContentProvider {
         dbHelper = new InstancesDatabaseHelper(new InstanceDatabaseMigrator(), new StoragePathProvider());
     }
 
-    @SuppressWarnings("PMD.NonThreadSafeSingleton") // PMD thinks the `= null` is setting a singleton here
+    @SuppressWarnings("PMD.NonThreadSafeSingleton")
+    // PMD thinks the `= null` is setting a singleton here
     public static void releaseDatabaseHelper() {
         if (dbHelper != null) {
             dbHelper.close();
@@ -141,17 +142,6 @@ public class InstanceProvider extends ContentProvider {
                 values = new ContentValues(initialValues);
             } else {
                 values = new ContentValues();
-            }
-
-            Long now = System.currentTimeMillis();
-
-            // Make sure that the fields are all set
-            if (!values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE)) {
-                values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
-            }
-
-            if (!values.containsKey(InstanceColumns.STATUS)) {
-                values.put(InstanceColumns.STATUS, Instance.STATUS_INCOMPLETE);
             }
 
             long rowId = instancesDatabaseHelper.getWritableDatabase().insert(INSTANCES_TABLE_NAME, null, values);
@@ -251,13 +241,9 @@ public class InstanceProvider extends ContentProvider {
                 case INSTANCE_ID:
                     String instanceId = uri.getPathSegments().get(1);
 
-                    Cursor c = null;
-                    String status = null;
-                    try {
-                        c = this.query(uri, null, where, whereArgs, null);
+                    try (Cursor c = this.query(uri, null, where, whereArgs, null)) {
                         if (c != null && c.getCount() > 0) {
                             c.moveToFirst();
-                            status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
                             do {
                                 String instanceFile = new StoragePathProvider().getAbsoluteInstanceFilePath(c.getString(
                                         c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
@@ -265,40 +251,23 @@ public class InstanceProvider extends ContentProvider {
                                 deleteAllFilesInDirectory(instanceDir);
                             } while (c.moveToNext());
                         }
-                    } finally {
-                        if (c != null) {
-                            c.close();
-                        }
                     }
 
-                    // Keep sent instance database rows but delete corresponding files
-                    if (status != null && status.equals(Instance.STATUS_SUBMITTED)) {
-                        ContentValues cv = new ContentValues();
-                        cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
-
-                        // Geometry fields represent data inside the form which can be very
-                        // sensitive so they are removed on delete.
-                        cv.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
-                        cv.put(InstanceColumns.GEOMETRY, (String) null);
-
-                        count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
+                    String[] newWhereArgs;
+                    if (whereArgs == null || whereArgs.length == 0) {
+                        newWhereArgs = new String[]{instanceId};
                     } else {
-                        String[] newWhereArgs;
-                        if (whereArgs == null || whereArgs.length == 0) {
-                            newWhereArgs = new String[] {instanceId};
-                        } else {
-                            newWhereArgs = new String[whereArgs.length + 1];
-                            newWhereArgs[0] = instanceId;
-                            System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
-                        }
-
-                        count =
-                                db.delete(INSTANCES_TABLE_NAME,
-                                        InstanceColumns._ID
-                                                + "=?"
-                                                + (!TextUtils.isEmpty(where) ? " AND ("
-                                                + where + ')' : ""), newWhereArgs);
+                        newWhereArgs = new String[whereArgs.length + 1];
+                        newWhereArgs[0] = instanceId;
+                        System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
                     }
+
+                    count =
+                            db.delete(INSTANCES_TABLE_NAME,
+                                    InstanceColumns._ID
+                                            + "=?"
+                                            + (!TextUtils.isEmpty(where) ? " AND ("
+                                            + where + ')' : ""), newWhereArgs);
                     break;
 
                 default:
@@ -340,7 +309,7 @@ public class InstanceProvider extends ContentProvider {
 
                     String[] newWhereArgs;
                     if (whereArgs == null || whereArgs.length == 0) {
-                        newWhereArgs = new String[] {instanceId};
+                        newWhereArgs = new String[]{instanceId};
                     } else {
                         newWhereArgs = new String[whereArgs.length + 1];
                         newWhereArgs[0] = instanceId;

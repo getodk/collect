@@ -10,6 +10,8 @@ import org.odk.collect.android.support.InMemInstancesRepository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.odk.collect.android.support.InstanceUtils.buildInstance;
 
 public class InstanceDeleterTest {
@@ -29,10 +31,11 @@ public class InstanceDeleterTest {
                 .build()
         );
 
-        instancesRepository.save(buildInstance(1L, "1", "version").build());
-        instancesRepository.save(buildInstance(2L, "1", "version").build());
+        instancesRepository.save(buildInstance("1", "version").build());
+        instancesRepository.save(buildInstance("1", "version").build());
 
-        instanceDeleter.delete(2L);
+        Long id = instancesRepository.getAll().get(0).getId();
+        instanceDeleter.delete(id);
         assertThat(formsRepository.getAll().size(), is(1));
     }
 
@@ -178,5 +181,30 @@ public class InstanceDeleterTest {
 
         instanceDeleter.delete(1L);
         assertThat(formsRepository.getAll().size(), is(2));
+    }
+
+    @Test
+    public void whenInstanceIsSubmitted_softDeletesInstance() {
+        Instance instance = instancesRepository.save(buildInstance("1", "version")
+                .status(Instance.STATUS_SUBMITTED)
+                .build());
+
+        instanceDeleter.delete(instance.getId());
+        assertThat(instancesRepository.get(instance.getId()).getDeletedDate(), notNullValue());
+    }
+
+    @Test
+    public void whenInstanceIsSubmitted_clearsGeometryData() {
+        Instance instance = instancesRepository.save(buildInstance("1", "version")
+                .status(Instance.STATUS_SUBMITTED)
+                .geometryType("Point")
+                .geometry("{\"type\":\"Point\",\"coordinates\":[127.6, 11.1]}")
+                .build());
+
+        instanceDeleter.delete(instance.getId());
+
+        Instance deletedInstance = instancesRepository.get(instance.getId());
+        assertThat(deletedInstance.getGeometry(), nullValue());
+        assertThat(deletedInstance.getGeometryType(), nullValue());
     }
 }

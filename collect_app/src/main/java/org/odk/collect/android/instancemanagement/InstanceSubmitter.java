@@ -1,13 +1,14 @@
 package org.odk.collect.android.instancemanagement;
 
-import android.net.Uri;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import org.odk.collect.android.R;
 import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.DatabaseFormsRepository;
+import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
@@ -21,7 +22,6 @@ import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.upload.InstanceUploader;
 import org.odk.collect.android.upload.UploadException;
@@ -116,8 +116,7 @@ public class InstanceSubmitter {
                 // communicated to the user. Maybe successful delete should also be communicated?
                 if (InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, instance.getJrFormId(), instance.getJrVersion(),
                         settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_DELETE_AFTER_SEND))) {
-                    Uri deleteForm = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, instance.getId().toString());
-                    Collect.getInstance().getContentResolver().delete(deleteForm, null, null);
+                    new InstanceDeleter(new DatabaseInstancesRepository(), new DatabaseFormsRepository()).delete(instance.getId());
                 }
 
                 String action = protocol.equals(TranslationHandler.getString(Collect.getInstance(), R.string.protocol_google_sheets)) ?
@@ -147,7 +146,7 @@ public class InstanceSubmitter {
     @NonNull
     private List<Instance> getInstancesToAutoSend(boolean isAutoSendAppSettingEnabled) {
         List<Instance> toUpload = new ArrayList<>();
-        for (Instance instance : instancesRepository.getAllFinalized()) {
+        for (Instance instance : instancesRepository.getAllByStatus(Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED)) {
             if (shouldFormBeSent(formsRepository, instance.getJrFormId(), instance.getJrVersion(), isAutoSendAppSettingEnabled)) {
                 toUpload.add(instance);
             }
@@ -159,12 +158,11 @@ public class InstanceSubmitter {
     /**
      * Returns whether a form with the specified form_id should be auto-sent given the current
      * app-level auto-send settings. Returns false if there is no form with the specified form_id.
-     *
+     * <p>
      * A form should be auto-sent if auto-send is on at the app level AND this form doesn't override
      * auto-send settings OR if auto-send is on at the form-level.
      *
      * @param isAutoSendAppSettingEnabled whether the auto-send option is enabled at the app level
-     *
      * @deprecated should be private what requires refactoring the whole class to make it testable
      */
     @Deprecated

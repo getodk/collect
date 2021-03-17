@@ -38,7 +38,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.backgroundwork.SchedulerFormUpdateAndSubmitManager;
-import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
@@ -80,8 +80,6 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
 
     @BindView(R.id.toggle_button)
     Button toggleSelsButton;
-
-    private InstancesDao instancesDao;
 
     private InstanceSyncTask instanceSyncTask;
 
@@ -145,7 +143,6 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
 
     void init() {
         uploadButton.setText(R.string.send_selected_data);
-        instancesDao = new InstancesDao();
 
         toggleSelsButton.setLongClickable(true);
         toggleSelsButton.setOnClickListener(v -> {
@@ -173,9 +170,9 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
 
         instanceSyncTask = new InstanceSyncTask(settingsProvider);
         instanceSyncTask.setDiskSyncListener(this);
-        instanceSyncTask.execute();
+//        instanceSyncTask.execute();
 
-        sortingOptions = new int[] {
+        sortingOptions = new int[]{
                 R.string.sort_by_name_asc, R.string.sort_by_name_desc,
                 R.string.sort_by_date_asc, R.string.sort_by_date_desc
         };
@@ -343,9 +340,9 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         showProgressBar();
         if (showAllMode) {
-            return instancesDao.getCompletedUndeletedInstancesCursorLoader(getFilterText(), getSortingOrder());
+            return new CursorLoaderFactory().createCompletedUndeletedInstancesCursorLoader(getFilterText(), getSortingOrder());
         } else {
-            return instancesDao.getFinalizedInstancesCursorLoader(getFilterText(), getSortingOrder());
+            return new CursorLoaderFactory().createFinalizedInstancesCursorLoader(getFilterText(), getSortingOrder());
         }
     }
 

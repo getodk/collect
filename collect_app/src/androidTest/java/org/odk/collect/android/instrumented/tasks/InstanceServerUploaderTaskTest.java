@@ -1,17 +1,14 @@
 package org.odk.collect.android.instrumented.tasks;
 
-import android.net.Uri;
-
 import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.openrosa.OpenRosaConstants;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.MockedServerTest;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
@@ -27,25 +24,22 @@ import static org.junit.Assert.assertTrue;
 import static org.odk.collect.android.support.TestUtils.assertMatches;
 import static org.odk.collect.android.support.TestUtils.cleanUpTempFiles;
 import static org.odk.collect.android.support.TestUtils.createTempFile;
-import static org.odk.collect.android.support.TestUtils.resetInstancesContentProvider;
+import static org.odk.collect.android.support.TestUtils.resetInstances;
 
 public class InstanceServerUploaderTaskTest extends MockedServerTest {
 
     @Rule
     public GrantPermissionRule runtimepermissionrule = GrantPermissionRule.grant(android.Manifest.permission.READ_PHONE_STATE);
 
-    private InstancesDao dao;
-
     @Before
     public void setUp() throws Exception {
-        resetInstancesContentProvider();
-        dao = new InstancesDao();
+        resetInstances();
     }
 
     @After
     public void tearDown() {
         cleanUpTempFiles();
-        resetInstancesContentProvider();
+        resetInstances();
     }
 
     @Test
@@ -98,8 +92,7 @@ public class InstanceServerUploaderTaskTest extends MockedServerTest {
                 .lastStatusChangeDate(123L)
                 .build();
 
-        Uri contentUri = dao.saveInstance(dao.getValuesFromInstanceObject(i));
-        return Long.parseLong(contentUri.toString().substring(InstanceColumns.CONTENT_URI.toString().length() + 1));
+        return new DatabaseInstancesRepository().save(i).getId();
     }
 
     private String hostAndPort() {

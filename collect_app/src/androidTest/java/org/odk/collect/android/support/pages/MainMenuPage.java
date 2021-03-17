@@ -103,6 +103,11 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return new EditSavedFormPage(rule).assertOnPage();
     }
 
+    public EditSavedFormPage clickEditSavedForm(int formCount) {
+        assertNumberOfEditableForms(formCount);
+        return clickEditSavedForm();
+    }
+
     public AboutPage clickAbout() {
         clickOnString(R.string.about_preferences);
         return new AboutPage(rule).assertOnPage();
@@ -121,7 +126,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
         if (number == 0) {
             onView(withText(getTranslatedString(R.string.review_data))).check(matches(isDisplayed()));
         } else {
-            onView(withText(getTranslatedString(R.string.review_data, String.valueOf(number)))).check(matches(isDisplayed()));
+            onView(withText(getTranslatedString(R.string.review_data_button, String.valueOf(number)))).check(matches(isDisplayed()));
         }
 
         return this;

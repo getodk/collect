@@ -29,8 +29,8 @@ public class SendFinalizedFormPage extends Page<SendFinalizedFormPage> {
         return this;
     }
 
-    public SendFinalizedFormPage clickSendSelected() {
+    public OkDialog clickSendSelected() {
         clickOnText(getTranslatedString(R.string.send_selected_data));
-        return this;
+        return new OkDialog(rule);
     }
 }

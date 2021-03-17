@@ -19,7 +19,6 @@
 package org.odk.collect.android.external;
 
 import android.content.Intent;
-import android.database.Cursor;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.condition.EvaluationContext;
@@ -36,9 +35,9 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.javarosa.xpath.expr.XPathPathExpr;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.exception.ExternalParamsException;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.instances.Instance;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -148,18 +147,12 @@ public class ExternalAppsUtils {
             return XPathFuncExpr.unpack(xpathNodeset);
         } else if (text.equals("instanceProviderID()")) {
             // instanceProviderID returns -1 if the current instance has not been saved to disk already
-            String path = Collect.getInstance().getFormController().getInstanceFile()
-                    .getAbsolutePath();
+            String path = Collect.getInstance().getFormController().getInstanceFile().getAbsolutePath();
 
             String instanceProviderID = "-1";
-            Cursor c = new InstancesDao().getInstancesCursorForFilePath(path);
-            if (c != null && c.getCount() > 0) {
-                // should only ever be one
-                c.moveToFirst();
-                instanceProviderID = c.getString(c.getColumnIndex(InstanceColumns._ID));
-            }
-            if (c != null) {
-                c.close();
+            Instance instance = new DatabaseInstancesRepository().getOneByPath(path);
+            if (instance != null) {
+                instanceProviderID = instance.getId().toString();
             }
 
             return instanceProviderID;

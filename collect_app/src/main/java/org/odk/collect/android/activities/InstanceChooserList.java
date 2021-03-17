@@ -32,7 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
-import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.listeners.DiskSyncListener;
@@ -93,7 +93,7 @@ public class InstanceChooserList extends InstanceListActivity implements
         setupAdapter();
         instanceSyncTask = new InstanceSyncTask(settingsProvider);
         instanceSyncTask.setDiskSyncListener(this);
-        instanceSyncTask.execute();
+//        instanceSyncTask.execute();
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
@@ -198,9 +198,9 @@ public class InstanceChooserList extends InstanceListActivity implements
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         showProgressBar();
         if (editMode) {
-            return new InstancesDao().getUnsentInstancesCursorLoader(getFilterText(), getSortingOrder());
+            return new CursorLoaderFactory().createUnsentInstancesCursorLoader(getFilterText(), getSortingOrder());
         } else {
-            return new InstancesDao().getSentInstancesCursorLoader(getFilterText(), getSortingOrder());
+            return new CursorLoaderFactory().createSentInstancesCursorLoader(getFilterText(), getSortingOrder());
         }
     }
 

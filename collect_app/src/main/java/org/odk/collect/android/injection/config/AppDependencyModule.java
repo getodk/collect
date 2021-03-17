@@ -42,7 +42,6 @@ import org.odk.collect.android.configure.qr.QRCodeDecoder;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeUtils;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.database.DatabaseMediaFileRepository;
@@ -139,11 +138,6 @@ public class AppDependencyModule {
     @Provides
     Context context(Application application) {
         return application;
-    }
-
-    @Provides
-    public InstancesDao provideInstancesDao() {
-        return new InstancesDao();
     }
 
     @Provides
