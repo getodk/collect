@@ -156,9 +156,8 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
                     // Since parsing is so slow, if there are multiple tasks,
                     // they may have already updated the database.
                     // Skip this file if that is the case.
-                    if (isAlreadyDefined(formsDao, formDefFile)) {
-                        Timber.i("[%d] skipping -- definition already recorded: %s",
-                                instance, formDefFile.getAbsolutePath());
+                    if (new DatabaseFormsRepository().getOneByPath(formDefFile.getAbsolutePath()) != null) {
+                        Timber.i("[%d] skipping -- definition already recorded: %s", instance, formDefFile.getAbsolutePath());
                         continue;
                     }
 
@@ -218,19 +217,6 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
         boolean xmlFile = fileName.endsWith(".xml");
         boolean xhtmlFile = fileName.endsWith(".xhtml");
         return !ignoredFile && (xmlFile || xhtmlFile);
-    }
-
-    private boolean isAlreadyDefined(FormsDao formsDao, File formDefFile) {
-        // first try to see if a record with this filename already exists...
-        Cursor c = null;
-        try {
-            c = formsDao.getFormsCursorForFormFilePath(formDefFile.getAbsolutePath());
-            return c == null || c.getCount() > 0;
-        } finally {
-            if (c != null) {
-                c.close();
-            }
-        }
     }
 
     /**
