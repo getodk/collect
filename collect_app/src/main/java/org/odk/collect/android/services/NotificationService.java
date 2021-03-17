@@ -23,6 +23,7 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.tasks.DownloadTasksTask;
@@ -48,9 +49,14 @@ public class NotificationService extends FirebaseMessagingService {
     public void onDeletedMessages() {
     }
 
+    private void deferDaggerInit() {
+        DaggerUtils.getComponent(getApplicationContext()).inject(this);
+    }
+
     @Override
     public void onMessageReceived(RemoteMessage message){
         Timber.i("Message received beginning refresh");
+        deferDaggerInit();
 
         // make sure sd card is ready, if not don't try to send
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
