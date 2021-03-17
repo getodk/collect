@@ -31,6 +31,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
@@ -92,8 +93,8 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     @Inject
     public AudioHelperFactory audioHelperFactory;
 
-    //@Inject
-    //public Analytics analytics;
+    @Inject
+    public Analytics analytics;
 
     @Inject
     public ScreenUtils screenUtils;
@@ -180,7 +181,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
             }
             if (playableAudioURI != null) {
                 label.setAudio(playableAudioURI, audioHelper);
-                //analytics.logEvent(PROMPT, "AudioLabel", questionDetails.getFormAnalyticsID());  // smap commented
+                analytics.logEvent(PROMPT, "AudioLabel", questionDetails.getFormAnalyticsID());  // smap commented
             }
         } catch (InvalidReferenceException e) {
             Timber.d(e, "Invalid media reference due to %s ", e.getMessage());

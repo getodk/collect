@@ -44,13 +44,13 @@ public class PromptAutoplayer {
             Clip promptClip = getPromptClip(prompt);
             if (promptClip != null) {
                 clipsToPlay.add(promptClip);
-                //analytics.logEvent(PROMPT, "AutoplayAudioLabel", formIdentifierHash);  // smap commented
+                analytics.logEvent(PROMPT, "AutoplayAudioLabel", formIdentifierHash);
             }
 
             List<Clip> selectClips = getSelectClips(prompt);
             if (!selectClips.isEmpty()) {
                 clipsToPlay.addAll(selectClips);
-                //analytics.logEvent(PROMPT, "AutoplayAudioChoice", formIdentifierHash);  // smap commented
+                analytics.logEvent(PROMPT, "AutoplayAudioChoice", formIdentifierHash);
             }
 
             if (clipsToPlay.isEmpty()) {
