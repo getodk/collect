@@ -181,8 +181,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         try {
             loadExternalData(formMediaDir);
             // Start smap load local data
-            //LocalDataManagerSmap ldm = new LocalDataManagerSmap();
-            //ldm.loadLocalData();
+            LocalDataManagerSmap ldm = new LocalDataManagerSmap();
+            ldm.loadLocalData();
             // end smap
         } catch (Exception e) {
             Timber.e(e, "Exception thrown while loading external data");

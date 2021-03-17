@@ -24,10 +24,12 @@ public class SmapReferenceDatabaseHelper extends SQLiteOpenHelper {
     static final int DATABASE_VERSION = 1;
     private static boolean isDatabaseBeingMigrated;
 
-    public static final String SOURCE = "source";
-    public static final String SURVEY = "survey";
-    public static final String NAME = "name";
-    public static final String UPDATED_TIME = "updated_time";
+    public static final String REF_SOURCE = "source";
+    public static final String REF_SURVEY = "survey";
+    public static final String REF_REFERENCE_SURVEY = "reference_survey";
+    public static final String REF_DATA_TABLE_NAME = "name";
+    public static final String REF_COLUMN_NAMES = "columns";
+    public static final String REF_UPDATED_TIME = "updated_time";
 
 
     public SmapReferenceDatabaseHelper() {
@@ -70,10 +72,12 @@ public class SmapReferenceDatabaseHelper extends SQLiteOpenHelper {
     private static void createLatestVersion(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
                 + _ID + " integer primary key, "
-                + SOURCE + " text not null, "
-                + SURVEY + " text not null, "
-                + NAME + " text not null, "
-                + UPDATED_TIME + " long not null "
+                + REF_SOURCE + " text not null, "
+                + REF_SURVEY + " text not null, "
+                + REF_REFERENCE_SURVEY + " text not null, "
+                + REF_DATA_TABLE_NAME + " text not null, "
+                + REF_COLUMN_NAMES + " text not null, "
+                + REF_UPDATED_TIME + " long not null "
                 + ");");
     }
 

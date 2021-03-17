@@ -37,4 +37,5 @@ public class TaskResponse {
     public List<PointEntry> userTrail;
     public String current_org;
     public Set<String> orgs;
+    public List<ReferenceSurvey> refSurveys;
 }

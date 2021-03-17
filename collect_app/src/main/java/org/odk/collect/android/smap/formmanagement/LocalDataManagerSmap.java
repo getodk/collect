@@ -82,7 +82,8 @@ public class LocalDataManagerSmap {
     }
 
     /*
-     * Get the surveys that have been references
+     * Get the surveys that have been referenced
+     * This is retrieved from the references table which will have been updated on "refresh"
      */
     private HashMap<String, LinkedSurvey> getLinkedSurveys() {
         HashMap<String, LinkedSurvey> surveys = new HashMap<> ();
@@ -95,7 +96,7 @@ public class LocalDataManagerSmap {
     }
 
     /*
-     * Get the array of linked surveys from the database
+     * Get the instances of the linked surveys
      */
     private ArrayList<LinkedInstance> getLinkedInstances(HashMap<String, LinkedSurvey> surveys) {
         ArrayList<LinkedInstance> instances = new ArrayList<>();
