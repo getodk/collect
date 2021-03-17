@@ -156,12 +156,6 @@ public class FormsDaoTest {
         assertEquals(widgetsForm, forms.get(0));
     }
 
-    @Test
-    public void getFormMediaPathTest() {
-        String mediaPath = formsDao.getFormMediaPath("Birds", "4");
-        assertEquals(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/Birds_4-media", mediaPath);
-    }
-
     private void setUpSampleForms() throws IOException {
         assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/Biggest N of Set.xml").createNewFile());
         biggestNOfSetForm = new Form.Builder()

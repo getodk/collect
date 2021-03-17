@@ -73,24 +73,6 @@ public class FormsDao {
         return getFormsCursor(null, selection, selectionArgs, order);
     }
 
-    public String getFormMediaPath(String formId, String formVersion) {
-        String formMediaPath = null;
-
-        Cursor cursor = getFormsCursorSortedByDateDesc(formId, formVersion);
-
-        if (cursor != null) {
-            try {
-                if (cursor.moveToFirst()) {
-                    int formMediaPathColumnIndex = cursor.getColumnIndex(FormsColumns.FORM_MEDIA_PATH);
-                    formMediaPath = new StoragePathProvider().getAbsoluteFormFilePath(cursor.getString(formMediaPathColumnIndex));
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-        return formMediaPath;
-    }
-
     public Cursor getFormsCursorForFormFilePath(String formFilePath) {
         String selection = FormsColumns.FORM_FILE_PATH + "=?";
         String[] selectionArgs = {new StoragePathProvider().getRelativeFormPath(formFilePath)};
