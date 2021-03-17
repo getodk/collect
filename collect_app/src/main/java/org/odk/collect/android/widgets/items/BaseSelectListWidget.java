@@ -27,9 +27,11 @@ public abstract class BaseSelectListWidget extends ItemsWidget implements MultiC
 
     SelectListWidgetAnswerBinding binding;
     protected AbstractSelectListAdapter recyclerViewAdapter;
+    protected boolean readOnlyOverride;   // smap
 
-    public BaseSelectListWidget(Context context, QuestionDetails questionDetails) {
+    public BaseSelectListWidget(Context context, QuestionDetails questionDetails, boolean readOnlyOverride) {   //
         super(context, questionDetails);
+        this.readOnlyOverride = readOnlyOverride;   // smap
         logAnalytics(questionDetails);
         binding.choicesRecyclerView.initRecyclerView(setUpAdapter(), Appearances.isFlexAppearance(getQuestionDetails().getPrompt()));
         if (Appearances.isAutocomplete(getQuestionDetails().getPrompt())) {
@@ -45,7 +47,7 @@ public abstract class BaseSelectListWidget extends ItemsWidget implements MultiC
 
     @Override
     public void setFocus(Context context) {
-        if (Appearances.isAutocomplete(getQuestionDetails().getPrompt()) && !questionDetails.isReadOnly()) {
+        if (Appearances.isAutocomplete(getQuestionDetails().getPrompt()) && !questionDetails.isReadOnly() && !readOnlyOverride) {   // smap readonly override
             softKeyboardController.showSoftKeyboard(binding.choicesSearchBox);
         }
     }

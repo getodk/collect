@@ -49,12 +49,11 @@ public class SelectOneWidget extends BaseSelectListWidget {
 
     @Nullable
     private AdvanceToNextListener listener;
-    private boolean readOnlyOverride;      // smap
 
     private final boolean autoAdvance;
 
     public SelectOneWidget(Context context, QuestionDetails questionDetails, boolean autoAdvance, boolean readOnlyOverride) {  // smap read only override
-        super(context, questionDetails);
+        super(context, questionDetails, readOnlyOverride);  // smap
         this.readOnlyOverride = readOnlyOverride;       // smap
         this.autoAdvance = autoAdvance;
         if (context instanceof AdvanceToNextListener) {

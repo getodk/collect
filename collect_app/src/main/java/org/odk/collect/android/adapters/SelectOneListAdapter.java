@@ -47,21 +47,23 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
     private RadioButton selectedRadioButton;
     private View selectedItem;
     private SelectItemClickListener listener;
+    private boolean readOnlyOverride;       // smap
 
     @SuppressWarnings("PMD.ExcessiveParameterList")
     public SelectOneListAdapter(String selectedValue, SelectItemClickListener listener, Context context,
                                 List<SelectChoice> items, FormEntryPrompt prompt, ReferenceManager referenceManager,
-                                AudioHelper audioHelper, int playColor, int numColumns, boolean noButtonsMode, boolean readOnlyOverride) {  // smap roo
+                                AudioHelper audioHelper, int playColor, int numColumns, boolean noButtonsMode, boolean readOnlyOverride) {  // smap readOnlyOverride
         super(context, items, prompt, referenceManager, audioHelper, playColor, numColumns, noButtonsMode, readOnlyOverride);
         this.originallySelectedValue = selectedValue;
         this.selectedValue = selectedValue;
         this.listener = listener;
+        this.readOnlyOverride = readOnlyOverride;       // smap
     }
 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder(noButtonsMode
-                ? new NoButtonsItem(context, !prompt.isReadOnly())
+                ? new NoButtonsItem(context, !prompt.isReadOnly() && !readOnlyOverride)
                 : new AudioVideoImageTextLabel(context));
     }
 

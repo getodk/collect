@@ -673,7 +673,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
 
             instancePath = formInfo.getInstancePath();
-            List<Form> candidateForms = formsRepository.getAllByFormIdAndVersion(formInfo.getFormId(), formInfo.getFormVersion());
+            List<Form> candidateForms = formsRepository.getAllByFormIdAndVersion(formInfo.getFormId(), null);   // Smap ignore version
 
             if (candidateForms.isEmpty()) {
                 createErrorDialog(getString(

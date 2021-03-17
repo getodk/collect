@@ -39,10 +39,8 @@ import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColo
  */
 @SuppressLint("ViewConstructor")
 public class SelectMultiWidget extends BaseSelectListWidget {
-    private boolean readOnlyOverride;      // smap
     public SelectMultiWidget(Context context, QuestionDetails prompt, boolean readOnlyOverride) {  // smap - add read only override
-        super(context, prompt);
-        this.readOnlyOverride = readOnlyOverride;   // smap
+        super(context, prompt, readOnlyOverride);   // smap
         SpacesInUnderlyingValuesWarning
                 .forQuestionWidget(this)
                 .renderWarningIfNecessary(items);

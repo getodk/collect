@@ -92,7 +92,7 @@ public class DatabaseFormsRepository implements FormsRepository {
         if (jrVersion != null) {
             return queryForForms(JR_FORM_ID + "=? AND " + JR_VERSION + "=?", new String[]{jrFormId, jrVersion});
         } else {
-            return queryForForms(JR_FORM_ID + "=? AND " + JR_VERSION + " IS NULL", new String[]{jrFormId});
+            return queryForForms(JR_FORM_ID + "=?", new String[]{jrFormId});    // smap if version is null then ignore version
         }
     }
 
@@ -107,7 +107,7 @@ public class DatabaseFormsRepository implements FormsRepository {
         if (jrVersion != null) {
             return queryForForms(DELETED_DATE + " IS NULL AND " + JR_FORM_ID + "=? AND " + JR_VERSION + "=?", new String[]{jrFormId, jrVersion});
         } else {
-            return queryForForms(DELETED_DATE + " IS NULL AND " + JR_FORM_ID + "=? AND " + JR_VERSION + " IS NULL", new String[]{jrFormId});
+            return queryForForms(DELETED_DATE + " IS NULL AND " + JR_FORM_ID + "=?", new String[]{jrFormId});  // smap ignore version
         }
     }
 
