@@ -19,20 +19,12 @@
 package org.odk.collect.android.gdrive;
 
 import android.app.Activity;
-
-import androidx.appcompat.app.AlertDialog;
-
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
-
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -40,13 +32,17 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.services.drive.Drive;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormListActivity;
 import org.odk.collect.android.adapters.FileArrayAdapter;
-import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
@@ -791,13 +787,11 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     }
 
     private void checkFormUpdates() {
-        FormsDao formsDao = new FormsDao();
         for (DriveListItem item : driveList) {
             if (item.getType() == DriveListItem.FILE) {
-                try (Cursor cursor = formsDao.getFormsCursorForFormFilePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName())) {
-                    if (cursor != null && cursor.moveToFirst() && (isNewerFormVersionAvailable(item) || areNewerMediaFilesAvailable(item))) {
-                        item.setNewerVersion(true);
-                    }
+                Form form = new DatabaseFormsRepository().getOneByPath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName());
+                if (form != null && (isNewerFormVersionAvailable(item) || areNewerMediaFilesAvailable(item))) {
+                    item.setNewerVersion(true);
                 }
             }
         }
