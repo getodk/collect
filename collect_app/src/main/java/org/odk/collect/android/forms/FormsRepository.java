@@ -27,7 +27,7 @@ public interface FormsRepository {
 
     List<Form> getAllNotDeletedByFormIdAndVersion(String formId, @Nullable String version);
 
-    Form save(Form form);
+    Form save(@NotNull Form form);
 
     void delete(Long id);
 

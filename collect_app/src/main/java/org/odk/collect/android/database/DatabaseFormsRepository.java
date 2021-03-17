@@ -107,18 +107,8 @@ public class DatabaseFormsRepository implements FormsRepository {
     }
 
     @Override
-    public Form save(Form form) {
-        final ContentValues values = new ContentValues();
-        values.put(FORM_FILE_PATH, storagePathProvider.getRelativeFormPath(form.getFormFilePath()));
-        values.put(FORM_MEDIA_PATH, storagePathProvider.getRelativeFormPath(form.getFormMediaPath()));
-        values.put(DISPLAY_NAME, form.getDisplayName());
-        values.put(JR_VERSION, form.getJrVersion());
-        values.put(JR_FORM_ID, form.getJrFormId());
-        values.put(SUBMISSION_URI, form.getSubmissionUri());
-        values.put(BASE64_RSA_PUBLIC_KEY, form.getBASE64RSAPublicKey());
-        values.put(AUTO_DELETE, form.getAutoDelete());
-        values.put(AUTO_SEND, form.getAutoSend());
-        values.put(GEOMETRY_XPATH, form.getGeometryXpath());
+    public Form save(@NotNull Form form) {
+        final ContentValues values = getValuesFromFormObject(form);
 
         if (form.isDeleted()) {
             values.put(DELETED_DATE, 0L);
@@ -220,8 +210,6 @@ public class DatabaseFormsRepository implements FormsRepository {
         int geometryXpathColumnIndex = cursor.getColumnIndex(GEOMETRY_XPATH);
         int deletedDateColumnIndex = cursor.getColumnIndex(DELETED_DATE);
 
-        StoragePathProvider storagePathProvider = new StoragePathProvider();
-
         return new Form.Builder()
                 .id(cursor.getLong(idColumnIndex))
                 .displayName(cursor.getString(displayNameColumnIndex))
@@ -241,5 +229,24 @@ public class DatabaseFormsRepository implements FormsRepository {
                 .geometryXpath(cursor.getString(geometryXpathColumnIndex))
                 .deleted(!cursor.isNull(deletedDateColumnIndex))
                 .build();
+    }
+
+    private ContentValues getValuesFromFormObject(Form form) {
+        ContentValues values = new ContentValues();
+        values.put(FormsProviderAPI.FormsColumns.DISPLAY_NAME, form.getDisplayName());
+        values.put(FormsProviderAPI.FormsColumns.DESCRIPTION, form.getDescription());
+        values.put(FormsProviderAPI.FormsColumns.JR_FORM_ID, form.getJrFormId());
+        values.put(FormsProviderAPI.FormsColumns.JR_VERSION, form.getJrVersion());
+        values.put(FormsProviderAPI.FormsColumns.FORM_FILE_PATH, storagePathProvider.getRelativeFormPath(form.getFormFilePath()));
+        values.put(FormsProviderAPI.FormsColumns.SUBMISSION_URI, form.getSubmissionUri());
+        values.put(FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY, form.getBASE64RSAPublicKey());
+        values.put(FormsProviderAPI.FormsColumns.MD5_HASH, form.getMD5Hash());
+        values.put(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH, storagePathProvider.getRelativeFormPath(form.getFormMediaPath()));
+        values.put(FormsProviderAPI.FormsColumns.LANGUAGE, form.getLanguage());
+        values.put(FormsProviderAPI.FormsColumns.AUTO_SEND, form.getAutoSend());
+        values.put(FormsProviderAPI.FormsColumns.AUTO_DELETE, form.getAutoDelete());
+        values.put(FormsProviderAPI.FormsColumns.GEOMETRY_XPATH, form.getGeometryXpath());
+
+        return values;
     }
 }

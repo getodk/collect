@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.forms;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.annotation.Nullable;
 
 /**
@@ -85,7 +87,7 @@ public final class Form {
         public Builder() {
         }
 
-        public Builder(Form form) {
+        public Builder(@NotNull Form form) {
             id = form.id;
             displayName = form.displayName;
             description = form.description;

@@ -73,19 +73,8 @@ public class FormsDao {
         return getFormsCursor(null, selection, selectionArgs, order);
     }
 
-    public Cursor getFormsCursorForFormFilePath(String formFilePath) {
-        String selection = FormsColumns.FORM_FILE_PATH + "=?";
-        String[] selectionArgs = {new StoragePathProvider().getRelativeFormPath(formFilePath)};
-
-        return getFormsCursor(null, selection, selectionArgs, null);
-    }
-
     public Uri saveForm(ContentValues values) {
         return Collect.getInstance().getContentResolver().insert(FormsColumns.CONTENT_URI, values);
-    }
-
-    public int updateForm(ContentValues values, String where, String[] whereArgs) {
-        return Collect.getInstance().getContentResolver().update(FormsColumns.CONTENT_URI, values, where, whereArgs);
     }
 
     /**

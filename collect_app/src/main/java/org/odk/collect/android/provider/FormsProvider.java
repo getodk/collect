@@ -167,8 +167,7 @@ public class FormsProvider extends ContentProvider {
             }
 
             if (!values.containsKey(FormsColumns.FORM_FILE_PATH)) {
-                throw new IllegalArgumentException(FormsColumns.FORM_FILE_PATH
-                        + " must be specified.");
+                throw new IllegalArgumentException(FormsColumns.FORM_FILE_PATH + " must be specified.");
             }
 
             // Normalize the file path.

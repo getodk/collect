@@ -88,7 +88,7 @@ public class InMemFormsRepository implements FormsRepository {
     }
 
     @Override
-    public Form save(Form form) {
+    public Form save(@NotNull Form form) {
         if (form.getId() != null) {
             forms.removeIf(f -> f.getId().equals(form.getId()));
             forms.add(form);

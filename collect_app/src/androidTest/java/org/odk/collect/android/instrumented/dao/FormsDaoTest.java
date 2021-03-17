@@ -118,35 +118,6 @@ public class FormsDaoTest {
         assertEquals(miramareForm, forms.get(0));
     }
 
-    @Test
-    public void updateInstanceTest() {
-        Cursor cursor = formsDao.getFormsCursorForFormFilePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/Widgets.xml");
-        List<Form> forms = formsDao.getFormsFromCursor(cursor);
-
-        assertEquals(1, forms.size());
-        assertEquals(widgetsForm, forms.get(0));
-
-        widgetsForm = new Form.Builder()
-                .displayName("Widgets")
-                .jrFormId("Widgets2")
-                .md5Hash("d41d8cd98f00b204e9800998ecf8427e")
-                .date(1487782554846L)
-                .formMediaPath(new StoragePathProvider().getRelativeFormPath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/Widgets-media"))
-                .formFilePath(new StoragePathProvider().getRelativeFormPath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/Widgets.xml"))
-                .jrCacheFilePath(new StoragePathProvider().getRelativeCachePath(storagePathProvider.getOdkRootDirPath() + "/.cache/0eacc6333449e66826326eb5fcc75749.formdef"))
-                .build();
-
-        String where = FormsColumns.DISPLAY_NAME + "=?";
-        String[] whereArgs = {"Widgets"};
-        assertEquals(formsDao.updateForm(getValuesFromFormObject(widgetsForm), where, whereArgs), 1);
-
-        cursor = formsDao.getFormsCursorForFormFilePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/Widgets.xml");
-        forms = formsDao.getFormsFromCursor(cursor);
-
-        assertEquals(1, forms.size());
-        assertEquals(widgetsForm, forms.get(0));
-    }
-
     private void setUpSampleForms() throws IOException {
         assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/Biggest N of Set.xml").createNewFile());
         biggestNOfSetForm = new Form.Builder()

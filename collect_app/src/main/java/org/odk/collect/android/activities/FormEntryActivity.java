@@ -15,7 +15,6 @@
 package org.odk.collect.android.activities;
 
 import android.content.BroadcastReceiver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -71,7 +70,6 @@ import org.odk.collect.android.audio.AMRAppender;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.audio.M4AAppender;
 import org.odk.collect.android.backgroundwork.FormSubmitManager;
-import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
@@ -1825,28 +1823,21 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
         alertDialog = new AlertDialog.Builder(this)
                 .setSingleChoiceItems(languages, selected,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int whichButton) {
-                                // Update the language in the content provider
-                                // when selecting a new
-                                // language
-                                ContentValues values = new ContentValues();
-                                values.put(FormsColumns.LANGUAGE, languages[whichButton]);
-                                String selection = FormsColumns.FORM_FILE_PATH + "=?";
-                                String[] selectArgs = {storagePathProvider.getRelativeFormPath(formPath)};
-                                int updated = new FormsDao().updateForm(values, selection, selectArgs);
-                                Timber.i("Updated language to: %s in %d rows", languages[whichButton], updated);
-
-                                FormController formController = getFormController();
-                                formController.setLanguage(languages[whichButton]);
-                                dialog.dismiss();
-                                if (formController.currentPromptIsQuestion()) {
-                                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                                }
-                                onScreenRefresh();
+                        (dialog, whichButton) -> {
+                            Form form = formsRepository.getOneByPath(formPath);
+                            if (form != null) {
+                                formsRepository.save(new Form.Builder(form)
+                                        .language(languages[whichButton])
+                                        .build()
+                                );
                             }
+
+                            getFormController().setLanguage(languages[whichButton]);
+                            dialog.dismiss();
+                            if (getFormController().currentPromptIsQuestion()) {
+                                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                            }
+                            onScreenRefresh();
                         })
                 .setTitle(getString(R.string.change_language))
                 .setNegativeButton(getString(R.string.do_not_change), null).create();
