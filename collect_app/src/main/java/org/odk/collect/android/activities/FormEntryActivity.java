@@ -73,7 +73,6 @@ import org.odk.collect.android.audio.M4AAppender;
 import org.odk.collect.android.backgroundwork.FormSubmitManager;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
-import org.odk.collect.android.dao.helpers.FormsDaoHelper;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
@@ -2138,18 +2137,19 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 String[] languageTest = formController.getLanguages();
                 if (languageTest != null) {
                     String defaultLanguage = formController.getLanguage();
-                    String newLanguage = FormsDaoHelper.getFormLanguage(formPath);
+                    Form form = formsRepository.getOneByPath(formPath);
 
-                    long start = System.currentTimeMillis();
-                    Timber.i("calling formController.setLanguage");
-                    try {
-                        formController.setLanguage(newLanguage);
-                    } catch (Exception e) {
-                        // if somehow we end up with a bad language, set it to the default
-                        Timber.i("Ended up with a bad language. %s", newLanguage);
-                        formController.setLanguage(defaultLanguage);
+                    if (form != null) {
+                        String newLanguage = form.getLanguage();
+
+                        try {
+                            formController.setLanguage(newLanguage);
+                        } catch (Exception e) {
+                            // if somehow we end up with a bad language, set it to the default
+                            Timber.i("Ended up with a bad language. %s", newLanguage);
+                            formController.setLanguage(defaultLanguage);
+                        }
                     }
-                    Timber.i("Done in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
                 }
 
                 boolean pendingActivityResult = task.hasPendingActivityResult();
