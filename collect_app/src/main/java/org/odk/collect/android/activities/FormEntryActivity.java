@@ -1833,15 +1833,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                 // when selecting a new
                                 // language
                                 ContentValues values = new ContentValues();
-                                values.put(FormsColumns.LANGUAGE,
-                                        languages[whichButton]);
-                                String selection = FormsColumns.FORM_FILE_PATH
-                                        + "=?";
+                                values.put(FormsColumns.LANGUAGE, languages[whichButton]);
+                                String selection = FormsColumns.FORM_FILE_PATH + "=?";
                                 String[] selectArgs = {storagePathProvider.getRelativeFormPath(formPath)};
                                 int updated = new FormsDao().updateForm(values, selection, selectArgs);
-                                Timber.i("Updated language to: %s in %d rows",
-                                        languages[whichButton],
-                                        updated);
+                                Timber.i("Updated language to: %s in %d rows", languages[whichButton], updated);
 
                                 FormController formController = getFormController();
                                 formController.setLanguage(languages[whichButton]);

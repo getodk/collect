@@ -22,8 +22,7 @@ public class FormDeleterTest {
 
     @Test
     public void whenFormHasDeletedInstances_deletesForm() {
-        formsRepository.save(new Form.Builder()
-                .id(1L)
+        Form formToDelete = formsRepository.save(new Form.Builder()
                 .jrFormId("id")
                 .jrVersion("version")
                 .formFilePath(FormUtils.createXFormFile("id", "version").getAbsolutePath())
@@ -35,21 +34,19 @@ public class FormDeleterTest {
                 .deletedDate(0L)
                 .build());
 
-        formDeleter.delete(1L);
+        formDeleter.delete(formToDelete.getId());
         assertThat(formsRepository.getAll().size(), is(0));
     }
 
     @Test
     public void whenOtherVersionOfFormHasInstances_deletesForm() {
         formsRepository.save(new Form.Builder()
-                .id(1L)
                 .jrFormId("1")
                 .jrVersion("old")
                 .formFilePath(FormUtils.createXFormFile("1", "old").getAbsolutePath())
                 .build());
 
-        formsRepository.save(new Form.Builder()
-                .id(2L)
+        Form formToDelete = formsRepository.save(new Form.Builder()
                 .jrFormId("1")
                 .jrVersion("new")
                 .formFilePath(FormUtils.createXFormFile("1", "new").getAbsolutePath())
@@ -60,7 +57,7 @@ public class FormDeleterTest {
                 .jrVersion("old")
                 .build());
 
-        formDeleter.delete(2L);
+        formDeleter.delete(formToDelete.getId());
         List<Form> forms = formsRepository.getAll();
         assertThat(forms.size(), is(1));
         assertThat(forms.get(0).getJrVersion(), is("old"));
@@ -69,14 +66,12 @@ public class FormDeleterTest {
     @Test
     public void whenFormHasNullVersion_butAnotherVersionHasInstances_deletesForm() {
         formsRepository.save(new Form.Builder()
-                .id(1L)
                 .jrFormId("1")
                 .jrVersion("version")
                 .formFilePath(FormUtils.createXFormFile("1", "version").getAbsolutePath())
                 .build());
 
-        formsRepository.save(new Form.Builder()
-                .id(2L)
+        Form formToDelete = formsRepository.save(new Form.Builder()
                 .jrFormId("1")
                 .jrVersion(null)
                 .formFilePath(FormUtils.createXFormFile("1", null).getAbsolutePath())
@@ -87,7 +82,7 @@ public class FormDeleterTest {
                 .jrVersion("version")
                 .build());
 
-        formDeleter.delete(2L);
+        formDeleter.delete(formToDelete.getId());
         List<Form> forms = formsRepository.getAll();
         assertThat(forms.size(), is(1));
         assertThat(forms.get(0).getJrVersion(), is("version"));
@@ -95,8 +90,7 @@ public class FormDeleterTest {
 
     @Test
     public void whenFormHasNullVersion_andInstancesWithNullVersion_softDeletesForm() {
-        formsRepository.save(new Form.Builder()
-                .id(1L)
+        Form formToDelete = formsRepository.save(new Form.Builder()
                 .jrFormId("1")
                 .jrVersion(null)
                 .formFilePath(FormUtils.createXFormFile("1", null).getAbsolutePath())
@@ -104,7 +98,7 @@ public class FormDeleterTest {
 
         instancesRepository.save(buildInstance("1", null).build());
 
-        formDeleter.delete(1L);
+        formDeleter.delete(formToDelete.getId());
         List<Form> forms = formsRepository.getAll();
         assertThat(forms.size(), is(1));
         assertThat(forms.get(0).isDeleted(), is(true));
@@ -112,8 +106,7 @@ public class FormDeleterTest {
 
     @Test
     public void whenFormIdAndVersionCombinationIsNotUnique_andInstanceExists_hardDeletesForm() {
-        formsRepository.save(new Form.Builder()
-                .id(1L)
+        Form formToDelete = formsRepository.save(new Form.Builder()
                 .jrFormId("id")
                 .jrVersion("version")
                 .formFilePath(FormUtils.createXFormFile("id", "version").getAbsolutePath())
@@ -125,13 +118,12 @@ public class FormDeleterTest {
                 .build());
 
         formsRepository.save(new Form.Builder()
-                .id(2L)
                 .jrFormId("id")
                 .jrVersion("version")
                 .formFilePath(FormUtils.createXFormFile("id", "version").getAbsolutePath())
                 .build());
 
-        formDeleter.delete(1L);
+        formDeleter.delete(formToDelete.getId());
         List<Form> forms = formsRepository.getAll();
         assertThat(forms.size(), is(1));
         assertThat(forms.get(0).getId(), is(2L));

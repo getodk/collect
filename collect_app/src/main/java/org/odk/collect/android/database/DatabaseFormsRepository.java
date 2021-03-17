@@ -108,28 +108,34 @@ public class DatabaseFormsRepository implements FormsRepository {
 
     @Override
     public Form save(Form form) {
-        final ContentValues v = new ContentValues();
-        v.put(FORM_FILE_PATH, storagePathProvider.getRelativeFormPath(form.getFormFilePath()));
-        v.put(FORM_MEDIA_PATH, storagePathProvider.getRelativeFormPath(form.getFormMediaPath()));
-        v.put(DISPLAY_NAME, form.getDisplayName());
-        v.put(JR_VERSION, form.getJrVersion());
-        v.put(JR_FORM_ID, form.getJrFormId());
-        v.put(SUBMISSION_URI, form.getSubmissionUri());
-        v.put(BASE64_RSA_PUBLIC_KEY, form.getBASE64RSAPublicKey());
-        v.put(AUTO_DELETE, form.getAutoDelete());
-        v.put(AUTO_SEND, form.getAutoSend());
-        v.put(GEOMETRY_XPATH, form.getGeometryXpath());
+        final ContentValues values = new ContentValues();
+        values.put(FORM_FILE_PATH, storagePathProvider.getRelativeFormPath(form.getFormFilePath()));
+        values.put(FORM_MEDIA_PATH, storagePathProvider.getRelativeFormPath(form.getFormMediaPath()));
+        values.put(DISPLAY_NAME, form.getDisplayName());
+        values.put(JR_VERSION, form.getJrVersion());
+        values.put(JR_FORM_ID, form.getJrFormId());
+        values.put(SUBMISSION_URI, form.getSubmissionUri());
+        values.put(BASE64_RSA_PUBLIC_KEY, form.getBASE64RSAPublicKey());
+        values.put(AUTO_DELETE, form.getAutoDelete());
+        values.put(AUTO_SEND, form.getAutoSend());
+        values.put(GEOMETRY_XPATH, form.getGeometryXpath());
 
         if (form.isDeleted()) {
-            v.put(DELETED_DATE, 0L);
+            values.put(DELETED_DATE, 0L);
         } else {
-            v.putNull(DELETED_DATE);
+            values.putNull(DELETED_DATE);
         }
 
-        FormsDao formsDao = new FormsDao();
-        Uri uri = formsDao.saveForm(v);
-        try (Cursor cursor = Collect.getInstance().getContentResolver().query(uri, null, null, null, null)) {
-            return getFormsFromCursor(cursor).get(0);
+        if (form.getId() == null) {
+            FormsDao formsDao = new FormsDao();
+            Uri uri = formsDao.saveForm(values);
+
+            try (Cursor cursor = Collect.getInstance().getContentResolver().query(uri, null, null, null, null)) {
+                return getFormsFromCursor(cursor).get(0);
+            }
+        } else {
+            Collect.getInstance().getContentResolver().update(CONTENT_URI, values, _ID + "=?", new String[]{form.getId().toString()});
+            return get(form.getId());
         }
     }
 

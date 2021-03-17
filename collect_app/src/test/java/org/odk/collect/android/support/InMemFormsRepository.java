@@ -89,22 +89,26 @@ public class InMemFormsRepository implements FormsRepository {
 
     @Override
     public Form save(Form form) {
-        form = new Form.Builder(form)
-                .id(idCounter++)
-                .date(clock.getCurrentTime())
-                .build();
+        if (form.getId() != null) {
+            forms.removeIf(f -> f.getId().equals(form.getId()));
+            forms.add(form);
+            return form;
+        } else {
+            Form.Builder builder = new Form.Builder(form)
+                    .id(idCounter++)
+                    .date(clock.getCurrentTime());
 
-        // Allows tests to override hash
-        if (form.getMD5Hash() == null) {
-            String formFilePath = form.getFormFilePath();
-            String hash = FileUtils.getMd5Hash(new File(formFilePath));
-            form = new Form.Builder(form)
-                    .md5Hash(hash)
-                    .build();
+            // Allows tests to override hash
+            if (form.getMD5Hash() == null) {
+                String formFilePath = form.getFormFilePath();
+                String hash = FileUtils.getMd5Hash(new File(formFilePath));
+                builder.md5Hash(hash);
+            }
+
+            Form formToSave = builder.build();
+            forms.add(formToSave);
+            return formToSave;
         }
-
-        forms.add(form);
-        return form;
     }
 
     @Override

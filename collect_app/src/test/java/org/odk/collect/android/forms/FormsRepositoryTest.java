@@ -169,6 +169,20 @@ public abstract class FormsRepositoryTest {
     }
 
     @Test
+    public void save_whenFormHasId_updatesExisting() {
+        FormsRepository formsRepository = buildSubject();
+        Form originalForm = formsRepository.save(buildForm("id", "version", getFormFilesPath())
+                .displayName("original")
+                .build());
+
+        formsRepository.save(new Form.Builder(originalForm)
+                .displayName("changed")
+                .build());
+
+        assertThat(formsRepository.get(originalForm.getId()).getDisplayName(), is("changed"));
+    }
+
+    @Test
     public void delete_deletesFiles() {
         FormsRepository formsRepository = buildSubject();
         Form form = formsRepository.save(buildForm("id", "version", getFormFilesPath()).build());
