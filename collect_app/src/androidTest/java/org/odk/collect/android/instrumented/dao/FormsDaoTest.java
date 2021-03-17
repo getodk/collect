@@ -119,15 +119,6 @@ public class FormsDaoTest {
     }
 
     @Test
-    public void getFormsCursorForFormFilePathTest() {
-        Cursor cursor = formsDao.getFormsCursorForFormFilePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/Miramare.xml");
-        List<Form> forms = formsDao.getFormsFromCursor(cursor);
-        assertEquals(1, forms.size());
-
-        assertEquals(miramareForm, forms.get(0));
-    }
-
-    @Test
     public void updateInstanceTest() {
         Cursor cursor = formsDao.getFormsCursorForFormFilePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/Widgets.xml");
         List<Form> forms = formsDao.getFormsFromCursor(cursor);
