@@ -520,6 +520,20 @@ public class FileUtils {
     /*
      * Smap
      */
+    public static void copyMediaFiles(String tempMediaPath, File formMediaPath) throws IOException {
+        File tempMediaFolder = new File(tempMediaPath);
+        File[] mediaFiles = tempMediaFolder.listFiles();
+        if (mediaFiles != null && mediaFiles.length > 0) {
+            for (File mediaFile : mediaFiles) {
+                deleteOldFile(mediaFile.getName(), formMediaPath);
+                org.apache.commons.io.FileUtils.copyFileToDirectory(mediaFile, formMediaPath, false);
+            }
+        }
+    }
+
+    /*
+     * Smap
+     */
     public static void deleteOldFile(String name, File d) {
         String path = d.getAbsolutePath() + "/" + name;
         File f = new File(path);

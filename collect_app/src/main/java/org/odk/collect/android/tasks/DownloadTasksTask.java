@@ -62,6 +62,8 @@ import org.odk.collect.android.smap.formmanagement.MultiFormDownloaderSmap;
 import org.odk.collect.android.smap.formmanagement.ServerFormDetailsSmap;
 import org.odk.collect.android.smap.listeners.DownloadFormsTaskListenerSmap;
 import org.odk.collect.android.smap.tasks.DownloadFormsTaskSmap;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.taskModel.FormLocator;
 import org.odk.collect.android.taskModel.TaskCompletionInfo;
 import org.odk.collect.android.taskModel.TaskResponse;
@@ -180,7 +182,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 .getDefaultSharedPreferences(Collect.getInstance().getBaseContext());
         source = Utilities.getSource();
         serverUrl = sharedPreferences.getString(GeneralKeys.KEY_SERVER_URL, null);
-        taskURL = serverUrl + "/surveyKPI/myassignments?orgs=true";
+        taskURL = serverUrl + "/surveyKPI/myassignments?orgs=true&noprojects=true";
 
         // Should mostly work may be better to add a lock however any error is recoverable
         if(Collect.getInstance().isDownloading()) {
@@ -772,7 +774,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                         if (f != null) {
                             int idx = f.lastIndexOf('.');
                             if (idx >= 0) {
-                                String mPath = f.substring(0, idx) + "-media";
+                                String mPath = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + File.separator + f.substring(0, idx) + "-media";
                                 File mDir = new File(mPath);
                                 Log.i(tag, "Media Dir is: " + mPath);
                                 if (mDir.exists() && mDir.isDirectory()) {

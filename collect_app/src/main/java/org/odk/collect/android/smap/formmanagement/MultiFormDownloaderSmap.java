@@ -46,6 +46,7 @@ import timber.log.Timber;
 import static org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME;
 import static org.odk.collect.android.utilities.FileUtils.STUB_XML;
 import static org.odk.collect.android.utilities.FileUtils.write;
+import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
 public class MultiFormDownloaderSmap {
 
@@ -238,18 +239,14 @@ public class MultiFormDownloaderSmap {
                         for (File mf : orgTempFiles) {
                             try {
                                 FileUtils.deleteOldFile(mf.getName(), orgMediaDir);
-                                if (mf.getName().endsWith(".json")) {
-                                    org.apache.commons.io.FileUtils.moveFileToDirectory(mf, orgMediaDir, true);     // Move json files
-                                } else {
-                                    org.apache.commons.io.FileUtils.copyFileToDirectory(mf, orgMediaDir, true);     // For other files a copy is saved
-                                }
+                                org.apache.commons.io.FileUtils.moveFileToDirectory(mf, orgMediaDir, true);
                             } catch (Exception e) {
                             }
                         }
                     }
 
                     File formMediaPath = new File(uriResult.getMediaPath());
-                    FileUtils.moveMediaFiles(orgTempMediaPath, formMediaPath);      // smap Move org files first and overwrite with form level
+                    FileUtils.copyMediaFiles(orgMediaPath, formMediaPath);      // smap Copy org files first and overwrite with form level - leave a copy in org media dir for other surveys
                     FileUtils.moveMediaFiles(tempMediaPath, formMediaPath);
                 }
                 return true;
@@ -333,8 +330,8 @@ public class MultiFormDownloaderSmap {
     private Uri saveNewForm(Map<String, String> formInfo, File formFile, String mediaPath,
                             boolean tasks_only, String source, String project) {    // smap add tasks_only, source project
         Form form = new Form.Builder()
-                .formFilePath(new StoragePathProvider().getFormDbPath(formFile.getAbsolutePath()))
-                .formMediaPath(new StoragePathProvider().getFormDbPath(mediaPath))
+                .formFilePath(formFile.getAbsolutePath())
+                .formMediaPath(mediaPath)
                 .displayName(formInfo.get(FileUtils.TITLE))
                 .jrVersion(formInfo.get(FileUtils.VERSION))
                 .jrFormId(formInfo.get(FileUtils.FORMID))
@@ -390,10 +387,10 @@ public class MultiFormDownloaderSmap {
                 Timber.w("Will use %s", existingPath);
             }
         } else {
-            if(formPath == null) {
+            if(formPath == null) {   // create a file where the file should be - why are we doing this?
                 f = new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + rootName + ".xml");   // smap
-            } else {
-                f = new File(formPath);     // smap
+            } else {  // return the existing file
+                f = new File(getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.FORMS), formPath));     // smap
             }
         }
         return new FileResult(f, isNew);    // smap
