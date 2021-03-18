@@ -17,7 +17,6 @@
 package org.odk.collect.android.dao;
 
 import android.database.Cursor;
-import android.net.Uri;
 import android.provider.BaseColumns;
 
 import org.odk.collect.android.application.Collect;
@@ -41,10 +40,6 @@ public class FormsDao {
 
     public Cursor getFormsCursor(String selection, String[] selectionArgs) {
         return Collect.getInstance().getContentResolver().query(FormsColumns.CONTENT_URI, null, selection, selectionArgs, null);
-    }
-
-    public Cursor getFormsCursor(Uri uri) {
-        return Collect.getInstance().getContentResolver().query(uri, null, null, null, null);
     }
 
     public Cursor getFormsCursorSortedByDateDesc(String formId, String formVersion) {

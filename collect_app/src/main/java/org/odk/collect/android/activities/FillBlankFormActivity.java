@@ -185,8 +185,9 @@ public class FillBlankFormActivity extends FormListActivity implements
     }
 
     public void onMapButtonClick(AdapterView<?> parent, View view, int position, long id) {
-        final Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, id);
-        final Intent intent = new Intent(Intent.ACTION_EDIT, formUri, this, FormMapActivity.class);
+        final Intent intent = new Intent(this, FormMapActivity.class);
+        intent.putExtra(FormMapActivity.EXTRA_FORM_ID, id);
+
         permissionsProvider.requestLocationPermissions(this, new PermissionListener() {
             @Override
             public void granted() {
