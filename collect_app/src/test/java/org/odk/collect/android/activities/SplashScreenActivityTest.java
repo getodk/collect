@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
+import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
 import org.odk.collect.android.injection.config.AppDependencyModule;
@@ -20,7 +21,6 @@ import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.support.RobolectricHelpers;
-import org.odk.collect.utilities.TestSettingsProvider;
 import org.odk.collect.utilities.UserAgentProvider;
 import org.robolectric.annotation.LooperMode;
 

@@ -11,10 +11,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.android.forms.ManifestFile;
-import org.odk.collect.utilities.TestSettingsProvider;
 
 import java.util.List;
 

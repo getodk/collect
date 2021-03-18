@@ -37,6 +37,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
+import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.GuidanceHint;
@@ -45,7 +46,6 @@ import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.FormLoadingUtils;
 import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.utilities.TestSettingsProvider;
 
 import java.io.File;
 import java.io.FileOutputStream;

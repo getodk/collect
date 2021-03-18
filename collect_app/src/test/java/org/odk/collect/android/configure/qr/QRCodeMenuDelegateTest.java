@@ -10,10 +10,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 
+import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.testshared.FakeScheduler;
-import org.odk.collect.utilities.TestSettingsProvider;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.fakes.RoboMenuItem;

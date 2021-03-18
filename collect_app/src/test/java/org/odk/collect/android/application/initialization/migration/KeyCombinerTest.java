@@ -2,8 +2,8 @@ package org.odk.collect.android.application.initialization.migration;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.preferences.source.Settings;
-import org.odk.collect.utilities.TestSettingsProvider;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.combineKeys;

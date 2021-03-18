@@ -25,6 +25,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.Instance;
@@ -36,7 +37,6 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ApplicationResetter;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
-import org.odk.collect.utilities.TestSettingsProvider;
 import org.osmdroid.config.Configuration;
 
 import java.io.File;

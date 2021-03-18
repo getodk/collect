@@ -13,11 +13,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.Settings;
 import org.odk.collect.android.preferences.Protocol;
-import org.odk.collect.utilities.TestSettingsProvider;
 
 import static android.os.Looper.getMainLooper;
 import static org.hamcrest.MatcherAssert.assertThat;

@@ -7,9 +7,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.preferences.source.Settings;
-import org.odk.collect.utilities.TestSettingsProvider;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 

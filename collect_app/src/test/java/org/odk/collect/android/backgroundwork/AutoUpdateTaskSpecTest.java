@@ -11,6 +11,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.odk.collect.android.R;
 import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.formmanagement.FormDownloader;
@@ -28,7 +29,6 @@ import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.BooleanChangeLock;
 import org.odk.collect.android.support.RobolectricHelpers;
-import org.odk.collect.utilities.TestSettingsProvider;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.HashMap;
