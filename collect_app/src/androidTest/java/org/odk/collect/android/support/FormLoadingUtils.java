@@ -51,11 +51,11 @@ public class FormLoadingUtils {
      * Copies a form with the given file name and given associated media to the SD Card where it
      * will be loaded by {@link FormLoaderTask}.
      */
-    public static void copyFormToStorage(String formFilename, List<String> mediaFilePaths, boolean copyToDatabase) throws IOException {
+    public static void copyFormToStorage(String formFilename, List<String> mediaFilePaths, boolean copyToDatabase, String copyTo) throws IOException {
         new StorageInitializer().createOdkDirsOnStorage();
         ReferenceManager.instance().reset();
 
-        String pathname = copyForm(formFilename);
+        String pathname = copyForm(formFilename, copyTo);
         if (mediaFilePaths != null) {
             copyFormMediaFiles(formFilename, mediaFilePaths);
         }
@@ -71,7 +71,11 @@ public class FormLoadingUtils {
      * {@link FormLoaderTask}.
      */
     public static void copyFormToStorage(String formFilename) throws IOException {
-        copyFormToStorage(formFilename, null, false);
+        copyFormToStorage(formFilename, null, false, formFilename);
+    }
+
+    public static void copyFormToStorage(String formFilename, String copyTo) throws IOException {
+        copyFormToStorage(formFilename, null, false, copyTo);
     }
 
     private static void saveFormToDatabase(File outFile) {
@@ -95,8 +99,8 @@ public class FormLoadingUtils {
         return new FormActivityTestRule(formFilename);
     }
 
-    private static String copyForm(String formFilename) throws IOException {
-        String pathname = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + "/" + formFilename;
+    private static String copyForm(String formFilename, String copyTo) throws IOException {
+        String pathname = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + "/" + copyTo;
         copyFileFromAssets("forms/" + formFilename, pathname);
         return pathname;
     }

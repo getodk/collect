@@ -52,7 +52,7 @@ public class CopyFormRule implements TestRule {
 
         @Override
         public void evaluate() throws Throwable {
-            FormLoadingUtils.copyFormToStorage(fileName, mediaFilePaths, copyToDatabase);
+            FormLoadingUtils.copyFormToStorage(fileName, mediaFilePaths, copyToDatabase, fileName);
             base.evaluate();
         }
     }

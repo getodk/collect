@@ -428,7 +428,7 @@ abstract class Page<T extends Page<T>> {
 
     public T copyForm(String formFilename, List<String> mediaFileNames) {
         try {
-            FormLoadingUtils.copyFormToStorage(formFilename, mediaFileNames, false);
+            FormLoadingUtils.copyFormToStorage(formFilename, mediaFileNames, false, formFilename);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

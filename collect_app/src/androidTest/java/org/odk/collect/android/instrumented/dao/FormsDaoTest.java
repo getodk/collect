@@ -25,6 +25,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -130,7 +131,7 @@ public class FormsDaoTest {
                 .jrCacheFilePath(new StoragePathProvider().getRelativeCachePath(storagePathProvider.getOdkRootDirPath() + "/.cache/ccce6015dd1b8f935f5f3058e81eeb43.formdef"))
                 .build();
 
-        formsDao.saveForm(getValuesFromFormObject(biggestNOfSetForm));
+        Collect.getInstance().getContentResolver().insert(FormsColumns.CONTENT_URI, getValuesFromFormObject(biggestNOfSetForm));
 
         assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/Birds.xml").createNewFile());
         birdsForm = new Form.Builder()
@@ -144,7 +145,7 @@ public class FormsDaoTest {
                 .jrCacheFilePath(new StoragePathProvider().getRelativeCachePath(storagePathProvider.getOdkRootDirPath() + "/.cache/4cd980d50f884362afba842cbff3a798.formdef"))
                 .build();
 
-        formsDao.saveForm(getValuesFromFormObject(birdsForm));
+        Collect.getInstance().getContentResolver().insert(FormsColumns.CONTENT_URI, getValuesFromFormObject(birdsForm));
 
         assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/Miramare.xml").createNewFile());
         miramareForm = new Form.Builder()
@@ -157,7 +158,7 @@ public class FormsDaoTest {
                 .jrCacheFilePath(new StoragePathProvider().getRelativeCachePath(storagePathProvider.getOdkRootDirPath() + "/.cache/e733627cdbf220929bf9c4899cb983ea.formdef"))
                 .build();
 
-        formsDao.saveForm(getValuesFromFormObject(miramareForm));
+        Collect.getInstance().getContentResolver().insert(FormsColumns.CONTENT_URI, getValuesFromFormObject(miramareForm));
 
         assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/Geo Tagger v2.xml").createNewFile());
         geoTaggerV2Form = new Form.Builder()
@@ -170,7 +171,7 @@ public class FormsDaoTest {
                 .jrCacheFilePath(new StoragePathProvider().getRelativeCachePath(storagePathProvider.getOdkRootDirPath() + "/.cache/1d5e9109298c8ef02bc523b17d7c0451.formdef"))
                 .build();
 
-        formsDao.saveForm(getValuesFromFormObject(geoTaggerV2Form));
+        Collect.getInstance().getContentResolver().insert(FormsColumns.CONTENT_URI, getValuesFromFormObject(geoTaggerV2Form));
 
         assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/Widgets.xml").createNewFile());
         widgetsForm = new Form.Builder()
@@ -183,7 +184,7 @@ public class FormsDaoTest {
                 .jrCacheFilePath(new StoragePathProvider().getRelativeCachePath(storagePathProvider.getOdkRootDirPath() + "/.cache/0eacc6333449e66826326eb5fcc75749.formdef"))
                 .build();
 
-        formsDao.saveForm(getValuesFromFormObject(widgetsForm));
+        Collect.getInstance().getContentResolver().insert(FormsColumns.CONTENT_URI, getValuesFromFormObject(widgetsForm));
 
         assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/sample.xml").createNewFile());
         sampleForm = new Form.Builder()
@@ -196,7 +197,7 @@ public class FormsDaoTest {
                 .jrCacheFilePath(new StoragePathProvider().getRelativeCachePath(storagePathProvider.getOdkRootDirPath() + "/.cache/4f495fddd1f2544f65444ea83d25f425.formdef"))
                 .build();
 
-        formsDao.saveForm(getValuesFromFormObject(sampleForm));
+        Collect.getInstance().getContentResolver().insert(FormsColumns.CONTENT_URI, getValuesFromFormObject(sampleForm));
 
         assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/Birds_4.xml").createNewFile());
         birds2Form = new Form.Builder()
@@ -210,7 +211,7 @@ public class FormsDaoTest {
                 .jrCacheFilePath(new StoragePathProvider().getRelativeCachePath(storagePathProvider.getOdkRootDirPath() + "/.cache/4cd980d50f884362afba842cbff3a775.formdef"))
                 .build();
 
-        formsDao.saveForm(getValuesFromFormObject(birds2Form));
+        Collect.getInstance().getContentResolver().insert(FormsColumns.CONTENT_URI, getValuesFromFormObject(birds2Form));
     }
 
     @After

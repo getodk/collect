@@ -16,7 +16,6 @@
 
 package org.odk.collect.android.dao;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -71,10 +70,6 @@ public class FormsDao {
         String order = FormsColumns.DATE + " DESC";
 
         return getFormsCursor(null, selection, selectionArgs, order);
-    }
-
-    public Uri saveForm(ContentValues values) {
-        return Collect.getInstance().getContentResolver().insert(FormsColumns.CONTENT_URI, values);
     }
 
     /**
