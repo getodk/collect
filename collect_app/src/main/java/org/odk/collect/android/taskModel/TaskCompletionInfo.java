@@ -9,5 +9,6 @@ public class TaskCompletionInfo {
     public double lon;
     public long actFinish;	// When the task was finished
     public String ident;	// Survey ident
+    public int version;     // Form version
     public String uuid;		// Unique identifier for the results
 }

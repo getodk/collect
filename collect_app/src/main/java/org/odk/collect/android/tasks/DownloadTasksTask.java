@@ -517,33 +517,34 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         /*
          * Set details on submitted tasks
          */
+        updateResponse.taskCompletionInfo = new ArrayList<>();   // Details on completed tasks
+
+        for (TaskEntry t : nonSynchTasks) {
+            if ((t.taskStatus.equals(Utilities.STATUS_T_SUBMITTED) || t.taskStatus.equals(Utilities.STATUS_T_CLOSED))
+                    && t.isSynced.equals(Utilities.STATUS_SYNC_NO)) {
+                TaskCompletionInfo tci = new TaskCompletionInfo();
+                tci.actFinish = t.actFinish;
+                tci.lat = t.actLat;
+                tci.lon = t.actLon;
+                tci.ident = t.ident;
+                tci.uuid = t.uuid;
+                tci.assId = t.assId;
+
+                updateResponse.taskCompletionInfo.add(tci);
+            }
+        }
+
+        /*
+         * Send user trail if enabled
+         */
         boolean sendLocation = (Boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SMAP_USER_LOCATION);
         long lastTraceIdSent = 0;
         if(sendLocation) {
-            updateResponse.taskCompletionInfo = new ArrayList<>();   // Details on completed tasks
-
-            for (TaskEntry t : nonSynchTasks) {
-                if ((t.taskStatus.equals(Utilities.STATUS_T_SUBMITTED) || t.taskStatus.equals(Utilities.STATUS_T_CLOSED))
-                        && t.isSynced.equals(Utilities.STATUS_SYNC_NO)) {
-                    TaskCompletionInfo tci = new TaskCompletionInfo();
-                    tci.actFinish = t.actFinish;
-                    tci.lat = t.actLat;
-                    tci.lon = t.actLon;
-                    tci.ident = t.ident;
-                    tci.uuid = t.uuid;
-                    tci.assId = t.assId;
-
-                    updateResponse.taskCompletionInfo.add(tci);
-                }
-            }
-
             // Get Points
             updateResponse.userTrail = new ArrayList<>(100);
             lastTraceIdSent = TraceUtilities.getPoints(updateResponse.userTrail, 10000, false);
-        } else {
-            // Delete any points that had been collected
-            TraceUtilities.deleteSource(0);
         }
+
         Collect.getInstance().setSavedLocation(null);
 
         if(updateResponse.taskAssignments.size() > 0 ||
