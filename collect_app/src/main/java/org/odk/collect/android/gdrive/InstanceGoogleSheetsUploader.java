@@ -14,8 +14,6 @@
 
 package org.odk.collect.android.gdrive;
 
-import android.database.Cursor;
-
 import androidx.annotation.NonNull;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -34,7 +32,6 @@ import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
@@ -100,9 +97,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
 
         // Get corresponding blank form and verify there is exactly 1
-        FormsDao dao = new FormsDao();
-        Cursor formCursor = dao.getFormsCursorSortedByDateDesc(instance.getJrFormId(), instance.getJrVersion());
-        List<Form> forms = dao.getFormsFromCursor(formCursor);
+        List<Form> forms = new DatabaseFormsRepository().getAllByFormIdAndVersion(instance.getJrFormId(), instance.getJrVersion());
 
         try {
             if (forms.size() != 1) {
