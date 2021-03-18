@@ -21,8 +21,6 @@ import androidx.annotation.NonNull;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.form.api.FormEntryController;
 
-import static org.odk.collect.android.utilities.CSVUtils.getEscapedValueForCsv;
-
 public class AuditEvent {
 
     public enum AuditEventType {
@@ -210,14 +208,6 @@ public class AuditEvent {
             this.oldValue = "";
             this.newValue = "";
             return false;
-        }
-
-        if (oldValue.contains(",") || oldValue.contains("\n")) {
-            oldValue = getEscapedValueForCsv(oldValue);
-        }
-
-        if (this.newValue.contains(",") || this.newValue.contains("\n")) {
-            this.newValue = getEscapedValueForCsv(this.newValue);
         }
 
         return true;

@@ -39,22 +39,16 @@ public class AuditEventCSVLine {
         }
 
         if (isTrackingChangesEnabled) {
-            string += String.format(",%s,%s", oldValue, newValue);
+            string += String.format(",%s,%s", getEscapedValueForCsv(oldValue), getEscapedValueForCsv(newValue));
         }
 
         if (user != null) {
-            if (user.contains(",") || user.contains("\n")) {
-                string += String.format(",%s", getEscapedValueForCsv(user));
-            } else {
-                string += String.format(",%s", user);
-            }
+            string += String.format(",%s", getEscapedValueForCsv(user));
         }
 
         if (isTrackingChangesReasonEnabled) {
-            if (changeReason != null && (changeReason.contains(",") || changeReason.contains("\n"))) {
+            if (changeReason != null) {
                 string += String.format(",%s", getEscapedValueForCsv(changeReason));
-            } else if (changeReason != null) {
-                string += String.format(",%s", changeReason);
             } else {
                 string += ",";
             }
