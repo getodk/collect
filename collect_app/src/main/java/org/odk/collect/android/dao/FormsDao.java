@@ -36,15 +36,11 @@ import java.util.List;
 public class FormsDao {
 
     public Cursor getFormsCursor() {
-        return getFormsCursor(null, null, null, null);
+        return Collect.getInstance().getContentResolver().query(FormsColumns.CONTENT_URI, null, null, null, null);
     }
 
     public Cursor getFormsCursor(String selection, String[] selectionArgs) {
-        return getFormsCursor(null, selection, selectionArgs, null);
-    }
-
-    public Cursor getFormsCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return Collect.getInstance().getContentResolver().query(FormsColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
+        return Collect.getInstance().getContentResolver().query(FormsColumns.CONTENT_URI, null, selection, selectionArgs, null);
     }
 
     public Cursor getFormsCursor(Uri uri) {
@@ -69,7 +65,7 @@ public class FormsDao {
         // the newest one
         String order = FormsColumns.DATE + " DESC";
 
-        return getFormsCursor(null, selection, selectionArgs, order);
+        return Collect.getInstance().getContentResolver().query(FormsColumns.CONTENT_URI, null, selection, selectionArgs, order);
     }
 
     /**

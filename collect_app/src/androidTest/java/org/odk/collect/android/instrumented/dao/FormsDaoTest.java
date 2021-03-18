@@ -83,7 +83,7 @@ public class FormsDaoTest {
 
     @Test
     public void getFormsCursorTest() {
-        Cursor cursor = formsDao.getFormsCursor(null, null, null, null);
+        Cursor cursor = Collect.getInstance().getContentResolver().query(FormsColumns.CONTENT_URI, null, null, null, null);
         List<Form> forms = formsDao.getFormsFromCursor(cursor);
         assertEquals(7, forms.size());
 
@@ -97,7 +97,7 @@ public class FormsDaoTest {
 
         String sortOrder = FormsColumns.DISPLAY_NAME + " COLLATE NOCASE DESC";
 
-        cursor = formsDao.getFormsCursor(null, null, null, sortOrder);
+        cursor = Collect.getInstance().getContentResolver().query(FormsColumns.CONTENT_URI, null, null, null, sortOrder);
         forms = formsDao.getFormsFromCursor(cursor);
         assertEquals(7, forms.size());
 
@@ -112,7 +112,7 @@ public class FormsDaoTest {
         String selection = FormsColumns.DISPLAY_NAME + "=?";
         String[] selectionArgs = {"Miramare"};
 
-        cursor = formsDao.getFormsCursor(null, selection, selectionArgs, null);
+        cursor = Collect.getInstance().getContentResolver().query(FormsColumns.CONTENT_URI, null, selection, selectionArgs, null);
         forms = formsDao.getFormsFromCursor(cursor);
         assertEquals(1, forms.size());
 
