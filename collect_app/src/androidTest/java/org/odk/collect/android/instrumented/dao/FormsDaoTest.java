@@ -67,21 +67,6 @@ public class FormsDaoTest {
     }
 
     @Test
-    public void getAllFormsCursorTest() {
-        Cursor cursor = formsDao.getFormsCursor();
-        List<Form> forms = formsDao.getFormsFromCursor(cursor);
-        assertEquals(7, forms.size());
-
-        assertEquals(biggestNOfSetForm, forms.get(0));
-        assertEquals(birdsForm, forms.get(1));
-        assertEquals(miramareForm, forms.get(2));
-        assertEquals(geoTaggerV2Form, forms.get(3));
-        assertEquals(widgetsForm, forms.get(4));
-        assertEquals(sampleForm, forms.get(5));
-        assertEquals(birds2Form, forms.get(6));
-    }
-
-    @Test
     public void getFormsCursorTest() {
         Cursor cursor = Collect.getInstance().getContentResolver().query(FormsColumns.CONTENT_URI, null, null, null, null);
         List<Form> forms = formsDao.getFormsFromCursor(cursor);

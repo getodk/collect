@@ -34,10 +34,6 @@ import java.util.List;
  */
 public class FormsDao {
 
-    public Cursor getFormsCursor() {
-        return Collect.getInstance().getContentResolver().query(FormsColumns.CONTENT_URI, null, null, null, null);
-    }
-
     public Cursor getFormsCursor(String selection, String[] selectionArgs) {
         return Collect.getInstance().getContentResolver().query(FormsColumns.CONTENT_URI, null, selection, selectionArgs, null);
     }
