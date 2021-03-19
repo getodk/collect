@@ -81,6 +81,7 @@ import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.Utilities;     // smap
 import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
+import org.odk.collect.android.widgets.SmapFormWidget;
 
 import javax.inject.Singleton;
 
@@ -160,6 +161,8 @@ public interface AppDependencyComponent {
     void inject(TraceProvider traceProvider);                                   // smap
 
     void inject(NotificationService notificationService);                       // smap
+
+    void inject(SmapFormWidget smapFormWidget);                                 // smap
 
     void inject(InstanceUploaderListActivity activity);
 
