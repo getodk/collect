@@ -42,27 +42,6 @@ public class FormsDao {
         return Collect.getInstance().getContentResolver().query(FormsColumns.CONTENT_URI, null, selection, selectionArgs, null);
     }
 
-    public Cursor getFormsCursorSortedByDateDesc(String formId, String formVersion) {
-        String[] selectionArgs;
-        String selection;
-
-        if (formVersion == null) {
-            selectionArgs = new String[]{formId};
-            selection = FormsColumns.JR_FORM_ID + "=? AND "
-                    + FormsColumns.JR_VERSION + " IS NULL";
-        } else {
-            selectionArgs = new String[]{formId, formVersion};
-            selection = FormsColumns.JR_FORM_ID + "=? AND "
-                    + FormsColumns.JR_VERSION + "=?";
-        }
-
-        // As long as we allow storing multiple forms with the same id and version number, choose
-        // the newest one
-        String order = FormsColumns.DATE + " DESC";
-
-        return Collect.getInstance().getContentResolver().query(FormsColumns.CONTENT_URI, null, selection, selectionArgs, order);
-    }
-
     /**
      * Returns all forms available through the cursor and closes the cursor.
      */

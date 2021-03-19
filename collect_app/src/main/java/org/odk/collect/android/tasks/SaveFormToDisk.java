@@ -40,10 +40,11 @@ import org.json.JSONObject;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.formentry.saving.FormSaver;
+import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -62,6 +63,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -461,15 +463,14 @@ public class SaveFormToDisk {
      * that the instance with the given uri is an instance of.
      */
     private static String getGeometryXpathForInstance(Uri uri) {
-        try (Cursor instanceCursor = Collect.getInstance().getContentResolver().query(
-                uri, new String[]{InstanceColumns.JR_FORM_ID, InstanceColumns.JR_VERSION}, null, null, null)) {
+        try (Cursor instanceCursor = Collect.getInstance().getContentResolver().query(uri, new String[]{InstanceColumns.JR_FORM_ID, InstanceColumns.JR_VERSION}, null, null, null)) {
             if (instanceCursor.moveToFirst()) {
                 String jrFormId = instanceCursor.getString(0);
                 String version = instanceCursor.getString(1);
-                try (Cursor formCursor = new FormsDao().getFormsCursorSortedByDateDesc(jrFormId, version)) {
-                    if (formCursor.moveToFirst()) {
-                        return formCursor.getString(formCursor.getColumnIndex(FormsColumns.GEOMETRY_XPATH));
-                    }
+
+                List<Form> forms = new DatabaseFormsRepository().getAllByFormIdAndVersion(jrFormId, version);
+                if (!forms.isEmpty()) {
+                    return forms.get(0).getGeometryXpath();
                 }
             }
         }
