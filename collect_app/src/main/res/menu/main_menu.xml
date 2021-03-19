@@ -28,16 +28,6 @@ limitations under the License.
         app:showAsAction="never"/>
 
     <item
-        android:id="@+id/menu_general_preferences"
-        android:title="@string/general_preferences"
-        app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/menu_admin_preferences"
-        android:title="@string/admin_preferences"
-        app:showAsAction="never"/>
-
-    <item
         android:id="@+id/menu_configure_qr_code"
         android:title="@string/configure_via_qr_code"
         app:showAsAction="never"/>
