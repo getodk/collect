@@ -193,8 +193,12 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
                         selectionArgs, null, null, ExternalDataUtil.SORT_COLUMN_NAME);
             } catch (Exception e) {
                 Timber.e(TranslationHandler.getString(Collect.getInstance(), R.string.ext_import_csv_missing_error, dataSetName, dataSetName));
-                c = db.query(ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, sqlColumns, selection,
-                        selectionArgs, null, null, null);
+                try {  // smap
+                    c = db.query(ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, sqlColumns, selection,
+                            selectionArgs, null, null, null);
+                } catch (Exception ex) {
+                    // Not sure why we are trying again with no sort
+                }
             }
 
             return createDynamicSelectChoices(c, selectColumnMap, safeImageColumn);
@@ -213,7 +217,7 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
         }
 
         ArrayList<SelectChoice> selectChoices = new ArrayList<>();
-        if (c.getCount() > 0) {
+        if (c!= null && c.getCount() > 0) { // smap add null check
             c.moveToPosition(-1);
             int index = 0;
             Set<String> uniqueValues = new HashSet<>();
