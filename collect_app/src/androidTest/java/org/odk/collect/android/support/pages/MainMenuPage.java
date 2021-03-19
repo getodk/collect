@@ -42,7 +42,13 @@ public class MainMenuPage extends Page<MainMenuPage> {
     public MainMenuPage clickOnMenu() {
         assertOnPage(); // Make sure we've waited for the application load correctly
         Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
-        onView(withText(getTranslatedString(R.string.general_preferences))).check(matches(isDisplayed()));
+        onView(withText(getTranslatedString(R.string.about))).check(matches(isDisplayed()));
+        return this;
+    }
+
+    public MainMenuPage openProjectSettingsDialog() {
+        assertOnPage(); // Make sure we've waited for the application load correctly
+        onView(withId(R.id.projects)).perform(click());
         return this;
     }
 
@@ -148,7 +154,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public MainMenuPage setServer(String url) {
-        return clickOnMenu()
+        return openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickServerSettings()
                 .clickOnURL()
@@ -159,7 +165,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public MainMenuPage enableManualUpdates() {
-        return clickOnMenu()
+        return openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
@@ -169,7 +175,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public MainMenuPage enablePreviouslyDownloadedOnlyUpdates() {
-        return clickOnMenu()
+        return openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
@@ -179,7 +185,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public MainMenuPage enableMatchExactly() {
-        return clickOnMenu()
+        return openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
@@ -189,7 +195,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public MainMenuPage enableAutoSend() {
-        return clickOnMenu()
+        return openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .clickOnString(R.string.autosend)
@@ -204,7 +210,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
         Instrumentation.ActivityResult activityResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, data);
         intending(hasAction("PICK_GOOGLE_ACCOUNT")).respondWith(activityResult);
 
-        return clickOnMenu()
+        return openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickServerSettings()
                 .clickOnServerType()

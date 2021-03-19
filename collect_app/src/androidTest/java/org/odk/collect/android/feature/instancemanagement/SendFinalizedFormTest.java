@@ -33,7 +33,7 @@ public class SendFinalizedFormTest {
         rule.mainMenu()
                 .setServer(testDependencies.server.getURL())
 
-                .clickOnMenu()
+                .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .scrollToRecyclerViewItemAndClickText(R.string.delete_after_send)

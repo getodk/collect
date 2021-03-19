@@ -46,7 +46,7 @@ public class CustomServerPathsTest {
         server.addForm("Custom path form", "one-question", "1", "one-question.xml");
 
         new MainMenuPage(rule)
-                .clickOnMenu()
+                .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickServerSettings()
                 .clickOnURL()
@@ -74,7 +74,7 @@ public class CustomServerPathsTest {
                 .swipeToEndScreen()
                 .clickSaveAndExit()
 
-                .clickOnMenu()
+                .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickServerSettings()
                 .clickOnURL()

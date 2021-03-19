@@ -103,7 +103,7 @@ public class ConfigureWithQRCodeTest {
 
         new MainMenuPage(rule)
                 .assertOnPage()
-                .clickOnMenu()
+                .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickServerSettings()
                 .assertText("http://gallops.example");
@@ -124,7 +124,7 @@ public class ConfigureWithQRCodeTest {
     @Test
     public void whenThereIsAnAdminPassword_canRemoveFromQRCode() {
         rule.mainMenu()
-                .clickOnMenu()
+                .openProjectSettingsDialog()
                 .clickAdminSettings()
                 .clickOnString(R.string.admin_password)
                 .inputText("blah")
@@ -143,7 +143,7 @@ public class ConfigureWithQRCodeTest {
     @Test
     public void whenThereIsAServerPassword_canRemoveFromQRCode() {
         rule.mainMenu()
-                .clickOnMenu()
+                .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickServerSettings()
                 .clickServerPassword()

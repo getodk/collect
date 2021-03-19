@@ -149,7 +149,7 @@ public class FillBlankFormTest {
     public void sortByDialog_ShouldBeTranslatedAndDisplayProperIcons() {
         //TestCase37
         rule.mainMenu()
-                .clickOnMenu()
+                .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickOnUserInterface()
                 .clickOnLanguage()
@@ -193,7 +193,7 @@ public class FillBlankFormTest {
         pressBack();
 
         new MainMenuPage(rule)
-                .clickOnMenu()
+                .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickOnUserInterface()
                 .clickOnLanguage()

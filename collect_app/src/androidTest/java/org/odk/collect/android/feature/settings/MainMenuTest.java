@@ -30,7 +30,7 @@ public class MainMenuTest {
     @Test
     public void configureWithQRCanBeDisabled() {
         new MainMenuPage(rule)
-                .clickOnMenu()
+                .openProjectSettingsDialog()
                 .clickAdminSettings()
                 .clickOnString(R.string.main_menu_settings)
                 .clickOnString(R.string.qr_code)
