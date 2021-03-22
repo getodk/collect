@@ -23,6 +23,8 @@ public interface FormsRepository {
 
     List<Form> getAllByFormIdAndVersion(String formId, @Nullable String version);
 
+    List<Form> getAllByFormId(String formId);
+
     List<Form> getAllNotDeletedByFormId(String formId);
 
     List<Form> getAllNotDeletedByFormIdAndVersion(String formId, @Nullable String version);

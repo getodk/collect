@@ -79,6 +79,11 @@ public class InMemFormsRepository implements FormsRepository {
     }
 
     @Override
+    public List<Form> getAllByFormId(String formId) {
+        return forms.stream().filter(f -> f.getJrFormId().equals(formId)).collect(toList());
+    }
+
+    @Override
     public List<Form> getAllNotDeletedByFormId(String jrFormId) {
         return forms.stream().filter(f -> f.getJrFormId().equals(jrFormId) && !f.isDeleted()).collect(toList());
     }

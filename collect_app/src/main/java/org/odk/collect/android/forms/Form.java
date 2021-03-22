@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 
 /**
  * A form definition stored on the device.
- *
+ * <p>
  * Objects of this class are created using the builder pattern: https://en.wikipedia.org/wiki/Builder_pattern
  */
 public final class Form {
@@ -274,5 +274,13 @@ public final class Form {
     @Override
     public int hashCode() {
         return md5Hash.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Form{" +
+                "jrFormId='" + jrFormId + '\'' +
+                "jrVersion='" + jrVersion + '\'' +
+                '}';
     }
 }

@@ -91,6 +91,11 @@ public class DatabaseFormsRepository implements FormsRepository {
     }
 
     @Override
+    public List<Form> getAllByFormId(String formId) {
+        return queryForForms(JR_FORM_ID + "=?", new String[]{formId});
+    }
+
+    @Override
     public List<Form> getAllNotDeletedByFormId(String jrFormId) {
         return queryForForms(JR_FORM_ID + "=? AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId});
     }

@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -276,5 +277,17 @@ public abstract class FormsRepositoryTest {
         formsRepository.save(form2);
 
         assertThat(formsRepository.getOneByPath(form2.getFormFilePath()).getJrFormId(), is("id2"));
+    }
+
+    @Test
+    public void getAllFormId_returnsMatchingForms() {
+        FormsRepository formsRepository = buildSubject();
+        Form form1 = formsRepository.save(buildForm("id1", "version", getFormFilesPath()).build());
+        Form form2 = formsRepository.save(buildForm("id1", "other_version", getFormFilesPath()).build());
+        formsRepository.save(buildForm("id2", "version", getFormFilesPath()).build());
+
+        List<Form> forms = formsRepository.getAllByFormId("id1");
+        assertThat(forms.size(), is(2));
+        assertThat(forms, contains(form1, form2));
     }
 }
