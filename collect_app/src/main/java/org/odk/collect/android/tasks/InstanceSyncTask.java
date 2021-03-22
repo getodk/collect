@@ -119,7 +119,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 List<Instance> instances = new DatabaseInstancesRepository().getAllNotDeleted();
 
                 for (Instance instance : instances) {
-                    String instanceFilename = storagePathProvider.getAbsoluteInstanceFilePath(instance.getInstanceFilePath());
+                    String instanceFilename = instance.getInstanceFilePath();
 
                     if (candidateInstances.contains(instanceFilename) || instance.getStatus().equals(Instance.STATUS_SUBMITTED)) {
                         candidateInstances.remove(instanceFilename);
@@ -153,7 +153,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                                 String submissionUri = form.getSubmissionUri();
 
                                 Instance instance = new DatabaseInstancesRepository().save(new Instance.Builder()
-                                        .instanceFilePath(storagePathProvider.getRelativeInstancePath(candidateInstance))
+                                        .instanceFilePath(candidateInstance)
                                         .submissionUri(submissionUri)
                                         .displayName(formName)
                                         .jrFormId(jrFormId)
@@ -228,7 +228,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
     private void encryptInstance(Instance instance)
             throws EncryptionException, IOException {
 
-        String instancePath = storagePathProvider.getAbsoluteInstanceFilePath(instance.getInstanceFilePath());
+        String instancePath = instance.getInstanceFilePath();
         File instanceXml = new File(instancePath);
         if (!new File(instanceXml.getParentFile(), "submission.xml.enc").exists()) {
             Uri uri = Uri.parse(InstanceColumns.CONTENT_URI + "/" + instance.getId());

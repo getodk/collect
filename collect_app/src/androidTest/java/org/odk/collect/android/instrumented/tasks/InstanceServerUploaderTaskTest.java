@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.openrosa.OpenRosaConstants;
-import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.MockedServerTest;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
@@ -86,7 +85,7 @@ public class InstanceServerUploaderTaskTest extends MockedServerTest {
 
         Instance i = new Instance.Builder()
                 .displayName("Test Form")
-                .instanceFilePath(new StoragePathProvider().getRelativeInstancePath(xml.getPath()))
+                .instanceFilePath(xml.getPath())
                 .jrFormId("test_form")
                 .status(Instance.STATUS_COMPLETE)
                 .lastStatusChangeDate(123L)

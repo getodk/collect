@@ -222,7 +222,7 @@ public class SaveFormToDisk {
                 }
 
                 // add missing fields into values
-                instanceBuilder.instanceFilePath(new StoragePathProvider().getRelativeInstancePath(instancePath));
+                instanceBuilder.instanceFilePath(instancePath);
                 instanceBuilder.submissionUri(submissionUri);
                 if (instanceName != null) {
                     instanceBuilder.displayName(instanceName);

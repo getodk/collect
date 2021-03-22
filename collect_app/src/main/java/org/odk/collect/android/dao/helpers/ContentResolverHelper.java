@@ -24,7 +24,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.logic.FormInfo;
-import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.io.File;
 import java.net.FileNameMap;
@@ -39,7 +38,7 @@ public final class ContentResolverHelper {
     public static FormInfo getFormDetails(Uri uri) {
         Instance instance = new DatabaseInstancesRepository().get(Long.parseLong(uri.getPathSegments().get(1)));
         if (instance != null) {
-            String instanceFilePath = new StoragePathProvider().getAbsoluteInstanceFilePath(instance.getInstanceFilePath());
+            String instanceFilePath = instance.getInstanceFilePath();
             return new FormInfo(instanceFilePath, instance.getJrFormId(), instance.getJrVersion());
         } else {
             return null;

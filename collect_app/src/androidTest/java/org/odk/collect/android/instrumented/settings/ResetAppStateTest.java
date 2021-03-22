@@ -169,7 +169,7 @@ public class ResetAppStateTest {
 
     private void setupTestInstancesDatabase() {
         new DatabaseInstancesRepository().save(new Instance.Builder()
-                .instanceFilePath(storagePathProvider.getRelativeInstancePath("testDir1/testFile1"))
+                .instanceFilePath("testDir1/testFile1")
                 .submissionUri("submissionUri")
                 .displayName("formName")
                 .jrFormId("jrformid")

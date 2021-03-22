@@ -166,7 +166,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
         values.put(InstanceColumns.DISPLAY_NAME, instance.getDisplayName());
         values.put(InstanceColumns.SUBMISSION_URI, instance.getSubmissionUri());
         values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(instance.canEditWhenComplete()));
-        values.put(InstanceColumns.INSTANCE_FILE_PATH, instance.getInstanceFilePath());
+        values.put(InstanceColumns.INSTANCE_FILE_PATH, new StoragePathProvider().getRelativeInstancePath(instance.getInstanceFilePath()));
         values.put(InstanceColumns.JR_FORM_ID, instance.getJrFormId());
         values.put(InstanceColumns.JR_VERSION, instance.getJrVersion());
         values.put(InstanceColumns.STATUS, instance.getStatus());
@@ -201,7 +201,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
                             .displayName(cursor.getString(displayNameColumnIndex))
                             .submissionUri(cursor.getString(submissionUriColumnIndex))
                             .canEditWhenComplete(Boolean.valueOf(cursor.getString(canEditWhenCompleteIndex)))
-                            .instanceFilePath(cursor.getString(instanceFilePathIndex))
+                            .instanceFilePath(new StoragePathProvider().getAbsoluteInstanceFilePath(cursor.getString(instanceFilePathIndex)))
                             .jrFormId(cursor.getString(jrFormIdColumnIndex))
                             .jrVersion(cursor.getString(jrVersionColumnIndex))
                             .status(cursor.getString(statusColumnIndex))
