@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_marginTop="@dimen/margin"
+        android:layout_marginTop="@dimen/margin_standard"
         android:text="@string/general_preferences"
         android:textColor="@color/deep_purple_500"
         app:layout_constraintStart_toStartOf="parent"

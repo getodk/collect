@@ -1,5 +1,6 @@
 package org.odk.collect.android.project
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -24,8 +25,12 @@ class ProjectSettingsDialog : DialogFragment() {
     @Inject
     lateinit var adminPasswordProvider: AdminPasswordProvider
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         return inflater.inflate(R.layout.project_settings_dialog_layout, container, false)
     }
