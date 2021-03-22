@@ -72,6 +72,7 @@ import org.odk.collect.android.audio.M4AAppender;
 import org.odk.collect.android.backgroundwork.FormSubmitManager;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
+import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
@@ -112,6 +113,7 @@ import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.FormController.FailedConstraint;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
@@ -120,7 +122,6 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.listeners.SwipeHandler;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.permissions.PermissionsChecker;
@@ -590,22 +591,22 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             formPath = intent.getStringExtra(EXTRA_TESTING_PATH);
 
         } else if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
-            FormInfo formInfo = ContentResolverHelper.getFormDetails(uri);
+            Instance instance = new DatabaseInstancesRepository().get(ContentResolverHelper.getIdFromUri(uri));
 
-            if (formInfo == null) {
+            if (instance == null) {
                 createErrorDialog(getString(R.string.bad_uri, uri), true);
                 return;
             }
 
-            instancePath = formInfo.getInstancePath();
-            List<Form> candidateForms = formsRepository.getAllByFormIdAndVersion(formInfo.getFormId(), formInfo.getFormVersion());
+            instancePath = instance.getInstanceFilePath();
+            List<Form> candidateForms = formsRepository.getAllByFormIdAndVersion(instance.getJrFormId(), instance.getJrVersion());
 
             if (candidateForms.isEmpty()) {
                 createErrorDialog(getString(
                         R.string.parent_form_not_present,
-                        formInfo.getFormId())
-                                + ((formInfo.getFormVersion() == null) ? ""
-                                : "\n" + getString(R.string.version) + " " + formInfo.getFormVersion()),
+                        instance.getJrFormId())
+                                + ((instance.getJrVersion() == null) ? ""
+                                : "\n" + getString(R.string.version) + " " + instance.getJrVersion()),
                         true);
                 return;
             } else if (candidateForms.stream().filter(f -> !f.isDeleted()).count() > 1) {
@@ -617,7 +618,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         } else if (uriMimeType != null
                 && uriMimeType.equals(FormsColumns.CONTENT_ITEM_TYPE)) {
 
-            Form form = formsRepository.get(Long.parseLong(uri.getPathSegments().get(1)));
+            Form form = formsRepository.get(ContentResolverHelper.getIdFromUri(uri));
             if (form != null) {
                 formPath = form.getFormFilePath();
             }
