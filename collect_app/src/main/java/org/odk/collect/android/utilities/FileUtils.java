@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.webkit.MimeTypeMap;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.Constants;
@@ -42,6 +43,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
+import java.net.FileNameMap;
+import java.net.URLConnection;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
@@ -589,6 +592,22 @@ public class FileUtils {
     /** Iterates over all directories and files under a root path. */
     public static Iterable<File> walk(File root) {
         return () -> new Walker(root, true);
+    }
+
+    public static String getMimeType(File file) {
+        String extension = MimeTypeMap.getFileExtensionFromUrl(file.getAbsolutePath());
+        String mimeType = extension != null ? MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension) : null;
+
+        if (mimeType == null || mimeType.isEmpty()) {
+            FileNameMap fileNameMap = URLConnection.getFileNameMap();
+            mimeType = fileNameMap.getContentTypeFor(file.getAbsolutePath());
+        }
+
+        if (mimeType == null || mimeType.isEmpty()) {
+            mimeType = URLConnection.guessContentTypeFromName(file.getName());
+        }
+
+        return mimeType;
     }
 
     /** An iterator that walks over all the directories and files under a given path. */

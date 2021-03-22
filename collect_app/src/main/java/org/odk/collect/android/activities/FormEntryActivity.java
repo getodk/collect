@@ -70,7 +70,7 @@ import org.odk.collect.android.audio.AMRAppender;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.audio.M4AAppender;
 import org.odk.collect.android.backgroundwork.FormSubmitManager;
-import org.odk.collect.android.dao.helpers.ContentResolverHelper;
+import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
@@ -591,7 +591,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             formPath = intent.getStringExtra(EXTRA_TESTING_PATH);
 
         } else if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
-            Instance instance = new DatabaseInstancesRepository().get(ContentResolverHelper.getIdFromUri(uri));
+            Instance instance = new DatabaseInstancesRepository().get(ContentUriHelper.getIdFromUri(uri));
 
             if (instance == null) {
                 createErrorDialog(getString(R.string.bad_uri, uri), true);
@@ -618,7 +618,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         } else if (uriMimeType != null
                 && uriMimeType.equals(FormsColumns.CONTENT_ITEM_TYPE)) {
 
-            Form form = formsRepository.get(ContentResolverHelper.getIdFromUri(uri));
+            Form form = formsRepository.get(ContentUriHelper.getIdFromUri(uri));
             if (form != null) {
                 formPath = form.getFormFilePath();
             }

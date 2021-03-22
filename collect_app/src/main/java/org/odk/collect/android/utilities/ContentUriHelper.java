@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.dao.helpers;
+package org.odk.collect.android.utilities;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
@@ -22,13 +22,9 @@ import android.webkit.MimeTypeMap;
 
 import org.odk.collect.android.application.Collect;
 
-import java.io.File;
-import java.net.FileNameMap;
-import java.net.URLConnection;
+public final class ContentUriHelper {
 
-public final class ContentResolverHelper {
-
-    private ContentResolverHelper() {
+    private ContentUriHelper() {
 
     }
 
@@ -60,19 +56,4 @@ public final class ContentResolverHelper {
         return extension;
     }
 
-    public static String getMimeType(File file) {
-        String extension = MimeTypeMap.getFileExtensionFromUrl(file.getAbsolutePath());
-        String mimeType = extension != null ? MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension) : null;
-
-        if (mimeType == null || mimeType.isEmpty()) {
-            FileNameMap fileNameMap = URLConnection.getFileNameMap();
-            mimeType = fileNameMap.getContentTypeFor(file.getAbsolutePath());
-        }
-
-        if (mimeType == null || mimeType.isEmpty()) {
-            mimeType = URLConnection.guessContentTypeFromName(file.getName());
-        }
-
-        return mimeType;
-    }
 }

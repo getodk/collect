@@ -21,7 +21,6 @@ import android.net.Uri;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 
 import java.io.File;
 
@@ -50,7 +49,7 @@ public class MediaUtils {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         if (mimeType == null || mimeType.isEmpty()) {
-            mimeType = ContentResolverHelper.getMimeType(file);
+            mimeType = FileUtils.getMimeType(file);
         }
         intent.setDataAndType(contentUri, mimeType);
         FileUtils.grantFileReadPermissions(intent, contentUri, context);
@@ -72,14 +71,14 @@ public class MediaUtils {
     }
 
     public boolean isVideoFile(File file) {
-        return ContentResolverHelper.getMimeType(file).startsWith("video");
+        return FileUtils.getMimeType(file).startsWith("video");
     }
 
     public boolean isImageFile(File file) {
-        return ContentResolverHelper.getMimeType(file).startsWith("image");
+        return FileUtils.getMimeType(file).startsWith("image");
     }
 
     public boolean isAudioFile(File file) {
-        return ContentResolverHelper.getMimeType(file).startsWith("audio");
+        return FileUtils.getMimeType(file).startsWith("audio");
     }
 }

@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment;
 
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.helpers.ContentResolverHelper;
+import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -47,7 +47,7 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
         if (formController != null) {
             File instanceFile = formController.getInstanceFile();
             if (instanceFile != null) {
-                String extension = ContentResolverHelper.getFileExtensionFromUri(uris[0]);
+                String extension = ContentUriHelper.getFileExtensionFromUri(uris[0]);
 
                 File newFile = FileUtils.createDestinationMediaFile(instanceFile.getParent(), extension);
                 FileUtils.saveAnswerFileFromUri(uris[0], newFile, Collect.getInstance());
