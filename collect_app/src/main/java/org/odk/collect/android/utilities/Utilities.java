@@ -211,7 +211,7 @@ public class Utilities {
             values.put(InstanceColumns.FORM_PATH, entry.taskForm);
             values.put(InstanceColumns.JR_FORM_ID, entry.jrFormId);
             values.put(InstanceColumns.JR_VERSION, entry.formVersion);
-            values.put(InstanceColumns.INSTANCE_FILE_PATH, newInstancePath);    // Set the new path
+            values.put(InstanceColumns.INSTANCE_FILE_PATH, new StoragePathProvider().getInstanceDbPath(newInstancePath));    // Set the new path
             values.put(InstanceColumns.SCHED_LON, entry.schedLon);
             values.put(InstanceColumns.SCHED_LAT, entry.schedLat);
             values.put(InstanceColumns.SOURCE, entry.source);

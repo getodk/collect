@@ -39,6 +39,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.taskModel.FormLaunchDetail;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ManageForm;
@@ -52,6 +53,7 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
+import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 
 /**
  * Launch another form
@@ -85,6 +87,7 @@ public class SmapFormWidget extends QuestionWidget implements WidgetDataReceiver
     public SmapFormWidget(Context context, QuestionDetails questionDetails, String appearance, boolean readOnlyOverride) {
 
         super(context, questionDetails);
+        getComponent(context).inject(this);
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
@@ -271,7 +274,7 @@ public class SmapFormWidget extends QuestionWidget implements WidgetDataReceiver
         FormIndex formIndex = Collect.getInstance().getFormController().getFormIndex();
 
         String title = (String) mFormEntryActivity.getTitle();
-        Collect.getInstance().pushToFormStack(new FormLaunchDetail(instancePath, formIndex, title));
+        Collect.getInstance().pushToFormStack(new FormLaunchDetail(new StoragePathProvider().getInstanceDbPath(instancePath), formIndex, title));
 
         // 2. Set form details to be launched in collect app
         Collect.getInstance().pushToFormStack(new FormLaunchDetail(mfd.id, mfd.formName, initialData));

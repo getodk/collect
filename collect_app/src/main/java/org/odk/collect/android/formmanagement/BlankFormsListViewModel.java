@@ -120,7 +120,7 @@ public class BlankFormsListViewModel extends ViewModel {
         Uri uri = Uri.parse(preferencesProvider.getGeneralSharedPreferences().getString(GeneralKeys.KEY_SERVER_URL, ""));
         String host = uri.getHost() != null ? uri.getHost() : "";
         String urlHash = FileUtils.getMd5Hash(new ByteArrayInputStream(host.getBytes()));
-        //analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC, "Manual", urlHash);  // smap
+        analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC, "Manual", urlHash);
     }
 
     public static class Factory implements ViewModelProvider.Factory {

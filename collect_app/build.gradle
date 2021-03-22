@@ -159,7 +159,7 @@ android {
 
             debuggable(true)
             testCoverageEnabled((findProperty("enableJacoco") ?: "false").toBoolean())
-            resValue("bool", "CRASHLYTICS_ENABLED", "false")
+            resValue("bool", "CRASHLYTICS_ENABLED", "true")
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
         }

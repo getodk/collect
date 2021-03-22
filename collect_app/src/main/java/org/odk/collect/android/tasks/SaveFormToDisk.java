@@ -501,7 +501,7 @@ public class SaveFormToDisk {
                 EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
                 isEncrypted = true;
 
-                //analytics.logEvent(ENCRYPT_SUBMISSION, Collect.getCurrentFormIdentifierHash(), "");  // smap
+                analytics.logEvent(ENCRYPT_SUBMISSION, Collect.getCurrentFormIdentifierHash(), "");
             }
 
             // At this point, we have:

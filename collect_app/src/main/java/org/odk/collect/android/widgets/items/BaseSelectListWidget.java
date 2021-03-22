@@ -99,7 +99,7 @@ public abstract class BaseSelectListWidget extends ItemsWidget implements MultiC
                 String audioURI = getPlayableAudioURI(questionDetails.getPrompt(), choice, getReferenceManager());
 
                 if (audioURI != null) {
-                    //analytics.logEvent(PROMPT, "AudioChoice", questionDetails.getFormAnalyticsID());  // prompt
+                    analytics.logEvent(PROMPT, "AudioChoice", questionDetails.getFormAnalyticsID());
                     break;
                 }
             }

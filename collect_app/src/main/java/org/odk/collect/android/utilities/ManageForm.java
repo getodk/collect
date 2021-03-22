@@ -347,7 +347,7 @@ public class ManageForm {
     	values.put(InstanceColumns.SOURCE, Utilities.getSource());
     	values.put(InstanceColumns.JR_VERSION, jrVersion);
     	values.put(InstanceColumns.SUBMISSION_URI, submissionUri);
-    	values.put(InstanceColumns.INSTANCE_FILE_PATH, instancePath);
+    	values.put(InstanceColumns.INSTANCE_FILE_PATH, new StoragePathProvider().getInstanceDbPath(instancePath));
     	values.put(InstanceColumns.DISPLAY_NAME, formName);
     	values.put(InstanceColumns.STATUS, Instance.STATUS_INCOMPLETE);
 

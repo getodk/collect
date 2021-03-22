@@ -37,11 +37,11 @@ public class LegacySettingsFileImporter {
                 String settingsHash = FileUtils.getMd5Hash(new ByteArrayInputStream(settings.getBytes()));
 
                 if (settingsImporter.fromJSON(settings)) {
-                    //analytics.logEvent(type, "Success", settingsHash);  // smap
+                    analytics.logEvent(type, "Success", settingsHash);
                     return true;
                 } else {
                     ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
-                    //analytics.logEvent(type, "Corrupt", settingsHash);  // smap
+                    analytics.logEvent(type, "Corrupt", settingsHash);
                     return false;
                 }
             } else {
@@ -52,7 +52,7 @@ public class LegacySettingsFileImporter {
 
             String type = new File(storagePathProvider.getStorageRootDirPath() + "/collect.settings.json").exists()
                     ? SETTINGS_IMPORT_JSON : SETTINGS_IMPORT_SERIALIZED;
-            //analytics.logEvent(type, "Corrupt exception", "none");   // smap
+            analytics.logEvent(type, "Corrupt exception", "none");
             return false;
         } finally {
             legacySettingsFileReader.delete();
