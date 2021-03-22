@@ -22,7 +22,6 @@ import android.webkit.MimeTypeMap;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormInfo;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 
@@ -59,17 +58,6 @@ public final class ContentResolverHelper {
             }
         }
         return formInfo;
-    }
-
-    public static String getFormPath(Uri uri) {
-        String formPath = null;
-        try (Cursor c = Collect.getInstance().getContentResolver().query(uri, null, null, null, null)) {
-            if (c != null && c.getCount() == 1) {
-                c.moveToFirst();
-                formPath = new StoragePathProvider().getAbsoluteFormFilePath(c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
-            }
-        }
-        return formPath;
     }
 
     public static String getFileExtensionFromUri(Uri fileUri) {

@@ -616,7 +616,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             formPath = candidateForms.get(0).getFormFilePath();
         } else if (uriMimeType != null
                 && uriMimeType.equals(FormsColumns.CONTENT_ITEM_TYPE)) {
-            formPath = ContentResolverHelper.getFormPath(uri);
+
+            Form form = formsRepository.get(Long.parseLong(uri.getPathSegments().get(1)));
+            if (form != null) {
+                formPath = form.getFormFilePath();
+            }
+            
             if (formPath == null) {
                 createErrorDialog(getString(R.string.bad_uri, uri), true);
                 return;
