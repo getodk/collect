@@ -112,7 +112,7 @@ public class DatabaseFormsRepository implements FormsRepository {
 
     @Override
     public Form save(@NotNull Form form) {
-        final ContentValues values = getValuesFromFormObject(form);
+        final ContentValues values = getValuesFromFormObject(form, storagePathProvider);
 
         if (form.isDeleted()) {
             values.put(DELETED_DATE, 0L);
@@ -124,7 +124,7 @@ public class DatabaseFormsRepository implements FormsRepository {
             Uri uri = Collect.getInstance().getContentResolver().insert(CONTENT_URI, values);
 
             try (Cursor cursor = Collect.getInstance().getContentResolver().query(uri, null, null, null, null)) {
-                return getFormsFromCursor(cursor).get(0);
+                return getFormsFromCursor(cursor, storagePathProvider).get(0);
             }
         } else {
             Collect.getInstance().getContentResolver().update(CONTENT_URI, values, _ID + "=?", new String[]{form.getId().toString()});
@@ -175,17 +175,17 @@ public class DatabaseFormsRepository implements FormsRepository {
 
     private List<Form> queryForForms(String selection, String[] selectionArgs) {
         try (Cursor cursor = Collect.getInstance().getContentResolver().query(CONTENT_URI, null, selection, selectionArgs, null)) {
-            return getFormsFromCursor(cursor);
+            return getFormsFromCursor(cursor, storagePathProvider);
         }
     }
 
     @NotNull
-    private List<Form> getFormsFromCursor(Cursor cursor) {
+    public static List<Form> getFormsFromCursor(Cursor cursor, StoragePathProvider storagePathProvider) {
         List<Form> forms = new ArrayList<>();
         if (cursor != null) {
             cursor.moveToPosition(-1);
             while (cursor.moveToNext()) {
-                Form form = getFormFromCurrentCursorPosition(cursor);
+                Form form = getFormFromCurrentCursorPosition(cursor, storagePathProvider);
 
                 forms.add(form);
             }
@@ -194,7 +194,7 @@ public class DatabaseFormsRepository implements FormsRepository {
         return forms;
     }
 
-    private Form getFormFromCurrentCursorPosition(Cursor cursor) {
+    private static Form getFormFromCurrentCursorPosition(Cursor cursor, StoragePathProvider storagePathProvider) {
         int idColumnIndex = cursor.getColumnIndex(_ID);
         int displayNameColumnIndex = cursor.getColumnIndex(DISPLAY_NAME);
         int descriptionColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.DESCRIPTION);
@@ -234,7 +234,7 @@ public class DatabaseFormsRepository implements FormsRepository {
                 .build();
     }
 
-    private ContentValues getValuesFromFormObject(Form form) {
+    private static ContentValues getValuesFromFormObject(Form form, StoragePathProvider storagePathProvider) {
         ContentValues values = new ContentValues();
         values.put(FormsProviderAPI.FormsColumns.DISPLAY_NAME, form.getDisplayName());
         values.put(FormsProviderAPI.FormsColumns.DESCRIPTION, form.getDescription());

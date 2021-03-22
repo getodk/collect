@@ -28,13 +28,13 @@ import org.kxml2.kdom.Element;
 import org.kxml2.kdom.Node;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.javarosawrapper.FormController.InstanceMetadata;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -302,7 +302,7 @@ public class EncryptionUtils {
                 throw new EncryptionException(msg, null);
             }
 
-            form = FormsDao.getFormsFromCursor(cursor).get(0);
+            form = DatabaseFormsRepository.getFormsFromCursor(cursor, new StoragePathProvider()).get(0);
         }
 
         formId = form.getJrFormId();
