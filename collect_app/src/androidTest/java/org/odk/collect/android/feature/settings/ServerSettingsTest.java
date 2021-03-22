@@ -35,7 +35,7 @@ public class ServerSettingsTest {
         testDependencies.server.addForm("One Question", "one-question", "1", "one-question.xml");
 
         new MainMenuPage(rule).assertOnPage()
-                .clickOnMenu()
+                .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickServerSettings()
                 .clickOnURL()
@@ -68,7 +68,7 @@ public class ServerSettingsTest {
     @Test
     public void selectingGoogleAccount_showsGoogleAccountSettings() {
         new MainMenuPage(rule).assertOnPage()
-                .clickOnMenu()
+                .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickServerSettings()
                 .clickOnServerType()

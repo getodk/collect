@@ -58,7 +58,7 @@ public class NavigationButtonsTest {
     @Test
     public void whenNavigatingBackwardsIsDisabled_showsAndHidesButtonsCorrectlyOnEachScreen() {
         rule.mainMenu()
-                .clickOnMenu()
+                .openProjectSettingsDialog()
                 .clickAdminSettings()
                 .clickFormEntrySettings()
                 .clickMovingBackwards()
@@ -84,7 +84,7 @@ public class NavigationButtonsTest {
     @Test
     public void whenButtonsDisabled_buttonsNotShown() {
         rule.mainMenu()
-                .clickOnMenu()
+                .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickOnUserInterface()
                 .clickNavigation()
