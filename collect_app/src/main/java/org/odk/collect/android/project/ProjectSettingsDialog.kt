@@ -50,8 +50,4 @@ class ProjectSettingsDialog : DialogFragment() {
             dismiss()
         }
     }
-
-    companion object {
-        const val TAG = "ProjectSettingsDialog"
-    }
 }

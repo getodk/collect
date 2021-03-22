@@ -47,6 +47,7 @@ import org.odk.collect.android.project.ProjectSettingsDialog;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -243,7 +244,7 @@ public class MainMenuActivity extends CollectAbstractActivity
 
         switch (item.getItemId()) {
             case R.id.projects:
-                new ProjectSettingsDialog().show(getSupportFragmentManager(), ProjectSettingsDialog.TAG);
+                DialogUtils.showIfNotShowing(ProjectSettingsDialog.class, getSupportFragmentManager());
                 return true;
             case R.id.menu_configure_qr_code:
                 if (adminPasswordProvider.isAdminPasswordSet()) {
