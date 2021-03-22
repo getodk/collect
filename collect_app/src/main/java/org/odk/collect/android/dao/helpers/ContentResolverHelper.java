@@ -21,8 +21,9 @@ import android.provider.MediaStore;
 import android.webkit.MimeTypeMap;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.DatabaseInstancesRepository;
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.logic.FormInfo;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.io.File;
@@ -36,28 +37,13 @@ public final class ContentResolverHelper {
     }
 
     public static FormInfo getFormDetails(Uri uri) {
-        FormInfo formInfo = null;
-
-        try (Cursor instanceCursor = Collect.getInstance().getContentResolver().query(uri, null, null, null, null)) {
-            if (instanceCursor != null && instanceCursor.getCount() > 0) {
-                instanceCursor.moveToFirst();
-                String instancePath = new StoragePathProvider().getAbsoluteInstanceFilePath(instanceCursor
-                        .getString(instanceCursor
-                                .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
-
-                String jrFormId = instanceCursor
-                        .getString(instanceCursor
-                                .getColumnIndex(InstanceColumns.JR_FORM_ID));
-                int idxJrVersion = instanceCursor
-                        .getColumnIndex(InstanceColumns.JR_VERSION);
-
-                String jrVersion = instanceCursor.isNull(idxJrVersion) ? null
-                        : instanceCursor
-                        .getString(idxJrVersion);
-                formInfo = new FormInfo(instancePath, jrFormId, jrVersion);
-            }
+        Instance instance = new DatabaseInstancesRepository().get(Long.parseLong(uri.getPathSegments().get(1)));
+        if (instance != null) {
+            String instanceFilePath = new StoragePathProvider().getAbsoluteInstanceFilePath(instance.getInstanceFilePath());
+            return new FormInfo(instanceFilePath, instance.getJrFormId(), instance.getJrVersion());
+        } else {
+            return null;
         }
-        return formInfo;
     }
 
     public static String getFileExtensionFromUri(Uri fileUri) {
