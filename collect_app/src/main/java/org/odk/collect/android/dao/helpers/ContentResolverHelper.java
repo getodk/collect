@@ -36,14 +36,10 @@ public final class ContentResolverHelper {
 
     }
 
-    private static ContentResolver getContentResolver() {
-        return Collect.getInstance().getContentResolver();
-    }
-
     public static FormInfo getFormDetails(Uri uri) {
         FormInfo formInfo = null;
 
-        try (Cursor instanceCursor = getContentResolver().query(uri, null, null, null, null)) {
+        try (Cursor instanceCursor = Collect.getInstance().getContentResolver().query(uri, null, null, null, null)) {
             if (instanceCursor != null && instanceCursor.getCount() > 0) {
                 instanceCursor.moveToFirst();
                 String instancePath = new StoragePathProvider().getAbsoluteInstanceFilePath(instanceCursor
@@ -67,7 +63,7 @@ public final class ContentResolverHelper {
 
     public static String getFormPath(Uri uri) {
         String formPath = null;
-        try (Cursor c = getContentResolver().query(uri, null, null, null, null)) {
+        try (Cursor c = Collect.getInstance().getContentResolver().query(uri, null, null, null, null)) {
             if (c != null && c.getCount() == 1) {
                 c.moveToFirst();
                 formPath = new StoragePathProvider().getAbsoluteFormFilePath(c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH)));
@@ -77,14 +73,14 @@ public final class ContentResolverHelper {
     }
 
     public static String getFileExtensionFromUri(Uri fileUri) {
-        String mimeType = getContentResolver().getType(fileUri);
+        String mimeType = Collect.getInstance().getContentResolver().getType(fileUri);
 
         String extension = fileUri.getScheme() != null && fileUri.getScheme().equals(ContentResolver.SCHEME_CONTENT)
                 ? MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
                 : MimeTypeMap.getFileExtensionFromUrl(fileUri.toString());
 
         if (extension == null || extension.isEmpty()) {
-            try (Cursor cursor = getContentResolver().query(fileUri, null, null, null, null)) {
+            try (Cursor cursor = Collect.getInstance().getContentResolver().query(fileUri, null, null, null, null)) {
                 String name = null;
                 if (cursor != null && cursor.moveToFirst()) {
                     name = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME));
