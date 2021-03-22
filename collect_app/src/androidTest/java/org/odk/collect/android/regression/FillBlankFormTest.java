@@ -13,7 +13,6 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.ActivityHelpers;
@@ -504,20 +503,6 @@ public class FillBlankFormTest {
                 .assertText("b, d")
                 .clickJumpEndButton()
                 .clickGoToArrow();
-    }
-
-    @Test
-    public void encryptedFormWithNoInstanceId_shouldNotBeFinalized() {
-        //TestCase47
-        rule.mainMenu()
-                .copyForm("Birds-encrypted.xml")
-                .startBlankForm("Birds")
-                .clickGoToArrow()
-                .clickJumpEndButton()
-                .clickSaveAndExit()
-                .checkIsToastWithMessageDisplayed("This form does not specify an instanceID. You must specify one to enable encryption. Form has not been saved as finalized.")
-                .clickEditSavedForm()
-                .checkInstanceState("Birds", Instance.STATUS_INCOMPLETE);
     }
 
     @Test

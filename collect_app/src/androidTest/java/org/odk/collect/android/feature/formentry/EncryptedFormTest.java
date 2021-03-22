@@ -76,6 +76,7 @@ public class EncryptedFormTest {
                 .assertOnPage();
     }
 
+    //TestCase47
     @Test
     public void instanceOfEncryptedFormWithoutInstanceID_failsFinalizationWithMessage() {
         rule.mainMenu()
