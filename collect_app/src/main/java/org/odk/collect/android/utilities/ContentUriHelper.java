@@ -29,7 +29,9 @@ public final class ContentUriHelper {
     }
 
     public static Long getIdFromUri(Uri contentUri) {
-        return Long.parseLong(contentUri.getPathSegments().get(1));
+        int lastSegmentIndex = contentUri.getPathSegments().size() - 1;
+        String idSegment = contentUri.getPathSegments().get(lastSegmentIndex);
+        return Long.parseLong(idSegment);
     }
 
     public static String getFileExtensionFromUri(Uri fileUri) {
