@@ -40,7 +40,6 @@ import org.odk.collect.strings.LocalizedApplication;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -194,11 +193,11 @@ public class Collect extends Application implements LocalizedApplication {
      * @return md5 hash of the form title, a space, the form ID
      */
     public static String getFormIdentifierHash(String formId, String formVersion) {
-        List<Form> forms = new DatabaseFormsRepository().getAllByFormIdAndVersion(formId, formVersion);
+        Form form = new DatabaseFormsRepository().getLatestByFormIdAndVersion(formId, formVersion);
 
         String formTitle;
-        if (!forms.isEmpty()) {
-            formTitle = forms.get(0).getDisplayName();
+        if (form != null) {
+            formTitle = form.getDisplayName();
         } else {
             formTitle = "";
         }

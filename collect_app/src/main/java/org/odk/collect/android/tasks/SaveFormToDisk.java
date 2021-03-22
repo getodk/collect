@@ -63,7 +63,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
-import java.util.List;
 
 import timber.log.Timber;
 
@@ -467,9 +466,9 @@ public class SaveFormToDisk {
                 String jrFormId = instanceCursor.getString(0);
                 String version = instanceCursor.getString(1);
 
-                List<Form> forms = new DatabaseFormsRepository().getAllByFormIdAndVersion(jrFormId, version);
-                if (!forms.isEmpty()) {
-                    return forms.get(0).getGeometryXpath();
+                Form form = new DatabaseFormsRepository().getLatestByFormIdAndVersion(jrFormId, version);
+                if (form != null) {
+                    return form.getGeometryXpath();
                 }
             }
         }

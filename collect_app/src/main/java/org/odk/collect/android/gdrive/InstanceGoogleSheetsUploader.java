@@ -86,11 +86,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     @Override
     public String uploadOneSubmission(Instance instance, String spreadsheetUrl) throws UploadException {
-        if (isFormEncrypted(instance)) {
-            saveFailedStatusToDatabase(instance);
-            throw new UploadException(TranslationHandler.getString(Collect.getInstance(), R.string.google_sheets_encrypted_message));
-        }
-
         File instanceFile = new File(instance.getAbsoluteInstanceFilePath());
         if (!instanceFile.exists()) {
             throw new UploadException(FAIL + "instance XML file does not exist!");
@@ -103,7 +98,13 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             if (forms.size() != 1) {
                 throw new UploadException(TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_blank_form_for_this_form_id));
             }
+
             Form form = forms.get(0);
+            if (form.getBASE64RSAPublicKey() != null) {
+                saveFailedStatusToDatabase(instance);
+                throw new UploadException(TranslationHandler.getString(Collect.getInstance(), R.string.google_sheets_encrypted_message));
+            }
+
             String formFilePath = new StoragePathProvider().getAbsoluteFormFilePath(form.getFormFilePath());
 
             TreeElement instanceElement = getInstanceElement(formFilePath, instanceFile);
@@ -128,11 +129,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         saveSuccessStatusToDatabase(instance);
         // Google Sheets can't provide a custom success message
         return null;
-    }
-
-    private boolean isFormEncrypted(Instance instance) {
-        List<Form> forms = new DatabaseFormsRepository().getAllByFormIdAndVersion(instance.getJrFormId(), instance.getJrVersion());
-        return !forms.isEmpty() && forms.get(0).getBASE64RSAPublicKey() != null;
     }
 
     private String getErrorMessageFromGoogleJsonResponseException(GoogleJsonResponseException e) {

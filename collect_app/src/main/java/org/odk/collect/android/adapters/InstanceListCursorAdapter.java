@@ -33,7 +33,6 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import timber.log.Timber;
@@ -68,10 +67,10 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
 
         String formId = getCursor().getString(getCursor().getColumnIndex(InstanceColumns.JR_FORM_ID));
         String formVersion = getCursor().getString(getCursor().getColumnIndex(InstanceColumns.JR_VERSION));
-        List<Form> forms = new DatabaseFormsRepository().getAllByFormIdAndVersion(formId, formVersion);
+        Form form = new DatabaseFormsRepository().getLatestByFormIdAndVersion(formId, formVersion);
 
-        if (!forms.isEmpty()) {
-            String base64RSAPublicKey = forms.get(0).getBASE64RSAPublicKey();
+        if (form != null) {
+            String base64RSAPublicKey = form.getBASE64RSAPublicKey();
             isFormEncrypted = base64RSAPublicKey != null && !base64RSAPublicKey.isEmpty();
         } else {
             formExists = false;
