@@ -64,6 +64,7 @@ import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.screens.ServerPreferencesFragment;
 import org.odk.collect.android.preferences.screens.UserInterfacePreferencesFragment;
+import org.odk.collect.android.project.ProjectSettingsDialog;
 import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.storage.StorageInitializer;
@@ -247,6 +248,8 @@ public interface AppDependencyComponent {
     void inject(BaseAdminPreferencesFragment baseAdminPreferencesFragment);
 
     void inject(CaptionedListPreference captionedListPreference);
+
+    void inject(ProjectSettingsDialog projectSettingsDialog);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 
