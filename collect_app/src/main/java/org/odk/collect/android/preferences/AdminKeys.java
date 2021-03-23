@@ -54,9 +54,7 @@ public final class AdminKeys {
     public static final String KEY_ANALYTICS                   = "analytics";
 
     public static final String KEY_MOVING_BACKWARDS             = "moving_backwards";
-    // start smap
-    public static final String KEY_SMAP_OVERRIDE_MOVING_BACKWARDS = "smap_override_moving_backwards";  // Override the local settings for moving backwards
-    // end smap
+    public static final String KEY_SMAP_OVERRIDE_MOVING_BACKWARDS = "smap_override_moving_backwards";  // smap Override the local settings for moving backwards
     public static final String KEY_ACCESS_SETTINGS              = "access_settings";
     public static final String KEY_CHANGE_LANGUAGE              = "change_language";
     public static final String KEY_JUMP_TO                      = "jump_to";

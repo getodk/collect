@@ -204,6 +204,7 @@ import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direct
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.FORWARDS;
 import static org.odk.collect.android.fragments.BarcodeWidgetScannerFragment.BARCODE_RESULT_KEY;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_SMAP_ODK_MARK_FINALIZED;
 import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.DialogUtils.getDialog;
@@ -1426,6 +1427,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_MARK_AS_FINALIZED)) {
             endView.findViewById(R.id.mark_finished).setVisibility(View.GONE);
         }
+        // start smap  // Set visibility of finalize as per setting on the server
+        if (!(boolean) PreferenceManager.getDefaultSharedPreferences(this).getBoolean(GeneralKeys.KEY_SMAP_ODK_MARK_FINALIZED, false)) {
+            endView.findViewById(R.id.mark_finished).setVisibility(View.GONE);
+        } else {
+            endView.findViewById(R.id.mark_finished).setVisibility(View.VISIBLE);
+        }
+        // end smap
 
         if (formController.getSubmissionMetadata().instanceName != null) {
             // if instanceName is defined in form, this is the name -- no
@@ -1437,7 +1445,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         // override the visibility settings based upon admin preferences
-        if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_AS)) {
+        //if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_AS)) { // smap
+        if (!(boolean) PreferenceManager.getDefaultSharedPreferences(this).getBoolean(GeneralKeys.KEY_SMAP_ODK_INSTANCENAME, false)) { // smap
             endView.findViewById(R.id.save_form_as).setVisibility(View.GONE);
             endView.findViewById(R.id.save_name).setVisibility(View.GONE);
         }
