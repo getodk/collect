@@ -108,8 +108,7 @@ public class FormsProvider extends ContentProvider {
                     break;
 
                 case FORM_ID:
-                    qb.appendWhere(FormsColumns._ID + "="
-                            + uri.getPathSegments().get(1));
+                    qb.appendWhere(FormsColumns._ID + "=" + uri.getPathSegments().get(1));
                     break;
 
                 // Only include the latest form that was downloaded with each form_id

@@ -251,7 +251,7 @@ public class EncryptionUtils {
     /**
      * Retrieve the encryption information for this uri.
      *
-     * @param uri              either an instance URI (if previously saved) or a form URI
+     * @param uri              an Instance uri
      * @param instanceMetadata the metadata for this instance used to check if the form definition
      *                         defines an instanceID
      * @return an {@link EncryptedFormInformation} object if the form definition requests encryption
@@ -295,14 +295,7 @@ public class EncryptionUtils {
 
             form = forms.get(0);
         } else if (FormsColumns.CONTENT_ITEM_TYPE.equals(cr.getType(uri))) {
-            Cursor cursor = cr.query(uri, null, null, null, null);
-            if (cursor.getCount() != 1) {
-                String msg = TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_blank_form_for_this_form_id);
-                Timber.d(msg);
-                throw new EncryptionException(msg, null);
-            }
-
-            form = DatabaseFormsRepository.getFormsFromCursor(cursor, new StoragePathProvider()).get(0);
+            throw new IllegalArgumentException("Can't get encryption info for Form URI!");
         }
 
         formId = form.getJrFormId();

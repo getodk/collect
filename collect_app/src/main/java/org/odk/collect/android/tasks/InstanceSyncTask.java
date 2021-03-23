@@ -225,9 +225,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
         DaggerUtils.getComponent(Collect.getInstance()).analytics().logFormEvent(AnalyticsEvents.IMPORT_AND_ENCRYPT_INSTANCE, formIdHash);
     }
 
-    private void encryptInstance(Instance instance)
-            throws EncryptionException, IOException {
-
+    private void encryptInstance(Instance instance) throws EncryptionException, IOException {
         String instancePath = instance.getInstanceFilePath();
         File instanceXml = new File(instancePath);
         if (!new File(instanceXml.getParentFile(), "submission.xml.enc").exists()) {
