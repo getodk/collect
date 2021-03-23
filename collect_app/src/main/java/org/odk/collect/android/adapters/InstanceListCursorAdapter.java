@@ -62,7 +62,7 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
             return view;
         }
 
-        boolean formExists = true;
+        boolean formExists = false;
         boolean isFormEncrypted = false;
 
         String formId = getCursor().getString(getCursor().getColumnIndex(InstanceColumns.JR_FORM_ID));
@@ -71,9 +71,8 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
 
         if (form != null) {
             String base64RSAPublicKey = form.getBASE64RSAPublicKey();
+            formExists = true;
             isFormEncrypted = base64RSAPublicKey != null && !base64RSAPublicKey.isEmpty();
-        } else {
-            formExists = false;
         }
 
         long date = getCursor().getLong(getCursor().getColumnIndex(InstanceColumns.DELETED_DATE));

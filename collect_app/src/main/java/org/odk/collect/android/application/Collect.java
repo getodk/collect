@@ -195,12 +195,7 @@ public class Collect extends Application implements LocalizedApplication {
     public static String getFormIdentifierHash(String formId, String formVersion) {
         Form form = new DatabaseFormsRepository().getLatestByFormIdAndVersion(formId, formVersion);
 
-        String formTitle;
-        if (form != null) {
-            formTitle = form.getDisplayName();
-        } else {
-            formTitle = "";
-        }
+        String formTitle = form != null ? form.getDisplayName() : "";
 
         String formIdentifier = formTitle + " " + formId;
         return FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
