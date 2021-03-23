@@ -29,4 +29,23 @@ public class SaveAsTest {
                 .clickSendFinalizedForm(1)
                 .assertText("My Favourite Form");
     }
+
+    @Test
+    public void editingFormWithSavedName_prefillsName() {
+        rule.mainMenu()
+                .copyForm("one-question.xml")
+                .startBlankForm("One Question")
+                .swipeToEndScreen()
+                .fillInFormName("My Favourite Form")
+                .clickSaveAndExit()
+
+                .clickEditSavedForm(1)
+                .clickOnForm("One Question", "My Favourite Form")
+                .clickJumpEndButton()
+                .assertText("My Favourite Form")
+                .clickSaveAndExit()
+
+                .clickSendFinalizedForm(1)
+                .assertText("My Favourite Form");
+    }
 }
