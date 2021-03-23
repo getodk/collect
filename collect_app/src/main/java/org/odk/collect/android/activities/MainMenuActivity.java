@@ -252,9 +252,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
                     startActivity(new Intent(this, QRCodeTabsActivity.class));
                 }
                 return true;
-            case R.id.menu_about:
-                startActivity(new Intent(this, AboutActivity.class));
-                return true;
         }
         return super.onOptionsItemSelected(item);
     }

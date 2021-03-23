@@ -12,6 +12,7 @@ import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.button.MaterialButton
 import org.odk.collect.android.R
+import org.odk.collect.android.activities.AboutActivity
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment
 import org.odk.collect.android.preferences.screens.AdminPreferencesActivity
@@ -56,6 +57,11 @@ class ProjectSettingsDialog : DialogFragment() {
             } else {
                 startActivity(Intent(requireContext(), AdminPreferencesActivity::class.java))
             }
+            dismiss()
+        }
+
+        view.findViewById<MaterialButton>(R.id.about_button).setOnClickListener {
+            startActivity(Intent(requireContext(), AboutActivity::class.java))
             dismiss()
         }
     }

@@ -36,8 +36,7 @@ public class MainMenuTest {
                 .clickOnString(R.string.qr_code)
                 .pressBack(new AdminSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule))
-                .clickOnMenu()
-                .assertTextDoesNotExist(R.string.configure_via_qr_code);
+                .assertOverflowMenuDoesNotExist();
     }
 
 }
