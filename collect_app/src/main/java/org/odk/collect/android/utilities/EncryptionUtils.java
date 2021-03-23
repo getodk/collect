@@ -14,8 +14,6 @@
 
 package org.odk.collect.android.utilities;
 
-import android.content.ContentResolver;
-import android.database.Cursor;
 import android.net.Uri;
 import android.util.Base64;
 
@@ -29,12 +27,13 @@ import org.kxml2.kdom.Node;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseFormsRepository;
+import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.forms.Form;
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.javarosawrapper.FormController.InstanceMetadata;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -261,8 +260,6 @@ public class EncryptionUtils {
      *                             be encrypted
      */
     public static EncryptedFormInformation getEncryptedFormInformation(Uri uri, InstanceMetadata instanceMetadata) throws EncryptionException {
-        ContentResolver cr = Collect.getInstance().getContentResolver();
-
         // fetch the form information
         String formId;
         String formVersion;
@@ -270,18 +267,16 @@ public class EncryptionUtils {
 
         Form form = null;
 
-        if (InstanceColumns.CONTENT_ITEM_TYPE.equals(cr.getType(uri))) {
-            try (Cursor instanceCursor = cr.query(uri, null, null, null, null)) {
-                if (instanceCursor.getCount() != 1) {
-                    String msg = TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_record_for_this_instance);
-                    Timber.e(msg);
-                    throw new EncryptionException(msg, null);
-                }
-                instanceCursor.moveToFirst();
-                formId = instanceCursor.getString(instanceCursor.getColumnIndex(InstanceColumns.JR_FORM_ID));
-                int idxJrVersion = instanceCursor.getColumnIndex(InstanceColumns.JR_VERSION);
-                formVersion = instanceCursor.getString(idxJrVersion);
+        if (InstanceColumns.CONTENT_ITEM_TYPE.equals(Collect.getInstance().getContentResolver().getType(uri))) {
+            Instance instance = new DatabaseInstancesRepository().get(ContentUriHelper.getIdFromUri(uri));
+            if (instance == null) {
+                String msg = TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_record_for_this_instance);
+                Timber.e(msg);
+                throw new EncryptionException(msg, null);
             }
+
+            formId = instance.getJrFormId();
+            formVersion = instance.getJrVersion();
 
             List<Form> forms = new DatabaseFormsRepository().getAllByFormIdAndVersion(formId, formVersion);
 
@@ -294,7 +289,7 @@ public class EncryptionUtils {
             }
 
             form = forms.get(0);
-        } else if (FormsColumns.CONTENT_ITEM_TYPE.equals(cr.getType(uri))) {
+        } else if (FormsColumns.CONTENT_ITEM_TYPE.equals(Collect.getInstance().getContentResolver().getType(uri))) {
             throw new IllegalArgumentException("Can't get encryption info for Form URI!");
         }
 
