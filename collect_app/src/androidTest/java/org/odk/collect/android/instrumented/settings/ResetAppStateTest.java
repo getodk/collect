@@ -16,9 +16,6 @@
 
 package org.odk.collect.android.instrumented.settings;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.After;
@@ -26,13 +23,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
+import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.Settings;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ApplicationResetter;
@@ -154,15 +151,14 @@ public class ResetAppStateTest {
     }
 
     private void setupTestFormsDatabase() {
-        ContentValues values = new ContentValues();
-        values.put(FormsColumns.JRCACHE_FILE_PATH, storagePathProvider.getRelativeCachePath("3a76a386464925b6f3e53422673dfe3c.formdef"));
-        values.put(FormsColumns.JR_FORM_ID, "jrFormId");
-        values.put(FormsColumns.FORM_MEDIA_PATH, storagePathProvider.getRelativeFormPath("testFile1-media"));
-        values.put(FormsColumns.DATE, "1487077903756");
-        values.put(FormsColumns.DISPLAY_NAME, "displayName");
-        values.put(FormsColumns.FORM_FILE_PATH, storagePathProvider.getRelativeFormPath("testFile1.xml"));
-        Collect.getInstance().getContentResolver()
-                .insert(FormsColumns.CONTENT_URI, values);
+        new DatabaseFormsRepository().save(new Form.Builder()
+                .jrFormId("jrFormId")
+                .formFilePath("testFile1.xml")
+                .formMediaPath("testFile1-media")
+//                .date(1487077903756L)
+                .displayName("displayName")
+                .build()
+        );
 
         assertEquals(1, getFormsCount());
     }
@@ -220,24 +216,7 @@ public class ResetAppStateTest {
     }
 
     private int getFormsCount() {
-        int forms = 0;
-        Cursor cursor = Collect.getInstance().getContentResolver().query(
-                FormsColumns.CONTENT_URI, null, null, null,
-                FormsColumns.DISPLAY_NAME + " ASC");
-        if (cursor != null) {
-            try {
-                if (cursor.moveToFirst()) {
-                    while (!cursor.isAfterLast()) {
-                        forms++;
-                        cursor.moveToNext();
-                    }
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-
-        return forms;
+        return new DatabaseFormsRepository().getAll().size();
     }
 
     private int getInstancesCount() {
