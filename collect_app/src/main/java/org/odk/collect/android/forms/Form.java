@@ -16,11 +16,13 @@
 
 package org.odk.collect.android.forms;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.annotation.Nullable;
 
 /**
  * A form definition stored on the device.
- *
+ * <p>
  * Objects of this class are created using the builder pattern: https://en.wikipedia.org/wiki/Builder_pattern
  */
 public final class Form {
@@ -85,7 +87,7 @@ public final class Form {
         public Builder() {
         }
 
-        public Builder(Form form) {
+        public Builder(@NotNull Form form) {
             id = form.id;
             displayName = form.displayName;
             description = form.description;
@@ -224,6 +226,7 @@ public final class Form {
         return submissionUri;
     }
 
+    @Nullable
     public String getBASE64RSAPublicKey() {
         return base64RSAPublicKey;
     }
@@ -272,5 +275,13 @@ public final class Form {
     @Override
     public int hashCode() {
         return md5Hash.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Form{" +
+                "jrFormId='" + jrFormId + '\'' +
+                "jrVersion='" + jrVersion + '\'' +
+                '}';
     }
 }

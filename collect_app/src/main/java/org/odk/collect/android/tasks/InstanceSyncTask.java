@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.tasks;
 
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 
@@ -22,10 +21,10 @@ import org.apache.commons.io.FileUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.exception.EncryptionException;
+import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.instances.Instance;
@@ -33,7 +32,6 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.EncryptionUtils;
@@ -142,22 +140,17 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                     String instanceFormId = getFormIdFromInstance(candidateInstance);
                     // only process if we can find the id from the instance file
                     if (instanceFormId != null) {
-                        Cursor formCursor = null;
                         try {
-                            String selection = FormsColumns.JR_FORM_ID + " = ? ";
-                            String[] selectionArgs = {instanceFormId};
-                            // retrieve the form definition
-                            formCursor = new FormsDao().getFormsCursor(selection, selectionArgs);
                             // TODO: optimize this by caching the previously found form definition
                             // TODO: optimize this by caching unavailable form definition to skip
-                            if (formCursor != null && formCursor.moveToFirst()) {
-                                String submissionUri = null;
-                                if (!formCursor.isNull(formCursor.getColumnIndex(FormsColumns.SUBMISSION_URI))) {
-                                    submissionUri = formCursor.getString(formCursor.getColumnIndex(FormsColumns.SUBMISSION_URI));
-                                }
-                                String jrFormId = formCursor.getString(formCursor.getColumnIndex(FormsColumns.JR_FORM_ID));
-                                String jrVersion = formCursor.getString(formCursor.getColumnIndex(FormsColumns.JR_VERSION));
-                                String formName = formCursor.getString(formCursor.getColumnIndex(FormsColumns.DISPLAY_NAME));
+                            List<Form> forms = new DatabaseFormsRepository().getAllByFormId(instanceFormId);
+
+                            if (!forms.isEmpty()) {
+                                Form form = forms.get(0);
+                                String jrFormId = form.getJrFormId();
+                                String jrVersion = form.getJrVersion();
+                                String formName = form.getDisplayName();
+                                String submissionUri = form.getSubmissionUri();
 
                                 Instance instance = new DatabaseInstancesRepository().save(new Instance.Builder()
                                         .instanceFilePath(storagePathProvider.getRelativeInstancePath(candidateInstance))
@@ -171,14 +164,10 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                                 );
                                 counter++;
 
-                                encryptInstanceIfNeeded(formCursor, instance);
+                                encryptInstanceIfNeeded(form, instance);
                             }
                         } catch (IOException | EncryptionException e) {
                             Timber.w(e);
-                        } finally {
-                            if (formCursor != null) {
-                                formCursor.close();
-                            }
                         }
                     }
                 }
@@ -220,18 +209,18 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
         return instanceId;
     }
 
-    private void encryptInstanceIfNeeded(Cursor formCursor, Instance instance) throws EncryptionException, IOException {
+    private void encryptInstanceIfNeeded(Form form, Instance instance) throws EncryptionException, IOException {
         if (instance != null) {
-            if (shouldInstanceBeEncrypted(formCursor)) {
-                logImportAndEncrypt(formCursor);
+            if (shouldInstanceBeEncrypted(form)) {
+                logImportAndEncrypt(form);
                 encryptInstance(instance);
             }
         }
     }
 
-    private void logImportAndEncrypt(Cursor formCursor) {
-        String id = formCursor.getString(formCursor.getColumnIndex(FormsColumns.JR_FORM_ID));
-        String title = formCursor.getString(formCursor.getColumnIndex(FormsColumns.DISPLAY_NAME));
+    private void logImportAndEncrypt(Form form) {
+        String id = form.getJrFormId();
+        String title = form.getDisplayName();
         String formIdHash = getMd5Hash(new ByteArrayInputStream((id + " " + title).getBytes()));
         DaggerUtils.getComponent(Collect.getInstance()).analytics().logFormEvent(AnalyticsEvents.IMPORT_AND_ENCRYPT_INSTANCE, formIdHash);
     }
@@ -267,9 +256,8 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
         }
     }
 
-    private boolean shouldInstanceBeEncrypted(Cursor formCursor) {
-        String base64RSAPublicKey = formCursor.getString(formCursor.getColumnIndex(FormsColumns.BASE64_RSA_PUBLIC_KEY));
-        return base64RSAPublicKey != null && !base64RSAPublicKey.isEmpty();
+    private boolean shouldInstanceBeEncrypted(Form form) {
+        return form.getBASE64RSAPublicKey() != null;
     }
 
     @Override

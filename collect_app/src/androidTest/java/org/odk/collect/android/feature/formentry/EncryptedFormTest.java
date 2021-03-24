@@ -16,28 +16,27 @@
 
 package org.odk.collect.android.feature.formentry;
 
-import android.Manifest;
-
-import androidx.test.rule.GrantPermissionRule;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.CollectTestRule;
-import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.TestDependencies;
+import org.odk.collect.android.support.TestRuleChain;
+import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.SendFinalizedFormPage;
 
 public class EncryptedFormTest {
+
+    TestDependencies testDependencies = new TestDependencies();
 
     @Rule
     public CollectTestRule rule = new CollectTestRule();
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(Manifest.permission.READ_PHONE_STATE))
-            .around(new ResetStateRule())
+    public RuleChain copyFormChain = TestRuleChain.chain(testDependencies)
             .around(new CopyFormRule("encrypted.xml"))
             .around(new CopyFormRule("encrypted-no-instanceID.xml"));
 
@@ -55,6 +54,29 @@ public class EncryptedFormTest {
                 .assertText(R.string.cannot_edit_completed_form);
     }
 
+    @Test
+    public void instanceOfEncryptedForm_cantBeViewedAfterSending() {
+        rule.mainMenu()
+                .setServer(testDependencies.server.getURL())
+
+                .startBlankForm("encrypted")
+                .assertQuestion("Question 1")
+                .swipeToEndScreen()
+                .clickSaveAndExit()
+
+                .clickSendFinalizedForm(1)
+                .clickOnForm("encrypted")
+                .clickSendSelected()
+                .clickOK(new SendFinalizedFormPage(rule))
+                .pressBack(new MainMenuPage(rule))
+
+                .clickViewSentForm(1)
+                .clickOnText("encrypted")
+                .assertText(R.string.encrypted_form)
+                .assertOnPage();
+    }
+
+    //TestCase47
     @Test
     public void instanceOfEncryptedFormWithoutInstanceID_failsFinalizationWithMessage() {
         rule.mainMenu()

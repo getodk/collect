@@ -22,7 +22,7 @@ import androidx.test.espresso.intent.rule.IntentsTestRule;
 
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.odk.collect.android.forms.FormUtils.setupReferenceManagerForForm;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.CONTENT_URI;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
 public class FormLoadingUtils {
@@ -50,11 +51,11 @@ public class FormLoadingUtils {
      * Copies a form with the given file name and given associated media to the SD Card where it
      * will be loaded by {@link FormLoaderTask}.
      */
-    public static void copyFormToStorage(String formFilename, List<String> mediaFilePaths, boolean copyToDatabase) throws IOException {
+    public static void copyFormToStorage(String formFilename, List<String> mediaFilePaths, boolean copyToDatabase, String copyTo) throws IOException {
         new StorageInitializer().createOdkDirsOnStorage();
         ReferenceManager.instance().reset();
 
-        String pathname = copyForm(formFilename);
+        String pathname = copyForm(formFilename, copyTo);
         if (mediaFilePaths != null) {
             copyFormMediaFiles(formFilename, mediaFilePaths);
         }
@@ -70,7 +71,11 @@ public class FormLoadingUtils {
      * {@link FormLoaderTask}.
      */
     public static void copyFormToStorage(String formFilename) throws IOException {
-            copyFormToStorage(formFilename, null, false);
+        copyFormToStorage(formFilename, null, false, formFilename);
+    }
+
+    public static void copyFormToStorage(String formFilename, String copyTo) throws IOException {
+        copyFormToStorage(formFilename, null, false, copyTo);
     }
 
     private static void saveFormToDatabase(File outFile) {
@@ -87,15 +92,15 @@ public class FormLoadingUtils {
         v.put(FormsColumns.AUTO_SEND, formInfo.get(FileUtils.AUTO_SEND));
         v.put(FormsColumns.GEOMETRY_XPATH, formInfo.get(FileUtils.GEOMETRY_XPATH));
 
-        new FormsDao().saveForm(v);
+        Collect.getInstance().getContentResolver().insert(CONTENT_URI, v);
     }
 
     public static IntentsTestRule<FormEntryActivity> getFormActivityTestRuleFor(String formFilename) {
         return new FormActivityTestRule(formFilename);
     }
 
-    private static String copyForm(String formFilename) throws IOException {
-        String pathname = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + "/" + formFilename;
+    private static String copyForm(String formFilename, String copyTo) throws IOException {
+        String pathname = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + "/" + copyTo;
         copyFileFromAssets("forms/" + formFilename, pathname);
         return pathname;
     }

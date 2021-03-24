@@ -14,12 +14,10 @@
 
 package org.odk.collect.android.gdrive;
 
-import android.database.Cursor;
-
-import org.odk.collect.android.R;
 import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
@@ -70,9 +68,7 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
             publishProgress(i + 1, instancesToUpload.size());
 
             // Get corresponding blank form and verify there is exactly 1
-            FormsDao dao = new FormsDao();
-            Cursor formCursor = dao.getFormsCursorSortedByDateDesc(instance.getJrFormId(), instance.getJrVersion());
-            List<Form> forms = dao.getFormsFromCursor(formCursor);
+            List<Form> forms = new DatabaseFormsRepository().getAllByFormIdAndVersion(instance.getJrFormId(), instance.getJrVersion());
 
             if (forms.size() != 1) {
                 outcome.messagesByInstanceId.put(instance.getId().toString(),

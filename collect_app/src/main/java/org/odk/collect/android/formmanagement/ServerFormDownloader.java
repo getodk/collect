@@ -1,8 +1,8 @@
 package org.odk.collect.android.formmanagement;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.R;
 import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormSource;
@@ -31,7 +31,6 @@ import timber.log.Timber;
 
 import static org.apache.commons.io.FileUtils.deleteDirectory;
 import static org.odk.collect.android.analytics.AnalyticsEvents.DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH;
-import static org.odk.collect.android.storage.StoragePathProvider.getAbsoluteFilePath;
 
 public class ServerFormDownloader implements FormDownloader {
 
@@ -187,7 +186,7 @@ public class ServerFormDownloader implements FormDownloader {
 
         // move the media files in the media folder
         if (tempMediaPath != null) {
-            File formMediaDir = new File(getAbsoluteFilePath(formsDirPath, formResult.form.getFormMediaPath()));
+            File formMediaDir = new File(formResult.form.getFormMediaPath());
 
             try {
                 moveMediaFiles(tempMediaPath, formMediaDir);
@@ -272,8 +271,7 @@ public class ServerFormDownloader implements FormDownloader {
             FileUtils.deleteAndReport(tempFormFile);
 
             // set the file returned to the file we already had
-            String existingPath = getAbsoluteFilePath(formsDirPath, form.getFormFilePath());
-            return new FileResult(new File(existingPath), false);
+            return new FileResult(new File(form.getFormFilePath()), false);
         } else {
             return new FileResult(tempFormFile, true);
         }

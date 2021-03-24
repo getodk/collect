@@ -15,7 +15,6 @@
 package org.odk.collect.android.backgroundwork;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
@@ -24,11 +23,9 @@ import android.util.Pair;
 import androidx.work.WorkerParameters;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.R;
 import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
@@ -37,17 +34,18 @@ import org.odk.collect.android.instancemanagement.SubmitException;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.permissions.PermissionsProvider;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import static java.lang.Boolean.parseBoolean;
 
 public class AutoSendTaskSpec implements TaskSpec {
 
@@ -169,21 +167,9 @@ public class AutoSendTaskSpec implements TaskSpec {
     /**
      * Returns true if at least one form currently on the device specifies that all of its filled
      * forms should auto-send no matter the connection type.
-     * <p>
-     * TODO: figure out where this should live
      */
     private boolean atLeastOneFormSpecifiesAutoSend() {
-        FormsDao dao = new FormsDao();
-
-        try (Cursor cursor = dao.getFormsCursor()) {
-            List<Form> forms = dao.getFormsFromCursor(cursor);
-            for (Form form : forms) {
-                if (Boolean.valueOf(form.getAutoSend())) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return formsRepository.getAll().stream().anyMatch(form -> parseBoolean(form.getAutoSend()));
     }
 
     public static class Adapter extends WorkerAdapter {

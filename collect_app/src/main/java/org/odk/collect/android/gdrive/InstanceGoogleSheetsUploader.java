@@ -14,8 +14,6 @@
 
 package org.odk.collect.android.gdrive;
 
-import android.database.Cursor;
-
 import androidx.annotation.NonNull;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -34,7 +32,7 @@ import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.forms.Form;
@@ -88,26 +86,25 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     @Override
     public String uploadOneSubmission(Instance instance, String spreadsheetUrl) throws UploadException {
-        if (new FormsDao().isFormEncrypted(instance.getJrFormId(), instance.getJrVersion())) {
-            saveFailedStatusToDatabase(instance);
-            throw new UploadException(TranslationHandler.getString(Collect.getInstance(), R.string.google_sheets_encrypted_message));
-        }
-
         File instanceFile = new File(instance.getAbsoluteInstanceFilePath());
         if (!instanceFile.exists()) {
             throw new UploadException(FAIL + "instance XML file does not exist!");
         }
 
         // Get corresponding blank form and verify there is exactly 1
-        FormsDao dao = new FormsDao();
-        Cursor formCursor = dao.getFormsCursorSortedByDateDesc(instance.getJrFormId(), instance.getJrVersion());
-        List<Form> forms = dao.getFormsFromCursor(formCursor);
+        List<Form> forms = new DatabaseFormsRepository().getAllByFormIdAndVersion(instance.getJrFormId(), instance.getJrVersion());
 
         try {
             if (forms.size() != 1) {
                 throw new UploadException(TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_blank_form_for_this_form_id));
             }
+
             Form form = forms.get(0);
+            if (form.getBASE64RSAPublicKey() != null) {
+                saveFailedStatusToDatabase(instance);
+                throw new UploadException(TranslationHandler.getString(Collect.getInstance(), R.string.google_sheets_encrypted_message));
+            }
+
             String formFilePath = new StoragePathProvider().getAbsoluteFormFilePath(form.getFormFilePath());
 
             TreeElement instanceElement = getInstanceElement(formFilePath, instanceFile);
@@ -138,10 +135,10 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         String message = e.getMessage();
         if (e.getDetails() != null) {
             switch (e.getDetails().getCode()) {
-                case 403 :
+                case 403:
                     message = TranslationHandler.getString(Collect.getInstance(), R.string.google_sheets_access_denied);
                     break;
-                case 429 :
+                case 429:
                     message = FAIL + "Too many requests per 100 seconds";
                     break;
             }
@@ -231,7 +228,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
      *
      * @param sheetHeaders - Headers from the spreadsheet
      * @param columnTitles - Column titles list to be updated with altitude / accuracy titles from
-     *                       the sheetHeaders
+     *                     the sheetHeaders
      */
     private void addAltitudeAndAccuracyTitles(List<Object> sheetHeaders, List<Object> columnTitles) {
         for (Object sheetTitle : sheetHeaders) {
@@ -389,9 +386,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
      *
      * @param columnTitles - A List of column titles on the sheet
      * @param elementTitle - The title of the geo data to parse. e.g. "data-Point"
-     * @param geoData - A space (" ") separated string that contains "Lat Long Altitude Accuracy"
+     * @param geoData      - A space (" ") separated string that contains "Lat Long Altitude Accuracy"
      * @return a Map of fields containing Lat/Long and Accuracy, Altitude (if the respective column
-     *         titles exist in the columnTitles parameter).
+     * titles exist in the columnTitles parameter).
      */
     private @NonNull
     Map<String, String> parseGeopoint(@NonNull List<Object> columnTitles, @NonNull String elementTitle, @NonNull String geoData) {
@@ -468,7 +465,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    /** This method builds a column name by joining all of the containing group names using "-" as a separator */
+    /**
+     * This method builds a column name by joining all of the containing group names using "-" as a separator
+     */
     private String getElementTitle(AbstractTreeElement element) {
         StringBuilder elementTitle = new StringBuilder();
         while (element != null && element.getName() != null) {

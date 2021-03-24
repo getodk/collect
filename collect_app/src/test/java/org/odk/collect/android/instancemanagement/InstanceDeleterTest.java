@@ -23,7 +23,6 @@ public class InstanceDeleterTest {
     @Test
     public void whenFormForInstanceIsSoftDeleted_andThereIsAnotherInstance_doesNotDeleteForm() {
         formsRepository.save(new Form.Builder()
-                .id(1L)
                 .jrFormId("1")
                 .jrVersion("version")
                 .deleted(true)
@@ -42,7 +41,6 @@ public class InstanceDeleterTest {
     @Test
     public void whenFormForInstanceIsSoftDeleted_andThereIsAnotherSoftDeletedInstance_deletesForm() {
         formsRepository.save(new Form.Builder()
-                .id(1L)
                 .jrFormId("1")
                 .jrVersion("version")
                 .deleted(true)
@@ -51,28 +49,25 @@ public class InstanceDeleterTest {
         );
 
         instancesRepository.save(new Instance.Builder()
-                .id(1L)
                 .jrFormId("1")
                 .deletedDate(0L)
                 .jrVersion("version")
                 .build()
         );
 
-        instancesRepository.save(new Instance.Builder()
-                .id(2L)
+        Instance instanceToDelete = instancesRepository.save(new Instance.Builder()
                 .jrFormId("1")
                 .jrVersion("version")
                 .build()
         );
 
-        instanceDeleter.delete(2L);
+        instanceDeleter.delete(instanceToDelete.getId());
         assertThat(formsRepository.getAll().size(), is(0));
     }
 
     @Test
     public void whenFormForInstanceIsSoftDeleted_andThereAreNoOtherInstances_deletesForm() {
         formsRepository.save(new Form.Builder()
-                .id(1L)
                 .jrFormId("1")
                 .jrVersion("version")
                 .deleted(true)
@@ -80,21 +75,19 @@ public class InstanceDeleterTest {
                 .build()
         );
 
-        instancesRepository.save(new Instance.Builder()
-                .id(1L)
+        Instance instanceToDelete = instancesRepository.save(new Instance.Builder()
                 .jrFormId("1")
                 .jrVersion("version")
                 .build()
         );
 
-        instanceDeleter.delete(1L);
+        instanceDeleter.delete(instanceToDelete.getId());
         assertThat(formsRepository.getAll().isEmpty(), is(true));
     }
 
     @Test
     public void whenFormForInstanceIsSoftDeleted_andThereAreNoOtherInstancesForThisVersion_deletesForm() {
         formsRepository.save(new Form.Builder()
-                .id(1L)
                 .jrFormId("1")
                 .jrVersion("1")
                 .deleted(true)
@@ -103,7 +96,6 @@ public class InstanceDeleterTest {
         );
 
         formsRepository.save(new Form.Builder()
-                .id(2L)
                 .jrFormId("1")
                 .jrVersion("2")
                 .formFilePath(FormUtils.createXFormFile("1", "2").getAbsolutePath())
@@ -111,21 +103,19 @@ public class InstanceDeleterTest {
                 .build()
         );
 
-        instancesRepository.save(new Instance.Builder()
-                .id(1L)
+        Instance instanceToDelete = instancesRepository.save(new Instance.Builder()
                 .jrFormId("1")
                 .jrVersion("1")
                 .build()
         );
 
         instancesRepository.save(new Instance.Builder()
-                .id(2L)
                 .jrFormId("1")
                 .jrVersion("2")
                 .build()
         );
 
-        instanceDeleter.delete(1L);
+        instanceDeleter.delete(instanceToDelete.getId());
         assertThat(formsRepository.getAll().size(), is(1));
         assertThat(formsRepository.getAll().get(0).getJrVersion(), is("2"));
     }
@@ -133,7 +123,6 @@ public class InstanceDeleterTest {
     @Test
     public void whenFormForInstanceIsNotSoftDeleted_andThereAreNoOtherInstances_doesNotDeleteForm() {
         formsRepository.save(new Form.Builder()
-                .id(1L)
                 .jrFormId("1")
                 .jrVersion("version")
                 .deleted(false)
@@ -141,21 +130,19 @@ public class InstanceDeleterTest {
                 .build()
         );
 
-        instancesRepository.save(new Instance.Builder()
-                .id(1L)
+        Instance instanceToDelete = instancesRepository.save(new Instance.Builder()
                 .jrFormId("1")
                 .jrVersion("version")
                 .build()
         );
 
-        instanceDeleter.delete(1L);
+        instanceDeleter.delete(instanceToDelete.getId());
         assertThat(formsRepository.getAll().size(), is(1));
     }
 
     @Test
     public void whenFormVersionForInstanceIsNotSoftDeleted_andThereAreNoOtherInstances_doesNotDeleteForm() {
         formsRepository.save(new Form.Builder()
-                .id(1L)
                 .jrFormId("1")
                 .jrVersion("1")
                 .deleted(true)
@@ -164,7 +151,6 @@ public class InstanceDeleterTest {
         );
 
         formsRepository.save(new Form.Builder()
-                .id(1L)
                 .jrFormId("1")
                 .jrVersion("2")
                 .deleted(false)
@@ -172,14 +158,13 @@ public class InstanceDeleterTest {
                 .build()
         );
 
-        instancesRepository.save(new Instance.Builder()
-                .id(1L)
+        Instance instanceToDelete = instancesRepository.save(new Instance.Builder()
                 .jrFormId("1")
                 .jrVersion("2")
                 .build()
         );
 
-        instanceDeleter.delete(1L);
+        instanceDeleter.delete(instanceToDelete.getId());
         assertThat(formsRepository.getAll().size(), is(2));
     }
 

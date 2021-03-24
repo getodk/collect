@@ -8,9 +8,9 @@ import org.odk.collect.android.forms.FormSource;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.forms.ManifestFile;
 import org.odk.collect.android.forms.MediaFile;
-import org.odk.collect.android.forms.MediaFileRepository;
 import org.odk.collect.android.support.FormUtils;
 import org.odk.collect.android.support.InMemFormsRepository;
+import org.odk.collect.testshared.TempFiles;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
@@ -41,12 +40,10 @@ public class ServerFormsDetailsFetcherTest {
 
     private ServerFormsDetailsFetcher fetcher;
     private FormsRepository formsRepository;
-    private MediaFileRepository mediaFileRepository;
 
     @Before
     public void setup() throws Exception {
         formsRepository = new InMemFormsRepository();
-        mediaFileRepository = mock(MediaFileRepository.class);
 
         FormSource formSource = mock(FormSource.class);
         when(formSource.fetchFormList()).thenReturn(formList);
@@ -56,7 +53,7 @@ public class ServerFormsDetailsFetcherTest {
         );
 
         DiskFormsSynchronizer diskFormsSynchronizer = mock(DiskFormsSynchronizer.class);
-        fetcher = new ServerFormsDetailsFetcher(formsRepository, mediaFileRepository, formSource, diskFormsSynchronizer);
+        fetcher = new ServerFormsDetailsFetcher(formsRepository, formSource, diskFormsSynchronizer);
     }
 
     @Test
@@ -111,8 +108,8 @@ public class ServerFormsDetailsFetcherTest {
                 .jrVersion("server")
                 .md5Hash("form-2-hash")
                 .formFilePath(FormUtils.createXFormFile("form-2", "server").getAbsolutePath())
+                .formMediaPath("/does-not-exist")
                 .build());
-        when(mediaFileRepository.getAll("form-2", "server")).thenReturn(emptyList());
 
         List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
         assertThat(serverFormDetails.get(1).isUpdated(), is(true));
@@ -120,17 +117,19 @@ public class ServerFormsDetailsFetcherTest {
 
     @Test
     public void whenAFormExists_andHasUpdatedMediaFileOnServer_isUpdated() throws Exception {
+        File mediaDir = TempFiles.createTempDir();
+
         formsRepository.save(new Form.Builder()
                 .id(2L)
                 .jrFormId("form-2")
                 .jrVersion("server")
                 .md5Hash("form-2-hash")
                 .formFilePath(FormUtils.createXFormFile("form-2", "server").getAbsolutePath())
+                .formMediaPath(mediaDir.getAbsolutePath())
                 .build());
 
-        File oldMediaFile = File.createTempFile("blah", ".csv");
+        File oldMediaFile = TempFiles.createTempFile(mediaDir, "blah", ".csv");
         writeToFile(oldMediaFile, "blah before");
-        when(mediaFileRepository.getAll("form-2", "server")).thenReturn(asList(oldMediaFile));
 
         List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
         assertThat(serverFormDetails.get(1).isUpdated(), is(true));
@@ -153,17 +152,19 @@ public class ServerFormsDetailsFetcherTest {
 
     @Test
     public void whenFormExists_isNotNewOrUpdated() throws Exception {
+        File mediaDir = TempFiles.createTempDir();
+
         formsRepository.save(new Form.Builder()
                 .id(2L)
                 .jrFormId("form-2")
                 .jrVersion("server")
                 .md5Hash("form-2-hash")
                 .formFilePath(FormUtils.createXFormFile("form-2", "server").getAbsolutePath())
+                .formMediaPath(mediaDir.getAbsolutePath())
                 .build());
 
-        File mediaFile = File.createTempFile("blah", ".csv");
+        File mediaFile = TempFiles.createTempFile(mediaDir, "blah", ".csv");
         writeToFile(mediaFile, "blah");
-        when(mediaFileRepository.getAll("form-2", "server")).thenReturn(asList(mediaFile));
 
         List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
         assertThat(serverFormDetails.get(1).isUpdated(), is(false));
@@ -172,16 +173,18 @@ public class ServerFormsDetailsFetcherTest {
 
     @Test
     public void whenAFormExists_andIsUpdatedOnServer_andDoesNotHaveNewMedia_isUpdated() throws Exception {
+        File mediaDir = TempFiles.createTempDir();
+
         formsRepository.save(new Form.Builder()
                 .id(2L)
                 .jrFormId("form-2")
                 .md5Hash("form-2-hash-old")
                 .formFilePath(FormUtils.createXFormFile("form-2", "server").getAbsolutePath())
+                .formMediaPath(mediaDir.getAbsolutePath())
                 .build());
 
-        File localMediaFile = File.createTempFile("blah", ".csv");
+        File localMediaFile = TempFiles.createTempFile(mediaDir, "blah", ".csv");
         writeToFile(localMediaFile, "blah");
-        when(mediaFileRepository.getAll("form-2", "server")).thenReturn(asList(localMediaFile));
 
         List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
         assertThat(serverFormDetails.get(1).isUpdated(), is(true));

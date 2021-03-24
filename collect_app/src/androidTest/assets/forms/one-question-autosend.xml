@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>One Question Autosend</h:title>
+        <model>
+            <instance>
+                <data id="one_question" orx:version="1">
+                    <age/>
+                </data>
+            </instance>
+            <submission orx:auto-send="true" />
+            <bind nodeset="age" type="int"/>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/age">
+            <label>what is your age</label>
+        </input>
+    </h:body>
+</h:html>

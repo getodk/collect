@@ -32,15 +32,15 @@ import androidx.loader.content.Loader;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FormListAdapter;
-import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.formmanagement.BlankFormListMenuDelegate;
 import org.odk.collect.android.formmanagement.BlankFormsListViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.FormSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -185,8 +185,9 @@ public class FillBlankFormActivity extends FormListActivity implements
     }
 
     public void onMapButtonClick(AdapterView<?> parent, View view, int position, long id) {
-        final Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, id);
-        final Intent intent = new Intent(Intent.ACTION_EDIT, formUri, this, FormMapActivity.class);
+        final Intent intent = new Intent(this, FormMapActivity.class);
+        intent.putExtra(FormMapActivity.EXTRA_FORM_ID, id);
+
         permissionsProvider.requestLocationPermissions(this, new PermissionListener() {
             @Override
             public void granted() {
@@ -264,7 +265,7 @@ public class FillBlankFormActivity extends FormListActivity implements
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         showProgressBar();
 
-        return new FormsDao().getFormsCursorLoader(getFilterText(), getSortingOrder(), hideOldFormVersions());
+        return new CursorLoaderFactory().getFormsCursorLoader(getFilterText(), getSortingOrder(), hideOldFormVersions());
     }
 
     @Override

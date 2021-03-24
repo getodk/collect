@@ -25,9 +25,9 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.database.DatabaseFormsRepository;
+import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
@@ -57,26 +57,22 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
         setUpSubtext(view);
 
         // Some form lists never contain disabled items; if so, we're done.
+        // Update: This only seems to be the case in Edit Saved Forms and it's not clear why...
         if (!shouldCheckDisabled) {
             return view;
         }
 
-        String formId = getCursor().getString(getCursor().getColumnIndex(InstanceColumns.JR_FORM_ID));
-        Cursor cursor = new FormsDao().getFormsCursorForFormId(formId);
-
         boolean formExists = false;
         boolean isFormEncrypted = false;
-        if (cursor != null) {
-            try {
-                if (cursor.moveToFirst()) {
-                    int base64RSAPublicKeyColumnIndex = cursor.getColumnIndex(FormsColumns.BASE64_RSA_PUBLIC_KEY);
-                    String base64RSAPublicKey = cursor.getString(base64RSAPublicKeyColumnIndex);
-                    isFormEncrypted = base64RSAPublicKey != null && !base64RSAPublicKey.isEmpty();
-                    formExists = true;
-                }
-            } finally {
-                cursor.close();
-            }
+
+        String formId = getCursor().getString(getCursor().getColumnIndex(InstanceColumns.JR_FORM_ID));
+        String formVersion = getCursor().getString(getCursor().getColumnIndex(InstanceColumns.JR_VERSION));
+        Form form = new DatabaseFormsRepository().getLatestByFormIdAndVersion(formId, formVersion);
+
+        if (form != null) {
+            String base64RSAPublicKey = form.getBASE64RSAPublicKey();
+            formExists = true;
+            isFormEncrypted = base64RSAPublicKey != null;
         }
 
         long date = getCursor().getLong(getCursor().getColumnIndex(InstanceColumns.DELETED_DATE));

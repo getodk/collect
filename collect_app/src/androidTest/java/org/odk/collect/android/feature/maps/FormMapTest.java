@@ -29,15 +29,18 @@ public class FormMapTest {
     private static final String SINGLE_GEOPOINT_FORM = "single-geopoint.xml";
     private static final String NO_GEOPOINT_FORM = "basic.xml";
 
-    @Rule public IntentsTestRule<MainMenuActivity> rule = new IntentsTestRule<>(MainMenuActivity.class);
+    @Rule
+    public IntentsTestRule<MainMenuActivity> rule = new IntentsTestRule<>(MainMenuActivity.class);
 
-    @Rule public RuleChain copyFormChain = RuleChain
+    @Rule
+    public RuleChain copyFormChain = RuleChain
             .outerRule(GrantPermissionRule.grant(Manifest.permission.ACCESS_COARSE_LOCATION))
             .around(new ResetStateRule())
             .around(new CopyFormRule(SINGLE_GEOPOINT_FORM))
             .around(new CopyFormRule(NO_GEOPOINT_FORM));
 
-    @Before public void stubGeopointIntent() {
+    @Before
+    public void stubGeopointIntent() {
         Location location = new Location("gps");
         location.setLatitude(125.1);
         location.setLongitude(10.1);
@@ -51,21 +54,24 @@ public class FormMapTest {
                 .respondWith(result);
     }
 
-    @Test public void gettingBlankFormList_showsMapIcon_onlyForFormsWithGeometry() {
+    @Test
+    public void gettingBlankFormList_showsMapIcon_onlyForFormsWithGeometry() {
         new MainMenuPage(rule)
                 .clickFillBlankForm()
                 .checkMapIconDisplayedForForm("Single geopoint")
                 .checkMapIconNotDisplayedForForm("basic");
     }
 
-    @Test public void clickingOnMapIcon_opensMapForForm() {
+    @Test
+    public void clickingOnMapIcon_opensMapForForm() {
         new MainMenuPage(rule)
                 .clickFillBlankForm()
                 .clickOnMapIconForForm("Single geopoint")
                 .assertText("Single geopoint");
     }
 
-    @Test public void fillingBlankForm_addsInstanceToMap() {
+    @Test
+    public void fillingBlankForm_addsInstanceToMap() {
         String oneInstanceString = ApplicationProvider.getApplicationContext().getResources().getString(R.string.geometry_status, 1, 1);
 
         new MainMenuPage(rule)

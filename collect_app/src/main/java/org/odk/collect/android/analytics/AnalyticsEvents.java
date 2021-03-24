@@ -74,25 +74,6 @@ public class AnalyticsEvents {
     public static final String DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH = "DownloadSameFormidVersionDifferentHash";
 
     /**
-     * Track downloads initiated when there are no downloaded forms on the device. The action should
-     * be in the format: {number of downloaded forms}/{total forms}-{form server hash}
-     *
-     * Questions to answer to help shape new on-boarding and multi-tenancy experience:
-     *      - Does it look like some projects instruct data collectors to download all forms on
-     *      first launch and others to download a subset?
-     *      - If it looks like there's a clear process split, which of the two processes is most
-     *      common? Is project scale or number of forms hosted on server relevant to the process?
-     *      - Are subsequent manual downloads common? Are all forms downloaded or a subset?
-     */
-    public static final String FIRST_FORM_DOWNLOAD = "FirstFormDownload";
-
-    /**
-     * Download a subset of available forms. The action should be in the format:
-     * {number of downloaded forms}/{total forms}-{form server hash}
-     */
-    public static final String SUBSEQUENT_FORM_DOWNLOAD = "SubsequentFormDownload";
-
-    /**
      * Used to measure how popular the refresh button on Fill Blank Forms is. The button
      * only displays when Match Exactly is enabled. Right now the action passed is "Manual". This
      * means that we could extend the event to track auto or other syncs in the future.

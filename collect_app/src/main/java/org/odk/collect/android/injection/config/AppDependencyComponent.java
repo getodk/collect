@@ -3,6 +3,8 @@ package org.odk.collect.android.injection.config;
 import android.app.Application;
 
 import org.javarosa.core.reference.ReferenceManager;
+import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.activities.AndroidShortcutsActivity;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.DeleteSavedFormActivity;
 import org.odk.collect.android.activities.FillBlankFormActivity;
@@ -17,7 +19,6 @@ import org.odk.collect.android.activities.InstanceUploaderListActivity;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.audio.AudioRecordingControllerFragment;
@@ -49,21 +50,21 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.CaptionedListPreference;
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment;
+import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog;
+import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.screens.AdminPreferencesFragment;
 import org.odk.collect.android.preferences.screens.BaseAdminPreferencesFragment;
 import org.odk.collect.android.preferences.screens.BaseGeneralPreferencesFragment;
 import org.odk.collect.android.preferences.screens.BasePreferencesFragment;
-import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog;
 import org.odk.collect.android.preferences.screens.ExperimentalPreferencesFragment;
 import org.odk.collect.android.preferences.screens.FormManagementPreferencesFragment;
 import org.odk.collect.android.preferences.screens.FormMetadataPreferencesFragment;
 import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity;
 import org.odk.collect.android.preferences.screens.GeneralPreferencesFragment;
 import org.odk.collect.android.preferences.screens.IdentityPreferencesFragment;
-import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.screens.ServerPreferencesFragment;
 import org.odk.collect.android.preferences.screens.UserInterfacePreferencesFragment;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.project.ProjectSettingsDialog;
 import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
@@ -85,18 +86,18 @@ import dagger.Component;
  * Dagger component for the application. Should include
  * application level Dagger Modules and be built with Application
  * object.
- *
+ * <p>
  * Add an `inject(MyClass myClass)` method here for objects you want
  * to inject into so Dagger knows to wire it up.
- *
+ * <p>
  * Annotated with @Singleton so modules can include @Singletons that will
  * be retained at an application level (as this an instance of this components
  * is owned by the Application object).
- *
+ * <p>
  * If you need to call a provider directly from the component (in a test
  * for example) you can add a method with the type you are looking to fetch
  * (`MyType myType()`) to this interface.
- *
+ * <p>
  * To read more about Dagger visit: https://google.github.io/dagger/users-guide
  **/
 
@@ -248,6 +249,8 @@ public interface AppDependencyComponent {
     void inject(BaseAdminPreferencesFragment baseAdminPreferencesFragment);
 
     void inject(CaptionedListPreference captionedListPreference);
+
+    void inject(AndroidShortcutsActivity androidShortcutsActivity);
 
     void inject(ProjectSettingsDialog projectSettingsDialog);
 

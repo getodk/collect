@@ -29,6 +29,27 @@ public class SendFinalizedFormTest {
             .around(rule);
 
     @Test
+    public void canViewSentForms() {
+        rule.mainMenu()
+                .setServer(testDependencies.server.getURL())
+                .copyForm("one-question.xml")
+                .startBlankForm("One Question")
+                .answerQuestion("what is your age", "123")
+                .swipeToEndScreen()
+                .clickSaveAndExit()
+
+                .clickSendFinalizedForm(1)
+                .clickOnForm("One Question")
+                .clickSendSelected()
+                .clickOK(new SendFinalizedFormPage(rule))
+                .pressBack(new MainMenuPage(rule))
+
+                .clickViewSentForm(1)
+                .clickOnForm("One Question")
+                .assertText("123");
+    }
+
+    @Test
     public void whenDeleteAfterSendIsEnabled_deletesFilledForm() {
         rule.mainMenu()
                 .setServer(testDependencies.server.getURL())

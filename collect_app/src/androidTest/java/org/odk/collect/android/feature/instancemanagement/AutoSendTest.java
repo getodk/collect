@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.support.CollectTestRule;
-import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.NotificationDrawerRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
@@ -24,7 +23,6 @@ public class AutoSendTest {
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain(testDependencies)
             .around(notificationDrawerRule)
-            .around(new CopyFormRule("one-question.xml"))
             .around(rule);
 
     @Test
@@ -32,9 +30,9 @@ public class AutoSendTest {
         MainMenuPage mainMenuPage = rule.mainMenu()
                 .setServer(testDependencies.server.getURL())
                 .enableAutoSend()
-                .clickFillBlankForm()
-                .clickOnForm("One Question")
-                .inputText("The greatest answer")
+                .copyForm("one-question.xml")
+                .startBlankForm("One Question")
+                .inputText("31")
                 .swipeToEndScreen()
                 .clickSaveAndExit();
 
@@ -43,6 +41,26 @@ public class AutoSendTest {
         mainMenuPage
                 .clickViewSentForm(1)
                 .assertText("One Question");
+
+        notificationDrawerRule.open()
+                .assertAndDismissNotification("ODK Collect", "ODK auto-send results", "Success");
+    }
+
+    @Test
+    public void whenFormHasAutoSend_fillingAndFinalizingForm_sendsFormAndNotifiesUser() {
+        MainMenuPage mainMenuPage = rule.mainMenu()
+                .setServer(testDependencies.server.getURL())
+                .copyForm("one-question-autosend.xml")
+                .startBlankForm("One Question Autosend")
+                .inputText("31")
+                .swipeToEndScreen()
+                .clickSaveAndExit();
+
+        testDependencies.scheduler.runDeferredTasks();
+
+        mainMenuPage
+                .clickViewSentForm(1)
+                .assertText("One Question Autosend");
 
         notificationDrawerRule.open()
                 .assertAndDismissNotification("ODK Collect", "ODK auto-send results", "Success");

@@ -79,6 +79,11 @@ public class InMemFormsRepository implements FormsRepository {
     }
 
     @Override
+    public List<Form> getAllByFormId(String formId) {
+        return forms.stream().filter(f -> f.getJrFormId().equals(formId)).collect(toList());
+    }
+
+    @Override
     public List<Form> getAllNotDeletedByFormId(String jrFormId) {
         return forms.stream().filter(f -> f.getJrFormId().equals(jrFormId) && !f.isDeleted()).collect(toList());
     }
@@ -88,23 +93,27 @@ public class InMemFormsRepository implements FormsRepository {
     }
 
     @Override
-    public Form save(Form form) {
-        form = new Form.Builder(form)
-                .id(idCounter++)
-                .date(clock.getCurrentTime())
-                .build();
+    public Form save(@NotNull Form form) {
+        if (form.getId() != null) {
+            forms.removeIf(f -> f.getId().equals(form.getId()));
+            forms.add(form);
+            return form;
+        } else {
+            Form.Builder builder = new Form.Builder(form)
+                    .id(idCounter++)
+                    .date(clock.getCurrentTime());
 
-        // Allows tests to override hash
-        if (form.getMD5Hash() == null) {
-            String formFilePath = form.getFormFilePath();
-            String hash = FileUtils.getMd5Hash(new File(formFilePath));
-            form = new Form.Builder(form)
-                    .md5Hash(hash)
-                    .build();
+            // Allows tests to override hash
+            if (form.getMD5Hash() == null) {
+                String formFilePath = form.getFormFilePath();
+                String hash = FileUtils.getMd5Hash(new File(formFilePath));
+                builder.md5Hash(hash);
+            }
+
+            Form formToSave = builder.build();
+            forms.add(formToSave);
+            return formToSave;
         }
-
-        forms.add(form);
-        return form;
     }
 
     @Override
@@ -112,26 +121,7 @@ public class InMemFormsRepository implements FormsRepository {
         Optional<Form> formToRemove = forms.stream().filter(f -> f.getId().equals(id)).findFirst();
         if (formToRemove.isPresent()) {
             Form form = formToRemove.get();
-
-            if (form.getFormFilePath() != null) {
-                new File(form.getFormFilePath()).delete();
-            }
-
-            if (form.getFormMediaPath() != null) {
-                try {
-                    File mediaDir = new File(form.getFormMediaPath());
-
-                    if (mediaDir.isDirectory()) {
-                        deleteDirectory(mediaDir);
-                    } else {
-                        mediaDir.delete();
-                    }
-                } catch (IOException ignored) {
-                    // Ignored
-                }
-            }
-
-
+            deleteFilesForForm(form);
             forms.remove(form);
         }
     }
@@ -149,8 +139,17 @@ public class InMemFormsRepository implements FormsRepository {
     }
 
     @Override
-    public void deleteByMd5Hash(String md5Hash) {
+    public void deleteByMd5Hash(@NotNull String md5Hash) {
         forms.removeIf(f -> f.getMD5Hash().equals(md5Hash));
+    }
+
+    @Override
+    public void deleteAll() {
+        for (Form form : forms) {
+            deleteFilesForForm(form);
+        }
+
+        forms.clear();
     }
 
     @Override
@@ -162,6 +161,26 @@ public class InMemFormsRepository implements FormsRepository {
             forms.add(new Form.Builder(form)
                     .deleted(false)
                     .build());
+        }
+    }
+
+    private void deleteFilesForForm(Form form) {
+        if (form.getFormFilePath() != null) {
+            new File(form.getFormFilePath()).delete();
+        }
+
+        if (form.getFormMediaPath() != null) {
+            try {
+                File mediaDir = new File(form.getFormMediaPath());
+
+                if (mediaDir.isDirectory()) {
+                    deleteDirectory(mediaDir);
+                } else {
+                    mediaDir.delete();
+                }
+            } catch (IOException ignored) {
+                // Ignored
+            }
         }
     }
 }

@@ -32,12 +32,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormDownloadListViewModel;
 import org.odk.collect.android.adapters.FormDownloadListAdapter;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.formentry.RefreshFormListDialogFragment;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.FormSourceExceptionMapper;
@@ -131,9 +130,6 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     Analytics analytics;
 
     @Inject
-    FormsDao formsDao;
-
-    @Inject
     FormDownloader formDownloader;
 
     @SuppressWarnings("unchecked")
@@ -145,7 +141,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         setContentView(R.layout.form_download_list);
         setTitle(getString(R.string.get_forms));
 
-        viewModel = new ViewModelProvider(this, new FormDownloadListViewModel.Factory(analytics))
+        viewModel = new ViewModelProvider(this, new FormDownloadListViewModel.Factory())
                 .get(FormDownloadListViewModel.class);
 
         init(savedInstanceState);
@@ -183,8 +179,6 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
         downloadButton.setOnClickListener(v -> {
             ArrayList<ServerFormDetails> filesToDownload = getFilesToDownload();
-            viewModel.logDownloadAnalyticsEvent(formsDao.getCount(),
-                    webCredentialsUtils.getServerUrlFromPreferences());
             startFormsDownload(filesToDownload);
         });
 

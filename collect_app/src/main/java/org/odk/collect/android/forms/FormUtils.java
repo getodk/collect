@@ -4,6 +4,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.core.reference.RootTranslator;
 import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.utilities.FileUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -13,6 +14,15 @@ public class FormUtils {
 
     private FormUtils() {
         
+    }
+
+    public static List<File> getMediaFiles(Form form) {
+        FileUtil fileUtil = new FileUtil();
+
+        String formMediaPath = form.getFormMediaPath();
+        return formMediaPath == null
+                ? new ArrayList<>()
+                : fileUtil.listFiles(fileUtil.getFileAtPath(formMediaPath));
     }
 
     /**

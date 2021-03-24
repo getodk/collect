@@ -18,8 +18,8 @@ package org.odk.collect.android.utilities;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.configure.ServerRepository;
-import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.logic.PropertyManager;
@@ -52,6 +52,9 @@ public class ApplicationResetter {
 
     @Inject
     InstancesRepository instancesRepository;
+
+    @Inject
+    FormsRepository formsRepository;
 
     public ApplicationResetter() {
         // This should probably just take arguments in the constructor rather than use Dagger
@@ -122,7 +125,7 @@ public class ApplicationResetter {
     }
 
     private void resetForms() {
-        new FormsDao().deleteFormsDatabase();
+        formsRepository.deleteAll();
 
         File itemsetDbFile = new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA) + File.separator + ItemsetDbAdapter.DATABASE_NAME);
 

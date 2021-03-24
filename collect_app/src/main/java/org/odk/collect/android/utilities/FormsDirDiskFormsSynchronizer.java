@@ -1,16 +1,14 @@
 package org.odk.collect.android.utilities;
 
-import android.content.ContentValues;
-import android.database.Cursor;
 import android.database.SQLException;
-import android.net.Uri;
 
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
-import org.odk.collect.android.provider.FormsProviderAPI;
+import org.odk.collect.android.forms.Form;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 
@@ -29,19 +27,24 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
 
     private static int counter;
 
+    private final FormsRepository formsRepository;
+
+    public FormsDirDiskFormsSynchronizer() {
+        formsRepository = new DatabaseFormsRepository();
+    }
+
     @Override
     public void synchronize() {
         synchronizeAndReturnError();
     }
 
     public String synchronizeAndReturnError() {
-        FormsDao formsDao = new FormsDao();
         String statusMessage = "";
 
         int instance = ++counter;
         Timber.i("[%d] doInBackground begins!", instance);
 
-        List<String> idsToDelete = new ArrayList<>();
+        List<Long> idsToDelete = new ArrayList<>();
 
         try {
             // Process everything then report what didn't work.
@@ -59,75 +62,52 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
                 // Step 2: quickly run through and figure out what files we need to
                 // parse and update; this is quick, as we only calculate the md5
                 // and see if it has changed.
-                List<UriFile> uriToUpdate = new ArrayList<>();
-                Cursor cursor = null;
-                // open the cursor within a try-catch block so it can always be closed.
-                try {
-                    cursor = formsDao.getFormsCursor();
-                    if (cursor == null) {
-                        Timber.e("[%d] Forms Content Provider returned NULL", instance);
-                        errors.append("Internal Error: Unable to access Forms content provider\r\n");
-                        return errors.toString();
-                    }
+                List<IdFile> uriToUpdate = new ArrayList<>();
+                List<Form> forms = formsRepository.getAll();
+                for (Form form : forms) {
+                    // For each element in the provider, see if the file already exists
+                    String sqlFilename = form.getFormFilePath();
+                    String md5 = form.getMD5Hash();
 
-                    cursor.moveToPosition(-1);
-
-                    while (cursor.moveToNext()) {
-                        // For each element in the provider, see if the file already exists
-                        String sqlFilename =
-                                storagePathProvider.getAbsoluteFormFilePath(cursor.getString(
-                                        cursor.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_FILE_PATH)));
-                        String md5 = cursor.getString(
-                                cursor.getColumnIndex(FormsProviderAPI.FormsColumns.MD5_HASH));
-                        File sqlFile = new File(sqlFilename);
-                        if (sqlFile.exists()) {
-                            // remove it from the list of forms (we only want forms
-                            // we haven't added at the end)
-                            formsToAdd.remove(sqlFile);
-                            String md5Computed = FileUtils.getMd5Hash(sqlFile);
-                            if (md5Computed == null || md5 == null || !md5Computed.equals(md5)) {
-                                // Probably someone overwrite the file on the sdcard
-                                // So re-parse it and update it's information
-                                String id = cursor.getString(
-                                        cursor.getColumnIndex(FormsProviderAPI.FormsColumns._ID));
-                                Uri updateUri = Uri.withAppendedPath(FormsProviderAPI.FormsColumns.CONTENT_URI, id);
-                                uriToUpdate.add(new UriFile(updateUri, sqlFile));
-                            }
-                        } else {
-                            //File not found in sdcard but file path found in database
-                            //probably because the file has been deleted or filename was changed in sdcard
-                            //Add the ID to list so that they could be deleted all together
-
-                            String id = cursor.getString(
-                                    cursor.getColumnIndex(FormsProviderAPI.FormsColumns._ID));
-
-                            idsToDelete.add(id);
+                    File sqlFile = new File(sqlFilename);
+                    if (sqlFile.exists()) {
+                        // remove it from the list of forms (we only want forms
+                        // we haven't added at the end)
+                        formsToAdd.remove(sqlFile);
+                        String md5Computed = FileUtils.getMd5Hash(sqlFile);
+                        if (md5Computed == null || md5 == null || !md5Computed.equals(md5)) {
+                            // Probably someone overwrite the file on the sdcard
+                            // So re-parse it and update it's information
+                            Long id = form.getId();
+                            uriToUpdate.add(new IdFile(id, sqlFile));
                         }
-                    }
-                } finally {
-                    if (cursor != null) {
-                        cursor.close();
+                    } else {
+                        //File not found in sdcard but file path found in database
+                        //probably because the file has been deleted or filename was changed in sdcard
+                        //Add the ID to list so that they could be deleted all together
+
+                        Long id = form.getId();
+                        idsToDelete.add(id);
                     }
                 }
 
-                if (!idsToDelete.isEmpty()) {
-                    //Delete the forms not found in sdcard from the database
-                    formsDao.deleteFormsFromIDs(idsToDelete.toArray(new String[idsToDelete.size()]));
+                //Delete the forms not found in sdcard from the database
+                for (Long id : idsToDelete) {
+                    formsRepository.delete(id);
                 }
 
                 // Step3: go through uriToUpdate to parse and update each in turn.
                 // Note: buildContentValues calls getMetadataFromFormDefinition which parses the
                 // form XML. This takes time for large forms and/or slow devices.
                 Collections.shuffle(uriToUpdate); // Big win if multiple DiskSyncTasks running
-                for (UriFile entry : uriToUpdate) {
-                    Uri updateUri = entry.uri;
+                for (IdFile entry : uriToUpdate) {
                     File formDefFile = entry.file;
                     // Probably someone overwrite the file on the sdcard
                     // So re-parse it and update it's information
-                    ContentValues values;
+                    Form form;
 
                     try {
-                        values = buildContentValues(formDefFile);
+                        form = parseForm(formDefFile);
                     } catch (IllegalArgumentException e) {
                         errors.append(e.getMessage()).append("\r\n");
                         File badFile = new File(formDefFile.getParentFile(),
@@ -137,11 +117,9 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
                         continue;
                     }
 
-                    // update in content provider
-                    int count =
-                            Collect.getInstance().getContentResolver()
-                                    .update(updateUri, values, null, null);
-                    Timber.i("[%d] %d records successfully updated", instance, count);
+                    formsRepository.save(new Form.Builder(form)
+                            .id(entry.id)
+                            .build());
                 }
                 uriToUpdate.clear();
 
@@ -155,17 +133,16 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
                     // Since parsing is so slow, if there are multiple tasks,
                     // they may have already updated the database.
                     // Skip this file if that is the case.
-                    if (isAlreadyDefined(formsDao, formDefFile)) {
-                        Timber.i("[%d] skipping -- definition already recorded: %s",
-                                instance, formDefFile.getAbsolutePath());
+                    if (formsRepository.getOneByPath(formDefFile.getAbsolutePath()) != null) {
+                        Timber.i("[%d] skipping -- definition already recorded: %s", instance, formDefFile.getAbsolutePath());
                         continue;
                     }
 
                     // Parse it for the first time...
-                    ContentValues values;
+                    Form form;
 
                     try {
-                        values = buildContentValues(formDefFile);
+                        form = parseForm(formDefFile);
                     } catch (IllegalArgumentException e) {
                         errors.append(e.getMessage()).append("\r\n");
                         File badFile = new File(formDefFile.getParentFile(),
@@ -179,7 +156,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
                     try {
                         // insert failures are OK and expected if multiple
                         // DiskSync scanners are active.
-                        formsDao.saveForm(values);
+                        formsRepository.save(form);
                     } catch (SQLException e) {
                         Timber.i("[%d] %s", instance, e.toString());
                     }
@@ -219,32 +196,10 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
         return !ignoredFile && (xmlFile || xhtmlFile);
     }
 
-    private boolean isAlreadyDefined(FormsDao formsDao, File formDefFile) {
-        // first try to see if a record with this filename already exists...
-        Cursor c = null;
-        try {
-            c = formsDao.getFormsCursorForFormFilePath(formDefFile.getAbsolutePath());
-            return c == null || c.getCount() > 0;
-        } finally {
-            if (c != null) {
-                c.close();
-            }
-        }
-    }
-
-    /**
-     * Parses the given form definition file to get basic form identifiers as a ContentValues object.
-     *
-     * Note: takes time for complex forms and/or slow devices.
-     *
-     * @return key-value list to update or insert into the content provider
-     * @throws IllegalArgumentException if the file failed to parse, is missing title or form_id
-     * fields or includes an invalid submission URL.
-     */
-    private ContentValues buildContentValues(File formDefFile) throws IllegalArgumentException {
+    private Form parseForm(File formDefFile) throws IllegalArgumentException {
         // Probably someone overwrite the file on the sdcard
         // So re-parse it and update it's information
-        ContentValues updateValues = new ContentValues();
+        Form.Builder builder = new Form.Builder();
 
         HashMap<String, String> fields;
         try {
@@ -260,12 +215,12 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
 
         // update date
         Long now = System.currentTimeMillis();
-        updateValues.put(FormsProviderAPI.FormsColumns.DATE, now);
+        builder.date(now);
 
         String title = fields.get(FileUtils.TITLE);
 
         if (title != null) {
-            updateValues.put(FormsProviderAPI.FormsColumns.DISPLAY_NAME, title);
+            builder.displayName(title);
         } else {
             throw new IllegalArgumentException(
                     TranslationHandler.getString(Collect.getInstance(), R.string.xform_parse_error,
@@ -273,7 +228,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
         }
         String formid = fields.get(FileUtils.FORMID);
         if (formid != null) {
-            updateValues.put(FormsProviderAPI.FormsColumns.JR_FORM_ID, formid);
+            builder.jrFormId(formid);
         } else {
             throw new IllegalArgumentException(
                     TranslationHandler.getString(Collect.getInstance(), R.string.xform_parse_error,
@@ -281,12 +236,12 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
         }
         String version = fields.get(FileUtils.VERSION);
         if (version != null) {
-            updateValues.put(FormsProviderAPI.FormsColumns.JR_VERSION, version);
+            builder.jrVersion(version);
         }
         String submission = fields.get(FileUtils.SUBMISSIONURI);
         if (submission != null) {
             if (Validator.isUrlValid(submission)) {
-                updateValues.put(FormsProviderAPI.FormsColumns.SUBMISSION_URI, submission);
+                builder.submissionUri(submission);
             } else {
                 throw new IllegalArgumentException(
                         TranslationHandler.getString(Collect.getInstance(), R.string.xform_parse_error,
@@ -295,26 +250,25 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
         }
         String base64RsaPublicKey = fields.get(FileUtils.BASE64_RSA_PUBLIC_KEY);
         if (base64RsaPublicKey != null) {
-            updateValues.put(FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY, base64RsaPublicKey);
+            builder.base64RSAPublicKey(base64RsaPublicKey);
         }
-        updateValues.put(FormsProviderAPI.FormsColumns.AUTO_DELETE, fields.get(FileUtils.AUTO_DELETE));
-        updateValues.put(FormsProviderAPI.FormsColumns.AUTO_SEND, fields.get(FileUtils.AUTO_SEND));
-        updateValues.put(FormsProviderAPI.FormsColumns.GEOMETRY_XPATH, fields.get(FileUtils.GEOMETRY_XPATH));
+        builder.autoDelete(fields.get(FileUtils.AUTO_DELETE));
+        builder.autoSend(fields.get(FileUtils.AUTO_SEND));
+        builder.geometryXpath(fields.get(FileUtils.GEOMETRY_XPATH));
 
         // Note, the path doesn't change here, but it needs to be included so the
         // update will automatically update the .md5 and the cache path.
-        updateValues.put(FormsProviderAPI.FormsColumns.FORM_FILE_PATH, new StoragePathProvider().getRelativeFormPath(formDefFile.getAbsolutePath()));
-        updateValues.putNull(FormsProviderAPI.FormsColumns.DELETED_DATE);
-
-        return updateValues;
+        builder.formFilePath(formDefFile.getAbsolutePath());
+        builder.formMediaPath(FileUtils.constructMediaPath(formDefFile.getAbsolutePath()));
+        return builder.build();
     }
 
-    private static class UriFile {
-        public final Uri uri;
+    private static class IdFile {
+        public final Long id;
         public final File file;
 
-        UriFile(Uri uri, File file) {
-            this.uri = uri;
+        IdFile(Long id, File file) {
+            this.id = id;
             this.file = file;
         }
     }

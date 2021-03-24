@@ -36,17 +36,18 @@ import com.google.android.material.chip.Chip;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFormInstance;
-import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.forms.Form;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -61,17 +62,23 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import timber.log.Timber;
-
-/** Show a map with points representing saved instances of the selected form. */
+/**
+ * Show a map with points representing saved instances of the selected form.
+ */
 public class FormMapActivity extends BaseGeoMapActivity {
+
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
+
+    public static final String EXTRA_FORM_ID = "form_id";
 
     private FormMapViewModel viewModel;
 
     @Inject
     MapProvider mapProvider;
+
+    @Inject
+    FormsRepository formsRepository;
 
     private MapFragment map;
 
@@ -93,32 +100,21 @@ public class FormMapActivity extends BaseGeoMapActivity {
      */
     private boolean viewportInitialized;
 
-    @VisibleForTesting public ViewModelProvider.Factory viewModelFactory;
+    @VisibleForTesting
+    public ViewModelProvider.Factory viewModelFactory;
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
 
-        FormsDao dao = new FormsDao();
-        Form form = null;
-        List<Form> forms = dao.getFormsFromCursor(dao.getFormsCursor(getIntent().getData()));
-        if (forms.size() == 1) {
-            form = forms.get(0);
-        } else if (viewModelFactory == null) {
-            // This shouldn't be possible because the instance URI had to be used in the calling
-            // activity but it has been logged to Crashlytics.
-            finish();
-            return;
-        }
+        Form form = formsRepository.get(getIntent().getLongExtra(EXTRA_FORM_ID, -1));
 
         if (viewModelFactory == null) { // tests set their factories directly
             viewModelFactory = new FormMapActivity.FormMapViewModelFactory(form, new DatabaseInstancesRepository());
         }
-        viewModel = new ViewModelProvider(this, viewModelFactory).get(FormMapViewModel.class);
 
-        Timber.i("Starting FormMapActivity for form \"%s\" (jrFormId = \"%s\")",
-                viewModel.getFormTitle(),
-                viewModel.getFormId());
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(FormMapViewModel.class);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.instance_map_layout);
@@ -154,7 +150,8 @@ public class FormMapActivity extends BaseGeoMapActivity {
         });
     }
 
-    @Override protected void onSaveInstanceState(Bundle state) {
+    @Override
+    protected void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
         if (map == null) {
             // initMap() is called asynchronously, so map can be null if the activity
@@ -189,17 +186,18 @@ public class FormMapActivity extends BaseGeoMapActivity {
         map = newMapFragment;
 
         findViewById(R.id.zoom_to_location).setOnClickListener(v ->
-            map.zoomToPoint(map.getGpsLocation(), true));
+                map.zoomToPoint(map.getGpsLocation(), true));
 
         findViewById(R.id.zoom_to_bounds).setOnClickListener(v ->
-            map.zoomToBoundingBox(points, 0.8, false));
+                map.zoomToBoundingBox(points, 0.8, false));
 
         findViewById(R.id.layer_menu).setOnClickListener(v -> {
             MapsPreferencesFragment.showReferenceLayerDialog(this);
         });
 
         findViewById(R.id.new_instance).setOnClickListener(v -> {
-            startActivity(new Intent(Intent.ACTION_EDIT, getIntent().getData()));
+            final Uri formUri = ContentUris.withAppendedId(FormsProviderAPI.FormsColumns.CONTENT_URI, viewModel.getFormId());
+            startActivity(new Intent(Intent.ACTION_EDIT, formUri));
         });
 
         map.setGpsLocationEnabled(true);
@@ -412,7 +410,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
         private final Form form;
         private final InstancesRepository instancesRepository;
 
-        FormMapViewModelFactory(Form form, InstancesRepository instancesRepository) {
+        FormMapViewModelFactory(@NonNull Form form, InstancesRepository instancesRepository) {
             this.form = form;
             this.instancesRepository = instancesRepository;
         }

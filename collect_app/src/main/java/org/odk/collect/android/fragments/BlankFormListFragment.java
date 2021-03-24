@@ -27,7 +27,7 @@ import androidx.loader.content.CursorLoader;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FormListAdapter;
-import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -142,7 +142,7 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
 
     @Override
     protected CursorLoader getCursorLoader() {
-        return new FormsDao().getFormsCursorLoader(getFilterText(), getSortingOrder());
+        return new CursorLoaderFactory().getFormsCursorLoader(getFilterText(), getSortingOrder(), false);
     }
 
     /**

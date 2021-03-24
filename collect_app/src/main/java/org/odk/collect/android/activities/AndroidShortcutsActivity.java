@@ -14,29 +14,35 @@
 
 package org.odk.collect.android.activities;
 
-import androidx.appcompat.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.forms.Form;
+import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
 
 /**
- * Allows the user to create desktop shortcuts to any form currently avaiable to Collect
+ * Allows the user to create desktop shortcuts to any form currently available to Collect
  *
  * @author ctsims
  * @author carlhartung (modified for ODK)
  */
-public class AndroidShortcuts extends AppCompatActivity {
+public class AndroidShortcutsActivity extends AppCompatActivity {
+
+    @Inject
+    FormsRepository formsRepository;
 
     private Uri[] commands;
     private String[] names;
@@ -44,14 +50,8 @@ public class AndroidShortcuts extends AppCompatActivity {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-
-        final Intent intent = getIntent();
-        final String action = intent.getAction();
-
-        // The Android needs to know what shortcuts are available, generate the list
-        if (Intent.ACTION_CREATE_SHORTCUT.equals(action)) {
-            buildMenuList();
-        }
+        DaggerUtils.getComponent(this).inject(this);
+        buildMenuList();
     }
 
     /**
@@ -64,42 +64,22 @@ public class AndroidShortcuts extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.select_odk_shortcut);
 
-        Cursor c = null;
-        try {
-            c = new FormsDao().getFormsCursor();
-
-            if (c.getCount() > 0) {
-                c.moveToPosition(-1);
-                while (c.moveToNext()) {
-                    String formName = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
-                    names.add(formName);
-                    Uri uri =
-                            Uri.withAppendedPath(FormsColumns.CONTENT_URI,
-                                    c.getString(c.getColumnIndex(FormsColumns._ID)));
-                    commands.add(uri);
-                }
-            }
-        } finally {
-            if (c != null) {
-                c.close();
-            }
+        List<Form> forms = formsRepository.getAll();
+        for (Form form : forms) {
+            String formName = form.getDisplayName();
+            names.add(formName);
+            Uri uri = Uri.withAppendedPath(FormsColumns.CONTENT_URI, String.valueOf(form.getId()));
+            commands.add(uri);
         }
 
         this.names = names.toArray(new String[0]);
         this.commands = commands.toArray(new Uri[0]);
 
-        builder.setItems(this.names, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                returnShortcut(AndroidShortcuts.this.names[item], AndroidShortcuts.this.commands[item]);
-            }
-        });
+        builder.setItems(this.names, (dialog, item) -> returnShortcut(this.names[item], this.commands[item]));
 
-        builder.setOnCancelListener(new OnCancelListener() {
-            public void onCancel(DialogInterface dialog) {
-                AndroidShortcuts sc = AndroidShortcuts.this;
-                sc.setResult(RESULT_CANCELED);
-                sc.finish();
-            }
+        builder.setOnCancelListener(dialog -> {
+            setResult(RESULT_CANCELED);
+            finish();
         });
 
         AlertDialog alert = builder.create();

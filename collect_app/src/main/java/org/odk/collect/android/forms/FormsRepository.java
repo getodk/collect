@@ -23,17 +23,21 @@ public interface FormsRepository {
 
     List<Form> getAllByFormIdAndVersion(String formId, @Nullable String version);
 
+    List<Form> getAllByFormId(String formId);
+
     List<Form> getAllNotDeletedByFormId(String formId);
 
     List<Form> getAllNotDeletedByFormIdAndVersion(String formId, @Nullable String version);
 
-    Form save(Form form);
+    Form save(@NotNull Form form);
 
     void delete(Long id);
 
     void softDelete(Long id);
 
     void deleteByMd5Hash(@NotNull String md5Hash);
+
+    void deleteAll();
 
     void restore(Long id);
 }

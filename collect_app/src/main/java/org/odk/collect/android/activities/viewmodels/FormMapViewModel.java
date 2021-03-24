@@ -43,8 +43,8 @@ public class FormMapViewModel extends ViewModel {
         return form.getDisplayName();
     }
 
-    public String getFormId() {
-        return form.getJrFormId();
+    public long getFormId() {
+        return form.getId();
     }
 
     /**

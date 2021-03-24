@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.ViewAction;
@@ -195,7 +196,13 @@ abstract class Page<T extends Page<T>> {
     }
 
     String getTranslatedString(Integer id) {
-        return getCurrentActivity().getString(id);
+        Activity currentActivity = getCurrentActivity();
+
+        if (currentActivity != null) {
+            return currentActivity.getString(id);
+        } else {
+            return ApplicationProvider.getApplicationContext().getString(id);
+        }
     }
 
     String getTranslatedString(Integer id, Object... formatArgs) {
@@ -285,7 +292,11 @@ abstract class Page<T extends Page<T>> {
         final Activity[] activity = new Activity[1];
         getInstrumentation().runOnMainSync(() -> {
             java.util.Collection<Activity> activities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED);
-            activity[0] = Iterables.getOnlyElement(activities);
+            if (!activities.isEmpty()) {
+                activity[0] = Iterables.getOnlyElement(activities);
+            } else {
+                activity[0] = null;
+            }
         });
 
         return activity[0];
@@ -428,7 +439,7 @@ abstract class Page<T extends Page<T>> {
 
     public T copyForm(String formFilename, List<String> mediaFileNames) {
         try {
-            FormLoadingUtils.copyFormToStorage(formFilename, mediaFileNames, false);
+            FormLoadingUtils.copyFormToStorage(formFilename, mediaFileNames, false, formFilename);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

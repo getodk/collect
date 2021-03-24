@@ -17,6 +17,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.CursorMatchers.withRowString;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -121,7 +122,9 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     }
 
     public FillBlankFormPage assertFormDoesNotExist(String formName) {
-        onData(withRowString(FormsColumns.DISPLAY_NAME, formName)).check(doesNotExist());
+        // It seems like `doesNotExist` doesn't work with onData (you get an error that the thing
+        // you're looking for doesn't exists)
+        onView(withText(formName)).check(doesNotExist());
         return this;
     }
 
