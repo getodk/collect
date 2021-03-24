@@ -81,16 +81,11 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return new AdminSettingsPage(rule).assertOnPage();
     }
 
-    public QRCodePage clickConfigureQR() {
-        clickOnString(R.string.configure_via_qr_code);
-        return new QRCodePage(rule).assertOnPage();
-    }
-
-    public QRCodePage clickConfigureQRWithAdminPassword(String password) {
-        clickOnString(R.string.configure_via_qr_code);
+    public AdminSettingsPage clickAdminSettingsWithPassword(String password) {
+        clickOnString(R.string.admin_preferences);
         inputText(password);
         clickOKOnDialog();
-        return new QRCodePage(rule).assertOnPage();
+        return new AdminSettingsPage(rule).assertOnPage();
     }
 
     public FillBlankFormPage clickFillBlankForm() {

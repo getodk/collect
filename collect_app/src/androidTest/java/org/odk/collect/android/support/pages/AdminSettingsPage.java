@@ -57,4 +57,9 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
         clickOnString(R.string.server_settings_title);
         return this;
     }
+
+    public QRCodePage clickConfigureQR() {
+        clickOnString(R.string.configure_via_qr_code);
+        return new QRCodePage(rule).assertOnPage();
+    }
 }
