@@ -173,6 +173,11 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
                 sb.append(ExternalDataUtil.SORT_COLUMN_NAME).append(" real ");
             }
 
+            // begin smap - add local column
+            sb.append(", ");
+            sb.append(ExternalDataUtil.LOCAL_COLUMN_NAME).append(" integer default 0 ");
+            // end smap
+
             sb.append(" );");
             String sql = sb.toString();
 
@@ -191,6 +196,11 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
                     Timber.w("Will create an index on %s later.", header);
                 }
             }
+
+            // begin smap add local index
+            String indexSQL = "CREATE INDEX " + ExternalDataUtil.LOCAL_COLUMN_NAME + "_idx ON " + tableName + " ("
+                    + ExternalDataUtil.toSafeColumnName(ExternalDataUtil.LOCAL_COLUMN_NAME, columnNamesCache) + ");";
+            createIndexesCommands.add(indexSQL);
 
             // populate the database
             String[] row = reader.readNext();

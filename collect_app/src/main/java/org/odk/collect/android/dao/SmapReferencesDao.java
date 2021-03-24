@@ -52,7 +52,6 @@ public class SmapReferencesDao {
             // Delete existing references
             String selection = SmapReferenceDatabaseHelper.REF_SOURCE + " = ?";
             String[] selectionArgs = {source};
-
             db.delete(SmapReferenceDatabaseHelper.TABLE_NAME, selection, selectionArgs);
 
             for (ReferenceSurvey rs : referenceSurveys) {

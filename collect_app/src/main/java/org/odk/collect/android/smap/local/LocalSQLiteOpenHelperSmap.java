@@ -26,6 +26,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseContext;
+import org.odk.collect.android.database.SmapReferenceDatabaseHelper;
 import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.external.ExternalDataReader;
 import org.odk.collect.android.external.ExternalDataUtil;
@@ -48,6 +49,9 @@ import java.util.Map;
 import au.com.bytecode.opencsv.CSVReader;
 import timber.log.Timber;
 
+import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
+
 /**
  * Author: Smap Consulting
  * Date: 22/03/2021
@@ -59,8 +63,6 @@ public class LocalSQLiteOpenHelperSmap extends SQLiteOpenHelper {
     private static final char QUOTE_CHAR = "\"".charAt(0);
     private static final char ESCAPE_CHAR = "\0".charAt(0);
 
-    private ArrayList<ContentValues> data;
-    private ExternalDataReader externalDataReader;
     private FormLoaderTask formLoaderTask;
 
     public LocalSQLiteOpenHelperSmap(File dbFile) {
@@ -69,13 +71,20 @@ public class LocalSQLiteOpenHelperSmap extends SQLiteOpenHelper {
 
     // Open the database
     public void append(ArrayList<ContentValues> data, FormLoaderTask formLoaderTask) throws java.lang.Exception {
-        this.data = data;
         this.formLoaderTask = formLoaderTask;
 
         SQLiteDatabase db = null;
         try {
             db = getWritableDatabase();
-            appendLocal(db, ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME);
+
+            // make sure the local column exists - it may not if the user has just upgraded from an older version of fieldTask
+            SQLiteUtils.addColumn(db, ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, ExternalDataUtil.LOCAL_COLUMN_NAME, "integer");
+
+            // Delete existing local data
+            String selection = ExternalDataUtil.LOCAL_COLUMN_NAME + " = 1";
+            db.delete(ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, selection, null);
+
+            appendLocal(db, ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, data);
         } finally {
             if (db != null) {
                 db.close();
@@ -90,77 +99,18 @@ public class LocalSQLiteOpenHelperSmap extends SQLiteOpenHelper {
                 TranslationHandler.getString(Collect.getInstance(), R.string.smap_local_data));
     }
 
-    private void appendLocal(SQLiteDatabase db, String tableName) throws Exception {
+    private void appendLocal(SQLiteDatabase db, String tableName, ArrayList<ContentValues> data) throws Exception {
 
         onProgress(TranslationHandler.getString(Collect.getInstance(), R.string.smap_local_data));
 
-        Map<String, String> columnNamesCache = new HashMap<>();
-
-        StringBuilder sb = new StringBuilder();
-
-        boolean sortColumnAlreadyPresent = false;
-
         for (ContentValues values : data) {
+            values.put(ExternalDataUtil.LOCAL_COLUMN_NAME, 1);    // Set local indicator
             db.insertOrThrow(tableName, null, values);
         }
     }
 
     protected boolean isCancelled() {
         return formLoaderTask != null && formLoaderTask.isCancelled();
-    }
-
-    // Create a metadata table with a single column that keeps track of the date of the last import
-    // of this data set.
-    static void createAndPopulateMetadataTable(SQLiteDatabase db, String metadataTableName, File dataSetFile) {
-        final String dataSetFilenameColumn = CustomSQLiteQueryBuilder.quoteIdentifier(ExternalDataUtil.COLUMN_DATASET_FILENAME);
-        final String md5HashColumn = CustomSQLiteQueryBuilder.quoteIdentifier(ExternalDataUtil.COLUMN_MD5_HASH);
-
-        List<String> columnDefinitions = new ArrayList<>();
-        columnDefinitions.add(CustomSQLiteQueryBuilder.formatColumnDefinition(dataSetFilenameColumn, "TEXT"));
-        columnDefinitions.add(CustomSQLiteQueryBuilder.formatColumnDefinition(md5HashColumn, "TEXT NOT NULL"));
-
-        CustomSQLiteQueryExecutor.begin(db).createTable(metadataTableName).columnsForCreate(columnDefinitions).end();
-
-        ContentValues metadata = new ContentValues();
-        metadata.put(ExternalDataUtil.COLUMN_DATASET_FILENAME, dataSetFile.getName());
-        metadata.put(ExternalDataUtil.COLUMN_MD5_HASH, FileUtils.getMd5Hash(dataSetFile));
-        db.insertOrThrow(metadataTableName, null, metadata);
-    }
-
-    static String getLastMd5Hash(SQLiteDatabase db, String metadataTableName, File dataSetFile) {
-        final String dataSetFilenameColumn = CustomSQLiteQueryBuilder.quoteIdentifier(ExternalDataUtil.COLUMN_DATASET_FILENAME);
-        final String md5HashColumn = CustomSQLiteQueryBuilder.quoteIdentifier(ExternalDataUtil.COLUMN_MD5_HASH);
-        final String dataSetFilenameLiteral = CustomSQLiteQueryBuilder.quoteStringLiteral(dataSetFile.getName());
-
-        String[] columns = {md5HashColumn};
-        String selectionCriteria = CustomSQLiteQueryBuilder.formatCompareEquals(dataSetFilenameColumn, dataSetFilenameLiteral);
-        Cursor cursor = db.query(metadataTableName, columns, selectionCriteria, null, null, null, null);
-
-        String lastImportMd5 = "";
-        if (cursor != null && cursor.getCount() == 1) {
-            cursor.moveToFirst();
-            lastImportMd5 = cursor.getString(0);
-        }
-        cursor.close();
-        return lastImportMd5;
-    }
-
-    static boolean shouldUpdateDBforDataSet(File dbFile, File dataSetFile) {
-        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READONLY);
-        return shouldUpdateDBforDataSet(db, ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, ExternalDataUtil.EXTERNAL_METADATA_TABLE_NAME, dataSetFile);
-    }
-
-    static boolean shouldUpdateDBforDataSet(SQLiteDatabase db, String dataTableName, String metadataTableName, File dataSetFile) {
-        if (!SQLiteUtils.doesTableExist(db, dataTableName)) {
-            return true;
-        }
-        if (!SQLiteUtils.doesTableExist(db, metadataTableName)) {
-            return true;
-        }
-        // Import if the CSV file has been updated
-        String priorImportMd5 = getLastMd5Hash(db, metadataTableName, dataSetFile);
-        String newFileMd5 = FileUtils.getMd5Hash(dataSetFile);
-        return newFileMd5 == null || !newFileMd5.equals(priorImportMd5);
     }
 
     @Override
@@ -173,13 +123,4 @@ public class LocalSQLiteOpenHelperSmap extends SQLiteOpenHelper {
         }
     }
 
-    /**
-     * Removes a Byte Order Mark (BOM) from the start of a String.
-     *
-     * @param bomCheckString is checked to see if it starts with a Byte Order Mark.
-     * @return bomCheckString without a Byte Order Mark.
-     */
-    private String removeByteOrderMark(String bomCheckString) {
-        return bomCheckString.startsWith("\uFEFF") ? bomCheckString.substring(1) : bomCheckString;
-    }
 }
