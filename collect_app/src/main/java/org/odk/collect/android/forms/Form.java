@@ -226,6 +226,7 @@ public final class Form {
         return submissionUri;
     }
 
+    @Nullable
     public String getBASE64RSAPublicKey() {
         return base64RSAPublicKey;
     }

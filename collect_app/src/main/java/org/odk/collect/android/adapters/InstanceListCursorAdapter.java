@@ -72,7 +72,7 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
         if (form != null) {
             String base64RSAPublicKey = form.getBASE64RSAPublicKey();
             formExists = true;
-            isFormEncrypted = base64RSAPublicKey != null && !base64RSAPublicKey.isEmpty();
+            isFormEncrypted = base64RSAPublicKey != null;
         }
 
         long date = getCursor().getLong(getCursor().getColumnIndex(InstanceColumns.DELETED_DATE));

@@ -257,8 +257,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
     }
 
     private boolean shouldInstanceBeEncrypted(Form form) {
-        String base64RSAPublicKey = form.getBASE64RSAPublicKey();
-        return base64RSAPublicKey != null && !base64RSAPublicKey.isEmpty();
+        return form.getBASE64RSAPublicKey() != null;
     }
 
     @Override

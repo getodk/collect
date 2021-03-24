@@ -314,7 +314,7 @@ public class EncryptionUtils {
         formVersion = form.getJrVersion();
         String base64RsaPublicKey = form.getBASE64RSAPublicKey();
 
-        if (base64RsaPublicKey == null || base64RsaPublicKey.length() == 0) {
+        if (base64RsaPublicKey == null) {
             return null; // this is legitimately not an encrypted form
         }
 
