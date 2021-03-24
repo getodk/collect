@@ -52,6 +52,7 @@ import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
 import org.odk.collect.android.formentry.saving.DiskFormSaver;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
+import org.odk.collect.android.formmanagement.FormCountRepository;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.FormMetadataParser;
 import org.odk.collect.android.formmanagement.ServerFormDownloader;
@@ -510,5 +511,11 @@ public class AppDependencyModule {
     @Singleton
     public UUIDGenerator providesUUIDGenerator() {
         return new UUIDGenerator();
+    }
+
+    @Provides
+    @Singleton
+    public FormCountRepository providesFormCountRepository() {
+        return new FormCountRepository();
     }
 }

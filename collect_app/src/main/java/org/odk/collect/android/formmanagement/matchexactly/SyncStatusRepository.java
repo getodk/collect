@@ -15,6 +15,10 @@ public class SyncStatusRepository {
         return syncing;
     }
 
+    public LiveData<FormSourceException> getSyncError() {
+        return lastSyncFailure;
+    }
+
     public void startSync() {
         syncing.postValue(true);
     }
@@ -22,9 +26,5 @@ public class SyncStatusRepository {
     public void finishSync(@Nullable FormSourceException exception) {
         lastSyncFailure.postValue(exception);
         syncing.postValue(false);
-    }
-
-    public LiveData<FormSourceException> getSyncError() {
-        return lastSyncFailure;
     }
 }
