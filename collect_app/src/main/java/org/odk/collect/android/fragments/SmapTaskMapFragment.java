@@ -17,6 +17,7 @@ package org.odk.collect.android.fragments;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -145,6 +146,12 @@ public class SmapTaskMapFragment extends Fragment
 
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -161,8 +168,6 @@ public class SmapTaskMapFragment extends Fragment
 
         Timber.i("######## onViewCreated");
         super.onViewCreated(rootView, savedInstanceState);
-
-        DaggerUtils.getComponent(getContext()).inject(this);
 
         model = new ViewModelProvider(requireActivity()).get(SurveyDataViewModel.class);
         model.getSurveyData().observe(getViewLifecycleOwner(), surveyData -> {

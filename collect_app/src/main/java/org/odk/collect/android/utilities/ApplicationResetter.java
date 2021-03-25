@@ -25,6 +25,7 @@ import org.odk.collect.android.database.InstancesDatabaseHelper;
 import org.odk.collect.android.database.FormsDatabaseHelper;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.SmapReferenceDatabaseHelper;
+import org.odk.collect.android.database.SmapTraceDatabaseHelper;
 import org.odk.collect.android.database.TraceUtilities;
 import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.configure.ServerRepository;
@@ -101,7 +102,7 @@ public class ApplicationResetter {
                     }
                     break;
                 case ResetAction.SMAP_RESET_LOCATIONS:  // smap
-                    TraceUtilities.deleteSource(0);
+                    SmapTraceDatabaseHelper.recreateDatabase();      // smap - really delete the database
                     break;
             }
         }

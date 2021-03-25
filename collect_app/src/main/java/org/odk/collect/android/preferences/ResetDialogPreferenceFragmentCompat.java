@@ -216,11 +216,11 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
                     break;
                 case ApplicationResetter.ResetAction.SMAP_RESET_LOCATIONS:     // smap
                     if (failedResetActions.contains(action)) {
-                        resultMessage.append(String.format(getContext().getString(R.string.smap_reset_locations_result),
-                                getContext().getString(R.string.error_occured)));
+                        resultMessage.append(String.format(context.getString(R.string.smap_reset_locations_result),
+                                context.getString(R.string.error_occured)));
                     } else {
-                        resultMessage.append(String.format(getContext().getString(R.string.smap_reset_locations_result),
-                                getContext().getString(R.string.success)));
+                        resultMessage.append(String.format(context.getString(R.string.smap_reset_locations_result),
+                                context.getString(R.string.success)));
                     }
                     break;
             }
