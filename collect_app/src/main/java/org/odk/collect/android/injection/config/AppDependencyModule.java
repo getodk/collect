@@ -84,6 +84,8 @@ import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.preferences.source.SettingsStore;
+import org.odk.collect.android.project.InMemProjectsRepository;
+import org.odk.collect.android.project.ProjectsRepository;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -495,5 +497,11 @@ public class AppDependencyModule {
     @Provides
     public ExternalWebPageHelper providesExternalWebPageHelper() {
         return new ExternalWebPageHelper();
+    }
+
+    @Provides
+    @Singleton
+    public ProjectsRepository providesProjectsRepository() {
+        return new InMemProjectsRepository();
     }
 }
