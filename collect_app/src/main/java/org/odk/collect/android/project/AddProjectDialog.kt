@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputLayout
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.material.MaterialFullScreenDialogFragment
@@ -35,6 +36,7 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
         }
 
         view.findViewById<MaterialButton>(R.id.add_button).setOnClickListener {
+            projectsRepository.add(getProjectName())
             dismiss()
         }
     }
@@ -54,4 +56,6 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
         toolbar?.setTitle(R.string.add_project)
         toolbar?.navigationIcon = null
     }
+
+    private fun getProjectName() = view?.findViewById<TextInputLayout>(R.id.project_name)?.editText?.text?.trim().toString()
 }

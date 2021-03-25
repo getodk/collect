@@ -1,14 +1,16 @@
 package org.odk.collect.android.project
 
-class InMemProjectsRepository : ProjectsRepository {
+import org.odk.collect.android.utilities.UUIDGenerator
+
+class InMemProjectsRepository(private val uuidGenerator: UUIDGenerator) : ProjectsRepository {
     val projects = mutableListOf<Project>()
 
     override fun get(uuid: String) = projects.find { it.uuid == uuid }
 
     override fun getAll() = projects
 
-    override fun add(project: Project) {
-        projects.add(project)
+    override fun add(projectName: String) {
+        projects.add(Project(uuidGenerator.generateUUID(), projectName))
     }
 
     override fun delete(uuid: String) {

@@ -100,6 +100,7 @@ import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
+import org.odk.collect.android.utilities.UUIDGenerator;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.android.views.BarcodeViewDecoder;
@@ -501,7 +502,13 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public ProjectsRepository providesProjectsRepository() {
-        return new InMemProjectsRepository();
+    public ProjectsRepository providesProjectsRepository(UUIDGenerator uuidGenerator) {
+        return new InMemProjectsRepository(uuidGenerator);
+    }
+
+    @Provides
+    @Singleton
+    public UUIDGenerator providesUUIDGenerator() {
+        return new UUIDGenerator();
     }
 }
