@@ -16,14 +16,12 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.matcher.CursorMatchers.withRowString;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
@@ -44,11 +42,6 @@ public class MainMenuPage extends Page<MainMenuPage> {
     public MainMenuPage clickOnMenu() {
         assertOnPage(); // Make sure we've waited for the application load correctly
         Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
-        return this;
-    }
-
-    public MainMenuPage assertOverflowMenuDoesNotExist() {
-        onView(withContentDescription("More options")).check(doesNotExist());
         return this;
     }
 
@@ -88,16 +81,11 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return new AdminSettingsPage(rule).assertOnPage();
     }
 
-    public QRCodePage clickConfigureQR() {
-        clickOnString(R.string.configure_via_qr_code);
-        return new QRCodePage(rule).assertOnPage();
-    }
-
-    public QRCodePage clickConfigureQRWithAdminPassword(String password) {
-        clickOnString(R.string.configure_via_qr_code);
+    public AdminSettingsPage clickAdminSettingsWithPassword(String password) {
+        clickOnString(R.string.admin_preferences);
         inputText(password);
         clickOKOnDialog();
-        return new QRCodePage(rule).assertOnPage();
+        return new AdminSettingsPage(rule).assertOnPage();
     }
 
     public FillBlankFormPage clickFillBlankForm() {

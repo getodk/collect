@@ -39,14 +39,11 @@ import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment.Action;
-import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.screens.AdminPreferencesActivity;
 import org.odk.collect.android.project.ProjectSettingsDialog;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -74,15 +71,11 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     private Button viewSentFormsButton;
     private Button reviewDataButton;
     private Button getFormsButton;
-    private MenuItem qrcodeScannerMenuItem;
     private final IncomingHandler handler = new IncomingHandler(this);
     private final MyContentObserver contentObserver = new MyContentObserver();
 
     @BindView(R.id.version_sha)
     TextView versionSHAView;
-
-    @Inject
-    AdminPasswordProvider adminPasswordProvider;
 
     @Inject
     MainMenuViewModel.Factory viewModelFactory;
@@ -223,14 +216,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
-        qrcodeScannerMenuItem = menu.findItem(R.id.menu_configure_qr_code);
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        qrcodeScannerMenuItem.setVisible(settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_QR_CODE_SCANNER));
-        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -239,19 +225,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             return true;
         }
 
-        switch (item.getItemId()) {
-            case R.id.projects:
-                DialogUtils.showIfNotShowing(ProjectSettingsDialog.class, getSupportFragmentManager());
-                return true;
-            case R.id.menu_configure_qr_code:
-                if (adminPasswordProvider.isAdminPasswordSet()) {
-                    Bundle args = new Bundle();
-                    args.putSerializable(AdminPasswordDialogFragment.ARG_ACTION, Action.SCAN_QR_CODE);
-                    showIfNotShowing(AdminPasswordDialogFragment.class, args, getSupportFragmentManager());
-                } else {
-                    startActivity(new Intent(this, QRCodeTabsActivity.class));
-                }
-                return true;
+        if (item.getItemId() == R.id.projects) {
+            showIfNotShowing(ProjectSettingsDialog.class, getSupportFragmentManager());
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

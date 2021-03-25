@@ -95,7 +95,8 @@ public class ConfigureWithQRCodeTest {
     @Test
     public void clickConfigureQRCode_opensScanner_andThenScanning_importsSettings() {
         QRCodePage qrCodePage = rule.mainMenu()
-                .clickOnMenu()
+                .openProjectSettingsDialog()
+                .clickAdminSettings()
                 .clickConfigureQR();
 
         stubBarcodeViewDecoder.scan("{\"general\":{ \"server_url\": \"http://gallops.example\" },\"admin\":{}}");
@@ -112,7 +113,8 @@ public class ConfigureWithQRCodeTest {
     @Test
     public void clickConfigureQRCode_andClickingOnView_showsQRCode() {
         rule.mainMenu()
-                .clickOnMenu()
+                .openProjectSettingsDialog()
+                .clickAdminSettings()
                 .clickConfigureQR()
                 .clickView()
                 .assertImageViewShowsImage(R.id.ivQRcode, BitmapFactory.decodeResource(
@@ -131,8 +133,9 @@ public class ConfigureWithQRCodeTest {
                 .clickOKOnDialog()
                 .pressBack(new MainMenuPage(rule))
 
-                .clickOnMenu()
-                .clickConfigureQRWithAdminPassword("blah")
+                .openProjectSettingsDialog()
+                .clickAdminSettingsWithPassword("blah")
+                .clickConfigureQR()
                 .clickView()
                 .clickOnString(R.string.qrcode_with_admin_password)
                 .clickOnString(R.string.admin_password)
@@ -152,7 +155,8 @@ public class ConfigureWithQRCodeTest {
                 .pressBack(new GeneralSettingsPage(rule))
                 .pressBack(new MainMenuPage(rule))
 
-                .clickOnMenu()
+                .openProjectSettingsDialog()
+                .clickAdminSettings()
                 .clickConfigureQR()
                 .clickView()
                 .clickOnString(R.string.qrcode_with_server_password)
