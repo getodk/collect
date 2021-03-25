@@ -408,8 +408,9 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 /*
                  * Update details on linked surveys
                  */
-                SmapReferencesDao refDao = new SmapReferencesDao();
-                refDao.updateReferences(tr.refSurveys);
+                // XXXXCSV disable
+                //SmapReferencesDao refDao = new SmapReferencesDao();
+                //refDao.updateReferences(tr.refSurveys);
 
 	        } catch(JsonSyntaxException e) {
 	        	
