@@ -199,7 +199,7 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
 
             // begin smap add local index
             String indexSQL = "CREATE INDEX " + ExternalDataUtil.LOCAL_COLUMN_NAME + "_idx ON " + tableName + " ("
-                    + ExternalDataUtil.toSafeColumnName(ExternalDataUtil.LOCAL_COLUMN_NAME, columnNamesCache) + ");";
+                    + ExternalDataUtil.LOCAL_COLUMN_NAME + ");";
             createIndexesCommands.add(indexSQL);
 
             // populate the database

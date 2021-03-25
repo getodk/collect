@@ -28,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 import timber.log.Timber;
 
@@ -39,6 +40,12 @@ public class LocalDataManagerSmap {
 
     public LocalDataManagerSmap(FormLoaderTask formLoaderTask) {
         this.formLoaderTask = formLoaderTask;
+    }
+
+    private class FormData {
+        String name;
+        ContentValues values = new ContentValues();
+        HashMap<String, ArrayList<FormData>> subForms = new HashMap<> ();
     }
 
     public void loadLocalData(String surveyIdent, File formMediaDir) {
@@ -67,18 +74,22 @@ public class LocalDataManagerSmap {
                             dataSets.put(li.survey.tableName, data);
                         }
 
-                        // Assume 1 record per instance
-                        ContentValues values = new ContentValues();
-                        data.add(values);
+                        // Accumulate data in a FormData structure
+                        FormData fd = new FormData();
+                        FormData currentForm = fd;
+                        currentForm.name = "main";
+                        Stack<FormData> formDataStack = new Stack<>(); formDataStack.push(fd);
+
                         String absPath = getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES), li.instanceFilePath);
                         XmlPullParser parser = new KXmlParser();
                         parser.setInput(new InputStreamReader(new FileInputStream(absPath), StandardCharsets.UTF_8));
 
+                        String tag;
                         parser.nextToken();
                         while (parser.getEventType() != XmlPullParser.END_DOCUMENT) {
                             switch (parser.getEventType()) {
                                 case XmlPullParser.START_TAG:
-                                    String tag = parser.getName();
+                                    tag = parser.getName();
 
                                     parser.next();
                                     if (parser.getEventType() == XmlPullParser.TEXT) {
@@ -86,15 +97,41 @@ public class LocalDataManagerSmap {
                                         Timber.i("#####################: " + tag + " : " + value);
                                         if(li.survey.columns.contains(tag)) {
                                             String safeColumnName = ExternalDataUtil.toSafeColumnName(tag, columnNamesCache);
-                                            values.put(safeColumnName, value);
+                                            currentForm.values.put(safeColumnName, value);
+                                        }
+                                    } else if (parser.getEventType() == XmlPullParser.START_TAG) {
+                                        Timber.i("#####################: Sub Form: " + tag);
+                                        if(!tag.equals("main")) {   // Top level form main already has a form definition which is an entry point to the graph
+                                            ArrayList<FormData> subFormArray = currentForm.subForms.get(tag);
+                                            if (subFormArray == null) {
+                                                subFormArray = new ArrayList<>();
+                                                currentForm.subForms.put(tag, subFormArray);
+                                            }
+                                            FormData subFormData = new FormData();
+                                            subFormArray.add(subFormData);
+                                            currentForm = subFormData;
+                                            currentForm.name = tag;
                                         }
                                     }
                                     break;
+                                case XmlPullParser.END_TAG:
+                                    tag = parser.getName();
+                                    if(tag.equals(currentForm.name) && !formDataStack.empty()) {
+                                        currentForm = formDataStack.pop();
+                                        Timber.i("#####################: End Sub Form: " + tag);
+                                    }
+
+
+
                                 default:
                             }
 
                             parser.next();
                         }
+
+                        // Convert FormData structure into records
+                        ContentValues values = new ContentValues();
+                        data.add(values);
                     }
 
                     // 4. Write instance records to the database table
