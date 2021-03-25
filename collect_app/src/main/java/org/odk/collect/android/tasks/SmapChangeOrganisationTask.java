@@ -23,7 +23,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import timber.log.Timber;
 
 /**
- * Background task for getting values from the server
+ * Background task for changing the current organisation
  */
 public class SmapChangeOrganisationTask extends AsyncTask<String, Void, String> {
 

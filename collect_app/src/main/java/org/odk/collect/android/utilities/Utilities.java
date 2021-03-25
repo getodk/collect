@@ -112,7 +112,9 @@ public class Utilities {
 
     public static String getOrgMediaPath() {
         String source = getSource();
-        return new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS)  + File.separator + "smap_media" + File.separator + source;
+        String currentOrg = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SMAP_CURRENT_ORGANISATION);
+        return new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS)  + File.separator
+                + "smap_media" + File.separator + source + File.separator + currentOrg;
     }
 
     public static TaskEntry getTaskWithIdOrPath(long id, String instancePath) {
@@ -1144,6 +1146,31 @@ public class Utilities {
             }
         }
         return out;
+    }
+
+    /*
+     * Recursive delete - skipping specified file
+     * References https://stackoverflow.com/questions/4943629/how-to-delete-a-whole-folder-and-content
+     */
+    public static boolean deleteRecursive(File deleteFile, String exceptName) {
+
+        boolean empty = true;
+        if(!deleteFile.getName().equals(exceptName)) {
+            if (deleteFile.isDirectory())
+                for (File child : deleteFile.listFiles()) {
+                    if(!child.getName().equals(exceptName)) {
+                        empty = empty  && deleteRecursive(child, exceptName);
+                    } else {
+                        empty = false;
+                    }
+                }
+            if(empty) {
+                deleteFile.delete();
+            }
+        } else {
+            empty = false;
+        }
+        return empty;
     }
 
     private static String getTaskSortOrderExpr(String sortOrder) {

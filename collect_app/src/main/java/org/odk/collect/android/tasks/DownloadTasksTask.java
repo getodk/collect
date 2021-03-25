@@ -403,6 +403,11 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                             " " + Collect.getInstance().getString(R.string.smap_deleted));
                 }
 
+                /*
+                 * Clean up shared organisation files
+                 */
+                cleanUpOrganisationFiles(tr.current_org);
+
 
 	        } catch(JsonSyntaxException e) {
 	        	
@@ -1006,6 +1011,22 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
             editor.apply();
         }
+    }
+
+    /*
+     * Delete all organisation files other than the ones for the current organisation
+     */
+    private void cleanUpOrganisationFiles(String organsisation) {
+        String source = Utilities.getSource();
+        String currentOrg = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SMAP_CURRENT_ORGANISATION);
+
+        String sharedMediaPath = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS)  + File.separator + "smap_media";
+
+        // 1. Delete all shared media except the current source
+        Utilities.deleteRecursive(new File(sharedMediaPath), source);
+
+        // 2. Delete all shared media except the current organisation
+        Utilities.deleteRecursive(new File(sharedMediaPath + File.separator + source), currentOrg);
     }
     
 }

@@ -559,13 +559,13 @@ public class MultiFormDownloaderSmap {
         int mediaCount = 0;
         if (!files.isEmpty()) {
             File tempMediaDir = new File(tempMediaPath);
-            File orgTempMediaDir = new File(orgTempMediaPath);  // smap organisational media
             File finalMediaDir = new File(finalMediaPath);
-            File orgMediaDir = new File (orgMediaPath);         // smap organisational media
+            File orgTempMediaDir = new File(orgTempMediaPath);  // smap temp organisational media
+            File orgMediaDir = new File (orgMediaPath);         // smap final organisational media
 
             FileUtils.checkMediaPath(tempMediaDir);
-            FileUtils.checkMediaPath(orgTempMediaDir);          // smap
             FileUtils.checkMediaPath(finalMediaDir);
+            FileUtils.checkMediaPath(orgTempMediaDir);          // smap
             FileUtils.checkMediaPath(orgMediaDir);              // smap
 
             for (MediaFile toDownload : files) {
