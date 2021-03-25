@@ -6,9 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputLayout
 import org.odk.collect.android.R
+import org.odk.collect.android.databinding.AddProjectDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import javax.inject.Inject
@@ -18,24 +17,27 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
     @Inject
     lateinit var projectsRepository: ProjectsRepository
 
+    private lateinit var binding: AddProjectDialogLayoutBinding
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.add_project_dialog_layout, container, false)
+        binding = AddProjectDialogLayoutBinding.inflate(inflater)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpToolbar()
 
-        view.findViewById<MaterialButton>(R.id.cancel_button).setOnClickListener {
+        binding.cancelButton.setOnClickListener {
             dismiss()
         }
 
-        view.findViewById<MaterialButton>(R.id.add_button).setOnClickListener {
+        binding.addButton.setOnClickListener {
             projectsRepository.add(getProjectName())
             dismiss()
         }
@@ -49,7 +51,7 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
     }
 
     override fun getToolbar(): Toolbar? {
-        return view?.findViewById(R.id.toolbar)
+        return binding.addProjectToolbar.toolbar
     }
 
     private fun setUpToolbar() {
@@ -57,5 +59,5 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
         toolbar?.navigationIcon = null
     }
 
-    private fun getProjectName() = view?.findViewById<TextInputLayout>(R.id.project_name)?.editText?.text?.trim().toString()
+    private fun getProjectName() = binding.projectName.editText?.text?.trim().toString()
 }

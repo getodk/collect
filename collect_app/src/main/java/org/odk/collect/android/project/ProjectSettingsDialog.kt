@@ -8,11 +8,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
-import com.google.android.material.button.MaterialButton
-import org.odk.collect.android.R
 import org.odk.collect.android.activities.AboutActivity
+import org.odk.collect.android.databinding.ProjectSettingsDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment
 import org.odk.collect.android.preferences.screens.AdminPreferencesActivity
@@ -26,6 +24,8 @@ class ProjectSettingsDialog : DialogFragment() {
     @Inject
     lateinit var adminPasswordProvider: AdminPasswordProvider
 
+    private lateinit var binding: ProjectSettingsDialogLayoutBinding
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
@@ -33,22 +33,23 @@ class ProjectSettingsDialog : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        return inflater.inflate(R.layout.project_settings_dialog_layout, container, false)
+        binding = ProjectSettingsDialogLayoutBinding.inflate(inflater)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view.findViewById<ImageView>(R.id.close_icon).setOnClickListener {
+        binding.closeIcon.setOnClickListener {
             dismiss()
         }
 
-        view.findViewById<MaterialButton>(R.id.general_settings_button).setOnClickListener {
+        binding.generalSettingsButton.setOnClickListener {
             startActivity(Intent(requireContext(), GeneralPreferencesActivity::class.java))
             dismiss()
         }
 
-        view.findViewById<MaterialButton>(R.id.admin_settings_button).setOnClickListener {
+        binding.adminSettingsButton.setOnClickListener {
             if (adminPasswordProvider.isAdminPasswordSet) {
                 val args = Bundle().also {
                     it.putSerializable(AdminPasswordDialogFragment.ARG_ACTION, AdminPasswordDialogFragment.Action.ADMIN_SETTINGS)
@@ -60,12 +61,12 @@ class ProjectSettingsDialog : DialogFragment() {
             dismiss()
         }
 
-        view.findViewById<MaterialButton>(R.id.add_project_button).setOnClickListener {
+        binding.addProjectButton.setOnClickListener {
             DialogUtils.showIfNotShowing(AddProjectDialog::class.java, requireActivity().supportFragmentManager)
             dismiss()
         }
 
-        view.findViewById<MaterialButton>(R.id.about_button).setOnClickListener {
+        binding.aboutButton.setOnClickListener {
             startActivity(Intent(requireContext(), AboutActivity::class.java))
             dismiss()
         }
