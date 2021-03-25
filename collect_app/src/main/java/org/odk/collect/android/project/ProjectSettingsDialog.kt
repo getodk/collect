@@ -8,7 +8,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.DialogFragment
+import org.odk.collect.android.R
 import org.odk.collect.android.activities.AboutActivity
 import org.odk.collect.android.databinding.ProjectSettingsDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
@@ -23,6 +25,9 @@ class ProjectSettingsDialog : DialogFragment() {
 
     @Inject
     lateinit var adminPasswordProvider: AdminPasswordProvider
+
+    @Inject
+    lateinit var projectsRepository: ProjectsRepository
 
     private lateinit var binding: ProjectSettingsDialogLayoutBinding
 
@@ -39,6 +44,8 @@ class ProjectSettingsDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        inflateListOfInActiveProjects()
 
         binding.closeIcon.setOnClickListener {
             dismiss()
@@ -69,6 +76,16 @@ class ProjectSettingsDialog : DialogFragment() {
         binding.aboutButton.setOnClickListener {
             startActivity(Intent(requireContext(), AboutActivity::class.java))
             dismiss()
+        }
+    }
+
+    private fun inflateListOfInActiveProjects() {
+        projectsRepository.getAll().forEach { project ->
+            val projectView = LayoutInflater.from(context).inflate(R.layout.project_list_item, null)
+
+            projectView.findViewById<TextView>(R.id.project_name).text = project.name
+
+            binding.projectList.addView(projectView)
         }
     }
 }

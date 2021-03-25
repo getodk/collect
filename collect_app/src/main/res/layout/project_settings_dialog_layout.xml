@@ -62,6 +62,14 @@
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/general_settings_button" />
 
+    <LinearLayout
+        android:id="@+id/project_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="@+id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@+id/admin_settings_button" />
+
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
@@ -70,7 +78,7 @@
         android:background="?colorPrimary"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/admin_settings_button" />
+        app:layout_constraintTop_toBottomOf="@+id/project_list" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/add_project_button"
