@@ -39,6 +39,7 @@ import org.odk.collect.android.fragments.MapBoxInitializationFragment;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
 import org.odk.collect.android.fragments.BlankFormListFragment;
 import org.odk.collect.android.fragments.SavedFormListFragment;
+import org.odk.collect.android.fragments.SmapFormListFragment;
 import org.odk.collect.android.fragments.SmapTaskMapFragment;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
@@ -161,6 +162,8 @@ public interface AppDependencyComponent {
     void inject(TraceProvider traceProvider);                                   // smap
 
     void inject(NotificationService notificationService);                       // smap
+
+    void inject(SmapFormListFragment smapFormListFragment);                     // smap
 
     void inject(SmapFormWidget smapFormWidget);                                 // smap
 

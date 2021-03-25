@@ -5,16 +5,12 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import org.odk.collect.android.database.DatabaseContext;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.TraceProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.SQLiteUtils;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 
 import timber.log.Timber;
 
@@ -65,7 +61,7 @@ public class SmapTraceDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        createTraceTableV2(db, TABLE_NAME);
+        createLatestVersion(db);
     }
 
     /**
@@ -80,13 +76,7 @@ public class SmapTraceDatabaseHelper extends SQLiteOpenHelper {
         try {
             Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
 
-            switch (oldVersion) {
-                case 1:
-                    upgradeToVersion2(db);
-                    break;
-                default:
-                    Timber.i("Unknown version %d", oldVersion);
-            }
+            upgrade(db);
 
             Timber.i("Upgrading database from version %d to %d completed with success.", oldVersion, newVersion);
             isDatabaseBeingMigrated = false;
@@ -106,19 +96,19 @@ public class SmapTraceDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    private void upgradeToVersion2(SQLiteDatabase db) {
+    private void upgrade(SQLiteDatabase db) {
         if (!SQLiteUtils.doesColumnExist(db, TABLE_NAME, SOURCE)) {
             SQLiteUtils.addColumn(db, TABLE_NAME, SOURCE, "text");
         }
     }
 
-    private void createTraceTableV2(SQLiteDatabase db, String name) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + name + " ("
+    private static void createLatestVersion(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
                 + _ID + " integer primary key, "
                 + SOURCE + " text, "
                 + LAT + " double not null, "
                 + LON + " double not null, "
-                +TraceProviderAPI.TraceColumns.TIME + " long not null "
+                + TraceProviderAPI.TraceColumns.TIME + " long not null "
                 + ");");
     }
 
@@ -141,4 +131,18 @@ public class SmapTraceDatabaseHelper extends SQLiteOpenHelper {
         }
         return isDatabaseHelperOutOfDate;
     }
+
+    // smap
+    public static void recreateDatabase() {
+
+        try {
+            SQLiteDatabase db = SQLiteDatabase.openDatabase(SmapTraceDatabaseHelper.getDatabasePath(), null, SQLiteDatabase.OPEN_READWRITE);
+            SQLiteUtils.dropTable(db, TABLE_NAME);
+            createLatestVersion(db);
+            db.close();
+        } catch (SQLException e) {
+            Timber.i(e);
+        }
+    }
+
 }
