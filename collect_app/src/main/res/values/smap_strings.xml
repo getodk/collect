@@ -128,6 +128,7 @@
     <string name="smap_other">Other</string>
     <string name="smap_organisation">Organization</string>
     <string name="smap_default">Default</string>
+    <string name="smap_local_data">Loading local data</string>
     <string-array name="smap_kontrolid_servers">
         <item>Kontrolid Org Server</item>
         <item>Kontrolid Com Server</item>

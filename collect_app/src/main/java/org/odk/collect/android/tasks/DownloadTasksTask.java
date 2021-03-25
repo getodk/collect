@@ -37,6 +37,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.dao.SmapReferencesDao;
 import org.odk.collect.android.database.Assignment;
 import org.odk.collect.android.database.SmapReferenceDatabaseHelper;
 import org.odk.collect.android.database.TaskAssignment;
@@ -182,7 +183,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 .getDefaultSharedPreferences(Collect.getInstance().getBaseContext());
         source = Utilities.getSource();
         serverUrl = sharedPreferences.getString(GeneralKeys.KEY_SERVER_URL, null);
-        taskURL = serverUrl + "/surveyKPI/myassignments?orgs=true&noprojects=true";
+        taskURL = serverUrl + "/surveyKPI/myassignments?orgs=true&noprojects=true&linked=true";
 
         // Should mostly work may be better to add a lock however any error is recoverable
         if(Collect.getInstance().isDownloading()) {
@@ -270,10 +271,6 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         
         if(source != null) {
 	        try {
-
-	            // REFERENCE
-                SmapReferenceDatabaseHelper referenceDatabaseHelper = new SmapReferenceDatabaseHelper();
-                referenceDatabaseHelper.getReadableDatabase();
 
                 /*
                  * Close tasks which were cancelled on the phone and
@@ -408,6 +405,11 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                  */
                 cleanUpOrganisationFiles(tr.current_org);
 
+                /*
+                 * Update details on linked surveys
+                 */
+                SmapReferencesDao refDao = new SmapReferencesDao();
+                refDao.updateReferences(tr.refSurveys);
 
 	        } catch(JsonSyntaxException e) {
 	        	

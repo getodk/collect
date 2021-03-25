@@ -64,6 +64,7 @@ public final class ExternalDataUtil {
     public static final String EXTERNAL_DATA_TABLE_NAME = "externalData";
     public static final String EXTERNAL_METADATA_TABLE_NAME = "externalMetadata";
     public static final String SORT_COLUMN_NAME = "c_sortby";
+    public static final String LOCAL_COLUMN_NAME = "_local";
     public static final String COLUMN_DATASET_FILENAME = "dataSetFilename";
     public static final String COLUMN_MD5_HASH = "md5Hash";
 
