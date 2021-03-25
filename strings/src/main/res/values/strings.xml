@@ -983,4 +983,6 @@
 
     <string name="projects">Projects</string>
     <string name="add_project">Add project</string>
+    <string name="add">Add</string>
+    <string name="project_name">Project name</string>
 </resources>

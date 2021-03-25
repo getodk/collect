@@ -60,6 +60,11 @@ class ProjectSettingsDialog : DialogFragment() {
             dismiss()
         }
 
+        view.findViewById<MaterialButton>(R.id.add_project_button).setOnClickListener {
+            DialogUtils.showIfNotShowing(AddProjectDialog::class.java, requireActivity().supportFragmentManager)
+            dismiss()
+        }
+
         view.findViewById<MaterialButton>(R.id.about_button).setOnClickListener {
             startActivity(Intent(requireContext(), AboutActivity::class.java))
             dismiss()
