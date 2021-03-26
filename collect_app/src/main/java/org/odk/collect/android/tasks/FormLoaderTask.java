@@ -147,7 +147,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             errorMsg = TranslationHandler.getString(Collect.getInstance(), R.string.too_complex_form);
         } catch (Exception | Error e) {
             Timber.w(e);
-            errorMsg = "An unknown error has occurred. Please ask your project leadership to email support@getodk.org with information about this form.";
+            errorMsg = "An unknown error has occurred. Please ask your project leadership to email smap-suite@googlegroups.com with information about this form.";   //smap
             errorMsg += "\n\n" + e.getMessage();
         }
 
