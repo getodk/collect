@@ -174,9 +174,21 @@ public class FormsProviderTest {
             assertThat(formFile.exists(), is(false));
             assertThat(mediaDir.exists(), is(false));
         }
+    }
 
+    @Test
+    public void delete_withSelection_onlyDeletesMatchingForms() {
+        addFormsToDirAndDb("form1", "1", "Matching form");
+        addFormsToDirAndDb("form2", "1", "Not matching form");
+        addFormsToDirAndDb("form3", "1", "Matching form");
 
+        contentResolver.delete(CONTENT_URI, DISPLAY_NAME + "=?", new String[]{"Matching form"});
+        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null)) {
+            assertThat(cursor.getCount(), is(1));
 
+            cursor.moveToNext();
+            assertThat(cursor.getString(cursor.getColumnIndex(JR_FORM_ID)), is("form2"));
+        }
     }
 
     @Test
