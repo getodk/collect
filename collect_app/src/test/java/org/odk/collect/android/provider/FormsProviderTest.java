@@ -15,7 +15,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.support.FormUtils;
-import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.robolectric.shadows.ShadowEnvironment;
 
@@ -157,6 +156,30 @@ public class FormsProviderTest {
     }
 
     @Test
+    public void delete_deletesFiles() {
+        Uri formUri = addFormsToDirAndDb("form1", "1", "Matching form");
+        try (Cursor cursor = contentResolver.query(formUri, null, null, null)) {
+            assertThat(cursor.getCount(), is(1));
+
+            cursor.moveToNext();
+            String formFileName = cursor.getString(cursor.getColumnIndex(FORM_FILE_PATH));
+            File formFile = new File(getFormsDirPath() + formFileName);
+            assertThat(formFile.exists(), is(true));
+
+            String mediaDirName = cursor.getString(cursor.getColumnIndex(FORM_MEDIA_PATH));
+            File mediaDir = new File(getFormsDirPath() + mediaDirName);
+            assertThat(mediaDir.exists(), is(true));
+
+            contentResolver.delete(formUri, null, null);
+            assertThat(formFile.exists(), is(false));
+            assertThat(mediaDir.exists(), is(false));
+        }
+
+
+
+    }
+
+    @Test
     public void query_withProjection_onlyReturnsSpecifiedColumns() {
         addFormsToDirAndDb("external_app_form", "1", "External app form");
 
@@ -237,8 +260,17 @@ public class FormsProviderTest {
     private File addFormToFormsDir(String formId, String formVersion, String formName) {
         String xformBody = FormUtils.createXFormBody(formId, formVersion, formName);
         String fileName = formId + "-" + formVersion + "-" + Math.random();
-        File formFile = new File(externalFilesDir + File.separator + "forms" + File.separator + fileName + ".xml");
+        File formFile = new File(getFormsDirPath() + fileName + ".xml");
         FileUtils.write(formFile, xformBody.getBytes());
+
+        String mediaDirPath = getFormsDirPath() + formFile.getName().substring(0, formFile.getName().lastIndexOf(".")) + "-media";
+        new File(mediaDirPath).mkdir();
+
         return formFile;
+    }
+
+    @NotNull
+    private String getFormsDirPath() {
+        return externalFilesDir + File.separator + "forms" + File.separator;
     }
 }
