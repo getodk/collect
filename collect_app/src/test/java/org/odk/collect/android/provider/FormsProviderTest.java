@@ -14,11 +14,13 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.support.FormUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.robolectric.shadows.ShadowEnvironment;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -177,9 +179,24 @@ public class FormsProviderTest {
             File cacheFile = new File(externalFilesDir + File.separator + ".cache" + File.separator + cacheFileName);
             assertThat(cacheFile.exists(), is(true));
 
+            ItemsetDbAdapter itemsetDbAdapter = new ItemsetDbAdapter().open();
+            try (Cursor itemsets = itemsetDbAdapter.getItemsets()) {
+                assertThat(itemsets.getCount(), is(1));
+            } finally {
+                itemsetDbAdapter.close();
+            }
+
             contentResolver.delete(formUri, null, null);
+
             assertThat(formFile.exists(), is(false));
             assertThat(mediaDir.exists(), is(false));
+
+            itemsetDbAdapter = new ItemsetDbAdapter().open();
+            try (Cursor itemsets = itemsetDbAdapter.getItemsets()) {
+                assertThat(itemsets.getCount(), is(0));
+            } finally {
+                itemsetDbAdapter.close();
+            }
         }
     }
 
@@ -281,15 +298,23 @@ public class FormsProviderTest {
         String fileName = formId + "-" + formVersion + "-" + Math.random();
         File formFile = new File(getFormsDirPath() + fileName + ".xml");
         FileUtils.write(formFile, xformBody.getBytes());
+        String md5Hash = FileUtils.getMd5Hash(formFile);
 
         String mediaDirPath = getFormsDirPath() + formFile.getName().substring(0, formFile.getName().lastIndexOf(".")) + "-media";
         new File(mediaDirPath).mkdir();
 
+        // Create a cache file so we can check deletion etc - wouldn't always be there
         try {
-            new File(externalFilesDir + File.separator + ".cache" + File.separator + FileUtils.getMd5Hash(formFile) + ".formdef").createNewFile();
+            new File(externalFilesDir + File.separator + ".cache" + File.separator + md5Hash + ".formdef").createNewFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        // Create a itemset table and row so we can check deletion etc - wouldn't always be there
+        String itemsetsCsvPath = mediaDirPath + File.separator + "itemsets.csv";
+        ItemsetDbAdapter itemsetDbAdapter = new ItemsetDbAdapter().open();
+        itemsetDbAdapter.createTable(md5Hash, FileUtils.getMd5Hash(new ByteArrayInputStream(itemsetsCsvPath.getBytes())), new String[]{"a, b"}, itemsetsCsvPath);
+        itemsetDbAdapter.close();
 
         return formFile;
     }
