@@ -45,7 +45,7 @@ public class LocalDataManagerSmap {
     private class FormData {
         String name;
         ContentValues values = new ContentValues();
-        HashMap<String, ArrayList<FormData>> subForms = new HashMap<> ();
+        ArrayList<FormData> subForms = new ArrayList<> ();
     }
 
     public void loadLocalData(String surveyIdent, File formMediaDir) {
@@ -78,60 +78,64 @@ public class LocalDataManagerSmap {
                         FormData fd = new FormData();
                         FormData currentForm = fd;
                         currentForm.name = "main";
-                        Stack<FormData> formDataStack = new Stack<>(); formDataStack.push(fd);
+                        Stack<FormData> formDataStack = new Stack<>();
+                        //formDataStack.push(fd);
 
                         String absPath = getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES), li.instanceFilePath);
                         XmlPullParser parser = new KXmlParser();
                         parser.setInput(new InputStreamReader(new FileInputStream(absPath), StandardCharsets.UTF_8));
 
                         String tag;
-                        parser.nextToken();
+                        parser.nextTag();
                         while (parser.getEventType() != XmlPullParser.END_DOCUMENT) {
+                            tag = parser.getName();
+                            String value = parser.getText();
+
+                            Timber.i("@@@@@@@@: " + tag + " : " + parser.getEventType() + " : " + value);
                             switch (parser.getEventType()) {
                                 case XmlPullParser.START_TAG:
-                                    tag = parser.getName();
-
                                     parser.next();
-                                    if (parser.getEventType() == XmlPullParser.TEXT) {
-                                        String value = parser.getText();
+                                    value = parser.getText();
+                                    Timber.i("%%%%%%%%: " + tag + " : " + parser.getEventType() + " : " + value);
+
+                                    if(parser.getEventType() == XmlPullParser.TEXT) {
                                         Timber.i("#####################: " + tag + " : " + value);
-                                        if(li.survey.columns.contains(tag)) {
+                                        if (li.survey.columns.contains(tag)) {
                                             String safeColumnName = ExternalDataUtil.toSafeColumnName(tag, columnNamesCache);
                                             currentForm.values.put(safeColumnName, value);
                                         }
-                                    } else if (parser.getEventType() == XmlPullParser.START_TAG) {
+                                    } else if(parser.getEventType() == XmlPullParser.START_TAG) {
                                         Timber.i("#####################: Sub Form: " + tag);
-                                        if(!tag.equals("main")) {   // Top level form main already has a form definition which is an entry point to the graph
-                                            ArrayList<FormData> subFormArray = currentForm.subForms.get(tag);
-                                            if (subFormArray == null) {
-                                                subFormArray = new ArrayList<>();
-                                                currentForm.subForms.put(tag, subFormArray);
-                                            }
+                                        if (!tag.equals("main")) {   // Top level form main already has a form definition which is an entry point to the graph
                                             FormData subFormData = new FormData();
-                                            subFormArray.add(subFormData);
+                                            formDataStack.push(currentForm);
                                             currentForm = subFormData;
                                             currentForm.name = tag;
                                         }
                                     }
                                     break;
+
                                 case XmlPullParser.END_TAG:
-                                    tag = parser.getName();
                                     if(tag.equals(currentForm.name) && !formDataStack.empty()) {
+                                        FormData completedForm = currentForm;
                                         currentForm = formDataStack.pop();
+                                        if(completedForm.values.size() > 0 || completedForm.subForms.size() > 0) {  // Add if not empty
+                                            currentForm.subForms.add(completedForm);
+                                        }
                                         Timber.i("#####################: End Sub Form: " + tag);
                                     }
-
-
-
+                                    parser.next();
+                                    break;
                                 default:
+                                    parser.next();
+                                    break;
                             }
 
-                            parser.next();
                         }
 
                         // Convert FormData structure into records
-                        ContentValues values = new ContentValues();
-                        data.add(values);
+                        addNode(data, fd, new ContentValues());
+
                     }
 
                     // 4. Write instance records to the database table
@@ -148,6 +152,7 @@ public class LocalDataManagerSmap {
 
             }
         } catch (Exception e) {
+            Timber.e(e);
             FirebaseCrashlytics.getInstance().recordException(e);
         }
 
@@ -182,5 +187,23 @@ public class LocalDataManagerSmap {
             Timber.e(e);
         }
         return instances;
+    }
+
+    /*
+     * Recursively convert nodes into records
+     */
+    private void addNode(ArrayList<ContentValues> data, FormData fd, ContentValues values) {
+        ContentValues nodeValues = new ContentValues();
+        nodeValues.putAll(values);      // Add what we have been passed
+        nodeValues.putAll(fd.values);   // Add the values in this node
+
+        // Process the subforms
+        if(fd.subForms.size() == 0) {
+            data.add(nodeValues);   // Reached a leaf node we are done
+        } else {
+            for(FormData sf : fd.subForms) {
+                addNode(data, sf, nodeValues);
+            }
+        }
     }
 }
