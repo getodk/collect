@@ -14,11 +14,13 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.support.FormUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.robolectric.shadows.ShadowEnvironment;
 
 import java.io.File;
+import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -47,6 +49,7 @@ public class FormsProviderTest {
     public void setup() {
         // Fake that external storage is mounted (it isn't by default in Robolectric)
         ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
+        new StorageInitializer().createOdkDirsOnStorage();
 
         Context context = ApplicationProvider.getApplicationContext();
         externalFilesDir = context.getExternalFilesDir(null);
@@ -170,6 +173,10 @@ public class FormsProviderTest {
             File mediaDir = new File(getFormsDirPath() + mediaDirName);
             assertThat(mediaDir.exists(), is(true));
 
+            String cacheFileName = cursor.getString(cursor.getColumnIndex(JRCACHE_FILE_PATH));
+            File cacheFile = new File(externalFilesDir + File.separator + ".cache" + File.separator + cacheFileName);
+            assertThat(cacheFile.exists(), is(true));
+
             contentResolver.delete(formUri, null, null);
             assertThat(formFile.exists(), is(false));
             assertThat(mediaDir.exists(), is(false));
@@ -277,6 +284,12 @@ public class FormsProviderTest {
 
         String mediaDirPath = getFormsDirPath() + formFile.getName().substring(0, formFile.getName().lastIndexOf(".")) + "-media";
         new File(mediaDirPath).mkdir();
+
+        try {
+            new File(externalFilesDir + File.separator + ".cache" + File.separator + FileUtils.getMd5Hash(formFile) + ".formdef").createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return formFile;
     }
