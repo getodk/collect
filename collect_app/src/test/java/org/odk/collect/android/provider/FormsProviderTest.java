@@ -32,6 +32,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FOR
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_VERSION;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LANGUAGE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.MD5_HASH;
 
 @RunWith(AndroidJUnit4.class)
@@ -105,6 +106,44 @@ public class FormsProviderTest {
     }
 
     @Test
+    public void update_updatesForm() {
+        Uri formUri = addFormsToDirAndDb("external_app_form", "1", "External app form");
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(LANGUAGE, "English");
+
+        contentResolver.update(formUri, contentValues, null, null);
+        try (Cursor cursor = contentResolver.query(formUri, null, null, null)) {
+            assertThat(cursor.getCount(), is(1));
+
+            cursor.moveToNext();
+            assertThat(cursor.getString(cursor.getColumnIndex(LANGUAGE)), is("English"));
+        }
+    }
+
+    @Test
+    public void update_withSelection_onlyUpdatesMatchingForms() {
+        addFormsToDirAndDb("form1", "1", "Matching form");
+        addFormsToDirAndDb("form2", "1", "Not matching form");
+        addFormsToDirAndDb("form3", "1", "Matching form");
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(LANGUAGE, "English");
+
+        contentResolver.update(CONTENT_URI, contentValues, DISPLAY_NAME + "=?", new String[]{"Matching form"});
+        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null)) {
+            assertThat(cursor.getCount(), is(3));
+
+            cursor.moveToNext();
+            if (cursor.getString(cursor.getColumnIndex(DISPLAY_NAME)).equals("Matching form")) {
+                assertThat(cursor.getString(cursor.getColumnIndex(LANGUAGE)), is("English"));
+            } else {
+                assertThat(cursor.isNull(cursor.getColumnIndex(LANGUAGE)), is(true));
+            }
+        }
+    }
+
+    @Test
     public void query_withProjection_onlyReturnsSpecifiedColumns() {
         addFormsToDirAndDb("external_app_form", "1", "External app form");
 
@@ -155,10 +194,10 @@ public class FormsProviderTest {
         }
     }
 
-    private void addFormsToDirAndDb(String id, String version, String name) {
+    private Uri addFormsToDirAndDb(String id, String version, String name) {
         File formFile = addFormToFormsDir(id, version, name);
         ContentValues values = getContentValues(id, version, name, formFile);
-        contentResolver.insert(CONTENT_URI, values);
+        return contentResolver.insert(CONTENT_URI, values);
     }
 
     @NotNull
