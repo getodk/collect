@@ -144,6 +144,16 @@ public class FormsProviderTest {
     }
 
     @Test
+    public void delete_deletesForm() {
+        Uri formUri = addFormsToDirAndDb("form1", "1", "Matching form");
+        contentResolver.delete(formUri, null, null);
+
+        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null)) {
+            assertThat(cursor.getCount(), is(0));
+        }
+    }
+
+    @Test
     public void query_withProjection_onlyReturnsSpecifiedColumns() {
         addFormsToDirAndDb("external_app_form", "1", "External app form");
 
