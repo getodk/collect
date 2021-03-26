@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.support.FormUtils;
+import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.robolectric.shadows.ShadowEnvironment;
 
@@ -24,6 +25,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isOneOf;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.CONTENT_ITEM_TYPE;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.CONTENT_TYPE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.CONTENT_URI;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DATE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DISPLAY_NAME;
@@ -202,6 +205,12 @@ public class FormsProviderTest {
             cursor.moveToNext();
             assertThat(cursor.getString(cursor.getColumnIndex(JR_FORM_ID)), is("formC"));
         }
+    }
+
+    @Test
+    public void getType_returnsFormAndAllFormsTypes() {
+        assertThat(contentResolver.getType(CONTENT_URI), is(CONTENT_TYPE));
+        assertThat(contentResolver.getType(Uri.withAppendedPath(CONTENT_URI, "1")), is(CONTENT_ITEM_TYPE));
     }
 
     private Uri addFormsToDirAndDb(String id, String version, String name) {
