@@ -64,6 +64,8 @@ import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.preferences.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.provider.TraceProvider;
+import org.odk.collect.android.receivers.LocationReceiver;
+import org.odk.collect.android.services.LocationService;
 import org.odk.collect.android.services.NotificationService;
 import org.odk.collect.android.tasks.DownloadTasksTask;                 // smap
 import org.odk.collect.android.tasks.SmapChangeOrganisationTask;
@@ -162,6 +164,8 @@ public interface AppDependencyComponent {
     void inject(TraceProvider traceProvider);                                   // smap
 
     void inject(NotificationService notificationService);                       // smap
+
+    void inject(LocationReceiver locationReceiver);                             // smap
 
     void inject(SmapFormListFragment smapFormListFragment);                     // smap
 

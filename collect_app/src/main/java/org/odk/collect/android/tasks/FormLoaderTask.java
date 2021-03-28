@@ -130,7 +130,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         final String formId = path[1];          // smap
         if (formPath == null) {
             Timber.e("formPath is null");
-            errorMsg = "formPath is null, please email support@getodk.org with a description of what you were doing when this happened.";
+            errorMsg = "formPath is null, please email smap-suite@googlegroups.com with a description of what you were doing when this happened.";  // smap email
             return null;
         }
 
@@ -147,7 +147,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             errorMsg = TranslationHandler.getString(Collect.getInstance(), R.string.too_complex_form);
         } catch (Exception | Error e) {
             Timber.w(e);
-            errorMsg = "An unknown error has occurred. Please ask your project leadership to email smap-suite@googlegroups.com with information about this form.";   //smap
+            errorMsg = "An unknown error has occurred. Please ask your project leadership to email smap-suite@googlegroups.com with information about this form.";  // smap email
             errorMsg += "\n\n" + e.getMessage();
         }
 
@@ -351,7 +351,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                     } else {
                         // The saved instance is corrupted.
                         Timber.e(e, "Corrupt saved instance");
-                        throw new RuntimeException("An unknown error has occurred. Please ask your project leadership to email support@getodk.org with information about this form."
+                        throw new RuntimeException("An unknown error has occurred. Please ask your project leadership to email smap-suite@googlegroups.com with information about this form."  // smap email
                             + "\n\n" + e.getMessage());
                     }
                 }
