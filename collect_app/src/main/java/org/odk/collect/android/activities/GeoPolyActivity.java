@@ -34,6 +34,7 @@ import org.odk.collect.android.geo.SettingsDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.utilities.DialogUtils;
+import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.ArrayList;
@@ -346,8 +347,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
                     Double.toString(point.alt), Float.toString((float) point.sd)));
         }
 
-        String answer = result.toString().trim();
-        return answer.isEmpty() ? answer : answer.substring(0, answer.length() - 1);
+        return StringUtils.removeEnd(result.toString().trim(), ";");
     }
 
     @Override
