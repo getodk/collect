@@ -12,6 +12,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.TraceUtilities;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.loaders.GeofenceEntry;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -38,6 +39,10 @@ public class LocationReceiver  extends BroadcastReceiver {
     @Inject
     Notifier notifier;
 
+    private void deferDaggerInit(Context context) {
+        DaggerUtils.getComponent(context).inject(this);
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent != null) {
@@ -57,7 +62,7 @@ public class LocationReceiver  extends BroadcastReceiver {
 
     public void onLocationChanged(Context context, Location location) {
 
-        //Timber.i("+++++ location changed");
+        deferDaggerInit(context);
 
         if(isValidLocation(location) && isAccurateLocation(location)) {
 

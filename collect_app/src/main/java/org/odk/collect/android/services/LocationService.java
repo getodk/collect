@@ -35,6 +35,7 @@ import com.google.android.gms.location.LocationServices;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.receivers.LocationReceiver;
@@ -65,9 +66,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private boolean isRecordingLocation = false;
     private Timer mTimer;
     String FG_CHANNEL_ID = "smap_foreground_channel";
-
-    @Inject
-    Notifier notifier;
 
     public LocationService() {
     }
