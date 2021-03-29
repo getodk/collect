@@ -17,6 +17,7 @@ package org.odk.collect.android.tasks;
 import android.os.AsyncTask;
 
 import org.odk.collect.android.listeners.DiskSyncListener;
+import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 
 /**
@@ -42,6 +43,9 @@ public class FormSyncTask extends AsyncTask<Void, String, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
+
+        FormsProvider.notifyChange();
+
         statusMessage = result;
 
         if (listener != null) {

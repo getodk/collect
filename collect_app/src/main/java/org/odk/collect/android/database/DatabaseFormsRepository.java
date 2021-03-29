@@ -2,15 +2,20 @@ package org.odk.collect.android.database;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.utilities.FileUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -18,6 +23,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import static android.provider.BaseColumns._ID;
+import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY;
@@ -29,6 +35,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FOR
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.GEOMETRY_XPATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_VERSION;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.MD5_HASH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SUBMISSION_URI;
 
 public class DatabaseFormsRepository implements FormsRepository {
@@ -114,6 +121,9 @@ public class DatabaseFormsRepository implements FormsRepository {
     public Form save(@NotNull Form form) {
         final ContentValues values = getValuesFromFormObject(form, storagePathProvider);
 
+        String md5Hash = FileUtils.getMd5Hash(new File(form.getFormFilePath()));
+        values.put(MD5_HASH, md5Hash);
+
         if (form.isDeleted()) {
             values.put(DELETED_DATE, 0L);
         } else {
@@ -127,7 +137,7 @@ public class DatabaseFormsRepository implements FormsRepository {
                 return getFormsFromCursor(cursor, storagePathProvider).get(0);
             }
         } else {
-            Collect.getInstance().getContentResolver().update(CONTENT_URI, values, _ID + "=?", new String[]{form.getId().toString()});
+            updateForm(form.getId(), values);
             return get(form.getId());
         }
     }
@@ -144,7 +154,7 @@ public class DatabaseFormsRepository implements FormsRepository {
     public void softDelete(Long id) {
         ContentValues values = new ContentValues();
         values.put(DELETED_DATE, System.currentTimeMillis());
-        Collect.getInstance().getContentResolver().update(CONTENT_URI, values, _ID + "=?", new String[]{id.toString()});
+        updateForm(id, values);
     }
 
     @Override
@@ -164,7 +174,7 @@ public class DatabaseFormsRepository implements FormsRepository {
     public void restore(Long id) {
         ContentValues values = new ContentValues();
         values.putNull(DELETED_DATE);
-        Collect.getInstance().getContentResolver().update(CONTENT_URI, values, _ID + "=?", new String[]{id.toString()});
+        updateForm(id, values);
     }
 
     @Nullable
@@ -174,9 +184,18 @@ public class DatabaseFormsRepository implements FormsRepository {
     }
 
     private List<Form> queryForForms(String selection, String[] selectionArgs) {
-        try (Cursor cursor = Collect.getInstance().getContentResolver().query(CONTENT_URI, null, selection, selectionArgs, null)) {
-            return getFormsFromCursor(cursor, storagePathProvider);
-        }
+        FormsDatabaseHelper formsDatabaseHelper = FormsProvider.getDbHelper();
+        SQLiteDatabase readableDatabase = formsDatabaseHelper.getReadableDatabase();
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+        qb.setTables(FORMS_TABLE_NAME);
+        Cursor cursor = qb.query(readableDatabase, null, selection, selectionArgs, null, null, null);
+        return getFormsFromCursor(cursor, storagePathProvider);
+    }
+
+    private void updateForm(Long id, ContentValues values) {
+        FormsDatabaseHelper formsDatabaseHelper = FormsProvider.getDbHelper();
+        SQLiteDatabase writableDatabase = formsDatabaseHelper.getWritableDatabase();
+        writableDatabase.update(FORMS_TABLE_NAME, values, _ID + "=?", new String[]{String.valueOf(id)});
     }
 
     @NotNull

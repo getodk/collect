@@ -16,6 +16,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.FormUtils.buildForm;
+import static org.odk.collect.android.support.FormUtils.createXFormBody;
 
 public abstract class FormsRepositoryTest {
 
@@ -181,6 +182,25 @@ public abstract class FormsRepositoryTest {
                 .build());
 
         assertThat(formsRepository.get(originalForm.getId()).getDisplayName(), is("changed"));
+    }
+
+    @Test
+    public void save_whenFormHasId_updatesHash() {
+        FormsRepository formsRepository = buildSubject();
+        Form originalForm = formsRepository.save(buildForm("id", "version", getFormFilesPath())
+                .displayName("original")
+                .build());
+
+        String newFormBody = createXFormBody("id", "version", "A different title");
+        File formFile = new File(originalForm.getFormFilePath());
+        FileUtils.write(formFile, newFormBody.getBytes());
+
+        formsRepository.save(new Form.Builder(originalForm)
+                .displayName("changed")
+                .build());
+
+        String expectedHash = FileUtils.getMd5Hash(formFile);
+        assertThat(formsRepository.get(originalForm.getId()).getMD5Hash(), is(expectedHash));
     }
 
     @Test

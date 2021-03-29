@@ -27,6 +27,7 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.FormDatabaseMigrator;
 import org.odk.collect.android.database.FormsDatabaseHelper;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
@@ -45,6 +46,8 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.CONTENT_URI;
 
 public class FormsProvider extends ContentProvider {
     private static HashMap<String, String> sFormsProjectionMap;
@@ -61,7 +64,7 @@ public class FormsProvider extends ContentProvider {
     @Inject
     Clock clock;
 
-    private synchronized FormsDatabaseHelper getDbHelper() {
+    public static synchronized FormsDatabaseHelper getDbHelper() {
         if (dbHelper == null) {
             recreateDatabaseHelper();
         }
@@ -79,6 +82,12 @@ public class FormsProvider extends ContentProvider {
             dbHelper.close();
             dbHelper = null;
         }
+    }
+
+    public static void notifyChange() {
+        // Make sure content observers (CursorLoaders for instance) are notified of change
+        Collect.getInstance().getContentResolver().notifyChange(CONTENT_URI, null);
+        Collect.getInstance().getContentResolver().notifyChange(CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
     }
 
     // Do not call it in onCreate() https://stackoverflow.com/questions/23521083/inject-database-in-a-contentprovider-with-dagger
