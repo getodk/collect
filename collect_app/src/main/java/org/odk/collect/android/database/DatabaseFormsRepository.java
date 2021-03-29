@@ -16,6 +16,7 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import static android.provider.BaseColumns._ID;
+import static org.apache.commons.io.FileUtils.deleteDirectory;
 import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
@@ -147,7 +149,7 @@ public class DatabaseFormsRepository implements FormsRepository {
         String selection = _ID + "=?";
         String[] selectionArgs = {String.valueOf(id)};
 
-        Collect.getInstance().getContentResolver().delete(CONTENT_URI, selection, selectionArgs);
+        deleteForms(selection, selectionArgs);
     }
 
     @Override
@@ -162,12 +164,12 @@ public class DatabaseFormsRepository implements FormsRepository {
         String selection = FormsProviderAPI.FormsColumns.MD5_HASH + "=?";
         String[] selectionArgs = {md5Hash};
 
-        Collect.getInstance().getContentResolver().delete(CONTENT_URI, selection, selectionArgs);
+        deleteForms(selection, selectionArgs);
     }
 
     @Override
     public void deleteAll() {
-        Collect.getInstance().getContentResolver().delete(CONTENT_URI, null, null);
+        deleteForms(null, null);
     }
 
     @Override
@@ -198,8 +200,19 @@ public class DatabaseFormsRepository implements FormsRepository {
         writableDatabase.update(FORMS_TABLE_NAME, values, _ID + "=?", new String[]{String.valueOf(id)});
     }
 
+    private void deleteForms(String selection, String[] selectionArgs) {
+        List<Form> forms = queryForForms(selection, selectionArgs);
+        for (Form form : forms) {
+            deleteFilesForForm(form);
+        }
+
+        FormsDatabaseHelper formsDatabaseHelper = FormsProvider.getDbHelper();
+        SQLiteDatabase writableDatabase = formsDatabaseHelper.getWritableDatabase();
+        writableDatabase.delete(FORMS_TABLE_NAME, selection, selectionArgs);
+    }
+
     @NotNull
-    public static List<Form> getFormsFromCursor(Cursor cursor, StoragePathProvider storagePathProvider) {
+    private static List<Form> getFormsFromCursor(Cursor cursor, StoragePathProvider storagePathProvider) {
         List<Form> forms = new ArrayList<>();
         if (cursor != null) {
             cursor.moveToPosition(-1);
@@ -270,5 +283,25 @@ public class DatabaseFormsRepository implements FormsRepository {
         values.put(FormsProviderAPI.FormsColumns.GEOMETRY_XPATH, form.getGeometryXpath());
 
         return values;
+    }
+
+    private void deleteFilesForForm(Form form) {
+        if (form.getFormFilePath() != null) {
+            new File(form.getFormFilePath()).delete();
+        }
+
+        if (form.getFormMediaPath() != null) {
+            try {
+                File mediaDir = new File(form.getFormMediaPath());
+
+                if (mediaDir.isDirectory()) {
+                    deleteDirectory(mediaDir);
+                } else {
+                    mediaDir.delete();
+                }
+            } catch (IOException ignored) {
+                // Ignored
+            }
+        }
     }
 }
