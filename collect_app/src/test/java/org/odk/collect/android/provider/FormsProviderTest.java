@@ -93,24 +93,12 @@ public class FormsProviderTest {
         String formVersion = "1";
         String formName = "External app form";
         File formFile = addFormToFormsDir(formId, formVersion, formName);
-        String md5Hash = FileUtils.getMd5Hash(formFile);
 
         ContentValues values = getContentValues(formId, formVersion, formName, formFile);
         Uri newFormUri = contentResolver.insert(CONTENT_URI, values);
 
         try (Cursor cursor = contentResolver.query(newFormUri, null, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
-
-            cursor.moveToNext();
-            assertThat(cursor.getString(cursor.getColumnIndex(DISPLAY_NAME)), is(formName));
-            assertThat(cursor.getString(cursor.getColumnIndex(JR_FORM_ID)), is(formId));
-            assertThat(cursor.getString(cursor.getColumnIndex(JR_VERSION)), is(formVersion));
-            assertThat(cursor.getString(cursor.getColumnIndex(FORM_FILE_PATH)), is(formFile.getName()));
-
-            assertThat(cursor.getString(cursor.getColumnIndex(DATE)), is(notNullValue()));
-            assertThat(cursor.getString(cursor.getColumnIndex(MD5_HASH)), is(md5Hash));
-            assertThat(cursor.getString(cursor.getColumnIndex(JRCACHE_FILE_PATH)), is(md5Hash + ".formdef"));
-            assertThat(cursor.getString(cursor.getColumnIndex(FORM_MEDIA_PATH)), is(mediaPathForFormFile(formFile)));
         }
     }
 

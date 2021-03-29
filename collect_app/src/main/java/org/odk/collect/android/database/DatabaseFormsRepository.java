@@ -131,7 +131,7 @@ public class DatabaseFormsRepository implements FormsRepository {
 
         String md5Hash = FileUtils.getMd5Hash(new File(form.getFormFilePath()));
         values.put(MD5_HASH, md5Hash);
-        values.put(FORM_MEDIA_PATH, FileUtils.constructMediaPath(form.getFormFilePath()));
+        values.put(FORM_MEDIA_PATH, storagePathProvider.getRelativeFormPath(FileUtils.constructMediaPath(form.getFormFilePath())));
         values.put(JRCACHE_FILE_PATH, md5Hash + ".formdef");
 
         if (form.isDeleted()) {

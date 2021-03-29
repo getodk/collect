@@ -15,12 +15,9 @@
 package org.odk.collect.android.provider;
 
 import android.content.ContentProvider;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
@@ -34,10 +31,8 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ContentUriHelper;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.utilities.Clock;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -164,84 +159,8 @@ public class FormsProvider extends ContentProvider {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        FormsDatabaseHelper formsDatabaseHelper = FormsDatabaseHelper.getDbHelper();
-        if (formsDatabaseHelper != null) {
-            ContentValues values;
-            if (initialValues != null) {
-                values = new ContentValues(initialValues);
-            } else {
-                values = new ContentValues();
-            }
-
-            if (!values.containsKey(FormsColumns.FORM_FILE_PATH)) {
-                throw new IllegalArgumentException(FormsColumns.FORM_FILE_PATH + " must be specified.");
-            }
-
-            // Normalize the file path.
-            // (don't trust the requester).
-            String filePath = storagePathProvider.getAbsoluteFormFilePath(values.getAsString(FormsColumns.FORM_FILE_PATH));
-            File form = new File(filePath);
-            filePath = form.getAbsolutePath(); // normalized
-            values.put(FormsColumns.FORM_FILE_PATH, storagePathProvider.getRelativeFormPath(filePath));
-
-            Long now = clock.getCurrentTime();
-
-            // Make sure that the necessary fields are all set
-            if (!values.containsKey(DATE)) {
-                values.put(DATE, now);
-            }
-
-            if (!values.containsKey(FormsColumns.DISPLAY_NAME)) {
-                values.put(FormsColumns.DISPLAY_NAME, form.getName());
-            }
-
-            // don't let users put in a manual md5 hash
-            if (values.containsKey(FormsColumns.MD5_HASH)) {
-                values.remove(FormsColumns.MD5_HASH);
-            }
-            String md5 = FileUtils.getMd5Hash(form);
-            values.put(FormsColumns.MD5_HASH, md5);
-
-            if (!values.containsKey(FormsColumns.JRCACHE_FILE_PATH)) {
-                values.put(FormsColumns.JRCACHE_FILE_PATH, storagePathProvider.getRelativeCachePath(md5 + ".formdef"));
-            }
-            if (!values.containsKey(FormsColumns.FORM_MEDIA_PATH)) {
-                values.put(FormsColumns.FORM_MEDIA_PATH, storagePathProvider.getRelativeFormPath(FileUtils.constructMediaPath(filePath)));
-            }
-
-            SQLiteDatabase db = formsDatabaseHelper.getWritableDatabase();
-
-            // first try to see if a record with this filename already exists...
-            String[] projection = {FormsColumns._ID, FormsColumns.FORM_FILE_PATH};
-            String[] selectionArgs = {storagePathProvider.getRelativeFormPath(filePath)};
-            String selection = FormsColumns.FORM_FILE_PATH + "=?";
-            Cursor c = null;
-            try {
-                c = db.query(FORMS_TABLE_NAME, projection, selection,
-                        selectionArgs, null, null, null);
-                if (c.getCount() > 0) {
-                    // already exists
-                    throw new SQLException("FAILED Insert into " + uri
-                            + " -- row already exists for form definition file: "
-                            + filePath);
-                }
-            } finally {
-                if (c != null) {
-                    c.close();
-                }
-            }
-
-            long rowId = db.insertOrThrow(FORMS_TABLE_NAME, null, values);
-            if (rowId > 0) {
-                Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI,
-                        rowId);
-                getContext().getContentResolver().notifyChange(formUri, null);
-                getContext().getContentResolver().notifyChange(FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
-                return formUri;
-            }
-        }
-
-        throw new SQLException("Failed to insert into the forms database.");
+        Form form = formsRepository.save(getFormFromValues(initialValues, storagePathProvider));
+        return Uri.withAppendedPath(CONTENT_URI, String.valueOf(form.getId()));
     }
 
     /**
