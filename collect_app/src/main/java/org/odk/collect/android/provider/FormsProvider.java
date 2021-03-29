@@ -84,45 +84,42 @@ public class FormsProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(@NonNull Uri uri, String[] projection, String selection,
-                        String[] selectionArgs, String sortOrder) {
-        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        qb.setTables(FORMS_TABLE_NAME);
-        qb.setProjectionMap(sFormsProjectionMap);
-        qb.setStrict(true);
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        Cursor cursor;
+        switch (URI_MATCHER.match(uri)) {
+            case FORMS:
+                cursor = formsRepository.rawQuery(projection, selection, selectionArgs, sortOrder);
+                break;
 
-        Cursor c = null;
-        FormsDatabaseHelper formsDatabaseHelper = FormsDatabaseHelper.getDbHelper();
-        if (formsDatabaseHelper != null) {
-            switch (URI_MATCHER.match(uri)) {
-                case FORMS:
-                    c = formsRepository.rawQuery(projection, selection, selectionArgs, sortOrder);
-                    break;
+            case FORM_ID:
+                String formId = String.valueOf(ContentUriHelper.getIdFromUri(uri));
+                cursor = formsRepository.rawQuery(null, _ID + "=?", new String[]{formId}, null);
+                break;
 
-                case FORM_ID:
-                    String formId = String.valueOf(ContentUriHelper.getIdFromUri(uri));
-                    c = formsRepository.rawQuery(null, _ID + "=?", new String[]{formId}, null);
-                    break;
+            // Only include the latest form that was downloaded with each form_id
+            case NEWEST_FORMS_BY_FORM_ID:
+                SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+                qb.setTables(FORMS_TABLE_NAME);
+                qb.setProjectionMap(sFormsProjectionMap);
+                qb.setStrict(true);
 
-                // Only include the latest form that was downloaded with each form_id
-                case NEWEST_FORMS_BY_FORM_ID:
-                    Map<String, String> filteredProjectionMap = new HashMap<>(sFormsProjectionMap);
-                    filteredProjectionMap.put(FormsColumns.DATE, FormsColumns.MAX_DATE);
+                Map<String, String> filteredProjectionMap = new HashMap<>(sFormsProjectionMap);
+                filteredProjectionMap.put(FormsColumns.DATE, FormsColumns.MAX_DATE);
 
-                    qb.setProjectionMap(filteredProjectionMap);
-                    String groupBy = FormsColumns.JR_FORM_ID;
-                    c = qb.query(formsDatabaseHelper.getReadableDatabase(), projection, selection, selectionArgs, groupBy, null, sortOrder);
-                    break;
+                qb.setProjectionMap(filteredProjectionMap);
+                String groupBy = FormsColumns.JR_FORM_ID;
 
-                default:
-                    throw new IllegalArgumentException("Unknown URI " + uri);
-            }
+                FormsDatabaseHelper formsDatabaseHelper = FormsDatabaseHelper.getDbHelper();
+                cursor = qb.query(formsDatabaseHelper.getReadableDatabase(), projection, selection, selectionArgs, groupBy, null, sortOrder);
+                break;
 
-            // Tell the cursor what uri to watch, so it knows when its source data changes
-            c.setNotificationUri(getContext().getContentResolver(), uri);
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        return c;
+        // Tell the cursor what uri to watch, so it knows when its source data changes
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return cursor;
     }
 
     @Override
