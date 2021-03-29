@@ -153,10 +153,8 @@ public class ResetAppStateTest {
     private void setupTestFormsDatabase() {
         new DatabaseFormsRepository().save(new Form.Builder()
                 .jrFormId("jrFormId")
-                .formFilePath("testFile1.xml")
-                .formMediaPath("testFile1-media")
-//                .date(1487077903756L)
                 .displayName("displayName")
+                .formFilePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/testFile1.xml")
                 .build()
         );
 

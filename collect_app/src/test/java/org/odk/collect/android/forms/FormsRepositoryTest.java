@@ -17,6 +17,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.FormUtils.buildForm;
 import static org.odk.collect.android.support.FormUtils.createXFormBody;
+import static org.odk.collect.android.utilities.FileUtils.constructMediaPath;
 
 public abstract class FormsRepositoryTest {
 
@@ -148,6 +149,16 @@ public abstract class FormsRepositoryTest {
     }
 
     @Test
+    public void save_addsMediaPathBasedOnFormFile() {
+        FormsRepository formsRepository = buildSubject();
+        Form form = buildForm("id", "version", getFormFilesPath()).build();
+        assertThat(form.getFormMediaPath(), equalTo(null));
+
+        Form savedForm = formsRepository.save(form);
+        assertThat(savedForm.getFormMediaPath(), is(constructMediaPath(form.getFormFilePath())));
+    }
+
+    @Test
     public void save_addsHashBasedOnFormFile() {
         FormsRepository formsRepository = buildSubject();
         Form form = buildForm("id", "version", getFormFilesPath()).build();
@@ -209,7 +220,7 @@ public abstract class FormsRepositoryTest {
         Form form = formsRepository.save(buildForm("id", "version", getFormFilesPath()).build());
 
         // FormRepository currently doesn't manage media file path other than deleting it
-        String mediaPath = FileUtils.constructMediaPath(form.getFormFilePath());
+        String mediaPath = constructMediaPath(form.getFormFilePath());
         new File(mediaPath).mkdir();
 
         File formFile = new File(form.getFormFilePath());
@@ -228,7 +239,7 @@ public abstract class FormsRepositoryTest {
         Form form = formsRepository.save(buildForm("id", "version", getFormFilesPath()).build());
 
         // FormRepository currently doesn't manage media file path other than deleting it
-        String mediaPath = FileUtils.constructMediaPath(form.getFormFilePath());
+        String mediaPath = constructMediaPath(form.getFormFilePath());
         new File(mediaPath).createNewFile();
 
         File formFile = new File(form.getFormFilePath());

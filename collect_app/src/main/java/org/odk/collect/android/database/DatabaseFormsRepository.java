@@ -4,16 +4,15 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
-import android.net.Uri;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.utilities.Clock;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,12 +28,13 @@ import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAM
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.CONTENT_URI;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DATE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DELETED_DATE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DISPLAY_NAME;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_FILE_PATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.GEOMETRY_XPATH;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_VERSION;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.MD5_HASH;
@@ -43,9 +43,15 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SUB
 public class DatabaseFormsRepository implements FormsRepository {
 
     private final StoragePathProvider storagePathProvider;
+    private final Clock clock;
 
     public DatabaseFormsRepository() {
-        storagePathProvider = new StoragePathProvider();
+        this(System::currentTimeMillis);
+    }
+
+    public DatabaseFormsRepository(Clock clock) {
+        this.clock = clock;
+        this.storagePathProvider = new StoragePathProvider();
     }
 
     @Nullable
@@ -123,8 +129,8 @@ public class DatabaseFormsRepository implements FormsRepository {
     public Form save(@NotNull Form form) {
         final ContentValues values = getValuesFromFormObject(form, storagePathProvider);
 
-        String md5Hash = FileUtils.getMd5Hash(new File(form.getFormFilePath()));
-        values.put(MD5_HASH, md5Hash);
+        values.put(MD5_HASH, FileUtils.getMd5Hash(new File(form.getFormFilePath())));
+        values.put(FORM_MEDIA_PATH, FileUtils.constructMediaPath(form.getFormFilePath()));
 
         if (form.isDeleted()) {
             values.put(DELETED_DATE, 0L);
@@ -133,11 +139,11 @@ public class DatabaseFormsRepository implements FormsRepository {
         }
 
         if (form.getId() == null) {
-            Uri uri = Collect.getInstance().getContentResolver().insert(CONTENT_URI, values);
+            values.put(JRCACHE_FILE_PATH, "");
+            values.put(DATE, clock.getCurrentTime());
 
-            try (Cursor cursor = Collect.getInstance().getContentResolver().query(uri, null, null, null, null)) {
-                return getFormsFromCursor(cursor, storagePathProvider).get(0);
-            }
+            Long idFromUri = insertForm(values);
+            return get(idFromUri);
         } else {
             updateForm(form.getId(), values);
             return get(form.getId());
@@ -194,10 +200,16 @@ public class DatabaseFormsRepository implements FormsRepository {
         return getFormsFromCursor(cursor, storagePathProvider);
     }
 
+    private Long insertForm(ContentValues values) {
+        FormsDatabaseHelper formsDatabaseHelper = FormsProvider.getDbHelper();
+        SQLiteDatabase writeableDatabase = formsDatabaseHelper.getWritableDatabase();
+        return writeableDatabase.insertOrThrow(FORMS_TABLE_NAME, null, values);
+    }
+
     private void updateForm(Long id, ContentValues values) {
         FormsDatabaseHelper formsDatabaseHelper = FormsProvider.getDbHelper();
-        SQLiteDatabase writableDatabase = formsDatabaseHelper.getWritableDatabase();
-        writableDatabase.update(FORMS_TABLE_NAME, values, _ID + "=?", new String[]{String.valueOf(id)});
+        SQLiteDatabase writeableDatabase = formsDatabaseHelper.getWritableDatabase();
+        writeableDatabase.update(FORMS_TABLE_NAME, values, _ID + "=?", new String[]{String.valueOf(id)});
     }
 
     private void deleteForms(String selection, String[] selectionArgs) {
@@ -207,8 +219,8 @@ public class DatabaseFormsRepository implements FormsRepository {
         }
 
         FormsDatabaseHelper formsDatabaseHelper = FormsProvider.getDbHelper();
-        SQLiteDatabase writableDatabase = formsDatabaseHelper.getWritableDatabase();
-        writableDatabase.delete(FORMS_TABLE_NAME, selection, selectionArgs);
+        SQLiteDatabase writeableDatabase = formsDatabaseHelper.getWritableDatabase();
+        writeableDatabase.delete(FORMS_TABLE_NAME, selection, selectionArgs);
     }
 
     @NotNull

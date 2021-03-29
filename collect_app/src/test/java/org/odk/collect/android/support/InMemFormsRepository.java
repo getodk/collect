@@ -96,6 +96,10 @@ public class InMemFormsRepository implements FormsRepository {
     public Form save(@NotNull Form form) {
         Form.Builder builder = new Form.Builder(form);
 
+        if (form.getFormMediaPath() == null) {
+            builder.formMediaPath(FileUtils.constructMediaPath(form.getFormFilePath()));
+        }
+
         if (form.getId() != null) {
             String formFilePath = form.getFormFilePath();
             String hash = FileUtils.getMd5Hash(new File(formFilePath));

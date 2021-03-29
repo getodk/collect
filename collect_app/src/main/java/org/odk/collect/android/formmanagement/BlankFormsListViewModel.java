@@ -21,6 +21,7 @@ import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.async.Scheduler;
 
@@ -107,6 +108,7 @@ public class BlankFormsListViewModel extends ViewModel {
                         result.setValue(false);
                     }
 
+                    FormsProvider.notifyChange();
                     logMatchExactlyCompleted(analytics, exception);
                 });
             }
