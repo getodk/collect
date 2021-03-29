@@ -23,7 +23,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
@@ -43,8 +42,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
-
-import timber.log.Timber;
 
 import static android.provider.BaseColumns._ID;
 import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
@@ -82,6 +79,9 @@ public class FormsProvider extends ContentProvider {
 
     @Inject
     FormsRepository formsRepository;
+
+    @Inject
+    StoragePathProvider storagePathProvider;
 
     public static void notifyChange() {
         // Make sure content observers (CursorLoaders for instance) are notified of change
@@ -179,7 +179,6 @@ public class FormsProvider extends ContentProvider {
 
             // Normalize the file path.
             // (don't trust the requester).
-            StoragePathProvider storagePathProvider = new StoragePathProvider();
             String filePath = storagePathProvider.getAbsoluteFormFilePath(values.getAsString(FormsColumns.FORM_FILE_PATH));
             File form = new File(filePath);
             filePath = form.getAbsolutePath(); // normalized
@@ -245,26 +244,6 @@ public class FormsProvider extends ContentProvider {
         throw new SQLException("Failed to insert into the forms database.");
     }
 
-    private void deleteFileOrDir(String fileName) {
-        File file = new File(fileName);
-        if (file.exists()) {
-            if (file.isDirectory()) {
-                // delete all the containing files
-                File[] files = file.listFiles();
-                if (files != null) {
-                    for (File f : files) {
-                        // should make this recursive if we get worried about
-                        // the media directory containing directories
-                        Timber.i("attempting to delete file: %s", f.getAbsolutePath());
-                        f.delete();
-                    }
-                }
-            }
-            file.delete();
-            Timber.i("attempting to delete file: %s", file.getAbsolutePath());
-        }
-    }
-
     /**
      * This method removes the entry from the content provider, and also removes
      * any associated files. files: form.xml, [formmd5].formdef, formname-media
@@ -272,16 +251,19 @@ public class FormsProvider extends ContentProvider {
      */
     @Override
     public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
+        deferDaggerInit();
+
         int count;
 
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
-                Cursor cursor = formsRepository.rawQuery(null, where, whereArgs, null);
-                while (cursor.moveToNext()) {
-                    formsRepository.delete(cursor.getLong(cursor.getColumnIndex(_ID)));
-                }
+                try (Cursor cursor = formsRepository.rawQuery(null, where, whereArgs, null)) {
+                    while (cursor.moveToNext()) {
+                        formsRepository.delete(cursor.getLong(cursor.getColumnIndex(_ID)));
+                    }
 
-                count = cursor.getCount();
+                    count = cursor.getCount();
+                }
                 break;
 
             case FORM_ID:
@@ -300,15 +282,12 @@ public class FormsProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String where, String[] whereArgs) {
-        StoragePathProvider storagePathProvider = new StoragePathProvider();
+        deferDaggerInit();
 
-        int count = 0;
-        FormsDatabaseHelper formsDatabaseHelper = FormsDatabaseHelper.getDbHelper();
-        if (formsDatabaseHelper != null) {
-            SQLiteDatabase db = formsDatabaseHelper.getWritableDatabase();
-            switch (URI_MATCHER.match(uri)) {
-                case FORMS:
-                    Cursor cursor = formsRepository.rawQuery(null, where, whereArgs, null);
+        int count;
+        switch (URI_MATCHER.match(uri)) {
+            case FORMS:
+                try (Cursor cursor = formsRepository.rawQuery(null, where, whereArgs, null)) {
                     while (cursor.moveToNext()) {
                         Form form = getFormFromCurrentCursorPosition(cursor, storagePathProvider);
 
@@ -319,96 +298,27 @@ public class FormsProvider extends ContentProvider {
                     }
 
                     count = cursor.getCount();
-                    break;
+                }
+                break;
 
-                case FORM_ID:
-                    String formId = uri.getPathSegments().get(1);
-                    // Whenever file paths are updated, delete the old files.
+            case FORM_ID:
+                Form form = formsRepository.get(ContentUriHelper.getIdFromUri(uri));
 
-                    Cursor update = null;
-                    try {
-                        update = this.query(uri, null, where, whereArgs, null);
+                ContentValues existingValues = getValuesFromForm(form, storagePathProvider);
+                existingValues.putAll(values);
 
-                        // This should only ever return 1 record.
-                        if (update != null && update.getCount() > 0) {
-                            update.moveToFirst();
+                formsRepository.save(getFormFromValues(existingValues, storagePathProvider));
+                count = 1;
+                break;
 
-                            // don't let users manually update md5
-                            if (values.containsKey(FormsColumns.MD5_HASH)) {
-                                values.remove(FormsColumns.MD5_HASH);
-                            }
-
-                            // the order here is important (jrcache needs to be before
-                            // form file)
-                            // because we update the jrcache file if there's a new form
-                            // file
-                            if (values.containsKey(FormsColumns.JRCACHE_FILE_PATH)) {
-                                deleteFileOrDir(storagePathProvider.getAbsoluteCacheFilePath(update
-                                        .getString(update
-                                                .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH))));
-                            }
-
-                            if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
-                                String formFile = storagePathProvider.getAbsoluteFormFilePath(values
-                                        .getAsString(FormsColumns.FORM_FILE_PATH));
-                                String oldFile = storagePathProvider.getAbsoluteFormFilePath(update.getString(update
-                                        .getColumnIndex(FormsColumns.FORM_FILE_PATH)));
-
-                                if (formFile == null || !formFile.equalsIgnoreCase(oldFile)) {
-                                    deleteFileOrDir(oldFile);
-                                }
-
-                                // we're updating our file, so update the md5
-                                // and get rid of the cache (doesn't harm anything)
-                                deleteFileOrDir(storagePathProvider.getAbsoluteCacheFilePath(update
-                                        .getString(update
-                                                .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH))));
-                                String newMd5 = FileUtils
-                                        .getMd5Hash(new File(formFile));
-                                values.put(FormsColumns.MD5_HASH, newMd5);
-                                values.put(FormsColumns.JRCACHE_FILE_PATH,
-                                        storagePathProvider.getRelativeCachePath(newMd5 + ".formdef"));
-                            }
-
-                            count = db.update(
-                                    FORMS_TABLE_NAME,
-                                    values,
-                                    FormsColumns._ID
-                                            + "=?"
-                                            + (!TextUtils.isEmpty(where) ? " AND ("
-                                            + where + ')' : ""), prepareWhereArgs(whereArgs, formId));
-                        } else {
-                            Timber.e("Attempting to update row that does not exist");
-                        }
-                    } finally {
-                        if (update != null) {
-                            update.close();
-                        }
-                    }
-                    break;
-
-                default:
-                    throw new IllegalArgumentException("Unknown URI " + uri);
-            }
-
-            getContext().getContentResolver().notifyChange(uri, null);
-            getContext().getContentResolver().notifyChange(FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
         }
+
+        getContext().getContentResolver().notifyChange(uri, null);
+        getContext().getContentResolver().notifyChange(FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
 
         return count;
-    }
-
-    @NonNull
-    private String[] prepareWhereArgs(String[] whereArgs, String formId) {
-        String[] newWhereArgs;
-        if (whereArgs == null || whereArgs.length == 0) {
-            newWhereArgs = new String[]{formId};
-        } else {
-            newWhereArgs = new String[whereArgs.length + 1];
-            newWhereArgs[0] = formId;
-            System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
-        }
-        return newWhereArgs;
     }
 
     private static Form getFormFromCurrentCursorPosition(Cursor cursor, StoragePathProvider storagePathProvider) {
