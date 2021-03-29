@@ -12,6 +12,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
@@ -81,7 +82,7 @@ public class FormsProviderTest {
             assertThat(cursor.getString(cursor.getColumnIndex(DATE)), is(notNullValue()));
             assertThat(cursor.getString(cursor.getColumnIndex(MD5_HASH)), is(md5Hash));
             assertThat(cursor.getString(cursor.getColumnIndex(JRCACHE_FILE_PATH)), is(md5Hash + ".formdef"));
-            assertThat(cursor.getString(cursor.getColumnIndex(FORM_MEDIA_PATH)), is(formFile.getName().substring(0, formFile.getName().lastIndexOf(".")) + "-media"));
+            assertThat(cursor.getString(cursor.getColumnIndex(FORM_MEDIA_PATH)), is(mediaPathForFormFile(formFile)));
         }
     }
 
@@ -108,7 +109,7 @@ public class FormsProviderTest {
             assertThat(cursor.getString(cursor.getColumnIndex(DATE)), is(notNullValue()));
             assertThat(cursor.getString(cursor.getColumnIndex(MD5_HASH)), is(md5Hash));
             assertThat(cursor.getString(cursor.getColumnIndex(JRCACHE_FILE_PATH)), is(md5Hash + ".formdef"));
-            assertThat(cursor.getString(cursor.getColumnIndex(FORM_MEDIA_PATH)), is(formFile.getName().substring(0, formFile.getName().lastIndexOf(".")) + "-media"));
+            assertThat(cursor.getString(cursor.getColumnIndex(FORM_MEDIA_PATH)), is(mediaPathForFormFile(formFile)));
         }
     }
 
@@ -149,6 +150,45 @@ public class FormsProviderTest {
             }
         }
     }
+
+    @Test
+    @Ignore
+    public void update_withFormFilePath_deletesFiles_andUpdatesHashAndPaths() {
+        Uri formUri = addFormsToDirAndDb("external_app_form", "1", "External app form");
+        File newFile = createFormFileInFormsDir("external_app_form", "1", "External app form renamed");
+        String newHash = FileUtils.getMd5Hash(newFile);
+
+        String oldFormPath;
+        String oldMediaPath;
+        String oldCachePath;
+        try (Cursor cursor = contentResolver.query(formUri, null, null, null, null)) {
+            assertThat(cursor.getCount(), is(1));
+
+            cursor.moveToNext();
+            oldFormPath = cursor.getString(cursor.getColumnIndex(FORM_FILE_PATH));
+            oldMediaPath = cursor.getString(cursor.getColumnIndex(FORM_MEDIA_PATH));
+            oldCachePath = cursor.getString(cursor.getColumnIndex(JRCACHE_FILE_PATH));
+        }
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(FORM_FILE_PATH, newFile.getAbsolutePath());
+
+        contentResolver.update(formUri, contentValues, null, null);
+
+        assertThat(new File(getFormsDirPath() + oldFormPath).exists(), is(false));
+        assertThat(new File(externalFilesDir + File.separator + ".cache" + File.separator + oldCachePath).exists(), is(false));
+
+        try (Cursor cursor = contentResolver.query(formUri, null, null, null)) {
+            assertThat(cursor.getCount(), is(1));
+
+            cursor.moveToNext();
+            assertThat(cursor.getString(cursor.getColumnIndex(MD5_HASH)), is(newHash));
+            assertThat(cursor.getString(cursor.getColumnIndex(FORM_FILE_PATH)), is(newFile.getAbsolutePath())); // This is broken - should be relative
+            assertThat(cursor.getString(cursor.getColumnIndex(JRCACHE_FILE_PATH)), is(newHash + ".formdef"));
+            assertThat(cursor.getString(cursor.getColumnIndex(FORM_MEDIA_PATH)), is(oldMediaPath)); // This is broken - hasn't updated
+        }
+    }
+
 
     @Test
     public void delete_deletesForm() {
@@ -294,13 +334,18 @@ public class FormsProviderTest {
      * https://developer.android.com/training/data-storage/app-specific#external anyway.
      **/
     private File addFormToFormsDir(String formId, String formVersion, String formName) {
+        File formFile = createFormFileInFormsDir(formId, formVersion, formName);
+        String md5Hash = FileUtils.getMd5Hash(formFile);
+
+        createExtraFormFiles(formFile, md5Hash);
+        return formFile;
+    }
+
+    private File createFormFileInFormsDir(String formId, String formVersion, String formName) {
         String xformBody = FormUtils.createXFormBody(formId, formVersion, formName);
         String fileName = formId + "-" + formVersion + "-" + Math.random();
         File formFile = new File(getFormsDirPath() + fileName + ".xml");
         FileUtils.write(formFile, xformBody.getBytes());
-        String md5Hash = FileUtils.getMd5Hash(formFile);
-
-        createExtraFormFiles(formFile, md5Hash);
         return formFile;
     }
 
@@ -326,6 +371,10 @@ public class FormsProviderTest {
         ItemsetDbAdapter itemsetDbAdapter = new ItemsetDbAdapter().open();
         itemsetDbAdapter.createTable(md5Hash, FileUtils.getMd5Hash(new ByteArrayInputStream(itemsetsCsvPath.getBytes())), new String[]{"a, b"}, itemsetsCsvPath);
         itemsetDbAdapter.close();
+    }
+
+    private String mediaPathForFormFile(File newFile) {
+        return newFile.getName().substring(0, newFile.getName().lastIndexOf(".")) + "-media";
     }
 
     @NotNull
