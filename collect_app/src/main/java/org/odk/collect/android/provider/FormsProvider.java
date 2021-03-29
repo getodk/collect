@@ -85,6 +85,8 @@ public class FormsProvider extends ContentProvider {
 
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        deferDaggerInit();
+
         Cursor cursor;
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
