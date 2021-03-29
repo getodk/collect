@@ -112,7 +112,6 @@ public class SmapReferencesDao {
 
                 surveys.put(rs.referenceSurvey, rs);
             }
-            cursor.close();
 
         } finally {
             cursor.close();
