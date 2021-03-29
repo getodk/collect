@@ -63,7 +63,7 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
         answerText = prompt.getAnswerText();
 
         if (answerText != null && !answerText.isEmpty()) {
-            binding.geoAnswerText.setText(GeoWidgetUtils.getAnswerToDisplay(getContext(), answerText));
+            binding.geoAnswerText.setText(GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answerText));
             binding.simpleButton.setText(R.string.change_location);
         } else {
             binding.simpleButton.setText(R.string.get_point);
@@ -103,7 +103,7 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
     @Override
     public void setData(Object answer) {
         answerText = answer.toString();
-        binding.geoAnswerText.setText(GeoWidgetUtils.getAnswerToDisplay(getContext(), answerText));
+        binding.geoAnswerText.setText(GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answerText));
         binding.simpleButton.setText(answerText == null || answerText.isEmpty() ? R.string.get_point : R.string.change_location);
         widgetValueChanged();
     }

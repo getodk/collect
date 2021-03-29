@@ -30,6 +30,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
+import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 /**
@@ -67,7 +68,7 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
             }
         });
 
-        String stringAnswer = prompt.getAnswerText();
+        String stringAnswer = GeoWidgetUtils.getGeoPolyAnswerToDisplay(prompt.getAnswerText());
         binding.geoAnswerText.setText(stringAnswer);
 
         boolean dataAvailable = stringAnswer != null && !stringAnswer.isEmpty();
