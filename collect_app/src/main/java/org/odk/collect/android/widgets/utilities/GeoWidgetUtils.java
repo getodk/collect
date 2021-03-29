@@ -38,7 +38,7 @@ public class GeoWidgetUtils {
 
     public static String getGeoPolyAnswerToDisplay(String answer) {
         if (answer != null && !answer.isEmpty()) {
-            answer = StringUtils.removeEnd(answer.replaceAll("\\s", ""), ";");
+            answer = StringUtils.removeEnd(answer.replaceAll(";\\s", ";"), ";");
         }
         return answer;
     }
