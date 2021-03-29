@@ -300,8 +300,19 @@ public class FormsProviderTest {
         FileUtils.write(formFile, xformBody.getBytes());
         String md5Hash = FileUtils.getMd5Hash(formFile);
 
+        createExtraFormFiles(formFile, md5Hash);
+        return formFile;
+    }
+
+    private void createExtraFormFiles(File formFile, String md5Hash) {
+        // Create a media directory (and file) so we can check deletion etc - wouldn't always be there
         String mediaDirPath = getFormsDirPath() + formFile.getName().substring(0, formFile.getName().lastIndexOf(".")) + "-media";
         new File(mediaDirPath).mkdir();
+        try {
+            new File(mediaDirPath, "blah.test").createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         // Create a cache file so we can check deletion etc - wouldn't always be there
         try {
@@ -315,8 +326,6 @@ public class FormsProviderTest {
         ItemsetDbAdapter itemsetDbAdapter = new ItemsetDbAdapter().open();
         itemsetDbAdapter.createTable(md5Hash, FileUtils.getMd5Hash(new ByteArrayInputStream(itemsetsCsvPath.getBytes())), new String[]{"a, b"}, itemsetsCsvPath);
         itemsetDbAdapter.close();
-
-        return formFile;
     }
 
     @NotNull
