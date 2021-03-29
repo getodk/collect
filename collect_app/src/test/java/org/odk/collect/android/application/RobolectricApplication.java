@@ -3,7 +3,7 @@ package org.odk.collect.android.application;
 import androidx.work.Configuration;
 import androidx.work.WorkManager;
 
-import org.odk.collect.android.provider.FormsProvider;
+import org.odk.collect.android.database.FormsDatabaseHelper;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.robolectric.RuntimeEnvironment;
@@ -42,7 +42,7 @@ public class RobolectricApplication extends Collect {
         shadowApplication.grantPermissions("android.permission.GET_ACCOUNTS");
 
         // These clear static state that can't persist from test to test
-        FormsProvider.releaseDatabaseHelper();
+        FormsDatabaseHelper.releaseDatabaseHelper();
         InstanceProvider.releaseDatabaseHelper();
 
         // We don't want any clicks to be blocked

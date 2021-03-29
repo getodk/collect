@@ -10,9 +10,9 @@ import org.junit.runners.model.Statement;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.application.Collect;
 
+import org.odk.collect.android.database.FormsDatabaseHelper;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
@@ -76,7 +76,7 @@ public class ResetStateRule implements TestRule {
             throw new RuntimeException(e);
         }
 
-        FormsProvider.recreateDatabaseHelper();
+        FormsDatabaseHelper.recreateDatabaseHelper();
         InstanceProvider.recreateDatabaseHelper();
     }
 

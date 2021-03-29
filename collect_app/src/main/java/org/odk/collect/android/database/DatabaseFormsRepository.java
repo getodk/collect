@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
-import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
@@ -192,7 +191,7 @@ public class DatabaseFormsRepository implements FormsRepository {
     }
 
     private List<Form> queryForForms(String selection, String[] selectionArgs) {
-        FormsDatabaseHelper formsDatabaseHelper = FormsProvider.getDbHelper();
+        FormsDatabaseHelper formsDatabaseHelper = FormsDatabaseHelper.getDbHelper();
         SQLiteDatabase readableDatabase = formsDatabaseHelper.getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(FORMS_TABLE_NAME);
@@ -201,13 +200,13 @@ public class DatabaseFormsRepository implements FormsRepository {
     }
 
     private Long insertForm(ContentValues values) {
-        FormsDatabaseHelper formsDatabaseHelper = FormsProvider.getDbHelper();
+        FormsDatabaseHelper formsDatabaseHelper = FormsDatabaseHelper.getDbHelper();
         SQLiteDatabase writeableDatabase = formsDatabaseHelper.getWritableDatabase();
         return writeableDatabase.insertOrThrow(FORMS_TABLE_NAME, null, values);
     }
 
     private void updateForm(Long id, ContentValues values) {
-        FormsDatabaseHelper formsDatabaseHelper = FormsProvider.getDbHelper();
+        FormsDatabaseHelper formsDatabaseHelper = FormsDatabaseHelper.getDbHelper();
         SQLiteDatabase writeableDatabase = formsDatabaseHelper.getWritableDatabase();
         writeableDatabase.update(FORMS_TABLE_NAME, values, _ID + "=?", new String[]{String.valueOf(id)});
     }
@@ -218,7 +217,7 @@ public class DatabaseFormsRepository implements FormsRepository {
             deleteFilesForForm(form);
         }
 
-        FormsDatabaseHelper formsDatabaseHelper = FormsProvider.getDbHelper();
+        FormsDatabaseHelper formsDatabaseHelper = FormsDatabaseHelper.getDbHelper();
         SQLiteDatabase writeableDatabase = formsDatabaseHelper.getWritableDatabase();
         writeableDatabase.delete(FORMS_TABLE_NAME, selection, selectionArgs);
     }

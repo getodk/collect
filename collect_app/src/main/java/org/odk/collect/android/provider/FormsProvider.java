@@ -28,7 +28,6 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.FormDatabaseMigrator;
 import org.odk.collect.android.database.FormsDatabaseHelper;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -59,30 +58,8 @@ public class FormsProvider extends ContentProvider {
 
     private static final UriMatcher URI_MATCHER;
 
-    private static FormsDatabaseHelper dbHelper;
-
     @Inject
     Clock clock;
-
-    public static synchronized FormsDatabaseHelper getDbHelper() {
-        if (dbHelper == null) {
-            recreateDatabaseHelper();
-        }
-
-        return dbHelper;
-    }
-
-    public static void recreateDatabaseHelper() {
-        dbHelper = new FormsDatabaseHelper(new FormDatabaseMigrator(), new StoragePathProvider());
-    }
-
-    @SuppressWarnings("PMD.NonThreadSafeSingleton") // PMD thinks the `= null` is setting a singleton here
-    public static void releaseDatabaseHelper() {
-        if (dbHelper != null) {
-            dbHelper.close();
-            dbHelper = null;
-        }
-    }
 
     public static void notifyChange() {
         // Make sure content observers (CursorLoaders for instance) are notified of change
@@ -110,7 +87,7 @@ public class FormsProvider extends ContentProvider {
 
         Cursor c = null;
         String groupBy = null;
-        FormsDatabaseHelper formsDatabaseHelper = getDbHelper();
+        FormsDatabaseHelper formsDatabaseHelper = FormsDatabaseHelper.getDbHelper();
         if (formsDatabaseHelper != null) {
             switch (URI_MATCHER.match(uri)) {
                 case FORMS:
@@ -165,7 +142,7 @@ public class FormsProvider extends ContentProvider {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        FormsDatabaseHelper formsDatabaseHelper = getDbHelper();
+        FormsDatabaseHelper formsDatabaseHelper = FormsDatabaseHelper.getDbHelper();
         if (formsDatabaseHelper != null) {
             ContentValues values;
             if (initialValues != null) {
@@ -275,7 +252,7 @@ public class FormsProvider extends ContentProvider {
     public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
         StoragePathProvider storagePathProvider = new StoragePathProvider();
         int count = 0;
-        FormsDatabaseHelper formsDatabaseHelper = getDbHelper();
+        FormsDatabaseHelper formsDatabaseHelper = FormsDatabaseHelper.getDbHelper();
         if (formsDatabaseHelper != null) {
             SQLiteDatabase db = formsDatabaseHelper.getWritableDatabase();
 
@@ -368,7 +345,7 @@ public class FormsProvider extends ContentProvider {
         StoragePathProvider storagePathProvider = new StoragePathProvider();
 
         int count = 0;
-        FormsDatabaseHelper formsDatabaseHelper = getDbHelper();
+        FormsDatabaseHelper formsDatabaseHelper = FormsDatabaseHelper.getDbHelper();
         if (formsDatabaseHelper != null) {
             SQLiteDatabase db = formsDatabaseHelper.getWritableDatabase();
             switch (URI_MATCHER.match(uri)) {
@@ -503,7 +480,7 @@ public class FormsProvider extends ContentProvider {
     private String[] prepareWhereArgs(String[] whereArgs, String formId) {
         String[] newWhereArgs;
         if (whereArgs == null || whereArgs.length == 0) {
-            newWhereArgs = new String[] {formId};
+            newWhereArgs = new String[]{formId};
         } else {
             newWhereArgs = new String[whereArgs.length + 1];
             newWhereArgs[0] = formId;
