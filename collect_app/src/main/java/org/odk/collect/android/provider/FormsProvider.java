@@ -30,6 +30,7 @@ import androidx.annotation.NonNull;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.FormsDatabaseHelper;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -61,6 +62,9 @@ public class FormsProvider extends ContentProvider {
     @Inject
     Clock clock;
 
+    @Inject
+    FormsRepository formsRepository;
+
     public static void notifyChange() {
         // Make sure content observers (CursorLoaders for instance) are notified of change
         Collect.getInstance().getContentResolver().notifyChange(CONTENT_URI, null);
@@ -91,10 +95,12 @@ public class FormsProvider extends ContentProvider {
         if (formsDatabaseHelper != null) {
             switch (URI_MATCHER.match(uri)) {
                 case FORMS:
+                    c = formsRepository.rawQuery(projection, selection, selectionArgs, sortOrder);
                     break;
 
                 case FORM_ID:
                     qb.appendWhere(FormsColumns._ID + "=" + uri.getPathSegments().get(1));
+                    c = qb.query(formsDatabaseHelper.getReadableDatabase(), projection, selection, selectionArgs, groupBy, null, sortOrder);
                     break;
 
                 // Only include the latest form that was downloaded with each form_id
@@ -104,12 +110,12 @@ public class FormsProvider extends ContentProvider {
 
                     qb.setProjectionMap(filteredProjectionMap);
                     groupBy = FormsColumns.JR_FORM_ID;
+                    c = qb.query(formsDatabaseHelper.getReadableDatabase(), projection, selection, selectionArgs, groupBy, null, sortOrder);
                     break;
 
                 default:
                     throw new IllegalArgumentException("Unknown URI " + uri);
             }
-            c = qb.query(formsDatabaseHelper.getReadableDatabase(), projection, selection, selectionArgs, groupBy, null, sortOrder);
 
             // Tell the cursor what uri to watch, so it knows when its source data changes
             c.setNotificationUri(getContext().getContentResolver(), uri);

@@ -1,5 +1,7 @@
 package org.odk.collect.android.support;
 
+import android.database.Cursor;
+
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
@@ -171,6 +173,11 @@ public class InMemFormsRepository implements FormsRepository {
                     .deleted(false)
                     .build());
         }
+    }
+
+    @Override
+    public Cursor rawQuery(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        throw new UnsupportedOperationException();
     }
 
     private void deleteFilesForForm(Form form) {

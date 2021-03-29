@@ -1,5 +1,7 @@
 package org.odk.collect.android.forms;
 
+import android.database.Cursor;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -40,4 +42,6 @@ public interface FormsRepository {
     void deleteAll();
 
     void restore(Long id);
+
+    Cursor rawQuery(String[] projection, String selection, String[] selectionArgs, String sortOrder);
 }
