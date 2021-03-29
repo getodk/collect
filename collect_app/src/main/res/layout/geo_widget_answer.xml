@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/margin_standard">
+    android:paddingTop="@dimen/margin_small"
+    android:paddingHorizontal="@dimen/margin_standard">
 
     <org.odk.collect.android.views.MultiClickSafeButton
         android:id="@+id/simple_button"

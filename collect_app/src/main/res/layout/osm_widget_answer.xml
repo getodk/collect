@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/margin_small"
+    android:paddingHorizontal="@dimen/margin_standard">
+
+    <org.odk.collect.android.views.MultiClickSafeButton
+        android:id="@+id/launch_open_map_kit_button"
+        style="@style/Widget.Collect.Button.WidgetAnswer"
+        android:text="@string/capture_osm"
+        android:textColor="#FFFFFF"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/error_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:paddingHorizontal="@dimen/margin_standard"
+        android:text="@string/invalid_osm_data"
+        android:visibility="gone"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/osm_file_header_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:paddingHorizontal="@dimen/margin_standard"
+        android:text="@string/edited_osm_file"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="?colorOnSurface"
+        android:textAppearance="@style/TextAppearance.Collect.Body1" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/osm_file_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:paddingHorizontal="@dimen/margin_large"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        android:textColor="?colorOnSurface"
+        android:textAppearance="@style/TextAppearance.Collect.Body1"/>
+
+</LinearLayout>

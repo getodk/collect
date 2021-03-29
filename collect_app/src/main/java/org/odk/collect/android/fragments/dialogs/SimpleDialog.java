@@ -18,7 +18,6 @@ package org.odk.collect.android.fragments.dialogs;
 
 import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
@@ -78,12 +77,9 @@ public class SimpleDialog extends DialogFragment {
                 .setTitle(getArguments().getString(DIALOG_TITLE))
                 .setIcon(getArguments().getInt(ICON_ID))
                 .setMessage(getArguments().getString(MESSAGE))
-                .setPositiveButton(getArguments().getString(BUTTON_TITLE), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        if (getArguments().getBoolean(FINISH_ACTIVITY)) {
-                            getActivity().finish();
-                        }
+                .setPositiveButton(getArguments().getString(BUTTON_TITLE), (dialog, id) -> {
+                    if (getArguments().getBoolean(FINISH_ACTIVITY)) {
+                        getActivity().finish();
                     }
                 })
                 .create();
