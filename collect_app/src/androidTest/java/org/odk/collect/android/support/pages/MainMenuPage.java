@@ -51,6 +51,21 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return this;
     }
 
+    public MainMenuPage clickAddProject() {
+        onView(withId(R.id.add_project_button)).perform(click());
+        return this;
+    }
+
+    public MainMenuPage inputProjectName(String projectName) {
+        inputText(R.string.project_name, projectName);
+        return this;
+    }
+
+    public MainMenuPage addProject() {
+        onView(withId(R.id.add_button)).perform(click());
+        return this;
+    }
+
     public FormEntryPage startBlankForm(String formName) {
         goToBlankForm(formName);
         return new FormEntryPage(formName, rule).assertOnPage();
