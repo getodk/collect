@@ -22,6 +22,14 @@ object TempFiles {
     }
 
     @JvmStatic
+    fun getPathInTempDir(name: String, extension: String): String {
+        val tmpDir = System.getProperty("java.io.tmpdir", ".")
+        val file = File(tmpDir, name + extension)
+        file.deleteOnExit()
+        return file.absolutePath
+    }
+
+    @JvmStatic
     @RequiresApi(Build.VERSION_CODES.O)
     fun createTempDir(): File {
         return Files.createTempDirectory(null as String?).toFile()!!

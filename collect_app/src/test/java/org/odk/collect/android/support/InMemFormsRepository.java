@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.testshared.TempFiles;
 import org.odk.collect.utilities.Clock;
 
 import java.io.File;
@@ -115,10 +116,17 @@ public class InMemFormsRepository implements FormsRepository {
                     .date(clock.getCurrentTime());
 
             // Allows tests to override hash
+            String hash;
             if (form.getMD5Hash() == null) {
                 String formFilePath = form.getFormFilePath();
-                String hash = FileUtils.getMd5Hash(new File(formFilePath));
+                hash = FileUtils.getMd5Hash(new File(formFilePath));
                 builder.md5Hash(hash);
+            } else {
+                hash = form.getMD5Hash();
+            }
+
+            if (form.getJrCacheFilePath() == null) {
+                builder.jrCacheFilePath(TempFiles.getPathInTempDir(hash, ".formdef"));
             }
 
             Form formToSave = builder.build();
@@ -181,10 +189,17 @@ public class InMemFormsRepository implements FormsRepository {
     }
 
     private void deleteFilesForForm(Form form) {
+        // Delete form file
         if (form.getFormFilePath() != null) {
             new File(form.getFormFilePath()).delete();
         }
 
+        // Delete cache file
+        if (form.getJrCacheFilePath() != null) {
+            new File(form.getJrCacheFilePath()).delete();
+        }
+
+        // Delete media files
         if (form.getFormMediaPath() != null) {
             try {
                 File mediaDir = new File(form.getFormMediaPath());

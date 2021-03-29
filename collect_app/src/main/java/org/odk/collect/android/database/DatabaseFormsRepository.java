@@ -129,8 +129,10 @@ public class DatabaseFormsRepository implements FormsRepository {
     public Form save(@NotNull Form form) {
         final ContentValues values = getValuesFromFormObject(form, storagePathProvider);
 
-        values.put(MD5_HASH, FileUtils.getMd5Hash(new File(form.getFormFilePath())));
+        String md5Hash = FileUtils.getMd5Hash(new File(form.getFormFilePath()));
+        values.put(MD5_HASH, md5Hash);
         values.put(FORM_MEDIA_PATH, FileUtils.constructMediaPath(form.getFormFilePath()));
+        values.put(JRCACHE_FILE_PATH, md5Hash + ".formdef");
 
         if (form.isDeleted()) {
             values.put(DELETED_DATE, 0L);
@@ -139,7 +141,6 @@ public class DatabaseFormsRepository implements FormsRepository {
         }
 
         if (form.getId() == null) {
-            values.put(JRCACHE_FILE_PATH, "");
             values.put(DATE, clock.getCurrentTime());
 
             Long idFromUri = insertForm(values);

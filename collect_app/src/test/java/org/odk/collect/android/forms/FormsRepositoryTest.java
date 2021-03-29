@@ -215,22 +215,25 @@ public abstract class FormsRepositoryTest {
     }
 
     @Test
-    public void delete_deletesFiles() {
+    public void delete_deletesFiles() throws Exception {
         FormsRepository formsRepository = buildSubject();
         Form form = formsRepository.save(buildForm("id", "version", getFormFilesPath()).build());
 
-        // FormRepository currently doesn't manage media file path other than deleting it
-        String mediaPath = constructMediaPath(form.getFormFilePath());
-        new File(mediaPath).mkdir();
+        // FormRepository doesn't automatically create all form files
+        File mediaDir = new File(constructMediaPath(form.getFormFilePath()));
+        mediaDir.mkdir();
+        File cacheFile = new File(form.getJrCacheFilePath());
+        cacheFile.createNewFile();
 
         File formFile = new File(form.getFormFilePath());
-        File mediaDir = new File(form.getFormMediaPath());
         assertThat(formFile.exists(), is(true));
         assertThat(mediaDir.exists(), is(true));
+        assertThat(cacheFile.exists(), is(true));
 
-        formsRepository.delete(1L);
+        formsRepository.delete(form.getId());
         assertThat(formFile.exists(), is(false));
         assertThat(mediaDir.exists(), is(false));
+        assertThat(cacheFile.exists(), is(false));
     }
 
     @Test
