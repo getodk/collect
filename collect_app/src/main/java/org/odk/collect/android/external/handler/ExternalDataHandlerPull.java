@@ -118,8 +118,9 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
             String[] columns = {ExternalDataUtil.toSafeColumnName(queriedColumn)};
             String selection = ExternalDataUtil.toSafeColumnName(referenceColumn) + "=?";
             String[] selectionArgs = {referenceValue};
+            String sortBy = ExternalDataUtil.SORT_COLUMN_NAME; // smap add sorting
 
-            // smap start - Add user specified selection if is is not matches
+            // smap start - Add user specified selection if it is not matches
             if(multiSelect && !searchType.equals("matches")) {
                 ExternalDataSearchType externalDataSearchType = ExternalDataSearchType.getByKeyword(
                         searchType, ExternalDataSearchType.CONTAINS);
@@ -131,7 +132,7 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
             // smap end
 
             c = db.query(ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, columns, selection,
-                    selectionArgs, null, null, null);
+                    selectionArgs, null, null, sortBy);
             if (c.getCount() > 0) {
                 if(!multiSelect) {  // smap - use original processing if the   original 4 parameter format is used
                     c.moveToFirst();
