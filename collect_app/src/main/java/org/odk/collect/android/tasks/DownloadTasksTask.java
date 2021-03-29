@@ -748,10 +748,9 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         HashMap<String, String> referencedFiles = new HashMap<> ();
 
         formsDao = new FormsDao();
-        String tag = "Process Shared Files";
 
         File orgMediaDir = new File(Utilities.getOrgMediaPath());
-        Log.i(tag,"====================== Check shared files");
+        Timber.i("====================== Check shared files");
         if (orgMediaDir.exists() && orgMediaDir.isDirectory()) {
 
             //publishProgress(Collect.getInstance().getString(R.string.smap_downloading, sharedMedia.size())); TODO
@@ -759,12 +758,11 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             // 1. Get the list of shared files
             File[] sharedFiles = orgMediaDir.listFiles();
             for(File sf : sharedFiles) {
-                Log.i(tag, "Shared File: " + sf.getAbsolutePath());
+                Timber.i( "Shared File: " + sf.getAbsolutePath());
             }
 
             // 2. Get the files used by this organisation
             if(sharedFiles.length > 0) {
-                List<UriFile> uriToUpdate = new ArrayList<UriFile>();
                 Cursor cursor = null;
                 try {
                     cursor = formsDao.getFormsCursor();
@@ -784,11 +782,11 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                             if (idx >= 0) {
                                 String mPath = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + File.separator + f.substring(0, idx) + "-media";
                                 File mDir = new File(mPath);
-                                Log.i(tag, "Media Dir is: " + mPath);
+                                Timber.i("Media Dir is: " + mPath);
                                 if (mDir.exists() && mDir.isDirectory()) {
                                     File[] mFiles = mDir.listFiles();
                                     for (File mf : mFiles) {
-                                        Log.i(tag, "Adding reference file: " + mf.getName());
+                                        Timber.i("Adding reference file: " + mf.getName());
                                         referencedFiles.put(mf.getName(), mf.getName());
                                     }
                                 }
@@ -805,10 +803,10 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 // 3. Remove shared files that are not referenced
                 for(File sf : sharedFiles) {
                     if(referencedFiles.get(sf.getName()) == null) {
-                        Log.i(tag, "Deleting shared file: " + sf.getName());
+                        Timber.i("Deleting shared file: " + sf.getName());
                         sf.delete();
                     } else {
-                        Log.i(tag, "Retaining shared file: " + sf.getName());
+                        Timber.i("Retaining shared file: " + sf.getName());
                     }
                 }
             }

@@ -89,8 +89,9 @@ public class MultiFormDownloaderSmap {
         final HashMap<ServerFormDetailsSmap, String> result = new HashMap<>();
 
         for (ServerFormDetailsSmap fd : toDownload) {
+            boolean success = false;
             try {
-                boolean success = processOneForm(total, count++, fd, stateListener);
+                success = processOneForm(total, count++, fd, stateListener);
                 if (success) {
                     result.put(fd, Collect.getInstance().getString(R.string.success));
                 } else {
@@ -98,6 +99,10 @@ public class MultiFormDownloaderSmap {
                 }
             } catch (TaskCancelledException cd) {
                 break;
+            } catch(Exception e) {
+                Timber.e(e);
+                success = false;
+                result.put(fd, Collect.getInstance().getString(R.string.failure) + ": " + e.getMessage());
             }
         }
 
@@ -113,7 +118,7 @@ public class MultiFormDownloaderSmap {
      * @return an empty string for success, or a nonblank string with one or more error messages
      * @throws TaskCancelledException to signal that form downloading is to be canceled
      */
-    private boolean processOneForm(int total, int count, ServerFormDetailsSmap fd, FormDownloaderListener stateListener) throws TaskCancelledException {
+    private boolean processOneForm(int total, int count, ServerFormDetailsSmap fd, FormDownloaderListener stateListener) throws Exception {
         if (stateListener != null) {
             stateListener.progressUpdate(fd.getFormName(), String.valueOf(count), String.valueOf(total));
         }
@@ -145,6 +150,7 @@ public class MultiFormDownloaderSmap {
                 String error = downloadManifestAndMediaFiles(tempMediaPath, finalMediaPath, fd,
                         count, total, stateListener, orgTempMediaPath, orgMediaPath);                              // smap added org paths
                 if (error != null && !error.isEmpty()) {
+                    Timber.i("####### Error: " + error);
                     success = false;
                 }
             } else {
@@ -156,9 +162,6 @@ public class MultiFormDownloaderSmap {
 
             // do not download additional forms.
             throw e;
-        } catch (Exception e) {
-            Timber.e(e);  // smap
-            return false;
         }
 
         if (stateListener != null && stateListener.isTaskCancelled()) {
@@ -167,6 +170,7 @@ public class MultiFormDownloaderSmap {
         }
 
         if (fileResult == null) {
+            Timber.i("##### fileResult is null");
             return false;
         }
 
@@ -192,7 +196,7 @@ public class MultiFormDownloaderSmap {
                         (System.currentTimeMillis() - start) / 1000F);
             } catch (RuntimeException e) {
                 ReferenceManager.instance().reset();    // smap ensure reference manager reset after error
-                return false;
+                throw(e);
             }
         }
 
@@ -202,11 +206,14 @@ public class MultiFormDownloaderSmap {
             if (!fileResult.isNew || isSubmissionOk(parsedFields)) {
                 installed = installEverything(tempMediaPath, fileResult, parsedFields, fd, orgTempMediaPath, orgMediaPath);   // Smap Added organisation paths
             } else {
+                Timber.i("###### fileResult is new or not isSubmissionOk");
                 success = false;
             }
         }
         if (!installed) {
+            Timber.i("###### not installed");
             success = false;
+
             cleanUp(fileResult, null, tempMediaPath, orgTempMediaPath);    // smap
         }
 
@@ -411,73 +418,56 @@ public class MultiFormDownloaderSmap {
         File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION,
                 new File(new StoragePathProvider().getDirPath(StorageSubdirectory.CACHE)));
 
-        // WiFi network connections can be renegotiated during a large form download sequence.
-        // This will cause intermittent download failures.  Silently retry once after each
-        // failure.  Only if there are two consecutive failures do we abort.
-        boolean success = false;
-        int attemptCount = 0;
-        final int MAX_ATTEMPT_COUNT = 2;
-        while (!success && ++attemptCount <= MAX_ATTEMPT_COUNT) {
-            if (stateListener != null && stateListener.isTaskCancelled()) {
-                throw new TaskCancelledException(tempFile);
-            }
+        OutputStream os = null;
 
-            // write connection to file
-            InputStream is = null;
-            OutputStream os = null;
+        try {
+                if (stateListener != null && stateListener.isTaskCancelled()) {
+                    throw new TaskCancelledException(tempFile);
+                }
 
-            try {
-                is = inputStream;
                 os = new FileOutputStream(tempFile);
 
                 byte[] buf = new byte[4096];
                 int len;
-                while ((len = is.read(buf)) > 0 && (stateListener == null || !stateListener.isTaskCancelled())) {
+                while ((len = inputStream.read(buf)) > 0 && (stateListener == null || !stateListener.isTaskCancelled())) {
                     os.write(buf, 0, len);
                 }
                 os.flush();
-                success = true;
 
-            } catch (Exception e) {
-                Timber.e(e.toString());
-                // silently retry unless this is the last attempt,
-                // in which case we rethrow the exception.
+        } catch (Exception e) {
+            Timber.e(e.toString());
 
-                FileUtils.deleteAndReport(tempFile);
+            FileUtils.deleteAndReport(tempFile);
 
-                if (attemptCount == MAX_ATTEMPT_COUNT) {
-                    throw e;
-                }
-            } finally {
-                if (os != null) {
-                    try {
-                        os.close();
-                    } catch (Exception e) {
-                        Timber.e(e);
-                    }
-                }
-                if (is != null) {
-                    try {
-                        // ensure stream is consumed...
-                        final long count = 1024L;
-                        while (is.skip(count) == count) {
-                            // skipping to the end of the http entity
-                        }
-                    } catch (Exception e) {
-                        // no-op
-                    }
-                    try {
-                        is.close();
-                    } catch (Exception e) {
-                        Timber.e(e);
-                    }
+        } finally {
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (Exception e) {
+                    Timber.e(e);
                 }
             }
-
-            if (stateListener != null && stateListener.isTaskCancelled()) {
-                FileUtils.deleteAndReport(tempFile);
-                throw new TaskCancelledException(tempFile);
+            if (inputStream != null) {
+                try {
+                    // ensure stream is consumed...
+                    final long count = 1024L;
+                    while (inputStream.skip(count) == count) {
+                        // skipping to the end of the http entity
+                    }
+                } catch (Exception e) {
+                    // no-op
+                }
+                try {
+                    inputStream.close();
+                } catch (Exception e) {
+                    Timber.e(e);
+                }
             }
+        }
+
+        if (stateListener != null && stateListener.isTaskCancelled()) {
+            FileUtils.deleteAndReport(tempFile);
+            throw new TaskCancelledException(tempFile);
         }
 
         Timber.d("Completed downloading of %s. It will be moved to the proper path...",
