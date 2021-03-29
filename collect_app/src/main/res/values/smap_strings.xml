@@ -119,8 +119,8 @@
     <string name="smap_sort_by_project_asc">Project, A-Z</string>
     <string name="smap_sort_by_project_desc">Project, Z-A</string>
     <string name="smap_no_label">A label was not specified in choices</string>
-    <string name="smap_survey_blocked">The survey %1$s has been blocked on the server.  Contact your administrator to un-block it.</string>
-    <string name="smap_survey_deleted">The survey %1$s has been deleted on the server.  Contact your administator if you need to un-delete it so that your data can be sent.</string>
+    <string name="smap_survey_blocked">The survey \"%1$s\" has been blocked on the server.  Contact your administrator to un-block it so that your results can be sent.</string>
+    <string name="smap_survey_deleted">The survey \"%1$s\" has been deleted on the server.  Contact your administator if you need to un-delete it so that your data can be sent.</string>
     <string name="smap_csv_column_nf">The column %1$s was not found in csv file %2$s</string>
     <string name="smap_self_select">This is a self assigned task.  You need to accept it by doing a long press on the task before it can be completed</string>
     <string name="smap_android_version">Android Version %1s</string>
