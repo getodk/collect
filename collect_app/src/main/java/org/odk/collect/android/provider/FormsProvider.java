@@ -29,7 +29,6 @@ import androidx.annotation.NonNull;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.FormsDatabaseHelper;
-import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -256,93 +255,29 @@ public class FormsProvider extends ContentProvider {
      */
     @Override
     public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
-        StoragePathProvider storagePathProvider = new StoragePathProvider();
-        int count = 0;
-        FormsDatabaseHelper formsDatabaseHelper = FormsDatabaseHelper.getDbHelper();
-        if (formsDatabaseHelper != null) {
-            SQLiteDatabase db = formsDatabaseHelper.getWritableDatabase();
+        int count;
+        
+        switch (URI_MATCHER.match(uri)) {
+            case FORMS:
+                Cursor cursor = formsRepository.rawQuery(null, where, whereArgs, null);
+                while (cursor.moveToNext()) {
+                    formsRepository.delete(cursor.getLong(cursor.getColumnIndex(_ID)));
+                }
 
-            switch (URI_MATCHER.match(uri)) {
-                case FORMS:
-                    Cursor del = null;
-                    try {
-                        del = this.query(uri, null, where, whereArgs, null);
-                        if (del != null && del.getCount() > 0) {
-                            del.moveToFirst();
-                            do {
-                                deleteFileOrDir(storagePathProvider.getAbsoluteCacheFilePath(del
-                                        .getString(del
-                                                .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH))));
-                                String formFilePath = storagePathProvider.getAbsoluteFormFilePath(del.getString(del
-                                        .getColumnIndex(FormsColumns.FORM_FILE_PATH)));
-                                deleteFileOrDir(formFilePath);
-                                deleteFileOrDir(storagePathProvider.getAbsoluteFormFilePath(del.getString(del
-                                        .getColumnIndex(FormsColumns.FORM_MEDIA_PATH))));
-                            } while (del.moveToNext());
-                        }
-                    } finally {
-                        if (del != null) {
-                            del.close();
-                        }
-                    }
-                    count = db.delete(FORMS_TABLE_NAME, where, whereArgs);
-                    break;
+                count = cursor.getCount();
+                break;
 
-                case FORM_ID:
-                    String formId = uri.getPathSegments().get(1);
+            case FORM_ID:
+                formsRepository.delete(ContentUriHelper.getIdFromUri(uri));
+                count = 1;
+                break;
 
-                    Cursor c = null;
-                    try {
-                        c = this.query(uri, null, where, whereArgs, null);
-                        // This should only ever return 1 record.
-                        if (c != null && c.getCount() > 0) {
-                            c.moveToFirst();
-                            do {
-                                deleteFileOrDir(storagePathProvider.getAbsoluteCacheFilePath(c.getString(c
-                                        .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH))));
-                                String formFilePath = storagePathProvider.getAbsoluteFormFilePath(c.getString(c
-                                        .getColumnIndex(FormsColumns.FORM_FILE_PATH)));
-                                deleteFileOrDir(formFilePath);
-                                deleteFileOrDir(storagePathProvider.getAbsoluteFormFilePath(c.getString(c
-                                        .getColumnIndex(FormsColumns.FORM_MEDIA_PATH))));
-
-                                try {
-                                    // get rid of the old tables
-                                    ItemsetDbAdapter ida = new ItemsetDbAdapter();
-                                    ida.open();
-                                    ida.delete(c.getString(c
-                                            .getColumnIndex(FormsColumns.FORM_MEDIA_PATH))
-                                            + "/itemsets.csv");
-                                    ida.close();
-                                } catch (Exception e) {
-                                    // if something else is accessing the provider this may not exist
-                                    // so catch it and move on.
-                                }
-
-                            } while (c.moveToNext());
-                        }
-                    } finally {
-                        if (c != null) {
-                            c.close();
-                        }
-                    }
-
-                    count = db.delete(
-                            FORMS_TABLE_NAME,
-                            FormsColumns._ID
-                                    + "=?"
-                                    + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), prepareWhereArgs(whereArgs, formId));
-                    break;
-
-                default:
-                    throw new IllegalArgumentException("Unknown URI " + uri);
-            }
-
-            getContext().getContentResolver().notifyChange(uri, null);
-            getContext().getContentResolver().notifyChange(FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
+        getContext().getContentResolver().notifyChange(uri, null);
+        getContext().getContentResolver().notifyChange(FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
         return count;
     }
 

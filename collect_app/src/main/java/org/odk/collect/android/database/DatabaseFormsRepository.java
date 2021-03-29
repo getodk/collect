@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.provider.FormsProviderAPI;
@@ -306,10 +307,17 @@ public class DatabaseFormsRepository implements FormsRepository {
     }
 
     private void deleteFilesForForm(Form form) {
+        // Delete form file
         if (form.getFormFilePath() != null) {
             new File(form.getFormFilePath()).delete();
         }
 
+        // Delete cache file
+        if (form.getJrCacheFilePath() != null) {
+            new File(form.getJrCacheFilePath()).delete();
+        }
+
+        // Delete media files
         if (form.getFormMediaPath() != null) {
             try {
                 File mediaDir = new File(form.getFormMediaPath());
@@ -323,5 +331,11 @@ public class DatabaseFormsRepository implements FormsRepository {
                 // Ignored
             }
         }
+
+        // Delete itemsets
+        ItemsetDbAdapter ida = new ItemsetDbAdapter();
+        ida.open();
+        ida.delete(form.getFormMediaPath() + "/itemsets.csv");
+        ida.close();
     }
 }
