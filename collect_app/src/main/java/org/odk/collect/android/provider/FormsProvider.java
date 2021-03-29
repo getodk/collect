@@ -34,6 +34,7 @@ import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.utilities.Clock;
 
@@ -45,6 +46,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
+import static android.provider.BaseColumns._ID;
 import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.CONTENT_URI;
@@ -90,7 +92,6 @@ public class FormsProvider extends ContentProvider {
         qb.setStrict(true);
 
         Cursor c = null;
-        String groupBy = null;
         FormsDatabaseHelper formsDatabaseHelper = FormsDatabaseHelper.getDbHelper();
         if (formsDatabaseHelper != null) {
             switch (URI_MATCHER.match(uri)) {
@@ -99,8 +100,8 @@ public class FormsProvider extends ContentProvider {
                     break;
 
                 case FORM_ID:
-                    qb.appendWhere(FormsColumns._ID + "=" + uri.getPathSegments().get(1));
-                    c = qb.query(formsDatabaseHelper.getReadableDatabase(), projection, selection, selectionArgs, groupBy, null, sortOrder);
+                    String formId = String.valueOf(ContentUriHelper.getIdFromUri(uri));
+                    c = formsRepository.rawQuery(null, _ID + "=?", new String[]{formId}, null);
                     break;
 
                 // Only include the latest form that was downloaded with each form_id
@@ -109,7 +110,7 @@ public class FormsProvider extends ContentProvider {
                     filteredProjectionMap.put(FormsColumns.DATE, FormsColumns.MAX_DATE);
 
                     qb.setProjectionMap(filteredProjectionMap);
-                    groupBy = FormsColumns.JR_FORM_ID;
+                    String groupBy = FormsColumns.JR_FORM_ID;
                     c = qb.query(formsDatabaseHelper.getReadableDatabase(), projection, selection, selectionArgs, groupBy, null, sortOrder);
                     break;
 
