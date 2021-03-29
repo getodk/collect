@@ -1,4 +1,4 @@
-package org.odk.collect.android.project
+package org.odk.collect.android.projects
 
 interface ProjectsRepository {
     fun get(uuid: String): Project?

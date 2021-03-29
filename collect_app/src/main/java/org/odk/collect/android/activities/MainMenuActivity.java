@@ -41,7 +41,7 @@ import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment.Action;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.screens.AdminPreferencesActivity;
-import org.odk.collect.android.project.ProjectSettingsDialog;
+import org.odk.collect.android.projects.ProjectSettingsDialog;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;

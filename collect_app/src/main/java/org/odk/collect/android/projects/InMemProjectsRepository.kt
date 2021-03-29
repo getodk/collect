@@ -1,4 +1,4 @@
-package org.odk.collect.android.project
+package org.odk.collect.android.projects
 
 import org.odk.collect.android.utilities.UUIDGenerator
 

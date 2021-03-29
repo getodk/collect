@@ -1,4 +1,4 @@
-package org.odk.collect.android.feature.project
+package org.odk.collect.android.feature.projects
 
 import androidx.test.rule.ActivityTestRule
 import org.junit.Rule

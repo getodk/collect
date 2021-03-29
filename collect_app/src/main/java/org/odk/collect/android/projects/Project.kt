@@ -1,4 +1,4 @@
-package org.odk.collect.android.project
+package org.odk.collect.android.projects
 
 data class Project(
     val uuid: String,

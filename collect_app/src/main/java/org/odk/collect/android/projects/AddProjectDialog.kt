@@ -1,4 +1,4 @@
-package org.odk.collect.android.project
+package org.odk.collect.android.projects
 
 import android.content.Context
 import android.os.Bundle
