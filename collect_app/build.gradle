@@ -376,6 +376,7 @@ dependencies {
     testImplementation 'org.hamcrest:hamcrest:2.2'
 
     testImplementation "org.json:json:20201115"
+    testImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     androidTestImplementation "org.mockito:mockito-android:3.7.7"
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
