@@ -1,12 +1,12 @@
 package org.odk.collect.android.projects
 
 import android.widget.ImageView
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.pressBack
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.CoreMatchers
-import org.hamcrest.MatcherAssert
+import org.hamcrest.CoreMatchers.`is`
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
@@ -20,9 +20,10 @@ class ProjectSettingsDialogTest {
         val scenario = RobolectricHelpers.launchDialogFragment(ProjectSettingsDialog::class.java)
         scenario.onFragment { f: ProjectSettingsDialog ->
             val dialog = f.dialog
-            val closeButton = dialog!!.findViewById<ImageView>(R.id.close_icon)
+            assertThat(dialog!!.isShowing, `is`(true))
+            val closeButton = dialog.findViewById<ImageView>(R.id.close_icon)
             closeButton.performClick()
-            MatcherAssert.assertThat(dialog.isShowing, CoreMatchers.`is`(false))
+            assertThat(dialog.isShowing, `is`(false))
         }
     }
 
@@ -31,8 +32,9 @@ class ProjectSettingsDialogTest {
         val scenario = RobolectricHelpers.launchDialogFragment(ProjectSettingsDialog::class.java)
         scenario.onFragment { f: ProjectSettingsDialog ->
             val dialog = f.dialog
-            Espresso.onView(ViewMatchers.isRoot()).perform(ViewActions.pressBack())
-            MatcherAssert.assertThat(dialog!!.isShowing, CoreMatchers.`is`(false))
+            assertThat(dialog!!.isShowing, `is`(true))
+            onView(ViewMatchers.isRoot()).perform(pressBack())
+            assertThat(dialog.isShowing, `is`(false))
         }
     }
 }

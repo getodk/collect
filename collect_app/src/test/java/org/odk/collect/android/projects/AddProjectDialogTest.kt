@@ -27,7 +27,8 @@ class AddProjectDialogTest {
         val scenario = RobolectricHelpers.launchDialogFragment(AddProjectDialog::class.java)
         scenario.onFragment { f: AddProjectDialog ->
             val dialog = f.dialog
-            val cancelButton = dialog!!.findViewById<MaterialButton>(R.id.cancel_button)
+            assertThat(dialog!!.isShowing, `is`(true))
+            val cancelButton = dialog.findViewById<MaterialButton>(R.id.cancel_button)
             assertThat(cancelButton!!.text, `is`(f.getString(R.string.cancel)))
             cancelButton.performClick()
             assertThat(dialog.isShowing, `is`(false))
@@ -39,8 +40,9 @@ class AddProjectDialogTest {
         val scenario = RobolectricHelpers.launchDialogFragment(AddProjectDialog::class.java)
         scenario.onFragment { f: AddProjectDialog ->
             val dialog = f.dialog
+            assertThat(dialog!!.isShowing, `is`(true))
             onView(isRoot()).perform(ViewActions.pressBack())
-            assertThat(dialog!!.isShowing, `is`(false))
+            assertThat(dialog.isShowing, `is`(false))
         }
     }
 
