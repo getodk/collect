@@ -83,6 +83,7 @@ class ProjectSettingsDialog : DialogFragment() {
         projectsRepository.getAll().forEach { project ->
             val projectView = LayoutInflater.from(context).inflate(R.layout.project_list_item, null)
 
+            projectView.findViewById<TextView>(R.id.project_icon).text = project.icon
             projectView.findViewById<TextView>(R.id.project_name).text = project.name
 
             binding.projectList.addView(projectView)
