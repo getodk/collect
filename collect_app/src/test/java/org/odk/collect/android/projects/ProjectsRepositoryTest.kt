@@ -19,9 +19,9 @@ abstract class ProjectsRepositoryTest {
 
     @Test
     fun getAll_shouldReturnAllProjectsFromStorage() {
-        projectsRepository.add("ProjectX")
-        projectsRepository.add("ProjectY")
-        projectsRepository.add("ProjectZ")
+        projectsRepository.add("ProjectX", "X")
+        projectsRepository.add("ProjectY", "y")
+        projectsRepository.add("ProjectZ", "Z")
 
         val projects = projectsRepository.getAll()
 
@@ -33,7 +33,7 @@ abstract class ProjectsRepositoryTest {
 
     @Test
     fun add_shouldSaveProjectToStorage() {
-        projectsRepository.add("ProjectX")
+        projectsRepository.add("ProjectX", "X")
 
         val projects = projectsRepository.getAll()
 
@@ -43,8 +43,8 @@ abstract class ProjectsRepositoryTest {
 
     @Test
     fun delete_shouldDeleteProjectFromStorage() {
-        projectsRepository.add("ProjectX")
-        projectsRepository.add("ProjectY")
+        projectsRepository.add("ProjectX", "X")
+        projectsRepository.add("ProjectY", "y")
 
         val projects = projectsRepository.getAll()
         projectsRepository.delete(projects.first { it.name == "ProjectX" }.uuid)
@@ -55,8 +55,8 @@ abstract class ProjectsRepositoryTest {
 
     @Test
     open fun add_shouldAddsUniqueId() {
-        projectsRepository.add("ProjectX")
-        projectsRepository.add("ProjectY")
+        projectsRepository.add("ProjectX", "X")
+        projectsRepository.add("ProjectY", "Y")
 
         val projects = projectsRepository.getAll()
 
