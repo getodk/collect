@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.configure.SettingsUtils;
-import org.odk.collect.android.formmanagement.FormCountRepository;
+import org.odk.collect.android.formmanagement.InstancesCountRepository;
 import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.source.Settings;
@@ -24,15 +24,15 @@ public class MainMenuViewModel extends ViewModel {
     private final VersionInformation version;
     private final Settings generalSettings;
     private final Settings adminSettings;
-    private final FormCountRepository formCountRepository;
+    private final InstancesCountRepository instancesCountRepository;
     private final Application application;
 
-    public MainMenuViewModel(Application application, VersionInformation versionInformation, SettingsProvider settingsProvider, FormCountRepository formCountRepository) {
+    public MainMenuViewModel(Application application, VersionInformation versionInformation, SettingsProvider settingsProvider, InstancesCountRepository instancesCountRepository) {
         this.application = application;
         this.version = versionInformation;
         this.generalSettings = settingsProvider.getGeneralSettings();
         this.adminSettings = settingsProvider.getAdminSettings();
-        this.formCountRepository = formCountRepository;
+        this.instancesCountRepository = instancesCountRepository;
     }
 
     public String getVersion() {
@@ -88,15 +88,15 @@ public class MainMenuViewModel extends ViewModel {
     }
 
     public LiveData<Integer> getUnsentFormsCount() {
-        return formCountRepository.getUnsent();
+        return instancesCountRepository.getUnsent();
     }
 
     public LiveData<Integer> getFinalizedFormsCount() {
-        return formCountRepository.getFinalized();
+        return instancesCountRepository.getFinalized();
     }
 
     public LiveData<Integer> getSentFormsCount() {
-        return formCountRepository.getSent();
+        return instancesCountRepository.getSent();
     }
 
     private boolean isMatchExactlyEnabled() {
@@ -114,7 +114,7 @@ public class MainMenuViewModel extends ViewModel {
     }
 
     public void resume() {
-        formCountRepository.update();
+        instancesCountRepository.update();
     }
 
     public static class Factory implements ViewModelProvider.Factory {
@@ -122,20 +122,20 @@ public class MainMenuViewModel extends ViewModel {
         private final VersionInformation versionInformation;
         private final Application application;
         private final SettingsProvider settingsProvider;
-        private final FormCountRepository formCountRepository;
+        private final InstancesCountRepository instancesCountRepository;
 
         @Inject
-        public Factory(VersionInformation versionInformation, Application application, SettingsProvider settingsProvider, FormCountRepository formCountRepository) {
+        public Factory(VersionInformation versionInformation, Application application, SettingsProvider settingsProvider, InstancesCountRepository instancesCountRepository) {
             this.versionInformation = versionInformation;
             this.application = application;
             this.settingsProvider = settingsProvider;
-            this.formCountRepository = formCountRepository;
+            this.instancesCountRepository = instancesCountRepository;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new MainMenuViewModel(application, versionInformation, settingsProvider, formCountRepository);
+            return (T) new MainMenuViewModel(application, versionInformation, settingsProvider, instancesCountRepository);
         }
     }
 }

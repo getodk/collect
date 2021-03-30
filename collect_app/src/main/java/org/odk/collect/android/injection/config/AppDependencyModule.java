@@ -52,9 +52,9 @@ import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
 import org.odk.collect.android.formentry.saving.DiskFormSaver;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
-import org.odk.collect.android.formmanagement.FormCountRepository;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.FormMetadataParser;
+import org.odk.collect.android.formmanagement.InstancesCountRepository;
 import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
@@ -515,7 +515,7 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public FormCountRepository providesFormCountRepository() {
-        return new FormCountRepository();
+    public InstancesCountRepository providesFormCountRepository() {
+        return new InstancesCountRepository();
     }
 }

@@ -5,7 +5,7 @@ import android.app.Application;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.formmanagement.FormCountRepository;
+import org.odk.collect.android.formmanagement.InstancesCountRepository;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.version.VersionInformation;
 import org.robolectric.RobolectricTestRunner;
@@ -79,6 +79,6 @@ public class MainMenuViewModelTest {
 
     @NotNull
     private MainMenuViewModel createViewModelWithVersion(String version) {
-        return new MainMenuViewModel(mock(Application.class), new VersionInformation(() -> version), mock(SettingsProvider.class), mock(FormCountRepository.class));
+        return new MainMenuViewModel(mock(Application.class), new VersionInformation(() -> version), mock(SettingsProvider.class), mock(InstancesCountRepository.class));
     }
 }

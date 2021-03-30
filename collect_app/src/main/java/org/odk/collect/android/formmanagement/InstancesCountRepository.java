@@ -7,7 +7,15 @@ import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 
-public class FormCountRepository {
+import javax.inject.Singleton;
+
+/**
+ * Stores reactive state of current instances count with various different statuses. This (as a
+ * singleton) can be read or updated by different parts of the app without needing reactive data
+ * in the {@link InstancesRepository}.
+ */
+@Singleton
+public class InstancesCountRepository {
 
     private final MutableLiveData<Integer> finalized = new MutableLiveData<>(0);
     private final MutableLiveData<Integer> unsent = new MutableLiveData<>(0);

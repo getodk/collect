@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.formmanagement.FormCountRepository;
+import org.odk.collect.android.formmanagement.InstancesCountRepository;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
@@ -82,7 +82,7 @@ public class AutoSendTaskSpec implements TaskSpec {
     SettingsProvider settingsProvider;
 
     @Inject
-    FormCountRepository formCountRepository;
+    InstancesCountRepository instancesCountRepository;
 
     /**
      * If the app-level auto-send setting is enabled, send all finalized forms that don't specify not
@@ -129,7 +129,7 @@ public class AutoSendTaskSpec implements TaskSpec {
                         }
                     }
 
-                    formCountRepository.update();
+                    instancesCountRepository.update();
                     return true;
                 } else {
                     return false;
