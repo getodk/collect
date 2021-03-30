@@ -65,7 +65,8 @@ import org.odk.collect.android.preferences.screens.IdentityPreferencesFragment;
 import org.odk.collect.android.preferences.screens.ServerPreferencesFragment;
 import org.odk.collect.android.preferences.screens.UserInterfacePreferencesFragment;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.project.ProjectSettingsDialog;
+import org.odk.collect.android.projects.AddProjectDialog;
+import org.odk.collect.android.projects.ProjectSettingsDialog;
 import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.storage.StorageInitializer;
@@ -253,6 +254,8 @@ public interface AppDependencyComponent {
     void inject(AndroidShortcutsActivity androidShortcutsActivity);
 
     void inject(ProjectSettingsDialog projectSettingsDialog);
+
+    void inject(AddProjectDialog addProjectDialog);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 
