@@ -1,24 +1,26 @@
 package org.odk.collect.android.feature.projects
 
-import androidx.test.rule.ActivityTestRule
 import org.junit.Rule
 import org.junit.Test
-import org.odk.collect.android.activities.MainMenuActivity
-import org.odk.collect.android.support.pages.MainMenuPage
+import org.junit.rules.RuleChain
+import org.odk.collect.android.support.CollectTestRule
+import org.odk.collect.android.support.TestRuleChain
 
 class AddNewProjectTest {
 
-    @get:Rule var rule = ActivityTestRule(MainMenuActivity::class.java)
+    val rule = CollectTestRule()
+
+    @get:Rule var chain: RuleChain = TestRuleChain.chain().around(rule)
 
     @Test
     fun addProjectTest() {
-        MainMenuPage(rule)
+        rule.mainMenu()
             .openProjectSettingsDialog()
             .clickAddProject()
             .inputProjectName("Project 1")
             .addProject()
 
-        MainMenuPage(rule)
+        rule.mainMenu()
             .openProjectSettingsDialog()
             .assertText("Project 1")
     }
