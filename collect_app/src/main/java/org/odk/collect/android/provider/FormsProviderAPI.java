@@ -49,7 +49,11 @@ public final class FormsProviderAPI {
          * The content:// style URL for accessing the newest versions of Forms. For each
          * {@link FormsColumns#JR_FORM_ID}, only the version with the most recent
          * {@link FormsColumns#DATE} is included.
+         *
+         * @deprecated This should be implemented as part of the UI/app code and should not be
+         * available as a special content URI case.
          */
+        @Deprecated
         public static final Uri CONTENT_NEWEST_FORMS_BY_FORMID_URI = Uri.parse("content://" + AUTHORITY + "/newest_forms_by_form_id");
 
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.odk.form";

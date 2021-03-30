@@ -183,8 +183,8 @@ public class DatabaseFormsRepository implements FormsRepository {
     }
 
     @Override
-    public Cursor rawQuery(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return queryAndReturnCursor(projection, selection, selectionArgs, sortOrder);
+    public Cursor rawQuery(String[] projection, String selection, String[] selectionArgs, String sortOrder, String groupBy) {
+        return queryAndReturnCursor(projection, selection, selectionArgs, sortOrder, groupBy);
     }
 
     @Nullable
@@ -194,16 +194,16 @@ public class DatabaseFormsRepository implements FormsRepository {
     }
 
     private List<Form> queryForForms(String selection, String[] selectionArgs) {
-        Cursor cursor = queryAndReturnCursor(null, selection, selectionArgs, null);
+        Cursor cursor = queryAndReturnCursor(null, selection, selectionArgs, null, null);
         return getFormsFromCursor(cursor, storagePathProvider);
     }
 
-    private Cursor queryAndReturnCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    private Cursor queryAndReturnCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder, String groupBy) {
         FormsDatabaseHelper formsDatabaseHelper = FormsDatabaseHelper.getDbHelper();
         SQLiteDatabase readableDatabase = formsDatabaseHelper.getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(FORMS_TABLE_NAME);
-        return qb.query(readableDatabase, projection, selection, selectionArgs, null, null, sortOrder);
+        return qb.query(readableDatabase, projection, selection, selectionArgs, groupBy, null, sortOrder);
     }
 
     private Long insertForm(ContentValues values) {

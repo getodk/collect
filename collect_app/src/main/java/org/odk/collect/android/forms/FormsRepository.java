@@ -44,5 +44,5 @@ public interface FormsRepository {
 
     void restore(Long id);
 
-    Cursor rawQuery(String[] projection, String selection, String[] selectionArgs, String sortOrder);
+    Cursor rawQuery(String[] projection, String selection, String[] selectionArgs, String sortOrder, String groupBy);
 }

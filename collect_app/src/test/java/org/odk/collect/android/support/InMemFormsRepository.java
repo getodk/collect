@@ -184,7 +184,7 @@ public class InMemFormsRepository implements FormsRepository {
     }
 
     @Override
-    public Cursor rawQuery(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public Cursor rawQuery(String[] projection, String selection, String[] selectionArgs, String sortOrder, String groupBy) {
         throw new UnsupportedOperationException();
     }
 

@@ -18,13 +18,11 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.FormsDatabaseHelper;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -39,7 +37,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import static android.provider.BaseColumns._ID;
-import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
 import static org.odk.collect.android.forms.FormUtils.getFormFromCurrentCursorPosition;
 import static org.odk.collect.android.forms.FormUtils.getFormFromValues;
 import static org.odk.collect.android.forms.FormUtils.getValuesFromForm;
@@ -89,29 +86,19 @@ public class FormsProvider extends ContentProvider {
         Cursor cursor;
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
-                cursor = formsRepository.rawQuery(projection, selection, selectionArgs, sortOrder);
+                cursor = formsRepository.rawQuery(projection, selection, selectionArgs, sortOrder, null);
                 break;
 
             case FORM_ID:
                 String formId = String.valueOf(ContentUriHelper.getIdFromUri(uri));
-                cursor = formsRepository.rawQuery(null, _ID + "=?", new String[]{formId}, null);
+                cursor = formsRepository.rawQuery(null, _ID + "=?", new String[]{formId}, null, null);
                 break;
 
             // Only include the latest form that was downloaded with each form_id
             case NEWEST_FORMS_BY_FORM_ID:
-                SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-                qb.setTables(FORMS_TABLE_NAME);
-                qb.setProjectionMap(sFormsProjectionMap);
-                qb.setStrict(true);
-
                 Map<String, String> filteredProjectionMap = new HashMap<>(sFormsProjectionMap);
                 filteredProjectionMap.put(DATE, FormsColumns.MAX_DATE);
-
-                qb.setProjectionMap(filteredProjectionMap);
-                String groupBy = FormsColumns.JR_FORM_ID;
-
-                FormsDatabaseHelper formsDatabaseHelper = FormsDatabaseHelper.getDbHelper();
-                cursor = qb.query(formsDatabaseHelper.getReadableDatabase(), projection, selection, selectionArgs, groupBy, null, sortOrder);
+                cursor = formsRepository.rawQuery(filteredProjectionMap.values().toArray(new String[0]), selection, selectionArgs, sortOrder, FormsColumns.JR_FORM_ID);
                 break;
 
             default:
@@ -164,7 +151,7 @@ public class FormsProvider extends ContentProvider {
 
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
-                try (Cursor cursor = formsRepository.rawQuery(null, where, whereArgs, null)) {
+                try (Cursor cursor = formsRepository.rawQuery(null, where, whereArgs, null, null)) {
                     while (cursor.moveToNext()) {
                         formsRepository.delete(cursor.getLong(cursor.getColumnIndex(_ID)));
                     }
@@ -194,7 +181,7 @@ public class FormsProvider extends ContentProvider {
         int count;
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
-                try (Cursor cursor = formsRepository.rawQuery(null, where, whereArgs, null)) {
+                try (Cursor cursor = formsRepository.rawQuery(null, where, whereArgs, null, null)) {
                     while (cursor.moveToNext()) {
                         Form form = getFormFromCurrentCursorPosition(cursor, storagePathProvider);
 

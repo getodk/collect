@@ -24,9 +24,11 @@ public class HideOldVersionsTest {
     @Test
     public void whenHideOldVersionsEnabled_onlyTheNewestVersionOfAFormShowsInFormList() {
         rule.mainMenu()
-                // No setup needed as this is the expected default
                 .copyForm("one-question.xml")
+                .clickFillBlankForm() // Sync forms on disk
+                .pressBack(new MainMenuPage(rule))
                 .copyForm("one-question-updated.xml")
+
                 .clickFillBlankForm()
                 .assertFormExists("One Question Updated")
                 .assertFormDoesNotExist("One Question");
@@ -44,6 +46,7 @@ public class HideOldVersionsTest {
 
                 .copyForm("one-question.xml")
                 .copyForm("one-question-updated.xml")
+
                 .clickFillBlankForm()
                 .assertFormExists("One Question Updated")
                 .assertFormExists("One Question");
