@@ -10,11 +10,13 @@ abstract class ProjectsRepositoryTest {
 
     abstract fun buildSubject(): ProjectsRepository
 
-    @Before fun setup() {
+    @Before
+    fun setup() {
         projectsRepository = buildSubject()
     }
 
-    @Test fun add_shouldSaveProjectToStorage() {
+    @Test
+    fun add_shouldSaveProjectToStorage() {
         projectsRepository.add("Project 1")
 
         val projects = projectsRepository.getAll()
