@@ -96,7 +96,6 @@ public class ServerFormsDetailsFetcher {
                     !thisFormAlreadyDownloaded,
                     isNewerFormVersionAvailable,
                     manifestFile,
-                    formNotDownloaded,        // smap
                     false,          // smap tasks only
                     null,             // smap formPath
                     null);                   // smap project

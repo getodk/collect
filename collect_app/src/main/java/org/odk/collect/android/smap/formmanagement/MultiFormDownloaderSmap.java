@@ -45,6 +45,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME;
 import static org.odk.collect.android.utilities.FileUtils.STUB_XML;
+import static org.odk.collect.android.utilities.FileUtils.deleteOldFile;
 import static org.odk.collect.android.utilities.FileUtils.write;
 import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
@@ -89,19 +90,16 @@ public class MultiFormDownloaderSmap {
         final HashMap<ServerFormDetailsSmap, String> result = new HashMap<>();
 
         for (ServerFormDetailsSmap fd : toDownload) {
-            boolean success = false;
+            boolean downloaded = false;
             try {
-                success = processOneForm(total, count++, fd, stateListener);
-                if (success) {
+                downloaded = processOneForm(total, count++, fd, stateListener);
+                if (downloaded) {
                     result.put(fd, Collect.getInstance().getString(R.string.success));
-                } else {
-                    result.put(fd, Collect.getInstance().getString(R.string.failure));
                 }
             } catch (TaskCancelledException cd) {
                 break;
             } catch(Exception e) {
                 Timber.e(e);
-                success = false;
                 result.put(fd, Collect.getInstance().getString(R.string.failure) + ": " + e.getMessage());
             }
         }
@@ -119,66 +117,34 @@ public class MultiFormDownloaderSmap {
      * @throws TaskCancelledException to signal that form downloading is to be canceled
      */
     private boolean processOneForm(int total, int count, ServerFormDetailsSmap fd, FormDownloaderListener stateListener) throws Exception {
+
         if (stateListener != null) {
             stateListener.progressUpdate(fd.getFormName(), String.valueOf(count), String.valueOf(total));
         }
-        boolean success = true;
+
         if (stateListener != null && stateListener.isTaskCancelled()) {
             throw new TaskCancelledException();
         }
 
-        // use a temporary media path until everything is ok.
         String tempMediaPath = new File(new StoragePathProvider().getDirPath(StorageSubdirectory.CACHE),
                 String.valueOf(System.currentTimeMillis())).getAbsolutePath();
         String orgTempMediaPath = new File(tempMediaPath + "_org").getAbsolutePath();      // smap
         String orgMediaPath = Utilities.getOrgMediaPath();  ;          // smap
-        final String finalMediaPath;
+        String finalMediaPath = null;
         FileResult fileResult = null;
+
         try {
             String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
                     .getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID);        // smap
 
-            // get the xml file
-            // if we've downloaded a duplicate, this gives us the file
+            // get the xml file - either download or use the existing one
             fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl() + "&deviceID=" + deviceId, stateListener,
-                    fd.isFormNotDownloaded() || fd.isFormNotDownloaded(),       // smap add flag on newer form version available or never downloaded
-                    fd.getFormPath());                      // smap
+                    fd.isFormDownloaded(),
+                    fd.getFormMediaPath());
 
-            if (fd.getManifestUrl() != null) {
-                finalMediaPath = FileUtils.constructMediaPath(
-                        fileResult.getFile().getAbsolutePath());
-                String error = downloadManifestAndMediaFiles(tempMediaPath, finalMediaPath, fd,
-                        count, total, stateListener, orgTempMediaPath, orgMediaPath);                              // smap added org paths
-                if (error != null && !error.isEmpty()) {
-                    Timber.i("####### Error: " + error);
-                    success = false;
-                }
+            if (fileResult == null || !fileResult.file.exists()) {
+                throw new Exception("Downloaded xml file does not exist");
             } else {
-                Timber.i("No Manifest for: %s", fd.getFormName());
-            }
-        } catch (TaskCancelledException e) {
-            Timber.i(e);
-            cleanUp(fileResult, e.file, tempMediaPath, orgTempMediaPath);   // smap
-
-            // do not download additional forms.
-            throw e;
-        }
-
-        if (stateListener != null && stateListener.isTaskCancelled()) {
-            cleanUp(fileResult, null, tempMediaPath, orgTempMediaPath);     // smap
-            fileResult = null;
-        }
-
-        if (fileResult == null) {
-            Timber.i("##### fileResult is null");
-            return false;
-        }
-
-        Map<String, String> parsedFields = null;
-        if (fileResult != null && fileResult.file.exists()) {       // smap add check for exists
-            try {
-                final long start = System.currentTimeMillis();
-                Timber.w("Parsing document %s", fileResult.file.getAbsolutePath());
 
                 // Add a stub last-saved instance to the tmp media directory so it will be resolved
                 // when parsing a form definition with last-saved reference
@@ -188,110 +154,65 @@ public class MultiFormDownloaderSmap {
                 ReferenceManager.instance().addReferenceFactory(new FileReferenceFactory(tempMediaPath));
                 ReferenceManager.instance().addSessionRootTranslator(new RootTranslator("jr://file-csv/", "jr://file/"));
 
-                parsedFields = FileUtils.getMetadataFromFormDefinition(fileResult.file);
+                Map<String, String> parsedFields = FileUtils.getMetadataFromFormDefinition(fileResult.file);
+
                 ReferenceManager.instance().reset();
                 FileUtils.deleteAndReport(tmpLastSaved);
 
-                Timber.i("Parse finished in %.3f seconds.",
-                        (System.currentTimeMillis() - start) / 1000F);
-            } catch (RuntimeException e) {
-                ReferenceManager.instance().reset();    // smap ensure reference manager reset after error
-                throw(e);
+                /*
+                 * Store result in database
+                 */
+                UriResult uriResult = findExistingOrCreateNewUri(fileResult.file, parsedFields,
+                        STFileUtils.getSource(fd.getDownloadUrl()),
+                        fd.getTasksOnly(),
+                        fd.getProject());  // smap add source, tasks_only, project
             }
-        }
 
-        boolean installed = false;
-
-        if ((stateListener == null || !stateListener.isTaskCancelled()) && parsedFields != null) {    // smap remove check on empty message and check that parsed fields is not empty
-            if (!fileResult.isNew || isSubmissionOk(parsedFields)) {
-                installed = installEverything(tempMediaPath, fileResult, parsedFields, fd, orgTempMediaPath, orgMediaPath);   // Smap Added organisation paths
-            } else {
-                Timber.i("###### fileResult is new or not isSubmissionOk");
-                success = false;
-            }
-        }
-        if (!installed) {
-            Timber.i("###### not installed");
-            success = false;
-
-            cleanUp(fileResult, null, tempMediaPath, orgTempMediaPath);    // smap
-        }
-
-        return success;
-    }
-
-    private boolean isSubmissionOk(Map<String, String> parsedFields) {
-        String submission = parsedFields.get(FileUtils.SUBMISSIONURI);
-        return submission == null || Validator.isUrlValid(submission);
-    }
-
-    boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields,
-                              ServerFormDetailsSmap fd, String orgTempMediaPath, String orgMediaPath)   {   // smap add fd,  organisational paths
-        UriResult uriResult = null;
-        try {
-            uriResult = findExistingOrCreateNewUri(fileResult.file, parsedFields,
-                    STFileUtils.getSource(fd.getDownloadUrl()),
-                    fd.getTasksOnly(),
-                    fd.getProject());  // smap add source, tasks_only, project
-            if (uriResult != null) {
-                Timber.w("Form uri = %s, isNew = %b", uriResult.getUri().toString(), uriResult.isNew());
-
-                // move the media files in the media folder
-                if (tempMediaPath != null) {
-
-                    File orgMediaDir = new File(orgMediaPath);                      // smap
-                    File orgTempMediaDir = new File(orgTempMediaPath);              // smap
-                    File[] orgTempFiles = orgTempMediaDir.listFiles();              // smap
-                    if(orgTempFiles != null && orgTempFiles.length > 0) {           // smap Save a copy the media files in the org media directory
-                        for (File mf : orgTempFiles) {
-                            try {
-                                FileUtils.deleteOldFile(mf.getName(), orgMediaDir);
-                                org.apache.commons.io.FileUtils.moveFileToDirectory(mf, orgMediaDir, true);
-                            } catch (Exception e) {
-                            }
-                        }
-                    }
-
-                    File formMediaPath = new File(uriResult.getMediaPath());
-                    FileUtils.copyMediaFiles(orgMediaPath, formMediaPath);      // smap Copy org files first and overwrite with form level - leave a copy in org media dir for other surveys
-                    FileUtils.moveMediaFiles(tempMediaPath, formMediaPath);
+            /*
+             * Get Manifest files
+             */
+            if (fd.getManifestUrl() != null) {
+                String error = downloadManifestAndMediaFiles(tempMediaPath, fd.getFormMediaPath(), fd,
+                        count, total, stateListener, orgTempMediaPath, orgMediaPath);                              // smap added org paths
+                if (error != null && !error.isEmpty()) {
+                    throw new Exception("Error: " + error);
                 }
-                return true;
-            } else {
-                Timber.w("Form uri = null");
-            }
-        } catch (IOException e) {
-            Timber.e(e);
-
-            if (uriResult.isNew() && fileResult.isNew()) {
-                // this means we should delete the entire form together with the metadata
-                Uri uri = uriResult.getUri();
-                Timber.w("The form is new. We should delete the entire form.");
-                int deletedCount = Collect.getInstance().getContentResolver().delete(uri,
-                        null, null);
-                Timber.w("Deleted %d rows using uri %s", deletedCount, uri.toString());
             }
 
-            cleanUp(fileResult, null, tempMediaPath, orgTempMediaPath);     // smap add organisation
+            cleanUp(null, null, null, tempMediaPath, orgTempMediaPath);     // clear temp directories only
+
+        } catch (TaskCancelledException e) {
+            Timber.i(e);
+            ReferenceManager.instance().reset();    // smap ensure reference manager reset after error
+            cleanUp(fileResult, null, finalMediaPath, tempMediaPath, orgTempMediaPath);             // clear all directories
+            throw e;        // do not download additional forms.
         }
-        return false;
+
+        if (stateListener != null && stateListener.isTaskCancelled()) {
+            cleanUp(fileResult, null, finalMediaPath, tempMediaPath, orgTempMediaPath);     // smap
+        }
+
+
+        return !fd.isFormDownloaded();
     }
 
-    private void cleanUp(FileResult fileResult, File fileOnCancel, String tempMediaPath, String orgTempMediaPath) {     // smap add org
-        if (fileResult == null) {
-            Timber.w("The user cancelled (or an exception happened) the download of a form at the "
-                    + "very beginning.");
-        } else {
-            if(fileResult.file.exists()) {  // smap
-                String md5Hash = FileUtils.getMd5Hash(fileResult.file);
-                if (md5Hash != null) {
-                    formsRepository.deleteByMd5Hash(md5Hash);
-                }
+    private void cleanUp(FileResult fileResult, File fileOnCancel, String mediaPath, String tempMediaPath, String orgTempMediaPath) {     // smap add org
+        // Delete the XML File
+        if (fileResult != null && fileResult.file.exists()) {
+            String md5Hash = FileUtils.getMd5Hash(fileResult.file);
+            if (md5Hash != null) {
+                formsRepository.deleteByMd5Hash(md5Hash);
             }
         }
 
         FileUtils.deleteAndReport(fileOnCancel);
 
+        // Delete the media folder
+        if (mediaPath != null) {
+            FileUtils.purgeMediaPath(tempMediaPath);
+        }
+
+        // Delete the temporart folders
         if (tempMediaPath != null) {
             FileUtils.purgeMediaPath(tempMediaPath);
         }
@@ -359,7 +280,7 @@ public class MultiFormDownloaderSmap {
      * Takes the formName and the URL and attempts to download the specified file. Returns a file
      * object representing the downloaded file.
      */
-    FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener, boolean download, String formPath) throws Exception {  // smap add download and formPath
+    FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener, boolean isFormDownloaded, String formPath) throws Exception {  // smap add download and formPath
         // clean up friendly form name...
         String rootName = FormNameUtils.formatFilenameFromFormName(formName);
 
@@ -367,7 +288,7 @@ public class MultiFormDownloaderSmap {
         boolean isNew = false;      // smap
         // proposed name of xml file...
         StoragePathProvider storagePathProvider = new StoragePathProvider();
-        if(download) {  // smap
+        if(!isFormDownloaded) {  // smap
             String path = storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + rootName + ".xml";
             int i = 2;
             f = new File(path);
@@ -379,6 +300,7 @@ public class MultiFormDownloaderSmap {
 
             // we've downloaded the file, and we may have renamed it
             // make sure it's not the same as a file we already have
+            /*
             Form form = formsRepository.getOneByMd5Hash(FileUtils.getMd5Hash(f));
             if (form != null) {
                 isNew = false;
@@ -393,6 +315,8 @@ public class MultiFormDownloaderSmap {
                 f = new File(existingPath);
                 Timber.w("Will use %s", existingPath);
             }
+            */
+
         } else {
             if(formPath == null) {   // create a file where the file should be - why are we doing this?
                 f = new File(storagePathProvider.getDirPath(StorageSubdirectory.FORMS) + File.separator + rootName + ".xml");   // smap
@@ -537,6 +461,7 @@ public class MultiFormDownloaderSmap {
                                          int total, FormDownloaderListener stateListener,
                                          String orgTempMediaPath,   // smap
                                          String orgMediaPath) throws Exception {        // smap
+
         if (fd.getManifestUrl() == null) {
             return null;
         }
@@ -559,19 +484,8 @@ public class MultiFormDownloaderSmap {
             FileUtils.checkMediaPath(orgMediaDir);              // smap
 
             for (MediaFile toDownload : files) {
-                ++mediaCount;
-                if (stateListener != null) {
-                    stateListener.progressUpdate(
-                            Collect.getInstance().getString(R.string.form_download_progress,
-                                    fd.getFormName(),
-                                    String.valueOf(mediaCount), String.valueOf(files.size())),
-                            String.valueOf(count), String.valueOf(total));
-                }
 
-                //try {
-                // start smap organisational media
                 File finalMediaFile = null;
-                File finalImportedMediaFile = null;
                 File tempMediaFile = null;
                 if(toDownload.getDownloadUrl().endsWith("organisation")) {
                     finalMediaFile = new File(orgMediaDir, toDownload.getFilename());
@@ -579,47 +493,64 @@ public class MultiFormDownloaderSmap {
                 } else {
                     finalMediaFile = new File(finalMediaDir, toDownload.getFilename());
                     tempMediaFile = new File(tempMediaDir, toDownload.getFilename());
-                    if(finalMediaFile.getName().endsWith(".csv")) {
-                        finalImportedMediaFile = new File(finalMediaDir, toDownload.getFilename() + ".imported");
-                    }
                 }
 
-                // end smap
+                /*
+                 * Test to see if we need to re-download this file
+                 */
+                boolean needToDownload = false;
                 if (!finalMediaFile.exists()) {
-                    InputStream mediaFile = formListApi.fetchMediaFile(toDownload.getDownloadUrl(), true);  // smap add credentials file
-                    writeFile(tempMediaFile, stateListener, mediaFile);
+                    needToDownload = true;
                 } else {
                     String currentFileHash = FileUtils.getMd5Hash(finalMediaFile);
-                    if(currentFileHash == null && finalImportedMediaFile != null && finalImportedMediaFile.exists()) { // smap get hash from imported if necessary
-                        currentFileHash = FileUtils.getMd5Hash(finalImportedMediaFile);
-                    }
                     String downloadFileHash = getMd5Hash(toDownload.getHash());
 
                     if (currentFileHash != null && downloadFileHash != null && !currentFileHash.contentEquals(downloadFileHash)) {
-                        // if the hashes match, it's the same file
-                        // otherwise delete our current one and replace it with the new one
-                        FileUtils.deleteAndReport(finalMediaFile);
-                        downloadMsg.append(Collect.getInstance().getString(R.string.smap_get_media, tempMediaFile.getName())).append("\n");     // smap
-                        InputStream mediaFile = formListApi.fetchMediaFile(toDownload.getDownloadUrl(), true);  // smap credentials flag
-                        writeFile(tempMediaFile, stateListener, mediaFile);
+                        needToDownload = true;
                     } else {
-                        // exists, and the hash is the same
-                        // no need to download it again
+                        needToDownload = false;
+
+                        // exists, and the hash is the same no need to download it again
                         Timber.i("Skipping media file fetch -- file hashes identical: %s",
                                 finalMediaFile.getAbsolutePath());
-
-                        if(toDownload.getDownloadUrl().endsWith("organisation")) {  // smap Lets get this file and copy it to the form
-                            try {
-                                org.apache.commons.io.FileUtils.copyFileToDirectory(finalMediaFile, finalMediaDir, true);
-                            } catch(Exception e) {
-                                // Ignore an error if the file already exists
-                            }
-                        }
                     }
                 }
-                //  } catch (Exception e) {
-                //  return e.getLocalizedMessage();
-                //}
+
+                /*
+                 * Copy the file to its final destination
+                 */
+                if(needToDownload) {
+
+                    // Report progress
+                    ++mediaCount;
+                    if (stateListener != null) {
+                        stateListener.progressUpdate(
+                                Collect.getInstance().getString(R.string.form_download_progress,
+                                        fd.getFormName(),
+                                        String.valueOf(mediaCount), String.valueOf(files.size())),
+                                String.valueOf(count), String.valueOf(total));
+                    }
+
+                    // Delete existing
+                    if (finalMediaFile.exists()) {
+                        FileUtils.deleteAndReport(finalMediaFile);
+                    }
+
+                    // Download
+                    InputStream mediaFile = formListApi.fetchMediaFile(toDownload.getDownloadUrl(), true);  // smap add credentials file
+                    writeFile(tempMediaFile, stateListener, mediaFile);
+
+                    deleteOldFile(tempMediaFile.getName(), finalMediaDir);
+                    if (toDownload.getDownloadUrl().endsWith("organisation")) {
+                        org.apache.commons.io.FileUtils.copyFileToDirectory(tempMediaFile, finalMediaDir, false);
+                        org.apache.commons.io.FileUtils.moveFileToDirectory(tempMediaFile, orgMediaDir, true);  // Save copy in org directory
+                    } else {
+                        org.apache.commons.io.FileUtils.moveFileToDirectory(tempMediaFile, finalMediaDir, true);
+                    }
+                } else if (toDownload.getDownloadUrl().endsWith("organisation")) {
+                    // Get latest copy of file in organsiation shared directory
+                    org.apache.commons.io.FileUtils.copyFileToDirectory(finalMediaFile, finalMediaDir, false);
+                }
             }
         }
         if(downloadMsg.length() > 0) {      // smap

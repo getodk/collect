@@ -39,12 +39,15 @@ import java.util.HashMap;
 
 import timber.log.Timber;
 
+import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
+
 public class ManageForm {
 	
 	public class ManageFormDetails {
          public long id = 0;
 		 public String formName = null;
 	     public String formPath = null;
+	     public String formMediaPath;
 	     public String submissionUri = null;
 	     public boolean exists = false;
 	}
@@ -77,6 +80,7 @@ public class ManageForm {
 	             fd.formName = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
 	             fd.submissionUri = c.getString(c.getColumnIndex(FormsColumns.SUBMISSION_URI));
 	             fd.formPath = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
+                 fd.formMediaPath = getAbsoluteFilePath(new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS), c.getString(c.getColumnIndex(FormsColumns.FORM_MEDIA_PATH)));
 	             fd.exists = true;
              
         	} else {
