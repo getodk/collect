@@ -30,18 +30,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isOneOf;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.CONTENT_ITEM_TYPE;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.CONTENT_TYPE;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.CONTENT_URI;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DATE;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DISPLAY_NAME;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_FILE_PATH;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_VERSION;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LANGUAGE;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.MD5_HASH;
+import static org.odk.collect.android.database.DatabaseFormColumns.DATE;
+import static org.odk.collect.android.database.DatabaseFormColumns.DISPLAY_NAME;
+import static org.odk.collect.android.database.DatabaseFormColumns.FORM_FILE_PATH;
+import static org.odk.collect.android.database.DatabaseFormColumns.FORM_MEDIA_PATH;
+import static org.odk.collect.android.database.DatabaseFormColumns.JRCACHE_FILE_PATH;
+import static org.odk.collect.android.database.DatabaseFormColumns.JR_FORM_ID;
+import static org.odk.collect.android.database.DatabaseFormColumns.JR_VERSION;
+import static org.odk.collect.android.database.DatabaseFormColumns.LANGUAGE;
+import static org.odk.collect.android.database.DatabaseFormColumns.MD5_HASH;
+import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_ITEM_TYPE;
+import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_TYPE;
+import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_URI;
 
 @RunWith(AndroidJUnit4.class)
 public class FormsProviderTest {
@@ -350,10 +350,10 @@ public class FormsProviderTest {
     @NotNull
     private ContentValues getContentValues(String formId, String formVersion, String formName, File formFile) {
         ContentValues values = new ContentValues();
-        values.put(FormsProviderAPI.FormsColumns.DISPLAY_NAME, formName);
-        values.put(FormsProviderAPI.FormsColumns.JR_FORM_ID, formId);
-        values.put(FormsProviderAPI.FormsColumns.JR_VERSION, formVersion);
-        values.put(FormsProviderAPI.FormsColumns.FORM_FILE_PATH, formFile.getAbsolutePath());
+        values.put(DISPLAY_NAME, formName);
+        values.put(JR_FORM_ID, formId);
+        values.put(JR_VERSION, formVersion);
+        values.put(FORM_FILE_PATH, formFile.getAbsolutePath());
         return values;
     }
 

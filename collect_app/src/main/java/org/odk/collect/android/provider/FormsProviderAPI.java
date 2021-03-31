@@ -17,72 +17,39 @@
 package org.odk.collect.android.provider;
 
 import android.net.Uri;
-import android.provider.BaseColumns;
+
+import org.odk.collect.android.database.DatabaseFormColumns;
 
 /**
- * Contract between the forms provider and applications. Contains definitions for the supported URIs
- * and data columns.
- *
+ * Contract between the forms provider and applications. Contains definitions for the supported
+ * URIs. Data columns are defined at {@link DatabaseFormColumns}.
+ * <p>
  * This defines the data model for blank forms. Blank forms are unique by
- * {@link FormsColumns#JR_FORM_ID} unless multiple {@link FormsColumns#JR_VERSION}s are defined.
+ * {@link DatabaseFormColumns#JR_FORM_ID} unless multiple {@link DatabaseFormColumns#JR_VERSION}s are defined.
  */
 public final class FormsProviderAPI {
 
     static final String AUTHORITY = "org.odk.collect.android.provider.odk.forms";
 
-    private FormsProviderAPI() {
-    }
+    /**
+     * The content:// style URL for accessing Forms.
+     */
+    public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/forms");
+
+    public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.odk.form";
+    public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.odk.form";
 
     /**
-     * Columns for the Forms table.
+     * The content:// style URL for accessing the newest versions of Forms. For each
+     * {@link DatabaseFormColumns#JR_FORM_ID}, only the version with the most recent
+     * {@link DatabaseFormColumns#DATE} is included.
+     *
+     * @deprecated This should be implemented as part of the UI/app code and should not be
+     * available as a special content URI case.
      */
-    public static final class FormsColumns implements BaseColumns {
-        private FormsColumns() {
-        }
+    @Deprecated
+    public static final Uri CONTENT_NEWEST_FORMS_BY_FORMID_URI = Uri.parse("content://" + AUTHORITY + "/newest_forms_by_form_id");
 
-        /**
-         * The content:// style URL for accessing Forms.
-         */
-        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/forms");
-
-        /**
-         * The content:// style URL for accessing the newest versions of Forms. For each
-         * {@link FormsColumns#JR_FORM_ID}, only the version with the most recent
-         * {@link FormsColumns#DATE} is included.
-         *
-         * @deprecated This should be implemented as part of the UI/app code and should not be
-         * available as a special content URI case.
-         */
-        @Deprecated
-        public static final Uri CONTENT_NEWEST_FORMS_BY_FORMID_URI = Uri.parse("content://" + AUTHORITY + "/newest_forms_by_form_id");
-
-        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.odk.form";
-        public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.odk.form";
-
-        // These are the only things needed for an insert
-        public static final String DISPLAY_NAME = "displayName";
-        public static final String DESCRIPTION = "description";  // can be null
-        public static final String JR_FORM_ID = "jrFormId";
-        public static final String JR_VERSION = "jrVersion"; // can be null
-        public static final String FORM_FILE_PATH = "formFilePath";
-        public static final String SUBMISSION_URI = "submissionUri"; // can be null
-        public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey"; // can be null
-        public static final String AUTO_DELETE = "autoDelete"; // can be null
-        // Column is called autoSubmit for legacy support but the attribute is auto-send
-        public static final String AUTO_SEND = "autoSubmit"; // can be null
-        public static final String GEOMETRY_XPATH = "geometryXpath"; // can be null
-
-        // these are generated for you (but you can insert something else if you want)
-        public static final String DISPLAY_SUBTEXT = "displaySubtext"; // not used in the newest database version
-        public static final String MD5_HASH = "md5Hash";
-        public static final String DATE = "date";
-        public static final String MAX_DATE = "MAX(date)"; // used only to get latest forms for each form_id
-        public static final String JRCACHE_FILE_PATH = "jrcacheFilePath";
-        public static final String FORM_MEDIA_PATH = "formMediaPath";
-
-        // this is null on create, and can only be set on an update.
-        public static final String LANGUAGE = "language";
-
-        public static final String DELETED_DATE = "deleted_date";
+    private FormsProviderAPI() {
     }
 }

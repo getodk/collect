@@ -5,6 +5,7 @@ import android.net.Uri;
 import androidx.loader.content.CursorLoader;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.DatabaseFormColumns;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -152,16 +153,16 @@ public class CursorLoaderFactory {
         CursorLoader cursorLoader;
 
         if (charSequence.length() == 0) {
-            Uri formUri = newestByFormId ? FormsProviderAPI.FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI
-                    : FormsProviderAPI.FormsColumns.CONTENT_URI;
+            Uri formUri = newestByFormId ? FormsProviderAPI.CONTENT_NEWEST_FORMS_BY_FORMID_URI
+                    : FormsProviderAPI.CONTENT_URI;
 
-            cursorLoader = new CursorLoader(Collect.getInstance(), formUri, null, FormsProviderAPI.FormsColumns.DELETED_DATE + " IS NULL", new String[]{}, sortOrder);
+            cursorLoader = new CursorLoader(Collect.getInstance(), formUri, null, DatabaseFormColumns.DELETED_DATE + " IS NULL", new String[]{}, sortOrder);
         } else {
-            String selection = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " LIKE ? AND " + FormsProviderAPI.FormsColumns.DELETED_DATE + " IS NULL";
+            String selection = DatabaseFormColumns.DISPLAY_NAME + " LIKE ? AND " + DatabaseFormColumns.DELETED_DATE + " IS NULL";
             String[] selectionArgs = {"%" + charSequence + "%"};
 
-            Uri formUri = newestByFormId ? FormsProviderAPI.FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI
-                    : FormsProviderAPI.FormsColumns.CONTENT_URI;
+            Uri formUri = newestByFormId ? FormsProviderAPI.CONTENT_NEWEST_FORMS_BY_FORMID_URI
+                    : FormsProviderAPI.CONTENT_URI;
 
             cursorLoader = new CursorLoader(Collect.getInstance(), formUri, null, selection, selectionArgs, sortOrder);
         }

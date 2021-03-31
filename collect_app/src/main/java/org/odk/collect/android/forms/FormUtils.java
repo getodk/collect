@@ -5,8 +5,8 @@ import android.database.Cursor;
 
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.core.reference.RootTranslator;
+import org.odk.collect.android.database.DatabaseFormColumns;
 import org.odk.collect.android.logic.FileReferenceFactory;
-import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtil;
 
@@ -15,22 +15,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.provider.BaseColumns._ID;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DATE;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DELETED_DATE;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DESCRIPTION;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DISPLAY_NAME;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_FILE_PATH;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.GEOMETRY_XPATH;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_VERSION;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LANGUAGE;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.MD5_HASH;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SUBMISSION_URI;
+import static org.odk.collect.android.database.DatabaseFormColumns.AUTO_DELETE;
+import static org.odk.collect.android.database.DatabaseFormColumns.AUTO_SEND;
+import static org.odk.collect.android.database.DatabaseFormColumns.BASE64_RSA_PUBLIC_KEY;
+import static org.odk.collect.android.database.DatabaseFormColumns.DATE;
+import static org.odk.collect.android.database.DatabaseFormColumns.DELETED_DATE;
+import static org.odk.collect.android.database.DatabaseFormColumns.DESCRIPTION;
+import static org.odk.collect.android.database.DatabaseFormColumns.DISPLAY_NAME;
+import static org.odk.collect.android.database.DatabaseFormColumns.FORM_FILE_PATH;
+import static org.odk.collect.android.database.DatabaseFormColumns.FORM_MEDIA_PATH;
+import static org.odk.collect.android.database.DatabaseFormColumns.GEOMETRY_XPATH;
+import static org.odk.collect.android.database.DatabaseFormColumns.JRCACHE_FILE_PATH;
+import static org.odk.collect.android.database.DatabaseFormColumns.JR_FORM_ID;
+import static org.odk.collect.android.database.DatabaseFormColumns.JR_VERSION;
+import static org.odk.collect.android.database.DatabaseFormColumns.LANGUAGE;
+import static org.odk.collect.android.database.DatabaseFormColumns.MD5_HASH;
+import static org.odk.collect.android.database.DatabaseFormColumns.SUBMISSION_URI;
 
 public class FormUtils {
 
@@ -91,19 +91,19 @@ public class FormUtils {
     public static ContentValues getValuesFromForm(Form form, StoragePathProvider storagePathProvider) {
         ContentValues values = new ContentValues();
         values.put(_ID, form.getId());
-        values.put(FormsProviderAPI.FormsColumns.DISPLAY_NAME, form.getDisplayName());
-        values.put(FormsProviderAPI.FormsColumns.DESCRIPTION, form.getDescription());
-        values.put(FormsProviderAPI.FormsColumns.JR_FORM_ID, form.getJrFormId());
-        values.put(FormsProviderAPI.FormsColumns.JR_VERSION, form.getJrVersion());
-        values.put(FormsProviderAPI.FormsColumns.FORM_FILE_PATH, storagePathProvider.getRelativeFormPath(form.getFormFilePath()));
-        values.put(FormsProviderAPI.FormsColumns.SUBMISSION_URI, form.getSubmissionUri());
-        values.put(FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY, form.getBASE64RSAPublicKey());
-        values.put(FormsProviderAPI.FormsColumns.MD5_HASH, form.getMD5Hash());
-        values.put(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH, storagePathProvider.getRelativeFormPath(form.getFormMediaPath()));
-        values.put(FormsProviderAPI.FormsColumns.LANGUAGE, form.getLanguage());
-        values.put(FormsProviderAPI.FormsColumns.AUTO_SEND, form.getAutoSend());
-        values.put(FormsProviderAPI.FormsColumns.AUTO_DELETE, form.getAutoDelete());
-        values.put(FormsProviderAPI.FormsColumns.GEOMETRY_XPATH, form.getGeometryXpath());
+        values.put(DatabaseFormColumns.DISPLAY_NAME, form.getDisplayName());
+        values.put(DatabaseFormColumns.DESCRIPTION, form.getDescription());
+        values.put(DatabaseFormColumns.JR_FORM_ID, form.getJrFormId());
+        values.put(DatabaseFormColumns.JR_VERSION, form.getJrVersion());
+        values.put(DatabaseFormColumns.FORM_FILE_PATH, storagePathProvider.getRelativeFormPath(form.getFormFilePath()));
+        values.put(DatabaseFormColumns.SUBMISSION_URI, form.getSubmissionUri());
+        values.put(DatabaseFormColumns.BASE64_RSA_PUBLIC_KEY, form.getBASE64RSAPublicKey());
+        values.put(DatabaseFormColumns.MD5_HASH, form.getMD5Hash());
+        values.put(DatabaseFormColumns.FORM_MEDIA_PATH, storagePathProvider.getRelativeFormPath(form.getFormMediaPath()));
+        values.put(DatabaseFormColumns.LANGUAGE, form.getLanguage());
+        values.put(DatabaseFormColumns.AUTO_SEND, form.getAutoSend());
+        values.put(DatabaseFormColumns.AUTO_DELETE, form.getAutoDelete());
+        values.put(DatabaseFormColumns.GEOMETRY_XPATH, form.getGeometryXpath());
 
         return values;
     }
@@ -133,17 +133,17 @@ public class FormUtils {
     public static Form getFormFromCurrentCursorPosition(Cursor cursor, StoragePathProvider storagePathProvider) {
         int idColumnIndex = cursor.getColumnIndex(_ID);
         int displayNameColumnIndex = cursor.getColumnIndex(DISPLAY_NAME);
-        int descriptionColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.DESCRIPTION);
+        int descriptionColumnIndex = cursor.getColumnIndex(DatabaseFormColumns.DESCRIPTION);
         int jrFormIdColumnIndex = cursor.getColumnIndex(JR_FORM_ID);
         int jrVersionColumnIndex = cursor.getColumnIndex(JR_VERSION);
         int formFilePathColumnIndex = cursor.getColumnIndex(FORM_FILE_PATH);
         int submissionUriColumnIndex = cursor.getColumnIndex(SUBMISSION_URI);
         int base64RSAPublicKeyColumnIndex = cursor.getColumnIndex(BASE64_RSA_PUBLIC_KEY);
-        int md5HashColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.MD5_HASH);
+        int md5HashColumnIndex = cursor.getColumnIndex(DatabaseFormColumns.MD5_HASH);
         int dateColumnIndex = cursor.getColumnIndex(DATE);
-        int jrCacheFilePathColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH);
+        int jrCacheFilePathColumnIndex = cursor.getColumnIndex(DatabaseFormColumns.JRCACHE_FILE_PATH);
         int formMediaPathColumnIndex = cursor.getColumnIndex(FORM_MEDIA_PATH);
-        int languageColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.LANGUAGE);
+        int languageColumnIndex = cursor.getColumnIndex(DatabaseFormColumns.LANGUAGE);
         int autoSendColumnIndex = cursor.getColumnIndex(AUTO_SEND);
         int autoDeleteColumnIndex = cursor.getColumnIndex(AUTO_DELETE);
         int geometryXpathColumnIndex = cursor.getColumnIndex(GEOMETRY_XPATH);

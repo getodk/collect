@@ -23,7 +23,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.database.DatabaseFormColumns;
 import org.odk.collect.android.utilities.MultiClickGuard;
 
 import java.text.SimpleDateFormat;
@@ -51,7 +51,7 @@ public class FormListAdapter extends SimpleCursorAdapter {
         originalBinder = getViewBinder();
         setViewBinder((view, cursor, columnIndex) -> {
             String columnName = cursor.getColumnName(columnIndex);
-            if (columnName.equals(FormsColumns.DATE) || columnName.equals(FormsColumns.MAX_DATE)) {
+            if (columnName.equals(DatabaseFormColumns.DATE) || columnName.equals(DatabaseFormColumns.MAX_DATE)) {
                 String timestampText = getTimestampText(new Date(cursor.getLong(columnIndex)));
                 if (!timestampText.isEmpty()) {
                     TextView v = (TextView) view;
@@ -64,8 +64,8 @@ public class FormListAdapter extends SimpleCursorAdapter {
                 if (version != null) {
                     versionIdText += getString(R.string.version_number, version);
                 }
-                if (Arrays.asList(columnNames).contains(FormsColumns.JR_FORM_ID)) {
-                    String id = cursor.getString(cursor.getColumnIndex(FormsColumns.JR_FORM_ID));
+                if (Arrays.asList(columnNames).contains(DatabaseFormColumns.JR_FORM_ID)) {
+                    String id = cursor.getString(cursor.getColumnIndex(DatabaseFormColumns.JR_FORM_ID));
                     if (version != null && id != null) {
                         versionIdText += "\n";
                     }
@@ -79,7 +79,7 @@ public class FormListAdapter extends SimpleCursorAdapter {
                     v.setText(versionIdText);
                     v.setVisibility(View.VISIBLE);
                 }
-            } else if (columnName.equals(FormsColumns.GEOMETRY_XPATH)) {
+            } else if (columnName.equals(DatabaseFormColumns.GEOMETRY_XPATH)) {
                 String xpath = cursor.getString(columnIndex);
                 view.setVisibility(xpath != null ? View.VISIBLE : View.GONE);
             } else {

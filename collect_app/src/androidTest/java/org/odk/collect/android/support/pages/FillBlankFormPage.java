@@ -6,7 +6,7 @@ import androidx.test.espresso.matcher.CursorMatchers;
 import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.database.DatabaseFormColumns;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -62,21 +62,21 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     }
 
     public FillBlankFormPage checkMapIconDisplayedForForm(String formName) {
-        onData(allOf(is(instanceOf(Cursor.class)), CursorMatchers.withRowString(FormsColumns.DISPLAY_NAME, is(formName))))
+        onData(allOf(is(instanceOf(Cursor.class)), CursorMatchers.withRowString(DatabaseFormColumns.DISPLAY_NAME, is(formName))))
                 .onChildView(withId(R.id.map_button))
                 .check(matches(isDisplayed()));
         return this;
     }
 
     public FillBlankFormPage checkMapIconNotDisplayedForForm(String formName) {
-        onData(allOf(is(instanceOf(Cursor.class)), CursorMatchers.withRowString(FormsColumns.DISPLAY_NAME, is(formName))))
+        onData(allOf(is(instanceOf(Cursor.class)), CursorMatchers.withRowString(DatabaseFormColumns.DISPLAY_NAME, is(formName))))
                 .onChildView(withId(R.id.map_button))
                 .check(matches(not(isDisplayed())));
         return this;
     }
 
     public FormMapPage clickOnMapIconForForm(String formName) {
-        onData(allOf(is(instanceOf(Cursor.class)), CursorMatchers.withRowString(FormsColumns.DISPLAY_NAME, is(formName))))
+        onData(allOf(is(instanceOf(Cursor.class)), CursorMatchers.withRowString(DatabaseFormColumns.DISPLAY_NAME, is(formName))))
                 .onChildView(withId(R.id.map_button))
                 .perform(click());
         return new FormMapPage(rule).assertOnPage();
@@ -89,7 +89,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
 
     private void clickOnFormButton(String formName) {
         assertFormExists(formName);
-        onData(withRowString(FormsColumns.DISPLAY_NAME, formName)).perform(click());
+        onData(withRowString(DatabaseFormColumns.DISPLAY_NAME, formName)).perform(click());
     }
 
     public FormEndPage clickOnEmptyForm(String formName) {
@@ -116,7 +116,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
         // Seen problems with disk syncing not being waited for even though it's an AsyncTask
         return waitFor(() -> {
             assertTextNotDisplayed(R.string.no_items_display_forms);
-            onData(withRowString(FormsColumns.DISPLAY_NAME, formName)).check(matches(isDisplayed()));
+            onData(withRowString(DatabaseFormColumns.DISPLAY_NAME, formName)).check(matches(isDisplayed()));
             return this;
         });
     }

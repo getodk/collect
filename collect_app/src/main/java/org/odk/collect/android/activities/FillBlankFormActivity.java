@@ -41,7 +41,8 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.database.DatabaseFormColumns;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.tasks.FormSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -167,7 +168,7 @@ public class FillBlankFormActivity extends FormListActivity implements
         if (MultiClickGuard.allowClick(getClass().getName())) {
             // get uri to form
             long idFormsTable = listView.getAdapter().getItemId(position);
-            Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, idFormsTable);
+            Uri formUri = ContentUris.withAppendedId(FormsProviderAPI.CONTENT_URI, idFormsTable);
 
             String action = getIntent().getAction();
             if (Intent.ACTION_PICK.equals(action)) {
@@ -232,10 +233,10 @@ public class FillBlankFormActivity extends FormListActivity implements
 
     private void setupAdapter() {
         String[] columnNames = {
-                FormsColumns.DISPLAY_NAME,
-                FormsColumns.JR_VERSION,
-                hideOldFormVersions() ? FormsColumns.MAX_DATE : FormsColumns.DATE,
-                FormsColumns.GEOMETRY_XPATH
+                DatabaseFormColumns.DISPLAY_NAME,
+                DatabaseFormColumns.JR_VERSION,
+                hideOldFormVersions() ? DatabaseFormColumns.MAX_DATE : DatabaseFormColumns.DATE,
+                DatabaseFormColumns.GEOMETRY_XPATH
         };
         int[] viewIds = {
                 R.id.form_title,
@@ -245,7 +246,7 @@ public class FillBlankFormActivity extends FormListActivity implements
         };
 
         listAdapter = new FormListAdapter(
-                listView, FormsColumns.JR_VERSION, this, R.layout.form_chooser_list_item,
+                listView, DatabaseFormColumns.JR_VERSION, this, R.layout.form_chooser_list_item,
                 this::onMapButtonClick, columnNames, viewIds);
         listView.setAdapter(listAdapter);
     }

@@ -125,7 +125,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -615,7 +615,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             formPath = candidateForms.get(0).getFormFilePath();
         } else if (uriMimeType != null
-                && uriMimeType.equals(FormsColumns.CONTENT_ITEM_TYPE)) {
+                && uriMimeType.equals(FormsProviderAPI.CONTENT_ITEM_TYPE)) {
 
             Form form = formsRepository.get(ContentUriHelper.getIdFromUri(uri));
             if (form != null) {

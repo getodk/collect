@@ -32,7 +32,7 @@ import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.javarosawrapper.FormController.InstanceMetadata;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 import java.io.ByteArrayOutputStream;
@@ -289,7 +289,7 @@ public class EncryptionUtils {
             }
 
             form = forms.get(0);
-        } else if (FormsColumns.CONTENT_ITEM_TYPE.equals(Collect.getInstance().getContentResolver().getType(uri))) {
+        } else if (FormsProviderAPI.CONTENT_ITEM_TYPE.equals(Collect.getInstance().getContentResolver().getType(uri))) {
             throw new IllegalArgumentException("Can't get encryption info for Form URI!");
         }
 

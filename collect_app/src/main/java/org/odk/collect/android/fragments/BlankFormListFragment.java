@@ -35,7 +35,7 @@ import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.database.DatabaseFormColumns;
 import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.FormSyncTask;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -128,12 +128,12 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
 
     private void setupAdapter() {
         String[] data = {
-                FormsColumns.DISPLAY_NAME, FormsColumns.JR_VERSION,
-                FormsColumns.DATE, FormsColumns.JR_FORM_ID};
+                DatabaseFormColumns.DISPLAY_NAME, DatabaseFormColumns.JR_VERSION,
+                DatabaseFormColumns.DATE, DatabaseFormColumns.JR_FORM_ID};
         int[] view = {R.id.form_title, R.id.form_subtitle, R.id.form_subtitle2};
 
         listAdapter = new FormListAdapter(
-                getListView(), FormsColumns.JR_VERSION, getActivity(),
+                getListView(), DatabaseFormColumns.JR_VERSION, getActivity(),
                 R.layout.form_chooser_list_item_multiple_choice, null, data, view);
         setListAdapter(listAdapter);
         checkPreviouslyCheckedItems();

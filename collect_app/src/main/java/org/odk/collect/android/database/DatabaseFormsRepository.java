@@ -10,7 +10,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.utilities.Clock;
@@ -26,16 +25,16 @@ import javax.annotation.Nullable;
 import static android.provider.BaseColumns._ID;
 import static org.apache.commons.io.FileUtils.deleteDirectory;
 import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
+import static org.odk.collect.android.database.DatabaseFormColumns.DATE;
+import static org.odk.collect.android.database.DatabaseFormColumns.DELETED_DATE;
+import static org.odk.collect.android.database.DatabaseFormColumns.FORM_FILE_PATH;
+import static org.odk.collect.android.database.DatabaseFormColumns.FORM_MEDIA_PATH;
+import static org.odk.collect.android.database.DatabaseFormColumns.JRCACHE_FILE_PATH;
+import static org.odk.collect.android.database.DatabaseFormColumns.JR_FORM_ID;
+import static org.odk.collect.android.database.DatabaseFormColumns.JR_VERSION;
+import static org.odk.collect.android.database.DatabaseFormColumns.MD5_HASH;
 import static org.odk.collect.android.forms.FormUtils.getFormFromCurrentCursorPosition;
 import static org.odk.collect.android.forms.FormUtils.getValuesFromForm;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DATE;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DELETED_DATE;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_FILE_PATH;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_VERSION;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.MD5_HASH;
 
 public class DatabaseFormsRepository implements FormsRepository {
 
@@ -85,7 +84,7 @@ public class DatabaseFormsRepository implements FormsRepository {
             throw new IllegalArgumentException("null hash");
         }
 
-        String selection = FormsProviderAPI.FormsColumns.MD5_HASH + "=?";
+        String selection = DatabaseFormColumns.MD5_HASH + "=?";
         String[] selectionArgs = {hash};
         return queryForForm(selection, selectionArgs);
     }
@@ -167,7 +166,7 @@ public class DatabaseFormsRepository implements FormsRepository {
 
     @Override
     public void deleteByMd5Hash(@NotNull String md5Hash) {
-        String selection = FormsProviderAPI.FormsColumns.MD5_HASH + "=?";
+        String selection = DatabaseFormColumns.MD5_HASH + "=?";
         String[] selectionArgs = {md5Hash};
 
         deleteForms(selection, selectionArgs);

@@ -3,7 +3,7 @@ package org.odk.collect.android.support.pages;
 import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.provider.FormsProviderAPI;
+import org.odk.collect.android.database.DatabaseFormColumns;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -22,7 +22,7 @@ public class ViewSentFormPage extends Page<ViewSentFormPage> {
     }
 
     public FormHierarchyPage clickOnForm(String formName) {
-        onData(withRowString(FormsProviderAPI.FormsColumns.DISPLAY_NAME, formName)).perform(click());
+        onData(withRowString(DatabaseFormColumns.DISPLAY_NAME, formName)).perform(click());
         return new FormHierarchyPage(formName, rule);
     }
 }

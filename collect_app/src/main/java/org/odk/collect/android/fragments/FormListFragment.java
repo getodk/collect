@@ -14,7 +14,7 @@ limitations under the License.
 
 package org.odk.collect.android.fragments;
 
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.database.DatabaseFormColumns;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
@@ -23,19 +23,19 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 
 public abstract class FormListFragment extends FileManagerFragment {
     protected String getSortingOrder() {
-        String sortOrder = FormsColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
+        String sortOrder = DatabaseFormColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
         switch (getSelectedSortingOrder()) {
             case BY_NAME_ASC:
-                sortOrder = FormsColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
+                sortOrder = DatabaseFormColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
                 break;
             case BY_NAME_DESC:
-                sortOrder = FormsColumns.DISPLAY_NAME + " COLLATE NOCASE DESC";
+                sortOrder = DatabaseFormColumns.DISPLAY_NAME + " COLLATE NOCASE DESC";
                 break;
             case BY_DATE_ASC:
-                sortOrder = FormsColumns.DATE + " ASC";
+                sortOrder = DatabaseFormColumns.DATE + " ASC";
                 break;
             case BY_DATE_DESC:
-                sortOrder = FormsColumns.DATE + " DESC";
+                sortOrder = DatabaseFormColumns.DATE + " DESC";
                 break;
         }
         return sortOrder;

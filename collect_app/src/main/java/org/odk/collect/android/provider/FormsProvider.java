@@ -29,7 +29,6 @@ import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.utilities.Clock;
@@ -40,12 +39,28 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import static android.provider.BaseColumns._ID;
+import static org.odk.collect.android.database.DatabaseFormColumns.AUTO_DELETE;
+import static org.odk.collect.android.database.DatabaseFormColumns.AUTO_SEND;
+import static org.odk.collect.android.database.DatabaseFormColumns.BASE64_RSA_PUBLIC_KEY;
+import static org.odk.collect.android.database.DatabaseFormColumns.DATE;
+import static org.odk.collect.android.database.DatabaseFormColumns.DELETED_DATE;
+import static org.odk.collect.android.database.DatabaseFormColumns.DESCRIPTION;
+import static org.odk.collect.android.database.DatabaseFormColumns.DISPLAY_NAME;
+import static org.odk.collect.android.database.DatabaseFormColumns.FORM_FILE_PATH;
+import static org.odk.collect.android.database.DatabaseFormColumns.FORM_MEDIA_PATH;
+import static org.odk.collect.android.database.DatabaseFormColumns.GEOMETRY_XPATH;
+import static org.odk.collect.android.database.DatabaseFormColumns.JRCACHE_FILE_PATH;
+import static org.odk.collect.android.database.DatabaseFormColumns.JR_FORM_ID;
+import static org.odk.collect.android.database.DatabaseFormColumns.JR_VERSION;
+import static org.odk.collect.android.database.DatabaseFormColumns.LANGUAGE;
+import static org.odk.collect.android.database.DatabaseFormColumns.MAX_DATE;
+import static org.odk.collect.android.database.DatabaseFormColumns.MD5_HASH;
+import static org.odk.collect.android.database.DatabaseFormColumns.SUBMISSION_URI;
 import static org.odk.collect.android.forms.FormUtils.getFormFromCurrentCursorPosition;
 import static org.odk.collect.android.forms.FormUtils.getFormFromValues;
 import static org.odk.collect.android.forms.FormUtils.getValuesFromForm;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.CONTENT_URI;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DATE;
+import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_NEWEST_FORMS_BY_FORMID_URI;
+import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_URI;
 
 public class FormsProvider extends ContentProvider {
     private static HashMap<String, String> sFormsProjectionMap;
@@ -106,8 +121,8 @@ public class FormsProvider extends ContentProvider {
             // Only include the latest form that was downloaded with each form_id
             case NEWEST_FORMS_BY_FORM_ID:
                 Map<String, String> filteredProjectionMap = new HashMap<>(sFormsProjectionMap);
-                filteredProjectionMap.put(DATE, FormsColumns.MAX_DATE);
-                cursor = formsRepository.rawQuery(filteredProjectionMap.values().toArray(new String[0]), selection, selectionArgs, sortOrder, FormsColumns.JR_FORM_ID);
+                filteredProjectionMap.put(DATE, MAX_DATE);
+                cursor = formsRepository.rawQuery(filteredProjectionMap.values().toArray(new String[0]), selection, selectionArgs, sortOrder, JR_FORM_ID);
                 break;
 
             default:
@@ -124,10 +139,10 @@ public class FormsProvider extends ContentProvider {
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
             case NEWEST_FORMS_BY_FORM_ID:
-                return FormsColumns.CONTENT_TYPE;
+                return FormsProviderAPI.CONTENT_TYPE;
 
             case FORM_ID:
-                return FormsColumns.CONTENT_ITEM_TYPE;
+                return FormsProviderAPI.CONTENT_ITEM_TYPE;
 
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -181,7 +196,7 @@ public class FormsProvider extends ContentProvider {
         }
 
         getContext().getContentResolver().notifyChange(uri, null);
-        getContext().getContentResolver().notifyChange(FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
+        getContext().getContentResolver().notifyChange(FormsProviderAPI.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
         return count;
     }
 
@@ -221,35 +236,35 @@ public class FormsProvider extends ContentProvider {
         }
 
         getContext().getContentResolver().notifyChange(uri, null);
-        getContext().getContentResolver().notifyChange(FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
+        getContext().getContentResolver().notifyChange(FormsProviderAPI.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
 
         return count;
     }
 
     static {
         URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
-        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsColumns.CONTENT_URI.getPath(), FORMS);
-        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsColumns.CONTENT_URI.getPath() + "/#", FORM_ID);
+        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsProviderAPI.CONTENT_URI.getPath(), FORMS);
+        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsProviderAPI.CONTENT_URI.getPath() + "/#", FORM_ID);
         // Only available for query and type
-        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI.getPath(), NEWEST_FORMS_BY_FORM_ID);
+        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsProviderAPI.CONTENT_NEWEST_FORMS_BY_FORMID_URI.getPath(), NEWEST_FORMS_BY_FORM_ID);
 
         sFormsProjectionMap = new HashMap<>();
-        sFormsProjectionMap.put(FormsColumns._ID, FormsColumns._ID);
-        sFormsProjectionMap.put(FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_NAME);
-        sFormsProjectionMap.put(FormsColumns.DESCRIPTION, FormsColumns.DESCRIPTION);
-        sFormsProjectionMap.put(FormsColumns.JR_FORM_ID, FormsColumns.JR_FORM_ID);
-        sFormsProjectionMap.put(FormsColumns.JR_VERSION, FormsColumns.JR_VERSION);
-        sFormsProjectionMap.put(FormsColumns.SUBMISSION_URI, FormsColumns.SUBMISSION_URI);
-        sFormsProjectionMap.put(FormsColumns.BASE64_RSA_PUBLIC_KEY, FormsColumns.BASE64_RSA_PUBLIC_KEY);
-        sFormsProjectionMap.put(FormsColumns.MD5_HASH, FormsColumns.MD5_HASH);
+        sFormsProjectionMap.put(_ID, _ID);
+        sFormsProjectionMap.put(DISPLAY_NAME, DISPLAY_NAME);
+        sFormsProjectionMap.put(DESCRIPTION, DESCRIPTION);
+        sFormsProjectionMap.put(JR_FORM_ID, JR_FORM_ID);
+        sFormsProjectionMap.put(JR_VERSION, JR_VERSION);
+        sFormsProjectionMap.put(SUBMISSION_URI, SUBMISSION_URI);
+        sFormsProjectionMap.put(BASE64_RSA_PUBLIC_KEY, BASE64_RSA_PUBLIC_KEY);
+        sFormsProjectionMap.put(MD5_HASH, MD5_HASH);
         sFormsProjectionMap.put(DATE, DATE);
-        sFormsProjectionMap.put(FormsColumns.FORM_MEDIA_PATH, FormsColumns.FORM_MEDIA_PATH);
-        sFormsProjectionMap.put(FormsColumns.FORM_FILE_PATH, FormsColumns.FORM_FILE_PATH);
-        sFormsProjectionMap.put(FormsColumns.JRCACHE_FILE_PATH, FormsColumns.JRCACHE_FILE_PATH);
-        sFormsProjectionMap.put(FormsColumns.LANGUAGE, FormsColumns.LANGUAGE);
-        sFormsProjectionMap.put(FormsColumns.AUTO_DELETE, FormsColumns.AUTO_DELETE);
-        sFormsProjectionMap.put(FormsColumns.AUTO_SEND, FormsColumns.AUTO_SEND);
-        sFormsProjectionMap.put(FormsColumns.GEOMETRY_XPATH, FormsColumns.GEOMETRY_XPATH);
-        sFormsProjectionMap.put(FormsColumns.DELETED_DATE, FormsColumns.DELETED_DATE);
+        sFormsProjectionMap.put(FORM_MEDIA_PATH, FORM_MEDIA_PATH);
+        sFormsProjectionMap.put(FORM_FILE_PATH, FORM_FILE_PATH);
+        sFormsProjectionMap.put(JRCACHE_FILE_PATH, JRCACHE_FILE_PATH);
+        sFormsProjectionMap.put(LANGUAGE, LANGUAGE);
+        sFormsProjectionMap.put(AUTO_DELETE, AUTO_DELETE);
+        sFormsProjectionMap.put(AUTO_SEND, AUTO_SEND);
+        sFormsProjectionMap.put(GEOMETRY_XPATH, GEOMETRY_XPATH);
+        sFormsProjectionMap.put(DELETED_DATE, DELETED_DATE);
     }
 }
