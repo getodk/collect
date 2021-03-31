@@ -197,8 +197,9 @@ public class DatabaseFormsRepository implements FormsRepository {
     }
 
     private List<Form> queryForForms(String selection, String[] selectionArgs) {
-        Cursor cursor = queryAndReturnCursor(null, selection, selectionArgs, null, null);
-        return getFormsFromCursor(cursor, storagePathProvider);
+        try (Cursor cursor = queryAndReturnCursor(null, selection, selectionArgs, null, null)) {
+            return getFormsFromCursor(cursor, storagePathProvider);
+        }
     }
 
     private Cursor queryAndReturnCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder, String groupBy) {
