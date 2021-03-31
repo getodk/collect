@@ -47,8 +47,8 @@ public class ManageForm {
          public long id = 0;
 		 public String formName = null;
 	     public String formPath = null;
-	     public String formMediaPath;
 	     public String submissionUri = null;
+	     public String formMediaPath = null;
 	     public boolean exists = false;
 	}
 	
@@ -67,7 +67,7 @@ public class ManageForm {
         	//String [] selectionArgs = new String [1];
         	//selectionArgs[0] = formId;
         	String [] proj = {FormsColumns._ID, FormsColumns.DISPLAY_NAME, FormsColumns.JR_FORM_ID,
-        			FormsColumns.SUBMISSION_URI,FormsColumns.FORM_FILE_PATH}; 
+        			FormsColumns.SUBMISSION_URI,FormsColumns.FORM_FILE_PATH, FormsColumns.FORM_MEDIA_PATH};
         	
         	final ContentResolver resolver = Collect.getInstance().getContentResolver();
         	c = resolver.query(FormsColumns.CONTENT_URI, proj, selectionClause, selectionArgs, null);
