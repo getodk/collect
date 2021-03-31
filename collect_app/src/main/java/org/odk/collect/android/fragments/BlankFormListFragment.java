@@ -32,6 +32,7 @@ import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -62,6 +63,9 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
 
     @Inject
     InstancesRepository instancesRepository;
+
+    @Inject
+    FastExternalItemsetsRepository fastExternalItemsetsRepository;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -124,8 +128,8 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
 
     private void setupAdapter() {
         String[] data = {
-            FormsColumns.DISPLAY_NAME, FormsColumns.JR_VERSION,
-            FormsColumns.DATE, FormsColumns.JR_FORM_ID};
+                FormsColumns.DISPLAY_NAME, FormsColumns.JR_VERSION,
+                FormsColumns.DATE, FormsColumns.JR_FORM_ID};
         int[] view = {R.id.form_title, R.id.form_subtitle, R.id.form_subtitle2};
 
         listAdapter = new FormListAdapter(
@@ -198,7 +202,7 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
             args.putBoolean(ProgressDialogFragment.CANCELABLE, false);
             DialogUtils.showIfNotShowing(ProgressDialogFragment.class, args, getActivity().getSupportFragmentManager());
 
-            backgroundTasks.deleteFormsTask = new DeleteFormsTask(formsRepository, instancesRepository);
+            backgroundTasks.deleteFormsTask = new DeleteFormsTask(formsRepository, instancesRepository, fastExternalItemsetsRepository);
             backgroundTasks.deleteFormsTask.setDeleteListener(this);
             backgroundTasks.deleteFormsTask.execute(getCheckedIdObjects());
         } else {

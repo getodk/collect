@@ -23,9 +23,12 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.formmanagement.FormDeleter;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ContentUriHelper;
@@ -59,6 +62,12 @@ public class FormsProvider extends ContentProvider {
 
     @Inject
     FormsRepository formsRepository;
+
+    @Inject
+    InstancesRepository instancesRepository;
+
+    @Inject
+    FastExternalItemsetsRepository fastExternalItemsetsRepository;
 
     @Inject
     StoragePathProvider storagePathProvider;
@@ -149,11 +158,13 @@ public class FormsProvider extends ContentProvider {
 
         int count;
 
+        FormDeleter formDeleter = new FormDeleter(formsRepository, instancesRepository, fastExternalItemsetsRepository);
+
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
                 try (Cursor cursor = formsRepository.rawQuery(null, where, whereArgs, null, null)) {
                     while (cursor.moveToNext()) {
-                        formsRepository.delete(cursor.getLong(cursor.getColumnIndex(_ID)));
+                        formDeleter.delete(cursor.getLong(cursor.getColumnIndex(_ID)));
                     }
 
                     count = cursor.getCount();
@@ -161,7 +172,7 @@ public class FormsProvider extends ContentProvider {
                 break;
 
             case FORM_ID:
-                formsRepository.delete(ContentUriHelper.getIdFromUri(uri));
+                formDeleter.delete(ContentUriHelper.getIdFromUri(uri));
                 count = 1;
                 break;
 

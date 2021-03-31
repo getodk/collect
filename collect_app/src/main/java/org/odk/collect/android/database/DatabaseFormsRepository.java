@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -269,11 +268,5 @@ public class DatabaseFormsRepository implements FormsRepository {
                 // Ignored
             }
         }
-
-        // Delete itemsets
-        ItemsetDbAdapter ida = new ItemsetDbAdapter();
-        ida.open();
-        ida.delete(form.getFormMediaPath() + "/itemsets.csv");
-        ida.close();
     }
 }

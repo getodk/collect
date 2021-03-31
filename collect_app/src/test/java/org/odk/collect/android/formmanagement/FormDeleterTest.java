@@ -3,14 +3,18 @@ package org.odk.collect.android.formmanagement;
 import org.junit.Test;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.support.FormUtils;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.android.support.InMemInstancesRepository;
 
+import java.io.File;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.odk.collect.android.support.InstanceUtils.buildInstance;
 
 
@@ -18,7 +22,20 @@ public class FormDeleterTest {
 
     private final InMemFormsRepository formsRepository = new InMemFormsRepository();
     private final InMemInstancesRepository instancesRepository = new InMemInstancesRepository();
-    private final FormDeleter formDeleter = new FormDeleter(formsRepository, instancesRepository);
+    private final FastExternalItemsetsRepository fastExternalItemsetsRepository = mock(FastExternalItemsetsRepository.class);
+    private final FormDeleter formDeleter = new FormDeleter(formsRepository, instancesRepository, fastExternalItemsetsRepository);
+
+    @Test
+    public void deletesItemsets() {
+        Form formToDelete = formsRepository.save(new Form.Builder()
+                .jrFormId("id")
+                .jrVersion("version")
+                .formFilePath(FormUtils.createXFormFile("id", "version").getAbsolutePath())
+                .build());
+
+        formDeleter.delete(formToDelete.getId());
+        verify(fastExternalItemsetsRepository).deleteAllByCsvPath(formToDelete.getFormMediaPath() + File.separator + "itemsets.csv");
+    }
 
     @Test
     public void whenFormHasDeletedInstances_deletesForm() {
