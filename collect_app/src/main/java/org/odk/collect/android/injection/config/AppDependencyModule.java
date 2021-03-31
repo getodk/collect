@@ -44,6 +44,7 @@ import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeUtils;
 import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
+import org.odk.collect.android.database.FormsDatabaseProvider;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
@@ -517,5 +518,11 @@ public class AppDependencyModule {
     @Singleton
     public InstancesCountRepository providesFormCountRepository() {
         return new InstancesCountRepository();
+    }
+
+    @Provides
+    @Singleton
+    public FormsDatabaseProvider providesFormsDatabaseProvider() {
+        return new FormsDatabaseProvider();
     }
 }

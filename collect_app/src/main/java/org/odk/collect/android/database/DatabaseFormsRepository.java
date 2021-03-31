@@ -6,9 +6,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
@@ -40,6 +42,7 @@ public class DatabaseFormsRepository implements FormsRepository {
 
     private final StoragePathProvider storagePathProvider;
     private final Clock clock;
+    private final FormsDatabaseProvider formsDatabaseProvider;
 
     public DatabaseFormsRepository() {
         this(System::currentTimeMillis);
@@ -48,6 +51,7 @@ public class DatabaseFormsRepository implements FormsRepository {
     public DatabaseFormsRepository(Clock clock) {
         this.clock = clock;
         this.storagePathProvider = new StoragePathProvider();
+        this.formsDatabaseProvider = DaggerUtils.getComponent(Collect.getInstance()).formsDatabaseProvider();
     }
 
     @Nullable
@@ -199,22 +203,19 @@ public class DatabaseFormsRepository implements FormsRepository {
     }
 
     private Cursor queryAndReturnCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder, String groupBy) {
-        FormsDatabaseHelper formsDatabaseHelper = FormsDatabaseHelper.getDbHelper();
-        SQLiteDatabase readableDatabase = formsDatabaseHelper.getReadableDatabase();
+        SQLiteDatabase readableDatabase = formsDatabaseProvider.getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(FORMS_TABLE_NAME);
         return qb.query(readableDatabase, projection, selection, selectionArgs, groupBy, null, sortOrder);
     }
 
     private Long insertForm(ContentValues values) {
-        FormsDatabaseHelper formsDatabaseHelper = FormsDatabaseHelper.getDbHelper();
-        SQLiteDatabase writeableDatabase = formsDatabaseHelper.getWritableDatabase();
+        SQLiteDatabase writeableDatabase = formsDatabaseProvider.getWriteableDatabase();
         return writeableDatabase.insertOrThrow(FORMS_TABLE_NAME, null, values);
     }
 
     private void updateForm(Long id, ContentValues values) {
-        FormsDatabaseHelper formsDatabaseHelper = FormsDatabaseHelper.getDbHelper();
-        SQLiteDatabase writeableDatabase = formsDatabaseHelper.getWritableDatabase();
+        SQLiteDatabase writeableDatabase = formsDatabaseProvider.getWriteableDatabase();
         writeableDatabase.update(FORMS_TABLE_NAME, values, _ID + "=?", new String[]{String.valueOf(id)});
     }
 
@@ -224,8 +225,7 @@ public class DatabaseFormsRepository implements FormsRepository {
             deleteFilesForForm(form);
         }
 
-        FormsDatabaseHelper formsDatabaseHelper = FormsDatabaseHelper.getDbHelper();
-        SQLiteDatabase writeableDatabase = formsDatabaseHelper.getWritableDatabase();
+        SQLiteDatabase writeableDatabase = formsDatabaseProvider.getWriteableDatabase();
         writeableDatabase.delete(FORMS_TABLE_NAME, selection, selectionArgs);
     }
 

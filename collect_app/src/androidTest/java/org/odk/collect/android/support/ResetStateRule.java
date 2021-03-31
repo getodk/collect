@@ -9,8 +9,7 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.application.Collect;
-
-import org.odk.collect.android.database.FormsDatabaseHelper;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
@@ -76,7 +75,7 @@ public class ResetStateRule implements TestRule {
             throw new RuntimeException(e);
         }
 
-        FormsDatabaseHelper.recreateDatabaseHelper();
+        DaggerUtils.getComponent(Collect.getInstance()).formsDatabaseProvider().recreateDatabaseHelper();
         InstanceProvider.recreateDatabaseHelper();
     }
 

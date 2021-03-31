@@ -32,34 +32,12 @@ import static org.odk.collect.android.database.DatabaseConstants.FORMS_DATABASE_
  */
 public class FormsDatabaseHelper extends SQLiteOpenHelper {
 
-    private static FormsDatabaseHelper dbHelper;
-
-    public static synchronized FormsDatabaseHelper getDbHelper() {
-        if (dbHelper == null) {
-            recreateDatabaseHelper();
-        }
-
-        return dbHelper;
-    }
+    private final DatabaseMigrator databaseMigrator;
 
     public FormsDatabaseHelper(DatabaseMigrator databaseMigrator, StoragePathProvider storagePathProvider) {
         super(new DatabaseContext(storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA)), FORMS_DATABASE_NAME, null, FORMS_DATABASE_VERSION);
         this.databaseMigrator = databaseMigrator;
     }
-
-    public static void recreateDatabaseHelper() {
-        dbHelper = new FormsDatabaseHelper(new FormDatabaseMigrator(), new StoragePathProvider());
-    }
-
-    @SuppressWarnings("PMD.NonThreadSafeSingleton") // PMD thinks the `= null` is setting a singleton here
-    public static void releaseDatabaseHelper() {
-        if (dbHelper != null) {
-            dbHelper.close();
-            dbHelper = null;
-        }
-    }
-
-    private final DatabaseMigrator databaseMigrator;
 
     @Override
     public void onCreate(SQLiteDatabase db) {
