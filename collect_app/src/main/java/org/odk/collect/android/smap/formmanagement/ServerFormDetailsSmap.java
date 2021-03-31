@@ -15,6 +15,7 @@
 package org.odk.collect.android.smap.formmanagement;
 
 import org.odk.collect.android.forms.ManifestFile;
+import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.Serializable;
 
@@ -54,11 +55,11 @@ public class ServerFormDetailsSmap implements Serializable {
         this.formVersion = formVersion;
         this.hash = hash;
         this.isUpdated = isUpdated;
-        this.manifestUrl = manifestUrl;     // smap
-        this.isFormDownloaded = isFormDownloaded;   // smap
-        this.tasks_only = tasks_only;   // smap
-        this.formPath = formPath;       // smap
-        this.project = project;       // smap
+        this.manifestUrl = manifestUrl;
+        this.isFormDownloaded = isFormDownloaded;
+        this.tasks_only = tasks_only;
+        this.formPath = formPath;
+        this.project = project;
         this.manifest = manifest;
         this.formMediaPath = formMediaPath;
     }

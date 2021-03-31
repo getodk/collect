@@ -172,7 +172,13 @@ public class MultiFormDownloaderSmap {
              * Get Manifest files
              */
             if (fd.getManifestUrl() != null) {
-                String error = downloadManifestAndMediaFiles(tempMediaPath, fd.getFormMediaPath(), fd,
+                String mediaPath = fd.getFormMediaPath();
+                if(mediaPath == null) {
+                    // A newly downloaded form will have a null media path
+                    mediaPath = FileUtils.constructMediaPath(fileResult.getFile().getAbsolutePath());
+                }
+
+                String error = downloadManifestAndMediaFiles(tempMediaPath, mediaPath, fd,
                         count, total, stateListener, orgTempMediaPath, orgMediaPath);                              // smap added org paths
                 if (error != null && !error.isEmpty()) {
                     throw new Exception("Error: " + error);
@@ -476,7 +482,7 @@ public class MultiFormDownloaderSmap {
                 /*
                  * Test to see if we need to re-download this file
                  */
-                boolean needToDownload = false;
+                boolean needToDownload;
                 if (!finalMediaFile.exists()) {
                     needToDownload = true;
                 } else {
@@ -495,7 +501,7 @@ public class MultiFormDownloaderSmap {
                 }
 
                 /*
-                 * Copy the file to its final destination
+                 * Download the media
                  */
                 if(needToDownload) {
 

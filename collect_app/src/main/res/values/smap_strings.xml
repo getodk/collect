@@ -129,6 +129,7 @@
     <string name="smap_organisation">Organization</string>
     <string name="smap_default">Default</string>
     <string name="smap_local_data">Loading local data</string>
+    <string name="smap_checking_file">Checking %1$s.\n\nForm %2$s of %3$s form(s).</string>
     <string-array name="smap_kontrolid_servers">
         <item>Kontrolid Org Server</item>
         <item>Kontrolid Com Server</item>
