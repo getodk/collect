@@ -22,17 +22,14 @@ public class InstancesCountRepository {
     private final MutableLiveData<Integer> sent = new MutableLiveData<>(0);
 
     public LiveData<Integer> getUnsent() {
-        update();
         return unsent;
     }
 
     public LiveData<Integer> getFinalized() {
-        update();
         return finalized;
     }
 
     public LiveData<Integer> getSent() {
-        update();
         return sent;
     }
 
