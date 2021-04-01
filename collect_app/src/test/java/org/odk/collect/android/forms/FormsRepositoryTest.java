@@ -205,5 +205,4 @@ public abstract class FormsRepositoryTest {
     public void getOneByMd5Hash_whenHashIsNull_explodes() {
         buildSubject().getOneByMd5Hash(null);
     }
->>>>>>> merge_master
 }
