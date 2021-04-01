@@ -60,7 +60,7 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
         }
 
         binding.addButton.setOnClickListener {
-            projectsRepository.add(getProjectName(), getProjectIcon())
+            projectsRepository.add(getProjectName(), getProjectIcon(), getProjectColor())
             dismiss()
         }
     }
@@ -84,4 +84,6 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
     private fun getProjectName() = binding.projectName.editText?.text?.trim().toString()
 
     private fun getProjectIcon() = binding.projectIcon.editText?.text?.trim().toString()
+
+    private fun getProjectColor() = binding.projectColor.editText?.text?.trim().toString()
 }
