@@ -991,4 +991,5 @@
     <string name="add">Add</string>
     <string name="project_name">Project name</string>
     <string name="project_icon">Project icon</string>
+    <string name="project_color">Project color</string>
 </resources>
