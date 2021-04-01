@@ -39,6 +39,8 @@ import java.util.HashMap;
 
 import timber.log.Timber;
 
+import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
+
 public class ManageForm {
 	
 	public class ManageFormDetails {
@@ -46,6 +48,7 @@ public class ManageForm {
 		 public String formName = null;
 	     public String formPath = null;
 	     public String submissionUri = null;
+	     public String formMediaPath = null;
 	     public boolean exists = false;
 	}
 	
@@ -64,7 +67,7 @@ public class ManageForm {
         	//String [] selectionArgs = new String [1];
         	//selectionArgs[0] = formId;
         	String [] proj = {FormsColumns._ID, FormsColumns.DISPLAY_NAME, FormsColumns.JR_FORM_ID,
-        			FormsColumns.SUBMISSION_URI,FormsColumns.FORM_FILE_PATH}; 
+        			FormsColumns.SUBMISSION_URI,FormsColumns.FORM_FILE_PATH, FormsColumns.FORM_MEDIA_PATH};
         	
         	final ContentResolver resolver = Collect.getInstance().getContentResolver();
         	c = resolver.query(FormsColumns.CONTENT_URI, proj, selectionClause, selectionArgs, null);
@@ -77,6 +80,7 @@ public class ManageForm {
 	             fd.formName = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
 	             fd.submissionUri = c.getString(c.getColumnIndex(FormsColumns.SUBMISSION_URI));
 	             fd.formPath = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
+                 fd.formMediaPath = getAbsoluteFilePath(new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS), c.getString(c.getColumnIndex(FormsColumns.FORM_MEDIA_PATH)));
 	             fd.exists = true;
              
         	} else {

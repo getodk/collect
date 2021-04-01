@@ -111,7 +111,7 @@ android {
         }
         stl {
             applicationId "org.smap.smapTask.android.stl"
-            versionName "6.303-stl"
+            versionName "6.304-stl"
         }
     }
 

@@ -365,7 +365,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     }
 
     @SuppressWarnings("unchecked")
-    private void loadExternalData(File mediaFolder) {
+    public void loadExternalData(File mediaFolder) {    // smap make public
         // SCTO-594
         File[] zipFiles = mediaFolder.listFiles(new FileFilter() {
             @Override

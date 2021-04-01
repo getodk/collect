@@ -495,7 +495,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     @Override
     public void progressUpdate(String currentFile, int progress, int total) {
         // TODO Auto-generated method stub
-        mProgressMsg = getString(R.string.fetching_file, currentFile, String.valueOf(progress), String.valueOf(total));
+        mProgressMsg = getString(R.string.smap_checking_file, currentFile, String.valueOf(progress), String.valueOf(total));
         if(mProgressDialog != null) {
             mProgressDialog.setMessage(mProgressMsg);
         }

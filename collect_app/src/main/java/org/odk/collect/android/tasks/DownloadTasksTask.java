@@ -90,6 +90,7 @@ import javax.inject.Inject;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import timber.log.Timber;
 
+import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
 
 /**
@@ -698,16 +699,21 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         				form.manifestUrl = serverUrl + "/xformsManifest?key=" + form.ident;
         			}
 
-                    ServerFormDetailsSmap fd = new ServerFormDetailsSmap(form.name, form.url, form.ident, formVersionString,
+                    ServerFormDetailsSmap fd = new ServerFormDetailsSmap(
+                            form.name,
+                            form.url,
+                            form.ident,
+                            formVersionString,
                             null,      // manifest hash
-                            !mfd.exists,        // New form version available
                             form.hasManifest,   // Are newer media files available
                             null,
                             form.manifestUrl,
-                            !mfd.exists,
+                            mfd.exists,
                             form.tasks_only,
                             mfd.formPath,
-                            form.project);
+                            form.project,
+                            mfd.formMediaPath
+                        );
         			toDownload.add(fd);
         		} else {
                     // Update form details

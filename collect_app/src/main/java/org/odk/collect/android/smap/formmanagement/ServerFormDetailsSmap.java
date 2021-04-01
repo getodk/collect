@@ -15,6 +15,7 @@
 package org.odk.collect.android.smap.formmanagement;
 
 import org.odk.collect.android.forms.ManifestFile;
+import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.Serializable;
 
@@ -27,38 +28,40 @@ public class ServerFormDetailsSmap implements Serializable {
     private final String formID;
     private final String formVersion;
     private final String hash;
-    private final boolean isNotOnDevice;
     private final boolean isUpdated;
-    private final String manifestUrl;       // smap
-    private boolean isFormNotDownloaded;    // smap
-    private boolean tasks_only;             // smap
-    private String formPath;                // smap
-    private String project;                 // smap
+    private final String manifestUrl;
+    private boolean isFormDownloaded;
+    private boolean tasks_only;
+    private String formPath;
+    private String project;
+    private String formMediaPath;
 
     private final ManifestFile manifest;
 
     public ServerFormDetailsSmap(String formName, String downloadUrl, String formID,
                                  String formVersion, String hash,
-                                 boolean isNotOnDevice, boolean isUpdated, ManifestFile manifest,
+                                 boolean isUpdated,
+                                 ManifestFile manifest,
                                  String manifestUrl,    // smap
-                                 boolean isFormNotDownloaded,
+                                 boolean isFormDownloaded,
                                  boolean tasks_only,
                                  String formPath,
-                                 String project) {   // smap add formNotDownloaded, tasks_only, formPath, project
+                                 String project,
+                                 String formMediaPath) {   // smap add formNotDownloaded, tasks_only, formPath, project
 
         this.formName = formName;
         this.downloadUrl = downloadUrl;
         this.formID = formID;
         this.formVersion = formVersion;
         this.hash = hash;
-        this.isNotOnDevice = isNotOnDevice;
         this.isUpdated = isUpdated;
-        this.manifestUrl = manifestUrl;     // smap
-        this.isFormNotDownloaded = isFormNotDownloaded;   // smap
-        this.tasks_only = tasks_only;   // smap
-        this.formPath = formPath;       // smap
-        this.project = project;       // smap
+        this.manifestUrl = manifestUrl;
+        this.isFormDownloaded = isFormDownloaded;
+        this.tasks_only = tasks_only;
+        this.formPath = formPath;
+        this.project = project;
         this.manifest = manifest;
+        this.formMediaPath = formMediaPath;
     }
 
     public String getFormName() {
@@ -85,8 +88,8 @@ public class ServerFormDetailsSmap implements Serializable {
         return tasks_only;
     }           // smap
 
-    public boolean isFormNotDownloaded() {
-        return isFormNotDownloaded;
+    public boolean isFormDownloaded() {
+        return isFormDownloaded;
     }           // smap
 
     public String getFormPath() {
@@ -97,12 +100,12 @@ public class ServerFormDetailsSmap implements Serializable {
         return project;
     }           // smap
 
+    public String getFormMediaPath() {
+        return formMediaPath;
+    }           // smap
+
     public String getHash() {
         return hash;
-    }
-
-    public boolean isNotOnDevice() {
-        return isNotOnDevice;
     }
 
     public boolean isUpdated() {

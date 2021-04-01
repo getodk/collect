@@ -103,13 +103,17 @@
   <string name="smap_sort_by_project_asc">Ascendente por Proyecto, A-Z</string>
   <string name="smap_sort_by_project_desc">Descendente por Proyecto, Z-A</string>
   <string name="smap_no_label">No se ha especificado una etiqueta en Opciones</string>
-  <string name="smap_survey_blocked">El formulario%1$s fué desactivado en el servidor. Contacte al responsable en su organización para activarlo de nuevo y poder enviar los datos.</string>
-  <string name="smap_survey_deleted">El formulario %1$s fué borrado del servidor. Contacte al responsable en su organización si puede recuperarlo y así poder enviar los datos.</string>
+  <string name="smap_survey_blocked">El formulario \"%1$s\" está desactivado en el servidor.  Póngase en contacto con su administrador para desbloquearlo y poder enviar sus resultados. </string>
+  <string name="smap_survey_deleted">El formulario \"%1$s\" ha sido eliminador en el servidor.  Póngase en contacto con su administrador  si usted necesita que se recupere el formulario y poder enviar sus datos.</string>
   <string name="smap_csv_column_nf">La columna %1$s no fué encontrada en el archivo csv %2$s</string>
   <string name="smap_self_select">Esta es una tarea que puede autoasignarse. Para hacerlo haga click sostenido en la tarea antes de ser realizada.</string>
   <string name="smap_android_version">Versión Android %1s</string>
   <string name="smap_eval_required">%1$s no es un tipo válido para la función lookup_choices que tiene 3 parámetros. Sólo eval se puede usar.</string>
   <string name="smap_other">Otros</string>
+  <string name="smap_organisation">Organización</string>
+  <string name="smap_default">Por Defecto</string>
+  <string name="smap_local_data">Cargando datos locales</string>
+  <string name="smap_checking_file">Comprobando %1$s.\n\nForm. %2$s de %3$s formulario(s).</string>
   <string-array name="smap_kontrolid_servers">
     <item>Servidor Kontrolid ORG</item>
     <item>Servidor Kontrolid COM</item>
