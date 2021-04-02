@@ -177,11 +177,7 @@ import org.odk.collect.audiorecorder.recording.AudioRecorder;
 
 import java.io.BufferedWriter;  // smap
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;      // smap
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -199,12 +195,10 @@ import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static android.view.animation.AnimationUtils.loadAnimation;
 import static org.javarosa.form.api.FormEntryController.EVENT_PROMPT_NEW_REPEAT;
-import static org.odk.collect.android.analytics.AnalyticsEvents.SAVE_INCOMPLETE;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.BACKWARDS;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.FORWARDS;
 import static org.odk.collect.android.fragments.BarcodeWidgetScannerFragment.BARCODE_RESULT_KEY;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
-import static org.odk.collect.android.preferences.GeneralKeys.KEY_SMAP_ODK_MARK_FINALIZED;
 import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.DialogUtils.getDialog;

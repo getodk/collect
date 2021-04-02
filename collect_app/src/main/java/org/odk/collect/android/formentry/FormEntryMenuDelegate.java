@@ -100,7 +100,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
             backgroundLocation.setVisible(true);
             backgroundLocation.setChecked(GeneralSharedPreferences.getInstance().getBoolean(KEY_BACKGROUND_LOCATION, true));
 
-            if(PreferenceManager        // smap allow for disabling of hte disablement
+            if(PreferenceManager        // smap allow for disabling of the disablement of tracking
                     .getDefaultSharedPreferences(Collect.getInstance())
                     .getBoolean(GeneralKeys.KEY_SMAP_PREVENT_DISABLE_TRACK, false)) {
                 backgroundLocation.setEnabled(false);
@@ -110,6 +110,16 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
         menu.findItem(R.id.menu_add_repeat).setVisible(formEntryViewModel.canAddRepeat());
         menu.findItem(R.id.menu_record_audio).setVisible(formEntryViewModel.hasBackgroundRecording().getValue());
         menu.findItem(R.id.menu_record_audio).setChecked(backgroundAudioViewModel.isBackgroundRecordingEnabled().getValue());
+
+        if(formEntryViewModel.hasBackgroundRecording().getValue()) {
+            if (PreferenceManager        // smap allow for disabling of the disablement of background audio
+                    .getDefaultSharedPreferences(Collect.getInstance())
+                    .getBoolean(GeneralKeys.KEY_SMAP_BG_STOP_MENU, false)) {
+                menu.findItem(R.id.menu_record_audio).setEnabled(false);
+                menu.findItem(R.id.menu_record_audio).setChecked(true);
+                backgroundAudioViewModel.setBackgroundRecordingEnabled(true);
+            }
+        }
     }
 
     @Override

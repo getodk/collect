@@ -843,6 +843,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             editor.putBoolean(GeneralKeys.KEY_SMAP_ADMIN_SERVER_MENU, tr.settings.ft_server_menu);
             editor.putBoolean(GeneralKeys.KEY_SMAP_ADMIN_META_MENU, tr.settings.ft_meta_menu);
             editor.putBoolean(GeneralKeys.KEY_SMAP_EXIT_TRACK_MENU, tr.settings.ft_exit_track_menu);
+            editor.putBoolean(GeneralKeys.KEY_SMAP_BG_STOP_MENU, tr.settings.ft_bg_stop_menu);
             editor.putBoolean(GeneralKeys.KEY_SMAP_REVIEW_FINAL, tr.settings.ft_review_final);
 
             /*
