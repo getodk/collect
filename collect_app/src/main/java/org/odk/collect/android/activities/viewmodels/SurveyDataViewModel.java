@@ -45,7 +45,7 @@ public class SurveyDataViewModel extends ViewModel {
         service.submit(new Runnable() {
             @Override
             public void run() {
-                // on background thread, obtain a fresh list of users
+                // on background thread, obtain a fresh set of data
                 // Create corresponding array of entries and load their labels.
                 data.points = new ArrayList<PointEntry>(100);
                 data.tasks = new ArrayList<TaskEntry> (10);

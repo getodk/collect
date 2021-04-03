@@ -14,6 +14,10 @@
 
 package org.odk.collect.android.taskModel;
 
+import org.odk.collect.android.forms.MediaFile;
+
+import java.util.List;
+
 public class FormLocator {
 	public String ident;
 	public String name;
@@ -24,4 +28,5 @@ public class FormLocator {
 	public String manifestUrl;
 	public boolean hasManifest;
     public boolean dirty;           // Force refresh - due to dynamicly created CSV
+    public List<MediaFile> mediaFiles;
 }

@@ -184,7 +184,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 .getDefaultSharedPreferences(Collect.getInstance().getBaseContext());
         source = Utilities.getSource();
         serverUrl = sharedPreferences.getString(GeneralKeys.KEY_SERVER_URL, null);
-        taskURL = serverUrl + "/surveyKPI/myassignments?orgs=true&noprojects=true&linked=true";
+        taskURL = serverUrl + "/surveyKPI/myassignments?orgs=true&noprojects=true&linked=true&manifests=true";
 
         // Should mostly work may be better to add a lock however any error is recoverable
         if(Collect.getInstance().isDownloading()) {
@@ -707,7 +707,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                             formVersionString,
                             null,      // manifest hash
                             form.hasManifest,   // Are newer media files available
-                            null,
+                            form.mediaFiles,
                             form.manifestUrl,
                             mfd.exists,
                             form.tasks_only,
