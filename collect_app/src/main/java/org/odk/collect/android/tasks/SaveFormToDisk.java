@@ -189,6 +189,7 @@ public class SaveFormToDisk {
         ContentValues values = new ContentValues();
         if (canUpdate && instanceName != null) {       // smap
             values.put(InstanceColumns.DISPLAY_NAME, instanceName);
+            values.putNull(InstanceColumns.DELETED_DATE);     // As we are saving an instance make sure it is not deleted
         }
         if(canUpdate) { // smap
             if (incomplete || !shouldFinalize) {

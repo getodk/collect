@@ -51,7 +51,7 @@ public class SurveyDataViewModel extends ViewModel {
                 data.tasks = new ArrayList<TaskEntry> (10);
                 TraceUtilities.getPoints(data.points, 500, true);
                 getForms(data.tasks);
-                Utilities.getTasks(data.tasks, false, taskSortOrder, filter.toString(), false, true);
+                Utilities.getTasks(data.tasks, false, taskSortOrder, filter.toString(), false, true, false);
 
                 Timber.i("-------------------------------------- Retrieved data");
                 surveyData.postValue(data);
