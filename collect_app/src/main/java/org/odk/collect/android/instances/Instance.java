@@ -16,11 +16,9 @@
 
 package org.odk.collect.android.instances;
 
-import org.odk.collect.android.storage.StoragePathProvider;
-
 /**
  * A filled form stored on the device.
- *
+ * <p>
  * Objects of this class are created using the builder pattern: https://en.wikipedia.org/wiki/Builder_pattern
  */
 public final class Instance {
@@ -173,10 +171,6 @@ public final class Instance {
 
     public String getInstanceFilePath() {
         return instanceFilePath;
-    }
-
-    public String getAbsoluteInstanceFilePath() {
-        return new StoragePathProvider().getAbsoluteInstanceFilePath(instanceFilePath);
     }
 
     public String getJrFormId() {
