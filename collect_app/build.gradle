@@ -67,51 +67,51 @@ android {
     productFlavors {
         standard {
             applicationId "org.smap.smapTask.android"
-            versionName "6.400"
+            versionName "6.401"
         }
         plan {
             applicationId "org.smap.smapTask.android.plan"
-            versionName "6.400-plan"
+            versionName "6.401-plan"
         }
         kontrolid {
             applicationId "org.smap.smapTask.android.kontrolid"
-            versionName "6.400-kontrolid"
+            versionName "6.401-kontrolid"
         }
         supply {
             applicationId "org.smap.smapTask.android.supply"
-            versionName "6.400-supply"
+            versionName "6.401-supply"
         }
         seracis {
             applicationId "org.smap.smapTask.android.seracis"
-            versionName "6.400-seracis"
+            versionName "6.401-seracis"
         }
         meqa {
             applicationId "org.smap.smapTask.android.meqa"
-            versionName "6.400-meqa"
+            versionName "6.401-meqa"
         }
         atempi {
             applicationId "org.smap.smapTask.android.atempi"
-            versionName "6.400-atempi"
+            versionName "6.401-atempi"
         }
         pop {
             applicationId "org.smap.smapTask.android.pop"
-            versionName "6.400-pop"
+            versionName "6.401-pop"
         }
         tdh {
             applicationId "org.smap.smapTask.android.tdh"
-            versionName "6.400-tdh"
+            versionName "6.401-tdh"
         }
         assignfield {
             applicationId "org.smap.smapTask.android.assignfield"
-            versionName "6.400-assignfield"
+            versionName "6.401-assignfield"
         }
         informEd {
             applicationId "org.smap.smapTask.android.informEd"
-            versionName "6.400-informEd"
+            versionName "6.401-informEd"
         }
         stl {
             applicationId "org.smap.smapTask.android.stl"
-            versionName "6.305-stl"
+            versionName "6.401-stl"
         }
     }
 
