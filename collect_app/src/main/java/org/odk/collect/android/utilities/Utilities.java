@@ -380,7 +380,8 @@ public class Utilities {
             boolean all_non_synchronised,
             String sortOrder, String filter,
             boolean serverOnly,
-            boolean useGeofenceFilter) {
+            boolean useGeofenceFilter,
+            boolean getDeletedTasks) {
 
         // Get cursor
         String[] proj = {
@@ -415,10 +416,16 @@ public class Utilities {
             selectClause = "(lower(" + InstanceColumns.SOURCE + ") = ?" +
                     " or " + InstanceColumns.SOURCE + " = 'local')" +
                     " and " + InstanceColumns.T_IS_SYNC + " = ? ";
+            if(!getDeletedTasks) {
+                selectClause += " and " + InstanceColumns.DELETED_DATE + " is null ";
+            }
         } else {
             selectClause = "(lower(" + InstanceColumns.SOURCE + ") = ?" +
                     " or " + InstanceColumns.SOURCE + " = 'local')" +
                     " and " + InstanceColumns.T_TASK_STATUS + " != ? ";
+            if(!getDeletedTasks) {
+                selectClause += " and " + InstanceColumns.DELETED_DATE + " is null ";
+            }
         }
 
         if (serverOnly) {

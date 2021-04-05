@@ -76,12 +76,6 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
  * Responsible for displaying tasks on the main fieldTask screen
  */
 public class SmapTaskListFragment extends ListFragment {
-        // implements LoaderManager.LoaderCallbacks<MapEntry> {     // loader
-
-    // request codes for returning chosen form to main menu.
-    private static final int FORM_CHOOSER = 0;
-    private static final int TASK_LOADER_ID = 1;
-    private static final int INSTANCE_UPLOADER = 2;
 
     private static final int MENU_ENTERDATA = Menu.FIRST + 2;
     private static final int MENU_GETFORMS = Menu.FIRST + 3;
@@ -90,17 +84,11 @@ public class SmapTaskListFragment extends ListFragment {
     private static final int MENU_EXIT = Menu.FIRST + 6;
     private static final int MENU_HISTORY = Menu.FIRST + 7;
 
-    private static final String SEARCH_TEXT = "searchText";
-    private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
-
     protected int[] sortingOptions;
 
     View rootView;
 
-    private boolean isSearchBoxShown;
     private String filterText;
-    private String savedFilterText;
-    private SearchView searchView;
 
     private Integer selectedSortingOrder;
     private BottomSheetDialog bottomSheetDialog;
@@ -370,10 +358,6 @@ public class SmapTaskListFragment extends ListFragment {
 
         if(filterText == null) {
             filterText = "";
-        }
-        if (isSearchBoxShown) {
-            searchItem.expandActionView();
-            searchView.setQuery(filterText, false);
         }
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

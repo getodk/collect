@@ -171,7 +171,7 @@ public class MultiFormDownloaderSmap {
             /*
              * Get Manifest files
              */
-            if (fd.getManifestUrl() != null) {
+            if (fd.getManifestUrl() != null || fd.getMediaFiles() != null) {
                 String mediaPath = fd.getFormMediaPath();
                 if(mediaPath == null) {
                     // A newly downloaded form will have a null media path
@@ -446,17 +446,17 @@ public class MultiFormDownloaderSmap {
                                          String orgTempMediaPath,   // smap
                                          String orgMediaPath) throws Exception {        // smap
 
-        if (fd.getManifestUrl() == null) {
-            return null;
+        List<MediaFile> files = fd.getMediaFiles();
+        if(files == null && fd.getManifestUrl() != null) {  // Old server - request files from the server
+            files = formListApi.fetchManifest(fd.getManifestUrl()).getMediaFiles();
         }
 
         StringBuffer downloadMsg = new StringBuffer("");      //smap
-        List<MediaFile> files = formListApi.fetchManifest(fd.getManifestUrl()).getMediaFiles();
 
         // OK we now have the full set of files to download...
         Timber.i("Downloading %d media files.", files.size());
         int mediaCount = 0;
-        if (!files.isEmpty()) {
+        if (files != null && !files.isEmpty()) {
             File tempMediaDir = new File(tempMediaPath);
             File finalMediaDir = new File(finalMediaPath);
             File orgTempMediaDir = new File(orgTempMediaPath);  // smap temp organisational media

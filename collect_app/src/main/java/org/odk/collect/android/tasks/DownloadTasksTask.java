@@ -184,7 +184,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 .getDefaultSharedPreferences(Collect.getInstance().getBaseContext());
         source = Utilities.getSource();
         serverUrl = sharedPreferences.getString(GeneralKeys.KEY_SERVER_URL, null);
-        taskURL = serverUrl + "/surveyKPI/myassignments?orgs=true&noprojects=true&linked=true";
+        taskURL = serverUrl + "/surveyKPI/myassignments?orgs=true&noprojects=true&linked=true&manifests=true";
 
         // Should mostly work may be better to add a lock however any error is recoverable
         if(Collect.getInstance().isDownloading()) {
@@ -303,7 +303,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 /*
                  * Get an array of the existing server tasks on the phone and create a hashmap indexed on the assignment id
                  */
-                Utilities.getTasks(tasks, false, "", "", true, false);
+                Utilities.getTasks(tasks, false, "", "", true, false, true);
                 for(TaskEntry t : tasks) {
                     TaskStatus ts = new TaskStatus(t.assId, t.taskStatus);
                     taskMap.put(t.assId, ts);
@@ -501,7 +501,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
         // Get tasks that have not been synchronised
         ArrayList<TaskEntry> nonSynchTasks = new ArrayList<TaskEntry>();
-        Utilities.getTasks(nonSynchTasks, true, "", "", true, false);
+        Utilities.getTasks(nonSynchTasks, true, "", "", true, false, true);
 
         /*
          * Set updates to task status
@@ -706,7 +706,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                             formVersionString,
                             null,      // manifest hash
                             form.hasManifest,   // Are newer media files available
-                            null,
+                            form.mediaFiles,
                             form.manifestUrl,
                             mfd.exists,
                             form.tasks_only,
@@ -842,6 +842,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             editor.putBoolean(GeneralKeys.KEY_SMAP_ADMIN_SERVER_MENU, tr.settings.ft_server_menu);
             editor.putBoolean(GeneralKeys.KEY_SMAP_ADMIN_META_MENU, tr.settings.ft_meta_menu);
             editor.putBoolean(GeneralKeys.KEY_SMAP_EXIT_TRACK_MENU, tr.settings.ft_exit_track_menu);
+            editor.putBoolean(GeneralKeys.KEY_SMAP_BG_STOP_MENU, tr.settings.ft_bg_stop_menu);
             editor.putBoolean(GeneralKeys.KEY_SMAP_REVIEW_FINAL, tr.settings.ft_review_final);
 
             /*

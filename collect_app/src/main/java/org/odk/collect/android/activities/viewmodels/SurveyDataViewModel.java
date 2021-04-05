@@ -45,13 +45,13 @@ public class SurveyDataViewModel extends ViewModel {
         service.submit(new Runnable() {
             @Override
             public void run() {
-                // on background thread, obtain a fresh list of users
+                // on background thread, obtain a fresh set of data
                 // Create corresponding array of entries and load their labels.
                 data.points = new ArrayList<PointEntry>(100);
                 data.tasks = new ArrayList<TaskEntry> (10);
                 TraceUtilities.getPoints(data.points, 500, true);
                 getForms(data.tasks);
-                Utilities.getTasks(data.tasks, false, taskSortOrder, filter.toString(), false, true);
+                Utilities.getTasks(data.tasks, false, taskSortOrder, filter.toString(), false, true, false);
 
                 Timber.i("-------------------------------------- Retrieved data");
                 surveyData.postValue(data);

@@ -15,9 +15,11 @@
 package org.odk.collect.android.smap.formmanagement;
 
 import org.odk.collect.android.forms.ManifestFile;
+import org.odk.collect.android.forms.MediaFile;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ServerFormDetailsSmap implements Serializable {
 
@@ -36,12 +38,12 @@ public class ServerFormDetailsSmap implements Serializable {
     private String project;
     private String formMediaPath;
 
-    private final ManifestFile manifest;
+    private List<MediaFile> mediaFiles;
 
     public ServerFormDetailsSmap(String formName, String downloadUrl, String formID,
                                  String formVersion, String hash,
                                  boolean isUpdated,
-                                 ManifestFile manifest,
+                                 List<MediaFile> mediaFiles,
                                  String manifestUrl,    // smap
                                  boolean isFormDownloaded,
                                  boolean tasks_only,
@@ -55,12 +57,12 @@ public class ServerFormDetailsSmap implements Serializable {
         this.formVersion = formVersion;
         this.hash = hash;
         this.isUpdated = isUpdated;
+        this.mediaFiles = mediaFiles;
         this.manifestUrl = manifestUrl;
         this.isFormDownloaded = isFormDownloaded;
         this.tasks_only = tasks_only;
         this.formPath = formPath;
         this.project = project;
-        this.manifest = manifest;
         this.formMediaPath = formMediaPath;
     }
 
@@ -82,27 +84,31 @@ public class ServerFormDetailsSmap implements Serializable {
 
     public String getManifestUrl() {
         return manifestUrl;
-    }           // smap
+    }
+
+    public List<MediaFile> getMediaFiles() {
+        return mediaFiles;
+    }
 
     public boolean getTasksOnly() {
         return tasks_only;
-    }           // smap
+    }
 
     public boolean isFormDownloaded() {
         return isFormDownloaded;
-    }           // smap
+    }
 
     public String getFormPath() {
         return formPath;
-    }           // smap
+    }
 
     public String getProject() {
         return project;
-    }           // smap
+    }
 
     public String getFormMediaPath() {
         return formMediaPath;
-    }           // smap
+    }
 
     public String getHash() {
         return hash;
@@ -112,7 +118,4 @@ public class ServerFormDetailsSmap implements Serializable {
         return isUpdated;
     }
 
-    public ManifestFile getManifest() {
-        return manifest;
-    }
 }
