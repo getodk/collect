@@ -38,7 +38,7 @@ public final class InMemInstancesRepository implements InstancesRepository {
         List<Instance> result = new ArrayList<>();
 
         for (Instance instance : instances) {
-            if (instance.getAbsoluteInstanceFilePath().equals(instancePath)) {
+            if (instance.getInstanceFilePath().equals(instancePath)) {
                 result.add(instance);
             }
         }

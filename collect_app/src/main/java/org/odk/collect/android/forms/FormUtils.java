@@ -3,6 +3,8 @@ package org.odk.collect.android.forms;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import androidx.annotation.NonNull;
+
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.core.reference.RootTranslator;
 import org.odk.collect.android.database.DatabaseFormColumns;
@@ -88,7 +90,7 @@ public class FormUtils {
         }
     }
 
-    public static ContentValues getValuesFromForm(Form form, StoragePathProvider storagePathProvider) {
+    public static ContentValues getValuesFromForm(@NonNull Form form, StoragePathProvider storagePathProvider) {
         ContentValues values = new ContentValues();
         values.put(_ID, form.getId());
         values.put(DatabaseFormColumns.DISPLAY_NAME, form.getDisplayName());

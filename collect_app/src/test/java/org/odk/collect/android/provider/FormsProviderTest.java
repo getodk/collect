@@ -103,13 +103,14 @@ public class FormsProviderTest {
     }
 
     @Test
-    public void update_updatesForm() {
+    public void update_updatesForm_andReturns1() {
         Uri formUri = addFormsToDirAndDb("external_app_form", "1", "External app form");
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(LANGUAGE, "English");
 
-        contentResolver.update(formUri, contentValues, null, null);
+        int updateCount = contentResolver.update(formUri, contentValues, null, null);
+        assertThat(updateCount, is(1));
         try (Cursor cursor = contentResolver.query(formUri, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
 
@@ -216,6 +217,15 @@ public class FormsProviderTest {
             assertThat(cursor.getString(cursor.getColumnIndex(JRCACHE_FILE_PATH)), is(oldCachePath)); // This is broken - hasn't updated and is deleted
             assertThat(cursor.getString(cursor.getColumnIndex(FORM_MEDIA_PATH)), is(oldMediaPath)); // This is broken - hasn't updated
         }
+    }
+
+    @Test
+    public void update_whenFormDoesNotExist_returns0() {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(LANGUAGE, "English");
+
+        int updatedCount = contentResolver.update(Uri.withAppendedPath(CONTENT_URI, String.valueOf(1)), contentValues, null, null);
+        assertThat(updatedCount, is(0));
     }
 
     @Test

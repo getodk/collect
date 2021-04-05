@@ -223,12 +223,16 @@ public class FormsProvider extends ContentProvider {
 
             case FORM_ID:
                 Form form = formsRepository.get(ContentUriHelper.getIdFromUri(uri));
+                if (form != null) {
+                    ContentValues existingValues = getValuesFromForm(form, storagePathProvider);
+                    existingValues.putAll(values);
 
-                ContentValues existingValues = getValuesFromForm(form, storagePathProvider);
-                existingValues.putAll(values);
+                    formsRepository.save(getFormFromValues(existingValues, storagePathProvider));
+                    count = 1;
+                } else {
+                    count = 0;
+                }
 
-                formsRepository.save(getFormFromValues(existingValues, storagePathProvider));
-                count = 1;
                 break;
 
             default:
