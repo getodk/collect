@@ -970,7 +970,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                 unregisterReceiver(listener);
                 listener = null;
             } catch (Exception e) {
-                Timber.e("Error on unregister: " + e.getMessage());
                 // Ignore - presumably already unregistered
             }
         }
@@ -980,7 +979,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                 unregisterReceiver(refreshListener);
                 refreshListener = null;
             } catch (Exception e) {
-                Timber.e("Error on unregister: " + e.getMessage());
                 // Ignore - presumably already unregistered
             }
         }
