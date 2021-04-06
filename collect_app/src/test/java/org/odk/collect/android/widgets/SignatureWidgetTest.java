@@ -35,7 +35,8 @@ import static org.odk.collect.android.support.CollectHelpers.setupFakeReferenceM
 import static org.robolectric.Shadows.shadowOf;
 
 /**
- * @author James Knight
+ *
+ *  @author James Knight
  */
 public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
 
