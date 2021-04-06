@@ -45,6 +45,7 @@
         layout="@layout/project_list_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_standard"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/close_icon"/>
 
@@ -53,7 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_marginTop="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_small"
         android:text="@string/general_preferences"
         android:textColor="@color/deep_purple_500"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
