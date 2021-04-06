@@ -60,7 +60,7 @@ public class FormUtils {
         return new Form.Builder()
                 .displayName("Test Form")
                 .formFilePath(formFile.getAbsolutePath())
-                .jrFormId(formId)
-                .jrVersion(version);
+                .formId(formId)
+                .version(version);
     }
 }

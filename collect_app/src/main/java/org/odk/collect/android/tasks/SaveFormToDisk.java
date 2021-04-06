@@ -203,7 +203,7 @@ public class SaveFormToDisk {
             }
 
             Instance newInstance = new DatabaseInstancesRepository().save(instanceBuilder.build());
-            uri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, newInstance.getId().toString());
+            uri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, newInstance.getDbId().toString());
         } else {
             Timber.i("No instance found, creating");
             Form form = new DatabaseFormsRepository().get(ContentUriHelper.getIdFromUri(uri));
@@ -217,8 +217,8 @@ public class SaveFormToDisk {
                 instanceBuilder.displayName(form.getDisplayName());
             }
 
-            instanceBuilder.jrFormId(form.getJrFormId());
-            instanceBuilder.jrVersion(form.getJrVersion());
+            instanceBuilder.formId(form.getFormId());
+            instanceBuilder.formVersion(form.getVersion());
 
             Pair<String, String> geometryContentValues = extractGeometryContentValues(formInstance, form.getGeometryXpath());
             if (geometryContentValues != null) {
@@ -228,7 +228,7 @@ public class SaveFormToDisk {
         }
 
         Instance newInstance = new DatabaseInstancesRepository().save(instanceBuilder.build());
-        uri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, newInstance.getId().toString());
+        uri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, newInstance.getDbId().toString());
     }
 
     /**
@@ -446,7 +446,7 @@ public class SaveFormToDisk {
      * that the instance with the given uri is an instance of.
      */
     private static String getGeometryXpathForInstance(Instance instance) {
-        Form form = new DatabaseFormsRepository().getLatestByFormIdAndVersion(instance.getJrFormId(), instance.getJrVersion());
+        Form form = new DatabaseFormsRepository().getLatestByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
         if (form != null) {
             return form.getGeometryXpath();
         } else {

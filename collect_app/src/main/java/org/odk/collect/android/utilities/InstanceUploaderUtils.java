@@ -66,7 +66,7 @@ public class InstanceUploaderUtils {
         StringBuilder uploadResultMessage = new StringBuilder();
         if (instance != null) {
             String name = instance.getDisplayName();
-            String text = localizeDefaultAggregateSuccessfulText(resultMessagesByInstanceId.get(instance.getId().toString()));
+            String text = localizeDefaultAggregateSuccessfulText(resultMessagesByInstanceId.get(instance.getDbId().toString()));
             uploadResultMessage
                     .append(name)
                     .append(" - ")

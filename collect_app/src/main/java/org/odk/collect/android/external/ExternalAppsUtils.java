@@ -152,7 +152,7 @@ public class ExternalAppsUtils {
             String instanceProviderID = "-1";
             Instance instance = new DatabaseInstancesRepository().getOneByPath(path);
             if (instance != null) {
-                instanceProviderID = instance.getId().toString();
+                instanceProviderID = instance.getDbId().toString();
             }
 
             return instanceProviderID;

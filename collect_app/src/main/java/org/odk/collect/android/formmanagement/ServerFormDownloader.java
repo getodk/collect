@@ -67,7 +67,7 @@ public class ServerFormDownloader implements FormDownloader {
 
         if (formOnDevice != null) {
             if (formOnDevice.isDeleted()) {
-                formsRepository.restore(formOnDevice.getId());
+                formsRepository.restore(formOnDevice.getDbId());
             }
         } else {
             List<Form> allSameFormIdVersion = formsRepository.getAllByFormIdAndVersion(form.getFormId(), form.getFormVersion());
@@ -195,7 +195,7 @@ public class ServerFormDownloader implements FormDownloader {
 
                 if (formResult.isNew() && fileResult.isNew()) {
                     // this means we should delete the entire form together with the metadata
-                    formsRepository.delete(formResult.form.getId());
+                    formsRepository.delete(formResult.form.getDbId());
                 }
 
                 return false;
@@ -240,8 +240,8 @@ public class ServerFormDownloader implements FormDownloader {
                 .formFilePath(formFile.getAbsolutePath())
                 .formMediaPath(mediaPath)
                 .displayName(formInfo.get(FileUtils.TITLE))
-                .jrVersion(formInfo.get(FileUtils.VERSION))
-                .jrFormId(formInfo.get(FileUtils.FORMID))
+                .version(formInfo.get(FileUtils.VERSION))
+                .formId(formInfo.get(FileUtils.FORMID))
                 .submissionUri(formInfo.get(FileUtils.SUBMISSIONURI))
                 .base64RSAPublicKey(formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY))
                 .autoDelete(formInfo.get(FileUtils.AUTO_DELETE))

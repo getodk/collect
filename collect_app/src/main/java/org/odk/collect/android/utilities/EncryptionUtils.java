@@ -275,8 +275,8 @@ public class EncryptionUtils {
                 throw new EncryptionException(msg, null);
             }
 
-            formId = instance.getJrFormId();
-            formVersion = instance.getJrVersion();
+            formId = instance.getFormId();
+            formVersion = instance.getFormVersion();
 
             List<Form> forms = new DatabaseFormsRepository().getAllByFormIdAndVersion(formId, formVersion);
 
@@ -293,13 +293,13 @@ public class EncryptionUtils {
             throw new IllegalArgumentException("Can't get encryption info for Form URI!");
         }
 
-        formId = form.getJrFormId();
+        formId = form.getFormId();
         if (formId == null || formId.length() == 0) {
             String msg = TranslationHandler.getString(Collect.getInstance(), R.string.no_form_id_specified);
             Timber.d(msg);
             throw new EncryptionException(msg, null);
         }
-        formVersion = form.getJrVersion();
+        formVersion = form.getVersion();
         String base64RsaPublicKey = form.getBASE64RSAPublicKey();
 
         if (base64RsaPublicKey == null) {

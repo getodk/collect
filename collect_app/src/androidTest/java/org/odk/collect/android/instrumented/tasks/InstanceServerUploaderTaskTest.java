@@ -86,12 +86,12 @@ public class InstanceServerUploaderTaskTest extends MockedServerTest {
         Instance i = new Instance.Builder()
                 .displayName("Test Form")
                 .instanceFilePath(xml.getPath())
-                .jrFormId("test_form")
+                .formId("test_form")
                 .status(Instance.STATUS_COMPLETE)
                 .lastStatusChangeDate(123L)
                 .build();
 
-        return new DatabaseInstancesRepository().save(i).getId();
+        return new DatabaseInstancesRepository().save(i).getDbId();
     }
 
     private String hostAndPort() {

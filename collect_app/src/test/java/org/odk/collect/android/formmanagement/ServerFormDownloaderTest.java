@@ -73,7 +73,7 @@ public class ServerFormDownloaderTest {
         List<Form> allForms = formsRepository.getAll();
         assertThat(allForms.size(), is(1));
         Form form = allForms.get(0);
-        assertThat(form.getJrFormId(), is("id"));
+        assertThat(form.getFormId(), is("id"));
 
         File formFile = new File(getAbsoluteFilePath(formsDir.getAbsolutePath(), form.getFormFilePath()));
         assertThat(formFile.exists(), is(true));
@@ -189,7 +189,7 @@ public class ServerFormDownloaderTest {
         List<Form> allForms = formsRepository.getAll();
         assertThat(allForms.size(), is(1));
         Form form = allForms.get(0);
-        assertThat(form.getJrFormId(), is("id"));
+        assertThat(form.getFormId(), is("id"));
 
         File formFile = new File(getAbsoluteFilePath(formsDir.getAbsolutePath(), form.getFormFilePath()));
         assertThat(formFile.exists(), is(true));
@@ -349,8 +349,8 @@ public class ServerFormDownloaderTest {
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 form.getDisplayName(),
                 "http://downloadUrl",
-                form.getJrFormId(),
-                form.getJrVersion(),
+                form.getFormId(),
+                form.getVersion(),
                 "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
                 true,
                 false,
@@ -381,8 +381,8 @@ public class ServerFormDownloaderTest {
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 form2.getDisplayName(),
                 "http://downloadUrl",
-                form2.getJrFormId(),
-                form2.getJrVersion(),
+                form2.getFormId(),
+                form2.getVersion(),
                 "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform2.getBytes())),
                 true,
                 false,
@@ -411,8 +411,8 @@ public class ServerFormDownloaderTest {
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 form2.getDisplayName(),
                 "http://downloadUrl",
-                form2.getJrFormId(),
-                form2.getJrVersion(),
+                form2.getFormId(),
+                form2.getVersion(),
                 "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform2.getBytes())),
                 true,
                 false,
@@ -425,7 +425,7 @@ public class ServerFormDownloaderTest {
         ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()), mockAnalytics);
         downloader.downloadForm(serverFormDetails, null, null);
 
-        String formIdentifier = form.getDisplayName() + " " + form.getJrFormId();
+        String formIdentifier = form.getDisplayName() + " " + form.getFormId();
         String formIdHash = FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
 
         verify(mockAnalytics).logFormEvent(DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH, formIdHash);
@@ -444,8 +444,8 @@ public class ServerFormDownloaderTest {
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 form.getDisplayName(),
                 "http://downloadUrl",
-                form.getJrFormId(),
-                form.getJrVersion(),
+                form.getFormId(),
+                form.getVersion(),
                 "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
                 true,
                 false,
@@ -472,8 +472,8 @@ public class ServerFormDownloaderTest {
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 form2.getDisplayName(),
                 "http://downloadUrl/draft.xml",
-                form2.getJrFormId(),
-                form2.getJrVersion(),
+                form2.getFormId(),
+                form2.getVersion(),
                 "md5:" + FileUtils.getMd5Hash(new ByteArrayInputStream(xform2.getBytes())),
                 true,
                 false,
@@ -578,7 +578,7 @@ public class ServerFormDownloaderTest {
             List<Form> allForms = formsRepository.getAll();
             assertThat(allForms.size(), is(1));
             Form form = allForms.get(0);
-            assertThat(form.getJrFormId(), is("id"));
+            assertThat(form.getFormId(), is("id"));
 
             File formFile = new File(getAbsoluteFilePath(formsDir.getAbsolutePath(), form.getFormFilePath()));
             assertThat(formFile.exists(), is(true));

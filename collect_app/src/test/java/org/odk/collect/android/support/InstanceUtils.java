@@ -14,8 +14,8 @@ public class InstanceUtils {
 
     public static Instance.Builder buildInstance(String formId, String version, String displayName, String status, Long deletedDate) {
         return new Instance.Builder()
-                .jrFormId(formId)
-                .jrVersion(version)
+                .formId(formId)
+                .formVersion(version)
                 .displayName(displayName)
                 .instanceFilePath(formId + version + Math.random())
                 .status(status)

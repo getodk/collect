@@ -129,7 +129,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 }
 
                 for (Instance instance : instancesToRemove) {
-                    new InstanceDeleter(new DatabaseInstancesRepository(), new DatabaseFormsRepository()).delete(instance.getId());
+                    new InstanceDeleter(new DatabaseInstancesRepository(), new DatabaseFormsRepository()).delete(instance.getDbId());
                 }
 
                 final boolean instanceSyncFlag = settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_INSTANCE_SYNC);
@@ -147,8 +147,8 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
                             if (!forms.isEmpty()) {
                                 Form form = forms.get(0);
-                                String jrFormId = form.getJrFormId();
-                                String jrVersion = form.getJrVersion();
+                                String jrFormId = form.getFormId();
+                                String jrVersion = form.getVersion();
                                 String formName = form.getDisplayName();
                                 String submissionUri = form.getSubmissionUri();
 
@@ -156,8 +156,8 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                                         .instanceFilePath(candidateInstance)
                                         .submissionUri(submissionUri)
                                         .displayName(formName)
-                                        .jrFormId(jrFormId)
-                                        .jrVersion(jrVersion)
+                                        .formId(jrFormId)
+                                        .formVersion(jrVersion)
                                         .status(instanceSyncFlag ? Instance.STATUS_COMPLETE : Instance.STATUS_INCOMPLETE)
                                         .canEditWhenComplete(true)
                                         .build()
@@ -219,7 +219,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
     }
 
     private void logImportAndEncrypt(Form form) {
-        String id = form.getJrFormId();
+        String id = form.getFormId();
         String title = form.getDisplayName();
         String formIdHash = getMd5Hash(new ByteArrayInputStream((id + " " + title).getBytes()));
         DaggerUtils.getComponent(Collect.getInstance()).analytics().logFormEvent(AnalyticsEvents.IMPORT_AND_ENCRYPT_INSTANCE, formIdHash);
@@ -229,7 +229,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
         String instancePath = instance.getInstanceFilePath();
         File instanceXml = new File(instancePath);
         if (!new File(instanceXml.getParentFile(), "submission.xml.enc").exists()) {
-            Uri uri = Uri.parse(InstanceColumns.CONTENT_URI + "/" + instance.getId());
+            Uri uri = Uri.parse(InstanceColumns.CONTENT_URI + "/" + instance.getDbId());
             FormController.InstanceMetadata instanceMetadata = new FormController.InstanceMetadata(getInstanceIdFromInstance(instancePath), null, null);
             EncryptionUtils.EncryptedFormInformation formInfo = EncryptionUtils.getEncryptedFormInformation(uri, instanceMetadata);
 

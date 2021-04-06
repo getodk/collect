@@ -78,7 +78,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
                         if (md5Computed == null || md5 == null || !md5Computed.equals(md5)) {
                             // Probably someone overwrite the file on the sdcard
                             // So re-parse it and update it's information
-                            Long id = form.getId();
+                            Long id = form.getDbId();
                             uriToUpdate.add(new IdFile(id, sqlFile));
                         }
                     } else {
@@ -86,7 +86,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
                         //probably because the file has been deleted or filename was changed in sdcard
                         //Add the ID to list so that they could be deleted all together
 
-                        Long id = form.getId();
+                        Long id = form.getDbId();
                         idsToDelete.add(id);
                     }
                 }
@@ -118,7 +118,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
                     }
 
                     formsRepository.save(new Form.Builder(form)
-                            .id(entry.id)
+                            .dbId(entry.id)
                             .build());
                 }
                 uriToUpdate.clear();
@@ -228,7 +228,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
         }
         String formid = fields.get(FileUtils.FORMID);
         if (formid != null) {
-            builder.jrFormId(formid);
+            builder.formId(formid);
         } else {
             throw new IllegalArgumentException(
                     TranslationHandler.getString(Collect.getInstance(), R.string.xform_parse_error,
@@ -236,7 +236,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
         }
         String version = fields.get(FileUtils.VERSION);
         if (version != null) {
-            builder.jrVersion(version);
+            builder.version(version);
         }
         String submission = fields.get(FileUtils.SUBMISSIONURI);
         if (submission != null) {

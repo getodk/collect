@@ -14,9 +14,9 @@ public class InstanceSubmitterTest {
         InMemFormsRepository formsRepository = new InMemFormsRepository();
 
         formsRepository.save(new Form.Builder()
-                .id(1L)
-                .jrFormId("1")
-                .jrVersion("1")
+                .dbId(1L)
+                .formId("1")
+                .version("1")
                 .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
                 .build());
 
@@ -28,9 +28,9 @@ public class InstanceSubmitterTest {
         InMemFormsRepository formsRepository = new InMemFormsRepository();
 
         formsRepository.save(new Form.Builder()
-                .id(1L)
-                .jrFormId("1")
-                .jrVersion("1")
+                .dbId(1L)
+                .formId("1")
+                .version("1")
                 .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
                 .build());
 
@@ -42,9 +42,9 @@ public class InstanceSubmitterTest {
         InMemFormsRepository formsRepository = new InMemFormsRepository();
 
         formsRepository.save(new Form.Builder()
-                .id(1L)
-                .jrFormId("1")
-                .jrVersion("1")
+                .dbId(1L)
+                .formId("1")
+                .version("1")
                 .autoSend("false")
                 .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
                 .build());
@@ -57,9 +57,9 @@ public class InstanceSubmitterTest {
         InMemFormsRepository formsRepository = new InMemFormsRepository();
 
         formsRepository.save(new Form.Builder()
-                .id(1L)
-                .jrFormId("1")
-                .jrVersion("1")
+                .dbId(1L)
+                .formId("1")
+                .version("1")
                 .autoSend("true")
                 .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
                 .build());

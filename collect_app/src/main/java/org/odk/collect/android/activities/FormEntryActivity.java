@@ -598,14 +598,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
 
             instancePath = instance.getInstanceFilePath();
-            List<Form> candidateForms = formsRepository.getAllByFormIdAndVersion(instance.getJrFormId(), instance.getJrVersion());
+            List<Form> candidateForms = formsRepository.getAllByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
 
             if (candidateForms.isEmpty()) {
                 createErrorDialog(getString(
                         R.string.parent_form_not_present,
-                        instance.getJrFormId())
-                                + ((instance.getJrVersion() == null) ? ""
-                                : "\n" + getString(R.string.version) + " " + instance.getJrVersion()),
+                        instance.getFormId())
+                                + ((instance.getFormVersion() == null) ? ""
+                                : "\n" + getString(R.string.version) + " " + instance.getFormVersion()),
                         true);
                 return;
             } else if (candidateForms.stream().filter(f -> !f.isDeleted()).count() > 1) {

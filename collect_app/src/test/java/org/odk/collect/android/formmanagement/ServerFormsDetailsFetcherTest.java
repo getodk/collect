@@ -74,8 +74,8 @@ public class ServerFormsDetailsFetcherTest {
     @Test
     public void whenAFormIsSoftDeleted_isNotOnDevice() throws Exception {
         formsRepository.save(new Form.Builder()
-                .jrFormId("form-1")
-                .jrVersion("server")
+                .formId("form-1")
+                .version("server")
                 .md5Hash("form-1-hash")
                 .deleted(true)
                 .formFilePath(FormUtils.createXFormFile("form-1", "server").getAbsolutePath())
@@ -89,7 +89,7 @@ public class ServerFormsDetailsFetcherTest {
     @Test
     public void whenAFormExists_andListContainsUpdatedVersion_isUpdated() throws Exception {
         formsRepository.save(new Form.Builder()
-                .jrFormId("form-2")
+                .formId("form-2")
                 .md5Hash("form-2-hash-old")
                 .formFilePath(FormUtils.createXFormFile("form-2", null).getAbsolutePath())
                 .build());
@@ -101,8 +101,8 @@ public class ServerFormsDetailsFetcherTest {
     @Test
     public void whenAFormExists_andHasNewMediaFileOnServer_isUpdated() throws Exception {
         formsRepository.save(new Form.Builder()
-                .jrFormId("form-2")
-                .jrVersion("server")
+                .formId("form-2")
+                .version("server")
                 .md5Hash("form-2-hash")
                 .formFilePath(FormUtils.createXFormFile("form-2", "server").getAbsolutePath())
                 .formMediaPath("/does-not-exist")
@@ -117,8 +117,8 @@ public class ServerFormsDetailsFetcherTest {
         File mediaDir = TempFiles.createTempDir();
 
         formsRepository.save(new Form.Builder()
-                .jrFormId("form-2")
-                .jrVersion("server")
+                .formId("form-2")
+                .version("server")
                 .md5Hash("form-2-hash")
                 .formFilePath(FormUtils.createXFormFile("form-2", "server").getAbsolutePath())
                 .formMediaPath(mediaDir.getAbsolutePath())
@@ -134,8 +134,8 @@ public class ServerFormsDetailsFetcherTest {
     @Test
     public void whenAFormExists_andIsNotUpdatedOnServer_andDoesNotHaveAManifest_isNotNewOrUpdated() throws Exception {
         formsRepository.save(new Form.Builder()
-                .jrFormId("form-1")
-                .jrVersion("server")
+                .formId("form-1")
+                .version("server")
                 .md5Hash("form-1-hash")
                 .formFilePath(FormUtils.createXFormFile("form-1", "server").getAbsolutePath())
                 .build());
@@ -152,8 +152,8 @@ public class ServerFormsDetailsFetcherTest {
         File mediaDir = TempFiles.createTempDir();
 
         formsRepository.save(new Form.Builder()
-                .jrFormId("form-2")
-                .jrVersion("server")
+                .formId("form-2")
+                .version("server")
                 .md5Hash("form-2-hash")
                 .formFilePath(FormUtils.createXFormFile("form-2", "server").getAbsolutePath())
                 .formMediaPath(mediaDir.getAbsolutePath())
@@ -174,7 +174,7 @@ public class ServerFormsDetailsFetcherTest {
         File mediaDir = TempFiles.createTempDir();
 
         formsRepository.save(new Form.Builder()
-                .jrFormId("form-2")
+                .formId("form-2")
                 .md5Hash("form-2-hash-old")
                 .formFilePath(FormUtils.createXFormFile("form-2", "server").getAbsolutePath())
                 .formMediaPath(mediaDir.getAbsolutePath())

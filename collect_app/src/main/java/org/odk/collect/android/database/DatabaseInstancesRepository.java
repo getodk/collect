@@ -116,7 +116,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
                     .build();
         }
 
-        Long instanceId = instance.getId();
+        Long instanceId = instance.getDbId();
         ContentValues values = getValuesFromInstanceObject(instance);
 
         if (instanceId == null) {
@@ -167,8 +167,8 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
         values.put(InstanceColumns.SUBMISSION_URI, instance.getSubmissionUri());
         values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(instance.canEditWhenComplete()));
         values.put(InstanceColumns.INSTANCE_FILE_PATH, new StoragePathProvider().getRelativeInstancePath(instance.getInstanceFilePath()));
-        values.put(InstanceColumns.JR_FORM_ID, instance.getJrFormId());
-        values.put(InstanceColumns.JR_VERSION, instance.getJrVersion());
+        values.put(InstanceColumns.JR_FORM_ID, instance.getFormId());
+        values.put(InstanceColumns.JR_VERSION, instance.getFormVersion());
         values.put(InstanceColumns.STATUS, instance.getStatus());
         values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, instance.getLastStatusChangeDate());
         values.put(InstanceColumns.DELETED_DATE, instance.getDeletedDate());
@@ -202,14 +202,14 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
                             .submissionUri(cursor.getString(submissionUriColumnIndex))
                             .canEditWhenComplete(Boolean.valueOf(cursor.getString(canEditWhenCompleteIndex)))
                             .instanceFilePath(new StoragePathProvider().getAbsoluteInstanceFilePath(cursor.getString(instanceFilePathIndex)))
-                            .jrFormId(cursor.getString(jrFormIdColumnIndex))
-                            .jrVersion(cursor.getString(jrVersionColumnIndex))
+                            .formId(cursor.getString(jrFormIdColumnIndex))
+                            .formVersion(cursor.getString(jrVersionColumnIndex))
                             .status(cursor.getString(statusColumnIndex))
                             .lastStatusChangeDate(cursor.getLong(lastStatusChangeDateColumnIndex))
                             .deletedDate(cursor.isNull(deletedDateColumnIndex) ? null : cursor.getLong(deletedDateColumnIndex))
                             .geometryType(cursor.getString(geometryTypeColumnIndex))
                             .geometry(cursor.getString(geometryColumnIndex))
-                            .id(cursor.getLong(databaseIdIndex))
+                            .dbId(cursor.getLong(databaseIdIndex))
                             .build();
 
                     instances.add(instance);

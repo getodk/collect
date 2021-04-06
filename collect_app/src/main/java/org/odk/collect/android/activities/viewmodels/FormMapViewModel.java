@@ -44,7 +44,7 @@ public class FormMapViewModel extends ViewModel {
     }
 
     public long getFormId() {
-        return form.getId();
+        return form.getDbId();
     }
 
     /**
@@ -56,7 +56,7 @@ public class FormMapViewModel extends ViewModel {
     }
 
     private void initializeFormInstances() {
-        List<Instance> instances = instancesRepository.getAllByFormId(form.getJrFormId());
+        List<Instance> instances = instancesRepository.getAllByFormId(form.getFormId());
 
         // Ideally we could observe database changes instead of re-computing this every time.
         totalInstanceCount = instances.size();
@@ -93,7 +93,7 @@ public class FormMapViewModel extends ViewModel {
                             Double lat = coordinates.getDouble(1);
 
                             mappableFormInstances.add(new MappableFormInstance(
-                                    instance.getId(),
+                                    instance.getDbId(),
                                     lat, lon,
                                     instance.getDisplayName(),
                                     instance.getLastStatusChangeDate(),
@@ -121,7 +121,7 @@ public class FormMapViewModel extends ViewModel {
                     || instance.getStatus().equals(Instance.STATUS_SUBMISSION_FAILED))
                     && !instance.canEditWhenComplete()) {
                 return ClickAction.NOT_VIEWABLE_TOAST;
-            } else if (instance.getId() != null) {
+            } else if (instance.getDbId() != null) {
                 if (instance.getStatus().equals(Instance.STATUS_SUBMITTED)) {
                     return ClickAction.OPEN_READ_ONLY;
                 }

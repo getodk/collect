@@ -159,7 +159,7 @@ public class FormsProvider extends ContentProvider {
         }
 
         Form form = formsRepository.save(getFormFromValues(initialValues, storagePathProvider));
-        return Uri.withAppendedPath(CONTENT_URI, String.valueOf(form.getId()));
+        return Uri.withAppendedPath(CONTENT_URI, String.valueOf(form.getDbId()));
     }
 
     /**

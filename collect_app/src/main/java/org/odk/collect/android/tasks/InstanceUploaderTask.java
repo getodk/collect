@@ -68,10 +68,10 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
                     Stream<Instance> instancesToDelete = instanceIds.stream()
                             .map(id -> new DatabaseInstancesRepository().get(Long.parseLong(id)))
                             .filter(instance -> instance.getStatus().equals(Instance.STATUS_SUBMITTED))
-                            .filter(instance -> shouldFormBeDeleted(formsRepository, instance.getJrFormId(), instance.getJrVersion(), isFormAutoDeleteOptionEnabled));
+                            .filter(instance -> shouldFormBeDeleted(formsRepository, instance.getFormId(), instance.getFormVersion(), isFormAutoDeleteOptionEnabled));
 
                     DeleteInstancesTask dit = new DeleteInstancesTask(instancesRepository, formsRepository);
-                    dit.execute(instancesToDelete.map(Instance::getId).toArray(Long[]::new));
+                    dit.execute(instancesToDelete.map(Instance::getDbId).toArray(Long[]::new));
                 }
             }
         }

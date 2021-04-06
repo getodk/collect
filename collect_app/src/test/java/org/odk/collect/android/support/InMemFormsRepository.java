@@ -40,7 +40,7 @@ public class InMemFormsRepository implements FormsRepository {
     @Nullable
     @Override
     public Form get(Long id) {
-        return forms.stream().filter(f -> f.getId().equals(id)).findFirst().orElse(null);
+        return forms.stream().filter(f -> f.getDbId().equals(id)).findFirst().orElse(null);
     }
 
     @Nullable
@@ -78,21 +78,21 @@ public class InMemFormsRepository implements FormsRepository {
 
     @Override
     public List<Form> getAllByFormIdAndVersion(String jrFormId, @Nullable String jrVersion) {
-        return forms.stream().filter(f -> f.getJrFormId().equals(jrFormId) && Objects.equals(f.getJrVersion(), jrVersion)).collect(toList());
+        return forms.stream().filter(f -> f.getFormId().equals(jrFormId) && Objects.equals(f.getVersion(), jrVersion)).collect(toList());
     }
 
     @Override
     public List<Form> getAllByFormId(String formId) {
-        return forms.stream().filter(f -> f.getJrFormId().equals(formId)).collect(toList());
+        return forms.stream().filter(f -> f.getFormId().equals(formId)).collect(toList());
     }
 
     @Override
     public List<Form> getAllNotDeletedByFormId(String jrFormId) {
-        return forms.stream().filter(f -> f.getJrFormId().equals(jrFormId) && !f.isDeleted()).collect(toList());
+        return forms.stream().filter(f -> f.getFormId().equals(jrFormId) && !f.isDeleted()).collect(toList());
     }
 
     public List<Form> getAllNotDeletedByFormIdAndVersion(String jrFormId, @Nullable String jrVersion) {
-        return forms.stream().filter(f -> f.getJrFormId().equals(jrFormId) && Objects.equals(f.getJrVersion(), jrVersion) && !f.isDeleted()).collect(toList());
+        return forms.stream().filter(f -> f.getFormId().equals(jrFormId) && Objects.equals(f.getVersion(), jrVersion) && !f.isDeleted()).collect(toList());
     }
 
     @Override
@@ -103,16 +103,16 @@ public class InMemFormsRepository implements FormsRepository {
             builder.formMediaPath(FileUtils.constructMediaPath(form.getFormFilePath()));
         }
 
-        if (form.getId() != null) {
+        if (form.getDbId() != null) {
             String formFilePath = form.getFormFilePath();
             String hash = FileUtils.getMd5Hash(new File(formFilePath));
             builder.md5Hash(hash);
 
-            forms.removeIf(f -> f.getId().equals(form.getId()));
+            forms.removeIf(f -> f.getDbId().equals(form.getDbId()));
             forms.add(builder.build());
             return form;
         } else {
-            builder.id(idCounter++)
+            builder.dbId(idCounter++)
                     .date(clock.getCurrentTime());
 
             // Allows tests to override hash
@@ -137,7 +137,7 @@ public class InMemFormsRepository implements FormsRepository {
 
     @Override
     public void delete(Long id) {
-        Optional<Form> formToRemove = forms.stream().filter(f -> f.getId().equals(id)).findFirst();
+        Optional<Form> formToRemove = forms.stream().filter(f -> f.getDbId().equals(id)).findFirst();
         if (formToRemove.isPresent()) {
             Form form = formToRemove.get();
             deleteFilesForForm(form);
@@ -147,7 +147,7 @@ public class InMemFormsRepository implements FormsRepository {
 
     @Override
     public void softDelete(Long id) {
-        Form form = forms.stream().filter(f -> f.getId().equals(id)).findFirst().orElse(null);
+        Form form = forms.stream().filter(f -> f.getDbId().equals(id)).findFirst().orElse(null);
 
         if (form != null) {
             forms.remove(form);
@@ -173,7 +173,7 @@ public class InMemFormsRepository implements FormsRepository {
 
     @Override
     public void restore(Long id) {
-        Form form = forms.stream().filter(f -> f.getId().equals(id)).findFirst().orElse(null);
+        Form form = forms.stream().filter(f -> f.getDbId().equals(id)).findFirst().orElse(null);
 
         if (form != null) {
             forms.remove(form);

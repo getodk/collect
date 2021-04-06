@@ -138,14 +138,14 @@ public class DatabaseFormsRepository implements FormsRepository {
             values.putNull(DELETED_DATE);
         }
 
-        if (form.getId() == null) {
+        if (form.getDbId() == null) {
             values.put(DATE, clock.getCurrentTime());
 
             Long idFromUri = insertForm(values);
             return get(idFromUri);
         } else {
-            updateForm(form.getId(), values);
-            return get(form.getId());
+            updateForm(form.getDbId(), values);
+            return get(form.getDbId());
         }
     }
 

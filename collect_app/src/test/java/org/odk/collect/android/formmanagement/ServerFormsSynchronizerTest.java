@@ -57,8 +57,8 @@ public class ServerFormsSynchronizerTest {
     @Test
     public void deletesFormsNotInList() throws Exception {
         formsRepository.save(new Form.Builder()
-                .id(3L)
-                .jrFormId("form-3")
+                .dbId(3L)
+                .formId("form-3")
                 .md5Hash("form-3-hash")
                 .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
                 .build());

@@ -92,11 +92,11 @@ public class FormUtils {
 
     public static ContentValues getValuesFromForm(@NonNull Form form, StoragePathProvider storagePathProvider) {
         ContentValues values = new ContentValues();
-        values.put(_ID, form.getId());
+        values.put(_ID, form.getDbId());
         values.put(DatabaseFormColumns.DISPLAY_NAME, form.getDisplayName());
         values.put(DatabaseFormColumns.DESCRIPTION, form.getDescription());
-        values.put(DatabaseFormColumns.JR_FORM_ID, form.getJrFormId());
-        values.put(DatabaseFormColumns.JR_VERSION, form.getJrVersion());
+        values.put(DatabaseFormColumns.JR_FORM_ID, form.getFormId());
+        values.put(DatabaseFormColumns.JR_VERSION, form.getVersion());
         values.put(DatabaseFormColumns.FORM_FILE_PATH, storagePathProvider.getRelativeFormPath(form.getFormFilePath()));
         values.put(DatabaseFormColumns.SUBMISSION_URI, form.getSubmissionUri());
         values.put(DatabaseFormColumns.BASE64_RSA_PUBLIC_KEY, form.getBASE64RSAPublicKey());
@@ -112,11 +112,11 @@ public class FormUtils {
 
     public static Form getFormFromValues(ContentValues values, StoragePathProvider storagePathProvider) {
         return new Form.Builder()
-                .id(values.getAsLong(_ID))
+                .dbId(values.getAsLong(_ID))
                 .displayName(values.getAsString(DISPLAY_NAME))
                 .description(values.getAsString(DESCRIPTION))
-                .jrFormId(values.getAsString(JR_FORM_ID))
-                .jrVersion(values.getAsString(JR_VERSION))
+                .formId(values.getAsString(JR_FORM_ID))
+                .version(values.getAsString(JR_VERSION))
                 .formFilePath(storagePathProvider.getAbsoluteFormFilePath(values.getAsString(FORM_FILE_PATH)))
                 .submissionUri(values.getAsString(SUBMISSION_URI))
                 .base64RSAPublicKey(values.getAsString(BASE64_RSA_PUBLIC_KEY))
@@ -152,11 +152,11 @@ public class FormUtils {
         int deletedDateColumnIndex = cursor.getColumnIndex(DELETED_DATE);
 
         return new Form.Builder()
-                .id(cursor.getLong(idColumnIndex))
+                .dbId(cursor.getLong(idColumnIndex))
                 .displayName(cursor.getString(displayNameColumnIndex))
                 .description(cursor.getString(descriptionColumnIndex))
-                .jrFormId(cursor.getString(jrFormIdColumnIndex))
-                .jrVersion(cursor.getString(jrVersionColumnIndex))
+                .formId(cursor.getString(jrFormIdColumnIndex))
+                .version(cursor.getString(jrVersionColumnIndex))
                 .formFilePath(storagePathProvider.getAbsoluteFormFilePath(cursor.getString(formFilePathColumnIndex)))
                 .submissionUri(cursor.getString(submissionUriColumnIndex))
                 .base64RSAPublicKey(cursor.getString(base64RSAPublicKeyColumnIndex))

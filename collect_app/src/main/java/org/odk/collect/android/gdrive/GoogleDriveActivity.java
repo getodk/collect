@@ -904,7 +904,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             String md5Hash = FileUtils.getMd5Hash(file);
             Form form = formsRepository.getOneByMd5Hash(md5Hash);
             if (form != null && form.isDeleted()) {
-                formsRepository.restore(form.getId());
+                formsRepository.restore(form.getDbId());
             }
         }
 

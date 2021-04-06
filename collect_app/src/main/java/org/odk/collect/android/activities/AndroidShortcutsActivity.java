@@ -68,7 +68,7 @@ public class AndroidShortcutsActivity extends AppCompatActivity {
         for (Form form : forms) {
             String formName = form.getDisplayName();
             names.add(formName);
-            Uri uri = Uri.withAppendedPath(FormsProviderAPI.CONTENT_URI, String.valueOf(form.getId()));
+            Uri uri = Uri.withAppendedPath(FormsProviderAPI.CONTENT_URI, String.valueOf(form.getDbId()));
             commands.add(uri);
         }
 

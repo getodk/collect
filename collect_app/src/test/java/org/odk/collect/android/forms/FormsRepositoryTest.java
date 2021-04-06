@@ -35,7 +35,7 @@ public abstract class FormsRepositoryTest {
 
         Form form = formsRepository.getLatestByFormIdAndVersion("1", null);
         assertThat(form, notNullValue());
-        assertThat(form.getId(), is(1L));
+        assertThat(form.getDbId(), is(1L));
     }
 
     @Test
@@ -53,7 +53,7 @@ public abstract class FormsRepositoryTest {
 
         Form form = formsRepository.getLatestByFormIdAndVersion("1", "1");
         assertThat(form, notNullValue());
-        assertThat(form.getId(), is(2L));
+        assertThat(form.getDbId(), is(2L));
     }
 
     @Test
@@ -70,8 +70,8 @@ public abstract class FormsRepositoryTest {
 
         List<Form> forms = formsRepository.getAllByFormIdAndVersion("1", null);
         assertThat(forms.size(), is(2));
-        assertThat(forms.get(0).getJrVersion(), is(nullValue()));
-        assertThat(forms.get(1).getJrVersion(), is(nullValue()));
+        assertThat(forms.get(0).getVersion(), is(nullValue()));
+        assertThat(forms.get(1).getVersion(), is(nullValue()));
     }
 
     @Test
@@ -89,7 +89,7 @@ public abstract class FormsRepositoryTest {
 
         List<Form> forms = formsRepository.getAllNotDeletedByFormId("1");
         assertThat(forms.size(), is(1));
-        assertThat(forms.get(0).getJrVersion(), equalTo("not-deleted"));
+        assertThat(forms.get(0).getVersion(), equalTo("not-deleted"));
     }
 
     @Test
@@ -115,7 +115,7 @@ public abstract class FormsRepositoryTest {
 
         List<Form> forms = formsRepository.getAllNotDeletedByFormIdAndVersion("id", "2");
         assertThat(forms.size(), is(1));
-        assertThat(forms.get(0).getJrVersion(), equalTo("2"));
+        assertThat(forms.get(0).getVersion(), equalTo("2"));
     }
 
     @Test
@@ -145,7 +145,7 @@ public abstract class FormsRepositoryTest {
         Form form = buildForm("id", "version", getFormFilesPath()).build();
 
         formsRepository.save(form);
-        assertThat(formsRepository.getAll().get(0).getId(), notNullValue());
+        assertThat(formsRepository.getAll().get(0).getDbId(), notNullValue());
     }
 
     @Test
@@ -192,7 +192,7 @@ public abstract class FormsRepositoryTest {
                 .displayName("changed")
                 .build());
 
-        assertThat(formsRepository.get(originalForm.getId()).getDisplayName(), is("changed"));
+        assertThat(formsRepository.get(originalForm.getDbId()).getDisplayName(), is("changed"));
     }
 
     @Test
@@ -211,7 +211,7 @@ public abstract class FormsRepositoryTest {
                 .build());
 
         String expectedHash = FileUtils.getMd5Hash(formFile);
-        assertThat(formsRepository.get(originalForm.getId()).getMD5Hash(), is(expectedHash));
+        assertThat(formsRepository.get(originalForm.getDbId()).getMD5Hash(), is(expectedHash));
     }
 
     @Test
@@ -230,7 +230,7 @@ public abstract class FormsRepositoryTest {
         assertThat(mediaDir.exists(), is(true));
         assertThat(cacheFile.exists(), is(true));
 
-        formsRepository.delete(form.getId());
+        formsRepository.delete(form.getDbId());
         assertThat(formFile.exists(), is(false));
         assertThat(mediaDir.exists(), is(false));
         assertThat(cacheFile.exists(), is(false));
@@ -285,7 +285,7 @@ public abstract class FormsRepositoryTest {
 
         formsRepository.deleteByMd5Hash(id1Forms.get(0).getMD5Hash());
         assertThat(formsRepository.getAll().size(), is(1));
-        assertThat(formsRepository.getAll().get(0).getJrFormId(), is("id2"));
+        assertThat(formsRepository.getAll().get(0).getFormId(), is("id2"));
     }
 
     @Test(expected = Exception.class)
@@ -310,7 +310,7 @@ public abstract class FormsRepositoryTest {
         Form form2 = buildForm("id2", "version", getFormFilesPath()).build();
         formsRepository.save(form2);
 
-        assertThat(formsRepository.getOneByPath(form2.getFormFilePath()).getJrFormId(), is("id2"));
+        assertThat(formsRepository.getOneByPath(form2.getFormFilePath()).getFormId(), is("id2"));
     }
 
     @Test
