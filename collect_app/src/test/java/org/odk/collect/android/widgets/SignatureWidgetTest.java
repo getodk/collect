@@ -39,8 +39,8 @@ import static org.robolectric.Shadows.shadowOf;
  */
 public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
 
-    private final String answerText = "jr://images/someURI";
-    private File currentFile=null;
+    private final static String answerText = "jr://images/someURI";
+    private File currentFile;
 
     @NonNull
     @Override
