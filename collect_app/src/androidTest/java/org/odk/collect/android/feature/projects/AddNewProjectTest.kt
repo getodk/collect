@@ -3,6 +3,7 @@ package org.odk.collect.android.feature.projects
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
+import org.odk.collect.android.projects.Project
 import org.odk.collect.android.support.CollectTestRule
 import org.odk.collect.android.support.TestRuleChain
 
@@ -24,8 +25,6 @@ class AddNewProjectTest {
 
         rule.mainMenu()
             .openProjectSettingsDialog()
-            .assertText("Project 1")
-            .assertText("X")
-            .assertProjectIconColor("#0000FF")
+            .assertInactiveProject(Project("1", "Project 1", "X", "#0000FF"))
     }
 }
