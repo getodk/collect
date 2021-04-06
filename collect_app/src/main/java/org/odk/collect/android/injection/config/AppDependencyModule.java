@@ -502,8 +502,8 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public ProjectsRepository providesProjectsRepository(UUIDGenerator uuidGenerator) {
-        return new InMemProjectsRepository(uuidGenerator);
+    public ProjectsRepository providesProjectsRepository() {
+        return new InMemProjectsRepository();
     }
 
     @Provides

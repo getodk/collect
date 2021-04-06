@@ -6,11 +6,12 @@ import org.hamcrest.Matchers.not
 import org.hamcrest.Matchers.notNullValue
 import org.junit.Before
 import org.junit.Test
+import org.odk.collect.android.utilities.UUIDGenerator
 
 abstract class ProjectsRepositoryTest {
-    private val red = "#FF0000"
-    private val green = "#00FF00"
-    private val blue = "#0000FF"
+    private val projectX = Project(UUIDGenerator().generateUUID(), "ProjectX", "X", "#FF0000")
+    private val projectY = Project(UUIDGenerator().generateUUID(), "ProjectY", "Y", "#00FF00")
+    private val projectZ = Project(UUIDGenerator().generateUUID(), "ProjectZ", "Z", "#0000FF")
 
     lateinit var projectsRepository: ProjectsRepository
 
@@ -23,55 +24,49 @@ abstract class ProjectsRepositoryTest {
 
     @Test
     fun getAll_shouldReturnAllProjectsFromStorage() {
-        projectsRepository.add("ProjectX", "X", red)
-        projectsRepository.add("ProjectY", "y", green)
-        projectsRepository.add("ProjectZ", "Z", blue)
+        projectsRepository.add(projectX)
+        projectsRepository.add(projectY)
+        projectsRepository.add(projectZ)
 
         val projects = projectsRepository.getAll()
 
         assertThat(projects.size, `is`(3))
-        assertProject(projects[0], "ProjectX", "X", red)
-        assertProject(projects[1], "ProjectY", "y", green)
-        assertProject(projects[2], "ProjectZ", "Z", blue)
+        assertThat(projects[0], `is`(projectX))
+        assertThat(projects[1], `is`(projectY))
+        assertThat(projects[2], `is`(projectZ))
     }
 
     @Test
     fun add_shouldSaveProjectToStorage() {
-        projectsRepository.add("ProjectX", "X", red)
+        projectsRepository.add(projectX)
 
         val projects = projectsRepository.getAll()
 
         assertThat(projects.size, `is`(1))
-        assertProject(projects[0], "ProjectX", "X", red)
+        assertThat(projects[0], `is`(projectX))
     }
 
     @Test
     fun delete_shouldDeleteProjectFromStorage() {
-        projectsRepository.add("ProjectX", "X", red)
-        projectsRepository.add("ProjectY", "Y", green)
+        projectsRepository.add(projectX)
+        projectsRepository.add(projectY)
 
         val projects = projectsRepository.getAll()
         projectsRepository.delete(projects.first { it.name == "ProjectX" }.uuid)
 
         assertThat(projects.size, `is`(1))
-        assertProject(projects[0], "ProjectY", "Y", green)
+        assertThat(projects[0], `is`(projectY))
     }
 
     @Test
     open fun add_shouldAddsUniqueId() {
-        projectsRepository.add("ProjectX", "X", red)
-        projectsRepository.add("ProjectY", "Y", green)
+        projectsRepository.add(projectX)
+        projectsRepository.add(projectY)
 
         val projects = projectsRepository.getAll()
 
         assertThat(projects[0].uuid, `is`(notNullValue()))
         assertThat(projects[1].uuid, `is`(notNullValue()))
         assertThat(projects[0].uuid, not(projects[1].uuid))
-    }
-
-    private fun assertProject(project: Project, projectName: String, projectIcon: String, projectColor: String) {
-        assertThat(project.name, `is`(projectName))
-        assertThat(project.icon, `is`(projectIcon))
-        assertThat(project.color, `is`(projectColor))
     }
 }
