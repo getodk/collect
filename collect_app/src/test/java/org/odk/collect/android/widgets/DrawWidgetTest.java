@@ -123,4 +123,23 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
         String loadedPath = shadowOf(((BitmapDrawable) drawable).getBitmap()).getCreatedFromPath();
         assertThat(loadedPath, equalTo(imagePath));
     }
+
+    @Test
+    public void whenPromptHasCurrentAnswer_showsInImageView() throws Exception {
+        String imagePath = File.createTempFile("current", ".bmp").getAbsolutePath();
+        currentFile=new File(imagePath);
+
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withAnswerDisplayText(answerText)
+                .build();
+
+        DrawWidget widget = createWidget();
+        ImageView imageView = widget.getImageView();
+        assertThat(imageView, notNullValue());
+        Drawable drawable = imageView.getDrawable();
+        assertThat(drawable, notNullValue());
+
+        String loadedPath = shadowOf(((BitmapDrawable) drawable).getBitmap()).getCreatedFromPath();
+        assertThat(loadedPath, equalTo(imagePath));
+    }
 }
