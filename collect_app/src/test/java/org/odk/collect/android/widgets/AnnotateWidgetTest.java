@@ -13,6 +13,7 @@ import androidx.core.util.Pair;
 import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.R;
@@ -20,12 +21,13 @@ import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
+import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 
 import java.io.File;
 
-import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -40,14 +42,30 @@ import static org.robolectric.Shadows.shadowOf;
  */
 public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
 
+    private final String answerText = "jr://images/someURI";
+    private File currentFile=null;
+
     @Mock
     File file;
 
     @NonNull
     @Override
     public AnnotateWidget createWidget() {
-        return new AnnotateWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride),
-                new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry());
+        QuestionMediaManager fakeQuestionMediaManager = new FakeQuestionMediaManager() {
+            @Override
+            public File getAnswerFile(String fileName) {
+                File result;
+                if (currentFile == null) {
+                    result = super.getAnswerFile(fileName);
+                } else {
+                    result = fileName.equals(answerText) ? currentFile : null;
+                }
+                return result;
+            }
+        };
+        return new AnnotateWidget(activity,
+                new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride),
+                fakeQuestionMediaManager, new FakeWaitingForDataRegistry());
     }
 
     @NonNull
@@ -57,7 +75,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     }
 
     @Override
-    public Object createBinaryData(StringData answerData) {
+    public Object createBinaryData(@NotNull StringData answerData) {
         when(file.exists()).thenReturn(true);
         when(file.getName()).thenReturn(answerData.getDisplayText());
 
@@ -107,13 +125,13 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
 
     @Test
     public void whenPromptHasDefaultAnswer_showsInImageView() throws Exception {
-        String defaultImagePath = File.createTempFile("blah", ".bmp").getAbsolutePath();
-        overrideReferenceManager(setupFakeReferenceManager(asList(
-                new Pair<>("jr://images/referenceURI", defaultImagePath)
+        String imagePath = File.createTempFile("default", ".bmp").getAbsolutePath();
+        overrideReferenceManager(setupFakeReferenceManager(singletonList(
+                new Pair<>(answerText, imagePath)
         )));
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText("jr://images/referenceURI")
+                .withAnswerDisplayText(answerText)
                 .build();
 
         AnnotateWidget widget = createWidget();
@@ -122,19 +140,38 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
         Drawable drawable = imageView.getDrawable();
         assertThat(drawable, notNullValue());
 
-        String loadedImagePath = shadowOf(((BitmapDrawable) drawable).getBitmap()).getCreatedFromPath();
-        assertThat(loadedImagePath, equalTo(defaultImagePath));
+        String loadedPath = shadowOf(((BitmapDrawable) drawable).getBitmap()).getCreatedFromPath();
+        assertThat(loadedPath, equalTo(imagePath));
+    }
+
+    @Test
+    public void whenPromptHasCurrentAnswer_showsInImageView() throws Exception {
+        String imagePath = File.createTempFile("current", ".bmp").getAbsolutePath();
+        currentFile=new File(imagePath);
+
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withAnswerDisplayText(answerText)
+                .build();
+
+        AnnotateWidget widget = createWidget();
+        ImageView imageView = widget.getImageView();
+        assertThat(imageView, notNullValue());
+        Drawable drawable = imageView.getDrawable();
+        assertThat(drawable, notNullValue());
+
+        String loadedPath = shadowOf(((BitmapDrawable) drawable).getBitmap()).getCreatedFromPath();
+        assertThat(loadedPath, equalTo(imagePath));
     }
 
     @Test
     public void markupButtonShouldBeDisabledIfImageAbsent() throws Exception {
         String wrongDefaultPath = "wrong_path";
-        overrideReferenceManager(setupFakeReferenceManager(asList(
-                new Pair<>("jr://images/referenceURI", wrongDefaultPath)
+        overrideReferenceManager(setupFakeReferenceManager(singletonList(
+                new Pair<>(answerText, wrongDefaultPath)
         )));
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText("jr://images/referenceURI")
+                .withAnswerDisplayText(answerText)
                 .build();
 
         assertThat(getWidget().annotateButton.isEnabled(), is(false));

@@ -12,15 +12,14 @@ import androidx.annotation.NonNull;
 import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
-import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
+import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.robolectric.RobolectricTestRunner;
@@ -45,7 +44,6 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
 
     private final String answerText = "jr://images/someURI";
     private File currentFile=null;
-    private String fileName;
 
     @NonNull
     @Override
@@ -70,13 +68,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
     @NonNull
     @Override
     public StringData getNextAnswer() {
-        return new StringData(fileName);
-    }
-
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-        fileName = RandomString.make();
+        return new StringData(RandomString.make());
     }
 
     @Test
