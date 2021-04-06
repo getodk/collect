@@ -1,10 +1,13 @@
 package org.odk.collect.android.support.pages
 
+import android.graphics.Color
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.rule.ActivityTestRule
 import org.odk.collect.android.R
+import org.odk.collect.android.support.matchers.DrawableMatcher.withBackgroundColor
 
 internal class ProjectSettingsDialogPage(rule: ActivityTestRule<*>) : Page<ProjectSettingsDialogPage>(rule) {
     override fun assertOnPage(): ProjectSettingsDialogPage {
@@ -37,5 +40,10 @@ internal class ProjectSettingsDialogPage(rule: ActivityTestRule<*>) : Page<Proje
     fun clickAddProject(): AddProjectDialogPage {
         Espresso.onView(withId(R.id.add_project_button)).perform(ViewActions.click())
         return AddProjectDialogPage(rule).assertOnPage()
+    }
+
+    fun assertProjectIconColor(color: String): ProjectSettingsDialogPage {
+        Espresso.onView(withId(R.id.project_icon)).check(matches(withBackgroundColor(Color.parseColor(color))))
+        return this
     }
 }

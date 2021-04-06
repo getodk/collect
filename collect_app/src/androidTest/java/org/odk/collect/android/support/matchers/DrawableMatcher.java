@@ -1,5 +1,6 @@
 package org.odk.collect.android.support.matchers;
 
+import android.graphics.drawable.GradientDrawable;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -23,6 +24,20 @@ public class DrawableMatcher  {
             @Override
             public boolean matchesSafely(ImageView imageView) {
                 return expectedResourceId == (Integer) imageView.getTag();
+            }
+        };
+    }
+
+    public static Matcher<View> withBackgroundColor(int color) {
+        return new BoundedMatcher<View, View>(View.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("View background color to be " + color);
+            }
+
+            @Override
+            public boolean matchesSafely(View view) {
+                return color == ((GradientDrawable) view.getBackground()).getColor().getDefaultColor();
             }
         };
     }

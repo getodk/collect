@@ -9,8 +9,9 @@ class InMemProjectsRepository(private val uuidGenerator: UUIDGenerator) : Projec
 
     override fun getAll() = projects
 
-    override fun add(projectName: String, projectIcon: String) {
-        projects.add(Project(uuidGenerator.generateUUID(), projectName, projectIcon))
+    override fun add(project: Project) {
+        project.uuid = uuidGenerator.generateUUID()
+        projects.add(project)
     }
 
     override fun delete(uuid: String) {

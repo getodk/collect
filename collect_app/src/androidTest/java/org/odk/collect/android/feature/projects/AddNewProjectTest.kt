@@ -19,11 +19,13 @@ class AddNewProjectTest {
             .clickAddProject()
             .inputProjectName("Project 1")
             .inputProjectIcon("X")
+            .inputProjectColor("#0000FF")
             .addProject()
 
         rule.mainMenu()
             .openProjectSettingsDialog()
             .assertText("Project 1")
             .assertText("X")
+            .assertProjectIconColor("#0000FF")
     }
 }

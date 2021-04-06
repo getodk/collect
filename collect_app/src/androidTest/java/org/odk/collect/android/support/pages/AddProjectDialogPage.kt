@@ -12,13 +12,18 @@ internal class AddProjectDialogPage(rule: ActivityTestRule<*>) : Page<AddProject
         return this
     }
 
-    fun inputProjectName(projectName: String?): AddProjectDialogPage {
+    fun inputProjectName(projectName: String): AddProjectDialogPage {
         inputText(R.string.project_name, projectName)
         return this
     }
 
-    fun inputProjectIcon(projectIcon: String?): AddProjectDialogPage {
+    fun inputProjectIcon(projectIcon: String): AddProjectDialogPage {
         inputText(R.string.project_icon, projectIcon)
+        return this
+    }
+
+    fun inputProjectColor(projectColor: String): AddProjectDialogPage {
+        inputText(R.string.project_color, projectColor)
         return this
     }
 
