@@ -244,7 +244,7 @@ abstract class AppListFragment extends ListFragment {
      */
     protected Long[] getCheckedIdObjects() {
         // This method could be simplified by using getCheckedItemIds, if one ensured that
-        // IDs were "stable" (see the getCheckedItemIds doc).
+        // IDs were “stable” (see the getCheckedItemIds doc).
         ListView lv = getListView();
         int itemCount = lv.getCount();
         int checkedItemCount = lv.getCheckedItemCount();

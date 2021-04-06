@@ -112,11 +112,11 @@ public class PropertyManager implements IPropertyManager {
     }
 
     /**
-     * Initializes a property and its associated "with URI" property, from shared preferences.
+     * Initializes a property and its associated “with URI” property, from shared preferences.
      * @param preferences the shared preferences object to be used
      * @param prefKey the preferences key
      * @param propName the name of the property to set
-     * @param scheme the scheme for the associated "with URI" property
+     * @param scheme the scheme for the associated “with URI” property
      */
     private void initUserDefined(SharedPreferences preferences, String prefKey,
                                  String propName, String scheme) {
