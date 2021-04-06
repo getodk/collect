@@ -6,12 +6,11 @@ import org.hamcrest.Matchers.not
 import org.hamcrest.Matchers.notNullValue
 import org.junit.Before
 import org.junit.Test
-import org.odk.collect.android.utilities.UUIDGenerator
 
 abstract class ProjectsRepositoryTest {
-    private val projectX = Project(UUIDGenerator().generateUUID(), "ProjectX", "X", "#FF0000")
-    private val projectY = Project(UUIDGenerator().generateUUID(), "ProjectY", "Y", "#00FF00")
-    private val projectZ = Project(UUIDGenerator().generateUUID(), "ProjectZ", "Z", "#0000FF")
+    private val projectX = Project("ProjectX", "X", "#FF0000")
+    private val projectY = Project("ProjectY", "Y", "#00FF00")
+    private val projectZ = Project("ProjectZ", "Z", "#0000FF")
 
     lateinit var projectsRepository: ProjectsRepository
 

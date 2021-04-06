@@ -11,7 +11,6 @@ import androidx.appcompat.widget.Toolbar
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.AddProjectDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.utilities.UUIDGenerator
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import javax.inject.Inject
 
@@ -19,9 +18,6 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
 
     @Inject
     lateinit var projectsRepository: ProjectsRepository
-
-    @Inject
-    lateinit var uuid: UUIDGenerator
 
     private lateinit var binding: AddProjectDialogLayoutBinding
 
@@ -64,7 +60,7 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
         }
 
         binding.addButton.setOnClickListener {
-            projectsRepository.add(Project(uuid.generateUUID(), getProjectName(), getProjectIcon(), getProjectColor()))
+            projectsRepository.add(Project(getProjectName(), getProjectIcon(), getProjectColor()))
             dismiss()
         }
     }
