@@ -18,7 +18,7 @@ class SaveProjectsRule(val projects: List<Project>) : TestRule {
             val projectsRepository = DaggerUtils.getComponent(Collect.getInstance()).projectsRepository()
             val currentProjectProvider = DaggerUtils.getComponent(Collect.getInstance()).currentProjectProvider()
             for (project in projects) {
-                projectsRepository.add(Project(project.uuid, project.name, project.icon, project.color))
+                projectsRepository.add(Project(project.name, project.icon, project.color, project.uuid))
             }
             currentProjectProvider.setCurrentProject(projectsRepository.getAll()[0].uuid)
             base.evaluate()

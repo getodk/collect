@@ -13,8 +13,8 @@ class SwitchProjectTest {
 
     val rule = CollectTestRule()
     private val projects = listOf(
-        Project("1", "Turtle nesting", "T", "#00FF00"),
-        Project("2", "Polio - Banadir", "P", "#FF0000")
+        Project("Turtle nesting", "T", "#00FF00", "1"),
+        Project("Polio - Banadir", "P", "#FF0000", "2")
     )
 
     @get:Rule
