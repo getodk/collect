@@ -88,6 +88,7 @@ import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.preferences.source.SettingsStore;
+import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.projects.InMemProjectsRepository;
 import org.odk.collect.android.projects.ProjectsRepository;
 import org.odk.collect.android.storage.StorageInitializer;
@@ -531,5 +532,11 @@ public class AppDependencyModule {
     @Provides
     public FastExternalItemsetsRepository providesItemsetsRepository() {
         return new DatabaseFastExternalItemsetsRepository();
+    }
+
+    @Provides
+    @Singleton
+    public CurrentProjectProvider providesCurrentProjectProvider(SettingsProvider settingsProvider, ProjectsRepository projectsRepository) {
+        return new CurrentProjectProvider(settingsProvider, projectsRepository);
     }
 }

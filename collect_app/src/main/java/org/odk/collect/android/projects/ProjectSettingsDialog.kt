@@ -18,10 +18,8 @@ import org.odk.collect.android.activities.AboutActivity
 import org.odk.collect.android.databinding.ProjectSettingsDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment
-import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.android.preferences.screens.AdminPreferencesActivity
 import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.ToastUtils
@@ -36,7 +34,7 @@ class ProjectSettingsDialog : DialogFragment() {
     lateinit var projectsRepository: ProjectsRepository
 
     @Inject
-    lateinit var settingsProvider: SettingsProvider
+    lateinit var currentProjectProvider: CurrentProjectProvider
 
     private lateinit var binding: ProjectSettingsDialogLayoutBinding
 
@@ -90,14 +88,14 @@ class ProjectSettingsDialog : DialogFragment() {
     }
 
     private fun inflateListOfInActiveProjects() {
-        if (projectsRepository.getAll().none { it.uuid != settingsProvider.getMetaSettings().getString(MetaKeys.CURRENT_PROJECT_ID) }) {
+        if (projectsRepository.getAll().none { it.uuid != currentProjectProvider.getCurrentProjectId() }) {
             binding.topDivider.visibility = GONE
         } else {
             binding.topDivider.visibility = VISIBLE
         }
 
         projectsRepository.getAll().filter {
-            it.uuid != settingsProvider.getMetaSettings().getString(MetaKeys.CURRENT_PROJECT_ID)
+            it.uuid != currentProjectProvider.getCurrentProjectId()
         }.forEach { project ->
             val projectView = LayoutInflater.from(context).inflate(R.layout.project_list_item, null)
 
@@ -116,14 +114,14 @@ class ProjectSettingsDialog : DialogFragment() {
     }
 
     private fun switchProject(project: Project) {
-        settingsProvider.getMetaSettings().save(MetaKeys.CURRENT_PROJECT_ID, project.uuid)
+        currentProjectProvider.setCurrentProject(project.uuid)
         dismiss()
         ToastUtils.showLongToast(getString(R.string.switched_project, project.name))
     }
 
     private fun setupCurrentProjectView() {
-        val currentProjectId = settingsProvider.getMetaSettings().getString(MetaKeys.CURRENT_PROJECT_ID) ?: return
-        val currentProject = projectsRepository.get(currentProjectId) ?: return
+        val currentProject = currentProjectProvider.getCurrentProject() ?: return
+
         binding.currentProject.projectIcon.apply {
             (background as GradientDrawable).setColor(Color.parseColor(currentProject.color))
             text = currentProject.icon
