@@ -89,7 +89,11 @@ class ProjectSettingsDialog : DialogFragment() {
     }
 
     private fun inflateListOfInActiveProjects() {
-        binding.topDivider.visibility = if (projectsRepository.getAll().isEmpty()) GONE else VISIBLE
+        if (projectsRepository.getAll().none { it.uuid != settingsProvider.getMetaSettings().getString(MetaKeys.CURRENT_PROJECT_ID) }) {
+            binding.topDivider.visibility = GONE
+        } else {
+            binding.topDivider.visibility = VISIBLE
+        }
 
         projectsRepository.getAll().filter {
             it.uuid != settingsProvider.getMetaSettings().getString(MetaKeys.CURRENT_PROJECT_ID)
