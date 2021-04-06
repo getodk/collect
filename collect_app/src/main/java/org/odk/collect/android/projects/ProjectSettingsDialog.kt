@@ -18,10 +18,13 @@ import org.odk.collect.android.activities.AboutActivity
 import org.odk.collect.android.databinding.ProjectSettingsDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment
+import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.android.preferences.screens.AdminPreferencesActivity
 import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity
+import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.android.utilities.DialogUtils
+import org.odk.collect.android.utilities.ToastUtils
 import javax.inject.Inject
 
 class ProjectSettingsDialog : DialogFragment() {
@@ -31,6 +34,9 @@ class ProjectSettingsDialog : DialogFragment() {
 
     @Inject
     lateinit var projectsRepository: ProjectsRepository
+
+    @Inject
+    lateinit var settingsProvider: SettingsProvider
 
     private lateinit var binding: ProjectSettingsDialogLayoutBinding
 
@@ -88,6 +94,10 @@ class ProjectSettingsDialog : DialogFragment() {
         projectsRepository.getAll().forEach { project ->
             val projectView = LayoutInflater.from(context).inflate(R.layout.project_list_item, null)
 
+            projectView.setOnClickListener {
+                switchProject(project)
+            }
+
             projectView.findViewById<TextView>(R.id.project_icon).apply {
                 (background as GradientDrawable).setColor(Color.parseColor(project.color))
                 text = project.icon
@@ -96,5 +106,11 @@ class ProjectSettingsDialog : DialogFragment() {
 
             binding.projectList.addView(projectView)
         }
+    }
+
+    private fun switchProject(project: Project) {
+        settingsProvider.getMetaSettings().save(MetaKeys.CURRENT_PROJECT_ID, project.uuid)
+        dismiss()
+        ToastUtils.showLongToast(getString(R.string.switched_project, project.name))
     }
 }
