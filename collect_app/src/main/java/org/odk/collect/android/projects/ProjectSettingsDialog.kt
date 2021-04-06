@@ -54,6 +54,7 @@ class ProjectSettingsDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupCurrentProjectView()
         inflateListOfInActiveProjects()
 
         binding.closeIcon.setOnClickListener {
@@ -118,5 +119,15 @@ class ProjectSettingsDialog : DialogFragment() {
         settingsProvider.getMetaSettings().save(MetaKeys.CURRENT_PROJECT_ID, project.uuid)
         dismiss()
         ToastUtils.showLongToast(getString(R.string.switched_project, project.name))
+    }
+
+    private fun setupCurrentProjectView() {
+        val currentProjectId = settingsProvider.getMetaSettings().getString(MetaKeys.CURRENT_PROJECT_ID) ?: return
+        val currentProject = projectsRepository.get(currentProjectId) ?: return
+        binding.currentProject.projectIcon.apply {
+            (background as GradientDrawable).setColor(Color.parseColor(currentProject.color))
+            text = currentProject.icon
+        }
+        binding.currentProject.projectName.text = currentProject.name
     }
 }
