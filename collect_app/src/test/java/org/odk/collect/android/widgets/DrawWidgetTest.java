@@ -42,8 +42,8 @@ import static org.robolectric.Shadows.shadowOf;
 @RunWith(RobolectricTestRunner.class)
 public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
 
-    private final String answerText = "jr://images/someURI";
-    private File currentFile=null;
+    private static final String ANSWER_TEXT = "jr://images/someURI";
+    private File currentFile;
 
     @NonNull
     @Override
@@ -55,7 +55,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
                 if (currentFile == null) {
                     result = super.getAnswerFile(fileName);
                 } else {
-                    result = fileName.equals(answerText) ? currentFile : null;
+                    result = fileName.equals(ANSWER_TEXT) ? currentFile : null;
                 }
                 return result;
             }
@@ -99,11 +99,11 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
     public void whenPromptHasDefaultAnswer_showsInImageView() throws Exception {
         String imagePath = File.createTempFile("default", ".bmp").getAbsolutePath();
         overrideReferenceManager(setupFakeReferenceManager(singletonList(
-                new Pair<>(answerText, imagePath)
+                new Pair<>(ANSWER_TEXT, imagePath)
         )));
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(answerText)
+                .withAnswerDisplayText(ANSWER_TEXT)
                 .build();
 
         DrawWidget widget = createWidget();
@@ -119,10 +119,10 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
     @Test
     public void whenPromptHasCurrentAnswer_showsInImageView() throws Exception {
         String imagePath = File.createTempFile("current", ".bmp").getAbsolutePath();
-        currentFile=new File(imagePath);
+        currentFile = new File(imagePath);
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(answerText)
+                .withAnswerDisplayText(ANSWER_TEXT)
                 .build();
 
         DrawWidget widget = createWidget();

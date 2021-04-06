@@ -144,7 +144,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             int screenHeight = metrics.heightPixels;
 
             File f = getFile();
-            if (f!=null&&f.exists()) {
+            if (f != null && f.exists()) {
                 Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
                 if (bmp == null) {
                     errorTextView.setVisibility(View.VISIBLE);

@@ -35,12 +35,12 @@ import static org.odk.collect.android.support.CollectHelpers.setupFakeReferenceM
 import static org.robolectric.Shadows.shadowOf;
 
 /**
- * @author James Knight
+ *  @author James Knight
  */
 public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
 
-    private final String answerText = "jr://images/someURI";
-    private File currentFile=null;
+    private static final String ANSWER_TEXT = "jr://images/someURI";
+    private File currentFile;
 
     @NonNull
     @Override
@@ -52,7 +52,7 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
                 if (currentFile == null) {
                     result = super.getAnswerFile(fileName);
                 } else {
-                    result = fileName.equals(answerText) ? currentFile : null;
+                    result = fileName.equals(ANSWER_TEXT) ? currentFile : null;
                 }
                 return result;
             }
@@ -95,11 +95,11 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
     public void whenPromptHasDefaultAnswer_showsInImageView() throws Exception {
         String imagePath = File.createTempFile("default", ".bmp").getAbsolutePath();
         overrideReferenceManager(setupFakeReferenceManager(singletonList(
-                new Pair<>(answerText, imagePath)
+                new Pair<>(ANSWER_TEXT, imagePath)
         )));
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(answerText)
+                .withAnswerDisplayText(ANSWER_TEXT)
                 .build();
 
         SignatureWidget widget = createWidget();
@@ -115,10 +115,10 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
     @Test
     public void whenPromptHasCurrentAnswer_showsInImageView() throws Exception {
         String imagePath = File.createTempFile("current", ".bmp").getAbsolutePath();
-        currentFile=new File(imagePath);
+        currentFile = new File(imagePath);
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(answerText)
+                .withAnswerDisplayText(ANSWER_TEXT)
                 .build();
 
         SignatureWidget widget = createWidget();
