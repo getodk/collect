@@ -19,6 +19,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
+import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
@@ -26,7 +27,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;
 
-import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -41,13 +42,29 @@ import static org.robolectric.Shadows.shadowOf;
  */
 @RunWith(RobolectricTestRunner.class)
 public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
+
+    private final String answerText = "jr://images/someURI";
+    private File currentFile=null;
     private String fileName;
 
     @NonNull
     @Override
     public DrawWidget createWidget() {
-        return new DrawWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride),
-                new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry());
+        QuestionMediaManager fakeQuestionMediaManager = new FakeQuestionMediaManager() {
+            @Override
+            public File getAnswerFile(String fileName) {
+                File result;
+                if (currentFile == null) {
+                    result = super.getAnswerFile(fileName);
+                } else {
+                    result = fileName.equals(answerText) ? currentFile : null;
+                }
+                return result;
+            }
+        };
+        return new DrawWidget(activity,
+                new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride),
+                fakeQuestionMediaManager, new FakeWaitingForDataRegistry());
     }
 
     @NonNull
@@ -88,13 +105,13 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
 
     @Test
     public void whenPromptHasDefaultAnswer_showsInImageView() throws Exception {
-        String defaultImagePath = File.createTempFile("blah", ".bmp").getAbsolutePath();
-        overrideReferenceManager(setupFakeReferenceManager(asList(
-                new Pair<>("jr://images/referenceURI", defaultImagePath)
+        String imagePath = File.createTempFile("default", ".bmp").getAbsolutePath();
+        overrideReferenceManager(setupFakeReferenceManager(singletonList(
+                new Pair<>(answerText, imagePath)
         )));
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText("jr://images/referenceURI")
+                .withAnswerDisplayText(answerText)
                 .build();
 
         DrawWidget widget = createWidget();
@@ -103,7 +120,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
         Drawable drawable = imageView.getDrawable();
         assertThat(drawable, notNullValue());
 
-        String loadedImagePath = shadowOf(((BitmapDrawable) drawable).getBitmap()).getCreatedFromPath();
-        assertThat(loadedImagePath, equalTo(defaultImagePath));
+        String loadedPath = shadowOf(((BitmapDrawable) drawable).getBitmap()).getCreatedFromPath();
+        assertThat(loadedPath, equalTo(imagePath));
     }
 }
