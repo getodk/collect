@@ -42,8 +42,8 @@ import static org.robolectric.Shadows.shadowOf;
  */
 public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
 
-    private final String answerText = "jr://images/someURI";
-    private File currentFile=null;
+    private final static String answerText = "jr://images/someURI";
+    private File currentFile;
 
     @Mock
     File file;

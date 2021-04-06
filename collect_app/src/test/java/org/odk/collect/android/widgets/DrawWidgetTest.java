@@ -42,8 +42,8 @@ import static org.robolectric.Shadows.shadowOf;
 @RunWith(RobolectricTestRunner.class)
 public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
 
-    private final String answerText = "jr://images/someURI";
-    private File currentFile=null;
+    private final static String answerText = "jr://images/someURI";
+    private File currentFile;
 
     @NonNull
     @Override
