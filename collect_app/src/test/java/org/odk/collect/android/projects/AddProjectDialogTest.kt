@@ -3,10 +3,8 @@ package org.odk.collect.android.projects
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.Visibility
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
-import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -47,16 +45,20 @@ class AddProjectDialogTest {
     }
 
     @Test
-    fun oneCharacterOrEmojiOnly_shouldBeAcceptedAsProjectIcon() {
+    fun noMoreThanOneCharacter_shouldBeAcceptedAsProjectIcon() {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java)
         scenario.onFragment {
-            // One character
             onView(withHint(R.string.project_icon)).perform(ViewActions.typeText("XYZ"))
-            onView(Matchers.allOf(withText("X"), withEffectiveVisibility(Visibility.VISIBLE))).check(matches(isDisplayed()))
+            onView(Matchers.allOf(withHint(R.string.project_icon), withText("X"))).check(matches(isDisplayed()))
+        }
+    }
 
-            // or one emoji
+    @Test
+    fun noMoreThanOneEmoji_shouldBeAcceptedAsProjectIcon() {
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java)
+        scenario.onFragment {
             onView(withHint(R.string.project_icon)).perform(ViewActions.replaceText("\uD83D\uDC22"))
-            onView(Matchers.allOf(withText("\uD83D\uDC22"), withEffectiveVisibility(Visibility.VISIBLE))).check(matches(isDisplayed()))
+            onView(Matchers.allOf(withHint(R.string.project_icon), withText("\uD83D\uDC22"))).check(matches(isDisplayed()))
         }
     }
 }
