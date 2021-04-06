@@ -91,7 +91,9 @@ class ProjectSettingsDialog : DialogFragment() {
     private fun inflateListOfInActiveProjects() {
         binding.topDivider.visibility = if (projectsRepository.getAll().isEmpty()) GONE else VISIBLE
 
-        projectsRepository.getAll().forEach { project ->
+        projectsRepository.getAll().filter {
+            it.uuid != settingsProvider.getMetaSettings().getString(MetaKeys.CURRENT_PROJECT_ID)
+        }.forEach { project ->
             val projectView = LayoutInflater.from(context).inflate(R.layout.project_list_item, null)
 
             projectView.setOnClickListener {
