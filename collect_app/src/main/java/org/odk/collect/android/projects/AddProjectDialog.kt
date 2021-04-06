@@ -2,6 +2,8 @@ package org.odk.collect.android.projects
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,12 +35,32 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpToolbar()
 
+        lateinit var oldTextString: String
+        binding.projectIconInputText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                oldTextString = charSequence.toString()
+            }
+
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+
+            override fun afterTextChanged(editable: Editable) {
+                var newTextString = editable.toString()
+                if (oldTextString != newTextString) {
+                    if (Character.codePointCount(newTextString, 0, newTextString.length) > 1) {
+                        newTextString = oldTextString
+                    }
+                    binding.projectIconInputText.setText(newTextString)
+                    binding.projectIconInputText.setSelection(newTextString.length)
+                }
+            }
+        })
+
         binding.cancelButton.setOnClickListener {
             dismiss()
         }
 
         binding.addButton.setOnClickListener {
-            projectsRepository.add(getProjectName())
+            projectsRepository.add(getProjectName(), getProjectIcon())
             dismiss()
         }
     }
@@ -60,4 +82,6 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
     }
 
     private fun getProjectName() = binding.projectName.editText?.text?.trim().toString()
+
+    private fun getProjectIcon() = binding.projectIcon.editText?.text?.trim().toString()
 }

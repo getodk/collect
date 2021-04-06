@@ -62,19 +62,29 @@
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/general_settings_button" />
 
+    <View
+        android:id="@+id/top_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/margin_small"
+        android:background="?colorPrimary"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/admin_settings_button" />
+
     <LinearLayout
         android:id="@+id/project_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@+id/admin_settings_button" />
+        app:layout_constraintTop_toBottomOf="@+id/top_divider" />
 
     <View
-        android:id="@+id/divider"
+        android:id="@+id/bottom_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_small"
         android:background="?colorPrimary"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -93,7 +103,7 @@
         app:icon="@drawable/ic_baseline_qr_code_scanner_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline_center"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
+        app:layout_constraintTop_toBottomOf="@+id/bottom_divider" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/about_button"
@@ -106,5 +116,5 @@
         android:text="@string/about_preferences"
         app:icon="@drawable/ic_outline_info_24"
         app:layout_constraintStart_toStartOf="@+id/guideline_center"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
+        app:layout_constraintTop_toBottomOf="@+id/bottom_divider" />
 </androidx.constraintlayout.widget.ConstraintLayout>

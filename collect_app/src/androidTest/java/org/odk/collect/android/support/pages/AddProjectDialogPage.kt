@@ -17,6 +17,11 @@ internal class AddProjectDialogPage(rule: ActivityTestRule<*>) : Page<AddProject
         return this
     }
 
+    fun inputProjectIcon(projectIcon: String?): AddProjectDialogPage {
+        inputText(R.string.project_icon, projectIcon)
+        return this
+    }
+
     fun addProject(): MainMenuPage {
         Espresso.onView(withId(R.id.add_button)).perform(ViewActions.click())
         return MainMenuPage(rule).assertOnPage()

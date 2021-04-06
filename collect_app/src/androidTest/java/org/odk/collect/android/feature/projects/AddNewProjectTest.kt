@@ -18,10 +18,12 @@ class AddNewProjectTest {
             .openProjectSettingsDialog()
             .clickAddProject()
             .inputProjectName("Project 1")
+            .inputProjectIcon("X")
             .addProject()
 
         rule.mainMenu()
             .openProjectSettingsDialog()
             .assertText("Project 1")
+            .assertText("X")
     }
 }
