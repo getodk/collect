@@ -16,15 +16,21 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.robolectric.shadows.ShadowEnvironment;
 
+import java.io.File;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.odk.collect.android.instances.Instance.STATUS_COMPLETE;
 import static org.odk.collect.android.instances.Instance.STATUS_INCOMPLETE;
+import static org.odk.collect.android.instances.Instance.STATUS_SUBMITTED;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CONTENT_URI;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DELETED_DATE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DISPLAY_NAME;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.GEOMETRY;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.GEOMETRY_TYPE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_VERSION;
@@ -35,6 +41,7 @@ import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColum
 public class InstanceProviderTest {
 
     private ContentResolver contentResolver;
+    private File externalFilesDir;
 
     @Before
     public void setup() {
@@ -44,6 +51,7 @@ public class InstanceProviderTest {
 
         Context context = ApplicationProvider.getApplicationContext();
         contentResolver = context.getContentResolver();
+        externalFilesDir = context.getExternalFilesDir(null);
     }
 
     @Test
@@ -160,6 +168,88 @@ public class InstanceProviderTest {
                 assertThat(cursor.getString(cursor.getColumnIndex(STATUS)), is(STATUS_INCOMPLETE));
             }
         }
+    }
+
+    @Test
+    public void delete_deletesInstance() {
+        Uri uri = addInstanceToDb("/blah1", "Instance 1");
+        contentResolver.delete(uri, null, null);
+
+        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null)) {
+            assertThat(cursor.getCount(), is(0));
+        }
+    }
+
+    @Test
+    public void delete_deletesInstanceDir() {
+        String instanceDirName = "my-instance";
+        File instanceDir = createInstanceDir(instanceDirName);
+
+        Uri uri = addInstanceToDb(instanceDir.getAbsolutePath(), "Instance 1");
+        contentResolver.delete(uri, null, null);
+        assertThat(instanceDir.exists(), is(false));
+    }
+
+    @Test
+    public void delete_whenStatusIsSubmitted_deletesFilesButSoftDeletesInstance() {
+        File instanceDir = createInstanceDir("my-instance");
+        Uri uri = addInstanceToDb(instanceDir.getAbsolutePath(), "Instance 1");
+
+        ContentValues updateValues = new ContentValues();
+        updateValues.put(STATUS, STATUS_SUBMITTED);
+        contentResolver.update(uri, updateValues, null, null);
+
+        contentResolver.delete(uri, null, null);
+        assertThat(instanceDir.exists(), is(false));
+
+        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null)) {
+            assertThat(cursor.getCount(), is(1));
+
+            cursor.moveToNext();
+            assertThat(cursor.getLong(cursor.getColumnIndex(DELETED_DATE)), is(notNullValue()));
+        }
+    }
+
+    @Test
+    public void delete_whenStatusIsSubmitted_clearsGeometryFields() {
+        File instanceDir = createInstanceDir("my-instance");
+        Uri uri = addInstanceToDb(instanceDir.getAbsolutePath(), "Instance 1");
+
+        ContentValues updateValues = new ContentValues();
+        updateValues.put(STATUS, STATUS_SUBMITTED);
+        updateValues.put(GEOMETRY, "something");
+        updateValues.put(GEOMETRY_TYPE, "something else");
+        contentResolver.update(uri, updateValues, null, null);
+
+        contentResolver.delete(uri, null, null);
+        assertThat(instanceDir.exists(), is(false));
+
+        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null)) {
+            assertThat(cursor.getCount(), is(1));
+
+            cursor.moveToNext();
+            assertThat(cursor.getString(cursor.getColumnIndex(GEOMETRY)), is(nullValue()));
+            assertThat(cursor.getString(cursor.getColumnIndex(GEOMETRY_TYPE)), is(nullValue()));
+        }
+    }
+
+    @Test
+    public void delete_withSelection_doesNotDeleteInstanceThatDoesNotMatchSelection() {
+        Uri uri = addInstanceToDb("/blah1", "Instance 1");
+        addInstanceToDb("/blah2", "Instance 2");
+
+        contentResolver.delete(uri, DISPLAY_NAME + "=?", new String[]{"Instance 2"});
+
+        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null)) {
+            assertThat(cursor.getCount(), is(2));
+        }
+    }
+
+    private File createInstanceDir(String instanceDirName) {
+        String instancesDirPath = externalFilesDir.getAbsolutePath() + File.separator + "instances";
+        File instanceDir = new File(instancesDirPath + File.separator + instanceDirName);
+        assertThat(instanceDir.mkdir(), is(true));
+        return instanceDir;
     }
 
     private Uri addInstanceToDb(String s, String s2) {
