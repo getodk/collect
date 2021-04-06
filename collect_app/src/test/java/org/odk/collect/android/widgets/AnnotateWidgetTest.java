@@ -38,7 +38,8 @@ import static org.odk.collect.android.support.CollectHelpers.setupFakeReferenceM
 import static org.robolectric.Shadows.shadowOf;
 
 /**
- * @author James Knight
+ *
+ *  @author James Knight
  */
 public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
 
