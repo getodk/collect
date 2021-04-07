@@ -7,6 +7,7 @@ import android.net.Uri;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 
@@ -19,16 +20,6 @@ import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColum
 
 /**
  * Mediates between {@link Instance} objects and the underlying SQLite database that stores them.
- * <p>
- * Uses {@link InstancesDao} to perform database queries. {@link InstancesDao} provides a thin
- * convenience layer over {@link org.odk.collect.android.provider.InstanceProvider} which exposes
- * {@link Cursor} and {@link androidx.loader.content.CursorLoader} objects that need to be managed.
- * This can be advantageous when providing data to Android components (e.g. lists through adapters)
- * but is cumbersome in domain code and makes writing test implementations harder.
- * <p>
- * Over time, we should consider redefining the responsibility split between
- * {@link org.odk.collect.android.provider.InstanceProvider}, {@link InstancesRepository} and
- * {@link InstancesDao}.
  */
 public final class DatabaseInstancesRepository implements InstancesRepository {
 
@@ -120,12 +111,15 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
         ContentValues values = getValuesFromInstanceObject(instance);
 
         if (instanceId == null) {
-            Uri uri = Collect.getInstance().getContentResolver().insert(InstanceColumns.CONTENT_URI, values);
-            Cursor cursor = Collect.getInstance().getContentResolver().query(uri, null, null, null, null);
-            return getInstancesFromCursor(cursor).get(0);
+            long insertId = InstanceProvider.getDbHelper().getWritableDatabase().insert(
+                    DatabaseConstants.INSTANCES_TABLE_NAME,
+                    null,
+                    values
+            );
+            return get(insertId);
         } else {
-            Collect.getInstance().getContentResolver().update(
-                    InstanceColumns.CONTENT_URI,
+            InstanceProvider.getDbHelper().getWritableDatabase().update(
+                    DatabaseConstants.INSTANCES_TABLE_NAME,
                     values,
                     InstanceColumns._ID + "=?",
                     new String[]{instanceId.toString()}
