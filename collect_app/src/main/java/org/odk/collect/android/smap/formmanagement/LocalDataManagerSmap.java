@@ -63,6 +63,17 @@ public class LocalDataManagerSmap {
                 HashMap<String, ArrayList<ContentValues>> dataSets = new HashMap<> ();
                 ArrayList<LinkedInstance> instances = getLinkedInstances(surveys);
 
+                // 2.5 Delete existing local data
+                for (String ref : surveys.keySet()) {
+                    LinkedSurvey ls = surveys.get(ref);
+                    File dbFile = new File(formMediaDir.getAbsolutePath(), ls.tableName + ".db");
+                    if (!dbFile.exists()) {
+                        FirebaseCrashlytics.getInstance().log("LocalCSV: csv table does not exist: " + dbFile.getAbsolutePath());
+                    }
+                    LocalSQLiteOpenHelperSmap localSQLiteOpenHelper = new LocalSQLiteOpenHelperSmap(dbFile);
+                    localSQLiteOpenHelper.deleteLocal(formLoaderTask);
+                }
+
                 // 3. Process each instance
                 if(instances.size() > 0) {
                     for (LinkedInstance li : instances) {
@@ -79,7 +90,6 @@ public class LocalDataManagerSmap {
                         FormData currentForm = fd;
                         currentForm.name = "main";
                         Stack<FormData> formDataStack = new Stack<>();
-                        //formDataStack.push(fd);
 
                         String absPath = getAbsoluteFilePath(storagePathProvider.getDirPath(StorageSubdirectory.INSTANCES), li.instanceFilePath);
                         XmlPullParser parser = new KXmlParser();

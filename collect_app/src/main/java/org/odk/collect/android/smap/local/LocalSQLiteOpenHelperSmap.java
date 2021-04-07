@@ -41,6 +41,22 @@ public class LocalSQLiteOpenHelperSmap extends SQLiteOpenHelper {
         try {
             db = getWritableDatabase();
 
+            appendLocal(db, ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, data);
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    // Delete local data
+    public void deleteLocal(FormLoaderTask formLoaderTask) throws java.lang.Exception {
+        this.formLoaderTask = formLoaderTask;
+
+        SQLiteDatabase db = null;
+        try {
+            db = getWritableDatabase();
+
             // make sure the local column exists - it may not if the user has just upgraded from an older version of fieldTask
             SQLiteUtils.addColumn(db, ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, ExternalDataUtil.LOCAL_COLUMN_NAME, "integer");
 
@@ -48,7 +64,6 @@ public class LocalSQLiteOpenHelperSmap extends SQLiteOpenHelper {
             String selection = ExternalDataUtil.LOCAL_COLUMN_NAME + " = 1";
             db.delete(ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, selection, null);
 
-            appendLocal(db, ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, data);
         } finally {
             if (db != null) {
                 db.close();
