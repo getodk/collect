@@ -26,6 +26,8 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.odk.collect.android.instances.Instance.STATUS_COMPLETE;
 import static org.odk.collect.android.instances.Instance.STATUS_INCOMPLETE;
 import static org.odk.collect.android.instances.Instance.STATUS_SUBMITTED;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CONTENT_ITEM_TYPE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CONTENT_TYPE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CONTENT_URI;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DELETED_DATE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DISPLAY_NAME;
@@ -233,8 +235,12 @@ public class InstanceProviderTest {
         }
     }
 
+    /**
+     * It's not clear when this is used. A hypothetical might be updating an instance but wanting
+     * that to be a no-op if it has already been soft deleted.
+     */
     @Test
-    public void delete_withSelection_doesNotDeleteInstanceThatDoesNotMatchSelection() {
+    public void delete_withInstanceUri_andSelection_doesNotDeleteInstanceThatDoesNotMatchSelection() {
         Uri uri = addInstanceToDb("/blah1", "Instance 1");
         addInstanceToDb("/blah2", "Instance 2");
 
@@ -243,6 +249,26 @@ public class InstanceProviderTest {
         try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null)) {
             assertThat(cursor.getCount(), is(2));
         }
+    }
+
+    @Test
+    public void delete_withSelection_deletesMatchingInstances() {
+        addInstanceToDb("/blah1", "Instance 1");
+        addInstanceToDb("/blah2", "Instance 2");
+
+        contentResolver.delete(CONTENT_URI, DISPLAY_NAME + "=?", new String[]{"Instance 2"});
+        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null)) {
+            assertThat(cursor.getCount(), is(1));
+
+            cursor.moveToNext();
+            assertThat(cursor.getString(cursor.getColumnIndex(DISPLAY_NAME)), is("Instance 1"));
+        }
+    }
+
+    @Test
+    public void getType_returnsInstanceAndAllInstanceTypes() {
+        assertThat(contentResolver.getType(CONTENT_URI), is(CONTENT_TYPE));
+        assertThat(contentResolver.getType(Uri.withAppendedPath(CONTENT_URI, "1")), is(CONTENT_ITEM_TYPE));
     }
 
     private File createInstanceDir(String instanceDirName) {
