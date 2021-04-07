@@ -34,12 +34,11 @@ import org.odk.collect.android.geo.SettingsDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.android.utilities.StringUtils;
+import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -278,7 +277,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
     private void finishWithResult() {
         List<MapPoint> points = map.getPolyPoints(featureId);
         setResult(RESULT_OK, new Intent().putExtra(
-            FormEntryActivity.ANSWER_KEY, formatPoints(points)));
+            FormEntryActivity.ANSWER_KEY, GeoUtils.formatPointsResultString(points, outputMode.equals(OutputMode.GEOSHAPE))));
         finish();
     }
 
@@ -324,30 +323,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
             }
         }
         return points;
-    }
-
-    /**
-     * Serializes a list of vertices into a string, in the format
-     * appropriate for storing as the result of this form question.
-     */
-    private String formatPoints(List<MapPoint> points) {
-        if (outputMode == OutputMode.GEOSHAPE) {
-            // Polygons are stored with a last point that duplicates the
-            // first point.  Add this extra point if it's not already present.
-            int count = points.size();
-            if (count > 1 && !points.get(0).equals(points.get(count - 1))) {
-                points.add(points.get(0));
-            }
-        }
-        StringBuilder result = new StringBuilder();
-        for (MapPoint point : points) {
-            // TODO(ping): Remove excess precision when we're ready for the output to change.
-            result.append(String.format(Locale.US, "%s %s %s %s;",
-                    Double.toString(point.lat), Double.toString(point.lon),
-                    Double.toString(point.alt), Float.toString((float) point.sd)));
-        }
-
-        return StringUtils.removeEnd(result.toString().trim(), ";");
     }
 
     @Override
