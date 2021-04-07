@@ -115,7 +115,7 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
     @Test
     public void whenPromptHasCurrentAnswer_showsInImageView() throws Exception {
         String imagePath = File.createTempFile("current", ".bmp").getAbsolutePath();
-        currentFile=new File(imagePath);
+        currentFile = new File(imagePath);
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withAnswerDisplayText(ANSWER_TEXT)
