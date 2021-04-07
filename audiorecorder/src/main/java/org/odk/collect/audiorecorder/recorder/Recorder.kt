@@ -4,7 +4,7 @@ import org.odk.collect.audiorecorder.recording.MicInUseException
 import org.odk.collect.audiorecorder.recording.SetupException
 import java.io.File
 
-internal interface Recorder {
+interface Recorder {
 
     @Throws(SetupException::class, MicInUseException::class)
     fun start(output: Output)
