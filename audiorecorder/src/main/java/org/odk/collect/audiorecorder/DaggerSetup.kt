@@ -20,6 +20,14 @@ import org.odk.collect.audiorecorder.recording.internal.RecordingRepository
 import java.io.File
 import javax.inject.Singleton
 
+/**
+ * This module follows the Android docs's multi-module example for Dagger. Any application that
+ * depends on this module should implement the provider interface and return a constructed
+ * component. This gives the application the opportunity to override dependencies if it wants to.
+ *
+ * @see [Using Dagger in multi-module apps](https://developer.android.com/training/dependency-injection/dagger-multi-module)
+ */
+
 interface AudioRecorderDependencyComponentProvider {
     fun getAudioRecorderDependencyComponentProvider(): AudioRecorderDependencyComponent
 }
