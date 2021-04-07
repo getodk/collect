@@ -37,7 +37,6 @@ import static org.odk.collect.android.support.CollectHelpers.setupFakeReferenceM
 import static org.robolectric.Shadows.shadowOf;
 
 /**
- *
  * @author James Knight
  */
 @RunWith(RobolectricTestRunner.class)
