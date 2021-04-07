@@ -43,7 +43,7 @@ import static org.robolectric.Shadows.shadowOf;
  */
 public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
 
-    private final static String answerText = "jr://images/someURI";
+    private static final String ANSWER_TEXT = "jr://images/someURI";
     private File currentFile;
 
     @Mock
@@ -59,7 +59,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
                 if (currentFile == null) {
                     result = super.getAnswerFile(fileName);
                 } else {
-                    result = fileName.equals(answerText) ? currentFile : null;
+                    result = fileName.equals(ANSWER_TEXT) ? currentFile : null;
                 }
                 return result;
             }
@@ -128,11 +128,11 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     public void whenPromptHasDefaultAnswer_showsInImageView() throws Exception {
         String imagePath = File.createTempFile("default", ".bmp").getAbsolutePath();
         overrideReferenceManager(setupFakeReferenceManager(singletonList(
-                new Pair<>(answerText, imagePath)
+                new Pair<>(ANSWER_TEXT, imagePath)
         )));
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(answerText)
+                .withAnswerDisplayText(ANSWER_TEXT)
                 .build();
 
         AnnotateWidget widget = createWidget();
@@ -148,10 +148,10 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     @Test
     public void whenPromptHasCurrentAnswer_showsInImageView() throws Exception {
         String imagePath = File.createTempFile("current", ".bmp").getAbsolutePath();
-        currentFile=new File(imagePath);
+        currentFile = new File(imagePath);
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(answerText)
+                .withAnswerDisplayText(ANSWER_TEXT)
                 .build();
 
         AnnotateWidget widget = createWidget();
@@ -168,11 +168,11 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     public void markupButtonShouldBeDisabledIfImageAbsent() throws Exception {
         String wrongDefaultPath = "wrong_path";
         overrideReferenceManager(setupFakeReferenceManager(singletonList(
-                new Pair<>(answerText, wrongDefaultPath)
+                new Pair<>(ANSWER_TEXT, wrongDefaultPath)
         )));
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(answerText)
+                .withAnswerDisplayText(ANSWER_TEXT)
                 .build();
 
         assertThat(getWidget().annotateButton.isEnabled(), is(false));
