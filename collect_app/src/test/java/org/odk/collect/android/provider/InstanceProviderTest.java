@@ -20,6 +20,7 @@ import java.io.File;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isOneOf;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
@@ -262,6 +263,57 @@ public class InstanceProviderTest {
 
             cursor.moveToNext();
             assertThat(cursor.getString(cursor.getColumnIndex(DISPLAY_NAME)), is("Instance 1"));
+        }
+    }
+
+    @Test
+    public void query_withProjection_onlyReturnsSpecifiedColumns() {
+        addInstanceToDb("/blah1", "Instance 1");
+
+        try (Cursor cursor = contentResolver.query(CONTENT_URI, new String[]{INSTANCE_FILE_PATH, DISPLAY_NAME}, null, null, null)) {
+            assertThat(cursor.getCount(), is(1));
+
+            cursor.moveToNext();
+            assertThat(cursor.getColumnCount(), is(2));
+            assertThat(cursor.getString(cursor.getColumnIndex(INSTANCE_FILE_PATH)), is("/blah1"));
+            assertThat(cursor.getString(cursor.getColumnIndex(DISPLAY_NAME)), is("Instance 1"));
+        }
+    }
+
+    @Test
+    public void query_withSelection_onlyReturnsMatchingRows() {
+        addInstanceToDb("/blah1", "Matching instance");
+        addInstanceToDb("/blah2", "Not a matching instance");
+        addInstanceToDb("/blah3", "Matching instance");
+
+        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, DISPLAY_NAME + "=?", new String[]{"Matching instance"}, null)) {
+            assertThat(cursor.getCount(), is(2));
+
+            cursor.moveToNext();
+            assertThat(cursor.getString(cursor.getColumnIndex(INSTANCE_FILE_PATH)), is(isOneOf("/blah1", "/blah3")));
+
+            cursor.moveToNext();
+            assertThat(cursor.getString(cursor.getColumnIndex(INSTANCE_FILE_PATH)), is(isOneOf("/blah1", "/blah3")));
+        }
+    }
+
+    @Test
+    public void query_withSortOrder_returnsSortedResults() {
+        addInstanceToDb("/blah3", "Instance C");
+        addInstanceToDb("/blah2", "Instance B");
+        addInstanceToDb("/blah1", "Instance A");
+
+        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, DISPLAY_NAME + " ASC")) {
+            assertThat(cursor.getCount(), is(3));
+
+            cursor.moveToNext();
+            assertThat(cursor.getString(cursor.getColumnIndex(DISPLAY_NAME)), is("Instance A"));
+
+            cursor.moveToNext();
+            assertThat(cursor.getString(cursor.getColumnIndex(DISPLAY_NAME)), is("Instance B"));
+
+            cursor.moveToNext();
+            assertThat(cursor.getString(cursor.getColumnIndex(DISPLAY_NAME)), is("Instance C"));
         }
     }
 
