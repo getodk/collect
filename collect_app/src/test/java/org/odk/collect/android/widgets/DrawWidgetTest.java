@@ -43,7 +43,7 @@ import static org.robolectric.Shadows.shadowOf;
 @RunWith(RobolectricTestRunner.class)
 public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
 
-    private final static String answerText = "jr://images/someURI";
+    private static final String answerText = "someURI";
     private File currentFile;
 
     @NonNull
@@ -120,7 +120,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
     @Test
     public void whenPromptHasCurrentAnswer_showsInImageView() throws Exception {
         String imagePath = File.createTempFile("current", ".bmp").getAbsolutePath();
-        currentFile=new File(imagePath);
+        currentFile = new File(imagePath);
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withAnswerDisplayText(answerText)
