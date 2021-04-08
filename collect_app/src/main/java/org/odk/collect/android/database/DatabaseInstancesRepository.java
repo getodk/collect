@@ -28,15 +28,15 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
         String selection = InstanceColumns._ID + "=?";
         String[] selectionArgs = {Long.toString(databaseId)};
 
-        Cursor c = getInstancesCursor(selection, selectionArgs);
-        List<Instance> result = getInstancesFromCursor(c);
+        List<Instance> result = getInstancesFromCursor(query(selection, selectionArgs));
         return !result.isEmpty() ? result.get(0) : null;
     }
 
     @Override
     public Instance getOneByPath(String instancePath) {
-        Cursor c = getInstancesCursor(InstanceColumns.INSTANCE_FILE_PATH + "=?", new String[]{new StoragePathProvider().getRelativeInstancePath(instancePath)});
-        List<Instance> instances = getInstancesFromCursor(c);
+        String selection = InstanceColumns.INSTANCE_FILE_PATH + "=?";
+        String[] args = {new StoragePathProvider().getRelativeInstancePath(instancePath)};
+        List<Instance> instances = getInstancesFromCursor(query(selection, args));
         if (instances.size() == 1) {
             return instances.get(0);
         } else {
@@ -46,13 +46,12 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     @Override
     public List<Instance> getAll() {
-        return getInstancesFromCursor(getInstancesCursor(null, null));
+        return getInstancesFromCursor(query(null, null));
     }
 
     @Override
     public List<Instance> getAllNotDeleted() {
-        String selection = InstanceColumns.DELETED_DATE + " IS NULL ";
-        return getInstancesFromCursor(getInstancesCursor(selection, null));
+        return getInstancesFromCursor(query(InstanceColumns.DELETED_DATE + " IS NULL ", null));
     }
 
     @Override
@@ -69,16 +68,16 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     @Override
     public List<Instance> getAllByFormId(String formId) {
-        Cursor c = getInstancesCursor(JR_FORM_ID + " = ?", new String[]{formId});
+        Cursor c = query(JR_FORM_ID + " = ?", new String[]{formId});
         return getInstancesFromCursor(c);
     }
 
     @Override
     public List<Instance> getAllNotDeletedByFormIdAndVersion(String jrFormId, String jrVersion) {
         if (jrVersion != null) {
-            return getInstancesFromCursor(getInstancesCursor(JR_FORM_ID + " = ? AND " + JR_VERSION + " = ? AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId, jrVersion}));
+            return getInstancesFromCursor(query(JR_FORM_ID + " = ? AND " + JR_VERSION + " = ? AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId, jrVersion}));
         } else {
-            return getInstancesFromCursor(getInstancesCursor(JR_FORM_ID + " = ? AND " + JR_VERSION + " IS NULL AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId}));
+            return getInstancesFromCursor(query(JR_FORM_ID + " = ? AND " + JR_VERSION + " IS NULL AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId}));
         }
     }
 
@@ -111,19 +110,10 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
         ContentValues values = getValuesFromInstanceObject(instance);
 
         if (instanceId == null) {
-            long insertId = InstanceProvider.getDbHelper().getWritableDatabase().insert(
-                    DatabaseConstants.INSTANCES_TABLE_NAME,
-                    null,
-                    values
-            );
+            long insertId = insert(values);
             return get(insertId);
         } else {
-            InstanceProvider.getDbHelper().getWritableDatabase().update(
-                    DatabaseConstants.INSTANCES_TABLE_NAME,
-                    values,
-                    InstanceColumns._ID + "=?",
-                    new String[]{instanceId.toString()}
-            );
+            update(instanceId, values);
 
             return get(instanceId);
         }
@@ -133,13 +123,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     public void softDelete(Long id) {
         ContentValues values = new ContentValues();
         values.put(DELETED_DATE, System.currentTimeMillis());
-
-        Collect.getInstance().getContentResolver().update(
-                InstanceColumns.CONTENT_URI,
-                values,
-                InstanceColumns._ID + "=?",
-                new String[]{id.toString()}
-        );
+        update(id, values);
     }
 
     private Cursor getCursorForAllByStatus(String[] status) {
@@ -148,11 +132,28 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
             selection.append(" or ").append(InstanceColumns.STATUS).append("=?");
         }
 
-        return getInstancesCursor(selection.toString(), status);
+        return query(selection.toString(), status);
     }
 
-    private Cursor getInstancesCursor(String selection, String[] selectionArgs) {
+    private Cursor query(String selection, String[] selectionArgs) {
         return Collect.getInstance().getContentResolver().query(InstanceColumns.CONTENT_URI, null, selection, selectionArgs, null);
+    }
+
+    private long insert(ContentValues values) {
+        return InstanceProvider.getDbHelper().getWritableDatabase().insert(
+                DatabaseConstants.INSTANCES_TABLE_NAME,
+                null,
+                values
+        );
+    }
+
+    private void update(Long instanceId, ContentValues values) {
+        InstanceProvider.getDbHelper().getWritableDatabase().update(
+                DatabaseConstants.INSTANCES_TABLE_NAME,
+                values,
+                InstanceColumns._ID + "=?",
+                new String[]{instanceId.toString()}
+        );
     }
 
     private static ContentValues getValuesFromInstanceObject(Instance instance) {
