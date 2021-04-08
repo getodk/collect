@@ -56,13 +56,11 @@ public class FormUtils {
         String fileName = formId + "-" + version + "-" + Math.random();
         File formFile = new File(formFilesPath + "/" + fileName + ".xml");
         FileUtils.write(formFile, xform.getBytes());
-        String mediaPath = new File(formFilesPath + "/" + fileName + "-media").getAbsolutePath();
 
         return new Form.Builder()
                 .displayName("Test Form")
                 .formFilePath(formFile.getAbsolutePath())
-                .formMediaPath(mediaPath)
-                .jrFormId(formId)
-                .jrVersion(version);
+                .formId(formId)
+                .version(version);
     }
 }

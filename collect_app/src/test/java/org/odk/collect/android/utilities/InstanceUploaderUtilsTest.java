@@ -28,9 +28,9 @@ public class InstanceUploaderUtilsTest {
         InMemFormsRepository formsRepository = new InMemFormsRepository();
 
         formsRepository.save(new Form.Builder()
-                .id(1L)
-                .jrFormId("1")
-                .jrVersion("1")
+                .dbId(1L)
+                .formId("1")
+                .version("1")
                 .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
                 .build());
 
@@ -42,9 +42,9 @@ public class InstanceUploaderUtilsTest {
         InMemFormsRepository formsRepository = new InMemFormsRepository();
 
         formsRepository.save(new Form.Builder()
-                .id(1L)
-                .jrFormId("1")
-                .jrVersion("1")
+                .dbId(1L)
+                .formId("1")
+                .version("1")
                 .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
                 .build());
 
@@ -56,9 +56,9 @@ public class InstanceUploaderUtilsTest {
         InMemFormsRepository formsRepository = new InMemFormsRepository();
 
         formsRepository.save(new Form.Builder()
-                .id(1L)
-                .jrFormId("1")
-                .jrVersion("1")
+                .dbId(1L)
+                .formId("1")
+                .version("1")
                 .autoDelete("false")
                 .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
                 .build());
@@ -71,9 +71,9 @@ public class InstanceUploaderUtilsTest {
         InMemFormsRepository formsRepository = new InMemFormsRepository();
 
         formsRepository.save(new Form.Builder()
-                .id(1L)
-                .jrFormId("1")
-                .jrVersion("1")
+                .dbId(1L)
+                .formId("1")
+                .version("1")
                 .autoDelete("true")
                 .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
                 .build());
@@ -99,9 +99,9 @@ public class InstanceUploaderUtilsTest {
         for (int i = 1; i <= NUMBER_OF_INSTANCES_TO_SEND; i++) {
             long time = System.currentTimeMillis();
             Instance instance = new Instance.Builder()
-                    .id((long) i)
+                    .dbId((long) i)
                     .displayName("InstanceTest")
-                    .jrFormId("instanceTest")
+                    .formId("instanceTest")
                     .status(Instance.STATUS_COMPLETE)
                     .lastStatusChangeDate(time)
                     .build();

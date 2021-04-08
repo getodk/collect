@@ -25,7 +25,7 @@ public final class InMemInstancesRepository implements InstancesRepository {
     @Override
     public Instance get(Long databaseId) {
         for (Instance instance : instances) {
-            if (instance.getId().equals(databaseId)) {
+            if (instance.getDbId().equals(databaseId)) {
                 return instance;
             }
         }
@@ -38,7 +38,7 @@ public final class InMemInstancesRepository implements InstancesRepository {
         List<Instance> result = new ArrayList<>();
 
         for (Instance instance : instances) {
-            if (instance.getAbsoluteInstanceFilePath().equals(instancePath)) {
+            if (instance.getInstanceFilePath().equals(instancePath)) {
                 result.add(instance);
             }
         }
@@ -86,7 +86,7 @@ public final class InMemInstancesRepository implements InstancesRepository {
         List<Instance> result = new ArrayList<>();
 
         for (Instance instance : instances) {
-            if (instance.getJrFormId().equals(formId)) {
+            if (instance.getFormId().equals(formId)) {
                 result.add(instance);
             }
         }
@@ -97,15 +97,15 @@ public final class InMemInstancesRepository implements InstancesRepository {
     @Override
     public List<Instance> getAllNotDeletedByFormIdAndVersion(String formId, String version) {
         return instances.stream().filter(instance -> {
-            return Objects.equals(instance.getJrFormId(), formId)
-                    && Objects.equals(instance.getJrVersion(), version)
+            return Objects.equals(instance.getFormId(), formId)
+                    && Objects.equals(instance.getFormVersion(), version)
                     && instance.getDeletedDate() == null;
         }).collect(Collectors.toList());
     }
 
     @Override
     public void delete(Long id) {
-        instances.removeIf(instance -> instance.getId().equals(id));
+        instances.removeIf(instance -> instance.getDbId().equals(id));
     }
 
     @Override
@@ -127,15 +127,15 @@ public final class InMemInstancesRepository implements InstancesRepository {
                     .build();
         }
 
-        Long id = instance.getId();
+        Long id = instance.getDbId();
         if (id == null) {
             Instance newInstance = new Instance.Builder(instance)
-                    .id(idCounter++)
+                    .dbId(idCounter++)
                     .build();
             instances.add(newInstance);
             return newInstance;
         } else {
-            instances.removeIf(i -> i.getId().equals(id));
+            instances.removeIf(i -> i.getDbId().equals(id));
             instances.add(instance);
             return instance;
         }
@@ -147,13 +147,13 @@ public final class InMemInstancesRepository implements InstancesRepository {
                 .deletedDate(System.currentTimeMillis())
                 .build();
 
-        instances.removeIf(i -> i.getId().equals(id));
+        instances.removeIf(i -> i.getDbId().equals(id));
         instances.add(instance);
     }
 
     public void removeInstanceById(Long databaseId) {
         for (int i = 0; i < instances.size(); i++) {
-            if (instances.get(i).getId().equals(databaseId)) {
+            if (instances.get(i).getDbId().equals(databaseId)) {
                 instances.remove(i);
                 return;
             }

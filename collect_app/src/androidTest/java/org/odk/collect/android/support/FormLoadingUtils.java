@@ -16,27 +16,22 @@
 
 package org.odk.collect.android.support;
 
-import android.content.ContentValues;
-
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import static org.odk.collect.android.forms.FormUtils.setupReferenceManagerForForm;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.CONTENT_URI;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
 public class FormLoadingUtils {
@@ -62,7 +57,7 @@ public class FormLoadingUtils {
 
         if (copyToDatabase) {
             setupReferenceManagerForForm(ReferenceManager.instance(), FileUtils.getFormMediaDir(new File(pathname)));
-            saveFormToDatabase(new File(pathname));
+            new FormsDirDiskFormsSynchronizer().synchronize();
         }
     }
 
@@ -76,23 +71,6 @@ public class FormLoadingUtils {
 
     public static void copyFormToStorage(String formFilename, String copyTo) throws IOException {
         copyFormToStorage(formFilename, null, false, copyTo);
-    }
-
-    private static void saveFormToDatabase(File outFile) {
-        Map<String, String> formInfo = FileUtils.getMetadataFromFormDefinition(outFile);
-        final ContentValues v = new ContentValues();
-        v.put(FormsColumns.FORM_FILE_PATH, new StoragePathProvider().getRelativeFormPath(outFile.getAbsolutePath()));
-        v.put(FormsColumns.FORM_MEDIA_PATH, new StoragePathProvider().getRelativeFormPath(FileUtils.constructMediaPath(outFile.getAbsolutePath())));
-        v.put(FormsColumns.DISPLAY_NAME, formInfo.get(FileUtils.TITLE));
-        v.put(FormsColumns.JR_VERSION, formInfo.get(FileUtils.VERSION));
-        v.put(FormsColumns.JR_FORM_ID, formInfo.get(FileUtils.FORMID));
-        v.put(FormsColumns.SUBMISSION_URI, formInfo.get(FileUtils.SUBMISSIONURI));
-        v.put(FormsColumns.BASE64_RSA_PUBLIC_KEY, formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
-        v.put(FormsColumns.AUTO_DELETE, formInfo.get(FileUtils.AUTO_DELETE));
-        v.put(FormsColumns.AUTO_SEND, formInfo.get(FileUtils.AUTO_SEND));
-        v.put(FormsColumns.GEOMETRY_XPATH, formInfo.get(FileUtils.GEOMETRY_XPATH));
-
-        Collect.getInstance().getContentResolver().insert(CONTENT_URI, v);
     }
 
     public static IntentsTestRule<FormEntryActivity> getFormActivityTestRuleFor(String formFilename) {

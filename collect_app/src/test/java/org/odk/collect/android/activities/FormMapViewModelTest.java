@@ -116,9 +116,9 @@ public class FormMapViewModelTest {
         assertThat(viewModel.getTotalInstanceCount(), is(7));
         assertThat(instances.size(), is(6));
 
-        Instance newInstance = new Instance.Builder().id(8L)
-                .jrFormId("formId1")
-                .jrVersion("2019103101")
+        Instance newInstance = new Instance.Builder().dbId(8L)
+                .formId("formId1")
+                .formVersion("2019103101")
                 .geometryType("Point")
                 .geometry("{\"type\":\"Point\",\"coordinates\":[127.6, 11.1]}")
                 .canEditWhenComplete(true)
@@ -142,9 +142,9 @@ public class FormMapViewModelTest {
         assertThat(mappableInstances.get(5).getClickAction(), is(FormMapViewModel.ClickAction.NOT_VIEWABLE_TOAST));
         ((InMemInstancesRepository) testInstancesRepository).removeInstanceById(6L);
 
-        ((InMemInstancesRepository) testInstancesRepository).save(new Instance.Builder().id(6L)
-                .jrFormId("formId1")
-                .jrVersion("2019103101")
+        ((InMemInstancesRepository) testInstancesRepository).save(new Instance.Builder().dbId(6L)
+                .formId("formId1")
+                .formVersion("2019103101")
                 .geometryType("")
                 .geometry("")
                 .canEditWhenComplete(false)
@@ -156,101 +156,101 @@ public class FormMapViewModelTest {
         assertThat(mappableInstances.get(4).getClickAction(), is(FormMapViewModel.ClickAction.OPEN_READ_ONLY));
     }
 
-    static final Form TEST_FORM_1 = new Form.Builder().id(0L)
-            .jrFormId("formId1")
-            .jrVersion("2019103104")
+    static final Form TEST_FORM_1 = new Form.Builder().dbId(0L)
+            .formId("formId1")
+            .version("2019103104")
             .displayName("Form with ID 1")
             .geometryXpath("/data/my-point")
             .build();
 
-    private static final Form TEST_FORM_2 = new Form.Builder().id(0L)
-            .jrFormId("formId2")
-            .jrVersion("2019103103")
+    private static final Form TEST_FORM_2 = new Form.Builder().dbId(0L)
+            .formId("formId2")
+            .version("2019103103")
             .displayName("Form with ID 2")
             .geometryXpath("/data/my-point2")
             .build();
 
     static Instance[] testInstances = {
-            new Instance.Builder().id(0L)
+            new Instance.Builder().dbId(0L)
                     .displayName("Form1")
                     .lastStatusChangeDate(1487782554846L)
-                    .jrFormId("formId1")
-                    .jrVersion("2019103101")
+                    .formId("formId1")
+                    .formVersion("2019103101")
                     .deletedDate(1487782554846L)
                     .geometryType("Point")
                     .geometry("{\"type\":\"Point\",\"coordinates\":[125.6, 10.0]}")
                     .status(Instance.STATUS_SUBMITTED).build(),
 
-            new Instance.Builder().id(1L)
+            new Instance.Builder().dbId(1L)
                     .displayName("Form2")
                     .lastStatusChangeDate(1488782558743L)
-                    .jrFormId("formId1")
-                    .jrVersion("2019103101")
+                    .formId("formId1")
+                    .formVersion("2019103101")
                     .geometryType("Point")
                     .geometry("{\"type\":\"Point\",\"coordinates\":[125.6, 10.1]}")
                     .canEditWhenComplete(true)
                     .status(Instance.STATUS_COMPLETE).build(),
 
-            new Instance.Builder().id(2L)
+            new Instance.Builder().dbId(2L)
                     .displayName("Form3")
                     .lastStatusChangeDate(1484582553254L)
-                    .jrFormId("formId1")
-                    .jrVersion("2019103102")
+                    .formId("formId1")
+                    .formVersion("2019103102")
                     .geometryType("Point")
                     .geometry("{\"type\":\"Point\",\"coordinates\":[126.6, 10.1]}")
                     .status(Instance.STATUS_INCOMPLETE).build(),
 
-            new Instance.Builder().id(3L)
+            new Instance.Builder().dbId(3L)
                     .displayName("Form4")
                     .lastStatusChangeDate(1488582557456L)
-                    .jrFormId("formId1")
-                    .jrVersion("2019103101")
+                    .formId("formId1")
+                    .formVersion("2019103101")
                     .status(Instance.STATUS_COMPLETE).build(),
 
-            new Instance.Builder().id(4L)
+            new Instance.Builder().dbId(4L)
                     .displayName("Form5")
                     .lastStatusChangeDate(1483582557438L)
-                    .jrFormId("formId1")
-                    .jrVersion("2019103106")
+                    .formId("formId1")
+                    .formVersion("2019103106")
                     .geometryType("Point")
                     .geometry("{\"type\":\"Point\",\"coordinates\":[125.6, 10.3]}")
                     .canEditWhenComplete(true)
                     .status(Instance.STATUS_SUBMISSION_FAILED).build(),
 
-            new Instance.Builder().id(5L)
+            new Instance.Builder().dbId(5L)
                     .displayName("Form6")
                     .lastStatusChangeDate(1482282559618L)
-                    .jrFormId("formId1")
-                    .jrVersion("2019103101")
+                    .formId("formId1")
+                    .formVersion("2019103101")
                     .geometryType("Point")
                     .geometry("{\"type\":\"Point\",\"coordinates\":[125.7, 10.3]}")
                     .canEditWhenComplete(true)
                     .status(Instance.STATUS_SUBMITTED).build(),
 
-            new Instance.Builder().id(6L)
+            new Instance.Builder().dbId(6L)
                     .displayName("Form7")
                     .lastStatusChangeDate(1484782559836L)
-                    .jrFormId("formId1")
-                    .jrVersion("2019103101")
+                    .formId("formId1")
+                    .formVersion("2019103101")
                     .geometryType("Point")
                     .geometry("{\"type\":\"Point\",\"coordinates\":[125.6, 10.4]}")
                     .canEditWhenComplete(false)
                     .status(Instance.STATUS_SUBMISSION_FAILED).build(),
 
-            new Instance.Builder().id(7L)
+            new Instance.Builder().dbId(7L)
                     .displayName("Form8")
                     .lastStatusChangeDate(1487982552254L)
-                    .jrFormId("formId2")
-                    .jrVersion("2019103101")
+                    .formId("formId2")
+                    .formVersion("2019103101")
                     .geometryType("Point")
                     .geometry("Crazy stuff")
                     .status(Instance.STATUS_COMPLETE).build(),
 
-            new Instance.Builder().id(8L)
+            new Instance.Builder().dbId(8L)
                     .displayName("Form9")
                     .lastStatusChangeDate(1484682557369L)
-                    .jrFormId("formId2")
-                    .jrVersion("2019103101")
+                    .formId("formId2")
+                    .formVersion("2019103101")
                     .geometryType("Crazy stuff")
                     .geometry("{\"type\":\"Point\",\"coordinates\":[125.6, 10.4]}")
                     .status(Instance.STATUS_COMPLETE).build(),

@@ -14,8 +14,6 @@
 
 package org.odk.collect.android.utilities;
 
-import android.content.ContentResolver;
-import android.database.Cursor;
 import android.net.Uri;
 import android.util.Base64;
 
@@ -29,12 +27,13 @@ import org.kxml2.kdom.Node;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseFormsRepository;
+import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.forms.Form;
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.javarosawrapper.FormController.InstanceMetadata;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -251,7 +250,7 @@ public class EncryptionUtils {
     /**
      * Retrieve the encryption information for this uri.
      *
-     * @param uri              either an instance URI (if previously saved) or a form URI
+     * @param uri              an Instance uri
      * @param instanceMetadata the metadata for this instance used to check if the form definition
      *                         defines an instanceID
      * @return an {@link EncryptedFormInformation} object if the form definition requests encryption
@@ -261,8 +260,6 @@ public class EncryptionUtils {
      *                             be encrypted
      */
     public static EncryptedFormInformation getEncryptedFormInformation(Uri uri, InstanceMetadata instanceMetadata) throws EncryptionException {
-        ContentResolver cr = Collect.getInstance().getContentResolver();
-
         // fetch the form information
         String formId;
         String formVersion;
@@ -270,18 +267,16 @@ public class EncryptionUtils {
 
         Form form = null;
 
-        if (InstanceColumns.CONTENT_ITEM_TYPE.equals(cr.getType(uri))) {
-            try (Cursor instanceCursor = cr.query(uri, null, null, null, null)) {
-                if (instanceCursor.getCount() != 1) {
-                    String msg = TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_record_for_this_instance);
-                    Timber.e(msg);
-                    throw new EncryptionException(msg, null);
-                }
-                instanceCursor.moveToFirst();
-                formId = instanceCursor.getString(instanceCursor.getColumnIndex(InstanceColumns.JR_FORM_ID));
-                int idxJrVersion = instanceCursor.getColumnIndex(InstanceColumns.JR_VERSION);
-                formVersion = instanceCursor.getString(idxJrVersion);
+        if (InstanceColumns.CONTENT_ITEM_TYPE.equals(Collect.getInstance().getContentResolver().getType(uri))) {
+            Instance instance = new DatabaseInstancesRepository().get(ContentUriHelper.getIdFromUri(uri));
+            if (instance == null) {
+                String msg = TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_record_for_this_instance);
+                Timber.e(msg);
+                throw new EncryptionException(msg, null);
             }
+
+            formId = instance.getFormId();
+            formVersion = instance.getFormVersion();
 
             List<Form> forms = new DatabaseFormsRepository().getAllByFormIdAndVersion(formId, formVersion);
 
@@ -294,24 +289,17 @@ public class EncryptionUtils {
             }
 
             form = forms.get(0);
-        } else if (FormsColumns.CONTENT_ITEM_TYPE.equals(cr.getType(uri))) {
-            Cursor cursor = cr.query(uri, null, null, null, null);
-            if (cursor.getCount() != 1) {
-                String msg = TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_blank_form_for_this_form_id);
-                Timber.d(msg);
-                throw new EncryptionException(msg, null);
-            }
-
-            form = DatabaseFormsRepository.getFormsFromCursor(cursor, new StoragePathProvider()).get(0);
+        } else if (FormsProviderAPI.CONTENT_ITEM_TYPE.equals(Collect.getInstance().getContentResolver().getType(uri))) {
+            throw new IllegalArgumentException("Can't get encryption info for Form URI!");
         }
 
-        formId = form.getJrFormId();
+        formId = form.getFormId();
         if (formId == null || formId.length() == 0) {
             String msg = TranslationHandler.getString(Collect.getInstance(), R.string.no_form_id_specified);
             Timber.d(msg);
             throw new EncryptionException(msg, null);
         }
-        formVersion = form.getJrVersion();
+        formVersion = form.getVersion();
         String base64RsaPublicKey = form.getBASE64RSAPublicKey();
 
         if (base64RsaPublicKey == null) {

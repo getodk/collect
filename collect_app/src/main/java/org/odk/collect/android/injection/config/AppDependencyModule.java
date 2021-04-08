@@ -44,6 +44,8 @@ import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeUtils;
 import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
+import org.odk.collect.android.database.DatabaseFastExternalItemsetsRepository;
+import org.odk.collect.android.database.FormsDatabaseProvider;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
@@ -54,6 +56,7 @@ import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.FormMetadataParser;
+import org.odk.collect.android.formmanagement.InstancesCountRepository;
 import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
@@ -65,6 +68,7 @@ import org.odk.collect.android.gdrive.GoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
@@ -383,8 +387,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ServerFormsSynchronizer providesServerFormSynchronizer(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormsRepository formsRepository, FormDownloader formDownloader, InstancesRepository instancesRepository) {
-        return new ServerFormsSynchronizer(serverFormsDetailsFetcher, formsRepository, instancesRepository, formDownloader);
+    public ServerFormsSynchronizer providesServerFormSynchronizer(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormsRepository formsRepository, FormDownloader formDownloader, InstancesRepository instancesRepository, FastExternalItemsetsRepository fastExternalItemsetsRepository) {
+        return new ServerFormsSynchronizer(serverFormsDetailsFetcher, formsRepository, instancesRepository, formDownloader, fastExternalItemsetsRepository);
     }
 
     @Provides
@@ -510,5 +514,22 @@ public class AppDependencyModule {
     @Singleton
     public UUIDGenerator providesUUIDGenerator() {
         return new UUIDGenerator();
+    }
+
+    @Provides
+    @Singleton
+    public InstancesCountRepository providesFormCountRepository() {
+        return new InstancesCountRepository();
+    }
+
+    @Provides
+    @Singleton
+    public FormsDatabaseProvider providesFormsDatabaseProvider() {
+        return new FormsDatabaseProvider();
+    }
+
+    @Provides
+    public FastExternalItemsetsRepository providesItemsetsRepository() {
+        return new DatabaseFastExternalItemsetsRepository();
     }
 }

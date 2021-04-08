@@ -16,6 +16,8 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.FormUtils.buildForm;
+import static org.odk.collect.android.support.FormUtils.createXFormBody;
+import static org.odk.collect.android.utilities.FileUtils.constructMediaPath;
 
 public abstract class FormsRepositoryTest {
 
@@ -33,7 +35,7 @@ public abstract class FormsRepositoryTest {
 
         Form form = formsRepository.getLatestByFormIdAndVersion("1", null);
         assertThat(form, notNullValue());
-        assertThat(form.getId(), is(1L));
+        assertThat(form.getDbId(), is(1L));
     }
 
     @Test
@@ -51,7 +53,7 @@ public abstract class FormsRepositoryTest {
 
         Form form = formsRepository.getLatestByFormIdAndVersion("1", "1");
         assertThat(form, notNullValue());
-        assertThat(form.getId(), is(2L));
+        assertThat(form.getDbId(), is(2L));
     }
 
     @Test
@@ -68,8 +70,8 @@ public abstract class FormsRepositoryTest {
 
         List<Form> forms = formsRepository.getAllByFormIdAndVersion("1", null);
         assertThat(forms.size(), is(2));
-        assertThat(forms.get(0).getJrVersion(), is(nullValue()));
-        assertThat(forms.get(1).getJrVersion(), is(nullValue()));
+        assertThat(forms.get(0).getVersion(), is(nullValue()));
+        assertThat(forms.get(1).getVersion(), is(nullValue()));
     }
 
     @Test
@@ -87,7 +89,7 @@ public abstract class FormsRepositoryTest {
 
         List<Form> forms = formsRepository.getAllNotDeletedByFormId("1");
         assertThat(forms.size(), is(1));
-        assertThat(forms.get(0).getJrVersion(), equalTo("not-deleted"));
+        assertThat(forms.get(0).getVersion(), equalTo("not-deleted"));
     }
 
     @Test
@@ -113,7 +115,7 @@ public abstract class FormsRepositoryTest {
 
         List<Form> forms = formsRepository.getAllNotDeletedByFormIdAndVersion("id", "2");
         assertThat(forms.size(), is(1));
-        assertThat(forms.get(0).getJrVersion(), equalTo("2"));
+        assertThat(forms.get(0).getVersion(), equalTo("2"));
     }
 
     @Test
@@ -143,7 +145,17 @@ public abstract class FormsRepositoryTest {
         Form form = buildForm("id", "version", getFormFilesPath()).build();
 
         formsRepository.save(form);
-        assertThat(formsRepository.getAll().get(0).getId(), notNullValue());
+        assertThat(formsRepository.getAll().get(0).getDbId(), notNullValue());
+    }
+
+    @Test
+    public void save_addsMediaPathBasedOnFormFile() {
+        FormsRepository formsRepository = buildSubject();
+        Form form = buildForm("id", "version", getFormFilesPath()).build();
+        assertThat(form.getFormMediaPath(), equalTo(null));
+
+        Form savedForm = formsRepository.save(form);
+        assertThat(savedForm.getFormMediaPath(), is(constructMediaPath(form.getFormFilePath())));
     }
 
     @Test
@@ -180,26 +192,48 @@ public abstract class FormsRepositoryTest {
                 .displayName("changed")
                 .build());
 
-        assertThat(formsRepository.get(originalForm.getId()).getDisplayName(), is("changed"));
+        assertThat(formsRepository.get(originalForm.getDbId()).getDisplayName(), is("changed"));
     }
 
     @Test
-    public void delete_deletesFiles() {
+    public void save_whenFormHasId_updatesHash() {
+        FormsRepository formsRepository = buildSubject();
+        Form originalForm = formsRepository.save(buildForm("id", "version", getFormFilesPath())
+                .displayName("original")
+                .build());
+
+        String newFormBody = createXFormBody("id", "version", "A different title");
+        File formFile = new File(originalForm.getFormFilePath());
+        FileUtils.write(formFile, newFormBody.getBytes());
+
+        formsRepository.save(new Form.Builder(originalForm)
+                .displayName("changed")
+                .build());
+
+        String expectedHash = FileUtils.getMd5Hash(formFile);
+        assertThat(formsRepository.get(originalForm.getDbId()).getMD5Hash(), is(expectedHash));
+    }
+
+    @Test
+    public void delete_deletesFiles() throws Exception {
         FormsRepository formsRepository = buildSubject();
         Form form = formsRepository.save(buildForm("id", "version", getFormFilesPath()).build());
 
-        // FormRepository currently doesn't manage media file path other than deleting it
-        String mediaPath = FileUtils.constructMediaPath(form.getFormFilePath());
-        new File(mediaPath).mkdir();
+        // FormRepository doesn't automatically create all form files
+        File mediaDir = new File(constructMediaPath(form.getFormFilePath()));
+        mediaDir.mkdir();
+        File cacheFile = new File(form.getJrCacheFilePath());
+        cacheFile.createNewFile();
 
         File formFile = new File(form.getFormFilePath());
-        File mediaDir = new File(form.getFormMediaPath());
         assertThat(formFile.exists(), is(true));
         assertThat(mediaDir.exists(), is(true));
+        assertThat(cacheFile.exists(), is(true));
 
-        formsRepository.delete(1L);
+        formsRepository.delete(form.getDbId());
         assertThat(formFile.exists(), is(false));
         assertThat(mediaDir.exists(), is(false));
+        assertThat(cacheFile.exists(), is(false));
     }
 
     @Test
@@ -208,7 +242,7 @@ public abstract class FormsRepositoryTest {
         Form form = formsRepository.save(buildForm("id", "version", getFormFilesPath()).build());
 
         // FormRepository currently doesn't manage media file path other than deleting it
-        String mediaPath = FileUtils.constructMediaPath(form.getFormFilePath());
+        String mediaPath = constructMediaPath(form.getFormFilePath());
         new File(mediaPath).createNewFile();
 
         File formFile = new File(form.getFormFilePath());
@@ -251,7 +285,7 @@ public abstract class FormsRepositoryTest {
 
         formsRepository.deleteByMd5Hash(id1Forms.get(0).getMD5Hash());
         assertThat(formsRepository.getAll().size(), is(1));
-        assertThat(formsRepository.getAll().get(0).getJrFormId(), is("id2"));
+        assertThat(formsRepository.getAll().get(0).getFormId(), is("id2"));
     }
 
     @Test(expected = Exception.class)
@@ -276,7 +310,7 @@ public abstract class FormsRepositoryTest {
         Form form2 = buildForm("id2", "version", getFormFilesPath()).build();
         formsRepository.save(form2);
 
-        assertThat(formsRepository.getOneByPath(form2.getFormFilePath()).getJrFormId(), is("id2"));
+        assertThat(formsRepository.getOneByPath(form2.getFormFilePath()).getFormId(), is("id2"));
     }
 
     @Test

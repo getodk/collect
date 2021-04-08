@@ -26,7 +26,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.provider.FormsProviderAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +68,7 @@ public class AndroidShortcutsActivity extends AppCompatActivity {
         for (Form form : forms) {
             String formName = form.getDisplayName();
             names.add(formName);
-            Uri uri = Uri.withAppendedPath(FormsColumns.CONTENT_URI, String.valueOf(form.getId()));
+            Uri uri = Uri.withAppendedPath(FormsProviderAPI.CONTENT_URI, String.valueOf(form.getDbId()));
             commands.add(uri);
         }
 

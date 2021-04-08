@@ -19,6 +19,7 @@ import android.os.AsyncTask;
 import org.odk.collect.android.formmanagement.FormDeleter;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.listeners.DeleteFormsListener;
 
 import timber.log.Timber;
@@ -38,10 +39,12 @@ public class DeleteFormsTask extends AsyncTask<Long, Integer, Integer> {
 
     private final FormsRepository formsRepository;
     private final InstancesRepository instancesRepository;
+    private final FastExternalItemsetsRepository fastExternalItemsetsRepository;
 
-    public DeleteFormsTask(FormsRepository formsRepository, InstancesRepository instancesRepository) {
+    public DeleteFormsTask(FormsRepository formsRepository, InstancesRepository instancesRepository, FastExternalItemsetsRepository fastExternalItemsetsRepository) {
         this.formsRepository = formsRepository;
         this.instancesRepository = instancesRepository;
+        this.fastExternalItemsetsRepository = fastExternalItemsetsRepository;
     }
 
     @Override
@@ -59,7 +62,7 @@ public class DeleteFormsTask extends AsyncTask<Long, Integer, Integer> {
                 break;
             }
             try {
-                new FormDeleter(formsRepository, instancesRepository).delete(param);
+                new FormDeleter(formsRepository, instancesRepository, fastExternalItemsetsRepository).delete(param);
 
                 deleted++;
 

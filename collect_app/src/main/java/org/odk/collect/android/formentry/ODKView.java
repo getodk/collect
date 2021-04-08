@@ -56,7 +56,7 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
-import org.odk.collect.android.dao.helpers.ContentResolverHelper;
+import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
@@ -543,7 +543,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                                     permissionsProvider.requestReadUriPermission((Activity) getContext(), uri, getContext().getContentResolver(), new PermissionListener() {
                                         @Override
                                         public void granted() {
-                                            File destFile = FileUtils.createDestinationMediaFile(formController.getInstanceFile().getParent(), ContentResolverHelper.getFileExtensionFromUri(uri));
+                                            File destFile = FileUtils.createDestinationMediaFile(formController.getInstanceFile().getParent(), ContentUriHelper.getFileExtensionFromUri(uri));
                                             //TODO might be better to use QuestionMediaManager in the future
                                             FileUtils.saveAnswerFileFromUri(uri, destFile, getContext());
                                             ((WidgetDataReceiver) questionWidget).setData(destFile);

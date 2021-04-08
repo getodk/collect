@@ -15,7 +15,6 @@
 package org.odk.collect.android.tasks;
 
 import android.content.ContentValues;
-import android.database.Cursor;
 import android.net.Uri;
 import android.util.Pair;
 
@@ -48,10 +47,10 @@ import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.EncryptionUtils;
 import org.odk.collect.android.utilities.EncryptionUtils.EncryptedFormInformation;
 import org.odk.collect.android.utilities.FileUtils;
@@ -196,8 +195,7 @@ public class SaveFormToDisk {
         instanceBuilder.canEditWhenComplete(canEditAfterCompleted);
 
         if (instance != null) {
-            uri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, instance.getId().toString());
-            String geometryXpath = getGeometryXpathForInstance(uri);
+            String geometryXpath = getGeometryXpathForInstance(instance);
             Pair<String, String> geometryContentValues = extractGeometryContentValues(formInstance, geometryXpath);
             if (geometryContentValues != null) {
                 instanceBuilder.geometryType(geometryContentValues.first);
@@ -205,46 +203,32 @@ public class SaveFormToDisk {
             }
 
             Instance newInstance = new DatabaseInstancesRepository().save(instanceBuilder.build());
-            uri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, newInstance.getId().toString());
+            uri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, newInstance.getDbId().toString());
         } else {
             Timber.i("No instance found, creating");
-            try (Cursor c = Collect.getInstance().getContentResolver().query(uri, null, null, null, null)) {
-                // retrieve the form definition
-                if (c.getCount() != 1) {
-                    Timber.w("No matching form found for %s", uri);
-                    Timber.w("Instance null: %s", instance == null);
-                }
-                c.moveToFirst();
-                String formname = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
-                String submissionUri = null;
-                if (!c.isNull(c.getColumnIndex(FormsColumns.SUBMISSION_URI))) {
-                    submissionUri = c.getString(c.getColumnIndex(FormsColumns.SUBMISSION_URI));
-                }
+            Form form = new DatabaseFormsRepository().get(ContentUriHelper.getIdFromUri(uri));
 
-                // add missing fields into values
-                instanceBuilder.instanceFilePath(new StoragePathProvider().getRelativeInstancePath(instancePath));
-                instanceBuilder.submissionUri(submissionUri);
-                if (instanceName != null) {
-                    instanceBuilder.displayName(instanceName);
-                } else {
-                    instanceBuilder.displayName(formname);
-                }
-                String jrformid = c.getString(c.getColumnIndex(FormsColumns.JR_FORM_ID));
-                String jrversion = c.getString(c.getColumnIndex(FormsColumns.JR_VERSION));
-                instanceBuilder.jrFormId(jrformid);
-                instanceBuilder.jrVersion(jrversion);
-
-                String geometryXpath = c.getString(c.getColumnIndex(FormsColumns.GEOMETRY_XPATH));
-                Pair<String, String> geometryContentValues = extractGeometryContentValues(formInstance, geometryXpath);
-                if (geometryContentValues != null) {
-                    instanceBuilder.geometryType(geometryContentValues.first);
-                    instanceBuilder.geometry(geometryContentValues.second);
-                }
+            // add missing fields into values
+            instanceBuilder.instanceFilePath(instancePath);
+            instanceBuilder.submissionUri(form.getSubmissionUri());
+            if (instanceName != null) {
+                instanceBuilder.displayName(instanceName);
+            } else {
+                instanceBuilder.displayName(form.getDisplayName());
             }
 
-            Instance newInstance = new DatabaseInstancesRepository().save(instanceBuilder.build());
-            uri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, newInstance.getId().toString());
+            instanceBuilder.formId(form.getFormId());
+            instanceBuilder.formVersion(form.getVersion());
+
+            Pair<String, String> geometryContentValues = extractGeometryContentValues(formInstance, form.getGeometryXpath());
+            if (geometryContentValues != null) {
+                instanceBuilder.geometryType(geometryContentValues.first);
+                instanceBuilder.geometry(geometryContentValues.second);
+            }
         }
+
+        Instance newInstance = new DatabaseInstancesRepository().save(instanceBuilder.build());
+        uri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, newInstance.getDbId().toString());
     }
 
     /**
@@ -435,19 +419,20 @@ public class SaveFormToDisk {
             // if encrypted, delete all plaintext files
             // (anything not named instanceXml or anything not ending in .enc)
             if (isEncrypted) {
+                DatabaseInstancesRepository instancesRepository = new DatabaseInstancesRepository();
+                Instance instance = instancesRepository.get(ContentUriHelper.getIdFromUri(uri));
+
                 // Clear the geometry. Done outside of updateInstanceDatabase to avoid multiple
                 // branches and because it has no knowledge of encryption status.
+                instancesRepository.save(new Instance.Builder(instance)
+                        .geometry(null)
+                        .geometryType(null)
+                        .build()
+                );
+
                 ContentValues values = new ContentValues();
                 values.put(InstanceColumns.GEOMETRY, (String) null);
                 values.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
-                try {
-                    int updated = Collect.getInstance().getContentResolver().update(uri, values, null, null);
-                    if (updated < 1) {
-                        Timber.w("Instance geometry not cleared after encryption");
-                    }
-                } catch (IllegalArgumentException e) {
-                    Timber.w(e);
-                }
 
                 if (!EncryptionUtils.deletePlaintextFiles(instanceXml, new File(lastSavedPath))) {
                     Timber.e("Error deleting plaintext files for %s", instanceXml.getAbsolutePath());
@@ -460,19 +445,13 @@ public class SaveFormToDisk {
      * Returns the XPath path of the geo feature used for mapping that corresponds to the blank form
      * that the instance with the given uri is an instance of.
      */
-    private static String getGeometryXpathForInstance(Uri uri) {
-        try (Cursor instanceCursor = Collect.getInstance().getContentResolver().query(uri, new String[]{InstanceColumns.JR_FORM_ID, InstanceColumns.JR_VERSION}, null, null, null)) {
-            if (instanceCursor.moveToFirst()) {
-                String jrFormId = instanceCursor.getString(0);
-                String version = instanceCursor.getString(1);
-
-                Form form = new DatabaseFormsRepository().getLatestByFormIdAndVersion(jrFormId, version);
-                if (form != null) {
-                    return form.getGeometryXpath();
-                }
-            }
+    private static String getGeometryXpathForInstance(Instance instance) {
+        Form form = new DatabaseFormsRepository().getLatestByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
+        if (form != null) {
+            return form.getGeometryXpath();
+        } else {
+            return null;
         }
-        return null;
     }
 
     static void manageFilesAfterSavingEncryptedForm(File instanceXml, File submissionXml) throws IOException {

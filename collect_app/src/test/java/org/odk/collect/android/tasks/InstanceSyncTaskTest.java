@@ -49,8 +49,8 @@ public class InstanceSyncTaskTest {
 
         List<Instance> instances = new DatabaseInstancesRepository().getAllByFormId("one_question");
         assertThat(instances.size(), is(1));
-        assertThat(instances.get(0).getJrFormId(), is("one_question"));
-        assertThat(instances.get(0).getJrVersion(), is("1"));
+        assertThat(instances.get(0).getFormId(), is("one_question"));
+        assertThat(instances.get(0).getFormVersion(), is("1"));
         assertThat(instances.get(0).getStatus(), is(Instance.STATUS_COMPLETE));
     }
 

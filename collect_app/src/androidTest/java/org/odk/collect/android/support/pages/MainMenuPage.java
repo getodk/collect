@@ -9,7 +9,7 @@ import androidx.test.espresso.Espresso;
 import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.database.DatabaseFormColumns;
 import org.odk.collect.android.support.ActivityHelpers;
 
 import static androidx.test.espresso.Espresso.onData;
@@ -78,7 +78,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
 
     private void goToBlankForm(String formName) {
         clickFillBlankForm();
-        onData(withRowString(FormsColumns.DISPLAY_NAME, formName)).perform(click());
+        onData(withRowString(DatabaseFormColumns.DISPLAY_NAME, formName)).perform(click());
     }
 
     public EditSavedFormPage clickEditSavedForm() {

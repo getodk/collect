@@ -19,7 +19,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
 import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -70,8 +69,8 @@ import org.odk.collect.android.audio.AMRAppender;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.audio.M4AAppender;
 import org.odk.collect.android.backgroundwork.FormSubmitManager;
-import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
+import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
@@ -112,6 +111,7 @@ import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.FormController.FailedConstraint;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
@@ -120,13 +120,12 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.listeners.SwipeHandler;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -135,6 +134,7 @@ import org.odk.collect.android.tasks.SaveFormIndexTask;
 import org.odk.collect.android.tasks.SavePointTask;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
@@ -590,22 +590,22 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             formPath = intent.getStringExtra(EXTRA_TESTING_PATH);
 
         } else if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
-            FormInfo formInfo = ContentResolverHelper.getFormDetails(uri);
+            Instance instance = new DatabaseInstancesRepository().get(ContentUriHelper.getIdFromUri(uri));
 
-            if (formInfo == null) {
+            if (instance == null) {
                 createErrorDialog(getString(R.string.bad_uri, uri), true);
                 return;
             }
 
-            instancePath = formInfo.getInstancePath();
-            List<Form> candidateForms = formsRepository.getAllByFormIdAndVersion(formInfo.getFormId(), formInfo.getFormVersion());
+            instancePath = instance.getInstanceFilePath();
+            List<Form> candidateForms = formsRepository.getAllByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
 
             if (candidateForms.isEmpty()) {
                 createErrorDialog(getString(
                         R.string.parent_form_not_present,
-                        formInfo.getFormId())
-                                + ((formInfo.getFormVersion() == null) ? ""
-                                : "\n" + getString(R.string.version) + " " + formInfo.getFormVersion()),
+                        instance.getFormId())
+                                + ((instance.getFormVersion() == null) ? ""
+                                : "\n" + getString(R.string.version) + " " + instance.getFormVersion()),
                         true);
                 return;
             } else if (candidateForms.stream().filter(f -> !f.isDeleted()).count() > 1) {
@@ -615,8 +615,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             formPath = candidateForms.get(0).getFormFilePath();
         } else if (uriMimeType != null
-                && uriMimeType.equals(FormsColumns.CONTENT_ITEM_TYPE)) {
-            formPath = ContentResolverHelper.getFormPath(uri);
+                && uriMimeType.equals(FormsProviderAPI.CONTENT_ITEM_TYPE)) {
+
+            Form form = formsRepository.get(ContentUriHelper.getIdFromUri(uri));
+            if (form != null) {
+                formPath = form.getFormFilePath();
+            }
+
             if (formPath == null) {
                 createErrorDialog(getString(R.string.bad_uri, uri), true);
                 return;
@@ -1203,20 +1208,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             if (saveName == null && uriMimeType != null
                     && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
-                Cursor instance = null;
-                try {
-                    instance = getContentResolver().query(instanceUri,
-                            null, null, null, null);
-                    if (instance != null && instance.getCount() == 1) {
-                        instance.moveToFirst();
-                        saveName = instance
-                                .getString(instance
-                                        .getColumnIndex(InstanceColumns.DISPLAY_NAME));
-                    }
-                } finally {
-                    if (instance != null) {
-                        instance.close();
-                    }
+                Instance instance = new DatabaseInstancesRepository().get(ContentUriHelper.getIdFromUri(instanceUri));
+                if (instance != null) {
+                    saveName = instance.getDisplayName();
                 }
             }
 

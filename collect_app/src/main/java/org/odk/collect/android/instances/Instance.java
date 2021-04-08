@@ -16,11 +16,9 @@
 
 package org.odk.collect.android.instances;
 
-import org.odk.collect.android.storage.StoragePathProvider;
-
 /**
  * A filled form stored on the device.
- *
+ * <p>
  * Objects of this class are created using the builder pattern: https://en.wikipedia.org/wiki/Builder_pattern
  */
 public final class Instance {
@@ -34,30 +32,30 @@ public final class Instance {
     private final String submissionUri;
     private final boolean canEditWhenComplete;
     private final String instanceFilePath;
-    private final String jrFormId;
-    private final String jrVersion;
+    private final String formId;
+    private final String formVersion;
     private final String status;
     private final Long lastStatusChangeDate;
     private final Long deletedDate;
     private final String geometryType;
     private final String geometry;
 
-    private final Long databaseId;
+    private final Long dbId;
 
     private Instance(Builder builder) {
         displayName = builder.displayName;
         submissionUri = builder.submissionUri;
         canEditWhenComplete = builder.canEditWhenComplete;
         instanceFilePath = builder.instanceFilePath;
-        jrFormId = builder.jrFormId;
-        jrVersion = builder.jrVersion;
+        formId = builder.formId;
+        formVersion = builder.formVersion;
         status = builder.status;
         lastStatusChangeDate = builder.lastStatusChangeDate;
         deletedDate = builder.deletedDate;
         geometryType = builder.geometryType;
         geometry = builder.geometry;
 
-        databaseId = builder.databaseId;
+        dbId = builder.dbId;
     }
 
     public static class Builder {
@@ -65,28 +63,28 @@ public final class Instance {
         private String submissionUri;
         private boolean canEditWhenComplete;
         private String instanceFilePath;
-        private String jrFormId;
-        private String jrVersion;
+        private String formId;
+        private String formVersion;
         private String status;
         private Long lastStatusChangeDate;
         private Long deletedDate;
         private String geometryType;
         private String geometry;
 
-        private Long databaseId;
+        private Long dbId;
 
         public Builder() {
 
         }
 
         public Builder(Instance instance) {
-            databaseId = instance.databaseId;
+            dbId = instance.dbId;
             displayName = instance.displayName;
             submissionUri = instance.submissionUri;
             canEditWhenComplete = instance.canEditWhenComplete;
             instanceFilePath = instance.instanceFilePath;
-            jrFormId = instance.jrFormId;
-            jrVersion = instance.jrVersion;
+            formId = instance.formId;
+            formVersion = instance.formVersion;
             status = instance.status;
             lastStatusChangeDate = instance.lastStatusChangeDate;
             deletedDate = instance.deletedDate;
@@ -114,13 +112,13 @@ public final class Instance {
             return this;
         }
 
-        public Builder jrFormId(String jrFormId) {
-            this.jrFormId = jrFormId;
+        public Builder formId(String formId) {
+            this.formId = formId;
             return this;
         }
 
-        public Builder jrVersion(String jrVersion) {
-            this.jrVersion = jrVersion;
+        public Builder formVersion(String jrVersion) {
+            this.formVersion = jrVersion;
             return this;
         }
 
@@ -149,8 +147,8 @@ public final class Instance {
             return this;
         }
 
-        public Builder id(Long databaseId) {
-            this.databaseId = databaseId;
+        public Builder dbId(Long dbId) {
+            this.dbId = dbId;
             return this;
         }
 
@@ -175,16 +173,12 @@ public final class Instance {
         return instanceFilePath;
     }
 
-    public String getAbsoluteInstanceFilePath() {
-        return new StoragePathProvider().getAbsoluteInstanceFilePath(instanceFilePath);
+    public String getFormId() {
+        return formId;
     }
 
-    public String getJrFormId() {
-        return jrFormId;
-    }
-
-    public String getJrVersion() {
-        return jrVersion;
+    public String getFormVersion() {
+        return formVersion;
     }
 
     public String getStatus() {
@@ -207,8 +201,8 @@ public final class Instance {
         return geometry;
     }
 
-    public Long getId() {
-        return databaseId;
+    public Long getDbId() {
+        return dbId;
     }
 
     @Override

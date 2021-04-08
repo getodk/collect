@@ -196,7 +196,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
         });
 
         findViewById(R.id.new_instance).setOnClickListener(v -> {
-            final Uri formUri = ContentUris.withAppendedId(FormsProviderAPI.FormsColumns.CONTENT_URI, viewModel.getFormId());
+            final Uri formUri = ContentUris.withAppendedId(FormsProviderAPI.CONTENT_URI, viewModel.getFormId());
             startActivity(new Intent(Intent.ACTION_EDIT, formUri));
         });
 

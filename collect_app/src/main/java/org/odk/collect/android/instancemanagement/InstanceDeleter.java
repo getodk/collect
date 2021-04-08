@@ -32,11 +32,11 @@ public class InstanceDeleter {
             }
 
 
-            Form form = formsRepository.getLatestByFormIdAndVersion(instance.getJrFormId(), instance.getJrVersion());
+            Form form = formsRepository.getLatestByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
             if (form != null && form.isDeleted()) {
-                List<Instance> otherInstances = instancesRepository.getAllNotDeletedByFormIdAndVersion(form.getJrFormId(), form.getJrVersion());
+                List<Instance> otherInstances = instancesRepository.getAllNotDeletedByFormIdAndVersion(form.getFormId(), form.getVersion());
                 if (otherInstances.isEmpty()) {
-                    formsRepository.delete(form.getId());
+                    formsRepository.delete(form.getDbId());
                 }
             }
         }

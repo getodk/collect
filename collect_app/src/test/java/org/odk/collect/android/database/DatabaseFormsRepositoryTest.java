@@ -39,7 +39,7 @@ public class DatabaseFormsRepositoryTest extends FormsRepositoryTest {
             }
         });
 
-        return buildSubject();
+        return new DatabaseFormsRepository(clock);
     }
 
     @Override

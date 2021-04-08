@@ -74,7 +74,7 @@ public final class InstancesDaoHelper {
         if (path != null) {
             Instance instance = new DatabaseInstancesRepository().getOneByPath(path);
             if (instance != null) {
-                return Uri.withAppendedPath(InstanceColumns.CONTENT_URI, instance.getId().toString());
+                return Uri.withAppendedPath(InstanceColumns.CONTENT_URI, instance.getDbId().toString());
             }
         }
 

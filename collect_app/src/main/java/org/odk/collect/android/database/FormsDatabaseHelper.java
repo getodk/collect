@@ -31,6 +31,7 @@ import static org.odk.collect.android.database.DatabaseConstants.FORMS_DATABASE_
  * This class helps open, create, and upgrade the database file.
  */
 public class FormsDatabaseHelper extends SQLiteOpenHelper {
+
     private final DatabaseMigrator databaseMigrator;
 
     public FormsDatabaseHelper(DatabaseMigrator databaseMigrator, StoragePathProvider storagePathProvider) {

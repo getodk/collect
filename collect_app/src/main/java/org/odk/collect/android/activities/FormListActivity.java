@@ -1,6 +1,6 @@
 package org.odk.collect.android.activities;
 
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.database.DatabaseFormColumns;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
@@ -10,11 +10,11 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 public abstract class FormListActivity extends AppListActivity {
 
     protected static final String SORT_BY_NAME_ASC
-            = FormsColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
+            = DatabaseFormColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
     protected static final String SORT_BY_NAME_DESC
-            = FormsColumns.DISPLAY_NAME + " COLLATE NOCASE DESC";
-    protected static final String SORT_BY_DATE_ASC = FormsColumns.DATE + " ASC";
-    protected static final String SORT_BY_DATE_DESC = FormsColumns.DATE + " DESC";
+            = DatabaseFormColumns.DISPLAY_NAME + " COLLATE NOCASE DESC";
+    protected static final String SORT_BY_DATE_ASC = DatabaseFormColumns.DATE + " ASC";
+    protected static final String SORT_BY_DATE_DESC = DatabaseFormColumns.DATE + " DESC";
 
     protected String getSortingOrder() {
         String sortingOrder = SORT_BY_NAME_ASC;

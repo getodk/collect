@@ -79,7 +79,7 @@ public class InstanceServerUploader extends InstanceUploader {
         // the proper scheme.
         if (uriRemap.containsKey(submissionUri)) {
             submissionUri = uriRemap.get(submissionUri);
-            Timber.i("Using Uri remap for submission %s. Now: %s", instance.getId(),
+            Timber.i("Using Uri remap for submission %s. Now: %s", instance.getDbId(),
                     submissionUri.toString());
         } else {
             if (submissionUri.getHost() == null) {
@@ -165,7 +165,7 @@ public class InstanceServerUploader extends InstanceUploader {
         // submission files on disk.  In this case, upload the submission.xml and all the files in
         // the directory. This means the plaintext files and the encrypted files will be sent to the
         // server and the server will have to figure out what to do with them.
-        File instanceFile = new File(instance.getAbsoluteInstanceFilePath());
+        File instanceFile = new File(instance.getInstanceFilePath());
         File submissionFile = new File(instanceFile.getParentFile(), "submission.xml");
         if (submissionFile.exists()) {
             Timber.w("submission.xml will be uploaded instead of %s", instanceFile.getAbsolutePath());

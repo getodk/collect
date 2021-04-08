@@ -10,13 +10,14 @@ import org.odk.collect.android.database.DatabaseContext;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 
+import java.io.Closeable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import timber.log.Timber;
 
-public class ItemsetDbAdapter {
+public class ItemsetDbAdapter implements Closeable {
 
     private DatabaseHelper dbHelper;
     private SQLiteDatabase db;
@@ -85,6 +86,7 @@ public class ItemsetDbAdapter {
         return this;
     }
 
+    @Override
     public void close() {
         dbHelper.close();
     }

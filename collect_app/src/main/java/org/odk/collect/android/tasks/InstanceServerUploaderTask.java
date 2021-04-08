@@ -78,17 +78,17 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
             try {
                 String destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, completeDestinationUrl, null);
                 String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
-                outcome.messagesByInstanceId.put(instance.getId().toString(),
+                outcome.messagesByInstanceId.put(instance.getDbId().toString(),
                         customMessage != null ? customMessage : TranslationHandler.getString(Collect.getInstance(), R.string.success));
 
-                analytics.logEvent(SUBMISSION, "HTTP", Collect.getFormIdentifierHash(instance.getJrFormId(), instance.getJrVersion()));
+                analytics.logEvent(SUBMISSION, "HTTP", Collect.getFormIdentifierHash(instance.getFormId(), instance.getFormVersion()));
             } catch (UploadAuthRequestedException e) {
                 outcome.authRequestingServer = e.getAuthRequestingServer();
                 // Don't add the instance that caused an auth request to the map because we want to
                 // retry. Items present in the map are considered already attempted and won't be
                 // retried.
             } catch (UploadException e) {
-                outcome.messagesByInstanceId.put(instance.getId().toString(),
+                outcome.messagesByInstanceId.put(instance.getDbId().toString(),
                         e.getDisplayMessage());
             }
         }

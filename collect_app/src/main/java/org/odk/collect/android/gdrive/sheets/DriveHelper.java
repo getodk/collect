@@ -21,8 +21,8 @@ import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.Permission;
 
-import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
+import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -112,7 +112,7 @@ public class DriveHelper {
                 mediaName,
                 null,
                 destinationFolderID);
-        String mimeType = ContentResolverHelper.getMimeType(toUpload);
+        String mimeType = FileUtils.getMimeType(toUpload);
         String fields = "id, parents";
         FileContent mediaContent = new FileContent(mimeType, toUpload);
 

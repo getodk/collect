@@ -86,13 +86,13 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     @Override
     public String uploadOneSubmission(Instance instance, String spreadsheetUrl) throws UploadException {
-        File instanceFile = new File(instance.getAbsoluteInstanceFilePath());
+        File instanceFile = new File(instance.getInstanceFilePath());
         if (!instanceFile.exists()) {
             throw new UploadException(FAIL + "instance XML file does not exist!");
         }
 
         // Get corresponding blank form and verify there is exactly 1
-        List<Form> forms = new DatabaseFormsRepository().getAllByFormIdAndVersion(instance.getJrFormId(), instance.getJrVersion());
+        List<Form> forms = new DatabaseFormsRepository().getAllByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
 
         try {
             if (forms.size() != 1) {
@@ -253,7 +253,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     private String uploadMediaFile(Instance instance, String fileName) throws UploadException {
-        File instanceFile = new File(instance.getAbsoluteInstanceFilePath());
+        File instanceFile = new File(instance.getInstanceFilePath());
         String filePath = instanceFile.getParentFile() + "/" + fileName;
         File toUpload = new File(filePath);
 

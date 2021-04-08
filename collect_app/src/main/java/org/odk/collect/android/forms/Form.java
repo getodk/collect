@@ -27,11 +27,11 @@ import javax.annotation.Nullable;
  */
 public final class Form {
 
-    private final Long id;
+    private final Long dbId;
     private final String displayName;
     private final String description;
-    private final String jrFormId;
-    private final String jrVersion;
+    private final String formId;
+    private final String version;
     private final String formFilePath;
     private final String submissionUri;
     private final String base64RSAPublicKey;
@@ -46,11 +46,11 @@ public final class Form {
     private final boolean deleted;
 
     private Form(Form.Builder builder) {
-        id = builder.id;
+        dbId = builder.dbId;
         displayName = builder.displayName;
         description = builder.description;
-        jrFormId = builder.jrFormId;
-        jrVersion = builder.jrVersion;
+        formId = builder.formId;
+        version = builder.version;
         formFilePath = builder.formFilePath;
         submissionUri = builder.submissionUri;
         base64RSAPublicKey = builder.base64RSAPublicKey;
@@ -66,11 +66,11 @@ public final class Form {
     }
 
     public static class Builder {
-        private Long id;
+        private Long dbId;
         private String displayName;
         private String description;
-        private String jrFormId;
-        private String jrVersion;
+        private String formId;
+        private String version;
         private String formFilePath;
         private String submissionUri;
         private String base64RSAPublicKey;
@@ -88,11 +88,11 @@ public final class Form {
         }
 
         public Builder(@NotNull Form form) {
-            id = form.id;
+            dbId = form.dbId;
             displayName = form.displayName;
             description = form.description;
-            jrFormId = form.jrFormId;
-            jrVersion = form.jrVersion;
+            formId = form.formId;
+            version = form.version;
             formFilePath = form.formFilePath;
             submissionUri = form.submissionUri;
             base64RSAPublicKey = form.base64RSAPublicKey;
@@ -107,8 +107,8 @@ public final class Form {
             this.deleted = form.deleted;
         }
 
-        public Builder id(Long id) {
-            this.id = id;
+        public Builder dbId(Long id) {
+            this.dbId = id;
             return this;
         }
 
@@ -122,13 +122,13 @@ public final class Form {
             return this;
         }
 
-        public Builder jrFormId(String jrFormId) {
-            this.jrFormId = jrFormId;
+        public Builder formId(String formId) {
+            this.formId = formId;
             return this;
         }
 
-        public Builder jrVersion(String jrVersion) {
-            this.jrVersion = jrVersion;
+        public Builder version(String version) {
+            this.version = version;
             return this;
         }
 
@@ -197,8 +197,8 @@ public final class Form {
         }
     }
 
-    public Long getId() {
-        return id;
+    public Long getDbId() {
+        return dbId;
     }
 
     public String getDisplayName() {
@@ -209,13 +209,13 @@ public final class Form {
         return description;
     }
 
-    public String getJrFormId() {
-        return jrFormId;
+    public String getFormId() {
+        return formId;
     }
 
     @Nullable
-    public String getJrVersion() {
-        return jrVersion;
+    public String getVersion() {
+        return version;
     }
 
     public String getFormFilePath() {
@@ -280,8 +280,8 @@ public final class Form {
     @Override
     public String toString() {
         return "Form{" +
-                "jrFormId='" + jrFormId + '\'' +
-                "jrVersion='" + jrVersion + '\'' +
+                "formId='" + formId + '\'' +
+                "version='" + version + '\'' +
                 '}';
     }
 }

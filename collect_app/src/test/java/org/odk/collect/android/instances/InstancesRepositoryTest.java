@@ -44,7 +44,7 @@ public abstract class InstancesRepositoryTest {
 
         List<Instance> allNotDeleted = instancesRepository.getAllNotDeleted();
         assertThat(allNotDeleted.size(), is(1));
-        assertThat(allNotDeleted.get(0).getJrFormId(), is("undeleted"));
+        assertThat(allNotDeleted.get(0).getFormId(), is("undeleted"));
     }
 
     @Test
@@ -67,7 +67,7 @@ public abstract class InstancesRepositoryTest {
 
         List<Instance> incomplete = instancesRepository.getAllByStatus(Instance.STATUS_INCOMPLETE);
         assertThat(incomplete.size(), is(2));
-        assertThat(incomplete.get(0).getJrFormId(), is("incomplete"));
+        assertThat(incomplete.get(0).getFormId(), is("incomplete"));
         assertThat(incomplete.get(1).getStatus(), is("incomplete"));
 
         // Check corresponding count method is also correct
@@ -101,9 +101,9 @@ public abstract class InstancesRepositoryTest {
 
         List<Instance> incomplete = instancesRepository.getAllByStatus(Instance.STATUS_INCOMPLETE, Instance.STATUS_SUBMITTED);
         assertThat(incomplete.size(), is(4));
-        assertThat(incomplete.get(0).getJrFormId(), is(not("complete")));
-        assertThat(incomplete.get(1).getJrFormId(), is(not("complete")));
-        assertThat(incomplete.get(2).getJrFormId(), is(not("complete")));
+        assertThat(incomplete.get(0).getFormId(), is(not("complete")));
+        assertThat(incomplete.get(1).getFormId(), is(not("complete")));
+        assertThat(incomplete.get(2).getFormId(), is(not("complete")));
         assertThat(incomplete.get(3).getStatus(), is(not("complete")));
 
         // Check corresponding count method is also correct
@@ -147,8 +147,8 @@ public abstract class InstancesRepositoryTest {
 
         instancesRepository.save(buildInstance("formid", "1").build());
         instancesRepository.save(buildInstance("formid", "1").build());
-        Long id1 = instancesRepository.getAll().get(0).getId();
-        Long id2 = instancesRepository.getAll().get(1).getId();
+        Long id1 = instancesRepository.getAll().get(0).getDbId();
+        Long id2 = instancesRepository.getAll().get(1).getDbId();
 
         instancesRepository.deleteAll();
         assertThat(instancesRepository.get(id1), is(nullValue()));
@@ -162,8 +162,8 @@ public abstract class InstancesRepositoryTest {
         instancesRepository.save(buildInstance("formid", "1").build());
         instancesRepository.save(buildInstance("formid", "1").build());
 
-        Long id1 = instancesRepository.getAll().get(0).getId();
-        Long id2 = instancesRepository.getAll().get(1).getId();
+        Long id1 = instancesRepository.getAll().get(0).getDbId();
+        Long id2 = instancesRepository.getAll().get(1).getDbId();
         assertThat(id1, notNullValue());
         assertThat(id2, notNullValue());
         assertThat(id1, not(equalTo(id2)));
@@ -174,7 +174,7 @@ public abstract class InstancesRepositoryTest {
         InstancesRepository instancesRepository = buildSubject();
 
         Instance instance = instancesRepository.save(buildInstance("formid", "1").build());
-        assertThat(instancesRepository.get(instance.getId()), is(instance));
+        assertThat(instancesRepository.get(instance.getDbId()), is(instance));
     }
 
     @Test
@@ -189,7 +189,7 @@ public abstract class InstancesRepositoryTest {
                 .displayName("A different blah")
                 .build());
 
-        assertThat(instancesRepository.get(originalInstance.getId()).getDisplayName(), is("A different blah"));
+        assertThat(instancesRepository.get(originalInstance.getDbId()).getDisplayName(), is("A different blah"));
     }
 
     @Test
@@ -199,7 +199,7 @@ public abstract class InstancesRepositoryTest {
         Instance instance = instancesRepository.save(buildInstance("formid", "1")
                 .status(null)
                 .build());
-        assertThat(instancesRepository.get(instance.getId()).getStatus(), is(Instance.STATUS_INCOMPLETE));
+        assertThat(instancesRepository.get(instance.getDbId()).getStatus(), is(Instance.STATUS_INCOMPLETE));
     }
 
     @Test
@@ -209,7 +209,7 @@ public abstract class InstancesRepositoryTest {
         Instance instance = instancesRepository.save(buildInstance("formid", "1")
                 .lastStatusChangeDate(null)
                 .build());
-        assertThat(instancesRepository.get(instance.getId()).getLastStatusChangeDate(), is(notNullValue()));
+        assertThat(instancesRepository.get(instance.getDbId()).getLastStatusChangeDate(), is(notNullValue()));
     }
 
     @Test
@@ -217,7 +217,7 @@ public abstract class InstancesRepositoryTest {
         InstancesRepository instancesRepository = buildSubject();
         Instance instance = instancesRepository.save(buildInstance("formid", "1").build());
 
-        instancesRepository.softDelete(instance.getId());
-        assertThat(instancesRepository.get(instance.getId()).getDeletedDate(), is(notNullValue()));
+        instancesRepository.softDelete(instance.getDbId());
+        assertThat(instancesRepository.get(instance.getDbId()).getDeletedDate(), is(notNullValue()));
     }
 }
