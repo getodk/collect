@@ -2,7 +2,6 @@ package org.odk.collect.android.database;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.net.Uri;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.instances.Instance;
@@ -14,6 +13,8 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.provider.BaseColumns._ID;
+import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_TABLE_NAME;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DELETED_DATE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_VERSION;
@@ -83,13 +84,20 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     @Override
     public void delete(Long id) {
-        Uri uri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id.toString());
-        Collect.getInstance().getContentResolver().delete(uri, null, null);
+        InstanceProvider.getDbHelper().getWritableDatabase().delete(
+                INSTANCES_TABLE_NAME,
+                _ID + "=?",
+                new String[]{String.valueOf(id)}
+        );
     }
 
     @Override
     public void deleteAll() {
-        Collect.getInstance().getContentResolver().delete(InstanceColumns.CONTENT_URI, null, null);
+        InstanceProvider.getDbHelper().getWritableDatabase().delete(
+                INSTANCES_TABLE_NAME,
+                null,
+                null
+        );
     }
 
     @Override
@@ -141,7 +149,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     private long insert(ContentValues values) {
         return InstanceProvider.getDbHelper().getWritableDatabase().insert(
-                DatabaseConstants.INSTANCES_TABLE_NAME,
+                INSTANCES_TABLE_NAME,
                 null,
                 values
         );
@@ -149,7 +157,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     private void update(Long instanceId, ContentValues values) {
         InstanceProvider.getDbHelper().getWritableDatabase().update(
-                DatabaseConstants.INSTANCES_TABLE_NAME,
+                INSTANCES_TABLE_NAME,
                 values,
                 InstanceColumns._ID + "=?",
                 new String[]{instanceId.toString()}
