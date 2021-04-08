@@ -43,10 +43,11 @@ import org.odk.collect.android.configure.qr.JsonPreferencesGenerator;
 import org.odk.collect.android.configure.qr.QRCodeDecoder;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeUtils;
+import org.odk.collect.android.database.DatabaseFastExternalItemsetsRepository;
 import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
-import org.odk.collect.android.database.DatabaseFastExternalItemsetsRepository;
 import org.odk.collect.android.database.FormsDatabaseProvider;
+import org.odk.collect.android.database.InstancesDatabaseProvider;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
@@ -538,6 +539,12 @@ public class AppDependencyModule {
     @Provides
     public FastExternalItemsetsRepository providesItemsetsRepository() {
         return new DatabaseFastExternalItemsetsRepository();
+    }
+
+    @Provides
+    @Singleton
+    public InstancesDatabaseProvider providesInstanceDatabaseProvider() {
+        return new InstancesDatabaseProvider();
     }
 
     @Provides

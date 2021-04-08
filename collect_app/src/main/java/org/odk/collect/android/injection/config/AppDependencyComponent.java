@@ -31,6 +31,7 @@ import org.odk.collect.android.configure.qr.QRCodeScannerFragment;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.configure.qr.ShowQRCodeFragment;
 import org.odk.collect.android.database.FormsDatabaseProvider;
+import org.odk.collect.android.database.InstancesDatabaseProvider;
 import org.odk.collect.android.formentry.BackgroundAudioPermissionDialogFragment;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
@@ -273,6 +274,8 @@ public interface AppDependencyComponent {
     SettingsImporter settingsImporter();
 
     FormsDatabaseProvider formsDatabaseProvider();
+
+    InstancesDatabaseProvider instancesDatabaseProvider();
 
     ProjectsRepository projectsRepository();
 

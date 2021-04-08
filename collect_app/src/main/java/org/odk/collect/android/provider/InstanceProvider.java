@@ -30,8 +30,8 @@ import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.InstanceDatabaseMigrator;
-import org.odk.collect.android.database.InstancesDatabaseHelper;
+import org.odk.collect.android.database.InstancesDatabaseProvider;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -42,11 +42,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_TABLE_NAME;
 
 public class InstanceProvider extends ContentProvider {
+
     private static HashMap<String, String> sInstancesProjectionMap;
 
     private static final int INSTANCES = 1;
@@ -54,28 +57,8 @@ public class InstanceProvider extends ContentProvider {
 
     private static final UriMatcher URI_MATCHER;
 
-    private static InstancesDatabaseHelper dbHelper;
-
-    public static synchronized InstancesDatabaseHelper getDbHelper() {
-        if (dbHelper == null) {
-            recreateDatabaseHelper();
-        }
-
-        return dbHelper;
-    }
-
-    public static void recreateDatabaseHelper() {
-        dbHelper = new InstancesDatabaseHelper(new InstanceDatabaseMigrator(), new StoragePathProvider());
-    }
-
-    @SuppressWarnings("PMD.NonThreadSafeSingleton")
-    // PMD thinks the `= null` is setting a singleton here
-    public static void releaseDatabaseHelper() {
-        if (dbHelper != null) {
-            dbHelper.close();
-            dbHelper = null;
-        }
-    }
+    @Inject
+    InstancesDatabaseProvider instancesDatabaseProvider;
 
     @Override
     public boolean onCreate() {
@@ -85,6 +68,8 @@ public class InstanceProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
+        DaggerUtils.getComponent(getContext()).inject(this);
+
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(INSTANCES_TABLE_NAME);
         qb.setProjectionMap(sInstancesProjectionMap);
@@ -102,14 +87,10 @@ public class InstanceProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        Cursor c = null;
-        InstancesDatabaseHelper instancesDatabaseHelper = getDbHelper();
-        if (instancesDatabaseHelper != null) {
-            c = qb.query(instancesDatabaseHelper.getReadableDatabase(), projection, selection, selectionArgs, null, null, sortOrder);
+        Cursor c = qb.query(instancesDatabaseProvider.getReadableDatabase(), projection, selection, selectionArgs, null, null, sortOrder);
 
-            // Tell the cursor what uri to watch, so it knows when its source data changes
-            c.setNotificationUri(getContext().getContentResolver(), uri);
-        }
+        // Tell the cursor what uri to watch, so it knows when its source data changes
+        c.setNotificationUri(getContext().getContentResolver(), uri);
 
         return c;
     }
@@ -130,37 +111,36 @@ public class InstanceProvider extends ContentProvider {
 
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues initialValues) {
+        DaggerUtils.getComponent(getContext()).inject(this);
+
         // Validate the requested uri
         if (URI_MATCHER.match(uri) != INSTANCES) {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        InstancesDatabaseHelper instancesDatabaseHelper = getDbHelper();
-        if (instancesDatabaseHelper != null) {
-            ContentValues values;
-            if (initialValues != null) {
-                values = new ContentValues(initialValues);
-            } else {
-                values = new ContentValues();
-            }
+        ContentValues values;
+        if (initialValues != null) {
+            values = new ContentValues(initialValues);
+        } else {
+            values = new ContentValues();
+        }
 
-            Long now = System.currentTimeMillis();
+        Long now = System.currentTimeMillis();
 
-            // Make sure that the fields are all set
-            if (!values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE)) {
-                values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
-            }
+        // Make sure that the fields are all set
+        if (!values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE)) {
+            values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
+        }
 
-            if (!values.containsKey(InstanceColumns.STATUS)) {
-                values.put(InstanceColumns.STATUS, Instance.STATUS_INCOMPLETE);
-            }
+        if (!values.containsKey(InstanceColumns.STATUS)) {
+            values.put(InstanceColumns.STATUS, Instance.STATUS_INCOMPLETE);
+        }
 
-            long rowId = instancesDatabaseHelper.getWritableDatabase().insertOrThrow(INSTANCES_TABLE_NAME, null, values);
-            if (rowId > 0) {
-                Uri instanceUri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, rowId);
-                getContext().getContentResolver().notifyChange(instanceUri, null);
-                return instanceUri;
-            }
+        long rowId = instancesDatabaseProvider.getWriteableDatabase().insertOrThrow(INSTANCES_TABLE_NAME, null, values);
+        if (rowId > 0) {
+            Uri instanceUri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, rowId);
+            getContext().getContentResolver().notifyChange(instanceUri, null);
+            return instanceUri;
         }
 
         throw new SQLException("Failed to insert into the instances database.");
@@ -222,119 +202,63 @@ public class InstanceProvider extends ContentProvider {
      */
     @Override
     public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
-        int count = 0;
-        InstancesDatabaseHelper instancesDatabaseHelper = getDbHelper();
-        if (instancesDatabaseHelper != null) {
-            SQLiteDatabase db = instancesDatabaseHelper.getWritableDatabase();
+        DaggerUtils.getComponent(getContext()).inject(this);
 
-            switch (URI_MATCHER.match(uri)) {
-                case INSTANCES:
-                    Cursor del = null;
-                    try {
-                        del = this.query(uri, null, where, whereArgs, null);
-                        if (del != null && del.getCount() > 0) {
-                            del.moveToFirst();
-                            do {
-                                String instanceFile = new StoragePathProvider().getAbsoluteInstanceFilePath(del.getString(
-                                        del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
-                                File instanceDir = (new File(instanceFile)).getParentFile();
-                                deleteAllFilesInDirectory(instanceDir);
-                            } while (del.moveToNext());
-                        }
-                    } finally {
-                        if (del != null) {
-                            del.close();
-                        }
+        int count;
+        SQLiteDatabase db = instancesDatabaseProvider.getWriteableDatabase();
+
+        switch (URI_MATCHER.match(uri)) {
+            case INSTANCES:
+                Cursor del = null;
+                try {
+                    del = this.query(uri, null, where, whereArgs, null);
+                    if (del != null && del.getCount() > 0) {
+                        del.moveToFirst();
+                        do {
+                            String instanceFile = new StoragePathProvider().getAbsoluteInstanceFilePath(del.getString(
+                                    del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
+                            File instanceDir = (new File(instanceFile)).getParentFile();
+                            deleteAllFilesInDirectory(instanceDir);
+                        } while (del.moveToNext());
                     }
-                    count = db.delete(INSTANCES_TABLE_NAME, where, whereArgs);
-                    break;
-
-                case INSTANCE_ID:
-                    String instanceId = uri.getPathSegments().get(1);
-                    String status = null;
-
-                    try (Cursor c = this.query(uri, null, where, whereArgs, null)) {
-                        if (c != null && c.getCount() > 0) {
-                            c.moveToFirst();
-                            status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
-
-                            do {
-                                String instanceFile = new StoragePathProvider().getAbsoluteInstanceFilePath(c.getString(
-                                        c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
-                                File instanceDir = (new File(instanceFile)).getParentFile();
-                                deleteAllFilesInDirectory(instanceDir);
-                            } while (c.moveToNext());
-                        }
+                } finally {
+                    if (del != null) {
+                        del.close();
                     }
+                }
+                count = db.delete(INSTANCES_TABLE_NAME, where, whereArgs);
+                break;
 
-                    // Keep sent instance database rows but delete corresponding files
-                    if (status != null && status.equals(Instance.STATUS_SUBMITTED)) {
-                        ContentValues cv = new ContentValues();
-                        cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
+            case INSTANCE_ID:
+                String instanceId = uri.getPathSegments().get(1);
+                String status = null;
 
-                        // Geometry fields represent data inside the form which can be very
-                        // sensitive so they are removed on delete.
-                        cv.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
-                        cv.put(InstanceColumns.GEOMETRY, (String) null);
+                try (Cursor c = this.query(uri, null, where, whereArgs, null)) {
+                    if (c != null && c.getCount() > 0) {
+                        c.moveToFirst();
+                        status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
 
-                        count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
-                    } else {
-                        String[] newWhereArgs;
-                        if (whereArgs == null || whereArgs.length == 0) {
-                            newWhereArgs = new String[]{instanceId};
-                        } else {
-                            newWhereArgs = new String[whereArgs.length + 1];
-                            newWhereArgs[0] = instanceId;
-                            System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
-                        }
-
-                        count =
-                                db.delete(INSTANCES_TABLE_NAME,
-                                        InstanceColumns._ID
-                                                + "=?"
-                                                + (!TextUtils.isEmpty(where) ? " AND ("
-                                                + where + ')' : ""), newWhereArgs);
+                        do {
+                            String instanceFile = new StoragePathProvider().getAbsoluteInstanceFilePath(c.getString(
+                                    c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
+                            File instanceDir = (new File(instanceFile)).getParentFile();
+                            deleteAllFilesInDirectory(instanceDir);
+                        } while (c.moveToNext());
                     }
+                }
 
-                    break;
+                // Keep sent instance database rows but delete corresponding files
+                if (status != null && status.equals(Instance.STATUS_SUBMITTED)) {
+                    ContentValues cv = new ContentValues();
+                    cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
 
-                default:
-                    throw new IllegalArgumentException("Unknown URI " + uri);
-            }
+                    // Geometry fields represent data inside the form which can be very
+                    // sensitive so they are removed on delete.
+                    cv.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
+                    cv.put(InstanceColumns.GEOMETRY, (String) null);
 
-            getContext().getContentResolver().notifyChange(uri, null);
-        }
-
-        return count;
-    }
-
-    @Override
-    public int update(@NonNull Uri uri, ContentValues values, String where, String[] whereArgs) {
-        int count = 0;
-        InstancesDatabaseHelper instancesDatabaseHelper = getDbHelper();
-        if (instancesDatabaseHelper != null) {
-            SQLiteDatabase db = instancesDatabaseHelper.getWritableDatabase();
-
-            Long now = System.currentTimeMillis();
-
-            // Make sure that the fields are all set
-            if (!values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE)) {
-                values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
-            }
-
-            // Don't update last status change date if an instance is being deleted
-            if (values.containsKey(InstanceColumns.DELETED_DATE)) {
-                values.remove(InstanceColumns.LAST_STATUS_CHANGE_DATE);
-            }
-
-            switch (URI_MATCHER.match(uri)) {
-                case INSTANCES:
-                    count = db.update(INSTANCES_TABLE_NAME, values, where, whereArgs);
-                    break;
-
-                case INSTANCE_ID:
-                    String instanceId = uri.getPathSegments().get(1);
-
+                    count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
+                } else {
                     String[] newWhereArgs;
                     if (whereArgs == null || whereArgs.length == 0) {
                         newWhereArgs = new String[]{instanceId};
@@ -345,20 +269,74 @@ public class InstanceProvider extends ContentProvider {
                     }
 
                     count =
-                            db.update(INSTANCES_TABLE_NAME,
-                                    values,
+                            db.delete(INSTANCES_TABLE_NAME,
                                     InstanceColumns._ID
                                             + "=?"
                                             + (!TextUtils.isEmpty(where) ? " AND ("
                                             + where + ')' : ""), newWhereArgs);
-                    break;
+                }
 
-                default:
-                    throw new IllegalArgumentException("Unknown URI " + uri);
-            }
+                break;
 
-            getContext().getContentResolver().notifyChange(uri, null);
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
         }
+
+        getContext().getContentResolver().notifyChange(uri, null);
+
+        return count;
+    }
+
+    @Override
+    public int update(@NonNull Uri uri, ContentValues values, String where, String[] whereArgs) {
+        DaggerUtils.getComponent(getContext()).inject(this);
+
+        int count;
+        SQLiteDatabase db = instancesDatabaseProvider.getWriteableDatabase();
+
+        Long now = System.currentTimeMillis();
+
+        // Make sure that the fields are all set
+        if (!values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE)) {
+            values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
+        }
+
+        // Don't update last status change date if an instance is being deleted
+        if (values.containsKey(InstanceColumns.DELETED_DATE)) {
+            values.remove(InstanceColumns.LAST_STATUS_CHANGE_DATE);
+        }
+
+        switch (URI_MATCHER.match(uri)) {
+            case INSTANCES:
+                count = db.update(INSTANCES_TABLE_NAME, values, where, whereArgs);
+                break;
+
+            case INSTANCE_ID:
+                String instanceId = uri.getPathSegments().get(1);
+
+                String[] newWhereArgs;
+                if (whereArgs == null || whereArgs.length == 0) {
+                    newWhereArgs = new String[]{instanceId};
+                } else {
+                    newWhereArgs = new String[whereArgs.length + 1];
+                    newWhereArgs[0] = instanceId;
+                    System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
+                }
+
+                count =
+                        db.update(INSTANCES_TABLE_NAME,
+                                values,
+                                InstanceColumns._ID
+                                        + "=?"
+                                        + (!TextUtils.isEmpty(where) ? " AND ("
+                                        + where + ')' : ""), newWhereArgs);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+
+        getContext().getContentResolver().notifyChange(uri, null);
 
         return count;
     }

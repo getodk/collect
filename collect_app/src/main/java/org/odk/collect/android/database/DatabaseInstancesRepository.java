@@ -5,9 +5,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
-import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.util.ArrayList;
@@ -31,6 +32,12 @@ import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColum
  * Mediates between {@link Instance} objects and the underlying SQLite database that stores them.
  */
 public final class DatabaseInstancesRepository implements InstancesRepository {
+
+    private final InstancesDatabaseProvider instancesDatabaseProvider;
+
+    public DatabaseInstancesRepository() {
+        instancesDatabaseProvider = DaggerUtils.getComponent(Collect.getInstance()).instancesDatabaseProvider();
+    }
 
     @Override
     public Instance get(Long databaseId) {
@@ -108,7 +115,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     @Override
     public void delete(Long id) {
-        InstanceProvider.getDbHelper().getWritableDatabase().delete(
+        instancesDatabaseProvider.getWriteableDatabase().delete(
                 INSTANCES_TABLE_NAME,
                 _ID + "=?",
                 new String[]{String.valueOf(id)}
@@ -117,7 +124,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     @Override
     public void deleteAll() {
-        InstanceProvider.getDbHelper().getWritableDatabase().delete(
+        instancesDatabaseProvider.getWriteableDatabase().delete(
                 INSTANCES_TABLE_NAME,
                 null,
                 null
@@ -168,7 +175,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     }
 
     private Cursor query(String selection, String[] selectionArgs) {
-        SQLiteDatabase readableDatabase = InstanceProvider.getDbHelper().getReadableDatabase();
+        SQLiteDatabase readableDatabase = instancesDatabaseProvider.getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(INSTANCES_TABLE_NAME);
 
@@ -191,7 +198,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     }
 
     private long insert(ContentValues values) {
-        return InstanceProvider.getDbHelper().getWritableDatabase().insert(
+        return instancesDatabaseProvider.getWriteableDatabase().insert(
                 INSTANCES_TABLE_NAME,
                 null,
                 values
@@ -199,7 +206,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     }
 
     private void update(Long instanceId, ContentValues values) {
-        InstanceProvider.getDbHelper().getWritableDatabase().update(
+        instancesDatabaseProvider.getWriteableDatabase().update(
                 INSTANCES_TABLE_NAME,
                 values,
                 _ID + "=?",
