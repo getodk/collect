@@ -23,8 +23,8 @@ class SwitchProjectTest {
 
     @get:Rule
     var chain: RuleChain = TestRuleChain
-            .chain()
-            .around(rule)
+        .chain()
+        .around(rule)
 
     @Before
     fun setup() {
