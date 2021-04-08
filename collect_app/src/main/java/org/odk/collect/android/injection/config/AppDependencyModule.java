@@ -535,7 +535,6 @@ public class AppDependencyModule {
     }
 
     @Provides
-    @Singleton
     public CurrentProjectProvider providesCurrentProjectProvider(SettingsProvider settingsProvider, ProjectsRepository projectsRepository) {
         return new CurrentProjectProvider(settingsProvider, projectsRepository);
     }
