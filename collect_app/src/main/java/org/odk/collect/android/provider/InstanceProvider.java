@@ -22,7 +22,6 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 
@@ -33,8 +32,10 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.InstancesDatabaseProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.utilities.ContentUriHelper;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -60,6 +61,9 @@ public class InstanceProvider extends ContentProvider {
     @Inject
     InstancesDatabaseProvider instancesDatabaseProvider;
 
+    @Inject
+    InstancesRepository instancesRepository;
+
     @Override
     public boolean onCreate() {
         return true;
@@ -70,28 +74,23 @@ public class InstanceProvider extends ContentProvider {
                         String sortOrder) {
         DaggerUtils.getComponent(getContext()).inject(this);
 
-        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        qb.setTables(INSTANCES_TABLE_NAME);
-        qb.setProjectionMap(sInstancesProjectionMap);
-        qb.setStrict(true);
-
+        Cursor c;
         switch (URI_MATCHER.match(uri)) {
             case INSTANCES:
+                c = instancesRepository.rawQuery(projection, selection, selectionArgs, sortOrder, null);
                 break;
 
             case INSTANCE_ID:
-                qb.appendWhere(InstanceColumns._ID + "=" + uri.getPathSegments().get(1));
+                String id = String.valueOf(ContentUriHelper.getIdFromUri(uri));
+                c = instancesRepository.rawQuery(projection, InstanceColumns._ID + "=?", new String[]{id}, null, null);
                 break;
 
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        Cursor c = qb.query(instancesDatabaseProvider.getReadableDatabase(), projection, selection, selectionArgs, null, null, sortOrder);
-
         // Tell the cursor what uri to watch, so it knows when its source data changes
         c.setNotificationUri(getContext().getContentResolver(), uri);
-
         return c;
     }
 

@@ -1,5 +1,7 @@
 package org.odk.collect.android.support;
 
+import android.database.Cursor;
+
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 
@@ -149,6 +151,11 @@ public final class InMemInstancesRepository implements InstancesRepository {
 
         instances.removeIf(i -> i.getDbId().equals(id));
         instances.add(instance);
+    }
+
+    @Override
+    public Cursor rawQuery(String[] projection, String selection, String[] selectionArgs, String sortOrder, String groupBy) {
+        throw new UnsupportedOperationException();
     }
 
     public void removeInstanceById(Long databaseId) {

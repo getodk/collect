@@ -1,5 +1,7 @@
 package org.odk.collect.android.instances;
 
+import android.database.Cursor;
+
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -43,4 +45,6 @@ public interface InstancesRepository {
     Instance save(Instance instance);
 
     void softDelete(Long id);
+
+    Cursor rawQuery(String[] projection, String selection, String[] selectionArgs, String sortOrder, String groupBy);
 }
