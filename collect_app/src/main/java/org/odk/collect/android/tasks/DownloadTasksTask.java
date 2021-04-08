@@ -734,7 +734,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             Timber.i("Downloading " + toDownload.size() + " forms");
             if(toDownload.size() > 0) {
                 DownloadFormsTaskSmap downloadFormsTask = new DownloadFormsTaskSmap(multiFormDownloader);
-                publishProgress(Collect.getInstance().getString(R.string.smap_downloading, toDownload.size()));
+                //publishProgress(Collect.getInstance().getString(R.string.smap_downloading, toDownload.size()));
 
                 downloadFormsTask.setDownloaderListener((DownloadFormsTaskListenerSmap) mStateListener);
                 dfResults = downloadFormsTask.doInBackground(toDownload);   // Not in background as called directly
