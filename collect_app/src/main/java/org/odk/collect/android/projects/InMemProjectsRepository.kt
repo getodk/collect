@@ -16,4 +16,8 @@ class InMemProjectsRepository(private val uuidGenerator: UUIDGenerator) : Projec
     override fun delete(uuid: String) {
         projects.removeIf { it.uuid == uuid }
     }
+
+    override fun deleteAll() {
+        projects.clear()
+    }
 }
