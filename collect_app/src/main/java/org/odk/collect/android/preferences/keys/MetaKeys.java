@@ -8,6 +8,7 @@ public class MetaKeys {
     public static final String LAST_UPDATED_NOTIFICATION = "last_updated_notification";
     public static final String SERVER_LIST = "server_list";
     public static final String CURRENT_PROJECT_ID = "current_project_id";
+    public static final String KEY_PROJECTS = "projects";
 
     private MetaKeys() {
 
