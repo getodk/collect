@@ -159,7 +159,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
         }
 
         Long instanceId = instance.getDbId();
-        ContentValues values = getValuesFromInstanceObject(instance);
+        ContentValues values = getValuesFromInstance(instance);
 
         if (instanceId == null) {
             long insertId = insert(values);
@@ -249,7 +249,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
         }
     }
 
-    private static ContentValues getValuesFromInstanceObject(Instance instance) {
+    private static ContentValues getValuesFromInstance(Instance instance) {
         ContentValues values = new ContentValues();
         values.put(DISPLAY_NAME, instance.getDisplayName());
         values.put(SUBMISSION_URI, instance.getSubmissionUri());
@@ -269,38 +269,41 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
         List<Instance> instances = new ArrayList<>();
         cursor.moveToPosition(-1);
         while (cursor.moveToNext()) {
-            int displayNameColumnIndex = cursor.getColumnIndex(DISPLAY_NAME);
-            int submissionUriColumnIndex = cursor.getColumnIndex(SUBMISSION_URI);
-            int canEditWhenCompleteIndex = cursor.getColumnIndex(CAN_EDIT_WHEN_COMPLETE);
-            int instanceFilePathIndex = cursor.getColumnIndex(INSTANCE_FILE_PATH);
-            int jrFormIdColumnIndex = cursor.getColumnIndex(JR_FORM_ID);
-            int jrVersionColumnIndex = cursor.getColumnIndex(JR_VERSION);
-            int statusColumnIndex = cursor.getColumnIndex(STATUS);
-            int lastStatusChangeDateColumnIndex = cursor.getColumnIndex(LAST_STATUS_CHANGE_DATE);
-            int deletedDateColumnIndex = cursor.getColumnIndex(DELETED_DATE);
-            int geometryTypeColumnIndex = cursor.getColumnIndex(GEOMETRY_TYPE);
-            int geometryColumnIndex = cursor.getColumnIndex(GEOMETRY);
-
-            int databaseIdIndex = cursor.getColumnIndex(_ID);
-
-            Instance instance = new Instance.Builder()
-                    .displayName(cursor.getString(displayNameColumnIndex))
-                    .submissionUri(cursor.getString(submissionUriColumnIndex))
-                    .canEditWhenComplete(Boolean.valueOf(cursor.getString(canEditWhenCompleteIndex)))
-                    .instanceFilePath(new StoragePathProvider().getAbsoluteInstanceFilePath(cursor.getString(instanceFilePathIndex)))
-                    .formId(cursor.getString(jrFormIdColumnIndex))
-                    .formVersion(cursor.getString(jrVersionColumnIndex))
-                    .status(cursor.getString(statusColumnIndex))
-                    .lastStatusChangeDate(cursor.getLong(lastStatusChangeDateColumnIndex))
-                    .deletedDate(cursor.isNull(deletedDateColumnIndex) ? null : cursor.getLong(deletedDateColumnIndex))
-                    .geometryType(cursor.getString(geometryTypeColumnIndex))
-                    .geometry(cursor.getString(geometryColumnIndex))
-                    .dbId(cursor.getLong(databaseIdIndex))
-                    .build();
-
+            Instance instance = getInstanceFromCurrentCursorPosition(cursor);
             instances.add(instance);
         }
 
         return instances;
+    }
+
+    private static Instance getInstanceFromCurrentCursorPosition(Cursor cursor) {
+        int displayNameColumnIndex = cursor.getColumnIndex(DISPLAY_NAME);
+        int submissionUriColumnIndex = cursor.getColumnIndex(SUBMISSION_URI);
+        int canEditWhenCompleteIndex = cursor.getColumnIndex(CAN_EDIT_WHEN_COMPLETE);
+        int instanceFilePathIndex = cursor.getColumnIndex(INSTANCE_FILE_PATH);
+        int jrFormIdColumnIndex = cursor.getColumnIndex(JR_FORM_ID);
+        int jrVersionColumnIndex = cursor.getColumnIndex(JR_VERSION);
+        int statusColumnIndex = cursor.getColumnIndex(STATUS);
+        int lastStatusChangeDateColumnIndex = cursor.getColumnIndex(LAST_STATUS_CHANGE_DATE);
+        int deletedDateColumnIndex = cursor.getColumnIndex(DELETED_DATE);
+        int geometryTypeColumnIndex = cursor.getColumnIndex(GEOMETRY_TYPE);
+        int geometryColumnIndex = cursor.getColumnIndex(GEOMETRY);
+
+        int databaseIdIndex = cursor.getColumnIndex(_ID);
+
+        return new Instance.Builder()
+                .displayName(cursor.getString(displayNameColumnIndex))
+                .submissionUri(cursor.getString(submissionUriColumnIndex))
+                .canEditWhenComplete(Boolean.valueOf(cursor.getString(canEditWhenCompleteIndex)))
+                .instanceFilePath(new StoragePathProvider().getAbsoluteInstanceFilePath(cursor.getString(instanceFilePathIndex)))
+                .formId(cursor.getString(jrFormIdColumnIndex))
+                .formVersion(cursor.getString(jrVersionColumnIndex))
+                .status(cursor.getString(statusColumnIndex))
+                .lastStatusChangeDate(cursor.getLong(lastStatusChangeDateColumnIndex))
+                .deletedDate(cursor.isNull(deletedDateColumnIndex) ? null : cursor.getLong(deletedDateColumnIndex))
+                .geometryType(cursor.getString(geometryTypeColumnIndex))
+                .geometry(cursor.getString(geometryColumnIndex))
+                .dbId(cursor.getLong(databaseIdIndex))
+                .build();
     }
 }

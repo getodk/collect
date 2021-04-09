@@ -19,9 +19,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
@@ -32,6 +30,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ContentUriHelper;
 
 import java.text.SimpleDateFormat;
@@ -43,7 +42,6 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_TABLE_NAME;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CONTENT_ITEM_TYPE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CONTENT_TYPE;
@@ -220,44 +218,50 @@ public class InstanceProvider extends ContentProvider {
         DaggerUtils.getComponent(getContext()).inject(this);
 
         int count;
-        SQLiteDatabase db = instancesDatabaseProvider.getWriteableDatabase();
-
-        Long now = System.currentTimeMillis();
-
-        // Make sure that the fields are all set
-        if (!values.containsKey(LAST_STATUS_CHANGE_DATE)) {
-            values.put(LAST_STATUS_CHANGE_DATE, now);
-        }
-
-        // Don't update last status change date if an instance is being deleted
-        if (values.containsKey(DELETED_DATE)) {
-            values.remove(LAST_STATUS_CHANGE_DATE);
-        }
 
         switch (URI_MATCHER.match(uri)) {
             case INSTANCES:
-                count = db.update(INSTANCES_TABLE_NAME, values, where, whereArgs);
+                try (Cursor cursor = instancesRepository.rawQuery(null, where, whereArgs, null, null)) {
+                    while (cursor.moveToNext()) {
+                        Instance instance = getInstanceFromCurrentCursorPosition(cursor);
+                        ContentValues existingValues = getValuesFromInstance(instance);
+
+                        existingValues.putAll(values);
+                        instancesRepository.save(getInstanceFromValues(existingValues));
+                    }
+
+                    count = cursor.getCount();
+                }
+
                 break;
 
             case INSTANCE_ID:
-                String instanceId = uri.getPathSegments().get(1);
+                long instanceId = ContentUriHelper.getIdFromUri(uri);
 
-                String[] newWhereArgs;
                 if (whereArgs == null || whereArgs.length == 0) {
-                    newWhereArgs = new String[]{instanceId};
+                    Instance instance = instancesRepository.get(instanceId);
+                    ContentValues existingValues = getValuesFromInstance(instance);
+
+                    existingValues.putAll(values);
+                    instancesRepository.save(getInstanceFromValues(existingValues));
+                    count = 1;
                 } else {
-                    newWhereArgs = new String[whereArgs.length + 1];
-                    newWhereArgs[0] = instanceId;
-                    System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
+                    try (Cursor cursor = instancesRepository.rawQuery(new String[]{_ID}, where, whereArgs, null, null)) {
+                        while (cursor.moveToNext()) {
+                            if (cursor.getLong(cursor.getColumnIndex(_ID)) == instanceId) {
+                                Instance instance = getInstanceFromCurrentCursorPosition(cursor);
+                                ContentValues existingValues = getValuesFromInstance(instance);
+
+                                existingValues.putAll(values);
+                                instancesRepository.save(getInstanceFromValues(existingValues));
+                                break;
+                            }
+                        }
+                    }
+
+                    count = 1;
                 }
 
-                count =
-                        db.update(INSTANCES_TABLE_NAME,
-                                values,
-                                _ID
-                                        + "=?"
-                                        + (!TextUtils.isEmpty(where) ? " AND ("
-                                        + where + ')' : ""), newWhereArgs);
                 break;
 
             default:
@@ -270,7 +274,8 @@ public class InstanceProvider extends ContentProvider {
     }
 
     private static Instance getInstanceFromValues(ContentValues values) {
-        Instance instance = new Instance.Builder()
+        return new Instance.Builder()
+                .dbId(values.getAsLong(_ID))
                 .displayName(values.getAsString(DISPLAY_NAME))
                 .submissionUri(values.getAsString(SUBMISSION_URI))
                 .canEditWhenComplete(Boolean.parseBoolean(values.getAsString(CAN_EDIT_WHEN_COMPLETE)))
@@ -283,9 +288,56 @@ public class InstanceProvider extends ContentProvider {
                 .geometry(values.getAsString(GEOMETRY))
                 .geometryType(values.getAsString(GEOMETRY_TYPE))
                 .build();
+    }
 
+    private static Instance getInstanceFromCurrentCursorPosition(Cursor cursor) {
+        long dbId = cursor.getLong(cursor.getColumnIndex(_ID));
+        int displayNameColumnIndex = cursor.getColumnIndex(DISPLAY_NAME);
+        int submissionUriColumnIndex = cursor.getColumnIndex(SUBMISSION_URI);
+        int canEditWhenCompleteIndex = cursor.getColumnIndex(CAN_EDIT_WHEN_COMPLETE);
+        int instanceFilePathIndex = cursor.getColumnIndex(INSTANCE_FILE_PATH);
+        int jrFormIdColumnIndex = cursor.getColumnIndex(JR_FORM_ID);
+        int jrVersionColumnIndex = cursor.getColumnIndex(JR_VERSION);
+        int statusColumnIndex = cursor.getColumnIndex(STATUS);
+        int lastStatusChangeDateColumnIndex = cursor.getColumnIndex(LAST_STATUS_CHANGE_DATE);
+        int deletedDateColumnIndex = cursor.getColumnIndex(DELETED_DATE);
+        int geometryTypeColumnIndex = cursor.getColumnIndex(GEOMETRY_TYPE);
+        int geometryColumnIndex = cursor.getColumnIndex(GEOMETRY);
 
-        return instance;
+        int databaseIdIndex = cursor.getColumnIndex(_ID);
+
+        return new Instance.Builder()
+                .dbId(dbId)
+                .displayName(cursor.getString(displayNameColumnIndex))
+                .submissionUri(cursor.getString(submissionUriColumnIndex))
+                .canEditWhenComplete(Boolean.valueOf(cursor.getString(canEditWhenCompleteIndex)))
+                .instanceFilePath(new StoragePathProvider().getAbsoluteInstanceFilePath(cursor.getString(instanceFilePathIndex)))
+                .formId(cursor.getString(jrFormIdColumnIndex))
+                .formVersion(cursor.getString(jrVersionColumnIndex))
+                .status(cursor.getString(statusColumnIndex))
+                .lastStatusChangeDate(cursor.getLong(lastStatusChangeDateColumnIndex))
+                .deletedDate(cursor.isNull(deletedDateColumnIndex) ? null : cursor.getLong(deletedDateColumnIndex))
+                .geometryType(cursor.getString(geometryTypeColumnIndex))
+                .geometry(cursor.getString(geometryColumnIndex))
+                .dbId(cursor.getLong(databaseIdIndex))
+                .build();
+    }
+
+    private static ContentValues getValuesFromInstance(Instance instance) {
+        ContentValues values = new ContentValues();
+        values.put(_ID, instance.getDbId());
+        values.put(DISPLAY_NAME, instance.getDisplayName());
+        values.put(SUBMISSION_URI, instance.getSubmissionUri());
+        values.put(CAN_EDIT_WHEN_COMPLETE, Boolean.toString(instance.canEditWhenComplete()));
+        values.put(INSTANCE_FILE_PATH, new StoragePathProvider().getRelativeInstancePath(instance.getInstanceFilePath()));
+        values.put(JR_FORM_ID, instance.getFormId());
+        values.put(JR_VERSION, instance.getFormVersion());
+        values.put(STATUS, instance.getStatus());
+        values.put(LAST_STATUS_CHANGE_DATE, instance.getLastStatusChangeDate());
+        values.put(DELETED_DATE, instance.getDeletedDate());
+        values.put(GEOMETRY, instance.getGeometry());
+        values.put(GEOMETRY_TYPE, instance.getGeometryType());
+        return values;
     }
 
     static {
