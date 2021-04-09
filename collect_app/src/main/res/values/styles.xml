@@ -42,4 +42,13 @@
         <item name="boxStrokeColor">?colorOnPrimary</item>
         <item name="hintTextColor">?colorOnPrimary</item>
     </style>
+
+    <style name="Widget.Collect.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="shapeAppearance">@style/ShapeAppearance.Collect.SmallComponent</item>
+    </style>
+
+    <style name="ShapeAppearance.Collect.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50dp</item>
+    </style>
 </resources>

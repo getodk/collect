@@ -53,10 +53,10 @@
         android:id="@+id/general_settings_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        style="@style/Widget.Collect.Button.OutlinedButton"
         android:layout_marginTop="@dimen/margin_small"
         android:text="@string/general_preferences"
-        android:textColor="@color/deep_purple_500"
+        android:textColor="?colorOnPrimary"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/current_project"/>
 
@@ -64,10 +64,9 @@
         android:id="@+id/admin_settings_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_marginTop="@dimen/margin_small"
+        style="@style/Widget.Collect.Button.OutlinedButton"
         android:text="@string/admin_preferences"
-        android:textColor="@color/deep_purple_500"
+        android:textColor="?colorOnPrimary"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/general_settings_button" />
 
