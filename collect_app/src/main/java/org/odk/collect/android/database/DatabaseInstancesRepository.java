@@ -5,12 +5,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
+import org.apache.commons.io.FileUtils;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.storage.StoragePathProvider;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,11 +118,15 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     @Override
     public void delete(Long id) {
+        Instance instance = get(id);
+
         instancesDatabaseProvider.getWriteableDatabase().delete(
                 INSTANCES_TABLE_NAME,
                 _ID + "=?",
                 new String[]{String.valueOf(id)}
         );
+
+        deleteInstanceFiles(instance);
     }
 
     @Override
@@ -163,6 +170,9 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
         ContentValues values = new ContentValues();
         values.put(DELETED_DATE, System.currentTimeMillis());
         update(id, values);
+
+        Instance instance = get(id);
+        deleteInstanceFiles(instance);
     }
 
     @Override
@@ -223,6 +233,14 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
                 _ID + "=?",
                 new String[]{instanceId.toString()}
         );
+    }
+
+    private void deleteInstanceFiles(Instance instance) {
+        try {
+            FileUtils.deleteDirectory(new File(instance.getInstanceFilePath()));
+        } catch (IOException e) {
+            // Ignored
+        }
     }
 
     private static ContentValues getValuesFromInstanceObject(Instance instance) {

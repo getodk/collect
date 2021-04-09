@@ -30,10 +30,11 @@ import androidx.annotation.NonNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.InstancesDatabaseProvider;
+import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ContentUriHelper;
 
@@ -48,6 +49,21 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_TABLE_NAME;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CONTENT_ITEM_TYPE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CONTENT_TYPE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CONTENT_URI;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DELETED_DATE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DISPLAY_NAME;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.GEOMETRY;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.GEOMETRY_TYPE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_FORM_ID;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_VERSION;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.STATUS;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.SUBMISSION_URI;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns._ID;
 
 public class InstanceProvider extends ContentProvider {
 
@@ -63,6 +79,9 @@ public class InstanceProvider extends ContentProvider {
 
     @Inject
     InstancesRepository instancesRepository;
+
+    @Inject
+    FormsRepository formsRepository;
 
     @Override
     public boolean onCreate() {
@@ -82,7 +101,7 @@ public class InstanceProvider extends ContentProvider {
 
             case INSTANCE_ID:
                 String id = String.valueOf(ContentUriHelper.getIdFromUri(uri));
-                c = instancesRepository.rawQuery(projection, InstanceColumns._ID + "=?", new String[]{id}, null, null);
+                c = instancesRepository.rawQuery(projection, _ID + "=?", new String[]{id}, null, null);
                 break;
 
             default:
@@ -98,10 +117,10 @@ public class InstanceProvider extends ContentProvider {
     public String getType(@NonNull Uri uri) {
         switch (URI_MATCHER.match(uri)) {
             case INSTANCES:
-                return InstanceColumns.CONTENT_TYPE;
+                return CONTENT_TYPE;
 
             case INSTANCE_ID:
-                return InstanceColumns.CONTENT_ITEM_TYPE;
+                return CONTENT_ITEM_TYPE;
 
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -127,17 +146,17 @@ public class InstanceProvider extends ContentProvider {
         Long now = System.currentTimeMillis();
 
         // Make sure that the fields are all set
-        if (!values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE)) {
-            values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
+        if (!values.containsKey(LAST_STATUS_CHANGE_DATE)) {
+            values.put(LAST_STATUS_CHANGE_DATE, now);
         }
 
-        if (!values.containsKey(InstanceColumns.STATUS)) {
-            values.put(InstanceColumns.STATUS, Instance.STATUS_INCOMPLETE);
+        if (!values.containsKey(STATUS)) {
+            values.put(STATUS, Instance.STATUS_INCOMPLETE);
         }
 
         long rowId = instancesDatabaseProvider.getWriteableDatabase().insertOrThrow(INSTANCES_TABLE_NAME, null, values);
         if (rowId > 0) {
-            Uri instanceUri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, rowId);
+            Uri instanceUri = ContentUris.withAppendedId(CONTENT_URI, rowId);
             getContext().getContentResolver().notifyChange(instanceUri, null);
             return instanceUri;
         }
@@ -215,7 +234,7 @@ public class InstanceProvider extends ContentProvider {
                         del.moveToFirst();
                         do {
                             String instanceFile = new StoragePathProvider().getAbsoluteInstanceFilePath(del.getString(
-                                    del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
+                                    del.getColumnIndex(INSTANCE_FILE_PATH)));
                             File instanceDir = (new File(instanceFile)).getParentFile();
                             deleteAllFilesInDirectory(instanceDir);
                         } while (del.moveToNext());
@@ -229,52 +248,22 @@ public class InstanceProvider extends ContentProvider {
                 break;
 
             case INSTANCE_ID:
-                String instanceId = uri.getPathSegments().get(1);
-                String status = null;
+                long id = ContentUriHelper.getIdFromUri(uri);
 
-                try (Cursor c = this.query(uri, null, where, whereArgs, null)) {
-                    if (c != null && c.getCount() > 0) {
-                        c.moveToFirst();
-                        status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
-
-                        do {
-                            String instanceFile = new StoragePathProvider().getAbsoluteInstanceFilePath(c.getString(
-                                    c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
-                            File instanceDir = (new File(instanceFile)).getParentFile();
-                            deleteAllFilesInDirectory(instanceDir);
-                        } while (c.moveToNext());
-                    }
-                }
-
-                // Keep sent instance database rows but delete corresponding files
-                if (status != null && status.equals(Instance.STATUS_SUBMITTED)) {
-                    ContentValues cv = new ContentValues();
-                    cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
-
-                    // Geometry fields represent data inside the form which can be very
-                    // sensitive so they are removed on delete.
-                    cv.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
-                    cv.put(InstanceColumns.GEOMETRY, (String) null);
-
-                    count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
+                if (where == null) {
+                    new InstanceDeleter(instancesRepository, formsRepository).delete(id);
                 } else {
-                    String[] newWhereArgs;
-                    if (whereArgs == null || whereArgs.length == 0) {
-                        newWhereArgs = new String[]{instanceId};
-                    } else {
-                        newWhereArgs = new String[whereArgs.length + 1];
-                        newWhereArgs[0] = instanceId;
-                        System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
+                    try (Cursor cursor = instancesRepository.rawQuery(new String[]{_ID}, where, whereArgs, null, null)) {
+                        while (cursor.moveToNext()) {
+                            if (cursor.getLong(cursor.getColumnIndex(_ID)) == id) {
+                                new InstanceDeleter(instancesRepository, formsRepository).delete(id);
+                                break;
+                            }
+                        }
                     }
-
-                    count =
-                            db.delete(INSTANCES_TABLE_NAME,
-                                    InstanceColumns._ID
-                                            + "=?"
-                                            + (!TextUtils.isEmpty(where) ? " AND ("
-                                            + where + ')' : ""), newWhereArgs);
                 }
 
+                count = 1;
                 break;
 
             default:
@@ -296,13 +285,13 @@ public class InstanceProvider extends ContentProvider {
         Long now = System.currentTimeMillis();
 
         // Make sure that the fields are all set
-        if (!values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE)) {
-            values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
+        if (!values.containsKey(LAST_STATUS_CHANGE_DATE)) {
+            values.put(LAST_STATUS_CHANGE_DATE, now);
         }
 
         // Don't update last status change date if an instance is being deleted
-        if (values.containsKey(InstanceColumns.DELETED_DATE)) {
-            values.remove(InstanceColumns.LAST_STATUS_CHANGE_DATE);
+        if (values.containsKey(DELETED_DATE)) {
+            values.remove(LAST_STATUS_CHANGE_DATE);
         }
 
         switch (URI_MATCHER.match(uri)) {
@@ -325,7 +314,7 @@ public class InstanceProvider extends ContentProvider {
                 count =
                         db.update(INSTANCES_TABLE_NAME,
                                 values,
-                                InstanceColumns._ID
+                                _ID
                                         + "=?"
                                         + (!TextUtils.isEmpty(where) ? " AND ("
                                         + where + ')' : ""), newWhereArgs);
@@ -346,17 +335,17 @@ public class InstanceProvider extends ContentProvider {
         URI_MATCHER.addURI(InstanceProviderAPI.AUTHORITY, "instances/#", INSTANCE_ID);
 
         sInstancesProjectionMap = new HashMap<>();
-        sInstancesProjectionMap.put(InstanceColumns._ID, InstanceColumns._ID);
-        sInstancesProjectionMap.put(InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_NAME);
-        sInstancesProjectionMap.put(InstanceColumns.SUBMISSION_URI, InstanceColumns.SUBMISSION_URI);
-        sInstancesProjectionMap.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, InstanceColumns.CAN_EDIT_WHEN_COMPLETE);
-        sInstancesProjectionMap.put(InstanceColumns.INSTANCE_FILE_PATH, InstanceColumns.INSTANCE_FILE_PATH);
-        sInstancesProjectionMap.put(InstanceColumns.JR_FORM_ID, InstanceColumns.JR_FORM_ID);
-        sInstancesProjectionMap.put(InstanceColumns.JR_VERSION, InstanceColumns.JR_VERSION);
-        sInstancesProjectionMap.put(InstanceColumns.STATUS, InstanceColumns.STATUS);
-        sInstancesProjectionMap.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, InstanceColumns.LAST_STATUS_CHANGE_DATE);
-        sInstancesProjectionMap.put(InstanceColumns.DELETED_DATE, InstanceColumns.DELETED_DATE);
-        sInstancesProjectionMap.put(InstanceColumns.GEOMETRY, InstanceColumns.GEOMETRY);
-        sInstancesProjectionMap.put(InstanceColumns.GEOMETRY_TYPE, InstanceColumns.GEOMETRY_TYPE);
+        sInstancesProjectionMap.put(_ID, _ID);
+        sInstancesProjectionMap.put(DISPLAY_NAME, DISPLAY_NAME);
+        sInstancesProjectionMap.put(SUBMISSION_URI, SUBMISSION_URI);
+        sInstancesProjectionMap.put(CAN_EDIT_WHEN_COMPLETE, CAN_EDIT_WHEN_COMPLETE);
+        sInstancesProjectionMap.put(INSTANCE_FILE_PATH, INSTANCE_FILE_PATH);
+        sInstancesProjectionMap.put(JR_FORM_ID, JR_FORM_ID);
+        sInstancesProjectionMap.put(JR_VERSION, JR_VERSION);
+        sInstancesProjectionMap.put(STATUS, STATUS);
+        sInstancesProjectionMap.put(LAST_STATUS_CHANGE_DATE, LAST_STATUS_CHANGE_DATE);
+        sInstancesProjectionMap.put(DELETED_DATE, DELETED_DATE);
+        sInstancesProjectionMap.put(GEOMETRY, GEOMETRY);
+        sInstancesProjectionMap.put(GEOMETRY_TYPE, GEOMETRY_TYPE);
     }
 }

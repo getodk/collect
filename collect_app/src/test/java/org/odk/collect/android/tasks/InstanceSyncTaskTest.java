@@ -28,7 +28,7 @@ public class InstanceSyncTaskTest {
         createDirectoryInInstances();
 
         DatabaseInstancesRepository databaseInstancesRepository = new DatabaseInstancesRepository();
-        databaseInstancesRepository.save(InstanceUtils.buildInstance("blah", "1").build());
+        databaseInstancesRepository.save(InstanceUtils.buildInstance("blah", "1", new StoragePathProvider().getOdkDirPath(StorageSubdirectory.INSTANCES)).build());
         assertThat(databaseInstancesRepository.getAllNotDeleted().size(), is(1));
 
         InstanceSyncTask instanceSyncTask = new InstanceSyncTask(TestSettingsProvider.getSettingsProvider());

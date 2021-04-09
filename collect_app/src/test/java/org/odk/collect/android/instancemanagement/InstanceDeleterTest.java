@@ -4,6 +4,8 @@ import org.junit.Test;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.FormUtils;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.android.support.InMemInstancesRepository;
@@ -30,8 +32,8 @@ public class InstanceDeleterTest {
                 .build()
         );
 
-        instancesRepository.save(buildInstance("1", "version").build());
-        instancesRepository.save(buildInstance("1", "version").build());
+        instancesRepository.save(buildInstance("1", "version", new StoragePathProvider().getOdkDirPath(StorageSubdirectory.INSTANCES)).build());
+        instancesRepository.save(buildInstance("1", "version", new StoragePathProvider().getOdkDirPath(StorageSubdirectory.INSTANCES)).build());
 
         Long id = instancesRepository.getAll().get(0).getDbId();
         instanceDeleter.delete(id);
@@ -170,7 +172,7 @@ public class InstanceDeleterTest {
 
     @Test
     public void whenInstanceIsSubmitted_softDeletesInstance() {
-        Instance instance = instancesRepository.save(buildInstance("1", "version")
+        Instance instance = instancesRepository.save(buildInstance("1", "version", new StoragePathProvider().getOdkDirPath(StorageSubdirectory.INSTANCES))
                 .status(Instance.STATUS_SUBMITTED)
                 .build());
 
@@ -180,7 +182,7 @@ public class InstanceDeleterTest {
 
     @Test
     public void whenInstanceIsSubmitted_clearsGeometryData() {
-        Instance instance = instancesRepository.save(buildInstance("1", "version")
+        Instance instance = instancesRepository.save(buildInstance("1", "version", new StoragePathProvider().getOdkDirPath(StorageSubdirectory.INSTANCES))
                 .status(Instance.STATUS_SUBMITTED)
                 .geometryType("Point")
                 .geometry("{\"type\":\"Point\",\"coordinates\":[127.6, 11.1]}")
