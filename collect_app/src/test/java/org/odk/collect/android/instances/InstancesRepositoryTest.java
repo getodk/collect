@@ -24,7 +24,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
 import static org.odk.collect.android.support.InstanceUtils.buildInstance;
 
 public abstract class InstancesRepositoryTest {
@@ -150,12 +149,21 @@ public abstract class InstancesRepositoryTest {
 
         instancesRepository.save(buildInstance("formid", "1", getInstancesDir()).build());
         instancesRepository.save(buildInstance("formid", "1", getInstancesDir()).build());
-        Long id1 = instancesRepository.getAll().get(0).getDbId();
-        Long id2 = instancesRepository.getAll().get(1).getDbId();
 
         instancesRepository.deleteAll();
-        assertThat(instancesRepository.get(id1), is(nullValue()));
-        assertThat(instancesRepository.get(id2), is(nullValue()));
+        assertThat(instancesRepository.getAll().size(), is(0));
+    }
+
+    @Test
+    public void deleteAll_deletesInstanceFiles() {
+        InstancesRepository instancesRepository = buildSubject();
+
+        Instance instance1 = instancesRepository.save(buildInstance("formid", "1", getInstancesDir()).build());
+        Instance instance2 = instancesRepository.save(buildInstance("formid", "1", getInstancesDir()).build());
+
+        instancesRepository.deleteAll();
+        assertThat(new File(instance1.getInstanceFilePath()).exists(), is(false));
+        assertThat(new File(instance2.getInstanceFilePath()).exists(), is(false));
     }
 
     @Test

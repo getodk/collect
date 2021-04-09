@@ -131,11 +131,17 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     @Override
     public void deleteAll() {
+        List<Instance> instances = getAll();
+
         instancesDatabaseProvider.getWriteableDatabase().delete(
                 INSTANCES_TABLE_NAME,
                 null,
                 null
         );
+
+        for (Instance instance : instances) {
+            deleteInstanceFiles(instance);
+        }
     }
 
     @Override

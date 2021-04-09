@@ -118,6 +118,10 @@ public final class InMemInstancesRepository implements InstancesRepository {
 
     @Override
     public void deleteAll() {
+        for (Instance instance : instances) {
+            deleteInstanceFiles(instance);
+        }
+
         instances.clear();
     }
 

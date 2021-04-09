@@ -28,17 +28,14 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.InstancesDatabaseProvider;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
-import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ContentUriHelper;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -192,27 +189,6 @@ public class InstanceProvider extends ContentProvider {
         }
     }
 
-    private void deleteAllFilesInDirectory(File directory) {
-        if (directory.exists()) {
-            // do not delete the directory if it might be an
-            // ODK Tables instance data directory. Let ODK Tables
-            // manage the lifetimes of its filled-in form data
-            // media attachments.
-            if (directory.isDirectory() && !Collect.isODKTablesInstanceDataDirectory(directory)) {
-                // delete all the files in the directory
-                File[] files = directory.listFiles();
-                if (files != null) {
-                    for (File f : files) {
-                        // should make this recursive if we get worried about
-                        // the media directory containing directories
-                        f.delete();
-                    }
-                }
-            }
-            directory.delete();
-        }
-    }
-
     /**
      * This method removes the entry from the content provider, and also removes any associated
      * files.
@@ -223,28 +199,18 @@ public class InstanceProvider extends ContentProvider {
         DaggerUtils.getComponent(getContext()).inject(this);
 
         int count;
-        SQLiteDatabase db = instancesDatabaseProvider.getWriteableDatabase();
 
         switch (URI_MATCHER.match(uri)) {
             case INSTANCES:
-                Cursor del = null;
-                try {
-                    del = this.query(uri, null, where, whereArgs, null);
-                    if (del != null && del.getCount() > 0) {
-                        del.moveToFirst();
-                        do {
-                            String instanceFile = new StoragePathProvider().getAbsoluteInstanceFilePath(del.getString(
-                                    del.getColumnIndex(INSTANCE_FILE_PATH)));
-                            File instanceDir = (new File(instanceFile)).getParentFile();
-                            deleteAllFilesInDirectory(instanceDir);
-                        } while (del.moveToNext());
+                try (Cursor cursor = instancesRepository.rawQuery(new String[]{_ID}, where, whereArgs, null, null)) {
+                    while (cursor.moveToNext()) {
+                        long id = cursor.getLong(cursor.getColumnIndex(_ID));
+                        new InstanceDeleter(instancesRepository, formsRepository).delete(id);
                     }
-                } finally {
-                    if (del != null) {
-                        del.close();
-                    }
+
+                    count = cursor.getCount();
                 }
-                count = db.delete(INSTANCES_TABLE_NAME, where, whereArgs);
+
                 break;
 
             case INSTANCE_ID:
