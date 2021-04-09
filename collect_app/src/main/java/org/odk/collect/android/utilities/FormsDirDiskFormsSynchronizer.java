@@ -21,7 +21,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.forms.FormUtils.setupReferenceManagerForForm;
+import static org.odk.collect.android.utilities.FormUtils.setupReferenceManagerForForm;
 
 public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
 

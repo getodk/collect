@@ -31,7 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import static org.odk.collect.android.forms.FormUtils.setupReferenceManagerForForm;
+import static org.odk.collect.android.utilities.FormUtils.setupReferenceManagerForForm;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
 public class FormLoadingUtils {

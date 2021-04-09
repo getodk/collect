@@ -30,6 +30,8 @@ import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColum
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.STATUS;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.SUBMISSION_URI;
+import static org.odk.collect.android.utilities.InstanceUtils.getInstanceFromCurrentCursorPosition;
+import static org.odk.collect.android.utilities.InstanceUtils.getValuesFromInstance;
 
 /**
  * Mediates between {@link Instance} objects and the underlying SQLite database that stores them.
@@ -249,22 +251,6 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
         }
     }
 
-    private static ContentValues getValuesFromInstance(Instance instance) {
-        ContentValues values = new ContentValues();
-        values.put(DISPLAY_NAME, instance.getDisplayName());
-        values.put(SUBMISSION_URI, instance.getSubmissionUri());
-        values.put(CAN_EDIT_WHEN_COMPLETE, Boolean.toString(instance.canEditWhenComplete()));
-        values.put(INSTANCE_FILE_PATH, new StoragePathProvider().getRelativeInstancePath(instance.getInstanceFilePath()));
-        values.put(JR_FORM_ID, instance.getFormId());
-        values.put(JR_VERSION, instance.getFormVersion());
-        values.put(STATUS, instance.getStatus());
-        values.put(LAST_STATUS_CHANGE_DATE, instance.getLastStatusChangeDate());
-        values.put(DELETED_DATE, instance.getDeletedDate());
-        values.put(GEOMETRY, instance.getGeometry());
-        values.put(GEOMETRY_TYPE, instance.getGeometryType());
-        return values;
-    }
-
     public static List<Instance> getInstancesFromCursor(Cursor cursor) {
         List<Instance> instances = new ArrayList<>();
         cursor.moveToPosition(-1);
@@ -274,36 +260,5 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
         }
 
         return instances;
-    }
-
-    private static Instance getInstanceFromCurrentCursorPosition(Cursor cursor) {
-        int displayNameColumnIndex = cursor.getColumnIndex(DISPLAY_NAME);
-        int submissionUriColumnIndex = cursor.getColumnIndex(SUBMISSION_URI);
-        int canEditWhenCompleteIndex = cursor.getColumnIndex(CAN_EDIT_WHEN_COMPLETE);
-        int instanceFilePathIndex = cursor.getColumnIndex(INSTANCE_FILE_PATH);
-        int jrFormIdColumnIndex = cursor.getColumnIndex(JR_FORM_ID);
-        int jrVersionColumnIndex = cursor.getColumnIndex(JR_VERSION);
-        int statusColumnIndex = cursor.getColumnIndex(STATUS);
-        int lastStatusChangeDateColumnIndex = cursor.getColumnIndex(LAST_STATUS_CHANGE_DATE);
-        int deletedDateColumnIndex = cursor.getColumnIndex(DELETED_DATE);
-        int geometryTypeColumnIndex = cursor.getColumnIndex(GEOMETRY_TYPE);
-        int geometryColumnIndex = cursor.getColumnIndex(GEOMETRY);
-
-        int databaseIdIndex = cursor.getColumnIndex(_ID);
-
-        return new Instance.Builder()
-                .displayName(cursor.getString(displayNameColumnIndex))
-                .submissionUri(cursor.getString(submissionUriColumnIndex))
-                .canEditWhenComplete(Boolean.valueOf(cursor.getString(canEditWhenCompleteIndex)))
-                .instanceFilePath(new StoragePathProvider().getAbsoluteInstanceFilePath(cursor.getString(instanceFilePathIndex)))
-                .formId(cursor.getString(jrFormIdColumnIndex))
-                .formVersion(cursor.getString(jrVersionColumnIndex))
-                .status(cursor.getString(statusColumnIndex))
-                .lastStatusChangeDate(cursor.getLong(lastStatusChangeDateColumnIndex))
-                .deletedDate(cursor.isNull(deletedDateColumnIndex) ? null : cursor.getLong(deletedDateColumnIndex))
-                .geometryType(cursor.getString(geometryTypeColumnIndex))
-                .geometry(cursor.getString(geometryColumnIndex))
-                .dbId(cursor.getLong(databaseIdIndex))
-                .build();
     }
 }

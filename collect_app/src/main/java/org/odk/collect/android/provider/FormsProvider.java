@@ -56,9 +56,9 @@ import static org.odk.collect.android.database.DatabaseFormColumns.LANGUAGE;
 import static org.odk.collect.android.database.DatabaseFormColumns.MAX_DATE;
 import static org.odk.collect.android.database.DatabaseFormColumns.MD5_HASH;
 import static org.odk.collect.android.database.DatabaseFormColumns.SUBMISSION_URI;
-import static org.odk.collect.android.forms.FormUtils.getFormFromCurrentCursorPosition;
-import static org.odk.collect.android.forms.FormUtils.getFormFromValues;
-import static org.odk.collect.android.forms.FormUtils.getValuesFromForm;
+import static org.odk.collect.android.utilities.FormUtils.getFormFromCurrentCursorPosition;
+import static org.odk.collect.android.utilities.FormUtils.getFormFromValues;
+import static org.odk.collect.android.utilities.FormUtils.getValuesFromForm;
 import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_NEWEST_FORMS_BY_FORMID_URI;
 import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_URI;
 

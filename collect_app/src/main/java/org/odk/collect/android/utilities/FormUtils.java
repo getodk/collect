@@ -1,4 +1,4 @@
-package org.odk.collect.android.forms;
+package org.odk.collect.android.utilities;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -8,9 +8,9 @@ import androidx.annotation.NonNull;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.core.reference.RootTranslator;
 import org.odk.collect.android.database.DatabaseFormColumns;
+import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.utilities.FileUtil;
 
 import java.io.File;
 import java.util.ArrayList;
