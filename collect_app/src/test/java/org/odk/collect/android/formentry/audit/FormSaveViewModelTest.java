@@ -16,7 +16,7 @@ import org.mockito.InOrder;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.FormSaver;
-import org.odk.collect.android.forms.FormDesignException;
+import org.odk.collect.android.javarosawrapper.FormDesignException;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.tasks.SaveFormToDisk;

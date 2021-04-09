@@ -101,7 +101,7 @@ import org.odk.collect.android.formentry.saving.SaveAnswerFileErrorDialogFragmen
 import org.odk.collect.android.formentry.saving.SaveAnswerFileProgressDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormDesignException;
+import org.odk.collect.android.javarosawrapper.FormDesignException;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;

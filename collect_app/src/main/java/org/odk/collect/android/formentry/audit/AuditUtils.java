@@ -1,7 +1,7 @@
 package org.odk.collect.android.formentry.audit;
 
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.forms.FormDesignException;
+import org.odk.collect.android.javarosawrapper.FormDesignException;
 import org.odk.collect.android.javarosawrapper.FormController;
 
 import static org.javarosa.form.api.FormEntryController.EVENT_GROUP;

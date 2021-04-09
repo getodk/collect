@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.forms;
+package org.odk.collect.android.javarosawrapper;
 
 /**
  * Thrown when there is an issue in form design. This type of error requires the form designer to

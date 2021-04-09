@@ -47,7 +47,6 @@ import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.formentry.audit.AsyncTaskAuditEventWriter;
 import org.odk.collect.android.formentry.audit.AuditConfig;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
-import org.odk.collect.android.forms.FormDesignException;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
