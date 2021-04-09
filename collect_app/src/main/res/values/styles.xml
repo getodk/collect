@@ -37,4 +37,9 @@
     <style name="Widget.Collect.BottomSheet.Modal" parent="Widget.Design.BottomSheet.Modal">
         <item name="behavior_peekHeight">300dp</item>
     </style>
+
+    <style name="Widget.Collect.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">?colorOnPrimary</item>
+        <item name="hintTextColor">?colorOnPrimary</item>
+    </style>
 </resources>
