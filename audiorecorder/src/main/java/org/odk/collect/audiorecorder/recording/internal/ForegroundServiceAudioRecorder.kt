@@ -5,14 +5,15 @@ import android.content.Intent
 import androidx.lifecycle.LiveData
 import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recording.AudioRecorder
+import org.odk.collect.audiorecorder.recording.AudioRecorderService
+import org.odk.collect.audiorecorder.recording.AudioRecorderService.Companion.ACTION_CLEAN_UP
+import org.odk.collect.audiorecorder.recording.AudioRecorderService.Companion.ACTION_PAUSE
+import org.odk.collect.audiorecorder.recording.AudioRecorderService.Companion.ACTION_RESUME
+import org.odk.collect.audiorecorder.recording.AudioRecorderService.Companion.ACTION_START
+import org.odk.collect.audiorecorder.recording.AudioRecorderService.Companion.ACTION_STOP
+import org.odk.collect.audiorecorder.recording.AudioRecorderService.Companion.EXTRA_OUTPUT
+import org.odk.collect.audiorecorder.recording.AudioRecorderService.Companion.EXTRA_SESSION_ID
 import org.odk.collect.audiorecorder.recording.RecordingSession
-import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_CLEAN_UP
-import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_PAUSE
-import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_RESUME
-import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_START
-import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.ACTION_STOP
-import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.EXTRA_OUTPUT
-import org.odk.collect.audiorecorder.recording.internal.AudioRecorderService.Companion.EXTRA_SESSION_ID
 import org.odk.collect.shared.data.Consumable
 import java.io.Serializable
 

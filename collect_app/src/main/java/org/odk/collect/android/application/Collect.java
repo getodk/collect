@@ -36,6 +36,9 @@ import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
+import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
+import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
+import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent;
 import org.odk.collect.strings.LocalizedApplication;
 
 import java.io.ByteArrayInputStream;
@@ -46,7 +49,7 @@ import javax.inject.Inject;
 
 import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
 
-public class Collect extends Application implements LocalizedApplication {
+public class Collect extends Application implements LocalizedApplication, AudioRecorderDependencyComponentProvider {
     public static String defaultSysLanguage;
     private static Collect singleton;
 
@@ -60,6 +63,8 @@ public class Collect extends Application implements LocalizedApplication {
 
     @Inject
     SettingsProvider settingsProvider;
+
+    private AudioRecorderDependencyComponent audioRecorderDependencyComponent;
 
     public static Collect getInstance() {
         return singleton;
@@ -150,8 +155,17 @@ public class Collect extends Application implements LocalizedApplication {
         applicationComponent = DaggerAppDependencyComponent.builder()
                 .application(this)
                 .build();
-
         applicationComponent.inject(this);
+
+        audioRecorderDependencyComponent = DaggerAudioRecorderDependencyComponent.builder()
+                .application(this)
+                .build();
+    }
+
+    @NotNull
+    @Override
+    public AudioRecorderDependencyComponent getAudioRecorderDependencyComponentProvider() {
+        return audioRecorderDependencyComponent;
     }
 
     @Override
