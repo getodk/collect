@@ -15,12 +15,10 @@
 package org.odk.collect.android.provider;
 
 import android.content.ContentProvider;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -133,32 +131,8 @@ public class InstanceProvider extends ContentProvider {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        ContentValues values;
-        if (initialValues != null) {
-            values = new ContentValues(initialValues);
-        } else {
-            values = new ContentValues();
-        }
-
-        Long now = System.currentTimeMillis();
-
-        // Make sure that the fields are all set
-        if (!values.containsKey(LAST_STATUS_CHANGE_DATE)) {
-            values.put(LAST_STATUS_CHANGE_DATE, now);
-        }
-
-        if (!values.containsKey(STATUS)) {
-            values.put(STATUS, Instance.STATUS_INCOMPLETE);
-        }
-
-        long rowId = instancesDatabaseProvider.getWriteableDatabase().insertOrThrow(INSTANCES_TABLE_NAME, null, values);
-        if (rowId > 0) {
-            Uri instanceUri = ContentUris.withAppendedId(CONTENT_URI, rowId);
-            getContext().getContentResolver().notifyChange(instanceUri, null);
-            return instanceUri;
-        }
-
-        throw new SQLException("Failed to insert into the instances database.");
+        Instance newInstance = instancesRepository.save(getInstanceFromValues(initialValues));
+        return Uri.withAppendedPath(CONTENT_URI, String.valueOf(newInstance.getDbId()));
     }
 
     public static String getDisplaySubtext(Context context, String state, Date date) {
@@ -293,6 +267,25 @@ public class InstanceProvider extends ContentProvider {
         getContext().getContentResolver().notifyChange(uri, null);
 
         return count;
+    }
+
+    private static Instance getInstanceFromValues(ContentValues values) {
+        Instance instance = new Instance.Builder()
+                .displayName(values.getAsString(DISPLAY_NAME))
+                .submissionUri(values.getAsString(SUBMISSION_URI))
+                .canEditWhenComplete(Boolean.parseBoolean(values.getAsString(CAN_EDIT_WHEN_COMPLETE)))
+                .instanceFilePath(values.getAsString(INSTANCE_FILE_PATH))
+                .formId(values.getAsString(JR_FORM_ID))
+                .formVersion(values.getAsString(JR_VERSION))
+                .status(values.getAsString(STATUS))
+                .lastStatusChangeDate(values.getAsLong(LAST_STATUS_CHANGE_DATE))
+                .deletedDate(values.getAsLong(DELETED_DATE))
+                .geometry(values.getAsString(GEOMETRY))
+                .geometryType(values.getAsString(GEOMETRY_TYPE))
+                .build();
+
+
+        return instance;
     }
 
     static {
