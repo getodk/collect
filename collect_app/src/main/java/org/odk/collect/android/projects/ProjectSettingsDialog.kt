@@ -22,6 +22,7 @@ import org.odk.collect.android.preferences.screens.AdminPreferencesActivity
 import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity
 import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.android.utilities.DialogUtils
+import org.odk.collect.android.utilities.ToastUtils
 import javax.inject.Inject
 
 class ProjectSettingsDialog : DialogFragment() {
@@ -31,6 +32,9 @@ class ProjectSettingsDialog : DialogFragment() {
 
     @Inject
     lateinit var projectsRepository: ProjectsRepository
+
+    @Inject
+    lateinit var currentProjectProvider: CurrentProjectProvider
 
     private lateinit var binding: ProjectSettingsDialogLayoutBinding
 
@@ -48,6 +52,7 @@ class ProjectSettingsDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupCurrentProjectView()
         inflateListOfInActiveProjects()
 
         binding.closeIcon.setOnClickListener {
@@ -83,10 +88,20 @@ class ProjectSettingsDialog : DialogFragment() {
     }
 
     private fun inflateListOfInActiveProjects() {
-        binding.topDivider.visibility = if (projectsRepository.getAll().isEmpty()) GONE else VISIBLE
+        if (projectsRepository.getAll().none { it.uuid != currentProjectProvider.getCurrentProjectId() }) {
+            binding.topDivider.visibility = GONE
+        } else {
+            binding.topDivider.visibility = VISIBLE
+        }
 
-        projectsRepository.getAll().forEach { project ->
+        projectsRepository.getAll().filter {
+            it.uuid != currentProjectProvider.getCurrentProjectId()
+        }.forEach { project ->
             val projectView = LayoutInflater.from(context).inflate(R.layout.project_list_item, null)
+
+            projectView.setOnClickListener {
+                switchProject(project)
+            }
 
             projectView.findViewById<TextView>(R.id.project_icon).apply {
                 (background as GradientDrawable).setColor(Color.parseColor(project.color))
@@ -96,5 +111,21 @@ class ProjectSettingsDialog : DialogFragment() {
 
             binding.projectList.addView(projectView)
         }
+    }
+
+    private fun switchProject(project: Project) {
+        currentProjectProvider.setCurrentProject(project.uuid)
+        dismiss()
+        ToastUtils.showLongToast(getString(R.string.switched_project, project.name))
+    }
+
+    private fun setupCurrentProjectView() {
+        val currentProject = currentProjectProvider.getCurrentProject() ?: return
+
+        binding.currentProject.projectIcon.apply {
+            (background as GradientDrawable).setColor(Color.parseColor(currentProject.color))
+            text = currentProject.icon
+        }
+        binding.currentProject.projectName.text = currentProject.name
     }
 }

@@ -40,16 +40,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/close_icon" />
 
+    <include
+        android:id="@+id/current_project"
+        layout="@layout/project_list_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_standard"
+        app:layout_constraintStart_toStartOf="@+id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@+id/close_icon"/>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/general_settings_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_marginTop="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_small"
         android:text="@string/general_preferences"
         android:textColor="@color/deep_purple_500"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@+id/close_icon"/>
+        app:layout_constraintTop_toBottomOf="@+id/current_project"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/admin_settings_button"

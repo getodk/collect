@@ -10,11 +10,14 @@ class InMemProjectsRepository(private val uuidGenerator: UUIDGenerator) : Projec
     override fun getAll() = projects
 
     override fun add(project: Project) {
-        project.uuid = uuidGenerator.generateUUID()
-        projects.add(project)
+        projects.add(project.copy(uuid = uuidGenerator.generateUUID()))
     }
 
     override fun delete(uuid: String) {
         projects.removeIf { it.uuid == uuid }
+    }
+
+    override fun deleteAll() {
+        projects.clear()
     }
 }

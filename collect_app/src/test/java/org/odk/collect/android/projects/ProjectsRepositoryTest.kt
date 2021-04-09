@@ -30,9 +30,9 @@ abstract class ProjectsRepositoryTest {
         val projects = projectsRepository.getAll()
 
         assertThat(projects.size, `is`(3))
-        assertThat(projects[0], `is`(projectX))
-        assertThat(projects[1], `is`(projectY))
-        assertThat(projects[2], `is`(projectZ))
+        assertThat(projects[0], `is`(projectX.copy(uuid = projects[0].uuid)))
+        assertThat(projects[1], `is`(projectY.copy(uuid = projects[1].uuid)))
+        assertThat(projects[2], `is`(projectZ.copy(uuid = projects[2].uuid)))
     }
 
     @Test
@@ -42,7 +42,7 @@ abstract class ProjectsRepositoryTest {
         val projects = projectsRepository.getAll()
 
         assertThat(projects.size, `is`(1))
-        assertThat(projects[0], `is`(projectX))
+        assertThat(projects[0], `is`(projectX.copy(uuid = projects[0].uuid)))
     }
 
     @Test
@@ -50,11 +50,23 @@ abstract class ProjectsRepositoryTest {
         projectsRepository.add(projectX)
         projectsRepository.add(projectY)
 
-        val projects = projectsRepository.getAll()
+        var projects = projectsRepository.getAll()
         projectsRepository.delete(projects.first { it.name == "ProjectX" }.uuid)
+        projects = projectsRepository.getAll()
 
         assertThat(projects.size, `is`(1))
-        assertThat(projects[0], `is`(projectY))
+        assertThat(projects[0], `is`(projectY.copy(uuid = projects[0].uuid)))
+    }
+
+    @Test
+    fun deleteAll_shouldDeleteAllProjectsFromStorage() {
+        projectsRepository.add(projectX)
+        projectsRepository.add(projectY)
+
+        projectsRepository.deleteAll()
+        val projects = projectsRepository.getAll()
+
+        assertThat(projects.size, `is`(0))
     }
 
     @Test
