@@ -24,6 +24,7 @@ import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 
 @RunWith(AndroidJUnit4.class)
 public class DatabaseInstancesRepositoryTest extends InstancesRepositoryTest {
@@ -35,7 +36,7 @@ public class DatabaseInstancesRepositoryTest extends InstancesRepositoryTest {
 
     @Override
     public InstancesRepository buildSubject() {
-        return new DatabaseInstancesRepository();
+        return new InstancesRepositoryProvider().get();
     }
 
     @Override

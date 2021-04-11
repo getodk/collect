@@ -62,8 +62,6 @@ import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
-import org.odk.collect.forms.FormSource;
-import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.gdrive.GoogleAccountCredentialGoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
@@ -104,6 +102,7 @@ import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
@@ -115,6 +114,8 @@ import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.AudioRecorderFactory;
+import org.odk.collect.forms.FormSource;
+import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.utilities.Clock;
 import org.odk.collect.utilities.UserAgentProvider;
 
@@ -415,7 +416,7 @@ public class AppDependencyModule {
 
     @Provides
     public InstancesRepository providesInstancesRepository() {
-        return new DatabaseInstancesRepository();
+        return new InstancesRepositoryProvider().get();
     }
 
     @Provides

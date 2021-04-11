@@ -6,8 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
 import org.apache.commons.io.FileUtils;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -39,9 +37,11 @@ import static org.odk.collect.android.utilities.InstanceUtils.getValuesFromInsta
 public final class DatabaseInstancesRepository implements InstancesRepository {
 
     private final InstancesDatabaseProvider instancesDatabaseProvider;
+    private final StoragePathProvider storagePathProvider;
 
-    public DatabaseInstancesRepository() {
-        instancesDatabaseProvider = DaggerUtils.getComponent(Collect.getInstance()).instancesDatabaseProvider();
+    public DatabaseInstancesRepository(InstancesDatabaseProvider instancesDatabaseProvider, StoragePathProvider storagePathProvider) {
+        this.instancesDatabaseProvider = instancesDatabaseProvider;
+        this.storagePathProvider = storagePathProvider;
     }
 
     @Override
@@ -58,7 +58,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     @Override
     public Instance getOneByPath(String instancePath) {
         String selection = INSTANCE_FILE_PATH + "=?";
-        String[] args = {new StoragePathProvider().getRelativeInstancePath(instancePath)};
+        String[] args = {storagePathProvider.getRelativeInstancePath(instancePath)};
         try (Cursor cursor = query(null, selection, args, null)) {
             List<Instance> instances = getInstancesFromCursor(cursor);
             if (instances.size() == 1) {

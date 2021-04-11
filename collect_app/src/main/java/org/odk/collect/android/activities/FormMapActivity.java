@@ -36,9 +36,6 @@ import com.google.android.material.chip.Chip;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFormInstance;
-import org.odk.collect.android.database.DatabaseInstancesRepository;
-import org.odk.collect.forms.Form;
-import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
@@ -52,6 +49,9 @@ import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.IconUtils;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormsRepository;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -111,7 +111,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
         Form form = formsRepository.get(getIntent().getLongExtra(EXTRA_FORM_ID, -1));
 
         if (viewModelFactory == null) { // tests set their factories directly
-            viewModelFactory = new FormMapActivity.FormMapViewModelFactory(form, new DatabaseInstancesRepository());
+            viewModelFactory = new FormMapActivity.FormMapViewModelFactory(form, new InstancesRepositoryProvider().get());
         }
 
         viewModel = new ViewModelProvider(this, viewModelFactory).get(FormMapViewModel.class);

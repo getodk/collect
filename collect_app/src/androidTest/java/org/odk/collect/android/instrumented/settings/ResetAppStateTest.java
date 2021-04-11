@@ -23,8 +23,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.android.database.DatabaseInstancesRepository;
-import org.odk.collect.forms.Form;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
@@ -33,7 +31,9 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ApplicationResetter;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.forms.Form;
 import org.osmdroid.config.Configuration;
 
 import java.io.File;
@@ -162,7 +162,7 @@ public class ResetAppStateTest {
     }
 
     private void setupTestInstancesDatabase() {
-        new DatabaseInstancesRepository().save(new Instance.Builder()
+        new InstancesRepositoryProvider().get().save(new Instance.Builder()
                 .instanceFilePath("testDir1/testFile1")
                 .submissionUri("submissionUri")
                 .displayName("formName")
@@ -218,7 +218,7 @@ public class ResetAppStateTest {
     }
 
     private int getInstancesCount() {
-        return new DatabaseInstancesRepository().getAll().size();
+        return new InstancesRepositoryProvider().get().getAll().size();
     }
 
     private void assertFolderEmpty(String folder) {

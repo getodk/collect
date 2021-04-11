@@ -8,13 +8,13 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.database.InstanceDatabaseMigrator;
 import org.odk.collect.android.database.InstancesDatabaseHelper;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.SQLiteUtils;
 
 import java.io.File;
@@ -87,7 +87,7 @@ public class InstancesDatabaseHelperTest extends SqlLiteHelperTest {
     }
 
     private void assertThatInstancesAreKeptAfterMigrating() {
-        List<Instance> instances = new DatabaseInstancesRepository().getAll();
+        List<Instance> instances = new InstancesRepositoryProvider().get().getAll();
         assertEquals(2, instances.size());
         assertEquals("complete", instances.get(0).getStatus());
         assertEquals(Long.valueOf(1564413556249L), instances.get(0).getLastStatusChangeDate());

@@ -21,9 +21,7 @@ import org.apache.commons.io.FileUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.exception.EncryptionException;
-import org.odk.collect.forms.Form;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.instances.Instance;
@@ -35,7 +33,9 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.EncryptionUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.TranslationHandler;
+import org.odk.collect.forms.Form;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -116,7 +116,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 List<Instance> instancesToRemove = new ArrayList<>();
 
                 // Remove all the path that's already in the content provider
-                List<Instance> instances = new DatabaseInstancesRepository().getAllNotDeleted();
+                List<Instance> instances = new InstancesRepositoryProvider().get().getAllNotDeleted();
 
                 for (Instance instance : instances) {
                     String instanceFilename = instance.getInstanceFilePath();
@@ -129,7 +129,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 }
 
                 for (Instance instance : instancesToRemove) {
-                    new InstanceDeleter(new DatabaseInstancesRepository(), new FormsRepositoryProvider().get()).delete(instance.getDbId());
+                    new InstanceDeleter(new InstancesRepositoryProvider().get(), new FormsRepositoryProvider().get()).delete(instance.getDbId());
                 }
 
                 final boolean instanceSyncFlag = settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_INSTANCE_SYNC);
@@ -152,7 +152,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                                 String formName = form.getDisplayName();
                                 String submissionUri = form.getSubmissionUri();
 
-                                Instance instance = new DatabaseInstancesRepository().save(new Instance.Builder()
+                                Instance instance = new InstancesRepositoryProvider().get().save(new Instance.Builder()
                                         .instanceFilePath(candidateInstance)
                                         .submissionUri(submissionUri)
                                         .displayName(formName)
@@ -239,7 +239,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
                 EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
 
-                new DatabaseInstancesRepository().save(new Instance.Builder(instance)
+                new InstancesRepositoryProvider().get().save(new Instance.Builder(instance)
                         .canEditWhenComplete(false)
                         .geometryType(null)
                         .geometry(null)

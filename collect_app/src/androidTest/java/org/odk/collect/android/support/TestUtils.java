@@ -10,10 +10,10 @@ import androidx.test.espresso.util.TreeIterables;
 
 import org.hamcrest.Matcher;
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.preferences.source.Settings;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 
 import java.io.Closeable;
 import java.io.File;
@@ -94,7 +94,7 @@ public final class TestUtils {
     }
 
     public static void resetInstances() {
-        new DatabaseInstancesRepository().deleteAll();
+        new InstancesRepositoryProvider().get().deleteAll();
     }
 
     public static void assertMatches(String expectedPattern, Object actual) {

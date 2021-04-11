@@ -26,13 +26,12 @@ import org.kxml2.kdom.Element;
 import org.kxml2.kdom.Node;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.exception.EncryptionException;
-import org.odk.collect.forms.Form;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.javarosawrapper.FormController.InstanceMetadata;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.forms.Form;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -267,7 +266,7 @@ public class EncryptionUtils {
         Form form = null;
 
         if (InstanceColumns.CONTENT_ITEM_TYPE.equals(Collect.getInstance().getContentResolver().getType(uri))) {
-            Instance instance = new DatabaseInstancesRepository().get(ContentUriHelper.getIdFromUri(uri));
+            Instance instance = new InstancesRepositoryProvider().get().get(ContentUriHelper.getIdFromUri(uri));
             if (instance == null) {
                 String msg = TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_record_for_this_instance);
                 Timber.e(msg);
