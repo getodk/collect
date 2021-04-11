@@ -20,7 +20,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 
 import org.odk.collect.android.database.DatabaseInstancesRepository;
-import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.InstanceUploaderListener;

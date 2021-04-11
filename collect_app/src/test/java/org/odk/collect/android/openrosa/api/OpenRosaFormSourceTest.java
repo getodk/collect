@@ -2,7 +2,7 @@ package org.odk.collect.android.openrosa.api;
 
 import org.junit.Test;
 import org.odk.collect.analytics.Analytics;
-import org.odk.collect.android.forms.FormSourceException;
+import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.android.openrosa.HttpGetResult;
 import org.odk.collect.android.openrosa.OpenRosaConstants;
 import org.odk.collect.android.openrosa.OpenRosaFormSource;

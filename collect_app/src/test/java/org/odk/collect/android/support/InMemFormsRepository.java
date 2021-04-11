@@ -1,8 +1,8 @@
 package org.odk.collect.android.support;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.testshared.TempFiles;
 import org.odk.collect.utilities.Clock;

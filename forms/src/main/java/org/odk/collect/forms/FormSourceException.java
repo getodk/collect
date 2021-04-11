@@ -1,4 +1,4 @@
-package org.odk.collect.android.forms;
+package org.odk.collect.forms;
 
 public class FormSourceException extends Exception {
 

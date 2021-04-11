@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.forms;
+package org.odk.collect.forms;
 
 public class MediaFile {
     private final String filename;

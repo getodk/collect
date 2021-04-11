@@ -6,10 +6,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.utilities.Clock;
 
 import java.io.File;

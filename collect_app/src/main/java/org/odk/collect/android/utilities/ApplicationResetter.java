@@ -19,7 +19,7 @@ package org.odk.collect.android.utilities;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
-import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.logic.PropertyManager;

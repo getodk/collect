@@ -2,8 +2,8 @@ package org.odk.collect.android.openrosa;
 
 import org.jetbrains.annotations.Nullable;
 import org.kxml2.kdom.Document;
-import org.odk.collect.android.forms.FormListItem;
-import org.odk.collect.android.forms.MediaFile;
+import org.odk.collect.forms.FormListItem;
+import org.odk.collect.forms.MediaFile;
 
 import java.util.List;
 

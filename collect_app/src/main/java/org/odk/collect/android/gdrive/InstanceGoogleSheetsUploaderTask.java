@@ -17,7 +17,7 @@ package org.odk.collect.android.gdrive;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.forms.Form;
+import org.odk.collect.forms.Form;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.tasks.InstanceUploaderTask;

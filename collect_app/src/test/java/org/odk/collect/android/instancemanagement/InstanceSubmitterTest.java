@@ -3,7 +3,7 @@ package org.odk.collect.android.instancemanagement;
 import org.junit.Test;
 import org.odk.collect.android.support.FormUtils;
 import org.odk.collect.android.support.InMemFormsRepository;
-import org.odk.collect.android.forms.Form;
+import org.odk.collect.forms.Form;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

@@ -1,7 +1,6 @@
-package org.odk.collect.android.forms;
+package org.odk.collect.forms;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.InputStream;
 import java.util.List;
@@ -21,18 +20,4 @@ public interface FormSource {
 
     @NotNull
     InputStream fetchMediaFile(String mediaFileURL) throws FormSourceException;
-
-    /**
-     * @deprecated This is specific to the Open Rosa/HTTP implementation so should really move
-     * down to that level
-     */
-    @Deprecated
-    void updateUrl(String url);
-
-    /**
-     * @deprecated This is specific to the Open Rosa/HTTP implementation so should really move
-     * down to that level
-     */
-    @Deprecated
-    void updateWebCredentialsUtils(WebCredentialsUtils webCredentialsUtils);
 }

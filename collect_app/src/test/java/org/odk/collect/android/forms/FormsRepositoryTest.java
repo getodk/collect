@@ -2,6 +2,8 @@ package org.odk.collect.android.forms;
 
 import org.junit.Test;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.utilities.Clock;
 
 import java.io.File;

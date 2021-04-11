@@ -6,7 +6,7 @@ import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.support.FormUtils;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.android.support.InMemInstancesRepository;
-import org.odk.collect.android.forms.Form;
+import org.odk.collect.forms.Form;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.HashMap;

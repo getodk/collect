@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.forms;
+package org.odk.collect.forms;
 
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A form definition stored on the device.

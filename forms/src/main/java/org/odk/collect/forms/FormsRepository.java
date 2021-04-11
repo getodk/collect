@@ -1,10 +1,9 @@
-package org.odk.collect.android.forms;
+package org.odk.collect.forms;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-
-import javax.annotation.Nullable;
 
 public interface FormsRepository {
 

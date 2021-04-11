@@ -2,6 +2,7 @@ package org.odk.collect.android.forms;
 
 import org.junit.Before;
 import org.odk.collect.android.support.InMemFormsRepository;
+import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.testshared.TempFiles;
 import org.odk.collect.utilities.Clock;
 

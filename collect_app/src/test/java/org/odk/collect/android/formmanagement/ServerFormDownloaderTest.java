@@ -5,17 +5,16 @@ import com.google.common.io.Files;
 import org.javarosa.core.reference.ReferenceManager;
 import org.junit.Test;
 import org.odk.collect.analytics.Analytics;
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormListItem;
-import org.odk.collect.android.forms.FormSource;
-import org.odk.collect.android.forms.FormSourceException;
-import org.odk.collect.android.forms.FormsRepository;
-import org.odk.collect.android.forms.ManifestFile;
-import org.odk.collect.android.forms.MediaFile;
 import org.odk.collect.android.support.FormUtils;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormListItem;
+import org.odk.collect.forms.FormSource;
+import org.odk.collect.forms.FormSourceException;
+import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.forms.ManifestFile;
+import org.odk.collect.forms.MediaFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -690,16 +689,6 @@ public class ServerFormDownloaderTest {
         }
 
         @Override
-        public void updateUrl(String url) {
-
-        }
-
-        @Override
-        public void updateWebCredentialsUtils(WebCredentialsUtils webCredentialsUtils) {
-
-        }
-
-        @Override
         public Boolean get() {
             return isCancelled;
         }
@@ -723,16 +712,6 @@ public class ServerFormDownloaderTest {
         public InputStream fetchMediaFile(String mediaFileURL) throws FormSourceException {
             isCancelled = true;
             return new ByteArrayInputStream("contents".getBytes());
-        }
-
-        @Override
-        public void updateUrl(String url) {
-
-        }
-
-        @Override
-        public void updateWebCredentialsUtils(WebCredentialsUtils webCredentialsUtils) {
-
         }
 
         @Override

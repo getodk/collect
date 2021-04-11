@@ -1,7 +1,7 @@
 package org.odk.collect.android.notifications;
 
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.forms.FormSourceException;
+import org.odk.collect.forms.FormSourceException;
 
 import java.util.HashMap;
 import java.util.List;

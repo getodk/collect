@@ -4,8 +4,8 @@ import org.javarosa.xform.parse.XFormParser;
 import org.jetbrains.annotations.Nullable;
 import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Element;
-import org.odk.collect.android.forms.FormListItem;
-import org.odk.collect.android.forms.MediaFile;
+import org.odk.collect.forms.FormListItem;
+import org.odk.collect.forms.MediaFile;
 
 import java.util.ArrayList;
 import java.util.List;

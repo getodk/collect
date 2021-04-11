@@ -13,8 +13,8 @@ import org.junit.runner.RunWith;
 
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.forms.FormSourceException;
-import org.odk.collect.android.forms.ManifestFile;
+import org.odk.collect.forms.FormSourceException;
+import org.odk.collect.forms.ManifestFile;
 
 import java.util.List;
 
