@@ -251,7 +251,7 @@ public class WidgetFactory {
                     questionWidget = new ListMultiWidget(context, questionDetails, false, readOnlyOverride);    //smap readOnlyOverride
                 } else if (appearance.contains(Appearances.LIST)) {
                     questionWidget = new ListMultiWidget(context, questionDetails, true, readOnlyOverride);     //smap readOnlyOverride
-                } else if (appearance.contains(Appearances.LABEL)) {
+                } else if (appearance.startsWith(Appearances.LABEL) || appearance.endsWith(Appearances.LABEL) || appearance.contains(" " + Appearances.LABEL + " ")) {  // smap ensure label is a standalone appearance
                     questionWidget = new LabelWidget(context, questionDetails);
                 } else if (appearance.contains(Appearances.IMAGE_MAP)) {
                     questionWidget = new SelectMultiImageMapWidget(context, questionDetails);
@@ -311,7 +311,7 @@ public class WidgetFactory {
             questionWidget = new ListWidget(context, questionDetails, false, isQuick, readOnlyOverride);   // smap readOnlyOverride
         } else if (appearance.contains(Appearances.LIST)) {
             questionWidget = new ListWidget(context, questionDetails, true, isQuick, readOnlyOverride);   // smap readOnlyOverride
-        } else if (appearance.contains(Appearances.LABEL)) {
+        } else if (appearance.startsWith(Appearances.LABEL) || appearance.endsWith(Appearances.LABEL) || appearance.contains(" " + Appearances.LABEL + " ")) {  // smap ensure label is a standalone appearance
             questionWidget = new LabelWidget(context, questionDetails);
         } else if (appearance.contains(Appearances.IMAGE_MAP)) {
             questionWidget = new SelectOneImageMapWidget(context, questionDetails, isQuick);
