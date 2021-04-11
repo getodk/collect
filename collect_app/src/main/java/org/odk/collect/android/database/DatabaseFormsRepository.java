@@ -178,7 +178,6 @@ public class DatabaseFormsRepository implements FormsRepository {
         updateForm(id, values);
     }
 
-    @Override
     public Cursor rawQuery(String[] projection, String selection, String[] selectionArgs, String sortOrder, String groupBy) {
         return queryAndReturnCursor(projection, selection, selectionArgs, sortOrder, groupBy);
     }

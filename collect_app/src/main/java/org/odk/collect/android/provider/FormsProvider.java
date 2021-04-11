@@ -23,6 +23,7 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.formmanagement.FormDeleter;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
@@ -56,13 +57,14 @@ import static org.odk.collect.android.database.DatabaseFormColumns.LANGUAGE;
 import static org.odk.collect.android.database.DatabaseFormColumns.MAX_DATE;
 import static org.odk.collect.android.database.DatabaseFormColumns.MD5_HASH;
 import static org.odk.collect.android.database.DatabaseFormColumns.SUBMISSION_URI;
+import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_NEWEST_FORMS_BY_FORMID_URI;
+import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_URI;
 import static org.odk.collect.android.utilities.FormUtils.getFormFromCurrentCursorPosition;
 import static org.odk.collect.android.utilities.FormUtils.getFormFromValues;
 import static org.odk.collect.android.utilities.FormUtils.getValuesFromForm;
-import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_NEWEST_FORMS_BY_FORMID_URI;
-import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_URI;
 
 public class FormsProvider extends ContentProvider {
+
     private static HashMap<String, String> sFormsProjectionMap;
 
     private static final int FORMS = 1;
@@ -110,19 +112,19 @@ public class FormsProvider extends ContentProvider {
         Cursor cursor;
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
-                cursor = formsRepository.rawQuery(projection, selection, selectionArgs, sortOrder, null);
+                cursor = databaseQuery(projection, selection, selectionArgs, sortOrder, null);
                 break;
 
             case FORM_ID:
                 String formId = String.valueOf(ContentUriHelper.getIdFromUri(uri));
-                cursor = formsRepository.rawQuery(null, _ID + "=?", new String[]{formId}, null, null);
+                cursor = databaseQuery(null, _ID + "=?", new String[]{formId}, null, null);
                 break;
 
             // Only include the latest form that was downloaded with each form_id
             case NEWEST_FORMS_BY_FORM_ID:
                 Map<String, String> filteredProjectionMap = new HashMap<>(sFormsProjectionMap);
                 filteredProjectionMap.put(DATE, MAX_DATE);
-                cursor = formsRepository.rawQuery(filteredProjectionMap.values().toArray(new String[0]), selection, selectionArgs, sortOrder, JR_FORM_ID);
+                cursor = databaseQuery(filteredProjectionMap.values().toArray(new String[0]), selection, selectionArgs, sortOrder, JR_FORM_ID);
                 break;
 
             default:
@@ -177,7 +179,7 @@ public class FormsProvider extends ContentProvider {
 
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
-                try (Cursor cursor = formsRepository.rawQuery(null, where, whereArgs, null, null)) {
+                try (Cursor cursor = databaseQuery(null, where, whereArgs, null, null)) {
                     while (cursor.moveToNext()) {
                         formDeleter.delete(cursor.getLong(cursor.getColumnIndex(_ID)));
                     }
@@ -207,7 +209,7 @@ public class FormsProvider extends ContentProvider {
         int count;
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
-                try (Cursor cursor = formsRepository.rawQuery(null, where, whereArgs, null, null)) {
+                try (Cursor cursor = databaseQuery(null, where, whereArgs, null, null)) {
                     while (cursor.moveToNext()) {
                         Form form = getFormFromCurrentCursorPosition(cursor, storagePathProvider);
 
@@ -243,6 +245,10 @@ public class FormsProvider extends ContentProvider {
         getContext().getContentResolver().notifyChange(FormsProviderAPI.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
 
         return count;
+    }
+
+    private Cursor databaseQuery(String[] projection, String selection, String[] selectionArgs, String sortOrder, String o) {
+        return ((DatabaseFormsRepository) formsRepository).rawQuery(projection, selection, selectionArgs, sortOrder, o);
     }
 
     static {
