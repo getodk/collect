@@ -25,13 +25,13 @@ import androidx.annotation.NonNull;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.formmanagement.FormDeleter;
-import org.odk.collect.forms.Form;
-import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ContentUriHelper;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.utilities.Clock;
 
 import java.util.HashMap;
@@ -57,11 +57,11 @@ import static org.odk.collect.android.database.DatabaseFormColumns.LANGUAGE;
 import static org.odk.collect.android.database.DatabaseFormColumns.MAX_DATE;
 import static org.odk.collect.android.database.DatabaseFormColumns.MD5_HASH;
 import static org.odk.collect.android.database.DatabaseFormColumns.SUBMISSION_URI;
+import static org.odk.collect.android.database.DatabaseFormColumns.getFormFromCurrentCursorPosition;
+import static org.odk.collect.android.database.DatabaseFormColumns.getFormFromValues;
+import static org.odk.collect.android.database.DatabaseFormColumns.getValuesFromForm;
 import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_NEWEST_FORMS_BY_FORMID_URI;
 import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_URI;
-import static org.odk.collect.android.utilities.FormUtils.getFormFromCurrentCursorPosition;
-import static org.odk.collect.android.utilities.FormUtils.getFormFromValues;
-import static org.odk.collect.android.utilities.FormUtils.getValuesFromForm;
 
 public class FormsProvider extends ContentProvider {
 

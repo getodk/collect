@@ -1,7 +1,7 @@
 package org.odk.collect.android.support;
 
-import org.odk.collect.forms.Form;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.forms.Form;
 
 import java.io.File;
 import java.io.IOException;
