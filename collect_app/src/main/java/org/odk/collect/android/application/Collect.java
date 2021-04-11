@@ -25,7 +25,6 @@ import androidx.multidex.MultiDex;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
-import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
@@ -35,6 +34,7 @@ import org.odk.collect.android.preferences.source.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
@@ -207,7 +207,7 @@ public class Collect extends Application implements LocalizedApplication, AudioR
      * @return md5 hash of the form title, a space, the form ID
      */
     public static String getFormIdentifierHash(String formId, String formVersion) {
-        Form form = new DatabaseFormsRepository().getLatestByFormIdAndVersion(formId, formVersion);
+        Form form = new FormsRepositoryProvider().get().getLatestByFormIdAndVersion(formId, formVersion);
 
         String formTitle = form != null ? form.getDisplayName() : "";
 

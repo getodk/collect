@@ -44,7 +44,6 @@ import org.odk.collect.android.configure.qr.QRCodeDecoder;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeUtils;
 import org.odk.collect.android.database.DatabaseFastExternalItemsetsRepository;
-import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.database.FormsDatabaseProvider;
 import org.odk.collect.android.database.InstancesDatabaseProvider;
@@ -104,6 +103,7 @@ import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
@@ -362,7 +362,7 @@ public class AppDependencyModule {
 
     @Provides
     public FormsRepository providesFormRepository() {
-        return new DatabaseFormsRepository();
+        return new FormsRepositoryProvider().get();
     }
 
     @Provides

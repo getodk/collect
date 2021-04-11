@@ -42,7 +42,6 @@ import com.google.api.services.drive.Drive;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormListActivity;
 import org.odk.collect.android.adapters.FileArrayAdapter;
-import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
@@ -57,6 +56,7 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -789,7 +789,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     private void checkFormUpdates() {
         for (DriveListItem item : driveList) {
             if (item.getType() == DriveListItem.FILE) {
-                Form form = new DatabaseFormsRepository().getOneByPath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName());
+                Form form = new FormsRepositoryProvider().get().getOneByPath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName());
                 if (form != null && (isNewerFormVersionAvailable(item) || areNewerMediaFilesAvailable(item))) {
                     item.setNewerVersion(true);
                 }

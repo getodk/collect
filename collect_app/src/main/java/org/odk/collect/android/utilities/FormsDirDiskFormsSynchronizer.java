@@ -5,7 +5,6 @@ import android.database.SQLException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
@@ -30,7 +29,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
     private final FormsRepository formsRepository;
 
     public FormsDirDiskFormsSynchronizer() {
-        formsRepository = new DatabaseFormsRepository();
+        formsRepository = new FormsRepositoryProvider().get();
     }
 
     @Override

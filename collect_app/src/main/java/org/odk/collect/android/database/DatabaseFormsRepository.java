@@ -6,10 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
-import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.utilities.Clock;
@@ -42,14 +40,10 @@ public class DatabaseFormsRepository implements FormsRepository {
     private final Clock clock;
     private final FormsDatabaseProvider formsDatabaseProvider;
 
-    public DatabaseFormsRepository() {
-        this(System::currentTimeMillis);
-    }
-
-    public DatabaseFormsRepository(Clock clock) {
+    public DatabaseFormsRepository(Clock clock, StoragePathProvider storagePathProvider, FormsDatabaseProvider formsDatabaseProvider) {
         this.clock = clock;
-        this.storagePathProvider = new StoragePathProvider();
-        this.formsDatabaseProvider = DaggerUtils.getComponent(Collect.getInstance()).formsDatabaseProvider();
+        this.storagePathProvider = storagePathProvider;
+        this.formsDatabaseProvider = formsDatabaseProvider;
     }
 
     @Nullable

@@ -5,7 +5,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -13,6 +12,7 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.FormUtils;
 import org.odk.collect.android.support.InstanceUtils;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
 
 import java.io.File;
 import java.util.List;
@@ -40,7 +40,7 @@ public class InstanceSyncTaskTest {
     @Test
     public void whenAnInstanceFileExistsOnDisk_andNotInDatabase_addsToDatabase() {
         createInstanceOnDisk(ONE_QUESTION_INSTANCE);
-        new DatabaseFormsRepository().save(FormUtils.buildForm("one_question", "1", new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS))
+        new FormsRepositoryProvider().get().save(FormUtils.buildForm("one_question", "1", new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS))
                 .build()
         );
 

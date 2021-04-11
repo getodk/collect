@@ -25,11 +25,11 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -67,7 +67,7 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
 
         String formId = getCursor().getString(getCursor().getColumnIndex(InstanceColumns.JR_FORM_ID));
         String formVersion = getCursor().getString(getCursor().getColumnIndex(InstanceColumns.JR_VERSION));
-        Form form = new DatabaseFormsRepository().getLatestByFormIdAndVersion(formId, formVersion);
+        Form form = new FormsRepositoryProvider().get().getLatestByFormIdAndVersion(formId, formVersion);
 
         if (form != null) {
             String base64RSAPublicKey = form.getBASE64RSAPublicKey();

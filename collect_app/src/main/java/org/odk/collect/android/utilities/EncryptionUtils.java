@@ -26,7 +26,6 @@ import org.kxml2.kdom.Element;
 import org.kxml2.kdom.Node;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.forms.Form;
@@ -278,11 +277,11 @@ public class EncryptionUtils {
             formId = instance.getFormId();
             formVersion = instance.getFormVersion();
 
-            List<Form> forms = new DatabaseFormsRepository().getAllByFormIdAndVersion(formId, formVersion);
+            List<Form> forms = new FormsRepositoryProvider().get().getAllByFormIdAndVersion(formId, formVersion);
 
             // OK to finalize with form definition that was soft-deleted. OK if there are multiple
             // forms with the same formid/version as long as only one is active (not deleted).
-            if (forms.isEmpty() || new DatabaseFormsRepository().getAllNotDeletedByFormIdAndVersion(formId, formVersion).size() > 1) {
+            if (forms.isEmpty() || new FormsRepositoryProvider().get().getAllNotDeletedByFormIdAndVersion(formId, formVersion).size() > 1) {
                 String msg = TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_blank_form_for_this_form_id);
                 Timber.d(msg);
                 throw new EncryptionException(msg, null);
