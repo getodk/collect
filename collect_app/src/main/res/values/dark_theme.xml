@@ -50,7 +50,6 @@
         <item name="android:panelBackground">@android:color/white</item>
         <item name="searchViewStyle">@style/Widget.Collect.SearchView.Dark</item>
         <item name="iconColor">#ffffff</item>
-        <item name="dividerColor">#1effffff</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
         <!--
             The default tint mode for ImageViews is SRC_ATOP, which produces

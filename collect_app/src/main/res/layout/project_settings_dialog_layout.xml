@@ -53,10 +53,9 @@
         android:id="@+id/general_settings_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        style="@style/Widget.Collect.Button.OutlinedButton"
         android:layout_marginTop="@dimen/margin_small"
         android:text="@string/general_preferences"
-        android:textColor="@color/deep_purple_500"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/current_project"/>
 
@@ -64,10 +63,8 @@
         android:id="@+id/admin_settings_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_marginTop="@dimen/margin_small"
+        style="@style/Widget.Collect.Button.OutlinedButton"
         android:text="@string/admin_preferences"
-        android:textColor="@color/deep_purple_500"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/general_settings_button" />
 
@@ -76,17 +73,19 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/margin_small"
-        android:background="?colorPrimary"
+        android:background="?colorOnSurface"
+        android:alpha="0.2"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/admin_settings_button" />
 
     <LinearLayout
         android:id="@+id/project_list"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/top_divider" />
 
     <View
@@ -94,7 +93,8 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/margin_small"
-        android:background="?colorPrimary"
+        android:background="?colorOnSurface"
+        android:alpha="0.2"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/project_list" />
@@ -109,7 +109,9 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:gravity="center_vertical"
         android:text="@string/add_project"
+        android:textColor="?colorOnSurface"
         app:icon="@drawable/ic_baseline_qr_code_scanner_24"
+        app:iconTintMode="multiply"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline_center"
         app:layout_constraintTop_toBottomOf="@+id/bottom_divider" />
@@ -123,7 +125,9 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:gravity="center_vertical"
         android:text="@string/about_preferences"
+        android:textColor="?colorOnSurface"
         app:icon="@drawable/ic_outline_info_24"
+        app:iconTintMode="multiply"
         app:layout_constraintStart_toStartOf="@+id/guideline_center"
         app:layout_constraintTop_toBottomOf="@+id/bottom_divider" />
 </androidx.constraintlayout.widget.ConstraintLayout>

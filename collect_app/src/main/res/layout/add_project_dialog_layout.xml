@@ -9,56 +9,76 @@
         android:id="@+id/add_project_toolbar"
         layout="@layout/material_full_screen_dialog_toolbar"
         app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/project_name"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_standard"
-        android:hint="@string/project_name"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/shadow_up"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_project_toolbar">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/margin_standard"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/project_name"
+                style="@style/Widget.Collect.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_standard"
+                android:hint="@string/project_name"
+                app:layout_constraintTop_toTopOf="parent">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/project_icon"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_standard"
-        android:hint="@string/project_icon"
-        app:layout_constraintTop_toBottomOf="@+id/project_name">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/project_icon_input_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/project_icon"
+                style="@style/Widget.Collect.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_standard"
+                android:hint="@string/project_icon"
+                app:layout_constraintTop_toBottomOf="@+id/project_name">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/project_color"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_standard"
-        android:hint="@string/project_color"
-        app:layout_constraintTop_toBottomOf="@+id/project_icon">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/project_icon_input_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/project_color"
+                style="@style/Widget.Collect.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_standard"
+                android:hint="@string/project_color"
+                app:layout_constraintTop_toBottomOf="@+id/project_icon">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <ImageView
+        android:id="@+id/shadow_up"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/shadow_up"
