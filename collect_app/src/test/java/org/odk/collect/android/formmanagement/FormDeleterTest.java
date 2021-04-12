@@ -4,11 +4,10 @@ import org.junit.Test;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.FormUtils;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.android.support.InMemInstancesRepository;
+import org.odk.collect.testshared.TempFiles;
 
 import java.io.File;
 import java.util.List;
@@ -115,7 +114,7 @@ public class FormDeleterTest {
                 .formFilePath(FormUtils.createXFormFile("1", null).getAbsolutePath())
                 .build());
 
-        instancesRepository.save(buildInstance("1", null, new StoragePathProvider().getOdkDirPath(StorageSubdirectory.INSTANCES)).build());
+        instancesRepository.save(buildInstance("1", null, TempFiles.createTempDir().getAbsolutePath()).build());
 
         formDeleter.delete(formToDelete.getDbId());
         List<Form> forms = formsRepository.getAll();

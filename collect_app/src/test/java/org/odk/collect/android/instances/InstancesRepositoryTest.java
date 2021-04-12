@@ -237,8 +237,9 @@ public abstract class InstancesRepositoryTest {
         InstancesRepository instancesRepository = buildSubject();
         Instance instance = instancesRepository.save(buildInstance("formid", "1", getInstancesDir()).build());
 
-        File instanceDir = new File(instance.getInstanceFilePath());
+        File instanceDir = new File(instance.getInstanceFilePath()).getParentFile();
         assertThat(instanceDir.exists(), is(true));
+        assertThat(instanceDir.isDirectory(), is(true));
 
         instancesRepository.softDelete(instance.getDbId());
         assertThat(instanceDir.exists(), is(false));
@@ -258,8 +259,10 @@ public abstract class InstancesRepositoryTest {
         InstancesRepository instancesRepository = buildSubject();
         Instance instance = instancesRepository.save(buildInstance("formid", "1", getInstancesDir()).build());
 
-        File instanceDir = new File(instance.getInstanceFilePath());
+        // The repo assumes the parent of the file also contains other instance files
+        File instanceDir = new File(instance.getInstanceFilePath()).getParentFile();
         assertThat(instanceDir.exists(), is(true));
+        assertThat(instanceDir.isDirectory(), is(true));
 
         instancesRepository.delete(instance.getDbId());
         assertThat(instanceDir.exists(), is(false));

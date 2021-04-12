@@ -111,9 +111,9 @@ public final class InMemInstancesRepository implements InstancesRepository {
     @Override
     public void delete(Long id) {
         Instance instance = get(id);
-        instances.remove(instance);
-
         deleteInstanceFiles(instance);
+
+        instances.remove(instance);
     }
 
     @Override
@@ -180,7 +180,7 @@ public final class InMemInstancesRepository implements InstancesRepository {
 
     private void deleteInstanceFiles(Instance instance) {
         try {
-            FileUtils.deleteDirectory(new File(instance.getInstanceFilePath()));
+            FileUtils.deleteDirectory(new File(instance.getInstanceFilePath()).getParentFile());
         } catch (IOException e) {
             // Ignored
         }

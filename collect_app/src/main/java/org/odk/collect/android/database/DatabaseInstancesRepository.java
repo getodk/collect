@@ -245,7 +245,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     private void deleteInstanceFiles(Instance instance) {
         try {
-            FileUtils.deleteDirectory(new File(instance.getInstanceFilePath()));
+            FileUtils.deleteDirectory(new File(instance.getInstanceFilePath()).getParentFile());
         } catch (IOException e) {
             // Ignored
         }

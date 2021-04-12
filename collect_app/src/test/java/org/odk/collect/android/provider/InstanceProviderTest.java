@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.storage.StorageInitializer;
+import org.odk.collect.android.support.InstanceUtils;
 import org.robolectric.shadows.ShadowEnvironment;
 
 import java.io.File;
@@ -185,25 +186,24 @@ public class InstanceProviderTest {
 
     @Test
     public void delete_deletesInstanceDir() {
-        String instanceDirName = "my-instance";
-        File instanceDir = createInstanceDir(instanceDirName);
+        File instanceFile = createInstanceDirAndFile();
 
-        Uri uri = addInstanceToDb(instanceDir.getAbsolutePath(), "Instance 1");
+        Uri uri = addInstanceToDb(instanceFile.getAbsolutePath(), "Instance 1");
         contentResolver.delete(uri, null, null);
-        assertThat(instanceDir.exists(), is(false));
+        assertThat(instanceFile.getParentFile().exists(), is(false));
     }
 
     @Test
     public void delete_whenStatusIsSubmitted_deletesFilesButSoftDeletesInstance() {
-        File instanceDir = createInstanceDir("my-instance");
-        Uri uri = addInstanceToDb(instanceDir.getAbsolutePath(), "Instance 1");
+        File instanceFile = createInstanceDirAndFile();
+        Uri uri = addInstanceToDb(instanceFile.getAbsolutePath(), "Instance 1");
 
         ContentValues updateValues = new ContentValues();
         updateValues.put(STATUS, STATUS_SUBMITTED);
         contentResolver.update(uri, updateValues, null, null);
 
         contentResolver.delete(uri, null, null);
-        assertThat(instanceDir.exists(), is(false));
+        assertThat(instanceFile.getParentFile().exists(), is(false));
 
         try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
@@ -215,8 +215,8 @@ public class InstanceProviderTest {
 
     @Test
     public void delete_whenStatusIsSubmitted_clearsGeometryFields() {
-        File instanceDir = createInstanceDir("my-instance");
-        Uri uri = addInstanceToDb(instanceDir.getAbsolutePath(), "Instance 1");
+        File instanceFile = createInstanceDirAndFile();
+        Uri uri = addInstanceToDb(instanceFile.getAbsolutePath(), "Instance 1");
 
         ContentValues updateValues = new ContentValues();
         updateValues.put(STATUS, STATUS_SUBMITTED);
@@ -225,7 +225,7 @@ public class InstanceProviderTest {
         contentResolver.update(uri, updateValues, null, null);
 
         contentResolver.delete(uri, null, null);
-        assertThat(instanceDir.exists(), is(false));
+        assertThat(instanceFile.getParentFile().exists(), is(false));
 
         try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
@@ -323,15 +323,12 @@ public class InstanceProviderTest {
         assertThat(contentResolver.getType(Uri.withAppendedPath(CONTENT_URI, "1")), is(CONTENT_ITEM_TYPE));
     }
 
-    private File createInstanceDir(String instanceDirName) {
-        String instancesDirPath = externalFilesDir.getAbsolutePath() + File.separator + "instances";
-        File instanceDir = new File(instancesDirPath + File.separator + instanceDirName);
-        assertThat(instanceDir.mkdir(), is(true));
-        return instanceDir;
+    private File createInstanceDirAndFile() {
+        return InstanceUtils.createInstanceDirAndFile(externalFilesDir + File.separator + "instances");
     }
 
-    private Uri addInstanceToDb(String s, String s2) {
-        ContentValues values1 = getContentValues(s, s2, "external_app_form", "1");
+    private Uri addInstanceToDb(String instanceFilePath, String displayName) {
+        ContentValues values1 = getContentValues(instanceFilePath, displayName, "external_app_form", "1");
         return contentResolver.insert(CONTENT_URI, values1);
     }
 
