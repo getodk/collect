@@ -20,8 +20,8 @@ import android.content.Context;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 

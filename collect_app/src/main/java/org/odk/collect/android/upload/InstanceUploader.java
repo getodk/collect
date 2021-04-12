@@ -17,7 +17,7 @@ package org.odk.collect.android.upload;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.odk.collect.android.instances.Instance;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 
 import java.util.ArrayList;

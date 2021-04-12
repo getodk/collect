@@ -34,7 +34,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.instances.Instance;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceSyncTask;

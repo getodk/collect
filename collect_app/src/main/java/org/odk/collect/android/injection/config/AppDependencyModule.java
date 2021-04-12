@@ -44,7 +44,6 @@ import org.odk.collect.android.configure.qr.QRCodeDecoder;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeUtils;
 import org.odk.collect.android.database.DatabaseFastExternalItemsetsRepository;
-import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.database.FormsDatabaseProvider;
 import org.odk.collect.android.database.InstancesDatabaseProvider;
 import org.odk.collect.android.events.RxEventBus;
@@ -66,7 +65,6 @@ import org.odk.collect.android.gdrive.GoogleAccountCredentialGoogleAccountPicker
 import org.odk.collect.android.gdrive.GoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.geo.MapProvider;
-import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.metadata.InstallIDProvider;
@@ -116,6 +114,7 @@ import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.AudioRecorderFactory;
 import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.utilities.Clock;
 import org.odk.collect.utilities.UserAgentProvider;
 

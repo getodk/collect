@@ -107,7 +107,7 @@ import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
-import org.odk.collect.android.instances.Instance;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.FormController.FailedConstraint;
 import org.odk.collect.android.javarosawrapper.FormDesignException;

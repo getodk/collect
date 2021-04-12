@@ -22,8 +22,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.CompositeDisposable;
 
-import static org.odk.collect.android.instances.Instance.STATUS_SUBMISSION_FAILED;
-import static org.odk.collect.android.instances.Instance.STATUS_SUBMITTED;
+import static org.odk.collect.forms.instances.Instance.STATUS_SUBMISSION_FAILED;
+import static org.odk.collect.forms.instances.Instance.STATUS_SUBMITTED;
 
 public class InstanceUploaderAdapter extends CursorAdapter {
     private final CompositeDisposable compositeDisposable;

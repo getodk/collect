@@ -2,7 +2,7 @@ package org.odk.collect.android.formmanagement;
 
 import org.junit.Test;
 import org.odk.collect.forms.Form;
-import org.odk.collect.android.instances.Instance;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.support.FormUtils;
 import org.odk.collect.android.support.InMemFormsRepository;

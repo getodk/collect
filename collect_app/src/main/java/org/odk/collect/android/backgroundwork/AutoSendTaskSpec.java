@@ -32,7 +32,7 @@ import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.instancemanagement.InstanceSubmitter;
 import org.odk.collect.android.instancemanagement.SubmitException;
-import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.permissions.PermissionsProvider;

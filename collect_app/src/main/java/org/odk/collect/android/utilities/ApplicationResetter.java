@@ -21,7 +21,7 @@ import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StoragePathProvider;

@@ -24,13 +24,14 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.database.InstancesDatabaseProvider;
-import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
-import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.utilities.ContentUriHelper;
+import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -91,12 +92,12 @@ public class InstanceProvider extends ContentProvider {
         Cursor c;
         switch (URI_MATCHER.match(uri)) {
             case INSTANCES:
-                c = instancesRepository.rawQuery(projection, selection, selectionArgs, sortOrder, null);
+                c = dbQuery(projection, selection, selectionArgs, sortOrder);
                 break;
 
             case INSTANCE_ID:
                 String id = String.valueOf(ContentUriHelper.getIdFromUri(uri));
-                c = instancesRepository.rawQuery(projection, _ID + "=?", new String[]{id}, null, null);
+                c = dbQuery(projection, _ID + "=?", new String[]{id}, null);
                 break;
 
             default:
@@ -106,6 +107,10 @@ public class InstanceProvider extends ContentProvider {
         // Tell the cursor what uri to watch, so it knows when its source data changes
         c.setNotificationUri(getContext().getContentResolver(), uri);
         return c;
+    }
+
+    private Cursor dbQuery(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        return ((DatabaseInstancesRepository) instancesRepository).rawQuery(projection, selection, selectionArgs, sortOrder, null);
     }
 
     @Override
@@ -176,7 +181,7 @@ public class InstanceProvider extends ContentProvider {
 
         switch (URI_MATCHER.match(uri)) {
             case INSTANCES:
-                try (Cursor cursor = instancesRepository.rawQuery(new String[]{_ID}, where, whereArgs, null, null)) {
+                try (Cursor cursor = dbQuery(new String[]{_ID}, where, whereArgs, null)) {
                     while (cursor.moveToNext()) {
                         long id = cursor.getLong(cursor.getColumnIndex(_ID));
                         new InstanceDeleter(instancesRepository, formsRepository).delete(id);
@@ -193,7 +198,7 @@ public class InstanceProvider extends ContentProvider {
                 if (where == null) {
                     new InstanceDeleter(instancesRepository, formsRepository).delete(id);
                 } else {
-                    try (Cursor cursor = instancesRepository.rawQuery(new String[]{_ID}, where, whereArgs, null, null)) {
+                    try (Cursor cursor = dbQuery(new String[]{_ID}, where, whereArgs, null)) {
                         while (cursor.moveToNext()) {
                             if (cursor.getLong(cursor.getColumnIndex(_ID)) == id) {
                                 new InstanceDeleter(instancesRepository, formsRepository).delete(id);
@@ -223,7 +228,7 @@ public class InstanceProvider extends ContentProvider {
 
         switch (URI_MATCHER.match(uri)) {
             case INSTANCES:
-                try (Cursor cursor = instancesRepository.rawQuery(null, where, whereArgs, null, null)) {
+                try (Cursor cursor = dbQuery(null, where, whereArgs, null)) {
                     while (cursor.moveToNext()) {
                         Instance instance = getInstanceFromCurrentCursorPosition(cursor);
                         ContentValues existingValues = getValuesFromInstance(instance);
@@ -248,7 +253,7 @@ public class InstanceProvider extends ContentProvider {
                     instancesRepository.save(getInstanceFromValues(existingValues));
                     count = 1;
                 } else {
-                    try (Cursor cursor = instancesRepository.rawQuery(new String[]{_ID}, where, whereArgs, null, null)) {
+                    try (Cursor cursor = dbQuery(new String[]{_ID}, where, whereArgs, null)) {
                         while (cursor.moveToNext()) {
                             if (cursor.getLong(cursor.getColumnIndex(_ID)) == instanceId) {
                                 Instance instance = getInstanceFromCurrentCursorPosition(cursor);

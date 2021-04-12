@@ -15,6 +15,8 @@
 package org.odk.collect.android.instances;
 
 import org.junit.Test;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
 
 import java.io.File;
 import java.util.List;

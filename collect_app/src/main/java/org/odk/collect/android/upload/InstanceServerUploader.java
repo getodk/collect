@@ -19,7 +19,7 @@ import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.instances.Instance;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.openrosa.CaseInsensitiveHeaders;
 import org.odk.collect.android.openrosa.HttpHeadResult;
 import org.odk.collect.android.openrosa.HttpPostResult;

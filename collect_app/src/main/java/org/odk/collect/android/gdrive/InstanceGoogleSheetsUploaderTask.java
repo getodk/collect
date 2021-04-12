@@ -18,7 +18,7 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.forms.Form;
-import org.odk.collect.android.instances.Instance;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
 import org.odk.collect.android.upload.UploadException;

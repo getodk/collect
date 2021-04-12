@@ -6,8 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
 import org.apache.commons.io.FileUtils;
-import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.io.File;
@@ -183,7 +183,6 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
         deleteInstanceFiles(instance);
     }
 
-    @Override
     public Cursor rawQuery(String[] projection, String selection, String[] selectionArgs, String sortOrder, String groupBy) {
         return query(projection, selection, selectionArgs, sortOrder);
     }

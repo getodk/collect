@@ -2,7 +2,7 @@ package org.odk.collect.android.database;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import org.odk.collect.android.instances.Instance;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.utilities.SQLiteUtils;
 
 import java.util.Arrays;

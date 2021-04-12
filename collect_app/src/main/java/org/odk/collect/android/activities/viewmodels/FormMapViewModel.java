@@ -6,8 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.forms.Form;
-import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
 
 import java.util.ArrayList;
 import java.util.Date;

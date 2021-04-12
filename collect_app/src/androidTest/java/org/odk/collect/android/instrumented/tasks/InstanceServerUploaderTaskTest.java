@@ -6,7 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.odk.collect.android.instances.Instance;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.openrosa.OpenRosaConstants;
 import org.odk.collect.android.support.MockedServerTest;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;

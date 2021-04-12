@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.odk.collect.android.database.InstanceDatabaseMigrator;
 import org.odk.collect.android.database.InstancesDatabaseHelper;
-import org.odk.collect.android.instances.Instance;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;

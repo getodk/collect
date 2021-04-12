@@ -26,7 +26,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.formmanagement.FormDeleter;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ContentUriHelper;

@@ -24,7 +24,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
-import org.odk.collect.android.instances.Instance;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.preferences.keys.GeneralKeys;

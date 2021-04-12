@@ -36,7 +36,7 @@ import org.javarosa.xpath.expr.XPathPathExpr;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
-import org.odk.collect.android.instances.Instance;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 
 import java.io.Serializable;

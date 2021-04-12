@@ -17,7 +17,7 @@ package org.odk.collect.android.tasks;
 import android.os.AsyncTask;
 
 import org.odk.collect.android.formmanagement.FormDeleter;
-import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.forms.FormsRepository;

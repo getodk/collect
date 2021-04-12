@@ -39,7 +39,7 @@ import org.odk.collect.android.gdrive.sheets.DriveApi;
 import org.odk.collect.android.gdrive.sheets.DriveHelper;
 import org.odk.collect.android.gdrive.sheets.SheetsApi;
 import org.odk.collect.android.gdrive.sheets.SheetsHelper;
-import org.odk.collect.android.instances.Instance;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.upload.InstanceUploader;

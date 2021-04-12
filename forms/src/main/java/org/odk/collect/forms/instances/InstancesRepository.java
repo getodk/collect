@@ -1,10 +1,8 @@
-package org.odk.collect.android.instances;
+package org.odk.collect.forms.instances;
 
-import android.database.Cursor;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-
-import javax.annotation.Nullable;
 
 /**
  * Gives access to {@link Instance} objects representing filled form instances on the device.
@@ -45,6 +43,4 @@ public interface InstancesRepository {
     Instance save(Instance instance);
 
     void softDelete(Long id);
-
-    Cursor rawQuery(String[] projection, String selection, String[] selectionArgs, String sortOrder, String groupBy);
 }

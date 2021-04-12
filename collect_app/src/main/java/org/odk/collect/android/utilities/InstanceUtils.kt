@@ -3,7 +3,7 @@ package org.odk.collect.android.utilities
 import android.content.ContentValues
 import android.database.Cursor
 import android.provider.BaseColumns
-import org.odk.collect.android.instances.Instance
+import org.odk.collect.forms.instances.Instance
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns
 import org.odk.collect.android.storage.StoragePathProvider
 import java.lang.Boolean

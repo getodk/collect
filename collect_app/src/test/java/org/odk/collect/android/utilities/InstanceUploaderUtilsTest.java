@@ -2,7 +2,7 @@ package org.odk.collect.android.utilities;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.instances.Instance;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.support.FormUtils;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.android.support.InMemInstancesRepository;

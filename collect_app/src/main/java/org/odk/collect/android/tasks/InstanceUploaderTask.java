@@ -19,8 +19,8 @@ package org.odk.collect.android.tasks;
 import android.net.Uri;
 import android.os.AsyncTask;
 
-import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;

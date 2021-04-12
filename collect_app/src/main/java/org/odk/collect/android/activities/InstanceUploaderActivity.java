@@ -24,7 +24,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;

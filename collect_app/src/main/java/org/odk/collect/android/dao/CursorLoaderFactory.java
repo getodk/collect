@@ -6,7 +6,7 @@ import androidx.loader.content.CursorLoader;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseFormColumns;
-import org.odk.collect.android.instances.Instance;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 

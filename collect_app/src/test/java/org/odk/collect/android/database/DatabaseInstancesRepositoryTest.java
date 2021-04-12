@@ -18,7 +18,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.android.instances.InstancesRepositoryTest;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;

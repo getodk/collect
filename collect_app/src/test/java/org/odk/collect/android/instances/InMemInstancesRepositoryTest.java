@@ -16,6 +16,7 @@ package org.odk.collect.android.instances;
 
 import org.junit.Before;
 import org.odk.collect.android.support.InMemInstancesRepository;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.testshared.TempFiles;
 
 public class InMemInstancesRepositoryTest extends InstancesRepositoryTest {

@@ -31,7 +31,7 @@ import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.android.listeners.DiskSyncListener;

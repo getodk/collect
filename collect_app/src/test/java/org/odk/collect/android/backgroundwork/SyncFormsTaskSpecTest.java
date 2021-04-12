@@ -17,7 +17,7 @@ import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.source.SettingsProvider;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.instances;
+package org.odk.collect.forms.instances;
 
 /**
  * A filled form stored on the device.

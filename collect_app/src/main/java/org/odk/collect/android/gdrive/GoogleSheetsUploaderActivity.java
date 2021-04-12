@@ -38,7 +38,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;

@@ -2,9 +2,9 @@ package org.odk.collect.android.formmanagement
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import org.odk.collect.android.instances.Instance
-import org.odk.collect.android.instances.InstancesRepository
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
+import org.odk.collect.forms.instances.Instance
+import org.odk.collect.forms.instances.InstancesRepository
 import javax.inject.Singleton
 
 /**
