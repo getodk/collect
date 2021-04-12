@@ -24,28 +24,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import org.odk.collect.android.R;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
-import org.odk.collect.shared.Md5;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 
 import javax.inject.Inject;
 
-import static org.odk.collect.android.analytics.AnalyticsEvents.SHOW_SPLASH_SCREEN;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_SPLASH_PATH;
 
 public class SplashScreenActivity extends Activity {
 
     private static final int SPLASH_TIMEOUT = 2000; // milliseconds
-
-    @Inject
-    Analytics analytics;
 
     @Inject
     SettingsProvider settingsProvider;
@@ -67,9 +60,6 @@ public class SplashScreenActivity extends Activity {
 
         if (showSplash) {
             startSplashScreen(splashPath);
-
-            String splashPathHash = Md5.getMd5Hash(new ByteArrayInputStream(splashPath.getBytes()));
-            analytics.logEvent(SHOW_SPLASH_SCREEN, splashPathHash, "");
         } else {
             endSplashScreen();
         }
