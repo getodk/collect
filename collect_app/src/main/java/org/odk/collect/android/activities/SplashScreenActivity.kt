@@ -13,11 +13,10 @@
  */
 package org.odk.collect.android.activities
 
-import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import android.view.Window
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.splash_screen.*
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
@@ -28,15 +27,13 @@ import org.odk.collect.android.utilities.ScreenUtils
 import java.io.File
 import javax.inject.Inject
 
-class SplashScreenActivity : Activity() {
+class SplashScreenActivity : AppCompatActivity() {
 
     @Inject
     lateinit var settingsProvider: SettingsProvider
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // this splash screen should be a blank slate
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
         DaggerUtils.getComponent(this).inject(this)
         init()
     }
