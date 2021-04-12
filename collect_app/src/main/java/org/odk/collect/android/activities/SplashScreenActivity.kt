@@ -43,8 +43,12 @@ class SplashScreenActivity : Activity() {
 
     private fun init() {
         setContentView(R.layout.splash_screen)
-        if (settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_SHOW_SPLASH)) {
-            startSplashScreen(settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_SPLASH_PATH))
+
+        val isSplashScreenEnabled = settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_SHOW_SPLASH)
+        val splashLogoPath = settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_SPLASH_PATH)
+
+        if (isSplashScreenEnabled && !splashLogoPath.isNullOrBlank()) {
+            startSplashScreen(splashLogoPath)
         } else {
             endSplashScreen()
         }
@@ -54,7 +58,7 @@ class SplashScreenActivity : Activity() {
         ActivityUtils.startActivityAndCloseAllOthers(this, MainMenuActivity::class.java)
     }
 
-    private fun startSplashScreen(path: String?) {
+    private fun startSplashScreen(path: String) {
         val customSplash = File(path)
         if (customSplash.exists()) {
             splash_default.visibility = View.GONE
