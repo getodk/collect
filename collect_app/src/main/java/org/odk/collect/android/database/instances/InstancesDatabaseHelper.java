@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.database;
+package org.odk.collect.android.database.instances;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import org.odk.collect.android.database.DatabaseContext;
+import org.odk.collect.android.database.DatabaseMigrator;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 

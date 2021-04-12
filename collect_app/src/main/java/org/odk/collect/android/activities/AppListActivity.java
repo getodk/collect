@@ -34,7 +34,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.SnackbarUtils;
 
@@ -236,7 +236,7 @@ abstract class AppListActivity extends CollectAbstractActivity {
         Cursor cursor = listAdapter.getCursor();
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                long instanceId = cursor.getLong(cursor.getColumnIndex(InstanceColumns._ID));
+                long instanceId = cursor.getLong(cursor.getColumnIndex(DatabaseInstanceColumns._ID));
                 if (selectedInstances.contains(instanceId)) {
                     selectedPositions.add(listViewPosition);
                 }

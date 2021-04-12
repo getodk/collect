@@ -1,4 +1,4 @@
-package org.odk.collect.android.database;
+package org.odk.collect.android.database.instances;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -6,9 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
 import org.apache.commons.io.FileUtils;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
-import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,19 +17,19 @@ import java.util.List;
 
 import static android.provider.BaseColumns._ID;
 import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_TABLE_NAME;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DELETED_DATE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DISPLAY_NAME;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.GEOMETRY;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.GEOMETRY_TYPE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_FORM_ID;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_VERSION;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.STATUS;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.SUBMISSION_URI;
-import static org.odk.collect.android.utilities.InstanceUtils.getInstanceFromCurrentCursorPosition;
-import static org.odk.collect.android.utilities.InstanceUtils.getValuesFromInstance;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.CAN_EDIT_WHEN_COMPLETE;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DELETED_DATE;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DISPLAY_NAME;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY_TYPE;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.INSTANCE_FILE_PATH;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.JR_FORM_ID;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.JR_VERSION;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.STATUS;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.SUBMISSION_URI;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.getInstanceFromCurrentCursorPosition;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.getValuesFromInstance;
 
 /**
  * Mediates between {@link Instance} objects and the underlying SQLite database that stores them.

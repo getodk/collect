@@ -41,7 +41,7 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.database.DatabaseFormColumns;
+import org.odk.collect.android.database.forms.DatabaseFormColumns;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.tasks.FormSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;

@@ -24,11 +24,11 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
-import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.EncryptionUtils;
@@ -36,6 +36,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.forms.Form;
+import org.odk.collect.forms.instances.Instance;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -52,7 +53,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import static org.odk.collect.android.utilities.FileUtils.getMd5Hash;
 
 /**
@@ -229,7 +229,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
         String instancePath = instance.getInstanceFilePath();
         File instanceXml = new File(instancePath);
         if (!new File(instanceXml.getParentFile(), "submission.xml.enc").exists()) {
-            Uri uri = Uri.parse(InstanceColumns.CONTENT_URI + "/" + instance.getDbId());
+            Uri uri = Uri.parse(InstanceProviderAPI.CONTENT_URI + "/" + instance.getDbId());
             FormController.InstanceMetadata instanceMetadata = new FormController.InstanceMetadata(getInstanceIdFromInstance(instancePath), null, null);
             EncryptionUtils.EncryptedFormInformation formInfo = EncryptionUtils.getEncryptedFormInformation(uri, instanceMetadata);
 

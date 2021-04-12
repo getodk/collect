@@ -39,12 +39,11 @@ import org.json.JSONObject;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.formentry.saving.FormSaver;
-import org.odk.collect.forms.instances.Instance;
-import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ContentUriHelper;
@@ -56,6 +55,8 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.forms.Form;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
 
 import java.io.File;
 import java.io.IOException;
@@ -203,7 +204,7 @@ public class SaveFormToDisk {
             }
 
             Instance newInstance = new InstancesRepositoryProvider().get().save(instanceBuilder.build());
-            uri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, newInstance.getDbId().toString());
+            uri = Uri.withAppendedPath(InstanceProviderAPI.CONTENT_URI, newInstance.getDbId().toString());
         } else {
             Timber.i("No instance found, creating");
             Form form = new FormsRepositoryProvider().get().get(ContentUriHelper.getIdFromUri(uri));
@@ -228,7 +229,7 @@ public class SaveFormToDisk {
         }
 
         Instance newInstance = new InstancesRepositoryProvider().get().save(instanceBuilder.build());
-        uri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, newInstance.getDbId().toString());
+        uri = Uri.withAppendedPath(InstanceProviderAPI.CONTENT_URI, newInstance.getDbId().toString());
     }
 
     /**
@@ -431,8 +432,8 @@ public class SaveFormToDisk {
                 );
 
                 ContentValues values = new ContentValues();
-                values.put(InstanceColumns.GEOMETRY, (String) null);
-                values.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
+                values.put(DatabaseInstanceColumns.GEOMETRY, (String) null);
+                values.put(DatabaseInstanceColumns.GEOMETRY_TYPE, (String) null);
 
                 if (!EncryptionUtils.deletePlaintextFiles(instanceXml, new File(lastSavedPath))) {
                     Timber.e("Error deleting plaintext files for %s", instanceXml.getAbsolutePath());

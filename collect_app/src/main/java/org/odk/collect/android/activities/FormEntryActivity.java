@@ -107,7 +107,6 @@ import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
-import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.FormController.FailedConstraint;
 import org.odk.collect.android.javarosawrapper.FormDesignException;
@@ -123,7 +122,7 @@ import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.provider.FormsProviderAPI;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
@@ -157,6 +156,7 @@ import org.odk.collect.audioclips.AudioClipViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.forms.instances.Instance;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -589,7 +589,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (uriMimeType == null && intent.hasExtra(EXTRA_TESTING_PATH)) {
             formPath = intent.getStringExtra(EXTRA_TESTING_PATH);
 
-        } else if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
+        } else if (uriMimeType != null && uriMimeType.equals(InstanceProviderAPI.CONTENT_ITEM_TYPE)) {
             Instance instance = new InstancesRepositoryProvider().get().get(ContentUriHelper.getIdFromUri(uri));
 
             if (instance == null) {
@@ -1207,7 +1207,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
 
             if (saveName == null && uriMimeType != null
-                    && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
+                    && uriMimeType.equals(InstanceProviderAPI.CONTENT_ITEM_TYPE)) {
                 Instance instance = new InstancesRepositoryProvider().get().get(ContentUriHelper.getIdFromUri(instanceUri));
                 if (instance != null) {
                     saveName = instance.getDisplayName();

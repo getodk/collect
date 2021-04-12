@@ -6,7 +6,7 @@ import androidx.test.espresso.matcher.CursorMatchers;
 import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.DatabaseFormColumns;
+import org.odk.collect.android.database.forms.DatabaseFormColumns;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;

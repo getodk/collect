@@ -37,7 +37,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -133,7 +133,7 @@ public class SavedFormListFragment extends InstanceListFragment
     }
 
     private void setupAdapter() {
-        String[] data = {InstanceColumns.DISPLAY_NAME};
+        String[] data = {DatabaseInstanceColumns.DISPLAY_NAME};
         int[] view = {R.id.form_title};
 
         listAdapter = new InstanceListCursorAdapter(getActivity(),

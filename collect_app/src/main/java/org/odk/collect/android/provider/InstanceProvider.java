@@ -24,8 +24,8 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.DatabaseInstancesRepository;
-import org.odk.collect.android.database.InstancesDatabaseProvider;
+import org.odk.collect.android.database.instances.DatabaseInstancesRepository;
+import org.odk.collect.android.database.instances.InstancesDatabaseProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.utilities.ContentUriHelper;
@@ -42,24 +42,24 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CONTENT_ITEM_TYPE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CONTENT_TYPE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CONTENT_URI;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DELETED_DATE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DISPLAY_NAME;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.GEOMETRY;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.GEOMETRY_TYPE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_FORM_ID;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_VERSION;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.STATUS;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.SUBMISSION_URI;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns._ID;
-import static org.odk.collect.android.utilities.InstanceUtils.getInstanceFromCurrentCursorPosition;
-import static org.odk.collect.android.utilities.InstanceUtils.getInstanceFromValues;
-import static org.odk.collect.android.utilities.InstanceUtils.getValuesFromInstance;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.CAN_EDIT_WHEN_COMPLETE;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DELETED_DATE;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DISPLAY_NAME;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY_TYPE;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.INSTANCE_FILE_PATH;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.JR_FORM_ID;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.JR_VERSION;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.STATUS;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.SUBMISSION_URI;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns._ID;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.getInstanceFromCurrentCursorPosition;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.getInstanceFromValues;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.getValuesFromInstance;
+import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_ITEM_TYPE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_TYPE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_URI;
 
 public class InstanceProvider extends ContentProvider {
 

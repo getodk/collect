@@ -1,4 +1,4 @@
-package org.odk.collect.android.database;
+package org.odk.collect.android.database.forms;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -23,16 +23,16 @@ import javax.annotation.Nullable;
 import static android.provider.BaseColumns._ID;
 import static org.apache.commons.io.FileUtils.deleteDirectory;
 import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
-import static org.odk.collect.android.database.DatabaseFormColumns.DATE;
-import static org.odk.collect.android.database.DatabaseFormColumns.DELETED_DATE;
-import static org.odk.collect.android.database.DatabaseFormColumns.FORM_FILE_PATH;
-import static org.odk.collect.android.database.DatabaseFormColumns.FORM_MEDIA_PATH;
-import static org.odk.collect.android.database.DatabaseFormColumns.JRCACHE_FILE_PATH;
-import static org.odk.collect.android.database.DatabaseFormColumns.JR_FORM_ID;
-import static org.odk.collect.android.database.DatabaseFormColumns.JR_VERSION;
-import static org.odk.collect.android.database.DatabaseFormColumns.MD5_HASH;
-import static org.odk.collect.android.database.DatabaseFormColumns.getFormFromCurrentCursorPosition;
-import static org.odk.collect.android.database.DatabaseFormColumns.getValuesFromForm;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.DATE;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.DELETED_DATE;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.FORM_FILE_PATH;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.FORM_MEDIA_PATH;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.JRCACHE_FILE_PATH;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_FORM_ID;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_VERSION;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.getFormFromCurrentCursorPosition;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.getValuesFromForm;
 
 public class DatabaseFormsRepository implements FormsRepository {
 

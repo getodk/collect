@@ -23,7 +23,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.DatabaseFormColumns;
+import org.odk.collect.android.database.forms.DatabaseFormColumns;
 import org.odk.collect.android.utilities.MultiClickGuard;
 
 import java.text.SimpleDateFormat;

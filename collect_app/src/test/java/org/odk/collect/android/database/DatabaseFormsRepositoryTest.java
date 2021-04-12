@@ -5,6 +5,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.forms.DatabaseFormsRepository;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.forms.FormsRepositoryTest;
 import org.odk.collect.android.injection.DaggerUtils;

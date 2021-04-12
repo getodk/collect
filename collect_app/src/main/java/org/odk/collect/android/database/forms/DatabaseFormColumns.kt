@@ -1,4 +1,4 @@
-package org.odk.collect.android.database
+package org.odk.collect.android.database.forms
 
 import android.content.ContentValues
 import android.database.Cursor

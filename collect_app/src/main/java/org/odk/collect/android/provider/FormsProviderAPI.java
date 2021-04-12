@@ -18,7 +18,7 @@ package org.odk.collect.android.provider;
 
 import android.net.Uri;
 
-import org.odk.collect.android.database.DatabaseFormColumns;
+import org.odk.collect.android.database.forms.DatabaseFormColumns;
 
 /**
  * Contract between the forms provider and applications. Contains definitions for the supported

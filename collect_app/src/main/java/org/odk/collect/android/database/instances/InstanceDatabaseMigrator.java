@@ -1,7 +1,8 @@
-package org.odk.collect.android.database;
+package org.odk.collect.android.database.instances;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import org.odk.collect.android.database.DatabaseMigrator;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.utilities.SQLiteUtils;
 
@@ -12,17 +13,17 @@ import timber.log.Timber;
 
 import static android.provider.BaseColumns._ID;
 import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_TABLE_NAME;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DELETED_DATE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DISPLAY_NAME;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.GEOMETRY;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.GEOMETRY_TYPE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_FORM_ID;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_VERSION;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.STATUS;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.SUBMISSION_URI;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.CAN_EDIT_WHEN_COMPLETE;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DELETED_DATE;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DISPLAY_NAME;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY_TYPE;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.INSTANCE_FILE_PATH;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.JR_FORM_ID;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.JR_VERSION;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.STATUS;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.SUBMISSION_URI;
 
 public class InstanceDatabaseMigrator implements DatabaseMigrator {
     private static final String[] COLUMN_NAMES_V5 = {_ID, DISPLAY_NAME, SUBMISSION_URI, CAN_EDIT_WHEN_COMPLETE,
@@ -88,8 +89,8 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
 
     /**
      * Upgrade to version 5. Prior versions of the instances table included a {@code displaySubtext}
-     * column which was redundant with the {@link org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns#STATUS} and
-     * {@link org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns#LAST_STATUS_CHANGE_DATE} columns and included
+     * column which was redundant with the {@link DatabaseInstanceColumns#STATUS} and
+     * {@link DatabaseInstanceColumns#LAST_STATUS_CHANGE_DATE} columns and included
      * unlocalized text. Version 5 removes this column.
      */
     private void upgradeToVersion5(SQLiteDatabase db) {

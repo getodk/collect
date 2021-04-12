@@ -40,8 +40,6 @@ import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.forms.instances.Instance;
-import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.provider.FormsProviderAPI;
@@ -52,6 +50,8 @@ import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -389,7 +389,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
     }
 
     private Intent getEditFormInstanceIntentFor(long instanceId) {
-        Uri uri = ContentUris.withAppendedId(InstanceProviderAPI.InstanceColumns.CONTENT_URI, instanceId);
+        Uri uri = ContentUris.withAppendedId(InstanceProviderAPI.CONTENT_URI, instanceId);
         return new Intent(Intent.ACTION_EDIT, uri);
     }
 

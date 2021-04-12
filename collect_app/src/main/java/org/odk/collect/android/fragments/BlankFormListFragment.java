@@ -35,7 +35,7 @@ import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
-import org.odk.collect.android.database.DatabaseFormColumns;
+import org.odk.collect.android.database.forms.DatabaseFormColumns;
 import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.FormSyncTask;
 import org.odk.collect.android.utilities.DialogUtils;

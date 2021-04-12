@@ -13,7 +13,7 @@ import android.widget.TextView;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.InstanceProvider;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.views.InstanceUploaderProgressBar;
 
 import java.util.Date;
@@ -51,10 +51,10 @@ public class InstanceUploaderAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        long lastStatusChangeDate = getCursor().getLong(getCursor().getColumnIndex(InstanceColumns.LAST_STATUS_CHANGE_DATE));
-        String status = cursor.getString(cursor.getColumnIndex(InstanceColumns.STATUS));
+        long lastStatusChangeDate = getCursor().getLong(getCursor().getColumnIndex(DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE));
+        String status = cursor.getString(cursor.getColumnIndex(DatabaseInstanceColumns.STATUS));
 
-        viewHolder.formTitle.setText(cursor.getString(cursor.getColumnIndex(InstanceColumns.DISPLAY_NAME)));
+        viewHolder.formTitle.setText(cursor.getString(cursor.getColumnIndex(DatabaseInstanceColumns.DISPLAY_NAME)));
         viewHolder.formSubtitle.setText(InstanceProvider.getDisplaySubtext(context, status, new Date(lastStatusChangeDate)));
 
         switch (status) {

@@ -17,10 +17,10 @@ package org.odk.collect.android.dao.helpers;
 import android.net.Uri;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 
 import timber.log.Timber;
@@ -75,7 +75,7 @@ public final class InstancesDaoHelper {
         if (path != null) {
             Instance instance = new InstancesRepositoryProvider().get().getOneByPath(path);
             if (instance != null) {
-                return Uri.withAppendedPath(InstanceColumns.CONTENT_URI, instance.getDbId().toString());
+                return Uri.withAppendedPath(InstanceProviderAPI.CONTENT_URI, instance.getDbId().toString());
             }
         }
 
