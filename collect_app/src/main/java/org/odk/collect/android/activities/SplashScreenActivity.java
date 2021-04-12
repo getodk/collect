@@ -28,7 +28,6 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.shared.Md5;
@@ -47,9 +46,6 @@ public class SplashScreenActivity extends Activity {
 
     @Inject
     Analytics analytics;
-
-    @Inject
-    PermissionsProvider permissionsProvider;
 
     @Inject
     SettingsProvider settingsProvider;
