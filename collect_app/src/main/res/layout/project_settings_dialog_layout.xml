@@ -56,7 +56,6 @@
         style="@style/Widget.Collect.Button.OutlinedButton"
         android:layout_marginTop="@dimen/margin_small"
         android:text="@string/general_preferences"
-        android:textColor="?colorOnPrimary"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/current_project"/>
 
@@ -66,7 +65,6 @@
         android:layout_height="wrap_content"
         style="@style/Widget.Collect.Button.OutlinedButton"
         android:text="@string/admin_preferences"
-        android:textColor="?colorOnPrimary"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/general_settings_button" />
 
@@ -109,7 +107,9 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:gravity="center_vertical"
         android:text="@string/add_project"
+        android:textColor="?colorOnSurface"
         app:icon="@drawable/ic_baseline_qr_code_scanner_24"
+        app:iconTintMode="multiply"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline_center"
         app:layout_constraintTop_toBottomOf="@+id/bottom_divider" />
@@ -123,7 +123,9 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:gravity="center_vertical"
         android:text="@string/about_preferences"
+        android:textColor="?colorOnSurface"
         app:icon="@drawable/ic_outline_info_24"
+        app:iconTintMode="multiply"
         app:layout_constraintStart_toStartOf="@+id/guideline_center"
         app:layout_constraintTop_toBottomOf="@+id/bottom_divider" />
 </androidx.constraintlayout.widget.ConstraintLayout>
