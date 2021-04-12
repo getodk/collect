@@ -15,7 +15,6 @@
 package org.odk.collect.android.activities;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -34,6 +33,7 @@ import java.io.File;
 
 import javax.inject.Inject;
 
+import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_SPLASH_PATH;
 
 public class SplashScreenActivity extends Activity {
@@ -55,19 +55,15 @@ public class SplashScreenActivity extends Activity {
     private void init() {
         setContentView(R.layout.splash_screen);
 
-        boolean showSplash = settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_SHOW_SPLASH);
-        String splashPath = settingsProvider.getGeneralSettings().getString(KEY_SPLASH_PATH);
-
-        if (showSplash) {
-            startSplashScreen(splashPath);
+        if (settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_SHOW_SPLASH)) {
+            startSplashScreen(settingsProvider.getGeneralSettings().getString(KEY_SPLASH_PATH));
         } else {
             endSplashScreen();
         }
     }
 
     private void endSplashScreen() {
-        startActivity(new Intent(this, MainMenuActivity.class));
-        finish();
+        startActivityAndCloseAllOthers(this, MainMenuActivity.class);
     }
 
     private void startSplashScreen(String path) {
