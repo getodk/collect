@@ -14,10 +14,12 @@
 package org.odk.collect.android.activities
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.splash_screen.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.keys.GeneralKeys
@@ -63,6 +65,9 @@ class SplashScreenActivity : AppCompatActivity() {
             splash.visibility = View.VISIBLE
         }
 
-        Handler().postDelayed({ endSplashScreen() }, 2000)
+        lifecycleScope.launch() {
+            delay(2000)
+            endSplashScreen()
+        }
     }
 }
