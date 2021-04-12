@@ -18,8 +18,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.view.Window
-import android.widget.ImageView
-import android.widget.LinearLayout
+import kotlinx.android.synthetic.main.splash_screen.*
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.keys.GeneralKeys
@@ -56,14 +55,11 @@ class SplashScreenActivity : Activity() {
     }
 
     private fun startSplashScreen(path: String?) {
-        // add items to the splash screen here. makes things less distracting.
-        val customSplashView = findViewById<ImageView>(R.id.splash)
-        val defaultSplashView = findViewById<LinearLayout>(R.id.splash_default)
         val customSplash = File(path)
         if (customSplash.exists()) {
-            customSplashView.setImageBitmap(FileUtils.getBitmapScaledToDisplay(customSplash, ScreenUtils.getScreenHeight(), ScreenUtils.getScreenWidth()))
-            defaultSplashView.visibility = View.GONE
-            customSplashView.visibility = View.VISIBLE
+            splash_default.visibility = View.GONE
+            splash.setImageBitmap(FileUtils.getBitmapScaledToDisplay(customSplash, ScreenUtils.getScreenHeight(), ScreenUtils.getScreenWidth()))
+            splash.visibility = View.VISIBLE
         }
 
         Handler().postDelayed({ endSplashScreen() }, 2000)

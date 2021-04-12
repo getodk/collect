@@ -3,6 +3,7 @@ apply plugin: 'com.google.firebase.crashlytics'
 apply from: '../config/quality.gradle'
 apply from: '../config/jacoco.gradle'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 import com.android.ddmlib.DdmPreferences
 
