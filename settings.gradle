@@ -1,3 +1,4 @@
+include ':shared'
 include ':forms'
 include ':analytics'
 include ':android-shared'

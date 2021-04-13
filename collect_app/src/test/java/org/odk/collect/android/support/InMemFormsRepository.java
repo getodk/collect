@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.shared.Md5;
 import org.odk.collect.testshared.TempFiles;
 import org.odk.collect.utilities.Clock;
 
@@ -103,7 +104,7 @@ public class InMemFormsRepository implements FormsRepository {
 
         if (form.getDbId() != null) {
             String formFilePath = form.getFormFilePath();
-            String hash = FileUtils.getMd5Hash(new File(formFilePath));
+            String hash = Md5.getMd5Hash(new File(formFilePath));
             builder.md5Hash(hash);
 
             forms.removeIf(f -> f.getDbId().equals(form.getDbId()));
@@ -117,7 +118,7 @@ public class InMemFormsRepository implements FormsRepository {
             String hash;
             if (form.getMD5Hash() == null) {
                 String formFilePath = form.getFormFilePath();
-                hash = FileUtils.getMd5Hash(new File(formFilePath));
+                hash = Md5.getMd5Hash(new File(formFilePath));
                 builder.md5Hash(hash);
             } else {
                 hash = form.getMD5Hash();

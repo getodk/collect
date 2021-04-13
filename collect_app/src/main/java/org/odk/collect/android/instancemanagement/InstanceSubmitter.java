@@ -21,7 +21,6 @@ import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.upload.InstanceUploader;
 import org.odk.collect.android.upload.UploadException;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
@@ -29,6 +28,7 @@ import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.shared.Md5;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -126,7 +126,7 @@ public class InstanceSubmitter {
 
                 String submissionEndpoint = settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_SUBMISSION_URL);
                 if (!submissionEndpoint.equals(TranslationHandler.getString(Collect.getInstance(), R.string.default_odk_submission))) {
-                    String submissionEndpointHash = FileUtils.getMd5Hash(new ByteArrayInputStream(submissionEndpoint.getBytes()));
+                    String submissionEndpointHash = Md5.getMd5Hash(new ByteArrayInputStream(submissionEndpoint.getBytes()));
                     analytics.logEvent(CUSTOM_ENDPOINT_SUB, submissionEndpointHash);
                 }
             } catch (UploadException e) {

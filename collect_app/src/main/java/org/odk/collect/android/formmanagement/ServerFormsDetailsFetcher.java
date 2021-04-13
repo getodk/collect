@@ -25,8 +25,8 @@ import org.odk.collect.android.utilities.FormUtils;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.ManifestFile;
 import org.odk.collect.forms.MediaFile;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.shared.Md5;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -148,7 +148,7 @@ public class ServerFormsDetailsFetcher {
         String mediaFileHash = newMediaFile.getHash();
         mediaFileHash = mediaFileHash.substring(4, mediaFileHash.length());
         for (File localMediaFile : localMediaFiles) {
-            if (mediaFileHash.equals(FileUtils.getMd5Hash(localMediaFile))) {
+            if (mediaFileHash.equals(Md5.getMd5Hash(localMediaFile))) {
                 return true;
             }
         }

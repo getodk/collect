@@ -42,13 +42,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.math.BigInteger;
 import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -113,51 +110,6 @@ public class FileUtils {
     public static boolean createFolder(String path) {
         File dir = new File(path);
         return dir.exists() || dir.mkdirs();
-    }
-
-    public static String getMd5Hash(File file) {
-        final InputStream is;
-        try {
-            is = new FileInputStream(file);
-
-        } catch (FileNotFoundException e) {
-            Timber.d(e, "Cache file %s not found", file.getAbsolutePath());
-            return null;
-
-        }
-
-        return getMd5Hash(is);
-    }
-
-    public static String getMd5Hash(InputStream is) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            final byte[] buffer = new byte[bufSize];
-
-            while (true) {
-                int result = is.read(buffer, 0, bufSize);
-                if (result == -1) {
-                    break;
-                }
-                md.update(buffer, 0, result);
-            }
-
-            StringBuilder md5 = new StringBuilder(new BigInteger(1, md.digest()).toString(16));
-            while (md5.length() < 32) {
-                md5.insert(0, "0");
-            }
-
-            is.close();
-            return md5.toString();
-
-        } catch (NoSuchAlgorithmException e) {
-            Timber.e(e);
-            return null;
-
-        } catch (IOException e) {
-            Timber.e(e, "Problem reading file.");
-            return null;
-        }
     }
 
     public static Bitmap getBitmapScaledToDisplay(File file, int screenHeight, int screenWidth) {

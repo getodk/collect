@@ -31,8 +31,8 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.permissions.PermissionsProvider;
+import org.odk.collect.shared.Md5;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -83,7 +83,7 @@ public class SplashScreenActivity extends Activity {
         if (showSplash) {
             startSplashScreen(splashPath);
 
-            String splashPathHash = FileUtils.getMd5Hash(new ByteArrayInputStream(splashPath.getBytes()));
+            String splashPathHash = Md5.getMd5Hash(new ByteArrayInputStream(splashPath.getBytes()));
             analytics.logEvent(SHOW_SPLASH_SCREEN, splashPathHash, "");
         } else {
             endSplashScreen();

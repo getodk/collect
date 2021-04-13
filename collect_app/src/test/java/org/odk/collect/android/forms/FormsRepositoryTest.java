@@ -4,19 +4,12 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.shared.Md5;
 import org.odk.collect.utilities.Clock;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
-
-import timber.log.Timber;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -176,7 +169,7 @@ public abstract class FormsRepositoryTest {
 
         formsRepository.save(form);
 
-        String expectedHash = getMD5Hash(new File(form.getFormFilePath()));
+        String expectedHash = Md5.getMd5Hash(new File(form.getFormFilePath()));
         assertThat(formsRepository.get(1L).getMD5Hash(), equalTo(expectedHash));
     }
 
@@ -220,7 +213,7 @@ public abstract class FormsRepositoryTest {
                 .displayName("changed")
                 .build());
 
-        String expectedHash = getMD5Hash(formFile);
+        String expectedHash = Md5.getMd5Hash(formFile);
         assertThat(formsRepository.get(originalForm.getDbId()).getMD5Hash(), is(expectedHash));
     }
 
@@ -333,46 +326,5 @@ public abstract class FormsRepositoryTest {
         List<Form> forms = formsRepository.getAllByFormId("id1");
         assertThat(forms.size(), is(2));
         assertThat(forms, contains(form1, form2));
-    }
-
-    private String getMD5Hash(File formFile) {
-        final InputStream is;
-        try {
-            is = new FileInputStream(formFile);
-
-        } catch (FileNotFoundException e) {
-            Timber.d(e, "Cache file %s not found", formFile.getAbsolutePath());
-            return null;
-
-        }
-
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            final byte[] buffer = new byte[16 * 1024];
-
-            while (true) {
-                int result = is.read(buffer, 0, 16 * 1024);
-                if (result == -1) {
-                    break;
-                }
-                md.update(buffer, 0, result);
-            }
-
-            StringBuilder md5 = new StringBuilder(new BigInteger(1, md.digest()).toString(16));
-            while (md5.length() < 32) {
-                md5.insert(0, "0");
-            }
-
-            is.close();
-            return md5.toString();
-
-        } catch (NoSuchAlgorithmException e) {
-            Timber.e(e);
-            return null;
-
-        } catch (IOException e) {
-            Timber.e(e, "Problem reading file.");
-            return null;
-        }
     }
 }

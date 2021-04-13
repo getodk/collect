@@ -57,6 +57,7 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.shared.Md5;
 
 import java.io.File;
 import java.io.IOException;
@@ -901,7 +902,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             driveHelper.downloadFile(fileId, file);
 
             // If the form already exists in the DB and is soft deleted we need to restore it
-            String md5Hash = FileUtils.getMd5Hash(file);
+            String md5Hash = Md5.getMd5Hash(file);
             Form form = formsRepository.getOneByMd5Hash(md5Hash);
             if (form != null && form.isDeleted()) {
                 formsRepository.restore(form.getDbId());

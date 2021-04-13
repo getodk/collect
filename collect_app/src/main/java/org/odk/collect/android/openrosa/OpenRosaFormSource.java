@@ -5,13 +5,13 @@ import org.jetbrains.annotations.NotNull;
 import org.kxml2.kdom.Element;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.utilities.DocumentFetchResult;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.forms.FormListItem;
 import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.forms.ManifestFile;
 import org.odk.collect.forms.MediaFile;
+import org.odk.collect.shared.Md5;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -68,7 +68,7 @@ public class OpenRosaFormSource implements FormSource {
                 throw new FormSourceException.ParseError(serverURL);
             }
         } else {
-            String serverHash = FileUtils.getMd5Hash(new ByteArrayInputStream(serverURL.getBytes()));
+            String serverHash = Md5.getMd5Hash(new ByteArrayInputStream(serverURL.getBytes()));
             analytics.logServerEvent(LEGACY_FORM_LIST, serverHash);
             return parseLegacyFormList(result);
         }

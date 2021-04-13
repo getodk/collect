@@ -10,6 +10,7 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.shared.Md5;
 import org.odk.collect.utilities.Clock;
 
 import java.io.File;
@@ -121,7 +122,7 @@ public class DatabaseFormsRepository implements FormsRepository {
     public Form save(@NotNull Form form) {
         final ContentValues values = getValuesFromForm(form, storagePathProvider);
 
-        String md5Hash = FileUtils.getMd5Hash(new File(form.getFormFilePath()));
+        String md5Hash = Md5.getMd5Hash(new File(form.getFormFilePath()));
         values.put(MD5_HASH, md5Hash);
         values.put(FORM_MEDIA_PATH, storagePathProvider.getRelativeFormPath(FileUtils.constructMediaPath(form.getFormFilePath())));
         values.put(JRCACHE_FILE_PATH, md5Hash + ".formdef");

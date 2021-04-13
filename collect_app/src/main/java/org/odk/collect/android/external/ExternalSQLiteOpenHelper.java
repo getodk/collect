@@ -30,9 +30,9 @@ import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 import org.odk.collect.android.utilities.CustomSQLiteQueryExecutor;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.SQLiteUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
+import org.odk.collect.shared.Md5;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -282,7 +282,7 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
 
         ContentValues metadata = new ContentValues();
         metadata.put(ExternalDataUtil.COLUMN_DATASET_FILENAME, dataSetFile.getName());
-        metadata.put(ExternalDataUtil.COLUMN_MD5_HASH, FileUtils.getMd5Hash(dataSetFile));
+        metadata.put(ExternalDataUtil.COLUMN_MD5_HASH, Md5.getMd5Hash(dataSetFile));
         db.insertOrThrow(metadataTableName, null, metadata);
     }
 
@@ -318,7 +318,7 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
         }
         // Import if the CSV file has been updated
         String priorImportMd5 = getLastMd5Hash(db, metadataTableName, dataSetFile);
-        String newFileMd5 = FileUtils.getMd5Hash(dataSetFile);
+        String newFileMd5 = Md5.getMd5Hash(dataSetFile);
         return newFileMd5 == null || !newFileMd5.equals(priorImportMd5);
     }
 

@@ -37,6 +37,7 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.shared.Md5;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -52,8 +53,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.utilities.FileUtils.getMd5Hash;
 
 /**
  * Background task for syncing form instances from the instances folder to the instances table.
@@ -221,7 +220,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
     private void logImportAndEncrypt(Form form) {
         String id = form.getFormId();
         String title = form.getDisplayName();
-        String formIdHash = getMd5Hash(new ByteArrayInputStream((id + " " + title).getBytes()));
+        String formIdHash = Md5.getMd5Hash(new ByteArrayInputStream((id + " " + title).getBytes()));
         DaggerUtils.getComponent(Collect.getInstance()).analytics().logFormEvent(AnalyticsEvents.IMPORT_AND_ENCRYPT_INSTANCE, formIdHash);
     }
 

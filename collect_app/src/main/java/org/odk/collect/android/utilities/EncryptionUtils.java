@@ -32,6 +32,7 @@ import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.shared.Md5;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -176,7 +177,7 @@ public class EncryptionUtils {
         }
 
         public void appendFileSignatureSource(File file) {
-            String md5Hash = FileUtils.getMd5Hash(file);
+            String md5Hash = Md5.getMd5Hash(file);
             appendElementSignatureSource(file.getName() + "::" + md5Hash);
         }
 

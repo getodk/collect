@@ -18,6 +18,7 @@ import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.support.FormUtils;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.shared.Md5;
 import org.robolectric.shadows.ShadowEnvironment;
 
 import java.io.ByteArrayInputStream;
@@ -64,7 +65,7 @@ public class FormsProviderTest {
         String formVersion = "1";
         String formName = "External app form";
         File formFile = addFormToFormsDir(formId, formVersion, formName);
-        String md5Hash = FileUtils.getMd5Hash(formFile);
+        String md5Hash = Md5.getMd5Hash(formFile);
 
         ContentValues values = getContentValues(formId, formVersion, formName, formFile);
         contentResolver.insert(CONTENT_URI, values);
@@ -303,7 +304,7 @@ public class FormsProviderTest {
      **/
     private File addFormToFormsDir(String formId, String formVersion, String formName) {
         File formFile = createFormFileInFormsDir(formId, formVersion, formName);
-        String md5Hash = FileUtils.getMd5Hash(formFile);
+        String md5Hash = Md5.getMd5Hash(formFile);
 
         createExtraFormFiles(formFile, md5Hash);
         return formFile;
@@ -337,7 +338,7 @@ public class FormsProviderTest {
         // Create a itemset table and row so we can check deletion etc - wouldn't always be there
         String itemsetsCsvPath = mediaDirPath + File.separator + "itemsets.csv";
         ItemsetDbAdapter itemsetDbAdapter = new ItemsetDbAdapter().open();
-        itemsetDbAdapter.createTable(md5Hash, FileUtils.getMd5Hash(new ByteArrayInputStream(itemsetsCsvPath.getBytes())), new String[]{"a, b"}, itemsetsCsvPath);
+        itemsetDbAdapter.createTable(md5Hash, Md5.getMd5Hash(new ByteArrayInputStream(itemsetsCsvPath.getBytes())), new String[]{"a, b"}, itemsetsCsvPath);
         itemsetDbAdapter.close();
     }
 
