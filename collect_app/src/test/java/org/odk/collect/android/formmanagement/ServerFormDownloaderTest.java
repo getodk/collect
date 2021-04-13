@@ -5,7 +5,7 @@ import com.google.common.io.Files;
 import org.javarosa.core.reference.ReferenceManager;
 import org.junit.Test;
 import org.odk.collect.analytics.Analytics;
-import org.odk.collect.android.support.FormUtils;
+import org.odk.collect.forms.testsupport.FormUtils;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormListItem;
@@ -39,8 +39,8 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.analytics.AnalyticsEvents.DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH;
 import static org.odk.collect.android.storage.StoragePathProvider.getAbsoluteFilePath;
-import static org.odk.collect.android.support.FormUtils.buildForm;
-import static org.odk.collect.android.support.FormUtils.createXFormBody;
+import static org.odk.collect.forms.testsupport.FormUtils.buildForm;
+import static org.odk.collect.forms.testsupport.FormUtils.createXFormBody;
 import static org.odk.collect.android.utilities.FileUtils.read;
 
 @SuppressWarnings("PMD.DoubleBraceInitialization")

@@ -19,8 +19,8 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.FormUtils.buildForm;
-import static org.odk.collect.android.support.FormUtils.createXFormBody;
+import static org.odk.collect.forms.testsupport.FormUtils.buildForm;
+import static org.odk.collect.forms.testsupport.FormUtils.createXFormBody;
 
 public abstract class FormsRepositoryTest {
 

@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
-import org.odk.collect.android.support.FormUtils;
+import org.odk.collect.forms.testsupport.FormUtils;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.android.support.InMemInstancesRepository;
 import org.odk.collect.testshared.TempFiles;

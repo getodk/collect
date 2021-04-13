@@ -1,13 +1,11 @@
-package org.odk.collect.android.support;
+package org.odk.collect.forms.testsupport;
 
-import org.odk.collect.android.utilities.FileUtils;
+import org.apache.commons.io.FileUtils;
 import org.odk.collect.forms.Form;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-
-import static org.apache.commons.io.FileUtils.writeStringToFile;
 
 public class FormUtils {
 
@@ -41,7 +39,7 @@ public class FormUtils {
 
         try {
             File file = File.createTempFile(formId + "-" + version, ".xml");
-            writeStringToFile(file, body, Charset.defaultCharset());
+            FileUtils.writeStringToFile(file, body, Charset.defaultCharset());
             return file;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -55,7 +53,12 @@ public class FormUtils {
     public static Form.Builder buildForm(String formId, String version, String formFilesPath, String xform) {
         String fileName = formId + "-" + version + "-" + Math.random();
         File formFile = new File(formFilesPath + "/" + fileName + ".xml");
-        FileUtils.write(formFile, xform.getBytes());
+
+        try {
+            FileUtils.writeByteArrayToFile(formFile, xform.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return new Form.Builder()
                 .displayName("Test Form")
