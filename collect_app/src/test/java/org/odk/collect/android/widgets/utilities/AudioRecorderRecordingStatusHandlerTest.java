@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
-import org.odk.collect.shared.livedata.MutableNonNullLiveData;
+import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
 import org.odk.collect.testshared.FakeLifecycleOwner;
 
 import java.util.function.Consumer;

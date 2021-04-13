@@ -22,8 +22,8 @@ import org.odk.collect.android.preferences.source.Settings;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
-import org.odk.collect.shared.livedata.MutableNonNullLiveData;
-import org.odk.collect.shared.livedata.NonNullLiveData;
+import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
+import org.odk.collect.androidshared.livedata.NonNullLiveData;
 import org.odk.collect.utilities.Clock;
 
 import java.util.HashSet;

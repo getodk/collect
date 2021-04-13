@@ -18,8 +18,8 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.shared.livedata.MutableNonNullLiveData;
-import org.odk.collect.shared.livedata.NonNullLiveData;
+import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
+import org.odk.collect.androidshared.livedata.NonNullLiveData;
 import org.odk.collect.utilities.Clock;
 
 import java.util.Objects;

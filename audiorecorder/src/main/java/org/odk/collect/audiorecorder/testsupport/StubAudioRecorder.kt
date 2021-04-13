@@ -2,10 +2,10 @@ package org.odk.collect.audiorecorder.testsupport
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recording.AudioRecorder
 import org.odk.collect.audiorecorder.recording.RecordingSession
-import org.odk.collect.shared.data.Consumable
 import java.io.File
 import java.io.Serializable
 

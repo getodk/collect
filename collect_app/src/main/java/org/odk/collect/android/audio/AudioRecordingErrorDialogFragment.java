@@ -15,7 +15,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.MicInUseException;
-import org.odk.collect.shared.data.Consumable;
+import org.odk.collect.androidshared.data.Consumable;
 
 import javax.inject.Inject;
 
