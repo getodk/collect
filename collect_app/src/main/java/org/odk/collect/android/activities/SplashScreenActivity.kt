@@ -16,38 +16,35 @@ package org.odk.collect.android.activities
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.splash_screen.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.odk.collect.android.R
+import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.preferences.keys.GeneralKeys
-import org.odk.collect.android.preferences.source.SettingsProvider
-import org.odk.collect.android.utilities.FileUtils
-import org.odk.collect.android.utilities.ScreenUtils
-import java.io.File
 import javax.inject.Inject
 
 class SplashScreenActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var settingsProvider: SettingsProvider
+    lateinit var splashScreenViewModelFactoryFactory: SplashScreenViewModel.FactoryFactory
+
+    lateinit var viewModel: SplashScreenViewModel
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
+        viewModel = ViewModelProvider(this, splashScreenViewModelFactoryFactory.create(this, null))[SplashScreenViewModel::class.java]
         init()
     }
 
     private fun init() {
         setContentView(R.layout.splash_screen)
 
-        val isSplashScreenEnabled = settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_SHOW_SPLASH)
-        val splashLogoPath = settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_SPLASH_PATH)
-
-        if (isSplashScreenEnabled && !splashLogoPath.isNullOrBlank()) {
-            startSplashScreen(splashLogoPath)
+        if (viewModel.shouldDisplaySplashScreen) {
+            startSplashScreen()
         } else {
             endSplashScreen()
         }
@@ -57,11 +54,10 @@ class SplashScreenActivity : AppCompatActivity() {
         ActivityUtils.startActivityAndCloseAllOthers(this, MainMenuActivity::class.java)
     }
 
-    private fun startSplashScreen(path: String) {
-        val customSplash = File(path)
-        if (customSplash.exists()) {
+    private fun startSplashScreen() {
+        if (viewModel.doesLogoFileExist) {
             splash_default.visibility = View.GONE
-            splash.setImageBitmap(FileUtils.getBitmapScaledToDisplay(customSplash, ScreenUtils.getScreenHeight(), ScreenUtils.getScreenWidth()))
+            splash.setImageBitmap(viewModel.scaledSplashScreenLogoBitmap)
             splash.visibility = View.VISIBLE
         }
 

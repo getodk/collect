@@ -24,6 +24,7 @@ import org.odk.collect.analytics.BlockableFirebaseAnalytics;
 import org.odk.collect.analytics.NoopAnalytics;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CollectSettingsPreferenceMigrator;
@@ -548,5 +549,16 @@ public class AppDependencyModule {
     @Provides
     public InstancesRepositoryProvider providesInstancesRepositoryProvider() {
         return new InstancesRepositoryProvider();
+    }
+
+    @Provides
+    public SplashScreenViewModel.FactoryFactory providesSplashScreenViewModelFactoryFactory(SettingsProvider settingsProvider) {
+        return (owner, defaultArgs) -> new AbstractSavedStateViewModelFactory(owner, defaultArgs) {
+            @NonNull
+            @Override
+            protected <T extends ViewModel> T create(@NonNull String key, @NonNull Class<T> modelClass, @NonNull SavedStateHandle handle) {
+                return (T) new SplashScreenViewModel(settingsProvider.getGeneralSettings());
+            }
+        };
     }
 }
