@@ -1,3 +1,4 @@
+include ':formstest'
 include ':shared'
 include ':forms'
 include ':analytics'

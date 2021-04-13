@@ -1,4 +1,4 @@
-package org.odk.collect.forms.testsupport;
+package org.odk.collect.formstest;
 
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.shared.TempFiles;

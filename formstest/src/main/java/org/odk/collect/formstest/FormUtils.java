@@ -1,4 +1,4 @@
-package org.odk.collect.forms.testsupport;
+package org.odk.collect.formstest;
 
 import org.apache.commons.io.FileUtils;
 import org.odk.collect.forms.Form;
