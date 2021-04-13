@@ -95,6 +95,7 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
+import org.odk.collect.android.utilities.AppStateProvider;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
@@ -552,13 +553,19 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SplashScreenViewModel.FactoryFactory providesSplashScreenViewModelFactoryFactory(SettingsProvider settingsProvider) {
+    public SplashScreenViewModel.FactoryFactory providesSplashScreenViewModelFactoryFactory(SettingsProvider settingsProvider, AppStateProvider appStateProvider) {
         return (owner, defaultArgs) -> new AbstractSavedStateViewModelFactory(owner, defaultArgs) {
             @NonNull
             @Override
             protected <T extends ViewModel> T create(@NonNull String key, @NonNull Class<T> modelClass, @NonNull SavedStateHandle handle) {
-                return (T) new SplashScreenViewModel(settingsProvider.getGeneralSettings());
+                return (T) new SplashScreenViewModel(settingsProvider.getGeneralSettings(), appStateProvider);
             }
         };
+    }
+
+    @Provides
+    @Singleton
+    public AppStateProvider providesAppStateProvider(Context context) {
+        return new AppStateProvider(context);
     }
 }

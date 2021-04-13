@@ -7,11 +7,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.savedstate.SavedStateRegistryOwner
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.source.Settings
+import org.odk.collect.android.utilities.AppStateProvider
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.ScreenUtils
 import java.io.File
 
-class SplashScreenViewModel(private val generalSettings: Settings) : ViewModel() {
+class SplashScreenViewModel(
+    private val generalSettings: Settings,
+    private val appStateProvider: AppStateProvider
+) : ViewModel() {
 
     val shouldDisplaySplashScreen
         get() = generalSettings.getBoolean(GeneralKeys.KEY_SHOW_SPLASH)
@@ -24,6 +28,9 @@ class SplashScreenViewModel(private val generalSettings: Settings) : ViewModel()
 
     val doesLogoFileExist
         get() = splashScreenLogoFile.exists()
+
+    val shouldFirstLaunchDialogBeDisplayed
+        get() = appStateProvider.isFreshInstall()
 
     interface FactoryFactory {
         fun create(owner: SavedStateRegistryOwner, defaultArgs: Bundle?): ViewModelProvider.Factory
