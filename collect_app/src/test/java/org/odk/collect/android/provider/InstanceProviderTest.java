@@ -14,7 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.storage.StorageInitializer;
-import org.odk.collect.forms.testsupport.InstanceUtils;
+import org.odk.collect.formstest.InstanceUtils;
 import org.robolectric.shadows.ShadowEnvironment;
 
 import java.io.File;

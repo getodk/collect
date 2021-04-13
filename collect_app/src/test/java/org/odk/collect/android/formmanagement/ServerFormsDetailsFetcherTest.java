@@ -2,14 +2,14 @@ package org.odk.collect.android.formmanagement;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormListItem;
 import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.ManifestFile;
 import org.odk.collect.forms.MediaFile;
-import org.odk.collect.forms.testsupport.FormUtils;
-import org.odk.collect.android.support.InMemFormsRepository;
+import org.odk.collect.formstest.FormUtils;
 import org.odk.collect.shared.Md5;
 import org.odk.collect.shared.TempFiles;
 

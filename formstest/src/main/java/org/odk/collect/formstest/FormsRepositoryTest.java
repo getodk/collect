@@ -19,8 +19,6 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.formstest.FormUtils.buildForm;
-import static org.odk.collect.formstest.FormUtils.createXFormBody;
 
 public abstract class FormsRepositoryTest {
 
@@ -37,14 +35,14 @@ public abstract class FormsRepositoryTest {
                 .build());
 
         Form form = formsRepository.getLatestByFormIdAndVersion("1", null);
-        MatcherAssert.assertThat(form, Matchers.notNullValue());
-        MatcherAssert.assertThat(form.getDbId(), Matchers.is(1L));
+        assertThat(form, notNullValue());
+        assertThat(form.getDbId(), is(1L));
     }
 
     @Test
     public void getLatestByFormIdAndVersion_whenMultipleExist_returnsLatest() {
-        Supplier<Long> mockClock = Mockito.mock(Supplier.class);
-        Mockito.when(mockClock.get()).thenReturn(2L, 3L, 1L);
+        Supplier<Long> mockClock = mock(Supplier.class);
+        when(mockClock.get()).thenReturn(2L, 3L, 1L);
 
         FormsRepository formsRepository = buildSubject(mockClock);
         formsRepository.save(FormUtils.buildForm("1", "1", getFormFilesPath())
@@ -55,8 +53,8 @@ public abstract class FormsRepositoryTest {
                 .build());
 
         Form form = formsRepository.getLatestByFormIdAndVersion("1", "1");
-        MatcherAssert.assertThat(form, Matchers.notNullValue());
-        MatcherAssert.assertThat(form.getDbId(), Matchers.is(2L));
+        assertThat(form, notNullValue());
+        assertThat(form.getDbId(), is(2L));
     }
 
     @Test
@@ -72,9 +70,9 @@ public abstract class FormsRepositoryTest {
                 .build());
 
         List<Form> forms = formsRepository.getAllByFormIdAndVersion("1", null);
-        MatcherAssert.assertThat(forms.size(), Matchers.is(2));
-        MatcherAssert.assertThat(forms.get(0).getVersion(), Matchers.is(Matchers.nullValue()));
-        MatcherAssert.assertThat(forms.get(1).getVersion(), Matchers.is(Matchers.nullValue()));
+        assertThat(forms.size(), is(2));
+        assertThat(forms.get(0).getVersion(), is(nullValue()));
+        assertThat(forms.get(1).getVersion(), is(nullValue()));
     }
 
     @Test
@@ -91,8 +89,8 @@ public abstract class FormsRepositoryTest {
         );
 
         List<Form> forms = formsRepository.getAllNotDeletedByFormId("1");
-        MatcherAssert.assertThat(forms.size(), Matchers.is(1));
-        MatcherAssert.assertThat(forms.get(0).getVersion(), Matchers.equalTo("not-deleted"));
+        assertThat(forms.size(), is(1));
+        assertThat(forms.get(0).getVersion(), equalTo("not-deleted"));
     }
 
     @Test
@@ -117,8 +115,8 @@ public abstract class FormsRepositoryTest {
         );
 
         List<Form> forms = formsRepository.getAllNotDeletedByFormIdAndVersion("id", "2");
-        MatcherAssert.assertThat(forms.size(), Matchers.is(1));
-        MatcherAssert.assertThat(forms.get(0).getVersion(), Matchers.equalTo("2"));
+        assertThat(forms.size(), is(1));
+        assertThat(forms.get(0).getVersion(), equalTo("2"));
     }
 
     @Test
@@ -128,7 +126,7 @@ public abstract class FormsRepositoryTest {
                 .build());
 
         formsRepository.softDelete(1L);
-        MatcherAssert.assertThat(formsRepository.get(1L).isDeleted(), Matchers.is(true));
+        assertThat(formsRepository.get(1L).isDeleted(), is(true));
     }
 
     @Test
@@ -139,7 +137,7 @@ public abstract class FormsRepositoryTest {
                 .build());
 
         formsRepository.restore(1L);
-        MatcherAssert.assertThat(formsRepository.get(1L).isDeleted(), Matchers.is(false));
+        assertThat(formsRepository.get(1L).isDeleted(), is(false));
     }
 
     @Test
@@ -148,29 +146,29 @@ public abstract class FormsRepositoryTest {
         Form form = FormUtils.buildForm("id", "version", getFormFilesPath()).build();
 
         formsRepository.save(form);
-        MatcherAssert.assertThat(formsRepository.getAll().get(0).getDbId(), Matchers.notNullValue());
+        assertThat(formsRepository.getAll().get(0).getDbId(), notNullValue());
     }
 
     @Test
     public void save_addsMediaPath_whereMediaDirCanBeCreated() {
         FormsRepository formsRepository = buildSubject();
         Form form = FormUtils.buildForm("id", "version", getFormFilesPath()).build();
-        MatcherAssert.assertThat(form.getFormMediaPath(), Matchers.equalTo(null));
+        assertThat(form.getFormMediaPath(), equalTo(null));
 
         Form savedForm = formsRepository.save(form);
-        MatcherAssert.assertThat(new File(savedForm.getFormMediaPath()).mkdir(), Matchers.is(true));
+        assertThat(new File(savedForm.getFormMediaPath()).mkdir(), is(true));
     }
 
     @Test
     public void save_addsHashBasedOnFormFile() {
         FormsRepository formsRepository = buildSubject();
         Form form = FormUtils.buildForm("id", "version", getFormFilesPath()).build();
-        MatcherAssert.assertThat(form.getMD5Hash(), Matchers.equalTo(null));
+        assertThat(form.getMD5Hash(), equalTo(null));
 
         formsRepository.save(form);
 
         String expectedHash = Md5.getMd5Hash(new File(form.getFormFilePath()));
-        MatcherAssert.assertThat(formsRepository.get(1L).getMD5Hash(), Matchers.equalTo(expectedHash));
+        assertThat(formsRepository.get(1L).getMD5Hash(), equalTo(expectedHash));
     }
 
     @Test(expected = Exception.class)
@@ -195,7 +193,7 @@ public abstract class FormsRepositoryTest {
                 .displayName("changed")
                 .build());
 
-        MatcherAssert.assertThat(formsRepository.get(originalForm.getDbId()).getDisplayName(), Matchers.is("changed"));
+        assertThat(formsRepository.get(originalForm.getDbId()).getDisplayName(), is("changed"));
     }
 
     @Test
@@ -214,7 +212,7 @@ public abstract class FormsRepositoryTest {
                 .build());
 
         String expectedHash = Md5.getMd5Hash(formFile);
-        MatcherAssert.assertThat(formsRepository.get(originalForm.getDbId()).getMD5Hash(), Matchers.is(expectedHash));
+        assertThat(formsRepository.get(originalForm.getDbId()).getMD5Hash(), is(expectedHash));
     }
 
     @Test
@@ -229,14 +227,14 @@ public abstract class FormsRepositoryTest {
         cacheFile.createNewFile();
 
         File formFile = new File(form.getFormFilePath());
-        MatcherAssert.assertThat(formFile.exists(), Matchers.is(true));
-        MatcherAssert.assertThat(mediaDir.exists(), Matchers.is(true));
-        MatcherAssert.assertThat(cacheFile.exists(), Matchers.is(true));
+        assertThat(formFile.exists(), is(true));
+        assertThat(mediaDir.exists(), is(true));
+        assertThat(cacheFile.exists(), is(true));
 
         formsRepository.delete(form.getDbId());
-        MatcherAssert.assertThat(formFile.exists(), Matchers.is(false));
-        MatcherAssert.assertThat(mediaDir.exists(), Matchers.is(false));
-        MatcherAssert.assertThat(cacheFile.exists(), Matchers.is(false));
+        assertThat(formFile.exists(), is(false));
+        assertThat(mediaDir.exists(), is(false));
+        assertThat(cacheFile.exists(), is(false));
     }
 
     @Test
@@ -250,12 +248,12 @@ public abstract class FormsRepositoryTest {
 
         File formFile = new File(form.getFormFilePath());
         File mediaDir = new File(form.getFormMediaPath());
-        MatcherAssert.assertThat(formFile.exists(), Matchers.is(true));
-        MatcherAssert.assertThat(mediaDir.exists(), Matchers.is(true));
+        assertThat(formFile.exists(), is(true));
+        assertThat(mediaDir.exists(), is(true));
 
         formsRepository.delete(1L);
-        MatcherAssert.assertThat(formFile.exists(), Matchers.is(false));
-        MatcherAssert.assertThat(mediaDir.exists(), Matchers.is(false));
+        assertThat(formFile.exists(), is(false));
+        assertThat(mediaDir.exists(), is(false));
     }
 
     @Test
@@ -267,11 +265,11 @@ public abstract class FormsRepositoryTest {
         List<Form> forms = formsRepository.getAll();
 
         formsRepository.deleteAll();
-        MatcherAssert.assertThat(formsRepository.getAll().size(), Matchers.is(0));
+        assertThat(formsRepository.getAll().size(), is(0));
 
         for (Form form : forms) {
-            MatcherAssert.assertThat(new File(form.getFormFilePath()).exists(), Matchers.is(false));
-            MatcherAssert.assertThat(new File(form.getFormMediaPath()).exists(), Matchers.is(false));
+            assertThat(new File(form.getFormFilePath()).exists(), is(false));
+            assertThat(new File(form.getFormMediaPath()).exists(), is(false));
         }
     }
 
@@ -283,12 +281,12 @@ public abstract class FormsRepositoryTest {
         formsRepository.save(FormUtils.buildForm("id2", "version", getFormFilesPath()).build());
 
         List<Form> id1Forms = formsRepository.getAllByFormIdAndVersion("id1", "version");
-        MatcherAssert.assertThat(id1Forms.size(), Matchers.is(2));
-        MatcherAssert.assertThat(id1Forms.get(0).getMD5Hash(), Matchers.is(id1Forms.get(1).getMD5Hash()));
+        assertThat(id1Forms.size(), is(2));
+        assertThat(id1Forms.get(0).getMD5Hash(), is(id1Forms.get(1).getMD5Hash()));
 
         formsRepository.deleteByMd5Hash(id1Forms.get(0).getMD5Hash());
-        MatcherAssert.assertThat(formsRepository.getAll().size(), Matchers.is(1));
-        MatcherAssert.assertThat(formsRepository.getAll().get(0).getFormId(), Matchers.is("id2"));
+        assertThat(formsRepository.getAll().size(), is(1));
+        assertThat(formsRepository.getAll().get(0).getFormId(), is("id2"));
     }
 
     @Test(expected = Exception.class)
@@ -302,7 +300,7 @@ public abstract class FormsRepositoryTest {
         formsRepository.save(FormUtils.buildForm("id1", "version", getFormFilesPath()).build());
         Form form2 = formsRepository.save(FormUtils.buildForm("id2", "version", getFormFilesPath()).build());
 
-        MatcherAssert.assertThat(formsRepository.getOneByMd5Hash(form2.getMD5Hash()), Matchers.is(form2));
+        assertThat(formsRepository.getOneByMd5Hash(form2.getMD5Hash()), is(form2));
     }
 
     @Test
@@ -313,7 +311,7 @@ public abstract class FormsRepositoryTest {
         Form form2 = FormUtils.buildForm("id2", "version", getFormFilesPath()).build();
         formsRepository.save(form2);
 
-        MatcherAssert.assertThat(formsRepository.getOneByPath(form2.getFormFilePath()).getFormId(), Matchers.is("id2"));
+        assertThat(formsRepository.getOneByPath(form2.getFormFilePath()).getFormId(), is("id2"));
     }
 
     @Test
@@ -324,7 +322,7 @@ public abstract class FormsRepositoryTest {
         formsRepository.save(FormUtils.buildForm("id2", "version", getFormFilesPath()).build());
 
         List<Form> forms = formsRepository.getAllByFormId("id1");
-        MatcherAssert.assertThat(forms.size(), Matchers.is(2));
-        MatcherAssert.assertThat(forms, Matchers.contains(form1, form2));
+        assertThat(forms.size(), is(2));
+        assertThat(forms, contains(form1, form2));
     }
 }

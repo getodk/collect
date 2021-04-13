@@ -16,8 +16,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.storage.StorageInitializer;
-import org.odk.collect.forms.testsupport.FormUtils;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.formstest.FormUtils;
 import org.odk.collect.shared.Md5;
 import org.robolectric.shadows.ShadowEnvironment;
 

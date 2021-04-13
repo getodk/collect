@@ -26,7 +26,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.odk.collect.formstest.InstanceUtils.buildInstance;
 
 public abstract class InstancesRepositoryTest {
 
@@ -47,8 +46,8 @@ public abstract class InstancesRepositoryTest {
                 .build());
 
         List<Instance> allNotDeleted = instancesRepository.getAllNotDeleted();
-        MatcherAssert.assertThat(allNotDeleted.size(), Matchers.is(1));
-        MatcherAssert.assertThat(allNotDeleted.get(0).getFormId(), Matchers.is("undeleted"));
+        assertThat(allNotDeleted.size(), is(1));
+        assertThat(allNotDeleted.get(0).getFormId(), is("undeleted"));
     }
 
     @Test
@@ -70,12 +69,12 @@ public abstract class InstancesRepositoryTest {
                 .build());
 
         List<Instance> incomplete = instancesRepository.getAllByStatus(Instance.STATUS_INCOMPLETE);
-        MatcherAssert.assertThat(incomplete.size(), Matchers.is(2));
-        MatcherAssert.assertThat(incomplete.get(0).getFormId(), Matchers.is("incomplete"));
-        MatcherAssert.assertThat(incomplete.get(1).getStatus(), Matchers.is("incomplete"));
+        assertThat(incomplete.size(), is(2));
+        assertThat(incomplete.get(0).getFormId(), is("incomplete"));
+        assertThat(incomplete.get(1).getStatus(), is("incomplete"));
 
         // Check corresponding count method is also correct
-        MatcherAssert.assertThat(instancesRepository.getCountByStatus(Instance.STATUS_INCOMPLETE), Matchers.is(2));
+        assertThat(instancesRepository.getCountByStatus(Instance.STATUS_INCOMPLETE), is(2));
     }
 
     @Test
@@ -104,14 +103,14 @@ public abstract class InstancesRepositoryTest {
                 .build());
 
         List<Instance> incomplete = instancesRepository.getAllByStatus(Instance.STATUS_INCOMPLETE, Instance.STATUS_SUBMITTED);
-        MatcherAssert.assertThat(incomplete.size(), Matchers.is(4));
-        MatcherAssert.assertThat(incomplete.get(0).getFormId(), Matchers.is(Matchers.not("complete")));
-        MatcherAssert.assertThat(incomplete.get(1).getFormId(), Matchers.is(Matchers.not("complete")));
-        MatcherAssert.assertThat(incomplete.get(2).getFormId(), Matchers.is(Matchers.not("complete")));
-        MatcherAssert.assertThat(incomplete.get(3).getStatus(), Matchers.is(Matchers.not("complete")));
+        assertThat(incomplete.size(), is(4));
+        assertThat(incomplete.get(0).getFormId(), is(not("complete")));
+        assertThat(incomplete.get(1).getFormId(), is(not("complete")));
+        assertThat(incomplete.get(2).getFormId(), is(not("complete")));
+        assertThat(incomplete.get(3).getStatus(), is(not("complete")));
 
         // Check corresponding count method is also correct
-        MatcherAssert.assertThat(instancesRepository.getCountByStatus(Instance.STATUS_INCOMPLETE, Instance.STATUS_SUBMITTED), Matchers.is(4));
+        assertThat(instancesRepository.getCountByStatus(Instance.STATUS_INCOMPLETE, Instance.STATUS_SUBMITTED), is(4));
     }
 
     @Test
@@ -125,7 +124,7 @@ public abstract class InstancesRepositoryTest {
         instancesRepository.save(InstanceUtils.buildInstance("formid2", "1", "display", Instance.STATUS_COMPLETE, null, getInstancesDir()).build());
 
         List<Instance> instances = instancesRepository.getAllByFormId("formid");
-        MatcherAssert.assertThat(instances.size(), Matchers.is(4));
+        assertThat(instances.size(), is(4));
     }
 
     @Test
@@ -142,7 +141,7 @@ public abstract class InstancesRepositoryTest {
                 .build());
 
         List<Instance> instances = instancesRepository.getAllNotDeletedByFormIdAndVersion("formid", "1");
-        MatcherAssert.assertThat(instances.size(), Matchers.is(3));
+        assertThat(instances.size(), is(3));
     }
 
     @Test
@@ -153,7 +152,7 @@ public abstract class InstancesRepositoryTest {
         instancesRepository.save(InstanceUtils.buildInstance("formid", "1", getInstancesDir()).build());
 
         instancesRepository.deleteAll();
-        MatcherAssert.assertThat(instancesRepository.getAll().size(), Matchers.is(0));
+        assertThat(instancesRepository.getAll().size(), is(0));
     }
 
     @Test
@@ -164,8 +163,8 @@ public abstract class InstancesRepositoryTest {
         Instance instance2 = instancesRepository.save(InstanceUtils.buildInstance("formid", "1", getInstancesDir()).build());
 
         instancesRepository.deleteAll();
-        MatcherAssert.assertThat(new File(instance1.getInstanceFilePath()).exists(), Matchers.is(false));
-        MatcherAssert.assertThat(new File(instance2.getInstanceFilePath()).exists(), Matchers.is(false));
+        assertThat(new File(instance1.getInstanceFilePath()).exists(), is(false));
+        assertThat(new File(instance2.getInstanceFilePath()).exists(), is(false));
     }
 
     @Test
@@ -177,9 +176,9 @@ public abstract class InstancesRepositoryTest {
 
         Long id1 = instancesRepository.getAll().get(0).getDbId();
         Long id2 = instancesRepository.getAll().get(1).getDbId();
-        MatcherAssert.assertThat(id1, Matchers.notNullValue());
-        MatcherAssert.assertThat(id2, Matchers.notNullValue());
-        MatcherAssert.assertThat(id1, Matchers.not(Matchers.equalTo(id2)));
+        assertThat(id1, notNullValue());
+        assertThat(id2, notNullValue());
+        assertThat(id1, not(equalTo(id2)));
     }
 
     @Test
@@ -187,7 +186,7 @@ public abstract class InstancesRepositoryTest {
         InstancesRepository instancesRepository = buildSubject();
 
         Instance instance = instancesRepository.save(InstanceUtils.buildInstance("formid", "1", getInstancesDir()).build());
-        MatcherAssert.assertThat(instancesRepository.get(instance.getDbId()), Matchers.is(instance));
+        assertThat(instancesRepository.get(instance.getDbId()), is(instance));
     }
 
     @Test
@@ -202,7 +201,7 @@ public abstract class InstancesRepositoryTest {
                 .displayName("A different blah")
                 .build());
 
-        MatcherAssert.assertThat(instancesRepository.get(originalInstance.getDbId()).getDisplayName(), Matchers.is("A different blah"));
+        assertThat(instancesRepository.get(originalInstance.getDbId()).getDisplayName(), is("A different blah"));
     }
 
     @Test
@@ -212,7 +211,7 @@ public abstract class InstancesRepositoryTest {
         Instance instance = instancesRepository.save(InstanceUtils.buildInstance("formid", "1", getInstancesDir())
                 .status(null)
                 .build());
-        MatcherAssert.assertThat(instancesRepository.get(instance.getDbId()).getStatus(), Matchers.is(Instance.STATUS_INCOMPLETE));
+        assertThat(instancesRepository.get(instance.getDbId()).getStatus(), is(Instance.STATUS_INCOMPLETE));
     }
 
     @Test
@@ -222,7 +221,7 @@ public abstract class InstancesRepositoryTest {
         Instance instance = instancesRepository.save(InstanceUtils.buildInstance("formid", "1", getInstancesDir())
                 .lastStatusChangeDate(null)
                 .build());
-        MatcherAssert.assertThat(instancesRepository.get(instance.getDbId()).getLastStatusChangeDate(), Matchers.is(Matchers.notNullValue()));
+        assertThat(instancesRepository.get(instance.getDbId()).getLastStatusChangeDate(), is(notNullValue()));
     }
 
     @Test
@@ -231,7 +230,7 @@ public abstract class InstancesRepositoryTest {
         Instance instance = instancesRepository.save(InstanceUtils.buildInstance("formid", "1", getInstancesDir()).build());
 
         instancesRepository.softDelete(instance.getDbId());
-        MatcherAssert.assertThat(instancesRepository.get(instance.getDbId()).getDeletedDate(), Matchers.is(Matchers.notNullValue()));
+        assertThat(instancesRepository.get(instance.getDbId()).getDeletedDate(), is(notNullValue()));
     }
 
     @Test
@@ -240,11 +239,11 @@ public abstract class InstancesRepositoryTest {
         Instance instance = instancesRepository.save(InstanceUtils.buildInstance("formid", "1", getInstancesDir()).build());
 
         File instanceDir = new File(instance.getInstanceFilePath()).getParentFile();
-        MatcherAssert.assertThat(instanceDir.exists(), Matchers.is(true));
-        MatcherAssert.assertThat(instanceDir.isDirectory(), Matchers.is(true));
+        assertThat(instanceDir.exists(), is(true));
+        assertThat(instanceDir.isDirectory(), is(true));
 
         instancesRepository.softDelete(instance.getDbId());
-        MatcherAssert.assertThat(instanceDir.exists(), Matchers.is(false));
+        assertThat(instanceDir.exists(), is(false));
     }
 
     @Test
@@ -253,7 +252,7 @@ public abstract class InstancesRepositoryTest {
         Instance instance = instancesRepository.save(InstanceUtils.buildInstance("formid", "1", getInstancesDir()).build());
 
         instancesRepository.delete(instance.getDbId());
-        MatcherAssert.assertThat(instancesRepository.getAll().size(), Matchers.is(0));
+        assertThat(instancesRepository.getAll().size(), is(0));
     }
 
     @Test
@@ -263,10 +262,10 @@ public abstract class InstancesRepositoryTest {
 
         // The repo assumes the parent of the file also contains other instance files
         File instanceDir = new File(instance.getInstanceFilePath()).getParentFile();
-        MatcherAssert.assertThat(instanceDir.exists(), Matchers.is(true));
-        MatcherAssert.assertThat(instanceDir.isDirectory(), Matchers.is(true));
+        assertThat(instanceDir.exists(), is(true));
+        assertThat(instanceDir.isDirectory(), is(true));
 
         instancesRepository.delete(instance.getDbId());
-        MatcherAssert.assertThat(instanceDir.exists(), Matchers.is(false));
+        assertThat(instanceDir.exists(), is(false));
     }
 }
