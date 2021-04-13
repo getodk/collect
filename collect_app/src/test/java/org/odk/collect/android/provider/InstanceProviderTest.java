@@ -269,6 +269,15 @@ public class InstanceProviderTest {
     }
 
     @Test
+    public void query_returnsTheExpectedNumberColumns() {
+        Uri uri = addInstanceToDb("/blah1", "Instance 1");
+
+        try (Cursor cursor = contentResolver.query(uri, null, null, null, null)) {
+            assertThat(cursor.getColumnCount(), is(12));
+        }
+    }
+
+    @Test
     public void query_withProjection_onlyReturnsSpecifiedColumns() {
         addInstanceToDb("/blah1", "Instance 1");
 
