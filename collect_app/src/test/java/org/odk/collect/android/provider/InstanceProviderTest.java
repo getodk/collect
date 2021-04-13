@@ -328,8 +328,8 @@ public class InstanceProviderTest {
     }
 
     private Uri addInstanceToDb(String instanceFilePath, String displayName) {
-        ContentValues values1 = getContentValues(instanceFilePath, displayName, "external_app_form", "1");
-        return contentResolver.insert(CONTENT_URI, values1);
+        ContentValues values = getContentValues(instanceFilePath, displayName, "external_app_form", "1");
+        return contentResolver.insert(CONTENT_URI, values);
     }
 
     private ContentValues getContentValues(String instanceFilePath, String displayName, String formId, String formVersion) {
