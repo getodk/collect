@@ -4,7 +4,8 @@ import org.junit.Before;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.testshared.TempFiles;
-import org.odk.collect.utilities.Clock;
+
+import java.util.function.Supplier;
 
 public class InMemFormsRepositoryTest extends FormsRepositoryTest {
 
@@ -21,7 +22,7 @@ public class InMemFormsRepositoryTest extends FormsRepositoryTest {
     }
 
     @Override
-    public FormsRepository buildSubject(Clock clock) {
+    public FormsRepository buildSubject(Supplier<Long> clock) {
         return new InMemFormsRepository(clock);
     }
 

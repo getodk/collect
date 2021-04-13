@@ -5,11 +5,11 @@ import org.junit.Test;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.shared.Md5;
-import org.odk.collect.utilities.Clock;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -26,7 +26,7 @@ public abstract class FormsRepositoryTest {
 
     public abstract FormsRepository buildSubject();
 
-    public abstract FormsRepository buildSubject(Clock clock);
+    public abstract FormsRepository buildSubject(Supplier<Long> clock);
 
     public abstract String getFormFilesPath();
 
@@ -43,8 +43,8 @@ public abstract class FormsRepositoryTest {
 
     @Test
     public void getLatestByFormIdAndVersion_whenMultipleExist_returnsLatest() {
-        Clock mockClock = mock(Clock.class);
-        when(mockClock.getCurrentTime()).thenReturn(2L, 3L, 1L);
+        Supplier<Long> mockClock = mock(Supplier.class);
+        when(mockClock.get()).thenReturn(2L, 3L, 1L);
 
         FormsRepository formsRepository = buildSubject(mockClock);
         formsRepository.save(buildForm("1", "1", getFormFilesPath())

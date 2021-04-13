@@ -11,13 +11,13 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.shared.Md5;
-import org.odk.collect.utilities.Clock;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
@@ -38,10 +38,10 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.getValu
 public class DatabaseFormsRepository implements FormsRepository {
 
     private final StoragePathProvider storagePathProvider;
-    private final Clock clock;
+    private final Supplier<Long> clock;
     private final FormsDatabaseProvider formsDatabaseProvider;
 
-    public DatabaseFormsRepository(Clock clock, StoragePathProvider storagePathProvider, FormsDatabaseProvider formsDatabaseProvider) {
+    public DatabaseFormsRepository(Supplier<Long> clock, StoragePathProvider storagePathProvider, FormsDatabaseProvider formsDatabaseProvider) {
         this.clock = clock;
         this.storagePathProvider = storagePathProvider;
         this.formsDatabaseProvider = formsDatabaseProvider;
@@ -134,7 +134,7 @@ public class DatabaseFormsRepository implements FormsRepository {
         }
 
         if (form.getDbId() == null) {
-            values.put(DATE, clock.getCurrentTime());
+            values.put(DATE, clock.get());
 
             Long idFromUri = insertForm(values);
             return get(idFromUri);

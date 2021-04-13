@@ -1,12 +1,11 @@
 package org.odk.collect.android.support;
 
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.shared.Md5;
 import org.odk.collect.testshared.TempFiles;
-import org.odk.collect.utilities.Clock;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
@@ -26,13 +26,13 @@ public class InMemFormsRepository implements FormsRepository {
     private final List<Form> forms = new ArrayList<>();
     private long idCounter = 1L;
 
-    private final Clock clock;
+    private final Supplier<Long> clock;
 
     public InMemFormsRepository() {
         this.clock = System::currentTimeMillis;
     }
 
-    public InMemFormsRepository(Clock clock) {
+    public InMemFormsRepository(Supplier<Long> clock) {
         this.clock = clock;
     }
 
@@ -112,7 +112,7 @@ public class InMemFormsRepository implements FormsRepository {
             return form;
         } else {
             builder.dbId(idCounter++)
-                    .date(clock.getCurrentTime());
+                    .date(clock.get());
 
             // Allows tests to override hash
             String hash;
