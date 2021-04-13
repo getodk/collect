@@ -1,4 +1,4 @@
-package org.odk.collect.android.forms;
+package org.odk.collect.forms.testsupport;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
