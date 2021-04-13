@@ -18,10 +18,12 @@ import org.odk.collect.android.support.InstanceUtils;
 import org.robolectric.shadows.ShadowEnvironment;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isOneOf;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
@@ -289,11 +291,12 @@ public class InstanceProviderTest {
         try (Cursor cursor = contentResolver.query(CONTENT_URI, null, DISPLAY_NAME + "=?", new String[]{"Matching instance"}, null)) {
             assertThat(cursor.getCount(), is(2));
 
-            cursor.moveToNext();
-            assertThat(cursor.getString(cursor.getColumnIndex(INSTANCE_FILE_PATH)), is(isOneOf("/blah1", "/blah3")));
+            List<String> paths = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                paths.add(cursor.getString(cursor.getColumnIndex(INSTANCE_FILE_PATH)));
+            }
 
-            cursor.moveToNext();
-            assertThat(cursor.getString(cursor.getColumnIndex(INSTANCE_FILE_PATH)), is(isOneOf("/blah1", "/blah3")));
+            assertThat(paths, contains("/blah1", "/blah3"));
         }
     }
 
