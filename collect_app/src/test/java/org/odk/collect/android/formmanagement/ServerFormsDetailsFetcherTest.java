@@ -11,7 +11,7 @@ import org.odk.collect.forms.MediaFile;
 import org.odk.collect.forms.testsupport.FormUtils;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.shared.Md5;
-import org.odk.collect.testshared.TempFiles;
+import org.odk.collect.shared.TempFiles;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;

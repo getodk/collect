@@ -10,7 +10,7 @@ import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.forms.testsupport.FormUtils;
-import org.odk.collect.android.support.InstanceUtils;
+import org.odk.collect.forms.testsupport.InstanceUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;

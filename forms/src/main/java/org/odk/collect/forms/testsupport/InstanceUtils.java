@@ -1,7 +1,7 @@
-package org.odk.collect.android.support;
+package org.odk.collect.forms.testsupport;
 
 import org.odk.collect.forms.instances.Instance;
-import org.odk.collect.testshared.TempFiles;
+import org.odk.collect.shared.TempFiles;
 
 import java.io.File;
 

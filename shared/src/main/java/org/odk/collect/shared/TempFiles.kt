@@ -1,7 +1,5 @@
-package org.odk.collect.testshared
+package org.odk.collect.shared
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import java.io.File
 import java.nio.file.Files
 
@@ -30,7 +28,6 @@ object TempFiles {
     }
 
     @JvmStatic
-    @RequiresApi(Build.VERSION_CODES.O)
     fun createTempDir(): File {
         return Files.createTempDirectory(null as String?).toFile()!!
     }

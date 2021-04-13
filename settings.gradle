@@ -1,7 +1,7 @@
 include ':shared'
 include ':forms'
 include ':analytics'
-include ':android-shared'
+include ':androidshared'
 include ':audiorecorder'
 include ':testshared'
 include ':audioclips'

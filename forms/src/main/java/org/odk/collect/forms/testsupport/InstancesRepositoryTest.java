@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.instances;
+package org.odk.collect.forms.testsupport;
 
 import org.junit.Test;
 import org.odk.collect.forms.instances.Instance;
@@ -26,7 +26,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.odk.collect.android.support.InstanceUtils.buildInstance;
+import static org.odk.collect.forms.testsupport.InstanceUtils.buildInstance;
 
 public abstract class InstancesRepositoryTest {
 

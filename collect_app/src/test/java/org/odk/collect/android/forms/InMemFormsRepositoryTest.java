@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.testsupport.FormsRepositoryTest;
-import org.odk.collect.testshared.TempFiles;
+import org.odk.collect.shared.TempFiles;
 
 import java.util.function.Supplier;
 
