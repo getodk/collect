@@ -1,13 +1,22 @@
 package org.odk.collect.android.forms;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.utilities.Clock;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
+
+import timber.log.Timber;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -19,7 +28,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.FormUtils.buildForm;
 import static org.odk.collect.android.support.FormUtils.createXFormBody;
-import static org.odk.collect.android.utilities.FileUtils.constructMediaPath;
 
 public abstract class FormsRepositoryTest {
 
@@ -151,13 +159,13 @@ public abstract class FormsRepositoryTest {
     }
 
     @Test
-    public void save_addsMediaPathBasedOnFormFile() {
+    public void save_addsMediaPath_whereMediaDirCanBeCreated() {
         FormsRepository formsRepository = buildSubject();
         Form form = buildForm("id", "version", getFormFilesPath()).build();
         assertThat(form.getFormMediaPath(), equalTo(null));
 
         Form savedForm = formsRepository.save(form);
-        assertThat(savedForm.getFormMediaPath(), is(constructMediaPath(form.getFormFilePath())));
+        assertThat(new File(savedForm.getFormMediaPath()).mkdir(), is(true));
     }
 
     @Test
@@ -168,7 +176,7 @@ public abstract class FormsRepositoryTest {
 
         formsRepository.save(form);
 
-        String expectedHash = FileUtils.getMd5Hash(new File(form.getFormFilePath()));
+        String expectedHash = getMD5Hash(new File(form.getFormFilePath()));
         assertThat(formsRepository.get(1L).getMD5Hash(), equalTo(expectedHash));
     }
 
@@ -198,7 +206,7 @@ public abstract class FormsRepositoryTest {
     }
 
     @Test
-    public void save_whenFormHasId_updatesHash() {
+    public void save_whenFormHasId_updatesHash() throws IOException {
         FormsRepository formsRepository = buildSubject();
         Form originalForm = formsRepository.save(buildForm("id", "version", getFormFilesPath())
                 .displayName("original")
@@ -206,13 +214,13 @@ public abstract class FormsRepositoryTest {
 
         String newFormBody = createXFormBody("id", "version", "A different title");
         File formFile = new File(originalForm.getFormFilePath());
-        FileUtils.write(formFile, newFormBody.getBytes());
+        FileUtils.writeByteArrayToFile(formFile, newFormBody.getBytes());
 
         formsRepository.save(new Form.Builder(originalForm)
                 .displayName("changed")
                 .build());
 
-        String expectedHash = FileUtils.getMd5Hash(formFile);
+        String expectedHash = getMD5Hash(formFile);
         assertThat(formsRepository.get(originalForm.getDbId()).getMD5Hash(), is(expectedHash));
     }
 
@@ -222,7 +230,7 @@ public abstract class FormsRepositoryTest {
         Form form = formsRepository.save(buildForm("id", "version", getFormFilesPath()).build());
 
         // FormRepository doesn't automatically create all form files
-        File mediaDir = new File(constructMediaPath(form.getFormFilePath()));
+        File mediaDir = new File(form.getFormMediaPath());
         mediaDir.mkdir();
         File cacheFile = new File(form.getJrCacheFilePath());
         cacheFile.createNewFile();
@@ -244,7 +252,7 @@ public abstract class FormsRepositoryTest {
         Form form = formsRepository.save(buildForm("id", "version", getFormFilesPath()).build());
 
         // FormRepository currently doesn't manage media file path other than deleting it
-        String mediaPath = constructMediaPath(form.getFormFilePath());
+        String mediaPath = form.getFormMediaPath();
         new File(mediaPath).createNewFile();
 
         File formFile = new File(form.getFormFilePath());
@@ -325,5 +333,46 @@ public abstract class FormsRepositoryTest {
         List<Form> forms = formsRepository.getAllByFormId("id1");
         assertThat(forms.size(), is(2));
         assertThat(forms, contains(form1, form2));
+    }
+
+    private String getMD5Hash(File formFile) {
+        final InputStream is;
+        try {
+            is = new FileInputStream(formFile);
+
+        } catch (FileNotFoundException e) {
+            Timber.d(e, "Cache file %s not found", formFile.getAbsolutePath());
+            return null;
+
+        }
+
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            final byte[] buffer = new byte[16 * 1024];
+
+            while (true) {
+                int result = is.read(buffer, 0, 16 * 1024);
+                if (result == -1) {
+                    break;
+                }
+                md.update(buffer, 0, result);
+            }
+
+            StringBuilder md5 = new StringBuilder(new BigInteger(1, md.digest()).toString(16));
+            while (md5.length() < 32) {
+                md5.insert(0, "0");
+            }
+
+            is.close();
+            return md5.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            Timber.e(e);
+            return null;
+
+        } catch (IOException e) {
+            Timber.e(e, "Problem reading file.");
+            return null;
+        }
     }
 }
