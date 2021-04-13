@@ -1,7 +1,6 @@
 package org.odk.collect.shared
 
 import java.io.File
-import java.nio.file.Files
 
 object TempFiles {
 
@@ -29,6 +28,9 @@ object TempFiles {
 
     @JvmStatic
     fun createTempDir(): File {
-        return Files.createTempDirectory(null as String?).toFile()!!
+        val tmpDir = System.getProperty("java.io.tmpdir", ".")
+        val dir = File(tmpDir, RandomString.randomString(16))
+        dir.mkdir()
+        return dir
     }
 }

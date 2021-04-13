@@ -1,4 +1,4 @@
-package org.odk.collect.utilities;
+package org.odk.collect.shared;
 
 import java.security.SecureRandom;
 

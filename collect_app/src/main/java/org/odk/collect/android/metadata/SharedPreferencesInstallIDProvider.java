@@ -2,7 +2,7 @@ package org.odk.collect.android.metadata;
 
 import org.odk.collect.android.preferences.source.Settings;
 
-import static org.odk.collect.utilities.RandomString.randomString;
+import static org.odk.collect.shared.RandomString.randomString;
 
 public class SharedPreferencesInstallIDProvider implements InstallIDProvider {
 
