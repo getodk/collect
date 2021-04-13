@@ -23,7 +23,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
+import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.utilities.DialogUtils
 import javax.inject.Inject
 
 class SplashScreenActivity : AppCompatActivity() {
@@ -43,10 +45,10 @@ class SplashScreenActivity : AppCompatActivity() {
     private fun init() {
         setContentView(R.layout.splash_screen)
 
-        if (viewModel.shouldDisplaySplashScreen) {
-            startSplashScreen()
-        } else {
-            endSplashScreen()
+        when {
+            viewModel.shouldFirstLaunchDialogBeDisplayed -> DialogUtils.showIfNotShowing(FirstLaunchDialog::class.java, supportFragmentManager)
+            viewModel.shouldDisplaySplashScreen -> startSplashScreen()
+            else -> endSplashScreen()
         }
     }
 
