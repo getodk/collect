@@ -26,7 +26,11 @@ class SharedPreferencesProjectsRepository(
     }
 
     override fun add(project: Project) {
-        val projects = getAll().toMutableList().plus(project.copy(uuid = uuidGenerator.generateUUID()))
+        val projects = if (project.uuid.isBlank()) {
+            getAll().toMutableList().plus(project.copy(uuid = uuidGenerator.generateUUID()))
+        } else {
+            getAll().toMutableList().plus(project)
+        }
         metaSettings.save(MetaKeys.KEY_PROJECTS, gson.toJson(projects))
     }
 

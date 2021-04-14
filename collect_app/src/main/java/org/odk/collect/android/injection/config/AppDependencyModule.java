@@ -87,6 +87,7 @@ import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.preferences.source.SettingsStore;
 import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.projects.ProjectsRepository;
 import org.odk.collect.android.projects.SharedPreferencesProjectsRepository;
 import org.odk.collect.android.storage.StorageInitializer;
@@ -567,5 +568,10 @@ public class AppDependencyModule {
     @Singleton
     public AppStateProvider providesAppStateProvider(Context context) {
         return new AppStateProvider(context);
+    }
+
+    @Provides
+    public ProjectImporter providesProjectImporter(ProjectsRepository projectsRepository, SettingsProvider settingsProvider) {
+        return new ProjectImporter(projectsRepository, settingsProvider.getMetaSettings());
     }
 }
