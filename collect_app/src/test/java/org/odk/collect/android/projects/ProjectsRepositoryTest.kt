@@ -2,6 +2,7 @@ package org.odk.collect.android.projects
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
+import org.hamcrest.Matchers.isEmptyString
 import org.hamcrest.Matchers.not
 import org.hamcrest.Matchers.notNullValue
 import org.junit.Before
@@ -43,6 +44,18 @@ abstract class ProjectsRepositoryTest {
 
         assertThat(projects.size, `is`(1))
         assertThat(projects[0], `is`(projectX.copy(uuid = projects[0].uuid)))
+    }
+
+    @Test
+    fun add_shouldAddUuidIfNotSpecified() {
+        projectsRepository.add(projectX)
+        assertThat(projectsRepository.getAll()[0].uuid, `is`(not(isEmptyString())))
+    }
+
+    @Test
+    fun add_shouldNotAddUuidIfSpecified() {
+        projectsRepository.add(projectX.copy(uuid = "1"))
+        assertThat(projectsRepository.get("1"), `is`(projectX.copy(uuid = "1")))
     }
 
     @Test
