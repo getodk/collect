@@ -21,6 +21,8 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.instances.InstancesRepositoryTest;
 import org.odk.collect.android.storage.StorageInitializer;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.RobolectricHelpers;
 
 @RunWith(AndroidJUnit4.class)
@@ -34,5 +36,10 @@ public class DatabaseInstancesRepositoryTest extends InstancesRepositoryTest {
     @Override
     public InstancesRepository buildSubject() {
         return new DatabaseInstancesRepository();
+    }
+
+    @Override
+    public String getInstancesDir() {
+        return new StoragePathProvider().getOdkDirPath(StorageSubdirectory.INSTANCES);
     }
 }

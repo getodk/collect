@@ -59,7 +59,7 @@ import java.util.Map;
 import au.com.bytecode.opencsv.CSVReader;
 import timber.log.Timber;
 
-import static org.odk.collect.android.forms.FormUtils.setupReferenceManagerForForm;
+import static org.odk.collect.android.utilities.FormUtils.setupReferenceManagerForForm;
 
 /**
  * Background task for loading a form.

@@ -33,8 +33,8 @@ import static org.odk.collect.android.database.DatabaseFormColumns.JRCACHE_FILE_
 import static org.odk.collect.android.database.DatabaseFormColumns.JR_FORM_ID;
 import static org.odk.collect.android.database.DatabaseFormColumns.JR_VERSION;
 import static org.odk.collect.android.database.DatabaseFormColumns.MD5_HASH;
-import static org.odk.collect.android.forms.FormUtils.getFormFromCurrentCursorPosition;
-import static org.odk.collect.android.forms.FormUtils.getValuesFromForm;
+import static org.odk.collect.android.utilities.FormUtils.getFormFromCurrentCursorPosition;
+import static org.odk.collect.android.utilities.FormUtils.getValuesFromForm;
 
 public class DatabaseFormsRepository implements FormsRepository {
 

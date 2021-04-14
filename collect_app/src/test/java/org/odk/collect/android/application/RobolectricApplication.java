@@ -5,7 +5,6 @@ import androidx.work.WorkManager;
 
 import org.odk.collect.android.database.FormsDatabaseProvider;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowApplication;
@@ -49,7 +48,7 @@ public class RobolectricApplication extends Collect {
 
         // These clear static state that can't persist from test to test
         DaggerUtils.getComponent(this).formsDatabaseProvider().releaseDatabaseHelper();
-        InstanceProvider.releaseDatabaseHelper();
+        DaggerUtils.getComponent(this).instancesDatabaseProvider().releaseDatabaseHelper();
 
         // We don't want any clicks to be blocked
         MultiClickGuard.test = true;

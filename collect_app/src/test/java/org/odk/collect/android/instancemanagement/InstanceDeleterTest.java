@@ -7,6 +7,7 @@ import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.support.FormUtils;
 import org.odk.collect.android.support.InMemFormsRepository;
 import org.odk.collect.android.support.InMemInstancesRepository;
+import org.odk.collect.testshared.TempFiles;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -30,8 +31,8 @@ public class InstanceDeleterTest {
                 .build()
         );
 
-        instancesRepository.save(buildInstance("1", "version").build());
-        instancesRepository.save(buildInstance("1", "version").build());
+        instancesRepository.save(buildInstance("1", "version", TempFiles.createTempDir().getAbsolutePath()).build());
+        instancesRepository.save(buildInstance("1", "version", TempFiles.createTempDir().getAbsolutePath()).build());
 
         Long id = instancesRepository.getAll().get(0).getDbId();
         instanceDeleter.delete(id);
@@ -58,6 +59,7 @@ public class InstanceDeleterTest {
         Instance instanceToDelete = instancesRepository.save(new Instance.Builder()
                 .formId("1")
                 .formVersion("version")
+                .instanceFilePath(TempFiles.createTempDir().getAbsolutePath())
                 .build()
         );
 
@@ -78,6 +80,7 @@ public class InstanceDeleterTest {
         Instance instanceToDelete = instancesRepository.save(new Instance.Builder()
                 .formId("1")
                 .formVersion("version")
+                .instanceFilePath(TempFiles.createTempDir().getAbsolutePath())
                 .build()
         );
 
@@ -106,12 +109,14 @@ public class InstanceDeleterTest {
         Instance instanceToDelete = instancesRepository.save(new Instance.Builder()
                 .formId("1")
                 .formVersion("1")
+                .instanceFilePath(TempFiles.createTempDir().getAbsolutePath())
                 .build()
         );
 
         instancesRepository.save(new Instance.Builder()
                 .formId("1")
                 .formVersion("2")
+                .instanceFilePath(TempFiles.createTempDir().getAbsolutePath())
                 .build()
         );
 
@@ -133,6 +138,7 @@ public class InstanceDeleterTest {
         Instance instanceToDelete = instancesRepository.save(new Instance.Builder()
                 .formId("1")
                 .formVersion("version")
+                .instanceFilePath(TempFiles.createTempDir().getAbsolutePath())
                 .build()
         );
 
@@ -161,6 +167,7 @@ public class InstanceDeleterTest {
         Instance instanceToDelete = instancesRepository.save(new Instance.Builder()
                 .formId("1")
                 .formVersion("2")
+                .instanceFilePath(TempFiles.createTempDir().getAbsolutePath())
                 .build()
         );
 
@@ -170,7 +177,7 @@ public class InstanceDeleterTest {
 
     @Test
     public void whenInstanceIsSubmitted_softDeletesInstance() {
-        Instance instance = instancesRepository.save(buildInstance("1", "version")
+        Instance instance = instancesRepository.save(buildInstance("1", "version", TempFiles.createTempDir().getAbsolutePath())
                 .status(Instance.STATUS_SUBMITTED)
                 .build());
 
@@ -180,7 +187,7 @@ public class InstanceDeleterTest {
 
     @Test
     public void whenInstanceIsSubmitted_clearsGeometryData() {
-        Instance instance = instancesRepository.save(buildInstance("1", "version")
+        Instance instance = instancesRepository.save(buildInstance("1", "version", TempFiles.createTempDir().getAbsolutePath())
                 .status(Instance.STATUS_SUBMITTED)
                 .geometryType("Point")
                 .geometry("{\"type\":\"Point\",\"coordinates\":[127.6, 11.1]}")

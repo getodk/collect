@@ -20,7 +20,7 @@ import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormListItem;
 import org.odk.collect.android.forms.FormSource;
 import org.odk.collect.android.forms.FormSourceException;
-import org.odk.collect.android.forms.FormUtils;
+import org.odk.collect.android.utilities.FormUtils;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.forms.ManifestFile;
 import org.odk.collect.android.forms.MediaFile;

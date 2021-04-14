@@ -14,11 +14,26 @@
 
 package org.odk.collect.android.instances;
 
+import org.junit.Before;
 import org.odk.collect.android.support.InMemInstancesRepository;
+import org.odk.collect.testshared.TempFiles;
 
 public class InMemInstancesRepositoryTest extends InstancesRepositoryTest {
+
+    private String tempDirectory;
+
+    @Before
+    public void setup() {
+        tempDirectory = TempFiles.createTempDir().getAbsolutePath();
+    }
+
     @Override
     public InstancesRepository buildSubject() {
         return new InMemInstancesRepository();
+    }
+
+    @Override
+    public String getInstancesDir() {
+        return tempDirectory;
     }
 }

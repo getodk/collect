@@ -16,6 +16,7 @@ package org.odk.collect.android.instances;
 
 import org.junit.Test;
 
+import java.io.File;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,22 +24,23 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
 import static org.odk.collect.android.support.InstanceUtils.buildInstance;
 
 public abstract class InstancesRepositoryTest {
 
     public abstract InstancesRepository buildSubject();
 
+    public abstract String getInstancesDir();
+
     @Test
     public void getAllNotDeleted_returnsUndeletedInstances() {
         InstancesRepository instancesRepository = buildSubject();
 
-        instancesRepository.save(buildInstance("deleted", "1")
+        instancesRepository.save(buildInstance("deleted", "1", getInstancesDir())
                 .status(Instance.STATUS_COMPLETE)
                 .deletedDate(System.currentTimeMillis())
                 .build());
-        instancesRepository.save(buildInstance("undeleted", "1")
+        instancesRepository.save(buildInstance("undeleted", "1", getInstancesDir())
                 .status(Instance.STATUS_COMPLETE)
                 .build());
 
@@ -51,17 +53,17 @@ public abstract class InstancesRepositoryTest {
     public void getAllByStatus_withOneStatus_returnsMatchingInstances() {
         InstancesRepository instancesRepository = buildSubject();
 
-        instancesRepository.save(buildInstance("incomplete", "1")
+        instancesRepository.save(buildInstance("incomplete", "1", getInstancesDir())
                 .status(Instance.STATUS_INCOMPLETE)
                 .build());
-        instancesRepository.save(buildInstance("incomplete", "1")
+        instancesRepository.save(buildInstance("incomplete", "1", getInstancesDir())
                 .status(Instance.STATUS_INCOMPLETE)
                 .build());
 
-        instancesRepository.save(buildInstance("complete", "1")
+        instancesRepository.save(buildInstance("complete", "1", getInstancesDir())
                 .status(Instance.STATUS_COMPLETE)
                 .build());
-        instancesRepository.save(buildInstance("complete", "1")
+        instancesRepository.save(buildInstance("complete", "1", getInstancesDir())
                 .status(Instance.STATUS_COMPLETE)
                 .build());
 
@@ -78,24 +80,24 @@ public abstract class InstancesRepositoryTest {
     public void getAllByStatus_withMultipleStatus_returnsMatchingInstances() {
         InstancesRepository instancesRepository = buildSubject();
 
-        instancesRepository.save(buildInstance("incomplete", "1")
+        instancesRepository.save(buildInstance("incomplete", "1", getInstancesDir())
                 .status(Instance.STATUS_INCOMPLETE)
                 .build());
-        instancesRepository.save(buildInstance("incomplete", "1")
+        instancesRepository.save(buildInstance("incomplete", "1", getInstancesDir())
                 .status(Instance.STATUS_INCOMPLETE)
                 .build());
 
-        instancesRepository.save(buildInstance("complete", "1")
+        instancesRepository.save(buildInstance("complete", "1", getInstancesDir())
                 .status(Instance.STATUS_COMPLETE)
                 .build());
-        instancesRepository.save(buildInstance("complete", "1")
+        instancesRepository.save(buildInstance("complete", "1", getInstancesDir())
                 .status(Instance.STATUS_COMPLETE)
                 .build());
 
-        instancesRepository.save(buildInstance("submitted", "1")
+        instancesRepository.save(buildInstance("submitted", "1", getInstancesDir())
                 .status(Instance.STATUS_SUBMITTED)
                 .build());
-        instancesRepository.save(buildInstance("submitted", "1")
+        instancesRepository.save(buildInstance("submitted", "1", getInstancesDir())
                 .status(Instance.STATUS_SUBMITTED)
                 .build());
 
@@ -114,11 +116,11 @@ public abstract class InstancesRepositoryTest {
     public void getAllByFormId_includesAllVersionsForFormId() {
         InstancesRepository instancesRepository = buildSubject();
 
-        instancesRepository.save(buildInstance("formid", "1").build());
-        instancesRepository.save(buildInstance("formid", "2", "display", Instance.STATUS_COMPLETE, null).build());
-        instancesRepository.save(buildInstance("formid", "3").build());
-        instancesRepository.save(buildInstance("formid", "4", "display", Instance.STATUS_COMPLETE, System.currentTimeMillis()).build());
-        instancesRepository.save(buildInstance("formid2", "1", "display", Instance.STATUS_COMPLETE, null).build());
+        instancesRepository.save(buildInstance("formid", "1", getInstancesDir()).build());
+        instancesRepository.save(buildInstance("formid", "2", "display", Instance.STATUS_COMPLETE, null, getInstancesDir()).build());
+        instancesRepository.save(buildInstance("formid", "3", getInstancesDir()).build());
+        instancesRepository.save(buildInstance("formid", "4", "display", Instance.STATUS_COMPLETE, System.currentTimeMillis(), getInstancesDir()).build());
+        instancesRepository.save(buildInstance("formid2", "1", "display", Instance.STATUS_COMPLETE, null, getInstancesDir()).build());
 
         List<Instance> instances = instancesRepository.getAllByFormId("formid");
         assertThat(instances.size(), is(4));
@@ -128,13 +130,13 @@ public abstract class InstancesRepositoryTest {
     public void getAllByFormIdAndVersionNotDeleted_excludesDeleted() {
         InstancesRepository instancesRepository = buildSubject();
 
-        instancesRepository.save(buildInstance("formid", "1").build());
-        instancesRepository.save(buildInstance("formid", "1", "display", Instance.STATUS_COMPLETE, null)
+        instancesRepository.save(buildInstance("formid", "1", getInstancesDir()).build());
+        instancesRepository.save(buildInstance("formid", "1", "display", Instance.STATUS_COMPLETE, null, getInstancesDir())
                 .build());
-        instancesRepository.save(buildInstance("formid", "1").build());
-        instancesRepository.save(buildInstance("formid", "1", "display", Instance.STATUS_COMPLETE, System.currentTimeMillis())
+        instancesRepository.save(buildInstance("formid", "1", getInstancesDir()).build());
+        instancesRepository.save(buildInstance("formid", "1", "display", Instance.STATUS_COMPLETE, System.currentTimeMillis(), getInstancesDir())
                 .build());
-        instancesRepository.save(buildInstance("formid2", "1", "display", Instance.STATUS_COMPLETE, null)
+        instancesRepository.save(buildInstance("formid2", "1", "display", Instance.STATUS_COMPLETE, null, getInstancesDir())
                 .build());
 
         List<Instance> instances = instancesRepository.getAllNotDeletedByFormIdAndVersion("formid", "1");
@@ -145,22 +147,31 @@ public abstract class InstancesRepositoryTest {
     public void deleteAll_deletesAllInstances() {
         InstancesRepository instancesRepository = buildSubject();
 
-        instancesRepository.save(buildInstance("formid", "1").build());
-        instancesRepository.save(buildInstance("formid", "1").build());
-        Long id1 = instancesRepository.getAll().get(0).getDbId();
-        Long id2 = instancesRepository.getAll().get(1).getDbId();
+        instancesRepository.save(buildInstance("formid", "1", getInstancesDir()).build());
+        instancesRepository.save(buildInstance("formid", "1", getInstancesDir()).build());
 
         instancesRepository.deleteAll();
-        assertThat(instancesRepository.get(id1), is(nullValue()));
-        assertThat(instancesRepository.get(id2), is(nullValue()));
+        assertThat(instancesRepository.getAll().size(), is(0));
+    }
+
+    @Test
+    public void deleteAll_deletesInstanceFiles() {
+        InstancesRepository instancesRepository = buildSubject();
+
+        Instance instance1 = instancesRepository.save(buildInstance("formid", "1", getInstancesDir()).build());
+        Instance instance2 = instancesRepository.save(buildInstance("formid", "1", getInstancesDir()).build());
+
+        instancesRepository.deleteAll();
+        assertThat(new File(instance1.getInstanceFilePath()).exists(), is(false));
+        assertThat(new File(instance2.getInstanceFilePath()).exists(), is(false));
     }
 
     @Test
     public void save_addsUniqueId() {
         InstancesRepository instancesRepository = buildSubject();
 
-        instancesRepository.save(buildInstance("formid", "1").build());
-        instancesRepository.save(buildInstance("formid", "1").build());
+        instancesRepository.save(buildInstance("formid", "1", getInstancesDir()).build());
+        instancesRepository.save(buildInstance("formid", "1", getInstancesDir()).build());
 
         Long id1 = instancesRepository.getAll().get(0).getDbId();
         Long id2 = instancesRepository.getAll().get(1).getDbId();
@@ -173,7 +184,7 @@ public abstract class InstancesRepositoryTest {
     public void save_returnsInstanceWithId() {
         InstancesRepository instancesRepository = buildSubject();
 
-        Instance instance = instancesRepository.save(buildInstance("formid", "1").build());
+        Instance instance = instancesRepository.save(buildInstance("formid", "1", getInstancesDir()).build());
         assertThat(instancesRepository.get(instance.getDbId()), is(instance));
     }
 
@@ -181,7 +192,7 @@ public abstract class InstancesRepositoryTest {
     public void save_whenInstanceHasId_updatesExisting() {
         InstancesRepository instancesRepository = buildSubject();
 
-        Instance originalInstance = instancesRepository.save(buildInstance("formid", "1")
+        Instance originalInstance = instancesRepository.save(buildInstance("formid", "1", getInstancesDir())
                 .displayName("Blah")
                 .build());
 
@@ -196,7 +207,7 @@ public abstract class InstancesRepositoryTest {
     public void save_whenStatusIsNull_usesIncomplete() {
         InstancesRepository instancesRepository = buildSubject();
 
-        Instance instance = instancesRepository.save(buildInstance("formid", "1")
+        Instance instance = instancesRepository.save(buildInstance("formid", "1", getInstancesDir())
                 .status(null)
                 .build());
         assertThat(instancesRepository.get(instance.getDbId()).getStatus(), is(Instance.STATUS_INCOMPLETE));
@@ -206,7 +217,7 @@ public abstract class InstancesRepositoryTest {
     public void save_whenLastStatusChangeDateIsNull_setsIt() {
         InstancesRepository instancesRepository = buildSubject();
 
-        Instance instance = instancesRepository.save(buildInstance("formid", "1")
+        Instance instance = instancesRepository.save(buildInstance("formid", "1", getInstancesDir())
                 .lastStatusChangeDate(null)
                 .build());
         assertThat(instancesRepository.get(instance.getDbId()).getLastStatusChangeDate(), is(notNullValue()));
@@ -215,9 +226,45 @@ public abstract class InstancesRepositoryTest {
     @Test
     public void softDelete_setsDeletedDate() {
         InstancesRepository instancesRepository = buildSubject();
-        Instance instance = instancesRepository.save(buildInstance("formid", "1").build());
+        Instance instance = instancesRepository.save(buildInstance("formid", "1", getInstancesDir()).build());
 
         instancesRepository.softDelete(instance.getDbId());
         assertThat(instancesRepository.get(instance.getDbId()).getDeletedDate(), is(notNullValue()));
+    }
+
+    @Test
+    public void softDelete_deletesInstanceDir() {
+        InstancesRepository instancesRepository = buildSubject();
+        Instance instance = instancesRepository.save(buildInstance("formid", "1", getInstancesDir()).build());
+
+        File instanceDir = new File(instance.getInstanceFilePath()).getParentFile();
+        assertThat(instanceDir.exists(), is(true));
+        assertThat(instanceDir.isDirectory(), is(true));
+
+        instancesRepository.softDelete(instance.getDbId());
+        assertThat(instanceDir.exists(), is(false));
+    }
+
+    @Test
+    public void delete_deletesInstance() {
+        InstancesRepository instancesRepository = buildSubject();
+        Instance instance = instancesRepository.save(buildInstance("formid", "1", getInstancesDir()).build());
+
+        instancesRepository.delete(instance.getDbId());
+        assertThat(instancesRepository.getAll().size(), is(0));
+    }
+
+    @Test
+    public void delete_deletesInstanceDir() {
+        InstancesRepository instancesRepository = buildSubject();
+        Instance instance = instancesRepository.save(buildInstance("formid", "1", getInstancesDir()).build());
+
+        // The repo assumes the parent of the file also contains other instance files
+        File instanceDir = new File(instance.getInstanceFilePath()).getParentFile();
+        assertThat(instanceDir.exists(), is(true));
+        assertThat(instanceDir.isDirectory(), is(true));
+
+        instancesRepository.delete(instance.getDbId());
+        assertThat(instanceDir.exists(), is(false));
     }
 }

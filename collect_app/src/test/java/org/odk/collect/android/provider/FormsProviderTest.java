@@ -215,6 +215,15 @@ public class FormsProviderTest {
     }
 
     @Test
+    public void query_returnsTheExpectedNumberColumns() {
+        Uri uri = addFormsToDirAndDb("external_app_form", "1", "External app form");
+
+        try (Cursor cursor = contentResolver.query(uri, null, null, null, null)) {
+            assertThat(cursor.getColumnCount(), is(17));
+        }
+    }
+
+    @Test
     public void query_withProjection_onlyReturnsSpecifiedColumns() {
         addFormsToDirAndDb("external_app_form", "1", "External app form");
 

@@ -1,8 +1,13 @@
 package org.odk.collect.android.support;
 
+import android.database.Cursor;
+
+import org.apache.commons.io.FileUtils;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.instances.InstancesRepository;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -105,11 +110,18 @@ public final class InMemInstancesRepository implements InstancesRepository {
 
     @Override
     public void delete(Long id) {
-        instances.removeIf(instance -> instance.getDbId().equals(id));
+        Instance instance = get(id);
+        deleteInstanceFiles(instance);
+
+        instances.remove(instance);
     }
 
     @Override
     public void deleteAll() {
+        for (Instance instance : instances) {
+            deleteInstanceFiles(instance);
+        }
+
         instances.clear();
     }
 
@@ -149,6 +161,12 @@ public final class InMemInstancesRepository implements InstancesRepository {
 
         instances.removeIf(i -> i.getDbId().equals(id));
         instances.add(instance);
+        deleteInstanceFiles(instance);
+    }
+
+    @Override
+    public Cursor rawQuery(String[] projection, String selection, String[] selectionArgs, String sortOrder, String groupBy) {
+        throw new UnsupportedOperationException();
     }
 
     public void removeInstanceById(Long databaseId) {
@@ -157,6 +175,14 @@ public final class InMemInstancesRepository implements InstancesRepository {
                 instances.remove(i);
                 return;
             }
+        }
+    }
+
+    private void deleteInstanceFiles(Instance instance) {
+        try {
+            FileUtils.deleteDirectory(new File(instance.getInstanceFilePath()).getParentFile());
+        } catch (IOException e) {
+            // Ignored
         }
     }
 }
