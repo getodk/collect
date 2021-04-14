@@ -7,6 +7,7 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.configure.SettingsImporter;
@@ -48,7 +49,7 @@ public class QRCodeScannerFragment extends BarCodeScannerFragment {
         if (importSuccess) {
             ToastUtils.showLongToast(getString(R.string.successfully_imported_settings));
             analytics.logEvent(AnalyticsEvents.SETTINGS_IMPORT_QR, "Success", settingsHash);
-            startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity.class);
+            startActivityAndCloseAllOthers(requireActivity(), SmapMain.class);  // smap
         } else {
             ToastUtils.showLongToast(getString(R.string.invalid_qrcode));
             analytics.logEvent(AnalyticsEvents.SETTINGS_IMPORT_QR, "No valid settings", settingsHash);
