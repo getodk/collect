@@ -50,7 +50,7 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
         }
     }
 
-    // smap sarting point for upgrades
+    // smap starting point for upgrades
     private void upgradeToLatestVersion(SQLiteDatabase db) {
         SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, AUTO_SEND, "text");     // Version 5
         SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, AUTO_DELETE, "text");   // Version 7
@@ -62,7 +62,7 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
         SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, SOURCE, "text");
         SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, DELETED_DATE, "integer");
 
-        //SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, GEOMETRY_XPATH, "text");
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, GEOMETRY_XPATH, "text");
 
     }
 
