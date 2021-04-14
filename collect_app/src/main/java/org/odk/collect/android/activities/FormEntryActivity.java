@@ -134,6 +134,7 @@ import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
@@ -304,7 +305,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     StoragePathProvider storagePathProvider;
 
     @Inject
-    FormsRepository formsRepository;
+    FormsRepositoryProvider formsRepositoryProvider;
+    private FormsRepository formsRepository;
 
     @Inject
     PropertyManager propertyManager;
@@ -361,7 +363,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Collect.getInstance().getComponent().inject(this);
+        formsRepository = formsRepositoryProvider.get();
+
         setContentView(R.layout.form_entry);
         setupViewModels();
         swipeHandler = new SwipeHandler(this, settingsProvider.getGeneralSettings().getString(KEY_NAVIGATION));

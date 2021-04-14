@@ -29,7 +29,8 @@ import org.odk.collect.android.database.instances.InstancesDatabaseProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.utilities.ContentUriHelper;
-import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 
@@ -74,10 +75,10 @@ public class InstanceProvider extends ContentProvider {
     InstancesDatabaseProvider instancesDatabaseProvider;
 
     @Inject
-    InstancesRepository instancesRepository;
+    InstancesRepositoryProvider instancesRepositoryProvider;
 
     @Inject
-    FormsRepository formsRepository;
+    FormsRepositoryProvider formsRepositoryProvider;
 
     @Override
     public boolean onCreate() {
@@ -110,7 +111,7 @@ public class InstanceProvider extends ContentProvider {
     }
 
     private Cursor dbQuery(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return ((DatabaseInstancesRepository) instancesRepository).rawQuery(projection, selection, selectionArgs, sortOrder, null);
+        return ((DatabaseInstancesRepository) instancesRepositoryProvider.get()).rawQuery(projection, selection, selectionArgs, sortOrder, null);
     }
 
     @Override
@@ -136,7 +137,7 @@ public class InstanceProvider extends ContentProvider {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        Instance newInstance = instancesRepository.save(getInstanceFromValues(initialValues));
+        Instance newInstance = instancesRepositoryProvider.get().save(getInstanceFromValues(initialValues));
         return Uri.withAppendedPath(CONTENT_URI, String.valueOf(newInstance.getDbId()));
     }
 
@@ -184,7 +185,7 @@ public class InstanceProvider extends ContentProvider {
                 try (Cursor cursor = dbQuery(new String[]{_ID}, where, whereArgs, null)) {
                     while (cursor.moveToNext()) {
                         long id = cursor.getLong(cursor.getColumnIndex(_ID));
-                        new InstanceDeleter(instancesRepository, formsRepository).delete(id);
+                        new InstanceDeleter(instancesRepositoryProvider.get(), formsRepositoryProvider.get()).delete(id);
                     }
 
                     count = cursor.getCount();
@@ -196,12 +197,12 @@ public class InstanceProvider extends ContentProvider {
                 long id = ContentUriHelper.getIdFromUri(uri);
 
                 if (where == null) {
-                    new InstanceDeleter(instancesRepository, formsRepository).delete(id);
+                    new InstanceDeleter(instancesRepositoryProvider.get(), formsRepositoryProvider.get()).delete(id);
                 } else {
                     try (Cursor cursor = dbQuery(new String[]{_ID}, where, whereArgs, null)) {
                         while (cursor.moveToNext()) {
                             if (cursor.getLong(cursor.getColumnIndex(_ID)) == id) {
-                                new InstanceDeleter(instancesRepository, formsRepository).delete(id);
+                                new InstanceDeleter(instancesRepositoryProvider.get(), formsRepositoryProvider.get()).delete(id);
                                 break;
                             }
                         }
@@ -223,6 +224,7 @@ public class InstanceProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String where, String[] whereArgs) {
         DaggerUtils.getComponent(getContext()).inject(this);
+        InstancesRepository instancesRepository = instancesRepositoryProvider.get();
 
         int count;
 

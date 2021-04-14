@@ -26,10 +26,11 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.forms.DatabaseFormsRepository;
 import org.odk.collect.android.formmanagement.FormDeleter;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ContentUriHelper;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.utilities.Clock;
@@ -78,10 +79,10 @@ public class FormsProvider extends ContentProvider {
     Clock clock;
 
     @Inject
-    FormsRepository formsRepository;
+    FormsRepositoryProvider formsRepositoryProvider;
 
     @Inject
-    InstancesRepository instancesRepository;
+    InstancesRepositoryProvider instancesRepositoryProvider;
 
     @Inject
     FastExternalItemsetsRepository fastExternalItemsetsRepository;
@@ -160,7 +161,7 @@ public class FormsProvider extends ContentProvider {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        Form form = formsRepository.save(getFormFromValues(initialValues, storagePathProvider));
+        Form form = formsRepositoryProvider.get().save(getFormFromValues(initialValues, storagePathProvider));
         return Uri.withAppendedPath(CONTENT_URI, String.valueOf(form.getDbId()));
     }
 
@@ -175,7 +176,7 @@ public class FormsProvider extends ContentProvider {
 
         int count;
 
-        FormDeleter formDeleter = new FormDeleter(formsRepository, instancesRepository, fastExternalItemsetsRepository);
+        FormDeleter formDeleter = new FormDeleter(formsRepositoryProvider.get(), instancesRepositoryProvider.get(), fastExternalItemsetsRepository);
 
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
@@ -205,6 +206,7 @@ public class FormsProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String where, String[] whereArgs) {
         deferDaggerInit();
+        FormsRepository formsRepository = formsRepositoryProvider.get();
 
         int count;
         switch (URI_MATCHER.match(uri)) {
@@ -248,7 +250,7 @@ public class FormsProvider extends ContentProvider {
     }
 
     private Cursor databaseQuery(String[] projection, String selection, String[] selectionArgs, String sortOrder, String o) {
-        return ((DatabaseFormsRepository) formsRepository).rawQuery(projection, selection, selectionArgs, sortOrder, o);
+        return ((DatabaseFormsRepository) formsRepositoryProvider.get()).rawQuery(projection, selection, selectionArgs, sortOrder, o);
     }
 
     static {

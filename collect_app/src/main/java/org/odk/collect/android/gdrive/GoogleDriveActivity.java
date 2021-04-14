@@ -120,7 +120,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     GoogleApiProvider googleApiProvider;
 
     @Inject
-    FormsRepository formsRepository;
+    FormsRepositoryProvider formsRepositoryProvider;
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -903,6 +903,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
             // If the form already exists in the DB and is soft deleted we need to restore it
             String md5Hash = Md5.getMd5Hash(file);
+            FormsRepository formsRepository = formsRepositoryProvider.get();
             Form form = formsRepository.getOneByMd5Hash(md5Hash);
             if (form != null && form.isDeleted()) {
                 formsRepository.restore(form.getDbId());

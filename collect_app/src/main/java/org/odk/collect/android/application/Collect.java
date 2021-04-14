@@ -26,7 +26,6 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.external.ExternalDataManager;
-import org.odk.collect.forms.Form;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -38,6 +37,7 @@ import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
 import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent;
+import org.odk.collect.forms.Form;
 import org.odk.collect.shared.Md5;
 import org.odk.collect.strings.LocalizedApplication;
 

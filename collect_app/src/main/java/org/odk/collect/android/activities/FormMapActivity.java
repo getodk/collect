@@ -46,10 +46,10 @@ import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.Form;
-import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 
@@ -78,7 +78,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
     MapProvider mapProvider;
 
     @Inject
-    FormsRepository formsRepository;
+    FormsRepositoryProvider formsRepositoryProvider;
 
     private MapFragment map;
 
@@ -108,7 +108,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
 
-        Form form = formsRepository.get(getIntent().getLongExtra(EXTRA_FORM_ID, -1));
+        Form form = formsRepositoryProvider.get().get(getIntent().getLongExtra(EXTRA_FORM_ID, -1));
 
         if (viewModelFactory == null) { // tests set their factories directly
             viewModelFactory = new FormMapActivity.FormMapViewModelFactory(form, new InstancesRepositoryProvider().get());
