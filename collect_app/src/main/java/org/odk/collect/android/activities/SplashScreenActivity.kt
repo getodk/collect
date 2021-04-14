@@ -46,7 +46,7 @@ class SplashScreenActivity : AppCompatActivity() {
         setContentView(R.layout.splash_screen)
 
         when {
-            viewModel.shouldFirstLaunchDialogBeDisplayed -> DialogUtils.showIfNotShowing(FirstLaunchDialog::class.java, supportFragmentManager)
+            viewModel.shouldFirstLaunchDialogBeDisplayed() -> DialogUtils.showIfNotShowing(FirstLaunchDialog::class.java, supportFragmentManager)
             viewModel.shouldDisplaySplashScreen -> startSplashScreen()
             else -> endSplashScreen()
         }

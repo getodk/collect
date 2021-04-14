@@ -6,15 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.savedstate.SavedStateRegistryOwner
 import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.android.preferences.source.Settings
-import org.odk.collect.android.utilities.AppStateProvider
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.ScreenUtils
 import java.io.File
 
 class SplashScreenViewModel(
     private val generalSettings: Settings,
-    private val appStateProvider: AppStateProvider
+    private val metaSettings: Settings,
 ) : ViewModel() {
 
     val shouldDisplaySplashScreen
@@ -29,8 +29,11 @@ class SplashScreenViewModel(
     val doesLogoFileExist
         get() = splashScreenLogoFile.exists()
 
-    val shouldFirstLaunchDialogBeDisplayed
-        get() = appStateProvider.isFreshInstall()
+    fun shouldFirstLaunchDialogBeDisplayed(): Boolean {
+        val isFirstLaunch = !metaSettings.contains(MetaKeys.KEY_FIRST_LAUNCH)
+        metaSettings.save(MetaKeys.KEY_FIRST_LAUNCH, false)
+        return isFirstLaunch
+    }
 
     interface FactoryFactory {
         fun create(owner: SavedStateRegistryOwner, defaultArgs: Bundle?): ViewModelProvider.Factory
