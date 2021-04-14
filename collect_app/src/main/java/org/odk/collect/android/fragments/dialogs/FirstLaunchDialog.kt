@@ -13,12 +13,16 @@ import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.ProjectImporter
+import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import javax.inject.Inject
 
 class FirstLaunchDialog : MaterialFullScreenDialogFragment() {
     @Inject
     lateinit var projectImporter: ProjectImporter
+
+    @Inject
+    lateinit var versionInformation: VersionInformation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +40,8 @@ class FirstLaunchDialog : MaterialFullScreenDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        app_name.text = String.format("%s %s", getString(R.string.app_name), versionInformation.versionToDisplay)
 
         configure_later_button.setOnClickListener {
             projectImporter.importDemoProject()
