@@ -47,6 +47,7 @@ class FirstLaunchDialog : MaterialFullScreenDialogFragment() {
     }
 
     override fun onBackPressed() {
+        dismiss()
     }
 
     override fun getToolbar(): Toolbar? {
