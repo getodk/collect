@@ -20,19 +20,19 @@ public class GeoWidgetUtilsTest {
 
     @Test
     public void getAnswerToDisplay_whenAnswerIsNull_returnsEmptyString() {
-        assertEquals(GeoWidgetUtils.getAnswerToDisplay(context, null), "");
+        assertEquals(GeoWidgetUtils.getGeoPointAnswerToDisplay(context, null), "");
     }
 
     @Test
     public void getAnswerToDisplay_whenAnswerIsNotConvertible_returnsEmptyString() {
-        assertEquals(GeoWidgetUtils.getAnswerToDisplay(context, "blah"), "");
+        assertEquals(GeoWidgetUtils.getGeoPointAnswerToDisplay(context, "blah"), "");
     }
 
     @Test
     public void getAnswerToDisplay_whenAnswerIsNotNullAndConvertible_returnsAnswer() {
         String stringAnswer = answer.getDisplayText();
         String[] parts = stringAnswer.split(" ");
-        assertEquals(GeoWidgetUtils.getAnswerToDisplay(context, stringAnswer), context.getString(
+        assertEquals(GeoWidgetUtils.getGeoPointAnswerToDisplay(context, stringAnswer), context.getString(
                 R.string.gps_result,
                 GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(context, Double.parseDouble(parts[0]), "lat"),
                 GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(context, Double.parseDouble(parts[1]), "lon"),

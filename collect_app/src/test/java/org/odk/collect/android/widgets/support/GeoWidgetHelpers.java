@@ -47,7 +47,7 @@ public class GeoWidgetHelpers {
         boolean first = true;
         for (double[] doubles : getRandomDoubleArrayList()) {
             if (!first) {
-                b.append("; ");
+                b.append(';');
             }
             first = false;
             b.append(stringFromDoubles(doubles));

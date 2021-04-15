@@ -28,6 +28,7 @@ import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
+import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 @SuppressLint("ViewConstructor")
@@ -54,7 +55,7 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
         binding.simpleButton.setOnClickListener(v ->
                 geoDataRequester.requestGeoShape(context, prompt, getAnswerText(), waitingForDataRegistry));
 
-        String stringAnswer = prompt.getAnswerText();
+        String stringAnswer = GeoWidgetUtils.getGeoPolyAnswerToDisplay(prompt.getAnswerText());
         binding.geoAnswerText.setText(stringAnswer);
 
         boolean dataAvailable = stringAnswer != null && !stringAnswer.isEmpty();

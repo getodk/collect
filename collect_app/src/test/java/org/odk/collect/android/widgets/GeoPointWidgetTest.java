@@ -59,7 +59,7 @@ public class GeoPointWidgetTest {
     @Test
     public void answerTextViewShouldShowCorrectAnswer() {
         GeoPointWidget widget = createWidget(promptWithAnswer(answer));
-        assertEquals(widget.binding.geoAnswerText.getText(), GeoWidgetUtils.getAnswerToDisplay(widget.getContext(), answer.getDisplayText()));
+        assertEquals(widget.binding.geoAnswerText.getText(), GeoWidgetUtils.getGeoPointAnswerToDisplay(widget.getContext(), answer.getDisplayText()));
     }
 
     @Test
@@ -116,7 +116,7 @@ public class GeoPointWidgetTest {
     public void setData_updatesWidgetDisplayedAnswer() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
         widget.setData(answer.getDisplayText());
-        assertEquals(widget.binding.geoAnswerText.getText(), GeoWidgetUtils.getAnswerToDisplay(widget.getContext(), answer.getDisplayText()));
+        assertEquals(widget.binding.geoAnswerText.getText(), GeoWidgetUtils.getGeoPointAnswerToDisplay(widget.getContext(), answer.getDisplayText()));
     }
 
     @Test

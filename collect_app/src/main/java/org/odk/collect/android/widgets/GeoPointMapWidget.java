@@ -58,7 +58,7 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
         binding.simpleButton.setOnClickListener(v -> geoDataRequester.requestGeoPoint(context, prompt, answerText, waitingForDataRegistry));
 
         answerText = prompt.getAnswerText();
-        binding.geoAnswerText.setText(GeoWidgetUtils.getAnswerToDisplay(getContext(), answerText));
+        binding.geoAnswerText.setText(GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answerText));
 
         boolean dataAvailable = answerText != null && !answerText.isEmpty();
         if (getFormEntryPrompt().isReadOnly()) {
@@ -109,7 +109,7 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
     @Override
     public void setData(Object answer) {
         answerText = answer.toString();
-        binding.geoAnswerText.setText(GeoWidgetUtils.getAnswerToDisplay(getContext(), answerText));
+        binding.geoAnswerText.setText(GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answerText));
         binding.simpleButton.setText(answerText == null || answerText.isEmpty() ? R.string.get_point : R.string.view_change_location);
         widgetValueChanged();
     }

@@ -5,11 +5,16 @@ import android.os.Bundle;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.location.LocationTestUtils;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static android.location.LocationManager.GPS_PROVIDER;
 import static junit.framework.TestCase.assertNotNull;
@@ -24,6 +29,36 @@ import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class GeoUtilsTest {
+    private final List<MapPoint> points = new ArrayList<>(Arrays.asList(
+            new MapPoint(11, 12, 13, 14),
+            new MapPoint(21, 22, 23, 24),
+            new MapPoint(31, 32, 33, 34)
+    ));
+
+    @Test
+    public void whenPointsAreNull_formatPoints_returnsEmptyString() {
+        assertEquals(GeoUtils.formatPointsResultString(Collections.emptyList(), true), "");
+        assertEquals(GeoUtils.formatPointsResultString(Collections.emptyList(), false), "");
+    }
+
+    @Test
+    public void geotraces_areSeparatedBySemicolon_withoutTrialingSemicolon() {
+        assertEquals(GeoUtils.formatPointsResultString(points, false),
+                "11.0 12.0 13.0 14.0;21.0 22.0 23.0 24.0;31.0 32.0 33.0 34.0");
+    }
+
+    @Test
+    public void geoshapes_areSeparatedBySemicolon_withoutTrialingSemicolon_andHaveMatchingFirstAndLastPoints() {
+        assertEquals(GeoUtils.formatPointsResultString(points, true),
+                "11.0 12.0 13.0 14.0;21.0 22.0 23.0 24.0;31.0 32.0 33.0 34.0;11.0 12.0 13.0 14.0");
+    }
+
+    @Test
+    public void test_formatLocationResultString() {
+        Location location = LocationTestUtils.createLocation("GPS", 1, 2, 3, 4);
+        assertEquals(GeoUtils.formatLocationResultString(location), "1.0 2.0 3.0 4.0");
+    }
+
     @Test
     public void capitalizesGps() {
         String input = "gps";

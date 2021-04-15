@@ -178,5 +178,17 @@ public class StringUtils {
         }
         return text;
     }
+
+    public static String removeEnd(String str, String remove) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        }
+
+        if (str.endsWith(remove)) {
+            return str.substring(0, str.length() - remove.length());
+        }
+
+        return str;
+    }
 }
 
