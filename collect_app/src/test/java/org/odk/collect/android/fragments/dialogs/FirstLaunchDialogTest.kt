@@ -66,6 +66,7 @@ class FirstLaunchDialogTest {
             Intents.init()
             Espresso.onView(withText(getString(ApplicationProvider.getApplicationContext<Collect>(), R.string.configure_later))).perform(click())
             intended(hasComponent(MainMenuActivity::class.java.name))
+            Intents.release()
         }
     }
 

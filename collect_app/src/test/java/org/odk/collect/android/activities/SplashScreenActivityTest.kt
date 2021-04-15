@@ -123,5 +123,7 @@ class SplashScreenActivityTest {
                 Intents.intended(IntentMatchers.hasComponent(MainMenuActivity::class.java.name))
             }
         }
+
+        Intents.release()
     }
 }
