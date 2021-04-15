@@ -3,6 +3,7 @@ package org.odk.collect.android.activities
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -11,9 +12,11 @@ import androidx.savedstate.SavedStateRegistryOwner
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
+import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert
@@ -35,13 +38,11 @@ import org.odk.collect.android.support.RobolectricHelpers
 @RunWith(AndroidJUnit4::class)
 class SplashScreenActivityTest {
 
-    private val generalSettings: Settings = mock(Settings::class.java)
-    private val metaSettings: Settings = mock(Settings::class.java)
     private lateinit var splashScreenViewModel: SplashScreenViewModel
 
     @Before
     fun setup() {
-        splashScreenViewModel = spy(SplashScreenViewModel(generalSettings, metaSettings))
+        splashScreenViewModel = spy(SplashScreenViewModel(mock(Settings::class.java), mock(Settings::class.java)))
 
         RobolectricHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesSplashScreenViewModelFactoryFactory(settingsProvider: SettingsProvider): SplashScreenViewModel.FactoryFactory {
@@ -120,10 +121,23 @@ class SplashScreenActivityTest {
         scenario.onActivity { activity: SplashScreenActivity ->
             activity.lifecycleScope.launch {
                 delay(2000)
+                assertThat(scenario.state, `is`(Lifecycle.State.DESTROYED))
                 Intents.intended(IntentMatchers.hasComponent(MainMenuActivity::class.java.name))
             }
         }
 
+        Intents.release()
+    }
+
+    @Test
+    fun whenAppLaunchedNotForTheFistTimeAndSplashScreenDisabled_showMainMenuActivityImmediately() {
+        doReturn(false).`when`(splashScreenViewModel).shouldFirstLaunchDialogBeDisplayed()
+        doReturn(false).`when`(splashScreenViewModel).shouldDisplaySplashScreen
+
+        Intents.init()
+        val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
+        assertThat(scenario.state, `is`(Lifecycle.State.DESTROYED))
+        Intents.intended(IntentMatchers.hasComponent(MainMenuActivity::class.java.name))
         Intents.release()
     }
 }
