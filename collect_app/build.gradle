@@ -380,10 +380,7 @@ dependencies {
 
     testImplementation "org.json:json:20201115"
     testImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    testImplementation("androidx.test.espresso:espresso-intents:3.3.0") {
-        exclude group: 'com.android.support', module: 'support-annotations'
-        exclude group: 'com.google.code.findbugs', module: 'jsr305'
-    }
+    testImplementation 'androidx.test.espresso:espresso-intents:3.3.0'
 
     testImplementation project(':formstest')
 
