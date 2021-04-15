@@ -3,7 +3,7 @@ package org.odk.collect.android.utilities;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.formstest.InMemFormsRepository;
-import org.odk.collect.android.support.InMemInstancesRepository;
+import org.odk.collect.formstest.InMemInstancesRepository;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.robolectric.RobolectricTestRunner;

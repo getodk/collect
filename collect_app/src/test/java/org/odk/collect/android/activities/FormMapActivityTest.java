@@ -24,7 +24,7 @@ import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.TestMapFragment;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.support.InMemInstancesRepository;
+import org.odk.collect.formstest.InMemInstancesRepository;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.provider.InstanceProvider;

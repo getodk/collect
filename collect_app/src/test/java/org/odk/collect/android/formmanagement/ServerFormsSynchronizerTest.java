@@ -8,7 +8,7 @@ import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.formstest.InMemFormsRepository;
-import org.odk.collect.android.support.InMemInstancesRepository;
+import org.odk.collect.formstest.InMemInstancesRepository;
 import org.odk.collect.formstest.FormUtils;
 
 import java.util.ArrayList;

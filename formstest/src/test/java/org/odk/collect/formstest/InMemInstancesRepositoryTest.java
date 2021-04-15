@@ -12,12 +12,10 @@
  * the License.
  */
 
-package org.odk.collect.android.instances;
+package org.odk.collect.formstest;
 
 import org.junit.Before;
-import org.odk.collect.android.support.InMemInstancesRepository;
 import org.odk.collect.forms.instances.InstancesRepository;
-import org.odk.collect.formstest.InstancesRepositoryTest;
 import org.odk.collect.shared.TempFiles;
 
 public class InMemInstancesRepositoryTest extends InstancesRepositoryTest {
