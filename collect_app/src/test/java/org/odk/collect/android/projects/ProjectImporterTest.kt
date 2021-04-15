@@ -7,6 +7,8 @@ import org.mockito.Mockito.verify
 import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.android.preferences.source.SharedPreferencesSettings
 import org.odk.collect.android.projects.ProjectImporter.Companion.DEMO_PROJECT_ID
+import org.odk.collect.projects.Project
+import org.odk.collect.projects.ProjectsRepository
 
 class ProjectImporterTest {
     private lateinit var projectsRepository: ProjectsRepository

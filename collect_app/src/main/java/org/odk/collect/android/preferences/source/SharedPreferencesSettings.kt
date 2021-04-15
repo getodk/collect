@@ -1,6 +1,7 @@
 package org.odk.collect.android.preferences.source
 
 import android.content.SharedPreferences
+import org.odk.collect.shared.Settings
 import java.util.Collections
 
 class SharedPreferencesSettings(private val sharedPreferences: SharedPreferences, private val settingKeysToDefaults: Map<String, Any> = emptyMap()) : Settings {

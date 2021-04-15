@@ -7,6 +7,7 @@ import org.junit.Test
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
+import org.odk.collect.shared.Settings
 
 class SettingsStoreTest {
     private lateinit var settingsStore: SettingsStore

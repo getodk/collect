@@ -1,6 +1,6 @@
-package org.odk.collect.android.projects
+package org.odk.collect.projects
 
-import org.odk.collect.android.utilities.UUIDGenerator
+import org.odk.collect.shared.UUIDGenerator
 
 class InMemProjectsRepository(private val uuidGenerator: UUIDGenerator) : ProjectsRepository {
     val projects = mutableListOf<Project>()

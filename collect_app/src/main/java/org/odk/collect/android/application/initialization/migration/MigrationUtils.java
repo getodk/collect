@@ -2,7 +2,7 @@ package org.odk.collect.android.application.initialization.migration;
 
 import android.annotation.SuppressLint;
 
-import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.shared.Settings;
 
 public class MigrationUtils {
 

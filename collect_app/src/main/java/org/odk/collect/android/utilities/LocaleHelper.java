@@ -2,7 +2,7 @@ package org.odk.collect.android.utilities;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.shared.Settings;
 
 import java.util.Locale;
 import java.util.TreeMap;

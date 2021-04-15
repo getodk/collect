@@ -28,9 +28,9 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
 import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.preferences.source.Settings
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.support.RobolectricHelpers
+import org.odk.collect.shared.Settings
 
 @RunWith(AndroidJUnit4::class)
 class SplashScreenActivityTest {

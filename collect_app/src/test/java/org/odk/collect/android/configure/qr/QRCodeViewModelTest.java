@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.shared.Settings;
 import org.odk.collect.testshared.FakeScheduler;
 
 import static java.util.Arrays.asList;

@@ -71,7 +71,7 @@ import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.AddProjectDialog;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.projects.ProjectSettingsDialog;
-import org.odk.collect.android.projects.ProjectsRepository;
+import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.storage.StorageInitializer;

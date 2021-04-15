@@ -1,4 +1,4 @@
-package org.odk.collect.android.projects
+package org.odk.collect.projects
 
 data class Project(
     val name: String,

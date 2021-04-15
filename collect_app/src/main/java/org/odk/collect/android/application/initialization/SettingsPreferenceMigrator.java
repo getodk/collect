@@ -1,6 +1,6 @@
 package org.odk.collect.android.application.initialization;
 
-import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.shared.Settings;
 
 public interface SettingsPreferenceMigrator {
 

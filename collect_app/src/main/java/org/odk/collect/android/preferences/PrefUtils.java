@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.preference.ListPreference;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 
 import java.util.Arrays;

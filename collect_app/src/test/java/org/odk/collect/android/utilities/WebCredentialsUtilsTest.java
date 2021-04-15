@@ -3,7 +3,7 @@ package org.odk.collect.android.utilities;
 import org.junit.Test;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.shared.Settings;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
