@@ -5,7 +5,7 @@ import com.google.common.io.Files;
 import org.javarosa.core.reference.ReferenceManager;
 import org.junit.Test;
 import org.odk.collect.analytics.Analytics;
-import org.odk.collect.android.support.InMemFormsRepository;
+import org.odk.collect.formstest.InMemFormsRepository;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormListItem;
 import org.odk.collect.forms.FormSource;

@@ -1,7 +1,7 @@
-package org.odk.collect.android.support;
+package org.odk.collect.formstest;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.utilities.FileUtils;
+import org.jetbrains.annotations.Nullable;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.shared.Md5;
@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
-
-import javax.annotation.Nullable;
 
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.io.FileUtils.deleteDirectory;
@@ -99,7 +97,7 @@ public class InMemFormsRepository implements FormsRepository {
         Form.Builder builder = new Form.Builder(form);
 
         if (form.getFormMediaPath() == null) {
-            builder.formMediaPath(FileUtils.constructMediaPath(form.getFormFilePath()));
+            builder.formMediaPath(TempFiles.getPathInTempDir());
         }
 
         if (form.getDbId() != null) {

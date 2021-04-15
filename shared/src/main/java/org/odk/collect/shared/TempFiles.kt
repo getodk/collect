@@ -27,9 +27,14 @@ object TempFiles {
     }
 
     @JvmStatic
-    fun createTempDir(): File {
+    fun getPathInTempDir(): String {
         val tmpDir = System.getProperty("java.io.tmpdir", ".")
-        val dir = File(tmpDir, RandomString.randomString(16))
+        return File(tmpDir, RandomString.randomString(16)).absolutePath
+    }
+
+    @JvmStatic
+    fun createTempDir(): File {
+        val dir = File(getPathInTempDir())
         dir.mkdir()
         return dir
     }
