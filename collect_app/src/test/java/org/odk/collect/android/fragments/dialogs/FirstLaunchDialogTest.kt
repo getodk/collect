@@ -16,6 +16,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.notNullValue
+import org.hamcrest.MatcherAssert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.`when`
@@ -40,11 +41,10 @@ class FirstLaunchDialogTest {
     @Test
     fun clickingDeviceBackButton_shouldNotDismissDialog() {
         val scenario = RobolectricHelpers.launchDialogFragment(FirstLaunchDialog::class.java)
-        scenario.onFragment { f: FirstLaunchDialog ->
-            val dialog = f.dialog
-            assertThat(dialog!!.isShowing, `is`(true))
+        scenario.onFragment {
+            MatcherAssert.assertThat(it.isVisible, `is`(true))
             onView(isRoot()).perform(pressBack())
-            assertThat(dialog.isShowing, `is`(true))
+            MatcherAssert.assertThat(it.isVisible, `is`(true))
         }
     }
 
