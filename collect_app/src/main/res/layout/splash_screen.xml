@@ -46,6 +46,7 @@
                 android:paddingRight="7dip"
                 android:paddingStart="7dip"
                 android:text="@string/app_name"
+                android:textColor="@android:color/white"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -58,6 +59,7 @@
                 android:paddingRight="7dip"
                 android:paddingStart="7dip"
                 android:text="@string/app_url"
+                android:textColor="@android:color/white"
                 android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
