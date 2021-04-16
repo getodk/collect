@@ -1,11 +1,10 @@
 package org.odk.collect.android.projects
 
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.pressBack
 import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.matcher.IntentMatchers
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -28,7 +27,7 @@ class ProjectSettingsDialogTest {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ProjectSettingsDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
-            onView(ViewMatchers.withId(R.id.close_icon)).perform(ViewActions.click())
+            onView(ViewMatchers.withId(R.id.close_icon)).perform(click())
             assertThat(it.isVisible, `is`(false))
         }
     }
@@ -51,7 +50,7 @@ class ProjectSettingsDialogTest {
             assertThat(it.isVisible, `is`(true))
             onView(withText(R.string.general_preferences)).perform(click())
             assertThat(it.isVisible, `is`(false))
-            MatcherAssert.assertThat(Intents.getIntents()[0], IntentMatchers.hasComponent(GeneralPreferencesActivity::class.java.name))
+            assertThat(Intents.getIntents()[0], hasComponent(GeneralPreferencesActivity::class.java.name))
             Intents.release()
         }
     }
@@ -64,7 +63,7 @@ class ProjectSettingsDialogTest {
             assertThat(it.isVisible, `is`(true))
             onView(withText(R.string.admin_preferences)).perform(click())
             assertThat(it.isVisible, `is`(false))
-            MatcherAssert.assertThat(Intents.getIntents()[0], IntentMatchers.hasComponent(AdminPreferencesActivity::class.java.name))
+            MatcherAssert.assertThat(Intents.getIntents()[0], hasComponent(AdminPreferencesActivity::class.java.name))
             Intents.release()
         }
     }
@@ -77,7 +76,7 @@ class ProjectSettingsDialogTest {
             assertThat(it.isVisible, `is`(true))
             onView(withText(R.string.about)).perform(click())
             assertThat(it.isVisible, `is`(false))
-            MatcherAssert.assertThat(Intents.getIntents()[0], IntentMatchers.hasComponent(AboutActivity::class.java.name))
+            assertThat(Intents.getIntents()[0], hasComponent(AboutActivity::class.java.name))
             Intents.release()
         }
     }
