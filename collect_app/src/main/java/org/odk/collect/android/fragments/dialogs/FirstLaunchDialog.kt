@@ -11,7 +11,10 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.projects.AddProjectDialog
+import org.odk.collect.android.projects.AddProjectDialog.Companion.STARTED_FROM_FIRST_LAUNCH_SCREEN
 import org.odk.collect.android.projects.ProjectImporter
+import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import javax.inject.Inject
@@ -36,6 +39,11 @@ class FirstLaunchDialog : MaterialFullScreenDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         app_name.text = String.format("%s %s", getString(R.string.app_name), versionInformation.versionToDisplay)
+
+        configure_manually_button.setOnClickListener {
+            val bundle = Bundle().apply { putBoolean(STARTED_FROM_FIRST_LAUNCH_SCREEN, true) }
+            DialogUtils.showIfNotShowing(AddProjectDialog::class.java, bundle, requireActivity().supportFragmentManager)
+        }
 
         configure_later_button.setOnClickListener {
             projectImporter.importDemoProject()

@@ -9,15 +9,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import org.odk.collect.android.R
+import org.odk.collect.android.activities.ActivityUtils
+import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.databinding.AddProjectDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import javax.inject.Inject
 
 class AddProjectDialog : MaterialFullScreenDialogFragment() {
-
     @Inject
     lateinit var projectsRepository: ProjectsRepository
+
+    @Inject
+    lateinit var currentProjectProvider: CurrentProjectProvider
 
     private lateinit var binding: AddProjectDialogLayoutBinding
 
@@ -61,7 +65,12 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
 
         binding.addButton.setOnClickListener {
             projectsRepository.add(Project(getProjectName(), getProjectIcon(), getProjectColor()))
-            dismiss()
+            if (isDialogStartedFromFirstLaunchScreen()) {
+                currentProjectProvider.setCurrentProject(projectsRepository.getAll()[0].uuid)
+                ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity::class.java)
+            } else {
+                dismiss()
+            }
         }
     }
 
@@ -86,4 +95,10 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
     private fun getProjectIcon() = binding.projectIcon.editText?.text?.trim().toString()
 
     private fun getProjectColor() = binding.projectColor.editText?.text?.trim().toString()
+
+    private fun isDialogStartedFromFirstLaunchScreen() = arguments != null && requireArguments()[STARTED_FROM_FIRST_LAUNCH_SCREEN] == true
+
+    companion object {
+        const val STARTED_FROM_FIRST_LAUNCH_SCREEN = "STARTED_FROM_FIRST_LAUNCH_SCREEN"
+    }
 }
