@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.matcher.IntentMatchers
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.delay
@@ -19,8 +19,6 @@ import kotlinx.coroutines.launch
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.CoreMatchers.nullValue
-import org.hamcrest.MatcherAssert
-import org.hamcrest.Matchers
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -65,7 +63,7 @@ class SplashScreenActivityTest {
 
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
         scenario.onActivity { activity: SplashScreenActivity ->
-            MatcherAssert.assertThat(activity.supportFragmentManager.findFragmentByTag(FirstLaunchDialog::class.qualifiedName), Matchers.`is`(notNullValue()))
+            assertThat(activity.supportFragmentManager.findFragmentByTag(FirstLaunchDialog::class.qualifiedName), `is`(notNullValue()))
         }
     }
 
@@ -77,7 +75,7 @@ class SplashScreenActivityTest {
 
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
         scenario.onActivity { activity: SplashScreenActivity ->
-            MatcherAssert.assertThat(activity.supportFragmentManager.findFragmentByTag(FirstLaunchDialog::class.qualifiedName), Matchers.`is`(nullValue()))
+            assertThat(activity.supportFragmentManager.findFragmentByTag(FirstLaunchDialog::class.qualifiedName), `is`(nullValue()))
         }
     }
 
@@ -89,8 +87,8 @@ class SplashScreenActivityTest {
 
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
         scenario.onActivity { activity: SplashScreenActivity ->
-            MatcherAssert.assertThat(activity.findViewById<View>(R.id.splash_default).visibility, Matchers.`is`(View.VISIBLE))
-            MatcherAssert.assertThat(activity.findViewById<View>(R.id.splash).visibility, Matchers.`is`(View.GONE))
+            assertThat(activity.findViewById<View>(R.id.splash_default).visibility, `is`(View.VISIBLE))
+            assertThat(activity.findViewById<View>(R.id.splash).visibility, `is`(View.GONE))
         }
     }
 
@@ -104,8 +102,8 @@ class SplashScreenActivityTest {
 
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
         scenario.onActivity { activity: SplashScreenActivity ->
-            MatcherAssert.assertThat(activity.findViewById<View>(R.id.splash_default).visibility, Matchers.`is`(View.GONE))
-            MatcherAssert.assertThat(activity.findViewById<View>(R.id.splash).visibility, Matchers.`is`(View.VISIBLE))
+            assertThat(activity.findViewById<View>(R.id.splash_default).visibility, `is`(View.GONE))
+            assertThat(activity.findViewById<View>(R.id.splash).visibility, `is`(View.VISIBLE))
         }
     }
 
@@ -122,7 +120,7 @@ class SplashScreenActivityTest {
             activity.lifecycleScope.launch {
                 delay(2000)
                 assertThat(scenario.state, `is`(Lifecycle.State.DESTROYED))
-                Intents.intended(IntentMatchers.hasComponent(MainMenuActivity::class.java.name))
+                Intents.intended(hasComponent(MainMenuActivity::class.java.name))
             }
         }
 
@@ -137,7 +135,7 @@ class SplashScreenActivityTest {
         Intents.init()
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
         assertThat(scenario.state, `is`(Lifecycle.State.DESTROYED))
-        Intents.intended(IntentMatchers.hasComponent(MainMenuActivity::class.java.name))
+        Intents.intended(hasComponent(MainMenuActivity::class.java.name))
         Intents.release()
     }
 }
