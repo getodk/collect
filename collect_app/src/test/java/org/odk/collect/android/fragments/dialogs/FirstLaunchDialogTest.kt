@@ -59,7 +59,7 @@ class FirstLaunchDialogTest {
 
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java)
         scenario.onFragment {
-            onView(withText(getString(ApplicationProvider.getApplicationContext<Collect>(), R.string.configure_later))).perform(click())
+            onView(withText(R.string.configure_later)).perform(click())
             verify(projectImporter).importDemoProject()
         }
     }
@@ -69,7 +69,7 @@ class FirstLaunchDialogTest {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java)
         scenario.onFragment {
             Intents.init()
-            onView(withText(getString(ApplicationProvider.getApplicationContext<Collect>(), R.string.configure_later))).perform(click())
+            onView(withText(R.string.configure_later)).perform(click())
             intended(hasComponent(MainMenuActivity::class.java.name))
             Intents.release()
         }
@@ -79,7 +79,7 @@ class FirstLaunchDialogTest {
     fun clickingConfigureManually_shouldStartAddProjectDialogWithRequiredArgument() {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java)
         scenario.onFragment {
-            onView(withText(getString(ApplicationProvider.getApplicationContext<Collect>(), R.string.configure_manually))).perform(click())
+            onView(withText(R.string.configure_manually)).perform(click())
             val fragment = it.activity!!.supportFragmentManager.findFragmentByTag(AddProjectDialog::class.qualifiedName)
             assertThat(fragment, `is`(notNullValue()))
             assertThat(fragment!!.arguments!![STARTED_FROM_FIRST_LAUNCH_SCREEN], `is`(true))
@@ -90,7 +90,7 @@ class FirstLaunchDialogTest {
     fun clickingConfigureManually_shouldNotDismissFirstLaunchDialog() {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java)
         scenario.onFragment {
-            onView(withText(getString(ApplicationProvider.getApplicationContext<Collect>(), R.string.configure_manually))).perform(click())
+            onView(withText(R.string.configure_manually)).perform(click())
             assertThat(it.activity!!.supportFragmentManager.findFragmentByTag(it.tag), `is`(notNullValue()))
         }
     }
