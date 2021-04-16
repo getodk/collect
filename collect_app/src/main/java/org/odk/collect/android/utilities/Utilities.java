@@ -1033,7 +1033,7 @@ public class Utilities {
             Cursor results = null;
             try {
                 results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
-                if (results.getCount() > 0) {
+                if (results != null && results.getCount() > 0) {   // smap add check for results being null
                     results.moveToPosition(-1);
                     while (results.moveToNext()) {
                         String name = results.getString(results
