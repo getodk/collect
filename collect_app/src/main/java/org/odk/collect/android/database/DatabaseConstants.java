@@ -4,7 +4,7 @@ public class DatabaseConstants {
 
     public static final String FORMS_DATABASE_NAME = "forms.db";
     public static final String FORMS_TABLE_NAME = "forms";
-    public static final int FORMS_DATABASE_VERSION = 19;        // smap
+    public static final int FORMS_DATABASE_VERSION = 20;        // smap
 
     public static final String INSTANCES_DATABASE_NAME = "instances.db";
     public static final String INSTANCES_TABLE_NAME = "instances";

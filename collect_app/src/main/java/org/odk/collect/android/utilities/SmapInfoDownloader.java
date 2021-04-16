@@ -81,7 +81,7 @@ public class SmapInfoDownloader {
      * @param file        the final file
      * @param downloadUrl the url to get the contents from.
      */
-    public void downloadFile(File file, InputStream is, String downloadUrl, boolean credentials)     // smap made public, flag to include credentials
+    public void downloadFile(File file, InputStream is, String downloadUrl)
             throws IOException, TaskCancelledException, URISyntaxException, Exception {
         File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION,
                 new File(new StoragePathProvider().getDirPath(StorageSubdirectory.CACHE)));

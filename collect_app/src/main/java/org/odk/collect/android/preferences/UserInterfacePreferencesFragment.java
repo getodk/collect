@@ -84,9 +84,7 @@ public class UserInterfacePreferencesFragment extends BasePreferenceFragment {
                 String entry = (String) ((ListPreference) preference).getEntries()[index];
                 if (pref.getEntry() == null || !pref.getEntry().equals(entry)) {
                     preference.setSummary(entry);
-                    Intent intent = new Intent(getActivity().getBaseContext(), SmapMain.class);     // smap
-                    getActivity().startActivity(intent);
-                    // startActivityAndCloseAllOthers(getActivity(), MainMenuActivity.class);    // smap commented out
+                    startActivityAndCloseAllOthers(getActivity(), SmapMain.class);    // smap
                 }
                 return true;
             });
@@ -151,9 +149,7 @@ public class UserInterfacePreferencesFragment extends BasePreferenceFragment {
                 edit.putString(KEY_APP_LANGUAGE, newValue.toString());
                 edit.apply();
 
-                Intent intent = new Intent(getActivity().getBaseContext(), SmapMain.class);             // smap
-                getActivity().startActivity(intent);                            // smap
-                //startActivityAndCloseAllOthers(getActivity(), MainMenuActivity.class);    // smap commented
+                startActivityAndCloseAllOthers(getActivity(), SmapMain.class);
                 return true;
             });
         }

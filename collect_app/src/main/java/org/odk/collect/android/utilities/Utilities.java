@@ -308,10 +308,10 @@ public class Utilities {
                                 e.printStackTrace();
                                 throw e;
                             }
-                            InputStream isMedia = httpInterface.executeGetRequest(uri, null, webCredentialsUtils.getCredentials(uri)).getInputStream();
+                            InputStream isMedia = httpInterface.executeGetRequest(uri, null, null).getInputStream();     // Smap do not use credentials
                             try {
                                 File f = new File(mediaPath);
-                                fd.downloadFile(f, isMedia, mediaUrl,false);    // Smap add flag not to use credentials
+                                fd.downloadFile(f, isMedia, mediaUrl);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -323,8 +323,17 @@ public class Utilities {
                                     formId + "/" + media;
                             String mediaPath = file.getParent() + "/" + media;
                             try {
+                                // assume the downloadUrl is escaped properly
+                                URL url = new URL(mediaUrl);
+                                uri = url.toURI();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                throw e;
+                            }
+                            InputStream isMedia = httpInterface.executeGetRequest(uri, null, null).getInputStream();     // Smap do not use credentials
+                            try {
                                 File f = new File(mediaPath);
-                                fd.downloadFile(f, is, mediaUrl, false);    // smap credentials flag
+                                fd.downloadFile(f, isMedia, mediaUrl);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -1024,7 +1033,7 @@ public class Utilities {
             Cursor results = null;
             try {
                 results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
-                if (results.getCount() > 0) {
+                if (results != null && results.getCount() > 0) {   // smap add check for results being null
                     results.moveToPosition(-1);
                     while (results.moveToNext()) {
                         String name = results.getString(results

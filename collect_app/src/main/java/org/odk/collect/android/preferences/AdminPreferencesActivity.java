@@ -110,8 +110,6 @@ public class AdminPreferencesActivity extends CollectAbstractActivity implements
 
     @Override
     public void onDialogClosed() {
-        //startActivityAndCloseAllOthers(this, MainMenuActivity.class);     // smap commented
-        Intent intent = new Intent(this, SmapMain.class);                   // smap
-        this.startActivity(intent);                                         // smap
+        startActivityAndCloseAllOthers(this, SmapMain.class);     // smap commented
     }
 }

@@ -82,7 +82,7 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
                 SmapInfoDownloader fd = new SmapInfoDownloader();
                 File f = new File(imagePath);
                 if(!f.exists()) {
-                    fd.downloadFile(f, is, lookupUrl, true);
+                    fd.downloadFile(f, is, lookupUrl);
                 }
                 item.data = imageName;
             } else {

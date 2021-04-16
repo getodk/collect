@@ -20,9 +20,7 @@ public class ExperimentalPreferencesFragment extends BasePreferenceFragment {
         setPreferencesFromResource(R.xml.experimental_preferences, rootKey);
 
         findPreference(GeneralKeys.KEY_MAGENTA_THEME).setOnPreferenceChangeListener((preference, newValue) -> {
-            Intent intent = new Intent(getActivity().getBaseContext(), SmapMain.class);     // smap
-            getActivity().startActivity(intent);
-            //startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity.class);    // smap commented out
+            startActivityAndCloseAllOthers(requireActivity(), SmapMain.class);    // smap commented out
             return true;
         });
     }
