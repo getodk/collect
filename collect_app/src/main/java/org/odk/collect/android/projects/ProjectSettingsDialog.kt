@@ -104,7 +104,11 @@ class ProjectSettingsDialog : DialogFragment() {
             }
 
             projectView.findViewById<TextView>(R.id.project_icon).apply {
-                (background as GradientDrawable).setColor(Color.parseColor(project.color))
+                try {
+                    (background as GradientDrawable).setColor(Color.parseColor(project.color))
+                } catch (e: Exception) {
+                    // ignore
+                }
                 text = project.icon
             }
             projectView.findViewById<TextView>(R.id.project_name).text = project.name
@@ -123,7 +127,11 @@ class ProjectSettingsDialog : DialogFragment() {
         val currentProject = currentProjectProvider.getCurrentProject() ?: return
 
         binding.currentProject.projectIcon.apply {
-            (background as GradientDrawable).setColor(Color.parseColor(currentProject.color))
+            try {
+                (background as GradientDrawable).setColor(Color.parseColor(currentProject.color))
+            } catch (e: Exception) {
+                // ignore
+            }
             text = currentProject.icon
         }
         binding.currentProject.projectName.text = currentProject.name
