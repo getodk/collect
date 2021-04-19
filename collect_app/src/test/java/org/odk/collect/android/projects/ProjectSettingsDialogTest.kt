@@ -11,16 +11,24 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.AboutActivity
+import org.odk.collect.android.application.Collect
+import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.screens.AdminPreferencesActivity
 import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity
 import org.odk.collect.android.support.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
 class ProjectSettingsDialogTest {
+
+    @Before
+    fun setup() {
+        DaggerUtils.getComponent(Collect.getInstance()).projectsRepository().deleteAll()
+    }
 
     @Test
     fun clickingCloseButton_dismissesDialog() {
