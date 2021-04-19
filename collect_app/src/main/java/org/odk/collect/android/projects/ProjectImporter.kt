@@ -8,12 +8,16 @@ class ProjectImporter(
     private val metaSettings: Settings
 ) {
     fun importDemoProject() {
-        val project = Project("Demo project", "D", "#3e9fcc", "1")
+        val project = Project("Demo project", "D", "#3e9fcc", DEMO_PROJECT_ID)
         projectsRepository.add(project)
-        metaSettings.save(MetaKeys.CURRENT_PROJECT_ID, "1")
+        metaSettings.save(MetaKeys.CURRENT_PROJECT_ID, DEMO_PROJECT_ID)
     }
 
     fun importExistingProject() {
         // TODO
+    }
+
+    companion object {
+        const val DEMO_PROJECT_ID = "DEMO"
     }
 }

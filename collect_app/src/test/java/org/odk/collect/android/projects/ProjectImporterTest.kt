@@ -6,6 +6,7 @@ import org.mockito.Mockito
 import org.mockito.Mockito.verify
 import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.android.preferences.source.SharedPreferencesSettings
+import org.odk.collect.android.projects.ProjectImporter.Companion.DEMO_PROJECT_ID
 
 class ProjectImporterTest {
     private lateinit var projectsRepository: ProjectsRepository
@@ -22,7 +23,7 @@ class ProjectImporterTest {
     @Test
     fun `Default project should be imported when importDemoProject() called`() {
         projectImporter.importDemoProject()
-        verify(projectsRepository).add(Project("Demo project", "D", "#3e9fcc", "1"))
-        verify(metaSettings).save(MetaKeys.CURRENT_PROJECT_ID, "1")
+        verify(projectsRepository).add(Project("Demo project", "D", "#3e9fcc", DEMO_PROJECT_ID))
+        verify(metaSettings).save(MetaKeys.CURRENT_PROJECT_ID, DEMO_PROJECT_ID)
     }
 }
