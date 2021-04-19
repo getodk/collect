@@ -39,7 +39,7 @@ class SwitchProjectTest {
 
         rule.mainMenu()
             .openProjectSettingsDialog()
-            .assertCurrentProject("Polio - Banadir", "P")
-            .assertInactiveProject("Turtle nesting", "T")
+            .assertCurrentProject("Polio - Banadir")
+            .assertInactiveProject("Turtle nesting")
     }
 }

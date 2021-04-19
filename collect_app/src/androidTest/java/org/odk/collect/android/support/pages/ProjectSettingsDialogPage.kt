@@ -3,8 +3,8 @@ package org.odk.collect.android.support.pages
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withChild
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -45,13 +45,13 @@ internal class ProjectSettingsDialogPage(rule: ActivityTestRule<*>) : Page<Proje
         return AddProjectDialogPage(rule).assertOnPage()
     }
 
-    fun assertCurrentProject(name: String, icon: String): ProjectSettingsDialogPage {
-        onView(allOf(withChild(withText(name)), withChild(withText(icon)), withContentDescription(getTranslatedString(R.string.using_project, name)))).check(matches(isDisplayed()))
+    fun assertCurrentProject(name: String): ProjectSettingsDialogPage {
+        onView(allOf(hasDescendant(withText(name)), withContentDescription(getTranslatedString(R.string.using_project, name)))).check(matches(isDisplayed()))
         return this
     }
 
-    fun assertInactiveProject(name: String, icon: String): ProjectSettingsDialogPage {
-        onView(allOf(withChild(withText(name)), withChild(withText(icon)), withContentDescription(getTranslatedString(R.string.switch_to_project, name)))).check(matches(isDisplayed()))
+    fun assertInactiveProject(name: String): ProjectSettingsDialogPage {
+        onView(allOf(hasDescendant(withText(name)), withContentDescription(getTranslatedString(R.string.switch_to_project, name)))).check(matches(isDisplayed()))
         return this
     }
 }

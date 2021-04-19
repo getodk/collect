@@ -25,6 +25,6 @@ class AddNewProjectTest {
 
         rule.mainMenu()
             .openProjectSettingsDialog()
-            .assertInactiveProject("Project 1", "X")
+            .assertInactiveProject("Project 1")
     }
 }
