@@ -8,21 +8,20 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.`is`
 import org.odk.collect.android.R
-import org.odk.collect.projects.Project
 
 object ProjectMatcher {
     @JvmStatic
-    fun withProject(project: Project): Matcher<View> {
+    fun withProject(name: String, icon: String): Matcher<View> {
         return object : BoundedMatcher<View, View>(View::class.java) {
             override fun describeTo(description: Description) {
-                description.appendText("Project to be $project")
+                description.appendText("Project item to contain \"$name\" and \"$icon\"")
             }
 
             override fun matchesSafely(view: View): Boolean {
                 val displayedProjectIcon = (view.findViewById<TextView>(R.id.project_icon)).text.toString()
                 val displayedProjectName = (view.findViewById<TextView>(R.id.project_name)).text.toString()
-                assertThat(displayedProjectIcon, `is`(project.icon))
-                assertThat(displayedProjectName, `is`(project.name))
+                assertThat(displayedProjectIcon, `is`(icon))
+                assertThat(displayedProjectName, `is`(name))
                 return true
             }
         }
