@@ -42,7 +42,8 @@ import static org.robolectric.Shadows.shadowOf;
 @RunWith(RobolectricTestRunner.class)
 public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
 
-    private static final String ANSWER_TEXT = "jr://images/someURI";
+    private static final String DEFAULT_IMAGE_ANSWER = "jr://images/someURI";
+    private static final String USER_SPECIFIED_IMAGE_ANSWER = "current.bmp";
     private File currentFile;
 
     @NonNull
@@ -55,7 +56,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
                 if (currentFile == null) {
                     result = super.getAnswerFile(fileName);
                 } else {
-                    result = fileName.equals(ANSWER_TEXT) ? currentFile : null;
+                    result = fileName.equals(USER_SPECIFIED_IMAGE_ANSWER) ? currentFile : null;
                 }
                 return result;
             }
@@ -99,11 +100,11 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
     public void whenPromptHasDefaultAnswer_showsInImageView() throws Exception {
         String imagePath = File.createTempFile("default", ".bmp").getAbsolutePath();
         overrideReferenceManager(setupFakeReferenceManager(singletonList(
-                new Pair<>(ANSWER_TEXT, imagePath)
+                new Pair<>(DEFAULT_IMAGE_ANSWER, imagePath)
         )));
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(ANSWER_TEXT)
+                .withAnswerDisplayText(DEFAULT_IMAGE_ANSWER)
                 .build();
 
         DrawWidget widget = createWidget();
@@ -122,7 +123,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
         currentFile = new File(imagePath);
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(ANSWER_TEXT)
+                .withAnswerDisplayText(USER_SPECIFIED_IMAGE_ANSWER)
                 .build();
 
         DrawWidget widget = createWidget();
