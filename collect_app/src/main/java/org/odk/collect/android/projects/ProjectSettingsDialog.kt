@@ -115,6 +115,7 @@ class ProjectSettingsDialog : DialogFragment() {
             }
             projectView.findViewById<TextView>(R.id.project_name).text = project.name
 
+            projectView.contentDescription = getString(R.string.switch_to_project, project.name)
             binding.projectList.addView(projectView)
         }
     }
@@ -137,5 +138,6 @@ class ProjectSettingsDialog : DialogFragment() {
             text = currentProject.icon
         }
         binding.currentProject.projectName.text = currentProject.name
+        binding.currentProject.root.contentDescription = getString(R.string.using_project, currentProject.name)
     }
 }
