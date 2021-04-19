@@ -39,7 +39,7 @@ import org.odk.collect.android.version.VersionInformation
 class FirstLaunchDialogTest {
 
     @Test
-    fun clickingDeviceBackButton_shouldNotDismissDialog() {
+    fun `The dialog should not be dismissed after clicking on a device back button`() {
         val scenario = RobolectricHelpers.launchDialogFragment(FirstLaunchDialog::class.java)
         scenario.onFragment {
             MatcherAssert.assertThat(it.isVisible, `is`(true))
@@ -49,7 +49,7 @@ class FirstLaunchDialogTest {
     }
 
     @Test
-    fun clickingConfigureLater_shouldTriggerImportingDefaultProject() {
+    fun `Importing default project should be triggered after clicking on the 'Configure later' button`() {
         val projectImporter = mock(ProjectImporter::class.java)
         RobolectricHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesProjectImporter(projectsRepository: ProjectsRepository, settingsProvider: SettingsProvider): ProjectImporter {
@@ -65,7 +65,7 @@ class FirstLaunchDialogTest {
     }
 
     @Test
-    fun clickingConfigureLater_shouldStartMainMenu() {
+    fun `The main menu should be started after clicking on the 'Configure later' button`() {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java)
         scenario.onFragment {
             Intents.init()
@@ -76,7 +76,7 @@ class FirstLaunchDialogTest {
     }
 
     @Test
-    fun clickingConfigureManually_shouldStartAddProjectDialogWithRequiredArgument() {
+    fun `The AddProjectDialog with required arguments should be started after clicking on the 'Configure manually' button`() {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java)
         scenario.onFragment {
             onView(withText(R.string.configure_manually)).perform(click())
@@ -87,7 +87,7 @@ class FirstLaunchDialogTest {
     }
 
     @Test
-    fun clickingConfigureManually_shouldNotDismissFirstLaunchDialog() {
+    fun `The FirstLaunchDialog should not be dismissed after clicking on the 'Configure manually' button`() {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java)
         scenario.onFragment {
             onView(withText(R.string.configure_manually)).perform(click())
@@ -96,7 +96,7 @@ class FirstLaunchDialogTest {
     }
 
     @Test
-    fun appIconShouldBeDisplayed() {
+    fun `The app logo should be displayed`() {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java)
         scenario.onFragment {
             onView(withId(R.id.logo)).check(matches(isDisplayed()))
@@ -104,7 +104,7 @@ class FirstLaunchDialogTest {
     }
 
     @Test
-    fun appNameWithVersionShouldBeDisplayed() {
+    fun `The app name with its version should be displayed`() {
         val versionInformation = mock(VersionInformation::class.java)
         `when`(versionInformation.versionToDisplay).thenReturn("v30.1.1")
         RobolectricHelpers.overrideAppDependencyModule(object : AppDependencyModule() {

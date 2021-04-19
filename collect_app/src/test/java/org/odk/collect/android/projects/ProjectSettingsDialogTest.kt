@@ -5,12 +5,12 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.pressBack
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
+import androidx.test.espresso.matcher.ViewMatchers.isRoot
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.MatcherAssert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -31,27 +31,27 @@ class ProjectSettingsDialogTest {
     }
 
     @Test
-    fun clickingCloseButton_dismissesDialog() {
+    fun `The dialog should be dismissed after clicking on the 'X' button`() {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ProjectSettingsDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
-            onView(ViewMatchers.withId(R.id.close_icon)).perform(click())
+            onView(withId(R.id.close_icon)).perform(click())
             assertThat(it.isVisible, `is`(false))
         }
     }
 
     @Test
-    fun clickingDeviceBackButton_dismissesDialog() {
+    fun `The dialog should be dismissed after clicking on a device back button`() {
         val scenario = RobolectricHelpers.launchDialogFragment(ProjectSettingsDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
-            onView(ViewMatchers.isRoot()).perform(pressBack())
+            onView(isRoot()).perform(pressBack())
             assertThat(it.isVisible, `is`(false))
         }
     }
 
     @Test
-    fun clickingGeneralSettingsButton_startsGeneralSettings() {
+    fun `General settings should be started after clicking on the 'General Settings' button`() {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ProjectSettingsDialog::class.java)
         scenario.onFragment {
             Intents.init()
@@ -64,20 +64,20 @@ class ProjectSettingsDialogTest {
     }
 
     @Test
-    fun clickingAdminSettingsButton_startsAdminSettings() {
+    fun `Admin settings should be started after clicking on the 'Admin Settings' button`() {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ProjectSettingsDialog::class.java)
         scenario.onFragment {
             Intents.init()
             assertThat(it.isVisible, `is`(true))
             onView(withText(R.string.admin_preferences)).perform(click())
             assertThat(it.isVisible, `is`(false))
-            MatcherAssert.assertThat(Intents.getIntents()[0], hasComponent(AdminPreferencesActivity::class.java.name))
+            assertThat(Intents.getIntents()[0], hasComponent(AdminPreferencesActivity::class.java.name))
             Intents.release()
         }
     }
 
     @Test
-    fun clickingAboutButton_startsAboutSection() {
+    fun `About section should be started after clicking on the 'About' button`() {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ProjectSettingsDialog::class.java)
         scenario.onFragment {
             Intents.init()

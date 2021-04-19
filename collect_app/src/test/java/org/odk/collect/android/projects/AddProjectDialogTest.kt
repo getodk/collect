@@ -36,7 +36,7 @@ import org.odk.collect.android.utilities.UUIDGenerator
 class AddProjectDialogTest {
 
     @Test
-    fun clickingCancel_dismissesDialog() {
+    fun `The dialog should be dismissed after clicking on the 'Cancel' button`() {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
@@ -46,7 +46,7 @@ class AddProjectDialogTest {
     }
 
     @Test
-    fun clickingDeviceBackButton_dismissesDialog() {
+    fun `The dialog should be dismissed after clicking on a device back button`() {
         val scenario = RobolectricHelpers.launchDialogFragment(AddProjectDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
@@ -56,7 +56,7 @@ class AddProjectDialogTest {
     }
 
     @Test
-    fun clickingAddButton_dismissesDialog() {
+    fun `The dialog should be dismissed after clicking the 'Add' button`() {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
@@ -66,7 +66,7 @@ class AddProjectDialogTest {
     }
 
     @Test
-    fun clickingAddButton_shouldAddNewProject() {
+    fun `A new project should be added after clicking on the 'Add' button`() {
         val projectsRepository = mock(ProjectsRepository::class.java)
         RobolectricHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesProjectsRepository(uuidGenerator: UUIDGenerator, gson: Gson, settingsProvider: SettingsProvider): ProjectsRepository {
@@ -82,7 +82,7 @@ class AddProjectDialogTest {
     }
 
     @Test
-    fun clickingAddButton_shouldSetCurrentProjectIfStartedFromFirstLaunchScreen() {
+    fun `Current project should be set after adding a project if the dialog was started from the First Launch Screen`() {
         val projectsRepository = mock(ProjectsRepository::class.java)
         `when`(projectsRepository.getAll()).thenReturn(listOf(Project("", "", "", "1")))
         val currentProjectProvider = mock(CurrentProjectProvider::class.java)
@@ -105,7 +105,7 @@ class AddProjectDialogTest {
     }
 
     @Test
-    fun clickingAddButton_shouldNotSetCurrentProjectIfNotStartedFromFirstLaunchScreen() {
+    fun `Current project should not be set after adding a project if the dialog was not started from the First Launch Screen`() {
         val currentProjectProvider = mock(CurrentProjectProvider::class.java)
         RobolectricHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesCurrentProjectProvider(settingsProvider: SettingsProvider, projectsRepository: ProjectsRepository): CurrentProjectProvider {
@@ -121,7 +121,7 @@ class AddProjectDialogTest {
     }
 
     @Test
-    fun clickingAddButton_shouldStartMainMenuIfStartedFromFirstLaunchScreen() {
+    fun `The main menu should be started after adding a project if the dialog was started from the First Launch Screen`() {
         val fragmentArgs = bundleOf(STARTED_FROM_FIRST_LAUNCH_SCREEN to true)
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java, fragmentArgs)
         scenario.onFragment {
@@ -133,7 +133,7 @@ class AddProjectDialogTest {
     }
 
     @Test
-    fun clickingAddButton_shouldNotStartMainMenuIfNotStartedFromFirstLaunchScreen() {
+    fun `The main menu should not be started after adding a project if the dialog was not started from the First Launch Screen`() {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java)
         scenario.onFragment {
             Intents.init()
@@ -144,7 +144,7 @@ class AddProjectDialogTest {
     }
 
     @Test
-    fun noMoreThanOneCharacter_shouldBeAcceptedAsProjectIcon() {
+    fun `Only one character should be accepted as a project icon`() {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java)
         scenario.onFragment {
             onView(withHint(R.string.project_icon)).perform(typeText("XYZ"))
@@ -153,7 +153,7 @@ class AddProjectDialogTest {
     }
 
     @Test
-    fun noMoreThanOneEmoji_shouldBeAcceptedAsProjectIcon() {
+    fun `Only one emoji should be accepted as a project icon`() {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java)
         scenario.onFragment {
             onView(withHint(R.string.project_icon)).perform(replaceText("\uD83D\uDC22"))

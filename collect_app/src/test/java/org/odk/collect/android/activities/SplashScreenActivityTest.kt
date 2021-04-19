@@ -58,29 +58,29 @@ class SplashScreenActivityTest {
     }
 
     @Test
-    fun whenAppLaunchedForTheFistTime_showFirstLaunchScreen() {
+    fun `The Fist Launch Screen should be displayed if the app is newly installed`() {
         doReturn(true).`when`(splashScreenViewModel).shouldFirstLaunchDialogBeDisplayed()
 
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
         scenario.onActivity { activity: SplashScreenActivity ->
-            assertThat(activity.supportFragmentManager.findFragmentByTag(FirstLaunchDialog::class.qualifiedName), `is`(notNullValue()))
+            assertThat(RobolectricHelpers.getFragmentByClass(activity.supportFragmentManager, FirstLaunchDialog::class.java), `is`(notNullValue()))
         }
     }
 
     @Test
-    fun whenAppLaunchedNotForTheFistTime_doNotShowFirstLaunchScreen() {
+    fun `The Fist Launch Screen should not be displayed if the app is not newly installed`() {
         doReturn(false).`when`(splashScreenViewModel).shouldFirstLaunchDialogBeDisplayed()
         doReturn(true).`when`(splashScreenViewModel).shouldDisplaySplashScreen
         doReturn(false).`when`(splashScreenViewModel).doesLogoFileExist
 
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
         scenario.onActivity { activity: SplashScreenActivity ->
-            assertThat(activity.supportFragmentManager.findFragmentByTag(FirstLaunchDialog::class.qualifiedName), `is`(nullValue()))
+            assertThat(RobolectricHelpers.getFragmentByClass(activity.supportFragmentManager, FirstLaunchDialog::class.java), `is`(nullValue()))
         }
     }
 
     @Test
-    fun whenShowSplashScreenEnabledWithDefaultLogo_showSplashScreenWithDefaultLogo() {
+    fun `The Splash screen should be displayed with the default logo if it's enabled and no other logo is set`() {
         doReturn(false).`when`(splashScreenViewModel).shouldFirstLaunchDialogBeDisplayed()
         doReturn(true).`when`(splashScreenViewModel).shouldDisplaySplashScreen
         doReturn(false).`when`(splashScreenViewModel).doesLogoFileExist
@@ -93,7 +93,7 @@ class SplashScreenActivityTest {
     }
 
     @Test
-    fun whenShowSplashScreenEnabledWithCustomLogo_showSplashScreenWithCustomLogo() {
+    fun `The Splash screen should be displayed with custom logo if it's enabled and custom logo is set`() {
         doReturn(false).`when`(splashScreenViewModel).shouldFirstLaunchDialogBeDisplayed()
         doReturn(true).`when`(splashScreenViewModel).shouldDisplaySplashScreen
         doReturn(true).`when`(splashScreenViewModel).doesLogoFileExist
@@ -108,7 +108,7 @@ class SplashScreenActivityTest {
     }
 
     @Test
-    fun whenAppLaunchedNotForTheFistTimeAndSplashScreenEnabled_showMainMenuActivityAutomaticallyAfterTwoSeconds() {
+    fun `The main menu should be displayed automatically after 2s if the Splash screen is enabled and the app is not newly installed`() {
         doReturn(false).`when`(splashScreenViewModel).shouldFirstLaunchDialogBeDisplayed()
         doReturn(true).`when`(splashScreenViewModel).shouldDisplaySplashScreen
         doReturn(false).`when`(splashScreenViewModel).doesLogoFileExist
@@ -128,7 +128,7 @@ class SplashScreenActivityTest {
     }
 
     @Test
-    fun whenAppLaunchedNotForTheFistTimeAndSplashScreenDisabled_showMainMenuActivityImmediately() {
+    fun `The main menu should be displayed immediately if the splash screen is disabled and the app is not newly installed`() {
         doReturn(false).`when`(splashScreenViewModel).shouldFirstLaunchDialogBeDisplayed()
         doReturn(false).`when`(splashScreenViewModel).shouldDisplaySplashScreen
 

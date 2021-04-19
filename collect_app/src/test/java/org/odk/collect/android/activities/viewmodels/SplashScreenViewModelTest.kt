@@ -24,36 +24,36 @@ class SplashScreenViewModelTest {
     }
 
     @Test
-    fun whenSplashScreenDisabled_shouldShouldDisplaySplashScreenReturnFalse() {
+    fun `shouldDisplaySplashScreen() should return false if displaying splash screen is disabled`() {
         `when`(generalSettings.getBoolean(GeneralKeys.KEY_SHOW_SPLASH)).thenReturn(false)
         assertThat(splashScreenViewModel.shouldDisplaySplashScreen, `is`(false))
     }
 
     @Test
-    fun whenSplashScreenEnabled_shouldShouldDisplaySplashScreenReturnTrue() {
+    fun `shouldDisplaySplashScreen() should return true if displaying splash screen is enabled`() {
         `when`(generalSettings.getBoolean(GeneralKeys.KEY_SHOW_SPLASH)).thenReturn(true)
         assertThat(splashScreenViewModel.shouldDisplaySplashScreen, `is`(true))
     }
 
     @Test
-    fun whenSplashScreenLogoNotSpecified_shouldReturnEmptyString() {
+    fun `splashScreenLogoFile should return empty string if no custom logo is specified`() {
         assertThat(splashScreenViewModel.splashScreenLogoFile.name, `is`(""))
     }
 
     @Test
-    fun whenSplashScreenLogoSpecified_shouldReturnSavedValue() {
+    fun `splashScreenLogoFile should return file name if custom logo is specified`() {
         `when`(generalSettings.getString(GeneralKeys.KEY_SPLASH_PATH)).thenReturn("blah")
         assertThat(splashScreenViewModel.splashScreenLogoFile.name, `is`("blah"))
     }
 
     @Test
-    fun whenAppStartedForTheFirstTime_shouldShouldFirstLaunchDialogBeDisplayedTrue() {
+    fun `shouldFirstLaunchDialogBeDisplayed() should return true if the app is newly installed`() {
         assertThat(splashScreenViewModel.shouldFirstLaunchDialogBeDisplayed(), `is`(true))
         verify(metaSettings).save(MetaKeys.KEY_FIRST_LAUNCH, false)
     }
 
     @Test
-    fun whenAppStartedNotForTheFirstTime_shouldShouldFirstLaunchDialogBeDisplayedFalse() {
+    fun `shouldFirstLaunchDialogBeDisplayed() should return false if the app is not newly installed`() {
         `when`(metaSettings.contains(MetaKeys.KEY_FIRST_LAUNCH)).thenReturn(true)
         assertThat(splashScreenViewModel.shouldFirstLaunchDialogBeDisplayed(), `is`(false))
     }

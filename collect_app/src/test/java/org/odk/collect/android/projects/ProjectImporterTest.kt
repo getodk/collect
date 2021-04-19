@@ -20,7 +20,7 @@ class ProjectImporterTest {
     }
 
     @Test
-    fun whenImportDemoProjectCalled_ShouldDefaultProjectBeImported() {
+    fun `Default project should be imported when importDemoProject() called`() {
         projectImporter.importDemoProject()
         verify(projectsRepository).add(Project("Demo project", "D", "#3e9fcc", "1"))
         verify(metaSettings).save(MetaKeys.CURRENT_PROJECT_ID, "1")
