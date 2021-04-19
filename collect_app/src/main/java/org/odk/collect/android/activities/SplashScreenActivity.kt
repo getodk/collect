@@ -18,11 +18,10 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import kotlinx.android.synthetic.main.splash_screen.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.odk.collect.android.R
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
+import org.odk.collect.android.databinding.SplashScreenBinding
 import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.utilities.DialogUtils
@@ -35,16 +34,18 @@ class SplashScreenActivity : AppCompatActivity() {
 
     lateinit var viewModel: SplashScreenViewModel
 
+    private lateinit var binding: SplashScreenBinding
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = SplashScreenBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         DaggerUtils.getComponent(this).inject(this)
         viewModel = ViewModelProvider(this, splashScreenViewModelFactoryFactory.create(this, null))[SplashScreenViewModel::class.java]
         init()
     }
 
     private fun init() {
-        setContentView(R.layout.splash_screen)
-
         when {
             viewModel.shouldFirstLaunchDialogBeDisplayed() -> DialogUtils.showIfNotShowing(FirstLaunchDialog::class.java, supportFragmentManager)
             viewModel.shouldDisplaySplashScreen -> startSplashScreen()
@@ -58,9 +59,9 @@ class SplashScreenActivity : AppCompatActivity() {
 
     private fun startSplashScreen() {
         if (viewModel.doesLogoFileExist) {
-            splash_default.visibility = View.GONE
-            splash.setImageBitmap(viewModel.scaledSplashScreenLogoBitmap)
-            splash.visibility = View.VISIBLE
+            binding.splashDefault.visibility = View.GONE
+            binding.splash.setImageBitmap(viewModel.scaledSplashScreenLogoBitmap)
+            binding.splash.visibility = View.VISIBLE
         }
 
         lifecycleScope.launch() {

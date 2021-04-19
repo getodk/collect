@@ -6,10 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
-import kotlinx.android.synthetic.main.first_launch_dialog_layout.*
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
+import org.odk.collect.android.databinding.FirstLaunchDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.AddProjectDialog
 import org.odk.collect.android.projects.AddProjectDialog.Companion.STARTED_FROM_FIRST_LAUNCH_SCREEN
@@ -26,8 +26,11 @@ class FirstLaunchDialog : MaterialFullScreenDialogFragment() {
     @Inject
     lateinit var versionInformation: VersionInformation
 
+    private lateinit var binding: FirstLaunchDialogLayoutBinding
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.first_launch_dialog_layout, container, false)
+        binding = FirstLaunchDialogLayoutBinding.inflate(inflater)
+        return binding.root
     }
 
     override fun onAttach(context: Context) {
@@ -38,14 +41,14 @@ class FirstLaunchDialog : MaterialFullScreenDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        app_name.text = String.format("%s %s", getString(R.string.app_name), versionInformation.versionToDisplay)
+        binding.appName.text = String.format("%s %s", getString(R.string.app_name), versionInformation.versionToDisplay)
 
-        configure_manually_button.setOnClickListener {
+        binding.configureManuallyButton.setOnClickListener {
             val bundle = Bundle().apply { putBoolean(STARTED_FROM_FIRST_LAUNCH_SCREEN, true) }
             DialogUtils.showIfNotShowing(AddProjectDialog::class.java, bundle, requireActivity().supportFragmentManager)
         }
 
-        configure_later_button.setOnClickListener {
+        binding.configureLaterButton.setOnClickListener {
             projectImporter.importDemoProject()
             ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity::class.java)
         }
