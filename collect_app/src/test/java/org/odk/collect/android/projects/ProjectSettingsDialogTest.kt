@@ -74,7 +74,7 @@ class ProjectSettingsDialogTest {
         scenario.onFragment {
             Intents.init()
             assertThat(it.isVisible, `is`(true))
-            onView(withText(R.string.about)).perform(click())
+            onView(withText(R.string.about_preferences)).perform(click())
             assertThat(it.isVisible, `is`(false))
             assertThat(Intents.getIntents()[0], hasComponent(AboutActivity::class.java.name))
             Intents.release()
