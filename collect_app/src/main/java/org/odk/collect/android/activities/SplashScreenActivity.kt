@@ -24,13 +24,22 @@ import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
 import org.odk.collect.android.databinding.SplashScreenBinding
 import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.projects.AddProjectDialog
+import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.projects.ProjectsRepository
 import org.odk.collect.android.utilities.DialogUtils
 import javax.inject.Inject
 
-class SplashScreenActivity : AppCompatActivity() {
+class SplashScreenActivity : AppCompatActivity(), AddProjectDialog.AddProjectDialogListener {
 
     @Inject
     lateinit var splashScreenViewModelFactoryFactory: SplashScreenViewModel.FactoryFactory
+
+    @Inject
+    lateinit var currentProjectProvider: CurrentProjectProvider
+
+    @Inject
+    lateinit var projectsRepository: ProjectsRepository
 
     lateinit var viewModel: SplashScreenViewModel
 
@@ -68,5 +77,10 @@ class SplashScreenActivity : AppCompatActivity() {
             delay(2000)
             endSplashScreen()
         }
+    }
+
+    override fun onProjectAdded() {
+        currentProjectProvider.setCurrentProject(projectsRepository.getAll()[0].uuid)
+        endSplashScreen()
     }
 }

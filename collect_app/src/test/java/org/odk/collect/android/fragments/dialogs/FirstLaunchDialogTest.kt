@@ -27,8 +27,6 @@ import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
-import org.odk.collect.android.projects.AddProjectDialog
-import org.odk.collect.android.projects.AddProjectDialog.Companion.STARTED_FROM_FIRST_LAUNCH_SCREEN
 import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.projects.ProjectsRepository
 import org.odk.collect.android.support.RobolectricHelpers
@@ -72,17 +70,6 @@ class FirstLaunchDialogTest {
             onView(withText(R.string.configure_later)).perform(click())
             intended(hasComponent(MainMenuActivity::class.java.name))
             Intents.release()
-        }
-    }
-
-    @Test
-    fun `The AddProjectDialog with required arguments should be started after clicking on the 'Configure manually' button`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java)
-        scenario.onFragment {
-            onView(withText(R.string.configure_manually)).perform(click())
-            val fragment = it.activity!!.supportFragmentManager.findFragmentByTag(AddProjectDialog::class.qualifiedName)
-            assertThat(fragment, `is`(notNullValue()))
-            assertThat(fragment!!.arguments!![STARTED_FROM_FIRST_LAUNCH_SCREEN], `is`(true))
         }
     }
 
