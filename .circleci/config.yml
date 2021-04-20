@@ -18,6 +18,17 @@ jobs:
       - checkout
 
       - restore_cache:
+          key: gradle-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - run:
+          name: Download gradle
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: gradle-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+
+
+      - restore_cache:
           key: deps-{{ .Branch }}
       - run:
           name: Download dependencies
@@ -61,6 +72,9 @@ jobs:
           at: ~/work
       - restore_cache:
           key: deps-{{ .Branch }}
+      - restore_cache:
+          key: robolectric-jars
+
 
       - run:
           name: Run shared unit tests
@@ -84,6 +98,11 @@ jobs:
           name: Run audiorecorder unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 audiorecorder:testDebug
 
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: roboletric-jars
+
       - store_artifacts:
           path: collect_app/build/reports
           destination: reports
@@ -99,6 +118,8 @@ jobs:
           at: ~/work
       - restore_cache:
           key: deps-{{ .Branch }}
+      - restore_cache:
+          key: robolectric-jars
 
       - run:
           name: Compile app unit tests
@@ -107,6 +128,11 @@ jobs:
       - run:
           name: Run app unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 collect_app:testDebug
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: roboletric-jars
 
       - store_artifacts:
           path: collect_app/build/reports
