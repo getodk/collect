@@ -5,14 +5,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.keys.MetaKeys
+import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.ScreenUtils
+import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.Settings
 import java.io.File
 
 class SplashScreenViewModel(
     private val generalSettings: Settings,
     private val metaSettings: Settings,
+    private val projectsRepository: ProjectsRepository,
+    private val projectImporter: ProjectImporter
 ) : ViewModel() {
 
     val shouldDisplaySplashScreen
@@ -33,9 +37,20 @@ class SplashScreenViewModel(
         return isFirstLaunch
     }
 
-    open class Factory constructor(private val generalSettings: Settings, private val metaSettings: Settings) : ViewModelProvider.Factory {
+    fun importExistingProjectIfNeeded() {
+        if (!shouldFirstLaunchDialogBeDisplayed() && projectsRepository.getAll().isEmpty()) {
+            projectImporter.importExistingProject()
+        }
+    }
+
+    open class Factory constructor(
+        private val generalSettings: Settings,
+        private val metaSettings: Settings,
+        private val projectsRepository: ProjectsRepository,
+        private val projectImporter: ProjectImporter
+    ) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return SplashScreenViewModel(generalSettings, metaSettings) as T
+            return SplashScreenViewModel(generalSettings, metaSettings, projectsRepository, projectImporter) as T
         }
     }
 }

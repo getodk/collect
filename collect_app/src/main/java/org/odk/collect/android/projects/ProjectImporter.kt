@@ -15,8 +15,11 @@ class ProjectImporter(
         metaSettings.save(MetaKeys.CURRENT_PROJECT_ID, DEMO_PROJECT_ID)
     }
 
+    // Now it does the same like importDemoProject() but it should be changed later
     fun importExistingProject() {
-        // TODO
+        val project = Project("Demo project", "D", "#3e9fcc", "1")
+        projectsRepository.add(project)
+        metaSettings.save(MetaKeys.CURRENT_PROJECT_ID, "1")
     }
 
     companion object {
