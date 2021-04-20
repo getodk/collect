@@ -17,9 +17,9 @@ class ProjectImporter(
 
     // Now it does the same like importDemoProject() but it should be changed later
     fun importExistingProject() {
-        val project = Project("Demo project", "D", "#3e9fcc", "1")
+        val project = Project("Demo project", "D", "#3e9fcc", DEMO_PROJECT_ID)
         projectsRepository.add(project)
-        metaSettings.save(MetaKeys.CURRENT_PROJECT_ID, "1")
+        metaSettings.save(MetaKeys.CURRENT_PROJECT_ID, DEMO_PROJECT_ID)
     }
 
     companion object {
