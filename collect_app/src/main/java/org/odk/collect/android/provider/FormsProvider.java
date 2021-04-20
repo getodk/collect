@@ -41,6 +41,9 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import static android.provider.BaseColumns._ID;
+import static org.odk.collect.android.database.DatabaseObjectMapper.getFormFromCurrentCursorPosition;
+import static org.odk.collect.android.database.DatabaseObjectMapper.getFormFromValues;
+import static org.odk.collect.android.database.DatabaseObjectMapper.getValuesFromForm;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.AUTO_DELETE;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.AUTO_SEND;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.BASE64_RSA_PUBLIC_KEY;
@@ -58,9 +61,6 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.LANGUAG
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.MAX_DATE;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.SUBMISSION_URI;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.getFormFromCurrentCursorPosition;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.getFormFromValues;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.getValuesFromForm;
 import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_NEWEST_FORMS_BY_FORMID_URI;
 import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_URI;
 

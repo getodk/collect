@@ -43,6 +43,9 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.database.DatabaseObjectMapper.getInstanceFromCurrentCursorPosition;
+import static org.odk.collect.android.database.DatabaseObjectMapper.getInstanceFromValues;
+import static org.odk.collect.android.database.DatabaseObjectMapper.getValuesFromInstance;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.CAN_EDIT_WHEN_COMPLETE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DELETED_DATE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DISPLAY_NAME;
@@ -55,9 +58,6 @@ import static org.odk.collect.android.database.instances.DatabaseInstanceColumns
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.STATUS;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.SUBMISSION_URI;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns._ID;
-import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.getInstanceFromCurrentCursorPosition;
-import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.getInstanceFromValues;
-import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.getValuesFromInstance;
 import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_ITEM_TYPE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_TYPE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_URI;
