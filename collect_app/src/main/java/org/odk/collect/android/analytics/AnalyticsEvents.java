@@ -19,12 +19,6 @@ public class AnalyticsEvents {
     public static final String SET_FALLBACK_SHEETS_URL = "SetFallbackSheetsUrl";
 
     /**
-     * Track displays of the splash screen that are not on first launch. The action should be a hash
-     * of the splash path.
-     */
-    public static final String SHOW_SPLASH_SCREEN = "ShowSplashScreen";
-
-    /**
      * Track video requests with high resolution setting turned off. The action should be a hash of
      * the form definition.
      */
