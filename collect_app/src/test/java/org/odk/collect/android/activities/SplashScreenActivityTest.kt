@@ -23,6 +23,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.doReturn
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
 import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog
@@ -58,6 +59,12 @@ class SplashScreenActivityTest {
     @After
     fun teardown() {
         Dispatchers.resetMain()
+    }
+
+    @Test
+    fun `importExistingProjectIfNeeded() should be called`() {
+        ActivityScenario.launch(SplashScreenActivity::class.java)
+        verify(splashScreenViewModel).importExistingProjectIfNeeded()
     }
 
     @Test
