@@ -101,6 +101,10 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
 
       - run:
+          name: Compile app unit tests
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 collect_app:compileDebugUnitTestSources
+
+      - run:
           name: Run app unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 collect_app:testDebug
 
