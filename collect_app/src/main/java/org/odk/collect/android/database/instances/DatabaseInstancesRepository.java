@@ -154,22 +154,21 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
                     .build();
         }
 
-        if (instance.getLastStatusChangeDate() == null) {
+        if (instance.getLastStatusChangeDate() == null || instance.getDbId() != null) {
             instance = new Instance.Builder(instance)
                     .lastStatusChangeDate(System.currentTimeMillis())
                     .build();
         }
 
-        Long instanceId = instance.getDbId();
         ContentValues values = getValuesFromInstance(instance);
 
-        if (instanceId == null) {
+        if (instance.getDbId() == null) {
             long insertId = insert(values);
             return get(insertId);
         } else {
-            update(instanceId, values);
+            update(instance.getDbId(), values);
 
-            return get(instanceId);
+            return get(instance.getDbId());
         }
     }
 
