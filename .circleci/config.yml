@@ -18,14 +18,14 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+          key: deps-{{ .Branch }}
       - run:
           name: Download dependencies
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 androidDependencies
       - save_cache:
           paths:
             - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+          key: deps-{{ .Branch }}
 
       - run:
           name: Compile code
@@ -43,7 +43,7 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+          key: deps-{{ .Branch }}
 
       - run:
           name: Run code quality checks
@@ -60,7 +60,7 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+          key: deps-{{ .Branch }}
 
       - run:
           name: Run shared unit tests
@@ -98,7 +98,7 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+          key: deps-{{ .Branch }}
 
       - run:
           name: Compile app unit tests
@@ -122,7 +122,7 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+          key: deps-{{ .Branch }}
 
       - run:
           name: Assemble connected test build
@@ -136,7 +136,7 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+          key: deps-{{ .Branch }}
 
       - run:
           name: Assemble test build
