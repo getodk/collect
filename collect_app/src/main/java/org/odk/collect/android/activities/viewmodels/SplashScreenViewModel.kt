@@ -1,10 +1,8 @@
 package org.odk.collect.android.activities.viewmodels
 
 import android.graphics.Bitmap
-import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.savedstate.SavedStateRegistryOwner
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.android.preferences.source.Settings
@@ -35,7 +33,9 @@ class SplashScreenViewModel(
         return isFirstLaunch
     }
 
-    interface FactoryFactory {
-        fun create(owner: SavedStateRegistryOwner, defaultArgs: Bundle?): ViewModelProvider.Factory
+    open class Factory constructor(private val generalSettings: Settings, private val metaSettings: Settings) : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return SplashScreenViewModel(generalSettings, metaSettings) as T
+        }
     }
 }

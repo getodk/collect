@@ -553,14 +553,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SplashScreenViewModel.FactoryFactory providesSplashScreenViewModelFactoryFactory(SettingsProvider settingsProvider) {
-        return (owner, defaultArgs) -> new AbstractSavedStateViewModelFactory(owner, defaultArgs) {
-            @NonNull
-            @Override
-            protected <T extends ViewModel> T create(@NonNull String key, @NonNull Class<T> modelClass, @NonNull SavedStateHandle handle) {
-                return (T) new SplashScreenViewModel(settingsProvider.getGeneralSettings(), settingsProvider.getMetaSettings());
-            }
-        };
+    public SplashScreenViewModel.Factory providesSplashScreenViewModel(SettingsProvider settingsProvider) {
+        return new SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), settingsProvider.getMetaSettings());
     }
 
     @Provides

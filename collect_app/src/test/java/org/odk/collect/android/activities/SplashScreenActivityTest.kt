@@ -1,13 +1,8 @@
 package org.odk.collect.android.activities
 
-import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.savedstate.SavedStateRegistryOwner
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
@@ -50,14 +45,10 @@ class SplashScreenActivityTest {
         splashScreenViewModel = spy(SplashScreenViewModel(mock(Settings::class.java), mock(Settings::class.java)))
 
         RobolectricHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesSplashScreenViewModelFactoryFactory(settingsProvider: SettingsProvider): SplashScreenViewModel.FactoryFactory {
-                return object : SplashScreenViewModel.FactoryFactory {
-                    override fun create(owner: SavedStateRegistryOwner, defaultArgs: Bundle?): ViewModelProvider.Factory {
-                        return object : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
-                            override fun <T : ViewModel?> create(key: String, modelClass: Class<T>, handle: SavedStateHandle): T {
-                                return splashScreenViewModel as T
-                            }
-                        }
+            override fun providesSplashScreenViewModel(settingsProvider: SettingsProvider): SplashScreenViewModel.Factory {
+                return object : SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), settingsProvider.getMetaSettings()) {
+                    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                        return splashScreenViewModel as T
                     }
                 }
             }

@@ -33,7 +33,7 @@ import javax.inject.Inject
 class SplashScreenActivity : AppCompatActivity(), AddProjectDialog.AddProjectDialogListener {
 
     @Inject
-    lateinit var splashScreenViewModelFactoryFactory: SplashScreenViewModel.FactoryFactory
+    lateinit var splashScreenViewModelFactoryFactory: SplashScreenViewModel.Factory
 
     @Inject
     lateinit var currentProjectProvider: CurrentProjectProvider
@@ -50,7 +50,7 @@ class SplashScreenActivity : AppCompatActivity(), AddProjectDialog.AddProjectDia
         binding = SplashScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
         DaggerUtils.getComponent(this).inject(this)
-        viewModel = ViewModelProvider(this, splashScreenViewModelFactoryFactory.create(this, null))[SplashScreenViewModel::class.java]
+        viewModel = ViewModelProvider(this, splashScreenViewModelFactoryFactory)[SplashScreenViewModel::class.java]
         init()
     }
 
