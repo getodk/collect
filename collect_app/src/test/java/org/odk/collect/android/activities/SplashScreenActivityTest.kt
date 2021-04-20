@@ -7,18 +7,22 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.setMain
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.CoreMatchers.nullValue
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -35,11 +39,14 @@ import org.odk.collect.android.support.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
 class SplashScreenActivityTest {
+    private val testDispatcher = TestCoroutineDispatcher()
 
     private lateinit var splashScreenViewModel: SplashScreenViewModel
 
     @Before
     fun setup() {
+        Dispatchers.setMain(testDispatcher)
+
         splashScreenViewModel = spy(SplashScreenViewModel(mock(Settings::class.java), mock(Settings::class.java)))
 
         RobolectricHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
@@ -55,6 +62,11 @@ class SplashScreenActivityTest {
                 }
             }
         })
+    }
+
+    @After
+    fun teardown() {
+        Dispatchers.resetMain()
     }
 
     @Test
@@ -107,8 +119,9 @@ class SplashScreenActivityTest {
         }
     }
 
+    @ExperimentalCoroutinesApi
     @Test
-    fun `The main menu should be displayed automatically after 2s if the Splash screen is enabled and the app is not newly installed`() {
+    fun `The main menu should be displayed automatically after 2s if the Splash screen is enabled and the app is not newly installed`() = testDispatcher.runBlockingTest {
         doReturn(false).`when`(splashScreenViewModel).shouldFirstLaunchDialogBeDisplayed()
         doReturn(true).`when`(splashScreenViewModel).shouldDisplaySplashScreen
         doReturn(false).`when`(splashScreenViewModel).doesLogoFileExist
@@ -116,13 +129,11 @@ class SplashScreenActivityTest {
         Intents.init()
 
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
-        scenario.onActivity { activity: SplashScreenActivity ->
-            activity.lifecycleScope.launch {
-                delay(2000)
-                assertThat(scenario.state, `is`(Lifecycle.State.DESTROYED))
-                Intents.intended(hasComponent(MainMenuActivity::class.java.name))
-            }
-        }
+        advanceTimeBy(1000)
+        assertThat(scenario.state, `is`(Lifecycle.State.RESUMED))
+        assertThat(Intents.getIntents().isEmpty(), `is`(true))
+        advanceTimeBy(1000)
+        Intents.intended(hasComponent(MainMenuActivity::class.java.name))
 
         Intents.release()
     }

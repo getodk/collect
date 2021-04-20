@@ -73,7 +73,7 @@ class SplashScreenActivity : AppCompatActivity(), AddProjectDialog.AddProjectDia
             binding.splash.visibility = View.VISIBLE
         }
 
-        lifecycleScope.launch() {
+        lifecycleScope.launch {
             delay(2000)
             endSplashScreen()
         }
