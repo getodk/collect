@@ -107,8 +107,8 @@ public class InstanceProviderTest {
 
             cursor.moveToNext();
             assertThat(cursor.getString(cursor.getColumnIndex(STATUS)), is(STATUS_COMPLETE));
-            assertThat(cursor.getString(cursor.getColumnIndex(LAST_STATUS_CHANGE_DATE)), is(not(originalStatusChangeDate)));
-            assertThat(cursor.getString(cursor.getColumnIndex(LAST_STATUS_CHANGE_DATE)), is(notNullValue()));
+            assertThat(cursor.getLong(cursor.getColumnIndex(LAST_STATUS_CHANGE_DATE)), is(not(originalStatusChangeDate)));
+            assertThat(cursor.getLong(cursor.getColumnIndex(LAST_STATUS_CHANGE_DATE)), is(notNullValue()));
         }
     }
 
