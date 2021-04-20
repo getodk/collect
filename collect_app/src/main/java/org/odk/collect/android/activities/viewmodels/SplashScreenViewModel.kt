@@ -31,14 +31,14 @@ class SplashScreenViewModel(
     val doesLogoFileExist
         get() = splashScreenLogoFile.exists()
 
-    fun shouldFirstLaunchDialogBeDisplayed(): Boolean {
+    fun isFirstLaunch(): Boolean {
         val isFirstLaunch = !metaSettings.contains(MetaKeys.KEY_FIRST_LAUNCH)
         metaSettings.save(MetaKeys.KEY_FIRST_LAUNCH, false)
         return isFirstLaunch
     }
 
     fun importExistingProjectIfNeeded() {
-        if (!shouldFirstLaunchDialogBeDisplayed() && projectsRepository.getAll().isEmpty()) {
+        if (!isFirstLaunch() && projectsRepository.getAll().isEmpty()) {
             projectImporter.importExistingProject()
         }
     }

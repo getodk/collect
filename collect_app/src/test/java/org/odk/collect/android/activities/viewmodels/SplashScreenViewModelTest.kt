@@ -48,13 +48,13 @@ class SplashScreenViewModelTest {
 
     @Test
     fun `shouldFirstLaunchDialogBeDisplayed() should return true if the app is newly installed`() {
-        assertThat(splashScreenViewModel.shouldFirstLaunchDialogBeDisplayed(), `is`(true))
+        assertThat(splashScreenViewModel.isFirstLaunch(), `is`(true))
         verify(metaSettings).save(MetaKeys.KEY_FIRST_LAUNCH, false)
     }
 
     @Test
     fun `shouldFirstLaunchDialogBeDisplayed() should return false if the app is not newly installed`() {
         `when`(metaSettings.contains(MetaKeys.KEY_FIRST_LAUNCH)).thenReturn(true)
-        assertThat(splashScreenViewModel.shouldFirstLaunchDialogBeDisplayed(), `is`(false))
+        assertThat(splashScreenViewModel.isFirstLaunch(), `is`(false))
     }
 }
