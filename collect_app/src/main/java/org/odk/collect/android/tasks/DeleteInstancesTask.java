@@ -16,10 +16,10 @@ package org.odk.collect.android.tasks;
 
 import android.os.AsyncTask;
 
-import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
-import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
+import org.odk.collect.forms.FormsRepository;
 
 import timber.log.Timber;
 

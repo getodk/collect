@@ -12,7 +12,7 @@ import org.odk.collect.android.openrosa.HttpHeadResult;
 import org.odk.collect.android.openrosa.HttpPostResult;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.OpenRosaServerClient;
-import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.shared.Md5;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -99,7 +99,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         if (HTTP_CONTENT_TYPE_TEXT_XML.equals(contentType)) {
             byte[] bytes = IOUtils.toByteArray(downloadStream);
             downloadStream = new ByteArrayInputStream(bytes);
-            hash = FileUtils.getMd5Hash(new ByteArrayInputStream(bytes));
+            hash = Md5.getMd5Hash(new ByteArrayInputStream(bytes));
         }
 
         Map<String, String> responseHeaders = new HashMap<>();

@@ -2,14 +2,14 @@ package org.odk.collect.android.formmanagement;
 
 import org.junit.Test;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormSourceException;
-import org.odk.collect.android.forms.FormsRepository;
-import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormSourceException;
+import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
-import org.odk.collect.android.support.FormUtils;
-import org.odk.collect.android.support.InMemFormsRepository;
-import org.odk.collect.android.support.InMemInstancesRepository;
+import org.odk.collect.formstest.InMemFormsRepository;
+import org.odk.collect.formstest.InMemInstancesRepository;
+import org.odk.collect.formstest.FormUtils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,12 +2,13 @@ package org.odk.collect.android.views;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
-import androidx.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+
+import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
 

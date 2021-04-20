@@ -2,11 +2,10 @@ package org.odk.collect.android.utilities;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.support.FormUtils;
-import org.odk.collect.android.support.InMemFormsRepository;
-import org.odk.collect.android.support.InMemInstancesRepository;
-import org.odk.collect.android.forms.Form;
+import org.odk.collect.formstest.InMemFormsRepository;
+import org.odk.collect.formstest.InMemInstancesRepository;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.instances.Instance;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.HashMap;
@@ -14,6 +13,7 @@ import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.odk.collect.formstest.FormUtils.createXFormFile;
 
 @RunWith(RobolectricTestRunner.class)
 public class InstanceUploaderUtilsTest {
@@ -31,7 +31,7 @@ public class InstanceUploaderUtilsTest {
                 .dbId(1L)
                 .formId("1")
                 .version("1")
-                .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
+                .formFilePath(createXFormFile("1", "1").getAbsolutePath())
                 .build());
 
         assertThat(InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, "1", "1", false), is(false));
@@ -45,7 +45,7 @@ public class InstanceUploaderUtilsTest {
                 .dbId(1L)
                 .formId("1")
                 .version("1")
-                .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
+                .formFilePath(createXFormFile("1", "1").getAbsolutePath())
                 .build());
 
         assertThat(InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, "1", "1", true), is(true));
@@ -60,7 +60,7 @@ public class InstanceUploaderUtilsTest {
                 .formId("1")
                 .version("1")
                 .autoDelete("false")
-                .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
+                .formFilePath(createXFormFile("1", "1").getAbsolutePath())
                 .build());
 
         assertThat(InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, "1", "1", true), is(false));
@@ -75,7 +75,7 @@ public class InstanceUploaderUtilsTest {
                 .formId("1")
                 .version("1")
                 .autoDelete("true")
-                .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
+                .formFilePath(createXFormFile("1", "1").getAbsolutePath())
                 .build());
 
         assertThat(InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, "1", "1", false), is(true));

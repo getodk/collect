@@ -17,19 +17,23 @@ jobs:
     steps:
       - checkout
 
+      - run:
+          name: Generate combined build.gradle file for cache key
+          command: cat build.gradle */build.gradle > deps.txt
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+          key: deps-{{ checksum "deps.txt" }}
       - run:
           name: Download dependencies
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 androidDependencies
       - save_cache:
           paths:
             - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+          key: deps-{{ checksum "deps.txt" }}
 
       - run:
           name: Compile code
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleDebug
+
       - persist_to_workspace:
           root: ~/work
           paths:
@@ -43,7 +47,7 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+          key: deps-{{ checksum "deps.txt" }}
 
       - run:
           name: Run code quality checks
@@ -60,8 +64,16 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+          key: deps-{{ checksum "deps.txt" }}
+      - restore_cache:
+          key: deps-robolectric-{{ checksum "deps.txt" }}
 
+      - run:
+          name: Run shared unit tests
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 shared:test
+      - run:
+          name: Run formtest unit tests
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 formstest:test
       - run:
           name: Run async unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 async:testDebug
@@ -78,6 +90,11 @@ jobs:
           name: Run audiorecorder unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 audiorecorder:testDebug
 
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: deps-robolectric-{{ checksum "deps.txt" }}
+
       - store_artifacts:
           path: collect_app/build/reports
           destination: reports
@@ -92,11 +109,22 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+          key: deps-{{ checksum "deps.txt" }}
+      - restore_cache:
+          key: deps-robolectric-{{ checksum "deps.txt" }}
+
+      - run:
+          name: Compile app unit tests
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 collect_app:compileDebugUnitTestSources
 
       - run:
           name: Run app unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 collect_app:testDebug
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: deps-robolectric-{{ checksum "deps.txt" }}
 
       - store_artifacts:
           path: collect_app/build/reports
@@ -112,7 +140,7 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+          key: deps-{{ checksum "deps.txt" }}
 
       - run:
           name: Assemble connected test build
@@ -126,7 +154,7 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+          key: deps-{{ checksum "deps.txt" }}
 
       - run:
           name: Assemble test build

@@ -2,16 +2,17 @@ package org.odk.collect.android.tasks;
 
 import android.net.Uri;
 import android.os.AsyncTask;
+
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.widgets.BaseImageWidget;

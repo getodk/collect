@@ -32,7 +32,7 @@ import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
-import org.odk.collect.android.forms.FormSourceException;
+import org.odk.collect.forms.FormSourceException;
 
 import java.util.HashMap;
 import java.util.List;

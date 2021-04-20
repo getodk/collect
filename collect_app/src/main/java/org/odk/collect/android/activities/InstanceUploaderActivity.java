@@ -21,10 +21,12 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -73,15 +75,20 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     private Boolean deleteInstanceAfterUpload;
 
     @Inject
-    InstancesRepository instancesRepository;
+    InstancesRepositoryProvider instancesRepositoryProvider;
+    private InstancesRepository instancesRepository;
 
     @Inject
-    FormsRepository formsRepository;
+    FormsRepositoryProvider formsRepositoryProvider;
+    private FormsRepository formsRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
+        instancesRepository = instancesRepositoryProvider.get();
+        formsRepository = formsRepositoryProvider.get();
+
         init(savedInstanceState);
     }
 

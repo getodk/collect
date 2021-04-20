@@ -1,13 +1,13 @@
 package org.odk.collect.android.formmanagement;
 
 import org.junit.Test;
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
-import org.odk.collect.android.support.FormUtils;
-import org.odk.collect.android.support.InMemFormsRepository;
-import org.odk.collect.android.support.InMemInstancesRepository;
-import org.odk.collect.testshared.TempFiles;
+import org.odk.collect.formstest.InMemFormsRepository;
+import org.odk.collect.formstest.InMemInstancesRepository;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.formstest.FormUtils;
+import org.odk.collect.shared.TempFiles;
 
 import java.io.File;
 import java.util.List;
@@ -16,7 +16,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.odk.collect.android.support.InstanceUtils.buildInstance;
+import static org.odk.collect.formstest.InstanceUtils.buildInstance;
 
 
 public class FormDeleterTest {

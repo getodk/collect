@@ -14,6 +14,7 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.SQLiteUtils;
+import org.odk.collect.shared.Md5;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowEnvironment;
 
@@ -118,7 +119,7 @@ public class ExternalDataReaderTest {
         cursor.moveToFirst();
         String fileMd5 = cursor.getString(0);
 
-        assertThat(fileMd5, is(FileUtils.getMd5Hash(csvFile)));
+        assertThat(fileMd5, is(Md5.getMd5Hash(csvFile)));
     }
 
     @Test
@@ -167,7 +168,7 @@ public class ExternalDataReaderTest {
         SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFile.getAbsolutePath(), null, SQLiteDatabase.OPEN_READWRITE);
         assertThat(db.rawQuery(SELECT_ALL_DATA_QUERY, null).getCount(), is(3));
 
-        String originalHash = FileUtils.getMd5Hash(csvFile);
+        String originalHash = Md5.getMd5Hash(csvFile);
         String metadataTableHash = ExternalSQLiteOpenHelper.getLastMd5Hash(db, EXTERNAL_METADATA_TABLE_NAME, csvFile);
         assertThat(metadataTableHash, is(originalHash));
 
@@ -175,7 +176,7 @@ public class ExternalDataReaderTest {
             out.write("\ncherimoya,Cherimoya");
         }
 
-        String newHash = FileUtils.getMd5Hash(csvFile);
+        String newHash = Md5.getMd5Hash(csvFile);
         assertThat(newHash, is(not(originalHash)));
 
         // Reimport

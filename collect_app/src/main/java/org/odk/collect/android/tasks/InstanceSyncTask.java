@@ -21,21 +21,23 @@ import org.apache.commons.io.FileUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.DatabaseFormsRepository;
-import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.exception.EncryptionException;
-import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
-import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.EncryptionUtils;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.TranslationHandler;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.shared.Md5;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -51,9 +53,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import static org.odk.collect.android.utilities.FileUtils.getMd5Hash;
 
 /**
  * Background task for syncing form instances from the instances folder to the instances table.
@@ -116,7 +115,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 List<Instance> instancesToRemove = new ArrayList<>();
 
                 // Remove all the path that's already in the content provider
-                List<Instance> instances = new DatabaseInstancesRepository().getAllNotDeleted();
+                List<Instance> instances = new InstancesRepositoryProvider().get().getAllNotDeleted();
 
                 for (Instance instance : instances) {
                     String instanceFilename = instance.getInstanceFilePath();
@@ -129,7 +128,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 }
 
                 for (Instance instance : instancesToRemove) {
-                    new InstanceDeleter(new DatabaseInstancesRepository(), new DatabaseFormsRepository()).delete(instance.getDbId());
+                    new InstanceDeleter(new InstancesRepositoryProvider().get(), new FormsRepositoryProvider().get()).delete(instance.getDbId());
                 }
 
                 final boolean instanceSyncFlag = settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_INSTANCE_SYNC);
@@ -143,7 +142,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                         try {
                             // TODO: optimize this by caching the previously found form definition
                             // TODO: optimize this by caching unavailable form definition to skip
-                            List<Form> forms = new DatabaseFormsRepository().getAllByFormId(instanceFormId);
+                            List<Form> forms = new FormsRepositoryProvider().get().getAllByFormId(instanceFormId);
 
                             if (!forms.isEmpty()) {
                                 Form form = forms.get(0);
@@ -152,7 +151,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                                 String formName = form.getDisplayName();
                                 String submissionUri = form.getSubmissionUri();
 
-                                Instance instance = new DatabaseInstancesRepository().save(new Instance.Builder()
+                                Instance instance = new InstancesRepositoryProvider().get().save(new Instance.Builder()
                                         .instanceFilePath(candidateInstance)
                                         .submissionUri(submissionUri)
                                         .displayName(formName)
@@ -221,7 +220,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
     private void logImportAndEncrypt(Form form) {
         String id = form.getFormId();
         String title = form.getDisplayName();
-        String formIdHash = getMd5Hash(new ByteArrayInputStream((id + " " + title).getBytes()));
+        String formIdHash = Md5.getMd5Hash(new ByteArrayInputStream((id + " " + title).getBytes()));
         DaggerUtils.getComponent(Collect.getInstance()).analytics().logFormEvent(AnalyticsEvents.IMPORT_AND_ENCRYPT_INSTANCE, formIdHash);
     }
 
@@ -229,7 +228,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
         String instancePath = instance.getInstanceFilePath();
         File instanceXml = new File(instancePath);
         if (!new File(instanceXml.getParentFile(), "submission.xml.enc").exists()) {
-            Uri uri = Uri.parse(InstanceColumns.CONTENT_URI + "/" + instance.getDbId());
+            Uri uri = Uri.parse(InstanceProviderAPI.CONTENT_URI + "/" + instance.getDbId());
             FormController.InstanceMetadata instanceMetadata = new FormController.InstanceMetadata(getInstanceIdFromInstance(instancePath), null, null);
             EncryptionUtils.EncryptedFormInformation formInfo = EncryptionUtils.getEncryptedFormInformation(uri, instanceMetadata);
 
@@ -239,7 +238,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
                 EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
 
-                new DatabaseInstancesRepository().save(new Instance.Builder(instance)
+                new InstancesRepositoryProvider().get().save(new Instance.Builder(instance)
                         .canEditWhenComplete(false)
                         .geometryType(null)
                         .geometry(null)

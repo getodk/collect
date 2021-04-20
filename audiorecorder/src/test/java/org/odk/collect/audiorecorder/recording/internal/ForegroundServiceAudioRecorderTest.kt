@@ -10,6 +10,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.AudioRecorderDependencyModule
 import org.odk.collect.audiorecorder.recorder.Output
@@ -21,7 +22,6 @@ import org.odk.collect.audiorecorder.recording.AudioRecorderTest
 import org.odk.collect.audiorecorder.recording.MicInUseException
 import org.odk.collect.audiorecorder.support.FakeRecorder
 import org.odk.collect.audiorecorder.testsupport.RobolectricApplication
-import org.odk.collect.shared.data.Consumable
 import org.odk.collect.testshared.FakeScheduler
 import org.robolectric.Robolectric
 import org.robolectric.Shadows.shadowOf

@@ -27,17 +27,17 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.InstancesCountRepository;
-import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.instancemanagement.InstanceSubmitter;
 import org.odk.collect.android.instancemanagement.SubmitException;
-import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
 
@@ -64,10 +64,10 @@ public class AutoSendTaskSpec implements TaskSpec {
     ChangeLock changeLock;
 
     @Inject
-    FormsRepository formsRepository;
+    FormsRepositoryProvider formsRepositoryProvider;
 
     @Inject
-    InstancesRepository instancesRepository;
+    InstancesRepositoryProvider instancesRepositoryProvider;
 
     @Inject
     GoogleAccountsManager googleAccountsManager;
@@ -114,7 +114,7 @@ public class AutoSendTaskSpec implements TaskSpec {
             return changeLock.withLock(acquiredLock -> {
                 if (acquiredLock) {
                     try {
-                        Pair<Boolean, String> results = new InstanceSubmitter(analytics, formsRepository, instancesRepository, googleAccountsManager, googleApiProvider, permissionsProvider, settingsProvider).submitUnsubmittedInstances();
+                        Pair<Boolean, String> results = new InstanceSubmitter(analytics, formsRepositoryProvider.get(), instancesRepositoryProvider.get(), googleAccountsManager, googleApiProvider, permissionsProvider, settingsProvider).submitUnsubmittedInstances();
                         notifier.onSubmission(results.first, results.second);
                     } catch (SubmitException e) {
                         switch (e.getType()) {
@@ -174,7 +174,7 @@ public class AutoSendTaskSpec implements TaskSpec {
      * forms should auto-send no matter the connection type.
      */
     private boolean atLeastOneFormSpecifiesAutoSend() {
-        return formsRepository.getAll().stream().anyMatch(form -> parseBoolean(form.getAutoSend()));
+        return formsRepositoryProvider.get().getAll().stream().anyMatch(form -> parseBoolean(form.getAutoSend()));
     }
 
     public static class Adapter extends WorkerAdapter {

@@ -33,7 +33,6 @@ import org.javarosa.xform.util.XFormUtils;
 import org.javarosa.xpath.XPathTypeMismatchException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.external.ExternalAnswerResolver;
 import org.odk.collect.android.external.ExternalDataHandler;
 import org.odk.collect.android.external.ExternalDataManager;
@@ -41,12 +40,14 @@ import org.odk.collect.android.external.ExternalDataManagerImpl;
 import org.odk.collect.android.external.ExternalDataReader;
 import org.odk.collect.android.external.ExternalDataReaderImpl;
 import org.odk.collect.android.external.handler.ExternalDataHandlerPull;
-import org.odk.collect.android.listeners.FormLoaderListener;
+import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormDefCache;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.ZipUtils;
+import org.odk.collect.shared.Md5;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -259,7 +260,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         final File csv = new File(formMediaDir.getAbsolutePath() + "/" + ITEMSETS_CSV);
         String csvmd5 = null;
         if (csv.exists()) {
-            csvmd5 = FileUtils.getMd5Hash(csv);
+            csvmd5 = Md5.getMd5Hash(csv);
             boolean readFile = false;
             final ItemsetDbAdapter ida = new ItemsetDbAdapter();
             ida.open();

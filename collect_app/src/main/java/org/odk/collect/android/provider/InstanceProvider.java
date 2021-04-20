@@ -24,13 +24,15 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.InstancesDatabaseProvider;
-import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.database.instances.DatabaseInstancesRepository;
+import org.odk.collect.android.database.instances.InstancesDatabaseProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
-import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.utilities.ContentUriHelper;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -41,24 +43,24 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CONTENT_ITEM_TYPE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CONTENT_TYPE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CONTENT_URI;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DELETED_DATE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DISPLAY_NAME;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.GEOMETRY;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.GEOMETRY_TYPE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_FORM_ID;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_VERSION;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.STATUS;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.SUBMISSION_URI;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns._ID;
-import static org.odk.collect.android.utilities.InstanceUtils.getInstanceFromCurrentCursorPosition;
-import static org.odk.collect.android.utilities.InstanceUtils.getInstanceFromValues;
-import static org.odk.collect.android.utilities.InstanceUtils.getValuesFromInstance;
+import static org.odk.collect.android.database.DatabaseObjectMapper.getInstanceFromCurrentCursorPosition;
+import static org.odk.collect.android.database.DatabaseObjectMapper.getInstanceFromValues;
+import static org.odk.collect.android.database.DatabaseObjectMapper.getValuesFromInstance;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.CAN_EDIT_WHEN_COMPLETE;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DELETED_DATE;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DISPLAY_NAME;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY_TYPE;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.INSTANCE_FILE_PATH;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.JR_FORM_ID;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.JR_VERSION;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.STATUS;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.SUBMISSION_URI;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns._ID;
+import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_ITEM_TYPE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_TYPE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_URI;
 
 public class InstanceProvider extends ContentProvider {
 
@@ -73,10 +75,10 @@ public class InstanceProvider extends ContentProvider {
     InstancesDatabaseProvider instancesDatabaseProvider;
 
     @Inject
-    InstancesRepository instancesRepository;
+    InstancesRepositoryProvider instancesRepositoryProvider;
 
     @Inject
-    FormsRepository formsRepository;
+    FormsRepositoryProvider formsRepositoryProvider;
 
     @Override
     public boolean onCreate() {
@@ -91,12 +93,12 @@ public class InstanceProvider extends ContentProvider {
         Cursor c;
         switch (URI_MATCHER.match(uri)) {
             case INSTANCES:
-                c = instancesRepository.rawQuery(projection, selection, selectionArgs, sortOrder, null);
+                c = dbQuery(projection, selection, selectionArgs, sortOrder);
                 break;
 
             case INSTANCE_ID:
                 String id = String.valueOf(ContentUriHelper.getIdFromUri(uri));
-                c = instancesRepository.rawQuery(projection, _ID + "=?", new String[]{id}, null, null);
+                c = dbQuery(projection, _ID + "=?", new String[]{id}, null);
                 break;
 
             default:
@@ -106,6 +108,10 @@ public class InstanceProvider extends ContentProvider {
         // Tell the cursor what uri to watch, so it knows when its source data changes
         c.setNotificationUri(getContext().getContentResolver(), uri);
         return c;
+    }
+
+    private Cursor dbQuery(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        return ((DatabaseInstancesRepository) instancesRepositoryProvider.get()).rawQuery(projection, selection, selectionArgs, sortOrder, null);
     }
 
     @Override
@@ -131,7 +137,7 @@ public class InstanceProvider extends ContentProvider {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        Instance newInstance = instancesRepository.save(getInstanceFromValues(initialValues));
+        Instance newInstance = instancesRepositoryProvider.get().save(getInstanceFromValues(initialValues));
         return Uri.withAppendedPath(CONTENT_URI, String.valueOf(newInstance.getDbId()));
     }
 
@@ -176,10 +182,10 @@ public class InstanceProvider extends ContentProvider {
 
         switch (URI_MATCHER.match(uri)) {
             case INSTANCES:
-                try (Cursor cursor = instancesRepository.rawQuery(new String[]{_ID}, where, whereArgs, null, null)) {
+                try (Cursor cursor = dbQuery(new String[]{_ID}, where, whereArgs, null)) {
                     while (cursor.moveToNext()) {
                         long id = cursor.getLong(cursor.getColumnIndex(_ID));
-                        new InstanceDeleter(instancesRepository, formsRepository).delete(id);
+                        new InstanceDeleter(instancesRepositoryProvider.get(), formsRepositoryProvider.get()).delete(id);
                     }
 
                     count = cursor.getCount();
@@ -191,12 +197,12 @@ public class InstanceProvider extends ContentProvider {
                 long id = ContentUriHelper.getIdFromUri(uri);
 
                 if (where == null) {
-                    new InstanceDeleter(instancesRepository, formsRepository).delete(id);
+                    new InstanceDeleter(instancesRepositoryProvider.get(), formsRepositoryProvider.get()).delete(id);
                 } else {
-                    try (Cursor cursor = instancesRepository.rawQuery(new String[]{_ID}, where, whereArgs, null, null)) {
+                    try (Cursor cursor = dbQuery(new String[]{_ID}, where, whereArgs, null)) {
                         while (cursor.moveToNext()) {
                             if (cursor.getLong(cursor.getColumnIndex(_ID)) == id) {
-                                new InstanceDeleter(instancesRepository, formsRepository).delete(id);
+                                new InstanceDeleter(instancesRepositoryProvider.get(), formsRepositoryProvider.get()).delete(id);
                                 break;
                             }
                         }
@@ -218,12 +224,13 @@ public class InstanceProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String where, String[] whereArgs) {
         DaggerUtils.getComponent(getContext()).inject(this);
+        InstancesRepository instancesRepository = instancesRepositoryProvider.get();
 
         int count;
 
         switch (URI_MATCHER.match(uri)) {
             case INSTANCES:
-                try (Cursor cursor = instancesRepository.rawQuery(null, where, whereArgs, null, null)) {
+                try (Cursor cursor = dbQuery(null, where, whereArgs, null)) {
                     while (cursor.moveToNext()) {
                         Instance instance = getInstanceFromCurrentCursorPosition(cursor);
                         ContentValues existingValues = getValuesFromInstance(instance);
@@ -248,7 +255,7 @@ public class InstanceProvider extends ContentProvider {
                     instancesRepository.save(getInstanceFromValues(existingValues));
                     count = 1;
                 } else {
-                    try (Cursor cursor = instancesRepository.rawQuery(new String[]{_ID}, where, whereArgs, null, null)) {
+                    try (Cursor cursor = dbQuery(new String[]{_ID}, where, whereArgs, null)) {
                         while (cursor.moveToNext()) {
                             if (cursor.getLong(cursor.getColumnIndex(_ID)) == instanceId) {
                                 Instance instance = getInstanceFromCurrentCursorPosition(cursor);

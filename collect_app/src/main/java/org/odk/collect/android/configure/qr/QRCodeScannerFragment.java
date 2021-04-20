@@ -12,8 +12,8 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.shared.Md5;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -43,7 +43,7 @@ public class QRCodeScannerFragment extends BarCodeScannerFragment {
     @Override
     protected void handleScanningResult(BarcodeResult result) throws IOException, DataFormatException {
         boolean importSuccess = settingsImporter.fromJSON(decompress(result.getText()));
-        String settingsHash = FileUtils.getMd5Hash(new ByteArrayInputStream(result.getText().getBytes()));
+        String settingsHash = Md5.getMd5Hash(new ByteArrayInputStream(result.getText().getBytes()));
 
         if (importSuccess) {
             ToastUtils.showLongToast(getString(R.string.successfully_imported_settings));

@@ -48,7 +48,7 @@ dependencies {
     implementation "com.google.dagger:dagger:${rootProject.daggerVersion}"
     implementation "com.jakewharton.timber:timber:${rootProject.timberVersion}"
     implementation project(path: ':async')
-    implementation project(path: ':shared')
+    implementation project(path: ':androidshared')
     testImplementation project(path: ':testshared')
     kapt "com.google.dagger:dagger-compiler:${rootProject.daggerVersion}"
 

@@ -3,12 +3,12 @@ package org.odk.collect.android.formmanagement;
 import android.content.Context;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.forms.FormSourceException;
+import org.odk.collect.forms.FormSourceException;
 
-import static org.odk.collect.android.forms.FormSourceException.ParseError;
-import static org.odk.collect.android.forms.FormSourceException.SecurityError;
-import static org.odk.collect.android.forms.FormSourceException.ServerError;
-import static org.odk.collect.android.forms.FormSourceException.Unreachable;
+import static org.odk.collect.forms.FormSourceException.ParseError;
+import static org.odk.collect.forms.FormSourceException.SecurityError;
+import static org.odk.collect.forms.FormSourceException.ServerError;
+import static org.odk.collect.forms.FormSourceException.Unreachable;
 import static org.odk.collect.android.utilities.TranslationHandler.getString;
 
 public class FormSourceExceptionMapper {

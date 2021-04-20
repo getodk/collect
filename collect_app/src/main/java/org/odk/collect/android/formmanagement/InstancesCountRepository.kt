@@ -2,9 +2,9 @@ package org.odk.collect.android.formmanagement
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import org.odk.collect.android.database.DatabaseInstancesRepository
-import org.odk.collect.android.instances.Instance
-import org.odk.collect.android.instances.InstancesRepository
+import org.odk.collect.android.utilities.InstancesRepositoryProvider
+import org.odk.collect.forms.instances.Instance
+import org.odk.collect.forms.instances.InstancesRepository
 import javax.inject.Singleton
 
 /**
@@ -25,7 +25,7 @@ class InstancesCountRepository {
     val sent: LiveData<Int> = _sent
 
     fun update() {
-        val instancesRepository: InstancesRepository = DatabaseInstancesRepository()
+        val instancesRepository: InstancesRepository = InstancesRepositoryProvider().get()
         val finalizedInstances = instancesRepository.getCountByStatus(Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED)
         val sentInstances = instancesRepository.getCountByStatus(Instance.STATUS_SUBMITTED)
         val unsentInstances = instancesRepository.getCountByStatus(Instance.STATUS_INCOMPLETE, Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED)

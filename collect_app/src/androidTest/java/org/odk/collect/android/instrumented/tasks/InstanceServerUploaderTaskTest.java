@@ -6,12 +6,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.odk.collect.android.database.DatabaseInstancesRepository;
-import org.odk.collect.android.instances.Instance;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.openrosa.OpenRosaConstants;
 import org.odk.collect.android.support.MockedServerTest;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 
 import java.io.File;
 
@@ -58,7 +58,8 @@ public class InstanceServerUploaderTaskTest extends MockedServerTest {
         assertEquals("success", o.messagesByInstanceId.get(id.toString()));
 
         // and
-        HEAD: {
+        HEAD:
+        {
             RecordedRequest r = nextRequest();
             assertEquals("HEAD", r.getMethod());
             assertMatches("/submission\\?deviceID=collect%\\w+", r.getPath());
@@ -68,7 +69,8 @@ public class InstanceServerUploaderTaskTest extends MockedServerTest {
         }
 
         // and
-        POST: {
+        POST:
+        {
             RecordedRequest r = nextRequest();
             assertEquals("POST", r.getMethod());
             assertMatches("/submission\\?deviceID=collect%\\w+", r.getPath());
@@ -91,7 +93,7 @@ public class InstanceServerUploaderTaskTest extends MockedServerTest {
                 .lastStatusChangeDate(123L)
                 .build();
 
-        return new DatabaseInstancesRepository().save(i).getDbId();
+        return new InstancesRepositoryProvider().get().save(i).getDbId();
     }
 
     private String hostAndPort() {
@@ -100,34 +102,34 @@ public class InstanceServerUploaderTaskTest extends MockedServerTest {
 
     private String headResponse() {
         return join(
-            "HTTP/1.1 204 No Content\r",
-            "X-OpenRosa-Version: 1.0\r",
-            "X-OpenRosa-Accept-Content-Length: 10485760\r",
-            "Location: http://" + hostAndPort() + "/submission\r",
-            "X-Cloud-Trace-Context: 2813267fc382586b60b1d7d494c53d6e;o=1\r",
-            "Date: Wed, 19 Apr 2017 22:11:03 GMT\r",
-            "Content-Type: text/html\r",
-            "Server: Google Frontend\r",
-            "Alt-Svc: quic=\":443\"; ma=2592000; v=\"37,36,35\"\r",
-            "Connection: close\r",
-            "\r");
+                "HTTP/1.1 204 No Content\r",
+                "X-OpenRosa-Version: 1.0\r",
+                "X-OpenRosa-Accept-Content-Length: 10485760\r",
+                "Location: http://" + hostAndPort() + "/submission\r",
+                "X-Cloud-Trace-Context: 2813267fc382586b60b1d7d494c53d6e;o=1\r",
+                "Date: Wed, 19 Apr 2017 22:11:03 GMT\r",
+                "Content-Type: text/html\r",
+                "Server: Google Frontend\r",
+                "Alt-Svc: quic=\":443\"; ma=2592000; v=\"37,36,35\"\r",
+                "Connection: close\r",
+                "\r");
     }
 
     private String postResponse() {
         return join(
-            "HTTP/1.1 201 Created\r",
-            "Location: http://" + hostAndPort() + "/submission\r",
-            "X-OpenRosa-Version: 1.0\r",
-            "X-OpenRosa-Accept-Content-Length: 10485760\r",
-            "Content-Type: text/xml; charset=UTF-8\r",
-            "X-Cloud-Trace-Context: d7e2d1c98f475e7fd912545f6cfac4e2\r",
-            "Date: Wed, 19 Apr 2017 22:11:05 GMT\r",
-            "Server: Google Frontend\r",
-            "Content-Length: 373\r",
-            "Alt-Svc: quic=\":443\"; ma=2592000; v=\"37,36,35\"\r",
-            "Connection: close\r",
-            "\r",
-            "<OpenRosaResponse xmlns=\"http://openrosa.org/http/response\"><message>success</message><submissionMetadata xmlns=\"http://www.opendatakit.org/xforms\" id=\"basic\" instanceID=\"uuid:5167d1cf-8dcb-4fa6-b7f7-ee5dd0265ab5\" submissionDate=\"2017-04-19T22:11:04.181Z\" isComplete=\"true\" markedAsCompleteDate=\"2017-04-19T22:11:04.181Z\"/></OpenRosaResponse>\r",
-            "\r");
+                "HTTP/1.1 201 Created\r",
+                "Location: http://" + hostAndPort() + "/submission\r",
+                "X-OpenRosa-Version: 1.0\r",
+                "X-OpenRosa-Accept-Content-Length: 10485760\r",
+                "Content-Type: text/xml; charset=UTF-8\r",
+                "X-Cloud-Trace-Context: d7e2d1c98f475e7fd912545f6cfac4e2\r",
+                "Date: Wed, 19 Apr 2017 22:11:05 GMT\r",
+                "Server: Google Frontend\r",
+                "Content-Length: 373\r",
+                "Alt-Svc: quic=\":443\"; ma=2592000; v=\"37,36,35\"\r",
+                "Connection: close\r",
+                "\r",
+                "<OpenRosaResponse xmlns=\"http://openrosa.org/http/response\"><message>success</message><submissionMetadata xmlns=\"http://www.opendatakit.org/xforms\" id=\"basic\" instanceID=\"uuid:5167d1cf-8dcb-4fa6-b7f7-ee5dd0265ab5\" submissionDate=\"2017-04-19T22:11:04.181Z\" isComplete=\"true\" markedAsCompleteDate=\"2017-04-19T22:11:04.181Z\"/></OpenRosaResponse>\r",
+                "\r");
     }
 }

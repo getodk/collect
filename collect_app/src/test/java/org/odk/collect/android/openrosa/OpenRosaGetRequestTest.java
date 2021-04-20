@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.android.openrosa.support.MockWebServerRule;
-import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.shared.Md5;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -93,7 +93,7 @@ public abstract class OpenRosaGetRequestTest {
 
         HttpGetResult result = subject.executeGetRequest(mockWebServer.url("").uri(), "text/xml", null);
         assertThat(IOUtils.toString(result.getInputStream(), Charset.defaultCharset()), equalTo("I AM BODY"));
-        assertThat(result.getHash(), equalTo(FileUtils.getMd5Hash(new ByteArrayInputStream("I AM BODY".getBytes()))));
+        assertThat(result.getHash(), equalTo(Md5.getMd5Hash(new ByteArrayInputStream("I AM BODY".getBytes()))));
     }
 
     @Test(expected = Exception.class)

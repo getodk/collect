@@ -15,6 +15,7 @@
 package org.odk.collect.android.logic;
 
 import android.graphics.drawable.Drawable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 

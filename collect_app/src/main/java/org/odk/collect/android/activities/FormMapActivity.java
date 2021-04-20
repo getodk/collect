@@ -36,22 +36,22 @@ import com.google.android.material.chip.Chip;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFormInstance;
-import org.odk.collect.android.database.DatabaseInstancesRepository;
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.IconUtils;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -78,7 +78,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
     MapProvider mapProvider;
 
     @Inject
-    FormsRepository formsRepository;
+    FormsRepositoryProvider formsRepositoryProvider;
 
     private MapFragment map;
 
@@ -108,10 +108,10 @@ public class FormMapActivity extends BaseGeoMapActivity {
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
 
-        Form form = formsRepository.get(getIntent().getLongExtra(EXTRA_FORM_ID, -1));
+        Form form = formsRepositoryProvider.get().get(getIntent().getLongExtra(EXTRA_FORM_ID, -1));
 
         if (viewModelFactory == null) { // tests set their factories directly
-            viewModelFactory = new FormMapActivity.FormMapViewModelFactory(form, new DatabaseInstancesRepository());
+            viewModelFactory = new FormMapActivity.FormMapViewModelFactory(form, new InstancesRepositoryProvider().get());
         }
 
         viewModel = new ViewModelProvider(this, viewModelFactory).get(FormMapViewModel.class);
@@ -389,7 +389,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
     }
 
     private Intent getEditFormInstanceIntentFor(long instanceId) {
-        Uri uri = ContentUris.withAppendedId(InstanceProviderAPI.InstanceColumns.CONTENT_URI, instanceId);
+        Uri uri = ContentUris.withAppendedId(InstanceProviderAPI.CONTENT_URI, instanceId);
         return new Intent(Intent.ACTION_EDIT, uri);
     }
 

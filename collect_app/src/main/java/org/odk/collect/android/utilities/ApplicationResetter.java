@@ -19,9 +19,7 @@ package org.odk.collect.android.utilities;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
-import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -51,10 +49,10 @@ public class ApplicationResetter {
     SettingsProvider settingsProvider;
 
     @Inject
-    InstancesRepository instancesRepository;
+    InstancesRepositoryProvider instancesRepositoryProvider;
 
     @Inject
-    FormsRepository formsRepository;
+    FormsRepositoryProvider formsRepositoryProvider;
 
     public ApplicationResetter() {
         // This should probably just take arguments in the constructor rather than use Dagger
@@ -117,7 +115,7 @@ public class ApplicationResetter {
     }
 
     private void resetInstances() {
-        instancesRepository.deleteAll();
+        instancesRepositoryProvider.get().deleteAll();
 
         if (deleteFolderContents(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES))) {
             failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_INSTANCES));
@@ -125,7 +123,7 @@ public class ApplicationResetter {
     }
 
     private void resetForms() {
-        formsRepository.deleteAll();
+        formsRepositoryProvider.get().deleteAll();
 
         File itemsetDbFile = new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA) + File.separator + ItemsetDbAdapter.DATABASE_NAME);
 

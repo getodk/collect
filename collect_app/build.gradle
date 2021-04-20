@@ -334,13 +334,15 @@ dependencies {
     }
 
     implementation project(':shared')
+    implementation project(':androidshared')
     implementation project(':nbistubs')
     implementation project(':strings')
     implementation project(':material')
     implementation project(':async')
     implementation project(':analytics')
     implementation project(':audioclips')
-    implementation project(path: ':audiorecorder')
+    implementation project(':forms')
+    implementation project(':audiorecorder')
 
     // Makes binding to Views easy:
     implementation "com.jakewharton:butterknife:10.2.3"
@@ -377,6 +379,8 @@ dependencies {
 
     testImplementation "org.json:json:20201115"
     testImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    testImplementation project(':formstest')
 
     androidTestImplementation "org.mockito:mockito-android:3.7.7"
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

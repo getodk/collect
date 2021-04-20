@@ -5,10 +5,11 @@ import android.net.Uri;
 import androidx.loader.content.CursorLoader;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.DatabaseFormColumns;
-import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.database.forms.DatabaseFormColumns;
+import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.forms.instances.Instance;
 
 public class CursorLoaderFactory {
 
@@ -18,8 +19,8 @@ public class CursorLoaderFactory {
             cursorLoader = createSentInstancesCursorLoader(sortOrder);
         } else {
             String selection =
-                    InstanceProviderAPI.InstanceColumns.STATUS + " =? and "
-                            + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ?";
+                    DatabaseInstanceColumns.STATUS + " =? and "
+                            + DatabaseInstanceColumns.DISPLAY_NAME + " LIKE ?";
             String[] selectionArgs = {
                     Instance.STATUS_SUBMITTED,
                     "%" + charSequence + "%"};
@@ -31,14 +32,14 @@ public class CursorLoaderFactory {
     }
 
     public CursorLoader createSentInstancesCursorLoader(String sortOrder) {
-        String selection = InstanceProviderAPI.InstanceColumns.STATUS + " =? ";
+        String selection = DatabaseInstanceColumns.STATUS + " =? ";
         String[] selectionArgs = {Instance.STATUS_SUBMITTED};
 
         return getInstancesCursorLoader(selection, selectionArgs, sortOrder);
     }
 
     public CursorLoader createUnsentInstancesCursorLoader(String sortOrder) {
-        String selection = InstanceProviderAPI.InstanceColumns.STATUS + " !=? ";
+        String selection = DatabaseInstanceColumns.STATUS + " !=? ";
         String[] selectionArgs = {Instance.STATUS_SUBMITTED};
 
         return getInstancesCursorLoader(selection, selectionArgs, sortOrder);
@@ -50,8 +51,8 @@ public class CursorLoaderFactory {
             cursorLoader = createUnsentInstancesCursorLoader(sortOrder);
         } else {
             String selection =
-                    InstanceProviderAPI.InstanceColumns.STATUS + " !=? and "
-                            + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ?";
+                    DatabaseInstanceColumns.STATUS + " !=? and "
+                            + DatabaseInstanceColumns.DISPLAY_NAME + " LIKE ?";
             String[] selectionArgs = {
                     Instance.STATUS_SUBMITTED,
                     "%" + charSequence + "%"};
@@ -63,7 +64,7 @@ public class CursorLoaderFactory {
     }
 
     public CursorLoader createSavedInstancesCursorLoader(String sortOrder) {
-        String selection = InstanceProviderAPI.InstanceColumns.DELETED_DATE + " IS NULL ";
+        String selection = DatabaseInstanceColumns.DELETED_DATE + " IS NULL ";
 
         return getInstancesCursorLoader(selection, null, sortOrder);
     }
@@ -74,8 +75,8 @@ public class CursorLoaderFactory {
             cursorLoader = createSavedInstancesCursorLoader(sortOrder);
         } else {
             String selection =
-                    InstanceProviderAPI.InstanceColumns.DELETED_DATE + " IS NULL and "
-                            + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ?";
+                    DatabaseInstanceColumns.DELETED_DATE + " IS NULL and "
+                            + DatabaseInstanceColumns.DISPLAY_NAME + " LIKE ?";
             String[] selectionArgs = {"%" + charSequence + "%"};
             cursorLoader = getInstancesCursorLoader(selection, selectionArgs, sortOrder);
         }
@@ -84,7 +85,7 @@ public class CursorLoaderFactory {
     }
 
     public CursorLoader createFinalizedInstancesCursorLoader(String sortOrder) {
-        String selection = InstanceProviderAPI.InstanceColumns.STATUS + "=? or " + InstanceProviderAPI.InstanceColumns.STATUS + "=?";
+        String selection = DatabaseInstanceColumns.STATUS + "=? or " + DatabaseInstanceColumns.STATUS + "=?";
         String[] selectionArgs = {Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED};
 
         return getInstancesCursorLoader(selection, selectionArgs, sortOrder);
@@ -96,9 +97,9 @@ public class CursorLoaderFactory {
             cursorLoader = createFinalizedInstancesCursorLoader(sortOrder);
         } else {
             String selection =
-                    "(" + InstanceProviderAPI.InstanceColumns.STATUS + "=? or "
-                            + InstanceProviderAPI.InstanceColumns.STATUS + "=?) and "
-                            + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ?";
+                    "(" + DatabaseInstanceColumns.STATUS + "=? or "
+                            + DatabaseInstanceColumns.STATUS + "=?) and "
+                            + DatabaseInstanceColumns.DISPLAY_NAME + " LIKE ?";
             String[] selectionArgs = {
                     Instance.STATUS_COMPLETE,
                     Instance.STATUS_SUBMISSION_FAILED,
@@ -111,10 +112,10 @@ public class CursorLoaderFactory {
     }
 
     public CursorLoader createCompletedUndeletedInstancesCursorLoader(String sortOrder) {
-        String selection = InstanceProviderAPI.InstanceColumns.DELETED_DATE + " IS NULL and ("
-                + InstanceProviderAPI.InstanceColumns.STATUS + "=? or "
-                + InstanceProviderAPI.InstanceColumns.STATUS + "=? or "
-                + InstanceProviderAPI.InstanceColumns.STATUS + "=?)";
+        String selection = DatabaseInstanceColumns.DELETED_DATE + " IS NULL and ("
+                + DatabaseInstanceColumns.STATUS + "=? or "
+                + DatabaseInstanceColumns.STATUS + "=? or "
+                + DatabaseInstanceColumns.STATUS + "=?)";
 
         String[] selectionArgs = {Instance.STATUS_COMPLETE,
                 Instance.STATUS_SUBMISSION_FAILED,
@@ -128,11 +129,11 @@ public class CursorLoaderFactory {
         if (charSequence.length() == 0) {
             cursorLoader = createCompletedUndeletedInstancesCursorLoader(sortOrder);
         } else {
-            String selection = InstanceProviderAPI.InstanceColumns.DELETED_DATE + " IS NULL and ("
-                    + InstanceProviderAPI.InstanceColumns.STATUS + "=? or "
-                    + InstanceProviderAPI.InstanceColumns.STATUS + "=? or "
-                    + InstanceProviderAPI.InstanceColumns.STATUS + "=?) and "
-                    + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ?";
+            String selection = DatabaseInstanceColumns.DELETED_DATE + " IS NULL and ("
+                    + DatabaseInstanceColumns.STATUS + "=? or "
+                    + DatabaseInstanceColumns.STATUS + "=? or "
+                    + DatabaseInstanceColumns.STATUS + "=?) and "
+                    + DatabaseInstanceColumns.DISPLAY_NAME + " LIKE ?";
 
             String[] selectionArgs = {
                     Instance.STATUS_COMPLETE,
@@ -172,7 +173,7 @@ public class CursorLoaderFactory {
     private CursorLoader getInstancesCursorLoader(String selection, String[] selectionArgs, String sortOrder) {
         return new CursorLoader(
                 Collect.getInstance(),
-                InstanceProviderAPI.InstanceColumns.CONTENT_URI,
+                InstanceProviderAPI.CONTENT_URI,
                 null,
                 selection,
                 selectionArgs,

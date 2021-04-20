@@ -14,15 +14,15 @@ import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
-import org.odk.collect.android.forms.FormSourceException;
-import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.support.BooleanChangeLock;
 import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.forms.FormSourceException;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.function.Supplier;
@@ -52,7 +52,7 @@ public class SyncFormsTaskSpecTest {
             }
 
             @Override
-            public ServerFormsSynchronizer providesServerFormSynchronizer(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormsRepository formsRepository, FormDownloader formDownloader, InstancesRepository instancesRepository, FastExternalItemsetsRepository fastExternalItemsetsRepository) {
+            public ServerFormsSynchronizer providesServerFormSynchronizer(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormsRepositoryProvider formsRepositoryProvider, FormDownloader formDownloader, InstancesRepositoryProvider instancesRepositoryProvider, FastExternalItemsetsRepository fastExternalItemsetsRepository) {
                 return serverFormsSynchronizer;
             }
 

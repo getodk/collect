@@ -28,17 +28,17 @@ import androidx.loader.content.CursorLoader;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FormListAdapter;
 import org.odk.collect.android.dao.CursorLoaderFactory;
-import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.database.forms.DatabaseFormColumns;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
-import org.odk.collect.android.database.DatabaseFormColumns;
 import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.FormSyncTask;
 import org.odk.collect.android.utilities.DialogUtils;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import javax.inject.Inject;
@@ -59,10 +59,10 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
     private AlertDialog alertDialog;
 
     @Inject
-    FormsRepository formsRepository;
+    FormsRepositoryProvider formsRepositoryProvider;
 
     @Inject
-    InstancesRepository instancesRepository;
+    InstancesRepositoryProvider instancesRepositoryProvider;
 
     @Inject
     FastExternalItemsetsRepository fastExternalItemsetsRepository;
@@ -202,7 +202,7 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
             args.putBoolean(ProgressDialogFragment.CANCELABLE, false);
             DialogUtils.showIfNotShowing(ProgressDialogFragment.class, args, getActivity().getSupportFragmentManager());
 
-            backgroundTasks.deleteFormsTask = new DeleteFormsTask(formsRepository, instancesRepository, fastExternalItemsetsRepository);
+            backgroundTasks.deleteFormsTask = new DeleteFormsTask(formsRepositoryProvider.get(), instancesRepositoryProvider.get(), fastExternalItemsetsRepository);
             backgroundTasks.deleteFormsTask.setDeleteListener(this);
             backgroundTasks.deleteFormsTask.execute(getCheckedIdObjects());
         } else {

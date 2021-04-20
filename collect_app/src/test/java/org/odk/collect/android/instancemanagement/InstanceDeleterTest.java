@@ -1,19 +1,19 @@
 package org.odk.collect.android.instancemanagement;
 
 import org.junit.Test;
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormsRepository;
-import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.support.FormUtils;
-import org.odk.collect.android.support.InMemFormsRepository;
-import org.odk.collect.android.support.InMemInstancesRepository;
-import org.odk.collect.testshared.TempFiles;
+import org.odk.collect.formstest.InMemFormsRepository;
+import org.odk.collect.formstest.InMemInstancesRepository;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.formstest.FormUtils;
+import org.odk.collect.shared.TempFiles;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
-import static org.odk.collect.android.support.InstanceUtils.buildInstance;
+import static org.odk.collect.formstest.InstanceUtils.buildInstance;
 
 public class InstanceDeleterTest {
 

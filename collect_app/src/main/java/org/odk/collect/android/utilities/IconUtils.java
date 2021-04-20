@@ -24,7 +24,7 @@ import android.graphics.drawable.Drawable;
 import androidx.core.content.ContextCompat;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.instances.Instance;
+import org.odk.collect.forms.instances.Instance;
 
 public class IconUtils {
 

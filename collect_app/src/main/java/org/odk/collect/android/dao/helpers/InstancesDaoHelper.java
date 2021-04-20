@@ -17,17 +17,18 @@ package org.odk.collect.android.dao.helpers;
 import android.net.Uri;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.DatabaseInstancesRepository;
-import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
 
 import timber.log.Timber;
 
 /**
  * Provides abstractions over database calls for instances.
  *
- * @deprecated to favor {@link org.odk.collect.android.instances.InstancesRepository}
+ * @deprecated to favor {@link InstancesRepository}
  */
 @Deprecated
 public final class InstancesDaoHelper {
@@ -43,7 +44,7 @@ public final class InstancesDaoHelper {
      *
      * @return true if form has been marked completed, false otherwise.
      * <p>
-     * TODO: replace with method in {@link org.odk.collect.android.instances.InstancesRepository}
+     * TODO: replace with method in {@link InstancesRepository}
      * that returns an {@link Instance} object from a path.
      */
     public static boolean isInstanceComplete(boolean end, boolean completedByDefault) {
@@ -57,7 +58,7 @@ public final class InstancesDaoHelper {
 
             // Then see if we've already marked this form as complete before
             String path = formController.getInstanceFile().getAbsolutePath();
-            Instance instance = new DatabaseInstancesRepository().getOneByPath(path);
+            Instance instance = new InstancesRepositoryProvider().get().getOneByPath(path);
             if (instance != null && instance.getStatus().equals(Instance.STATUS_COMPLETE)) {
                 complete = true;
             }
@@ -72,9 +73,9 @@ public final class InstancesDaoHelper {
     // that returns an {@link Instance} object from a path.
     public static Uri getLastInstanceUri(String path) {
         if (path != null) {
-            Instance instance = new DatabaseInstancesRepository().getOneByPath(path);
+            Instance instance = new InstancesRepositoryProvider().get().getOneByPath(path);
             if (instance != null) {
-                return Uri.withAppendedPath(InstanceColumns.CONTENT_URI, instance.getDbId().toString());
+                return Uri.withAppendedPath(InstanceProviderAPI.CONTENT_URI, instance.getDbId().toString());
             }
         }
 
@@ -85,7 +86,7 @@ public final class InstancesDaoHelper {
     // that returns an {@link Instance} object from a path.
     public static boolean isInstanceAvailable(String path) {
         if (path != null) {
-            Instance instance = new DatabaseInstancesRepository().getOneByPath(path);
+            Instance instance = new InstancesRepositoryProvider().get().getOneByPath(path);
             return instance != null;
         } else {
             return false;

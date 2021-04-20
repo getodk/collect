@@ -2,15 +2,16 @@ package org.odk.collect.android.formmanagement;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormListItem;
-import org.odk.collect.android.forms.FormSource;
-import org.odk.collect.android.forms.FormsRepository;
-import org.odk.collect.android.forms.ManifestFile;
-import org.odk.collect.android.forms.MediaFile;
-import org.odk.collect.android.support.FormUtils;
-import org.odk.collect.android.support.InMemFormsRepository;
-import org.odk.collect.testshared.TempFiles;
+import org.odk.collect.formstest.InMemFormsRepository;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormListItem;
+import org.odk.collect.forms.FormSource;
+import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.forms.ManifestFile;
+import org.odk.collect.forms.MediaFile;
+import org.odk.collect.formstest.FormUtils;
+import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.TempFiles;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -26,7 +27,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.utilities.FileUtils.getMd5Hash;
 
 @SuppressWarnings("PMD.DoubleBraceInitialization")
 public class ServerFormsDetailsFetcherTest {
@@ -36,7 +36,7 @@ public class ServerFormsDetailsFetcherTest {
             new FormListItem("http://example.com/form-2", "form-2", "server", "md5:form-2-hash", "Form 2", "http://example.com/form-2-manifest")
     );
 
-    private final MediaFile mediaFile = new MediaFile("blah.txt", "md5:" + getMd5Hash(new ByteArrayInputStream("blah".getBytes())), "http://example.com/media-file");
+    private final MediaFile mediaFile = new MediaFile("blah.txt", "md5:" + Md5.getMd5Hash(new ByteArrayInputStream("blah".getBytes())), "http://example.com/media-file");
 
     private ServerFormsDetailsFetcher fetcher;
     private FormsRepository formsRepository;

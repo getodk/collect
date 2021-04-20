@@ -6,10 +6,10 @@ import org.junit.Test;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.instances.InstancesRepository;
-import org.odk.collect.android.support.InMemInstancesRepository;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
+import org.odk.collect.formstest.InMemInstancesRepository;
 
 import java.util.Arrays;
 import java.util.List;

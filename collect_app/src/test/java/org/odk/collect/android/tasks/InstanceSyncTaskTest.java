@@ -5,14 +5,15 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.android.database.DatabaseFormsRepository;
-import org.odk.collect.android.database.DatabaseInstancesRepository;
-import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.android.support.FormUtils;
-import org.odk.collect.android.support.InstanceUtils;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
+import org.odk.collect.formstest.FormUtils;
+import org.odk.collect.formstest.InstanceUtils;
 
 import java.io.File;
 import java.util.List;
@@ -27,27 +28,27 @@ public class InstanceSyncTaskTest {
     public void whenAnInstanceFileNoLongerExists_deletesFromDatabase() {
         createDirectoryInInstances();
 
-        DatabaseInstancesRepository databaseInstancesRepository = new DatabaseInstancesRepository();
-        databaseInstancesRepository.save(InstanceUtils.buildInstance("blah", "1", new StoragePathProvider().getOdkDirPath(StorageSubdirectory.INSTANCES)).build());
-        assertThat(databaseInstancesRepository.getAllNotDeleted().size(), is(1));
+        InstancesRepository instancesRepository = new InstancesRepositoryProvider().get();
+        instancesRepository.save(InstanceUtils.buildInstance("blah", "1", new StoragePathProvider().getOdkDirPath(StorageSubdirectory.INSTANCES)).build());
+        assertThat(instancesRepository.getAllNotDeleted().size(), is(1));
 
         InstanceSyncTask instanceSyncTask = new InstanceSyncTask(TestSettingsProvider.getSettingsProvider());
         instanceSyncTask.execute();
 
-        assertThat(databaseInstancesRepository.getAllNotDeleted().size(), is(0));
+        assertThat(instancesRepository.getAllNotDeleted().size(), is(0));
     }
 
     @Test
     public void whenAnInstanceFileExistsOnDisk_andNotInDatabase_addsToDatabase() {
         createInstanceOnDisk(ONE_QUESTION_INSTANCE);
-        new DatabaseFormsRepository().save(FormUtils.buildForm("one_question", "1", new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS))
+        new FormsRepositoryProvider().get().save(FormUtils.buildForm("one_question", "1", new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS))
                 .build()
         );
 
         InstanceSyncTask instanceSyncTask = new InstanceSyncTask(TestSettingsProvider.getSettingsProvider());
         instanceSyncTask.execute();
 
-        List<Instance> instances = new DatabaseInstancesRepository().getAllByFormId("one_question");
+        List<Instance> instances = new InstancesRepositoryProvider().get().getAllByFormId("one_question");
         assertThat(instances.size(), is(1));
         assertThat(instances.get(0).getFormId(), is("one_question"));
         assertThat(instances.get(0).getFormVersion(), is("1"));

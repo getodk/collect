@@ -13,7 +13,7 @@ limitations under the License.
 
 package org.odk.collect.android.fragments;
 
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
@@ -24,25 +24,25 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 
 public abstract class InstanceListFragment extends FileManagerFragment {
     protected String getSortingOrder() {
-        String sortOrder = InstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC, " + InstanceColumns.STATUS + " DESC";
+        String sortOrder = DatabaseInstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC, " + DatabaseInstanceColumns.STATUS + " DESC";
         switch (getSelectedSortingOrder()) {
             case BY_NAME_ASC:
-                sortOrder = InstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC, " + InstanceColumns.STATUS + " DESC";
+                sortOrder = DatabaseInstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC, " + DatabaseInstanceColumns.STATUS + " DESC";
                 break;
             case BY_NAME_DESC:
-                sortOrder = InstanceColumns.DISPLAY_NAME + " COLLATE NOCASE DESC, " + InstanceColumns.STATUS + " DESC";
+                sortOrder = DatabaseInstanceColumns.DISPLAY_NAME + " COLLATE NOCASE DESC, " + DatabaseInstanceColumns.STATUS + " DESC";
                 break;
             case BY_DATE_ASC:
-                sortOrder = InstanceColumns.LAST_STATUS_CHANGE_DATE + " ASC";
+                sortOrder = DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE + " ASC";
                 break;
             case BY_DATE_DESC:
-                sortOrder = InstanceColumns.LAST_STATUS_CHANGE_DATE + " DESC";
+                sortOrder = DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE + " DESC";
                 break;
             case BY_STATUS_ASC:
-                sortOrder = InstanceColumns.STATUS + " ASC, " + InstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
+                sortOrder = DatabaseInstanceColumns.STATUS + " ASC, " + DatabaseInstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
                 break;
             case BY_STATUS_DESC:
-                sortOrder = InstanceColumns.STATUS + " DESC, " + InstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
+                sortOrder = DatabaseInstanceColumns.STATUS + " DESC, " + DatabaseInstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
                 break;
         }
         return sortOrder;

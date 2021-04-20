@@ -16,7 +16,7 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.RobolectricHelpers;
-import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.shared.Md5;
 import org.robolectric.Robolectric;
 
 import java.io.ByteArrayInputStream;
@@ -65,7 +65,7 @@ public class QRCodeActivityResultDelegateTest {
     @Test
     public void forSelectPhoto_importsSettingsFromQRCode_logsSuccessAnalytics() {
         importSettingsFromQRCode_successfully();
-        String contentsHash = FileUtils.getMd5Hash(new ByteArrayInputStream("data".getBytes()));
+        String contentsHash = Md5.getMd5Hash(new ByteArrayInputStream("data".getBytes()));
         verify(analytics).logEvent("SettingsImportQrImage", "Success", contentsHash);
     }
 
@@ -88,7 +88,7 @@ public class QRCodeActivityResultDelegateTest {
     @Test
     public void forSelectPhoto_whenImportingFails_logsInvalidAnalytics() {
         importSettingsFromQRCode_withFailedImport();
-        String contentsHash = FileUtils.getMd5Hash(new ByteArrayInputStream("data".getBytes()));
+        String contentsHash = Md5.getMd5Hash(new ByteArrayInputStream("data".getBytes()));
         verify(analytics).logEvent("SettingsImportQrImage", "No valid settings", contentsHash);
     }
 

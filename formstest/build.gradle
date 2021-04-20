@@ -1,0 +1,21 @@
+plugins {
+    id 'java-library'
+    id 'kotlin'
+}
+
+apply from: '../config/quality.gradle'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation project(':forms')
+    implementation project(':shared')
+    implementation "commons-io:commons-io:2.5"
+    implementation 'junit:junit:4.13.2'
+    implementation "org.mockito:mockito-core:3.7.7"
+    implementation 'org.hamcrest:hamcrest:2.2'
+}

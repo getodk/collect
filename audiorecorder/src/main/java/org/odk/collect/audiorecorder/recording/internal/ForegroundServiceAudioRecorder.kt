@@ -3,6 +3,7 @@ package org.odk.collect.audiorecorder.recording.internal
 import android.app.Application
 import android.content.Intent
 import androidx.lifecycle.LiveData
+import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.audiorecorder.recorder.Output
 import org.odk.collect.audiorecorder.recording.AudioRecorder
 import org.odk.collect.audiorecorder.recording.AudioRecorderService
@@ -14,7 +15,6 @@ import org.odk.collect.audiorecorder.recording.AudioRecorderService.Companion.AC
 import org.odk.collect.audiorecorder.recording.AudioRecorderService.Companion.EXTRA_OUTPUT
 import org.odk.collect.audiorecorder.recording.AudioRecorderService.Companion.EXTRA_SESSION_ID
 import org.odk.collect.audiorecorder.recording.RecordingSession
-import org.odk.collect.shared.data.Consumable
 import java.io.Serializable
 
 internal class ForegroundServiceAudioRecorder internal constructor(private val application: Application, private val recordingRepository: RecordingRepository) : AudioRecorder() {

@@ -4,15 +4,16 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormSource;
-import org.odk.collect.android.forms.FormSourceException;
-import org.odk.collect.android.forms.FormsRepository;
-import org.odk.collect.android.forms.MediaFile;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormSource;
+import org.odk.collect.forms.FormSourceException;
+import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.forms.MediaFile;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.android.utilities.Validator;
+import org.odk.collect.shared.Md5;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -73,7 +74,7 @@ public class ServerFormDownloader implements FormDownloader {
             List<Form> allSameFormIdVersion = formsRepository.getAllByFormIdAndVersion(form.getFormId(), form.getFormVersion());
             if (!allSameFormIdVersion.isEmpty() && !form.getDownloadUrl().contains("/draft.xml")) {
                 String formIdentifier = form.getFormName() + " " + form.getFormId();
-                String formIdHash = FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
+                String formIdHash = Md5.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
                 analytics.logFormEvent(DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH, formIdHash);
             }
         }
@@ -209,7 +210,7 @@ public class ServerFormDownloader implements FormDownloader {
         if (fileResult == null) {
             Timber.d("The user cancelled (or an exception happened) the download of a form at the very beginning.");
         } else {
-            String md5Hash = FileUtils.getMd5Hash(fileResult.file);
+            String md5Hash = Md5.getMd5Hash(fileResult.file);
             if (md5Hash != null) {
                 formsRepository.deleteByMd5Hash(md5Hash);
             }
@@ -265,7 +266,7 @@ public class ServerFormDownloader implements FormDownloader {
 
         // we've downloaded the file, and we may have renamed it
         // make sure it's not the same as a file we already have
-        Form form = formsRepository.getOneByMd5Hash(FileUtils.getMd5Hash(tempFormFile));
+        Form form = formsRepository.getOneByMd5Hash(Md5.getMd5Hash(tempFormFile));
         if (form != null) {
             // delete the file we just downloaded, because it's a duplicate
             FileUtils.deleteAndReport(tempFormFile);
@@ -393,7 +394,7 @@ public class ServerFormDownloader implements FormDownloader {
                 InputStream mediaFile = formSource.fetchMediaFile(toDownload.getDownloadUrl());
                 writeFile(mediaFile, tempMediaFile, tempDir, stateListener);
             } else {
-                String currentFileHash = FileUtils.getMd5Hash(finalMediaFile);
+                String currentFileHash = Md5.getMd5Hash(finalMediaFile);
                 String downloadFileHash = getMd5HashWithoutPrefix(toDownload.getHash());
 
                 if (currentFileHash != null && downloadFileHash != null && !currentFileHash.contentEquals(downloadFileHash)) {

@@ -39,23 +39,24 @@ import org.json.JSONObject;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.DatabaseFormsRepository;
-import org.odk.collect.android.database.DatabaseInstancesRepository;
+import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.formentry.saving.FormSaver;
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.EncryptionUtils;
 import org.odk.collect.android.utilities.EncryptionUtils.EncryptedFormInformation;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
 
 import java.io.File;
 import java.io.IOException;
@@ -172,7 +173,7 @@ public class SaveFormToDisk {
         FormInstance formInstance = formController.getFormDef().getInstance();
 
         String instancePath = formController.getInstanceFile().getAbsolutePath();
-        InstancesRepository instances = new DatabaseInstancesRepository();
+        InstancesRepository instances = new InstancesRepositoryProvider().get();
         Instance instance = instances.getOneByPath(instancePath);
 
         Instance.Builder instanceBuilder;
@@ -202,11 +203,11 @@ public class SaveFormToDisk {
                 instanceBuilder.geometry(geometryContentValues.second);
             }
 
-            Instance newInstance = new DatabaseInstancesRepository().save(instanceBuilder.build());
-            uri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, newInstance.getDbId().toString());
+            Instance newInstance = new InstancesRepositoryProvider().get().save(instanceBuilder.build());
+            uri = Uri.withAppendedPath(InstanceProviderAPI.CONTENT_URI, newInstance.getDbId().toString());
         } else {
             Timber.i("No instance found, creating");
-            Form form = new DatabaseFormsRepository().get(ContentUriHelper.getIdFromUri(uri));
+            Form form = new FormsRepositoryProvider().get().get(ContentUriHelper.getIdFromUri(uri));
 
             // add missing fields into values
             instanceBuilder.instanceFilePath(instancePath);
@@ -227,8 +228,8 @@ public class SaveFormToDisk {
             }
         }
 
-        Instance newInstance = new DatabaseInstancesRepository().save(instanceBuilder.build());
-        uri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, newInstance.getDbId().toString());
+        Instance newInstance = new InstancesRepositoryProvider().get().save(instanceBuilder.build());
+        uri = Uri.withAppendedPath(InstanceProviderAPI.CONTENT_URI, newInstance.getDbId().toString());
     }
 
     /**
@@ -419,7 +420,7 @@ public class SaveFormToDisk {
             // if encrypted, delete all plaintext files
             // (anything not named instanceXml or anything not ending in .enc)
             if (isEncrypted) {
-                DatabaseInstancesRepository instancesRepository = new DatabaseInstancesRepository();
+                InstancesRepository instancesRepository = new InstancesRepositoryProvider().get();
                 Instance instance = instancesRepository.get(ContentUriHelper.getIdFromUri(uri));
 
                 // Clear the geometry. Done outside of updateInstanceDatabase to avoid multiple
@@ -431,8 +432,8 @@ public class SaveFormToDisk {
                 );
 
                 ContentValues values = new ContentValues();
-                values.put(InstanceColumns.GEOMETRY, (String) null);
-                values.put(InstanceColumns.GEOMETRY_TYPE, (String) null);
+                values.put(DatabaseInstanceColumns.GEOMETRY, (String) null);
+                values.put(DatabaseInstanceColumns.GEOMETRY_TYPE, (String) null);
 
                 if (!EncryptionUtils.deletePlaintextFiles(instanceXml, new File(lastSavedPath))) {
                     Timber.e("Error deleting plaintext files for %s", instanceXml.getAbsolutePath());
@@ -446,7 +447,7 @@ public class SaveFormToDisk {
      * that the instance with the given uri is an instance of.
      */
     private static String getGeometryXpathForInstance(Instance instance) {
-        Form form = new DatabaseFormsRepository().getLatestByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
+        Form form = new FormsRepositoryProvider().get().getLatestByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
         if (form != null) {
             return form.getGeometryXpath();
         } else {

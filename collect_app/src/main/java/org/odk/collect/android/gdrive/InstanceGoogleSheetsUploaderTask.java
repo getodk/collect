@@ -17,12 +17,12 @@ package org.odk.collect.android.gdrive;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.DatabaseFormsRepository;
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.instances.Instance;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
 import org.odk.collect.android.upload.UploadException;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
 
@@ -68,7 +68,7 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
             publishProgress(i + 1, instancesToUpload.size());
 
             // Get corresponding blank form and verify there is exactly 1
-            List<Form> forms = new DatabaseFormsRepository().getAllByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
+            List<Form> forms = new FormsRepositoryProvider().get().getAllByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
 
             if (forms.size() != 1) {
                 outcome.messagesByInstanceId.put(instance.getDbId().toString(),

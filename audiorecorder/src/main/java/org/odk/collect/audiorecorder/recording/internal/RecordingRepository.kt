@@ -2,8 +2,8 @@ package org.odk.collect.audiorecorder.recording.internal
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.audiorecorder.recording.RecordingSession
-import org.odk.collect.shared.data.Consumable
 import java.io.File
 import java.io.Serializable
 

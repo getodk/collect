@@ -23,10 +23,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.provider.FormsProviderAPI;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.forms.Form;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,7 @@ import javax.inject.Inject;
 public class AndroidShortcutsActivity extends AppCompatActivity {
 
     @Inject
-    FormsRepository formsRepository;
+    FormsRepositoryProvider formsRepositoryProvider;
 
     private Uri[] commands;
     private String[] names;
@@ -64,7 +64,7 @@ public class AndroidShortcutsActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.select_odk_shortcut);
 
-        List<Form> forms = formsRepository.getAll();
+        List<Form> forms = formsRepositoryProvider.get().getAll();
         for (Form form : forms) {
             String formName = form.getDisplayName();
             names.add(formName);

@@ -35,6 +35,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
+import org.odk.collect.shared.Md5;
 import org.odk.collect.utilities.Clock;
 import org.odk.collect.utilities.Result;
 
@@ -349,12 +350,12 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
 
         isSavingAnswerFile.setValue(true);
         scheduler.immediate(() -> {
-            String newFileHash = FileUtils.getMd5Hash(file);
+            String newFileHash = Md5.getMd5Hash(file);
             String instanceDir = formController.getInstanceFile().getParent();
 
             File[] answerFiles = new File(instanceDir).listFiles();
             for (File answerFile : answerFiles) {
-                if (FileUtils.getMd5Hash(answerFile).equals(newFileHash)) {
+                if (Md5.getMd5Hash(answerFile).equals(newFileHash)) {
                     return answerFile;
                 }
             }

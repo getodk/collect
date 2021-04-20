@@ -9,7 +9,7 @@ import androidx.test.espresso.Espresso;
 import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.DatabaseFormColumns;
+import org.odk.collect.android.database.forms.DatabaseFormColumns;
 import org.odk.collect.android.support.ActivityHelpers;
 
 import static androidx.test.espresso.Espresso.onData;

@@ -32,20 +32,20 @@ import androidx.appcompat.app.AlertDialog;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.analytics.Analytics;
-import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.DialogUtils;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.IOException;
@@ -82,10 +82,10 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     Analytics analytics;
 
     @Inject
-    InstancesRepository instancesRepository;
+    InstancesRepositoryProvider instancesRepositoryProvider;
 
     @Inject
-    FormsRepository formsRepository;
+    FormsRepositoryProvider formsRepositoryProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +134,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
 
     private void runTask() {
         instanceGoogleSheetsUploaderTask = new InstanceGoogleSheetsUploaderTask(googleApiProvider, analytics);
-        instanceGoogleSheetsUploaderTask.setRepositories(instancesRepository, formsRepository, settingsProvider);
+        instanceGoogleSheetsUploaderTask.setRepositories(instancesRepositoryProvider.get(), formsRepositoryProvider.get(), settingsProvider);
 
         // ensure we have a google account selected
         String googleUsername = settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
@@ -265,7 +265,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         Timber.i("uploadingComplete: Processing results ( %d ) from upload of %d instances!",
                 result.size(), instancesToSend.length);
 
-        createAlertDialog(InstanceUploaderUtils.getUploadResultMessage(instancesRepository, this, result));
+        createAlertDialog(InstanceUploaderUtils.getUploadResultMessage(instancesRepositoryProvider.get(), this, result));
     }
 
     @Override

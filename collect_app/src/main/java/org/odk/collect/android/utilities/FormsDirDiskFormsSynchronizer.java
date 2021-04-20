@@ -5,12 +5,12 @@ import android.database.SQLException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.shared.Md5;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
     private final FormsRepository formsRepository;
 
     public FormsDirDiskFormsSynchronizer() {
-        formsRepository = new DatabaseFormsRepository();
+        formsRepository = new FormsRepositoryProvider().get();
     }
 
     @Override
@@ -74,7 +74,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
                         // remove it from the list of forms (we only want forms
                         // we haven't added at the end)
                         formsToAdd.remove(sqlFile);
-                        String md5Computed = FileUtils.getMd5Hash(sqlFile);
+                        String md5Computed = Md5.getMd5Hash(sqlFile);
                         if (md5Computed == null || md5 == null || !md5Computed.equals(md5)) {
                             // Probably someone overwrite the file on the sdcard
                             // So re-parse it and update it's information

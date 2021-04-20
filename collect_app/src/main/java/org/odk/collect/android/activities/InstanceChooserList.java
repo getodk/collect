@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import androidx.appcompat.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,24 +21,27 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
-
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 import org.odk.collect.android.dao.CursorLoaderFactory;
+import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.listeners.DiskSyncListener;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.forms.instances.Instance;
 
 import timber.log.Timber;
 
@@ -71,7 +73,7 @@ public class InstanceChooserList extends InstanceListActivity implements
 
             setTitle(getString(R.string.review_data));
             editMode = true;
-            sortingOptions = new int[] {
+            sortingOptions = new int[]{
                     R.string.sort_by_name_asc, R.string.sort_by_name_desc,
                     R.string.sort_by_date_asc, R.string.sort_by_date_desc,
                     R.string.sort_by_status_asc, R.string.sort_by_status_desc
@@ -79,7 +81,7 @@ public class InstanceChooserList extends InstanceListActivity implements
         } else {
             setTitle(getString(R.string.view_sent_forms));
 
-            sortingOptions = new int[] {
+            sortingOptions = new int[]{
                     R.string.sort_by_name_asc, R.string.sort_by_name_desc,
                     R.string.sort_by_date_asc, R.string.sort_by_date_desc
             };
@@ -106,8 +108,8 @@ public class InstanceChooserList extends InstanceListActivity implements
             if (view.isEnabled()) {
                 Cursor c = (Cursor) listView.getAdapter().getItem(position);
                 Uri instanceUri =
-                        ContentUris.withAppendedId(InstanceColumns.CONTENT_URI,
-                                c.getLong(c.getColumnIndex(InstanceColumns._ID)));
+                        ContentUris.withAppendedId(InstanceProviderAPI.CONTENT_URI,
+                                c.getLong(c.getColumnIndex(DatabaseInstanceColumns._ID)));
 
                 String action = getIntent().getAction();
                 if (Intent.ACTION_PICK.equals(action)) {
@@ -117,9 +119,9 @@ public class InstanceChooserList extends InstanceListActivity implements
                     // the form can be edited if it is incomplete or if, when it was
                     // marked as complete, it was determined that it could be edited
                     // later.
-                    String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
+                    String status = c.getString(c.getColumnIndex(DatabaseInstanceColumns.STATUS));
                     String strCanEditWhenComplete =
-                            c.getString(c.getColumnIndex(InstanceColumns.CAN_EDIT_WHEN_COMPLETE));
+                            c.getString(c.getColumnIndex(DatabaseInstanceColumns.CAN_EDIT_WHEN_COMPLETE));
 
                     boolean canEdit = status.equals(Instance.STATUS_INCOMPLETE)
                             || Boolean.parseBoolean(strCanEditWhenComplete);
@@ -174,7 +176,7 @@ public class InstanceChooserList extends InstanceListActivity implements
     }
 
     private void setupAdapter() {
-        String[] data = {InstanceColumns.DISPLAY_NAME, InstanceColumns.DELETED_DATE};
+        String[] data = {DatabaseInstanceColumns.DISPLAY_NAME, DatabaseInstanceColumns.DELETED_DATE};
         int[] view = {R.id.form_title, R.id.form_subtitle2};
 
         boolean shouldCheckDisabled = !editMode;

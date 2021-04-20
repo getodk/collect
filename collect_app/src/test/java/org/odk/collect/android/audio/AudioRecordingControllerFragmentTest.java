@@ -24,7 +24,7 @@ import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorder;
-import org.odk.collect.shared.livedata.MutableNonNullLiveData;
+import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
 import org.odk.collect.utilities.Clock;
 import org.robolectric.annotation.Config;
 

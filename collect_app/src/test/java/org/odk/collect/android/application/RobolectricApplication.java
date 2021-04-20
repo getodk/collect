@@ -3,7 +3,7 @@ package org.odk.collect.android.application;
 import androidx.work.Configuration;
 import androidx.work.WorkManager;
 
-import org.odk.collect.android.database.FormsDatabaseProvider;
+import org.odk.collect.android.database.forms.FormsDatabaseProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.robolectric.RuntimeEnvironment;

@@ -25,20 +25,20 @@ import androidx.multidex.MultiDex;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
-import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.external.ExternalDataManager;
-import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.source.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
 import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent;
+import org.odk.collect.forms.Form;
+import org.odk.collect.shared.Md5;
 import org.odk.collect.strings.LocalizedApplication;
 
 import java.io.ByteArrayInputStream;
@@ -207,12 +207,12 @@ public class Collect extends Application implements LocalizedApplication, AudioR
      * @return md5 hash of the form title, a space, the form ID
      */
     public static String getFormIdentifierHash(String formId, String formVersion) {
-        Form form = new DatabaseFormsRepository().getLatestByFormIdAndVersion(formId, formVersion);
+        Form form = new FormsRepositoryProvider().get().getLatestByFormIdAndVersion(formId, formVersion);
 
         String formTitle = form != null ? form.getDisplayName() : "";
 
         String formIdentifier = formTitle + " " + formId;
-        return FileUtils.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
+        return Md5.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
     }
 
     // https://issuetracker.google.com/issues/154855417

@@ -4,6 +4,7 @@ import org.javarosa.core.model.FormDef;
 import org.javarosa.core.util.externalizable.ExtUtil;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.shared.Md5;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -106,7 +107,7 @@ public class FormDefCache {
      */
     private static File getCacheFile(File formXml) {
         return new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE) + File.separator +
-                FileUtils.getMd5Hash(formXml) + ".formdef");
+                Md5.getMd5Hash(formXml) + ".formdef");
     }
 
     private static FormDef deserializeFormDef(File serializedFormDef) throws Exception {

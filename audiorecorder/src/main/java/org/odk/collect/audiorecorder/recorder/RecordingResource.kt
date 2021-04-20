@@ -1,7 +1,6 @@
 package org.odk.collect.audiorecorder.recorder
 
 import java.io.IOException
-import java.lang.IllegalStateException
 
 /**
  * Allows faking/stubbing/mocking with our interactions with Android's MediaRecorder. Could also

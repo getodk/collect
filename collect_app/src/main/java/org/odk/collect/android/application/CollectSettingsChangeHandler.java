@@ -8,7 +8,7 @@ import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.source.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.shared.Md5;
 
 import java.io.ByteArrayInputStream;
 
@@ -49,7 +49,7 @@ public class CollectSettingsChangeHandler implements SettingsChangeHandler {
         if (changedKey.equals(KEY_EXTERNAL_APP_RECORDING) && !((Boolean) newValue)) {
             Settings generalSettings = settingsProvider.getGeneralSettings();
             String currentServerUrl = generalSettings.getString(KEY_SERVER_URL);
-            String serverHash = FileUtils.getMd5Hash(new ByteArrayInputStream(currentServerUrl.getBytes()));
+            String serverHash = Md5.getMd5Hash(new ByteArrayInputStream(currentServerUrl.getBytes()));
 
             analytics.logServerEvent(AnalyticsEvents.INTERNAL_RECORDING_OPT_IN, serverHash);
         }

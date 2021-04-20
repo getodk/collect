@@ -15,7 +15,7 @@
 package org.odk.collect.android.listeners;
 
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.forms.FormSourceException;
+import org.odk.collect.forms.FormSourceException;
 
 import java.util.HashMap;
 

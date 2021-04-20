@@ -14,7 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.storage.StorageInitializer;
-import org.odk.collect.android.support.InstanceUtils;
+import org.odk.collect.formstest.InstanceUtils;
 import org.robolectric.shadows.ShadowEnvironment;
 
 import java.io.File;
@@ -27,21 +27,21 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
-import static org.odk.collect.android.instances.Instance.STATUS_COMPLETE;
-import static org.odk.collect.android.instances.Instance.STATUS_INCOMPLETE;
-import static org.odk.collect.android.instances.Instance.STATUS_SUBMITTED;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CONTENT_ITEM_TYPE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CONTENT_TYPE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CONTENT_URI;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DELETED_DATE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DISPLAY_NAME;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.GEOMETRY;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.GEOMETRY_TYPE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_FORM_ID;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_VERSION;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.STATUS;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DELETED_DATE;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DISPLAY_NAME;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY_TYPE;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.INSTANCE_FILE_PATH;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.JR_FORM_ID;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.JR_VERSION;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.STATUS;
+import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_ITEM_TYPE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_TYPE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_URI;
+import static org.odk.collect.forms.instances.Instance.STATUS_COMPLETE;
+import static org.odk.collect.forms.instances.Instance.STATUS_INCOMPLETE;
+import static org.odk.collect.forms.instances.Instance.STATUS_SUBMITTED;
 
 @RunWith(AndroidJUnit4.class)
 public class InstanceProviderTest {

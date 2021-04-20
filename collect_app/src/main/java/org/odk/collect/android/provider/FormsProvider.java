@@ -23,14 +23,16 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.forms.DatabaseFormsRepository;
 import org.odk.collect.android.formmanagement.FormDeleter;
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.instances.InstancesRepository;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ContentUriHelper;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.utilities.Clock;
 
 import java.util.HashMap;
@@ -39,30 +41,31 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import static android.provider.BaseColumns._ID;
-import static org.odk.collect.android.database.DatabaseFormColumns.AUTO_DELETE;
-import static org.odk.collect.android.database.DatabaseFormColumns.AUTO_SEND;
-import static org.odk.collect.android.database.DatabaseFormColumns.BASE64_RSA_PUBLIC_KEY;
-import static org.odk.collect.android.database.DatabaseFormColumns.DATE;
-import static org.odk.collect.android.database.DatabaseFormColumns.DELETED_DATE;
-import static org.odk.collect.android.database.DatabaseFormColumns.DESCRIPTION;
-import static org.odk.collect.android.database.DatabaseFormColumns.DISPLAY_NAME;
-import static org.odk.collect.android.database.DatabaseFormColumns.FORM_FILE_PATH;
-import static org.odk.collect.android.database.DatabaseFormColumns.FORM_MEDIA_PATH;
-import static org.odk.collect.android.database.DatabaseFormColumns.GEOMETRY_XPATH;
-import static org.odk.collect.android.database.DatabaseFormColumns.JRCACHE_FILE_PATH;
-import static org.odk.collect.android.database.DatabaseFormColumns.JR_FORM_ID;
-import static org.odk.collect.android.database.DatabaseFormColumns.JR_VERSION;
-import static org.odk.collect.android.database.DatabaseFormColumns.LANGUAGE;
-import static org.odk.collect.android.database.DatabaseFormColumns.MAX_DATE;
-import static org.odk.collect.android.database.DatabaseFormColumns.MD5_HASH;
-import static org.odk.collect.android.database.DatabaseFormColumns.SUBMISSION_URI;
-import static org.odk.collect.android.utilities.FormUtils.getFormFromCurrentCursorPosition;
-import static org.odk.collect.android.utilities.FormUtils.getFormFromValues;
-import static org.odk.collect.android.utilities.FormUtils.getValuesFromForm;
+import static org.odk.collect.android.database.DatabaseObjectMapper.getFormFromCurrentCursorPosition;
+import static org.odk.collect.android.database.DatabaseObjectMapper.getFormFromValues;
+import static org.odk.collect.android.database.DatabaseObjectMapper.getValuesFromForm;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.AUTO_DELETE;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.AUTO_SEND;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.BASE64_RSA_PUBLIC_KEY;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.DATE;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.DELETED_DATE;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.DESCRIPTION;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.DISPLAY_NAME;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.FORM_FILE_PATH;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.FORM_MEDIA_PATH;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.GEOMETRY_XPATH;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.JRCACHE_FILE_PATH;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_FORM_ID;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_VERSION;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.LANGUAGE;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.MAX_DATE;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.SUBMISSION_URI;
 import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_NEWEST_FORMS_BY_FORMID_URI;
 import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_URI;
 
 public class FormsProvider extends ContentProvider {
+
     private static HashMap<String, String> sFormsProjectionMap;
 
     private static final int FORMS = 1;
@@ -76,10 +79,10 @@ public class FormsProvider extends ContentProvider {
     Clock clock;
 
     @Inject
-    FormsRepository formsRepository;
+    FormsRepositoryProvider formsRepositoryProvider;
 
     @Inject
-    InstancesRepository instancesRepository;
+    InstancesRepositoryProvider instancesRepositoryProvider;
 
     @Inject
     FastExternalItemsetsRepository fastExternalItemsetsRepository;
@@ -110,19 +113,19 @@ public class FormsProvider extends ContentProvider {
         Cursor cursor;
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
-                cursor = formsRepository.rawQuery(projection, selection, selectionArgs, sortOrder, null);
+                cursor = databaseQuery(projection, selection, selectionArgs, sortOrder, null);
                 break;
 
             case FORM_ID:
                 String formId = String.valueOf(ContentUriHelper.getIdFromUri(uri));
-                cursor = formsRepository.rawQuery(null, _ID + "=?", new String[]{formId}, null, null);
+                cursor = databaseQuery(null, _ID + "=?", new String[]{formId}, null, null);
                 break;
 
             // Only include the latest form that was downloaded with each form_id
             case NEWEST_FORMS_BY_FORM_ID:
                 Map<String, String> filteredProjectionMap = new HashMap<>(sFormsProjectionMap);
                 filteredProjectionMap.put(DATE, MAX_DATE);
-                cursor = formsRepository.rawQuery(filteredProjectionMap.values().toArray(new String[0]), selection, selectionArgs, sortOrder, JR_FORM_ID);
+                cursor = databaseQuery(filteredProjectionMap.values().toArray(new String[0]), selection, selectionArgs, sortOrder, JR_FORM_ID);
                 break;
 
             default:
@@ -158,7 +161,7 @@ public class FormsProvider extends ContentProvider {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        Form form = formsRepository.save(getFormFromValues(initialValues, storagePathProvider));
+        Form form = formsRepositoryProvider.get().save(getFormFromValues(initialValues, storagePathProvider));
         return Uri.withAppendedPath(CONTENT_URI, String.valueOf(form.getDbId()));
     }
 
@@ -173,11 +176,11 @@ public class FormsProvider extends ContentProvider {
 
         int count;
 
-        FormDeleter formDeleter = new FormDeleter(formsRepository, instancesRepository, fastExternalItemsetsRepository);
+        FormDeleter formDeleter = new FormDeleter(formsRepositoryProvider.get(), instancesRepositoryProvider.get(), fastExternalItemsetsRepository);
 
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
-                try (Cursor cursor = formsRepository.rawQuery(null, where, whereArgs, null, null)) {
+                try (Cursor cursor = databaseQuery(null, where, whereArgs, null, null)) {
                     while (cursor.moveToNext()) {
                         formDeleter.delete(cursor.getLong(cursor.getColumnIndex(_ID)));
                     }
@@ -203,11 +206,12 @@ public class FormsProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String where, String[] whereArgs) {
         deferDaggerInit();
+        FormsRepository formsRepository = formsRepositoryProvider.get();
 
         int count;
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
-                try (Cursor cursor = formsRepository.rawQuery(null, where, whereArgs, null, null)) {
+                try (Cursor cursor = databaseQuery(null, where, whereArgs, null, null)) {
                     while (cursor.moveToNext()) {
                         Form form = getFormFromCurrentCursorPosition(cursor, storagePathProvider);
 
@@ -243,6 +247,10 @@ public class FormsProvider extends ContentProvider {
         getContext().getContentResolver().notifyChange(FormsProviderAPI.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
 
         return count;
+    }
+
+    private Cursor databaseQuery(String[] projection, String selection, String[] selectionArgs, String sortOrder, String o) {
+        return ((DatabaseFormsRepository) formsRepositoryProvider.get()).rawQuery(projection, selection, selectionArgs, sortOrder, o);
     }
 
     static {

@@ -42,10 +42,9 @@ import com.google.api.services.drive.Drive;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormListActivity;
 import org.odk.collect.android.adapters.FileArrayAdapter;
-import org.odk.collect.android.database.DatabaseFormsRepository;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.gdrive.sheets.DriveHelper;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -57,6 +56,8 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.shared.Md5;
 
 import java.io.File;
 import java.io.IOException;
@@ -119,7 +120,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     GoogleApiProvider googleApiProvider;
 
     @Inject
-    FormsRepository formsRepository;
+    FormsRepositoryProvider formsRepositoryProvider;
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -789,7 +790,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     private void checkFormUpdates() {
         for (DriveListItem item : driveList) {
             if (item.getType() == DriveListItem.FILE) {
-                Form form = new DatabaseFormsRepository().getOneByPath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName());
+                Form form = new FormsRepositoryProvider().get().getOneByPath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName());
                 if (form != null && (isNewerFormVersionAvailable(item) || areNewerMediaFilesAvailable(item))) {
                     item.setNewerVersion(true);
                 }
@@ -901,7 +902,8 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             driveHelper.downloadFile(fileId, file);
 
             // If the form already exists in the DB and is soft deleted we need to restore it
-            String md5Hash = FileUtils.getMd5Hash(file);
+            String md5Hash = Md5.getMd5Hash(file);
+            FormsRepository formsRepository = formsRepositoryProvider.get();
             Form form = formsRepository.getOneByMd5Hash(md5Hash);
             if (form != null && form.isDeleted()) {
                 formsRepository.restore(form.getDbId());

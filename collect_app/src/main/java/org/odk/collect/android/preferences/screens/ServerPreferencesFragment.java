@@ -48,13 +48,13 @@ import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.Protocol;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Validator;
+import org.odk.collect.shared.Md5;
 
 import java.io.ByteArrayInputStream;
 import java.util.Locale;
@@ -332,7 +332,7 @@ public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment im
                     if (Validator.isUrlValid(url)) {
                         preference.setSummary(url + "\n\n" + getString(R.string.google_sheets_url_hint));
 
-                        String urlHash = FileUtils.getMd5Hash(new ByteArrayInputStream(url.getBytes()));
+                        String urlHash = Md5.getMd5Hash(new ByteArrayInputStream(url.getBytes()));
                         analytics.logEvent(SET_FALLBACK_SHEETS_URL, urlHash);
                     } else if (url.length() == 0) {
                         preference.setSummary(getString(R.string.google_sheets_url_hint));
@@ -371,8 +371,7 @@ public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment im
             host = "Ona";
         }
 
-        String urlHash = FileUtils.getMd5Hash(
-                new ByteArrayInputStream(url.getBytes()));
+        String urlHash = Md5.getMd5Hash(new ByteArrayInputStream(url.getBytes()));
 
         analytics.logEvent(SET_SERVER, scheme + " " + host, urlHash);
     }

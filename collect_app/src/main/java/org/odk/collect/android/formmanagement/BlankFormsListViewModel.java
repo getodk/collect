@@ -15,15 +15,15 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.backgroundwork.ChangeLock;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
-import org.odk.collect.android.forms.FormSourceException;
+import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.provider.FormsProvider;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.shared.Md5;
 
 import java.io.ByteArrayInputStream;
 import java.util.Objects;
@@ -122,7 +122,7 @@ public class BlankFormsListViewModel extends ViewModel {
     private void logManualSync() {
         Uri uri = Uri.parse(generalSettings.getString(GeneralKeys.KEY_SERVER_URL));
         String host = uri.getHost() != null ? uri.getHost() : "";
-        String urlHash = FileUtils.getMd5Hash(new ByteArrayInputStream(host.getBytes()));
+        String urlHash = Md5.getMd5Hash(new ByteArrayInputStream(host.getBytes()));
         analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC, "Manual", urlHash);
     }
 

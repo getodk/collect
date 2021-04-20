@@ -70,7 +70,6 @@ import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.audio.M4AAppender;
 import org.odk.collect.android.backgroundwork.FormSubmitManager;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
-import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
@@ -100,9 +99,6 @@ import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.SaveAnswerFileErrorDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveAnswerFileProgressDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormDesignException;
-import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog;
@@ -111,9 +107,9 @@ import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
-import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.FormController.FailedConstraint;
+import org.odk.collect.android.javarosawrapper.FormDesignException;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -126,7 +122,7 @@ import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.provider.FormsProviderAPI;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
@@ -138,6 +134,8 @@ import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ScreenContext;
@@ -157,6 +155,9 @@ import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.AudioClipViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.forms.instances.Instance;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -304,7 +305,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     StoragePathProvider storagePathProvider;
 
     @Inject
-    FormsRepository formsRepository;
+    FormsRepositoryProvider formsRepositoryProvider;
+    private FormsRepository formsRepository;
 
     @Inject
     PropertyManager propertyManager;
@@ -361,7 +363,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Collect.getInstance().getComponent().inject(this);
+        formsRepository = formsRepositoryProvider.get();
+
         setContentView(R.layout.form_entry);
         setupViewModels();
         swipeHandler = new SwipeHandler(this, settingsProvider.getGeneralSettings().getString(KEY_NAVIGATION));
@@ -589,8 +594,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (uriMimeType == null && intent.hasExtra(EXTRA_TESTING_PATH)) {
             formPath = intent.getStringExtra(EXTRA_TESTING_PATH);
 
-        } else if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
-            Instance instance = new DatabaseInstancesRepository().get(ContentUriHelper.getIdFromUri(uri));
+        } else if (uriMimeType != null && uriMimeType.equals(InstanceProviderAPI.CONTENT_ITEM_TYPE)) {
+            Instance instance = new InstancesRepositoryProvider().get().get(ContentUriHelper.getIdFromUri(uri));
 
             if (instance == null) {
                 createErrorDialog(getString(R.string.bad_uri, uri), true);
@@ -1207,8 +1212,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
 
             if (saveName == null && uriMimeType != null
-                    && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
-                Instance instance = new DatabaseInstancesRepository().get(ContentUriHelper.getIdFromUri(instanceUri));
+                    && uriMimeType.equals(InstanceProviderAPI.CONTENT_ITEM_TYPE)) {
+                Instance instance = new InstancesRepositoryProvider().get().get(ContentUriHelper.getIdFromUri(instanceUri));
                 if (instance != null) {
                     saveName = instance.getDisplayName();
                 }

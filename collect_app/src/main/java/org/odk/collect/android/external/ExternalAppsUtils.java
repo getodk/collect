@@ -35,9 +35,9 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.javarosa.xpath.expr.XPathPathExpr;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.exception.ExternalParamsException;
-import org.odk.collect.android.instances.Instance;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -150,7 +150,7 @@ public class ExternalAppsUtils {
             String path = Collect.getInstance().getFormController().getInstanceFile().getAbsolutePath();
 
             String instanceProviderID = "-1";
-            Instance instance = new DatabaseInstancesRepository().getOneByPath(path);
+            Instance instance = new InstancesRepositoryProvider().get().getOneByPath(path);
             if (instance != null) {
                 instanceProviderID = instance.getDbId().toString();
             }

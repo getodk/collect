@@ -17,8 +17,8 @@ package org.odk.collect.android.upload;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.odk.collect.android.database.DatabaseInstancesRepository;
-import org.odk.collect.android.instances.Instance;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,21 +45,21 @@ public abstract class InstanceUploader {
         List<Instance> instances = new ArrayList<>();
 
         for (Long id : instanceDatabaseIds) {
-            instances.add(new DatabaseInstancesRepository().get(id));
+            instances.add(new InstancesRepositoryProvider().get().get(id));
         }
 
         return instances;
     }
 
     public void saveSuccessStatusToDatabase(Instance instance) {
-        new DatabaseInstancesRepository().save(new Instance.Builder(instance)
+        new InstancesRepositoryProvider().get().save(new Instance.Builder(instance)
                 .status(Instance.STATUS_SUBMITTED)
                 .build()
         );
     }
 
     public void saveFailedStatusToDatabase(Instance instance) {
-        new DatabaseInstancesRepository().save(new Instance.Builder(instance)
+        new InstancesRepositoryProvider().get().save(new Instance.Builder(instance)
                 .status(Instance.STATUS_SUBMISSION_FAILED)
                 .build()
         );

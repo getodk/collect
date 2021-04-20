@@ -22,8 +22,8 @@ import androidx.core.util.Pair;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
-import org.odk.collect.android.forms.FormSourceException;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.forms.FormSourceException;
 
 import java.util.HashMap;
 import java.util.List;

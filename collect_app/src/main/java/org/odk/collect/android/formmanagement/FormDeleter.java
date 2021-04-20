@@ -1,9 +1,9 @@
 package org.odk.collect.android.formmanagement;
 
-import org.odk.collect.android.forms.Form;
-import org.odk.collect.android.forms.FormsRepository;
-import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.instances.InstancesRepository;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 
 import java.io.File;
