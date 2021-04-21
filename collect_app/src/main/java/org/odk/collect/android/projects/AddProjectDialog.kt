@@ -21,9 +21,15 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
 
     private lateinit var binding: AddProjectDialogLayoutBinding
 
+    private var listener: AddProjectDialogListener? = null
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
+
+        if (context is AddProjectDialogListener) {
+            listener = context
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -61,6 +67,7 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
 
         binding.addButton.setOnClickListener {
             projectsRepository.add(Project(getProjectName(), getProjectIcon(), getProjectColor()))
+            listener?.onProjectAdded()
             dismiss()
         }
     }
@@ -86,4 +93,8 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
     private fun getProjectIcon() = binding.projectIcon.editText?.text?.trim().toString()
 
     private fun getProjectColor() = binding.projectColor.editText?.text?.trim().toString()
+
+    interface AddProjectDialogListener {
+        fun onProjectAdded()
+    }
 }

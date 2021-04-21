@@ -138,7 +138,7 @@ the specific language governing permissions and limitations under the License.
         <activity android:name=".activities.BearingActivity" />
         <activity
             android:name=".activities.SplashScreenActivity"
-            android:theme="@android:style/Theme.Dialog" />
+            android:theme="@style/Theme.Transparent" />
         <activity android:name=".activities.CaptureSelfieActivity" />
         <activity android:name=".activities.WebViewActivity" />
         <activity android:name=".activities.CaptureSelfieVideoActivity" />

@@ -379,6 +379,8 @@ dependencies {
 
     testImplementation "org.json:json:20201115"
     testImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    testImplementation 'androidx.test.espresso:espresso-intents:3.3.0'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.3'
 
     testImplementation project(':formstest')
 

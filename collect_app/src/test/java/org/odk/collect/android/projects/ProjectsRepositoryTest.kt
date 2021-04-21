@@ -2,8 +2,8 @@ package org.odk.collect.android.projects
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
+import org.hamcrest.Matchers.isEmptyString
 import org.hamcrest.Matchers.not
-import org.hamcrest.Matchers.notNullValue
 import org.junit.Before
 import org.junit.Test
 
@@ -22,7 +22,7 @@ abstract class ProjectsRepositoryTest {
     }
 
     @Test
-    fun getAll_shouldReturnAllProjectsFromStorage() {
+    fun `getAll() should return all projects from storage`() {
         projectsRepository.add(projectX)
         projectsRepository.add(projectY)
         projectsRepository.add(projectZ)
@@ -36,7 +36,7 @@ abstract class ProjectsRepositoryTest {
     }
 
     @Test
-    fun add_shouldSaveProjectToStorage() {
+    fun `add() should save project to storage`() {
         projectsRepository.add(projectX)
 
         val projects = projectsRepository.getAll()
@@ -46,7 +46,19 @@ abstract class ProjectsRepositoryTest {
     }
 
     @Test
-    fun delete_shouldDeleteProjectFromStorage() {
+    fun `add() should add uuid if not specified`() {
+        projectsRepository.add(projectX)
+        assertThat(projectsRepository.getAll()[0].uuid, `is`(not(isEmptyString())))
+    }
+
+    @Test
+    fun `add() should not add uuid if specified`() {
+        projectsRepository.add(projectX.copy(uuid = "1"))
+        assertThat(projectsRepository.get("1"), `is`(projectX.copy(uuid = "1")))
+    }
+
+    @Test
+    fun `delete() should delete project from storage for given uuid`() {
         projectsRepository.add(projectX)
         projectsRepository.add(projectY)
 
@@ -59,7 +71,7 @@ abstract class ProjectsRepositoryTest {
     }
 
     @Test
-    fun deleteAll_shouldDeleteAllProjectsFromStorage() {
+    fun `deleteAll() should delete all projects from storage`() {
         projectsRepository.add(projectX)
         projectsRepository.add(projectY)
 
@@ -67,17 +79,5 @@ abstract class ProjectsRepositoryTest {
         val projects = projectsRepository.getAll()
 
         assertThat(projects.size, `is`(0))
-    }
-
-    @Test
-    open fun add_shouldAddsUniqueId() {
-        projectsRepository.add(projectX)
-        projectsRepository.add(projectY)
-
-        val projects = projectsRepository.getAll()
-
-        assertThat(projects[0].uuid, `is`(notNullValue()))
-        assertThat(projects[1].uuid, `is`(notNullValue()))
-        assertThat(projects[0].uuid, not(projects[1].uuid))
     }
 }

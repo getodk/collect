@@ -28,7 +28,7 @@ class CurrentProjectProviderTest {
     }
 
     @Test
-    fun getCurrentProjectId_shouldReturnProjectIdOfCurrentProject() {
+    fun `Id of current project should be returned after calling getCurrentProjectId()`() {
         `when`(settingsProvider.getMetaSettings()).thenReturn(metaSettings)
         `when`(metaSettings.getString(MetaKeys.CURRENT_PROJECT_ID)).thenReturn("123e4567")
 
@@ -36,7 +36,7 @@ class CurrentProjectProviderTest {
     }
 
     @Test
-    fun getCurrentProject_shouldReturnProjectForGivenIdIfExist() {
+    fun `A project should be returned after calling getCurrentProject() if there is a project for given id`() {
         `when`(settingsProvider.getMetaSettings()).thenReturn(metaSettings)
         `when`(metaSettings.getString(MetaKeys.CURRENT_PROJECT_ID)).thenReturn("123e4567")
         val project = Project("ProjectX", "X", "#00FF00", "123e4567")
@@ -46,7 +46,7 @@ class CurrentProjectProviderTest {
     }
 
     @Test
-    fun getCurrentProject_shouldReturnNullIfThereIsNoProjectForGivenId() {
+    fun `Null should be returned after calling getCurrentProject() if there is no project for given id`() {
         `when`(settingsProvider.getMetaSettings()).thenReturn(metaSettings)
         `when`(metaSettings.getString(MetaKeys.CURRENT_PROJECT_ID)).thenReturn("123e4567")
         `when`(projectsRepository.get("123e4567")).thenReturn(null)
@@ -55,7 +55,7 @@ class CurrentProjectProviderTest {
     }
 
     @Test
-    fun setCurrentProject_shouldCallSaveOnMetaSettingsWithProperValues() {
+    fun `save() on meta settings should be called after current project is set`() {
         `when`(settingsProvider.getMetaSettings()).thenReturn(metaSettings)
 
         currentProjectProvider.setCurrentProject("123e4567")

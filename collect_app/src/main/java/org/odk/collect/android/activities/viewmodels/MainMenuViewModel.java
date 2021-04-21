@@ -36,11 +36,7 @@ public class MainMenuViewModel extends ViewModel {
     }
 
     public String getVersion() {
-        if (version.getBetaNumber() != null) {
-            return version.getSemanticVersion() + " Beta " + version.getBetaNumber();
-        } else {
-            return version.getSemanticVersion();
-        }
+        return version.getVersionToDisplay();
     }
 
     @Nullable

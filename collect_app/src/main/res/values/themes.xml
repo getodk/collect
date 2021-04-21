@@ -12,4 +12,8 @@
         <item name="imageButtonStyle">@style/Widget.Collect.ImageButton.Custom.Light</item>
     </style>
 
+    <style name="Theme.Transparent" parent="Theme.Collect.BaseLight">
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
 </resources>
