@@ -12,7 +12,7 @@ class ProjectImporter(
     fun importDemoProject() {
         val project = Project("Demo project", "D", "#3e9fcc", DEMO_PROJECT_ID)
         projectsRepository.add(project)
-        metaSettings.save(MetaKeys.CURRENT_PROJECT_ID, DEMO_PROJECT_ID)
+        metaSettings.save(MetaKeys.CURRENT_PROJECT_ID, "")
     }
 
     // Now it does the same like importDemoProject() but it should be changed later
@@ -23,6 +23,11 @@ class ProjectImporter(
     }
 
     companion object {
-        const val DEMO_PROJECT_ID = "DEMO"
+        /*
+        Should be empty to easily access existed settings (general and admin) that had be saved in versions
+        prior to the one that implemented "Projects" and treat them as those which belong to
+        the imported existed project.
+         */
+        const val DEMO_PROJECT_ID = ""
     }
 }

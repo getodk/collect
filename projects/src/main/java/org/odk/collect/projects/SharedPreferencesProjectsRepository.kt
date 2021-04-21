@@ -26,7 +26,7 @@ class SharedPreferencesProjectsRepository(
     }
 
     override fun add(project: Project) {
-        val projects = if (project.uuid.isBlank()) {
+        val projects = if (project.uuid == NOT_SPECIFIED_UUID) {
             getAll().toMutableList().plus(project.copy(uuid = uuidGenerator.generateUUID()))
         } else {
             getAll().toMutableList().plus(project)
