@@ -191,7 +191,7 @@ public class InstanceServerUploader extends InstanceUploader {
         try {
             URI uri = URI.create(submissionUri.toString());
 
-            postResult = httpInterface.uploadSubmissionFile(files, submissionFile, uri,
+            postResult = httpInterface.uploadSubmissionAndFiles(submissionFile, files, uri,
                     webCredentialsUtils.getCredentials(uri), contentLength);
 
             int responseCode = postResult.getResponseCode();
