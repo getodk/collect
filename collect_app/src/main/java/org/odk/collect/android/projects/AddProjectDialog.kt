@@ -19,9 +19,6 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
     @Inject
     lateinit var projectsRepository: ProjectsRepository
 
-    @Inject
-    lateinit var currentProjectProvider: CurrentProjectProvider
-
     private lateinit var binding: AddProjectDialogLayoutBinding
 
     private var listener: AddProjectDialogListener? = null
