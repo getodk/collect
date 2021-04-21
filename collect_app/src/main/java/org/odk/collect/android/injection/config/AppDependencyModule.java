@@ -97,6 +97,7 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
+import org.odk.collect.android.utilities.AppStateProvider;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
@@ -554,12 +555,17 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SplashScreenViewModel.Factory providesSplashScreenViewModel(SettingsProvider settingsProvider, ProjectsRepository projectsRepository, ProjectImporter projectImporter) {
-        return new SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), settingsProvider.getMetaSettings(), projectsRepository, projectImporter);
+    public SplashScreenViewModel.Factory providesSplashScreenViewModel(SettingsProvider settingsProvider, ProjectsRepository projectsRepository, ProjectImporter projectImporter, AppStateProvider appStateProvider) {
+        return new SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), settingsProvider.getMetaSettings(), projectsRepository, projectImporter, appStateProvider);
     }
 
     @Provides
     public ProjectImporter providesProjectImporter(ProjectsRepository projectsRepository, SettingsProvider settingsProvider) {
         return new ProjectImporter(projectsRepository, settingsProvider.getMetaSettings());
+    }
+
+    @Provides
+    public AppStateProvider providesAppStateProvider(Context context) {
+        return new AppStateProvider(context);
     }
 }

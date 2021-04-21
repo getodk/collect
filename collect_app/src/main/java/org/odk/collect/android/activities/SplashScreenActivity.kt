@@ -58,7 +58,7 @@ class SplashScreenActivity : AppCompatActivity(), AddProjectDialog.AddProjectDia
         viewModel.importExistingProjectIfNeeded()
 
         when {
-            viewModel.isFirstLaunch() -> DialogUtils.showIfNotShowing(FirstLaunchDialog::class.java, supportFragmentManager)
+            viewModel.isFirstLaunch -> DialogUtils.showIfNotShowing(FirstLaunchDialog::class.java, supportFragmentManager)
             viewModel.shouldDisplaySplashScreen -> startSplashScreen()
             else -> endSplashScreen()
         }

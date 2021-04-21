@@ -21,6 +21,7 @@ import org.mockito.Mockito.doReturn
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import org.odk.collect.android.rules.MainCoroutineScopeRule
+import org.mockito.Mockito.spy
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
 import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog
@@ -29,11 +30,12 @@ import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.support.RobolectricHelpers
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.android.utilities.AppStateProvider
 
 @RunWith(AndroidJUnit4::class)
 class SplashScreenActivityTest {
     @get:Rule
-    val coroutineScope =  MainCoroutineScopeRule()
+    val coroutineScope = MainCoroutineScopeRule()
 
     private lateinit var splashScreenViewModel: SplashScreenViewModel
 
@@ -42,8 +44,8 @@ class SplashScreenActivityTest {
         splashScreenViewModel = mock(SplashScreenViewModel::class.java)
 
         RobolectricHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesSplashScreenViewModel(settingsProvider: SettingsProvider, projectsRepository: ProjectsRepository, projectImporter: ProjectImporter): SplashScreenViewModel.Factory {
-                return object : SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), settingsProvider.getMetaSettings(), projectsRepository, projectImporter) {
+            override fun providesSplashScreenViewModel(settingsProvider: SettingsProvider, projectsRepository: ProjectsRepository, projectImporter: ProjectImporter, appStateProvider: AppStateProvider): SplashScreenViewModel.Factory {
+                return object : SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), settingsProvider.getMetaSettings(), projectsRepository, projectImporter, appStateProvider) {
                     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                         return splashScreenViewModel as T
                     }
@@ -60,7 +62,7 @@ class SplashScreenActivityTest {
 
     @Test
     fun `The Fist Launch Screen should be displayed if the app is newly installed`() {
-        doReturn(true).`when`(splashScreenViewModel).isFirstLaunch()
+        doReturn(true).`when`(splashScreenViewModel).isFirstLaunch
 
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
         scenario.onActivity { activity: SplashScreenActivity ->
@@ -70,7 +72,7 @@ class SplashScreenActivityTest {
 
     @Test
     fun `The Fist Launch Screen should not be displayed if the app is not newly installed`() {
-        doReturn(false).`when`(splashScreenViewModel).isFirstLaunch()
+        doReturn(false).`when`(splashScreenViewModel).isFirstLaunch
         doReturn(true).`when`(splashScreenViewModel).shouldDisplaySplashScreen
         doReturn(false).`when`(splashScreenViewModel).doesLogoFileExist
 
@@ -82,7 +84,7 @@ class SplashScreenActivityTest {
 
     @Test
     fun `The Splash screen should be displayed with the default logo if it's enabled and no other logo is set`() {
-        doReturn(false).`when`(splashScreenViewModel).isFirstLaunch()
+        doReturn(false).`when`(splashScreenViewModel).isFirstLaunch
         doReturn(true).`when`(splashScreenViewModel).shouldDisplaySplashScreen
         doReturn(false).`when`(splashScreenViewModel).doesLogoFileExist
 
@@ -95,7 +97,7 @@ class SplashScreenActivityTest {
 
     @Test
     fun `The Splash screen should be displayed with custom logo if it's enabled and custom logo is set`() {
-        doReturn(false).`when`(splashScreenViewModel).isFirstLaunch()
+        doReturn(false).`when`(splashScreenViewModel).isFirstLaunch
         doReturn(true).`when`(splashScreenViewModel).shouldDisplaySplashScreen
         doReturn(true).`when`(splashScreenViewModel).doesLogoFileExist
         doReturn(null).`when`(splashScreenViewModel).scaledSplashScreenLogoBitmap
@@ -111,7 +113,7 @@ class SplashScreenActivityTest {
     @ExperimentalCoroutinesApi
     @Test
     fun `The main menu should be displayed automatically after 2s if the Splash screen is enabled and the app is not newly installed`() = coroutineScope.runBlockingTest {
-        doReturn(false).`when`(splashScreenViewModel).isFirstLaunch()
+        doReturn(false).`when`(splashScreenViewModel).isFirstLaunch
         doReturn(true).`when`(splashScreenViewModel).shouldDisplaySplashScreen
         doReturn(false).`when`(splashScreenViewModel).doesLogoFileExist
 
@@ -129,7 +131,7 @@ class SplashScreenActivityTest {
 
     @Test
     fun `The main menu should be displayed immediately if the splash screen is disabled and the app is not newly installed`() {
-        doReturn(false).`when`(splashScreenViewModel).isFirstLaunch()
+        doReturn(false).`when`(splashScreenViewModel).isFirstLaunch
         doReturn(false).`when`(splashScreenViewModel).shouldDisplaySplashScreen
 
         Intents.init()

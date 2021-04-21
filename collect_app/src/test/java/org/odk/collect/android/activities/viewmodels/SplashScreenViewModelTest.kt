@@ -9,16 +9,17 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.verifyNoInteractions
 import org.odk.collect.android.preferences.keys.GeneralKeys
-import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.android.preferences.source.SharedPreferencesSettings
 import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.projects.ProjectsRepository
+import org.odk.collect.android.utilities.AppStateProvider
 
 class SplashScreenViewModelTest {
     private lateinit var generalSettings: SharedPreferencesSettings
     private lateinit var metaSettings: SharedPreferencesSettings
     private lateinit var projectsRepository: ProjectsRepository
     private lateinit var projectImporter: ProjectImporter
+    private lateinit var appStateProvider: AppStateProvider
     private lateinit var splashScreenViewModel: SplashScreenViewModel
 
     @Before
@@ -27,7 +28,8 @@ class SplashScreenViewModelTest {
         metaSettings = mock(SharedPreferencesSettings::class.java)
         projectsRepository = mock(ProjectsRepository::class.java)
         projectImporter = mock(ProjectImporter::class.java)
-        splashScreenViewModel = SplashScreenViewModel(generalSettings, metaSettings, projectsRepository, projectImporter)
+        appStateProvider = mock(AppStateProvider::class.java)
+        splashScreenViewModel = SplashScreenViewModel(generalSettings, metaSettings, projectsRepository, projectImporter, appStateProvider)
     }
 
     @Test
@@ -54,20 +56,20 @@ class SplashScreenViewModelTest {
     }
 
     @Test
-    fun `shouldFirstLaunchDialogBeDisplayed() should return true if the app is newly installed`() {
-        assertThat(splashScreenViewModel.isFirstLaunch(), `is`(true))
-        verify(metaSettings).save(MetaKeys.KEY_FIRST_LAUNCH, false)
+    fun `isFirstLaunch should return true if the app is newly installed`() {
+        `when`(appStateProvider.isFreshInstall()).thenReturn(true)
+        assertThat(splashScreenViewModel.isFirstLaunch, `is`(true))
     }
 
     @Test
-    fun `shouldFirstLaunchDialogBeDisplayed() should return false if the app is not newly installed`() {
-        `when`(metaSettings.contains(MetaKeys.KEY_FIRST_LAUNCH)).thenReturn(true)
-        assertThat(splashScreenViewModel.isFirstLaunch(), `is`(false))
+    fun `isFirstLaunch should return false if the app is not newly installed`() {
+        `when`(appStateProvider.isFreshInstall()).thenReturn(false)
+        assertThat(splashScreenViewModel.isFirstLaunch, `is`(false))
     }
 
     @Test
     fun `Should existing project be imported when it's not first launch and projects repository is empty`() {
-        `when`(metaSettings.contains(MetaKeys.KEY_FIRST_LAUNCH)).thenReturn(true)
+        `when`(appStateProvider.isFreshInstall()).thenReturn(false)
         `when`(projectsRepository.getAll()).thenReturn(emptyList())
         splashScreenViewModel.importExistingProjectIfNeeded()
         verify(projectImporter).importExistingProject()
@@ -75,7 +77,7 @@ class SplashScreenViewModelTest {
 
     @Test
     fun `Should not existing project be imported when it's first launch`() {
-        `when`(metaSettings.contains(MetaKeys.KEY_FIRST_LAUNCH)).thenReturn(false)
+        `when`(appStateProvider.isFreshInstall()).thenReturn(true)
         `when`(projectsRepository.getAll()).thenReturn(emptyList())
         splashScreenViewModel.importExistingProjectIfNeeded()
         verifyNoInteractions(projectImporter)
