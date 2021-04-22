@@ -21,6 +21,9 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
 import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.projects.ProjectImporter;
+import org.odk.collect.android.utilities.AppStateProvider;
+import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StorageInitializer;
@@ -42,15 +45,23 @@ public class ApplicationInitializer {
     private final Settings generalSettings;
     private final Settings adminSettings;
     private final StorageInitializer storageInitializer;
+    private final ProjectsRepository projectsRepository;
+    private final AppStateProvider appStateProvider;
+    private final ProjectImporter projectImporter;
 
+    @SuppressWarnings("PMD.ExcessiveParameterList")
     public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator,
-                                  PropertyManager propertyManager, Analytics analytics, StorageInitializer storageInitializer, SettingsProvider settingsProvider) {
+                                  PropertyManager propertyManager, Analytics analytics, StorageInitializer storageInitializer, SettingsProvider settingsProvider,
+                                  ProjectsRepository projectsRepository, AppStateProvider appStateProvider, ProjectImporter projectImporter) {
         this.context = context;
         this.userAgentProvider = userAgentProvider;
         this.preferenceMigrator = preferenceMigrator;
         this.propertyManager = propertyManager;
         this.analytics = analytics;
         this.storageInitializer = storageInitializer;
+        this.projectsRepository = projectsRepository;
+        this.appStateProvider = appStateProvider;
+        this.projectImporter = projectImporter;
 
         generalSettings = settingsProvider.getGeneralSettings();
         adminSettings = settingsProvider.getAdminSettings();
@@ -61,6 +72,7 @@ public class ApplicationInitializer {
         initializePreferences();
         initializeFrameworks();
         initializeLocale();
+        importExistingProjectIfNeeded();
     }
 
     private void initializeStorage() {
@@ -136,6 +148,12 @@ public class ApplicationInitializer {
             MapboxUtils.initMapbox();
         } catch (Exception | Error ignore) {
             // ignored
+        }
+    }
+
+    private void importExistingProjectIfNeeded() {
+        if (!appStateProvider.isFreshInstall() && projectsRepository.getAll().isEmpty()) {
+            projectImporter.importExistingProject();
         }
     }
 }

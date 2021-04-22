@@ -308,12 +308,16 @@ public class AppDependencyModule {
         return new CoroutineAndWorkManagerScheduler(workManager);
     }
 
+    @SuppressWarnings("PMD.ExcessiveParameterList")
     @Singleton
     @Provides
     public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider,
                                                                  SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager,
-                                                                 Analytics analytics, StorageInitializer storageInitializer, SettingsProvider settingsProvider) {
-        return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator, propertyManager, analytics, storageInitializer, settingsProvider);
+                                                                 Analytics analytics, StorageInitializer storageInitializer, SettingsProvider settingsProvider,
+                                                                 ProjectsRepository projectsRepository, AppStateProvider appStateProvider, ProjectImporter projectImporter) {
+        return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator,
+                propertyManager, analytics, storageInitializer, settingsProvider, projectsRepository,
+                appStateProvider, projectImporter);
     }
 
     @Provides
@@ -555,8 +559,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SplashScreenViewModel.Factory providesSplashScreenViewModel(SettingsProvider settingsProvider, ProjectsRepository projectsRepository, ProjectImporter projectImporter, AppStateProvider appStateProvider) {
-        return new SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), projectsRepository, projectImporter, appStateProvider);
+    public SplashScreenViewModel.Factory providesSplashScreenViewModel(SettingsProvider settingsProvider, AppStateProvider appStateProvider) {
+        return new SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), appStateProvider);
     }
 
     @Provides

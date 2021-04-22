@@ -6,28 +6,20 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
-import org.mockito.Mockito.verifyNoInteractions
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.source.SharedPreferencesSettings
-import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.utilities.AppStateProvider
-import org.odk.collect.projects.ProjectsRepository
 
 class SplashScreenViewModelTest {
     private lateinit var generalSettings: SharedPreferencesSettings
-    private lateinit var projectsRepository: ProjectsRepository
-    private lateinit var projectImporter: ProjectImporter
     private lateinit var appStateProvider: AppStateProvider
     private lateinit var splashScreenViewModel: SplashScreenViewModel
 
     @Before
     fun setup() {
         generalSettings = mock(SharedPreferencesSettings::class.java)
-        projectsRepository = mock(ProjectsRepository::class.java)
-        projectImporter = mock(ProjectImporter::class.java)
         appStateProvider = mock(AppStateProvider::class.java)
-        splashScreenViewModel = SplashScreenViewModel(generalSettings, projectsRepository, projectImporter, appStateProvider)
+        splashScreenViewModel = SplashScreenViewModel(generalSettings, appStateProvider)
     }
 
     @Test
@@ -63,21 +55,5 @@ class SplashScreenViewModelTest {
     fun `isFirstLaunch should return false if the app is not newly installed`() {
         `when`(appStateProvider.isFreshInstall()).thenReturn(false)
         assertThat(splashScreenViewModel.isFirstLaunch, `is`(false))
-    }
-
-    @Test
-    fun `Should existing project be imported when it's not first launch and projects repository is empty`() {
-        `when`(appStateProvider.isFreshInstall()).thenReturn(false)
-        `when`(projectsRepository.getAll()).thenReturn(emptyList())
-        splashScreenViewModel.importExistingProjectIfNeeded()
-        verify(projectImporter).importExistingProject()
-    }
-
-    @Test
-    fun `Should not existing project be imported when it's first launch`() {
-        `when`(appStateProvider.isFreshInstall()).thenReturn(true)
-        `when`(projectsRepository.getAll()).thenReturn(emptyList())
-        splashScreenViewModel.importExistingProjectIfNeeded()
-        verifyNoInteractions(projectImporter)
     }
 }

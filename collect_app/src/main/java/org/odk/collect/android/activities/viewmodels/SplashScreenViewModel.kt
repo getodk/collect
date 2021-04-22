@@ -4,18 +4,14 @@ import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.preferences.keys.GeneralKeys
-import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.utilities.AppStateProvider
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.ScreenUtils
-import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.Settings
 import java.io.File
 
 class SplashScreenViewModel(
     private val generalSettings: Settings,
-    private val projectsRepository: ProjectsRepository,
-    private val projectImporter: ProjectImporter,
     private val appStateProvider: AppStateProvider
 ) : ViewModel() {
 
@@ -34,20 +30,12 @@ class SplashScreenViewModel(
     val isFirstLaunch
         get() = appStateProvider.isFreshInstall()
 
-    fun importExistingProjectIfNeeded() {
-        if (!isFirstLaunch && projectsRepository.getAll().isEmpty()) {
-            projectImporter.importExistingProject()
-        }
-    }
-
     open class Factory constructor(
         private val generalSettings: Settings,
-        private val projectsRepository: ProjectsRepository,
-        private val projectImporter: ProjectImporter,
         private val appStateProvider: AppStateProvider
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return SplashScreenViewModel(generalSettings, projectsRepository, projectImporter, appStateProvider) as T
+            return SplashScreenViewModel(generalSettings, appStateProvider) as T
         }
     }
 }

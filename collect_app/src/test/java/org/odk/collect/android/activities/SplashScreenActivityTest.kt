@@ -18,17 +18,14 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.doReturn
 import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
 import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
-import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.rules.MainCoroutineScopeRule
 import org.odk.collect.android.support.RobolectricHelpers
 import org.odk.collect.android.utilities.AppStateProvider
-import org.odk.collect.projects.ProjectsRepository
 
 @RunWith(AndroidJUnit4::class)
 class SplashScreenActivityTest {
@@ -42,20 +39,14 @@ class SplashScreenActivityTest {
         splashScreenViewModel = mock(SplashScreenViewModel::class.java)
 
         RobolectricHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesSplashScreenViewModel(settingsProvider: SettingsProvider, projectsRepository: ProjectsRepository, projectImporter: ProjectImporter, appStateProvider: AppStateProvider): SplashScreenViewModel.Factory {
-                return object : SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), projectsRepository, projectImporter, appStateProvider) {
+            override fun providesSplashScreenViewModel(settingsProvider: SettingsProvider, appStateProvider: AppStateProvider): SplashScreenViewModel.Factory {
+                return object : SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), appStateProvider) {
                     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                         return splashScreenViewModel as T
                     }
                 }
             }
         })
-    }
-
-    @Test
-    fun `importExistingProjectIfNeeded() should be called`() {
-        ActivityScenario.launch(SplashScreenActivity::class.java)
-        verify(splashScreenViewModel).importExistingProjectIfNeeded()
     }
 
     @Test
