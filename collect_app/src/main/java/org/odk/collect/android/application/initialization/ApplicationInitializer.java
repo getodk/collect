@@ -25,7 +25,6 @@ import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.utilities.AppStateProvider;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.shared.Settings;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.utilities.UserAgentProvider;
 
@@ -51,20 +50,19 @@ public class ApplicationInitializer {
 
     @SuppressWarnings("PMD.ExcessiveParameterList")
     public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator,
-                                  PropertyManager propertyManager, Analytics analytics, StorageInitializer storageInitializer, SettingsProvider settingsProvider,
-                                  ProjectsRepository projectsRepository, AppStateProvider appStateProvider, ProjectImporter projectImporter) {
+                                  PropertyManager propertyManager, Analytics analytics, StorageInitializer storageInitializer, Settings generalSettings,
+                                  Settings adminSettings, ProjectsRepository projectsRepository, AppStateProvider appStateProvider, ProjectImporter projectImporter) {
         this.context = context;
         this.userAgentProvider = userAgentProvider;
         this.preferenceMigrator = preferenceMigrator;
         this.propertyManager = propertyManager;
         this.analytics = analytics;
+        this.generalSettings = generalSettings;
+        this.adminSettings = adminSettings;
         this.storageInitializer = storageInitializer;
         this.projectsRepository = projectsRepository;
         this.appStateProvider = appStateProvider;
         this.projectImporter = projectImporter;
-
-        generalSettings = settingsProvider.getGeneralSettings();
-        adminSettings = settingsProvider.getAdminSettings();
     }
 
     public void initialize() {

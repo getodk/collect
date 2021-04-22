@@ -316,8 +316,8 @@ public class AppDependencyModule {
                                                                  Analytics analytics, StorageInitializer storageInitializer, SettingsProvider settingsProvider,
                                                                  ProjectsRepository projectsRepository, AppStateProvider appStateProvider, ProjectImporter projectImporter) {
         return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator,
-                propertyManager, analytics, storageInitializer, settingsProvider, projectsRepository,
-                appStateProvider, projectImporter);
+                propertyManager, analytics, storageInitializer, settingsProvider.getGeneralSettings(),
+                settingsProvider.getAdminSettings(), projectsRepository, appStateProvider, projectImporter);
     }
 
     @Provides
