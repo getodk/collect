@@ -13,7 +13,8 @@ the specific language governing permissions and limitations under the License. -
     <string name="default_server_url" translatable="false">https://demo.getodk.org</string>
     <string name="default_odk_formlist" translatable="false">/formList</string>
     <string name="default_odk_submission" translatable="false">/submission</string>
-    <string name="app_url" translatable="false">http://getodk.org</string>
+    <string name="app_url" translatable="false">https://getodk.org</string>
+    <string name="forum_url" translatable="false">"https://forum.getodk.org"</string>
     <string name="never_value" translatable="false">never</string>
     <string name="every_fifteen_minutes_value" translatable="false">every_fifteen_minutes</string>
     <string name="every_one_hour_value" translatable="false">every_one_hour</string>

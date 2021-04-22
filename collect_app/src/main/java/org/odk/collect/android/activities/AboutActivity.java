@@ -44,8 +44,6 @@ public class AboutActivity extends CollectAbstractActivity implements
 
     private static final String LICENSES_HTML_PATH = "file:///android_asset/open_source_licenses.html";
     private static final String GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=";
-    private static final String ODK_WEBSITE = "https://getodk.org";
-    private static final String ODK_FORUM = "https://forum.getodk.org";
 
     private ExternalWebPageHelper websiteTabHelper;
     private ExternalWebPageHelper forumTabHelper;
@@ -75,8 +73,8 @@ public class AboutActivity extends CollectAbstractActivity implements
         websiteTabHelper = new ExternalWebPageHelper();
         forumTabHelper = new ExternalWebPageHelper();
 
-        websiteUri = Uri.parse(ODK_WEBSITE);
-        forumUri = Uri.parse(ODK_FORUM);
+        websiteUri = Uri.parse(getString(R.string.app_url));
+        forumUri = Uri.parse(getString(R.string.forum_url));
     }
 
     private void initToolbar() {
