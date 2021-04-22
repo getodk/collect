@@ -6,7 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 
-import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.shared.Settings;
 
 import java.io.File;
 import java.util.Collection;

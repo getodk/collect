@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
-import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.shared.Settings;
 
 import java.util.ArrayList;
 import java.util.HashMap;

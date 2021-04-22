@@ -26,7 +26,7 @@ import org.odk.collect.android.openrosa.HttpPostResult;
 import org.odk.collect.android.openrosa.OpenRosaConstants;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.odk.collect.android.utilities.TranslationHandler;

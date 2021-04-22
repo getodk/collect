@@ -6,7 +6,7 @@ import org.odk.collect.android.backgroundwork.FormUpdateManager;
 import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.shared.Md5;
 

@@ -6,8 +6,8 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.rule.ActivityTestRule
 import org.odk.collect.android.R
-import org.odk.collect.android.projects.Project
 import org.odk.collect.android.support.matchers.ProjectMatcher.withProject
+import org.odk.collect.projects.Project
 
 internal class ProjectSettingsDialogPage(rule: ActivityTestRule<*>) : Page<ProjectSettingsDialogPage>(rule) {
     override fun assertOnPage(): ProjectSettingsDialogPage {

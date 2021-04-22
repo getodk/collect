@@ -3,9 +3,9 @@ package org.odk.collect.android.feature.projects
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
-import org.odk.collect.android.projects.Project
 import org.odk.collect.android.support.CollectTestRule
 import org.odk.collect.android.support.TestRuleChain
+import org.odk.collect.projects.Project
 
 class AddNewProjectTest {
 

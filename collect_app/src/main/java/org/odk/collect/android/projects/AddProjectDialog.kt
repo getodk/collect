@@ -12,6 +12,8 @@ import org.odk.collect.android.R
 import org.odk.collect.android.databinding.AddProjectDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.material.MaterialFullScreenDialogFragment
+import org.odk.collect.projects.Project
+import org.odk.collect.projects.ProjectsRepository
 import javax.inject.Inject
 
 class AddProjectDialog : MaterialFullScreenDialogFragment() {

@@ -8,9 +8,9 @@ import org.junit.rules.RuleChain
 import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.projects.Project
 import org.odk.collect.android.support.CollectTestRule
 import org.odk.collect.android.support.TestRuleChain
+import org.odk.collect.projects.Project
 
 class SwitchProjectTest {
 

@@ -1,4 +1,4 @@
-package org.odk.collect.android.projects
+package org.odk.collect.projects
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`

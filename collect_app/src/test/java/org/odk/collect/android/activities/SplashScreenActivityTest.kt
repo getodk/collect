@@ -23,12 +23,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.doReturn
 import org.mockito.Mockito.mock
-import org.mockito.Mockito.spy
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
 import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.preferences.source.Settings
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.support.RobolectricHelpers
 
@@ -42,7 +40,7 @@ class SplashScreenActivityTest {
     fun setup() {
         Dispatchers.setMain(testDispatcher)
 
-        splashScreenViewModel = spy(SplashScreenViewModel(mock(Settings::class.java), mock(Settings::class.java)))
+        splashScreenViewModel = mock(SplashScreenViewModel::class.java)
 
         RobolectricHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesSplashScreenViewModel(settingsProvider: SettingsProvider): SplashScreenViewModel.Factory {

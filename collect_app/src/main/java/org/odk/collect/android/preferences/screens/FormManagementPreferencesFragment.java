@@ -28,7 +28,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.backgroundwork.FormUpdateManager;
-import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.Protocol;
 
 import javax.inject.Inject;

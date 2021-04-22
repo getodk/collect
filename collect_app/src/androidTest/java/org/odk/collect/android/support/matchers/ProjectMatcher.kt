@@ -8,7 +8,7 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.`is`
 import org.odk.collect.android.R
-import org.odk.collect.android.projects.Project
+import org.odk.collect.projects.Project
 
 object ProjectMatcher {
     @JvmStatic

@@ -26,7 +26,7 @@ import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.shared.Settings;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ApplicationResetter;

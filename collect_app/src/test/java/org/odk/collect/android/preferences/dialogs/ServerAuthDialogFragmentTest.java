@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.shared.Settings;
 import org.odk.collect.android.support.RobolectricHelpers;
 
 import static org.hamcrest.MatcherAssert.assertThat;

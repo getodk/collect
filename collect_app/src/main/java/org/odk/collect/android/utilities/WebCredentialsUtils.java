@@ -8,7 +8,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.HttpCredentials;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.shared.Settings;
 
 import java.net.URI;
 import java.util.HashMap;

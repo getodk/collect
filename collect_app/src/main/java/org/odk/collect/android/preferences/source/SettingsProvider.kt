@@ -5,6 +5,7 @@ import androidx.preference.PreferenceManager
 import org.odk.collect.android.preferences.keys.AdminKeys
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.keys.MetaKeys.CURRENT_PROJECT_ID
+import org.odk.collect.shared.Settings
 
 class SettingsProvider(private val context: Context) {
     fun getMetaSettings() = settings.getOrPut(META_SETTINGS_NAME) {

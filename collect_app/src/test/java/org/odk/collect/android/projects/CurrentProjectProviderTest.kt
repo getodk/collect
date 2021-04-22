@@ -11,6 +11,8 @@ import org.mockito.Mockito.verify
 import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.preferences.source.SharedPreferencesSettings
+import org.odk.collect.projects.Project
+import org.odk.collect.projects.ProjectsRepository
 
 class CurrentProjectProviderTest {
 

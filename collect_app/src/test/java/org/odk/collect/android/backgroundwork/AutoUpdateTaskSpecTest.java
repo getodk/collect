@@ -20,7 +20,7 @@ import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.BooleanChangeLock;

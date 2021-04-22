@@ -28,10 +28,10 @@ import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.ProjectImporter
-import org.odk.collect.android.projects.ProjectsRepository
 import org.odk.collect.android.support.RobolectricHelpers
 import org.odk.collect.android.utilities.TranslationHandler.getString
 import org.odk.collect.android.version.VersionInformation
+import org.odk.collect.projects.ProjectsRepository
 
 @RunWith(AndroidJUnit4::class)
 class FirstLaunchDialogTest {

@@ -12,7 +12,7 @@ import org.odk.collect.android.R;
 
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.preferences.keys.AdminKeys;
-import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.shared.Settings;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;

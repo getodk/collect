@@ -1,6 +1,6 @@
 package org.odk.collect.android.application.initialization.migration;
 
-import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.shared.Settings;
 
 import static org.odk.collect.android.application.initialization.migration.MigrationUtils.replace;
 

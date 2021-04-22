@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.keys.MetaKeys
-import org.odk.collect.android.preferences.source.Settings
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.ScreenUtils
+import org.odk.collect.shared.Settings
 import java.io.File
 
 class SplashScreenViewModel(

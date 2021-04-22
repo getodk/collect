@@ -22,7 +22,7 @@ import androidx.preference.PreferenceGroup;
 
 import org.odk.collect.android.preferences.keys.AdminAndGeneralKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.shared.Settings;
 
 import timber.log.Timber;
 

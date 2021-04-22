@@ -14,7 +14,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.ServerAuthDialogBinding;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 
 import javax.inject.Inject;

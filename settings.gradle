@@ -1,3 +1,4 @@
+include ':projects'
 include ':formstest'
 include ':shared'
 include ':forms'

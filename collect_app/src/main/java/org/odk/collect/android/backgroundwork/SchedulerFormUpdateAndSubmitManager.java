@@ -2,7 +2,7 @@ package org.odk.collect.android.backgroundwork;
 
 import android.app.Application;
 
-import org.odk.collect.android.preferences.source.Settings;
+import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.Protocol;
 import org.odk.collect.async.Scheduler;
 
