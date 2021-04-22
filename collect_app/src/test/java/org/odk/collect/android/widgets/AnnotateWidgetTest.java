@@ -42,7 +42,6 @@ import static org.robolectric.Shadows.shadowOf;
  */
 public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
 
-    private static final String ANSWER_TEXT = "jr://images/someURI";
     private File currentFile;
 
     @Mock
@@ -58,7 +57,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
                 if (currentFile == null) {
                     result = super.getAnswerFile(fileName);
                 } else {
-                    result = fileName.equals(ANSWER_TEXT) ? currentFile : null;
+                    result = fileName.equals(DrawWidgetTest.USER_SPECIFIED_IMAGE_ANSWER) ? currentFile : null;
                 }
                 return result;
             }
@@ -127,11 +126,11 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     public void whenPromptHasDefaultAnswer_showsInImageView() throws Exception {
         String imagePath = File.createTempFile("default", ".bmp").getAbsolutePath();
         overrideReferenceManager(setupFakeReferenceManager(singletonList(
-                new Pair<>(ANSWER_TEXT, imagePath)
+                new Pair<>(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, imagePath)
         )));
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(ANSWER_TEXT)
+                .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
                 .build();
 
         AnnotateWidget widget = createWidget();
@@ -150,7 +149,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
         currentFile = new File(imagePath);
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(ANSWER_TEXT)
+                .withAnswerDisplayText(DrawWidgetTest.USER_SPECIFIED_IMAGE_ANSWER)
                 .build();
 
         AnnotateWidget widget = createWidget();
@@ -165,13 +164,19 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
 
     @Test
     public void markupButtonShouldBeDisabledIfImageAbsent() throws Exception {
-        String wrongDefaultPath = "wrong_path";
+        String badPath = "bad_path";
         overrideReferenceManager(setupFakeReferenceManager(singletonList(
-                new Pair<>(ANSWER_TEXT, wrongDefaultPath)
+                new Pair<>(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, badPath)
         )));
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(ANSWER_TEXT)
+                .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
+                .build();
+
+        assertThat(getWidget().annotateButton.isEnabled(), is(false));
+
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withAnswerDisplayText(DrawWidgetTest.USER_SPECIFIED_IMAGE_ANSWER)
                 .build();
 
         assertThat(getWidget().annotateButton.isEnabled(), is(false));
