@@ -9,6 +9,8 @@ ODK Collect is an Android app for filling out forms. It is designed to be used i
 
 ODK Collect renders forms that are compliant with the [ODK XForms standard](https://getodk.github.io/xforms-spec/), a subset of the [XForms 1.1 standard](https://www.w3.org/TR/xforms/) with some extensions. The form parsing is done by the [JavaRosa library](https://github.com/getodk/javarosa) which Collect includes as a dependency.
 
+Please note that the `master` branch reflects ongoing development and is not production-ready.
+
 ## Table of Contents
 * [Learn more about ODK Collect](#learn-more-about-odk-collect)
 * [Release cycle](#release-cycle)
