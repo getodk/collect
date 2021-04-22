@@ -89,6 +89,9 @@ jobs:
       - run:
           name: Run audiorecorder unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 audiorecorder:testDebug
+      - run:
+          name: Run projects unit tests
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 projects:test
 
       - save_cache:
           paths:
