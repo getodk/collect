@@ -42,8 +42,10 @@ import static org.robolectric.Shadows.shadowOf;
 @RunWith(RobolectricTestRunner.class)
 public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
 
-    private static final String DEFAULT_IMAGE_ANSWER = "jr://images/someURI";
-    private static final String USER_SPECIFIED_IMAGE_ANSWER = "current.bmp";
+    //Package visibility for sharing with related tests
+    static final String DEFAULT_IMAGE_ANSWER = "jr://images/referenceURI";
+    static final String USER_SPECIFIED_IMAGE_ANSWER = "current.bmp";
+
     private File currentFile;
 
     @NonNull
