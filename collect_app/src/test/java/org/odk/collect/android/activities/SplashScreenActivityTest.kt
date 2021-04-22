@@ -8,11 +8,10 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.CoreMatchers.nullValue
+import org.hamcrest.Matchers.notNullValue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -20,17 +19,16 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito.doReturn
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
-import org.odk.collect.android.rules.MainCoroutineScopeRule
-import org.mockito.Mockito.spy
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
 import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.ProjectImporter
+import org.odk.collect.android.rules.MainCoroutineScopeRule
 import org.odk.collect.android.support.RobolectricHelpers
-import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.android.utilities.AppStateProvider
+import org.odk.collect.projects.ProjectsRepository
 
 @RunWith(AndroidJUnit4::class)
 class SplashScreenActivityTest {
@@ -45,7 +43,7 @@ class SplashScreenActivityTest {
 
         RobolectricHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesSplashScreenViewModel(settingsProvider: SettingsProvider, projectsRepository: ProjectsRepository, projectImporter: ProjectImporter, appStateProvider: AppStateProvider): SplashScreenViewModel.Factory {
-                return object : SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), settingsProvider.getMetaSettings(), projectsRepository, projectImporter, appStateProvider) {
+                return object : SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), projectsRepository, projectImporter, appStateProvider) {
                     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                         return splashScreenViewModel as T
                     }
@@ -110,7 +108,6 @@ class SplashScreenActivityTest {
         }
     }
 
-    @ExperimentalCoroutinesApi
     @Test
     fun `The main menu should be displayed automatically after 2s if the Splash screen is enabled and the app is not newly installed`() = coroutineScope.runBlockingTest {
         doReturn(false).`when`(splashScreenViewModel).isFirstLaunch

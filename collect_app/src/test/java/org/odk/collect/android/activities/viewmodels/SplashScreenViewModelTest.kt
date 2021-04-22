@@ -11,12 +11,11 @@ import org.mockito.Mockito.verifyNoInteractions
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.source.SharedPreferencesSettings
 import org.odk.collect.android.projects.ProjectImporter
-import org.odk.collect.android.projects.ProjectsRepository
 import org.odk.collect.android.utilities.AppStateProvider
+import org.odk.collect.projects.ProjectsRepository
 
 class SplashScreenViewModelTest {
     private lateinit var generalSettings: SharedPreferencesSettings
-    private lateinit var metaSettings: SharedPreferencesSettings
     private lateinit var projectsRepository: ProjectsRepository
     private lateinit var projectImporter: ProjectImporter
     private lateinit var appStateProvider: AppStateProvider
@@ -25,11 +24,10 @@ class SplashScreenViewModelTest {
     @Before
     fun setup() {
         generalSettings = mock(SharedPreferencesSettings::class.java)
-        metaSettings = mock(SharedPreferencesSettings::class.java)
         projectsRepository = mock(ProjectsRepository::class.java)
         projectImporter = mock(ProjectImporter::class.java)
         appStateProvider = mock(AppStateProvider::class.java)
-        splashScreenViewModel = SplashScreenViewModel(generalSettings, metaSettings, projectsRepository, projectImporter, appStateProvider)
+        splashScreenViewModel = SplashScreenViewModel(generalSettings, projectsRepository, projectImporter, appStateProvider)
     }
 
     @Test

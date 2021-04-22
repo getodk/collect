@@ -14,7 +14,6 @@ import java.io.File
 
 class SplashScreenViewModel(
     private val generalSettings: Settings,
-    private val metaSettings: Settings,
     private val projectsRepository: ProjectsRepository,
     private val projectImporter: ProjectImporter,
     private val appStateProvider: AppStateProvider
@@ -43,13 +42,12 @@ class SplashScreenViewModel(
 
     open class Factory constructor(
         private val generalSettings: Settings,
-        private val metaSettings: Settings,
         private val projectsRepository: ProjectsRepository,
         private val projectImporter: ProjectImporter,
         private val appStateProvider: AppStateProvider
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return SplashScreenViewModel(generalSettings, metaSettings, projectsRepository, projectImporter, appStateProvider) as T
+            return SplashScreenViewModel(generalSettings, projectsRepository, projectImporter, appStateProvider) as T
         }
     }
 }

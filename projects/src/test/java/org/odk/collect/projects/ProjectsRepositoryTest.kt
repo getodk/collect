@@ -6,7 +6,6 @@ import org.hamcrest.Matchers.isEmptyString
 import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Test
-import org.odk.collect.android.projects.ProjectImporter.Companion.DEMO_PROJECT_ID
 
 abstract class ProjectsRepositoryTest {
     private val projectX = Project("ProjectX", "X", "#FF0000")
@@ -54,8 +53,8 @@ abstract class ProjectsRepositoryTest {
 
     @Test
     fun `add() should not add uuid if specified`() {
-        projectsRepository.add(projectX.copy(uuid = DEMO_PROJECT_ID))
-        assertThat(projectsRepository.get(""), `is`(projectX.copy(uuid = DEMO_PROJECT_ID)))
+        projectsRepository.add(projectX.copy(uuid = ""))
+        assertThat(projectsRepository.get(""), `is`(projectX.copy(uuid = "")))
     }
 
     @Test
