@@ -37,6 +37,7 @@ import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveAnswerFileErrorDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
+import org.odk.collect.android.formmanagement.InstancesCountRepository;
 import org.odk.collect.android.fragments.AppListFragment;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
 import org.odk.collect.android.fragments.BlankFormListFragment;
@@ -284,6 +285,8 @@ public interface AppDependencyComponent {
     ProjectsRepository projectsRepository();
 
     CurrentProjectProvider currentProjectProvider();
+
+    InstancesCountRepository instancesCountRepository();
 
     ProjectImporter projectImporter();
 }

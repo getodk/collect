@@ -2,6 +2,8 @@ package org.odk.collect.android.formmanagement
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import org.odk.collect.android.application.Collect
+import org.odk.collect.android.provider.InstanceProviderAPI
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
@@ -33,5 +35,7 @@ class InstancesCountRepository {
         _finalized.postValue(finalizedInstances)
         _sent.postValue(sentInstances)
         _unsent.postValue(unsentInstances)
+
+        Collect.getInstance().contentResolver.notifyChange(InstanceProviderAPI.CONTENT_URI, null)
     }
 }
