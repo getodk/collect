@@ -78,6 +78,12 @@ public class Collect extends Application implements
     private AudioRecorderDependencyComponent audioRecorderDependencyComponent;
     private ProjectsDependencyComponent projectsDependencyComponent;
 
+    /**
+     * @deprecated we shouldn't have to reference a static singleton of the application. Code doing this
+     * should either have a {@link Context} instance passed to it (or have any references removed if
+     * possible).
+     */
+    @Deprecated
     public static Collect getInstance() {
         return singleton;
     }
