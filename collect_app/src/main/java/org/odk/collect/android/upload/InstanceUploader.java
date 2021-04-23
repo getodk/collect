@@ -22,11 +22,25 @@ import org.odk.collect.android.formmanagement.InstancesAppState;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public abstract class InstanceUploader {
+
+    @Inject
+    InstancesRepositoryProvider instancesRepositoryProvider;
+
+    @Inject
+    InstancesAppState instancesAppState;
+
+    public InstanceUploader() {
+        DaggerUtils.getComponent(Collect.getInstance()).inject(this);
+    }
+
     public static final String FAIL = "Error: ";
 
     /**
@@ -55,19 +69,20 @@ public abstract class InstanceUploader {
     }
 
     public void submissionComplete(Instance instance, boolean successful) {
+        InstancesRepository instancesRepository = instancesRepositoryProvider.get();
+
         if (successful) {
-            new InstancesRepositoryProvider().get().save(new Instance.Builder(instance)
+            instancesRepository.save(new Instance.Builder(instance)
                     .status(Instance.STATUS_SUBMITTED)
                     .build()
             );
         } else {
-            new InstancesRepositoryProvider().get().save(new Instance.Builder(instance)
+            instancesRepository.save(new Instance.Builder(instance)
                     .status(Instance.STATUS_SUBMISSION_FAILED)
                     .build()
             );
         }
 
-        InstancesAppState instancesAppState = DaggerUtils.getComponent(Collect.getInstance()).instancesAppState();
         instancesAppState.update();
     }
 }
