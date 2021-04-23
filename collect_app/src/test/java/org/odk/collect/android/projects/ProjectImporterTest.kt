@@ -28,4 +28,11 @@ class ProjectImporterTest {
         verify(projectsRepository).add(Project("Demo project", "D", "#3e9fcc", DEMO_PROJECT_ID))
         verify(metaSettings).save(MetaKeys.CURRENT_PROJECT_ID, DEMO_PROJECT_ID)
     }
+
+    @Test
+    fun `Existed project should be imported when importExistingProject() called`() {
+        projectImporter.importExistingProject()
+        verify(projectsRepository).add(Project("Demo project", "D", "#3e9fcc", DEMO_PROJECT_ID))
+        verify(metaSettings).save(MetaKeys.CURRENT_PROJECT_ID, DEMO_PROJECT_ID)
+    }
 }

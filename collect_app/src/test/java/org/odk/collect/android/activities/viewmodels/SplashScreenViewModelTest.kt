@@ -4,23 +4,22 @@ import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito
 import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.mock
 import org.odk.collect.android.preferences.keys.GeneralKeys
-import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.android.preferences.source.SharedPreferencesSettings
+import org.odk.collect.android.utilities.AppStateProvider
 
 class SplashScreenViewModelTest {
     private lateinit var generalSettings: SharedPreferencesSettings
-    private lateinit var metaSettings: SharedPreferencesSettings
+    private lateinit var appStateProvider: AppStateProvider
     private lateinit var splashScreenViewModel: SplashScreenViewModel
 
     @Before
     fun setup() {
-        generalSettings = Mockito.mock(SharedPreferencesSettings::class.java)
-        metaSettings = Mockito.mock(SharedPreferencesSettings::class.java)
-        splashScreenViewModel = SplashScreenViewModel(generalSettings, metaSettings)
+        generalSettings = mock(SharedPreferencesSettings::class.java)
+        appStateProvider = mock(AppStateProvider::class.java)
+        splashScreenViewModel = SplashScreenViewModel(generalSettings, appStateProvider)
     }
 
     @Test
@@ -47,14 +46,14 @@ class SplashScreenViewModelTest {
     }
 
     @Test
-    fun `shouldFirstLaunchDialogBeDisplayed() should return true if the app is newly installed`() {
-        assertThat(splashScreenViewModel.shouldFirstLaunchDialogBeDisplayed(), `is`(true))
-        verify(metaSettings).save(MetaKeys.KEY_FIRST_LAUNCH, false)
+    fun `isFirstLaunch should return true if the app is newly installed`() {
+        `when`(appStateProvider.isFreshInstall()).thenReturn(true)
+        assertThat(splashScreenViewModel.isFirstLaunch, `is`(true))
     }
 
     @Test
-    fun `shouldFirstLaunchDialogBeDisplayed() should return false if the app is not newly installed`() {
-        `when`(metaSettings.contains(MetaKeys.KEY_FIRST_LAUNCH)).thenReturn(true)
-        assertThat(splashScreenViewModel.shouldFirstLaunchDialogBeDisplayed(), `is`(false))
+    fun `isFirstLaunch should return false if the app is not newly installed`() {
+        `when`(appStateProvider.isFreshInstall()).thenReturn(false)
+        assertThat(splashScreenViewModel.isFirstLaunch, `is`(false))
     }
 }

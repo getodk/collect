@@ -97,6 +97,7 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
+import org.odk.collect.android.utilities.AppStateProvider;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
@@ -307,12 +308,16 @@ public class AppDependencyModule {
         return new CoroutineAndWorkManagerScheduler(workManager);
     }
 
+    @SuppressWarnings("PMD.ExcessiveParameterList")
     @Singleton
     @Provides
     public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider,
                                                                  SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager,
-                                                                 Analytics analytics, StorageInitializer storageInitializer, SettingsProvider settingsProvider) {
-        return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator, propertyManager, analytics, storageInitializer, settingsProvider);
+                                                                 Analytics analytics, StorageInitializer storageInitializer, SettingsProvider settingsProvider,
+                                                                 ProjectsRepository projectsRepository, AppStateProvider appStateProvider, ProjectImporter projectImporter) {
+        return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator,
+                propertyManager, analytics, storageInitializer, settingsProvider.getGeneralSettings(),
+                settingsProvider.getAdminSettings(), projectsRepository, appStateProvider, projectImporter);
     }
 
     @Provides
@@ -554,12 +559,17 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SplashScreenViewModel.Factory providesSplashScreenViewModel(SettingsProvider settingsProvider) {
-        return new SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), settingsProvider.getMetaSettings());
+    public SplashScreenViewModel.Factory providesSplashScreenViewModel(SettingsProvider settingsProvider, AppStateProvider appStateProvider) {
+        return new SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), appStateProvider);
     }
 
     @Provides
     public ProjectImporter providesProjectImporter(ProjectsRepository projectsRepository, SettingsProvider settingsProvider) {
         return new ProjectImporter(projectsRepository, settingsProvider.getMetaSettings());
+    }
+
+    @Provides
+    public AppStateProvider providesAppStateProvider(Context context) {
+        return new AppStateProvider(context);
     }
 }

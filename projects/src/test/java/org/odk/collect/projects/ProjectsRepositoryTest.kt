@@ -53,8 +53,8 @@ abstract class ProjectsRepositoryTest {
 
     @Test
     fun `add() should not add uuid if specified`() {
-        projectsRepository.add(projectX.copy(uuid = "1"))
-        assertThat(projectsRepository.get("1"), `is`(projectX.copy(uuid = "1")))
+        projectsRepository.add(projectX.copy(uuid = ""))
+        assertThat(projectsRepository.get(""), `is`(projectX.copy(uuid = "")))
     }
 
     @Test

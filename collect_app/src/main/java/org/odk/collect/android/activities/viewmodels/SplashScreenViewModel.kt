@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.preferences.keys.GeneralKeys
-import org.odk.collect.android.preferences.keys.MetaKeys
+import org.odk.collect.android.utilities.AppStateProvider
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.ScreenUtils
 import org.odk.collect.shared.Settings
@@ -12,7 +12,7 @@ import java.io.File
 
 class SplashScreenViewModel(
     private val generalSettings: Settings,
-    private val metaSettings: Settings,
+    private val appStateProvider: AppStateProvider
 ) : ViewModel() {
 
     val shouldDisplaySplashScreen
@@ -27,15 +27,15 @@ class SplashScreenViewModel(
     val doesLogoFileExist
         get() = splashScreenLogoFile.exists()
 
-    fun shouldFirstLaunchDialogBeDisplayed(): Boolean {
-        val isFirstLaunch = !metaSettings.contains(MetaKeys.KEY_FIRST_LAUNCH)
-        metaSettings.save(MetaKeys.KEY_FIRST_LAUNCH, false)
-        return isFirstLaunch
-    }
+    val isFirstLaunch
+        get() = appStateProvider.isFreshInstall()
 
-    open class Factory constructor(private val generalSettings: Settings, private val metaSettings: Settings) : ViewModelProvider.Factory {
+    open class Factory constructor(
+        private val generalSettings: Settings,
+        private val appStateProvider: AppStateProvider
+    ) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return SplashScreenViewModel(generalSettings, metaSettings) as T
+            return SplashScreenViewModel(generalSettings, appStateProvider) as T
         }
     }
 }
