@@ -14,7 +14,7 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.backgroundwork.ChangeLock;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
-import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
+import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.FormUpdateMode;
@@ -38,14 +38,14 @@ public class BlankFormsListViewModel extends ViewModel {
 
     private final Application application;
     private final Scheduler scheduler;
-    private final SyncStatusRepository syncRepository;
+    private final SyncStatusAppState syncRepository;
     private final ServerFormsSynchronizer serverFormsSynchronizer;
     private final Settings generalSettings;
     private final Notifier notifier;
     private final ChangeLock changeLock;
     private final Analytics analytics;
 
-    public BlankFormsListViewModel(Application application, Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, SettingsProvider settingsProvider, Notifier notifier, ChangeLock changeLock, Analytics analytics) {
+    public BlankFormsListViewModel(Application application, Scheduler scheduler, SyncStatusAppState syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, SettingsProvider settingsProvider, Notifier notifier, ChangeLock changeLock, Analytics analytics) {
         this.application = application;
         this.scheduler = scheduler;
         this.syncRepository = syncRepository;
@@ -130,7 +130,7 @@ public class BlankFormsListViewModel extends ViewModel {
 
         private final Application application;
         private final Scheduler scheduler;
-        private final SyncStatusRepository syncRepository;
+        private final SyncStatusAppState syncRepository;
         private final ServerFormsSynchronizer serverFormsSynchronizer;
         private final SettingsProvider settingsProvider;
         private final Notifier notifier;
@@ -138,7 +138,7 @@ public class BlankFormsListViewModel extends ViewModel {
         private final Analytics analytics;
 
         @Inject
-        public Factory(Application application, Scheduler scheduler, SyncStatusRepository syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, SettingsProvider settingsProvider, Notifier notifier, @Named("FORMS") ChangeLock changeLock, Analytics analytics) {
+        public Factory(Application application, Scheduler scheduler, SyncStatusAppState syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, SettingsProvider settingsProvider, Notifier notifier, @Named("FORMS") ChangeLock changeLock, Analytics analytics) {
             this.application = application;
             this.scheduler = scheduler;
             this.syncRepository = syncRepository;

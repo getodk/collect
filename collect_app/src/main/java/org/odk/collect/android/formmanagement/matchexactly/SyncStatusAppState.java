@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import org.odk.collect.forms.FormSourceException;
 
-public class SyncStatusRepository {
+public class SyncStatusAppState {
 
     private final MutableLiveData<Boolean> syncing = new MutableLiveData<>(false);
     private final MutableLiveData<FormSourceException> lastSyncFailure = new MutableLiveData<>(null);

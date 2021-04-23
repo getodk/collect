@@ -65,7 +65,7 @@ import org.odk.collect.android.formmanagement.InstancesAppState;
 import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
-import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
+import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
 import org.odk.collect.android.gdrive.GoogleAccountCredentialGoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
@@ -385,8 +385,8 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public SyncStatusRepository providesServerFormSyncRepository() {
-        return new SyncStatusRepository();
+    public SyncStatusAppState providesServerFormSyncRepository() {
+        return new SyncStatusAppState();
     }
 
     @Provides
