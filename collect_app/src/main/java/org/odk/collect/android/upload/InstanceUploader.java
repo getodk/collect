@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.formmanagement.InstancesCountRepository;
+import org.odk.collect.android.formmanagement.InstancesAppState;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.instances.Instance;
@@ -67,7 +67,7 @@ public abstract class InstanceUploader {
             );
         }
 
-        InstancesCountRepository instancesCountRepository = DaggerUtils.getComponent(Collect.getInstance()).instancesCountRepository();
-        instancesCountRepository.update();
+        InstancesAppState instancesAppState = DaggerUtils.getComponent(Collect.getInstance()).instancesAppState();
+        instancesAppState.update();
     }
 }

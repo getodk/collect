@@ -1,8 +1,8 @@
 package org.odk.collect.android.formmanagement
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import org.odk.collect.android.application.Collect
 import org.odk.collect.android.provider.InstanceProviderAPI
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.forms.instances.Instance
@@ -10,21 +10,20 @@ import org.odk.collect.forms.instances.InstancesRepository
 import javax.inject.Singleton
 
 /**
- * Stores reactive state of current instances count with various different statuses. This (as a
- * singleton) can be read or updated by different parts of the app without needing reactive data
- * in the [InstancesRepository].
+ * Stores reactive state of instances. This (as a singleton) can be read or updated by
+ * different parts of the app without needing reactive data in the [InstancesRepository].
  */
 @Singleton
-class InstancesCountRepository {
+class InstancesAppState(private val context: Context) {
 
     private val _unsent = MutableLiveData(0)
-    val unsent: LiveData<Int> = _unsent
+    val unsentCount: LiveData<Int> = _unsent
 
     private val _finalized = MutableLiveData(0)
-    val finalized: LiveData<Int> = _finalized
+    val finalizedCount: LiveData<Int> = _finalized
 
     private val _sent = MutableLiveData(0)
-    val sent: LiveData<Int> = _sent
+    val sentCount: LiveData<Int> = _sent
 
     fun update() {
         val instancesRepository: InstancesRepository = InstancesRepositoryProvider().get()
@@ -36,6 +35,6 @@ class InstancesCountRepository {
         _sent.postValue(sentInstances)
         _unsent.postValue(unsentInstances)
 
-        Collect.getInstance().contentResolver.notifyChange(InstanceProviderAPI.CONTENT_URI, null)
+        context.contentResolver.notifyChange(InstanceProviderAPI.CONTENT_URI, null)
     }
 }
