@@ -1,13 +1,16 @@
 package org.odk.collect.android.support.pages
 
-import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.rule.ActivityTestRule
+import org.hamcrest.Matchers.allOf
 import org.odk.collect.android.R
-import org.odk.collect.android.support.matchers.ProjectMatcher.withProject
-import org.odk.collect.projects.Project
 
 internal class ProjectSettingsDialogPage(rule: ActivityTestRule<*>) : Page<ProjectSettingsDialogPage>(rule) {
     override fun assertOnPage(): ProjectSettingsDialogPage {
@@ -38,17 +41,17 @@ internal class ProjectSettingsDialogPage(rule: ActivityTestRule<*>) : Page<Proje
     }
 
     fun clickAddProject(): AddProjectDialogPage {
-        Espresso.onView(withId(R.id.add_project_button)).perform(ViewActions.click())
+        onView(withId(R.id.add_project_button)).perform(ViewActions.click())
         return AddProjectDialogPage(rule).assertOnPage()
     }
 
-    fun assertCurrentProject(project: Project): ProjectSettingsDialogPage {
-        Espresso.onView(withId(R.id.current_project)).check(matches(withProject(project)))
+    fun assertCurrentProject(name: String): ProjectSettingsDialogPage {
+        onView(allOf(hasDescendant(withText(name)), withContentDescription(getTranslatedString(R.string.using_project, name)))).check(matches(isDisplayed()))
         return this
     }
 
-    fun assertInactiveProject(project: Project): ProjectSettingsDialogPage {
-        Espresso.onView(withId(R.id.project_item)).check(matches(withProject(project)))
+    fun assertInactiveProject(name: String): ProjectSettingsDialogPage {
+        onView(allOf(hasDescendant(withText(name)), withContentDescription(getTranslatedString(R.string.switch_to_project, name)))).check(matches(isDisplayed()))
         return this
     }
 }

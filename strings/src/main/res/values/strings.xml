@@ -996,4 +996,6 @@
     <string name="configure_with_qr_code">Configure with QR code</string>
     <string name="configure_manually">Manually enter project details</string>
     <string name="configure_later">Try Collect and configure later</string>
+    <string name="using_project">Using %s</string>
+    <string name="switch_to_project">Switch to %s</string>
 </resources>

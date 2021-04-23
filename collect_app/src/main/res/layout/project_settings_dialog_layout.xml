@@ -24,8 +24,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_standard"
-        android:src="@drawable/ic_close"
         android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_close"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,30 +40,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/close_icon" />
 
-    <include
+    <org.odk.collect.android.projects.ProjectListItemView
         android:id="@+id/current_project"
-        layout="@layout/project_list_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_standard"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@+id/close_icon"/>
+        app:layout_constraintTop_toBottomOf="@+id/close_icon" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/general_settings_button"
+        style="@style/Widget.Collect.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Widget.Collect.Button.OutlinedButton"
         android:layout_marginTop="@dimen/margin_small"
         android:text="@string/general_preferences"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@+id/current_project"/>
+        app:layout_constraintTop_toBottomOf="@+id/current_project" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/admin_settings_button"
+        style="@style/Widget.Collect.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Widget.Collect.Button.OutlinedButton"
         android:text="@string/admin_preferences"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/general_settings_button" />
@@ -73,8 +72,8 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/margin_small"
-        android:background="?colorOnSurface"
         android:alpha="0.2"
+        android:background="?colorOnSurface"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/admin_settings_button" />
@@ -84,8 +83,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/top_divider" />
 
     <View
@@ -93,8 +92,8 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/margin_small"
-        android:background="?colorOnSurface"
         android:alpha="0.2"
+        android:background="?colorOnSurface"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/project_list" />

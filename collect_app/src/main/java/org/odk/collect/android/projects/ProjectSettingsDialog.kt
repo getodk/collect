@@ -4,14 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.AboutActivity
@@ -55,7 +53,7 @@ class ProjectSettingsDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupCurrentProjectView()
-        inflateListOfInActiveProjects()
+        inflateListOfInActiveProjects(view.context)
 
         binding.closeIcon.setOnClickListener {
             dismiss()
@@ -89,7 +87,7 @@ class ProjectSettingsDialog : DialogFragment() {
         }
     }
 
-    private fun inflateListOfInActiveProjects() {
+    private fun inflateListOfInActiveProjects(context: Context) {
         if (projectsRepository.getAll().none { it.uuid != currentProjectProvider.getCurrentProjectId() }) {
             binding.topDivider.visibility = GONE
         } else {
@@ -99,22 +97,14 @@ class ProjectSettingsDialog : DialogFragment() {
         projectsRepository.getAll().filter {
             it.uuid != currentProjectProvider.getCurrentProjectId()
         }.forEach { project ->
-            val projectView = LayoutInflater.from(context).inflate(R.layout.project_list_item, null)
+            val projectView = ProjectListItemView(context)
 
             projectView.setOnClickListener {
                 switchProject(project)
             }
 
-            projectView.findViewById<TextView>(R.id.project_icon).apply {
-                try {
-                    (background as GradientDrawable).setColor(Color.parseColor(project.color))
-                } catch (e: Exception) {
-                    // ignore
-                }
-                text = project.icon
-            }
-            projectView.findViewById<TextView>(R.id.project_name).text = project.name
-
+            projectView.project = project
+            projectView.contentDescription = getString(R.string.switch_to_project, project.name)
             binding.projectList.addView(projectView)
         }
     }
@@ -128,14 +118,7 @@ class ProjectSettingsDialog : DialogFragment() {
     private fun setupCurrentProjectView() {
         val currentProject = currentProjectProvider.getCurrentProject() ?: return
 
-        binding.currentProject.projectIcon.apply {
-            try {
-                (background as GradientDrawable).setColor(Color.parseColor(currentProject.color))
-            } catch (e: Exception) {
-                // ignore
-            }
-            text = currentProject.icon
-        }
-        binding.currentProject.projectName.text = currentProject.name
+        binding.currentProject.project = currentProject
+        binding.currentProject.contentDescription = getString(R.string.using_project, currentProject.name)
     }
 }
