@@ -15,12 +15,15 @@
 package org.odk.collect.android.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
@@ -208,6 +211,19 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         viewSentFormsButton.setVisibility(viewModel.shouldViewSentFormButtonBeVisible() ? View.VISIBLE : View.GONE);
         getFormsButton.setVisibility(viewModel.shouldGetBlankFormButtonBeVisible() ? View.VISIBLE : View.GONE);
         manageFilesButton.setVisibility(viewModel.shouldDeleteSavedFormButtonBeVisible() ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        final MenuItem projectsMenuItem = menu.findItem(R.id.projects);
+        FrameLayout rootView = (FrameLayout) projectsMenuItem.getActionView();
+        rootView.setOnClickListener(v -> onOptionsItemSelected(projectsMenuItem));
+
+        TextView projectIcon = rootView.findViewById(R.id.project_icon);
+        ((GradientDrawable) projectIcon.getBackground()).setColor(Color.parseColor(viewModel.getCurrentProject().getColor()));
+        projectIcon.setText(viewModel.getCurrentProject().getIcon());
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override

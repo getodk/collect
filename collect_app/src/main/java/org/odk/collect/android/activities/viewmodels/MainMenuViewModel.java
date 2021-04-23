@@ -13,6 +13,8 @@ import org.odk.collect.android.configure.SettingsUtils;
 import org.odk.collect.android.formmanagement.InstancesCountRepository;
 import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.AdminKeys;
+import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.projects.Project;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.version.VersionInformation;
@@ -26,13 +28,17 @@ public class MainMenuViewModel extends ViewModel {
     private final Settings adminSettings;
     private final InstancesCountRepository instancesCountRepository;
     private final Application application;
+    private final CurrentProjectProvider currentProjectProvider;
 
-    public MainMenuViewModel(Application application, VersionInformation versionInformation, SettingsProvider settingsProvider, InstancesCountRepository instancesCountRepository) {
+    public MainMenuViewModel(Application application, VersionInformation versionInformation,
+                             SettingsProvider settingsProvider, InstancesCountRepository instancesCountRepository,
+                             CurrentProjectProvider currentProjectProvider) {
         this.application = application;
         this.version = versionInformation;
         this.generalSettings = settingsProvider.getGeneralSettings();
         this.adminSettings = settingsProvider.getAdminSettings();
         this.instancesCountRepository = instancesCountRepository;
+        this.currentProjectProvider = currentProjectProvider;
     }
 
     public String getVersion() {
@@ -113,25 +119,33 @@ public class MainMenuViewModel extends ViewModel {
         instancesCountRepository.update();
     }
 
+    public Project getCurrentProject() {
+        return currentProjectProvider.getCurrentProject();
+    }
+
     public static class Factory implements ViewModelProvider.Factory {
 
         private final VersionInformation versionInformation;
         private final Application application;
         private final SettingsProvider settingsProvider;
         private final InstancesCountRepository instancesCountRepository;
+        private final CurrentProjectProvider currentProjectProvider;
 
         @Inject
-        public Factory(VersionInformation versionInformation, Application application, SettingsProvider settingsProvider, InstancesCountRepository instancesCountRepository) {
+        public Factory(VersionInformation versionInformation, Application application,
+                       SettingsProvider settingsProvider, InstancesCountRepository instancesCountRepository,
+                       CurrentProjectProvider currentProjectProvider) {
             this.versionInformation = versionInformation;
             this.application = application;
             this.settingsProvider = settingsProvider;
             this.instancesCountRepository = instancesCountRepository;
+            this.currentProjectProvider = currentProjectProvider;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new MainMenuViewModel(application, versionInformation, settingsProvider, instancesCountRepository);
+            return (T) new MainMenuViewModel(application, versionInformation, settingsProvider, instancesCountRepository, currentProjectProvider);
         }
     }
 }
