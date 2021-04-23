@@ -17,8 +17,10 @@ package org.odk.collect.android.upload;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.forms.instances.Instance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,17 +53,19 @@ public abstract class InstanceUploader {
         return instances;
     }
 
-    public void saveSuccessStatusToDatabase(Instance instance) {
-        new InstancesRepositoryProvider().get().save(new Instance.Builder(instance)
-                .status(Instance.STATUS_SUBMITTED)
-                .build()
-        );
-    }
+    public void submissionComplete(Instance instance, boolean successful) {
+        if (successful) {
+            new InstancesRepositoryProvider().get().save(new Instance.Builder(instance)
+                    .status(Instance.STATUS_SUBMITTED)
+                    .build()
+            );
+        } else {
+            new InstancesRepositoryProvider().get().save(new Instance.Builder(instance)
+                    .status(Instance.STATUS_SUBMISSION_FAILED)
+                    .build()
+            );
+        }
 
-    public void saveFailedStatusToDatabase(Instance instance) {
-        new InstancesRepositoryProvider().get().save(new Instance.Builder(instance)
-                .status(Instance.STATUS_SUBMISSION_FAILED)
-                .build()
-        );
+        Collect.getInstance().getContentResolver().notifyChange(InstanceProviderAPI.CONTENT_URI, null);
     }
 }
