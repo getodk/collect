@@ -38,9 +38,15 @@ class ProjectSettingsDialog : DialogFragment() {
 
     private lateinit var binding: ProjectSettingsDialogLayoutBinding
 
+    private lateinit var listener: ProjectSettingsDialogListener
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
+
+        if (context is ProjectSettingsDialogListener) {
+            listener = context
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -112,6 +118,7 @@ class ProjectSettingsDialog : DialogFragment() {
     private fun switchProject(project: Project) {
         currentProjectProvider.setCurrentProject(project.uuid)
         dismiss()
+        listener.onProjectSwitched()
         ToastUtils.showLongToast(getString(R.string.switched_project, project.name))
     }
 
@@ -120,5 +127,9 @@ class ProjectSettingsDialog : DialogFragment() {
 
         binding.currentProject.project = currentProject
         binding.currentProject.contentDescription = getString(R.string.using_project, currentProject.name)
+    }
+
+    interface ProjectSettingsDialogListener {
+        fun onProjectSwitched()
     }
 }

@@ -55,7 +55,7 @@ import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class MainMenuActivity extends CollectAbstractActivity implements AdminPasswordDialogFragment.AdminPasswordDialogCallback {
+public class MainMenuActivity extends CollectAbstractActivity implements AdminPasswordDialogFragment.AdminPasswordDialogCallback, ProjectSettingsDialog.ProjectSettingsDialogListener {
     // buttons
     private Button manageFilesButton;
     private Button sendDataButton;
@@ -266,5 +266,10 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     @Override
     public void onIncorrectAdminPassword() {
         ToastUtils.showShortToast(R.string.admin_password_incorrect);
+    }
+
+    @Override
+    public void onProjectSwitched() {
+        invalidateOptionsMenu();
     }
 }
