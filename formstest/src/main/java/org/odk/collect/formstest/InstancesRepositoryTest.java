@@ -212,11 +212,12 @@ public abstract class InstancesRepositoryTest {
     @Test
     public void save_whenInstanceHasId_updatesLastStatusChangeDate() {
         Supplier<Long> clock = mock(Supplier.class);
+        when(clock.get()).thenReturn(123L);
+
         InstancesRepository instancesRepository = buildSubject(clock);
 
         Instance instance = instancesRepository.save(InstanceUtils.buildInstance("formid", "1", getInstancesDir()).build());
 
-        when(clock.get()).thenReturn(123L);
         instancesRepository.save(instance);
         assertThat(instancesRepository.get(instance.getDbId()).getLastStatusChangeDate(), is(123L));
     }
@@ -239,6 +240,23 @@ public abstract class InstancesRepositoryTest {
                 .lastStatusChangeDate(null)
                 .build());
         assertThat(instancesRepository.get(instance.getDbId()).getLastStatusChangeDate(), is(notNullValue()));
+    }
+
+    @Test
+    public void save_whenInstanceSoftDeleted_doesNotUpdateLastChangesStatusDate() {
+        Supplier<Long> clock = mock(Supplier.class);
+        when(clock.get()).thenReturn(123L);
+
+        InstancesRepository instancesRepository = buildSubject(clock);
+
+        Instance originalInstance = instancesRepository.save(InstanceUtils.buildInstance("formid", "1", getInstancesDir()).build());
+        Long originalInstanceDbId = originalInstance.getDbId();
+
+        when(clock.get()).thenReturn(456L);
+        instancesRepository.softDelete(originalInstanceDbId);
+        instancesRepository.save(instancesRepository.get(originalInstanceDbId));
+
+        assertThat(instancesRepository.get(originalInstanceDbId).getLastStatusChangeDate(), is(123L));
     }
 
     @Test

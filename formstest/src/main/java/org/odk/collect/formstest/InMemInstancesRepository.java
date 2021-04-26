@@ -34,7 +34,7 @@ public final class InMemInstancesRepository implements InstancesRepository {
 
     public InMemInstancesRepository(Supplier<Long> clock, List<Instance> instances) {
         this.clock = clock;
-        this.instances = instances;
+        this.instances = new ArrayList<>(instances);
     }
 
     @Override
@@ -143,20 +143,26 @@ public final class InMemInstancesRepository implements InstancesRepository {
                     .build();
         }
 
-        if (instance.getLastStatusChangeDate() == null || instance.getDbId() != null) {
-            instance = new Instance.Builder(instance)
-                    .lastStatusChangeDate(clock.get())
-                    .build();
-        }
-
         Long id = instance.getDbId();
         if (id == null) {
+            if (instance.getLastStatusChangeDate() == null) {
+                instance = new Instance.Builder(instance)
+                        .lastStatusChangeDate(clock.get())
+                        .build();
+            }
+
             Instance newInstance = new Instance.Builder(instance)
                     .dbId(idCounter++)
                     .build();
             instances.add(newInstance);
             return newInstance;
         } else {
+            if (instance.getDeletedDate() == null) {
+                instance = new Instance.Builder(instance)
+                        .lastStatusChangeDate(clock.get())
+                        .build();
+            }
+
             instances.removeIf(i -> i.getDbId().equals(id));
             instances.add(instance);
             return instance;

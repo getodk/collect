@@ -157,20 +157,23 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
                     .build();
         }
 
-        if (instance.getLastStatusChangeDate() == null || instance.getDbId() != null) {
-            instance = new Instance.Builder(instance)
-                    .lastStatusChangeDate(clock.get())
-                    .build();
-        }
-
-        ContentValues values = getValuesFromInstance(instance);
-
         if (instance.getDbId() == null) {
-            long insertId = insert(values);
+            if (instance.getLastStatusChangeDate() == null) {
+                instance = new Instance.Builder(instance)
+                        .lastStatusChangeDate(clock.get())
+                        .build();
+            }
+
+            long insertId = insert(getValuesFromInstance(instance));
             return get(insertId);
         } else {
-            update(instance.getDbId(), values);
+            if (instance.getDeletedDate() == null) {
+                instance = new Instance.Builder(instance)
+                        .lastStatusChangeDate(clock.get())
+                        .build();
+            }
 
+            update(instance.getDbId(), getValuesFromInstance(instance));
             return get(instance.getDbId());
         }
     }
@@ -228,7 +231,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     }
 
     private long insert(ContentValues values) {
-        return instancesDatabaseProvider.getWriteableDatabase().insert(
+        return instancesDatabaseProvider.getWriteableDatabase().insertOrThrow(
                 INSTANCES_TABLE_NAME,
                 null,
                 values
