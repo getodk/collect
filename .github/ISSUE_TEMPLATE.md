@@ -2,11 +2,9 @@
 
 Thank you for taking the time to report an ODK Collect issue!
 
-This space is for submitting problems and feature requests. For general usage, form design questions and for ODK Collect source code questions, please visit ODK forum: https://forum.getodk.org
+This space is for bugs that have clear reproduction steps and expected behavior. For unexpected behavior that is unclear how to address, general usage questions, form design questions, and to ask about the source code, please visit the ODK forum: https://forum.getodk.org
 
-Before filling this form, visit https://github.com/getodk/collect/issues?q=is%3Aissue and search to see whether your issue was already reported or fixed. If you find a match, comment on it or add a +1 rather than posting a new issue. If you find a problem you know how to fix, submit a pull request. 🎉
-
-For all problem reports, please use the template below. Also include any relevant stack traces or error messages.
+Before filling the template below, visit https://github.com/getodk/collect/issues?q=is%3Aissue and search to see whether your issue was already reported or fixed. If you find a match, comment on it or add a +1 rather than posting a new issue. If you find a problem you know how to fix, submit a pull request. 🎉
 
 Feature suggestions should be described [in the forum Features category](https://forum.getodk.org/c/features) and discussed by the broader user community. Once there is a clear way forward, issues should be filed on the relevant repositories.
 

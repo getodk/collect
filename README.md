@@ -5,23 +5,28 @@
 [![codecov.io](https://codecov.io/github/getodk/collect/branch/master/graph/badge.svg)](https://codecov.io/github/getodk/collect)
 [![Slack](https://img.shields.io/badge/chat-on%20slack-brightgreen)](https://slack.getodk.org)
 
-ODK Collect is an Android app for filling out forms. It is designed to be used in resource-constrained environments with challenges such as unreliable connectivity or power infrastructure. ODK Collect is part the ODK Project, a free and open-source set of tools which help organizations author, field, and manage mobile data collection solutions. Learn more about the ODK project and its history [here](https://getodk.org/) and read about example ODK deployments [here](https://forum.getodk.org/c/showcase).
+ODK Collect is an Android app for filling out forms. It is designed to be used in resource-constrained environments with challenges such as unreliable connectivity or power infrastructure. ODK Collect is part the ODK project, a free and open-source set of tools which help organizations author, field, and manage mobile data collection solutions. Learn more about ODK and its history [here](https://getodk.org/) and read about example ODK deployments [here](https://forum.getodk.org/c/showcase).
 
 ODK Collect renders forms that are compliant with the [ODK XForms standard](https://getodk.github.io/xforms-spec/), a subset of the [XForms 1.1 standard](https://www.w3.org/TR/xforms/) with some extensions. The form parsing is done by the [JavaRosa library](https://github.com/getodk/javarosa) which Collect includes as a dependency.
+
+Please note that the `master` branch reflects ongoing development and is not production-ready.
 
 ## Table of Contents
 * [Learn more about ODK Collect](#learn-more-about-odk-collect)
 * [Release cycle](#release-cycle)
-* [Setting up your development environment](#setting-up-your-development-environment)
-* [Testing a form without a server](#testing-a-form-without-a-server)
-* [Using APIs for local development](#using-apis-for-local-development)
-* [Debugging JavaRosa](#debugging-javarosa)
-* [Contributing code](#contributing-code)
-* [Contributing translations](#contributing-translations)
-* [Contributing testing](#contributing-testing)
 * [Downloading builds](#downloading-builds)
+* [Suggesting new features](#suggesting-new-features)
+* Contributing
+  * [Contributing code](#contributing-code)
+  * [Contributing translations](#contributing-translations)
+  * [Contributing testing](#contributing-testing)
+* Developing
+  * [Setting up your development environment](#setting-up-your-development-environment)
+  * [Testing a form without a server](#testing-a-form-without-a-server)
+  * [Using APIs for local development](#using-apis-for-local-development)
+  * [Debugging JavaRosa](#debugging-javarosa)
+  * [Troubleshooting](#troubleshooting)
 * [Creating signed releases for Google Play Store](#creating-signed-releases-for-google-play-store)
-* [Troubleshooting](#troubleshooting)
 
 ## Learn more about ODK Collect
 * ODK website: [https://getodk.org](https://getodk.org)
@@ -36,8 +41,46 @@ Before release we perform a "code freeze" (we stop merging pull requests) and th
 
 At the beginning of each release cycle, [@grzesiek2010](https://github.com/grzesiek2010) updates all dependencies that have compatible upgrades available and ensures that the build targets the latest SDK.
 
+## Downloading builds
+Per-commit debug builds can be found on [CircleCI](https://circleci.com/gh/getodk/collect). Login with your GitHub account, click the build you'd like, then find the APK in the Artifacts tab.
+
+If you are looking to use ODK Collect, we strongly recommend using the [Play Store build](https://play.google.com/store/apps/details?id=org.odk.collect.android). Current and previous production builds can be found in [Releases](https://github.com/getodk/collect/releases).
+
 ## Suggesting new features
 We try to make sure that all issues in the issue tracker are as close to fully specified as possible so that they can be closed by a pull request. Feature suggestions should be described [in the forum Features category](https://forum.getodk.org/c/features) and discussed by the broader user community. Once there is a clear way forward, issues should be filed on the relevant repositories. More controversial features will be discussed as part of the Technical Steering Committee's [roadmapping process](https://github.com/getodk/governance/blob/master/TSC-1/STANDARD-OPERATING-PROCEDURES.md#roadmap).
+
+## Contributing code
+Any and all contributions to the project are welcome. ODK Collect is used across the world primarily by organizations with a social purpose so you can have real impact!
+
+Issues tagged as [good first issue](https://github.com/getodk/collect/labels/good%20first%20issue) should be a good place to start. There are also currently many issues tagged as [needs reproduction](https://github.com/getodk/collect/labels/needs%20reproduction) which need someone to try to reproduce them with the current version of ODK Collect and comment on the issue with their findings.
+
+If you're ready to contribute code, see [the contribution guide](docs/CONTRIBUTING.md).
+
+## Contributing translations
+If you know a language other than English, consider contributing translations through [Transifex](https://www.transifex.com/getodk/collect/).
+
+Translations are updated right before the first beta for a release and before the release itself. To update translations, download the zip from https://www.transifex.com/getodk/collect/strings/. The contents of each folder then need to be moved to the Android project folders. A quick script like [the one in this gist](https://gist.github.com/lognaturel/9974fab4e7579fac034511cd4944176b) can help. We currently copy everything from Transifex to minimize manual intervention. Sometimes translation files will only get comment changes. When new languages are updated in Transifex, they need to be added to the script above. Additionally, `ApplicationConstants.TRANSLATIONS_AVAILABLE` needs to be updated. This array provides the choices for the language preference in general settings. Ideally the list could be dynamically generated.
+
+## Contributing testing
+All pull requests are verified on the following devices (ordered by Android version):
+* [Huawei Y560-L01](http://www.gsmarena.com/huawei_y560-7829.php) - Android 5.1.1
+* [Sony Xperia Z3 D6603](http://www.gsmarena.com/sony_xperia_z3-6539.php) - Android 6.0.1
+* [Samsung Galaxy S7 SM-G930F](https://www.gsmarena.com/samsung_galaxy_s7-7821.php) - Android 7.0.0
+* [Motorola Moto G4 Play](https://www.gsmarena.com/motorola_moto_g4_play-8104.php) - Android 7.1.1
+* [LG Nexus 5X](https://www.gsmarena.com/lg_nexus_5x-7556.php) - Android 8.1
+* [Xiaomi Redmi 7](https://www.gsmarena.com/xiaomi_redmi_7-9498.php) - Android 9.0
+* [Google Pixel 3a](https://www.gsmarena.com/google_pixel_3a-9408.php) - Android 10.0
+
+Our regular code contributors use these devices (ordered by Android version):
+* [Samsung Galaxy Tab SM-T285](http://www.gsmarena.com/samsung_galaxy_tab_a_7_0_(2016)-7880.php) - Android 5.1.1 [@lognaturel](https://github.com/lognaturel)
+* [Motorola G 5th Gen XT1671](https://www.gsmarena.com/motorola_moto_g5-8454.php) - Android 7.0 [@lognaturel](https://github.com/lognaturel)
+
+
+The best way to help us test is to build from source! If you aren't a developer and want to help us test release candidates, join the [beta program](https://play.google.com/apps/testing/org.odk.collect.android)!
+
+Testing checklists can be found on the [Collect testing plan](https://docs.google.com/spreadsheets/d/1ITmOW2MFs_8-VM6MTwganTRWDjpctz9CI8QKojXrnjE/edit?usp=sharing).
+
+If you have finished testing a pull request, please use a template from [Testing result templates](.github/TESTING_RESULT_TEMPLATES.md) to report your insights.
 
 ## Setting up your development environment
 
@@ -79,7 +122,7 @@ When you first run Collect, it is set to download forms from [https://demo.getod
 
 1. Once you have the XForm, use [adb](https://developer.android.com/studio/command-line/adb.html) to push the form to your device (after [enabling USB debugging](https://www.kingoapp.com/root-tutorials/how-to-enable-usb-debugging-mode-on-android.htm)) or emulator.
 	```
-	adb push my_form.xml /sdcard/odk/forms/
+	adb push my_form.xml /sdcard/Android/data/org.odk.collect.android/files/forms
 	```
 
 1. Launch ODK Collect and tap `Fill Blank Form`. The new form will be there.
@@ -148,67 +191,6 @@ JavaRosa is the form engine that powers Collect. If you want to debug or change 
 	compile files('/path/to/javarosa/build/libs/javarosa-x.y.z-SNAPSHOT.jar')
 	```
 
-## Contributing code
-Any and all contributions to the project are welcome. ODK Collect is used across the world primarily by organizations with a social purpose so you can have real impact!
-
-Issues tagged as [good first issue](https://github.com/getodk/collect/labels/good%20first%20issue) should be a good place to start. There are also currently many issues tagged as [needs reproduction](https://github.com/getodk/collect/labels/needs%20reproduction) which need someone to try to reproduce them with the current version of ODK Collect and comment on the issue with their findings.
-
-If you're ready to contribute code, see [the contribution guide](docs/CONTRIBUTING.md).
-
-## Contributing translations
-If you know a language other than English, consider contributing translations through [Transifex](https://www.transifex.com/getodk/collect/). 
-
-Translations are updated right before the first beta for a release and before the release itself. To update translations, download the zip from https://www.transifex.com/getodk/collect/strings/. The contents of each folder then need to be moved to the Android project folders. A quick script like [the one in this gist](https://gist.github.com/lognaturel/9974fab4e7579fac034511cd4944176b) can help. We currently copy everything from Transifex to minimize manual intervention. Sometimes translation files will only get comment changes. When new languages are updated in Transifex, they need to be added to the script above. Additionally, `ApplicationConstants.TRANSLATIONS_AVAILABLE` needs to be updated. This array provides the choices for the language preference in general settings. Ideally the list could be dynamically generated.
-
-## Contributing testing
-All pull requests are verified on the following devices (ordered by Android version):
-* [Huawei Y560-L01](http://www.gsmarena.com/huawei_y560-7829.php) - Android 5.1.1
-* [Sony Xperia Z3 D6603](http://www.gsmarena.com/sony_xperia_z3-6539.php) - Android 6.0.1
-* [Samsung Galaxy S7 SM-G930F](https://www.gsmarena.com/samsung_galaxy_s7-7821.php) - Android 7.0.0
-* [Motorola Moto G4 Play](https://www.gsmarena.com/motorola_moto_g4_play-8104.php) - Android 7.1.1
-* [LG Nexus 5X](https://www.gsmarena.com/lg_nexus_5x-7556.php) - Android 8.1
-* [Xiaomi Redmi 7](https://www.gsmarena.com/xiaomi_redmi_7-9498.php) - Android 9.0
-* [Google Pixel 3a](https://www.gsmarena.com/google_pixel_3a-9408.php) - Android 10.0
-
-Our regular code contributors use these devices (ordered by Android version): 
-* [Samsung Galaxy Tab SM-T285](http://www.gsmarena.com/samsung_galaxy_tab_a_7_0_(2016)-7880.php) - Android 5.1.1 [@lognaturel](https://github.com/lognaturel)
-* [Motorola G 5th Gen XT1671](https://www.gsmarena.com/motorola_moto_g5-8454.php) - Android 7.0 [@lognaturel](https://github.com/lognaturel)
-
-
-The best way to help us test is to build from source! If you aren't a developer and want to help us test release candidates, join the [beta program](https://play.google.com/apps/testing/org.odk.collect.android)!
-
-Testing checklists can be found on the [Collect testing plan](https://docs.google.com/spreadsheets/d/1ITmOW2MFs_8-VM6MTwganTRWDjpctz9CI8QKojXrnjE/edit?usp=sharing).
-
-If you have finished testing a pull request, please use a template from [Testing result templates](.github/TESTING_RESULT_TEMPLATES.md) to report your insights.
-
-## Downloading builds
-Per-commit debug builds can be found on [CircleCI](https://circleci.com/gh/getodk/collect). Login with your GitHub account, click the build you'd like, then find the APK in the Artifacts tab.
-
-Current and previous production builds can be found on the [ODK website](https://getodk.org/software/#odk-collect).
-
-## Creating signed releases for Google Play Store
-Maintainers keep a folder with a clean checkout of the code and use [jenv.be](https://www.jenv.be) in that folder to ensure compilation with Java 1.8.
-
-Maintainers have a `local.properties` file in the root folder with the following:
-```
-sdk.dir=/path/to/android/sdk
-```
-
-Maintainers have a `secrets.properties` file in the `collect_app` folder with the following:
-```
-// collect_app/secrets.properties
-RELEASE_STORE_FILE=/path/to/collect.keystore
-RELEASE_STORE_PASSWORD=secure-store-password
-RELEASE_KEY_ALIAS=key-alias
-RELEASE_KEY_PASSWORD=secure-alias-password
-```
-
-Maintainers also have a `google-services.json` file in the `collect_app/src/odkCollectRelease` folder. The contents of the file are similar to the contents of `collect_app/src/google-services.json`.
-
-When ready to generate a build for the Play Store, maintainers tag the build by [adding a release](releases). Tags for full releases must have the format `vX.X.X`. Tags for beta releases must have the format `vX.X.X-beta.X`.
-
-To generate official signed releases, you'll need the keystore file, the keystore passwords, a configured `collect_app/secrets.properties` file, and a configured `collect_app/src/odkCollectRelease/google-services.json` file. Then run `./gradlew assembleOdkCollectRelease`. If successful, a signed release will be at `collect_app/build/outputs/apk`.
-
 ## Troubleshooting
 
 #### Error when running Robolectric tests from Android Studio on macOS: `build/intermediates/bundles/debug/AndroidManifest.xml (No such file or directory)`
@@ -252,3 +234,26 @@ Note that this change might cause problems with other Java-based applications (e
 If you encounter the `java.lang.NullPointerException (no error message).` when running `gradlew`, please make sure your Java version for this project is Java 8.
 
 This can be configured under **File > Project Structure** in Android Studio, or by editing `$USER_HOME/.gradle/gradle.properties` to set `org.gradle.java.home=(path to JDK home)` for command-line use.
+
+## Creating signed releases for Google Play Store
+Maintainers keep a folder with a clean checkout of the code and use [jenv.be](https://www.jenv.be) in that folder to ensure compilation with Java 1.8.
+
+Maintainers have a `local.properties` file in the root folder with the following:
+```
+sdk.dir=/path/to/android/sdk
+```
+
+Maintainers have a `secrets.properties` file in the `collect_app` folder with the following:
+```
+// collect_app/secrets.properties
+RELEASE_STORE_FILE=/path/to/collect.keystore
+RELEASE_STORE_PASSWORD=secure-store-password
+RELEASE_KEY_ALIAS=key-alias
+RELEASE_KEY_PASSWORD=secure-alias-password
+```
+
+Maintainers also have a `google-services.json` file in the `collect_app/src/odkCollectRelease` folder. The contents of the file are similar to the contents of `collect_app/src/google-services.json`.
+
+When ready to generate a build for the Play Store, maintainers tag the build by [adding a release](releases). Tags for full releases must have the format `vX.X.X`. Tags for beta releases must have the format `vX.X.X-beta.X`.
+
+To generate official signed releases, you'll need the keystore file, the keystore passwords, a configured `collect_app/secrets.properties` file, and a configured `collect_app/src/odkCollectRelease/google-services.json` file. Then run `./gradlew assembleOdkCollectRelease`. If successful, a signed release will be at `collect_app/build/outputs/apk`.
