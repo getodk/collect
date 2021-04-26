@@ -20,16 +20,21 @@ import org.odk.collect.forms.instances.InstancesRepository;
 
 import java.io.File;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public abstract class InstancesRepositoryTest {
 
     public abstract InstancesRepository buildSubject();
+
+    public abstract InstancesRepository buildSubject(Supplier<Long> clock);
 
     public abstract String getInstancesDir();
 
@@ -202,6 +207,18 @@ public abstract class InstancesRepositoryTest {
                 .build());
 
         assertThat(instancesRepository.get(originalInstance.getDbId()).getDisplayName(), is("A different blah"));
+    }
+
+    @Test
+    public void save_whenInstanceHasId_updatesLastStatusChangeDate() {
+        Supplier<Long> clock = mock(Supplier.class);
+        InstancesRepository instancesRepository = buildSubject(clock);
+
+        Instance instance = instancesRepository.save(InstanceUtils.buildInstance("formid", "1", getInstancesDir()).build());
+
+        when(clock.get()).thenReturn(123L);
+        instancesRepository.save(instance);
+        assertThat(instancesRepository.get(instance.getDbId()).getLastStatusChangeDate(), is(123L));
     }
 
     @Test

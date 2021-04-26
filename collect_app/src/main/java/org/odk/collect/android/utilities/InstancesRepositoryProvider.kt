@@ -9,6 +9,6 @@ import org.odk.collect.forms.instances.InstancesRepository
 class InstancesRepositoryProvider {
 
     fun get(): InstancesRepository {
-        return DatabaseInstancesRepository(DaggerUtils.getComponent(Collect.getInstance()).instancesDatabaseProvider(), StoragePathProvider())
+        return DatabaseInstancesRepository(DaggerUtils.getComponent(Collect.getInstance()).instancesDatabaseProvider(), StoragePathProvider(), System::currentTimeMillis)
     }
 }

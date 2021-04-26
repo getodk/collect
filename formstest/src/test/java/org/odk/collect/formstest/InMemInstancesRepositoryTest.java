@@ -18,6 +18,8 @@ import org.junit.Before;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.shared.TempFiles;
 
+import java.util.function.Supplier;
+
 public class InMemInstancesRepositoryTest extends InstancesRepositoryTest {
 
     private String tempDirectory;
@@ -29,7 +31,12 @@ public class InMemInstancesRepositoryTest extends InstancesRepositoryTest {
 
     @Override
     public InstancesRepository buildSubject() {
-        return new InMemInstancesRepository();
+        return new InMemInstancesRepository(System::currentTimeMillis);
+    }
+
+    @Override
+    public InstancesRepository buildSubject(Supplier<Long> clock) {
+        return new InMemInstancesRepository(clock);
     }
 
     @Override
