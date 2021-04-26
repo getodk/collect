@@ -4,18 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <org.odk.collect.android.projects.ProjectIconView
         android:id="@+id/project_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/project_icon_background"
-        android:textAppearance="@style/TextAppearance.Collect.Subtitle1"
-        android:layout_marginVertical="@dimen/margin_small"
-        android:textColor="@android:color/white"
-        android:textAllCaps="true"
-        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/project_name"

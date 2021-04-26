@@ -221,7 +221,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
 
     public MainMenuPage assertProjectIcon(String projectIcon, String expectedBackgroundColor) {
         onView(allOf(hasDescendant(withText(projectIcon)), withId(R.id.projects))).check(matches(isDisplayed()));
-        int backgroundColor = ((GradientDrawable) rule.getActivity().findViewById(R.id.project_icon).getBackground()).getColor().getDefaultColor();
+        int backgroundColor = ((GradientDrawable) rule.getActivity().findViewById(R.id.project_icon_text).getBackground()).getColor().getDefaultColor();
         assertThat(backgroundColor, is(Color.parseColor(expectedBackgroundColor)));
         return this;
     }

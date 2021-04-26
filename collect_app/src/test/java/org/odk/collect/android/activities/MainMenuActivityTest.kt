@@ -75,7 +75,7 @@ class MainMenuActivityTest {
     fun `Project icon for current project should be displayed`() {
         val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
-            val projectIcon = activity.findViewById<TextView>(R.id.project_icon)
+            val projectIcon = activity.findViewById<TextView>(R.id.project_icon_text)
 
             assertThat(projectIcon.visibility, `is`(View.VISIBLE))
             assertThat(projectIcon.text, `is`("P"))

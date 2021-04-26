@@ -15,15 +15,12 @@
 package org.odk.collect.android.activities;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
@@ -38,6 +35,7 @@ import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment.Action;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.screens.AdminPreferencesActivity;
+import org.odk.collect.android.projects.ProjectIconView;
 import org.odk.collect.android.projects.ProjectSettingsDialog;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
@@ -216,12 +214,10 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         final MenuItem projectsMenuItem = menu.findItem(R.id.projects);
-        FrameLayout rootView = (FrameLayout) projectsMenuItem.getActionView();
-        rootView.setOnClickListener(v -> onOptionsItemSelected(projectsMenuItem));
 
-        TextView projectIcon = rootView.findViewById(R.id.project_icon);
-        ((GradientDrawable) projectIcon.getBackground()).setColor(Color.parseColor(viewModel.getCurrentProject().getColor()));
-        projectIcon.setText(viewModel.getCurrentProject().getIcon());
+        ProjectIconView projectIconView = (ProjectIconView) projectsMenuItem.getActionView();
+        projectIconView.setProject(viewModel.getCurrentProject());
+        projectIconView.setOnClickListener(v -> onOptionsItemSelected(projectsMenuItem));
 
         return super.onPrepareOptionsMenu(menu);
     }
