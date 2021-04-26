@@ -70,6 +70,7 @@ import org.odk.collect.android.preferences.screens.UserInterfacePreferencesFragm
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.AddProjectDialog;
 import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.projects.ProjectSettingsDialog;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.android.provider.FormsProvider;
@@ -283,4 +284,6 @@ public interface AppDependencyComponent {
     ProjectsRepository projectsRepository();
 
     CurrentProjectProvider currentProjectProvider();
+
+    ProjectImporter projectImporter();
 }

@@ -18,7 +18,9 @@ class SwitchProjectTest {
 
     @Test
     fun switchProjectTest() {
+        // Add project Turtle nesting
         rule.mainMenu()
+            .assertProjectIcon("D", "#3e9fcc")
             .openProjectSettingsDialog()
             .clickAddProject()
             .inputProjectName("Turtle nesting")
@@ -26,20 +28,23 @@ class SwitchProjectTest {
             .inputProjectColor("#0000FF")
             .addProject()
 
-            .openProjectSettingsDialog()
-            .clickAddProject()
-            .inputProjectName("Polio - Banadir")
-            .inputProjectIcon("P")
-            .inputProjectColor("#0000FF")
-            .addProject()
-
-            .openProjectSettingsDialog()
-            .clickOnText("Polio - Banadir")
-            .checkIsToastWithMessageDisplayed(R.string.switched_project, "Polio - Banadir")
-
+        // Switch to Turtle nesting
         rule.mainMenu()
             .openProjectSettingsDialog()
-            .assertCurrentProject("Polio - Banadir")
+            .assertCurrentProject("Demo project")
             .assertInactiveProject("Turtle nesting")
+            .clickOnText("Turtle nesting")
+        rule.mainMenu()
+            .checkIsToastWithMessageDisplayed(R.string.switched_project, "Turtle nesting")
+            .assertProjectIcon("T", "#0000FF")
+
+        // Switch to Demo project
+        rule.mainMenu()
+            .openProjectSettingsDialog()
+            .assertCurrentProject("Turtle nesting")
+            .assertInactiveProject("Demo project")
+            .clickOnText("Demo project")
+        rule.mainMenu()
+            .assertProjectIcon("D", "#3e9fcc")
     }
 }
