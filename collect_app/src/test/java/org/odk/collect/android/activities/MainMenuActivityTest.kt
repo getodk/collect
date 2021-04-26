@@ -26,6 +26,7 @@ import org.odk.collect.android.formmanagement.InstancesCountRepository
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.projects.ProjectSettingsDialog
 import org.odk.collect.android.support.RobolectricHelpers
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.version.VersionInformation
@@ -60,6 +61,14 @@ class MainMenuActivityTest {
                 }
             }
         })
+    }
+
+    @Test
+    fun `MainMenuActivity should implement ProjectSettingsDialogListener`() {
+        val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
+        scenario.onActivity { activity: MainMenuActivity ->
+            assertThat(activity is ProjectSettingsDialog.ProjectSettingsDialogListener, `is`(true))
+        }
     }
 
     @Test
