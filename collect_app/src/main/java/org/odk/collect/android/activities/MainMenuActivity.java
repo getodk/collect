@@ -271,5 +271,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     @Override
     public void onProjectSwitched() {
         invalidateOptionsMenu();
+        ToastUtils.showLongToast(getString(R.string.switched_project, viewModel.getCurrentProject().getName()));
     }
 }
