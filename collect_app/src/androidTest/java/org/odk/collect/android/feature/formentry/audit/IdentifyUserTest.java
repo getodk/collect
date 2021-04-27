@@ -30,7 +30,7 @@ public class IdentifyUserTest {
 
     @Test
     public void openingForm_andThenEnteringIdentity_proceedsToForm() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .clickFillBlankForm()
                 .clickOnFormWithIdentityPrompt("Identify User")
                 .enterIdentity("Lucius")
@@ -41,7 +41,7 @@ public class IdentifyUserTest {
 
     @Test
     public void openingSavedForm_promptsForIdentity() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .clickFillBlankForm()
                 .clickOnFormWithIdentityPrompt("Identify User")
                 .enterIdentity("Lucius")
@@ -54,7 +54,7 @@ public class IdentifyUserTest {
 
     @Test
     public void openingForm_andEnteringBlankIdentity_remainsOnIdentityPrompt() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .clickFillBlankForm()
                 .clickOnFormWithIdentityPrompt("Identify User")
                 .enterIdentity("  ")
@@ -63,26 +63,26 @@ public class IdentifyUserTest {
 
     @Test
     public void openingForm_andPressingBack_returnsToMainMenu() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .clickFillBlankForm()
                 .clickOnFormWithIdentityPrompt("Identify User")
                 .closeSoftKeyboard()
-                .pressBack(new MainMenuPage(rule));
+                .pressBack(new MainMenuPage());
     }
 
     @Test
     public void openingForm_andRotating_remainsOnIdentityPrompt() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .clickFillBlankForm()
                 .clickOnFormWithIdentityPrompt("Identify User")
                 .enterIdentity("Blah")
-                .rotateToLandscape(new IdentifyUserPromptPage("Identify User", rule))
+                .rotateToLandscape(new IdentifyUserPromptPage("Identify User"))
                 .assertText("Blah");
     }
 
     @Test
     public void openingForm_andPressingCloseCross_returnsToMainMenu() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .clickFillBlankForm()
                 .clickOnFormWithIdentityPrompt("Identify User")
                 .pressClose();
@@ -90,7 +90,7 @@ public class IdentifyUserTest {
 
     @Test
     public void openFormWithIdentifyUserFalse_proceedsToForm() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .clickFillBlankForm()
                 .clickOnForm("Identify User False")
                 .swipeToEndScreen()

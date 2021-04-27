@@ -48,7 +48,7 @@ public class GetAndSubmitFormTest {
                 .clickGetBlankForm()
                 .clickGetSelected()
                 .assertText("One Question (Version:: 1 ID: one-question) - Success")
-                .clickOK(new MainMenuPage(rule))
+                .clickOK(new MainMenuPage())
 
                 .startBlankForm("One Question")
                 .swipeToEndScreen()

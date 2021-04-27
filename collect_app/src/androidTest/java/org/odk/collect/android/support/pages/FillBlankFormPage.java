@@ -3,7 +3,6 @@ package org.odk.collect.android.support.pages;
 import android.database.Cursor;
 
 import androidx.test.espresso.matcher.CursorMatchers;
-import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.forms.DatabaseFormColumns;
@@ -26,10 +25,6 @@ import static org.odk.collect.android.support.CustomMatchers.withIndex;
 
 public class FillBlankFormPage extends Page<FillBlankFormPage> {
 
-    public FillBlankFormPage(ActivityTestRule rule) {
-        super(rule);
-    }
-
     @Override
     public FillBlankFormPage assertOnPage() {
         assertToolbarTitle(R.string.enter_data);
@@ -38,7 +33,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
 
     public IdentifyUserPromptPage clickOnFormWithIdentityPrompt(String formName) {
         clickOnFormButton(formName);
-        return new IdentifyUserPromptPage(formName, rule).assertOnPage();
+        return new IdentifyUserPromptPage(formName).assertOnPage();
     }
 
     public FillBlankFormPage clickOnSortByButton() {
@@ -53,7 +48,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
 
     public BlankFormSearchPage searchInBar(String query) {
         onView(withId(R.id.search_src_text)).perform(replaceText(query));
-        return new BlankFormSearchPage(rule).assertOnPage();
+        return new BlankFormSearchPage().assertOnPage();
     }
 
     public FillBlankFormPage checkIsFormSubtextDisplayed() {
@@ -79,12 +74,12 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
         onData(allOf(is(instanceOf(Cursor.class)), CursorMatchers.withRowString(DatabaseFormColumns.DISPLAY_NAME, is(formName))))
                 .onChildView(withId(R.id.map_button))
                 .perform(click());
-        return new FormMapPage(rule).assertOnPage();
+        return new FormMapPage().assertOnPage();
     }
 
     public FormEntryPage clickOnForm(String formName) {
         clickOnFormButton(formName);
-        return new FormEntryPage(formName, rule);
+        return new FormEntryPage(formName);
     }
 
     private void clickOnFormButton(String formName) {
@@ -94,7 +89,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
 
     public FormEndPage clickOnEmptyForm(String formName) {
         clickOnFormButton(formName);
-        return new FormEndPage(formName, rule).assertOnPage();
+        return new FormEndPage(formName).assertOnPage();
     }
 
     public FillBlankFormPage clickRefresh() {
@@ -109,7 +104,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
 
     public ServerAuthDialog clickRefreshWithAuthError() {
         onView(withId(R.id.menu_refresh)).perform(click());
-        return new ServerAuthDialog(rule).assertOnPage();
+        return new ServerAuthDialog().assertOnPage();
     }
 
     public FillBlankFormPage assertFormExists(String formName) {

@@ -41,8 +41,8 @@ public class SendFinalizedFormTest {
                 .clickSendFinalizedForm(1)
                 .clickOnForm("One Question")
                 .clickSendSelected()
-                .clickOK(new SendFinalizedFormPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .clickOK(new SendFinalizedFormPage())
+                .pressBack(new MainMenuPage())
 
                 .clickViewSentForm(1)
                 .clickOnForm("One Question")
@@ -58,8 +58,8 @@ public class SendFinalizedFormTest {
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .scrollToRecyclerViewItemAndClickText(R.string.delete_after_send)
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage())
 
                 .copyForm("one-question.xml")
                 .startBlankForm("One Question")
@@ -70,8 +70,8 @@ public class SendFinalizedFormTest {
                 .clickSendFinalizedForm(1)
                 .clickOnForm("One Question")
                 .clickSendSelected()
-                .clickOK(new SendFinalizedFormPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .clickOK(new SendFinalizedFormPage())
+                .pressBack(new MainMenuPage())
 
                 .clickViewSentForm(1)
                 .clickOnText("One Question")

@@ -34,7 +34,7 @@ public class QuittingFormTest {
                 .answerQuestion("What is your name?", "Reuben")
                 .swipeToNextQuestion()
                 .answerQuestion("What is your age?", "10")
-                .pressBack(new SaveOrIgnoreDialog<>("Two Question", new MainMenuPage(rule), rule))
+                .pressBack(new SaveOrIgnoreDialog<>("Two Question", new MainMenuPage()))
                 .clickSaveChanges()
                 .clickEditSavedForm()
                 .clickOnForm("Two Question")
@@ -47,7 +47,7 @@ public class QuittingFormTest {
         rule.mainMenu()
                 .startBlankForm("Two Question")
                 .answerQuestion("What is your name?", "Reuben")
-                .pressBack(new SaveOrIgnoreDialog<>("Two Question", new MainMenuPage(rule), rule))
+                .pressBack(new SaveOrIgnoreDialog<>("Two Question", new MainMenuPage()))
                 .clickIgnoreChanges()
                 .assertNumberOfEditableForms(0);
     }

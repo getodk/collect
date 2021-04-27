@@ -4,11 +4,8 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 
 import androidx.test.espresso.Espresso;
-import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.forms.DatabaseFormColumns;
@@ -27,17 +24,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.AllOf.allOf;
 
 public class MainMenuPage extends Page<MainMenuPage> {
-
-    public MainMenuPage(ActivityTestRule rule) {
-        super(rule);
-    }
 
     @Override
     public MainMenuPage assertOnPage() {
@@ -54,32 +44,32 @@ public class MainMenuPage extends Page<MainMenuPage> {
     public ProjectSettingsDialogPage openProjectSettingsDialog() {
         assertOnPage(); // Make sure we've waited for the application load correctly
         onView(withId(R.id.projects)).perform(click());
-        return new ProjectSettingsDialogPage(rule).assertOnPage();
+        return new ProjectSettingsDialogPage().assertOnPage();
     }
 
     public FormEntryPage startBlankForm(String formName) {
         goToBlankForm(formName);
-        return new FormEntryPage(formName, rule).assertOnPage();
+        return new FormEntryPage(formName).assertOnPage();
     }
 
     public AddNewRepeatDialog startBlankFormWithRepeatGroup(String formName, String repeatName) {
         goToBlankForm(formName);
-        return new AddNewRepeatDialog(repeatName, rule).assertOnPage();
+        return new AddNewRepeatDialog(repeatName).assertOnPage();
     }
 
     public ErrorDialog startBlankFormWithError(String formName) {
         goToBlankForm(formName);
-        return new ErrorDialog(rule).assertOnPage();
+        return new ErrorDialog().assertOnPage();
     }
 
     public OkDialog startBlankFormWithDialog(String formName) {
         goToBlankForm(formName);
-        return new OkDialog(rule).assertOnPage();
+        return new OkDialog().assertOnPage();
     }
 
     public FillBlankFormPage clickFillBlankForm() {
         onView(withId(R.id.enter_data)).perform(click());
-        return new FillBlankFormPage(rule).assertOnPage();
+        return new FillBlankFormPage().assertOnPage();
     }
 
     private void goToBlankForm(String formName) {
@@ -89,7 +79,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
 
     public EditSavedFormPage clickEditSavedForm() {
         onView(withId(R.id.review_data)).perform(click());
-        return new EditSavedFormPage(rule).assertOnPage();
+        return new EditSavedFormPage().assertOnPage();
     }
 
     public EditSavedFormPage clickEditSavedForm(int formCount) {
@@ -116,19 +106,14 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return this;
     }
 
-    public MainMenuPage recreateActivity() {
-        getInstrumentation().runOnMainSync(() -> rule.getActivity().recreate());
-        return this;
-    }
-
     public GetBlankFormPage clickGetBlankForm() {
         onView(withText(getTranslatedString(R.string.get_forms))).perform(scrollTo(), click());
-        return new GetBlankFormPage(rule).assertOnPage();
+        return new GetBlankFormPage().assertOnPage();
     }
 
     public SendFinalizedFormPage clickSendFinalizedForm(int formCount) {
         onView(withText(getTranslatedString(R.string.send_data_button, formCount))).perform(click());
-        return new SendFinalizedFormPage(rule);
+        return new SendFinalizedFormPage();
     }
 
     public MainMenuPage setServer(String url) {
@@ -138,8 +123,8 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickOnURL()
                 .inputText(url)
                 .clickOKOnDialog()
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule));
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage());
     }
 
     public MainMenuPage enableManualUpdates() {
@@ -148,8 +133,8 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickFormManagement()
                 .clickUpdateForms()
                 .clickOption(R.string.manual)
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule));
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage());
     }
 
     public MainMenuPage enablePreviouslyDownloadedOnlyUpdates() {
@@ -158,8 +143,8 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickFormManagement()
                 .clickUpdateForms()
                 .clickOption(R.string.previously_downloaded_only)
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule));
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage());
     }
 
     public MainMenuPage enableMatchExactly() {
@@ -168,8 +153,8 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickFormManagement()
                 .clickUpdateForms()
                 .clickOption(R.string.match_exactly)
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule));
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage());
     }
 
     public MainMenuPage enableAutoSend() {
@@ -178,8 +163,8 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickFormManagement()
                 .clickOnString(R.string.autosend)
                 .clickOnString(R.string.wifi_cellular_autosend)
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule));
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage());
     }
 
     public MainMenuPage setGoogleAccount(String account) {
@@ -194,35 +179,33 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickOnServerType()
                 .clickOnString(R.string.server_platform_google_sheets)
                 .clickOnString(R.string.selected_google_account_text)
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule));
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage());
     }
 
     public ServerAuthDialog clickGetBlankFormWithAuthenticationError() {
         onView(withText(getTranslatedString(R.string.get_forms))).perform(scrollTo(), click());
-        return new ServerAuthDialog(rule).assertOnPage();
+        return new ServerAuthDialog().assertOnPage();
     }
 
     public OkDialog clickGetBlankFormWithError() {
         onView(withText(getTranslatedString(R.string.get_forms))).perform(scrollTo(), click());
-        return new OkDialog(rule).assertOnPage();
+        return new OkDialog().assertOnPage();
     }
 
     public ViewSentFormPage clickViewSentForm(int formCount) {
         onView(withText(getTranslatedString(R.string.view_sent_forms_button, formCount))).perform(click());
-        return new ViewSentFormPage(rule).assertOnPage();
+        return new ViewSentFormPage().assertOnPage();
     }
 
     public DeleteSavedFormPage clickDeleteSavedForm() {
         onView(withText(getTranslatedString(R.string.manage_files))).check(matches(isClickable()));
         onView(withText(getTranslatedString(R.string.manage_files))).perform(scrollTo(), click());
-        return new DeleteSavedFormPage(rule).assertOnPage();
+        return new DeleteSavedFormPage().assertOnPage();
     }
 
     public MainMenuPage assertProjectIcon(String projectIcon, String expectedBackgroundColor) {
         onView(allOf(hasDescendant(withText(projectIcon)), withId(R.id.projects))).check(matches(isDisplayed()));
-        int backgroundColor = ((GradientDrawable) rule.getActivity().findViewById(R.id.project_icon_text).getBackground()).getColor().getDefaultColor();
-        assertThat(backgroundColor, is(Color.parseColor(expectedBackgroundColor)));
         return this;
     }
 }

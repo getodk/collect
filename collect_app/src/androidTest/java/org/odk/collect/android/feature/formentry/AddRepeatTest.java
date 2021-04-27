@@ -42,32 +42,32 @@ public class AddRepeatTest {
 
     @Test
     public void whenInRepeat_swipingNext_andClickingAdd_addsAnotherRepeat() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("One Question Repeat")
                 .assertText("Person > 1")
                 .swipeToNextQuestionWithRepeatGroup("Person")
-                .clickOnAdd(new FormEntryPage("One Question Repeat", rule))
+                .clickOnAdd(new FormEntryPage("One Question Repeat"))
                 .assertText("Person > 2");
     }
 
     @Test
     public void whenInRepeat_swipingNext_andClickingDoNotAdd_leavesRepeatGroup() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("One Question Repeat")
                 .assertText("Person > 1")
                 .swipeToNextQuestionWithRepeatGroup("Person")
-                .clickOnDoNotAdd(new EndOfFormPage("One Question Repeat", rule));
+                .clickOnDoNotAdd(new EndOfFormPage("One Question Repeat"));
     }
 
     @Test
     public void whenInRepeat_thatIsAFieldList_swipingNext_andClickingAdd_addsAnotherRepeat() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("Field-List Repeat")
                 .assertText("Person > 1")
                 .assertText("What is their age?")
                 .assertText("What is their name?")
                 .swipeToNextQuestionWithRepeatGroup("Person")
-                .clickOnAdd(new FormEntryPage("One Question Repeat", rule))
+                .clickOnAdd(new FormEntryPage("One Question Repeat"))
                 .assertText("Person > 2")
                 .assertText("What is their age?")
                 .assertText("What is their name?");
@@ -75,35 +75,35 @@ public class AddRepeatTest {
 
     @Test
     public void whenInRepeat_clickingPlus_andClickingAdd_addsRepeatToEndOfSeries() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("One Question Repeat")
                 .assertText("Person > 1")
                 .swipeToNextQuestionWithRepeatGroup("Person")
-                .clickOnAdd(new FormEntryPage("One Question Repeat", rule))
+                .clickOnAdd(new FormEntryPage("One Question Repeat"))
                 .swipeToPreviousQuestion()
                 .assertText("Person > 1")
                 .clickPlus("Person")
-                .clickOnAdd(new FormEntryPage("One Question Repeat", rule))
+                .clickOnAdd(new FormEntryPage("One Question Repeat"))
                 .assertText("Person > 3");
     }
 
     @Test
     public void whenInARepeat_clickingPlus_andClickingDoNotAdd_returns() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("One Question Repeat")
                 .assertText("Person > 1")
                 .swipeToNextQuestionWithRepeatGroup("Person")
-                .clickOnAdd(new FormEntryPage("One Question Repeat", rule))
+                .clickOnAdd(new FormEntryPage("One Question Repeat"))
                 .swipeToPreviousQuestion()
                 .assertText("Person > 1")
                 .clickPlus("Person")
-                .clickOnDoNotAdd(new FormEntryPage("One Question Repeat", rule))
+                .clickOnDoNotAdd(new FormEntryPage("One Question Repeat"))
                 .assertText("Person > 1");
     }
 
     @Test
     public void whenInRepeatWithFixedCount_noPlusButtonAppears() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("Fixed Count Repeat");
 
         onView(withId(R.id.menu_add_repeat)).check(doesNotExist());
@@ -111,11 +111,11 @@ public class AddRepeatTest {
 
     @Test
     public void whenInHierarchyForRepeat_clickingPlus_addsRepeatAtEndOfSeries() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("One Question Repeat")
                 .assertText("Person > 1")
                 .swipeToNextQuestionWithRepeatGroup("Person")
-                .clickOnAdd(new FormEntryPage("One Question Repeat", rule))
+                .clickOnAdd(new FormEntryPage("One Question Repeat"))
                 .clickGoToArrow()
                 .clickGoUpIcon()
                 .addGroup()

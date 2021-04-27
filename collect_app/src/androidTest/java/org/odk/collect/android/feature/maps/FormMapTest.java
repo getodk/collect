@@ -56,7 +56,7 @@ public class FormMapTest {
 
     @Test
     public void gettingBlankFormList_showsMapIcon_onlyForFormsWithGeometry() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .clickFillBlankForm()
                 .checkMapIconDisplayedForForm("Single geopoint")
                 .checkMapIconNotDisplayedForForm("basic");
@@ -64,7 +64,7 @@ public class FormMapTest {
 
     @Test
     public void clickingOnMapIcon_opensMapForForm() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .clickFillBlankForm()
                 .clickOnMapIconForForm("Single geopoint")
                 .assertText("Single geopoint");
@@ -74,7 +74,7 @@ public class FormMapTest {
     public void fillingBlankForm_addsInstanceToMap() {
         String oneInstanceString = ApplicationProvider.getApplicationContext().getResources().getString(R.string.geometry_status, 1, 1);
 
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .clickFillBlankForm()
                 .clickOnMapIconForForm("Single geopoint")
                 .clickFillBlankFormButton("Single geopoint")

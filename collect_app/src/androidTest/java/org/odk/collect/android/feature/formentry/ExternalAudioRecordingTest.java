@@ -71,7 +71,7 @@ public class ExternalAudioRecordingTest {
 
     @Test
     public void onAudioQuestion_whenAudioQualityIsExternal_usesExternalRecorder() throws Exception {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .copyForm("external-audio-question.xml")
                 .startBlankForm("External Audio Question")
                 .clickOnString(R.string.capture_audio)
@@ -82,7 +82,7 @@ public class ExternalAudioRecordingTest {
 
     @Test
     public void onAudioQuestion_withoutAudioQuality_usesExternalRecorder() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .copyForm("audio-question.xml")
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)

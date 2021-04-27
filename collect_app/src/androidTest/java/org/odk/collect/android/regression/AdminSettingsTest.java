@@ -41,9 +41,9 @@ public class AdminSettingsTest {
                 .openProjectSettingsDialog()
                 .clickAdminSettings()
                 .assertOnPage()
-                .rotateToLandscape(new AdminSettingsPage(rule))
+                .rotateToLandscape(new AdminSettingsPage())
                 .assertOnPage()
-                .rotateToPortrait(new AdminSettingsPage(rule))
+                .rotateToPortrait(new AdminSettingsPage())
                 .assertOnPage();
     }
 

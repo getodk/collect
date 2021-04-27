@@ -1,14 +1,8 @@
 package org.odk.collect.android.support.pages;
 
-import androidx.test.rule.ActivityTestRule;
-
 import org.odk.collect.android.R;
 
 public class ServerAuthDialog extends Page<ServerAuthDialog> {
-
-    public ServerAuthDialog(ActivityTestRule rule) {
-        super(rule);
-    }
 
     @Override
     public ServerAuthDialog assertOnPage() {

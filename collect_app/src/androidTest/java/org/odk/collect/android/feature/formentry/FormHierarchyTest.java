@@ -35,7 +35,7 @@ public class FormHierarchyTest {
     @Test
     //https://github.com/getodk/collect/issues/2871
     public void allRelevantQuestionsShouldBeVisibleInHierarchyView() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("formHierarchy1")
                 .clickGoToArrow();
 
@@ -51,7 +51,7 @@ public class FormHierarchyTest {
     @Test
     //https://github.com/getodk/collect/issues/2944
     public void notRelevantRepeatGroupsShouldNotBeVisibleInHierarchy() {
-        final FormHierarchyPage page = new MainMenuPage(rule)
+        final FormHierarchyPage page = new MainMenuPage()
                 .startBlankForm("formHierarchy2")
                 .inputText("2")
                 .clickGoToArrow();
@@ -97,7 +97,7 @@ public class FormHierarchyTest {
     @Test
     //https://github.com/getodk/collect/issues/2936
     public void repeatGroupsShouldBeVisibleAsAppropriate() {
-        FormHierarchyPage page = new MainMenuPage(rule)
+        FormHierarchyPage page = new MainMenuPage()
                 .startBlankForm("formHierarchy3")
                 .assertQuestion("Intro")
                 .swipeToNextQuestion("Text")
@@ -106,12 +106,12 @@ public class FormHierarchyTest {
                 .swipeToNextQuestion("Integer 2_1")
                 .swipeToNextQuestion("Integer 2_2")
                 .swipeToNextQuestionWithRepeatGroup("Repeat Group 1")
-                .clickOnAdd(new FormEntryPage("formHierarchy3", rule))
+                .clickOnAdd(new FormEntryPage("formHierarchy3"))
                 .swipeToNextQuestionWithRepeatGroup("Repeat Group 1_1")
-                .clickOnAdd(new FormEntryPage("formHierarchy3", rule))
+                .clickOnAdd(new FormEntryPage("formHierarchy3"))
                 .swipeToNextQuestionWithRepeatGroup("Repeat Group 1_1")
-                .clickOnDoNotAdd(new AddNewRepeatDialog("Repeat Group 1", rule))
-                .clickOnDoNotAdd(new FormEntryPage("formHierarchy3", rule))
+                .clickOnDoNotAdd(new AddNewRepeatDialog("Repeat Group 1"))
+                .clickOnDoNotAdd(new FormEntryPage("formHierarchy3"))
                 .clickGoToArrow();
 
         onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(3)));
@@ -126,7 +126,7 @@ public class FormHierarchyTest {
     @Test
     //https://github.com/getodk/collect/issues/2942
     public void deletingLastGroupShouldNotBreakHierarchy() {
-        FormHierarchyPage page = new MainMenuPage(rule)
+        FormHierarchyPage page = new MainMenuPage()
                 .startBlankForm("formHierarchy3")
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
@@ -157,9 +157,9 @@ public class FormHierarchyTest {
     @Test
     //https://github.com/getodk/collect/issues/3971
     public void deletingLastGroupAndAddingOneShouldNotBreakHierarchy() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankFormWithRepeatGroup("RepeatGroupNew", "People")
-                .clickOnAdd(new FormEntryPage("RepeatGroupNew", rule))
+                .clickOnAdd(new FormEntryPage("RepeatGroupNew"))
                 .swipeToNextQuestion()
                 .swipeToNextQuestion()
                 .clickOnAddGroup()

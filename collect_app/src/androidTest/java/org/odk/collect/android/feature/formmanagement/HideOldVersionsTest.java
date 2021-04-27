@@ -26,7 +26,7 @@ public class HideOldVersionsTest {
         rule.mainMenu()
                 .copyForm("one-question.xml")
                 .clickFillBlankForm() // Sync forms on disk
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new MainMenuPage())
                 .copyForm("one-question-updated.xml")
 
                 .clickFillBlankForm()
@@ -41,8 +41,8 @@ public class HideOldVersionsTest {
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .scrollToRecyclerViewItemAndClickText(R.string.hide_old_form_versions_setting_title)
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage())
 
                 .copyForm("one-question.xml")
                 .copyForm("one-question-updated.xml")

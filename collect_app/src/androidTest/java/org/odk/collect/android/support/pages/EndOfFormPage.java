@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import androidx.test.rule.ActivityTestRule;
-
 import org.odk.collect.android.R;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -13,8 +11,7 @@ public class EndOfFormPage extends Page<EndOfFormPage> {
 
     private final String formName;
 
-    public EndOfFormPage(String formName, ActivityTestRule rule) {
-        super(rule);
+    public EndOfFormPage(String formName) {
         this.formName = formName;
     }
 

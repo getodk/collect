@@ -34,21 +34,21 @@ public class SignatureWidgetTest {
     public void saveIgnoreDialog_ShouldUseBothOptions() {
 
         //TestCase1
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
                 .clickOnText("Image widgets")
                 .clickOnQuestion("Signature widget")
                 .clickWidgetButton()
                 .waitForRotationToEnd()
-                .pressBack(new SaveOrIgnoreDialog<>("Gather Signature", new FormEntryPage("All widgets", rule), rule))
+                .pressBack(new SaveOrIgnoreDialog<>("Gather Signature", new FormEntryPage("All widgets")))
                 .checkIsTranslationDisplayed("Exit Gather Signature", "Salir Adjuntar firma")
                 .assertText(R.string.keep_changes)
                 .clickIgnoreChanges()
                 .waitForRotationToEnd()
                 .clickWidgetButton()
                 .waitForRotationToEnd()
-                .pressBack(new SaveOrIgnoreDialog<>("Gather Signature", new FormEntryPage("All widgets", rule), rule))
+                .pressBack(new SaveOrIgnoreDialog<>("Gather Signature", new FormEntryPage("All widgets")))
                 .clickSaveChanges()
                 .waitForRotationToEnd()
                 .clickGoToArrow()
@@ -60,7 +60,7 @@ public class SignatureWidgetTest {
     public void multiClickOnPlus_ShouldDisplayIcons() {
 
         //TestCase2
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
                 .clickOnText("Image widgets")
@@ -73,7 +73,7 @@ public class SignatureWidgetTest {
                 .clickOnString(R.string.ok)
                 .clickOnId(R.id.fab_actions)
                 .checkIsIdDisplayed(R.id.fab_set_color)
-                .pressBack(new SaveOrIgnoreDialog<>("Gather Signature", new FormEntryPage("All widgets", rule), rule))
+                .pressBack(new SaveOrIgnoreDialog<>("Gather Signature", new FormEntryPage("All widgets")))
                 .clickSaveChanges()
                 .waitForRotationToEnd()
                 .clickGoToArrow()

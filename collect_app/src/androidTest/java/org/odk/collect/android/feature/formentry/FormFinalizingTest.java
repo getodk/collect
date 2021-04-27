@@ -33,7 +33,7 @@ public class FormFinalizingTest {
 
     @Test
     public void fillingForm_andPressingSaveAndExit_finalizesForm() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .assertNumberOfFinalizedForms(0)
                 .startBlankForm("One Question")
                 .swipeToEndScreen()
@@ -43,7 +43,7 @@ public class FormFinalizingTest {
 
     @Test
     public void fillingForm_andUncheckingFinalize_andPressingSaveAndExit_doesNotFinalizesForm() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .assertNumberOfFinalizedForms(0)
                 .startBlankForm("One Question")
                 .swipeToEndScreen()
@@ -55,11 +55,11 @@ public class FormFinalizingTest {
 
     @Test
     public void fillingForm_andPressingBack_andPressingSave_doesNotFinalizesForm() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .assertNumberOfFinalizedForms(0)
                 .startBlankForm("One Question")
                 .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage(rule), rule))
+                .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage()))
                 .clickSaveChanges()
                 .assertNumberOfFinalizedForms(0);
     }

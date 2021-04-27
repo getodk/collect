@@ -27,7 +27,7 @@ public class RankingWidgetWithCSVTest {
 
     @Test
     public void rankingWidget_shouldDisplayItemsFromSearchFunc() {
-        new FormEntryPage("ranking_widget", activityTestRule)
+        new FormEntryPage("ranking_widget")
                 .clickRankingButton()
                 .assertText("Mango", "Oranges", "Strawberries");
     }

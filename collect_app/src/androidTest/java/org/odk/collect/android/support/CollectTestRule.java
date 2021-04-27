@@ -13,7 +13,7 @@ public class CollectTestRule extends ActivityTestRule<MainMenuActivity> {
     }
 
     public MainMenuPage mainMenu() {
-        return new MainMenuPage(this).assertOnPage();
+        return new MainMenuPage().assertOnPage();
     }
 
     public static class StubbedIntents extends IntentsTestRule<MainMenuActivity> {
@@ -23,7 +23,7 @@ public class CollectTestRule extends ActivityTestRule<MainMenuActivity> {
         }
 
         public MainMenuPage mainMenu() {
-            return new MainMenuPage(this).assertOnPage();
+            return new MainMenuPage().assertOnPage();
         }
     }
 }

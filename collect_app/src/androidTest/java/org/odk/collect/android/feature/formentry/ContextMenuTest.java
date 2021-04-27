@@ -25,7 +25,7 @@ public class ContextMenuTest {
 
     @Test
     public void whenRemoveStringAnswer_ShouldAppropriateQuestionBeCleared() {
-        new FormEntryPage("string_widgets", activityTestRule)
+        new FormEntryPage("string_widgets")
                 .putTextOnIndex(0, "TestString")
                 .putTextOnIndex(1, "1234")
                 .assertText("TestString")
@@ -44,7 +44,7 @@ public class ContextMenuTest {
 
     @Test
     public void whenLongPressedOnEditText_ShouldNotRemoveAnswerOptionAppear() {
-        new FormEntryPage("string_widgets", activityTestRule)
+        new FormEntryPage("string_widgets")
                 .longPressOnView(R.id.answer_container, 0)
                 .assertTextDoesNotExist(R.string.clear_answer);
     }

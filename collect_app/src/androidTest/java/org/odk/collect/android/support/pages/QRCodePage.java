@@ -8,7 +8,6 @@ import android.widget.ImageView;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.matcher.BoundedMatcher;
-import androidx.test.rule.ActivityTestRule;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -24,10 +23,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class QRCodePage extends Page<QRCodePage> {
-    public QRCodePage(ActivityTestRule rule) {
-        super(rule);
-    }
-
     @Override
     public QRCodePage assertOnPage() {
         assertText(R.string.configure_via_qr_code);

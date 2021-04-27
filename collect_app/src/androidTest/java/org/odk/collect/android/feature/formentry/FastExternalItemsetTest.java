@@ -21,7 +21,7 @@ public class FastExternalItemsetTest {
 
     @Test
     public void testFastExternalItemset() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("selectOneExternal")
                 .clickOnText("Texas")
                 .swipeToNextQuestion("county")
@@ -40,7 +40,7 @@ public class FastExternalItemsetTest {
                 .swipeToEndScreen()
                 .clickSaveAndExit();
 
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .clickEditSavedForm()
                 .clickOnForm("selectOneExternal")
                 .assertText("Texas", "King", "Dumont", "Washington", "Pierce", "Puyallup")

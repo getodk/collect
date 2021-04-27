@@ -29,7 +29,7 @@ public class ExternalDataFileNotFoundTest {
     public void questionsThatUseExternalFiles_ShouldDisplayFriendlyMessageWhenFilesAreMissing() {
         String formsDirPath = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS);
 
-        new FormEntryPage("externalDataQuestions", activityTestRule)
+        new FormEntryPage("externalDataQuestions")
                 .assertText(activityTestRule.getActivity().getString(R.string.file_missing, formsDirPath + "/external_data_questions-media/fruits.csv"))
                 .swipeToNextQuestion()
                 .assertText(activityTestRule.getActivity().getString(R.string.file_missing, formsDirPath + "/external_data_questions-media/itemsets.csv"));

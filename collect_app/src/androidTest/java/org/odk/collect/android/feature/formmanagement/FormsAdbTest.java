@@ -33,7 +33,7 @@ public class FormsAdbTest {
                 .copyForm("one-question.xml")
                 .clickFillBlankForm()
                 .assertFormExists("One Question")
-                .pressBack(new MainMenuPage(rule));
+                .pressBack(new MainMenuPage());
 
         FormLoadingUtils.copyFormToStorage("one-question-updated.xml", "one-question.xml");
 
@@ -49,7 +49,7 @@ public class FormsAdbTest {
                 .copyForm("one-question.xml")
                 .clickFillBlankForm()
                 .assertFormExists("One Question")
-                .pressBack(new MainMenuPage(rule));
+                .pressBack(new MainMenuPage());
 
         String formsDir = testDependencies.storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS);
         boolean formDeleted = new File(formsDir, "one-question.xml").delete();

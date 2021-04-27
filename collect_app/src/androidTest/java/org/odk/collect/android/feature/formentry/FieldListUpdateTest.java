@@ -262,7 +262,7 @@ public class FieldListUpdateTest {
 
     @Test
     public void selectionChangeAtOneCascadeLevelWithMinimalAppearance_ShouldUpdateNextLevels() {
-        new FormEntryPage("fieldlist-updates", activityTestRule)
+        new FormEntryPage("fieldlist-updates")
                 .clickGoToArrow()
                 .clickGoUpIcon()
                 .clickOnGroup("Cascading select minimal")
@@ -378,7 +378,7 @@ public class FieldListUpdateTest {
 
     @Test
     public void searchMinimalInFieldList() {
-        new FormEntryPage("fieldlist-updates", activityTestRule)
+        new FormEntryPage("fieldlist-updates")
                 .clickGoToArrow()
                 .clickGoUpIcon()
                 .clickOnGroup("Search in field-list")

@@ -45,7 +45,7 @@ public class CustomServerPathsTest {
         server.setFormListPath("/customPath");
         server.addForm("Custom path form", "one-question", "1", "one-question.xml");
 
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickServerSettings()
@@ -57,9 +57,9 @@ public class CustomServerPathsTest {
                 .inputText("/customPath")
                 .clickOKOnDialog()
                 .assertText("/customPath")
-                .pressBack(new ServerSettingsPage(rule))
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new ServerSettingsPage())
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage())
 
                 .clickGetBlankForm()
                 .assertText("Custom path form");
@@ -69,7 +69,7 @@ public class CustomServerPathsTest {
     public void changingSubmissionPathInSettings_changesSubmissionUploadPath() {
         server.setFormSubmissionPath("/customPath");
 
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("One Question")
                 .swipeToEndScreen()
                 .clickSaveAndExit()
@@ -85,9 +85,9 @@ public class CustomServerPathsTest {
                 .inputText("/customPath")
                 .clickOKOnDialog()
                 .assertText("/customPath")
-                .pressBack(new ServerSettingsPage(rule))
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new ServerSettingsPage())
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage())
 
                 .clickSendFinalizedForm(1)
                 .clickOnForm("One Question")

@@ -43,6 +43,6 @@ public class AndroidShortcutsTest {
         Intent shortcutIntent = resultData.getParcelableExtra(Intent.EXTRA_SHORTCUT_INTENT);
 
         rule.getActivity().startActivity(shortcutIntent);
-        return new FormEntryPage(formName, rule);
+        return new FormEntryPage(formName);
     }
 }

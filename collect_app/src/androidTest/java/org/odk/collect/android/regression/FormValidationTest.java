@@ -32,7 +32,7 @@ public class FormValidationTest {
     @Test
     public void invalidAnswer_ShouldDisplayAllQuestionsOnOnePage() {
 
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("OnePageFormShort")
                 .putTextOnIndex(0, "A")
                 .clickGoToArrow()
@@ -50,14 +50,14 @@ public class FormValidationTest {
     public void openHierarchyView_ShouldSeeShortForms() {
 
         //TestCase3
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("OnePageFormShort")
                 .clickGoToArrow()
                 .assertText("YY MM")
                 .assertText("YY")
-                .pressBack(new FormEntryPage("OnePageFormShort", rule))
+                .pressBack(new FormEntryPage("OnePageFormShort"))
                 .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("OnePageFormShort", new MainMenuPage(rule), rule))
+                .pressBack(new SaveOrIgnoreDialog<>("OnePageFormShort", new MainMenuPage()))
                 .clickIgnoreChanges();
     }
 }

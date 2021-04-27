@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import androidx.test.rule.ActivityTestRule;
-
 import org.odk.collect.android.R;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -18,8 +16,8 @@ public class IdentifyUserPromptPage extends Page<IdentifyUserPromptPage> {
 
     private final String formName;
 
-    public IdentifyUserPromptPage(String formName, ActivityTestRule rule) {
-        super(rule);
+    public IdentifyUserPromptPage(String formName) {
+        super();
         this.formName = formName;
     }
 
@@ -37,7 +35,7 @@ public class IdentifyUserPromptPage extends Page<IdentifyUserPromptPage> {
 
     public FormEntryPage clickKeyboardEnter() {
         onView(withHint(getTranslatedString(R.string.identity))).perform(pressImeActionButton());
-        return new FormEntryPage(formName, rule).assertOnPage();
+        return new FormEntryPage(formName).assertOnPage();
     }
 
     public IdentifyUserPromptPage clickKeyboardEnterWithValidationError() {
@@ -47,6 +45,6 @@ public class IdentifyUserPromptPage extends Page<IdentifyUserPromptPage> {
 
     public MainMenuPage pressClose() {
         onView(withContentDescription(getTranslatedString(R.string.close))).perform(click());
-        return new MainMenuPage(rule).assertOnPage();
+        return new MainMenuPage().assertOnPage();
     }
 }

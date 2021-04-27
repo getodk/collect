@@ -67,8 +67,8 @@ public class EncryptedFormTest {
                 .clickSendFinalizedForm(1)
                 .clickOnForm("encrypted")
                 .clickSendSelected()
-                .clickOK(new SendFinalizedFormPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .clickOK(new SendFinalizedFormPage())
+                .pressBack(new MainMenuPage())
 
                 .clickViewSentForm(1)
                 .clickOnText("encrypted")

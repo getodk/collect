@@ -1,9 +1,8 @@
 package org.odk.collect.android.support.pages
 
-import androidx.test.rule.ActivityTestRule
 import org.odk.collect.android.R
 
-internal class FirstLaunchDialogPage(rule: ActivityTestRule<*>) : Page<FirstLaunchDialogPage>(rule) {
+internal class FirstLaunchDialogPage : Page<FirstLaunchDialogPage>() {
 
     override fun assertOnPage(): FirstLaunchDialogPage {
         assertText(R.string.configure_with_qr_code)

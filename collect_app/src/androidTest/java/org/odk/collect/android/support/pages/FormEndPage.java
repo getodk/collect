@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import androidx.test.rule.ActivityTestRule;
-
 import org.odk.collect.android.R;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -17,8 +15,7 @@ public class FormEndPage extends Page<FormEndPage> {
 
     private final String formName;
 
-    public FormEndPage(String formName, ActivityTestRule rule) {
-        super(rule);
+    public FormEndPage(String formName) {
         this.formName = formName;
     }
 
@@ -30,27 +27,27 @@ public class FormEndPage extends Page<FormEndPage> {
 
     public MainMenuPage clickSaveAndExit() {
         onView(withId(R.id.save_exit_button)).perform(click());
-        return new MainMenuPage(rule).assertOnPage();
+        return new MainMenuPage().assertOnPage();
     }
 
     public FormMapPage clickSaveAndExitBackToMap() {
         onView(withId(R.id.save_exit_button)).perform(click());
-        return new FormMapPage(rule).assertOnPage();
+        return new FormMapPage().assertOnPage();
     }
 
     public FormEntryPage clickSaveAndExitWithError() {
         onView(withId(R.id.save_exit_button)).perform(click());
-        return new FormEntryPage(formName, rule).assertOnPage();
+        return new FormEntryPage(formName).assertOnPage();
     }
 
     public OkDialog clickSaveAndExitWithErrorDialog() {
         onView(withId(R.id.save_exit_button)).perform(click());
-        return new OkDialog(rule).assertOnPage();
+        return new OkDialog().assertOnPage();
     }
 
     public ChangesReasonPromptPage clickSaveAndExitWithChangesReasonPrompt() {
         onView(withId(R.id.save_exit_button)).perform(click());
-        return new ChangesReasonPromptPage(formName, rule).assertOnPage();
+        return new ChangesReasonPromptPage(formName).assertOnPage();
     }
 
     public FormEndPage assertMarkFinishedIsSelected() {
@@ -70,15 +67,15 @@ public class FormEndPage extends Page<FormEndPage> {
 
     public FormHierarchyPage clickGoToArrow() {
         onView(withId(R.id.menu_goto)).perform(click());
-        return new FormHierarchyPage(formName, rule);
+        return new FormHierarchyPage(formName);
     }
 
     public FormEntryPage swipeToPreviousQuestion(String questionText) {
-        return new FormEntryPage(formName, rule).swipeToPreviousQuestion(questionText);
+        return new FormEntryPage(formName).swipeToPreviousQuestion(questionText);
     }
 
     public FormEntryPage swipeToPreviousQuestion(String questionText, boolean isRequired) {
-        return new FormEntryPage(formName, rule).swipeToPreviousQuestion(questionText, isRequired);
+        return new FormEntryPage(formName).swipeToPreviousQuestion(questionText, isRequired);
     }
 
     public FormEndPage fillInFormName(String formName) {

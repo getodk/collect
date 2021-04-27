@@ -43,7 +43,7 @@ public class FormMetadataTest {
 
     @Test
     public void settingMetadata_letsThemBeIncludedInAForm() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickUserAndDeviceIdentity()
@@ -60,27 +60,27 @@ public class FormMetadataTest {
                 .inputText("664615")
                 .clickOKOnDialog()
                 .assertPreference(R.string.phone_number, "664615")
-                .pressBack(new UserAndDeviceIdentitySettingsPage(rule))
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new UserAndDeviceIdentitySettingsPage())
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage())
                 .startBlankForm("Metadata")
                 .assertText("Chino", "chino@whitepony.com", "664615");
     }
 
     @Test // Issue number NODK-238 TestCase4 TestCase5
     public void settingServerUsername_usedAsFallbackForMetadataUsername() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickServerSettings()
                 .clickServerUsername()
                 .inputText("Chino")
                 .clickOKOnDialog()
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage())
                 .startBlankForm("Metadata")
                 .assertText("Chino")
-                .pressBack(new SaveOrIgnoreDialog<>("Metadata", new MainMenuPage(rule), rule))
+                .pressBack(new SaveOrIgnoreDialog<>("Metadata", new MainMenuPage()))
                 .clickIgnoreChanges()
                 .openProjectSettingsDialog()
                 .clickGeneralSettings()
@@ -89,16 +89,16 @@ public class FormMetadataTest {
                 .clickUsername()
                 .inputText("Stephen")
                 .clickOKOnDialog()
-                .pressBack(new UserAndDeviceIdentitySettingsPage(rule))
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new UserAndDeviceIdentitySettingsPage())
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage())
                 .startBlankForm("Metadata")
                 .assertText("Stephen");
     }
 
     @Test
     public void deviceIdentifiersAreDisplayedInSettings() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickUserAndDeviceIdentity()
@@ -108,7 +108,7 @@ public class FormMetadataTest {
 
     @Test
     public void deviceIdentifiersCanBeIncludedInAForm() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("Metadata")
                 .scrollToAndAssertText(deviceDetailsProvider.getDeviceId());
     }

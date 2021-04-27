@@ -23,9 +23,9 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.configure.qr.JsonPreferencesGenerator;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.configure.qr.JsonPreferencesGenerator;
 import org.odk.collect.android.support.CallbackCountingTaskExecutorRule;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CountingTaskExecutorIdlingResource;
@@ -102,7 +102,7 @@ public class ConfigureWithQRCodeTest {
         stubBarcodeViewDecoder.scan("{\"general\":{ \"server_url\": \"http://gallops.example\" },\"admin\":{}}");
         qrCodePage.checkIsToastWithMessageDisplayed(R.string.successfully_imported_settings);
 
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .assertOnPage()
                 .openProjectSettingsDialog()
                 .clickGeneralSettings()
@@ -131,7 +131,7 @@ public class ConfigureWithQRCodeTest {
                 .clickOnString(R.string.admin_password)
                 .inputText("blah")
                 .clickOKOnDialog()
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new MainMenuPage())
 
                 .openProjectSettingsDialog()
                 .clickAdminSettingsWithPassword("blah")
@@ -152,8 +152,8 @@ public class ConfigureWithQRCodeTest {
                 .clickServerPassword()
                 .inputText("blah")
                 .clickOKOnDialog()
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage())
 
                 .openProjectSettingsDialog()
                 .clickAdminSettings()

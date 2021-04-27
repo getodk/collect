@@ -27,7 +27,7 @@ public class ExternalCsvSearchTest {
 
     @Test
     public void search_withoutFilter_displaysAllChoices() {
-        new FormEntryPage("external-csv-search", rule).assertOnPage()
+        new FormEntryPage("external-csv-search").assertOnPage()
                 .assertText("Artichoke")
                 .assertText("Apple")
                 .assertText("Banana")
@@ -39,7 +39,7 @@ public class ExternalCsvSearchTest {
     @Test
     // Regression: https://github.com/getodk/collect/issues/3132
     public void search_withFilter_showsMatchingChoices() {
-        new FormEntryPage("external-csv-search", rule).assertOnPage()
+        new FormEntryPage("external-csv-search").assertOnPage()
                 .swipeToNextQuestion("Produce search")
                 .inputText("A")
                 .swipeToNextQuestion("Produce")
