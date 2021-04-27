@@ -30,7 +30,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.javarosa.core.model.data.IAnswerData;
@@ -96,8 +95,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
     @Override
     public void deleteFile() {
-        questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
-                        getInstanceFolder() + File.separator + binaryName);
+        questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(), binaryName);
         binaryName = null;
     }
 
@@ -146,7 +144,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             int screenHeight = metrics.heightPixels;
 
             File f = getFile();
-            if (f.exists()) {
+            if (f != null && f.exists()) {
                 Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
                 if (bmp == null) {
                     errorTextView.setVisibility(View.VISIBLE);
@@ -181,7 +179,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
      * @param intent to add extras
      * @return intent with added extras
      */
-    public abstract Intent addExtrasToIntent(@NonNull Intent intent);
+    public abstract Intent addExtrasToIntent(Intent intent);
 
     /**
      * Interface for Clicking on Images
@@ -197,7 +195,8 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
         @Override
         public void clickImage(String context) {
-            mediaUtils.openFile(getContext(), new File(getInstanceFolder() + File.separator + binaryName), "image/*");
+            mediaUtils.openFile(getContext(), questionMediaManager.getAnswerFile(binaryName),
+                    "image/*");
         }
     }
 
@@ -282,10 +281,10 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             waitingForDataRegistry.cancelWaitingForData();
         }
     }
-
+    @Nullable
     private File getFile() {
-        File file = new File(getInstanceFolder() + File.separator + binaryName);
-        if (!file.exists() && doesSupportDefaultValues()) {
+        File file = questionMediaManager.getAnswerFile(binaryName);
+        if ((file == null || !file.exists()) && doesSupportDefaultValues()) {
             file = new File(getDefaultFilePath());
         }
 
