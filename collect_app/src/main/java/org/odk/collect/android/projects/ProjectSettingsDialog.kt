@@ -11,8 +11,10 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.AboutActivity
+import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
 import org.odk.collect.android.databinding.ProjectSettingsDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment
@@ -35,17 +37,18 @@ class ProjectSettingsDialog : DialogFragment() {
     @Inject
     lateinit var currentProjectProvider: CurrentProjectProvider
 
+    @Inject
+    lateinit var currentProjectViewModelFactory: CurrentProjectViewModel.Factory
+
     private lateinit var binding: ProjectSettingsDialogLayoutBinding
 
-    private lateinit var listener: ProjectSettingsDialogListener
+    private lateinit var currentProjectViewModel: CurrentProjectViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
 
-        if (context is ProjectSettingsDialogListener) {
-            listener = context
-        }
+        currentProjectViewModel = ViewModelProvider(requireActivity(), currentProjectViewModelFactory)[CurrentProjectViewModel::class.java]
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -117,7 +120,7 @@ class ProjectSettingsDialog : DialogFragment() {
     private fun switchProject(project: Project) {
         currentProjectProvider.setCurrentProject(project.uuid)
         dismiss()
-        listener.onProjectSwitched()
+        currentProjectViewModel.setCurrentProject(project)
     }
 
     private fun setupCurrentProjectView() {
@@ -125,9 +128,5 @@ class ProjectSettingsDialog : DialogFragment() {
 
         binding.currentProject.project = currentProject
         binding.currentProject.contentDescription = getString(R.string.using_project, currentProject.name)
-    }
-
-    interface ProjectSettingsDialogListener {
-        fun onProjectSwitched()
     }
 }

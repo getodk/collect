@@ -25,8 +25,6 @@ import org.odk.collect.android.activities.viewmodels.MainMenuViewModel
 import org.odk.collect.android.formmanagement.InstancesCountRepository
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
-import org.odk.collect.android.projects.CurrentProjectProvider
-import org.odk.collect.android.projects.ProjectSettingsDialog
 import org.odk.collect.android.support.RobolectricHelpers
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.version.VersionInformation
@@ -45,30 +43,19 @@ class MainMenuActivityTest {
         currentProject = mock(Project::class.java)
         livedata = mock(LiveData::class.java) as LiveData<Int>
 
-        `when`(mainMenuViewModel.currentProject).thenReturn(currentProject)
         `when`(mainMenuViewModel.finalizedFormsCount).thenReturn(livedata)
         `when`(mainMenuViewModel.sentFormsCount).thenReturn(livedata)
         `when`(mainMenuViewModel.unsentFormsCount).thenReturn(livedata)
 
-        `when`(mainMenuViewModel.currentProject).thenReturn(Project("Project 1", "P", "#ffffff"))
-
         RobolectricHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesMainMenuViewModel(versionInformation: VersionInformation, application: Application, settingsProvider: SettingsProvider, instancesCountRepository: InstancesCountRepository, currentProjectProvider: CurrentProjectProvider): MainMenuViewModel.Factory {
-                return object : MainMenuViewModel.Factory(versionInformation, application, settingsProvider, instancesCountRepository, currentProjectProvider) {
+            override fun providesMainMenuViewModel(versionInformation: VersionInformation, application: Application, settingsProvider: SettingsProvider, instancesCountRepository: InstancesCountRepository): MainMenuViewModel.Factory {
+                return object : MainMenuViewModel.Factory(versionInformation, application, settingsProvider, instancesCountRepository) {
                     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                         return mainMenuViewModel as T
                     }
                 }
             }
         })
-    }
-
-    @Test
-    fun `MainMenuActivity should implement ProjectSettingsDialogListener`() {
-        val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
-        scenario.onActivity { activity: MainMenuActivity ->
-            assertThat(activity is ProjectSettingsDialog.ProjectSettingsDialogListener, `is`(true))
-        }
     }
 
     @Test

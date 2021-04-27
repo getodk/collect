@@ -7,19 +7,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.formmanagement.InstancesCountRepository;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.version.VersionInformation;
-import org.odk.collect.projects.Project;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class MainMenuViewModelTest {
-    private final CurrentProjectProvider currentProjectProvider = mock(CurrentProjectProvider.class);
 
     @Test
     public void version_whenBetaRelease_returnsSemanticVersionWithPrefix_andBetaVersion() {
@@ -81,17 +77,8 @@ public class MainMenuViewModelTest {
         assertThat(viewModel.getVersionCommitDescription(), equalTo("181-ge51d004d4-dirty"));
     }
 
-    @Test
-    public void getCurrentProject_shouldReturnCurrentProject() {
-        Project project = new Project("Project 1", "P", "#ffffff", "1");
-        when(currentProjectProvider.getCurrentProject()).thenReturn(project);
-
-        MainMenuViewModel viewModel = createViewModelWithVersion("");
-        assertThat(viewModel.getCurrentProject(), equalTo(project));
-    }
-
     @NotNull
     private MainMenuViewModel createViewModelWithVersion(String version) {
-        return new MainMenuViewModel(mock(Application.class), new VersionInformation(() -> version), mock(SettingsProvider.class), mock(InstancesCountRepository.class), currentProjectProvider);
+        return new MainMenuViewModel(mock(Application.class), new VersionInformation(() -> version), mock(SettingsProvider.class), mock(InstancesCountRepository.class));
     }
 }

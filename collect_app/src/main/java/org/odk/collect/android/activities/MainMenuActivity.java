@@ -27,6 +27,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
@@ -53,7 +54,7 @@ import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class MainMenuActivity extends CollectAbstractActivity implements AdminPasswordDialogFragment.AdminPasswordDialogCallback, ProjectSettingsDialog.ProjectSettingsDialogListener {
+public class MainMenuActivity extends CollectAbstractActivity implements AdminPasswordDialogFragment.AdminPasswordDialogCallback {
     // buttons
     private Button manageFilesButton;
     private Button sendDataButton;
@@ -63,7 +64,13 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     @Inject
     MainMenuViewModel.Factory viewModelFactory;
-    private MainMenuViewModel viewModel;
+
+    @Inject
+    CurrentProjectViewModel.Factory currentProjectViewModelFactory;
+
+    private MainMenuViewModel mainMenuViewModel;
+
+    private CurrentProjectViewModel currentProjectViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +78,11 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         DaggerUtils.getComponent(this).inject(this);
         setContentView(R.layout.main_menu);
 
-        viewModel = new ViewModelProvider(this, viewModelFactory).get(MainMenuViewModel.class);
+        mainMenuViewModel = new ViewModelProvider(this, viewModelFactory).get(MainMenuViewModel.class);
+        currentProjectViewModel = new ViewModelProvider(this, currentProjectViewModelFactory).get(CurrentProjectViewModel.class);
 
         initToolbar();
+
         // enter data button. expects a result.
         Button enterDataButton = findViewById(R.id.enter_data);
         enterDataButton.setText(getString(R.string.enter_data_button));
@@ -160,14 +169,14 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         });
 
         TextView versionSHAView = findViewById(R.id.version_sha);
-        String versionSHA = viewModel.getVersionCommitDescription();
+        String versionSHA = mainMenuViewModel.getVersionCommitDescription();
         if (versionSHA != null) {
             versionSHAView.setText(versionSHA);
         } else {
             versionSHAView.setVisibility(View.GONE);
         }
 
-        viewModel.getFinalizedFormsCount().observe(this, finalized -> {
+        mainMenuViewModel.getFinalizedFormsCount().observe(this, finalized -> {
             if (finalized > 0) {
                 sendDataButton.setText(getString(R.string.send_data_button, String.valueOf(finalized)));
             } else {
@@ -176,7 +185,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         });
 
 
-        viewModel.getUnsentFormsCount().observe(this, unsent -> {
+        mainMenuViewModel.getUnsentFormsCount().observe(this, unsent -> {
             if (unsent > 0) {
                 reviewDataButton.setText(getString(R.string.review_data_button, String.valueOf(unsent)));
             } else {
@@ -185,7 +194,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         });
 
 
-        viewModel.getSentFormsCount().observe(this, sent -> {
+        mainMenuViewModel.getSentFormsCount().observe(this, sent -> {
             if (sent > 0) {
                 viewSentFormsButton.setText(getString(R.string.view_sent_forms_button, String.valueOf(sent)));
             } else {
@@ -197,18 +206,18 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     @Override
     protected void onResume() {
         super.onResume();
-        viewModel.resume();
+        mainMenuViewModel.resume();
 
         setButtonsVisibility();
         invalidateOptionsMenu();
     }
 
     private void setButtonsVisibility() {
-        reviewDataButton.setVisibility(viewModel.shouldEditSavedFormButtonBeVisible() ? View.VISIBLE : View.GONE);
-        sendDataButton.setVisibility(viewModel.shouldSendFinalizedFormButtonBeVisible() ? View.VISIBLE : View.GONE);
-        viewSentFormsButton.setVisibility(viewModel.shouldViewSentFormButtonBeVisible() ? View.VISIBLE : View.GONE);
-        getFormsButton.setVisibility(viewModel.shouldGetBlankFormButtonBeVisible() ? View.VISIBLE : View.GONE);
-        manageFilesButton.setVisibility(viewModel.shouldDeleteSavedFormButtonBeVisible() ? View.VISIBLE : View.GONE);
+        reviewDataButton.setVisibility(mainMenuViewModel.shouldEditSavedFormButtonBeVisible() ? View.VISIBLE : View.GONE);
+        sendDataButton.setVisibility(mainMenuViewModel.shouldSendFinalizedFormButtonBeVisible() ? View.VISIBLE : View.GONE);
+        viewSentFormsButton.setVisibility(mainMenuViewModel.shouldViewSentFormButtonBeVisible() ? View.VISIBLE : View.GONE);
+        getFormsButton.setVisibility(mainMenuViewModel.shouldGetBlankFormButtonBeVisible() ? View.VISIBLE : View.GONE);
+        manageFilesButton.setVisibility(mainMenuViewModel.shouldDeleteSavedFormButtonBeVisible() ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -216,8 +225,16 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         final MenuItem projectsMenuItem = menu.findItem(R.id.projects);
 
         ProjectIconView projectIconView = (ProjectIconView) projectsMenuItem.getActionView();
-        projectIconView.setProject(viewModel.getCurrentProject());
+        projectIconView.setProject(currentProjectViewModel.getCurrentProject().getValue().getValue());
         projectIconView.setOnClickListener(v -> onOptionsItemSelected(projectsMenuItem));
+
+        currentProjectViewModel.getCurrentProject().getValue().consume();
+        currentProjectViewModel.getCurrentProject().observe(this, project -> {
+            if (!project.isConsumed()) {
+                invalidateOptionsMenu();
+                ToastUtils.showLongToast(getString(R.string.switched_project, project.getValue().getName()));
+            }
+        });
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -243,7 +260,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setTitle(String.format("%s %s", getString(R.string.app_name), viewModel.getVersion()));
+        setTitle(String.format("%s %s", getString(R.string.app_name), mainMenuViewModel.getVersion()));
         setSupportActionBar(toolbar);
     }
 
@@ -262,11 +279,5 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     @Override
     public void onIncorrectAdminPassword() {
         ToastUtils.showShortToast(R.string.admin_password_incorrect);
-    }
-
-    @Override
-    public void onProjectSwitched() {
-        invalidateOptionsMenu();
-        ToastUtils.showLongToast(getString(R.string.switched_project, viewModel.getCurrentProject().getName()));
     }
 }
