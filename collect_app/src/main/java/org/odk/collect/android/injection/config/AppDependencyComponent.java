@@ -225,8 +225,6 @@ public interface AppDependencyComponent {
 
     void inject(DeleteSavedFormActivity deleteSavedFormActivity);
 
-    void inject(AdminPreferencesFragment.MainMenuAccessPreferences mainMenuAccessPreferences);
-
     void inject(SelectMinimalDialog selectMinimalDialog);
 
     void inject(AudioRecordingControllerFragment audioRecordingControllerFragment);

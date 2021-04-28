@@ -1,12 +1,8 @@
 package org.odk.collect.android.preferences.screens;
 
-import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-
 import org.odk.collect.android.R;
-import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.FormUpdateMode;
 
 import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
@@ -16,12 +12,6 @@ import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_GET_BLANK;
 import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
 
 public class MainMenuAccessPreferencesFragment extends BaseAdminPreferencesFragment {
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        DaggerUtils.getComponent(context).inject(this);
-    }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
