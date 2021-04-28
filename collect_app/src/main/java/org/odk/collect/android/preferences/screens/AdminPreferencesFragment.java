@@ -50,6 +50,7 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
 
         settingsProvider.getAdminSettings().save("project_name", currentProjectProvider.getCurrentProject().getName());
         settingsProvider.getAdminSettings().save("project_icon", currentProjectProvider.getCurrentProject().getIcon());
+        settingsProvider.getAdminSettings().save("project_color", currentProjectProvider.getCurrentProject().getColor());
     }
 
     @Override
