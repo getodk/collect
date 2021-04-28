@@ -165,6 +165,7 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
     private void setProjectColorSummary() {
         Spannable summary = new SpannableString("■");
         summary.setSpan(new ForegroundColorSpan(Color.parseColor(currentProjectProvider.getCurrentProject().getColor())), 0, summary.length(), 0);
+        findPreference("project_color").setSummary("");
         findPreference("project_color").setSummary(summary);
     }
 }
