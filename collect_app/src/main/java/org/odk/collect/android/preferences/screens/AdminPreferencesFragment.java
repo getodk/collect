@@ -44,7 +44,12 @@ import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_CHANGE_ADMI
 import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_IMPORT_SETTINGS;
 import static org.odk.collect.android.preferences.screens.GeneralPreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
-public class AdminPreferencesFragment extends BaseAdminPreferencesFragment implements Preference.OnPreferenceClickListener {
+public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
+        implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
+
+    private static final String PROJECT_NAME_KEY = "project_name";
+    private static final String PROJECT_ICON_KEY = "project_icon";
+    private static final String PROJECT_COLOR_KEY = "project_color";
 
     @Inject
     CurrentProjectProvider currentProjectProvider;
@@ -57,9 +62,9 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
 
-        settingsProvider.getAdminSettings().save("project_name", currentProjectProvider.getCurrentProject().getName());
-        settingsProvider.getAdminSettings().save("project_icon", currentProjectProvider.getCurrentProject().getIcon());
-        settingsProvider.getAdminSettings().save("project_color", currentProjectProvider.getCurrentProject().getColor());
+        settingsProvider.getAdminSettings().save(PROJECT_NAME_KEY, currentProjectProvider.getCurrentProject().getName());
+        settingsProvider.getAdminSettings().save(PROJECT_ICON_KEY, currentProjectProvider.getCurrentProject().getIcon());
+        settingsProvider.getAdminSettings().save(PROJECT_COLOR_KEY, currentProjectProvider.getCurrentProject().getColor());
     }
 
     @Override
@@ -74,22 +79,9 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
         findPreference("user_settings").setOnPreferenceClickListener(this);
         findPreference("form_entry").setOnPreferenceClickListener(this);
 
-        findPreference("project_name").setOnPreferenceChangeListener((preference, newValue) -> {
-            Project currentProject = currentProjectProvider.getCurrentProject();
-            projectsRepository.update(new Project(String.valueOf(newValue), currentProject.getIcon(), currentProject.getColor(), currentProject.getUuid()));
-            return true;
-        });
-        findPreference("project_icon").setOnPreferenceChangeListener((preference, newValue) -> {
-            Project currentProject = currentProjectProvider.getCurrentProject();
-            projectsRepository.update(new Project(currentProject.getName(), String.valueOf(newValue), currentProject.getColor(), currentProject.getUuid()));
-            return true;
-        });
-        findPreference("project_color").setOnPreferenceChangeListener((preference, newValue) -> {
-            Project currentProject = currentProjectProvider.getCurrentProject();
-            projectsRepository.update(new Project(currentProject.getName(), currentProject.getIcon(), String.valueOf(newValue), currentProject.getUuid()));
-            setProjectColorSummary();
-            return true;
-        });
+        findPreference(PROJECT_NAME_KEY).setOnPreferenceChangeListener(this);
+        findPreference(PROJECT_ICON_KEY).setOnPreferenceChangeListener(this);
+        findPreference(PROJECT_COLOR_KEY).setOnPreferenceChangeListener(this);
 
         setProjectColorSummary();
     }
@@ -122,8 +114,7 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
                     break;
 
                 case KEY_CHANGE_ADMIN_PASSWORD:
-                    DialogUtils.showIfNotShowing(ChangeAdminPasswordDialog.class,
-                            getActivity().getSupportFragmentManager());
+                    DialogUtils.showIfNotShowing(ChangeAdminPasswordDialog.class, getActivity().getSupportFragmentManager());
                     break;
 
                 case KEY_IMPORT_SETTINGS:
@@ -147,6 +138,24 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
         return false;
     }
 
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        Project currentProject = currentProjectProvider.getCurrentProject();
+        switch (preference.getKey()) {
+            case PROJECT_NAME_KEY:
+                projectsRepository.update(new Project(String.valueOf(newValue), currentProject.getIcon(), currentProject.getColor(), currentProject.getUuid()));
+                break;
+            case PROJECT_ICON_KEY:
+                projectsRepository.update(new Project(currentProject.getName(), String.valueOf(newValue), currentProject.getColor(), currentProject.getUuid()));
+                break;
+            case PROJECT_COLOR_KEY:
+                projectsRepository.update(new Project(currentProject.getName(), currentProject.getIcon(), String.valueOf(newValue), currentProject.getUuid()));
+                setProjectColorSummary();
+                break;
+        }
+        return true;
+    }
+
     private void displayPreferences(Fragment fragment) {
         if (fragment != null) {
             fragment.setArguments(getArguments());
@@ -165,7 +174,7 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
     private void setProjectColorSummary() {
         Spannable summary = new SpannableString("■");
         summary.setSpan(new ForegroundColorSpan(Color.parseColor(currentProjectProvider.getCurrentProject().getColor())), 0, summary.length(), 0);
-        findPreference("project_color").setSummary("");
-        findPreference("project_color").setSummary(summary);
+        findPreference(PROJECT_COLOR_KEY).setSummary("");
+        findPreference(PROJECT_COLOR_KEY).setSummary(summary);
     }
 }
