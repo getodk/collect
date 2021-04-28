@@ -35,12 +35,6 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return this;
     }
 
-    public MainMenuPage clickOnMenu() {
-        assertOnPage(); // Make sure we've waited for the application load correctly
-        Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
-        return this;
-    }
-
     public ProjectSettingsDialogPage openProjectSettingsDialog() {
         assertOnPage(); // Make sure we've waited for the application load correctly
         onView(withId(R.id.projects)).perform(click());
