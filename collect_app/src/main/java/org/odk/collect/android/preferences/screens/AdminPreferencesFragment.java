@@ -18,10 +18,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 
 import androidx.annotation.NonNull;
@@ -38,6 +36,7 @@ import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragment
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.androidshared.OneSignTextWatcher;
 import org.odk.collect.projects.Project;
 import org.odk.collect.projects.ProjectsRepository;
 
@@ -86,31 +85,7 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
         findPreference(PROJECT_ICON_KEY).setOnPreferenceChangeListener(this);
         findPreference(PROJECT_COLOR_KEY).setOnPreferenceChangeListener(this);
 
-        ((EditTextPreference) findPreference(PROJECT_ICON_KEY)).setOnBindEditTextListener(editText -> {
-            editText.addTextChangedListener(new TextWatcher() {
-                private String oldTextString = "";
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    String newTextString = editable.toString();
-                    if (!oldTextString.equals(newTextString)) {
-                        if (Character.codePointCount(newTextString, 0, newTextString.length()) > 1) {
-                            newTextString = oldTextString;
-                        }
-                        editText.setText(newTextString);
-                        editText.setSelection(newTextString.length());
-                    }
-                }
-
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    oldTextString = s.toString();
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
-            });
-        });
+        ((EditTextPreference) findPreference(PROJECT_ICON_KEY)).setOnBindEditTextListener(editText -> editText.addTextChangedListener(new OneSignTextWatcher(editText)));
 
         setProjectColorSummary();
     }
