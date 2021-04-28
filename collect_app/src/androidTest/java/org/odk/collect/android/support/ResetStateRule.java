@@ -13,6 +13,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.utilities.AppStateProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
 
 import java.io.File;
@@ -66,6 +67,7 @@ public class ResetStateRule implements TestRule {
 
     private void setTestState() {
         MultiClickGuard.test = true;
+        AppStateProvider.alwaysFresh = true;
     }
 
     private void clearDisk() {
@@ -81,10 +83,10 @@ public class ResetStateRule implements TestRule {
     }
 
     private void resetDagger() {
-        if (appDependencyModule != null) {
-            CollectHelpers.overrideAppDependencyModule(appDependencyModule);
-        } else {
+        if (appDependencyModule == null) {
             CollectHelpers.overrideAppDependencyModule(new AppDependencyModule());
+        } else {
+            CollectHelpers.overrideAppDependencyModule(appDependencyModule);
         }
     }
 
