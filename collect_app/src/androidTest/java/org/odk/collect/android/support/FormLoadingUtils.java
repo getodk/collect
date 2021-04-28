@@ -16,10 +16,7 @@
 
 package org.odk.collect.android.support;
 
-import androidx.test.espresso.intent.rule.IntentsTestRule;
-
 import org.javarosa.core.reference.ReferenceManager;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -73,7 +70,7 @@ public class FormLoadingUtils {
         copyFormToStorage(formFilename, null, false, copyTo);
     }
 
-    public static IntentsTestRule<FormEntryActivity> getFormActivityTestRuleFor(String formFilename) {
+    public static FormActivityTestRule getFormActivityTestRuleFor(String formFilename) {
         return new FormActivityTestRule(formFilename);
     }
 

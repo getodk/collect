@@ -1,13 +1,11 @@
 package org.odk.collect.android.feature.formentry;
 
-import androidx.test.espresso.intent.rule.IntentsTestRule;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.FormActivityTestRule;
 import org.odk.collect.android.support.FormLoadingUtils;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
@@ -23,7 +21,7 @@ public class DeletingRepeatGroupsTest {
     private static final String TEST_FORM = "repeat_groups.xml";
 
     @Rule
-    public IntentsTestRule<FormEntryActivity> activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(TEST_FORM);
+    public FormActivityTestRule activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(TEST_FORM);
 
     @Rule
     public RuleChain copyFormChain = RuleChain

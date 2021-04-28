@@ -24,16 +24,17 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.core.content.FileProvider;
-import androidx.test.rule.ActivityTestRule;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.RecordedIntentsRule;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.FormActivityTestRule;
 import org.odk.collect.android.support.FormLoadingUtils;
 import org.odk.collect.android.support.ResetStateRule;
 
@@ -68,12 +69,13 @@ import static org.odk.collect.android.support.actions.NestedScrollToAction.neste
 public class IntentGroupTest {
     private static final String INTENT_GROUP_FORM = "intent-group.xml";
 
-    public ActivityTestRule<FormEntryActivity> activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(INTENT_GROUP_FORM);
+    public FormActivityTestRule activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(INTENT_GROUP_FORM);
 
     @Rule
     public RuleChain copyFormChain = RuleChain
             .outerRule(new ResetStateRule())
             .around(new CopyFormRule(INTENT_GROUP_FORM, true))
+            .around(new RecordedIntentsRule())
             .around(activityTestRule);
 
     // Verifies that a value given to the label text with form buttonText is used as the button text.
@@ -88,7 +90,7 @@ public class IntentGroupTest {
     @Test
     public void appMissingErrorText_ShouldComeFromSpecialFormText() {
         onView(withText("This is buttonText")).perform(click());
-        onView(withText("This is noAppErrorString")).inRoot(withDecorView(not(activityTestRule.getActivity().getWindow().getDecorView()))).check(matches(isDisplayed()));
+        onView(withText("This is noAppErrorString")).inRoot(withDecorView(not(ActivityHelpers.getActivity().getWindow().getDecorView()))).check(matches(isDisplayed()));
     }
 
     @Test

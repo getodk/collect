@@ -110,6 +110,11 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
+    public T assertText(int stringID, Object... formatArgs) {
+        assertText(getTranslatedString(stringID, formatArgs));
+        return (T) this;
+    }
+
     public T checkIsTranslationDisplayed(String... text) {
         for (String s : text) {
             try {
