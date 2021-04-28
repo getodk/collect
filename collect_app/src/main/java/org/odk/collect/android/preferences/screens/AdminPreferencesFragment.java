@@ -18,12 +18,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 
 import org.odk.collect.android.R;
@@ -82,6 +85,32 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
         findPreference(PROJECT_NAME_KEY).setOnPreferenceChangeListener(this);
         findPreference(PROJECT_ICON_KEY).setOnPreferenceChangeListener(this);
         findPreference(PROJECT_COLOR_KEY).setOnPreferenceChangeListener(this);
+
+        ((EditTextPreference) findPreference(PROJECT_ICON_KEY)).setOnBindEditTextListener(editText -> {
+            editText.addTextChangedListener(new TextWatcher() {
+                private String oldTextString = "";
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    String newTextString = editable.toString();
+                    if (!oldTextString.equals(newTextString)) {
+                        if (Character.codePointCount(newTextString, 0, newTextString.length()) > 1) {
+                            newTextString = oldTextString;
+                        }
+                        editText.setText(newTextString);
+                        editText.setSelection(newTextString.length());
+                    }
+                }
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    oldTextString = s.toString();
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+            });
+        });
 
         setProjectColorSummary();
     }
