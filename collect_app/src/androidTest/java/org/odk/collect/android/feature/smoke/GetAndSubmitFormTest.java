@@ -1,7 +1,6 @@
 package org.odk.collect.android.feature.smoke;
 
 import android.Manifest;
-import android.webkit.MimeTypeMap;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
@@ -10,21 +9,16 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.ResetStateRule;
-import org.odk.collect.android.support.StubOpenRosaServer;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.utilities.UserAgentProvider;
 
 @RunWith(AndroidJUnit4.class)
 public class GetAndSubmitFormTest {
 
-    public CollectTestRule rule = new CollectTestRule();
-
-    private TestDependencies testDependencies = new TestDependencies();
+    private final  CollectTestRule rule = new CollectTestRule();
+    private final TestDependencies testDependencies = new TestDependencies();
 
     @Rule
     public RuleChain copyFormChain = RuleChain

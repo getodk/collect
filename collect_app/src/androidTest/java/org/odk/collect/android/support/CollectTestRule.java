@@ -1,7 +1,6 @@
 package org.odk.collect.android.support;
 
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.rule.ActivityTestRule;
 
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;

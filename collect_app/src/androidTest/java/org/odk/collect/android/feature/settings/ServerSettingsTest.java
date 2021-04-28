@@ -1,6 +1,5 @@
 package org.odk.collect.android.feature.settings;
 
-import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Rule;
@@ -8,8 +7,9 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.RecordedIntentsRule;
 import org.odk.collect.android.gdrive.sheets.DriveHelper;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
@@ -23,10 +23,11 @@ public class ServerSettingsTest {
 
     private final TestDependencies testDependencies = new TestDependencies();
 
-    public IntentsTestRule<MainMenuActivity> rule = new IntentsTestRule<>(MainMenuActivity.class);
+    public final CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain(testDependencies)
+            .around(new RecordedIntentsRule())
             .around(rule);
 
     @Test

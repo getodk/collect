@@ -94,8 +94,4 @@ public class ResetStateRule implements TestRule {
         settingsProvider.getAdminSettings().setDefaultForAllSettingsWithoutValues();
         settingsProvider.getMetaSettings().clear();
     }
-
-    private void importDemoProject() {
-        DaggerUtils.getComponent(InstrumentationRegistry.getInstrumentation().getTargetContext()).projectImporter().importDemoProject();
-    }
 }

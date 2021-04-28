@@ -2,7 +2,6 @@ package org.odk.collect.android.feature.settings;
 
 import android.Manifest;
 
-import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
 
@@ -11,7 +10,8 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.RecordedIntentsRule;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.FormLoadingUtils;
 import org.odk.collect.android.support.NotificationDrawerRule;
 import org.odk.collect.android.support.TestDependencies;
@@ -33,11 +33,12 @@ public class FormManagementSettingsTest {
     private final TestDependencies testDependencies = new TestDependencies();
     private final NotificationDrawerRule notificationDrawer = new NotificationDrawerRule();
 
-    public IntentsTestRule<MainMenuActivity> rule = new IntentsTestRule<>(MainMenuActivity.class);
+    public final CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain(testDependencies)
             .around(GrantPermissionRule.grant(Manifest.permission.GET_ACCOUNTS))
+            .around(new RecordedIntentsRule())
             .around(notificationDrawer)
             .around(rule);
 
