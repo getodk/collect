@@ -4,6 +4,8 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.rule.ActivityTestRule;
@@ -20,12 +22,16 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.matcher.CursorMatchers.withRowString;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.AllOf.allOf;
 
 public class MainMenuPage extends Page<MainMenuPage> {
 
@@ -211,6 +217,13 @@ public class MainMenuPage extends Page<MainMenuPage> {
         onView(withText(getTranslatedString(R.string.manage_files))).check(matches(isClickable()));
         onView(withText(getTranslatedString(R.string.manage_files))).perform(scrollTo(), click());
         return new DeleteSavedFormPage(rule).assertOnPage();
+    }
+
+    public MainMenuPage assertProjectIcon(String projectIcon, String expectedBackgroundColor) {
+        onView(allOf(hasDescendant(withText(projectIcon)), withId(R.id.projects))).check(matches(isDisplayed()));
+        int backgroundColor = ((GradientDrawable) rule.getActivity().findViewById(R.id.project_icon_text).getBackground()).getColor().getDefaultColor();
+        assertThat(backgroundColor, is(Color.parseColor(expectedBackgroundColor)));
+        return this;
     }
 }
 

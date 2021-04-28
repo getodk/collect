@@ -58,6 +58,8 @@ public class ResetStateRule implements TestRule {
             // Reinitialize any application state with new deps/state
             ((Collect) context.getApplicationContext()).getComponent().applicationInitializer().initialize();
 
+            importDemoProject();
+
             base.evaluate();
         }
     }
@@ -92,5 +94,9 @@ public class ResetStateRule implements TestRule {
         settingsProvider.getAdminSettings().clear();
         settingsProvider.getAdminSettings().setDefaultForAllSettingsWithoutValues();
         settingsProvider.getMetaSettings().clear();
+    }
+
+    private void importDemoProject() {
+        DaggerUtils.getComponent(InstrumentationRegistry.getInstrumentation().getTargetContext()).projectImporter().importDemoProject();
     }
 }

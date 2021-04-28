@@ -9,9 +9,12 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.projects.Project;
 import org.odk.collect.shared.Settings;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
@@ -38,6 +41,9 @@ public class ThemeUtilsTests {
 
     @Before
     public void setup() {
+        DaggerUtils.getComponent(RuntimeEnvironment.application).projectsRepository().add(new Project("Project 1", "P", "#ffffff", "1"));
+        DaggerUtils.getComponent(RuntimeEnvironment.application).currentProjectProvider().setCurrentProject("1");
+
         mainMenuActivity = Robolectric.setupActivity(MainMenuActivity.class);
         themeUtils = new ThemeUtils(mainMenuActivity);
     }

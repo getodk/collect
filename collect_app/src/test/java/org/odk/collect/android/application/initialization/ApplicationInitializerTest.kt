@@ -6,7 +6,6 @@ import com.google.gson.Gson
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
@@ -24,23 +23,14 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class ApplicationInitializerTest {
-    @Mock
-    lateinit var appStateProvider: AppStateProvider
-
-    @Mock
-    lateinit var projectsRepository: ProjectsRepository
-
-    @Mock
-    lateinit var projectImporter: ProjectImporter
+    val appStateProvider: AppStateProvider = mock(AppStateProvider::class.java)
+    val projectsRepository: ProjectsRepository = mock(ProjectsRepository::class.java)
+    val projectImporter: ProjectImporter = mock(ProjectImporter::class.java)
 
     lateinit var applicationInitializer: ApplicationInitializer
 
     @Before
     fun setup() {
-        appStateProvider = mock(AppStateProvider::class.java)
-        projectsRepository = mock(ProjectsRepository::class.java)
-        projectImporter = mock(ProjectImporter::class.java)
-
         RobolectricHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesAppStateProvider(context: Context): AppStateProvider {
                 return appStateProvider

@@ -1,5 +1,6 @@
 package org.odk.collect.android.projects
 
+import androidx.lifecycle.ViewModel
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.pressBack
@@ -14,20 +15,41 @@ import org.hamcrest.CoreMatchers.`is`
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.AboutActivity
+import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.injection.config.AppDependencyComponent
+import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.screens.AdminPreferencesActivity
 import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity
 import org.odk.collect.android.support.RobolectricHelpers
+import org.odk.collect.projects.Project
 
 @RunWith(AndroidJUnit4::class)
 class ProjectSettingsDialogTest {
+    lateinit var appDependencyComponent: AppDependencyComponent
+
+    lateinit var currentProjectViewModel: CurrentProjectViewModel
 
     @Before
     fun setup() {
-        DaggerUtils.getComponent(Collect.getInstance()).projectsRepository().deleteAll()
+        currentProjectViewModel = mock(CurrentProjectViewModel::class.java)
+        appDependencyComponent = DaggerUtils.getComponent(Collect.getInstance())
+        appDependencyComponent.projectsRepository().deleteAll()
+
+        RobolectricHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
+            override fun providesCurrentProjectViewModel(currentProjectProvider: CurrentProjectProvider): CurrentProjectViewModel.Factory {
+                return object : CurrentProjectViewModel.Factory(currentProjectProvider) {
+                    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                        return currentProjectViewModel as T
+                    }
+                }
+            }
+        })
     }
 
     @Test
@@ -86,6 +108,19 @@ class ProjectSettingsDialogTest {
             assertThat(it.isVisible, `is`(false))
             assertThat(Intents.getIntents()[0], hasComponent(AboutActivity::class.java.name))
             Intents.release()
+        }
+    }
+
+    @Test
+    fun `currentProjectViewModel should be notified when project switched`() {
+        appDependencyComponent.projectsRepository().add(Project("Project X", "X", "#cccccc", "1"))
+        appDependencyComponent.projectsRepository().add(Project("Project Y", "Y", "#ffffff", "2"))
+        appDependencyComponent.currentProjectProvider().setCurrentProject("1")
+
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ProjectSettingsDialog::class.java)
+        scenario.onFragment {
+            onView(withText("Project Y")).perform(click())
+            verify(currentProjectViewModel).setCurrentProject(Project("Project Y", "Y", "#ffffff", "2"))
         }
     }
 }

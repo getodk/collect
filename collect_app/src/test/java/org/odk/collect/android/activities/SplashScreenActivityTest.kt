@@ -23,6 +23,7 @@ import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
 import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.android.projects.AddProjectDialog
 import org.odk.collect.android.rules.MainCoroutineScopeRule
 import org.odk.collect.android.support.RobolectricHelpers
 import org.odk.collect.android.utilities.AppStateProvider
@@ -47,6 +48,16 @@ class SplashScreenActivityTest {
                 }
             }
         })
+    }
+
+    @Test
+    fun `SplashScreenActivity should implement AddProjectDialogListener`() {
+        doReturn(true).`when`(splashScreenViewModel).isFirstLaunch
+
+        val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
+        scenario.onActivity { activity: SplashScreenActivity ->
+            assertThat(activity is AddProjectDialog.AddProjectDialogListener, `is`(true))
+        }
     }
 
     @Test

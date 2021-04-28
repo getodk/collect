@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/project_icon_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/project_icon_background"
+    android:textAppearance="@style/TextAppearance.Collect.Subtitle1"
+    android:layout_marginVertical="@dimen/margin_small"
+    android:textColor="@android:color/white"
+    android:textAllCaps="true"
+    android:gravity="center" />

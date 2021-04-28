@@ -24,6 +24,8 @@ import org.odk.collect.analytics.BlockableFirebaseAnalytics;
 import org.odk.collect.analytics.NoopAnalytics;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
+import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
@@ -571,5 +573,16 @@ public class AppDependencyModule {
     @Provides
     public AppStateProvider providesAppStateProvider(Context context) {
         return new AppStateProvider(context);
+    }
+
+    @Provides
+    public MainMenuViewModel.Factory providesMainMenuViewModel(VersionInformation versionInformation, Application application,
+                                                               SettingsProvider settingsProvider, InstancesCountRepository instancesCountRepository) {
+        return new MainMenuViewModel.Factory(versionInformation, application, settingsProvider, instancesCountRepository);
+    }
+
+    @Provides
+    public CurrentProjectViewModel.Factory providesCurrentProjectViewModel(CurrentProjectProvider currentProjectProvider) {
+        return new CurrentProjectViewModel.Factory(currentProjectProvider);
     }
 }

@@ -19,6 +19,6 @@ limitations under the License.
     <item
         android:id="@+id/projects"
         android:title="@string/projects"
-        android:icon="@drawable/ic_face"
+        app:actionLayout="@layout/current_project_menu_icon"
         app:showAsAction="always"/>
 </menu>

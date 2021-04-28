@@ -27,7 +27,8 @@ public class MainMenuViewModel extends ViewModel {
     private final InstancesCountRepository instancesCountRepository;
     private final Application application;
 
-    public MainMenuViewModel(Application application, VersionInformation versionInformation, SettingsProvider settingsProvider, InstancesCountRepository instancesCountRepository) {
+    public MainMenuViewModel(Application application, VersionInformation versionInformation,
+                             SettingsProvider settingsProvider, InstancesCountRepository instancesCountRepository) {
         this.application = application;
         this.version = versionInformation;
         this.generalSettings = settingsProvider.getGeneralSettings();
@@ -121,7 +122,8 @@ public class MainMenuViewModel extends ViewModel {
         private final InstancesCountRepository instancesCountRepository;
 
         @Inject
-        public Factory(VersionInformation versionInformation, Application application, SettingsProvider settingsProvider, InstancesCountRepository instancesCountRepository) {
+        public Factory(VersionInformation versionInformation, Application application,
+                       SettingsProvider settingsProvider, InstancesCountRepository instancesCountRepository) {
             this.versionInformation = versionInformation;
             this.application = application;
             this.settingsProvider = settingsProvider;
