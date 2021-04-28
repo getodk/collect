@@ -58,6 +58,23 @@ abstract class ProjectsRepositoryTest {
     }
 
     @Test
+    fun `update() should update project`() {
+        projectsRepository.add(projectX)
+        projectsRepository.add(projectY)
+        projectsRepository.add(projectZ)
+
+        val originalProjectX = projectsRepository.getAll()[0]
+        val updatedProjectX = originalProjectX.copy(name = "Project X2", "2", "#ff80ff")
+        projectsRepository.update(updatedProjectX)
+
+        val projects = projectsRepository.getAll()
+        assertThat(projects.size, `is`(3))
+        assertThat(projects[0], `is`(updatedProjectX))
+        assertThat(projects[1], `is`(projectY))
+        assertThat(projects[2], `is`(projectZ))
+    }
+
+    @Test
     fun `delete() should delete project from storage for given uuid`() {
         projectsRepository.add(projectX)
         projectsRepository.add(projectY)
