@@ -80,6 +80,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
         mainMenuViewModel = new ViewModelProvider(this, viewModelFactory).get(MainMenuViewModel.class);
         currentProjectViewModel = new ViewModelProvider(this, currentProjectViewModelFactory).get(CurrentProjectViewModel.class);
+        currentProjectViewModel.getCurrentProject().observe(this, project -> {
+            invalidateOptionsMenu();
+        });
 
         initToolbar();
 
@@ -225,16 +228,8 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         final MenuItem projectsMenuItem = menu.findItem(R.id.projects);
 
         ProjectIconView projectIconView = (ProjectIconView) projectsMenuItem.getActionView();
-        projectIconView.setProject(currentProjectViewModel.getCurrentProject().getValue().getValue());
+        projectIconView.setProject(currentProjectViewModel.getCurrentProject().getValue());
         projectIconView.setOnClickListener(v -> onOptionsItemSelected(projectsMenuItem));
-
-        currentProjectViewModel.getCurrentProject().getValue().consume();
-        currentProjectViewModel.getCurrentProject().observe(this, project -> {
-            if (!project.isConsumed()) {
-                invalidateOptionsMenu();
-                ToastUtils.showLongToast(getString(R.string.switched_project, project.getValue().getName()));
-            }
-        });
 
         return super.onPrepareOptionsMenu(menu);
     }

@@ -5,16 +5,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
-import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.projects.Project
 
 class CurrentProjectViewModel(currentProjectProvider: CurrentProjectProvider) : ViewModel() {
 
-    private val _currentProject = MutableLiveData(Consumable(currentProjectProvider.getCurrentProject()!!))
-    val currentProject: LiveData<Consumable<Project>> = _currentProject
+    private val _currentProject = MutableLiveData(currentProjectProvider.getCurrentProject()!!)
+    val currentProject: LiveData<Project> = _currentProject
 
     fun setCurrentProject(project: Project) {
-        _currentProject.postValue(Consumable(project))
+        _currentProject.postValue(project)
     }
 
     open class Factory constructor(private val currentProjectProvider: CurrentProjectProvider) : ViewModelProvider.Factory {

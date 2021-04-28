@@ -22,6 +22,7 @@ import org.odk.collect.android.preferences.screens.AdminPreferencesActivity
 import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity
 import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.android.utilities.DialogUtils
+import org.odk.collect.android.utilities.ToastUtils
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import javax.inject.Inject
@@ -119,8 +120,9 @@ class ProjectSettingsDialog : DialogFragment() {
 
     private fun switchProject(project: Project) {
         currentProjectProvider.setCurrentProject(project.uuid)
-        dismiss()
         currentProjectViewModel.setCurrentProject(project)
+        ToastUtils.showLongToast(getString(R.string.switched_project, project.name))
+        dismiss()
     }
 
     private fun setupCurrentProjectView() {

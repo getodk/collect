@@ -9,7 +9,6 @@ import org.junit.Test
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.odk.collect.android.projects.CurrentProjectProvider
-import org.odk.collect.androidshared.livedata.LiveDataUtils.getOrAwaitValue
 import org.odk.collect.projects.Project
 
 class CurrentProjectViewModelTest {
@@ -28,7 +27,7 @@ class CurrentProjectViewModelTest {
 
     @Test
     fun `Initial current project should be set`() {
-        assertThat(currentProjectViewModel.currentProject.value!!.value, `is`(Project("Project X", "X", "#cccccc")))
+        assertThat(currentProjectViewModel.currentProject.value!!, `is`(Project("Project X", "X", "#cccccc")))
     }
 
     @Test
@@ -36,6 +35,6 @@ class CurrentProjectViewModelTest {
         val project = Project("Project Y", "Y", "#ffffff")
 
         currentProjectViewModel.setCurrentProject(project)
-        assertThat(getOrAwaitValue(currentProjectViewModel.currentProject).value, `is`(project))
+        assertThat(currentProjectViewModel.currentProject.value, `is`(project))
     }
 }
