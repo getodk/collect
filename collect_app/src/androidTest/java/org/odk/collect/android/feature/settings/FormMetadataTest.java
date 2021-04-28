@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
@@ -12,9 +11,9 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.metadata.InstallIDProvider;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
@@ -27,7 +26,7 @@ import org.odk.collect.android.utilities.DeviceDetailsProvider;
 public class FormMetadataTest {
 
     private final DeviceDetailsProvider deviceDetailsProvider = new FakeDeviceDetailsProvider();
-    public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
+    public CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = RuleChain

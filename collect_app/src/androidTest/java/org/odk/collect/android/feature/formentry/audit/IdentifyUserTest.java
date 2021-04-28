@@ -1,13 +1,12 @@
 package org.odk.collect.android.feature.formentry.audit;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.ActivityTestRule;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.IdentifyUserPromptPage;
@@ -19,14 +18,14 @@ public class IdentifyUserTest {
     private static final String IDENTIFY_USER_AUDIT_FORM = "identify-user-audit.xml";
     private static final String IDENTIFY_USER_AUDIT_FALSE_FORM = "identify-user-audit-false.xml";
 
-    @Rule
-    public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
+    public CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
             .outerRule(new ResetStateRule())
             .around(new CopyFormRule(IDENTIFY_USER_AUDIT_FORM))
-            .around(new CopyFormRule(IDENTIFY_USER_AUDIT_FALSE_FORM));
+            .around(new CopyFormRule(IDENTIFY_USER_AUDIT_FALSE_FORM))
+            .around(rule);
 
     @Test
     public void openingForm_andThenEnteringIdentity_proceedsToForm() {
