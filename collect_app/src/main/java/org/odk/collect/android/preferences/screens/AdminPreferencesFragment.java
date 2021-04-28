@@ -49,6 +49,7 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
         DaggerUtils.getComponent(context).inject(this);
 
         settingsProvider.getAdminSettings().save("project_name", currentProjectProvider.getCurrentProject().getName());
+        settingsProvider.getAdminSettings().save("project_icon", currentProjectProvider.getCurrentProject().getIcon());
     }
 
     @Override
