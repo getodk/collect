@@ -104,7 +104,7 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
                     displayPreferences(new MainMenuAccessPreferencesFragment());
                     break;
                 case "user_settings":
-                    displayPreferences(new UserSettingsAccessPreferences());
+                    displayPreferences(new UserSettingsAccessPreferencesFragment());
                     break;
                 case "form_entry":
                     displayPreferences(new FormEntryAccessPreferencesFragment());
@@ -124,15 +124,6 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
                     .replace(R.id.preferences_fragment_container, fragment)
                     .addToBackStack(null)
                     .commit();
-        }
-    }
-
-    public static class UserSettingsAccessPreferences extends BaseAdminPreferencesFragment {
-
-        @Override
-        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            super.onCreatePreferences(savedInstanceState, rootKey);
-            setPreferencesFromResource(R.xml.user_settings_access_preferences, rootKey);
         }
     }
 
