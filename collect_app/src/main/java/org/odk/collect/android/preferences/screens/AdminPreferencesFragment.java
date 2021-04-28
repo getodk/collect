@@ -26,7 +26,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog;
-import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreference;
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragmentCompat;
 import org.odk.collect.android.projects.CurrentProjectProvider;
@@ -35,14 +34,9 @@ import org.odk.collect.android.utilities.MultiClickGuard;
 
 import javax.inject.Inject;
 
-import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
-import static org.odk.collect.android.preferences.keys.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_CHANGE_ADMIN_PASSWORD;
-import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_EDIT_SAVED;
-import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_GET_BLANK;
 import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_IMPORT_SETTINGS;
 import static org.odk.collect.android.preferences.screens.GeneralPreferencesActivity.INTENT_KEY_ADMIN_MODE;
-import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
 
 public class AdminPreferencesFragment extends BaseAdminPreferencesFragment implements Preference.OnPreferenceClickListener {
 
@@ -107,7 +101,7 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
                     startActivity(pref);
                     break;
                 case "main_menu":
-                    displayPreferences(new MainMenuAccessPreferences());
+                    displayPreferences(new MainMenuAccessPreferencesFragment());
                     break;
                 case "user_settings":
                     displayPreferences(new UserSettingsAccessPreferences());
@@ -130,27 +124,6 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
                     .replace(R.id.preferences_fragment_container, fragment)
                     .addToBackStack(null)
                     .commit();
-        }
-    }
-
-    public static class MainMenuAccessPreferences extends BaseAdminPreferencesFragment {
-
-        @Override
-        public void onAttach(@NonNull Context context) {
-            super.onAttach(context);
-            DaggerUtils.getComponent(context).inject(this);
-        }
-
-        @Override
-        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            super.onCreatePreferences(savedInstanceState, rootKey);
-            setPreferencesFromResource(R.xml.main_menu_access_preferences, rootKey);
-            findPreference(KEY_EDIT_SAVED).setEnabled(settingsProvider.getAdminSettings().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
-
-            FormUpdateMode formUpdateMode = getFormUpdateMode(requireContext(), settingsProvider.getGeneralSettings());
-            if (formUpdateMode == FormUpdateMode.MATCH_EXACTLY) {
-                displayDisabled(findPreference(KEY_GET_BLANK), false);
-            }
         }
     }
 
