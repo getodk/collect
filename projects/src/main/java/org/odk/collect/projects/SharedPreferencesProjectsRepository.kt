@@ -34,6 +34,15 @@ class SharedPreferencesProjectsRepository(
         metaSettings.save(key, gson.toJson(projects))
     }
 
+    override fun update(project: Project) {
+        val projects = getAll().toMutableList()
+        val projectIndex = projects.indexOf(get(project.uuid))
+        if (projectIndex != -1) {
+            projects.set(projectIndex, project)
+        }
+        metaSettings.save(key, gson.toJson(projects))
+    }
+
     override fun delete(uuid: String) {
         val projects = getAll().toMutableList().minus(get(uuid))
         metaSettings.save(key, gson.toJson(projects))

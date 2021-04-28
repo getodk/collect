@@ -7,6 +7,8 @@ interface ProjectsRepository {
 
     fun add(project: Project)
 
+    fun update(project: Project)
+
     fun delete(uuid: String)
 
     fun deleteAll()

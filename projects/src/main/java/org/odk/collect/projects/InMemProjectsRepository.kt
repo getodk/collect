@@ -17,6 +17,13 @@ class InMemProjectsRepository(private val uuidGenerator: UUIDGenerator) : Projec
         }
     }
 
+    override fun update(project: Project) {
+        val projectIndex = projects.indexOf(get(project.uuid))
+        if (projectIndex != -1) {
+            projects.set(projectIndex, project)
+        }
+    }
+
     override fun delete(uuid: String) {
         projects.removeIf { it.uuid == uuid }
     }
