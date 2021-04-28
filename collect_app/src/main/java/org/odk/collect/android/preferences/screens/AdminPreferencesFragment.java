@@ -35,6 +35,8 @@ import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragment
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.projects.Project;
+import org.odk.collect.projects.ProjectsRepository;
 
 import javax.inject.Inject;
 
@@ -46,6 +48,9 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
 
     @Inject
     CurrentProjectProvider currentProjectProvider;
+
+    @Inject
+    ProjectsRepository projectsRepository;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -68,6 +73,22 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
         findPreference("main_menu").setOnPreferenceClickListener(this);
         findPreference("user_settings").setOnPreferenceClickListener(this);
         findPreference("form_entry").setOnPreferenceClickListener(this);
+
+        findPreference("project_name").setOnPreferenceChangeListener((preference, newValue) -> {
+            Project currentProject = currentProjectProvider.getCurrentProject();
+            projectsRepository.update(new Project(currentProject.getName(), currentProject.getIcon(), currentProject.getColor(), currentProject.getUuid()));
+            return true;
+        });
+        findPreference("project_icon").setOnPreferenceChangeListener((preference, newValue) -> {
+            Project currentProject = currentProjectProvider.getCurrentProject();
+            projectsRepository.update(new Project(currentProject.getName(), currentProject.getIcon(), currentProject.getColor(), currentProject.getUuid()));
+            return true;
+        });
+        findPreference("project_color").setOnPreferenceChangeListener((preference, newValue) -> {
+            Project currentProject = currentProjectProvider.getCurrentProject();
+            projectsRepository.update(new Project(currentProject.getName(), currentProject.getIcon(), currentProject.getColor(), currentProject.getUuid()));
+            return true;
+        });
 
         setProjectColorSummary();
     }
