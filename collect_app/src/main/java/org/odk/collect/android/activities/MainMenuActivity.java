@@ -212,7 +212,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         mainMenuViewModel.resume();
 
         setButtonsVisibility();
-        invalidateOptionsMenu();
+        currentProjectViewModel.refresh();
     }
 
     private void setButtonsVisibility() {
