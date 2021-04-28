@@ -16,7 +16,11 @@ package org.odk.collect.android.preferences.screens;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -64,6 +68,8 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
         findPreference("main_menu").setOnPreferenceClickListener(this);
         findPreference("user_settings").setOnPreferenceClickListener(this);
         findPreference("form_entry").setOnPreferenceClickListener(this);
+
+        setProjectColorSummary();
     }
 
     @Override
@@ -132,5 +138,11 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
     public void preventOtherWaysOfEditingForm() {
         FormEntryAccessPreferencesFragment fragment = (FormEntryAccessPreferencesFragment) getFragmentManager().findFragmentById(R.id.preferences_fragment_container);
         fragment.preventOtherWaysOfEditingForm();
+    }
+
+    private void setProjectColorSummary() {
+        Spannable summary = new SpannableString("■");
+        summary.setSpan(new ForegroundColorSpan(Color.parseColor(currentProjectProvider.getCurrentProject().getColor())), 0, summary.length(), 0);
+        findPreference("project_color").setSummary(summary);
     }
 }

@@ -34,8 +34,7 @@
         <EditTextPreference
             android:key="project_color"
             android:title="@string/project_color"
-            app:iconSpaceReserved="false"
-            app:useSimpleSummaryProvider="true"/>
+            app:iconSpaceReserved="false" />
 
         <org.odk.collect.android.preferences.dialogs.ResetDialogPreference
             android:dialogTitle="@string/reset_settings_dialog_title"
