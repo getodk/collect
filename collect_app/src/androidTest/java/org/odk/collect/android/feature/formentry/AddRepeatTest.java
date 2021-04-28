@@ -3,7 +3,6 @@ package org.odk.collect.android.feature.formentry;
 import android.Manifest;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
@@ -11,7 +10,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.EndOfFormPage;
@@ -29,16 +28,16 @@ public class AddRepeatTest {
     private static final String FIELD_LIST_REPEAT = "field-list-repeat.xml";
     private static final String FIXED_COUNT_REPEAT = "fixed-count-repeat.xml";
 
+    private final CollectTestRule rule = new CollectTestRule();
+
     @Rule
     public RuleChain copyFormChain = RuleChain
             .outerRule(GrantPermissionRule.grant(Manifest.permission.READ_PHONE_STATE))
             .around(new ResetStateRule())
             .around(new CopyFormRule(ONE_QUESTION_REPEAT))
             .around(new CopyFormRule(FIELD_LIST_REPEAT))
-            .around(new CopyFormRule(FIXED_COUNT_REPEAT));
-
-    @Rule
-    public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
+            .around(new CopyFormRule(FIXED_COUNT_REPEAT))
+            .around(rule);
 
     @Test
     public void whenInRepeat_swipingNext_andClickingAdd_addsAnotherRepeat() {

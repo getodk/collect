@@ -58,9 +58,6 @@ public class ResetStateRule implements TestRule {
 
             // Reinitialize any application state with new deps/state
             ((Collect) context.getApplicationContext()).getComponent().applicationInitializer().initialize();
-
-            importDemoProject();
-
             base.evaluate();
         }
     }

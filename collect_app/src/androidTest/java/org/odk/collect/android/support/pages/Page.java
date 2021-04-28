@@ -281,7 +281,7 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
-    private static Activity getCurrentActivity() {
+    public static Activity getCurrentActivity() {
         getInstrumentation().waitForIdleSync();
 
         final Activity[] activity = new Activity[1];

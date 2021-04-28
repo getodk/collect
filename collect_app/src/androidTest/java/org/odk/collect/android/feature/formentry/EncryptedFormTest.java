@@ -32,13 +32,13 @@ public class EncryptedFormTest {
 
     TestDependencies testDependencies = new TestDependencies();
 
-    @Rule
     public CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain(testDependencies)
             .around(new CopyFormRule("encrypted.xml"))
-            .around(new CopyFormRule("encrypted-no-instanceID.xml"));
+            .around(new CopyFormRule("encrypted-no-instanceID.xml"))
+            .around(rule);
 
     @Test
     public void instanceOfEncryptedForm_cantBeEditedWhenFinalized() {

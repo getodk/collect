@@ -15,6 +15,7 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.SplashScreenActivity;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
@@ -29,10 +30,12 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 public class SendFinalizedFormTest {
 
     private final TestDependencies testDependencies = new TestDependencies();
+    private final CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain chain = TestRuleChain.chain(testDependencies)
-            .around(GrantPermissionRule.grant(Manifest.permission.GET_ACCOUNTS));
+            .around(GrantPermissionRule.grant(Manifest.permission.GET_ACCOUNTS))
+            .around(rule);
 
     @Before
     public void setup() {
@@ -46,9 +49,7 @@ public class SendFinalizedFormTest {
 
     @Test
     public void canViewSentForms() {
-        ActivityScenario.launch(SplashScreenActivity.class);
-        onView(withText(R.string.configure_later)).perform(click());
-        new MainMenuPage().assertOnPage()
+        rule.mainMenu()
                 .setServer(testDependencies.server.getURL())
                 .copyForm("one-question.xml")
                 .startBlankForm("One Question")
@@ -69,9 +70,7 @@ public class SendFinalizedFormTest {
 
     @Test
     public void whenDeleteAfterSendIsEnabled_deletesFilledForm() {
-        ActivityScenario.launch(SplashScreenActivity.class);
-        onView(withText(R.string.configure_later)).perform(click());
-        new MainMenuPage().assertOnPage()
+        rule.mainMenu()
                 .setServer(testDependencies.server.getURL())
 
                 .openProjectSettingsDialog()
@@ -103,9 +102,7 @@ public class SendFinalizedFormTest {
         testDependencies.googleAccountPicker.setDeviceAccount("dani@davey.com");
         testDependencies.googleApi.setAccount("dani@davey.com");
 
-        ActivityScenario.launch(SplashScreenActivity.class);
-        onView(withText(R.string.configure_later)).perform(click());
-        new MainMenuPage().assertOnPage()
+        rule.mainMenu()
                 .setGoogleAccount("dani@davey.com")
                 .copyForm("one-question-google.xml")
                 .startBlankForm("One Question Google")
