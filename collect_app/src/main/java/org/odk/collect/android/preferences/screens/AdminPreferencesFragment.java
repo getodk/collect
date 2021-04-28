@@ -76,17 +76,17 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
 
         findPreference("project_name").setOnPreferenceChangeListener((preference, newValue) -> {
             Project currentProject = currentProjectProvider.getCurrentProject();
-            projectsRepository.update(new Project(currentProject.getName(), currentProject.getIcon(), currentProject.getColor(), currentProject.getUuid()));
+            projectsRepository.update(new Project(String.valueOf(newValue), currentProject.getIcon(), currentProject.getColor(), currentProject.getUuid()));
             return true;
         });
         findPreference("project_icon").setOnPreferenceChangeListener((preference, newValue) -> {
             Project currentProject = currentProjectProvider.getCurrentProject();
-            projectsRepository.update(new Project(currentProject.getName(), currentProject.getIcon(), currentProject.getColor(), currentProject.getUuid()));
+            projectsRepository.update(new Project(currentProject.getName(), String.valueOf(newValue), currentProject.getColor(), currentProject.getUuid()));
             return true;
         });
         findPreference("project_color").setOnPreferenceChangeListener((preference, newValue) -> {
             Project currentProject = currentProjectProvider.getCurrentProject();
-            projectsRepository.update(new Project(currentProject.getName(), currentProject.getIcon(), currentProject.getColor(), currentProject.getUuid()));
+            projectsRepository.update(new Project(currentProject.getName(), currentProject.getIcon(), String.valueOf(newValue), currentProject.getUuid()));
             setProjectColorSummary();
             return true;
         });
