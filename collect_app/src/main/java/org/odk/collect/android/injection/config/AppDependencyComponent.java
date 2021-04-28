@@ -265,6 +265,8 @@ public interface AppDependencyComponent {
 
     void inject(FirstLaunchDialog firstLaunchDialog);
 
+    void inject(AdminPreferencesFragment adminPreferencesFragment);
+
     OpenRosaHttpInterface openRosaHttpInterface();
 
     ReferenceManager referenceManager();

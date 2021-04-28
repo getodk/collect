@@ -33,8 +33,11 @@ import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreference;
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragmentCompat;
+import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
+
+import javax.inject.Inject;
 
 import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
 import static org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MOVING_BACKWARDS_DIALOG_TAG;
@@ -51,6 +54,18 @@ import static org.odk.collect.android.preferences.screens.GeneralPreferencesActi
 import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
 
 public class AdminPreferencesFragment extends BaseAdminPreferencesFragment implements Preference.OnPreferenceClickListener {
+
+    @Inject
+    CurrentProjectProvider currentProjectProvider;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
+
+        settingsProvider.getAdminSettings().save("project_name", currentProjectProvider.getCurrentProject().getName());
+    }
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         super.onCreatePreferences(savedInstanceState, rootKey);
