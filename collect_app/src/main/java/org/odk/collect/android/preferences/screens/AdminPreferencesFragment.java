@@ -20,17 +20,13 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.preference.CheckBoxPreference;
 import androidx.preference.Preference;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
-import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
-import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog;
 import org.odk.collect.android.preferences.FormUpdateMode;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreference;
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragmentCompat;
 import org.odk.collect.android.projects.CurrentProjectProvider;
@@ -40,16 +36,11 @@ import org.odk.collect.android.utilities.MultiClickGuard;
 import javax.inject.Inject;
 
 import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
-import static org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MOVING_BACKWARDS_DIALOG_TAG;
 import static org.odk.collect.android.preferences.keys.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_CHANGE_ADMIN_PASSWORD;
 import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_EDIT_SAVED;
 import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_GET_BLANK;
 import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_IMPORT_SETTINGS;
-import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_JUMP_TO;
-import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_MOVING_BACKWARDS;
-import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_SAVE_MID;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE;
 import static org.odk.collect.android.preferences.screens.GeneralPreferencesActivity.INTENT_KEY_ADMIN_MODE;
 import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
 
@@ -122,7 +113,7 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
                     displayPreferences(new UserSettingsAccessPreferences());
                     break;
                 case "form_entry":
-                    displayPreferences(new FormEntryAccessPreferences());
+                    displayPreferences(new FormEntryAccessPreferencesFragment());
                     break;
             }
 
@@ -172,49 +163,8 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
         }
     }
 
-    public static class FormEntryAccessPreferences extends BaseAdminPreferencesFragment {
-
-        @Override
-        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            super.onCreatePreferences(savedInstanceState, rootKey);
-            addPreferencesFromResource(R.xml.form_entry_access_preferences);
-
-            findPreference(KEY_MOVING_BACKWARDS).setOnPreferenceChangeListener((preference, newValue) -> {
-                if (((CheckBoxPreference) preference).isChecked()) {
-                    new MovingBackwardsDialog().show(getActivity().getSupportFragmentManager(), MOVING_BACKWARDS_DIALOG_TAG);
-                } else {
-                    SimpleDialog.newInstance(getActivity().getString(R.string.moving_backwards_enabled_title), 0, getActivity().getString(R.string.moving_backwards_enabled_message), getActivity().getString(R.string.ok), false).show(((AdminPreferencesActivity) getActivity()).getSupportFragmentManager(), SimpleDialog.COLLECT_DIALOG_TAG);
-                    onMovingBackwardsEnabled();
-                }
-                return true;
-            });
-            findPreference(KEY_JUMP_TO).setEnabled(settingsProvider.getAdminSettings().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
-            findPreference(KEY_SAVE_MID).setEnabled(settingsProvider.getAdminSettings().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
-        }
-
-        private void preventOtherWaysOfEditingForm() {
-            settingsProvider.getAdminSettings().save(ALLOW_OTHER_WAYS_OF_EDITING_FORM, false);
-            settingsProvider.getAdminSettings().save(KEY_EDIT_SAVED, false);
-            settingsProvider.getAdminSettings().save(KEY_SAVE_MID, false);
-            settingsProvider.getAdminSettings().save(KEY_JUMP_TO, false);
-            settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR, CONSTRAINT_BEHAVIOR_ON_SWIPE);
-
-            findPreference(KEY_JUMP_TO).setEnabled(false);
-            findPreference(KEY_SAVE_MID).setEnabled(false);
-
-            ((CheckBoxPreference) findPreference(KEY_JUMP_TO)).setChecked(false);
-            ((CheckBoxPreference) findPreference(KEY_SAVE_MID)).setChecked(false);
-        }
-
-        private void onMovingBackwardsEnabled() {
-            settingsProvider.getAdminSettings().save(ALLOW_OTHER_WAYS_OF_EDITING_FORM, true);
-            findPreference(KEY_JUMP_TO).setEnabled(true);
-            findPreference(KEY_SAVE_MID).setEnabled(true);
-        }
-    }
-
     public void preventOtherWaysOfEditingForm() {
-        FormEntryAccessPreferences fragment = (FormEntryAccessPreferences) getFragmentManager().findFragmentById(R.id.preferences_fragment_container);
+        FormEntryAccessPreferencesFragment fragment = (FormEntryAccessPreferencesFragment) getFragmentManager().findFragmentById(R.id.preferences_fragment_container);
         fragment.preventOtherWaysOfEditingForm();
     }
 }
