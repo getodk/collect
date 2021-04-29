@@ -10,6 +10,7 @@ references:
       - image: circleci/android:api-30
     resource_class: xlarge
     environment:
+      ROBOLECTRIC_HEAP_SIZE: '14336m'
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-XX:+UseContainerSupport -XX:MaxRAMPercentage=90.0" -Dorg.gradle.parallel="true" -Dkotlin.compiler.execution.strategy=in-process'
 
 jobs:
