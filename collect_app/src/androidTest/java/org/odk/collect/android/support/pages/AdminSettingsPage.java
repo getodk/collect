@@ -62,4 +62,25 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
         clickOnString(R.string.configure_via_qr_code);
         return new QRCodePage(rule).assertOnPage();
     }
+
+    public AdminSettingsPage setProjectName(String projectName) {
+        clickOnString(R.string.project_name);
+        inputText(projectName);
+        clickOKOnDialog();
+        return this;
+    }
+
+    public AdminSettingsPage setProjectIcon(String projectIcon) {
+        clickOnString(R.string.project_icon);
+        inputText(projectIcon);
+        clickOKOnDialog();
+        return this;
+    }
+
+    public AdminSettingsPage setProjectColor(String projectColor) {
+        clickOnString(R.string.project_color);
+        inputText(projectColor);
+        clickOKOnDialog();
+        return this;
+    }
 }
