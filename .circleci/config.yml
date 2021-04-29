@@ -9,15 +9,14 @@ references:
     docker:
       - image: circleci/android:api-30
     resource_class: xlarge
+    environment:
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-XX:+UseContainerSupport -XX:MaxRAMPercentage=90.0" -Dorg.gradle.parallel="true" -Dkotlin.compiler.execution.strategy=in-process'
 
 jobs:
   compile:
     <<: *android_config
-    environment:
-      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx12g" -Dorg.gradle.parallel="true" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
       - checkout
-
       - run:
           name: Generate combined build.gradle file for cache key
           command: cat build.gradle */build.gradle > deps.txt
@@ -42,8 +41,6 @@ jobs:
 
   check_quality:
     <<: *android_config
-    environment:
-      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx12g" -Dorg.gradle.parallel="true" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
       - attach_workspace:
           at: ~/work
@@ -59,8 +56,6 @@ jobs:
 
   test_modules:
     <<: *android_config
-    environment:
-      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx12g" -Dorg.gradle.parallel="true" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
       - attach_workspace:
           at: ~/work
@@ -107,8 +102,6 @@ jobs:
 
   test_app:
     <<: *android_config
-    environment:
-      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx12g" -Dorg.gradle.parallel="true" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
       - attach_workspace:
           at: ~/work
@@ -138,8 +131,6 @@ jobs:
 
   build_instrumented:
     <<: *android_config
-    environment:
-      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx12g" -Dorg.gradle.parallel="true" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
       - attach_workspace:
           at: ~/work
@@ -152,8 +143,6 @@ jobs:
 
   test_instrumented:
     <<: *android_config
-    environment:
-      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx12g" -Dorg.gradle.parallel="true" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
       - attach_workspace:
           at: ~/work
