@@ -689,7 +689,6 @@
   <string name="found_in_main">Deaktivieren, um aus dem Haupt-Menü auszublenden</string>
   <string name="found_in_settings">Deaktivieren, um aus dem Einstellungen-Menü auszublenden</string>
   <string name="form_entry">Deaktivieren, um in der Formular-Eingabe auszublenden</string>
-  <string name="app_configuration">App-Konfiguration</string>
   <string name="reset_settings_dialog">App zurücksetzen…</string>
   <string name="select_all">Alle auswählen</string>
   <string name="clear_all">Auswahl aufheben</string>

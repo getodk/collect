@@ -665,7 +665,6 @@
   <string name="found_in_main">チェックを外すとメインメニューから非表示にします</string>
   <string name="found_in_settings">チェックを外すと全般設定から非表示にします</string>
   <string name="form_entry">チェックを外すとフォーム入力から非表示にします</string>
-  <string name="app_configuration">アプリ設定</string>
   <string name="reset_settings_dialog">アプリケーションのリセット…</string>
   <string name="select_all">すべて選択</string>
   <string name="clear_all">すべてクリア</string>
