@@ -5,14 +5,8 @@ import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
 
-import androidx.test.espresso.Espresso;
-import androidx.test.espresso.NoMatchingViewException;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.forms.DatabaseFormColumns;
-import org.odk.collect.android.support.ActivityHelpers;
-
-import java.util.concurrent.Callable;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
