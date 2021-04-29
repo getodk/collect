@@ -49,9 +49,9 @@ import static org.odk.collect.android.preferences.screens.GeneralPreferencesActi
 public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
         implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
 
-    private static final String PROJECT_NAME_KEY = "project_name";
-    private static final String PROJECT_ICON_KEY = "project_icon";
-    private static final String PROJECT_COLOR_KEY = "project_color";
+    public static final String PROJECT_NAME_KEY = "project_name";
+    public static final String PROJECT_ICON_KEY = "project_icon";
+    public static final String PROJECT_COLOR_KEY = "project_color";
 
     @Inject
     CurrentProjectProvider currentProjectProvider;
