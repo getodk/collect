@@ -9,6 +9,7 @@ public class MetaKeys {
     public static final String SERVER_LIST = "server_list";
     public static final String CURRENT_PROJECT_ID = "current_project_id";
     public static final String KEY_PROJECTS = "projects";
+    public static final String FIRST_LAUNCH = "first_launch";
 
     private MetaKeys() {
 

@@ -1,17 +1,15 @@
 package org.odk.collect.android.utilities
 
-import android.content.Context
+import android.content.pm.PackageInfo
+import org.odk.collect.android.preferences.keys.MetaKeys
+import org.odk.collect.shared.Settings
 
-class AppStateProvider(private val context: Context) {
+class AppStateProvider(private val packageInfo: PackageInfo, private val metaSettings: Settings) {
     fun isFreshInstall(): Boolean {
-        return try {
-            val firstInstallTime = context.packageManager.getPackageInfo(context.packageName, 0).firstInstallTime
-            val lastUpdateTime = context.packageManager.getPackageInfo(context.packageName, 0).lastUpdateTime
-            firstInstallTime == lastUpdateTime
-        } catch (e: Exception) {
-            true
-        } catch (e: Error) {
-            true
-        }
+        return !isUpdatedVersion() && !metaSettings.contains(MetaKeys.FIRST_LAUNCH)
+    }
+
+    private fun isUpdatedVersion(): Boolean {
+        return packageInfo.firstInstallTime != packageInfo.lastUpdateTime
     }
 }

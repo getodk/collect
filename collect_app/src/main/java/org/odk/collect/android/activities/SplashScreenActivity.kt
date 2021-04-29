@@ -24,6 +24,8 @@ import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
 import org.odk.collect.android.databinding.SplashScreenBinding
 import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.preferences.keys.MetaKeys
+import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.projects.AddProjectDialog
@@ -41,6 +43,9 @@ class SplashScreenActivity : AppCompatActivity(), AddProjectDialog.AddProjectDia
     @Inject
     lateinit var projectsRepository: ProjectsRepository
 
+    @Inject
+    lateinit var settingsProvider: SettingsProvider
+
     lateinit var viewModel: SplashScreenViewModel
 
     private lateinit var binding: SplashScreenBinding
@@ -56,7 +61,10 @@ class SplashScreenActivity : AppCompatActivity(), AddProjectDialog.AddProjectDia
 
     private fun init() {
         when {
-            viewModel.isFirstLaunch -> DialogUtils.showIfNotShowing(FirstLaunchDialog::class.java, supportFragmentManager)
+            viewModel.isFirstLaunch -> {
+                settingsProvider.getMetaSettings().save(MetaKeys.FIRST_LAUNCH, false)
+                DialogUtils.showIfNotShowing(FirstLaunchDialog::class.java, supportFragmentManager)
+            }
             viewModel.shouldDisplaySplashScreen -> startSplashScreen()
             else -> endSplashScreen()
         }
