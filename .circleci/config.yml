@@ -11,7 +11,6 @@ references:
     resource_class: xlarge
     environment:
       ROBOLECTRIC_HEAP_SIZE: '14336m'
-      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-XX:+UseContainerSupport -XX:MaxRAMPercentage=90.0" -Dorg.gradle.parallel="true" -Dkotlin.compiler.execution.strategy=in-process'
 
 jobs:
   compile:
@@ -20,12 +19,15 @@ jobs:
       - checkout
       - run:
           name: Generate combined build.gradle file for cache key
-          command: cat build.gradle */build.gradle > deps.txt
+          command: cat build.gradle */build.gradle .circleci/gradle.properties > deps.txt
       - restore_cache:
           key: deps-{{ checksum "deps.txt" }}
       - run:
           name: Download dependencies
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 androidDependencies
+      - run:
+          name: Copy gradle config
+          command: cp .circleci/gradle.properties ~/.gradle/gradle.properties
       - save_cache:
           paths:
             - ~/.gradle
