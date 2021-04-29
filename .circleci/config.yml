@@ -9,8 +9,6 @@ references:
     docker:
       - image: circleci/android:api-30
     resource_class: xlarge
-    environment:
-      ROBOLECTRIC_HEAP_SIZE: '14336m'
 
 jobs:
   compile:

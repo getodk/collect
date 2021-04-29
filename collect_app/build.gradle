@@ -194,7 +194,7 @@ android {
             includeAndroidResources = true
             returnDefaultValues = true
             all {
-                maxHeapSize = "${System.env.ROBOLECTRIC_HEAP_SIZE != null ? System.env.ROBOLECTRIC_HEAP_SIZE : "2048m"}"
+                maxHeapSize = robolectricHeapSize
             }
         }
     }
