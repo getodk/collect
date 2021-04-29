@@ -6,7 +6,7 @@ import android.graphics.drawable.GradientDrawable
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.intent.Intents
@@ -18,13 +18,15 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 import org.odk.collect.android.R
+import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel
 import org.odk.collect.android.formmanagement.InstancesCountRepository
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.version.VersionInformation
@@ -33,25 +35,33 @@ import org.odk.collect.projects.Project
 @RunWith(AndroidJUnit4::class)
 class MainMenuActivityTest {
 
-    private lateinit var mainMenuViewModel: MainMenuViewModel
-    private lateinit var currentProject: Project
-    private lateinit var livedata: LiveData<Int>
+    private val project = Project("Project", "P", "#f5f5f5")
+
+    private val mainMenuViewModel = mock<MainMenuViewModel> {
+        on { finalizedFormsCount } doReturn MutableLiveData(0)
+        on { sentFormsCount } doReturn MutableLiveData(0)
+        on { unsentFormsCount } doReturn MutableLiveData(0)
+    }
+
+    private val currentProjectViewModel = mock<CurrentProjectViewModel> {
+        on { currentProject } doReturn MutableLiveData(project)
+    }
 
     @Before
     fun setup() {
-        mainMenuViewModel = mock(MainMenuViewModel::class.java)
-        currentProject = mock(Project::class.java)
-        livedata = mock(LiveData::class.java) as LiveData<Int>
-
-        `when`(mainMenuViewModel.finalizedFormsCount).thenReturn(livedata)
-        `when`(mainMenuViewModel.sentFormsCount).thenReturn(livedata)
-        `when`(mainMenuViewModel.unsentFormsCount).thenReturn(livedata)
-
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesMainMenuViewModel(versionInformation: VersionInformation, application: Application, settingsProvider: SettingsProvider, instancesCountRepository: InstancesCountRepository): MainMenuViewModel.Factory {
                 return object : MainMenuViewModel.Factory(versionInformation, application, settingsProvider, instancesCountRepository) {
                     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                         return mainMenuViewModel as T
+                    }
+                }
+            }
+
+            override fun providesCurrentProjectViewModel(currentProjectProvider: CurrentProjectProvider): CurrentProjectViewModel.Factory {
+                return object : CurrentProjectViewModel.Factory(currentProjectProvider) {
+                    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                        return currentProjectViewModel as T
                     }
                 }
             }
@@ -65,10 +75,10 @@ class MainMenuActivityTest {
             val projectIcon = activity.findViewById<TextView>(R.id.project_icon_text)
 
             assertThat(projectIcon.visibility, `is`(View.VISIBLE))
-            assertThat(projectIcon.text, `is`("D"))
+            assertThat(projectIcon.text, `is`(project.icon))
 
             val background = projectIcon.background as GradientDrawable
-            assertThat(background.color!!.defaultColor, equalTo(Color.parseColor("#3e9fcc")))
+            assertThat(background.color!!.defaultColor, equalTo(Color.parseColor(project.color)))
         }
     }
 
@@ -100,7 +110,7 @@ class MainMenuActivityTest {
         val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
             val button: Button = activity.findViewById(R.id.review_data)
-            assertThat(button.text, `is`(activity.getString(R.string.review_data_button)))
+            assertThat(button.text, `is`(activity.getString(R.string.review_data)))
         }
     }
 
@@ -124,7 +134,7 @@ class MainMenuActivityTest {
         val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
             val button: Button = activity.findViewById(R.id.send_data)
-            assertThat(button.text, `is`(activity.getString(R.string.send_data_button)))
+            assertThat(button.text, `is`(activity.getString(R.string.send_data)))
         }
     }
 
