@@ -3,6 +3,8 @@ package org.odk.collect.android.injection.config;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.telephony.TelephonyManager;
 import android.webkit.MimeTypeMap;
@@ -571,8 +573,15 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public AppStateProvider providesAppStateProvider(Context context) {
-        return new AppStateProvider(context);
+    public AppStateProvider providesAppStateProvider(Context context, SettingsProvider settingsProvider) {
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            // ignored
+        }
+
+        return new AppStateProvider(packageInfo, settingsProvider.getMetaSettings());
     }
 
     @Provides

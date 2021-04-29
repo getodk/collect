@@ -32,7 +32,7 @@ class ApplicationInitializerTest {
     @Before
     fun setup() {
         RobolectricHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesAppStateProvider(context: Context): AppStateProvider {
+            override fun providesAppStateProvider(context: Context, settingsProvider: SettingsProvider): AppStateProvider {
                 return appStateProvider
             }
 
