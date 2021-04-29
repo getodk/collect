@@ -1,4 +1,4 @@
-package org.odk.collect.android.feature.formmanagement;
+package org.odk.collect.android.feature.external;
 
 import android.content.Intent;
 
