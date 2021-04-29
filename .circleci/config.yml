@@ -8,23 +8,24 @@ references:
     working_directory: ~/work
     docker:
       - image: circleci/android:api-30
+    resource_class: xlarge
 
 jobs:
   compile:
     <<: *android_config
-    environment:
-      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
       - checkout
-
       - run:
           name: Generate combined build.gradle file for cache key
-          command: cat build.gradle */build.gradle > deps.txt
+          command: cat build.gradle */build.gradle .circleci/gradle.properties > deps.txt
       - restore_cache:
           key: deps-{{ checksum "deps.txt" }}
       - run:
           name: Download dependencies
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 androidDependencies
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 androidDependencies
+      - run:
+          name: Copy gradle config
+          command: cp .circleci/gradle.properties ~/.gradle/gradle.properties
       - save_cache:
           paths:
             - ~/.gradle
@@ -32,7 +33,7 @@ jobs:
 
       - run:
           name: Compile code
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleDebug
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 assembleDebug
 
       - persist_to_workspace:
           root: ~/work
@@ -41,8 +42,6 @@ jobs:
 
   check_quality:
     <<: *android_config
-    environment:
-      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
       - attach_workspace:
           at: ~/work
@@ -51,15 +50,13 @@ jobs:
 
       - run:
           name: Run code quality checks
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 checkCode
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 checkCode
       - store_artifacts:
           path: collect_app/build/reports
           destination: reports
 
   test_modules:
     <<: *android_config
-    environment:
-      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
       - attach_workspace:
           at: ~/work
@@ -70,28 +67,28 @@ jobs:
 
       - run:
           name: Run shared unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 shared:test
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 shared:test
       - run:
           name: Run formtest unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 formstest:test
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 formstest:test
       - run:
           name: Run async unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 async:testDebug
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 async:testDebug
       - run:
           name: Run strings unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 strings:testDebug
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 strings:testDebug
       - run:
           name: Run material unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 material:testDebug
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 material:testDebug
       - run:
           name: Run audioclips unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 audioclips:testDebug
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 audioclips:testDebug
       - run:
           name: Run audiorecorder unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 audiorecorder:testDebug
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 audiorecorder:testDebug
       - run:
           name: Run projects unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 projects:test
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 projects:test
 
       - save_cache:
           paths:
@@ -106,8 +103,6 @@ jobs:
 
   test_app:
     <<: *android_config
-    environment:
-      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
       - attach_workspace:
           at: ~/work
@@ -118,11 +113,11 @@ jobs:
 
       - run:
           name: Compile app unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 collect_app:compileDebugUnitTestSources
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 collect_app:compileDebugUnitTestSources
 
       - run:
           name: Run app unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 collect_app:testDebug
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 collect_app:testDebug
 
       - save_cache:
           paths:
@@ -137,8 +132,6 @@ jobs:
 
   build_instrumented:
     <<: *android_config
-    environment:
-      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
       - attach_workspace:
           at: ~/work
@@ -147,12 +140,10 @@ jobs:
 
       - run:
           name: Assemble connected test build
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleDebugAndroidTest
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 assembleDebugAndroidTest
 
   test_instrumented:
     <<: *android_config
-    environment:
-      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m" -Dkotlin.compiler.execution.strategy=in-process'
     steps:
       - attach_workspace:
           at: ~/work
@@ -161,7 +152,7 @@ jobs:
 
       - run:
           name: Assemble test build
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleDebug assembleDebugAndroidTest
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 assembleDebug assembleDebugAndroidTest
       - run:
           name: Authorize gcloud
           command: |
