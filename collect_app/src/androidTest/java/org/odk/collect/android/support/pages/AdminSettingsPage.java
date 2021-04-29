@@ -23,7 +23,7 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
     }
 
     public AdminSettingsPage openUserSettings() {
-        clickOnString(R.string.user_settings);
+        scrollToRecyclerViewItemAndClickText(getTranslatedString(R.string.user_settings));
         return this;
     }
 

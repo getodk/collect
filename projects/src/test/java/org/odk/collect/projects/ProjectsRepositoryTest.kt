@@ -70,8 +70,8 @@ abstract class ProjectsRepositoryTest {
         val projects = projectsRepository.getAll()
         assertThat(projects.size, `is`(3))
         assertThat(projects[0], `is`(updatedProjectX))
-        assertThat(projects[1], `is`(projectY))
-        assertThat(projects[2], `is`(projectZ))
+        assertThat(projects[1], `is`(projectY.copy(uuid = projects[1].uuid)))
+        assertThat(projects[2], `is`(projectZ.copy(uuid = projects[2].uuid)))
     }
 
     @Test
