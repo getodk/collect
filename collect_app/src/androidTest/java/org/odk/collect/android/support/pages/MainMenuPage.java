@@ -6,10 +6,13 @@ import android.app.Instrumentation;
 import android.content.Intent;
 
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.NoMatchingViewException;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.forms.DatabaseFormColumns;
 import org.odk.collect.android.support.ActivityHelpers;
+
+import java.util.concurrent.Callable;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -37,8 +40,12 @@ public class MainMenuPage extends Page<MainMenuPage> {
 
     public ProjectSettingsDialogPage openProjectSettingsDialog() {
         assertOnPage(); // Make sure we've waited for the application load correctly
+
         onView(withId(R.id.projects)).perform(click());
-        return new ProjectSettingsDialogPage().assertOnPage();
+        return waitFor(() -> {
+            // It seems there is some lag here sometimes
+            return new ProjectSettingsDialogPage().assertOnPage();
+        });
     }
 
     public FormEntryPage startBlankForm(String formName) {
