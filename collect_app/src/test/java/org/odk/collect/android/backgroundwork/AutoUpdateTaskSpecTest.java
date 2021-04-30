@@ -1,6 +1,8 @@
 package org.odk.collect.android.backgroundwork;
 
 import android.app.Application;
+import android.content.Context;
+import android.database.ContentObserver;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -21,14 +23,15 @@ import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.support.CollectHelpers;
-import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.BooleanChangeLock;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.ManifestFile;
+import org.odk.collect.shared.Settings;
 
 import java.util.HashMap;
 import java.util.function.Supplier;
@@ -75,6 +78,7 @@ public class AutoUpdateTaskSpecTest {
                 return notifier;
             }
         });
+
         generalSettings.clear();
         generalSettings.setDefaultForAllSettingsWithoutValues();
     }
@@ -142,5 +146,20 @@ public class AutoUpdateTaskSpecTest {
                 put(form1, Collect.getInstance().getString(R.string.success));
             }
         });
+    }
+
+    @Test
+    public void updatesFormsContentObserver() throws Exception {
+        ContentObserver contentObserver = mock(ContentObserver.class);
+        Context applicationContext = ApplicationProvider.getApplicationContext();
+        applicationContext.getContentResolver().registerContentObserver(FormsProviderAPI.CONTENT_URI, false, contentObserver);
+
+        when(serverFormsDetailsFetcher.fetchFormDetails()).thenReturn(asList(new ServerFormDetails("", "", "", "", "", false, true, new ManifestFile("", emptyList()))));
+        generalSettings.save(GeneralKeys.KEY_AUTOMATIC_UPDATE, true);
+        AutoUpdateTaskSpec taskSpec = new AutoUpdateTaskSpec();
+        Supplier<Boolean> task = taskSpec.getTask(applicationContext);
+        task.get();
+
+        verify(contentObserver).dispatchChange(false, FormsProviderAPI.CONTENT_URI);
     }
 }
