@@ -147,13 +147,13 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
         Project currentProject = currentProjectProvider.getCurrentProject();
         switch (preference.getKey()) {
             case PROJECT_NAME_KEY:
-                projectsRepository.save(currentProject.copy(String.valueOf(newValue), currentProject.getIcon(), currentProject.getColor(), currentProject.getUuid()));
+                projectsRepository.save(new Project(String.valueOf(newValue), currentProject.getIcon(), currentProject.getColor(), currentProject.getUuid()));
                 break;
             case PROJECT_ICON_KEY:
-                projectsRepository.save(currentProject.copy(currentProject.getName(), String.valueOf(newValue), currentProject.getColor(), currentProject.getUuid()));
+                projectsRepository.save(new Project(currentProject.getName(), String.valueOf(newValue), currentProject.getColor(), currentProject.getUuid()));
                 break;
             case PROJECT_COLOR_KEY:
-                projectsRepository.save(currentProject.copy(currentProject.getName(), currentProject.getIcon(), String.valueOf(newValue), currentProject.getUuid()));
+                projectsRepository.save(new Project(currentProject.getName(), currentProject.getIcon(), String.valueOf(newValue), currentProject.getUuid()));
                 break;
         }
         return true;
