@@ -1,6 +1,7 @@
 package org.odk.collect.android.backgroundwork;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -57,7 +58,7 @@ public class SyncFormsTaskSpecTest {
             }
 
             @Override
-            public SyncStatusAppState providesServerFormSyncRepository() {
+            public SyncStatusAppState providesServerFormSyncRepository(Context context) {
                 return syncStatusAppState;
             }
 

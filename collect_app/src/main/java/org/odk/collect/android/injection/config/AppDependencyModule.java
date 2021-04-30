@@ -385,8 +385,8 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public SyncStatusAppState providesServerFormSyncRepository() {
-        return new SyncStatusAppState();
+    public SyncStatusAppState providesServerFormSyncRepository(Context context) {
+        return new SyncStatusAppState(context);
     }
 
     @Provides
