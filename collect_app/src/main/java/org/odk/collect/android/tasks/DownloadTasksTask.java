@@ -710,6 +710,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                             form.manifestUrl,
                             mfd.exists,
                             form.tasks_only,
+                            form.search_local_data,
                             mfd.formPath,
                             form.project,
                             mfd.formMediaPath

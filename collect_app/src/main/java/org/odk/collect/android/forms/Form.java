@@ -32,6 +32,7 @@ public final class Form {
     private final String jrVersion;
     private final String project;       // smap
     private final String tasksOnly;     // smap
+    private final String searchLocalData;     // smap
     private final String source;        // smap
     private final String formFilePath;
     private final String submissionUri;
@@ -53,6 +54,7 @@ public final class Form {
         jrFormId = builder.jrFormId;
         project = builder.project;  // smap
         tasksOnly = builder.tasksOnly;  // smap
+        searchLocalData = builder.searchLocalData;  // smap
         source = builder.source;        // smap
         jrVersion = builder.jrVersion;
         formFilePath = builder.formFilePath;
@@ -77,6 +79,7 @@ public final class Form {
         private String jrVersion;
         private String project;     // smap
         private String tasksOnly;   // smap
+        private String searchLocalData;  // smap
         private String source;      // smap
         private String formFilePath;
         private String submissionUri;
@@ -146,6 +149,12 @@ public final class Form {
         // smap
         public Builder tasksOnly(String tasksOnly) {
             this.tasksOnly = tasksOnly;
+            return this;
+        }
+
+        // smap
+        public Builder searchLocalData(String searchLocalData) {
+            this.searchLocalData = searchLocalData;
             return this;
         }
 
@@ -248,6 +257,10 @@ public final class Form {
 
     public String getTasksOnly() {
         return tasksOnly;
+    }     // smap
+
+    public String getSearchLocalData() {
+        return searchLocalData;
     }     // smap
 
     public String getSource() {

@@ -74,13 +74,11 @@ public class FileUtils {
     public static final String FORMID = "formid";
     public static final String VERSION = "version"; // arbitrary string in OpenRosa 1.0
     public static final String TITLE = "title";
-    public static final String PROJECT = "project";			// smap
     public static final String SUBMISSIONURI = "submission";
     public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
     public static final String AUTO_DELETE = "autoDelete";
     public static final String AUTO_SEND = "autoSend";
     //public static final String GEOMETRY_XPATH = "geometryXpath";   // smap
-    public static final String TASKS_ONLY = "tasks_only"; // smap Set to "yes" if the form should not be available to the user
     public static final String SOURCE = "source"; // smap (shouldn't be null but for migration can be)
 
     /** Suffix for the form media directory. */

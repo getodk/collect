@@ -29,6 +29,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.MD5
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SUBMISSION_URI;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.PROJECT;       // smap
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.TASKS_ONLY;    // smap
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SEARCH_LOCAL_DATA;    // smap
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SOURCE;        // smap
 
 public class FormDatabaseMigrator implements DatabaseMigrator {
@@ -63,6 +64,7 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
         SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, DELETED_DATE, "integer");
 
         SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, GEOMETRY_XPATH, "text");
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, SEARCH_LOCAL_DATA, "text");
 
     }
 
@@ -92,6 +94,7 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
                 + GEOMETRY_XPATH + " text,"
                 + PROJECT + " text,"    // smap
                 + TASKS_ONLY + " text," // smap
+                + SEARCH_LOCAL_DATA + " text," // smap
                 + SOURCE + " text,"     // smap
                 + DELETED_DATE + " integer,"
 

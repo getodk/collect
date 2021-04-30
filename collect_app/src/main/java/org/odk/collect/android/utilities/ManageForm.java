@@ -137,7 +137,7 @@ public class ManageForm {
         return fd;
     }
 
-    public void updateFormDetails(Long id, String displayName, boolean tasks_only) {
+    public void updateFormDetails(Long id, String displayName, boolean tasks_only, boolean searchLocalData) {
 
 
         try {
@@ -147,6 +147,7 @@ public class ManageForm {
             ContentValues values = new ContentValues();
             values.put(FormsColumns.DISPLAY_NAME, displayName);
             values.put(FormsColumns.TASKS_ONLY, tasks_only ? "yes" : "no");
+            values.put(FormsColumns.SEARCH_LOCAL_DATA, searchLocalData ? "yes" : "no");
 
             Collect.getInstance().getContentResolver().update(formUri, values, null, null);
 

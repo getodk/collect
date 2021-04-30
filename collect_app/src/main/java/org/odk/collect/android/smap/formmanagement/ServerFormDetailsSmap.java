@@ -34,6 +34,7 @@ public class ServerFormDetailsSmap implements Serializable {
     private final String manifestUrl;
     private boolean isFormDownloaded;
     private boolean tasks_only;
+    private boolean searchLocalData;
     private String formPath;
     private String project;
     private String formMediaPath;
@@ -47,9 +48,10 @@ public class ServerFormDetailsSmap implements Serializable {
                                  String manifestUrl,    // smap
                                  boolean isFormDownloaded,
                                  boolean tasks_only,
+                                 boolean searchLocalData,
                                  String formPath,
                                  String project,
-                                 String formMediaPath) {   // smap add formNotDownloaded, tasks_only, formPath, project
+                                 String formMediaPath) {   // smap add searchLocalData, formNotDownloaded, tasks_only, formPath, project
 
         this.formName = formName;
         this.downloadUrl = downloadUrl;
@@ -61,6 +63,7 @@ public class ServerFormDetailsSmap implements Serializable {
         this.manifestUrl = manifestUrl;
         this.isFormDownloaded = isFormDownloaded;
         this.tasks_only = tasks_only;
+        this.searchLocalData = searchLocalData;
         this.formPath = formPath;
         this.project = project;
         this.formMediaPath = formMediaPath;
@@ -92,6 +95,10 @@ public class ServerFormDetailsSmap implements Serializable {
 
     public boolean getTasksOnly() {
         return tasks_only;
+    }
+
+    public boolean getSearchLocalData() {
+        return searchLocalData;
     }
 
     public boolean isFormDownloaded() {
