@@ -63,10 +63,6 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
-
-        settingsProvider.getAdminSettings().save(PROJECT_NAME_KEY, currentProjectProvider.getCurrentProject().getName());
-        settingsProvider.getAdminSettings().save(PROJECT_ICON_KEY, currentProjectProvider.getCurrentProject().getIcon());
-        settingsProvider.getAdminSettings().save(PROJECT_COLOR_KEY, currentProjectProvider.getCurrentProject().getColor());
     }
 
     @Override
@@ -81,13 +77,19 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
         findPreference("user_settings").setOnPreferenceClickListener(this);
         findPreference("form_entry").setOnPreferenceClickListener(this);
 
+        findPreference(PROJECT_NAME_KEY).setSummaryProvider(new ProjectDetailsSummaryProvider(PROJECT_NAME_KEY, currentProjectProvider));
+        findPreference(PROJECT_ICON_KEY).setSummaryProvider(new ProjectDetailsSummaryProvider(PROJECT_ICON_KEY, currentProjectProvider));
+        findPreference(PROJECT_COLOR_KEY).setSummaryProvider(new ProjectDetailsSummaryProvider(PROJECT_COLOR_KEY, currentProjectProvider));
+
         findPreference(PROJECT_NAME_KEY).setOnPreferenceChangeListener(this);
         findPreference(PROJECT_ICON_KEY).setOnPreferenceChangeListener(this);
         findPreference(PROJECT_COLOR_KEY).setOnPreferenceChangeListener(this);
 
-        ((EditTextPreference) findPreference(PROJECT_ICON_KEY)).setOnBindEditTextListener(editText -> editText.addTextChangedListener(new OneSignTextWatcher(editText)));
+        ((EditTextPreference) findPreference(PROJECT_NAME_KEY)).setText(currentProjectProvider.getCurrentProject().getName());
+        ((EditTextPreference) findPreference(PROJECT_ICON_KEY)).setText(currentProjectProvider.getCurrentProject().getIcon());
+        ((EditTextPreference) findPreference(PROJECT_COLOR_KEY)).setText(currentProjectProvider.getCurrentProject().getColor());
 
-        setProjectColorSummary();
+        ((EditTextPreference) findPreference(PROJECT_ICON_KEY)).setOnBindEditTextListener(editText -> editText.addTextChangedListener(new OneSignTextWatcher(editText)));
     }
 
     @Override
@@ -116,11 +118,9 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
                     intent.putExtra(INTENT_KEY_ADMIN_MODE, true);
                     startActivity(intent);
                     break;
-
                 case KEY_CHANGE_ADMIN_PASSWORD:
                     DialogUtils.showIfNotShowing(ChangeAdminPasswordDialog.class, getActivity().getSupportFragmentManager());
                     break;
-
                 case KEY_IMPORT_SETTINGS:
                     Intent pref = new Intent(getActivity(), QRCodeTabsActivity.class);
                     startActivity(pref);
@@ -154,7 +154,6 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
                 break;
             case PROJECT_COLOR_KEY:
                 projectsRepository.save(currentProject.copy(currentProject.getName(), currentProject.getIcon(), String.valueOf(newValue), currentProject.getUuid()));
-                setProjectColorSummary();
                 break;
         }
         return true;
@@ -175,10 +174,29 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
         fragment.preventOtherWaysOfEditingForm();
     }
 
-    private void setProjectColorSummary() {
-        Spannable summary = new SpannableString("■");
-        summary.setSpan(new ForegroundColorSpan(Color.parseColor(currentProjectProvider.getCurrentProject().getColor())), 0, summary.length(), 0);
-        findPreference(PROJECT_COLOR_KEY).setSummary("");
-        findPreference(PROJECT_COLOR_KEY).setSummary(summary);
+    private static class ProjectDetailsSummaryProvider implements Preference.SummaryProvider<EditTextPreference> {
+        private final String key;
+        private final CurrentProjectProvider currentProjectProvider;
+
+        ProjectDetailsSummaryProvider(String key, CurrentProjectProvider currentProjectProvider) {
+            this.key = key;
+            this.currentProjectProvider = currentProjectProvider;
+        }
+
+        @Override
+        public CharSequence provideSummary(EditTextPreference preference) {
+            switch (key) {
+                case PROJECT_NAME_KEY:
+                    return currentProjectProvider.getCurrentProject().getName();
+                case PROJECT_ICON_KEY:
+                    return currentProjectProvider.getCurrentProject().getIcon();
+                case PROJECT_COLOR_KEY:
+                    Spannable summary = new SpannableString("■");
+                    summary.setSpan(new ForegroundColorSpan(Color.parseColor(currentProjectProvider.getCurrentProject().getColor())), 0, summary.length(), 0);
+                    return summary;
+                default:
+                    return null;
+            }
+        }
     }
 }

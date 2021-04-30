@@ -23,18 +23,20 @@
             android:key="project_name"
             android:title="@string/project_name"
             app:iconSpaceReserved="false"
-            app:useSimpleSummaryProvider="true"/>
+            app:useSimpleSummaryProvider="true"
+            app:persistent="false"/>
 
         <EditTextPreference
             android:key="project_icon"
             android:title="@string/project_icon"
             app:iconSpaceReserved="false"
-            app:useSimpleSummaryProvider="true"/>
+            app:persistent="false"/>
 
         <EditTextPreference
             android:key="project_color"
             android:title="@string/project_color"
-            app:iconSpaceReserved="false" />
+            app:iconSpaceReserved="false"
+            app:persistent="false"/>
 
         <org.odk.collect.android.preferences.dialogs.ResetDialogPreference
             android:dialogTitle="@string/reset_settings_dialog_title"
