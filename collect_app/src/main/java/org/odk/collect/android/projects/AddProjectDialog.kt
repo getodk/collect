@@ -49,7 +49,7 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
         }
 
         binding.addButton.setOnClickListener {
-            projectsRepository.add(Project(getProjectName(), getProjectIcon(), getProjectColor()))
+            projectsRepository.save(Project(getProjectName(), getProjectIcon(), getProjectColor()))
             listener?.onProjectAdded()
             dismiss()
         }

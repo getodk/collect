@@ -25,20 +25,18 @@ class SharedPreferencesProjectsRepository(
         }
     }
 
-    override fun add(project: Project) {
-        val projects = if (project.uuid == NOT_SPECIFIED_UUID) {
-            getAll().toMutableList().plus(project.copy(uuid = uuidGenerator.generateUUID()))
-        } else {
-            getAll().toMutableList().plus(project)
-        }
-        metaSettings.save(key, gson.toJson(projects))
-    }
-
-    override fun update(project: Project) {
+    override fun save(project: Project) {
         val projects = getAll().toMutableList()
-        val projectIndex = projects.indexOf(get(project.uuid))
-        if (projectIndex != -1) {
-            projects.set(projectIndex, project)
+
+        if (project.uuid == NOT_SPECIFIED_UUID) {
+            projects.add(project.copy(uuid = uuidGenerator.generateUUID()))
+        } else {
+            val projectIndex = projects.indexOf(get(project.uuid))
+            if (projectIndex == -1) {
+                projects.add(project)
+            } else {
+                projects.set(projectIndex, project)
+            }
         }
         metaSettings.save(key, gson.toJson(projects))
     }

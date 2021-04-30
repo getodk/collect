@@ -5,9 +5,7 @@ interface ProjectsRepository {
 
     fun getAll(): List<Project>
 
-    fun add(project: Project)
-
-    fun update(project: Project)
+    fun save(project: Project)
 
     fun delete(uuid: String)
 

@@ -72,7 +72,7 @@ class AddProjectDialogTest {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java)
         scenario.onFragment {
             onView(withText(R.string.add)).perform(click())
-            verify(projectsRepository).add(Project("", "", ""))
+            verify(projectsRepository).save(Project("", "", ""))
         }
     }
 
