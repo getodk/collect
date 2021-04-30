@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.backgroundwork.ChangeLock;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
@@ -21,7 +22,6 @@ import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.shared.Md5;
 
@@ -33,6 +33,7 @@ import javax.inject.Named;
 
 import static org.odk.collect.android.analytics.AnalyticsUtils.logMatchExactlyCompleted;
 import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
+import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_URI;
 
 public class BlankFormsListViewModel extends ViewModel {
 
@@ -108,7 +109,8 @@ public class BlankFormsListViewModel extends ViewModel {
                         result.setValue(false);
                     }
 
-                    FormsProvider.notifyChange();
+                    // Make sure content observers (CursorLoaders for instance) are notified of change
+                    Collect.getInstance().getContentResolver().notifyChange(CONTENT_URI, null);
                     logMatchExactlyCompleted(analytics, exception);
                 });
             }
