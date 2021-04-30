@@ -29,19 +29,9 @@ public class ServerFormDetails implements Serializable {
     private final String hash;
     private final boolean isNotOnDevice;
     private final boolean isUpdated;
-    private boolean tasks_only;             // smap
-    private String formPath;                // smap
-    private String project;                 // smap
-
     private final ManifestFile manifest;
 
-    public ServerFormDetails(String formName, String downloadUrl, String formID,
-                             String formVersion, String hash,
-                             boolean isNotOnDevice, boolean isUpdated, ManifestFile manifest,
-                             boolean tasks_only,
-                             String formPath,
-                             String project) {   // smap add formNotDownloaded, tasks_only, formPath, project
-
+    public ServerFormDetails(String formName, String downloadUrl, String formID, String formVersion, String hash, boolean isNotOnDevice, boolean isUpdated, ManifestFile manifest) {
         this.formName = formName;
         this.downloadUrl = downloadUrl;
         this.formID = formID;
@@ -49,9 +39,6 @@ public class ServerFormDetails implements Serializable {
         this.hash = hash;
         this.isNotOnDevice = isNotOnDevice;
         this.isUpdated = isUpdated;
-        this.tasks_only = tasks_only;   // smap
-        this.formPath = formPath;       // smap
-        this.project = project;       // smap
         this.manifest = manifest;
     }
 
@@ -70,18 +57,6 @@ public class ServerFormDetails implements Serializable {
     public String getFormVersion() {
         return formVersion;
     }
-
-    public boolean getTasksOnly() {
-        return tasks_only;
-    }           // smap
-
-    public String getFormPath() {
-        return formPath;
-    }           // smap
-
-    public String getProject() {
-        return project;
-    }           // smap
 
     public String getHash() {
         return hash;
