@@ -244,7 +244,7 @@ public abstract class InstancesRepositoryTest {
     }
 
     @Test
-    public void save_whenInstanceSoftDeleted_doesNotUpdateLastChangesStatusDate() {
+    public void save_whenInstanceHasDeletedDate_doesNotUpdateLastChangesStatusDate() {
         Supplier<Long> clock = mock(Supplier.class);
         when(clock.get()).thenReturn(123L);
 
@@ -254,23 +254,23 @@ public abstract class InstancesRepositoryTest {
         Long originalInstanceDbId = originalInstance.getDbId();
 
         when(clock.get()).thenReturn(456L);
-        instancesRepository.softDelete(originalInstanceDbId);
+        instancesRepository.deleteWithLogging(originalInstanceDbId);
         instancesRepository.save(instancesRepository.get(originalInstanceDbId));
 
         assertThat(instancesRepository.get(originalInstanceDbId).getLastStatusChangeDate(), is(123L));
     }
 
     @Test
-    public void softDelete_setsDeletedDate() {
+    public void deleteWithLogging_setsDeletedDate() {
         InstancesRepository instancesRepository = buildSubject();
         Instance instance = instancesRepository.save(InstanceUtils.buildInstance("formid", "1", getInstancesDir()).build());
 
-        instancesRepository.softDelete(instance.getDbId());
+        instancesRepository.deleteWithLogging(instance.getDbId());
         assertThat(instancesRepository.get(instance.getDbId()).getDeletedDate(), is(notNullValue()));
     }
 
     @Test
-    public void softDelete_deletesInstanceDir() {
+    public void deleteWithLogging_deletesInstanceDir() {
         InstancesRepository instancesRepository = buildSubject();
         Instance instance = instancesRepository.save(InstanceUtils.buildInstance("formid", "1", getInstancesDir()).build());
 
@@ -278,19 +278,19 @@ public abstract class InstancesRepositoryTest {
         assertThat(instanceDir.exists(), is(true));
         assertThat(instanceDir.isDirectory(), is(true));
 
-        instancesRepository.softDelete(instance.getDbId());
+        instancesRepository.deleteWithLogging(instance.getDbId());
         assertThat(instanceDir.exists(), is(false));
     }
 
     @Test
-    public void softDelete_clearsGeometryData() {
+    public void deleteWithLogging_clearsGeometryData() {
         InstancesRepository instancesRepository = buildSubject();
         Instance instance = instancesRepository.save(InstanceUtils.buildInstance("formid", "1", getInstancesDir())
                 .geometry("blah")
                 .geometryType("blah")
                 .build());
 
-        instancesRepository.softDelete(instance.getDbId());
+        instancesRepository.deleteWithLogging(instance.getDbId());
         assertThat(instancesRepository.get(instance.getDbId()).getGeometry(), is(nullValue()));
         assertThat(instancesRepository.get(instance.getDbId()).getGeometryType(), is(nullValue()));
     }

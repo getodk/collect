@@ -170,7 +170,7 @@ public final class InMemInstancesRepository implements InstancesRepository {
     }
 
     @Override
-    public void softDelete(Long id) {
+    public void deleteWithLogging(Long id) {
         Instance instance = new Instance.Builder(get(id))
                 .geometry(null)
                 .geometryType(null)

@@ -39,7 +39,7 @@ public class InstanceDeleterTest {
     }
 
     @Test
-    public void whenFormForInstanceIsSoftDeleted_andThereIsAnotherSoftDeletedInstance_deletesForm() {
+    public void whenFormForInstanceIsSoftDeleted_andThereIsAnotherInstaceWithDeletedDate_deletesForm() {
         formsRepository.save(new Form.Builder()
                 .formId("1")
                 .version("version")
@@ -175,7 +175,7 @@ public class InstanceDeleterTest {
     }
 
     @Test
-    public void whenInstanceIsSubmitted_softDeletesInstance() {
+    public void whenInstanceIsSubmitted_deletesInstanceWithLogging() {
         Instance instance = instancesRepository.save(buildInstance("1", "version", TempFiles.createTempDir().getAbsolutePath())
                 .status(Instance.STATUS_SUBMITTED)
                 .build());

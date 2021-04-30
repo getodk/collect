@@ -21,7 +21,7 @@ public class InstanceDeleter {
         Instance instance = instancesRepository.get(id);
         if (instance != null) {
             if (instance.getStatus().equals(Instance.STATUS_SUBMITTED)) {
-                instancesRepository.softDelete(id);
+                instancesRepository.deleteWithLogging(id);
             } else {
                 instancesRepository.delete(id);
             }
