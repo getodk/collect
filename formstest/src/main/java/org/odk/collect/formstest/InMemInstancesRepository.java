@@ -172,6 +172,8 @@ public final class InMemInstancesRepository implements InstancesRepository {
     @Override
     public void softDelete(Long id) {
         Instance instance = new Instance.Builder(get(id))
+                .geometry(null)
+                .geometryType(null)
                 .deletedDate(clock.get())
                 .build();
 

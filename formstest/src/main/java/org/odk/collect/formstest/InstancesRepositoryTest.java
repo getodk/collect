@@ -27,6 +27,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -279,6 +280,19 @@ public abstract class InstancesRepositoryTest {
 
         instancesRepository.softDelete(instance.getDbId());
         assertThat(instanceDir.exists(), is(false));
+    }
+
+    @Test
+    public void softDelete_clearsGeometryData() {
+        InstancesRepository instancesRepository = buildSubject();
+        Instance instance = instancesRepository.save(InstanceUtils.buildInstance("formid", "1", getInstancesDir())
+                .geometry("blah")
+                .geometryType("blah")
+                .build());
+
+        instancesRepository.softDelete(instance.getDbId());
+        assertThat(instancesRepository.get(instance.getDbId()).getGeometry(), is(nullValue()));
+        assertThat(instancesRepository.get(instance.getDbId()).getGeometryType(), is(nullValue()));
     }
 
     @Test

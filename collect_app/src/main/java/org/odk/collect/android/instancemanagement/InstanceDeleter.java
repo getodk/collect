@@ -21,11 +21,6 @@ public class InstanceDeleter {
         Instance instance = instancesRepository.get(id);
         if (instance != null) {
             if (instance.getStatus().equals(Instance.STATUS_SUBMITTED)) {
-                instancesRepository.save(new Instance.Builder(instance)
-                        .geometry(null)
-                        .geometryType(null)
-                        .build()
-                );
                 instancesRepository.softDelete(id);
             } else {
                 instancesRepository.delete(id);

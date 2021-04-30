@@ -181,6 +181,8 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     @Override
     public void softDelete(Long id) {
         ContentValues values = new ContentValues();
+        values.putNull(GEOMETRY);
+        values.putNull(GEOMETRY_TYPE);
         values.put(DELETED_DATE, clock.get());
         update(id, values);
 
