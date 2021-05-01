@@ -128,6 +128,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         final String formPath = path[0];
         final String formId = path[1];          // smap
+        final String searchLocalData = path[2]; // smap
         if (formPath == null) {
             Timber.e("formPath is null");
             errorMsg = "formPath is null, please email smap-suite@googlegroups.com with a description of what you were doing when this happened.";  // smap email
@@ -181,8 +182,10 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         try {
             loadExternalData(formMediaDir);
             // Start smap load local data
-            LocalDataManagerSmap ldm = new LocalDataManagerSmap(this);
-            ldm.loadLocalData(formId, formMediaDir);
+            if(searchLocalData != null && searchLocalData.equals("yes")) {
+                LocalDataManagerSmap ldm = new LocalDataManagerSmap(this);
+                ldm.loadLocalData(formId, formMediaDir);
+            }
             // end smap
         } catch (Exception e) {
             Timber.e(e, "Exception thrown while loading external data");

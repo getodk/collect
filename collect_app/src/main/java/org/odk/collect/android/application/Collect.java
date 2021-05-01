@@ -79,6 +79,7 @@ public class Collect extends Application implements LocalizedApplication {
     private Stack<FormLaunchDetail> formStack = new Stack<>();              // smap
     private FormRestartDetails mRestartDetails;                             // smap
     private String formId;                                                  // smap
+    private String searchLocalData;                                         // smap
 
     @Inject
     ApplicationInitializer applicationInitializer;
@@ -193,6 +194,12 @@ public class Collect extends Application implements LocalizedApplication {
     }
     public String getFormId() {
         return formId;
+    }
+    public void setSearchLocalData(String v) {
+        searchLocalData = v;
+    }
+    public String getSearchLocalData() {
+        return searchLocalData;
     }
 
     public void setLocation(Location l) {

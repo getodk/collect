@@ -2,7 +2,6 @@ package org.odk.collect.android.smap.formmanagement;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteOpenHelper;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
@@ -10,14 +9,12 @@ import org.kxml2.io.KXmlParser;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.dao.SmapReferencesDao;
 import org.odk.collect.android.external.ExternalDataUtil;
-import org.odk.collect.android.external.ExternalSQLiteOpenHelper;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.smap.local.LocalSQLiteOpenHelperSmap;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.taskModel.LinkedInstance;
 import org.odk.collect.android.taskModel.LinkedSurvey;
-import org.odk.collect.android.taskModel.ReferenceSurvey;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.xmlpull.v1.XmlPullParser;
 

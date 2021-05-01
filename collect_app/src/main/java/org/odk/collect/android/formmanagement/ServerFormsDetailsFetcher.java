@@ -95,10 +95,7 @@ public class ServerFormsDetailsFetcher {
                     listItem.getHashWithPrefix(),
                     !thisFormAlreadyDownloaded,
                     isNewerFormVersionAvailable,
-                    manifestFile,
-                    false,          // smap tasks only
-                    null,             // smap formPath
-                    null);                   // smap project
+                    manifestFile);
 
             serverFormDetailsList.add(serverFormDetails);
         }

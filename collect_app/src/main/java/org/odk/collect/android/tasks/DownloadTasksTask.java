@@ -718,7 +718,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         			toDownload.add(fd);
         		} else {
                     // Update form details
-                    mf.updateFormDetails(mfd.id, form.name, form.tasks_only);
+                    mf.updateFormDetails(mfd.id, form.name, form.tasks_only, form.search_local_data);
                 }
 
         		// Store a hashmap of new forms so we can delete existing forms not in the list

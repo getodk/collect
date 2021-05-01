@@ -632,7 +632,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     Timber.w("Reloading form and restoring state.");
                     formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath);
                     showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
-                    formLoaderTask.execute(formPath, Collect.getInstance().getFormId());      // Smap add formId
+                    formLoaderTask.execute(formPath, Collect.getInstance().getFormId(), Collect.getInstance().getSearchLocalData());      // Smap add formId, search local data
                 }
 
                 return;
@@ -697,7 +697,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     // retrieve the form definition...
                     c.moveToFirst();
                     String jrformid = c.getString(c.getColumnIndex(FormsColumns.JR_FORM_ID));
+                    String searchLocalData = c.getString(c.getColumnIndex(FormsColumns.SEARCH_LOCAL_DATA));
                     Collect.getInstance().setFormId(jrformid);
+                    Collect.getInstance().setSearchLocalData(searchLocalData);
                 }
                 // end smap
 
@@ -777,7 +779,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
         //formLoaderTask.execute(formPath, Collect.getInstance().getFormId());		// smap replaced with background thread
-        formLoaderTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, formPath, Collect.getInstance().getFormId());      // smap add formId
+        formLoaderTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, formPath, Collect.getInstance().getFormId(), Collect.getInstance().getSearchLocalData());      // smap add formId
 
     }
 
