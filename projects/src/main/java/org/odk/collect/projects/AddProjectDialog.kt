@@ -23,7 +23,7 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         val provider = context.applicationContext as ProjectsDependencyComponentProvider
-        provider.getProjectsDependencyComponent().inject(this)
+        provider.projectsDependencyComponent.inject(this)
 
         if (context is AddProjectDialogListener) {
             listener = context

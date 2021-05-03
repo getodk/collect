@@ -38,6 +38,13 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+
 }
 
 dependencies {
@@ -53,8 +60,14 @@ dependencies {
     implementation "com.google.dagger:dagger:${rootProject.daggerVersion}"
     kapt "com.google.dagger:dagger-compiler:${rootProject.daggerVersion}"
 
+    debugImplementation("androidx.fragment:fragment-testing:${rootProject.fragmentVersion}") {
+        exclude group: 'androidx.test', module: 'monitor' //fixes issue https://github.com/android/android-test/issues/731
+    }
+
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.hamcrest:hamcrest:2.2'
-    testImplementation "org.robolectric:robolectric:4.5.1"
     testImplementation 'androidx.test.ext:junit:1.1.2'
+    testImplementation project(':testshared')
+    testImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    testImplementation "org.mockito:mockito-core:3.7.7"
 }

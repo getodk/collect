@@ -7,7 +7,7 @@ import org.odk.collect.shared.UUIDGenerator
 import javax.inject.Singleton
 
 interface ProjectsDependencyComponentProvider {
-    fun getProjectsDependencyComponent(): ProjectsDependencyComponent
+    val projectsDependencyComponent: ProjectsDependencyComponent
 }
 
 @Component(modules = [ProjectsDependencyModule::class])
