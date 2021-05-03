@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -7,13 +8,13 @@
         android:layout_height="wrap_content"
         android:elevation="4dp">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <com.google.android.material.appbar.MaterialToolbar xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/toolbar"
-            style="@style/Widget.Collect.Toolbar"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:navigationIcon="@drawable/notes" />
+            app:navigationIcon="@drawable/notes"
+            tools:title="Title" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
