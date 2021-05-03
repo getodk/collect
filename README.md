@@ -113,6 +113,17 @@ If you have finished testing a pull request, please use a template from [Testing
     ```
     **Note:** You can see the emulator setup used on CI in  `.circleci/config.yml`.
 
+## Customizing the development environment
+
+### Changing JVM heap size
+
+You can customize the heap size that is used for compiling and running tests. Increasing these will most likely speed up compilation and tests on your local machine. The default values are specified in the project's `gradle.properties` and this can be overriden by your user level `gradle.properties` (found in your `GRADLE_USER_HOME` directory). An example `gradle.properties` that would give you a heap size of 4GB (rather than the default 1GB) would look like:
+
+```
+org.gradle.jvmargs=-Xmx4096 -Dkotlin.daemon.jvm.options\="-Xmx4096"
+robolectricHeapSize=4096
+```
+
 ## Testing a form without a server
 When you first run Collect, it is set to download forms from [https://demo.getodk.org/](https://demo.getodk.org/), the demo server. You can sometimes verify your changes with those forms but it can also be helpful to put a specific test form on your device. Here are some options for that:
 
