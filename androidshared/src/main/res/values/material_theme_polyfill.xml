@@ -8,8 +8,11 @@
 
 <resources>
 
-    <style name="Theme.Collect.MaterialComponents.Polyfill" parent="">
+    <!-- Fixes problems with colors when colorPrimary and colorSurface match for the theme -->
+    <style name="Theme.AndroidShared.MaterialComponents.MatchingPrimarySurfacePolyfill" parent="">
         <item name="colorPrimary">?attr/colorOnSurface</item>
+        <item name="boxStrokeColor">?colorOnSurface</item>
+        <item name="hintTextColor">?colorOnSurface</item>
     </style>
 
 </resources>

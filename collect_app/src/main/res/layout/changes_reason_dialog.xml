@@ -12,7 +12,7 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
-            style="@style/Widget.Collect.Toolbar.Primary.CloseIcon"
+            style="@style/Widget.AndroidShared.Toolbar.Primary.CloseIcon"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             tools:title="Title" />
@@ -65,7 +65,7 @@
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_extra_large"
-                android:theme="@style/Theme.Collect.MaterialComponents.Polyfill">
+                android:theme="@style/Theme.AndroidShared.MaterialComponents.MatchingPrimarySurfacePolyfill">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/reason"
