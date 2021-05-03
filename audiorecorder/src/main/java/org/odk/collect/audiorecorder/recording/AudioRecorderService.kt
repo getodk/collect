@@ -32,7 +32,7 @@ class AudioRecorderService : Service() {
     override fun onCreate() {
         super.onCreate()
         val provider = applicationContext as AudioRecorderDependencyComponentProvider
-        provider.getAudioRecorderDependencyComponentProvider().inject(this)
+        provider.getAudioRecorderDependencyComponent().inject(this)
 
         notification = RecordingForegroundServiceNotification(this, recordingRepository)
     }

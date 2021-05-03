@@ -11,11 +11,11 @@ import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.databinding.FirstLaunchDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.projects.AddProjectDialog
 import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.material.MaterialFullScreenDialogFragment
+import org.odk.collect.projects.AddProjectDialog
 import javax.inject.Inject
 
 class FirstLaunchDialog : MaterialFullScreenDialogFragment() {

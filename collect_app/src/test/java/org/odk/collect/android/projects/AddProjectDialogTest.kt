@@ -23,6 +23,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.support.RobolectricHelpers
+import org.odk.collect.projects.AddProjectDialog
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.UUIDGenerator

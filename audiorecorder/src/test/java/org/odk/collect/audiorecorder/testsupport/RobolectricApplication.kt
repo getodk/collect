@@ -27,7 +27,7 @@ internal class RobolectricApplication : Application(), AudioRecorderDependencyCo
             .build()
     }
 
-    override fun getAudioRecorderDependencyComponentProvider(): AudioRecorderDependencyComponent {
+    override fun getAudioRecorderDependencyComponent(): AudioRecorderDependencyComponent {
         return audioRecorderDependencyComponent
     }
 }

@@ -29,7 +29,7 @@ import javax.inject.Singleton
  */
 
 interface AudioRecorderDependencyComponentProvider {
-    fun getAudioRecorderDependencyComponentProvider(): AudioRecorderDependencyComponent
+    fun getAudioRecorderDependencyComponent(): AudioRecorderDependencyComponent
 }
 
 @Component(modules = [AudioRecorderDependencyModule::class])
@@ -41,8 +41,6 @@ interface AudioRecorderDependencyComponent {
 
         @BindsInstance
         fun application(application: Application): Builder
-
-        fun dependencyModule(audioRecorderDependencyModule: AudioRecorderDependencyModule): Builder
 
         fun build(): AudioRecorderDependencyComponent
     }

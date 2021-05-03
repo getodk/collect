@@ -23,6 +23,7 @@ import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity
 import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.ToastUtils
+import org.odk.collect.projects.AddProjectDialog
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import javax.inject.Inject

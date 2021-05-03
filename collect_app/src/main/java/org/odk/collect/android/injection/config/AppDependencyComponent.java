@@ -68,7 +68,7 @@ import org.odk.collect.android.preferences.screens.IdentityPreferencesFragment;
 import org.odk.collect.android.preferences.screens.ServerPreferencesFragment;
 import org.odk.collect.android.preferences.screens.UserInterfacePreferencesFragment;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.projects.AddProjectDialog;
+import org.odk.collect.projects.AddProjectDialog;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.projects.ProjectSettingsDialog;

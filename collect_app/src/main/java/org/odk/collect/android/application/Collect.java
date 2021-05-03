@@ -29,6 +29,11 @@ import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.projects.DaggerProjectsDependencyComponent;
+import org.odk.collect.projects.ProjectsDependencyComponent;
+import org.odk.collect.projects.ProjectsDependencyComponentProvider;
+import org.odk.collect.projects.ProjectsDependencyModule;
+import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -49,7 +54,10 @@ import javax.inject.Inject;
 
 import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
 
-public class Collect extends Application implements LocalizedApplication, AudioRecorderDependencyComponentProvider {
+public class Collect extends Application implements
+        LocalizedApplication,
+        AudioRecorderDependencyComponentProvider,
+        ProjectsDependencyComponentProvider {
     public static String defaultSysLanguage;
     private static Collect singleton;
 
@@ -64,7 +72,11 @@ public class Collect extends Application implements LocalizedApplication, AudioR
     @Inject
     SettingsProvider settingsProvider;
 
+    @Inject
+    ProjectsRepository projectsRepository;
+
     private AudioRecorderDependencyComponent audioRecorderDependencyComponent;
+    private ProjectsDependencyComponent projectsDependencyComponent;
 
     public static Collect getInstance() {
         return singleton;
@@ -160,12 +172,28 @@ public class Collect extends Application implements LocalizedApplication, AudioR
         audioRecorderDependencyComponent = DaggerAudioRecorderDependencyComponent.builder()
                 .application(this)
                 .build();
+
+        projectsDependencyComponent = DaggerProjectsDependencyComponent.builder()
+                .projectsDependencyModule(new ProjectsDependencyModule() {
+                    @NotNull
+                    @Override
+                    public ProjectsRepository providesProjectsRepository() {
+                        return projectsRepository;
+                    }
+                })
+                .build();
     }
 
     @NotNull
     @Override
-    public AudioRecorderDependencyComponent getAudioRecorderDependencyComponentProvider() {
+    public AudioRecorderDependencyComponent getAudioRecorderDependencyComponent() {
         return audioRecorderDependencyComponent;
+    }
+
+    @NotNull
+    @Override
+    public ProjectsDependencyComponent getProjectsDependencyComponent() {
+        return projectsDependencyComponent;
     }
 
     @Override

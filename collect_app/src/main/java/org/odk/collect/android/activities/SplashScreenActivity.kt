@@ -24,9 +24,9 @@ import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
 import org.odk.collect.android.databinding.SplashScreenBinding
 import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.projects.AddProjectDialog
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.DialogUtils
+import org.odk.collect.projects.AddProjectDialog
 import org.odk.collect.projects.ProjectsRepository
 import javax.inject.Inject
 

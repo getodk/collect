@@ -46,11 +46,11 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0"
     implementation project(':strings')
     implementation "com.google.dagger:dagger:${rootProject.daggerVersion}"
+    kapt "com.google.dagger:dagger-compiler:${rootProject.daggerVersion}"
     implementation "com.jakewharton.timber:timber:${rootProject.timberVersion}"
     implementation project(path: ':async')
     implementation project(path: ':androidshared')
     testImplementation project(path: ':testshared')
-    kapt "com.google.dagger:dagger-compiler:${rootProject.daggerVersion}"
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation "org.robolectric:robolectric:4.5.1"
