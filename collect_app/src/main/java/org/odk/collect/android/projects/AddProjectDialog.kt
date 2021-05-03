@@ -63,7 +63,7 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
     }
 
     override fun getToolbar(): Toolbar? {
-        return binding.addProjectToolbar.toolbar
+        return binding.toolbar
     }
 
     private fun setUpToolbar() {
