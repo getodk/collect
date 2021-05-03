@@ -15,8 +15,8 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.fragments.support.DialogFragmentHelpers;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.shared.Settings;
-import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestActivityScenario;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowDialog;
@@ -37,7 +37,7 @@ public class ChangeAdminPasswordDialogTest {
 
     @Before
     public void setup() {
-        FragmentActivity activity = RobolectricHelpers.createThemedActivity(FragmentActivity.class);
+        FragmentActivity activity = CollectHelpers.createThemedActivity(FragmentActivity.class);
 
         fragmentManager = activity.getSupportFragmentManager();
         dialogFragment = new ChangeAdminPasswordDialog();

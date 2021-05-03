@@ -10,7 +10,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.testshared.RobolectricHelpers;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.formstest.FormsRepositoryTest;

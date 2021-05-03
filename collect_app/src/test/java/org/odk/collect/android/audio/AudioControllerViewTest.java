@@ -16,7 +16,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.odk.collect.android.support.RobolectricHelpers.buildThemedActivity;
+import static org.odk.collect.android.support.CollectHelpers.buildThemedActivity;
 import static org.robolectric.Shadows.shadowOf;
 import static org.robolectric.shadows.ShadowView.innerText;
 

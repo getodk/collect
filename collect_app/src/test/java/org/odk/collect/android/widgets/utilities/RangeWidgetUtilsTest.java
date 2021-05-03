@@ -13,7 +13,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.RangePickerWidgetAnswerBinding;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
-import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.views.TrackingTouchSlider;
 import org.robolectric.RobolectricTestRunner;
@@ -27,7 +27,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.RobolectricHelpers.createThemedContext;
+import static org.odk.collect.android.support.CollectHelpers.createThemedContext;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithQuestionDefAndAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndQuestionDef;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
@@ -182,7 +182,7 @@ public class RangeWidgetUtilsTest {
 
     @Test
     public void clickingPickerButton_showsNumberPickerDialog() {
-        TestScreenContextActivity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
+        TestScreenContextActivity activity = CollectHelpers.createThemedActivity(TestScreenContextActivity.class);
         RangeWidgetUtils.showNumberPickerDialog(activity, new String[]{}, 0, 0);
         NumberPickerDialog numberPickerDialog = (NumberPickerDialog) activity.getSupportFragmentManager()
                 .findFragmentByTag(NumberPickerDialog.NUMBER_PICKER_DIALOG_TAG);

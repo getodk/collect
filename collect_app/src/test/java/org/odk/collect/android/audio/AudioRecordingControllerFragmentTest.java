@@ -19,7 +19,7 @@ import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -37,7 +37,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.RobolectricHelpers.getFragmentByClass;
+import static org.odk.collect.testshared.RobolectricHelpers.getFragmentByClass;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(AndroidJUnit4.class)
@@ -66,7 +66,7 @@ public class AudioRecordingControllerFragmentTest {
 
         externalWebPageHelper = mock(ExternalWebPageHelper.class);
 
-        RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
 
             @Override
             public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, SettingsProvider settingsProvider, PermissionsChecker permissionsChecker, Clock clock, Analytics analytics) {

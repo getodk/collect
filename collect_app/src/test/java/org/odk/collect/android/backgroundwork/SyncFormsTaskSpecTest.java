@@ -19,7 +19,7 @@ import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.support.BooleanChangeLock;
-import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.FormSourceException;
@@ -44,7 +44,7 @@ public class SyncFormsTaskSpecTest {
 
     @Before
     public void setup() {
-        RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
 
             @Override
             public ChangeLock providesFormsChangeLock() {

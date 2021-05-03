@@ -16,7 +16,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.permissions.PermissionsChecker;
-import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.robolectric.annotation.LooperMode;
@@ -39,7 +39,7 @@ public class FormMetadataPreferencesFragmentTest {
 
     @Before
     public void setup() {
-        RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
 
             @Override
             public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker) {

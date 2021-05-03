@@ -16,7 +16,7 @@ import org.odk.collect.android.fragments.dialogs.IslamicDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.MyanmarDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.PersianDatePickerDialog;
 import org.odk.collect.android.logic.DatePickerDetails;
-import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.testshared.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.robolectric.RobolectricTestRunner;
 

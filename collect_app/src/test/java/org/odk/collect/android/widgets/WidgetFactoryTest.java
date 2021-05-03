@@ -7,8 +7,8 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
-import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.widgets.items.LabelWidget;
 import org.odk.collect.android.widgets.items.LikertWidget;
@@ -32,7 +32,7 @@ public class WidgetFactoryTest {
 
     @Before
     public void setup() {
-        Activity activity = RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
+        Activity activity = CollectHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
 
         widgetFactory = new WidgetFactory(activity, false, false, null, null, null, null, null, null, null, null);
     }

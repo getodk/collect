@@ -28,17 +28,18 @@ import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.ProjectImporter
-import org.odk.collect.android.support.RobolectricHelpers
+import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.TranslationHandler.getString
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
 class FirstLaunchDialogTest {
 
     @Test
     fun `The dialog should not be dismissed after clicking on a device back button`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(FirstLaunchDialog::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragment(FirstLaunchDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
             MatcherAssert.assertThat(it.isVisible, `is`(true))
             onView(isRoot()).perform(pressBack())
@@ -49,13 +50,13 @@ class FirstLaunchDialogTest {
     @Test
     fun `Importing default project should be triggered after clicking on the 'Configure later' button`() {
         val projectImporter = mock(ProjectImporter::class.java)
-        RobolectricHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
+        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesProjectImporter(projectsRepository: ProjectsRepository, settingsProvider: SettingsProvider): ProjectImporter {
                 return projectImporter
             }
         })
 
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
             onView(withText(R.string.configure_later)).perform(click())
             verify(projectImporter).importDemoProject()
@@ -64,7 +65,7 @@ class FirstLaunchDialogTest {
 
     @Test
     fun `The main menu should be started after clicking on the 'Configure later' button`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
             Intents.init()
             onView(withText(R.string.configure_later)).perform(click())
@@ -75,7 +76,7 @@ class FirstLaunchDialogTest {
 
     @Test
     fun `The FirstLaunchDialog should not be dismissed after clicking on the 'Configure manually' button`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
             onView(withText(R.string.configure_manually)).perform(click())
             assertThat(it.activity!!.supportFragmentManager.findFragmentByTag(it.tag), `is`(notNullValue()))
@@ -84,7 +85,7 @@ class FirstLaunchDialogTest {
 
     @Test
     fun `The app logo should be displayed`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
             onView(withId(R.id.logo)).check(matches(isDisplayed()))
         }
@@ -94,13 +95,13 @@ class FirstLaunchDialogTest {
     fun `The app name with its version should be displayed`() {
         val versionInformation = mock(VersionInformation::class.java)
         `when`(versionInformation.versionToDisplay).thenReturn("v30.1.1")
-        RobolectricHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
+        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesVersionInformation(): VersionInformation {
                 return versionInformation
             }
         })
 
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
             verify(versionInformation).versionToDisplay
             onView(withText(getString(ApplicationProvider.getApplicationContext<Collect>(), R.string.app_name, "v1.30.1.1"))).check(matches(isDisplayed()))

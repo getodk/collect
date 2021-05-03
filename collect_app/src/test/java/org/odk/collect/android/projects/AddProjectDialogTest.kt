@@ -22,18 +22,19 @@ import org.mockito.Mockito.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
-import org.odk.collect.android.support.RobolectricHelpers
+import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.projects.AddProjectDialog
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.UUIDGenerator
+import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
 class AddProjectDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on the 'Cancel' button`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java, R.style.Theme_MaterialComponents)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
             onView(withText(R.string.cancel)).perform(click())
@@ -43,7 +44,7 @@ class AddProjectDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on a device back button`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(AddProjectDialog::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragment(AddProjectDialog::class.java, R.style.Theme_MaterialComponents)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
             onView(isRoot()).perform(pressBack())
@@ -53,7 +54,7 @@ class AddProjectDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking the 'Add' button`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java, R.style.Theme_MaterialComponents)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
             onView(withText(R.string.add)).perform(click())
@@ -64,13 +65,13 @@ class AddProjectDialogTest {
     @Test
     fun `A new project should be added after clicking on the 'Add' button`() {
         val projectsRepository = mock(ProjectsRepository::class.java)
-        RobolectricHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
+        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesProjectsRepository(uuidGenerator: UUIDGenerator, gson: Gson, settingsProvider: SettingsProvider): ProjectsRepository {
                 return projectsRepository
             }
         })
 
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java, R.style.Theme_MaterialComponents)
         scenario.onFragment {
             onView(withText(R.string.add)).perform(click())
             verify(projectsRepository).save(Project("", "", ""))
@@ -79,7 +80,7 @@ class AddProjectDialogTest {
 
     @Test
     fun `Only one character should be accepted as a project icon`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java, R.style.Theme_MaterialComponents)
         scenario.onFragment {
             onView(withHint(R.string.project_icon)).perform(typeText("XYZ"))
             onView(allOf(withHint(R.string.project_icon), withText("X"))).check(matches(isDisplayed()))
@@ -88,7 +89,7 @@ class AddProjectDialogTest {
 
     @Test
     fun `Only one emoji should be accepted as a project icon`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java, R.style.Theme_MaterialComponents)
         scenario.onFragment {
             onView(withHint(R.string.project_icon)).perform(replaceText("\uD83D\uDC22"))
             onView(allOf(withHint(R.string.project_icon), withText("\uD83D\uDC22"))).check(matches(isDisplayed()))

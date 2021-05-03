@@ -16,7 +16,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
@@ -42,7 +42,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.RobolectricHelpers.setupMediaPlayerDataSource;
+import static org.odk.collect.testshared.RobolectricHelpers.setupMediaPlayerDataSource;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
@@ -62,7 +62,7 @@ public class AudioWidgetTest {
 
     @Before
     public void setUp() throws Exception {
-        widgetActivity = RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
+        widgetActivity = CollectHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
 
         formIndex = mock(FormIndex.class);
         when(formIndex.toString()).thenReturn("questionIndex");

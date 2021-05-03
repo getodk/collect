@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.network.NetworkStateProvider;
-import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.support.CollectHelpers;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.fakes.RoboMenuItem;
 import org.robolectric.shadows.ShadowToast;
@@ -40,7 +40,7 @@ public class BlankFormListMenuDelegateTest {
         when(viewModel.isOutOfSync()).thenReturn(new MutableLiveData<>(false));
         when(networkStateProvider.isDeviceOnline()).thenReturn(true);
 
-        activity = RobolectricHelpers.createThemedActivity(FragmentActivity.class);
+        activity = CollectHelpers.createThemedActivity(FragmentActivity.class);
     }
 
     @Test

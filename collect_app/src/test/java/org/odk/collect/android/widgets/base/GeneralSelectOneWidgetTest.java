@@ -9,7 +9,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.junit.Test;
-import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
@@ -25,7 +25,7 @@ import static org.junit.Assert.assertNull;
 public abstract class GeneralSelectOneWidgetTest<W extends MultiChoiceWidget>
         extends SelectWidgetTest<W, SelectOneData> {
 
-    protected Activity activity = RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
+    protected Activity activity = CollectHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
 
     @NonNull
     @Override

@@ -5,7 +5,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.R;
+import org.odk.collect.testshared.RobolectricHelpers;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -15,7 +16,7 @@ public class FormLoadingDialogFragmentTest {
 
     @Test
     public void dialogIsNotCancellable() {
-        FragmentScenario<FormLoadingDialogFragment> fragmentScenario = RobolectricHelpers.launchDialogFragment(FormLoadingDialogFragment.class);
+        FragmentScenario<FormLoadingDialogFragment> fragmentScenario = RobolectricHelpers.launchDialogFragment(FormLoadingDialogFragment.class, R.style.Theme_Collect_Light);
         fragmentScenario.onFragment(fragment -> {
             assertThat(fragment.isCancelable(), equalTo(false));
         });

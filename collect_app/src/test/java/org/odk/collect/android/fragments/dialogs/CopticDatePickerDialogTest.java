@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.fragments.support.DialogFragmentHelpers;
 import org.odk.collect.android.logic.DatePickerDetails;
-import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.support.CollectHelpers;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.Mockito.when;
@@ -23,7 +23,7 @@ public class CopticDatePickerDialogTest {
 
     @Before
     public void setup() {
-        activity = RobolectricHelpers.createThemedActivity(DialogFragmentHelpers.DatePickerTestActivity.class);
+        activity = CollectHelpers.createThemedActivity(DialogFragmentHelpers.DatePickerTestActivity.class);
         fragmentManager = activity.getSupportFragmentManager();
 
         dialogFragment = new CopticDatePickerDialog();

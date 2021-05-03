@@ -20,11 +20,11 @@ import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.BooleanChangeLock;
-import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.ManifestFile;
@@ -54,7 +54,7 @@ public class AutoUpdateTaskSpecTest {
 
     @Before
     public void setup() {
-        RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
             public ChangeLock providesFormsChangeLock() {
                 return changeLock;

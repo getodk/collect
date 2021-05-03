@@ -16,11 +16,12 @@ import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
-import org.odk.collect.android.support.RobolectricHelpers
+import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.TranslationHandler
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.UUIDGenerator
+import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
 class AdminPreferencesFragmentTest {
@@ -35,7 +36,7 @@ class AdminPreferencesFragmentTest {
 
         `when`(currentProjectProvider.getCurrentProject()).thenReturn(Project("Project X", "X", "#cccccc"))
 
-        RobolectricHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
+        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesCurrentProjectProvider(settingsProvider: SettingsProvider, projectsRepository: ProjectsRepository): CurrentProjectProvider {
                 return currentProjectProvider
             }
@@ -48,7 +49,7 @@ class AdminPreferencesFragmentTest {
 
     @Test
     fun `Project Name preference should be visible`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(AdminPreferencesFragment::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragment(AdminPreferencesFragment::class.java, R.style.ThemeOverlay_MaterialComponents)
         scenario.onFragment {
             assertThat(it.findPreference<EditTextPreference>(AdminPreferencesFragment.PROJECT_NAME_KEY)!!.isVisible, `is`(true))
         }
@@ -56,7 +57,7 @@ class AdminPreferencesFragmentTest {
 
     @Test
     fun `Project Name preference should have proper title`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(AdminPreferencesFragment::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragment(AdminPreferencesFragment::class.java, R.style.ThemeOverlay_MaterialComponents)
         scenario.onFragment {
             assertThat(it.findPreference<EditTextPreference>(AdminPreferencesFragment.PROJECT_NAME_KEY)!!.title, `is`(TranslationHandler.getString(ApplicationProvider.getApplicationContext<Collect>(), R.string.project_name)))
         }
@@ -64,7 +65,7 @@ class AdminPreferencesFragmentTest {
 
     @Test
     fun `Project Name preference should have proper summary`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(AdminPreferencesFragment::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragment(AdminPreferencesFragment::class.java, R.style.ThemeOverlay_MaterialComponents)
         scenario.onFragment {
             assertThat(it.findPreference<EditTextPreference>(AdminPreferencesFragment.PROJECT_NAME_KEY)!!.summary, `is`("Project X"))
         }
@@ -72,7 +73,7 @@ class AdminPreferencesFragmentTest {
 
     @Test
     fun `Project Icon preference should be visible`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(AdminPreferencesFragment::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragment(AdminPreferencesFragment::class.java, R.style.ThemeOverlay_MaterialComponents)
         scenario.onFragment {
             assertThat(it.findPreference<EditTextPreference>(AdminPreferencesFragment.PROJECT_ICON_KEY)!!.isVisible, `is`(true))
         }
@@ -80,7 +81,7 @@ class AdminPreferencesFragmentTest {
 
     @Test
     fun `Project Icon preference should have proper title`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(AdminPreferencesFragment::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragment(AdminPreferencesFragment::class.java, R.style.ThemeOverlay_MaterialComponents)
         scenario.onFragment {
             assertThat(it.findPreference<EditTextPreference>(AdminPreferencesFragment.PROJECT_ICON_KEY)!!.title, `is`(TranslationHandler.getString(ApplicationProvider.getApplicationContext<Collect>(), R.string.project_icon)))
         }
@@ -88,7 +89,7 @@ class AdminPreferencesFragmentTest {
 
     @Test
     fun `Project Icon preference should have proper summary`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(AdminPreferencesFragment::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragment(AdminPreferencesFragment::class.java, R.style.ThemeOverlay_MaterialComponents)
         scenario.onFragment {
             assertThat(it.findPreference<EditTextPreference>(AdminPreferencesFragment.PROJECT_ICON_KEY)!!.summary, `is`("X"))
         }
@@ -96,7 +97,7 @@ class AdminPreferencesFragmentTest {
 
     @Test
     fun `Project Color preference should be visible`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(AdminPreferencesFragment::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragment(AdminPreferencesFragment::class.java, R.style.ThemeOverlay_MaterialComponents)
         scenario.onFragment {
             assertThat(it.findPreference<EditTextPreference>(AdminPreferencesFragment.PROJECT_COLOR_KEY)!!.isVisible, `is`(true))
         }
@@ -104,7 +105,7 @@ class AdminPreferencesFragmentTest {
 
     @Test
     fun `Project Color preference should have proper title`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(AdminPreferencesFragment::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragment(AdminPreferencesFragment::class.java, R.style.ThemeOverlay_MaterialComponents)
         scenario.onFragment {
             assertThat(it.findPreference<EditTextPreference>(AdminPreferencesFragment.PROJECT_COLOR_KEY)!!.title, `is`(TranslationHandler.getString(ApplicationProvider.getApplicationContext<Collect>(), R.string.project_color)))
         }
@@ -112,7 +113,7 @@ class AdminPreferencesFragmentTest {
 
     @Test
     fun `Project Color preference should have proper summary`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(AdminPreferencesFragment::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragment(AdminPreferencesFragment::class.java, R.style.ThemeOverlay_MaterialComponents)
         scenario.onFragment {
             assertThat(it.findPreference<EditTextPreference>(AdminPreferencesFragment.PROJECT_COLOR_KEY)!!.summary.toString(), `is`("■"))
         }

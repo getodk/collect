@@ -29,8 +29,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
-import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.DateWidget;
@@ -61,7 +61,7 @@ public class DaylightSavingTest {
 
     @Before
     public void setUp() {
-        widgetActivity = RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
+        widgetActivity = CollectHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
         widgetUtils = mock(DateTimeWidgetUtils.class);
         currentTimeZone = TimeZone.getDefault();
     }

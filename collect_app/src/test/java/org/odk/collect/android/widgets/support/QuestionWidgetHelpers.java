@@ -4,8 +4,8 @@ import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
-import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.widgets.QuestionWidget;
 
@@ -18,7 +18,7 @@ public class QuestionWidgetHelpers {
     }
 
     public static TestScreenContextActivity widgetTestActivity() {
-        return RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
+        return CollectHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
     }
 
     public static <T extends QuestionWidget> WidgetValueChangedListener mockValueChangedListener(T widget) {

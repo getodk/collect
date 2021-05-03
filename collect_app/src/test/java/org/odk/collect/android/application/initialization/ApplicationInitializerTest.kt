@@ -15,7 +15,7 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.ProjectImporter
-import org.odk.collect.android.support.RobolectricHelpers
+import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AppStateProvider
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.UUIDGenerator
@@ -31,7 +31,7 @@ class ApplicationInitializerTest {
 
     @Before
     fun setup() {
-        RobolectricHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
+        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesAppStateProvider(context: Context): AppStateProvider {
                 return appStateProvider
             }

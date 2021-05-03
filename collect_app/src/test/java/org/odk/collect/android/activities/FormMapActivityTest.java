@@ -24,11 +24,11 @@ import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.TestMapFragment;
 import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.formstest.InMemInstancesRepository;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.provider.InstanceProvider;
-import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
@@ -65,7 +65,7 @@ public class FormMapActivityTest {
     private final MapPoint currentLocation = new MapPoint(5, 5);
 
     @Before public void setUpActivity() {
-        RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
                @Override
                public MapProvider providesMapProvider() {
                    MapProvider mapProvider = mock(MapProvider.class);
@@ -74,7 +74,7 @@ public class FormMapActivityTest {
                }
            });
 
-        activityController = RobolectricHelpers.buildThemedActivity(FormMapActivity.class);
+        activityController = CollectHelpers.buildThemedActivity(FormMapActivity.class);
         activity = (FormMapActivity) activityController.get();
 
         InMemInstancesRepository inMemInstancesRepository = new InMemInstancesRepository(Arrays.asList(testInstances));
@@ -96,7 +96,7 @@ public class FormMapActivityTest {
         // The @Before block set up a map with points. Reset everything for this test.
         map.resetState();
 
-        ActivityController controller = RobolectricHelpers.buildThemedActivity(FormMapActivity.class);
+        ActivityController controller = CollectHelpers.buildThemedActivity(FormMapActivity.class);
         FormMapActivity activity = (FormMapActivity) controller.get();
 
         InMemInstancesRepository inMemInstancesRepository = new InMemInstancesRepository(new ArrayList<>());
@@ -112,7 +112,7 @@ public class FormMapActivityTest {
         // The @Before block set up a map with points. Reset everything for this test.
         map.resetState();
 
-        ActivityController controller = RobolectricHelpers.buildThemedActivity(FormMapActivity.class);
+        ActivityController controller = CollectHelpers.buildThemedActivity(FormMapActivity.class);
         FormMapActivity activity = (FormMapActivity) controller.get();
 
         InMemInstancesRepository inMemInstancesRepository = new InMemInstancesRepository(new ArrayList<>());

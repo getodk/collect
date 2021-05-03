@@ -13,7 +13,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.shared.Settings;
-import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.testshared.RobolectricHelpers;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -34,7 +34,7 @@ public class ServerAuthDialogFragmentTest {
         generalSettings.save(GeneralKeys.KEY_USERNAME, "Alpen");
         generalSettings.save(GeneralKeys.KEY_PASSWORD, "swiss");
 
-        FragmentScenario<ServerAuthDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(ServerAuthDialogFragment.class);
+        FragmentScenario<ServerAuthDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(ServerAuthDialogFragment.class, R.style.Theme_Collect_Light);
 
         scenario.onFragment(fragment -> {
             EditText username = fragment.getDialogView().findViewById(R.id.username_edit);
@@ -47,7 +47,7 @@ public class ServerAuthDialogFragmentTest {
 
     @Test
     public void clickingOK_savesUsernameAndPasswordToGeneralPrefs() {
-        FragmentScenario<ServerAuthDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(ServerAuthDialogFragment.class);
+        FragmentScenario<ServerAuthDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(ServerAuthDialogFragment.class, R.style.Theme_Collect_Light);
 
         scenario.onFragment(fragment -> {
             EditText username = fragment.getDialogView().findViewById(R.id.username_edit);
