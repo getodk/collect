@@ -10,7 +10,7 @@ import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.FormActivityTestRule;
-import org.odk.collect.android.support.FormLoadingUtils;
+import org.odk.collect.android.support.AdbFormLoadingUtils;
 import org.odk.collect.android.support.ResetStateRule;
 
 import java.util.Collections;
@@ -33,7 +33,7 @@ public class LikertTest {
     private static final String LIKERT_TEST_FORM = "likert_test.xml";
 
     @Rule
-    public FormActivityTestRule activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(LIKERT_TEST_FORM);
+    public FormActivityTestRule activityTestRule = AdbFormLoadingUtils.getFormActivityTestRuleFor(LIKERT_TEST_FORM);
 
     @Rule
     public RuleChain copyFormChain = RuleChain

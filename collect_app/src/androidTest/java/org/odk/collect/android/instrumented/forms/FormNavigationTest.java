@@ -26,7 +26,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
-import org.odk.collect.android.support.FormLoadingUtils;
+import org.odk.collect.android.support.AdbFormLoadingUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -137,7 +137,7 @@ public class FormNavigationTest {
      * FormLoaderTask loads forms from SD card so we need to put each form there
      */
     private void copyToStorage(String formName) throws IOException {
-        FormLoadingUtils.copyFormToStorage(formName);
+        AdbFormLoadingUtils.copyFormToStorage(formName);
     }
 
     private static String formPath(String formName) {

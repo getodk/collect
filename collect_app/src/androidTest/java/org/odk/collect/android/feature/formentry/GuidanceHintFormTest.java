@@ -16,7 +16,7 @@ import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.FormActivityTestRule;
-import org.odk.collect.android.support.FormLoadingUtils;
+import org.odk.collect.android.support.AdbFormLoadingUtils;
 import org.odk.collect.android.support.ResetStateRule;
 
 import tools.fastlane.screengrab.Screengrab;
@@ -40,7 +40,7 @@ public class GuidanceHintFormTest {
     }
 
     @Rule
-    public FormActivityTestRule activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(GUIDANCE_SAMPLE_FORM);
+    public FormActivityTestRule activityTestRule = AdbFormLoadingUtils.getFormActivityTestRuleFor(GUIDANCE_SAMPLE_FORM);
 
     @Rule
     public RuleChain copyFormChain = RuleChain

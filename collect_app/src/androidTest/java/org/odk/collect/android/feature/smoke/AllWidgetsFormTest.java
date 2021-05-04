@@ -26,7 +26,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.Mockito.mock;
-import static org.odk.collect.android.support.FormLoadingUtils.ALL_WIDGETS_FORM;
 
 /**
  * Integration test that runs through a form with all question types.
@@ -42,7 +41,7 @@ public class AllWidgetsFormTest {
     @ClassRule
     public static final LocaleTestRule LOCALE_TEST_RULE = new LocaleTestRule();
 
-    public FormActivityTestRule activityTestRule = new FormActivityTestRule(ALL_WIDGETS_FORM);
+    public FormActivityTestRule activityTestRule = new FormActivityTestRule("all-widgets.xml");
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -52,7 +51,7 @@ public class AllWidgetsFormTest {
                     return activityAvailability;
                 }
             }))
-            .around(new CopyFormRule(ALL_WIDGETS_FORM))
+            .around(new CopyFormRule("all-widgets.xml"))
             .around(activityTestRule);
 
     @BeforeClass

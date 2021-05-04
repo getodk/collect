@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.FormActivityTestRule;
-import org.odk.collect.android.support.FormLoadingUtils;
+import org.odk.collect.android.support.AdbFormLoadingUtils;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.FormEntryPage;
 
@@ -21,7 +21,7 @@ public class RankingWidgetWithCSVTest {
             .around(new CopyFormRule(TEST_FORM, Collections.singletonList("fruits.csv")));
 
     @Rule
-    public FormActivityTestRule activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(TEST_FORM);
+    public FormActivityTestRule activityTestRule = AdbFormLoadingUtils.getFormActivityTestRuleFor(TEST_FORM);
 
     @Test
     public void rankingWidget_shouldDisplayItemsFromSearchFunc() {
