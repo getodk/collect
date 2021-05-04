@@ -11,7 +11,6 @@ import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.FormEntryPage;
 
 public class ContextMenuTest {
-
     private static final String STRING_WIDGETS_TEST_FORM = "string_widgets_in_field_list.xml";
 
     @Rule

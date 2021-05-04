@@ -6,7 +6,8 @@ public enum StorageSubdirectory {
     CACHE(".cache"),
     METADATA("metadata"),
     LAYERS("layers"),
-    SETTINGS("settings");
+    SETTINGS("settings"),
+    PROJECTS("projects");
 
     private final String directoryName;
 

@@ -275,7 +275,7 @@ public interface AppDependencyComponent {
 
     Analytics analytics();
 
-    SettingsProvider preferencesRepository();
+    SettingsProvider settingsProvider();
 
     ApplicationInitializer applicationInitializer();
 
@@ -292,4 +292,6 @@ public interface AppDependencyComponent {
     InstancesAppState instancesAppState();
 
     ProjectImporter projectImporter();
+
+    StorageInitializer storageInitializer();
 }

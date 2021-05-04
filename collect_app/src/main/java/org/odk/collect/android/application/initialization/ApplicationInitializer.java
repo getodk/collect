@@ -23,9 +23,9 @@ import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.keys.MetaKeys;
 import org.odk.collect.android.projects.ProjectImporter;
+import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.utilities.AppStateProvider;
 import org.odk.collect.shared.Settings;
-import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.util.Locale;
@@ -153,6 +153,7 @@ public class ApplicationInitializer {
         if (!appStateProvider.isFreshInstall() && !metaSettings.getBoolean(MetaKeys.EXISTING_PROJECT_IMPORTED)) {
             projectImporter.importExistingProject();
         }
+
         metaSettings.save(MetaKeys.EXISTING_PROJECT_IMPORTED, true);
     }
 }

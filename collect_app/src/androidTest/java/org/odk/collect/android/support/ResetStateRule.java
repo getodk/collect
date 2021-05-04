@@ -10,6 +10,7 @@ import org.junit.runners.model.Statement;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -25,7 +26,7 @@ public class ResetStateRule implements TestRule {
 
     private final AppDependencyModule appDependencyModule;
     private final SettingsProvider settingsProvider = TestSettingsProvider.getSettingsProvider();
-    private final boolean installWithoutProjects;
+    private final boolean upgrade;
 
     public ResetStateRule() {
         this(null, true);
@@ -35,9 +36,9 @@ public class ResetStateRule implements TestRule {
         this(appDependencyModule, true);
     }
 
-    public ResetStateRule(AppDependencyModule appDependencyModule, boolean installWithProjects) {
+    public ResetStateRule(AppDependencyModule appDependencyModule, boolean upgrade) {
         this.appDependencyModule = appDependencyModule;
-        this.installWithoutProjects = installWithProjects;
+        this.upgrade = upgrade;
     }
 
     @Override
@@ -62,15 +63,17 @@ public class ResetStateRule implements TestRule {
             clearDisk();
             setTestState();
 
+            AppDependencyComponent component = ((Collect) context.getApplicationContext()).getComponent();
+
             // Reinitialize any application state with new deps/state
-            ((Collect) context.getApplicationContext()).getComponent().applicationInitializer().initialize();
+            component.applicationInitializer().initialize();
             base.evaluate();
         }
     }
 
     private void setTestState() {
         MultiClickGuard.test = true;
-        AppStateProvider.overrideFresh = !installWithoutProjects;
+        AppStateProvider.overrideFresh = !upgrade;
     }
 
     private void clearDisk() {

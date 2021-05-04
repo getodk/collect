@@ -1,11 +1,26 @@
 package org.odk.collect.android.storage;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.projects.CurrentProjectProvider;
 
 import java.io.File;
 
 public class StoragePathProvider {
-    public String[] getOdkDirPaths() {
+
+    private final CurrentProjectProvider currentProjectProvider;
+
+    public StoragePathProvider() {
+        currentProjectProvider = DaggerUtils.getComponent(Collect.getInstance()).currentProjectProvider();
+    }
+
+    public String[] getOdkRootDirPaths() {
+        return new String[]{
+                getOdkDirPath(StorageSubdirectory.PROJECTS)
+        };
+    }
+
+    public String[] getProjectDirPaths() {
         return new String[]{
                 getOdkDirPath(StorageSubdirectory.FORMS),
                 getOdkDirPath(StorageSubdirectory.INSTANCES),
@@ -23,7 +38,20 @@ public class StoragePathProvider {
     }
 
     public String getOdkDirPath(StorageSubdirectory subdirectory) {
-        return getOdkRootDirPath() + File.separator + subdirectory.getDirectoryName();
+        switch (subdirectory) {
+            case FORMS:
+            case INSTANCES:
+            case CACHE:
+            case METADATA:
+            case LAYERS:
+                String projectId = currentProjectProvider.getCurrentProject().getUuid();
+                return getOdkDirPath(StorageSubdirectory.PROJECTS) + File.separator + projectId + File.separator + subdirectory.getDirectoryName();
+            case SETTINGS:
+            case PROJECTS:
+                return getOdkRootDirPath() + File.separator + subdirectory.getDirectoryName();
+            default:
+                throw new IllegalStateException("Unexpected value: " + subdirectory);
+        }
     }
 
     public String getCustomSplashScreenImagePath() {

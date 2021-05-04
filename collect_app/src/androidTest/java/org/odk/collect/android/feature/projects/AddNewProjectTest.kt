@@ -11,7 +11,7 @@ class AddNewProjectTest {
     val rule = CollectTestRule()
 
     @get:Rule
-    var chain: RuleChain = TestRuleChain.chain().around(rule)
+    var chain: RuleChain = TestRuleChain.chain(false).around(rule)
 
     @Test
     fun addingProject_addsNewProject() {

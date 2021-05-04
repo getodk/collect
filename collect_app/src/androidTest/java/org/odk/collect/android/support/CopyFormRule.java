@@ -6,6 +6,11 @@ import org.junit.runners.model.Statement;
 
 import java.util.List;
 
+/**
+ * @deprecated using this forces us to set the app as if it was being "upgraded"
+ * as otherwise we can't copy forms before the app has been launched.
+ */
+@Deprecated
 public class CopyFormRule implements TestRule {
 
     private final String fileName;

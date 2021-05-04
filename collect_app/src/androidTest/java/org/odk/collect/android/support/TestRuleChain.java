@@ -20,14 +20,14 @@ public class TestRuleChain {
         return chain(testDependencies, true);
     }
 
-    public static RuleChain chain(boolean installWithoutProjects) {
-        return chain(new TestDependencies(), installWithoutProjects);
+    public static RuleChain chain(boolean upgrade) {
+        return chain(new TestDependencies(), upgrade);
     }
 
-    public static RuleChain chain(TestDependencies testDependencies, boolean installWithoutProjects) {
+    public static RuleChain chain(TestDependencies testDependencies, boolean upgrade) {
         return RuleChain
                 .outerRule(GrantPermissionRule.grant(Manifest.permission.READ_PHONE_STATE))
-                .around(new ResetStateRule(testDependencies, installWithoutProjects))
+                .around(new ResetStateRule(testDependencies, upgrade))
                 .around(new IdlingResourceRule(testDependencies.idlingResources));
     }
 }

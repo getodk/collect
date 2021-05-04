@@ -22,7 +22,7 @@ public class StorageInitializerTest {
         storagePathProvider = new StoragePathProvider();
         storageInitializer = new StorageInitializer(storagePathProvider, ApplicationProvider.getApplicationContext());
 
-        for (String dirName : storagePathProvider.getOdkDirPaths()) {
+        for (String dirName : storagePathProvider.getOdkRootDirPaths()) {
             File dir = new File(dirName);
             dir.delete();
         }
@@ -30,14 +30,14 @@ public class StorageInitializerTest {
 
     @Test
     public void createOdkDirsOnStorage_shouldCreteRequiredDirs() {
-        for (String dirName : storagePathProvider.getOdkDirPaths()) {
+        for (String dirName : storagePathProvider.getOdkRootDirPaths()) {
             File dir = new File(dirName);
             assertThat(dir.exists(), is(false));
         }
 
         storageInitializer.createOdkDirsOnStorage();
 
-        for (String dirName : storagePathProvider.getOdkDirPaths()) {
+        for (String dirName : storagePathProvider.getOdkRootDirPaths()) {
             File dir = new File(dirName);
             assertThat(dir.exists(), is(true));
             assertThat(dir.isDirectory(), is(true));

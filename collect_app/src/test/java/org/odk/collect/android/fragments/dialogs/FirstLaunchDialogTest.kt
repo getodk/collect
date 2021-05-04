@@ -26,7 +26,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.TranslationHandler.getString
@@ -51,7 +51,7 @@ class FirstLaunchDialogTest {
     fun `Importing default project should be triggered after clicking on the 'Configure later' button`() {
         val projectImporter = mock(ProjectImporter::class.java)
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesProjectImporter(projectsRepository: ProjectsRepository, settingsProvider: SettingsProvider): ProjectImporter {
+            override fun providesProjectImporter(projectsRepository: ProjectsRepository, currentProjectProvider: CurrentProjectProvider): ProjectImporter? {
                 return projectImporter
             }
         })

@@ -24,7 +24,15 @@ public class StorageInitializer {
     }
 
     public void createOdkDirsOnStorage() throws RuntimeException {
-        for (String dirPath : storagePathProvider.getOdkDirPaths()) {
+        createDirs(storagePathProvider.getOdkRootDirPaths());
+    }
+
+    public void createProjectDirsOnStorage() {
+        createDirs(storagePathProvider.getProjectDirPaths());
+    }
+
+    private void createDirs(String[] dirPaths) {
+        for (String dirPath : dirPaths) {
             File dir = new File(dirPath);
             if (!dir.exists()) {
                 if (!dir.mkdirs()) {
@@ -41,4 +49,5 @@ public class StorageInitializer {
             }
         }
     }
+
 }

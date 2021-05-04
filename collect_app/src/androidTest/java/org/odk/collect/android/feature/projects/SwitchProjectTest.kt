@@ -9,7 +9,6 @@ import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.TestRuleChain
 import org.odk.collect.android.support.pages.GeneralSettingsPage
 import org.odk.collect.android.support.pages.MainMenuPage
-import org.odk.collect.android.support.pages.ServerSettingsPage
 
 class SwitchProjectTest {
 
@@ -17,7 +16,7 @@ class SwitchProjectTest {
     val testDependencies = TestDependencies()
 
     @get:Rule
-    var chain: RuleChain = TestRuleChain.chain(testDependencies)
+    var chain: RuleChain = TestRuleChain.chain(testDependencies, false)
         .around(rule)
 
     @Test
@@ -47,8 +46,15 @@ class SwitchProjectTest {
         testDependencies.server.addForm("One Question", "one-question", "1", "one-question.xml")
 
         rule.mainMenu()
+            // Copy and fill form
+            .copyForm("two-question.xml")
+            .startBlankForm("Two Question")
+            .swipeToNextQuestion("What is your age?")
+            .swipeToEndScreen()
+            .clickSaveAndExit()
+            .assertNumberOfFinalizedForms(1)
 
-            // Create project
+            // Create and switch to new project
             .assertProjectIcon("D", "#3e9fcc")
             .openProjectSettings()
             .clickAddProject()
@@ -81,16 +87,17 @@ class SwitchProjectTest {
             .clickServerSettings()
             .clickOnURL()
             .assertText("https://demo.getodk.org")
-            .pressBack(ServerSettingsPage())
+            .clickOKOnDialog()
             .pressBack(GeneralSettingsPage())
             .pressBack(MainMenuPage())
 
             // Check forms
             .clickFillBlankForm()
-            .assertNoForms()
+            .assertFormExists("Two Question")
             .pressBack(MainMenuPage())
 
             // Check instances
-            .assertNumberOfFinalizedForms(0)
+            .clickSendFinalizedForm(1)
+            .assertText("Two Question")
     }
 }

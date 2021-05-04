@@ -66,12 +66,16 @@ public class AdbFormLoadingUtils {
         copyFormToStorage(formFilename, null, false, copyTo);
     }
 
+    public static void copyFormToStorage(String formFilename, boolean copyToDatabase) throws IOException {
+        copyFormToStorage(formFilename, null, copyToDatabase, formFilename);
+    }
+
     public static FormActivityTestRule getFormActivityTestRuleFor(String formFilename) {
         return new FormActivityTestRule(formFilename);
     }
 
     private static String copyForm(String formFilename, String copyTo) throws IOException {
-        String pathname = ApplicationProvider.getApplicationContext().getExternalFilesDir(null) + "/forms/" + copyTo;
+        String pathname = getFormsDirPath() + copyTo;
         copyFileFromAssets("forms/" + formFilename, pathname);
         return pathname;
     }
@@ -95,6 +99,9 @@ public class AdbFormLoadingUtils {
      * @return the forms dir path that the user would expect (from docs)
      */
     private static String getFormsDirPath() {
-        return ApplicationProvider.getApplicationContext().getExternalFilesDir(null) + "/forms/";
+        String projectsDirPath = ApplicationProvider.getApplicationContext().getExternalFilesDir(null) + "/projects/";
+        String firstProjectId = new File(projectsDirPath).list()[0];
+
+        return projectsDirPath + "/" + firstProjectId + "/forms/";
     }
 }

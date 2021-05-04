@@ -17,6 +17,7 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AppStateProvider
@@ -33,16 +34,21 @@ class ApplicationInitializerTest {
     @Before
     fun setup() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesAppStateProvider(context: Context, settingsProvider: SettingsProvider): AppStateProvider {
+            override fun providesAppStateProvider(
+                context: Context,
+                settingsProvider: SettingsProvider
+            ): AppStateProvider {
                 return appStateProvider
             }
 
-            override fun providesProjectImporter(projectsRepository: ProjectsRepository, settingsProvider: SettingsProvider): ProjectImporter {
+            override fun providesProjectImporter(projectsRepository: ProjectsRepository, currentProjectProvider: CurrentProjectProvider): ProjectImporter {
                 return projectImporter
             }
         })
 
-        applicationInitializer = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Collect>()).applicationInitializer()
+        applicationInitializer =
+            DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Collect>())
+                .applicationInitializer()
     }
 
     @Test
@@ -72,6 +78,9 @@ class ApplicationInitializerTest {
     fun `Initializing the app should set ALREADY_TRIED_TO_IMPORT_EXISTING_PROJECT flag to true`() {
         TestSettingsProvider.getMetaSettings().save(MetaKeys.EXISTING_PROJECT_IMPORTED, false)
         applicationInitializer.initialize()
-        assertThat(TestSettingsProvider.getMetaSettings().getBoolean(MetaKeys.EXISTING_PROJECT_IMPORTED), equalTo(true))
+        assertThat(
+            TestSettingsProvider.getMetaSettings().getBoolean(MetaKeys.EXISTING_PROJECT_IMPORTED),
+            equalTo(true)
+        )
     }
 }

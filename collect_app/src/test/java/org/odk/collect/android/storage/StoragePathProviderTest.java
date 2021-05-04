@@ -59,7 +59,7 @@ public class StoragePathProviderTest {
 
     @Test
     public void getODKDirPathsWithScopedStorageTest() {
-        String[] storageSubdirectories = storagePathProvider.getOdkDirPaths();
+        String[] storageSubdirectories = storagePathProvider.getOdkRootDirPaths();
         assertThat(storageSubdirectories, arrayWithSize(5));
 
         assertThat(storageSubdirectories, hasItemInArray("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms"));

@@ -19,6 +19,7 @@ import org.odk.collect.projects.AddProjectDialog
 import javax.inject.Inject
 
 class FirstLaunchDialog : MaterialFullScreenDialogFragment() {
+
     @Inject
     lateinit var projectImporter: ProjectImporter
 
@@ -27,7 +28,11 @@ class FirstLaunchDialog : MaterialFullScreenDialogFragment() {
 
     private lateinit var binding: FirstLaunchDialogLayoutBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = FirstLaunchDialogLayoutBinding.inflate(inflater)
         return binding.root
     }
@@ -40,15 +45,25 @@ class FirstLaunchDialog : MaterialFullScreenDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.appName.text = String.format("%s %s", getString(R.string.app_name), versionInformation.versionToDisplay)
+        binding.appName.text = String.format(
+            "%s %s",
+            getString(R.string.app_name),
+            versionInformation.versionToDisplay
+        )
 
         binding.configureManuallyButton.setOnClickListener {
-            DialogUtils.showIfNotShowing(AddProjectDialog::class.java, requireActivity().supportFragmentManager)
+            DialogUtils.showIfNotShowing(
+                AddProjectDialog::class.java,
+                requireActivity().supportFragmentManager
+            )
         }
 
         binding.configureLaterButton.setOnClickListener {
             projectImporter.importDemoProject()
-            ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity::class.java)
+            ActivityUtils.startActivityAndCloseAllOthers(
+                requireActivity(),
+                MainMenuActivity::class.java
+            )
         }
     }
 
