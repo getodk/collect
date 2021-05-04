@@ -53,4 +53,9 @@ internal class ProjectSettingsDialogPage() : Page<ProjectSettingsDialogPage>() {
         onView(allOf(hasDescendant(withText(name)), withContentDescription(getTranslatedString(R.string.switch_to_project, name)))).check(matches(isDisplayed()))
         return this
     }
+
+    fun selectProject(projectName: String): MainMenuPage {
+        clickOnText(projectName)
+        return MainMenuPage().assertOnPage()
+    }
 }
