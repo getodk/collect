@@ -25,13 +25,19 @@ public class ResetStateRule implements TestRule {
 
     private final AppDependencyModule appDependencyModule;
     private final SettingsProvider settingsProvider = TestSettingsProvider.getSettingsProvider();
+    private final boolean installWithoutProjects;
 
     public ResetStateRule() {
-        this(null);
+        this(null, true);
     }
 
     public ResetStateRule(AppDependencyModule appDependencyModule) {
+        this(appDependencyModule, true);
+    }
+
+    public ResetStateRule(AppDependencyModule appDependencyModule, boolean installWithProjects) {
         this.appDependencyModule = appDependencyModule;
+        this.installWithoutProjects = installWithProjects;
     }
 
     @Override
@@ -64,7 +70,7 @@ public class ResetStateRule implements TestRule {
 
     private void setTestState() {
         MultiClickGuard.test = true;
-        AppStateProvider.alwaysFresh = true;
+        AppStateProvider.overrideFresh = !installWithoutProjects;
     }
 
     private void clearDisk() {
@@ -75,8 +81,8 @@ public class ResetStateRule implements TestRule {
             throw new RuntimeException(e);
         }
 
-        DaggerUtils.getComponent(Collect.getInstance()).formsDatabaseProvider().recreateDatabaseHelper();
-        DaggerUtils.getComponent(Collect.getInstance()).instancesDatabaseProvider().recreateDatabaseHelper();
+        DaggerUtils.getComponent(Collect.getInstance()).formsDatabaseProvider().releaseDatabaseHelper();
+        DaggerUtils.getComponent(Collect.getInstance()).instancesDatabaseProvider().releaseDatabaseHelper();
     }
 
     private void resetDagger() {

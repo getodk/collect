@@ -17,9 +17,17 @@ public class TestRuleChain {
     }
 
     public static RuleChain chain(TestDependencies testDependencies) {
+        return chain(testDependencies, true);
+    }
+
+    public static RuleChain chain(boolean installWithoutProjects) {
+        return chain(new TestDependencies(), installWithoutProjects);
+    }
+
+    public static RuleChain chain(TestDependencies testDependencies, boolean installWithoutProjects) {
         return RuleChain
                 .outerRule(GrantPermissionRule.grant(Manifest.permission.READ_PHONE_STATE))
-                .around(new ResetStateRule(testDependencies))
+                .around(new ResetStateRule(testDependencies, installWithoutProjects))
                 .around(new IdlingResourceRule(testDependencies.idlingResources));
     }
 }

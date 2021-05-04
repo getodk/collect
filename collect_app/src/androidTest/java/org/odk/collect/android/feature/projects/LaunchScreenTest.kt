@@ -14,7 +14,7 @@ class LaunchScreenTest {
     private val rule = CollectTestRule(false)
 
     @get:Rule
-    val chain: RuleChain = TestRuleChain.chain()
+    val chain: RuleChain = TestRuleChain.chain(false)
         .around(rule)
 
     @Test

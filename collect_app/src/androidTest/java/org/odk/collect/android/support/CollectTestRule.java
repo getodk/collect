@@ -9,6 +9,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.support.pages.FirstLaunchPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.utilities.AppStateProvider;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -33,7 +34,8 @@ public class CollectTestRule implements TestRule {
             public void evaluate() throws Throwable {
                 ActivityScenario.launch(SplashScreenActivity.class);
 
-                if (skipProject) {
+                Boolean overrideFresh = AppStateProvider.overrideFresh;
+                if (overrideFresh != null && overrideFresh && skipProject) {
                     onView(withText(R.string.configure_later)).perform(click());
                 }
 
