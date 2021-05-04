@@ -14,9 +14,9 @@ class AddNewProjectTest {
     var chain: RuleChain = TestRuleChain.chain().around(rule)
 
     @Test
-    fun addProjectTest() {
+    fun addingProject_addsNewProject() {
         rule.mainMenu()
-            .openProjectSettingsDialog()
+            .openProjectSettings()
             .clickAddProject()
             .inputProjectName("Project 1")
             .inputProjectIcon("X")
@@ -24,7 +24,7 @@ class AddNewProjectTest {
             .addProject()
 
         rule.mainMenu()
-            .openProjectSettingsDialog()
+            .openProjectSettings()
             .assertInactiveProject("Project 1")
     }
 }

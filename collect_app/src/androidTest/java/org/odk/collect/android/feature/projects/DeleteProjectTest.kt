@@ -20,7 +20,7 @@ class DeleteProjectTest {
     fun deleteProjectTest() {
         // Add project Turtle nesting
         rule.mainMenu()
-            .openProjectSettingsDialog()
+            .openProjectSettings()
             .clickAddProject()
             .inputProjectName("Turtle nesting")
             .inputProjectIcon("T")
@@ -29,7 +29,7 @@ class DeleteProjectTest {
 
         // Delete Demo project
         rule.mainMenu()
-            .openProjectSettingsDialog()
+            .openProjectSettings()
             .clickAdminSettings()
             .deleteProject()
 
@@ -40,7 +40,7 @@ class DeleteProjectTest {
 
         // Delete Turtle nesting project
         rule.mainMenu()
-            .openProjectSettingsDialog()
+            .openProjectSettings()
             .clickAdminSettings()
             .deleteLastProject()
     }

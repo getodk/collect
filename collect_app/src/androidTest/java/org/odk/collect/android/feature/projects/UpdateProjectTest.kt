@@ -22,7 +22,7 @@ class UpdateProjectTest {
     fun updateProjectTest() {
         rule.mainMenu()
             .assertProjectIcon("D", "#3e9fcc")
-            .openProjectSettingsDialog()
+            .openProjectSettings()
             .assertCurrentProject("Demo project")
             .clickAdminSettings()
             .setProjectName("Project X")
@@ -33,7 +33,7 @@ class UpdateProjectTest {
 
         rule.mainMenu()
             .assertProjectIcon("X", "#cccccc")
-            .openProjectSettingsDialog()
+            .openProjectSettings()
             .assertCurrentProject("Project X")
     }
 }

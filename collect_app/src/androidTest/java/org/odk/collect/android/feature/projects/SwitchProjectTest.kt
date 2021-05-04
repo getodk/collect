@@ -17,11 +17,11 @@ class SwitchProjectTest {
         .around(rule)
 
     @Test
-    fun switchProjectTest() {
+    fun canSwitchActiveProjectToAnotherInList() {
         // Add project Turtle nesting
         rule.mainMenu()
             .assertProjectIcon("D", "#3e9fcc")
-            .openProjectSettingsDialog()
+            .openProjectSettings()
             .clickAddProject()
             .inputProjectName("Turtle nesting")
             .inputProjectIcon("T")
@@ -30,21 +30,12 @@ class SwitchProjectTest {
 
         // Switch to Turtle nesting
         rule.mainMenu()
-            .openProjectSettingsDialog()
+            .openProjectSettings()
             .assertCurrentProject("Demo project")
             .assertInactiveProject("Turtle nesting")
             .clickOnText("Turtle nesting")
         rule.mainMenu()
             .checkIsToastWithMessageDisplayed(R.string.switched_project, "Turtle nesting")
             .assertProjectIcon("T", "#0000FF")
-
-        // Switch to Demo project
-        rule.mainMenu()
-            .openProjectSettingsDialog()
-            .assertCurrentProject("Turtle nesting")
-            .assertInactiveProject("Demo project")
-            .clickOnText("Demo project")
-        rule.mainMenu()
-            .assertProjectIcon("D", "#3e9fcc")
     }
 }

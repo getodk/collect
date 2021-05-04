@@ -5,7 +5,7 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.odk.collect.android.R
 
-internal class AddProjectDialogPage() : Page<AddProjectDialogPage>() {
+class AddProjectDialogPage : Page<AddProjectDialogPage>() {
     override fun assertOnPage(): AddProjectDialogPage {
         assertText(R.string.add_project)
         return this

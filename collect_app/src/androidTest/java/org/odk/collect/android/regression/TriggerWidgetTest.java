@@ -32,7 +32,7 @@ public class TriggerWidgetTest {
     @Test
     public void guidanceIcons_ShouldBeAlwaysShown() {
         new MainMenuPage()
-                .openProjectSettingsDialog()
+                .openProjectSettings()
                 .clickGeneralSettings()
                 .openFormManagement()
                 .openShowGuidanceForQuestions()
@@ -49,7 +49,7 @@ public class TriggerWidgetTest {
     @Test
     public void guidanceIcons_ShouldBeCollapsed() {
         new MainMenuPage()
-                .openProjectSettingsDialog()
+                .openProjectSettings()
                 .clickGeneralSettings()
                 .openFormManagement()
                 .openShowGuidanceForQuestions()

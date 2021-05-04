@@ -43,7 +43,7 @@ public class FormMetadataTest {
     @Test
     public void settingMetadata_letsThemBeIncludedInAForm() {
         new MainMenuPage()
-                .openProjectSettingsDialog()
+                .openProjectSettings()
                 .clickGeneralSettings()
                 .clickUserAndDeviceIdentity()
                 .clickFormMetadata()
@@ -69,7 +69,7 @@ public class FormMetadataTest {
     @Test // Issue number NODK-238 TestCase4 TestCase5
     public void settingServerUsername_usedAsFallbackForMetadataUsername() {
         new MainMenuPage()
-                .openProjectSettingsDialog()
+                .openProjectSettings()
                 .clickGeneralSettings()
                 .clickServerSettings()
                 .clickServerUsername()
@@ -81,7 +81,7 @@ public class FormMetadataTest {
                 .assertText("Chino")
                 .pressBack(new SaveOrIgnoreDialog<>("Metadata", new MainMenuPage()))
                 .clickIgnoreChanges()
-                .openProjectSettingsDialog()
+                .openProjectSettings()
                 .clickGeneralSettings()
                 .clickUserAndDeviceIdentity()
                 .clickFormMetadata()
@@ -98,7 +98,7 @@ public class FormMetadataTest {
     @Test
     public void deviceIdentifiersAreDisplayedInSettings() {
         new MainMenuPage()
-                .openProjectSettingsDialog()
+                .openProjectSettings()
                 .clickGeneralSettings()
                 .clickUserAndDeviceIdentity()
                 .clickFormMetadata()

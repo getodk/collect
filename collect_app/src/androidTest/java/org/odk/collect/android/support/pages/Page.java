@@ -75,7 +75,7 @@ import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withR
  * @see <a href="https://en.wikipedia.org/wiki/Fluent_interface">Fluent Interfaces</a>
  */
 
-abstract class Page<T extends Page<T>> {
+public abstract class Page<T extends Page<T>> {
 
     public abstract T assertOnPage();
 

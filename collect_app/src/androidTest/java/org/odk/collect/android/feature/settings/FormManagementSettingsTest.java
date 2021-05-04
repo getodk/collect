@@ -48,7 +48,7 @@ public class FormManagementSettingsTest {
         assertThat(deferredTasks, is(empty()));
 
         FormManagementPage page = new MainMenuPage().assertOnPage()
-                .openProjectSettingsDialog()
+                .openProjectSettings()
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
@@ -73,7 +73,7 @@ public class FormManagementSettingsTest {
         assertThat(deferredTasks, is(empty()));
 
         FormManagementPage page = new MainMenuPage().assertOnPage()
-                .openProjectSettingsDialog()
+                .openProjectSettings()
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
@@ -96,7 +96,7 @@ public class FormManagementSettingsTest {
     public void whenPreviouslyDownloadedOnlyEnabled_checkingAutoDownload_downloadsUpdatedForms() throws Exception {
         FormManagementPage page = new MainMenuPage().assertOnPage()
                 .setServer(testDependencies.server.getURL())
-                .openProjectSettingsDialog()
+                .openProjectSettings()
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
@@ -123,7 +123,7 @@ public class FormManagementSettingsTest {
         new MainMenuPage().assertOnPage()
                 .enablePreviouslyDownloadedOnlyUpdates() // Enabled a different mode before setting up Google
                 .setGoogleAccount("steph@curry.basket")
-                .openProjectSettingsDialog()
+                .openProjectSettings()
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .assertDisabled(R.string.form_update_mode_title)

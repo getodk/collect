@@ -7,6 +7,7 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.SplashScreenActivity;
+import org.odk.collect.android.support.pages.FirstLaunchPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -43,5 +44,9 @@ public class CollectTestRule implements TestRule {
 
     public MainMenuPage mainMenu() {
         return new MainMenuPage().assertOnPage();
+    }
+
+    public FirstLaunchPage firstLaunch() {
+        return new FirstLaunchPage().assertOnPage();
     }
 }
